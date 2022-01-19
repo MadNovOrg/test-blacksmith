@@ -1,29 +1,32 @@
 import React from 'react'
 
-type ButtonProps = {
+export type ButtonProps = {
+  variant: string
   children: React.ReactNode
 }
 
-export const PrimaryButton: React.FC<ButtonProps> = ({ children }) => {
-  return (
-    <button className="text-white rounded bg-navy2 hover:bg-navy px-5 py-2.5">
-      {children}
-    </button>
-  )
-}
+export const Button: React.FC<ButtonProps> = ({ variant, children }) => {
+  let className = ''
+  switch (variant) {
+    case 'primary':
+      className = 'btn btn-primary'
+      break
+    case 'secondary':
+      className = 'btn btn-secondary'
+      break
+    case 'tertiary':
+      className =
+        'active:text-darkNavy hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border'
+      break
+    case 'tagOne':
+      className = 'btn btn-tagOne'
+      break
+    case 'tagTwo':
+      className = 'btn btn-tagTwo'
+      break
+    default:
+      className = 'btn btn-primary'
+  }
 
-export const SecondaryButton: React.FC<ButtonProps> = ({ children }) => {
-  return (
-    <button className="text-white rounded bg-grey2 hover:bg-grey px-5 py-2.5">
-      {children}
-    </button>
-  )
-}
-
-export const TertiaryButton: React.FC<ButtonProps> = ({ children }) => {
-  return (
-    <button className="text-navy2 hover:text-navy rounded bg-white px-5 py-2.5 border">
-      {children}
-    </button>
-  )
+  return <button className={className}>{children}</button>
 }

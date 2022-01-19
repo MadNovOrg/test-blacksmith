@@ -1,16 +1,46 @@
 import React from 'react'
+import { Meta, Story } from '@storybook/react'
 
-import { PrimaryButton, SecondaryButton, TertiaryButton } from './Button'
+import { Button, ButtonProps } from './Button'
 
 export default {
   title: 'components/Button',
-  component: PrimaryButton,
+  component: Button,
+} as Meta
+
+const Template: Story<ButtonProps> = args => <Button {...args} />
+
+export const Primary = Template.bind({})
+
+Primary.args = {
+  variant: 'primary',
+  children: 'primary',
 }
 
-export const Primary = () => <PrimaryButton>Primary Button</PrimaryButton>
+export const Secondary = Template.bind({})
 
-export const Secondary = () => (
-  <SecondaryButton>Secondary Button</SecondaryButton>
-)
+Secondary.args = {
+  variant: 'secondary',
+  children: 'Secondary',
+}
 
-export const Tertiary = () => <TertiaryButton>Tertiary Button</TertiaryButton>
+export const Tertiary = Template.bind({})
+
+Tertiary.args = {
+  variant: 'tertiary',
+  children: 'Tertiary',
+}
+
+export const TagOne = Template.bind({})
+
+TagOne.args = {
+  variant: 'tagOne',
+  children: 'Tag One',
+}
+
+export const TagTwo = Template.bind({})
+
+TagTwo.args = {
+  variant: 'tagTwo',
+  children: 'Tag Two',
+}

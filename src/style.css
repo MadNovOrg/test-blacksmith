@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+.btn {
+  @apply px-5 py-2.5
+}
+
+.btn-primary {
+  @apply text-white disabled:bg-lightNavy rounded hover:bg-navy2 bg-navy active:bg-darkNavy
+}
+
+.btn-secondary {
+  @apply text-white rounded disabled:bg-grey4 hover:bg-grey2 bg-grey active:bg-darkGrey
+}
+
+.btn-tertiary {
+  @apply active:text-darkNavy hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border
+}
+
+.btn-tagOne {
+  @apply active:bg-darkNavy text-white rounded-3xl hover:bg-navy2 bg-navy
+}
+
+.btn-tagTwo {
+  @apply active:text-darkNavy hover:text-navy2 text-navy rounded-3xl bg-white border
+}
