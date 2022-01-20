@@ -1,0 +1,10 @@
+{
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "account": {
+      "title": "Account"
+    }
+  }
+}
