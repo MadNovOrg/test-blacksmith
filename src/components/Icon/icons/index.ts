@@ -35,6 +35,7 @@ import { ReactComponent as ArrowLeftIcon } from './arrow-left.svg'
 import { ReactComponent as CloudIcon } from './cloud.svg'
 import { ReactComponent as FolderIcon } from './folder.svg'
 import { ReactComponent as AlarmIcon } from './alarm.svg'
+import { ReactComponent as LogoColor } from './logo-color.svg'
 
 const icons = {
   'arrow-down': ArrowDownIcon,
@@ -74,6 +75,7 @@ const icons = {
   cloud: CloudIcon,
   folder: FolderIcon,
   alarm: AlarmIcon,
+  'logo-color': LogoColor,
 }
 
 export default icons

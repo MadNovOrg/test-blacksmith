@@ -47,6 +47,8 @@ module.exports = {
       purple2: '#A18AB6',
       purple3: '#C0B1CE',
       purple4: '#DFD8E7',
+
+      divider: '#DBDBDB',
     },
     extend: {
       fontFamily: {

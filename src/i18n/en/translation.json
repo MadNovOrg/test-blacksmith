@@ -1,4 +1,7 @@
 {
+  "common": {
+    "appTitle": "Team Teach Hub"
+  },
   "pages": {
     "home": {
       "title": "Home"

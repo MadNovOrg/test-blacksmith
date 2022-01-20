@@ -9,8 +9,12 @@ type IconProps = {
   className?: string
 }
 
-export const Icon: React.FC<IconProps> = ({ name, ...props }) => {
+export const Icon: React.FC<IconProps> = ({
+  name,
+  className = 'cursor-pointer text-2xl',
+  ...props
+}) => {
   const Comp = icons[name]
 
-  return <Comp {...props} />
+  return <Comp {...props} className={className} />
 }
