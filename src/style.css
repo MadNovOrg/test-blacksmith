@@ -9,21 +9,21 @@
 }
 
 .btn-primary {
-  @apply text-white disabled:bg-lightNavy rounded hover:bg-navy2 bg-navy active:bg-darkNavy
+  @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-primaryNavy active:bg-navy1
 }
 
 .btn-secondary {
-  @apply text-white rounded disabled:bg-grey4 hover:bg-grey2 bg-grey active:bg-darkGrey
+  @apply text-white rounded disabled:bg-grey4 hover:bg-grey2 bg-grey active:bg-grey1
 }
 
 .btn-tertiary {
-  @apply active:text-darkNavy hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border
+  @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded bg-white px-5 py-2.5 border
 }
 
 .btn-tagOne {
-  @apply active:bg-darkNavy text-white rounded-3xl hover:bg-navy2 bg-navy
+  @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-primaryNavy
 }
 
 .btn-tagTwo {
-  @apply active:text-darkNavy hover:text-navy2 text-navy rounded-3xl bg-white border
+  @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded-3xl bg-white border
 }

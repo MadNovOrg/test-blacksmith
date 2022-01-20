@@ -6,6 +6,7 @@ export type CustomIcons = keyof typeof icons
 
 type IconProps = {
   name: CustomIcons
+  className?: string
 }
 
 export const Icon: React.FC<IconProps> = ({ name, ...props }) => {

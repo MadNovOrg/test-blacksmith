@@ -1,7 +1,7 @@
 import React from 'react'
 
 export type ButtonProps = {
-  variant: string
+  variant: 'primary' | 'secondary' | 'tertiary' | 'tagOne' | 'tagTwo'
   children: React.ReactNode
 }
 
@@ -16,7 +16,7 @@ export const Button: React.FC<ButtonProps> = ({ variant, children }) => {
       break
     case 'tertiary':
       className =
-        'active:text-darkNavy hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border'
+        'active:text-navy1 hover:text-navy2 text-primaryNavy rounded bg-white px-5 py-2.5 border'
       break
     case 'tagOne':
       className = 'btn btn-tagOne'
