@@ -29,7 +29,7 @@ export const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({
           <RadioGroup.Option
             value={option.value}
             key={index}
-            className="group p-1.5 hover:bg-grey5"
+            className="group p-1.5 hover:bg-grey7"
           >
             <span
               className={clsx(

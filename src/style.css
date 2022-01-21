@@ -3,27 +3,26 @@
 @tailwind utilities;
 
 
-
 .btn {
-  @apply px-5 py-2.5
+    @apply px-5 py-2.5
 }
 
 .btn-primary {
-  @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-primaryNavy active:bg-navy1
+    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-primaryNavy active:bg-navy1
 }
 
 .btn-secondary {
-  @apply text-white rounded disabled:bg-grey4 hover:bg-grey2 bg-grey active:bg-grey1
+    @apply text-white rounded disabled:bg-grey6 hover:bg-grey2 bg-grey active:bg-grey1
 }
 
 .btn-tertiary {
-  @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded bg-white px-5 py-2.5 border
+    @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6
 }
 
 .btn-tagOne {
-  @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-primaryNavy
+    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-primaryNavy
 }
 
 .btn-tagTwo {
-  @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded-3xl bg-white border
+    @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded-3xl bg-white border
 }

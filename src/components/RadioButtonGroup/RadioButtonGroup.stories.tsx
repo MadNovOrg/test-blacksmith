@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
-import { RadioButtonGroup } from './RadioButtonGroup'
+import { RadioButtonGroup } from '.'
 
 export default {
   title: 'components/RadioButtonGroup',

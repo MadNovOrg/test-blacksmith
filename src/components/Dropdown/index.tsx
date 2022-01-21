@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
@@ -21,7 +21,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         {({ open }) => (
           <>
             <span className="shadow-sm">
-              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-grey4 bg-white">
+              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-grey3 bg-white">
                 <span>{title}</span>
                 <Icon
                   name="chevron-up"
@@ -42,7 +42,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-grey6 shadow-greenBottom outline-none"
+                className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-grey7 shadow-greenBottom outline-none"
               >
                 <div className="px-1 py-1 ">
                   {items.map((item, index) => {

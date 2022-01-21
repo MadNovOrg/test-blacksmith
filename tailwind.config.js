@@ -22,10 +22,10 @@ module.exports = {
       grey: '#3B3A3C',
       grey1: '#626163',
       grey2: '#89898A',
-      grey3: '#B1B0B1',
-      grey4: '#D8D8D8',
-      grey5: '#F1F1F1',
-      grey6: '#9C9C9C',
+      grey3: '#9C9C9C',
+      grey4: '#B1B0B1',
+      grey5: '#C4C4C4',
+      grey6: '#D8D8D8',
       grey7: '#F1F1F1',
       fuschia: '#CC3E78',
       fuschia1: '#D45F92',
@@ -47,7 +47,7 @@ module.exports = {
       purple2: '#A18AB6',
       purple3: '#C0B1CE',
       purple4: '#DFD8E7',
-
+      red: '#FF0000',
       divider: '#DBDBDB',
     },
     extend: {
