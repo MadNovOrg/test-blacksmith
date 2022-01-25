@@ -1,0 +1,38 @@
+version: '3.6'
+
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    volumes:
+      - tth-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tth-db
+
+  graphql-engine:
+    image: hasura/graphql-engine:v2.1.1.cli-migrations-v3
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+      - ./hasura/metadata:/hasura-metadata
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
+      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - 9090:8080
+
+volumes:
+  tth-data:
