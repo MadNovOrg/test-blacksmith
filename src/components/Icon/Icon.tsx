@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 
 import icons from './icons'
@@ -9,12 +10,10 @@ type IconProps = {
   className?: string
 }
 
-export const Icon: React.FC<IconProps> = ({
-  name,
-  className = 'cursor-pointer text-2xl',
-  ...props
-}) => {
+export const Icon: React.FC<IconProps> = ({ name, className, ...props }) => {
   const Comp = icons[name]
 
-  return <Comp {...props} className={className} />
+  return (
+    <Comp {...props} className={clsx('cursor-pointer text-2xl', className)} />
+  )
 }

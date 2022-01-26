@@ -7,6 +7,7 @@ module.exports = {
   theme: {
     colors: {
       white: '#FFFFFF',
+      black: '#000000',
       primaryLime: '#9EB934',
       lime: '#A4B64C',
       lime1: '#B6C56C',
@@ -50,6 +51,10 @@ module.exports = {
       red: '#FF0000',
       divider: '#DBDBDB',
     },
+    ripple: theme => ({
+      colors: theme('colors'),
+    }),
+
     extend: {
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
@@ -59,5 +64,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('tailwindcss-ripple')(),
+  ],
 }

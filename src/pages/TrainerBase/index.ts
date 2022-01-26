@@ -1,0 +1,1 @@
+export { TrainerBasePage } from './TrainerBase'

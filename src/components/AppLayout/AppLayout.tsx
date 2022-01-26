@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next'
 
 import { Icon } from '@app/components/Icon'
 
+import { AppMenu } from '../AppMenu'
+
 type LayoutProps = {
   children: React.ReactNode
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
 
   return (
@@ -20,8 +22,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {t('common.appTitle')}
         </div>
         <div className="flex items-center">
-          <Icon name="chevron-down" />
-          <p className="text-base">Salman M</p>
+          <AppMenu />
           <div className="ml-4">
             <img
               className="inline-block h-12 w-12 rounded-full ring-1 ring-lime"

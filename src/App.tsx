@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Layout } from '@app/components/Layout'
+import { AppLayout } from '@app/components/AppLayout'
 
 import { AppRoutes } from './AppRoutes'
 
@@ -8,9 +8,9 @@ import './style.css'
 
 function App() {
   return (
-    <Layout>
+    <AppLayout>
       <AppRoutes />
-    </Layout>
+    </AppLayout>
   )
 }
 

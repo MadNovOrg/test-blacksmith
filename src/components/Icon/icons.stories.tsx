@@ -8,7 +8,7 @@ export default {
   component: Icon,
 }
 
-export const Primary = () => (
+export const Basic = () => (
   <div>
     <table className="table-auto">
       <tbody>
