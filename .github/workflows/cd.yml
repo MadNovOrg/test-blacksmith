@@ -1,20 +1,27 @@
-name: CI
+name: CD
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  build:
-    name: CI
+  build-deploy:
+    name: CD
     runs-on: ubuntu-latest
     env:
-      CI: 'true'
+      CD: 'true'
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
 
       - name: Build
         uses: actions/setup-node@v2
@@ -35,3 +42,6 @@ jobs:
 
       - name: Build web
         run: npm run build
+
+      - name: Deploy to S3 bucket
+        run: aws s3 sync ./dist/ ${{ secrets.S3_BUCKET }} --delete
