@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-deploy:
     name: CI
     runs-on: ubuntu-latest
     env:
@@ -18,6 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
 
       - name: Build
         uses: actions/setup-node@v2
@@ -38,3 +45,7 @@ jobs:
 
       - name: Build web
         run: npm run build
+
+      - name: Deploy to S3 bucket
+        if: github.event.pull_request.merged == true || github.event.push.ref == 'refs/heads/main'
+        run: aws s3 sync ./dist/ ${{ secrets.S3_BUCKET }} --delete
