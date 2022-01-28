@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CustomIcons, Icon } from './Icon'
+import { IconProps, Icon } from './Icon'
 import icons from './icons'
 
 export default {
@@ -12,7 +12,7 @@ export const Basic = () => (
   <div>
     <table className="table-auto">
       <tbody>
-        {(Object.keys(icons) as CustomIcons[]).map((name, index) => (
+        {(Object.keys(icons) as IconProps['name'][]).map((name, index) => (
           <tr key={index}>
             <td className="text-3xl py-2">
               <Icon name={name} />

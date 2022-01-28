@@ -8,7 +8,7 @@
 }
 
 .btn-primary {
-    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-primaryNavy active:bg-navy1
+    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-navy active:bg-navy1
 }
 
 .btn-secondary {
@@ -16,13 +16,13 @@
 }
 
 .btn-tertiary {
-    @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6
+    @apply active:text-navy1 hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6
 }
 
 .btn-tagOne {
-    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-primaryNavy
+    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-navy
 }
 
 .btn-tagTwo {
-    @apply active:text-navy1 hover:text-navy2 text-primaryNavy rounded-3xl bg-white border
+    @apply active:text-navy1 hover:text-navy2 text-navy rounded-3xl bg-white border
 }

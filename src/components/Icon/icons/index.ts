@@ -1,3 +1,4 @@
+import { ReactComponent as BurgerIcon } from './burger.svg'
 import { ReactComponent as ArrowDownIcon } from './arrow-down.svg'
 import { ReactComponent as PersonIcon } from './person.svg'
 import { ReactComponent as ChevronDownIcon } from './chevron-down.svg'
@@ -38,6 +39,7 @@ import { ReactComponent as AlarmIcon } from './alarm.svg'
 import { ReactComponent as LogoColor } from './logo-color.svg'
 
 const icons = {
+  burger: BurgerIcon,
   'arrow-down': ArrowDownIcon,
   person: PersonIcon,
   'chevron-down': ChevronDownIcon,

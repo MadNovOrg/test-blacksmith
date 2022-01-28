@@ -1,0 +1,40 @@
+// TODO: fix colors based on course level
+// colors denote the course level, dark blue is level 1,
+// purple level 2, pink is advanced and turquoise for the top level BILD ACT certification
+export default [
+  {
+    id: 1,
+    name: 'Positive Behaviour Training: Level Two',
+    date: new Date(),
+    orgName: 'ABC Org',
+    color: 'bg-purple',
+  },
+  {
+    id: 2,
+    name: 'Positive Behaviour Training: BILD ACT Certified',
+    date: new Date(),
+    orgName: 'ABC Org',
+    color: 'bg-teal',
+  },
+  {
+    id: 3,
+    name: 'Positive Behaviour Training: Level One',
+    date: new Date(),
+    orgName: 'ABC Org',
+    color: 'bg-navy',
+  },
+  {
+    id: 4,
+    name: 'Positive Behaviour Training: Advanced Modules',
+    date: new Date(),
+    orgName: 'ABC Org',
+    color: 'bg-fuschia',
+  },
+  {
+    id: 5,
+    name: 'Positive Behaviour Training: Advanced Modules',
+    date: new Date(),
+    orgName: 'ABC Org',
+    color: 'bg-fuschia',
+  },
+]

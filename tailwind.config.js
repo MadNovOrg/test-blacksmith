@@ -3,6 +3,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  important: '#app',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     colors: {
@@ -14,7 +15,7 @@ module.exports = {
       lime2: '#C8D38E',
       lime3: '#DAE1B3',
       lime4: '#EDF0D8',
-      primaryNavy: '#0D2860',
+      navy: '#0D2860',
       navy1: '#06173A',
       navy2: '#41547D',
       navy3: '#707E9D',

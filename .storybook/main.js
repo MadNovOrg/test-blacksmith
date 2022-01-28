@@ -31,6 +31,11 @@ module.exports = {
     );
 
     config = mergeConfig(config, {
+      resolve: {
+        alias: {
+          '@app': path.resolve(__dirname, '..', 'src'),
+        },
+      },
       plugins: [userConfig.plugins.find(p => p.name === 'vite:svgr')],
     });
 
