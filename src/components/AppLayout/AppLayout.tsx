@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
 import { Icon } from '@app/components/Icon'
 
 import { AppMenu } from '../AppMenu'
 import { Typography } from '../Typography'
 import { IconButton } from '../IconButton'
+import { Drawer } from '../Drawer'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -13,6 +15,13 @@ type LayoutProps = {
 
 export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  const location = useLocation()
+
+  useEffect(() => {
+    setOpen(false)
+  }, [location.pathname])
 
   return (
     <div className="md:container md:mx-auto">
@@ -37,7 +46,9 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
         <div className="items-center flex sm:hidden">
-          <IconButton name="burger" />
+          <IconButton name="burger" onClick={() => setOpen(true)} />
+
+          <Drawer open={open} onClose={() => setOpen(false)} />
         </div>
       </div>
       <div>{children}</div>

@@ -42,13 +42,13 @@ export const Typography: React.FC<TypographyProps> = ({
   ...props
 }) => {
   return (
-    <p
+    <div
       className={clsx('flex items-center', variants[variant], className)}
       {...props}
     >
       {startIcon && <div className="mr-2">{startIcon}</div>}
       {children}
       {endIcon && <div className="ml-2">{endIcon}</div>}
-    </p>
+    </div>
   )
 }

@@ -5,19 +5,33 @@ import icons from './icons'
 
 type CustomIcons = keyof typeof icons
 
+type Size = 'sm' | 'md' | 'lg' | 'xl'
+
 export type IconProps = {
   name: CustomIcons
+  size?: Size
   className?: string
 }
 
-const DEFAULT_CLASSES = 'text-2xl'
+const sizeClasses: Record<Size, string> = {
+  sm: 'text-xl',
+  md: 'text-2xl',
+  lg: 'text-4xl',
+  xl: 'text-5xl',
+}
 
 export const Icon: React.FC<IconProps> = ({
   name,
-  className = DEFAULT_CLASSES,
+  className,
+  size = 'md',
   ...props
 }) => {
   const Comp = icons[name]
 
-  return <Comp {...props} className={clsx('cursor-pointer', className)} />
+  return (
+    <Comp
+      {...props}
+      className={clsx('cursor-pointer', sizeClasses[size], className)}
+    />
+  )
 }

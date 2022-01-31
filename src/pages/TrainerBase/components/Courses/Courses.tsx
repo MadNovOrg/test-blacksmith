@@ -39,7 +39,7 @@ export const Courses: React.FC<CoursesProps> = ({ data: courses }) => {
           </div>
           <div className="flex-1" />
           <div className="flex justify-end items-center">
-            <IconButton name="arrow-right" className="text-white text-4xl" />
+            <IconButton name="arrow-right" size="lg" className="text-white" />
           </div>
         </div>
       ))}
