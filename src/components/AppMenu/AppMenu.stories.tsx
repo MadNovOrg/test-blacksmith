@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 
 import { AppMenu } from '.'
 
@@ -8,7 +9,9 @@ export default {
 }
 
 export const Basic = () => (
-  <div className="flex justify-end">
-    <AppMenu />
-  </div>
+  <BrowserRouter>
+    <div className="flex justify-end">
+      <AppMenu />
+    </div>
+  </BrowserRouter>
 )

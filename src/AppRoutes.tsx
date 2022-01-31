@@ -2,12 +2,17 @@ import React from 'react'
 import { Routes, Route, NavLink, Outlet } from 'react-router-dom'
 import clsx from 'clsx'
 
+import { AppLayout } from '@app/components/AppLayout'
+
+import Spinner from './components/Spinner'
 import { NewCourse } from './pages/TrainerBase/components/NewCourse'
 import { CourseHistory } from './pages/TrainerBase/components/CourseHistory'
 import { CourseTemplates } from './pages/TrainerBase/components/CourseTemplates'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
+import { useSession } from '@app/auth'
+import { LoginPage } from '@app/pages/Login'
 
 // TODO: will be generated later based on user/role
 const tabs = [
@@ -55,17 +60,48 @@ const Layout: React.FC<LayoutProps> = ({ tabs }) => {
   )
 }
 
-export const AppRoutes: React.FC<unknown> = () => {
+const LoggedInRoutes: React.FC<unknown> = () => {
+  return (
+    <AppLayout>
+      <Routes>
+        <Route path="/" element={<Layout tabs={tabs} />}>
+          <Route path="trainer-base" element={<TrainerBasePage />}>
+            <Route path="new-course" element={<NewCourse />} />
+            <Route path="course-history" element={<CourseHistory />} />
+            <Route path="course-templates" element={<CourseTemplates />} />
+          </Route>
+          <Route path="my-training" element={<MyTrainingPage />} />
+        </Route>
+      </Routes>
+    </AppLayout>
+  )
+}
+
+const LoggedOutRoutes: React.FC<unknown> = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout tabs={tabs} />}>
-        <Route path="trainer-base" element={<TrainerBasePage />}>
-          <Route path="new-course" element={<NewCourse />} />
-          <Route path="course-history" element={<CourseHistory />} />
-          <Route path="course-templates" element={<CourseTemplates />} />
-        </Route>
-        <Route path="my-training" element={<MyTrainingPage />} />
-      </Route>
+      <Route path="login" element={<LoginPage />} />
+      <Route path="*" element={<LoginPage />} />
     </Routes>
   )
+}
+
+export const AppRoutes: React.FC<unknown> = () => {
+  const session = useSession()
+
+  if (session.loading) {
+    return (
+      <main className="w-screen h-screen relative">
+        <Spinner cls="w-16 h-16" />
+      </main>
+    )
+  }
+
+  console.log(session)
+
+  if (session.accessToken === null) {
+    return <LoggedOutRoutes />
+  }
+
+  return <LoggedInRoutes />
 }

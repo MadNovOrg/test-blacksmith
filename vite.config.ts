@@ -9,6 +9,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, 'src'),
+      // see https://github.com/aws-amplify/amplify-ui/issues/268
+      // and https://ui.docs.amplify.aws/getting-started/installation?platform=vue
+      './runtimeConfig': './runtimeConfig.browser',
     },
   },
   plugins: [

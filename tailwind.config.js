@@ -63,6 +63,9 @@ module.exports = {
       boxShadow: {
         greenBottom: '0 6px 6px -3px #9EB934',
       },
+      lineHeight: {
+        '5rem': '5rem',
+      },
     },
   },
   plugins: [

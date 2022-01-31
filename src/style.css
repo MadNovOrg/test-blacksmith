@@ -2,27 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .btn {
+    @apply px-5 py-2.5;
+  }
 
-.btn {
-    @apply px-5 py-2.5
+  .btn-primary {
+    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 active:bg-navy1;
+  }
+
+  .btn-secondary {
+    @apply text-white rounded disabled:bg-grey6 hover:bg-grey2 bg-grey active:bg-grey1;
+  }
+
+  .btn-tertiary {
+    @apply active:text-navy1 hover:text-navy2 rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6;
+  }
+
+  .btn-tagOne {
+    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2;
+  }
+
+  .btn-tagTwo {
+    @apply active:text-navy1 hover:text-navy2 rounded-3xl bg-white border;
+  }
+
+  .spinner {
+    @apply absolute z-10 -mt-6 -ml-6 top-2/4 left-2/4 animate-spin;
+  }
+
+  .spinner .path {
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
 }
 
-.btn-primary {
-    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 bg-navy active:bg-navy1
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.btn-secondary {
-    @apply text-white rounded disabled:bg-grey6 hover:bg-grey2 bg-grey active:bg-grey1
-}
-
-.btn-tertiary {
-    @apply active:text-navy1 hover:text-navy2 text-navy rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6
-}
-
-.btn-tagOne {
-    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2 bg-navy
-}
-
-.btn-tagTwo {
-    @apply active:text-navy1 hover:text-navy2 text-navy rounded-3xl bg-white border
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }

@@ -38,7 +38,13 @@ module.exports = {
       },
       plugins: [userConfig.plugins.find(p => p.name === 'vite:svgr')],
     });
-
-    return config;
+    
+    return {
+      ...config,
+      define: {
+        ...config.define,
+        global: "window",
+      },
+    }
   },
 }

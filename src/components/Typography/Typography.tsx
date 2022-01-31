@@ -3,6 +3,7 @@ import React from 'react'
 
 type Variant =
   | 'h3'
+  | 'lighth4'
   | 'h4'
   | 'h5'
   | 'h6'
@@ -12,6 +13,7 @@ type Variant =
   | 'body1'
   | 'body2'
   | 'body3'
+  | 'body4'
 
 export type TypographyProps = {
   variant?: Variant
@@ -23,6 +25,7 @@ export type TypographyProps = {
 const variants: Record<Variant, string> = {
   h3: 'text-4xl',
   h4: 'font-light text-2xl sm:text-4xl',
+  lighth4: 'sm:text-4xl font-thin leading-10 sm:leading-5rem',
   h5: 'text-2xl',
   h6: 'text-2xl font-light',
   subtitle1: 'text-base font-bold',
@@ -31,6 +34,7 @@ const variants: Record<Variant, string> = {
   body1: 'text-base',
   body2: 'text-sm',
   body3: 'text-sm	font-light',
+  body4: 'text-xs font-light',
 }
 
 export const Typography: React.FC<TypographyProps> = ({

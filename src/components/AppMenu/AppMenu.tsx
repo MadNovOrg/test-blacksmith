@@ -1,13 +1,18 @@
 import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { Icon } from '../Icon'
 import { Typography } from '../Typography'
+import { useSession } from '../../auth'
 
 type AppMenuProps = unknown
 
 export const AppMenu: React.FC<AppMenuProps> = () => {
+  const session = useSession()
+  const navigate = useNavigate()
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -60,6 +65,10 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
                     'group flex rounded-md items-center w-full px-2 py-2 text-sm hover:bg-grey7',
                     active ? ' text-black' : 'text-grey'
                   )}
+                  onClick={() => {
+                    session.logout()
+                    navigate('/login')
+                  }}
                 >
                   <Icon name="arrow-right" className="mr-2" />
                   <Typography>Logout</Typography>

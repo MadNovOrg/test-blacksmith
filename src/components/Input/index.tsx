@@ -7,6 +7,7 @@ export interface InputProps
   className?: string
   value?: string | number
   error?: string
+  isPassword?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -15,6 +16,7 @@ export const Input: React.FC<InputProps> = ({
   className,
   value,
   error,
+  isPassword = false,
   ...props
 }) => {
   return (
@@ -31,12 +33,13 @@ export const Input: React.FC<InputProps> = ({
       <input
         value={value}
         className={clsx(
-          'border-b-2 focus:outline-0 block w-full pb-1.5',
+          'focus:ring-0 border-b-2 border-t-0 border-l-0 border-r-0 focus:outline-0 block w-full pb-1.5 placeholder-grey5',
           {
             'focus:border-lime1': !error,
             'border-red': !!error,
             'border-grey5': !value && !error,
-            'border-navy': value && !error,
+            'border-navy1': value && !error,
+            'pl-1': isPassword,
           },
           className
         )}

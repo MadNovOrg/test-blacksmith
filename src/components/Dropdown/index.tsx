@@ -3,6 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Icon } from '../Icon/Icon'
+import { Typography } from '../Typography'
 
 export type DropdownProps = {
   title: string
@@ -22,9 +23,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
           <>
             <span className="shadow-sm">
               <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-grey3 bg-white">
-                <span>{title}</span>
+                <span>
+                  <Typography variant="body1">{title}</Typography>
+                </span>
                 <Icon
-                  name="chevron-up"
+                  name="chevron-down"
                   aria-hidden="true"
                   className="w-5 h-5 ml-2 -mr-1"
                 />
