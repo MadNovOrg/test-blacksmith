@@ -41,7 +41,7 @@ jobs:
         run: npm t
 
       - name: Build web
-        run: npm run build
+        run: export $(cat .env.development) && npm run build
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.S3_BUCKET }} --delete
