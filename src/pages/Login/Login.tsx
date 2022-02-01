@@ -137,7 +137,7 @@ export const LoginPage = () => {
 
           <div className="text-center">
             <Button variant="primary" type="submit" className="w-40">
-              <Typography>Sign In</Typography>
+              <Typography className="ml-8 mr-8">Sign In</Typography>
             </Button>
           </div>
         </form>
