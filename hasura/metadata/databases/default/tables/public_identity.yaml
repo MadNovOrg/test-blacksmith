@@ -1,0 +1,3 @@
+table:
+  name: identity
+  schema: public

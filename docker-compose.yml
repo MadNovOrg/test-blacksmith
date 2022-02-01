@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   postgres:
-    image: postgres:12
+    image: postgres:14
     restart: always
     volumes:
       - tth-data:/var/lib/postgresql/data
@@ -25,7 +25,7 @@ services:
       - ./hasura/metadata:/hasura-metadata
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
-      HASURA_GRAPHQL_ENABLE_CONSOLE: true
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
 
   adminer:

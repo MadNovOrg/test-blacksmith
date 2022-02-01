@@ -1,0 +1,4 @@
+table:
+  name: profile_status
+  schema: public
+is_enum: true

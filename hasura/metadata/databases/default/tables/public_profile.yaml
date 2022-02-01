@@ -1,3 +1,3 @@
 table:
-  name: users
+  name: profile
   schema: public
