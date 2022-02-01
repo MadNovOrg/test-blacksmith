@@ -6,6 +6,7 @@ import { AppLayout } from '@app/components/AppLayout'
 
 import Spinner from './components/Spinner'
 import { NewCourse } from './pages/TrainerBase/components/NewCourse'
+import { Course } from './pages/TrainerBase/components/Course'
 import { CourseHistory } from './pages/TrainerBase/components/CourseHistory'
 import { CourseTemplates } from './pages/TrainerBase/components/CourseTemplates'
 
@@ -67,6 +68,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
         <Route path="/" element={<Layout tabs={tabs} />}>
           <Route path="trainer-base" element={<TrainerBasePage />}>
             <Route path="new-course" element={<NewCourse />} />
+            <Route path="course/:id" element={<Course />} />
             <Route path="course-history" element={<CourseHistory />} />
             <Route path="course-templates" element={<CourseTemplates />} />
           </Route>

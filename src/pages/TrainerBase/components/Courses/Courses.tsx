@@ -1,6 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
 import clsx from 'clsx'
+import { useNavigate } from 'react-router-dom'
 
 import { Typography } from '@app/components/Typography'
 import { IconButton } from '@app/components/IconButton'
@@ -18,6 +19,8 @@ type CoursesProps = {
 }
 
 export const Courses: React.FC<CoursesProps> = ({ data: courses }) => {
+  const navigate = useNavigate()
+
   return (
     <div className="mt-4 -mx-2 flex flex-wrap">
       {courses.map(c => (
@@ -39,7 +42,12 @@ export const Courses: React.FC<CoursesProps> = ({ data: courses }) => {
           </div>
           <div className="flex-1" />
           <div className="flex justify-end items-center">
-            <IconButton name="arrow-right" size="lg" className="text-white" />
+            <IconButton
+              name="arrow-right"
+              size="lg"
+              className="text-white"
+              onClick={() => navigate(`../course/${c.id}`)}
+            />
           </div>
         </div>
       ))}
