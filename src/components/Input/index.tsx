@@ -22,23 +22,25 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div>
       {label && (
-        <div
+        <label
+          htmlFor={props.id || props.name}
           className={clsx('text-xs mb-1.5', {
             'text-red': !!error,
           })}
         >
           {label}
-        </div>
+        </label>
       )}
       <input
+        id={props.id || props.name}
         value={value}
         className={clsx(
-          'focus:ring-0 border-b-2 border-t-0 border-l-0 border-r-0 focus:outline-0 block w-full pb-1.5 placeholder-grey5',
+          'focus:ring-0 border-b-2 border-t-0 border-l-0 border-r-0 focus:outline-0 block w-full pb-1.5 placeholder-gray-400',
           {
-            'focus:border-lime1': !error,
+            'focus:border-lime-500': !error,
             'border-red': !!error,
-            'border-grey5': !value && !error,
-            'border-navy1': value && !error,
+            'border-gray-300': !value && !error,
+            'border-navy-100': value && !error,
             'pl-1': isPassword,
           },
           className

@@ -25,7 +25,7 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="md:container md:mx-auto">
-      <div className="flex items-center px-4 sm:px-6 py-3 border-b border-b-lime">
+      <div className="flex items-center px-4 sm:px-6 py-3 border-b border-b-lime-500 sm:border-0">
         <div className="">
           <Icon name="logo-color" className="text-4xl sm:text-5xl" />
         </div>
@@ -39,7 +39,7 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
           <AppMenu />
           <div className="ml-4">
             <img
-              className="inline-block h-12 w-12 rounded-full ring-1 ring-lime"
+              className="inline-block h-12 w-12 rounded-full ring-1 ring-lime-500"
               src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
               alt="avatar"
             />
@@ -47,7 +47,6 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         <div className="items-center flex sm:hidden">
           <IconButton name="burger" onClick={() => setOpen(true)} />
-
           <Drawer open={open} onClose={() => setOpen(false)} />
         </div>
       </div>

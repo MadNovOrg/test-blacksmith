@@ -27,6 +27,7 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_MbPqfM7i4/.well-known/jwks.json","claims_format":"stringified_json"}'
 
   adminer:
     image: adminer:latest

@@ -20,7 +20,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
 }) => {
   return (
     <button
-      className={`rounded-full bg-white/0 ripple-bg-grey7 p-2 ${className}`}
+      className={`rounded-full bg-white/0 ripple-bg-gray-400 p-2 ${className}`}
       onClick={onClick}
       {...props}
     >

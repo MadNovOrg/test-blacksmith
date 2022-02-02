@@ -36,7 +36,7 @@ export const TrainerBasePage: React.FC<TrainerBasePageProps> = () => {
               <NavLink
                 to={m.to}
                 className={({ isActive }) =>
-                  isActive ? 'border-b border-lime font-bold' : ''
+                  isActive ? 'border-b border-lime-500 font-bold' : ''
                 }
               >
                 {m.title}

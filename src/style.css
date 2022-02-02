@@ -1,30 +1,47 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
+
+@layer base {
+  html {
+    @apply font-sans;
+  }
+
+  ::placeholder {
+    @apply font-sans text-base;
+  }
+
+  a:focus {
+    @apply outline-none rounded focus:ring-offset-2 focus:ring-2 ring-navy-500;
+  }
+
+  input[type="checkbox"] {
+    @apply border-gray-300 checked:border-navy-500 checked:bg-lime-500 text-lime-500 focus:ring-lime-500 h-6 w-6 rounded;
+  }
+
+  input[type="radio"] {
+    @apply border-gray-300 checked:border-navy-500 checked:bg-lime-500 text-lime-500 focus:ring-lime-500 h-6 w-6 rounded-full;
+  }
+}
 
 @layer components {
   .btn {
-    @apply px-5 py-2.5;
+    @apply px-5 py-2.5 rounded outline-none focus:ring-offset-2 focus:ring-2;
+  }
+  
+  .tag {
+    @apply rounded-full px-5 py-2.5 outline-none focus:ring-offset-2 focus:ring-2;
   }
 
-  .btn-primary {
-    @apply text-white disabled:bg-navy4 rounded hover:bg-navy2 active:bg-navy1 bg-navy;
+  .primary {
+    @apply text-white text-center bg-navy-500 disabled:bg-navy-100 rounded hover:bg-navy-300 active:bg-navy-600 focus:bg-navy-600 ring-navy-500 transition-all;
   }
 
-  .btn-secondary {
-    @apply text-white rounded disabled:bg-grey6 hover:bg-grey2 bg-grey active:bg-grey1;
+  .secondary {
+    @apply text-white text-center bg-gray-500 disabled:bg-gray-100 rounded hover:bg-gray-300 active:bg-gray-600 focus:bg-gray-600 ring-gray-500 transition-all;
   }
 
-  .btn-tertiary {
-    @apply active:text-navy1 hover:text-navy2 rounded bg-white px-5 py-2.5 border disabled:text-grey6 disabled:border-grey6;
-  }
-
-  .btn-tagOne {
-    @apply active:bg-navy1 text-white rounded-3xl hover:bg-navy2;
-  }
-
-  .btn-tagTwo {
-    @apply active:text-navy1 hover:text-navy2 rounded-3xl bg-white border;
+  .tertiary {
+    @apply text-navy-500 text-center ring-navy-500 transition-all border border-navy-500 hover:border-navy-300 hover:text-navy-300 active:border-navy-300 active:text-navy-300 disabled:border-navy-100 disabled:text-navy-100;
   }
 
   .spinner {
@@ -57,3 +74,5 @@
     stroke-dashoffset: -124;
   }
 }
+
+@tailwind utilities;

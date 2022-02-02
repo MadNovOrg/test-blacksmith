@@ -35,17 +35,17 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ tabs }) => {
   return (
     <div>
-      <div className="border-t border-divider bg-grey7 hidden sm:flex">
+      <div className="border-t border-divider bg-gray-50 hidden sm:flex">
         {tabs.map(tab => (
           <NavLink
             key={tab.id}
             to={tab.id}
             className={({ isActive }) =>
               clsx(
-                'px-2 w-48 py-2 -mt-px text-center',
+                'relative z-10 px-2 w-48 py-2 -mt-px text-center',
                 isActive
-                  ? 'bg-white text-black border-t border-lime'
-                  : 'text-grey1'
+                  ? 'bg-white text-black border-t-2 border-lime-500'
+                  : 'text-gray-400'
               )
             }
           >

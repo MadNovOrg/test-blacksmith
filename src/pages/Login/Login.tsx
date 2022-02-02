@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import * as EmailValidator from 'email-validator'
 
 import { Icon } from '@app/components/Icon'
-import { Button } from '@app/components/Button'
 import { Typography } from '@app/components/Typography'
-import { CustomLink } from '@app/components/Link'
 import { Input } from '@app/components/Input'
 
 import { useSession } from '@app/auth'
@@ -113,7 +112,7 @@ export const LoginPage = () => {
 
       <div className="w-60 md:w-96">
         <form onSubmit={handleSubmit}>
-          <div className="mb-5">
+          <section className="space-y-6 mb-16">
             <Input
               error={errorState.emailErrorMessage}
               placeholder="Please enter your email address"
@@ -121,9 +120,7 @@ export const LoginPage = () => {
               title="email"
               label="Email Address"
             ></Input>
-          </div>
 
-          <div className="mb-10">
             <Input
               error={errorState.passwordErrorMessage}
               placeholder="Please enter your password"
@@ -133,20 +130,20 @@ export const LoginPage = () => {
               label="Password"
               type="password"
             ></Input>
-          </div>
+          </section>
 
           <div className="text-center">
-            <Button variant="primary" type="submit" className="w-40">
-              <Typography className="ml-8 mr-8">Sign In</Typography>
-            </Button>
+            <button type="submit" className="btn primary w-40">
+              Sign In
+            </button>
           </div>
         </form>
       </div>
 
-      <div>
-        <CustomLink to="/login" className="mt-12">
+      <div className="mt-12">
+        <Link to="/login" className="text-xs font-light underline">
           Forgotten your password?
-        </CustomLink>
+        </Link>
       </div>
     </div>
   )

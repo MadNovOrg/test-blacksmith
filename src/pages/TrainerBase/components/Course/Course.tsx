@@ -120,7 +120,7 @@ export const Course: React.FC<CourseProps> = () => {
             <label className="block">
               <Typography variant="body2">Add to booking</Typography>
               <select
-                className="px-0 pr-10 border-0 border-b border-grey3 focus:ring-0 focus:border-navy"
+                className="px-0 pr-10 border-0 border-b border-gray-300 focus:ring-0 focus:border-navy"
                 placeholder="Please choose"
               >
                 <option>Birchwood Academy, 3rd-4th May 2022</option>
@@ -137,7 +137,7 @@ export const Course: React.FC<CourseProps> = () => {
               className={clsx(
                 'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
                 {
-                  'bg-lime4': snapshot.isDraggingOver,
+                  'bg-lime-400': snapshot.isDraggingOver,
                 }
               )}
               {...provided.droppableProps}
@@ -152,7 +152,7 @@ export const Course: React.FC<CourseProps> = () => {
         </Droppable>
 
         <div className="flex items-center justify-end mb-3">
-          <button className="btn btn-tertiary">Submit Course</button>
+          <button className="btn tertiary">Submit Course</button>
         </div>
 
         <Typography variant="subtitle3">Modules Available</Typography>
@@ -163,7 +163,7 @@ export const Course: React.FC<CourseProps> = () => {
               className={clsx(
                 'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
                 {
-                  'bg-lime4': snapshot.isDraggingOver,
+                  'bg-lime-400': snapshot.isDraggingOver,
                 }
               )}
               {...provided.droppableProps}
