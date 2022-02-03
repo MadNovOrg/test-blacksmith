@@ -22,7 +22,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         {({ open }) => (
           <>
             <span className="shadow-sm">
-              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-grey3 bg-white">
+              <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 border-gray-300 bg-white">
                 <span>
                   <Typography variant="body1">{title}</Typography>
                 </span>
@@ -45,7 +45,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-grey7 shadow-greenBottom outline-none"
+                className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-50 shadow-greenBottom outline-none"
               >
                 <div className="px-1 py-1 ">
                   {items.map((item, index) => {
@@ -60,7 +60,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                           {({ active }) => (
                             <span
                               className={`${clsx({
-                                'bg-grey7': active,
+                                'bg-gray-50': active,
                               })} flex justify-between w-full px-4 py-2 text-sm leading-5 text-left`}
                             >
                               {item}

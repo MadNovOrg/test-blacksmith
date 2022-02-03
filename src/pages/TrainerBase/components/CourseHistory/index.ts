@@ -1,1 +1,0 @@
-export { CourseHistory } from './CourseHistory'

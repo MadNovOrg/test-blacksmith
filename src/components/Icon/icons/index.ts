@@ -1,4 +1,5 @@
 import { ReactComponent as CloseIcon } from './close.svg'
+import { ReactComponent as SupervisorIcon } from './supervisor.svg'
 import { ReactComponent as BurgerIcon } from './burger.svg'
 import { ReactComponent as ArrowDownIcon } from './arrow-down.svg'
 import { ReactComponent as PersonIcon } from './person.svg'
@@ -6,6 +7,7 @@ import { ReactComponent as ChevronDownIcon } from './chevron-down.svg'
 import { ReactComponent as AddPhotoIcon } from './add-photo.svg'
 import { ReactComponent as MoodHappyIcon } from './mood-happy.svg'
 import { ReactComponent as TagIcon } from './tag.svg'
+import { ReactComponent as SchoolIcon } from './school.svg'
 import { ReactComponent as ChatBubbleIcon } from './chat-bubble.svg'
 import { ReactComponent as ChevronUpIcon } from './chevron-up.svg'
 import { ReactComponent as LockIcon } from './lock.svg'
@@ -37,6 +39,7 @@ import { ReactComponent as ArrowLeftIcon } from './arrow-left.svg'
 import { ReactComponent as CloudIcon } from './cloud.svg'
 import { ReactComponent as FolderIcon } from './folder.svg'
 import { ReactComponent as AlarmIcon } from './alarm.svg'
+import { ReactComponent as BookmarkCollectionIcon } from './bookmark-collection.svg'
 import { ReactComponent as LogoColor } from './logo-color.svg'
 
 const icons = {
@@ -79,7 +82,12 @@ const icons = {
   cloud: CloudIcon,
   folder: FolderIcon,
   alarm: AlarmIcon,
+  'bookmark-collection': BookmarkCollectionIcon,
+  supervisor: SupervisorIcon,
+  school: SchoolIcon,
   'logo-color': LogoColor,
 }
 
 export default icons
+
+export type AppIcons = keyof typeof icons

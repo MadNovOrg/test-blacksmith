@@ -1,14 +1,12 @@
 import clsx from 'clsx'
 import React from 'react'
 
-import icons from './icons'
-
-type CustomIcons = keyof typeof icons
+import icons, { AppIcons } from './icons'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl'
 
 export type IconProps = {
-  name: CustomIcons
+  name: AppIcons
   size?: Size
   className?: string
 }

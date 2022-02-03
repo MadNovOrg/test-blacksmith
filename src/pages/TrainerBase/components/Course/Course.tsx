@@ -1,182 +1,54 @@
-import React, { useCallback, useState } from 'react'
-import {
-  DragDropContext,
-  DragDropContextProps,
-  Droppable,
-} from 'react-beautiful-dnd'
-import clsx from 'clsx'
+import React from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
 
 import { Typography } from '@app/components/Typography'
-
-import { ModuleCard } from './components/ModuleCard'
-
-import { CourseModule } from '@app/types'
+import { Icon } from '@app/components/Icon'
 
 type CourseProps = unknown
 
-const mockedCourseModules = [
+const menu = [
   {
-    id: 'm1',
-    name: 'Module A',
-    description: 'Brief description of the module',
-  },
-]
-
-const mockedModules = [
-  {
-    id: 'm2',
-    name: 'Module B',
-    description: 'Brief description of the module',
+    to: 'create',
+    title: 'New Course',
   },
   {
-    id: 'm3',
-    name: 'Module C',
-    description: 'Brief description of the module',
+    to: 'history',
+    title: 'View History',
   },
   {
-    id: 'm4',
-    name: 'Module D',
-    description: 'Brief description of the module',
+    to: 'templates',
+    title: 'Templates',
   },
 ]
 
 export const Course: React.FC<CourseProps> = () => {
-  // TODO: mocked data, will be plugged with API
-  const [courseModules, setCourseModules] =
-    useState<CourseModule[]>(mockedCourseModules)
-  const [allModules, setAllModules] = useState<CourseModule[]>(mockedModules)
-
-  const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
-    result => {
-      const { draggableId, source, destination } = result
-
-      // if drop happened outside of droppable
-      if (!destination) return
-
-      // No need to allow sorting within all module list
-      if (
-        destination.droppableId === source.droppableId &&
-        source.droppableId === 'all-modules'
-      ) {
-        return
-      }
-
-      if (destination.droppableId === 'course-modules') {
-        const isReordering = source.droppableId === 'course-modules'
-
-        const targetItem = (isReordering ? courseModules : allModules).find(
-          m => m.id === draggableId
-        ) as CourseModule
-
-        const newCourseModules = Array.from(courseModules)
-        const newAllModules = isReordering ? allModules : Array.from(allModules)
-
-        if (isReordering) {
-          newCourseModules.splice(source.index, 1)
-        } else {
-          newAllModules.splice(source.index, 1)
-        }
-
-        newCourseModules.splice(destination.index, 0, targetItem)
-
-        setCourseModules(newCourseModules)
-        setAllModules(newAllModules)
-        return
-      }
-
-      if (destination.droppableId === 'all-modules') {
-        const targetItem = courseModules.find(
-          m => m.id === draggableId
-        ) as CourseModule
-
-        const newAllModules = Array.from(allModules)
-        newAllModules.splice(destination.index, 0, targetItem)
-        setAllModules(newAllModules)
-
-        const newCourseModules = Array.from(courseModules)
-        newCourseModules.splice(source.index, 1)
-        setCourseModules(newCourseModules)
-        return
-      }
-    },
-    [allModules, courseModules]
-  )
-
   return (
-    <DragDropContext onDragEnd={handleDrop}>
-      <div className="">
-        <Typography variant="h4" className="mb-4">
-          Level Two
-        </Typography>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex-1">
-            <Typography variant="body2">
-              To meet the acceptance crteria, this course must contain tier 1
-              (green) and two tier 2 (yellow) modules. Drag and drop modules in
-              the area provided below and submit when complete.
-            </Typography>
-          </div>
-          <div className="flex-1 flex justify-end">
-            <label className="block">
-              <Typography variant="body2">Add to booking</Typography>
-              <select
-                className="px-0 pr-10 border-0 border-b border-gray-300 focus:ring-0 focus:border-navy"
-                placeholder="Please choose"
+    <div className="flex">
+      <div className="w-48 hidden sm:flex sm:flex-col">
+        <div className="flex mb-8">
+          <Icon name="arrow-left" />
+          <Typography className="ml-2">Back</Typography>
+        </div>
+
+        <div className="flex flex-col">
+          {menu.map(m => (
+            <Typography key={m.to} variant="body2" className="py-3">
+              <NavLink
+                to={m.to}
+                className={({ isActive }) =>
+                  isActive ? 'border-b border-lime-500 font-bold' : ''
+                }
               >
-                <option>Birchwood Academy, 3rd-4th May 2022</option>
-              </select>
-            </label>
-          </div>
+                {m.title}
+              </NavLink>
+            </Typography>
+          ))}
         </div>
-
-        <Typography variant="subtitle3">My Course</Typography>
-
-        <Droppable droppableId="course-modules" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              className={clsx(
-                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
-                {
-                  'bg-lime-400': snapshot.isDraggingOver,
-                }
-              )}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {courseModules.map((m, index) => (
-                <ModuleCard key={m.id} data={m} index={index} />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-
-        <div className="flex items-center justify-end mb-3">
-          <button className="btn tertiary">Submit Course</button>
-        </div>
-
-        <Typography variant="subtitle3">Modules Available</Typography>
-
-        <Droppable droppableId="all-modules" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              className={clsx(
-                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
-                {
-                  'bg-lime-400': snapshot.isDraggingOver,
-                }
-              )}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {allModules.map((m, index) => (
-                <ModuleCard key={m.id} data={m} index={index} />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
       </div>
-    </DragDropContext>
+
+      <div className="flex-1 px-4 py-2 sm:pt-16">
+        <Outlet />
+      </div>
+    </div>
   )
 }

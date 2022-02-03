@@ -25,7 +25,7 @@ export const ToggleSwitch: React.FC<SwitchProps> = ({
             'relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none',
             {
               'bg-lime': checked,
-              'bg-grey5': !checked,
+              'bg-gray-50': !checked,
             }
           )}
         >
@@ -43,7 +43,7 @@ export const ToggleSwitch: React.FC<SwitchProps> = ({
           <span
             className={clsx({
               'text-navy': checked,
-              'text-grey5': !checked,
+              'text-gray-50': !checked,
             })}
           >
             {label}

@@ -17,9 +17,9 @@ const menu = [
     to: '/trainer-base',
     title: 'Trainer Base',
     children: [
-      { to: '/trainer-base/new-course', title: 'New Course' },
-      { to: '/trainer-base/course-history', title: 'Course History' },
-      { to: '/trainer-base/course-templates', title: 'Course Templates' },
+      { to: '/trainer-base/course/create', title: 'New Course' },
+      { to: '/trainer-base/course/history', title: 'Course History' },
+      { to: '/trainer-base/course/templates', title: 'Course Templates' },
     ],
   },
   {
@@ -47,7 +47,7 @@ export const Drawer: React.FC<DrawerProps> = ({ open, onClose }) => {
             leaveTo="opacity-0"
           >
             <Dialog.Overlay
-              className="absolute inset-0 bg-grey/50 transition-opacity"
+              className="absolute inset-0 bg-gray/50 transition-opacity"
               onClick={onClose}
             />
           </Transition.Child>
