@@ -1,3 +1,29 @@
 table:
   name: profile
   schema: public
+object_relationships:
+- name: profile_status
+  using:
+    foreign_key_constraint_on: status
+array_relationships:
+- name: identities
+  using:
+    foreign_key_constraint_on:
+      column: profile_id
+      table:
+        name: identity
+        schema: public
+- name: organization_members
+  using:
+    foreign_key_constraint_on:
+      column: profile_id
+      table:
+        name: organization_member
+        schema: public
+- name: profile_roles
+  using:
+    foreign_key_constraint_on:
+      column: profile_id
+      table:
+        name: profile_role
+        schema: public

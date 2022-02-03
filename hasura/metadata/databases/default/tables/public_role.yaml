@@ -1,3 +1,18 @@
 table:
   name: role
   schema: public
+array_relationships:
+- name: organization_roles
+  using:
+    foreign_key_constraint_on:
+      column: role_id
+      table:
+        name: organization_role
+        schema: public
+- name: profile_roles
+  using:
+    foreign_key_constraint_on:
+      column: role_id
+      table:
+        name: profile_role
+        schema: public

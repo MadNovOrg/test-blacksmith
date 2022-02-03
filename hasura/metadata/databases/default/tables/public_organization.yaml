@@ -1,3 +1,36 @@
 table:
   name: organization
   schema: public
+object_relationships:
+- name: organization_status
+  using:
+    foreign_key_constraint_on: status
+array_relationships:
+- name: organizationGroupsByParentOrganizationId
+  using:
+    foreign_key_constraint_on:
+      column: parent_organization_id
+      table:
+        name: organization_group
+        schema: public
+- name: organization_groups
+  using:
+    foreign_key_constraint_on:
+      column: organization_id
+      table:
+        name: organization_group
+        schema: public
+- name: organization_members
+  using:
+    foreign_key_constraint_on:
+      column: organization_id
+      table:
+        name: organization_member
+        schema: public
+- name: organization_roles
+  using:
+    foreign_key_constraint_on:
+      column: organization_id
+      table:
+        name: organization_role
+        schema: public
