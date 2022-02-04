@@ -15,7 +15,7 @@ export const CourseCreate: React.FC<CourseCreateProps> = () => {
   return (
     <div className="">
       <Typography variant="h4" className="mb-4">
-        Course Templates
+        Create Course
       </Typography>
       <Typography variant="body2">Select your template</Typography>
 

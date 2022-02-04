@@ -1,18 +1,35 @@
 table:
   name: organization_member
   schema: public
+configuration:
+  custom_column_names:
+    created_at: createdAt
+    member_type: memberType
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
-- name: organization_role
+- name: organization
   using:
     foreign_key_constraint_on: organization_id
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
 array_relationships:
-- name: organization_member_roles
+- name: roles
   using:
     foreign_key_constraint_on:
       column: organization_member_id
       table:
         name: organization_member_role
         schema: public
+select_permissions:
+- permission:
+    columns:
+    - created_at
+    - id
+    - member_type
+    - organization_id
+    - profile_id
+    - updated_at
+    filter: {}
+  role: user

@@ -1,0 +1,27 @@
+table:
+  name: module_group
+  schema: public
+configuration:
+  custom_column_names:
+    created_at: createdAt
+    module_level: level
+    updated_at: updatedAt
+  custom_root_fields: {}
+array_relationships:
+- name: modules
+  using:
+    foreign_key_constraint_on:
+      column: module_group_id
+      table:
+        name: module
+        schema: public
+select_permissions:
+- permission:
+    columns:
+    - module_level
+    - name
+    - created_at
+    - updated_at
+    - id
+    filter: {}
+  role: user

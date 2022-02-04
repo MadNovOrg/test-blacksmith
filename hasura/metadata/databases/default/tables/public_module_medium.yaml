@@ -1,0 +1,10 @@
+table:
+  name: module_medium
+  schema: public
+is_enum: true
+select_permissions:
+- permission:
+    columns:
+    - name
+    filter: {}
+  role: user

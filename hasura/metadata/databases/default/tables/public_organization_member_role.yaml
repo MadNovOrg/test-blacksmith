@@ -2,9 +2,9 @@ table:
   name: organization_member_role
   schema: public
 object_relationships:
-- name: organization_member
+- name: member
   using:
     foreign_key_constraint_on: organization_member_id
-- name: organization_role
+- name: role
   using:
     foreign_key_constraint_on: organization_role_id

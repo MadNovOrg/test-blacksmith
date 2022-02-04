@@ -6,6 +6,12 @@
     @apply font-sans antialiased;
   }
 
+  html, body, #app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
   ::placeholder {
     @apply font-sans text-base;
   }

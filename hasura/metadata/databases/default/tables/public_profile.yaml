@@ -1,6 +1,14 @@
 table:
   name: profile
   schema: public
+configuration:
+  custom_column_names:
+    contact_details: contactDetails
+    created_at: createdAt
+    family_name: familyName
+    given_name: givenName
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
 - name: profile_status
   using:
@@ -13,17 +21,35 @@ array_relationships:
       table:
         name: identity
         schema: public
-- name: organization_members
+- name: organizations
   using:
     foreign_key_constraint_on:
       column: profile_id
       table:
         name: organization_member
         schema: public
-- name: profile_roles
+- name: roles
   using:
     foreign_key_constraint_on:
       column: profile_id
       table:
         name: profile_role
         schema: public
+select_permissions:
+- permission:
+    columns:
+    - id
+    - given_name
+    - family_name
+    - title
+    - tags
+    - status
+    - contact_details
+    - attributes
+    - addresses
+    - preferences
+    - original_record
+    - created_at
+    - updated_at
+    filter: {}
+  role: user

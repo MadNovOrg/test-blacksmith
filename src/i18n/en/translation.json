@@ -1,6 +1,24 @@
 {
   "common": {
-    "appTitle": "Team Teach Hub"
+    "appTitle": "Team Teach Hub",
+    "internal-error": "Internal error occurred.",
+    "certificates": {
+      "level-one": "Level One",
+      "level-two": "Level Two",
+      "advanced": "Advanced",
+      "bild-act-certified": "BILD ACT Certified"
+    }
+  },
+  "components": {
+    "certification-details": {
+      "certification-passed": "Certification Passed",
+      "course-passed-on": "Course passed on",
+      "remaining": "remaining",
+      "digital-certificate": "Digital Certificate",
+      "dbs-certificate": "DBS Certificate",
+      "feedback": "Feedback",
+      "view-or-download-here": "View or download here"
+    }
   },
   "pages": {
     "home": {
@@ -8,6 +26,20 @@
     },
     "account": {
       "title": "Account"
+    },
+    "my-organization": {
+      "overview": {
+        "title": "Overview",
+        "organization-name": "Organization Name",
+        "location": "Location",
+        "contact-name": "Contact Name",
+        "contact-email": "Contact Email",
+        "contact-number": "Contact Number",
+        "no-org-assigned": "No organization assigned to current user."
+      },
+      "profiles": {
+        "title": "Individual records"
+      }
     }
   }
 }

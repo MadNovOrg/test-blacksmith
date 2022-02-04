@@ -1,4 +1,0 @@
-CREATE TRIGGER trigger_organization_member_role_updated_at
-  BEFORE UPDATE ON "organization_member_role"
-  FOR EACH ROW
-  EXECUTE PROCEDURE updated_at_field ();

@@ -1,0 +1,1 @@
+export { MyOrganizationPage } from './MyOrganization'

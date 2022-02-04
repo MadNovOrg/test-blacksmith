@@ -41,6 +41,9 @@ import { ReactComponent as FolderIcon } from './folder.svg'
 import { ReactComponent as AlarmIcon } from './alarm.svg'
 import { ReactComponent as BookmarkCollectionIcon } from './bookmark-collection.svg'
 import { ReactComponent as LogoColor } from './logo-color.svg'
+import { ReactComponent as KeyboardArrowRightIcon } from './keyboard-arrow-right.svg'
+import { ReactComponent as CheckmarkIcon } from './checkmark.svg'
+import { ReactComponent as PDFIcon } from './pdf.svg'
 
 const icons = {
   close: CloseIcon,
@@ -86,6 +89,9 @@ const icons = {
   supervisor: SupervisorIcon,
   school: SchoolIcon,
   'logo-color': LogoColor,
+  'keyboard-arrow-right': KeyboardArrowRightIcon,
+  checkmark: CheckmarkIcon,
+  pdf: PDFIcon,
 }
 
 export default icons

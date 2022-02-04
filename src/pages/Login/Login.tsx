@@ -7,7 +7,7 @@ import { Icon } from '@app/components/Icon'
 import { Typography } from '@app/components/Typography'
 import { Input } from '@app/components/Input'
 
-import { useSession } from '@app/auth'
+import { useAuth } from '@app/context/auth'
 
 type SpecificErrorCodeToMessage = {
   passwordMessage: string
@@ -46,7 +46,7 @@ type ErrorState = {
 export const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const session = useSession()
+  const auth = useAuth()
 
   const [errorState, setErrorState] = useState<ErrorState>({
     emailErrorMessage: '',
@@ -74,19 +74,19 @@ export const LoginPage = () => {
         emailErrorMessage: '',
       }))
 
-      const userSession = await session.login(email, password)
+      const loginResult = await auth.login(email, password)
 
       // if successdfully logged in; redirect, otherwise render error message(s)
-      if (userSession.error === undefined) {
+      if (loginResult.error === undefined) {
         navigate(from, { replace: true })
       } else {
         setErrorState(() => ({
           emailErrorMessage:
-            errorCodeToMesaageMapping[userSession.error?.code || '']
+            errorCodeToMesaageMapping[loginResult.error?.code || '']
               ?.emailMessage ||
             'A problem occurred. Please contact your administrator',
           passwordErrorMessage:
-            errorCodeToMesaageMapping[userSession.error?.code || '']
+            errorCodeToMesaageMapping[loginResult.error?.code || '']
               ?.passwordMessage ||
             'A problem occurred. Please contact your administrator',
         }))

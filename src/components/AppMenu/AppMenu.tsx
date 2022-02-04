@@ -1,25 +1,28 @@
 import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+
+import { useAuth } from '@app/context/auth'
 
 import { Icon } from '../Icon'
 import { Typography } from '../Typography'
-import { useSession } from '../../auth'
 
 type AppMenuProps = unknown
 
 export const AppMenu: React.FC<AppMenuProps> = () => {
-  const session = useSession()
-  const navigate = useNavigate()
+  const auth = useAuth()
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex px-4 py-2 text-sm bg-white focus:outline-none ripple-bg-gray-100 rounded">
-          <Icon name="chevron-down" aria-hidden="true" />
-          <Typography>Salman M</Typography>
-        </Menu.Button>
+        {auth.profile ? (
+          <Menu.Button className="inline-flex px-4 py-2 text-sm bg-white focus:outline-none ripple-bg-gray-100 rounded">
+            <Icon name="chevron-down" aria-hidden="true" />
+            <Typography>
+              {auth.profile.givenName} {auth.profile.familyName.charAt(0)}
+            </Typography>
+          </Menu.Button>
+        ) : null}
       </div>
       <Transition
         as={React.Fragment}
@@ -65,10 +68,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
                     'group flex rounded-md items-center w-full px-2 py-2 text-sm hover:bg-gray-100',
                     active ? ' text-black' : 'text-gray-500'
                   )}
-                  onClick={() => {
-                    session.logout()
-                    navigate('/login')
-                  }}
+                  onClick={() => auth.logout()}
                 >
                   <Icon name="arrow-right" className="mr-2" />
                   <Typography>Logout</Typography>

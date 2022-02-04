@@ -4,6 +4,8 @@ import clsx from 'clsx'
 
 import { AppLayout } from '@app/components/AppLayout'
 
+import { useAuth } from '@app/context/auth'
+
 import Spinner from './components/Spinner'
 import { Course } from './pages/TrainerBase/components/Course'
 import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
@@ -14,8 +16,11 @@ import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboar
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
-import { useSession } from '@app/auth'
+import { MyOrganizationPage } from '@app/pages/MyOrganization'
+import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
+import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { LoginPage } from '@app/pages/Login'
+import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
 
 // TODO: will be generated later based on user/role
 const tabs = [
@@ -27,6 +32,10 @@ const tabs = [
     id: 'my-training',
     title: 'My Training',
   },
+  {
+    id: 'my-organization',
+    title: 'My Organization',
+  },
 ]
 
 type LayoutProps = {
@@ -36,7 +45,7 @@ type LayoutProps = {
 // TODO: consider extracting when things grow here
 const Layout: React.FC<LayoutProps> = ({ tabs }) => {
   return (
-    <div>
+    <>
       <div className="border-t border-divider bg-gray-50 hidden sm:flex">
         {tabs.map(tab => (
           <NavLink
@@ -55,11 +64,10 @@ const Layout: React.FC<LayoutProps> = ({ tabs }) => {
           </NavLink>
         ))}
       </div>
-
       <div className="flex flex-col py-4">
         <Outlet />
       </div>
-    </div>
+    </>
   )
 }
 
@@ -79,6 +87,12 @@ const LoggedInRoutes: React.FC<unknown> = () => {
             </Route>
           </Route>
           <Route path="my-training" element={<MyTrainingPage />} />
+          <Route path="my-organization" element={<MyOrganizationPage />}>
+            <Route index element={<Navigate to="overview" />} />
+            <Route path="overview" element={<OrganizationOverviewPage />} />
+            <Route path="profiles" element={<ProfileListPage />} />
+            <Route path="profiles/:id" element={<ProfilePage />} />
+          </Route>
         </Route>
       </Routes>
     </AppLayout>
@@ -88,16 +102,16 @@ const LoggedInRoutes: React.FC<unknown> = () => {
 const LoggedOutRoutes: React.FC<unknown> = () => {
   return (
     <Routes>
+      <Route index element={<Navigate replace to="login" />} />
       <Route path="login" element={<LoginPage />} />
-      <Route path="*" element={<LoginPage />} />
     </Routes>
   )
 }
 
 export const AppRoutes: React.FC<unknown> = () => {
-  const session = useSession()
+  const auth = useAuth()
 
-  if (session.loading) {
+  if (auth.loading) {
     return (
       <main className="w-screen h-screen relative">
         <Spinner cls="w-16 h-16" />
@@ -105,9 +119,7 @@ export const AppRoutes: React.FC<unknown> = () => {
     )
   }
 
-  console.log(session)
-
-  if (session.accessToken === null) {
+  if (!auth.accessToken) {
     return <LoggedOutRoutes />
   }
 

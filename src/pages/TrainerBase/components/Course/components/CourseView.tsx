@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import useSWR from 'swr'
 import {
   DragDropContext,
   DragDropContextProps,
@@ -7,53 +8,37 @@ import {
 import clsx from 'clsx'
 
 import { Typography } from '@app/components/Typography'
+import Spinner from '@app/components/Spinner'
 
 import { ModuleCard } from './ModuleCard'
 
-import { CourseModule } from '@app/types'
+import { ModuleGroup } from '@app/types'
+import { getModuleGroups } from '@app/queries/modules'
 
 type CourseViewProps = unknown
 
-const mockedCourseModules = [
-  {
-    id: 'm1',
-    name: 'Module A',
-    description: 'Brief description of the module',
-  },
-]
-
-const mockedModules = [
-  {
-    id: 'm2',
-    name: 'Module B',
-    description: 'Brief description of the module',
-  },
-  {
-    id: 'm3',
-    name: 'Module C',
-    description: 'Brief description of the module',
-  },
-  {
-    id: 'm4',
-    name: 'Module D',
-    description: 'Brief description of the module',
-  },
-]
-
 export const CourseView: React.FC<CourseViewProps> = () => {
-  // TODO: mocked data, will be plugged with API
-  const [courseModules, setCourseModules] =
-    useState<CourseModule[]>(mockedCourseModules)
-  const [allModules, setAllModules] = useState<CourseModule[]>(mockedModules)
+  // @TODO - we could/should be able to identify the level early based on course type etc
+  const { data } = useSWR<{ groups: ModuleGroup[] }>([
+    getModuleGroups,
+    { level: 1 },
+  ])
+
+  const [courseModules, setCourseModules] = useState<ModuleGroup[]>([])
+  const [allModules, setAllModules] = useState<ModuleGroup[]>([])
+
+  useEffect(() => {
+    if (allModules.length === 0 && data) {
+      setAllModules(data.groups)
+    }
+  }, [allModules, data])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     result => {
       const { draggableId, source, destination } = result
-
-      // if drop happened outside of droppable
+      if (!data) return
       if (!destination) return
 
-      // No need to allow sorting within all module list
       if (
         destination.droppableId === source.droppableId &&
         source.droppableId === 'all-modules'
@@ -66,7 +51,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
 
         const targetItem = (isReordering ? courseModules : allModules).find(
           m => m.id === draggableId
-        ) as CourseModule
+        )
 
         const newCourseModules = Array.from(courseModules)
         const newAllModules = isReordering ? allModules : Array.from(allModules)
@@ -77,7 +62,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           newAllModules.splice(source.index, 1)
         }
 
-        newCourseModules.splice(destination.index, 0, targetItem)
+        if (targetItem) {
+          newCourseModules.splice(destination.index, 0, targetItem)
+        }
 
         setCourseModules(newCourseModules)
         setAllModules(newAllModules)
@@ -85,12 +72,12 @@ export const CourseView: React.FC<CourseViewProps> = () => {
       }
 
       if (destination.droppableId === 'all-modules') {
-        const targetItem = courseModules.find(
-          m => m.id === draggableId
-        ) as CourseModule
+        const targetItem = courseModules.find(m => m.id === draggableId)
 
         const newAllModules = Array.from(allModules)
-        newAllModules.splice(destination.index, 0, targetItem)
+        if (targetItem) {
+          newAllModules.splice(destination.index, 0, targetItem)
+        }
         setAllModules(newAllModules)
 
         const newCourseModules = Array.from(courseModules)
@@ -99,12 +86,16 @@ export const CourseView: React.FC<CourseViewProps> = () => {
         return
       }
     },
-    [allModules, courseModules]
+    [allModules, courseModules, data]
   )
+
+  if (!data) {
+    return <Spinner cls="w-16 h-16" />
+  }
 
   return (
     <DragDropContext onDragEnd={handleDrop}>
-      <div className="">
+      <div className="pb-12">
         <Typography variant="h4" className="mb-4">
           Level Two
         </Typography>
@@ -161,7 +152,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           {(provided, snapshot) => (
             <div
               className={clsx(
-                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
+                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out',
                 {
                   'bg-lime-100': snapshot.isDraggingOver,
                 }

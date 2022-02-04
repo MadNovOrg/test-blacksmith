@@ -2,10 +2,10 @@ import React from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import clsx from 'clsx'
 
-import { CourseModule } from '@app/types'
+import { ModuleGroup } from '@app/types'
 
 type ModuleCardProps = {
-  data: CourseModule
+  data: ModuleGroup
   index: number
 }
 
@@ -23,7 +23,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({ data, index }) => {
           ref={provided.innerRef}
         >
           <p className="text-xs text-center font-bold mb-2">{data.name}</p>
-          <p className="text-xs text-center">{data.description}</p>
+          {/* <p className="text-xs text-center">{data.description}</p> */}
         </div>
       )}
     </Draggable>

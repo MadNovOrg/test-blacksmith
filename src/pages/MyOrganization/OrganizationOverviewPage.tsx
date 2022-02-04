@@ -1,0 +1,116 @@
+import React from 'react'
+import useSWR from 'swr'
+import { useTranslation } from 'react-i18next'
+
+import Spinner from '@app/components/Spinner'
+
+import { useAuth } from '@app/context/auth'
+
+import { Address, ContactDetail } from '@app/types'
+import { getOrganizationWithKeyContacts } from '@app/queries/organization'
+
+type OrganizationOverviewPageProps = unknown
+
+export const OrganizationOverviewPage: React.FC<
+  OrganizationOverviewPageProps
+> = () => {
+  const auth = useAuth()
+  const { t } = useTranslation()
+  const { data, error } = useSWR(
+    auth?.claims
+      ? [
+          getOrganizationWithKeyContacts,
+          { id: 'c98b8088-6993-482c-b236-21628ae0874d' },
+          // { id: auth.claims['x-hasura-organization'] }, // TODO uncomment when new lambda deployed
+        ]
+      : null
+  )
+
+  const renderLocation = (org: { addresses: [Address] }) => {
+    const physical = org.addresses.find(address => address.type === 'physical')
+    return physical
+      ? [
+          physical.line1,
+          physical.line2,
+          physical.city,
+          physical.state,
+          physical.postCode,
+          physical.country,
+        ]
+          .filter(Boolean)
+          .join(', ')
+      : ''
+  }
+
+  return (
+    <div className="px-8">
+      <div className="pb-8 font-light text-2xl sm:text-4xl">
+        {t('pages.my-organization.overview.title')}
+      </div>
+      {error && (
+        <div className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
+          {t('common.internal-error')}
+        </div>
+      )}
+      {data &&
+        !data.organization &&
+        t('pages.my-organization.overview.no-org-assigned')}
+      {data?.organization && (
+        <div className="grid grid-rows-5 grid-flow-col gap-4">
+          <div>
+            <div className="font-bold text-sm">
+              {t('pages.my-organization.overview.organization-name')}:
+            </div>
+            <div>{data.organization.name}</div>
+          </div>
+          <div>
+            <div className="font-bold text-sm">
+              {t('pages.my-organization.overview.location')}:
+            </div>
+            <div>{renderLocation(data.organization)}</div>
+          </div>
+          <div>
+            <div className="font-bold text-sm">
+              {t('pages.my-organization.overview.contact-name')}:
+            </div>
+            <div>
+              {data.organization.members[0]?.profile['givenName']}{' '}
+              {data.organization.members[0]?.profile['familyName']}
+            </div>
+          </div>
+          <div>
+            <div className="font-bold text-sm">
+              {t('pages.my-organization.overview.contact-email')}:
+            </div>
+            <div>
+              {
+                data.organization.members[0]?.profile.contactDetails.find(
+                  (contactDetail: ContactDetail) =>
+                    contactDetail.type === 'email'
+                )?.value
+              }
+            </div>
+          </div>
+          <div>
+            <div className="font-bold text-sm">
+              {t('pages.my-organization.overview.contact-number')}:
+            </div>
+            <div>
+              {
+                data.organization.members[0]?.profile.contactDetails.find(
+                  (contactDetail: ContactDetail) =>
+                    contactDetail.type === 'phone'
+                )?.value
+              }
+            </div>
+          </div>
+        </div>
+      )}
+      {!data && !error && (
+        <div className="w-full h-full">
+          <Spinner cls="w-16 h-16" />
+        </div>
+      )}
+    </div>
+  )
+}

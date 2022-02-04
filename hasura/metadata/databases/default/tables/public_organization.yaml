@@ -1,11 +1,31 @@
 table:
   name: organization
   schema: public
+configuration:
+  custom_column_names:
+    contact_details: contactDetails
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
 - name: organization_status
   using:
     foreign_key_constraint_on: status
 array_relationships:
+- name: groups
+  using:
+    foreign_key_constraint_on:
+      column: organization_id
+      table:
+        name: organization_group
+        schema: public
+- name: members
+  using:
+    foreign_key_constraint_on:
+      column: organization_id
+      table:
+        name: organization_member
+        schema: public
 - name: organizationGroupsByParentOrganizationId
   using:
     foreign_key_constraint_on:
@@ -13,24 +33,26 @@ array_relationships:
       table:
         name: organization_group
         schema: public
-- name: organization_groups
-  using:
-    foreign_key_constraint_on:
-      column: organization_id
-      table:
-        name: organization_group
-        schema: public
-- name: organization_members
-  using:
-    foreign_key_constraint_on:
-      column: organization_id
-      table:
-        name: organization_member
-        schema: public
-- name: organization_roles
+- name: roles
   using:
     foreign_key_constraint_on:
       column: organization_id
       table:
         name: organization_role
         schema: public
+select_permissions:
+- permission:
+    columns:
+    - name
+    - addresses
+    - attributes
+    - contact_details
+    - original_record
+    - preferences
+    - tags
+    - status
+    - created_at
+    - updated_at
+    - id
+    filter: {}
+  role: user
