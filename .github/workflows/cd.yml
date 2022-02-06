@@ -45,3 +45,29 @@ jobs:
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.S3_BUCKET }} --delete
+
+  hasura_migrations:
+    name: Hasura migrations
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET: ${{ secrets.HASURA_ADMIN_PASS }}
+      ENDPOINT: ${{ secrets.HASURA_ENDPOINT }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Install Hasura CLI
+        run: |
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.1.1 bash
+
+      - name: Apply Hasura migrations
+        working-directory: ./hasura
+        run: |
+          echo Hasura Metadata Apply
+          hasura metadata apply --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Migrate Apply
+          hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Metadata Reload
+          hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT

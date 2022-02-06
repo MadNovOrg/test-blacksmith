@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CertificationDetails } from '@app/pages/MyOrganization/components/CertificationDetails'
+import { CertificationDetails } from '@app/pages/components/CertificationDetails'
 
 type ProfilePageProps = unknown
 

@@ -1,1 +1,1 @@
-export { MyTrainingPage } from './MyTraining'
+export { MyTrainingPage } from './MyTrainingPage'

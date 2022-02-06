@@ -21,6 +21,11 @@ import { OrganizationOverviewPage } from '@app/pages/MyOrganization/Organization
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { LoginPage } from '@app/pages/Login'
 import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
+import { MyTrainingDashboard } from '@app/pages/MyTraining/MyTrainingDashboard'
+import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
+import { MyResources } from '@app/pages/MyTraining/MyResources'
+import { MyMembership } from '@app/pages/MyTraining/MyMembership'
+import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
 
 // TODO: will be generated later based on user/role
 const tabs = [
@@ -86,7 +91,13 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="templates" element={<CourseTemplates />} />
             </Route>
           </Route>
-          <Route path="my-training" element={<MyTrainingPage />} />
+          <Route path="my-training" element={<MyTrainingPage />}>
+            <Route index element={<MyTrainingDashboard />} />
+            <Route path="upcoming-training" element={<MyUpcomingTraining />} />
+            <Route path="certifications" element={<MyCertifications />} />
+            <Route path="resources" element={<MyResources />} />
+            <Route path="membership" element={<MyMembership />} />
+          </Route>
           <Route path="my-organization" element={<MyOrganizationPage />}>
             <Route index element={<Navigate to="overview" />} />
             <Route path="overview" element={<OrganizationOverviewPage />} />

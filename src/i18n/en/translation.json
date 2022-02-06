@@ -7,7 +7,8 @@
       "level-two": "Level Two",
       "advanced": "Advanced",
       "bild-act-certified": "BILD ACT Certified"
-    }
+    },
+    "back": "Back"
   },
   "components": {
     "certification-details": {
@@ -40,6 +41,39 @@
       "profiles": {
         "title": "Individual records"
       }
+    },
+    "my-training": {
+      "common": {
+        "my-certification-and-credentials": "My Certifications & Credentials"
+      },
+      "dashboard": {
+        "title": "My Training",
+        "my-upcoming-training": "My Upcoming Training",
+        "next-course": "Next Course",
+        "latest-certification": "Latest Certification",
+        "my-resources": "My Resources",
+        "latest-available": "Latest Available",
+        "membership-status": "Membership Status",
+        "my-membership": "My Membership"
+      },
+      "resources": {
+        "title": "My Resources"
+      },
+      "membership": {
+        "title": "My Membership"
+      },
+      "upcoming-training": {
+        "title": "My Upcoming Training"
+      }
+    },
+    "upcoming-training": {
+      "course-upcoming": "Course Upcoming",
+      "course-takes-place-on": "Course takes place on",
+      "your-status": "Your Status",
+      "registration-complete": "Registration Complete",
+      "health-check-complete": "Health Check Complete",
+      "dbs-check-complete": "DBS Check Complete",
+      "change-availability": "Change Availability"
     }
   }
 }
