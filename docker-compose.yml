@@ -29,11 +29,11 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_MbPqfM7i4/.well-known/jwks.json","claims_format":"stringified_json"}'
 
-  adminer:
-    image: adminer:latest
-    restart: always
-    ports:
-      - 9090:8080
+  # adminer:
+  #   image: adminer:latest
+  #   restart: always
+  #   ports:
+  #     - 9090:8080
 
 volumes:
   tth-data:

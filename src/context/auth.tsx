@@ -3,7 +3,7 @@ import { Auth } from 'aws-amplify'
 import { CognitoUser } from 'amazon-cognito-identity-js'
 import useSWR from 'swr'
 
-import { getCurrentProfile } from '@app/queries/users'
+import { getUserProfile } from '@app/queries/users'
 import { fetcher } from '@app/App'
 import { Profile } from '@app/types'
 
@@ -60,8 +60,14 @@ type AuthProviderProps = { children: React.ReactNode }
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, setState] = useState<State>(initialState)
 
-  const { data } = useSWR<{ profile: Profile[] }>(
-    state.claims ? [getCurrentProfile, {}, state.idToken] : null,
+  const { data } = useSWR<{ profile: Profile }>(
+    state.claims
+      ? [
+          getUserProfile,
+          { id: state.claims['x-hasura-user-id'] },
+          state.idToken,
+        ]
+      : null,
     fetcher
   )
 
@@ -112,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     () => ({
       login,
       logout,
-      profile: data?.profile[0],
+      profile: data?.profile,
       ...state,
     }),
     [login, logout, data, state]
