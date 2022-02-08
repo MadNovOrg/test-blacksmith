@@ -1,6 +1,12 @@
 import { gql } from 'graphql-request'
 
-export const getModuleGroups = gql`
+import { ModuleGroup } from '@app/types'
+
+export type ResponseType = { groups: ModuleGroup[] }
+
+export type ParamsType = { level: number }
+
+export const QUERY = gql`
   query ModuleGroups($level: Int!) {
     groups: module_group(where: { level: { _eq: $level } }) {
       id

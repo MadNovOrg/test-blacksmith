@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
 import { RequestDocument, GraphQLClient, Variables } from 'graphql-request'
 
@@ -19,15 +19,19 @@ export async function fetcher<T>(
 
 function App() {
   const auth = useAuth()
-  const config = {
-    fetcher: function <T>(
-      query: RequestDocument,
-      variables: Variables
-    ): Promise<T> {
-      return fetcher(query, variables, auth.idToken)
-    },
-    onError: (e: string) => console.error('fetcher error', e),
-  }
+
+  const config = useMemo(
+    () => ({
+      fetcher: function <T>(
+        query: RequestDocument,
+        variables: Variables
+      ): Promise<T> {
+        return fetcher(query, variables, auth.idToken)
+      },
+      onError: (e: string) => console.error('fetcher error', e),
+    }),
+    [auth]
+  )
 
   return (
     <SWRConfig value={config}>

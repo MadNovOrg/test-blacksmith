@@ -13,16 +13,21 @@ import Spinner from '@app/components/Spinner'
 import { ModuleCard } from './ModuleCard'
 
 import { ModuleGroup } from '@app/types'
-import { getModuleGroups } from '@app/queries/modules'
+import {
+  QUERY as GetModuleGroups,
+  ResponseType as GetModuleGroupsResponseType,
+  ParamsType as GetModuleGroupsParamsType,
+} from '@app/queries/modules/get-module-groups'
 
 type CourseViewProps = unknown
 
 export const CourseView: React.FC<CourseViewProps> = () => {
   // @TODO - we could/should be able to identify the level early based on course type etc
-  const { data } = useSWR<{ groups: ModuleGroup[] }>([
-    getModuleGroups,
-    { level: 1 },
-  ])
+  const { data } = useSWR<
+    GetModuleGroupsResponseType,
+    Error,
+    [string, GetModuleGroupsParamsType]
+  >([GetModuleGroups, { level: 1 }])
 
   const [courseModules, setCourseModules] = useState<ModuleGroup[]>([])
   const [allModules, setAllModules] = useState<ModuleGroup[]>([])
