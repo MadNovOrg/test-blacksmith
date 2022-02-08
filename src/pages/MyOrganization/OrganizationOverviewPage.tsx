@@ -16,14 +16,21 @@ export const OrganizationOverviewPage: React.FC<
 > = () => {
   const auth = useAuth()
   const { t } = useTranslation()
+
+  const orgs =
+    auth.claims &&
+    JSON.parse(
+      '[' +
+        auth.claims['x-hasura-tt-organizations'].slice(
+          1,
+          auth.claims['x-hasura-tt-organizations'].length - 1
+        ) +
+        ']'
+    )
+  console.log(orgs)
+
   const { data, error } = useSWR(
-    auth?.claims
-      ? [
-          getOrganizationWithKeyContacts,
-          { id: 'c98b8088-6993-482c-b236-21628ae0874d' },
-          // { id: auth.claims['x-hasura-organization'] }, // TODO uncomment when new lambda deployed
-        ]
-      : null
+    auth?.claims ? [getOrganizationWithKeyContacts, { id: orgs[0] }] : null
   )
 
   const renderLocation = (org: { addresses: [Address] }) => {

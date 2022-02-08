@@ -19,3 +19,21 @@ export const getUserProfile = gql`
     }
   }
 `
+
+export const getProfileWithCriteria = gql`
+  ${PROFILE}
+  query GetProfileWithCriteria(
+    $limit: Int = 20
+    $offset: Int = 0
+    $where: profile_bool_exp
+  ) {
+    profiles: profile(limit: $limit, offset: $offset, where: $where) {
+      ...Profile
+    }
+    profile_aggregate(where: $where) {
+      aggregate {
+        count
+      }
+    }
+  }
+`

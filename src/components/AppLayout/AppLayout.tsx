@@ -46,7 +46,7 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
           <Drawer open={open} onClose={() => setOpen(false)} />
         </div>
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 flex flex-col">{children}</div>
     </div>
   )
 }

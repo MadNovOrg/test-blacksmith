@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
@@ -19,6 +20,7 @@ export const ProfileListPage: React.FC<ProfileListPageProps> = () => {
   }
   for (const [, arr] of Object.entries(mockData)) {
     Array.from({ length: 10 }).forEach((_, i) => {
+      // @ts-ignore
       arr.push({
         createdAt: '',
         updatedAt: '',

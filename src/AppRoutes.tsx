@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Routes, Route, NavLink, Outlet, Navigate } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -26,6 +26,17 @@ import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
 import { MyResources } from '@app/pages/MyTraining/MyResources'
 import { MyMembership } from '@app/pages/MyTraining/MyMembership'
 import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
+
+const Dashboard = React.lazy(() => import('@app/pages/admin/dashboard'))
+const Organizations = React.lazy(
+  () => import('@app/pages/admin/components/organizations')
+)
+const Trainers = React.lazy(
+  () => import('@app/pages/admin/components/trainers')
+)
+const Trainees = React.lazy(
+  () => import('@app/pages/admin/components/trainees')
+)
 
 // TODO: will be generated later based on user/role
 const tabs = [
@@ -69,7 +80,7 @@ const Layout: React.FC<LayoutProps> = ({ tabs }) => {
           </NavLink>
         ))}
       </div>
-      <div className="flex flex-col py-4">
+      <div className="flex flex-col py-4 flex-1">
         <Outlet />
       </div>
     </>
@@ -79,33 +90,44 @@ const Layout: React.FC<LayoutProps> = ({ tabs }) => {
 const LoggedInRoutes: React.FC<unknown> = () => {
   return (
     <AppLayout>
-      <Routes>
-        <Route path="/" element={<Layout tabs={tabs} />}>
-          <Route path="trainer-base" element={<TrainerBasePage />}>
-            <Route index element={<TrainerDashboard />} />
-            <Route path="course" element={<Course />}>
-              <Route index element={<Navigate replace to="create" />} />
-              <Route path="create" element={<CourseCreate />} />
-              <Route path="view/:id" element={<CourseView />} />
-              <Route path="history" element={<CourseHistory />} />
-              <Route path="templates" element={<CourseTemplates />} />
+      <Suspense fallback={() => 'Loading'}>
+        <Routes>
+          <Route path="/" element={<Layout tabs={tabs} />}>
+            <Route path="trainer-base" element={<TrainerBasePage />}>
+              <Route index element={<TrainerDashboard />} />
+              <Route path="course" element={<Course />}>
+                <Route index element={<Navigate replace to="create" />} />
+                <Route path="create" element={<CourseCreate />} />
+                <Route path="view/:id" element={<CourseView />} />
+                <Route path="history" element={<CourseHistory />} />
+                <Route path="templates" element={<CourseTemplates />} />
+              </Route>
+            </Route>
+            <Route path="my-training" element={<MyTrainingPage />}>
+              <Route index element={<MyTrainingDashboard />} />
+              <Route
+                path="upcoming-training"
+                element={<MyUpcomingTraining />}
+              />
+              <Route path="certifications" element={<MyCertifications />} />
+              <Route path="resources" element={<MyResources />} />
+              <Route path="membership" element={<MyMembership />} />
+            </Route>
+            <Route path="my-organization" element={<MyOrganizationPage />}>
+              <Route index element={<Navigate to="overview" />} />
+              <Route path="overview" element={<OrganizationOverviewPage />} />
+              <Route path="profiles" element={<ProfileListPage />} />
+              <Route path="profiles/:id" element={<ProfilePage />} />
+            </Route>
+            <Route path="admin" element={<Dashboard />}>
+              <Route index element={<Navigate to="organizations" />} />
+              <Route path="organizations" element={<Organizations />} />
+              <Route path="trainers" element={<Trainers />} />
+              <Route path="trainees" element={<Trainees />} />
             </Route>
           </Route>
-          <Route path="my-training" element={<MyTrainingPage />}>
-            <Route index element={<MyTrainingDashboard />} />
-            <Route path="upcoming-training" element={<MyUpcomingTraining />} />
-            <Route path="certifications" element={<MyCertifications />} />
-            <Route path="resources" element={<MyResources />} />
-            <Route path="membership" element={<MyMembership />} />
-          </Route>
-          <Route path="my-organization" element={<MyOrganizationPage />}>
-            <Route index element={<Navigate to="overview" />} />
-            <Route path="overview" element={<OrganizationOverviewPage />} />
-            <Route path="profiles" element={<ProfileListPage />} />
-            <Route path="profiles/:id" element={<ProfilePage />} />
-          </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </Suspense>
     </AppLayout>
   )
 }

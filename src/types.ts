@@ -45,13 +45,12 @@ export type Profile = {
   givenName: string
   familyName: string
   title: string
-  // tags
-  // status
-  // addresses
-  // attributes
-  // contactDetails
-  // preferences
-  // status
+  tags: string[] | null
+  status: string
+  addresses: { [key: string]: string }[]
+  attributes: string[]
+  contactDetails: { [key: string]: string }[]
+  preferences: { [key: string]: string }[]
 } & Base
 
 export type Module = {

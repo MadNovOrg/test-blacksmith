@@ -14,7 +14,7 @@ type E = {
 
 type State = {
   loading: boolean
-  claims?: { [key: string]: string } | null
+  claims?: { [key: string]: string }
   accessToken?: string
   idToken?: string
 }
