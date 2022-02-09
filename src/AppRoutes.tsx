@@ -13,6 +13,10 @@ import { CourseHistory } from './pages/TrainerBase/components/Course/components/
 import { CourseCreate } from './pages/TrainerBase/components/Course/components/CourseCreate'
 import { CourseTemplates } from './pages/TrainerBase/components/Course/components/CourseTemplates'
 import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboard'
+import { Management as TrainerManagement } from './pages/TrainerBase/components/Management'
+import { MyCalendar as TrainerCalendar } from './pages/TrainerBase/components//Management/components/MyCalendar'
+import { ManageAvailability as TrainerAvailability } from './pages/TrainerBase/components//Management/components/ManageAvailability'
+import { ManageExpenses as TrainerExpenses } from './pages/TrainerBase/components//Management/components/ManageExpenses'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
@@ -101,6 +105,12 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                 <Route path="view/:id" element={<CourseView />} />
                 <Route path="history" element={<CourseHistory />} />
                 <Route path="templates" element={<CourseTemplates />} />
+              </Route>
+              <Route path="management" element={<TrainerManagement />}>
+                <Route index element={<Navigate replace to="calendar" />} />
+                <Route path="calendar" element={<TrainerCalendar />} />
+                <Route path="availability" element={<TrainerAvailability />} />
+                <Route path="expenses" element={<TrainerExpenses />} />
               </Route>
             </Route>
             <Route path="my-training" element={<MyTrainingPage />}>

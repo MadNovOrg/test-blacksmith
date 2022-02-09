@@ -3,24 +3,24 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 
 import { Icon } from '@app/components/Icon'
 
-type CourseProps = unknown
+type ManagementProps = unknown
 
 const menu = [
   {
-    to: 'create',
-    title: 'New Course',
+    to: 'calendar',
+    title: 'My Calendar',
   },
   {
-    to: 'history',
-    title: 'View History',
+    to: 'availability',
+    title: 'Manage Availability',
   },
   {
-    to: 'templates',
-    title: 'Templates',
+    to: 'expenses',
+    title: 'Manage Expenses',
   },
 ]
 
-export const Course: React.FC<CourseProps> = () => {
+export const Management: React.FC<ManagementProps> = () => {
   const navigate = useNavigate()
 
   return (

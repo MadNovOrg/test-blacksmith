@@ -25,3 +25,5 @@ export const formatDateRange = (dateFrom: Date, dateTo: Date): string => {
   }
   return `${format(dateFrom, 'do LLLL y')} - ${format(dateTo, 'do LLLL y')}`
 }
+
+export const now = () => new Date()

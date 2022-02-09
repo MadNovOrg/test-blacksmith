@@ -20,7 +20,7 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = () => {
         <DashboardCard
           title="My Calendar"
           icon="calender"
-          onClick={() => console.log('TBD')}
+          onClick={() => navigate('management')}
         >
           <p className="font-bold text-white text-sm">Next Event</p>
           <p className="font-light text-white text-2xl mb-4">
