@@ -9,6 +9,7 @@ export interface InputProps
   error?: string
   isPassword?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  registerFunc?: () => void
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -17,6 +18,7 @@ export const Input: React.FC<InputProps> = ({
   value,
   error,
   isPassword = false,
+  registerFunc,
   ...props
 }) => {
   return (
@@ -33,6 +35,7 @@ export const Input: React.FC<InputProps> = ({
       )}
       <input
         id={props.id || props.name}
+        {...registerFunc?.()} // only call if not null
         value={value}
         className={clsx(
           'focus:ring-0 border-b-2 border-t-0 border-l-0 border-r-0 focus:outline-0 block w-full pb-1.5 placeholder-gray-400',

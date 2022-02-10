@@ -1,0 +1,1 @@
+export { ContactedConfirmationPage } from './ContactedConfirmation'

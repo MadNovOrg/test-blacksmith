@@ -8,7 +8,9 @@
       "advanced": "Advanced",
       "bild-act-certified": "BILD ACT Certified"
     },
-    "back": "Back"
+    "back": "Back",
+    "submit": "Submit",
+    "cancel": "Cancel"
   },
   "components": {
     "certification-details": {
@@ -74,6 +76,36 @@
       "health-check-complete": "Health Check Complete",
       "dbs-check-complete": "DBS Check Complete",
       "change-availability": "Change Availability"
+    },
+    "forgot-password": {
+      "generic-error": "An error occurred. Please contact your administrator",
+      "generic-email-error": "Please enter a valid email address",
+      "title": "If you've forgotten your password, simply enter your email address below and we'll send you a link to reset your password ",
+      "email-placeholder": "Please enter your email address",
+      "email-address": "Email Address",
+      "user-does-not-exist": "User does not exist",
+      "loading-state-part-one": "If you have trouble loading, please ",
+      "loading-state-part-two": "contact us"
+    },
+    "reset-password": {
+      "not-recieved-email": "If you still haven’t received it, you ",
+      "can-resend-code": "can resend the code here",
+      "changing-password-text": "Changing password for",
+      "new-password-label": "New Password",
+      "confirm-new-password-label": "Confirm New Password",
+      "please-contact": "please contact us",
+      "reset": "Reset Password",
+      "incorrect-username-or-password": "Incorrect username or password",
+      "user-does-not-exist": "User does not exist",
+      "enter-password": "Please enter a password",
+      "invalid-password": "Invalid password",
+      "incorrect-passcode": "Passcode is incorrect",
+      "passwords-must-match": "Passwords must match",
+      "empty-password": "Password cannot be empty",
+      "verification-code-six-digits": "Verification code must be six digits",
+      "password-placeholder": "Please enter your password",
+      "enter-passcode": "Enter Passcode",
+      "title": "A six-digit authentication code has been sent to your chosen method of 2fa, please enter it below, along with your new password"
     }
   }
 }

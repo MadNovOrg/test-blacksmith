@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import * as EmailValidator from 'email-validator'
 
-import { Icon } from '@app/components/Icon'
-import { Typography } from '@app/components/Typography'
 import { Input } from '@app/components/Input'
+import { LoggedOutHeader } from '@app/components/LoggedOutHeader'
 
 import { useAuth } from '@app/context/auth'
 
@@ -30,6 +29,10 @@ const errorCodeToMesaageMapping: Map = {
     passwordMessage: 'Please enter a password',
     emailMessage: '',
   },
+  '401': {
+    passwordMessage: 'New password required',
+    emailMessage: '',
+  },
 }
 
 type LocationState = {
@@ -44,6 +47,7 @@ type ErrorState = {
 }
 
 export const LoginPage = () => {
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const location = useLocation()
   const auth = useAuth()
@@ -53,17 +57,18 @@ export const LoginPage = () => {
     passwordErrorMessage: '',
   })
 
+  const [email, setEmail] = useState(searchParams.get('email'))
+  const [password, setPassword] = useState('')
+  const showResetPasswordMessage =
+    searchParams.get('email') &&
+    searchParams.get('justResetPassword') === 'true'
+
   const from = (location.state as LocationState)?.from?.pathname || '/'
 
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    const formData = new FormData(event.currentTarget)
-
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-
-    if (!EmailValidator.validate(email)) {
+    if (!EmailValidator.validate(email as string)) {
       setErrorState(s => ({
         ...s,
         emailErrorMessage: 'Please enter a valid email address',
@@ -74,54 +79,65 @@ export const LoginPage = () => {
         emailErrorMessage: '',
       }))
 
-      const loginResult = await auth.login(email, password)
+      const loginResult = await auth.login(email as string, password)
 
       // if successdfully logged in; redirect, otherwise render error message(s)
       if (loginResult.error === undefined) {
         navigate(from, { replace: true })
       } else {
-        setErrorState(() => ({
-          emailErrorMessage:
-            errorCodeToMesaageMapping[loginResult.error?.code || '']
-              ?.emailMessage ||
-            'A problem occurred. Please contact your administrator',
-          passwordErrorMessage:
-            errorCodeToMesaageMapping[loginResult.error?.code || '']
-              ?.passwordMessage ||
-            'A problem occurred. Please contact your administrator',
-        }))
+        if (
+          errorCodeToMesaageMapping[loginResult.error?.code || '']?.emailMessage
+        ) {
+          setErrorState(s => ({
+            ...s,
+            emailErrorMessage:
+              errorCodeToMesaageMapping[loginResult.error?.code || '']
+                ?.emailMessage ||
+              'An error occurred. Please contact your administrator',
+          }))
+        }
+
+        if (
+          errorCodeToMesaageMapping[loginResult.error?.code || '']
+            ?.passwordMessage
+        ) {
+          setErrorState(s => ({
+            ...s,
+            passwordErrorMessage:
+              errorCodeToMesaageMapping[loginResult.error?.code || '']
+                ?.passwordMessage ||
+              'An error occurred. Please contact your administrator',
+          }))
+        }
       }
     }
   }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <div className="flex mb-12">
-        <div className="inline-block">
-          <Icon
-            name="logo-color"
-            aria-hidden="true"
-            className="w-10 h-10 sm:w-20 sm:h-20"
-          />
-        </div>
+      <LoggedOutHeader />
 
-        <div className="ml-2 md:ml-6">
-          <Typography variant="lighth4">Team Teach Hub</Typography>
-        </div>
-      </div>
+      {showResetPasswordMessage && (
+        <p className="mb-8 text-sm md:text-base">
+          Please login with your new password
+        </p>
+      )}
 
       <div className="w-60 md:w-96">
         <form onSubmit={handleSubmit}>
           <section className="space-y-6 mb-16">
             <Input
+              onChange={e => setEmail(e.target.value)}
               error={errorState.emailErrorMessage}
               placeholder="Please enter your email address"
               name="email"
               title="email"
               label="Email Address"
+              value={email || ''}
             ></Input>
 
             <Input
+              onChange={e => setPassword(e.target.value)}
               error={errorState.passwordErrorMessage}
               placeholder="Please enter your password"
               isPassword={true}
@@ -141,7 +157,7 @@ export const LoginPage = () => {
       </div>
 
       <div className="mt-12">
-        <Link to="/login" className="text-xs font-light underline">
+        <Link to="/forgot-password" className="text-xs font-light underline">
           Forgotten your password?
         </Link>
       </div>
