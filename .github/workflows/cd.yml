@@ -9,6 +9,7 @@ jobs:
   build-deploy:
     name: CD
     runs-on: ubuntu-latest
+
     env:
       CD: 'true'
 
@@ -41,7 +42,12 @@ jobs:
         run: npm t
 
       - name: Build web
-        run: export $(cat .env.development) && npm run build
+        run: npm run build
+        env:
+          VITE_AWS_REGION: eu-west-2
+          VITE_COGNITO_USER_POOL_ID: eu-west-2_MbPqfM7i4
+          VITE_COGNITO_USER_POOL_CLIENT_ID: 7s0cqsg26utmorpp4lllfakji1
+          VITE_HASURA_GRAPHQL_API: '${{ secrets.HASURA_ENDPOINT }}/v1/graphql'
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.S3_BUCKET }} --delete
@@ -95,7 +101,7 @@ jobs:
       - name: Playwright setup
         run: npx playwright install chromium
 
-      - name: Playwright tests 
+      - name: Playwright tests
         run: npm run test:e2e
 
       - name: Playwright report
