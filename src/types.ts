@@ -65,3 +65,19 @@ export type ModuleGroup = {
   level: string
   modules: Module[]
 } & Base
+
+export type Venue = {
+  id: string
+  name: string
+  address: string[]
+}
+
+export type TrainerSchedule = {
+  id: string
+  name: string
+  start: string
+  end: string
+  type: string
+  course: Course
+  venue: Venue
+} & Base

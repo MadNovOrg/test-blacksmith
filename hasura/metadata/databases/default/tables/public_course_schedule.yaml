@@ -1,0 +1,24 @@
+table:
+  name: course_schedule
+  schema: public
+object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
+- name: venue
+  using:
+    foreign_key_constraint_on: venue_id
+select_permissions:
+- permission:
+    columns:
+    - name
+    - type
+    - created_at
+    - end
+    - start
+    - updated_at
+    - course_id
+    - id
+    - venue_id
+    filter: {}
+  role: user

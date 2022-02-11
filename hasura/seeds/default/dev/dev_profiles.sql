@@ -1,7 +1,7 @@
 INSERT INTO profile (
   id,
   given_name, family_name, contact_details
-) VALUES 
+) VALUES
 ('434de6da-cdc5-431b-b109-022854319d69', 'Shaun', 'Baker', '[ { "type": "email", "value": "shaun.baker@nearform.com" } ]'),
 ('77eaddad-ba95-4ab7-9ef7-801b347d6502', 'Andrew', 'Winterbotham', '[ { "type": "email", "value": "andrew.winterbotham@nearform.com" } ]'),
 ('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'Greg', 'Ilach', '[ { "type": "email", "value": "grzegorz.ilach@nearform.com" } ]'),
@@ -11,7 +11,7 @@ INSERT INTO profile (
 ('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', '[ { "type": "email", "value": "maksym.barvinskyi@nearform.com" } ]'),
 ('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', 'Lefteris', 'Paraskevas', '[ { "type": "email", "value": "lefteris.paraskevas@nearform.com" } ]');
 
-INSERT INTO identity (provider_id, profile_id, type) VALUES 
+INSERT INTO identity (provider_id, profile_id, type) VALUES
 (
   '9b0c754a-c12f-4f04-a554-cd899a09484d',
   (SELECT id FROM profile WHERE contact_details @> '[{"value":"shaun.baker@nearform.com"}]'  LIMIT 1),
@@ -84,7 +84,7 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES (
 INSERT INTO organization_role(organization_id, role_id) VALUES (
   '55320dc6-cfb0-41fb-9000-ca7eb9d2894d',
   (SELECT id FROM role WHERE name = 'Administrator')
-)
+);
 
 INSERT INTO organization_member_role(organization_member_id, organization_role_id) VALUES (
   (SELECT id FROM organization_member WHERE profile_id = '434de6da-cdc5-431b-b109-022854319d69' LIMIT 1),

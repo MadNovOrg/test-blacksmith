@@ -1,3 +1,49 @@
 table:
   name: course
   schema: public
+object_relationships:
+- name: type
+  using:
+    foreign_key_constraint_on: course_type
+array_relationships:
+- name: modules
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_module
+        schema: public
+- name: participants
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_participant
+        schema: public
+- name: schedule
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_schedule
+        schema: public
+- name: team
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_team
+        schema: public
+select_permissions:
+- permission:
+    columns:
+    - course_type
+    - name
+    - created_at
+    - updated_at
+    - id
+    filter:
+      team:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  role: user

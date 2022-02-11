@@ -149,6 +149,7 @@ const LoggedOutRoutes: React.FC<unknown> = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="login" />} />
+      <Route path="*" element={<Navigate replace to="login" />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
