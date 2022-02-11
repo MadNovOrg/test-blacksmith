@@ -1,0 +1,72 @@
+name: E2E tests
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  tests:
+    if: github.event.review.state == 'approved'
+    name: E2E smoke tests
+    runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: tth-db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      graphql-engine:
+        image: hasura/graphql-engine:v2.1.1.cli-migrations-v3
+        ports:
+          - 8080:8080
+        env:
+          HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
+          HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+          HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
+          HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_MbPqfM7i4/.well-known/jwks.json","claims_format":"stringified_json"}'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.3.0"
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Playwright setup
+        run: |
+          cp hasura/.env.sample hasura/.env
+          npm run hasura -- metadata apply
+          npm run hasura -- migrate apply --all-databases
+          npm run hasura -- metadata reload
+          PGPASSWORD=root psql -h localhost -U postgres -d tth-db -q -f hasura/seeds/default/dev/dev_profiles.sql
+          npm run dev &
+          npx playwright install chromium
+
+      - name: Playwright tests 
+        run: npm run test:e2e
+
+      - name: Playwright report
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: test-artifacts
+          path: |
+            playwright-report
+            test-results

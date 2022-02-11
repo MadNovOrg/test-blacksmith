@@ -11,6 +11,10 @@
     "build-storybook": "build-storybook",
     "typecheck": "tsc",
     "test": "jest",
+    "test:e2e": "playwright test --config=playwright/playwright.config.ts --project=chromium",
+    "test:e2e:firefox": "playwright test --config=playwright/playwright.config.ts --project=firefox",
+    "test:e2e:webkit": "playwright test --config=playwright/playwright.config.ts --project=webkit",
+    "test:e2e:ci": "concurrently --kill-others \"npm run dev\" \"npx playwright install chromium && npm run test:e2e\"",
     "hasura": "env-cmd -f ./hasura/.env hasura --project hasura",
     "hasura:console": "npm run hasura -- console",
     "hasura:squash": "npm run hasura -- migrate squash",
@@ -49,6 +53,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
+    "@playwright/test": "^1.18.1",
     "@storybook/addon-actions": "^6.5.0-alpha.19",
     "@storybook/addon-essentials": "^6.5.0-alpha.19",
     "@storybook/addon-links": "^6.5.0-alpha.19",
@@ -68,13 +73,12 @@
     "@vitejs/plugin-react": "^1.0.7",
     "autoprefixer": "^10.4.2",
     "babel-loader": "^8.2.3",
-    "cypress": "^9.3.1",
+    "concurrently": "^7.0.0",
     "env-cmd": "^10.1.0",
     "esbuild": "0.13.8",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
-    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-prettier": "^4.0.0",
@@ -100,7 +104,7 @@
       "\\.(css|less)$": "identity-obj-proxy"
     },
     "modulePathIgnorePatterns": [
-      "<rootDir>/cypress"
+      "<rootDir>/playwright"
     ]
   }
 }

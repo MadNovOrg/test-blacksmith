@@ -7,3 +7,7 @@ dist-ssr
 .idea
 
 hasura/.env
+
+playwright-report
+test-results
+tmp

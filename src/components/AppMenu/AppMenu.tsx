@@ -16,7 +16,10 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         {auth.profile ? (
-          <Menu.Button className="inline-flex px-4 py-2 text-sm bg-white focus:outline-none ripple-bg-gray-100 rounded">
+          <Menu.Button
+            className="inline-flex px-4 py-2 text-sm bg-white focus:outline-none ripple-bg-gray-100 rounded"
+            data-id="user-menu-btn"
+          >
             <Icon name="chevron-down" aria-hidden="true" />
             <Typography>
               {auth.profile.givenName} {auth.profile.familyName.charAt(0)}

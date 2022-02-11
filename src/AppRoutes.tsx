@@ -69,7 +69,10 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ tabs }) => {
   return (
     <>
-      <div className="border-t border-divider bg-gray-50 hidden sm:flex">
+      <div
+        className="border-t border-divider bg-gray-50 hidden sm:flex"
+        data-id="nav-menu"
+      >
         {tabs.map(tab => (
           <NavLink
             key={tab.id}

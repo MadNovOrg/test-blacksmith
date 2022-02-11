@@ -46,4 +46,7 @@ TBD
 
 ## E2E tests
 
-TBD
+[Playwright](https://playwright.dev/) is used for E2E tests. To run tests locally, first make sure you have started the app according to [setup](#setup). Then run the following commands:
+- `npx playwright install` - only the first time on each machine, this installs the browsers (chromium, firefox and webkit) via npm
+- `npm run test:e2e` - runs all the tests (filtering will be possible when there are more tests)
+- `npm run test:e2e -- --headed` - runs tests in a visible browser

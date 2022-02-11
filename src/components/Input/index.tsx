@@ -50,7 +50,14 @@ export const Input: React.FC<InputProps> = ({
         )}
         {...props}
       />
-      {error && <div className="text-xs text-red mt-2">{error}</div>}
+      {error && (
+        <div
+          className="text-xs text-red mt-2"
+          error-for={props.id || props.name}
+        >
+          {error}
+        </div>
+      )}
     </div>
   )
 }
