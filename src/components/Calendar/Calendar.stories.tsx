@@ -16,10 +16,26 @@ const Template: ComponentStory<typeof Calendar> = () => {
     <div className="w-[500px] h-[400px] relative">
       <Calendar
         highlight={[
-          { color: '', range: [addDays(now(), -2), addDays(now(), 2)] },
-          { color: '', range: [addDays(now(), 12), addDays(now(), 15)] },
-          { color: '', range: [addDays(now(), 37), addDays(now(), 39)] },
-          { color: '', range: [addDays(now(), 64), addDays(now(), 69)] },
+          {
+            colorClass: 'text-white bg-lime-500',
+            start: addDays(now(), -2),
+            end: addDays(now(), 2),
+          },
+          {
+            colorClass: 'text-white bg-yellow-500',
+            start: addDays(now(), 12),
+            end: addDays(now(), 15),
+          },
+          {
+            colorClass: 'text-white bg-teal-500',
+            start: addDays(now(), 37),
+            end: addDays(now(), 39),
+          },
+          {
+            colorClass: 'text-white bg-purple-500',
+            start: addDays(now(), 64),
+            end: addDays(now(), 69),
+          },
         ]}
       />
     </div>

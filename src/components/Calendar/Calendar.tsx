@@ -1,32 +1,40 @@
 import React, { useMemo, useState } from 'react'
 import clsx from 'clsx'
-import format from 'date-fns/format'
-import addMonths from 'date-fns/addMonths'
-import startOfWeek from 'date-fns/startOfWeek'
-import endOfMonth from 'date-fns/endOfMonth'
-import endOfWeek from 'date-fns/endOfWeek'
-import differenceInCalendarDays from 'date-fns/differenceInCalendarDays'
-import startOfMonth from 'date-fns/startOfMonth'
-import { isSameMonth, addDays, isToday, isAfter } from 'date-fns/esm'
-import getDate from 'date-fns/getDate'
-import isSameDay from 'date-fns/isSameDay'
-import isBefore from 'date-fns/isBefore'
+import {
+  format,
+  addMonths,
+  startOfWeek,
+  endOfMonth,
+  endOfWeek,
+  differenceInCalendarDays,
+  startOfMonth,
+  isSameMonth,
+  addDays,
+  isToday,
+  isAfter,
+  getDate,
+  isSameDay,
+  isBefore,
+  startOfDay,
+  startOfToday,
+} from 'date-fns'
 
 import { IconButton } from '../IconButton'
 
-import { now } from '@app/util'
-
-type Range = [Date, Date]
-
 type CalendarProps = {
   highlight?: {
-    color: string
-    range: Range
+    colorClass: string
+    start: Date
+    end: Date
   }[]
+  onDateSelected?: (day: Date) => void
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ highlight = [] }) => {
-  const [selected, setSelected] = useState<Date>(now())
+export const Calendar: React.FC<CalendarProps> = ({
+  highlight = [],
+  onDateSelected,
+}) => {
+  const [selected, setSelected] = useState<Date>(startOfToday())
 
   const days = useMemo(() => {
     const first = startOfWeek(startOfMonth(selected))
@@ -35,43 +43,35 @@ export const Calendar: React.FC<CalendarProps> = ({ highlight = [] }) => {
 
     const days = Array.from({ length: numDays }, (_, index) => {
       const date = addDays(first, index)
-      const result = highlight.find(({ range: [r1, r2] }) => {
-        return r1 <= date && date <= r2
+      const result = highlight.find(({ start, end }) => {
+        return (
+          startOfDay(start) <= startOfDay(date) &&
+          startOfDay(date) <= startOfDay(end)
+        )
       })
 
       return {
         date,
-        isSelected: isSameDay(date, selected),
         isToday: isToday(date),
         isCurrentMonth: isSameMonth(date, selected),
-        color: result?.color,
+        colorClass: result?.colorClass,
         isRangeStart: false,
         isRangeEnd: false,
-        inRange: false,
+        isRangeBetween: false,
       }
     })
 
-    highlight.forEach(h => {
-      const [r1, r2] = h.range
-
-      let rangeFlag = false
+    highlight.forEach(({ start, end }) => {
       days.forEach(d => {
-        if (isSameDay(d.date, r2)) {
-          d.isRangeEnd = true
-          rangeFlag = false
-        } else {
-          if (!rangeFlag && isAfter(d.date, r1) && isBefore(d.date, r2)) {
-            rangeFlag = true
-          }
-        }
-
-        if (rangeFlag) {
-          d.inRange = true
-        }
-
-        if (isSameDay(d.date, r1)) {
+        if (isSameDay(d.date, start) && isSameDay(d.date, end)) {
           d.isRangeStart = true
-          rangeFlag = true
+          d.isRangeEnd = true
+        } else if (isSameDay(d.date, start)) {
+          d.isRangeStart = true
+        } else if (isSameDay(d.date, end)) {
+          d.isRangeEnd = true
+        } else if (isAfter(d.date, start) && isBefore(d.date, end)) {
+          d.isRangeBetween = true
         }
       })
     })
@@ -109,36 +109,41 @@ export const Calendar: React.FC<CalendarProps> = ({ highlight = [] }) => {
 
       <div className="mt-2 grid grid-cols-7">
         {days.map(day => {
-          const isRange = day.isRangeStart || day.inRange || day.isRangeEnd
+          const inRange =
+            day.isRangeStart || day.isRangeBetween || day.isRangeEnd
 
           return (
             <div
               key={day.date.getTime()}
               className={clsx('flex aspect-square p-2', {
-                'pr-0': day.isRangeStart,
-                'pl-0': day.isRangeEnd,
-                'px-0': day.inRange,
+                'pr-0': day.isRangeStart && !day.isRangeEnd,
+                'pl-0': !day.isRangeStart && day.isRangeEnd,
+                'px-0': day.isRangeBetween,
               })}
             >
               <button
                 type="button"
-                onClick={() => setSelected(day.date)}
+                onClick={() => {
+                  setSelected(day.date)
+                  if (onDateSelected) {
+                    onDateSelected(day.date)
+                  }
+                }}
                 className={clsx(
                   'flex items-center justify-center h-full w-full',
                   'rounded-full text-lg font-light',
-                  'bg-gray-50/50',
+                  inRange && day.colorClass,
                   {
-                    'text-white bg-navy-500 font-semibold': day.isToday,
+                    'bg-gray-50/50': !inRange,
+                    'text-white bg-navy-100 font-semibold': day.isToday,
                     'text-gray-900': day.isCurrentMonth,
                     'text-gray-200 hover:bg-gray-50':
-                      !day.isCurrentMonth && !isRange,
-                    'text-white bg-lime-500': isRange,
-                    'font-semibold': isRange && day.isCurrentMonth,
-                    'hover:bg-gray-200': !isRange && !day.isSelected,
-                    'rounded-r-none': day.isRangeStart,
-                    'rounded-l-none': day.isRangeEnd,
-                    'rounded-none': day.inRange,
-                    'bg-navy-500 text-white font-semibold': day.isSelected,
+                      !day.isCurrentMonth && !inRange,
+                    'font-semibold': inRange && day.isCurrentMonth,
+                    'hover:bg-gray-200': !inRange,
+                    'rounded-r-none': day.isRangeStart && !day.isRangeEnd,
+                    'rounded-l-none': !day.isRangeStart && day.isRangeEnd,
+                    'rounded-none': day.isRangeBetween,
                   }
                 )}
               >

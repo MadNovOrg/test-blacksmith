@@ -77,6 +77,19 @@
       "dbs-check-complete": "DBS Check Complete",
       "change-availability": "Change Availability"
     },
+    "manage-availability": {
+      "title": "Manage Availability",
+      "event-form": {
+        "from": "From",
+        "to": "To",
+        "for": "For",
+        "submit-event": "Submit Event",
+        "add-reason-optional": "Add Reason (optional)",
+        "validation": {
+          "end-before-start-date": "The end date cannot be before the start date."
+        }
+      }
+    },
     "forgot-password": {
       "generic-error": "An error occurred. Please contact your administrator",
       "generic-email-error": "Please enter a valid email address",

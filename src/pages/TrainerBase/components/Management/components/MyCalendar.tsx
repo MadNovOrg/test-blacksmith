@@ -31,17 +31,16 @@ export const MyCalendar: React.FC<MyCalendarProps> = () => {
     })
   }, [data])
 
-  // TODO: Same day range breaks the Calendar, will fix after #38 goes in
   const ranges = useMemo(
     () =>
       schedule.map(s => ({
-        color: '',
-        range: [new Date(s.start), new Date(s.end)] as [Date, Date], // TODO: no need to be an array
+        colorClass: 'text-white bg-lime-500',
+        start: new Date(s.start),
+        end: new Date(s.end),
       })),
     [schedule]
   )
 
-  console.log(ranges)
   return (
     <div className="">
       <p className="font-light text-3xl">My Calendar</p>
