@@ -1,9 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL, DEFAULT_USER } from '../constants'
-
-import { BasePage } from './BasePage'
-import { HomePage } from './HomePage'
+import { BASE_URL } from '../../constants'
+import { BasePage } from '../BasePage'
 
 export class LoginPage extends BasePage {
   readonly emailInput: Locator
@@ -27,39 +25,27 @@ export class LoginPage extends BasePage {
     this.generalErrorText = this.page.locator('#error')
   }
 
-  async goto(): Promise<LoginPage> {
+  async goto() {
     await super.goto(BASE_URL, this.emailInput)
-    return this
   }
 
-  async logIn(
-    email: string = DEFAULT_USER.email,
-    password: string = DEFAULT_USER.password
-  ): Promise<HomePage> {
+  async checkLoginPageOpened() {
+    await expect(this.emailInput).toBeVisible()
+  }
+
+  async logIn(email: string, password: string) {
     await this.emailInput.fill(email)
     await this.passwordInput.fill(password)
     await this.signInButton.click()
-    return new HomePage(this.page)
-  }
-
-  async logInWithError(
-    email: string = DEFAULT_USER.email,
-    password: string = DEFAULT_USER.password
-  ): Promise<LoginPage> {
-    await this.emailInput.fill(email)
-    await this.passwordInput.fill(password)
-    await this.signInButton.click()
-    return this
   }
 
   async checkErrors(errors: {
     generalError?: string
     emailError?: string
     passwordError?: string
-  }): Promise<LoginPage> {
+  }) {
     await expect(this.generalErrorText).toHaveText(errors.generalError ?? '')
     await expect(this.emailErrorText).toHaveText(errors.emailError ?? '')
     await expect(this.passwordErrorText).toHaveText(errors.passwordError ?? '')
-    return this
   }
 }

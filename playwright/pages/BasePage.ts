@@ -7,9 +7,8 @@ export class BasePage {
     this.page = page
   }
 
-  async goto(url: string, mandatoryElement: Locator): Promise<BasePage> {
+  async goto(url: string, mandatoryElement: Locator) {
     await this.page.goto(url)
     await mandatoryElement.waitFor({ timeout: 30000 })
-    return this
   }
 }

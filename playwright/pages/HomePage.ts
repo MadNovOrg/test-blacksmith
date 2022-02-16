@@ -1,31 +1,23 @@
-import { expect, Locator, Page } from '@playwright/test'
+import { Page } from '@playwright/test'
 
+import { UserMenu } from '../components/UserMenu'
 import { BASE_URL } from '../constants'
 
 import { BasePage } from './BasePage'
 
 export class HomePage extends BasePage {
-  readonly userNameText: Locator
+  readonly userMenu: UserMenu
 
   constructor(page: Page) {
     super(page)
-    this.userNameText = this.page.locator(
-      'button[data-id="user-menu-btn"] > div'
-    )
+    this.userMenu = new UserMenu(this.page)
   }
 
-  async goto(): Promise<HomePage> {
-    await super.goto(BASE_URL, this.userNameText)
-    return this
+  async goto() {
+    await super.goto(BASE_URL, this.userMenu.userNameText)
   }
 
-  async openUserMenu(): Promise<HomePage> {
-    await this.userNameText.click()
-    return this
-  }
-
-  async checkHomePageOpened(): Promise<HomePage> {
-    await expect(this.userNameText).toBeVisible()
-    return this
+  async tryToOpen() {
+    await this.page.goto(BASE_URL)
   }
 }

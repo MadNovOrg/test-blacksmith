@@ -20,4 +20,6 @@ switch (targetEnv) {
     break
 }
 
-export { BASE_URL, DEFAULT_USER }
+const TEMP_DIR = './tmp'
+
+export { BASE_URL, DEFAULT_USER, TEMP_DIR }

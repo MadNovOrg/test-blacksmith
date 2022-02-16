@@ -3,6 +3,7 @@ import { PlaywrightTestConfig, devices } from '@playwright/test'
 const config: PlaywrightTestConfig = {
   forbidOnly: !!process.env.CI,
   retries: 1,
+  globalSetup: require.resolve('./hooks/global-setup'),
   use: {
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
