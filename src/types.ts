@@ -66,6 +66,21 @@ export type ModuleGroup = {
   modules: Module[]
 } & Base
 
+export enum AvailabilityType {
+  AVAILABLE = 'available',
+  UNAVAILABLE = 'unavailable',
+  ANNUAL_LEAVE = 'annual_leave',
+  SICK_LEAVE = 'sick_leave',
+  COMPASSIONATE_LEAVE = 'compassionate_leave',
+}
+
+export type Availability = {
+  type: AvailabilityType
+  start: Date
+  end: Date
+  description?: string
+} & Base
+
 export type Venue = {
   id: string
   name: string

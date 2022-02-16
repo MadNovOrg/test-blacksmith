@@ -136,7 +136,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                   {
                     'bg-gray-50/50': !inRange,
                     'text-white bg-navy-100 font-semibold': day.isToday,
-                    'text-gray-900': day.isCurrentMonth,
+                    'text-gray-900': day.isCurrentMonth && !inRange,
                     'text-gray-200 hover:bg-gray-50':
                       !day.isCurrentMonth && !inRange,
                     'font-semibold': inRange && day.isCurrentMonth,

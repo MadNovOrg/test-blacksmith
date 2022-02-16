@@ -32,3 +32,15 @@ export const PROFILE = gql`
     updatedAt
   }
 `
+
+export const AVAILABILITY = gql`
+  fragment Availability on availability {
+    id
+    start
+    end
+    description
+    createdAt
+    updatedAt
+    type
+  }
+`

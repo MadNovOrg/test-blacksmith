@@ -50,6 +50,10 @@
     @apply text-navy-500 text-center ring-navy-500 transition-all border border-navy-500 hover:border-navy-300 hover:text-navy-300 active:border-navy-300 active:text-navy-300 disabled:border-navy-100 disabled:text-navy-100;
   }
 
+  .warning {
+    @apply text-red text-center ring-red transition-all border border-red hover:text-white hover:bg-red active:border-navy-300 active:text-navy-300 disabled:border-navy-100 disabled:text-navy-100;
+  }
+
   .spinner {
     @apply absolute z-10 -mt-6 -ml-6 top-2/4 left-2/4 animate-spin;
   }

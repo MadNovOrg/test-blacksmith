@@ -26,4 +26,11 @@ export const formatDateRange = (dateFrom: Date, dateTo: Date): string => {
   return `${format(dateFrom, 'do LLLL y')} - ${format(dateTo, 'do LLLL y')}`
 }
 
+export const formatDateForInput = (value: string | Date) => {
+  return format(
+    typeof value === 'string' ? new Date(value) : value,
+    'yyyy-MM-dd'
+  )
+}
+
 export const now = () => new Date()

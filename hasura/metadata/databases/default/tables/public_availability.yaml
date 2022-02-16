@@ -1,0 +1,64 @@
+table:
+  name: availability
+  schema: public
+configuration:
+  custom_column_names:
+    created_at: createdAt
+    profile_id: profileId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+- name: profile
+  using:
+    foreign_key_constraint_on: profile_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      profile:
+        id:
+          _eq: X-Hasura-User-Id
+    columns:
+    - type
+    - description
+    - end
+    - start
+    - profile_id
+  role: user
+select_permissions:
+- permission:
+    columns:
+    - type
+    - description
+    - created_at
+    - end
+    - start
+    - updated_at
+    - id
+    - profile_id
+    filter:
+      profile:
+        id:
+          _eq: X-Hasura-User-Id
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - type
+    - description
+    - end
+    - start
+    - profile_id
+    filter:
+      profile:
+        id:
+          _eq: X-Hasura-User-Id
+  role: user
+delete_permissions:
+- permission:
+    filter:
+      profile:
+        id:
+          _eq: X-Hasura-User-Id
+  role: user

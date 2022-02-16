@@ -10,7 +10,8 @@
     },
     "back": "Back",
     "submit": "Submit",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "discard-changes": "Discard Changes"
   },
   "components": {
     "certification-details": {
@@ -87,7 +88,8 @@
         "add-reason-optional": "Add Reason (optional)",
         "validation": {
           "end-before-start-date": "The end date cannot be before the start date."
-        }
+        },
+        "delete-event": "Delete Event"
       }
     },
     "forgot-password": {
