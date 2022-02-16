@@ -54,3 +54,17 @@ select_permissions:
     - updated_at
     filter: {}
   role: user
+event_triggers:
+- definition:
+    enable_manual: true
+    insert:
+      columns: "*"
+    update:
+      columns:
+      - contact_details
+  name: create_stripe_user
+  retry_conf:
+    interval_sec: 15
+    num_retries: 3
+    timeout_sec: 5
+  webhook: "{{EVENTS_HOST}}/create-stripe-user"
