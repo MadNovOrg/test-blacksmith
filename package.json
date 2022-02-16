@@ -44,7 +44,6 @@
     "react-i18next": "^11.15.3",
     "react-router-dom": "^6.2.1",
     "swr": "^1.2.1",
-    "react-verification-input": "^2.0.4",
     "tailwindcss-ripple": "^0.7.1",
     "vite-plugin-svgr": "^1.0.1"
   },
