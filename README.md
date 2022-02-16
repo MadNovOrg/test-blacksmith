@@ -1,19 +1,20 @@
 # Team Teach Hub
 
 ## Setup
-
 - `npm i`
 - `docker compose up -d` to spin up postgres, hasura and adminer for local developement
 - `npm run dev` to run the frontend
 
 ## New Dev Account
+
+For first time setup:
 - Create a user in Cognito
 - Add new user to DEV database via https://hasura.dev.teamteachhub.co.uk/console (needed for Cognito functions that depend on db data such as PreTokenGeneration)
   1. insert row in `profile` with name and email
   2. insert row in `identity` with uuid from cognito and `profile.id` (uuid from step 1)
   3. insert row in `organization_member` with `profile.id` and organization id desired
   4. insert row in `organization_member_role` with `organization_member.id` (uuid from step 3) and `organization_role.id` with matching `organization_id`
-- The steps above can be done locally by updating `dev_profiles.sql` seed file and running `npm run hasura:seed:apply` (needs clean database)
+- The steps above can be done locally by updating `dev_profiles.sql` seed file and running `npm run hasura:seed:apply` (needs clean database - see [here](https://github.com/TeamTeach/data) for how to populate the local database with more data)
 - Login locally at http://localhost:3000
 
 ## Designs

@@ -33,6 +33,7 @@ import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
 import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
+import { MembershipAreaPage } from '@app/pages/MembershipArea'
 
 const Dashboard = React.lazy(() => import('@app/pages/admin/dashboard'))
 const Organizations = React.lazy(
@@ -44,6 +45,7 @@ const Trainers = React.lazy(
 const Trainees = React.lazy(
   () => import('@app/pages/admin/components/trainees')
 )
+const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
 
 // TODO: will be generated later based on user/role
 const tabs = [
@@ -58,6 +60,14 @@ const tabs = [
   {
     id: 'my-organization',
     title: 'My Organization',
+  },
+  {
+    id: 'admin',
+    title: 'Admin',
+  },
+  {
+    id: 'membership-area',
+    title: 'Membership Area',
   },
 ]
 
@@ -140,7 +150,12 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="organizations" element={<Organizations />} />
               <Route path="trainers" element={<Trainers />} />
               <Route path="trainees" element={<Trainees />} />
+              <Route path="plans" element={<Plans />} />
             </Route>
+            <Route
+              path="membership-area"
+              element={<MembershipAreaPage />}
+            ></Route>
           </Route>
         </Routes>
       </Suspense>

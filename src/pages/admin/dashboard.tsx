@@ -52,6 +52,12 @@ const navigation = [
     icon: ChartBarIcon,
     current: false,
   },
+  {
+    name: 'Plans',
+    href: '/admin/plans',
+    icon: UsersIcon,
+    current: false,
+  },
 ]
 
 function Dashboard() {
