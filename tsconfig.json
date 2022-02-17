@@ -17,10 +17,11 @@
     "jsx": "react-jsx",
     "typeRoots": ["./src/types"],
     "types": ["vite-plugin-svgr/client", "@types/jest", "@types/amazon-cognito-auth-js"],
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@app/*": ["./*"]
+      "@app/*": ["./src/*"],
+      "@test/*": ["./test/*"]
     },
   },
-  "include": ["./src"]
+  "include": ["./src", "./test"]
 }

@@ -34,6 +34,7 @@ export const Input: React.FC<InputProps> = ({
         </label>
       )}
       <input
+        data-testid={`input-${props.name}`}
         id={props.id || props.name}
         {...registerFunc?.()} // only call if not null
         value={value}
@@ -54,6 +55,7 @@ export const Input: React.FC<InputProps> = ({
         <div
           className="text-xs text-red mt-2"
           error-for={props.id || props.name}
+          data-testid={`input-${props.name}-error`}
         >
           {error}
         </div>

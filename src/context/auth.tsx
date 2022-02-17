@@ -19,9 +19,9 @@ type State = {
   idToken?: string
 }
 
-type LoginResult = { session?: CognitoUser; error?: E }
+export type LoginResult = { session?: CognitoUser; error?: E }
 
-interface ContextType extends State {
+export interface ContextType extends State {
   login: (_: string, __: string) => Promise<LoginResult>
   logout: () => Promise<void>
   profile?: Profile
@@ -31,7 +31,7 @@ const initialState: State = {
   loading: true,
 }
 
-const AuthContext = React.createContext<ContextType>({} as ContextType)
+export const AuthContext = React.createContext<ContextType>({} as ContextType)
 
 async function getAuthenticatedUser() {
   try {

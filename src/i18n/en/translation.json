@@ -92,6 +92,45 @@
         "delete-event": "Delete Event"
       }
     },
+    "login": {
+      "reset-pass": "Please login with your new password",
+      "email-label": "Email Address",
+      "email-placeholder": "Please enter your email address",
+      "email-title": "Email Address",
+      "pass-label": "Password",
+      "pass-placeholder": "Please enter your password",
+      "pass-title": "Password",
+      "submit-label": "Sign In",
+      "forgot-label": "Forgotten your password?",
+      "loading-state-part-one": "If you have trouble loading, please ",
+      "loading-state-part-two": "contact us",
+      "errorMessages": {
+        "InvalidEmail": {
+          "emailMessage": "Please enter a valid email address",
+          "passMessage": ""
+        },
+        "NotAuthorizedException": {
+          "emailMessage": "",
+          "passMessage": "Email address or password was incorrect, please try again"
+        },
+        "UserNotFoundException": {
+          "emailMessage": "User does not exist",
+          "passMessage": ""
+        },
+        "InvalidParameterException": {
+          "emailMessage": "",
+          "passMessage": "Please enter a password"
+        },
+        "401": {
+          "emailMessage": "",
+          "passMessage": "New password required"
+        },
+        "UnknownError": {
+          "emailMessage": "",
+          "passMessage": "An error occurred. Please contact your administrator"
+        }
+      }
+    },
     "forgot-password": {
       "generic-error": "An error occurred. Please contact your administrator",
       "generic-email-error": "Please enter a valid email address",

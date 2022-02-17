@@ -1,165 +1,139 @@
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import * as EmailValidator from 'email-validator'
+import { useTranslation } from 'react-i18next'
 
 import { Input } from '@app/components/Input'
 import { LoggedOutHeader } from '@app/components/LoggedOutHeader'
 
 import { useAuth } from '@app/context/auth'
 
-type SpecificErrorCodeToMessage = {
-  passwordMessage: string
-  emailMessage: string
-}
-interface Map {
-  [key: string]: SpecificErrorCodeToMessage | undefined
-}
-
-const errorCodeToMesaageMapping: Map = {
-  NotAuthorizedException: {
-    passwordMessage: 'Incorrect username or password',
-    emailMessage: 'Incorrect username or password',
-  },
-  UserNotFoundException: {
-    passwordMessage: '',
-    emailMessage: 'User does not exist',
-  },
-  InvalidParameterException: {
-    passwordMessage: 'Please enter a password',
-    emailMessage: '',
-  },
-  '401': {
-    passwordMessage: 'New password required',
-    emailMessage: '',
-  },
-}
-
-type LocationState = {
-  from: {
-    pathname: string
-  }
-}
-
-type ErrorState = {
-  emailErrorMessage: string
-  passwordErrorMessage: string
-}
+type LocationState = { from: { pathname: string } }
+type ErrorState = { emailMessage: string; passMessage: string }
+const NO_ERROR: ErrorState = { emailMessage: '', passMessage: '' }
 
 export const LoginPage = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const location = useLocation()
   const auth = useAuth()
+  const { t } = useTranslation()
 
-  const [errorState, setErrorState] = useState<ErrorState>({
-    emailErrorMessage: '',
-    passwordErrorMessage: '',
-  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorState, setErrorState] = useState(NO_ERROR)
 
-  const [email, setEmail] = useState(searchParams.get('email'))
+  const [email, setEmail] = useState(searchParams.get('email') ?? '')
   const [password, setPassword] = useState('')
-  const showResetPasswordMessage =
+
+  const showResetPassMessage =
     searchParams.get('email') &&
     searchParams.get('justResetPassword') === 'true'
 
   const from = (location.state as LocationState)?.from?.pathname || '/'
 
-  const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const errorCodeToMsg: Record<string, ErrorState> = useMemo(() => {
+    return t(`pages.login.errorMessages`, { returnObjects: true })
+  }, [t])
 
-    if (!EmailValidator.validate(email as string)) {
-      setErrorState(s => ({
-        ...s,
-        emailErrorMessage: 'Please enter a valid email address',
-      }))
-    } else {
-      setErrorState(s => ({
-        ...s,
-        emailErrorMessage: '',
-      }))
+  const handleSubmit = useCallback(
+    async (event: React.ChangeEvent<HTMLFormElement>) => {
+      event.preventDefault()
 
-      const loginResult = await auth.login(email as string, password)
-
-      // if successdfully logged in; redirect, otherwise render error message(s)
-      if (loginResult.error === undefined) {
-        navigate(from, { replace: true })
-      } else {
-        if (
-          errorCodeToMesaageMapping[loginResult.error?.code || '']?.emailMessage
-        ) {
-          setErrorState(s => ({
-            ...s,
-            emailErrorMessage:
-              errorCodeToMesaageMapping[loginResult.error?.code || '']
-                ?.emailMessage ||
-              'An error occurred. Please contact your administrator',
-          }))
-        }
-
-        if (
-          errorCodeToMesaageMapping[loginResult.error?.code || '']
-            ?.passwordMessage
-        ) {
-          setErrorState(s => ({
-            ...s,
-            passwordErrorMessage:
-              errorCodeToMesaageMapping[loginResult.error?.code || '']
-                ?.passwordMessage ||
-              'An error occurred. Please contact your administrator',
-          }))
-        }
+      if (!EmailValidator.validate(email)) {
+        setErrorState(s => ({ ...s, ...errorCodeToMsg.InvalidEmail }))
+        return
       }
-    }
-  }
+
+      setIsLoading(true)
+      setErrorState(s => ({ ...s, ...NO_ERROR }))
+
+      const { error } = await auth.login(email as string, password)
+
+      if (!error) {
+        return navigate(from, { replace: true })
+      }
+
+      setIsLoading(false)
+      const msgs = errorCodeToMsg[error.code] ?? errorCodeToMsg.UnknownError
+      setErrorState(s => ({ ...s, ...msgs }))
+    },
+    [auth, email, password, from, navigate, errorCodeToMsg]
+  )
+
+  const loader = useMemo(() => {
+    if (!isLoading) return null
+
+    // Wrapping div covers the form to prevent UI "jumps"
+    return (
+      <div
+        className="absolute z-10 inset-0 bg-white text-center"
+        data-testid="LoginLoader"
+      >
+        <div className="loader"></div>
+        <p className="pt-12">
+          {t('pages.login.loading-state-part-one')}
+          <Link to="/contacted-confirmation" className="underline">
+            {t('pages.login.loading-state-part-two')}
+          </Link>
+        </p>
+      </div>
+    )
+  }, [t, isLoading])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <LoggedOutHeader />
 
-      {showResetPasswordMessage && (
-        <p className="mb-8 text-sm md:text-base">
-          Please login with your new password
-        </p>
-      )}
+      <div className="w-60 md:w-96 relative">
+        {loader}
 
-      <div className="w-60 md:w-96">
-        <form onSubmit={handleSubmit}>
-          <section className="space-y-6 mb-16">
+        {showResetPassMessage ? (
+          <p className="mb-8 text-sm md:text-base">
+            {t('pages.login.reset-pass')}
+          </p>
+        ) : null}
+
+        <form onSubmit={handleSubmit} data-testid="LoginForm">
+          <section className="relative space-y-6 mb-16">
             <Input
-              onChange={e => setEmail(e.target.value)}
-              error={errorState.emailErrorMessage}
-              placeholder="Please enter your email address"
               name="email"
-              title="email"
-              label="Email Address"
-              value={email || ''}
+              value={email}
+              label={t('pages.login.email-label')}
+              placeholder={t('pages.login.email-placeholder')}
+              title={t('pages.login.email-title')}
+              onChange={e => setEmail(e.target.value)}
+              error={errorState.emailMessage}
             ></Input>
 
             <Input
-              onChange={e => setPassword(e.target.value)}
-              error={errorState.passwordErrorMessage}
-              placeholder="Please enter your password"
-              isPassword={true}
-              name="password"
-              title="password"
-              label="Password"
               type="password"
+              name="password"
+              isPassword={true}
+              label={t('pages.login.pass-label')}
+              placeholder={t('pages.login.pass-placeholder')}
+              title={t('pages.login.pass-title')}
+              onChange={e => setPassword(e.target.value)}
+              error={errorState.passMessage}
             ></Input>
           </section>
 
           <div className="text-center">
-            <button type="submit" className="btn primary w-40">
-              Sign In
+            <button
+              type="submit"
+              className="btn primary w-40"
+              data-testid="LoginSubmit"
+            >
+              {t('pages.login.submit-label')}
             </button>
           </div>
         </form>
-      </div>
 
-      <div className="mt-12">
-        <Link to="/forgot-password" className="text-xs font-light underline">
-          Forgotten your password?
-        </Link>
+        <div className="text-center mt-12">
+          <Link to="/forgot-password" className="text-xs font-light underline">
+            {t('pages.login.forgot-label')}
+          </Link>
+        </div>
       </div>
     </div>
   )
