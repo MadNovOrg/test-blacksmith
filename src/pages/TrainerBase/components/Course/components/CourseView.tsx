@@ -7,7 +7,6 @@ import {
 } from 'react-beautiful-dnd'
 import clsx from 'clsx'
 
-import { Typography } from '@app/components/Typography'
 import Spinner from '@app/components/Spinner'
 
 import { ModuleCard } from './ModuleCard'
@@ -18,8 +17,20 @@ import {
   ResponseType as GetModuleGroupsResponseType,
   ParamsType as GetModuleGroupsParamsType,
 } from '@app/queries/modules/get-module-groups'
+import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
 
 type CourseViewProps = unknown
+
+type AvailableModule = ModuleGroup & {
+  used?: boolean
+  draggableId: string
+}
+
+type ModuleSlot = {
+  module?: ModuleGroup
+  droppableId: string
+  draggableId: string
+}
 
 export const CourseView: React.FC<CourseViewProps> = () => {
   // @TODO - we could/should be able to identify the level early based on course type etc
@@ -29,69 +40,105 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     [string, GetModuleGroupsParamsType]
   >([GetModuleGroups, { level: 1 }])
 
-  const [courseModules, setCourseModules] = useState<ModuleGroup[]>([])
-  const [allModules, setAllModules] = useState<ModuleGroup[]>([])
+  const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
+    []
+  )
+  const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleSlot[]>([])
 
   useEffect(() => {
-    if (allModules.length === 0 && data) {
-      setAllModules(data.groups)
+    if (availableModules.length === 0 && data) {
+      setAvailableModules(
+        data.groups.map(module => ({
+          ...module,
+          draggableId: `all-modules-${module.id}`,
+        }))
+      )
+      setCourseModuleSlots(
+        data.groups.map((_, i) => ({
+          droppableId: `course-modules-slot-drop-${i}`,
+          draggableId: `course-modules-slot-drag-${i}`,
+        }))
+      )
     }
-  }, [allModules, data])
+  }, [availableModules, data])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     result => {
       const { draggableId, source, destination } = result
-      if (!data) return
-      if (!destination) return
+      if (!data || !destination) return
 
-      if (
-        destination.droppableId === source.droppableId &&
-        source.droppableId === 'all-modules'
-      ) {
+      if (destination.droppableId === source.droppableId) {
         return
       }
 
-      if (destination.droppableId === 'course-modules') {
-        const isReordering = source.droppableId === 'course-modules'
-
-        const targetItem = (isReordering ? courseModules : allModules).find(
-          m => m.id === draggableId
+      function setModuleUsage(moduleId: string, used: boolean) {
+        setAvailableModules(prevState =>
+          prevState.map(module => {
+            return {
+              ...module,
+              used: module.id === moduleId ? used : module.used,
+            }
+          })
         )
-
-        const newCourseModules = Array.from(courseModules)
-        const newAllModules = isReordering ? allModules : Array.from(allModules)
-
-        if (isReordering) {
-          newCourseModules.splice(source.index, 1)
-        } else {
-          newAllModules.splice(source.index, 1)
-        }
-
-        if (targetItem) {
-          newCourseModules.splice(destination.index, 0, targetItem)
-        }
-
-        setCourseModules(newCourseModules)
-        setAllModules(newAllModules)
-        return
       }
 
-      if (destination.droppableId === 'all-modules') {
-        const targetItem = courseModules.find(m => m.id === draggableId)
-
-        const newAllModules = Array.from(allModules)
-        if (targetItem) {
-          newAllModules.splice(destination.index, 0, targetItem)
+      if (source.droppableId.startsWith('course-modules')) {
+        if (destination.droppableId.startsWith('course-modules')) {
+          // move module between slots
+          const draggedSlot = courseModuleSlots.find(
+            module => draggableId === module.draggableId
+          )
+          const draggedModule = draggedSlot?.module
+          setCourseModuleSlots(prevState =>
+            prevState.map(slot => {
+              if (destination.droppableId === slot.droppableId) {
+                if (slot.module) {
+                  setModuleUsage(slot.module.id, false)
+                }
+                slot.module = draggedModule
+              } else if (source.droppableId === slot.droppableId) {
+                slot.module = undefined
+              }
+              return slot
+            })
+          )
+        } else {
+          // remove module from course
+          const draggedSlot = courseModuleSlots.find(
+            module => draggableId === module.draggableId
+          )
+          const draggedModule = draggedSlot?.module
+          if (!draggedModule) return
+          setCourseModuleSlots(prevState =>
+            prevState.map(slot => ({
+              ...slot,
+              module:
+                slot.draggableId === draggableId ? undefined : slot.module,
+            }))
+          )
+          setModuleUsage(draggedModule.id, false)
         }
-        setAllModules(newAllModules)
-
-        const newCourseModules = Array.from(courseModules)
-        newCourseModules.splice(source.index, 1)
-        setCourseModules(newCourseModules)
-        return
+      } else if (destination.droppableId.startsWith('course-modules')) {
+        // add module to course
+        const draggedModule = availableModules.find(
+          module => draggableId === module.draggableId
+        )
+        if (!draggedModule) return
+        setCourseModuleSlots(prevState =>
+          prevState.map(slot => {
+            if (destination.droppableId === slot.droppableId) {
+              if (slot.module) {
+                setModuleUsage(slot.module.id, false)
+              }
+              slot.module = draggedModule
+            }
+            return slot
+          })
+        )
+        setModuleUsage(draggedModule.id, true)
       }
     },
-    [allModules, courseModules, data]
+    [availableModules, courseModuleSlots, data]
   )
 
   if (!data) {
@@ -101,77 +148,75 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   return (
     <DragDropContext onDragEnd={handleDrop}>
       <div className="pb-12">
-        <Typography variant="h4" className="mb-4">
-          Level Two
-        </Typography>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex-1">
-            <Typography variant="body2">
-              To meet the acceptance crteria, this course must contain tier 1
+        <div className="font-light text-2xl sm:text-4xl mb-4">Level Two</div>
+
+        <div className="grid grid-cols-3 lg:grid-cols-8 gap-y-8 lg:pt-8">
+          <div className="col-span-3 lg:col-span-8 lg:col-start-1 lg:col-span-3 lg:col-end-4">
+            <div className="text-sm">
+              To meet the acceptance criteria, this course must contain tier 1
               (green) and two tier 2 (yellow) modules. Drag and drop modules in
               the area provided below and submit when complete.
-            </Typography>
+            </div>
           </div>
-          <div className="flex-1 flex justify-end">
-            <label className="block">
-              <Typography variant="body2">Add to booking</Typography>
-              <select
-                className="px-0 pr-10 border-0 border-b border-gray-300 focus:ring-0 focus:border-navy"
-                placeholder="Please choose"
-              >
-                <option>Birchwood Academy, 3rd-4th May 2022</option>
-              </select>
-            </label>
+          <div className="col-span-3 lg:col-span-8 lg:col-start-5 lg:col-span-4 lg:col-end-9 flex flex-col lg:items-end text-sm">
+            <div>
+              <b>Location: </b>Birchwood Academy, Wrotham, Kent
+            </div>
+            <div>
+              <b>Starts: </b>20/01/22 09:00
+            </div>
+            <div>
+              <b>Course Type: </b>Blended
+            </div>
+          </div>
+          <div className="lg:col-start-1 lg:col-span-3 lg:col-end-4">
+            <div className="text-sm lg:text-base">Modules Available</div>
+
+            <Droppable droppableId="all-modules" direction="horizontal">
+              {(provided, snapshot) => (
+                <div
+                  className={clsx(
+                    'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out',
+                    {
+                      'bg-lime-100': snapshot.isDraggingOver,
+                    }
+                  )}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {availableModules.map((m, index) => (
+                    <ModuleCard
+                      key={m.id}
+                      index={index}
+                      data={m}
+                      isDragDisabled={m.used}
+                      draggableId={m.draggableId}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+          <div className="col-start-2 col-span-2 col-end-4 lg:col-start-5 lg:col-span-4 lg:col-end-9">
+            <div className="text-sm lg:text-base">My Course</div>
+
+            <div className="flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out">
+              {courseModuleSlots.map(slot => (
+                <ModuleSlot
+                  key={slot.droppableId}
+                  module={slot.module}
+                  droppableId={slot.droppableId}
+                  draggableId={slot.draggableId}
+                />
+              ))}
+            </div>
+
+            <div className="flex items-center justify-end mb-3">
+              <button className="btn tertiary">Submit Course</button>
+            </div>
           </div>
         </div>
-
-        <Typography variant="subtitle3">My Course</Typography>
-
-        <Droppable droppableId="course-modules" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              className={clsx(
-                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out h-32',
-                {
-                  'bg-lime-100': snapshot.isDraggingOver,
-                }
-              )}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {courseModules.map((m, index) => (
-                <ModuleCard key={m.id} data={m} index={index} />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-
-        <div className="flex items-center justify-end mb-3">
-          <button className="btn tertiary">Submit Course</button>
-        </div>
-
-        <Typography variant="subtitle3">Modules Available</Typography>
-
-        <Droppable droppableId="all-modules" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              className={clsx(
-                'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out',
-                {
-                  'bg-lime-100': snapshot.isDraggingOver,
-                }
-              )}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {allModules.map((m, index) => (
-                <ModuleCard key={m.id} data={m} index={index} />
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
       </div>
     </DragDropContext>
   )

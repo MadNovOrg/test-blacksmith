@@ -7,15 +7,30 @@ import { ModuleGroup } from '@app/types'
 type ModuleCardProps = {
   data: ModuleGroup
   index: number
+  draggableId: string
+  isDragDisabled?: boolean
+  className?: string
 }
 
-export const ModuleCard: React.FC<ModuleCardProps> = ({ data, index }) => {
+export const ModuleCard: React.FC<ModuleCardProps> = ({
+  data,
+  draggableId,
+  index,
+  isDragDisabled,
+  className,
+}) => {
   return (
-    <Draggable draggableId={data.id} index={index}>
+    <Draggable
+      draggableId={draggableId}
+      index={index}
+      isDragDisabled={isDragDisabled}
+    >
       {(provided, snapshot) => (
         <div
           className={clsx(
-            'm-2 w-28 h-28 bg-fuschia-500 rounded-md text-white p-2 flex flex-col justify-center transition-colors',
+            className,
+            'm-2 w-24 h-24 lg:w-28 lg:h-28 rounded-md text-white p-2 flex flex-col justify-center transition-colors',
+            isDragDisabled ? 'bg-fuschia-200' : 'bg-fuschia-500',
             { 'bg-fuschia-600': snapshot.isDragging }
           )}
           {...provided.draggableProps}
