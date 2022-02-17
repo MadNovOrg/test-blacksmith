@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Dropdown } from '@app/components/Dropdown'
+
 type MembershipAreaPageProps = unknown
 
 export const MembershipAreaPage: React.FC<MembershipAreaPageProps> = () => {
@@ -7,10 +9,13 @@ export const MembershipAreaPage: React.FC<MembershipAreaPageProps> = () => {
     <div>
       <div className="p-8 clear-rightpb-8 font-light text-2xl sm:text-4xl">
         Membership Details
-      </div>
-
-      <div className="p-8">
-        id, start, end, cycle dates, amount, free period information etc)
+        <div className="mt-8">
+          <Dropdown
+            title={'Choose plan'}
+            items={['Choice 1', 'Choice 2', 'Choice 3']}
+            handleClick={item => console.log(item)}
+          />
+        </div>
       </div>
     </div>
   )

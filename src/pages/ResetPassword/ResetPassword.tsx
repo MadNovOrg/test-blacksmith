@@ -69,8 +69,9 @@ const errorCodeToMessageMapping: Map = {
   },
 }
 
+const otpNumFields = 6
+
 const useVerificationInputFields = () => {
-  const numFields = 6
   const [verificationCodeValues, setVerificationCodeValues] =
     React.useState<VerificationCodeState>({
       '0': '',
@@ -124,7 +125,7 @@ const useVerificationInputFields = () => {
       // Check if they hit the max character length
       if (value.length >= maxLength) {
         // Check if it's not the last input field
-        if (parseInt(fieldIndex, 10) < numFields) {
+        if (parseInt(fieldIndex, 10) < otpNumFields) {
           // Get the next input field
           const nextSibling = document.querySelector(
             `input[name=code-${parseInt(fieldIndex, 10) + 1}]`
@@ -205,12 +206,12 @@ export const ResetPasswordPage = () => {
     }
 
     let codeInputted = ''
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < otpNumFields; i++) {
       codeInputted += verificationCodeValues[i.toString()]
     }
     const codeToSubmit = code || codeInputted
 
-    if (codeToSubmit === null || codeToSubmit.length != 6) {
+    if (codeToSubmit === null || codeToSubmit.length != otpNumFields) {
       error = true
       setErrorState(s => ({
         ...s,
@@ -370,7 +371,7 @@ export const ResetPasswordPage = () => {
                   <input
                     onPaste={e => {
                       e.clipboardData.items[0].getAsString(text => {
-                        for (let i = 0; i < text.length; i++) {
+                        for (let i = 0; i < otpNumFields; i++) {
                           setVerificationCodeValues(s => ({
                             ...s,
                             [i]: text[i],

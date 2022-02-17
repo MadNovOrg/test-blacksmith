@@ -26,11 +26,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 <span>
                   <Typography variant="body1">{title}</Typography>
                 </span>
-                <Icon
-                  name="chevron-down"
-                  aria-hidden="true"
-                  className="w-5 h-5 ml-2 -mr-1"
-                />
+                <Icon name="chevron-down" aria-hidden="true" />
               </Menu.Button>
             </span>
 
@@ -45,7 +41,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
               <Menu.Items
                 static
-                className="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-50 shadow-greenBottom outline-none"
+                className="absolute right-0 left-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-50 shadow-greenBottom outline-none"
               >
                 <div className="px-1 py-1 ">
                   {items.map((item, index) => {
