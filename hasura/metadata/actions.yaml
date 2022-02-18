@@ -1,6 +1,12 @@
-actions: []
+actions:
+- name: linkGo1
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/go1-profile'
+    forward_client_headers: true
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+  - name: LinkProfileResult
   scalars: []

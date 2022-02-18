@@ -7,6 +7,7 @@ import { AppLayout } from '@app/components/AppLayout'
 import { useAuth } from '@app/context/auth'
 
 import Spinner from './components/Spinner'
+import { MyProfilePage } from './pages/MyProfile'
 import { Course } from './pages/TrainerBase/components/Course'
 import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
 import { CourseHistory } from './pages/TrainerBase/components/Course/components/CourseHistory'
@@ -113,6 +114,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
       <Suspense fallback={() => 'Loading'}>
         <Routes>
           <Route path="/" element={<Layout tabs={tabs} />}>
+            <Route path="my-profile" element={<MyProfilePage />} />
             <Route path="trainer-base" element={<TrainerBasePage />}>
               <Route index element={<TrainerDashboard />} />
               <Route path="course" element={<Course />}>

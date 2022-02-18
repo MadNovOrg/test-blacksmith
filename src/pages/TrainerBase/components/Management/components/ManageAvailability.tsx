@@ -16,15 +16,16 @@ import {
   QUERY as GetAvailability,
   ResponseType as GetAvailabilityResponseType,
 } from '@app/queries/trainer/manage-availability/get-availability'
-import { fetcher } from '@app/App'
 import { AvailabilityType } from '@app/types'
 import { formatDateForInput } from '@app/util'
+import { useFetcher } from '@app/hooks/use-fetcher'
 
 type ManageAvailabilityProps = unknown
 
 export const ManageAvailability: React.FC<ManageAvailabilityProps> = () => {
   const { t } = useTranslation()
-  const { profile, idToken } = useAuth()
+  const { profile } = useAuth()
+  const fetcher = useFetcher()
   const { data, mutate } = useSWR<GetAvailabilityResponseType, Error>(
     GetAvailability
   )
@@ -79,20 +80,16 @@ export const ManageAvailability: React.FC<ManageAvailabilityProps> = () => {
   const onEventSubmit = async (formData: FieldValues) => {
     setError(undefined)
     try {
-      await fetcher(
-        updatedEventId ? UpdateAvailability : InsertAvailability,
-        {
-          id: updatedEventId,
-          event: {
-            profileId: profile?.id,
-            start: formData.start,
-            end: formData.end,
-            description: formData.description,
-            type: AvailabilityType.UNAVAILABLE,
-          },
+      await fetcher(updatedEventId ? UpdateAvailability : InsertAvailability, {
+        id: updatedEventId,
+        event: {
+          profileId: profile?.id,
+          start: formData.start,
+          end: formData.end,
+          description: formData.description,
+          type: AvailabilityType.UNAVAILABLE,
         },
-        idToken
-      )
+      })
       setUpdatedEventId(undefined)
       await mutate()
       reset()
@@ -135,13 +132,9 @@ export const ManageAvailability: React.FC<ManageAvailabilityProps> = () => {
   const onDelete = async () => {
     setError(undefined)
     try {
-      await fetcher(
-        DeleteAvailability,
-        {
-          id: updatedEventId,
-        },
-        idToken
-      )
+      await fetcher(DeleteAvailability, {
+        id: updatedEventId,
+      })
       setUpdatedEventId(undefined)
       reset()
       await mutate()

@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
-import React from 'react'
+import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 
@@ -10,25 +11,34 @@ import { Typography } from '../Typography'
 type AppMenuProps = unknown
 
 export const AppMenu: React.FC<AppMenuProps> = () => {
-  const auth = useAuth()
+  const { profile, logout } = useAuth()
+
+  if (!profile) return null
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        {auth.profile ? (
-          <Menu.Button
-            className="inline-flex px-4 py-2 text-sm bg-white focus:outline-none ripple-bg-gray-100 rounded"
-            data-id="user-menu-btn"
+    <Menu as="div" className="relative inline-block text-left z-50">
+      <Menu.Button data-id="user-menu-btn" as={Fragment}>
+        {({ open }) => (
+          <button
+            className={clsx(
+              'inline-flex px-4 py-2 text-sm bg-white focus:outline-none rounded-t',
+              'border-t border-l border-r',
+              open ? 'border-divider' : 'border-white'
+            )}
           >
-            <Icon name="chevron-down" aria-hidden="true" />
+            <Icon
+              name={open ? 'chevron-up' : 'chevron-down'}
+              aria-hidden="true"
+            />
             <Typography>
-              {auth.profile.givenName} {auth.profile.familyName.charAt(0)}
+              {profile.givenName} {profile.familyName.charAt(0)}
             </Typography>
-          </Menu.Button>
-        ) : null}
-      </div>
+          </button>
+        )}
+      </Menu.Button>
+
       <Transition
-        as={React.Fragment}
+        as={Fragment}
         enter="transition ease-out duration-100"
         enterFrom="transform opacity-0 scale-95"
         enterTo="transform opacity-100 scale-100"
@@ -36,47 +46,34 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded shadow-lg ring-1 ring-gray-100 focus:outline-none">
-          <div className="px-1 py-1">
+        <Menu.Items className="absolute right-[1px] w-56 -mt-[1px] origin-top-right bg-white rounded-b rounded-l ring-1 ring-divider focus:outline-none -z-10">
+          <div className="px-3 py-1">
             <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={clsx(
-                    'group flex rounded-md items-center w-full px-2 py-2 text-sm hover:bg-gray-100',
-                    active ? ' text-black' : 'text-gray-500'
-                  )}
-                >
-                  <Icon name="computer" className="mr-2" />
-                  <Typography>My Trainings</Typography>
-                </button>
-              )}
+              <Link
+                className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
+                to="/my-profile"
+              >
+                <Typography>View or edit account</Typography>
+                <Icon name="keyboard-arrow-right" className="ml-2" />
+              </Link>
             </Menu.Item>
             <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={clsx(
-                    'group flex rounded-md items-center w-full px-2 py-2 text-sm hover:bg-gray-100',
-                    active ? ' text-black' : 'text-gray-500'
-                  )}
-                >
-                  <Icon name="cloud" className="mr-2" />
-                  <Typography>My Organization</Typography>
-                </button>
-              )}
+              <Link
+                className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
+                to="/notifications"
+              >
+                <Typography>Notifications</Typography>
+                <Icon name="keyboard-arrow-right" className="ml-2" />
+              </Link>
             </Menu.Item>
             <Menu.Item>
-              {({ active }) => (
-                <button
-                  className={clsx(
-                    'group flex rounded-md items-center w-full px-2 py-2 text-sm hover:bg-gray-100',
-                    active ? ' text-black' : 'text-gray-500'
-                  )}
-                  onClick={() => auth.logout()}
-                >
-                  <Icon name="arrow-right" className="mr-2" />
-                  <Typography>Logout</Typography>
-                </button>
-              )}
+              <button
+                className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline"
+                onClick={() => logout()}
+              >
+                <Typography>Log Out</Typography>
+                <Icon name="exit" className="ml-2" />
+              </button>
             </Menu.Item>
           </div>
         </Menu.Items>

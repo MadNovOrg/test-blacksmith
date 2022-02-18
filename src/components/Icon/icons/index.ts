@@ -44,7 +44,8 @@ import { ReactComponent as LogoColor } from './logo-color.svg'
 import { ReactComponent as KeyboardArrowRightIcon } from './keyboard-arrow-right.svg'
 import { ReactComponent as CheckmarkIcon } from './checkmark.svg'
 import { ReactComponent as PDFIcon } from './pdf.svg'
-import { ReactComponent as Books } from './books.svg'
+import { ReactComponent as BooksIcon } from './books.svg'
+import { ReactComponent as ExitIcon } from './exit.svg'
 
 const icons = {
   close: CloseIcon,
@@ -93,7 +94,8 @@ const icons = {
   'keyboard-arrow-right': KeyboardArrowRightIcon,
   checkmark: CheckmarkIcon,
   pdf: PDFIcon,
-  books: Books,
+  books: BooksIcon,
+  exit: ExitIcon,
 }
 
 export default icons

@@ -1,36 +1,18 @@
 import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
-import { RequestDocument, GraphQLClient, Variables } from 'graphql-request'
 
 import { AppRoutes } from './AppRoutes'
-import { useAuth } from './context/auth'
-
-const graphqlClient = new GraphQLClient(import.meta.env.VITE_HASURA_GRAPHQL_API)
-
-export async function fetcher<T>(
-  query: RequestDocument,
-  variables: Variables,
-  token?: string
-): Promise<T> {
-  return graphqlClient.request(query, variables, {
-    Authorization: `Bearer ${token}`,
-  })
-}
+import { useFetcher } from './hooks/use-fetcher'
 
 function App() {
-  const auth = useAuth()
+  const fetcher = useFetcher()
 
   const config = useMemo(
     () => ({
-      fetcher: function <T>(
-        query: RequestDocument,
-        variables: Variables
-      ): Promise<T> {
-        return fetcher(query, variables, auth.idToken)
-      },
+      fetcher,
       onError: (e: string) => console.error('fetcher error', e),
     }),
-    [auth]
+    [fetcher]
   )
 
   return (

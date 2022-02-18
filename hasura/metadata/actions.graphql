@@ -1,0 +1,8 @@
+type Mutation {
+  linkGo1: LinkProfileResult
+}
+
+type LinkProfileResult {
+  status: Boolean!
+}
+

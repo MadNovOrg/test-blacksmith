@@ -3,8 +3,9 @@ import { Auth } from 'aws-amplify'
 import { CognitoUser } from 'amazon-cognito-identity-js'
 import useSWR from 'swr'
 
+import { gqlRequest } from '@app/lib/gql-request'
+
 import { getUserProfile } from '@app/queries/users'
-import { fetcher } from '@app/App'
 import { Profile } from '@app/types'
 
 type E = {
@@ -68,7 +69,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           state.idToken,
         ]
       : null,
-    fetcher
+    gqlRequest
   )
 
   useEffect(() => {
