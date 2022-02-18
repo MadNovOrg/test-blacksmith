@@ -53,7 +53,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/my-profile"
               >
-                <Typography>View or edit account</Typography>
+                View or edit account
                 <Icon name="keyboard-arrow-right" className="ml-2" />
               </Link>
             </Menu.Item>
@@ -62,7 +62,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/notifications"
               >
-                <Typography>Notifications</Typography>
+                Notifications
                 <Icon name="keyboard-arrow-right" className="ml-2" />
               </Link>
             </Menu.Item>
@@ -71,7 +71,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline"
                 onClick={() => logout()}
               >
-                <Typography>Log Out</Typography>
+                Log Out
                 <Icon name="exit" className="ml-2" />
               </button>
             </Menu.Item>
