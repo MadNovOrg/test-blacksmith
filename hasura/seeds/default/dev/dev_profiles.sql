@@ -9,7 +9,7 @@ INSERT INTO profile (
 ('83156e3f-a075-43b5-b345-dacb06d5b057', 'Simone', 'Sanfratello', '[ { "type": "email", "value": "simone.sanfratello@nearform.com" } ]'),
 ('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'Spyridon', 'Chortis', '[ { "type": "email", "value": "spyridon.chortis@nearform.com" } ]'),
 ('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', '[ { "type": "email", "value": "maksym.barvinskyi@nearform.com" } ]'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', '[ { "type": "email", "value": "trainer@tth.mail7.io" } ]'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', '[ { "type": "email", "value": "trainer@teamteach.testinator.com" } ]'),
 ('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', 'Lefteris', 'Paraskevas', '[ { "type": "email", "value": "lefteris.paraskevas@nearform.com" } ]'),
 ('7eb8bd38-3048-4416-90d2-4b2299e4633b', 'Alex', 'Parra', '[ { "type": "email", "value": "alex.parra@nearform.com" } ]');
 
@@ -51,7 +51,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ),
 (
   '1491a65b-3237-45d4-a1de-7c70c0b139db',
-  (SELECT id FROM profile WHERE contact_details @> '[{"value":"trainer@tth.mail7.io"}]' LIMIT 1),
+  (SELECT id FROM profile WHERE contact_details @> '[{"value":"trainer@teamteach.testinator.com"}]' LIMIT 1),
   'cognito'
 ),
 (

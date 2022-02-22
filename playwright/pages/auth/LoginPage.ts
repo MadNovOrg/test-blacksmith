@@ -2,6 +2,9 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
+import { HomePage } from '../HomePage'
+
+import { ForgotPasswordPage } from './ForgotPasswordPage'
 
 export class LoginPage extends BasePage {
   readonly emailInput: Locator
@@ -33,10 +36,11 @@ export class LoginPage extends BasePage {
     await expect(this.emailInput).toBeVisible()
   }
 
-  async logIn(email: string, password: string) {
+  async logIn(email: string, password: string): Promise<HomePage> {
     await this.emailInput.fill(email)
     await this.passwordInput.fill(password)
     await this.signInButton.click()
+    return new HomePage(this.page)
   }
 
   async checkErrors(errors: {
@@ -47,5 +51,10 @@ export class LoginPage extends BasePage {
     await expect(this.generalErrorText).toHaveText(errors.generalError ?? '')
     await expect(this.emailErrorText).toHaveText(errors.emailError ?? '')
     await expect(this.passwordErrorText).toHaveText(errors.passwordError ?? '')
+  }
+
+  async clickForgotPasswordLink(): Promise<ForgotPasswordPage> {
+    await this.forgotPasswordLink.click()
+    return new ForgotPasswordPage(this.page)
   }
 }

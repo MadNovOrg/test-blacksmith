@@ -281,6 +281,7 @@ export const ResetPasswordPage = () => {
               {t('pages.reset-password.not-recieved-email')}
               <span
                 className="underline cursor-pointer"
+                data-testid="resend-code"
                 onClick={async () => {
                   setAlreadyResent(true)
 
@@ -297,6 +298,7 @@ export const ResetPasswordPage = () => {
               {t('pages.reset-password.not-recieved-email')}
               <span
                 className="underline cursor-pointer"
+                data-testid="contact-us-link"
                 onClick={() =>
                   navigate({
                     pathname: '/contacted-confirmation',
@@ -313,7 +315,10 @@ export const ResetPasswordPage = () => {
 
           <p className="mb-8 text-sm font-light">
             {t('pages.reset-password.changing-password-text')}: <br></br>
-            <span className="mt-4 text-base text-center font-medium">
+            <span
+              className="mt-4 text-base text-center font-medium"
+              data-testid="email"
+            >
               {email}
             </span>
           </p>

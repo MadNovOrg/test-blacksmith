@@ -17,7 +17,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
 
   return (
     <Menu as="div" className="relative inline-block text-left z-50">
-      <Menu.Button data-id="user-menu-btn" as={Fragment}>
+      <Menu.Button data-testid="user-menu-btn" as={Fragment}>
         {({ open }) => (
           <button
             className={clsx(
@@ -52,7 +52,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <Link
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/my-profile"
-                data-id="profile-link"
+                data-testid="profile-link"
               >
                 View or edit account
                 <Icon name="keyboard-arrow-right" className="ml-2" />
@@ -62,7 +62,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <Link
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/notifications"
-                data-id="notifications-link"
+                data-testid="notifications-link"
               >
                 Notifications
                 <Icon name="keyboard-arrow-right" className="ml-2" />
@@ -72,7 +72,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <button
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline"
                 onClick={() => logout()}
-                data-id="logout-link"
+                data-testid="logout-link"
               >
                 Log Out
                 <Icon name="exit" className="ml-2" />

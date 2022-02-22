@@ -61,7 +61,7 @@ jobs:
           npx playwright install chromium
 
       - name: Playwright tests 
-        run: npm run test:e2e
+        run: npm run test:e2e:smoke
 
       - name: Playwright report
         uses: actions/upload-artifact@v2

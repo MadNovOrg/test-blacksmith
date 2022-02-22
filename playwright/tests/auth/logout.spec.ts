@@ -3,7 +3,7 @@ import { trainerTest as test } from '../../fixtures/auth'
 import { HomePage } from '../../pages/HomePage'
 import { LoginPage } from '../../pages/auth/LoginPage'
 
-test('logout', async ({ page }) => {
+test('logout @smoke', async ({ page }) => {
   const homePage = new HomePage(page)
   await homePage.goto()
   await homePage.userMenu.selectOption(Option.Logout)

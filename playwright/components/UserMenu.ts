@@ -14,17 +14,18 @@ export class UserMenu {
   constructor(page: Page) {
     this.page = page
     this.userNameText = this.page.locator(
-      'button[data-id="user-menu-btn"] > div'
+      'button[data-testid="user-menu-btn"] > div'
     )
-    this.option = text => this.page.locator(`[data-id="${text}"]`)
+    this.option = text => this.page.locator(`[data-testid="${text}"]`)
   }
 
   async selectOption(option: Option) {
     await this.userNameText.click()
     await this.option(option).click()
+    await this.page.waitForLoadState()
   }
 
   async checkIsVisible() {
-    await expect(this.userNameText).toBeVisible({ timeout: 10000 })
+    await expect(this.userNameText).toBeVisible({ timeout: 20000 })
   }
 }

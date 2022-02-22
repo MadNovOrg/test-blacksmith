@@ -82,7 +82,7 @@ const Layout: React.FC<LayoutProps> = ({ tabs }) => {
     <>
       <div
         className="border-t border-divider bg-gray-50 hidden sm:flex"
-        data-id="nav-menu"
+        data-testid="nav-menu"
       >
         {tabs.map(tab => (
           <NavLink

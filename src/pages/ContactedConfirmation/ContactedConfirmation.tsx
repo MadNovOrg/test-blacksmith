@@ -14,13 +14,19 @@ export const ContactedConfirmationPage = () => {
       <div>
         <div className="w-60 md:w-96">
           {email !== 'null' && email !== null ? (
-            <p className="font-light text-center text-xs md:text-base">
+            <p
+              className="font-light text-center text-xs md:text-base"
+              data-testid="will-contact-you"
+            >
               We&apos;re aware you&apos;re having some issues, a member of our
               team will contact you at {email} as soon as possible
             </p>
           ) : (
-            <p className="font-light text-center text-xs md:text-base">
-              We have recieved your contact request and will reply as soon as
+            <p
+              className="font-light text-center text-xs md:text-base"
+              data-testid="will-contact-you"
+            >
+              We have received your contact request and will reply as soon as
               possible
             </p>
           )}

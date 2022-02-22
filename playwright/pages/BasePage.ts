@@ -11,4 +11,8 @@ export class BasePage {
     await this.page.goto(url)
     await mandatoryElement.waitFor({ timeout: 30000 })
   }
+
+  async closeCurrentTab() {
+    await this.page.close()
+  }
 }

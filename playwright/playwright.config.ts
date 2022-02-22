@@ -2,14 +2,16 @@ import { PlaywrightTestConfig, devices } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
   forbidOnly: !!process.env.CI,
-  retries: 1,
   globalSetup: require.resolve('./hooks/global-setup'),
   use: {
-    trace: 'on-first-retry',
+    trace: 'on',
     screenshot: 'only-on-failure',
-    video: 'on-first-retry',
+    video: 'on',
   },
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
+  expect: {
+    timeout: 10 * 1000,
+  },
   projects: [
     {
       name: 'chromium',
