@@ -62,7 +62,8 @@ export type Module = {
 
 export type ModuleGroup = {
   name: string
-  level: string
+  level: number
+  mandatory: boolean
   modules: Module[]
 } & Base
 

@@ -1,9 +1,9 @@
 import { expect, Locator, Page } from '@playwright/test'
 
 export enum Option {
-  MyTrainings = 'My Trainings',
-  MyOrganization = 'My Organization',
-  Logout = 'Logout',
+  ViewEditAccount = 'profile-link',
+  Notifications = 'notifications-link',
+  Logout = 'logout-link',
 }
 
 export class UserMenu {
@@ -16,8 +16,7 @@ export class UserMenu {
     this.userNameText = this.page.locator(
       'button[data-id="user-menu-btn"] > div'
     )
-    this.option = text =>
-      this.page.locator(`button[role="menuitem"]:has-text("${text}")`)
+    this.option = text => this.page.locator(`[data-id="${text}"]`)
   }
 
   async selectOption(option: Option) {
@@ -26,6 +25,6 @@ export class UserMenu {
   }
 
   async checkIsVisible() {
-    await expect(this.userNameText).toBeVisible()
+    await expect(this.userNameText).toBeVisible({ timeout: 10000 })
   }
 }

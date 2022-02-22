@@ -52,6 +52,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <Link
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/my-profile"
+                data-id="profile-link"
               >
                 View or edit account
                 <Icon name="keyboard-arrow-right" className="ml-2" />
@@ -61,6 +62,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <Link
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline border-b border-divider"
                 to="/notifications"
+                data-id="notifications-link"
               >
                 Notifications
                 <Icon name="keyboard-arrow-right" className="ml-2" />
@@ -70,6 +72,7 @@ export const AppMenu: React.FC<AppMenuProps> = () => {
               <button
                 className="group flex justify-between items-center w-full py-2 text-sm underline-offset-4 hover:underline"
                 onClick={() => logout()}
+                data-id="logout-link"
               >
                 Log Out
                 <Icon name="exit" className="ml-2" />

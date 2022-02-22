@@ -3,11 +3,14 @@ import useSWR from 'swr'
 import {
   DragDropContext,
   DragDropContextProps,
+  Draggable,
   Droppable,
 } from 'react-beautiful-dnd'
 import clsx from 'clsx'
 
 import Spinner from '@app/components/Spinner'
+
+import CourseColorScheme from '../CourseColorScheme'
 
 import { ModuleCard } from './ModuleCard'
 
@@ -18,19 +21,12 @@ import {
   ParamsType as GetModuleGroupsParamsType,
 } from '@app/queries/modules/get-module-groups'
 import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
+import {
+  AvailableModule,
+  ModuleGroupSlot,
+} from '@app/pages/TrainerBase/components/Course'
 
 type CourseViewProps = unknown
-
-type AvailableModule = ModuleGroup & {
-  used?: boolean
-  draggableId: string
-}
-
-type ModuleSlot = {
-  module?: ModuleGroup
-  droppableId: string
-  draggableId: string
-}
 
 export const CourseView: React.FC<CourseViewProps> = () => {
   // @TODO - we could/should be able to identify the level early based on course type etc
@@ -40,27 +36,38 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     [string, GetModuleGroupsParamsType]
   >([GetModuleGroups, { level: 1 }])
 
+  const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
     []
   )
-  const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleSlot[]>([])
+  const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleGroupSlot[]>(
+    []
+  )
 
   useEffect(() => {
     if (availableModules.length === 0 && data) {
+      const modules = {
+        mandatory: [] as ModuleGroup[],
+        nonMandatory: [] as ModuleGroup[],
+      }
+      data.groups.forEach(group =>
+        modules[group.mandatory ? 'mandatory' : 'nonMandatory'].push(group)
+      )
+      setMandatoryModules(mandatoryModules)
       setAvailableModules(
-        data.groups.map(module => ({
+        modules.mandatory.map(module => ({
           ...module,
           draggableId: `all-modules-${module.id}`,
         }))
       )
       setCourseModuleSlots(
-        data.groups.map((_, i) => ({
+        modules.nonMandatory.map((_, i) => ({
           droppableId: `course-modules-slot-drop-${i}`,
           draggableId: `course-modules-slot-drag-${i}`,
         }))
       )
     }
-  }, [availableModules, data])
+  }, [availableModules, mandatoryModules, data])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     result => {
@@ -141,6 +148,12 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     [availableModules, courseModuleSlots, data]
   )
 
+  function getModuleCardColors(module: ModuleGroup) {
+    return CourseColorScheme.BY_MODULE_LEVEL[
+      module.level as keyof typeof CourseColorScheme.BY_MODULE_LEVEL
+    ]
+  }
+
   if (!data) {
     return <Spinner cls="w-16 h-16" />
   }
@@ -176,7 +189,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
               {(provided, snapshot) => (
                 <div
                   className={clsx(
-                    'flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out',
+                    'flex flex-wrap mt-10 mb-3 -m-2 transition-colors ease-in-out',
                     {
                       'bg-lime-100': snapshot.isDraggingOver,
                     }
@@ -185,13 +198,30 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                   ref={provided.innerRef}
                 >
                   {availableModules.map((m, index) => (
-                    <ModuleCard
+                    <Draggable
                       key={m.id}
-                      index={index}
-                      data={m}
-                      isDragDisabled={m.used}
                       draggableId={m.draggableId}
-                    />
+                      index={index}
+                      isDragDisabled={m.used}
+                    >
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef}>
+                          <ModuleCard
+                            key={m.id}
+                            data={m}
+                            className={clsx(
+                              m.used
+                                ? getModuleCardColors(m).disabledColor
+                                : snapshot.isDragging
+                                ? getModuleCardColors(m).draggingColor
+                                : getModuleCardColors(m).color
+                            )}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
                   ))}
                   {provided.placeholder}
                 </div>
@@ -202,6 +232,20 @@ export const CourseView: React.FC<CourseViewProps> = () => {
             <div className="text-sm lg:text-base">My Course</div>
 
             <div className="flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out">
+              {mandatoryModules?.length ? (
+                <div>
+                  <div className="text-xs m-2">Mandatory modules</div>
+                  <div className="flex flex-wrap border border-dashed rounded-lg border-navy-500">
+                    {mandatoryModules.map(m => (
+                      <ModuleCard
+                        key={m.id}
+                        data={m}
+                        className={getModuleCardColors(m).color}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : null}
               {courseModuleSlots.map(slot => (
                 <ModuleSlot
                   key={slot.droppableId}
