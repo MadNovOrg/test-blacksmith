@@ -1,19 +1,18 @@
 table:
   name: course
   schema: public
+configuration:
+  custom_column_names:
+    course_delivery_type: deliveryType
+    course_level: level
+    course_type: type
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
-- name: deliveryType
-  using:
-    foreign_key_constraint_on: course_delivery_type
-- name: level
-  using:
-    foreign_key_constraint_on: course_level
 - name: organization
   using:
     foreign_key_constraint_on: organization_id
-- name: type
-  using:
-    foreign_key_constraint_on: course_type
 array_relationships:
 - name: leaders
   using:
@@ -54,10 +53,14 @@ select_permissions:
 - permission:
     columns:
     - course_delivery_type
+    - course_level
     - course_type
     - created_at
     - id
     - name
+    - organization_id
+    - reaccreditation
+    - submitted
     - updated_at
     filter:
       leaders:

@@ -53,18 +53,38 @@ export type Profile = {
   preferences: { [key: string]: string }[]
 } & Base
 
+export enum CourseLevel {
+  LEVEL_1 = 'LEVEL_1',
+  LEVEL_2 = 'LEVEL_2',
+  ADVANCED = 'ADVANCED',
+  INTERMEDIATE = 'INTERMEDIATE',
+}
+
+export enum CourseDeliveryType {
+  F2F = 'F2F',
+  BLENDED = 'BLENDED',
+  VIRTUAL = 'VIRTUAL',
+}
+
 export type Module = {
   name: string
   description: string
-  level: string
+  level: CourseLevel
   type: string
+} & Base
+
+export type ModuleGroupDuration = {
+  courseDeliveryType: CourseDeliveryType
+  reaccreditation: boolean
+  duration: number
 } & Base
 
 export type ModuleGroup = {
   name: string
-  level: number
+  level: CourseLevel
   mandatory: boolean
   modules: Module[]
+  durations?: ModuleGroupDuration[]
 } & Base
 
 export enum AvailabilityType {

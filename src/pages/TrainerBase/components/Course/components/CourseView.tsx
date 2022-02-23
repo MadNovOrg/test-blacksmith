@@ -14,7 +14,7 @@ import CourseColorScheme from '../CourseColorScheme'
 
 import { ModuleCard } from './ModuleCard'
 
-import { ModuleGroup } from '@app/types'
+import { CourseLevel, ModuleGroup } from '@app/types'
 import {
   QUERY as GetModuleGroups,
   ResponseType as GetModuleGroupsResponseType,
@@ -34,7 +34,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     GetModuleGroupsResponseType,
     Error,
     [string, GetModuleGroupsParamsType]
-  >([GetModuleGroups, { level: 1 }])
+  >([GetModuleGroups, { level: CourseLevel.LEVEL_1 }])
 
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
@@ -149,8 +149,8 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   )
 
   function getModuleCardColors(module: ModuleGroup) {
-    return CourseColorScheme.BY_MODULE_LEVEL[
-      module.level as keyof typeof CourseColorScheme.BY_MODULE_LEVEL
+    return CourseColorScheme.BY_COURSE_LEVEL[
+      module.level as keyof typeof CourseColorScheme.BY_COURSE_LEVEL
     ]
   }
 

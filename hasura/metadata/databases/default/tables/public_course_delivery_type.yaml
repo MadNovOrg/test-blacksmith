@@ -2,3 +2,9 @@ table:
   name: course_delivery_type
   schema: public
 is_enum: true
+select_permissions:
+- permission:
+    columns:
+    - name
+    filter: {}
+  role: user

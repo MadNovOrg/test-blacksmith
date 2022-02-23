@@ -1,29 +1,27 @@
 import { gql } from 'graphql-request'
 
-import { ModuleGroup } from '@app/types'
+import { MODULE, MODULE_GROUP } from '../fragments'
+
+import { CourseLevel, ModuleGroup } from '@app/types'
 
 export type ResponseType = { groups: ModuleGroup[] }
 
-export type ParamsType = { level: number }
+export type ParamsType = { level: CourseLevel }
 
 export const QUERY = gql`
-  query ModuleGroups($level: Int!) {
+  ${MODULE}
+  ${MODULE_GROUP}
+  query ModuleGroups($level: course_level_enum!) {
     groups: module_group(where: { level: { _eq: $level } }) {
-      id
-      name
-      level
-      mandatory
+      ...ModuleGroup
       modules {
-        id
-        name
-        description
-        level
-        type: module_category
-        createdAt
-        updatedAt
+        ...Module
       }
-      createdAt
-      updatedAt
+      durations {
+        courseDeliveryType
+        reaccreditation
+        duration
+      }
     }
   }
 `

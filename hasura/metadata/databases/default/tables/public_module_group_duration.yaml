@@ -1,3 +1,25 @@
 table:
   name: module_group_duration
   schema: public
+configuration:
+  custom_column_names:
+    course_delivery_type: courseDeliveryType
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+- name: moduleGroup
+  using:
+    foreign_key_constraint_on: module_group_id
+select_permissions:
+- permission:
+    columns:
+    - reaccreditation
+    - duration
+    - course_delivery_type
+    - created_at
+    - updated_at
+    - id
+    - module_group_id
+    filter: {}
+  role: user

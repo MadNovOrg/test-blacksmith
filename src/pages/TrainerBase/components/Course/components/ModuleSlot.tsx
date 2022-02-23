@@ -18,8 +18,8 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
   module,
 }) => {
   const moduleColors = module
-    ? CourseColorScheme.BY_MODULE_LEVEL[
-        module.level as keyof typeof CourseColorScheme.BY_MODULE_LEVEL
+    ? CourseColorScheme.BY_COURSE_LEVEL[
+        module.level as keyof typeof CourseColorScheme.BY_COURSE_LEVEL
       ]
     : undefined
   return (

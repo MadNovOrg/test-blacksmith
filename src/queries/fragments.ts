@@ -44,3 +44,40 @@ export const AVAILABILITY = gql`
     type
   }
 `
+
+export const MODULE = gql`
+  fragment Module on module {
+    id
+    name
+    description
+    level
+    type
+    createdAt
+    updatedAt
+  }
+`
+
+export const MODULE_GROUP = gql`
+  fragment ModuleGroup on module_group {
+    id
+    name
+    level
+    mandatory
+    createdAt
+    updatedAt
+  }
+`
+
+export const COURSE = gql`
+  fragment Course on course {
+    id
+    createdAt
+    updatedAt
+    name
+    type
+    deliveryType
+    submitted
+    level
+    reaccreditation
+  }
+`

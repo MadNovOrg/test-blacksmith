@@ -3,14 +3,18 @@ table:
   schema: public
 configuration:
   custom_column_names:
+    course_level: level
     created_at: createdAt
     updated_at: updatedAt
   custom_root_fields: {}
-object_relationships:
-- name: level
-  using:
-    foreign_key_constraint_on: course_level
 array_relationships:
+- name: durations
+  using:
+    foreign_key_constraint_on:
+      column: module_group_id
+      table:
+        name: module_group_duration
+        schema: public
 - name: modules
   using:
     foreign_key_constraint_on:
@@ -21,8 +25,11 @@ array_relationships:
 select_permissions:
 - permission:
     columns:
+    - course_level
+    - created_at
     - id
     - mandatory
     - name
+    - updated_at
     filter: {}
   role: user
