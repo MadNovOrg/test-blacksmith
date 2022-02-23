@@ -5,10 +5,23 @@ object_relationships:
 - name: deliveryType
   using:
     foreign_key_constraint_on: course_delivery_type
+- name: level
+  using:
+    foreign_key_constraint_on: course_level
+- name: organization
+  using:
+    foreign_key_constraint_on: organization_id
 - name: type
   using:
     foreign_key_constraint_on: course_type
 array_relationships:
+- name: leaders
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_leader
+        schema: public
 - name: modules
   using:
     foreign_key_constraint_on:
@@ -47,7 +60,7 @@ select_permissions:
     - name
     - updated_at
     filter:
-      team:
+      leaders:
         profile_id:
           _eq: X-Hasura-User-Id
   role: user

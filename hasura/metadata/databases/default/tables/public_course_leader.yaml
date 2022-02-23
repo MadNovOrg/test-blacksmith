@@ -1,0 +1,7 @@
+table:
+  name: course_leader
+  schema: public
+object_relationships:
+- name: profile
+  using:
+    foreign_key_constraint_on: profile_id
