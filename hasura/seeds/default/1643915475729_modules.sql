@@ -1,13 +1,13 @@
 INSERT INTO
     module (
         name,
-        module_level,
+        course_level,
         module_category,
         module_group_id
     )
 VALUES (
         'Values Exercise',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -15,11 +15,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Values Exercise',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -27,11 +27,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Legal Framework',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -39,11 +39,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Legal Framework',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -51,11 +51,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Policies Practices & Procedure',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -63,11 +63,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Policies Practices & Procedure',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -75,11 +75,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Understanding Emotions & Behaviour',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -87,11 +87,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Understanding Emotions & Behaviour',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -99,11 +99,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Six Stages Of Crisis',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -111,11 +111,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Six Stages Of Crisis',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -123,11 +123,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Conflict Spiral',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -135,11 +135,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Conflict Spiral',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -147,11 +147,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Fizzy Pop Challenge',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -159,11 +159,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Fizzy Pop Challenge',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -171,11 +171,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Behaviours That Challenge',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -183,11 +183,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Behaviours That Challenge',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -195,11 +195,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'De-escalation Scenario',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -207,11 +207,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'De-escalation Scenario',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -219,11 +219,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Handling Plans',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -231,11 +231,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Handling Plans',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -243,11 +243,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Scripts',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -255,11 +255,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Scripts',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -267,11 +267,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Post Listening & Learning',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -279,11 +279,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Post Listening & Learning',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -291,11 +291,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ), (
         'Quiz',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -303,11 +303,11 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ), (
         'Quiz',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -315,7 +315,7 @@ VALUES (
                 module_group
             WHERE
                 name = 'Theory' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     );
 
@@ -324,13 +324,13 @@ VALUES (
 INSERT INTO
     module (
         name,
-        module_level,
+        course_level,
         module_category,
         module_group_id
     )
 VALUES (
         'Circles Of Danger',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -338,12 +338,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Circles Of Danger',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -351,12 +351,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ),
     (
         'Posturing And Body Language',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -364,12 +364,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Posturing And Body Language',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -377,12 +377,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ),
     (
         'Experiencing Feeling',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -390,12 +390,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Experiencing Feeling',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -403,12 +403,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Experiencing Feeling',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -416,12 +416,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ),
     (
         'Calm Stance',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -429,12 +429,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Calm Stance',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -442,12 +442,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     ),
     (
         'Calming Scripts',
-        1,
+        'LEVEL_1',
         'THEORY', (
             SELECT
                 id
@@ -455,12 +455,12 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 1
+                course_level = 'LEVEL_1'
         )
     ),
     (
         'Calming Scripts',
-        2,
+        'LEVEL_2',
         'THEORY', (
             SELECT
                 id
@@ -468,6 +468,6 @@ VALUES (
                 module_group
             WHERE
                 name = 'Personal Space & Body Language' AND
-                module_level = 2
+                course_level = 'LEVEL_2'
         )
     );

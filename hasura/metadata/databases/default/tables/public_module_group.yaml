@@ -4,9 +4,12 @@ table:
 configuration:
   custom_column_names:
     created_at: createdAt
-    module_level: level
     updated_at: updatedAt
   custom_root_fields: {}
+object_relationships:
+- name: level
+  using:
+    foreign_key_constraint_on: course_level
 array_relationships:
 - name: modules
   using:
@@ -20,7 +23,6 @@ select_permissions:
     columns:
     - id
     - mandatory
-    - module_level
     - name
     filter: {}
   role: user
