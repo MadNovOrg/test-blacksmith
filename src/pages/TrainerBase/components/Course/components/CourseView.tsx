@@ -10,7 +10,7 @@ import clsx from 'clsx'
 
 import Spinner from '@app/components/Spinner'
 
-import CourseColorScheme from '../CourseColorScheme'
+import { COURSE_COLOR_BY_LEVEL } from '../CourseColorScheme'
 
 import { ModuleCard } from './ModuleCard'
 
@@ -149,9 +149,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   )
 
   function getModuleCardColors(module: ModuleGroup) {
-    return CourseColorScheme.BY_COURSE_LEVEL[
-      module.level as keyof typeof CourseColorScheme.BY_COURSE_LEVEL
-    ]
+    return COURSE_COLOR_BY_LEVEL[module.level]
   }
 
   if (!data) {

@@ -6,9 +6,15 @@ type Base = {
 
 export type Course = {
   name: string
-  date: Date
-  orgName: string
-  color: string
+  level: CourseLevel
+  submitted: boolean
+  organization: Organization
+  dates: {
+    aggregate: {
+      start: { date: string }
+      end: { date: string }
+    }
+  }
 } & Base
 
 export type CourseModule = {

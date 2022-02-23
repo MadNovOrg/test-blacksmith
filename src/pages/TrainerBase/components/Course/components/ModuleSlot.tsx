@@ -4,7 +4,7 @@ import clsx from 'clsx'
 
 import { ModuleGroup } from '@app/types'
 import { ModuleCard } from '@app/pages/TrainerBase/components/Course/components/ModuleCard'
-import CourseColorScheme from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
+import { COURSE_COLOR_BY_LEVEL } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
 
 type ModuleSlotProps = {
   module?: ModuleGroup
@@ -17,11 +17,7 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
   draggableId,
   module,
 }) => {
-  const moduleColors = module
-    ? CourseColorScheme.BY_COURSE_LEVEL[
-        module.level as keyof typeof CourseColorScheme.BY_COURSE_LEVEL
-      ]
-    : undefined
+  const moduleColors = module ? COURSE_COLOR_BY_LEVEL[module.level] : undefined
   return (
     <Droppable droppableId={droppableId}>
       {(droppableProvided, droppableSnapshot) => {

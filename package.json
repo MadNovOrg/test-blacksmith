@@ -20,7 +20,8 @@
     "hasura:squash": "npm run hasura -- migrate squash",
     "hasura:seed:create": "npm run hasura -- seed create",
     "hasura:seed:apply": "npm run hasura -- seed apply",
-    "hasura:metadata:apply": "npm run hasura -- metadata apply"
+    "hasura:metadata:apply": "npm run hasura -- metadata apply",
+    "hasura:migrate:apply": "npm run hasura -- migrate apply"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.3",

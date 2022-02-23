@@ -5,6 +5,8 @@ import format from 'date-fns/format'
 import { Typography } from '@app/components/Typography'
 import { IconButton } from '@app/components/IconButton'
 
+import { COURSE_COLOR_BY_LEVEL } from '../CourseColorScheme'
+
 import { Course } from '@app/types'
 
 type CourseCardProps = {
@@ -17,16 +19,16 @@ export const CourseCard: React.FC<CourseCardProps> = ({ data, onClick }) => {
     <div
       className={clsx(
         'p-4 w-auto sm:w-52 m-2 text-white flex flex-col',
-        data.color
+        COURSE_COLOR_BY_LEVEL[data.level].color
       )}
     >
       <Typography variant="subtitle3" className="mb-6">
         {data.name}
       </Typography>
       <div>
-        <Typography variant="body3">{data.orgName}</Typography>
+        <Typography variant="body3">{data.organization?.name}</Typography>
         <Typography variant="body3">
-          {format(data.date, 'dd/MM/yyyy')}
+          {format(new Date(data.dates.aggregate.start.date), 'dd/MM/yyyy')}
         </Typography>
       </div>
       <div className="flex-1" />

@@ -31,11 +31,5 @@ services:
       EVENTS_HOST: 'https://vjil7l5fmc.execute-api.eu-west-2.amazonaws.com/dev'
       ACTIONS_HOST: 'https://vjil7l5fmc.execute-api.eu-west-2.amazonaws.com/dev'
 
-  # adminer:
-  #   image: adminer:latest
-  #   restart: always
-  #   ports:
-  #     - 9090:8080
-
 volumes:
   tth-data:
