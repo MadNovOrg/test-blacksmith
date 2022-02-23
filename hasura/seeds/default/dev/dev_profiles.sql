@@ -11,7 +11,8 @@ INSERT INTO profile (
 ('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', '[ { "type": "email", "value": "maksym.barvinskyi@nearform.com" } ]'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', '[ { "type": "email", "value": "trainer@teamteach.testinator.com" } ]'),
 ('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', 'Lefteris', 'Paraskevas', '[ { "type": "email", "value": "lefteris.paraskevas@nearform.com" } ]'),
-('7eb8bd38-3048-4416-90d2-4b2299e4633b', 'Alex', 'Parra', '[ { "type": "email", "value": "alex.parra@nearform.com" } ]');
+('7eb8bd38-3048-4416-90d2-4b2299e4633b', 'Alex', 'Parra', '[ { "type": "email", "value": "alex.parra@nearform.com" } ]'),
+('7584edda-3772-447c-9162-25f7fc6a9b38', 'Danijel', 'Maksimovic', '[ { "type": "email", "value": "danijel.maksimovic@nearform.com" } ]');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
 (
@@ -63,6 +64,11 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
   '05211b74-5e28-4eb3-80eb-e903647afd96',
   (SELECT id FROM profile WHERE contact_details @> '[{"value":"alex.parra@nearform.com"}]' LIMIT 1),
   'cognito'
+),
+(
+  '2e1b9dd4-fec8-4496-8480-3dd41291fa88',
+  (SELECT id FROM profile WHERE contact_details @> '[{"value":"danijel.maksimovic@nearform.com"}]' LIMIT 1),
+  'cognito'
 );
 
 INSERT INTO organization (id, name, original_record) VALUES ('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}');
@@ -96,6 +102,10 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES (
   '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'
 ), (
   '7eb8bd38-3048-4416-90d2-4b2299e4633b',
+  '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'
+),
+(
+  '7584edda-3772-447c-9162-25f7fc6a9b38',
   '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'
 );
 
@@ -135,5 +145,9 @@ INSERT INTO organization_member_role(organization_member_id, organization_role_i
   (SELECT id FROM organization_role WHERE organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d' LIMIT 1)
 ), (
   (SELECT id FROM organization_member WHERE profile_id = '7eb8bd38-3048-4416-90d2-4b2299e4633b' LIMIT 1),
+  (SELECT id FROM organization_role WHERE organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d' LIMIT 1)
+),
+(
+  (SELECT id FROM organization_member WHERE profile_id = '7584edda-3772-447c-9162-25f7fc6a9b38' LIMIT 1),
   (SELECT id FROM organization_role WHERE organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d' LIMIT 1)
 );
