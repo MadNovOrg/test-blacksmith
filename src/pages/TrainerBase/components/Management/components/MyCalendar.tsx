@@ -58,7 +58,7 @@ export const MyCalendar: React.FC<MyCalendarProps> = () => {
               {/* TODO: find out color logic for events */}
               <EventCard startDate={s.start} endDate={s.end} variant="fuschia">
                 <p className="text-sm text-gray-400 font-light">
-                  {s.address.join(', ')}
+                  {s.address['city']}
                 </p>
                 <p className="text-sm text-gray-400 font-light">{s.name}</p>
                 <p className="text-sm text-gray-400 font-light">

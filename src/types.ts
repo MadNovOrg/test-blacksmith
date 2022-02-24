@@ -6,9 +6,13 @@ type Base = {
 
 export type Course = {
   name: string
+  type: string
   level: CourseLevel
+  deliveryType: CourseDeliveryType
   submitted: boolean
+  reaccreditation: boolean
   organization: Organization
+  schedule: CourseSchedule[]
   dates: {
     aggregate: {
       start: { date: string }
@@ -90,7 +94,13 @@ export type ModuleGroup = {
   level: CourseLevel
   mandatory: boolean
   modules: Module[]
-  durations?: ModuleGroupDuration[]
+  duration: {
+    aggregate: {
+      sum: {
+        duration: number
+      }
+    }
+  }
 } & Base
 
 export enum AvailabilityType {
@@ -111,7 +121,7 @@ export type Availability = {
 export type Venue = {
   id: string
   name: string
-  address: string[]
+  address: { [key: string]: string }
 }
 
 export type TrainerSchedule = {
@@ -120,6 +130,15 @@ export type TrainerSchedule = {
   start: string
   end: string
   type: string
+  course: Course
+  venue: Venue
+} & Base
+
+export type CourseSchedule = {
+  name: string
+  type: string
+  start: Date
+  end: Date
   course: Course
   venue: Venue
 } & Base

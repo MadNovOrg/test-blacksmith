@@ -81,3 +81,25 @@ export const COURSE = gql`
     reaccreditation
   }
 `
+
+export const COURSE_SCHEDULE = gql`
+  fragment CourseSchedule on course_schedule {
+    id
+    createdAt
+    updatedAt
+    name
+    type
+    start
+    end
+  }
+`
+
+export const VENUE = gql`
+  fragment Venue on venue {
+    id
+    createdAt
+    updatedAt
+    name
+    address
+  }
+`

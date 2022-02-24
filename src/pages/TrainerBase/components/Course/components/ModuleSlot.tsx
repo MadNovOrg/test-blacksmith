@@ -42,7 +42,7 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
                   />
                   {draggableSnapshot.isDragging &&
                     droppableSnapshot.isDraggingOver && (
-                      <div className="m-2 w-24 h-24 lg:w-28 lg:h-28 bg-gray-500 rounded-md text-white p-2 flex flex-col justify-center transition-colors"></div>
+                      <div className="m-2 w-24 h-24 lg:w-28 lg:h-28 bg-gray-500 rounded-md text-white p-2 flex flex-col justify-center transition-colors" />
                     )}
                 </div>
               )}

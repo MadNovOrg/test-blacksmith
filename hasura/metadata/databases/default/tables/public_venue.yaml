@@ -1,6 +1,11 @@
 table:
   name: venue
   schema: public
+configuration:
+  custom_column_names:
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 select_permissions:
 - permission:
     columns:

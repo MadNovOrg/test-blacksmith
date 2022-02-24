@@ -11,7 +11,14 @@
     "back": "Back",
     "submit": "Submit",
     "cancel": "Cancel",
-    "discard-changes": "Discard Changes"
+    "discard-changes": "Discard Changes",
+    "course": {
+      "delivery-type": {
+        "F2F": "Face to face",
+        "BLENDED": "Blended",
+        "VIRTUAL": "Virtual"
+      }
+    }
   },
   "components": {
     "certification-details": {
@@ -43,6 +50,22 @@
       },
       "profiles": {
         "title": "Individual records"
+      }
+    },
+    "trainer-base": {
+      "create-course": {
+        "new-course": {
+          "description": "To submit a course, choose from the modules available to create a course {{duration}} hours in duration. Times indicated on the modules are the minimum recommended duration for each.",
+          "location": "Location",
+          "starts": "Starts",
+          "ends": "Ends",
+          "course-type": "Course Type",
+          "modules-available": "Modules Available",
+          "my-course": "My Course",
+          "mandatory-modules": "Mandatory modules",
+          "estimated-duration": "Estimated duration",
+          "submit-course": "Submit Course"
+        }
       }
     },
     "my-training": {

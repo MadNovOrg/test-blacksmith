@@ -24,6 +24,7 @@ array_relationships:
         schema: public
 select_permissions:
 - permission:
+    allow_aggregations: true
     columns:
     - course_level
     - created_at

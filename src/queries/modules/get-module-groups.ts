@@ -2,25 +2,41 @@ import { gql } from 'graphql-request'
 
 import { MODULE, MODULE_GROUP } from '../fragments'
 
-import { CourseLevel, ModuleGroup } from '@app/types'
+import { CourseDeliveryType, CourseLevel, ModuleGroup } from '@app/types'
 
 export type ResponseType = { groups: ModuleGroup[] }
 
-export type ParamsType = { level: CourseLevel }
+export type ParamsType = {
+  level: CourseLevel
+  courseDeliveryType: CourseDeliveryType
+  reaccreditation: boolean
+}
 
 export const QUERY = gql`
   ${MODULE}
   ${MODULE_GROUP}
-  query ModuleGroups($level: course_level_enum!) {
+  query ModuleGroups(
+    $level: course_level_enum!
+    $courseDeliveryType: course_delivery_type_enum!
+    $reaccreditation: Boolean!
+  ) {
     groups: module_group(where: { level: { _eq: $level } }) {
       ...ModuleGroup
       modules {
         ...Module
       }
-      durations {
-        courseDeliveryType
-        reaccreditation
-        duration
+      duration: durations_aggregate(
+        where: {
+          reaccreditation: { _eq: $reaccreditation }
+          courseDeliveryType: { _eq: $courseDeliveryType }
+        }
+        limit: 1
+      ) {
+        aggregate {
+          sum {
+            duration
+          }
+        }
       }
     }
   }

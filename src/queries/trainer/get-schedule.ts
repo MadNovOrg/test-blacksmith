@@ -15,7 +15,8 @@ export type ResponseType = {
   }[]
 }
 
-export type ParamsType = any // TODO: filter by month to show on calendar
+// TODO: filter by month to show on calendar
+// export type ParamsType = any
 
 export const QUERY = gql`
   query TrainerSchedule {
