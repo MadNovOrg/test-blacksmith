@@ -1,3 +1,14 @@
 table:
   name: course_module
   schema: public
+select_permissions:
+- permission:
+    allow_aggregations: true
+    columns:
+    - created_at
+    - updated_at
+    - course_id
+    - id
+    - module_id
+    filter: {}
+  role: user

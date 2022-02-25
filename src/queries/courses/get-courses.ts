@@ -5,12 +5,16 @@ import { Course } from '@app/types'
 export type ResponseType = { course: Course[] }
 
 export type ParamsType = {
-  orderBy?: Record<string, 'asc' | 'desc'> // TODO: restrict column names
+  orderBy?: object
+  where?: object
 }
 
 export const QUERY = gql`
-  query MyCourses($orderBy: [course_order_by!] = { name: asc }) {
-    course(where: { type: { _in: [open, closed] } }, order_by: $orderBy) {
+  query Courses(
+    $orderBy: [course_order_by!] = { name: asc }
+    $where: course_bool_exp = {}
+  ) {
+    course(where: $where, order_by: $orderBy) {
       id
       name
       type
@@ -27,6 +31,11 @@ export const QUERY = gql`
           end: max {
             date: end
           }
+        }
+      }
+      modulesAgg: modules_aggregate {
+        aggregate {
+          count
         }
       }
     }

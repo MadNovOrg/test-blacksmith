@@ -6,9 +6,9 @@ type Base = {
 
 export type Course = {
   name: string
-  type: string
   level: CourseLevel
   deliveryType: CourseDeliveryType
+  type: CourseType
   submitted: boolean
   reaccreditation: boolean
   organization: Organization
@@ -17,6 +17,11 @@ export type Course = {
     aggregate: {
       start: { date: string }
       end: { date: string }
+    }
+  }
+  modulesAgg: {
+    aggregate: {
+      count: number
     }
   }
 } & Base
@@ -62,6 +67,12 @@ export type Profile = {
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
 } & Base
+
+export enum CourseType {
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
+  INDIRECT = 'INDIRECT',
+}
 
 export enum CourseLevel {
   LEVEL_1 = 'LEVEL_1',

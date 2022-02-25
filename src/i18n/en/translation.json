@@ -18,6 +18,17 @@
         "BLENDED": "Blended",
         "VIRTUAL": "Virtual"
       }
+    },
+    "course-levels": {
+      "LEVEL_1": "Level One",
+      "LEVEL_2": "Level Two",
+      "ADVANCED": "Advanced",
+      "INTERMEDIATE": "Intermediate"
+    },
+    "course-types": {
+      "OPEN": "Open",
+      "CLOSED": "Closed",
+      "INDIRECT": "Indirect"
     }
   },
   "components": {

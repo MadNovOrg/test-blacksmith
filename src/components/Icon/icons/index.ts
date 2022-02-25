@@ -46,6 +46,8 @@ import { ReactComponent as CheckmarkIcon } from './checkmark.svg'
 import { ReactComponent as PDFIcon } from './pdf.svg'
 import { ReactComponent as BooksIcon } from './books.svg'
 import { ReactComponent as ExitIcon } from './exit.svg'
+import { ReactComponent as MoreHorizIcon } from './more-horiz.svg'
+import { ReactComponent as BlankIcon } from './blank.svg'
 
 const icons = {
   close: CloseIcon,
@@ -96,6 +98,8 @@ const icons = {
   pdf: PDFIcon,
   books: BooksIcon,
   exit: ExitIcon,
+  'more-horiz': MoreHorizIcon,
+  blank: BlankIcon,
 }
 
 export default icons

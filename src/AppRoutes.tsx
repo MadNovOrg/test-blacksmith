@@ -10,7 +10,7 @@ import Spinner from './components/Spinner'
 import { MyProfilePage } from './pages/MyProfile'
 import { Course } from './pages/TrainerBase/components/Course'
 import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
-import { CourseCreate } from './pages/TrainerBase/components/Course/components/CourseCreate'
+import { MyCourses } from './pages/TrainerBase/components/Course/components/MyCourses'
 import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboard'
 import { Management as TrainerManagement } from './pages/TrainerBase/components/Management'
 import { MyCalendar as TrainerCalendar } from './pages/TrainerBase/components//Management/components/MyCalendar'
@@ -116,8 +116,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
             <Route path="trainer-base" element={<TrainerBasePage />}>
               <Route index element={<TrainerDashboard />} />
               <Route path="course" element={<Course />}>
-                <Route index element={<Navigate replace to="create" />} />
-                <Route path="create" element={<CourseCreate />} />
+                <Route index element={<MyCourses />} />
                 <Route path="view/:id" element={<CourseView />} />
               </Route>
               <Route path="management" element={<TrainerManagement />}>

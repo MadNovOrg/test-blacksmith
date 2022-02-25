@@ -47,6 +47,7 @@
     "react-hook-form": "^7.25.3",
     "react-i18next": "^11.15.3",
     "react-router-dom": "^6.2.1",
+    "react-use": "^17.3.2",
     "swr": "^1.2.1",
     "tailwindcss-ripple": "^0.7.1",
     "vite-plugin-svgr": "^1.0.1"
