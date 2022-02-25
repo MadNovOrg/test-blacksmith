@@ -1,6 +1,33 @@
 table:
   name: course_module
   schema: public
+configuration:
+  custom_column_names:
+    course_id: courseId
+    module_id: moduleId
+  custom_root_fields: {}
+object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
+- name: module
+  using:
+    foreign_key_constraint_on: module_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      course:
+        leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
+    columns:
+    - id
+    - created_at
+    - updated_at
+    - course_id
+    - module_id
+  role: user
 select_permissions:
 - permission:
     allow_aggregations: true
@@ -10,5 +37,17 @@ select_permissions:
     - course_id
     - id
     - module_id
-    filter: {}
+    filter:
+      course:
+        leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
+  role: user
+delete_permissions:
+- permission:
+    filter:
+      course:
+        leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
   role: user

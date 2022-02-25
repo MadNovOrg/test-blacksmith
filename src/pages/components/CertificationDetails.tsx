@@ -5,15 +5,13 @@ import QRCode from 'qrcode.react'
 
 import { Icon } from '@app/components/Icon'
 
-import { CourseModule } from '@app/types'
-
 type CertificationDetailsProps = {
   // TODO replace mock with proper model when it's ready
   certification: {
     title: string
     passDate: Date
     expirationDate: Date
-    modules: CourseModule[]
+    modules: { module: { name: string } }[]
   }
 }
 
@@ -37,12 +35,12 @@ export const CertificationDetails: React.FC<CertificationDetailsProps> = ({
         </div>
 
         <div className="pt-4">
-          {certification.modules.map(module => (
+          {certification.modules.map(courseModule => (
             <div
-              key={module.name}
+              key={courseModule.module.name}
               className="py-4 w-full border-b border-grey flex place-content-between"
             >
-              <span>{module.name}</span>
+              <span>{courseModule.module.name}</span>
               <Icon name="checkmark" className="text-lime-500" />
             </div>
           ))}

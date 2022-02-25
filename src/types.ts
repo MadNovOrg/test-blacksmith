@@ -27,8 +27,8 @@ export type Course = {
 } & Base
 
 export type CourseModule = {
-  name: string
-  description: string
+  course: Course
+  module: Module
 } & Base
 
 export type Address = {

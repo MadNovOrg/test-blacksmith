@@ -68,3 +68,13 @@ select_permissions:
         profile_id:
           _eq: X-Hasura-User-Id
   role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - submitted
+    filter:
+      leaders:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  role: user

@@ -15,11 +15,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
     passDate: new Date(2020, 4, 17),
     expirationDate: new Date(2023, 4, 17),
     modules: Array.from({ length: 10 }, (_, i) => ({
-      name: `Positive Behaviour Theory Module ${i}`,
-      description: '',
-      id: `${i}`,
-      createdAt: '',
-      updatedAt: '',
+      module: {
+        name: `Positive Behaviour Theory Module ${i}`,
+      },
     })),
   }
 

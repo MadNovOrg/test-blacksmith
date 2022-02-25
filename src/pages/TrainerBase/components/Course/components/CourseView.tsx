@@ -7,7 +7,7 @@ import {
   Droppable,
 } from 'react-beautiful-dnd'
 import clsx from 'clsx'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import Spinner from '@app/components/Spinner'
@@ -28,6 +28,8 @@ import {
   QUERY as GetCourseById,
   ResponseType as GetCourseByIdResponseType,
 } from '@app/queries/courses/get-course-by-id'
+import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
+import { MUTATION as SubmitCourse } from '@app/queries/courses/submit-course'
 import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
 import {
   AvailableModule,
@@ -35,6 +37,7 @@ import {
 } from '@app/pages/TrainerBase/components/Course'
 import { formatDurationShort, getPercentage } from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
+import { useFetcher } from '@app/hooks/use-fetcher'
 
 type CourseViewProps = unknown
 
@@ -56,7 +59,10 @@ const MAX_COURSE_DURATION_MAP = {
 export const CourseView: React.FC<CourseViewProps> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
+  const fetcher = useFetcher()
+  const navigate = useNavigate()
 
+  const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
     []
@@ -75,7 +81,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     Error,
     [string, GetModuleGroupsParamsType] | null
   >(
-    courseData
+    courseData?.course
       ? [
           GetModuleGroups,
           {
@@ -209,6 +215,32 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     [availableModules, courseModuleSlots, data]
   )
 
+  const onCourseSubmit = async () => {
+    setSubmitError(undefined)
+    try {
+      const moduleGroups = [
+        ...mandatoryModules,
+        ...courseModuleSlots.flatMap(slot => slot.module || []),
+      ]
+      await fetcher(SaveCourseModules, {
+        courseId: courseData?.course.id,
+        modules: moduleGroups.flatMap(moduleGroup =>
+          moduleGroup.modules.map(module => ({
+            courseId: courseData?.course.id,
+            moduleId: module.id,
+          }))
+        ),
+      })
+      // TODO redirect to course details page when available
+      navigate({
+        pathname: '/trainer-base/course',
+      })
+      await fetcher(SubmitCourse, { id: courseData?.course.id })
+    } catch (e: unknown) {
+      setSubmitError((e as Error).message)
+    }
+  }
+
   function getModuleCardColors(module: ModuleGroup) {
     return COURSE_COLOR_BY_LEVEL[module.level]
   }
@@ -216,18 +248,24 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   return (
     <DragDropContext onDragEnd={handleDrop}>
       {(courseDataError || moduleDataError) && (
-        <div className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
+        <p className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
           {t('common.internal-error')}
-        </div>
+        </p>
       )}
       {!data && !courseDataError && !moduleDataError && (
         <Spinner cls="w-16 h-16" />
       )}
-      {data && courseData && (
+      {data && courseData?.course && (
         <div className="pb-12">
           <p className="font-light text-2xl sm:text-4xl mb-4">
             {courseData.course.name}
           </p>
+
+          {submitError && (
+            <p className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
+              {submitError}
+            </p>
+          )}
 
           <div className="grid grid-cols-3 lg:grid-cols-8 gap-y-8 lg:pt-8">
             <div className="col-span-3 lg:col-span-8 lg:col-start-1 lg:col-end-4">
@@ -342,6 +380,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                 </div>
                 <button
                   className="btn tertiary"
+                  onClick={onCourseSubmit}
                   disabled={
                     getPercentage(estimatedCourseDuration, maxDuration) > 100
                   }
