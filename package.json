@@ -21,7 +21,8 @@
     "hasura:seed:create": "npm run hasura -- seed create",
     "hasura:seed:apply": "npm run hasura -- seed apply",
     "hasura:metadata:apply": "npm run hasura -- metadata apply",
-    "hasura:migrate:apply": "npm run hasura -- migrate apply"
+    "hasura:migrate:apply": "npm run hasura -- migrate apply",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.3",
@@ -89,8 +90,10 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "hasura-cli": "^2.1.1",
+    "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.7",
+    "lint-staged": "^12.3.4",
     "nanoid": "^3.2.0",
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
@@ -113,6 +116,12 @@
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/playwright"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run lint:fix",
+      "npm t"
     ]
   }
 }
