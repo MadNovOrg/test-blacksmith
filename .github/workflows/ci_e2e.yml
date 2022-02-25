@@ -33,7 +33,7 @@ jobs:
           - 8080:8080
         env:
           HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:root@postgres:5432/tth-db
-          HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+          HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
           HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
           HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_MbPqfM7i4/.well-known/jwks.json","claims_format":"stringified_json"}'
 
@@ -56,11 +56,11 @@ jobs:
           npm run hasura -- metadata apply
           npm run hasura -- migrate apply --all-databases
           npm run hasura -- metadata reload
-          PGPASSWORD=root psql -h localhost -U postgres -d tth-db -q -f hasura/seeds/default/dev/dev_profiles.sql
+          PGPASSWORD=root psql -h localhost -U postgres -d tth-db -q -f hasura/seeds/default/dev/001_dev_profiles.sql
           npm run dev &
           npx playwright install chromium
 
-      - name: Playwright tests 
+      - name: Playwright tests
         run: npm run test:e2e:smoke
 
       - name: Playwright report
