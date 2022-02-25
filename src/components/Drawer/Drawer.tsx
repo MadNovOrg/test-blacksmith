@@ -17,7 +17,7 @@ const menu = [
     to: '/trainer-base',
     title: 'Trainer Base',
     children: [
-      { to: '/trainer-base/course/create', title: 'New Course' },
+      { to: '/trainer-base/course', title: 'New Course' },
       { to: '/trainer-base/course/history', title: 'Course History' },
       { to: '/trainer-base/course/templates', title: 'Course Templates' },
     ],

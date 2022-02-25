@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import useSWR from 'swr'
 import format from 'date-fns/format'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { IconButton } from '@app/components/IconButton'
 import { TD } from '@app/components/Table/TD'
@@ -167,10 +168,12 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
             {data?.course?.map((c, index) => (
               <tr key={c.id} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                 <td className="py-4 px-2">
-                  <p className="font-semibold text-base mb-1">
-                    {t(`common.course-levels.${c.level}`)}
-                  </p>
-                  <p className="text-gray-400">{c.name}</p>
+                  <Link to={`view/${c.id}`}>
+                    <p className="font-semibold text-base mb-1">
+                      {t(`common.course-levels.${c.level}`)}
+                    </p>
+                    <p className="text-gray-400">{c.name}</p>
+                  </Link>
                 </td>
                 <td className="py-4 px-2">{c.organization?.name}</td>
                 <td className="py-4 px-2 capitalize">{c.type}</td>
@@ -214,7 +217,12 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 </td>
                 <td className="py-4 px-2">
                   <div className="flex items-center">
-                    <button className="btn primary small mr-2">Manage</button>
+                    <Link
+                      to={`view/${c.id}`}
+                      className="btn primary small mr-2"
+                    >
+                      Manage
+                    </Link>
                     <IconButton name="more-horiz" />
                   </div>
                 </td>

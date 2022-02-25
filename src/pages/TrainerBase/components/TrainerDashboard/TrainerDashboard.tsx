@@ -38,7 +38,7 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = () => {
           onClick={() => navigate('course')}
         >
           <Link
-            to="course/create"
+            to="course"
             className="block my-2 font-light text-white text-sm hover:underline"
           >
             Create a new course
