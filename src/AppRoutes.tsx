@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react'
-import { Routes, Route, NavLink, Outlet, Navigate } from 'react-router-dom'
-import clsx from 'clsx'
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Box } from '@mui/material'
 
 import { AppLayout } from '@app/components/AppLayout'
 
 import { useAuth } from '@app/context/auth'
 
-import Spinner from './components/Spinner'
 import { MyProfilePage } from './pages/MyProfile'
 import { Course } from './pages/TrainerBase/components/Course'
 import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
@@ -46,64 +46,9 @@ const Trainees = React.lazy(
 )
 const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
 
-// TODO: will be generated later based on user/role
-const tabs = [
-  {
-    id: 'trainer-base',
-    title: 'Trainer Base',
-  },
-  {
-    id: 'my-training',
-    title: 'My Training',
-  },
-  {
-    id: 'my-organization',
-    title: 'My Organization',
-  },
-  {
-    id: 'admin',
-    title: 'Admin',
-  },
-  {
-    id: 'membership-area',
-    title: 'Membership Area',
-  },
-]
-
-type LayoutProps = {
-  tabs: { id: string; title: string }[]
-}
-
 // TODO: consider extracting when things grow here
-const Layout: React.FC<LayoutProps> = ({ tabs }) => {
-  return (
-    <>
-      <div
-        className="border-t border-divider bg-gray-50 hidden sm:flex"
-        data-testid="nav-menu"
-      >
-        {tabs.map(tab => (
-          <NavLink
-            key={tab.id}
-            to={tab.id}
-            className={({ isActive }) =>
-              clsx(
-                'relative z-10 px-2 w-48 py-2 -mt-px text-center',
-                isActive
-                  ? 'bg-white text-black border-t-2 border-lime-500'
-                  : 'text-gray-400'
-              )
-            }
-          >
-            {tab.title}
-          </NavLink>
-        ))}
-      </div>
-      <div className="flex flex-col py-4 flex-1">
-        <Outlet />
-      </div>
-    </>
-  )
+const Layout: React.FC = () => {
+  return <Outlet />
 }
 
 const LoggedInRoutes: React.FC<unknown> = () => {
@@ -111,7 +56,8 @@ const LoggedInRoutes: React.FC<unknown> = () => {
     <AppLayout>
       <Suspense fallback={() => 'Loading'}>
         <Routes>
-          <Route path="/" element={<Layout tabs={tabs} />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Navigate replace to="trainer-base" />} />
             <Route path="my-profile" element={<MyProfilePage />} />
             <Route path="trainer-base" element={<TrainerBasePage />}>
               <Route index element={<TrainerDashboard />} />
@@ -181,9 +127,17 @@ export const AppRoutes: React.FC<unknown> = () => {
 
   if (auth.loading) {
     return (
-      <main className="w-screen h-screen relative">
-        <Spinner cls="w-16 h-16" />
-      </main>
+      <Box position="relative" width="100vw" height="100vh">
+        <CircularProgress
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+          size={60}
+        />
+      </Box>
     )
   }
 

@@ -1,7 +1,11 @@
+import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-
-import { Typography } from '@app/components/Typography'
+import { Link as RRLink, useNavigate } from 'react-router-dom'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark'
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'
+import SchoolIcon from '@mui/icons-material/School'
+import Link from '@mui/material/Link'
 
 import { DashboardCard } from './components/DashboardCard'
 
@@ -11,94 +15,87 @@ export const TrainerDashboard: React.FC<TrainerDashboardProps> = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="">
-      <Typography variant="h4" className="mb-4">
+    <Box>
+      <Typography variant="h4" gutterBottom>
         Trainer Base
       </Typography>
       <Typography variant="body2">&nbsp;</Typography>
-      <div className="flex">
-        <DashboardCard
-          title="My Calendar"
-          icon="calender"
-          onClick={() => navigate('management')}
-        >
-          <p className="font-bold text-white text-sm">Next Event</p>
-          <p className="font-light text-white text-2xl mb-4">
-            3rd-4th May 2022
-          </p>
-          <p className="font-light text-white text-sm">
-            Birchwood Academy, Wrotham, Kent Positive Behaviour Training: Level
-            Two 14 Attendees
-          </p>
-        </DashboardCard>
 
-        <DashboardCard
-          title="Create a Course"
-          icon="bookmark-collection"
-          onClick={() => navigate('course')}
-        >
-          <Link
-            to="course"
-            className="block my-2 font-light text-white text-sm hover:underline"
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <DashboardCard
+            title="My Calendar"
+            icon={<CalendarTodayIcon fontSize="inherit" />}
+            onClick={() => navigate('management')}
           >
-            Create a new course
-          </Link>
-          <Link
-            to="course/history"
-            className="block my-2 font-light text-white text-sm hover:underline"
-          >
-            Select from your previous courses
-          </Link>
-          <Link
-            to="course/templates"
-            className="block my-2 font-light text-white text-sm hover:underline"
-          >
-            Select a Team Teach template
-          </Link>
-          <Link
-            to=""
-            className="block my-2 font-light text-white text-sm hover:underline"
-          >
-            Create an exception
-          </Link>
-        </DashboardCard>
-      </div>
+            <Typography variant="subtitle2">Next Event</Typography>
+            <Typography variant="h6" gutterBottom>
+              3rd-4th May 2022
+            </Typography>
+            <Typography variant="body2">
+              Birchwood Academy, Wrotham, Kent Positive Behaviour Training:
+              Level Two 14 Attendees
+            </Typography>
+          </DashboardCard>
+        </Grid>
 
-      <div className="flex">
-        <DashboardCard
-          title="Course Manager"
-          icon="supervisor"
-          onClick={() => console.log('TBD')}
-        >
-          <p className="font-bold text-white text-sm">Next Event</p>
-          <p className="font-light text-white text-2xl mb-4">
-            Registration in progress
-          </p>
-          <p className="font-light text-white text-sm">
-            Birchwood Academy, Wrotham, Kent Positive Behaviour Training: Level
-            Two 14 Attendees
-          </p>
-        </DashboardCard>
+        <Grid item xs={6}>
+          <DashboardCard
+            title="Create a Course"
+            icon={<CollectionsBookmarkIcon fontSize="inherit" />}
+            onClick={() => navigate('course')}
+          >
+            <Box display="flex" flexDirection="column" color="white">
+              <Link component={RRLink} to="course" gutterBottom>
+                Create a new course
+              </Link>
+              <Link component={RRLink} to="course/history" gutterBottom>
+                Select from your previous courses
+              </Link>
+              <Link component={RRLink} to="course/templates" gutterBottom>
+                Select a Team Teach template
+              </Link>
+              <Link component={RRLink} to="" gutterBottom>
+                Create an exception
+              </Link>
+            </Box>
+          </DashboardCard>
+        </Grid>
 
-        <DashboardCard
-          title="Certification Centre"
-          icon="school"
-          onClick={() => console.log('TBD')}
-        >
-          <Link
-            to=""
-            className="block my-2 font-light text-white text-sm hover:underline"
+        <Grid item xs={6}>
+          <DashboardCard
+            title="Course Manager"
+            icon={<SupervisorAccountIcon fontSize="inherit" />}
+            onClick={() => console.log('TBD')}
           >
-            Grade a course
-          </Link>
-          <Link
-            to=""
-            className="block my-2 font-light text-white text-sm hover:underline"
+            <Typography variant="subtitle2">Next Event</Typography>
+            <Typography variant="h6" gutterBottom>
+              Registration in progress
+            </Typography>
+            <Typography variant="body2">
+              Birchwood Academy, Wrotham, Kent Positive Behaviour Training:
+              Level Two 14 Attendees
+            </Typography>
+          </DashboardCard>
+        </Grid>
+
+        <Grid item xs={6}>
+          <DashboardCard
+            title="Certification Centre"
+            icon={<SchoolIcon fontSize="inherit" />}
+            onClick={() => console.log('TBD')}
           >
-            View your certification history
-          </Link>
-        </DashboardCard>
-      </div>
-    </div>
+            <Box display="flex" flexDirection="column" color="white">
+              <Link component={RRLink} to="" gutterBottom>
+                Grade a course
+              </Link>
+              <Link component={RRLink} to="" gutterBottom>
+                View your certification history
+              </Link>
+            </Box>
+          </DashboardCard>
+        </Grid>
+      </Grid>
+    </Box>
   )
 }

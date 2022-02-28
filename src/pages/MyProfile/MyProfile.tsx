@@ -1,10 +1,11 @@
 import React from 'react'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
+
 import {
   MUTATION as LinkGo1Profile,
   ResponseType as LinkGo1ProfileResponseType,
 } from '@app/queries/user/link-go1-profile'
-import { useFetcher } from '@app/hooks/use-fetcher'
 
 type MyProfilePageProps = unknown
 

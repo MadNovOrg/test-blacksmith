@@ -1,15 +1,28 @@
 import React from 'react'
-
-import { Icon } from '@app/components/Icon'
-import { IconButton } from '@app/components/IconButton'
-import { AppIcons } from '@app/components/Icon/icons'
+import { Box, Card, IconButton, Typography } from '@mui/material'
+import { styled } from '@mui/system'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 type DashboardCardProps = {
-  icon: AppIcons
+  icon: React.ReactNode
   title: string
   children: React.ReactNode
   onClick: VoidFunction
 }
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  backgroundImage: `linear-gradient(
+    to right,
+    ${theme.palette.common.black},
+    ${theme.colors.navy[500]},
+    ${theme.colors.navy[500]}
+  )`,
+  position: 'relative',
+  height: '100%',
+  color: theme.palette.common.white,
+  padding: theme.spacing(2),
+  minHeight: 220,
+}))
 
 export const DashboardCard: React.FC<DashboardCardProps> = ({
   icon,
@@ -18,25 +31,29 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex-1 basis-1/2 p-2">
-      <div className="h-full bg-gradient-to-r from-black via-navy-500 to-navy-500 p-4 pb-8 pr-16 relative">
-        <div className="absolute top-6 right-6 pointer-events-none">
-          <Icon name={icon} className="text-white/10 text-[16rem]" />
-        </div>
-        <p className="text-2xl font-light text-white">{title}</p>
-        <div className="flex mt-4">
-          <Icon name={icon} className="text-white text-6xl" />
-          <div className="flex-1 ml-3">{children}</div>
-        </div>
-        <div className="absolute right-1 bottom-1">
-          <IconButton
-            name="arrow-right"
-            size="lg"
-            className="text-white bg-navy/10"
-            onClick={onClick}
-          />
-        </div>
-      </div>
-    </div>
+    <StyledCard>
+      <Box
+        position="absolute"
+        sx={{
+          pointerEvents: 'none',
+          fontSize: '15rem',
+          right: 50,
+          top: 10,
+          opacity: 0.1,
+        }}
+      >
+        {icon}
+      </Box>
+      <Typography variant="h6">{title}</Typography>
+      <Box display="flex" mt={2}>
+        <Box sx={{ fontSize: '3rem' }}>{icon}</Box>
+        <Box ml={2}>{children}</Box>
+      </Box>
+      <Box position="absolute" right={10} bottom={10}>
+        <IconButton onClick={onClick}>
+          <ArrowForwardIcon htmlColor="white" fontSize="large" />
+        </IconButton>
+      </Box>
+    </StyledCard>
   )
 }

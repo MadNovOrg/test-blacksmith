@@ -9,6 +9,8 @@ import { Calendar } from '@app/components/Calendar'
 
 import { useAuth } from '@app/context/auth'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
+
 import { MUTATION as InsertAvailability } from '@app/queries/trainer/manage-availability/insert-availability'
 import { MUTATION as UpdateAvailability } from '@app/queries/trainer/manage-availability/update-availability'
 import { MUTATION as DeleteAvailability } from '@app/queries/trainer/manage-availability/delete-availability'
@@ -18,7 +20,6 @@ import {
 } from '@app/queries/trainer/manage-availability/get-availability'
 import { AvailabilityType } from '@app/types'
 import { formatDateForInput } from '@app/util'
-import { useFetcher } from '@app/hooks/use-fetcher'
 
 type ManageAvailabilityProps = unknown
 

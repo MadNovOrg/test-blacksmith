@@ -5,8 +5,6 @@ import Amplify from 'aws-amplify'
 
 import { AuthProvider } from '@app/context/auth'
 
-import './style.css'
-
 import App from './App'
 
 import './i18n/config'

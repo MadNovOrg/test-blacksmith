@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next'
 import Spinner from '@app/components/Spinner'
 import ProgressBar from '@app/components/ProgressBar'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
+
 import { COURSE_COLOR_BY_LEVEL } from '../CourseColorScheme'
 
 import { ModuleCard } from './ModuleCard'
@@ -37,7 +39,6 @@ import {
 } from '@app/pages/TrainerBase/components/Course'
 import { formatDurationShort, getPercentage } from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
-import { useFetcher } from '@app/hooks/use-fetcher'
 
 type CourseViewProps = unknown
 

@@ -1,8 +1,12 @@
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
 
 import { AppRoutes } from './AppRoutes'
 import { useFetcher } from './hooks/use-fetcher'
+import theme from './theme'
+
+import './style.css'
 
 function App() {
   const fetcher = useFetcher()
@@ -17,7 +21,10 @@ function App() {
 
   return (
     <SWRConfig value={config}>
-      <AppRoutes />
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <AppRoutes />
+      </ThemeProvider>
     </SWRConfig>
   )
 }

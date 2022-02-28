@@ -33,6 +33,10 @@
         "group": "external",
         "position": "after"
       }, {
+        "pattern": "@app/hooks/**",
+        "group": "external",
+        "position": "after"
+      }, {
         "pattern": "@app/types/**",
         "group": "external",
         "position": "after"
