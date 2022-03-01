@@ -1,4 +1,19 @@
 actions:
+- name: createStripeSubscription
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
+  comment: Creates a membership subscription
+- name: fetchPlans
+  definition:
+    kind: ""
+    handler: '{{ACTIONS_HOST}}/stripe/prices/list'
+  comment: Fetches membership plans
+- name: isUserSubscribedToMembership
+  definition:
+    kind: ""
+    handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
+  comment: Checks whether user is subscribed to membership
 - name: linkGo1
   definition:
     kind: synchronous
@@ -6,9 +21,33 @@ actions:
     forward_client_headers: true
   permissions:
   - role: user
+- name: plansCreate
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/stripe/prices/create'
+  comment: Creates a membership plan
 custom_types:
-  enums: []
-  input_objects: []
+  enums:
+  - name: BillingInterval
+    values:
+    - description: null
+      is_deprecated: null
+      value: day
+    - description: null
+      is_deprecated: null
+      value: week
+    - description: null
+      is_deprecated: null
+      value: month
+    - description: null
+      is_deprecated: null
+      value: year
+  input_objects:
+  - name: PlansCreateInput
   objects:
   - name: LinkProfileResult
+  - name: PlansCreateResult
+  - name: PlanObject
+  - name: createSubscriptionOutput
+  - name: isUserSubscribedToMembershipResponse
   scalars: []

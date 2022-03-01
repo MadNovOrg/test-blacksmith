@@ -1,8 +1,71 @@
 type Mutation {
+  createStripeSubscription(
+    priceId: String!
+    customerId: String!
+  ): createSubscriptionOutput
+}
+
+type Query {
+  fetchPlans: [PlanObject]
+}
+
+type Query {
+  isUserSubscribedToMembership(
+    customerId: String!
+  ): isUserSubscribedToMembershipResponse
+}
+
+type Mutation {
   linkGo1: LinkProfileResult
+}
+
+type Mutation {
+  plansCreate(
+    data: PlansCreateInput!
+  ): PlansCreateResult
+}
+
+enum BillingInterval {
+  day
+  week
+  month
+  year
+}
+
+input PlansCreateInput {
+  name: String!
+  currency: String!
+  amount: Int!
+  recurring_type: BillingInterval!
+  recurring_count: Int!
+  trial_type: BillingInterval!
+  trial_count: Int!
 }
 
 type LinkProfileResult {
   status: Boolean!
+}
+
+type PlansCreateResult {
+  id: String!
+}
+
+type PlanObject {
+  id: String
+  active: Boolean
+  currency: String
+  productName: String
+  billingInterval: String
+  unitAmount: Int
+  name: String
+}
+
+type createSubscriptionOutput {
+  subscriptionId: String!
+  clientSecret: String!
+}
+
+type isUserSubscribedToMembershipResponse {
+  isSubscribed: Boolean!
 }
 
