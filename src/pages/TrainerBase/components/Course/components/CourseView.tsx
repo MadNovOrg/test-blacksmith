@@ -246,6 +246,21 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     return COURSE_COLOR_BY_LEVEL[module.level]
   }
 
+  const onClearCourse = async () => {
+    setAvailableModules(prevState =>
+      prevState.map(module => ({
+        ...module,
+        used: false,
+      }))
+    )
+    setCourseModuleSlots(prevState =>
+      prevState.map(slot => ({
+        ...slot,
+        module: undefined,
+      }))
+    )
+  }
+
   return (
     <DragDropContext onDragEnd={handleDrop}>
       {(courseDataError || moduleDataError) && (
@@ -390,6 +405,14 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                     'pages.trainer-base.create-course.new-course.submit-course'
                   )}
                 </button>
+                {courseModuleSlots.find(slot => !!slot.module) && (
+                  <button
+                    className="btn warning lg:col-start-2"
+                    onClick={onClearCourse}
+                  >
+                    {t('common.clear')}
+                  </button>
+                )}
               </div>
             </div>
           </div>
