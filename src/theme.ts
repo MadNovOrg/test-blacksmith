@@ -122,10 +122,39 @@ const theme = createTheme({
   },
 })
 
+const breakpoints = {
+  values: {
+    xs: 0,
+    sm: 0,
+    md: 768,
+    lg: 1280,
+    xl: 1920,
+  },
+}
+
 export default createTheme({
   ...theme,
+  breakpoints,
   typography: {
     fontFamily: ['Inter', 'sans-serif', 'Arial'].join(','),
+    body2: {
+      fontSize: '0.875rem',
+      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
+        fontSize: '0.75rem',
+      },
+    },
+    h2: {
+      fontSize: '2.25rem',
+      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
+        fontSize: '1.5rem',
+      },
+    },
+    h3: {
+      fontSize: '1.125rem',
+      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
+        fontSize: '0.875rem',
+      },
+    },
     h4: {
       fontWeight: 'lighter',
     },
