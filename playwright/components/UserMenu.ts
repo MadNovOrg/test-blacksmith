@@ -13,9 +13,7 @@ export class UserMenu {
 
   constructor(page: Page) {
     this.page = page
-    this.userNameText = this.page.locator(
-      'button[data-testid="user-menu-btn"] > div'
-    )
+    this.userNameText = this.page.locator('button[data-testid="user-menu-btn"]')
     this.option = text => this.page.locator(`[data-testid="${text}"]`)
   }
 

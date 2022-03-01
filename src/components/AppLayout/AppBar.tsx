@@ -102,6 +102,7 @@ export const AppBar = () => {
               onClick={handleOpenUserMenu}
               sx={{ marginRight: 2, border: anchorElUser ? 1 : 0 }}
               startIcon={<ArrowDropDownIcon />}
+              data-testid="user-menu-btn"
             >
               {profile?.givenName} {profile?.familyName}
             </Button>
@@ -118,7 +119,12 @@ export const AppBar = () => {
             >
               <MenuItem>
                 <ListItemText disableTypography>
-                  <Link component={RRLink} to="/my-profile" variant="body2">
+                  <Link
+                    component={RRLink}
+                    to="/my-profile"
+                    variant="body2"
+                    data-testid="profile-link"
+                  >
                     View or edit account
                   </Link>
                 </ListItemText>
@@ -128,7 +134,12 @@ export const AppBar = () => {
               </MenuItem>
               <MenuItem>
                 <ListItemText disableTypography>
-                  <Link component={RRLink} to="/notifications" variant="body2">
+                  <Link
+                    component={RRLink}
+                    to="/notifications"
+                    variant="body2"
+                    data-testid="notifications-link"
+                  >
                     Notifications
                   </Link>
                 </ListItemText>
@@ -138,7 +149,9 @@ export const AppBar = () => {
               </MenuItem>
               <MenuItem onClick={logout}>
                 <ListItemText disableTypography>
-                  <Typography variant="body2">Logout</Typography>
+                  <Typography variant="body2" data-testid="logout-link">
+                    Logout
+                  </Typography>
                 </ListItemText>
                 <ListItemIcon sx={{ justifyContent: 'flex-end' }}>
                   <ExitToAppIcon fontSize="small" />
