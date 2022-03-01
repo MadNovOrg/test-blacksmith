@@ -10,7 +10,11 @@ export function useRouteMatch(routes: Route[]) {
 
   for (let i = 0; i < routes.length; i += 1) {
     const pattern = routes[i].id
-    const possibleMatch = matchPath(pattern, pathname)
+    const possibleMatch = matchPath(
+      { path: pattern, caseSensitive: false, end: false },
+      pathname
+    )
+
     if (possibleMatch !== null) {
       return possibleMatch
     }

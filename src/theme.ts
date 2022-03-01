@@ -139,6 +139,7 @@ export default createTheme({
     fontFamily: ['Inter', 'sans-serif', 'Arial'].join(','),
     body2: {
       fontSize: '0.875rem',
+      fontWeight: '400',
       [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
         fontSize: '0.75rem',
       },
@@ -156,16 +157,44 @@ export default createTheme({
       },
     },
     h4: {
-      fontWeight: 'lighter',
+      fontWeight: '300',
     },
     h5: {
-      fontWeight: 'lighter',
+      fontWeight: '300',
     },
     h6: {
-      fontWeight: 'lighter',
+      fontWeight: '300',
+    },
+    subtitle2: {
+      fontWeight: '600',
     },
   },
   components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          border: 0,
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableRow-root': {
+            backgroundColor: theme.palette.common.white,
+          },
+        },
+      },
+    },
+    MuiTableBody: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableRow-root:nth-of-type(odd)': {
+            backgroundColor: theme.palette.grey[100],
+          },
+        },
+      },
+    },
     MuiLink: {
       defaultProps: {
         underline: 'hover',

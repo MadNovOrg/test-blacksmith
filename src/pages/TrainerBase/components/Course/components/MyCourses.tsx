@@ -2,12 +2,21 @@ import React, { useMemo, useState } from 'react'
 import useSWR from 'swr'
 import format from 'date-fns/format'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import Link from '@mui/material/Link'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import TextField from '@mui/material/TextField'
+import { Button, Chip } from '@mui/material'
 
-import { IconButton } from '@app/components/IconButton'
-import { TD } from '@app/components/Table/TD'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import type { FilterOption } from '@app/components/FilterAccordion'
+import { TableHead } from '@app/components/Table/TableHead'
 
 import {
   QUERY as GetMyCourses,
@@ -31,19 +40,17 @@ function getCourseStatus(c: Course) {
   return 'Draft'
 }
 
-type Sort =
-  | 'name-asc'
-  | 'name-desc'
-  | 'org-asc'
-  | 'org-desc'
-  | 'type-asc'
-  | 'type-desc'
-  | 'start-asc'
-  | 'start-desc'
-  | 'end-asc'
-  | 'end-desc'
+const cols = [
+  { id: 'name', label: 'Course name' },
+  { id: 'org', label: 'Organization' },
+  { id: 'type', label: 'Course type' },
+  { id: 'start', label: 'Start' },
+  { id: 'end', label: 'End' },
+  { id: 'status', label: 'status', sorting: false },
+  { id: 'empty', label: '', sorting: false },
+]
 
-const sorts: Record<Sort, object> = {
+const sorts: Record<string, object> = {
   'name-asc': { name: 'asc' },
   'name-desc': { name: 'desc' },
   'org-asc': { organization: { name: 'asc' } },
@@ -78,7 +85,8 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [keyword, setKeyword] = useState('')
   const [levelFilter, setLevelFilter] = useState<FilterOption[]>(levelOptions)
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
-  const [sort, setSort] = useState('name-asc')
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+  const [orderBy, setOrderBy] = useState(cols[0].id)
 
   const where = useMemo(() => {
     const obj: Record<string, object> = {}
@@ -110,14 +118,20 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     GetMyCoursesResponseType,
     Error,
     [string, GetMyCourseParamsType]
-  >([GetMyCourses, { orderBy: sorts[sort as Sort], where }])
+  >([GetMyCourses, { orderBy: sorts[`${orderBy}-${order}`], where }])
+
+  const handleRequestSort = (col: string) => {
+    const isAsc = orderBy === col && order === 'asc'
+    setOrder(isAsc ? 'desc' : 'asc')
+    setOrderBy(col)
+  }
 
   return (
-    <div className="flex py-2">
-      <div className="w-48 hidden sm:flex flex-col pt-8 pr-4">
-        <p className="text-sm text-gray-400 mb-4">Filter by</p>
+    <Box display="flex">
+      <Box width={250} display="flex" flexDirection="column" pt={8} pr={4}>
+        <Typography variant="body2">Filter by</Typography>
 
-        <div className="flex flex-col">
+        <Box display="flex" flexDirection="column">
           <FilterAccordion
             options={levelFilter}
             title="Level"
@@ -125,112 +139,104 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
           />
 
           <FilterAccordion
-            className="mt-4"
             options={typeFilter}
             title="Course type"
             onChange={setTypeFilter}
           />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className="flex-1">
-        <p className="font-light text-2xl sm:text-4xl">My Courses</p>
-        <p className="font-semibold">6 items</p>
+      <Box flex={1}>
+        <Typography variant="h5">My Courses</Typography>
+        <Typography variant="subtitle2">6 items</Typography>
 
-        <div className="my-4">
-          <input
-            type="text"
-            className="bg-gray-50 border-0"
-            placeholder="Search"
+        <Box mt={4}>
+          <TextField
+            hiddenLabel
             value={keyword}
-            onChange={e => setKeyword(e.target.value)}
+            variant="filled"
+            size="small"
+            placeholder="Search"
+            onChange={e => setKeyword(e.target.value) /* TODO: throttle */}
           />
-        </div>
+        </Box>
 
-        <table className="border-collapse w-full bg-white text-sm">
-          <thead className="font-normal text-gray-400">
-            <tr>
-              <TD id="name" title="Course name" sort={sort} onSort={setSort} />
-              <TD
-                id="orgName"
-                title="Organization"
-                sort={sort}
-                onSort={setSort}
-              />
-              <TD id="type" title="Course type" sort={sort} onSort={setSort} />
-              <TD id="start" title="Start" sort={sort} onSort={setSort} />
-              <TD id="end" title="End" sort={sort} onSort={setSort} />
-              <TD id="status" title="Status" />
-              <td className="py-4 px-2"> </td>
-            </tr>
-          </thead>
-          <tbody className="text-gray-700">
-            {data?.course?.map((c, index) => (
-              <tr key={c.id} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
-                <td className="py-4 px-2">
-                  <Link to={`view/${c.id}`}>
-                    <p className="font-semibold text-base mb-1">
-                      {t(`common.course-levels.${c.level}`)}
-                    </p>
-                    <p className="text-gray-400">{c.name}</p>
-                  </Link>
-                </td>
-                <td className="py-4 px-2">{c.organization?.name}</td>
-                <td className="py-4 px-2 capitalize">{c.type}</td>
-                <td className="py-4 px-2">
-                  {c.dates.aggregate.start.date && (
-                    <div>
-                      <p className="mb-1">
-                        {format(
-                          new Date(c.dates.aggregate.start.date),
-                          'dd MMM'
-                        )}
-                      </p>
-                      <p className="text-gray-400">
-                        {format(
-                          new Date(c.dates.aggregate.start.date),
-                          'hh:mm aa'
-                        )}
-                      </p>
-                    </div>
-                  )}
-                </td>
-                <td className="py-4 px-2">
-                  {c.dates.aggregate.end.date && (
-                    <div>
-                      <p className="mb-1">
-                        {format(new Date(c.dates.aggregate.end.date), 'dd MMM')}
-                      </p>
-                      <p className="text-gray-400">
-                        {format(
-                          new Date(c.dates.aggregate.end.date),
-                          'hh:mm aa'
-                        )}
-                      </p>
-                    </div>
-                  )}
-                </td>
-                <td className="py-4 px-2">
-                  <span className="rounded-full bg-purple-100 px-3 py-1 text-purple-500 text-xs font-semibold">
-                    {getCourseStatus(c)}
-                  </span>
-                </td>
-                <td className="py-4 px-2">
-                  <div className="flex items-center">
-                    <Link
-                      to={`view/${c.id}`}
-                      className="btn primary small mr-2"
-                    >
-                      Manage
+        <TableContainer component={Paper} elevation={0}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead
+              cols={cols}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+            />
+            <TableBody>
+              {data?.course?.map(c => (
+                <TableRow key={c.id}>
+                  <TableCell>
+                    <Link href={`view/${c.id}`}>
+                      <Typography variant="subtitle2" gutterBottom>
+                        {t(`common.course-levels.${c.level}`)}
+                      </Typography>
+                      <Typography variant="body2">{c.name}</Typography>
                     </Link>
-                    <IconButton name="more-horiz" />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+                  </TableCell>
+                  <TableCell>{c.organization?.name}</TableCell>
+                  <TableCell>{c.type}</TableCell>
+                  <TableCell>
+                    {c.dates.aggregate.start.date && (
+                      <Box>
+                        <Typography variant="body2" gutterBottom>
+                          {format(
+                            new Date(c.dates.aggregate.start.date),
+                            'dd MMM'
+                          )}
+                        </Typography>
+                        <Typography variant="body2" color="grey.500">
+                          {format(
+                            new Date(c.dates.aggregate.start.date),
+                            'hh:mm aa'
+                          )}
+                        </Typography>
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {c.dates.aggregate.end.date && (
+                      <Box>
+                        <Typography variant="body2" gutterBottom>
+                          {format(
+                            new Date(c.dates.aggregate.end.date),
+                            'dd MMM'
+                          )}
+                        </Typography>
+                        <Typography variant="body2" color="grey.500">
+                          {format(
+                            new Date(c.dates.aggregate.end.date),
+                            'hh:mm aa'
+                          )}
+                        </Typography>
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {/* TODO: finalize color */}
+                    <Chip
+                      label={getCourseStatus(c)}
+                      color="secondary"
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="contained" color="primary" size="small">
+                      Manage
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Box>
   )
 }

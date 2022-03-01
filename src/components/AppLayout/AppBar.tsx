@@ -36,23 +36,23 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 // TODO: will be generated later based on user/role
 const tabs = [
   {
-    id: 'trainer-base',
+    id: '/trainer-base',
     title: 'Trainer Base',
   },
   {
-    id: 'my-training',
+    id: '/my-training',
     title: 'My Training',
   },
   {
-    id: 'my-organization',
+    id: '/my-organization',
     title: 'My Organization',
   },
   {
-    id: 'admin',
+    id: '/admin',
     title: 'Admin',
   },
   {
-    id: 'membership-area',
+    id: '/membership-area',
     title: 'Membership Area',
   },
 ]
