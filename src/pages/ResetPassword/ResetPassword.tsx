@@ -141,7 +141,12 @@ export const ResetPasswordPage = () => {
             }}
           >
             {t('pages.reset-password.not-recieved-email')}
-            <Button variant="text" size="small" onClick={handleResend}>
+            <Button
+              variant="text"
+              size="small"
+              onClick={handleResend}
+              data-testid="resend-code"
+            >
               {t('pages.reset-password.resend-code')}
             </Button>
           </Typography>
@@ -249,7 +254,7 @@ export const ResetPasswordPage = () => {
               type="submit"
               variant="contained"
               color="primary"
-              data-testid="LoginSubmit"
+              data-testid="reset-password"
               size="large"
             >
               {t('pages.reset-password.reset')}

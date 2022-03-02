@@ -21,9 +21,9 @@ export class LoginPage extends BasePage {
     this.emailErrorText = this.page.locator('div[error-for="email"]')
     this.passwordInput = this.page.locator('#password')
     this.passwordErrorText = this.page.locator('div[error-for="password"]')
-    this.signInButton = this.page.locator('text=Sign In')
+    this.signInButton = this.page.locator('button[data-testid="login-submit"]')
     this.forgotPasswordLink = this.page.locator(
-      'text="Forgotten your password?"'
+      'a[data-testid="forgot-password-link"]'
     )
     this.generalErrorText = this.page.locator('#error')
   }

@@ -193,6 +193,7 @@ export const LoginPage = () => {
             variant="subtitle1"
             fontWeight="600"
             color="primary.main"
+            data-testid="forgot-password-link"
           >
             {t('pages.login.forgot-label')}
           </Link>

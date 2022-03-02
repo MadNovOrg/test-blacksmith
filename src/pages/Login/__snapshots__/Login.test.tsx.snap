@@ -124,6 +124,7 @@ Object {
           >
             <a
               class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+              data-testid="forgot-password-link"
               href="/forgot-password"
             >
               Forgot password
@@ -253,6 +254,7 @@ Object {
         >
           <a
             class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+            data-testid="forgot-password-link"
             href="/forgot-password"
           >
             Forgot password

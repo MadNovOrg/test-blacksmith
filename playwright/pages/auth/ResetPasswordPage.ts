@@ -22,10 +22,12 @@ export class ResetPasswordPage extends BasePage {
     this.contactUsLink = this.page.locator('[data-testid="contact-us-link"]')
     this.emailText = this.page.locator('[data-testid="email"]')
     this.newPasswordInput = this.page.locator('#password')
-    this.confirmPasswordInput = this.page.locator('#passwordConfirm')
+    this.confirmPasswordInput = this.page.locator('#confirmPassword')
     this.confirmationCodeInputs = this.page.locator('input[name*="code"]')
-    this.passwordErrorText = this.page.locator('[error-for="passwordConfirm"]')
-    this.resetPasswordButton = this.page.locator('text="Reset Password"')
+    this.passwordErrorText = this.page.locator('#password-helper-text')
+    this.resetPasswordButton = this.page.locator(
+      'button[data-testid="reset-password"]'
+    )
   }
 
   async goto() {

@@ -151,6 +151,7 @@ export const ForgotPasswordPage = () => {
                 size="large"
                 sx={{ mt: 4 }}
                 href="/login"
+                data-testid="cancel-link"
               >
                 {t('common.cancel')}
               </Link>

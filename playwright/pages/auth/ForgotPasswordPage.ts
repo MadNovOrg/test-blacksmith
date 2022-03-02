@@ -15,9 +15,11 @@ export class ForgotPasswordPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.emailInput = this.page.locator('#email')
-    this.emailErrorText = this.page.locator('div[error-for="email"]')
-    this.submitButton = this.page.locator('text=Submit')
-    this.cancelLink = this.page.locator('text=Cancel')
+    this.emailErrorText = this.page.locator('#email-helper-text')
+    this.submitButton = this.page.locator(
+      'button[data-testid="forgot-pass-submit"]'
+    )
+    this.cancelLink = this.page.locator('a[data-testid="cancel-link"]')
   }
 
   async goto() {
