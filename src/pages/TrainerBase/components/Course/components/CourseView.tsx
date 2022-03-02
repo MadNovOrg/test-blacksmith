@@ -8,9 +8,15 @@ import {
 } from 'react-beautiful-dnd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Alert, Box, Button, Typography, useTheme } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Typography,
+  useTheme,
+} from '@mui/material'
 
-import Spinner from '@app/components/Spinner'
 import ProgressBar from '@app/components/ProgressBar'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -276,7 +282,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
         </Alert>
       )}
       {!data && !courseDataError && !moduleDataError && (
-        <Spinner cls="w-16 h-16" />
+        <Box display="flex" margin="auto">
+          <CircularProgress sx={{ m: 'auto' }} size={64} />
+        </Box>
       )}
       {data && courseData?.course && (
         <Box
