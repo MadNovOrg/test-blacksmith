@@ -470,7 +470,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                   variant="outlined"
                   onClick={onCourseSubmit}
                   disabled={
-                    getPercentage(estimatedCourseDuration, maxDuration) > 100
+                    getPercentage(estimatedCourseDuration, maxDuration) > 100 ||
+                    (!courseModuleSlots?.filter(slot => !!slot.module).length &&
+                      !mandatoryModules?.length)
                   }
                 >
                   {t(
