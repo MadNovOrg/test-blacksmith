@@ -58,7 +58,7 @@ export const AppBar = () => {
   const [anchorElUser, setAnchorElUser] =
     React.useState<HTMLButtonElement | null>(null)
   const routeMatch = useRouteMatch(tabs)
-  const currentTab = routeMatch?.pattern?.path ?? ''
+  const currentTab = routeMatch?.pattern?.path ?? tabs[0].id
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorElUser(event.currentTarget)

@@ -18,8 +18,9 @@ import {
   startOfDay,
   startOfToday,
 } from 'date-fns'
-
-import { IconButton } from '../IconButton'
+import { IconButton } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 type CalendarProps = {
   highlight?: {
@@ -83,18 +84,20 @@ export const Calendar: React.FC<CalendarProps> = ({
     <div className="w-full h-full">
       <div className="flex items-center justify-between">
         <IconButton
-          name="arrow-left"
           aria-hidden="true"
           onClick={() => setSelected(addMonths(selected, -1))}
-        />
+        >
+          <ArrowBackIcon />
+        </IconButton>
         <h2 className="font-light text-2xl text-gray-900 text-center">
           {format(selected, 'MMMM yyyy')}
         </h2>
         <IconButton
-          name="arrow-right"
           aria-hidden="true"
           onClick={() => setSelected(addMonths(selected, 1))}
-        />
+        >
+          <ArrowForwardIcon />
+        </IconButton>
       </div>
 
       <div className="mt-10 grid grid-cols-7 text-center font-semibold text-lg">

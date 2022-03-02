@@ -1,15 +1,15 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-
-import { Icon } from '@app/components/Icon'
-import { Typography } from '@app/components/Typography'
+import { Button } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import { CertificationDetails } from '@app/pages/components/CertificationDetails'
 
 type MyCertificationsProps = unknown
 
 export const MyCertifications: React.FC<MyCertificationsProps> = () => {
+  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const certification = {
@@ -27,10 +27,13 @@ export const MyCertifications: React.FC<MyCertificationsProps> = () => {
     <div className="flex">
       <div className="w-48 p-8 hidden sm:flex sm:flex-col">
         <div className="flex mb-8">
-          <NavLink to=".." className="flex flex-row">
-            <Icon name="arrow-left" />
-            <Typography className="ml-2">{t('common.back')}</Typography>
-          </NavLink>
+          <Button
+            variant="text"
+            onClick={() => navigate(-1)}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Box, Button } from '@mui/material'
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 export const Course: React.FC = () => {
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ export const Course: React.FC = () => {
         <Button
           variant="text"
           onClick={() => navigate(-1)}
-          startIcon={<ArrowBackOutlinedIcon />}
+          startIcon={<ArrowBackIcon />}
         >
           Back
         </Button>

@@ -1,23 +1,27 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-
-import { Icon } from '@app/components/Icon'
-import { Typography } from '@app/components/Typography'
+import { Button } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CheckIcon from '@mui/icons-material/Check'
 
 type MyUpcomingTrainingProps = unknown
 
 export const MyUpcomingTraining: React.FC<MyUpcomingTrainingProps> = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   return (
     <div className="flex">
       <div className="w-48 p-8 hidden sm:flex sm:flex-col">
         <div className="flex mb-8">
-          <NavLink to=".." className="flex flex-row">
-            <Icon name="arrow-left" />
-            <Typography className="ml-2">{t('common.back')}</Typography>
-          </NavLink>
+          <Button
+            variant="text"
+            onClick={() => navigate(-1)}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back
+          </Button>
         </div>
       </div>
 
@@ -54,17 +58,17 @@ export const MyUpcomingTraining: React.FC<MyUpcomingTrainingProps> = () => {
                 <span>
                   {t('pages.upcoming-training.registration-complete')}
                 </span>
-                <Icon name="checkmark" className="text-lime-500" />
+                <CheckIcon />
               </div>
               <div className="flex justify-between">
                 <span>
                   {t('pages.upcoming-training.health-check-complete')}
                 </span>
-                <Icon name="checkmark" className="text-lime-500" />
+                <CheckIcon />
               </div>
               <div className="flex justify-between">
                 <span>{t('pages.upcoming-training.dbs-check-complete')}</span>
-                <Icon name="checkmark" className="text-lime-500" />
+                <CheckIcon />
               </div>
               <button className="btn tertiary">
                 {t('pages.upcoming-training.change-availability')}

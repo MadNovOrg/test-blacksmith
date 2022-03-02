@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from '@mui/material'
 
 type ManagementProps = unknown
@@ -31,7 +31,7 @@ export const Management: React.FC<ManagementProps> = () => {
         <Button
           variant="text"
           onClick={() => navigate(-1)}
-          startIcon={<ArrowBackOutlinedIcon />}
+          startIcon={<ArrowBackIcon />}
         >
           Back
         </Button>

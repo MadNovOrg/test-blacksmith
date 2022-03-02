@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { format, formatDistanceToNow } from 'date-fns'
 import QRCode from 'qrcode.react'
-
-import { Icon } from '@app/components/Icon'
+import CheckIcon from '@mui/icons-material/Check'
+import PdfIcon from '@mui/icons-material/PictureAsPdf'
 
 type CertificationDetailsProps = {
   // TODO replace mock with proper model when it's ready
@@ -41,7 +41,7 @@ export const CertificationDetails: React.FC<CertificationDetailsProps> = ({
               className="py-4 w-full border-b border-grey flex place-content-between"
             >
               <span>{courseModule.module.name}</span>
-              <Icon name="checkmark" className="text-lime-500" />
+              <CheckIcon />
             </div>
           ))}
         </div>
@@ -54,7 +54,7 @@ export const CertificationDetails: React.FC<CertificationDetailsProps> = ({
         <div className="mt-4">
           <div>{t('components.certification-details.dbs-certificate')}:</div>
           <div className="flex">
-            <Icon name="pdf" className="mr-2" />
+            <PdfIcon />
             <span>
               {t('components.certification-details.view-or-download-here')}
             </span>
@@ -63,7 +63,7 @@ export const CertificationDetails: React.FC<CertificationDetailsProps> = ({
         <div className="mt-4">
           <div>{t('components.certification-details.feedback')}:</div>
           <div className="flex">
-            <Icon name="pdf" className="mr-2" />
+            <PdfIcon />
             <span>
               {t('components.certification-details.view-or-download-here')}
             </span>

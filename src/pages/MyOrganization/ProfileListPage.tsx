@@ -2,8 +2,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
-
-import { Icon } from '@app/components/Icon'
+import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 import { Profile } from '@app/types'
 
@@ -52,7 +51,7 @@ export const ProfileListPage: React.FC<ProfileListPageProps> = () => {
                 <span>
                   {profile.givenName} {profile.familyName}
                 </span>
-                <Icon name="keyboard-arrow-right" className="mr-2" />
+                <ArrowRightIcon />
               </NavLink>
             ))}
           </div>
