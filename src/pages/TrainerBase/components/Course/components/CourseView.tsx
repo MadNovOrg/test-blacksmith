@@ -321,7 +321,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
             <Box gridColumn="1 / 4">
               <Typography variant="body2">
                 {t('pages.trainer-base.create-course.new-course.description', {
-                  duration: maxDuration,
+                  duration: maxDuration ? maxDuration / 60 : 0,
                 })}
               </Typography>
             </Box>
