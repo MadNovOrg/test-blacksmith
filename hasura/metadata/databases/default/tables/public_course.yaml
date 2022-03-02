@@ -13,6 +13,9 @@ object_relationships:
 - name: organization
   using:
     foreign_key_constraint_on: organization_id
+- name: trainer
+  using:
+    foreign_key_constraint_on: trainer_profile_id
 array_relationships:
 - name: leaders
   using:
@@ -42,13 +45,6 @@ array_relationships:
       table:
         name: course_schedule
         schema: public
-- name: team
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_team
-        schema: public
 select_permissions:
 - permission:
     allow_aggregations: true
@@ -62,11 +58,16 @@ select_permissions:
     - organization_id
     - reaccreditation
     - submitted
+    - trainer_profile_id
     - updated_at
     filter:
-      leaders:
-        profile_id:
-          _eq: X-Hasura-User-Id
+      _or:
+      - trainer:
+          id:
+            _eq: X-Hasura-User-Id
+      - leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
   role: user
 update_permissions:
 - permission:
@@ -74,7 +75,11 @@ update_permissions:
     columns:
     - submitted
     filter:
-      leaders:
-        profile_id:
-          _eq: X-Hasura-User-Id
+      _or:
+      - trainer:
+          id:
+            _eq: X-Hasura-User-Id
+      - leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
   role: user
