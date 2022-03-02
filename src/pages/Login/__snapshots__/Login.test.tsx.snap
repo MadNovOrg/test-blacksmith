@@ -1,0 +1,341 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login matches snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="MuiBox-root css-1nrbtl5"
+      >
+        <div
+          class="css-sm43lu"
+          size="80"
+        />
+        <div
+          class="MuiBox-root css-1cb30mv"
+        >
+          <h6
+            class="MuiTypography-root MuiTypography-h6 css-1ujikh7-MuiTypography-root"
+          >
+            Log in to Team Teach
+          </h6>
+          <form
+            autocomplete="off"
+            class="MuiBox-root css-h5fkc8"
+            data-testid="LoginForm"
+            novalidate=""
+          >
+            <section
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="MuiBox-root css-1yjvs5a"
+              >
+                <div
+                  class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                  title="Email Address"
+                >
+                  <label
+                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+                    data-shrink="false"
+                    for="email"
+                    id="email-label"
+                  >
+                    Email Address
+                  </label>
+                  <div
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ghsjzk-MuiInputBase-root-MuiInput-root"
+                  >
+                    <input
+                      aria-invalid="false"
+                      class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                      data-testid="input-email"
+                      id="email"
+                      name="email"
+                      placeholder="Please enter your email address"
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiBox-root css-1yjvs5a"
+              >
+                <div
+                  class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                  title="Password"
+                >
+                  <label
+                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+                    data-shrink="false"
+                    for="password"
+                    id="password-label"
+                  >
+                    Password
+                  </label>
+                  <div
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ghsjzk-MuiInputBase-root-MuiInput-root"
+                  >
+                    <input
+                      aria-invalid="false"
+                      class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                      data-testid="input-password"
+                      id="password"
+                      name="password"
+                      placeholder="Please enter your password"
+                      type="password"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div
+              class="MuiBox-root css-dvxtzn"
+            >
+              <button
+                class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-124vkh3-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+                data-testid="login-submit"
+                id="mui-1"
+                tabindex="0"
+                type="submit"
+              >
+                Login
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+              <button
+                class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-1d9tfpj-MuiButtonBase-root-MuiButton-root"
+                tabindex="0"
+                type="button"
+              >
+                Or Sign up for an account
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </form>
+          <div
+            class="MuiBox-root css-h8m1q6"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+              href="/forgot-password"
+            >
+              Forgot password
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="MuiBox-root css-1nrbtl5"
+    >
+      <div
+        class="css-sm43lu"
+        size="80"
+      />
+      <div
+        class="MuiBox-root css-1cb30mv"
+      >
+        <h6
+          class="MuiTypography-root MuiTypography-h6 css-1ujikh7-MuiTypography-root"
+        >
+          Log in to Team Teach
+        </h6>
+        <form
+          autocomplete="off"
+          class="MuiBox-root css-h5fkc8"
+          data-testid="LoginForm"
+          novalidate=""
+        >
+          <section
+            class="MuiBox-root css-0"
+          >
+            <div
+              class="MuiBox-root css-1yjvs5a"
+            >
+              <div
+                class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                title="Email Address"
+              >
+                <label
+                  class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+                  data-shrink="false"
+                  for="email"
+                  id="email-label"
+                >
+                  Email Address
+                </label>
+                <div
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ghsjzk-MuiInputBase-root-MuiInput-root"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                    data-testid="input-email"
+                    id="email"
+                    name="email"
+                    placeholder="Please enter your email address"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiBox-root css-1yjvs5a"
+            >
+              <div
+                class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                title="Password"
+              >
+                <label
+                  class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-aqpgxn-MuiFormLabel-root-MuiInputLabel-root"
+                  data-shrink="false"
+                  for="password"
+                  id="password-label"
+                >
+                  Password
+                </label>
+                <div
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-ghsjzk-MuiInputBase-root-MuiInput-root"
+                >
+                  <input
+                    aria-invalid="false"
+                    class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                    data-testid="input-password"
+                    id="password"
+                    name="password"
+                    placeholder="Please enter your password"
+                    type="password"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+          <div
+            class="MuiBox-root css-dvxtzn"
+          >
+            <button
+              class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-124vkh3-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+              data-testid="login-submit"
+              id="mui-1"
+              tabindex="0"
+              type="submit"
+            >
+              Login
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-1d9tfpj-MuiButtonBase-root-MuiButton-root"
+              tabindex="0"
+              type="button"
+            >
+              Or Sign up for an account
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </form>
+        <div
+          class="MuiBox-root css-h8m1q6"
+        >
+          <a
+            class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+            href="/forgot-password"
+          >
+            Forgot password
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "context": Object {
+    "auth": Object {
+      "loading": false,
+      "login": [MockFunction],
+      "logout": [MockFunction],
+      "profile": Object {
+        "addresses": Array [],
+        "attributes": Array [],
+        "contactDetails": Array [
+          Object {
+            "email": "john.smith@example.com",
+          },
+        ],
+        "createdAt": "",
+        "familyName": "Smith",
+        "givenName": "John",
+        "id": "cacb559d-b85d-5e64-b623-37252520ebda",
+        "preferences": Array [],
+        "status": "active",
+        "tags": Array [],
+        "title": "Mr",
+        "updatedAt": "",
+      },
+    },
+  },
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

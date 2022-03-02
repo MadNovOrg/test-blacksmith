@@ -1,17 +1,29 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
-import { Link } from 'react-router-dom'
-import * as EmailValidator from 'email-validator'
 import { useTranslation } from 'react-i18next'
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Link,
+  FormHelperText,
+} from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
-import { Input } from '@app/components/Input'
-import { LoggedOutHeader } from '@app/components/LoggedOutHeader'
+import { Logo } from '@app/components/Logo'
 
 import { useAuth } from '@app/context/auth'
 
 type LocationState = { from: { pathname: string } }
-type ErrorState = { emailMessage: string; passMessage: string }
-const NO_ERROR: ErrorState = { emailMessage: '', passMessage: '' }
+
+type LoginInput = {
+  email: string
+  password: string
+}
 
 export const LoginPage = () => {
   const [searchParams] = useSearchParams()
@@ -21,10 +33,7 @@ export const LoginPage = () => {
   const { t } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [errorState, setErrorState] = useState(NO_ERROR)
-
-  const [email, setEmail] = useState(searchParams.get('email') ?? '')
-  const [password, setPassword] = useState('')
+  const [loginError, setLoginError] = useState(null)
 
   const showResetPassMessage =
     searchParams.get('email') &&
@@ -32,109 +41,163 @@ export const LoginPage = () => {
 
   const from = (location.state as LocationState)?.from?.pathname || '/'
 
-  const errorCodeToMsg: Record<string, ErrorState> = useMemo(() => {
-    return t(`pages.login.errorMessages`, { returnObjects: true })
-  }, [t])
+  const schema = useMemo(
+    () =>
+      yup
+        .object({
+          email: yup
+            .string()
+            .email(t('common.validation-errors.email-invalid'))
+            .required(t('common.validation-errors.email-required')),
+          password: yup
+            .string()
+            .required(t('common.validation-errors.password-required')),
+        })
+        .required(),
+    [t]
+  )
 
-  const handleSubmit = useCallback(
-    async (event: React.ChangeEvent<HTMLFormElement>) => {
-      event.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: searchParams.get('email') ?? '',
+      password: '',
+    },
+  })
 
-      if (!EmailValidator.validate(email)) {
-        setErrorState(s => ({ ...s, ...errorCodeToMsg.InvalidEmail }))
-        return
-      }
-
+  const onSubmit = useCallback(
+    async (data: LoginInput) => {
       setIsLoading(true)
-      setErrorState(s => ({ ...s, ...NO_ERROR }))
+      setLoginError(null)
 
-      const { error } = await auth.login(email as string, password)
+      const { error } = await auth.login(data.email, data.password)
 
       if (!error) {
         return navigate(from, { replace: true })
       }
 
       setIsLoading(false)
-      const msgs = errorCodeToMsg[error.code] ?? errorCodeToMsg.UnknownError
-      setErrorState(s => ({ ...s, ...msgs }))
+      setLoginError(
+        t(`pages.login.auth-errors.${error.code}`) ||
+          t(`pages.login.auth-errors.UnknownError`)
+      )
     },
-    [auth, email, password, from, navigate, errorCodeToMsg]
+    [auth, from, navigate, t]
   )
 
-  const loader = useMemo(() => {
-    if (!isLoading) return null
-
-    // Wrapping div covers the form to prevent UI "jumps"
-    return (
-      <div
-        className="absolute z-10 inset-0 bg-white text-center"
-        data-testid="LoginLoader"
-      >
-        <div className="loader"></div>
-        <p className="pt-12">
-          {t('pages.login.loading-state-part-one')}
-          <Link to="/contacted-confirmation" className="underline">
-            {t('pages.login.loading-state-part-two')}
-          </Link>
-        </p>
-      </div>
-    )
-  }, [t, isLoading])
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <LoggedOutHeader />
+    <Box
+      bgcolor="grey.200"
+      width="100%"
+      height="100%"
+      p={10}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Logo size={80} />
 
-      <div className="w-60 md:w-96 relative">
-        {loader}
-
+      <Box
+        mt={5}
+        bgcolor="common.white"
+        py={5}
+        px={10}
+        borderRadius={2}
+        width={500}
+        textAlign="center"
+      >
         {showResetPassMessage ? (
-          <p className="mb-8 text-sm md:text-base">
-            {t('pages.login.reset-pass')}
-          </p>
+          <Typography variant="body2">{t('pages.login.reset-pass')}</Typography>
         ) : null}
 
-        <form onSubmit={handleSubmit} data-testid="LoginForm">
-          <section className="relative space-y-6 mb-16">
-            <Input
-              name="email"
-              value={email}
-              label={t('pages.login.email-label')}
-              placeholder={t('pages.login.email-placeholder')}
-              title={t('pages.login.email-title')}
-              onChange={e => setEmail(e.target.value)}
-              error={errorState.emailMessage}
-            ></Input>
+        <Typography variant="h6" fontWeight="600" color="grey.800">
+          Log in to Team Teach
+        </Typography>
 
-            <Input
-              type="password"
-              name="password"
-              isPassword={true}
-              label={t('pages.login.pass-label')}
-              placeholder={t('pages.login.pass-placeholder')}
-              title={t('pages.login.pass-title')}
-              onChange={e => setPassword(e.target.value)}
-              error={errorState.passMessage}
-            ></Input>
-          </section>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          data-testid="LoginForm"
+          noValidate
+          autoComplete="off"
+          sx={{ mt: 4 }}
+        >
+          <Box component="section">
+            <Box mb={4}>
+              <TextField
+                id="email"
+                variant="standard"
+                label={t('pages.login.email-label')}
+                placeholder={t('pages.login.email-placeholder')}
+                title={t('pages.login.email-title')}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                {...register('email')}
+                fullWidth
+                inputProps={{ 'data-testid': 'input-email' }}
+              />
+            </Box>
+            <Box mb={4}>
+              <TextField
+                id="password"
+                type="password"
+                variant="standard"
+                label={t('pages.login.pass-label')}
+                placeholder={t('pages.login.pass-placeholder')}
+                title={t('pages.login.pass-title')}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                {...register('password')}
+                fullWidth
+                inputProps={{ 'data-testid': 'input-password' }}
+              />
+            </Box>
+          </Box>
 
-          <div className="text-center">
-            <button
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <LoadingButton
+              loading={isLoading}
               type="submit"
-              className="btn primary w-40"
-              data-testid="LoginSubmit"
+              variant="contained"
+              color="primary"
+              data-testid="login-submit"
+              size="large"
             >
               {t('pages.login.submit-label')}
-            </button>
-          </div>
-        </form>
+            </LoadingButton>
 
-        <div className="text-center mt-12">
-          <Link to="/forgot-password" className="text-xs font-light underline">
+            {loginError && (
+              <FormHelperText sx={{ mt: 2 }} error>
+                {loginError}
+              </FormHelperText>
+            )}
+
+            <Button
+              variant="text"
+              color="primary"
+              size="large"
+              sx={{ mt: 4, fontWeight: '600' }}
+            >
+              {t('pages.login.sign-up-message')}
+            </Button>
+          </Box>
+        </Box>
+
+        <Box mt={8}>
+          <Link
+            href="/forgot-password"
+            variant="subtitle1"
+            fontWeight="600"
+            color="primary.main"
+          >
             {t('pages.login.forgot-label')}
           </Link>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }

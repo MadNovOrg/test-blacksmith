@@ -1,4 +1,4 @@
-import { waitFor, render as _render } from '@testing-library/react'
+import { waitFor, render as _render, screen } from '@testing-library/react'
 import React from 'react'
 import deepmerge from 'deepmerge'
 import { MemoryRouter } from 'react-router-dom'
@@ -44,6 +44,18 @@ function waitForCalls<T extends (...args: unknown[]) => unknown>(
   })
 }
 
+function waitForText(text: string, timeout?: number): Promise<void> {
+  return waitFor(() => expect(screen.queryByText(text)).toBeInTheDocument(), {
+    timeout,
+  })
+}
+
 // Re-export everything
 export * from '@testing-library/react'
-export { render, defaultProviders as providers, waitForCalls, chance }
+export {
+  render,
+  defaultProviders as providers,
+  waitForCalls,
+  chance,
+  waitForText,
+}

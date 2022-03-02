@@ -21,13 +21,8 @@ import { useAuth } from '@app/context/auth'
 
 import { useRouteMatch } from '@app/hooks/use-route-match'
 
-import { Icon } from '../Icon'
 import { DrawerMenu } from '../DrawerMenu'
-
-const Logo = styled(props => <Icon {...props} name="logo-color" />)({
-  width: 40,
-  height: 40,
-})
+import { Logo } from '../Logo'
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -79,7 +74,7 @@ export const AppBar = () => {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box display="flex" alignItems="center">
-            <Logo />
+            <Logo size={40} />
             <Link
               underline="none"
               component={RRLink}

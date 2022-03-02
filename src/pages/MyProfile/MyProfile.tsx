@@ -1,4 +1,5 @@
 import React from 'react'
+import { Box, Button, Typography } from '@mui/material'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 
@@ -18,14 +19,14 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
   }
 
   return (
-    <div>
-      <p className="font-light text-3xl">My Profile</p>
+    <Box>
+      <Typography variant="h4">My Profile</Typography>
 
-      <div className="mt-4 flex">
-        <button onClick={linkGo1} className="btn primary">
+      <Box mt={3} display="flex">
+        <Button variant="contained" onClick={linkGo1}>
           Link Go1 Profile
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   )
 }

@@ -1,8 +1,4 @@
-import Chance from 'chance'
-
 import { Profile } from '@app/types'
-
-const chance = new Chance()
 
 export interface Providers {
   auth: {
@@ -18,12 +14,12 @@ export const defaultProviders: Providers = {
     login: jest.fn(async () => ({})),
     logout: jest.fn(async () => undefined),
     profile: {
-      id: chance.guid(),
-      givenName: chance.first(),
-      familyName: chance.last(),
-      title: chance.prefix(),
+      id: 'cacb559d-b85d-5e64-b623-37252520ebda',
+      givenName: 'John',
+      familyName: 'Smith',
+      title: 'Mr',
       status: 'active',
-      contactDetails: [{ email: chance.email() }],
+      contactDetails: [{ email: 'john.smith@example.com' }],
       tags: [],
       addresses: [],
       attributes: [],

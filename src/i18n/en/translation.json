@@ -30,6 +30,15 @@
       "OPEN": "Open",
       "CLOSED": "Closed",
       "INDIRECT": "Indirect"
+    },
+    "validation-errors" : {
+      "email-required": "Please enter your email",
+      "email-invalid": "Please enter a valid email address",
+      "password-required": "Please enter your password",
+      "new-password-required": "Please enter a new password",
+      "confirm-password-required": "Please re-enter the new password",
+      "confirm-password-invalid": "Confirm password must be same as password",
+      "otp-required": "Please enter 6 digit passcode received in email"
     }
   },
   "components": {
@@ -136,35 +145,17 @@
       "pass-label": "Password",
       "pass-placeholder": "Please enter your password",
       "pass-title": "Password",
-      "submit-label": "Sign In",
-      "forgot-label": "Forgotten your password?",
+      "submit-label": "Login",
+      "sign-up-message": "Or Sign up for an account",
+      "forgot-label": "Forgot password",
       "loading-state-part-one": "If you have trouble loading, please ",
       "loading-state-part-two": "contact us",
-      "errorMessages": {
-        "InvalidEmail": {
-          "emailMessage": "Please enter a valid email address",
-          "passMessage": ""
-        },
-        "NotAuthorizedException": {
-          "emailMessage": "",
-          "passMessage": "Email address or password was incorrect, please try again"
-        },
-        "UserNotFoundException": {
-          "emailMessage": "User does not exist",
-          "passMessage": ""
-        },
-        "InvalidParameterException": {
-          "emailMessage": "",
-          "passMessage": "Please enter a password"
-        },
-        "401": {
-          "emailMessage": "",
-          "passMessage": "New password required"
-        },
-        "UnknownError": {
-          "emailMessage": "",
-          "passMessage": "An error occurred. Please contact your administrator"
-        }
+
+      "auth-errors": {
+        "NotAuthorizedException": "Email address or password was incorrect, please try again",
+        "UserNotFoundException": "User does not exist",
+        "401": "New password required",
+        "UnknownError": "An error occurred. Please contact your administrator"
       }
     },
     "forgot-password": {
@@ -173,13 +164,15 @@
       "title": "If you've forgotten your password, simply enter your email address below and we'll send you a link to reset your password ",
       "email-placeholder": "Please enter your email address",
       "email-address": "Email Address",
-      "user-does-not-exist": "User does not exist",
+      "authErrors": {
+        "UserNotFoundException": "User does not exist"
+      },
       "loading-state-part-one": "If you have trouble loading, please ",
       "loading-state-part-two": "contact us"
     },
     "reset-password": {
-      "not-recieved-email": "If you still haven’t received it, you ",
-      "can-resend-code": "can resend the code here",
+      "not-recieved-email": "If you still haven’t received it, you can",
+      "resend-code": "resend the code here",
       "changing-password-text": "Changing password for",
       "new-password-label": "New Password",
       "confirm-new-password-label": "Confirm New Password",
@@ -195,7 +188,14 @@
       "verification-code-six-digits": "Verification code must be six digits",
       "password-placeholder": "Please enter your password",
       "enter-passcode": "Enter Passcode",
-      "title": "A six-digit authentication code has been sent to your chosen method of 2fa, please enter it below, along with your new password"
+      "title": "A six-digit authentication code has been sent to your chosen method of 2fa, please enter it below, along with your new password",
+      "authErrors": {
+        "NotAuthorizedException": "Incorrect username or password",
+        "UserNotFoundException": "User does not exist",
+        "InvalidPasswordException": "Invalid password",
+        "CodeMismatchException": "Passcode is incorrect",
+        "ExpiredCodeException": "Invalid passcode"
+      }
     }
   }
 }

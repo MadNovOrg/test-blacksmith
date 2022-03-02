@@ -33,7 +33,7 @@ export const DrawerMenu: React.FC = () => {
           mx={5}
           pb={1}
           display="flex"
-          sx={{ borderBottom: 1, borderBottomColor: 'primary.main' }}
+          sx={{ borderBottom: 1, borderBottomColor: 'lime.500' }}
         >
           <Avatar
             alt="avatar"

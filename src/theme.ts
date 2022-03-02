@@ -26,6 +26,9 @@ declare module '@mui/material/styles' {
       purple: ColorPartial
       fuschia: ColorPartial
     }
+    typography: {
+      body3: string
+    }
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
@@ -129,7 +132,10 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#9EB934',
+      main: '#0D2860',
+    },
+    secondary: {
+      main: '#3B3A3C',
     },
     error: {
       main: alpha('#FF0000', 0.6),
@@ -227,11 +233,6 @@ export default createTheme({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         component: LinkBehavior,
-      },
-      styleOverrides: {
-        root: {
-          fontWeight: 'lighter',
-        },
       },
     },
     MuiButton: {

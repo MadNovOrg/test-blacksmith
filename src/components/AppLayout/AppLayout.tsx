@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 
 import { AppBar } from './AppBar'
 
@@ -9,12 +9,12 @@ type LayoutProps = {
 
 export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <Box>
       <AppBar />
 
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {children}
       </Container>
-    </div>
+    </Box>
   )
 }

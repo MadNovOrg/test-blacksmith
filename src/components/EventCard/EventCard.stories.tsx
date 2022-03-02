@@ -24,5 +24,4 @@ export const BasicExample = Template.bind({})
 BasicExample.args = {
   startDate: new Date(2022, 1, 8),
   endDate: new Date(2022, 1, 9),
-  variant: 'fuschia',
 }

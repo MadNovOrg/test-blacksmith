@@ -1,7 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import useSWR from 'swr'
+import { Typography, Box, TextField } from '@mui/material'
+import StaticDateRangePicker from '@mui/lab/StaticDateRangePicker'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { styled } from '@mui/system'
+import { RangeInput } from '@mui/lab/DateRangePicker/RangeTypes'
 
-import { Calendar } from '@app/components/Calendar'
 import { EventCard } from '@app/components/EventCard'
 
 import {
@@ -11,7 +16,11 @@ import {
 
 type MyCalendarProps = unknown
 
+const Calendar = styled(StaticDateRangePicker)({})
+
 export const MyCalendar: React.FC<MyCalendarProps> = () => {
+  const [value, setValue] = useState<RangeInput<Date>>([null, null])
+
   const { data } = useSWR<GetTrainerScheduleResponseType, Error>(
     GetTrainerSchedule
   )
@@ -34,41 +43,68 @@ export const MyCalendar: React.FC<MyCalendarProps> = () => {
   const ranges = useMemo(
     () =>
       schedule.map(s => ({
-        colorClass: 'text-white bg-lime-500',
         start: new Date(s.start),
         end: new Date(s.end),
       })),
     [schedule]
   )
 
-  return (
-    <div className="">
-      <p className="font-light text-3xl">My Calendar</p>
+  console.log(ranges) // TODO: revisit this page
 
-      <div className="mt-8 flex">
-        <div className="flex flex-1">
-          <div className="w-full max-w-[500px]">
-            <Calendar highlight={ranges} />
-          </div>
-        </div>
-        <div className="flex flex-col w-72 pl-8">
-          <p className="text-2xl font-light mb-5">Events this month:</p>
-          {schedule.map(s => (
-            <div key={s.id} className="border-b border-divider pb-5 mb-5">
-              {/* TODO: find out color logic for events */}
-              <EventCard startDate={s.start} endDate={s.end} variant="fuschia">
-                <p className="text-sm text-gray-400 font-light">
-                  {s.address['city']}
-                </p>
-                <p className="text-sm text-gray-400 font-light">{s.name}</p>
-                <p className="text-sm text-gray-400 font-light">
-                  {s.attendees} Attendees
-                </p>
-              </EventCard>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+  return (
+    <Box>
+      <Typography variant="h5">My Calendar</Typography>
+
+      <Box display="flex">
+        <Box
+          display="flex"
+          // sx={{ transform: 'scale(1.5)', transformOrigin: 'top left' }}
+          width={500}
+        >
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Calendar
+              showDaysOutsideCurrentMonth
+              calendars={1}
+              displayStaticWrapperAs="desktop"
+              value={value}
+              onChange={newValue => {
+                setValue(newValue as RangeInput<Date>) // TODO: revisit
+              }}
+              renderInput={(startProps, endProps) => (
+                <React.Fragment>
+                  <TextField {...startProps} />
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField {...endProps} />
+                </React.Fragment>
+              )}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box display="flex" flexDirection="column">
+          <Typography variant="h6">Events this month:</Typography>
+
+          <Box mt={4}>
+            {schedule.map((s, index) => (
+              <Box
+                key={s.id}
+                mb={2}
+                pb={3}
+                borderBottom={schedule.length - 1 === index ? 0 : 1}
+                borderColor="divider"
+              >
+                {/* TODO: find out color logic for events */}
+                <EventCard startDate={s.start} endDate={s.end}>
+                  <Typography variant="body2">{s.address['city']}</Typography>
+                  <Typography variant="body2">{s.name}</Typography>
+                  <Typography variant="body2">
+                    {s.attendees} Attendees
+                  </Typography>
+                </EventCard>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   )
 }
