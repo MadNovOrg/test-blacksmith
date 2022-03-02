@@ -2,11 +2,11 @@ INSERT INTO profile (
   id,
   given_name, family_name, contact_details
 ) VALUES
-('434de6da-cdc5-431b-b109-022854319d69', 'Shaun', 'Baker', '[ { "type": "email", "value": "shaun.baker@nearform.com" } ]'),
+('434de6da-cdc5-431b-b109-022854319d69', 'Jon-Paul', 'Little', '[ { "type": "email", "value": "jonpaul.little@teamteach.co.uk" } ]'),
 ('77eaddad-ba95-4ab7-9ef7-801b347d6502', 'Andrew', 'Winterbotham', '[ { "type": "email", "value": "andrew.winterbotham@nearform.com" } ]'),
 ('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'Greg', 'Ilach', '[ { "type": "email", "value": "grzegorz.ilach@nearform.com" } ]'),
 ('bb665826-8ff0-45f7-a75f-babdad3d8e17', 'Salman', 'Mitha', '[ { "type": "email", "value": "salman.mitha@nearform.com" } ]'),
-('83156e3f-a075-43b5-b345-dacb06d5b057', 'Simone', 'Sanfratello', '[ { "type": "email", "value": "simone.sanfratello@nearform.com" } ]'),
+('83156e3f-a075-43b5-b345-dacb06d5b057', 'Aneesa', 'Ramzan', '[ { "type": "email", "value": "aneesa.ramzan@teamteach.co.uk" } ]'),
 ('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'Spyridon', 'Chortis', '[ { "type": "email", "value": "spyridon.chortis@nearform.com" } ]'),
 ('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', '[ { "type": "email", "value": "maksym.barvinskyi@nearform.com" } ]'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', '[ { "type": "email", "value": "trainer@teamteach.testinator.com" } ]'),
@@ -17,7 +17,7 @@ INSERT INTO profile (
 INSERT INTO identity (provider_id, profile_id, type) VALUES
 (
   '9b0c754a-c12f-4f04-a554-cd899a09484d',
-  (SELECT id FROM profile WHERE contact_details @> '[{"value":"shaun.baker@nearform.com"}]'  LIMIT 1),
+  (SELECT id FROM profile WHERE contact_details @> '[{"value":"jonpaul.little@teamteach.co.uk"}]'  LIMIT 1),
   'cognito'
 ),
 (
@@ -32,7 +32,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ),
 (
   '9a18b249-2ad6-4efa-87d5-49bfeaa90e86',
-  (SELECT id FROM profile WHERE contact_details @> '[{"value":"simone.sanfratello@nearform.com"}]' LIMIT 1),
+  (SELECT id FROM profile WHERE contact_details @> '[{"value":"aneesa.ramzan@teamteach.co.uk"}]' LIMIT 1),
   'cognito'
 ),
 (
