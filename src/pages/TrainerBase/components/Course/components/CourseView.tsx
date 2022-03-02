@@ -86,7 +86,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
       ? [
           GetModuleGroups,
           {
-            level: CourseLevel.LEVEL_1,
+            level: courseData?.course.level,
             courseDeliveryType: courseData?.course.deliveryType,
             reaccreditation: courseData?.course.reaccreditation,
           },
@@ -271,7 +271,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   return (
     <DragDropContext onDragEnd={handleDrop}>
       {(courseDataError || moduleDataError) && (
-        <Alert severity="error">{t('common.internal-error')}</Alert>
+        <Alert severity="error" variant="filled">
+          {t('common.internal-error')}
+        </Alert>
       )}
       {!data && !courseDataError && !moduleDataError && (
         <Spinner cls="w-16 h-16" />
@@ -287,13 +289,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
         >
           <Typography variant="h2">{courseData.course.name}</Typography>
 
-          {submitError && <Alert severity="error">{submitError}</Alert>}
-
-          {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
-            <Alert severity="error">
-              {t(
-                'pages.trainer-base.create-course.new-course.duration-exceeded'
-              )}
+          {submitError && (
+            <Alert severity="error" variant="filled">
+              {submitError}
             </Alert>
           )}
 
@@ -322,6 +320,16 @@ export const CourseView: React.FC<CourseViewProps> = () => {
             <Box gridColumn={{ xs: 'span 3', lg: '5 / 9' }}>
               <CourseHero data={courseData.course} />
             </Box>
+
+            {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
+              <Box gridColumn={{ xs: 'span 3', lg: 'span 8' }}>
+                <Alert severity="error" variant="filled">
+                  {t(
+                    'pages.trainer-base.create-course.new-course.duration-exceeded'
+                  )}
+                </Alert>
+              </Box>
+            )}
 
             <Box gridColumn={{ xs: 'span 1', lg: '1 / 4' }}>
               <Typography variant="h3">
