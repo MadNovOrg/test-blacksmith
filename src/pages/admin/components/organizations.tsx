@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import useSWR from 'swr'
-
-import Spinner from '@app/components/Spinner'
+import { CircularProgress } from '@mui/material'
 
 import { getOrganizations } from '@app/queries/organizations'
 import { Organization } from '@app/types'
@@ -23,7 +22,7 @@ function Organizations() {
   if (!data) {
     return (
       <div className="w-full h-full">
-        <Spinner cls="w-16 h-16" />
+        <CircularProgress />
       </div>
     )
   }

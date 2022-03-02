@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import useSWR from 'swr'
-
-import Spinner from '@app/components/Spinner'
+import { CircularProgress } from '@mui/material'
 
 import { getProfileWithCriteria } from '@app/queries/users'
 import { Profile } from '@app/types'
@@ -35,7 +34,7 @@ function Trainers() {
   if (!data) {
     return (
       <div className="w-full h-full">
-        <Spinner cls="w-16 h-16" />
+        <CircularProgress />
       </div>
     )
   }

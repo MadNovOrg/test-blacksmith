@@ -1,8 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import { useTranslation } from 'react-i18next'
-
-import Spinner from '@app/components/Spinner'
+import { CircularProgress } from '@mui/material'
 
 import { useAuth } from '@app/context/auth'
 
@@ -115,7 +114,7 @@ export const OrganizationOverviewPage: React.FC<
       )}
       {!data && !error && (
         <div className="w-full h-full">
-          <Spinner cls="w-16 h-16" />
+          <CircularProgress />
         </div>
       )}
     </div>
