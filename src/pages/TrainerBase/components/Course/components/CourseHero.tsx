@@ -1,16 +1,15 @@
 import React from 'react'
-import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
+import { Box, Typography } from '@mui/material'
 
 import { Course } from '@app/types'
 import { formatDateWithTime } from '@app/util'
 
 type CourseHeroProps = {
   data: Course
-  className?: string
 }
 
-export const CourseHero: React.FC<CourseHeroProps> = ({ data, className }) => {
+export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
   const { t } = useTranslation()
 
   let courseStartDate = ''
@@ -28,24 +27,49 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data, className }) => {
   }
 
   return (
-    <div className={clsx(className, 'flex flex-col text-sm')}>
-      <p>
-        <b>{t('pages.trainer-base.create-course.new-course.location')}: </b>
-        {location}
-      </p>
-      <p>
-        <b>{t('pages.trainer-base.create-course.new-course.starts')}: </b>
-        {courseStartDate}
-      </p>
-      <p>
-        <b>{t('pages.trainer-base.create-course.new-course.ends')}: </b>
-        {courseEndDate}
-      </p>
-      <p>
-        <b>{t('pages.trainer-base.create-course.new-course.course-type')}: </b>
-        {data.deliveryType &&
-          t(`common.course.delivery-type.${data.deliveryType}`)}
-      </p>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: {
+          xs: 'left',
+          lg: 'right',
+        },
+      }}
+    >
+      <Box>
+        <Typography display="inline" variant="body2" fontWeight={600}>
+          {`${t('pages.trainer-base.create-course.new-course.location')}: `}
+        </Typography>
+        <Typography display="inline" variant="body2">
+          {location}
+        </Typography>
+      </Box>
+      <Box>
+        <Typography display="inline" variant="body2" fontWeight={600}>
+          {`${t('pages.trainer-base.create-course.new-course.starts')}: `}
+        </Typography>
+        <Typography display="inline" variant="body2">
+          {courseStartDate}
+        </Typography>
+      </Box>
+      <Box>
+        <Typography display="inline" variant="body2" fontWeight={600}>
+          {`${t('pages.trainer-base.create-course.new-course.ends')}: `}
+        </Typography>
+        <Typography display="inline" variant="body2">
+          {courseEndDate}
+        </Typography>
+      </Box>
+      <Box>
+        <Typography display="inline" variant="body2" fontWeight={600}>
+          {`${t('pages.trainer-base.create-course.new-course.course-type')}: `}
+        </Typography>
+        <Typography display="inline" variant="body2">
+          {data.deliveryType &&
+            t(`common.course.delivery-type.${data.deliveryType}`)}
+        </Typography>
+      </Box>
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material'
+import { alpha, createTheme } from '@mui/material'
 import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
@@ -37,6 +37,18 @@ declare module '@mui/material/styles' {
       purple?: ColorPartial
       fuschia?: ColorPartial
     }
+  }
+  interface TypographyVariants {
+    body3: React.CSSProperties
+  }
+  interface TypographyVariantsOptions {
+    body3?: React.CSSProperties
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    body3: true
   }
 }
 
@@ -119,6 +131,11 @@ const theme = createTheme({
     primary: {
       main: '#9EB934',
     },
+    error: {
+      main: alpha('#FF0000', 0.6),
+      light: alpha('#FF0000', 0.2),
+      dark: alpha('#FF0000', 0.8),
+    },
   },
 })
 
@@ -142,6 +159,13 @@ export default createTheme({
       fontWeight: '400',
       [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
         fontSize: '0.75rem',
+      },
+    },
+    body3: {
+      fontSize: '0.75rem',
+      fontWeight: '400',
+      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
+        fontSize: '0.625rem',
       },
     },
     h2: {

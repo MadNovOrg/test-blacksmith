@@ -6,16 +6,14 @@ import {
   Draggable,
   Droppable,
 } from 'react-beautiful-dnd'
-import clsx from 'clsx'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Alert, Box, Button, Typography, useTheme } from '@mui/material'
 
 import Spinner from '@app/components/Spinner'
 import ProgressBar from '@app/components/ProgressBar'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { COURSE_COLOR_BY_LEVEL } from '../CourseColorScheme'
 
 import { ModuleCard } from './ModuleCard'
 
@@ -39,6 +37,7 @@ import {
 } from '@app/pages/TrainerBase/components/Course'
 import { formatDurationShort, getPercentage } from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
+import { COURSE_COLOR } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
 
 type CourseViewProps = unknown
 
@@ -62,6 +61,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   const { id: courseId } = useParams()
   const fetcher = useFetcher()
   const navigate = useNavigate()
+  const theme = useTheme()
 
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
@@ -242,8 +242,15 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     }
   }
 
-  function getModuleCardColors(module: ModuleGroup) {
-    return COURSE_COLOR_BY_LEVEL[module.level]
+  function getModuleCardColor(
+    module: AvailableModule | ModuleGroup,
+    isDragging: boolean
+  ) {
+    const color = theme.colors[COURSE_COLOR[module.level]]
+    if ('used' in module) {
+      return module.used ? color[200] : isDragging ? color[600] : color[500]
+    }
+    return color[500]
   }
 
   const onClearCourse = async () => {
@@ -264,53 +271,78 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   return (
     <DragDropContext onDragEnd={handleDrop}>
       {(courseDataError || moduleDataError) && (
-        <p className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
-          {t('common.internal-error')}
-        </p>
+        <Alert severity="error">{t('common.internal-error')}</Alert>
       )}
       {!data && !courseDataError && !moduleDataError && (
         <Spinner cls="w-16 h-16" />
       )}
       {data && courseData?.course && (
-        <div className="pb-12">
-          <p className="font-light text-2xl sm:text-4xl mb-4">
-            {courseData.course.name}
-          </p>
+        <Box
+          pb={6}
+          margin="auto"
+          maxWidth={{
+            xs: '340px',
+            lg: '1040px',
+          }}
+        >
+          <Typography variant="h2">{courseData.course.name}</Typography>
 
-          {submitError && (
-            <p className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
-              {submitError}
-            </p>
+          {submitError && <Alert severity="error">{submitError}</Alert>}
+
+          {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
+            <Alert severity="error">
+              {t(
+                'pages.trainer-base.create-course.new-course.duration-exceeded'
+              )}
+            </Alert>
           )}
 
-          <div className="grid grid-cols-3 lg:grid-cols-8 gap-y-8 lg:pt-8">
-            <div className="col-span-3 lg:col-span-8 lg:col-start-1 lg:col-end-4">
-              <p className="text-sm">
+          <Box
+            mt={{ xs: 2, lg: 3 }}
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: 'repeat(3, 1fr)',
+                lg: 'repeat(8, 1fr)',
+              },
+              columnGap: 4,
+              rowGap: {
+                xs: 3,
+                lg: 4,
+              },
+            }}
+          >
+            <Box gridColumn="1 / 4">
+              <Typography variant="body2">
                 {t('pages.trainer-base.create-course.new-course.description', {
                   duration: maxDuration,
                 })}
-              </p>
-            </div>
-            <CourseHero
-              className="col-span-3 lg:col-span-8 lg:col-start-5 lg:col-end-9 lg:items-end"
-              data={courseData.course}
-            />
-            <div className="lg:col-start-1 lg:col-span-3 lg:col-end-4">
-              <p className="text-sm lg:text-base">
+              </Typography>
+            </Box>
+            <Box gridColumn={{ xs: 'span 3', lg: '5 / 9' }}>
+              <CourseHero data={courseData.course} />
+            </Box>
+
+            <Box gridColumn={{ xs: 'span 1', lg: '1 / 4' }}>
+              <Typography variant="h3">
                 {t(
                   'pages.trainer-base.create-course.new-course.modules-available'
                 )}
-              </p>
+              </Typography>
 
               <Droppable droppableId="all-modules" direction="horizontal">
                 {(provided, snapshot) => (
-                  <div
-                    className={clsx(
-                      'flex flex-wrap mt-10 mb-3 -m-2 transition-colors ease-in-out',
-                      {
-                        'bg-lime-100': snapshot.isDraggingOver,
-                      }
-                    )}
+                  <Box
+                    display="flex"
+                    flexWrap="wrap"
+                    mt={{
+                      xs: 2,
+                      lg: 4,
+                    }}
+                    mx={-1}
+                    bgcolor={
+                      snapshot.isDraggingOver ? theme.colors.lime[100] : ''
+                    }
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
@@ -326,13 +358,9 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                             <ModuleCard
                               key={m.id}
                               data={m}
-                              className={clsx(
-                                m.used
-                                  ? getModuleCardColors(m).disabledColor
-                                  : snapshot.isDragging
-                                  ? getModuleCardColors(m).draggingColor
-                                  : getModuleCardColors(m).color
-                              )}
+                              bgColor={
+                                getModuleCardColor(m, snapshot.isDragging) ?? ''
+                              }
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                             />
@@ -341,33 +369,49 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                       </Draggable>
                     ))}
                     {provided.placeholder}
-                  </div>
+                  </Box>
                 )}
               </Droppable>
-            </div>
-            <div className="col-start-2 col-span-2 col-end-4 lg:col-start-5 lg:col-span-4 lg:col-end-9">
-              <p className="text-sm lg:text-base">
+            </Box>
+            <Box gridColumn={{ xs: '2 / 4', lg: '5 / 9' }}>
+              <Typography variant="h3" px={1}>
                 {t('pages.trainer-base.create-course.new-course.my-course')}
-              </p>
+              </Typography>
 
-              <div className="flex flex-wrap mt-2 mb-3 -m-2 transition-colors ease-in-out">
+              <Box
+                display="flex"
+                flexDirection="row-reverse"
+                flexWrap="wrap"
+                my={2}
+                mx={-1}
+              >
                 {mandatoryModules.length ? (
-                  <div>
-                    <p className="text-xs m-2">
+                  <Box>
+                    <Typography fontSize="10px" mx={1}>
                       {t(
                         'pages.trainer-base.create-course.new-course.mandatory-modules'
                       )}
-                    </p>
-                    <div className="flex flex-wrap border border-dashed rounded-lg border-navy-500">
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        flexDirection: 'row-reverse',
+                        border: 1,
+                        borderStyle: 'dashed',
+                        borderRadius: '0.5rem',
+                        borderColor: theme.colors.navy[500],
+                      }}
+                    >
                       {mandatoryModules.map(m => (
                         <ModuleCard
                           key={m.id}
                           data={m}
-                          className={getModuleCardColors(m).color}
+                          bgColor={getModuleCardColor(m, false) ?? ''}
                         />
                       ))}
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
                 ) : null}
                 {courseModuleSlots.map(slot => (
                   <ModuleSlot
@@ -377,16 +421,28 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                     draggableId={slot.draggableId}
                   />
                 ))}
-              </div>
+              </Box>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center justify-end mb-3">
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: 'repeat(1, 1fr)',
+                    lg: 'repeat(2, 1fr)',
+                  },
+                  columnGap: 4,
+                  rowGap: 1,
+                  mb: 1,
+                  alignItems: 'center',
+                  justifyContent: 'end',
+                }}
+              >
                 <div>
                   {t(
                     'pages.trainer-base.create-course.new-course.estimated-duration'
                   )}
                   :{' '}
                   <ProgressBar
-                    className="relative"
                     percentage={getPercentage(
                       estimatedCourseDuration,
                       maxDuration
@@ -394,8 +450,8 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                     label={formatDurationShort(estimatedCourseDuration)}
                   />
                 </div>
-                <button
-                  className="btn tertiary"
+                <Button
+                  variant="outlined"
                   onClick={onCourseSubmit}
                   disabled={
                     getPercentage(estimatedCourseDuration, maxDuration) > 100
@@ -404,19 +460,26 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                   {t(
                     'pages.trainer-base.create-course.new-course.submit-course'
                   )}
-                </button>
+                </Button>
                 {courseModuleSlots.find(slot => !!slot.module) && (
-                  <button
-                    className="btn warning lg:col-start-2"
+                  <Button
+                    sx={{
+                      gridColumn: {
+                        xs: '1 / 2',
+                        lg: '2 / 3',
+                      },
+                    }}
+                    variant="outlined"
+                    color="warning"
                     onClick={onClearCourse}
                   >
                     {t('common.clear')}
-                  </button>
+                  </Button>
                 )}
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       )}
     </DragDropContext>
   )

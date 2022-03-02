@@ -76,7 +76,8 @@
           "my-course": "My Course",
           "mandatory-modules": "Mandatory modules",
           "estimated-duration": "Estimated duration",
-          "submit-course": "Submit Course"
+          "submit-course": "Submit Course",
+          "duration-exceeded": "You have exceeded the minimum duration for this course, you must remove a module in order to add more."
         }
       }
     },

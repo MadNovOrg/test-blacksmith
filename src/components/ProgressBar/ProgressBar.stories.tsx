@@ -20,8 +20,4 @@ export const Basic = Template.bind({})
 
 Basic.args = {
   percentage: 50,
-  textColor: 'text-white',
-  fillColor: 'bg-teal-500',
-  bgColor: 'bg-gray-100',
-  warnColor: 'bg-red',
 }

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import clsx from 'clsx'
+import { Box, useTheme } from '@mui/material'
 
 import { ModuleGroup } from '@app/types'
 import { ModuleCard } from '@app/pages/TrainerBase/components/Course/components/ModuleCard'
-import { COURSE_COLOR_BY_LEVEL } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
+import { COURSE_COLOR } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
 
 type ModuleSlotProps = {
   module?: ModuleGroup
@@ -17,7 +17,8 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
   draggableId,
   module,
 }) => {
-  const moduleColors = module ? COURSE_COLOR_BY_LEVEL[module.level] : undefined
+  const theme = useTheme()
+  const color = module ? theme.colors[COURSE_COLOR[module.level]] : undefined
   return (
     <Droppable droppableId={droppableId}>
       {(droppableProvided, droppableSnapshot) => {
@@ -30,19 +31,38 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
               {(draggableProvided, draggableSnapshot) => (
                 <div ref={draggableProvided.innerRef}>
                   <ModuleCard
-                    className={clsx(
-                      { hidden: droppableSnapshot.isDraggingOver },
-                      draggableSnapshot.isDragging
-                        ? moduleColors?.draggingColor
-                        : moduleColors?.color
-                    )}
+                    bgColor={
+                      color
+                        ? color[draggableSnapshot.isDragging ? 600 : 500] || ''
+                        : ''
+                    }
+                    hide={droppableSnapshot.isDraggingOver}
                     data={module}
                     {...draggableProvided.draggableProps}
                     {...draggableProvided.dragHandleProps}
                   />
                   {draggableSnapshot.isDragging &&
                     droppableSnapshot.isDraggingOver && (
-                      <div className="m-2 w-24 h-24 lg:w-28 lg:h-28 bg-gray-500 rounded-md text-white p-2 flex flex-col justify-center transition-colors" />
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          m: 1,
+                          p: 1,
+                          width: {
+                            xs: '6rem',
+                            lg: '7rem',
+                          },
+                          height: {
+                            xs: '6rem',
+                            lg: '7rem',
+                          },
+                          color: 'white',
+                          borderRadius: '0.375rem',
+                          bgcolor: 'grey.500',
+                          justifyContent: 'center',
+                        }}
+                      />
                     )}
                 </div>
               )}
@@ -50,16 +70,32 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
             {droppableProvided.placeholder}
           </div>
         ) : (
-          <div
-            className={clsx(
-              'm-2 w-24 h-24 lg:w-28 lg:h-28 bg-gray-100 rounded-md text-white p-2 flex flex-col justify-center transition-colors',
-              { 'bg-gray-500': droppableSnapshot.isDraggingOver }
-            )}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 1,
+              p: 1,
+              width: {
+                xs: '6rem',
+                lg: '7rem',
+              },
+              height: {
+                xs: '6rem',
+                lg: '7rem',
+              },
+              color: 'white',
+              borderRadius: '0.375rem',
+              bgcolor: droppableSnapshot.isDraggingOver
+                ? 'grey.600'
+                : 'grey.400',
+              justifyContent: 'center',
+            }}
             {...droppableProvided.droppableProps}
             ref={droppableProvided.innerRef}
           >
             {droppableProvided.placeholder}
-          </div>
+          </Box>
         )
       }}
     </Droppable>

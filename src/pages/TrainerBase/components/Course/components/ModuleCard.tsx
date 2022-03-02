@@ -1,29 +1,40 @@
 import React from 'react'
-import clsx from 'clsx'
+import { Box, Typography } from '@mui/material'
 
 import { ModuleGroup } from '@app/types'
 import { formatDurationShort } from '@app/util'
 
 type ModuleCardProps = {
   data: ModuleGroup
-  className?: string
+  bgColor: string
+  hide?: boolean
 }
 
 export const ModuleCard: React.FC<ModuleCardProps> = ({
   data,
-  className,
+  bgColor,
+  hide,
   ...props
 }) => (
-  <div
-    className={clsx(
-      className,
-      'relative m-2 w-24 h-24 lg:w-28 lg:h-28 rounded-md text-white p-2 flex flex-col justify-center transition-colors'
-    )}
+  <Box
+    display={hide ? 'none' : 'flex'}
+    flexDirection="column"
+    position="relative"
+    m={1}
+    p={1}
+    width={{ xs: '6rem', lg: '7rem' }}
+    height={{ xs: '6rem', lg: '7rem' }}
+    color="white"
+    bgcolor={bgColor}
+    borderRadius="0.375rem"
+    justifyContent="center"
     {...props}
   >
-    <p className="text-xs text-center font-bold mb-2">{data.name}</p>
-    <p className="text-xs absolute bottom-2 left-2">
+    <Typography mb={1} variant="body3" fontWeight="600" textAlign="center">
+      {data.name}
+    </Typography>
+    <Typography variant="body3" position="absolute" bottom={3} left={4}>
       {formatDurationShort(data.duration.aggregate.sum.duration)}
-    </p>
-  </div>
+    </Typography>
+  </Box>
 )

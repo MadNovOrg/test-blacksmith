@@ -1,39 +1,53 @@
 import React from 'react'
-import clsx from 'clsx'
+import {
+  Box,
+  LinearProgress,
+  linearProgressClasses,
+  useTheme,
+} from '@mui/material'
 
 export type ProgressBarProps = {
   percentage: number
   label?: string
-  textColor?: string
-  fillColor?: string
-  bgColor?: string
-  warnColor?: string
-  className?: string
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = function ({
   percentage,
   label,
-  textColor = 'text-white',
-  fillColor = 'bg-teal-500',
-  bgColor = 'bg-gray-100',
-  warnColor = 'bg-red',
-  className,
 }) {
+  const theme = useTheme()
   const rounded = Math.floor(percentage)
   return (
-    <div className={clsx(className, bgColor, textColor, 'w-full h-6 relative')}>
-      <div
-        className={clsx(
-          'h-full',
-          percentage > 100 ? warnColor : fillColor,
-          `w-[${Math.min(rounded, 100)}%]`
-        )}
+    <Box sx={{ position: 'relative' }}>
+      <LinearProgress
+        sx={{
+          borderRadius: '3px',
+          height: '24px',
+          width: '100%',
+          [`&.${linearProgressClasses.determinate}`]: {
+            backgroundColor: 'grey.300',
+          },
+          [`& .${linearProgressClasses.bar}`]: {
+            backgroundColor: percentage > 100 ? 'red' : theme.colors.teal[500],
+          },
+        }}
+        variant="determinate"
+        value={percentage > 100 ? 100 : percentage}
       />
-      <span className="absolute bottom-1 left-1 text-xs">
+      <Box
+        sx={{
+          display: 'inline',
+          position: 'absolute',
+          bottom: '2px',
+          left: '6px',
+          fontSize: '14px',
+          fontWeight: 'bold',
+          color: 'white',
+        }}
+      >
         {label ? label : `${rounded}%`}
-      </span>
-    </div>
+      </Box>
+    </Box>
   )
 }
 
