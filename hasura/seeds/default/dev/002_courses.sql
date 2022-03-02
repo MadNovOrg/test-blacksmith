@@ -1,10 +1,10 @@
-INSERT INTO public.course (id, name, course_type, course_delivery_type, submitted, course_level,
+INSERT INTO public.course (id, description, name, course_type, course_delivery_type, submitted, course_level,
                            organization_id, reaccreditation)
-VALUES ('45045398-f757-4ece-85c0-bdf2d95d7cee', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', false, 'LEVEL_1',
+VALUES ('45045398-f757-4ece-85c0-bdf2d95d7cee', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', false, 'LEVEL_1',
         '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false),
-       ('913777a7-07fd-46d6-8ad8-d7498f630aea', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', false, 'LEVEL_2',
+       ('913777a7-07fd-46d6-8ad8-d7498f630aea', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', false, 'LEVEL_2',
         '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false),
-       ('bd42bbfb-9b7d-4028-ba50-6f8bbb6884d6', 'Positive Behaviour Training: Advanced Modules', 'OPEN', 'F2F', false, 'ADVANCED',
+       ('bd42bbfb-9b7d-4028-ba50-6f8bbb6884d6', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Advanced Modules', 'OPEN', 'F2F', false, 'ADVANCED',
         '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false);
 
 INSERT INTO public.course_leader (profile_id, course_id, type)
