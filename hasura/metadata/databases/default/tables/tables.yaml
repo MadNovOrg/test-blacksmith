@@ -1,5 +1,7 @@
 - "!include public_course.yaml"
 - "!include public_course_delivery_type.yaml"
+- "!include public_course_invite_status.yaml"
+- "!include public_course_invites.yaml"
 - "!include public_course_leader.yaml"
 - "!include public_course_level.yaml"
 - "!include public_course_module.yaml"

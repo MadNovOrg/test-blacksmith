@@ -1,0 +1,7 @@
+table:
+  name: course_invites
+  schema: public
+object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
