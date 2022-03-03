@@ -59,9 +59,9 @@ export class ResetPasswordPage extends BasePage {
   }
 
   async checkPasscode(expectedCode: string) {
-    const count = await this.confirmationCodeInputs.count()
+    await expect(this.confirmationCodeInputs).toHaveCount(6)
     let code = ''
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < 6; i++) {
       code += await this.confirmationCodeInputs.nth(i).inputValue()
     }
     expect(code).toStrictEqual(expectedCode)
