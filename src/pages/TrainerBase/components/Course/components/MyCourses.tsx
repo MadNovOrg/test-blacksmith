@@ -12,7 +12,8 @@ import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { Button, Chip, CircularProgress } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Button, Chip, CircularProgress, Container } from '@mui/material'
 import { useDebounce } from 'use-debounce'
 import { useNavigate } from 'react-router-dom'
 
@@ -144,139 +145,150 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   }
 
   return (
-    <Box display="flex">
-      <Box width={250} display="flex" flexDirection="column" pt={8} pr={4}>
-        <Typography variant="body2">{t('filter-by')}</Typography>
+    <Container maxWidth="lg" sx={{ pt: 2 }}>
+      <Box display="flex">
+        <Box width={250} display="flex" flexDirection="column" pr={4}>
+          <Box display="flex" mb={6}>
+            <Button
+              variant="text"
+              onClick={() => navigate(-1)}
+              startIcon={<ArrowBackIcon />}
+            >
+              Back
+            </Button>
+          </Box>
+          <Typography variant="body2">{t('filter-by')}</Typography>
 
-        <Box display="flex" flexDirection="column">
-          <FilterAccordion
-            options={levelFilter}
-            title={t('level')}
-            onChange={setLevelFilter}
-          />
-
-          <FilterAccordion
-            options={typeFilter}
-            title={t('course-type')}
-            onChange={setTypeFilter}
-          />
-
-          <FilterAccordion
-            options={statusFilter}
-            title={t('course-status')}
-            onChange={setStatusFilter}
-          />
-        </Box>
-      </Box>
-
-      <Box flex={1}>
-        <Typography variant="h5">{t('my-courses')}</Typography>
-        <Typography variant="subtitle2">
-          {t('x-items', { num: data?.course?.length })}
-        </Typography>
-
-        <Box mt={4}>
-          <TextField
-            hiddenLabel
-            value={keyword}
-            variant="filled"
-            size="small"
-            placeholder={t('search')}
-            onChange={e => setKeyword(e.target.value)}
-          />
-        </Box>
-
-        <TableContainer component={Paper} elevation={0}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead
-              cols={cols}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
+          <Box display="flex" flexDirection="column">
+            <FilterAccordion
+              options={levelFilter}
+              title={t('level')}
+              onChange={setLevelFilter}
             />
-            <TableBody>
-              {data?.course?.map(c => (
-                <TableRow key={c.id}>
-                  <TableCell>
-                    <Link href={`view/${c.id}`}>
-                      <Typography variant="subtitle2" gutterBottom>
-                        {t(`course-levels.${c.level}`)}
-                      </Typography>
-                      <Typography variant="body2">{c.name}</Typography>
-                    </Link>
-                  </TableCell>
-                  <TableCell>{c.organization?.name}</TableCell>
-                  <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-                  <TableCell>
-                    {c.dates.aggregate.start.date && (
-                      <Box>
-                        <Typography variant="body2" gutterBottom>
-                          {format(
-                            new Date(c.dates.aggregate.start.date),
-                            'dd MMM'
-                          )}
+
+            <FilterAccordion
+              options={typeFilter}
+              title={t('course-type')}
+              onChange={setTypeFilter}
+            />
+
+            <FilterAccordion
+              options={statusFilter}
+              title={t('course-status')}
+              onChange={setStatusFilter}
+            />
+          </Box>
+        </Box>
+
+        <Box flex={1}>
+          <Typography variant="h5">{t('my-courses')}</Typography>
+          <Typography variant="subtitle2">
+            {t('x-items', { num: data?.course?.length })}
+          </Typography>
+
+          <Box mt={4}>
+            <TextField
+              hiddenLabel
+              value={keyword}
+              variant="filled"
+              size="small"
+              placeholder={t('search')}
+              onChange={e => setKeyword(e.target.value)}
+            />
+          </Box>
+
+          <TableContainer component={Paper} elevation={0}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead
+                cols={cols}
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+              />
+              <TableBody>
+                {data?.course?.map(c => (
+                  <TableRow key={c.id}>
+                    <TableCell>
+                      <Link href={`view/${c.id}`}>
+                        <Typography variant="subtitle2" gutterBottom>
+                          {t(`course-levels.${c.level}`)}
                         </Typography>
-                        <Typography variant="body2" color="grey.500">
-                          {format(
-                            new Date(c.dates.aggregate.start.date),
-                            'hh:mm aa'
-                          )}
-                        </Typography>
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {c.dates.aggregate.end.date && (
-                      <Box>
-                        <Typography variant="body2" gutterBottom>
-                          {format(
-                            new Date(c.dates.aggregate.end.date),
-                            'dd MMM'
-                          )}
-                        </Typography>
-                        <Typography variant="body2" color="grey.500">
-                          {format(
-                            new Date(c.dates.aggregate.end.date),
-                            'hh:mm aa'
-                          )}
-                        </Typography>
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {/* TODO: finalize color */}
-                    <Chip
-                      label={t(`course-statuses.${c.status}`)}
-                      color="secondary"
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      onClick={() => navigate(`view/${c.id}`)} // TODO: navigate based on status
-                    >
-                      {c.status === CourseStatus.PENDING ||
-                      c.status === CourseStatus.DRAFT
-                        ? t('build')
-                        : t('manage')}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )) ??
-                (loading && (
-                  <TableRow>
-                    <TableCell colSpan={9} align="center">
-                      <CircularProgress />
+                        <Typography variant="body2">{c.name}</Typography>
+                      </Link>
+                    </TableCell>
+                    <TableCell>{c.organization?.name}</TableCell>
+                    <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                    <TableCell>
+                      {c.dates.aggregate.start.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {format(
+                              new Date(c.dates.aggregate.start.date),
+                              'dd MMM'
+                            )}
+                          </Typography>
+                          <Typography variant="body2" color="grey.500">
+                            {format(
+                              new Date(c.dates.aggregate.start.date),
+                              'hh:mm aa'
+                            )}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {c.dates.aggregate.end.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {format(
+                              new Date(c.dates.aggregate.end.date),
+                              'dd MMM'
+                            )}
+                          </Typography>
+                          <Typography variant="body2" color="grey.500">
+                            {format(
+                              new Date(c.dates.aggregate.end.date),
+                              'hh:mm aa'
+                            )}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {/* TODO: finalize color */}
+                      <Chip
+                        label={t(`course-statuses.${c.status}`)}
+                        color="secondary"
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => navigate(`view/${c.id}`)} // TODO: navigate based on status
+                      >
+                        {c.status === CourseStatus.PENDING ||
+                        c.status === CourseStatus.DRAFT
+                          ? t('build')
+                          : t('manage')}
+                      </Button>
                     </TableCell>
                   </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                )) ??
+                  (loading && (
+                    <TableRow>
+                      <TableCell colSpan={9} align="center">
+                        <CircularProgress />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
-    </Box>
+    </Container>
   )
 }
