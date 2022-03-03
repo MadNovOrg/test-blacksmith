@@ -23,7 +23,9 @@ export class ResetPasswordPage extends BasePage {
     this.emailText = this.page.locator('[data-testid="email"]')
     this.newPasswordInput = this.page.locator('#password')
     this.confirmPasswordInput = this.page.locator('#confirmPassword')
-    this.confirmationCodeInputs = this.page.locator('input[name*="code"]')
+    this.confirmationCodeInputs = this.page.locator(
+      'input[data-testid*="passcode"]'
+    )
     this.passwordErrorText = this.page.locator('#password-helper-text')
     this.resetPasswordButton = this.page.locator(
       'button[data-testid="reset-password"]'

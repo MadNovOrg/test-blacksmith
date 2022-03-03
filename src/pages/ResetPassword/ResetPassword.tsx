@@ -232,6 +232,7 @@ export const ResetPasswordPage = () => {
                 numInputs={otpNumFields}
                 value={watch('code')}
                 onChange={(c: string) => setValue('code', c)}
+                data-testid="passcode"
                 inputStyle={{
                   border: 0,
                   outline: 'none',
