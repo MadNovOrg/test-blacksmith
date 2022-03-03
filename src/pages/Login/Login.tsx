@@ -47,11 +47,11 @@ export const LoginPage = () => {
         .object({
           email: yup
             .string()
-            .email(t('common.validation-errors.email-invalid'))
-            .required(t('common.validation-errors.email-required')),
+            .email(t('validation-errors.email-invalid'))
+            .required(t('validation-errors.email-required')),
           password: yup
             .string()
-            .required(t('common.validation-errors.password-required')),
+            .required(t('validation-errors.password-required')),
         })
         .required(),
     [t]

@@ -162,7 +162,7 @@ export const ManageAvailability: React.FC<ManageAvailabilityProps> = () => {
         <div className="p-4">
           {error && (
             <div className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2 m-6">
-              {t('common.internal-error')}
+              {t('internal-error')}
             </div>
           )}
           <form>
@@ -233,7 +233,7 @@ export const ManageAvailability: React.FC<ManageAvailabilityProps> = () => {
                   className="col-span-2 btn tertiary"
                   onClick={onDiscardChanges}
                 >
-                  {t('common.discard-changes')}
+                  {t('discard-changes')}
                 </button>
               )}
               {updatedEventId && (

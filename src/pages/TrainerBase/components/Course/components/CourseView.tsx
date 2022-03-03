@@ -278,7 +278,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     <DragDropContext onDragEnd={handleDrop}>
       {(courseDataError || moduleDataError) && (
         <Alert severity="error" variant="filled">
-          {t('common.internal-error')}
+          {t('internal-error')}
         </Alert>
       )}
       {!data && !courseDataError && !moduleDataError && (
@@ -292,7 +292,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           margin="auto"
           maxWidth={{
             xs: '340px',
-            lg: '1040px',
+            md: '1040px',
           }}
         >
           <Typography variant="h2">{courseData.course.name}</Typography>
@@ -304,17 +304,17 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           )}
 
           <Box
-            mt={{ xs: 2, lg: 3 }}
+            mt={{ xs: 2, md: 3 }}
             sx={{
               display: 'grid',
               gridTemplateColumns: {
                 xs: 'repeat(3, 1fr)',
-                lg: 'repeat(8, 1fr)',
+                md: 'repeat(8, 1fr)',
               },
               columnGap: 4,
               rowGap: {
                 xs: 3,
-                lg: 4,
+                md: 4,
               },
             }}
           >
@@ -325,12 +325,12 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                 })}
               </Typography>
             </Box>
-            <Box gridColumn={{ xs: 'span 3', lg: '5 / 9' }}>
+            <Box gridColumn={{ xs: 'span 3', md: '5 / 9' }}>
               <CourseHero data={courseData.course} />
             </Box>
 
             {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
-              <Box gridColumn={{ xs: 'span 3', lg: 'span 8' }}>
+              <Box gridColumn={{ xs: 'span 3', md: 'span 8' }}>
                 <Alert severity="error" variant="filled">
                   {t(
                     'pages.trainer-base.create-course.new-course.duration-exceeded'
@@ -339,7 +339,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
               </Box>
             )}
 
-            <Box gridColumn={{ xs: 'span 1', lg: '1 / 4' }}>
+            <Box gridColumn={{ xs: 'span 1', md: '1 / 4' }}>
               <Typography variant="h3">
                 {t(
                   'pages.trainer-base.create-course.new-course.modules-available'
@@ -353,7 +353,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                     flexWrap="wrap"
                     mt={{
                       xs: 2,
-                      lg: 4,
+                      md: 4,
                     }}
                     mx={-1}
                     bgcolor={
@@ -389,7 +389,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                 )}
               </Droppable>
             </Box>
-            <Box gridColumn={{ xs: '2 / 4', lg: '5 / 9' }}>
+            <Box gridColumn={{ xs: '2 / 4', md: '5 / 9' }}>
               <Typography variant="h3" px={1}>
                 {t('pages.trainer-base.create-course.new-course.my-course')}
               </Typography>
@@ -444,7 +444,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                   display: 'grid',
                   gridTemplateColumns: {
                     xs: 'repeat(1, 1fr)',
-                    lg: 'repeat(2, 1fr)',
+                    md: 'repeat(2, 1fr)',
                   },
                   columnGap: 4,
                   rowGap: 1,
@@ -484,14 +484,14 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                     sx={{
                       gridColumn: {
                         xs: '1 / 2',
-                        lg: '2 / 3',
+                        md: '2 / 3',
                       },
                     }}
                     variant="outlined"
                     color="warning"
                     onClick={onClearCourse}
                   >
-                    {t('common.clear')}
+                    {t('clear')}
                   </Button>
                 )}
               </Box>

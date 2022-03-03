@@ -5,6 +5,7 @@ configuration:
   custom_column_names:
     course_delivery_type: deliveryType
     course_level: level
+    course_status: status
     course_type: type
     created_at: createdAt
     updated_at: updatedAt
@@ -51,13 +52,13 @@ select_permissions:
     columns:
     - course_delivery_type
     - course_level
+    - course_status
     - course_type
     - created_at
     - id
     - name
     - organization_id
     - reaccreditation
-    - submitted
     - trainer_profile_id
     - updated_at
     filter:
@@ -73,7 +74,7 @@ update_permissions:
 - permission:
     check: null
     columns:
-    - submitted
+    - course_status
     filter:
       _or:
       - trainer:

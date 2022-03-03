@@ -3,9 +3,13 @@ import { initReactI18next } from 'react-i18next'
 
 import translation from './en/translation.json'
 
-export const resources = {
+type Locales = Record<string, { name: string; display: string }>
+
+export const supportedLocales: Locales = {
   en: {
-    translation,
+    name: 'English',
+    display: '**English**',
+    ...translation,
   },
 } as const
 
@@ -14,7 +18,10 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  resources,
+  resources: supportedLocales,
+  ns: Object.keys(translation),
+  defaultNS: 'common',
+  nsSeparator: '.',
   parseMissingKeyHandler: () => {
     return ''
   },

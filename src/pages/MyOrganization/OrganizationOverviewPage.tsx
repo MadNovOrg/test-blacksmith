@@ -55,7 +55,7 @@ export const OrganizationOverviewPage: React.FC<
       </div>
       {error && (
         <div className="border-red/20 border rounded bg-red/10 text-red/80 font-bold p-2">
-          {t('common.internal-error')}
+          {t('internal-error')}
         </div>
       )}
       {data &&

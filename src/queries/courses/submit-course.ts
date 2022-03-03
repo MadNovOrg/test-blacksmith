@@ -9,7 +9,7 @@ export type ParamsType = { id: string }
 export const MUTATION = gql`
   ${COURSE}
   mutation submitCourse($id: uuid!) {
-    update_course_by_pk(pk_columns: { id: $id }, _set: { submitted: true }) {
+    update_course_by_pk(pk_columns: { id: $id }, _set: { status: PUBLISHED }) {
       ...Course
     }
   }

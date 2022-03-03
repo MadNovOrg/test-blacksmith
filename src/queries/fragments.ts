@@ -76,7 +76,7 @@ export const COURSE = gql`
     name
     type
     deliveryType
-    submitted
+    status
     level
     reaccreditation
   }

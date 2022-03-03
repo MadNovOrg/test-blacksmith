@@ -19,7 +19,7 @@ export const QUERY = gql`
       name
       type
       level
-      submitted
+      status
       organization {
         name
       }

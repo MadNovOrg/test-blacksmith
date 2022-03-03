@@ -61,18 +61,18 @@ export const ResetPasswordPage = () => {
           email: yup.string(),
           password: yup
             .string()
-            .required(t('common.validation-errors.new-password-required')),
+            .required(t('validation-errors.new-password-required')),
           confirmPassword: yup
             .string()
-            .required(t('common.validation-errors.confirm-password-required'))
+            .required(t('validation-errors.confirm-password-required'))
             .oneOf(
               [yup.ref('password'), null],
-              t('common.validation-errors.confirm-password-invalid')
+              t('validation-errors.confirm-password-invalid')
             ),
           code: yup
             .string()
-            .min(6, t('common.validation-errors.otp-required'))
-            .required(t('common.validation-errors.otp-required')),
+            .min(6, t('validation-errors.otp-required'))
+            .required(t('validation-errors.otp-required')),
         })
         .required(),
     [t]

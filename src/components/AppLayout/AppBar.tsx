@@ -82,7 +82,7 @@ export const AppBar = () => {
               sx={{ marginLeft: 2 }}
               variant="h5"
             >
-              {t('common.appTitle')}
+              {t('appTitle')}
             </Link>
           </Box>
 

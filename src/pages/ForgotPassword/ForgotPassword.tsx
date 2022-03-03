@@ -39,8 +39,8 @@ export const ForgotPasswordPage = () => {
         .object({
           email: yup
             .string()
-            .email(t('common.validation-errors.email-invalid'))
-            .required(t('common.validation-errors.email-required')),
+            .email(t('validation-errors.email-invalid'))
+            .required(t('validation-errors.email-required')),
         })
         .required(),
     [t]
@@ -136,7 +136,7 @@ export const ForgotPasswordPage = () => {
                 data-testid="forgot-pass-submit"
                 size="large"
               >
-                {t('common.submit')}
+                {t('submit')}
               </LoadingButton>
 
               {errorMessage && (
@@ -153,7 +153,7 @@ export const ForgotPasswordPage = () => {
                 href="/login"
                 data-testid="cancel-link"
               >
-                {t('common.cancel')}
+                {t('cancel')}
               </Link>
             </Box>
           </Box>

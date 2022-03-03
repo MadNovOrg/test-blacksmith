@@ -12,7 +12,9 @@ import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { Button, Chip } from '@mui/material'
+import { Button, Chip, CircularProgress } from '@mui/material'
+import { useDebounce } from 'use-debounce'
+import { useNavigate } from 'react-router-dom'
 
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import type { FilterOption } from '@app/components/FilterAccordion'
@@ -23,32 +25,9 @@ import {
   ResponseType as GetMyCoursesResponseType,
   ParamsType as GetMyCourseParamsType,
 } from '@app/queries/courses/get-courses'
-import { Course, CourseLevel, CourseType } from '@app/types'
+import { CourseLevel, CourseStatus, CourseType } from '@app/types'
 
 type MyCoursesProps = unknown
-
-// TODO: finalize after getting correct statuses from business
-function getCourseStatus(c: Course) {
-  if (c.submitted) {
-    return 'Published'
-  }
-
-  if (c.modulesAgg.aggregate.count === 0) {
-    return 'Pending'
-  }
-
-  return 'Draft'
-}
-
-const cols = [
-  { id: 'name', label: 'Course name' },
-  { id: 'org', label: 'Organization' },
-  { id: 'type', label: 'Course type' },
-  { id: 'start', label: 'Start' },
-  { id: 'end', label: 'End' },
-  { id: 'status', label: 'status', sorting: false },
-  { id: 'empty', label: '', sorting: false },
-]
 
 const sorts: Record<string, object> = {
   'name-asc': { name: 'asc' },
@@ -64,12 +43,26 @@ const sorts: Record<string, object> = {
 }
 
 export const MyCourses: React.FC<MyCoursesProps> = () => {
+  const navigate = useNavigate()
   const { t } = useTranslation()
+
+  const cols = useMemo(
+    () => [
+      { id: 'name', label: t('course-name') },
+      { id: 'org', label: t('organization') },
+      { id: 'type', label: t('course-type') },
+      { id: 'start', label: t('start') },
+      { id: 'end', label: t('end') },
+      { id: 'status', label: t('status'), sorting: false },
+      { id: 'empty', label: '', sorting: false },
+    ],
+    [t]
+  )
 
   const levelOptions = useMemo<FilterOption[]>(() => {
     return Object.values(CourseLevel).map<FilterOption>(level => ({
       id: level,
-      title: t(`common.course-levels.${level}`),
+      title: t(`course-levels.${level}`),
       selected: false,
     }))
   }, [t])
@@ -77,16 +70,28 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const typeOptions = useMemo<FilterOption[]>(() => {
     return Object.values(CourseType).map<FilterOption>(type => ({
       id: type,
-      title: t(`common.course-types.${type}`),
+      title: t(`course-types.${type}`),
+      selected: false,
+    }))
+  }, [t])
+
+  const statusOptions = useMemo<FilterOption[]>(() => {
+    return Object.values(CourseStatus).map<FilterOption>(s => ({
+      id: s,
+      title: t(`course-statuses.${s}`),
       selected: false,
     }))
   }, [t])
 
   const [keyword, setKeyword] = useState('')
+
   const [levelFilter, setLevelFilter] = useState<FilterOption[]>(levelOptions)
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
+  const [statusFilter, setStatusFilter] =
+    useState<FilterOption[]>(statusOptions)
   const [order, setOrder] = useState<'asc' | 'desc'>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
+  const [keywordDebounced] = useDebounce(keyword, 300)
 
   const where = useMemo(() => {
     const obj: Record<string, object> = {}
@@ -107,18 +112,30 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
       obj.type = { _in: selectedTypes }
     }
 
-    if (keyword.trim().length) {
-      obj.name = { _ilike: `%${keyword}%` }
+    const selectedStatuses = statusFilter.flatMap(item =>
+      item.selected ? item.id : []
+    )
+
+    if (selectedStatuses.length) {
+      obj.status = { _in: selectedStatuses }
+    }
+
+    if (keywordDebounced.trim().length) {
+      obj.name = { _ilike: `%${keywordDebounced}%` }
     }
 
     return obj
-  }, [levelFilter, typeFilter, keyword])
+  }, [levelFilter, typeFilter, statusFilter, keywordDebounced])
 
-  const { data } = useSWR<
+  const { data, error } = useSWR<
     GetMyCoursesResponseType,
     Error,
     [string, GetMyCourseParamsType]
-  >([GetMyCourses, { orderBy: sorts[`${orderBy}-${order}`], where }])
+  >([GetMyCourses, { orderBy: sorts[`${orderBy}-${order}`], where }], {
+    focusThrottleInterval: 2000,
+  })
+
+  const loading = !data && !error
 
   const handleRequestSort = (col: string) => {
     const isAsc = orderBy === col && order === 'asc'
@@ -129,26 +146,34 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   return (
     <Box display="flex">
       <Box width={250} display="flex" flexDirection="column" pt={8} pr={4}>
-        <Typography variant="body2">Filter by</Typography>
+        <Typography variant="body2">{t('filter-by')}</Typography>
 
         <Box display="flex" flexDirection="column">
           <FilterAccordion
             options={levelFilter}
-            title="Level"
+            title={t('level')}
             onChange={setLevelFilter}
           />
 
           <FilterAccordion
             options={typeFilter}
-            title="Course type"
+            title={t('course-type')}
             onChange={setTypeFilter}
+          />
+
+          <FilterAccordion
+            options={statusFilter}
+            title={t('course-status')}
+            onChange={setStatusFilter}
           />
         </Box>
       </Box>
 
       <Box flex={1}>
-        <Typography variant="h5">My Courses</Typography>
-        <Typography variant="subtitle2">6 items</Typography>
+        <Typography variant="h5">{t('my-courses')}</Typography>
+        <Typography variant="subtitle2">
+          {t('x-items', { num: data?.course?.length })}
+        </Typography>
 
         <Box mt={4}>
           <TextField
@@ -156,13 +181,13 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
             value={keyword}
             variant="filled"
             size="small"
-            placeholder="Search"
-            onChange={e => setKeyword(e.target.value) /* TODO: throttle */}
+            placeholder={t('search')}
+            onChange={e => setKeyword(e.target.value)}
           />
         </Box>
 
         <TableContainer component={Paper} elevation={0}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table sx={{ minWidth: 650 }}>
             <TableHead
               cols={cols}
               order={order}
@@ -175,13 +200,13 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                   <TableCell>
                     <Link href={`view/${c.id}`}>
                       <Typography variant="subtitle2" gutterBottom>
-                        {t(`common.course-levels.${c.level}`)}
+                        {t(`course-levels.${c.level}`)}
                       </Typography>
                       <Typography variant="body2">{c.name}</Typography>
                     </Link>
                   </TableCell>
                   <TableCell>{c.organization?.name}</TableCell>
-                  <TableCell>{c.type}</TableCell>
+                  <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                   <TableCell>
                     {c.dates.aggregate.start.date && (
                       <Box>
@@ -221,18 +246,33 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                   <TableCell>
                     {/* TODO: finalize color */}
                     <Chip
-                      label={getCourseStatus(c)}
+                      label={t(`course-statuses.${c.status}`)}
                       color="secondary"
                       size="small"
                     />
                   </TableCell>
                   <TableCell>
-                    <Button variant="contained" color="primary" size="small">
-                      Manage
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => navigate(`view/${c.id}`)} // TODO: navigate based on status
+                    >
+                      {c.status === CourseStatus.PENDING ||
+                      c.status === CourseStatus.DRAFT
+                        ? t('build')
+                        : t('manage')}
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) ??
+                (loading && (
+                  <TableRow>
+                    <TableCell colSpan={9} align="center">
+                      <CircularProgress />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

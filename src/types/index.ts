@@ -9,7 +9,7 @@ export type Course = {
   level: CourseLevel
   deliveryType: CourseDeliveryType
   type: CourseType
-  submitted: boolean
+  status: CourseStatus
   reaccreditation: boolean
   organization: Organization
   schedule: CourseSchedule[]
@@ -72,6 +72,12 @@ export enum CourseType {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
   INDIRECT = 'INDIRECT',
+}
+
+export enum CourseStatus {
+  PENDING = 'PENDING',
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED',
 }
 
 export enum CourseLevel {
