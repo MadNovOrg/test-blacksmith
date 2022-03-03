@@ -56,6 +56,8 @@ select_permissions:
     - course_type
     - created_at
     - id
+    - min_participants
+    - max_participants
     - name
     - organization_id
     - reaccreditation

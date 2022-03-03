@@ -79,6 +79,8 @@ export const COURSE = gql`
     status
     level
     reaccreditation
+    min_participants
+    max_participants
   }
 `
 

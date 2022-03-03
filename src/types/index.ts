@@ -9,6 +9,8 @@ export type Course = {
   level: CourseLevel
   deliveryType: CourseDeliveryType
   type: CourseType
+  min_participants: number
+  max_participants: number
   status: CourseStatus
   reaccreditation: boolean
   organization: Organization

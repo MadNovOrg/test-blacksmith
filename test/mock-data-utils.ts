@@ -88,6 +88,8 @@ export const buildCourse = build<Course>({
     status: '',
     createdAt: new Date().toISOString(),
     type: CourseType.OPEN,
+    min_participants: 6,
+    max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
     reaccreditation: () => false,
     organization: buildOrganization(),
