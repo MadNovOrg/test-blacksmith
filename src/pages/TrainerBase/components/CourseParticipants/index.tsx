@@ -1,0 +1,167 @@
+import React, { ChangeEvent, useCallback, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+  Container,
+  Table,
+  TableHead,
+  TableCell,
+  TableRow,
+  TableBody,
+  CircularProgress,
+  Stack,
+  TablePagination,
+  Alert,
+  Button,
+} from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { useTranslation } from 'react-i18next'
+
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import useCourse from '@app/hooks/useCourse'
+
+import { CourseHeroSummary } from './CourseHeroSummary'
+
+import { LoadingStatus } from '@app/util'
+import { capitalize } from '@app/util'
+
+const PER_PAGE = 12
+
+export const CourseParticipants = () => {
+  const { id: courseId } = useParams()
+  const [currentPage, setCurrentPage] = useState(0)
+  const [perPage, setPerPage] = useState(PER_PAGE)
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  const {
+    status: courseLoadingStatus,
+    data: course,
+    error: courseError,
+  } = useCourse(courseId ?? '')
+  const {
+    data: courseParticipants,
+    status: courseParticipantsLoadingStatus,
+    total,
+    error: courseParticipantsError,
+  } = useCourseParticipants(courseId ?? '', {
+    limit: perPage,
+    offset: perPage * currentPage,
+  })
+
+  const handleRowsPerPageChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+      setPerPage(parseInt(event.target.value, 10))
+      setCurrentPage(0)
+    },
+    []
+  )
+
+  if (courseLoadingStatus === LoadingStatus.FETCHING) {
+    return (
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        data-testid="course-fetching"
+      >
+        <CircularProgress />
+      </Stack>
+    )
+  }
+
+  return (
+    <>
+      {courseError ? (
+        <Alert severity="error">There was an error loading a course.</Alert>
+      ) : null}
+      {course ? (
+        <>
+          <CourseHeroSummary course={course}>
+            <Button
+              variant="text"
+              startIcon={<ArrowBackIcon />}
+              sx={{ marginBottom: 2 }}
+              onClick={() => navigate('/trainer-base/course')}
+            >
+              {t('pages.course-participants.back-button')}
+            </Button>
+          </CourseHeroSummary>
+          <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
+            {courseParticipantsLoadingStatus === LoadingStatus.FETCHING ? (
+              <Stack
+                alignItems="center"
+                paddingTop={2}
+                data-testid="course-participants-fetching"
+              >
+                <CircularProgress />
+              </Stack>
+            ) : null}
+
+            {courseParticipantsError ? (
+              <Alert>There was an error loading course participants.</Alert>
+            ) : null}
+
+            {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
+            courseParticipants?.length ? (
+              <>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Contact</TableCell>
+                      <TableCell>Organisation</TableCell>
+                      <TableCell>Prerequisites</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {courseParticipants?.map(courseParticipant => (
+                      <TableRow
+                        key={courseParticipant.id}
+                        data-testid={`course-participant-row-${courseParticipant.id}`}
+                      >
+                        <TableCell>
+                          {courseParticipant.firstName}{' '}
+                          {courseParticipant.lastName}
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.contactDetails.map(
+                            contact =>
+                              `${capitalize(contact.type)}: ${contact.value}`
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.organization?.name}
+                        </TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                {total ? (
+                  <TablePagination
+                    component="div"
+                    count={total}
+                    page={currentPage}
+                    onPageChange={(_, page) => setCurrentPage(page)}
+                    onRowsPerPageChange={handleRowsPerPageChange}
+                    rowsPerPage={perPage}
+                    rowsPerPageOptions={[12, 24, 50, 100]}
+                    data-testid="course-participants-pagination"
+                  />
+                ) : null}
+              </>
+            ) : (
+              <Alert severity="info">
+                {t('pages.course-participants.no-participants-registered')}
+              </Alert>
+            )}
+          </Container>
+        </>
+      ) : (
+        <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
+          <Alert severity="warning">Course not found.</Alert>
+        </Container>
+      )}
+    </>
+  )
+}

@@ -8,8 +8,8 @@
       "advanced": "Advanced",
       "bild-act-certified": "BILD ACT Certified"
     },
-    "filter-by":" Filter By",
-    "level":" Level",
+    "filter-by": " Filter By",
+    "level": " Level",
     "course-name": "Course Name",
     "organization": "Organization",
     "course-type": "Course Type",
@@ -50,7 +50,7 @@
       "DRAFT": "Draft",
       "PUBLISHED": "Published"
     },
-    "validation-errors" : {
+    "validation-errors": {
       "email-required": "Please enter your email",
       "email-invalid": "Please enter a valid email address",
       "password-required": "Please enter your password",
@@ -115,6 +115,22 @@
         "end": "End",
         "status": "Status"
       }
+    },
+    "course-participants": {
+      "edit-course-button": "Edit course details",
+      "course-beggins": "Begins",
+      "course-ends": "Ends",
+      "course-duration_one": "Duration {{count}} day",
+      "course-duration_other": "Duration {{count}} days",
+      "until-course-begins_one": "{{count}} day until course begins",
+      "until-course-begins_other": "{{count}} days until course begins",
+      "no-participants-registered": "No participants registered yet for this course.",
+      "course-began": "Course has began.",
+      "course-begins-today": "Course begins today.",
+      "course-ended": "Course has ended.",
+      "trainer": "You are the trainer",
+      "hosted-by": "Hosted by {{trainer}}",
+      "back-button": "All courses"
     },
     "my-training": {
       "common": {

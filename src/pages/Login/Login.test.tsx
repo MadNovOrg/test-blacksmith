@@ -1,4 +1,5 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 
 import { LoginPage } from './Login'
 
@@ -20,13 +21,21 @@ jest.mock('react-router-dom', () => ({
 
 describe('Login', () => {
   it('matches snapshot', async () => {
-    const view = render(<LoginPage />)
+    const view = render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     expect(view).toMatchSnapshot()
   })
 
   it('shows error when email is empty', async () => {
-    render(<LoginPage />)
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     const email = screen.getByTestId('input-email')
     expect(email).toHaveValue('')
@@ -43,7 +52,11 @@ describe('Login', () => {
   })
 
   it('shows error when email is invalid', async () => {
-    render(<LoginPage />)
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     const email = screen.getByTestId('input-email')
 
@@ -58,7 +71,11 @@ describe('Login', () => {
   it('attempts login when email is valid', async () => {
     providers.auth.login.mockResolvedValue({ error: { code: 'OnPurpose' } })
 
-    render(<LoginPage />)
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     fireEvent.change(screen.getByTestId('input-email'), {
       target: { value: chance.email() },
@@ -76,7 +93,11 @@ describe('Login', () => {
       error: { code: 'NotAuthorizedException' },
     })
 
-    render(<LoginPage />)
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     const email = screen.getByTestId('input-email')
     fireEvent.change(email, { target: { value: chance.email() } })
@@ -94,7 +115,11 @@ describe('Login', () => {
   it('navigates away when login succeeds', async () => {
     providers.auth.login.mockResolvedValue({}) // no error
 
-    render(<LoginPage />)
+    render(
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    )
 
     const email = screen.getByTestId('input-email')
     fireEvent.change(email, { target: { value: chance.email() } })

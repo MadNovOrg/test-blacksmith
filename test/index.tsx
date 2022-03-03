@@ -1,7 +1,6 @@
 import { waitFor, render as _render, screen } from '@testing-library/react'
 import React from 'react'
 import deepmerge from 'deepmerge'
-import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import Chance from 'chance'
 
@@ -20,11 +19,9 @@ function render(
 
   const wrapper: React.FC = ({ children }) => {
     return (
-      <MemoryRouter>
-        <AuthContext.Provider value={context.auth as ContextType}>
-          {children}
-        </AuthContext.Provider>
-      </MemoryRouter>
+      <AuthContext.Provider value={context.auth as ContextType}>
+        {children}
+      </AuthContext.Provider>
     )
   }
 

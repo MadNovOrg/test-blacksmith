@@ -15,6 +15,11 @@ export const QUERY = gql`
   query GetCourseById($id: uuid!) {
     course: course_by_pk(id: $id) {
       ...Course
+      trainer {
+        id
+        givenName
+        familyName
+      }
       schedule {
         ...CourseSchedule
         venue {

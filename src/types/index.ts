@@ -1,7 +1,7 @@
 type Base = {
   id: string
   createdAt: string
-  updatedAt: string
+  updatedAt?: string
 }
 
 export type Course = {
@@ -13,6 +13,7 @@ export type Course = {
   reaccreditation: boolean
   organization: Organization
   schedule: CourseSchedule[]
+  trainer?: Profile
   dates: {
     aggregate: {
       start: { date: string }
@@ -156,6 +157,19 @@ export type CourseSchedule = {
   type: string
   start: Date
   end: Date
-  course: Course
+  course?: Course
   venue: Venue
 } & Base
+
+export type CourseParticipant = {
+  id: string
+  firstName?: string
+  lastName?: string
+  bookingDate?: Date
+  organization?: Organization
+  invoiceID?: string
+  registrationId?: string
+  organizationId?: string
+  course: Course
+  contactDetails: Record<string, string>[]
+}

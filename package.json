@@ -63,6 +63,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@babel/preset-typescript": "^7.16.7",
+    "@jackfranklin/test-data-bot": "^1.4.0",
     "@playwright/test": "1.19.1",
     "@storybook/addon-actions": "^6.5.0-alpha.19",
     "@storybook/addon-essentials": "^6.5.0-alpha.19",

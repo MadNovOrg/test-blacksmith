@@ -61,3 +61,37 @@ export const getPercentage = (x: number, y: number) => {
 }
 
 export const now = () => new Date()
+
+export function capitalize(str: string): string {
+  const lower = str.toLowerCase()
+
+  return str.charAt(0).toUpperCase() + lower.slice(1)
+}
+
+export enum LoadingStatus {
+  IDLE,
+  SUCCESS,
+  FETCHING,
+  ERROR,
+}
+
+export function getSWRLoadingStatus(
+  data?: object,
+  error?: Error
+): LoadingStatus {
+  let status: LoadingStatus = LoadingStatus.IDLE
+
+  if (!data && !error) {
+    status = LoadingStatus.FETCHING
+  }
+
+  if (error) {
+    status = LoadingStatus.ERROR
+  }
+
+  if (data && !error) {
+    status = LoadingStatus.SUCCESS
+  }
+
+  return status
+}

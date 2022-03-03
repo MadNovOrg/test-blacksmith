@@ -10,6 +10,7 @@ import { useAuth } from '@app/context/auth'
 import { MyProfilePage } from './pages/MyProfile'
 import { Course } from './pages/TrainerBase/components/Course'
 import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
+import { CourseParticipants } from './pages/TrainerBase/components/CourseParticipants'
 import { MyCourses } from './pages/TrainerBase/components/Course/components/MyCourses'
 import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboard'
 import { Management as TrainerManagement } from './pages/TrainerBase/components/Management'
@@ -64,6 +65,10 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="course" element={<Course />}>
                 <Route index element={<MyCourses />} />
                 <Route path="view/:id" element={<CourseView />} />
+                <Route
+                  path=":id/participants"
+                  element={<CourseParticipants />}
+                />
               </Route>
               <Route path="management" element={<TrainerManagement />}>
                 <Route index element={<Navigate replace to="calendar" />} />
