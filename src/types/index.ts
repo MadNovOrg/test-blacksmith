@@ -97,6 +97,15 @@ export enum CourseDeliveryType {
   VIRTUAL = 'VIRTUAL',
 }
 
+export enum Color {
+  NAVY = 'navy',
+  LIME = 'lime',
+  TEAL = 'teal',
+  YELLOW = 'yellow',
+  PURPLE = 'purple',
+  FUSCHIA = 'fuschia',
+}
+
 export type Module = {
   name: string
   description: string
@@ -123,6 +132,7 @@ export type ModuleGroup = {
       }
     }
   }
+  color: Color
 } & Base
 
 export enum AvailabilityType {

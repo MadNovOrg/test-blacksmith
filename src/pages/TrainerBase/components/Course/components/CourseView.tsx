@@ -43,7 +43,6 @@ import {
 } from '@app/pages/TrainerBase/components/Course'
 import { formatDurationShort, getPercentage } from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
-import { COURSE_COLOR } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
 
 type CourseViewProps = unknown
 
@@ -288,7 +287,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     module: AvailableModule | ModuleGroup,
     isDragging: boolean
   ) {
-    const color = theme.colors[COURSE_COLOR[module.level]]
+    const color = theme.colors[module.color]
     if ('used' in module) {
       return module.used ? color[200] : isDragging ? color[600] : color[500]
     }

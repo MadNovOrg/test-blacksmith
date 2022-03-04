@@ -62,6 +62,7 @@ export const MODULE_GROUP = gql`
     id
     name
     level
+    color
     mandatory
     createdAt
     updatedAt

@@ -4,7 +4,6 @@ import { Box, useTheme } from '@mui/material'
 
 import { ModuleGroup } from '@app/types'
 import { ModuleCard } from '@app/pages/TrainerBase/components/Course/components/ModuleCard'
-import { COURSE_COLOR } from '@app/pages/TrainerBase/components/Course/CourseColorScheme'
 
 type ModuleSlotProps = {
   module?: ModuleGroup
@@ -18,7 +17,7 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
   module,
 }) => {
   const theme = useTheme()
-  const color = module ? theme.colors[COURSE_COLOR[module.level]] : undefined
+  const color = module ? theme.colors[module.color] : undefined
   return (
     <Droppable droppableId={droppableId}>
       {(droppableProvided, droppableSnapshot) => {
