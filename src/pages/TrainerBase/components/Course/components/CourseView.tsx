@@ -23,7 +23,7 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 
 import { ModuleCard } from './ModuleCard'
 
-import { CourseLevel, ModuleGroup } from '@app/types'
+import { CourseLevel, CourseStatus, ModuleGroup } from '@app/types'
 import {
   ParamsType as GetModuleGroupsParamsType,
   QUERY as GetModuleGroups,
@@ -35,7 +35,7 @@ import {
   ResponseType as GetCourseByIdResponseType,
 } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
-import { MUTATION as SubmitCourse } from '@app/queries/courses/submit-course'
+import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
 import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
 import {
   AvailableModule,
@@ -188,6 +188,10 @@ export const CourseView: React.FC<CourseViewProps> = () => {
               }))
             ),
           })
+          await fetcher(SetCourseStatus, {
+            id: courseData.course.id,
+            status: CourseStatus.DRAFT,
+          })
           await mutateCourse()
         }
       }
@@ -273,7 +277,10 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   const onCourseSubmit = async () => {
     setSubmitError(undefined)
     try {
-      await fetcher(SubmitCourse, { id: courseData?.course.id })
+      await fetcher(SetCourseStatus, {
+        id: courseData?.course.id,
+        status: CourseStatus.PUBLISHED,
+      })
       // TODO redirect to course details page when available
       navigate({
         pathname: '/trainer-base/course',
@@ -316,6 +323,10 @@ export const CourseView: React.FC<CourseViewProps> = () => {
             moduleId: module.id,
           }))
         ),
+      })
+      await fetcher(SetCourseStatus, {
+        id: courseData.course.id,
+        status: CourseStatus.DRAFT,
       })
       await mutateCourse()
     }
