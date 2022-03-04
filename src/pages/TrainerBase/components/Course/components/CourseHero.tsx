@@ -39,6 +39,14 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
     >
       <Box>
         <Typography display="inline" variant="body2" fontWeight={600}>
+          {`${t('pages.trainer-base.create-course.new-course.organization')}: `}
+        </Typography>
+        <Typography display="inline" variant="body2">
+          {data.organization.name}
+        </Typography>
+      </Box>
+      <Box>
+        <Typography display="inline" variant="body2" fontWeight={600}>
           {`${t('pages.trainer-base.create-course.new-course.location')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
