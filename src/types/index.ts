@@ -187,3 +187,15 @@ export type CourseParticipant = {
   course: Course
   contactDetails: Record<string, string>[]
 }
+
+export enum InviteStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+  DECLINED = 'DECLINED',
+}
+
+export type CourseInvite = {
+  id: number
+  email: string
+  status: InviteStatus
+}
