@@ -78,7 +78,11 @@ export const CourseView: React.FC<CourseViewProps> = () => {
     []
   )
 
-  const { data: courseData, error: courseDataError } = useSWR<
+  const {
+    data: courseData,
+    error: courseDataError,
+    mutate: mutateCourse,
+  } = useSWR<
     GetCourseByIdResponseType,
     Error,
     [string, GetCourseByIdParamsType] | null
@@ -119,7 +123,12 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   }, [courseData])
 
   useEffect(() => {
-    if (availableModules.length === 0 && data) {
+    if (availableModules.length === 0 && data && courseData) {
+      const addedModuleGroupIds = new Set<string>(
+        courseData.course.moduleGroupIds.map(
+          courseModule => courseModule.module.moduleGroup.id
+        )
+      )
       const modules = {
         mandatory: [] as ModuleGroup[],
         nonMandatory: [] as ModuleGroup[],
@@ -132,19 +141,25 @@ export const CourseView: React.FC<CourseViewProps> = () => {
         modules.nonMandatory.map(module => ({
           ...module,
           draggableId: `all-modules-${module.id}`,
+          used: addedModuleGroupIds.has(module.id),
         }))
       )
+      const addedModuleGroups = [...addedModuleGroupIds]
+        .map(id => modules.nonMandatory.find(m => m.id === id))
+        .filter(Boolean)
       setCourseModuleSlots(
         modules.nonMandatory.map((_, i) => ({
+          module:
+            i < addedModuleGroups.length ? addedModuleGroups[i] : undefined,
           droppableId: `course-modules-slot-drop-${i}`,
           draggableId: `course-modules-slot-drag-${i}`,
         }))
       )
     }
-  }, [availableModules, mandatoryModules, data])
+  }, [availableModules, mandatoryModules, data, courseData])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
-    result => {
+    async result => {
       const { draggableId, source, destination } = result
       if (!data || !destination) return
 
@@ -161,6 +176,21 @@ export const CourseView: React.FC<CourseViewProps> = () => {
             }
           })
         )
+      }
+
+      async function saveCourseModules(moduleGroups: ModuleGroup[]) {
+        if (courseData) {
+          await fetcher(SaveCourseModules, {
+            courseId: courseData.course.id,
+            modules: moduleGroups.flatMap(moduleGroup =>
+              moduleGroup.modules.map(module => ({
+                courseId: courseData.course.id,
+                moduleId: module.id,
+              }))
+            ),
+          })
+          await mutateCourse()
+        }
       }
 
       if (source.droppableId.startsWith('course-modules')) {
@@ -190,6 +220,12 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           )
           const draggedModule = draggedSlot?.module
           if (!draggedModule) return
+          await saveCourseModules([
+            ...mandatoryModules,
+            ...courseModuleSlots.flatMap(slot =>
+              slot.module && slot.draggableId !== draggableId ? slot.module : []
+            ),
+          ])
           setCourseModuleSlots(prevState =>
             prevState.map(slot => ({
               ...slot,
@@ -205,6 +241,11 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           module => draggableId === module.draggableId
         )
         if (!draggedModule) return
+        await saveCourseModules([
+          ...mandatoryModules,
+          ...courseModuleSlots.flatMap(slot => slot.module ?? []),
+          draggedModule,
+        ])
         setCourseModuleSlots(prevState =>
           prevState.map(slot => {
             if (destination.droppableId === slot.droppableId) {
@@ -219,30 +260,25 @@ export const CourseView: React.FC<CourseViewProps> = () => {
         setModuleUsage(draggedModule.id, true)
       }
     },
-    [availableModules, courseModuleSlots, data]
+    [
+      availableModules,
+      courseData,
+      courseModuleSlots,
+      data,
+      fetcher,
+      mandatoryModules,
+      mutateCourse,
+    ]
   )
 
   const onCourseSubmit = async () => {
     setSubmitError(undefined)
     try {
-      const moduleGroups = [
-        ...mandatoryModules,
-        ...courseModuleSlots.flatMap(slot => slot.module || []),
-      ]
-      await fetcher(SaveCourseModules, {
-        courseId: courseData?.course.id,
-        modules: moduleGroups.flatMap(moduleGroup =>
-          moduleGroup.modules.map(module => ({
-            courseId: courseData?.course.id,
-            moduleId: module.id,
-          }))
-        ),
-      })
+      await fetcher(SubmitCourse, { id: courseData?.course.id })
       // TODO redirect to course details page when available
       navigate({
         pathname: '/trainer-base/course',
       })
-      await fetcher(SubmitCourse, { id: courseData?.course.id })
     } catch (e: unknown) {
       setSubmitError((e as Error).message)
     }
@@ -260,18 +296,30 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   }
 
   const onClearCourse = async () => {
-    setAvailableModules(prevState =>
-      prevState.map(module => ({
-        ...module,
-        used: false,
-      }))
-    )
-    setCourseModuleSlots(prevState =>
-      prevState.map(slot => ({
-        ...slot,
-        module: undefined,
-      }))
-    )
+    if (courseData) {
+      setAvailableModules(prevState =>
+        prevState.map(module => ({
+          ...module,
+          used: false,
+        }))
+      )
+      setCourseModuleSlots(prevState =>
+        prevState.map(slot => ({
+          ...slot,
+          module: undefined,
+        }))
+      )
+      await fetcher(SaveCourseModules, {
+        courseId: courseData.course.id,
+        modules: mandatoryModules.flatMap(moduleGroup =>
+          moduleGroup.modules.map(module => ({
+            courseId: courseData.course.id,
+            moduleId: module.id,
+          }))
+        ),
+      })
+      await mutateCourse()
+    }
   }
 
   return (

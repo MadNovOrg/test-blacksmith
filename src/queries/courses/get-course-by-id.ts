@@ -26,6 +26,13 @@ export const QUERY = gql`
           ...Venue
         }
       }
+      moduleGroupIds: modules {
+        module {
+          moduleGroup {
+            id
+          }
+        }
+      }
     }
   }
 `

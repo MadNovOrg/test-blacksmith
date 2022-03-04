@@ -27,6 +27,7 @@ export type Course = {
       count: number
     }
   }
+  moduleGroupIds: { module: { moduleGroup: { id: string } } }[]
 } & Base
 
 export type CourseModule = {
@@ -101,6 +102,7 @@ export type Module = {
   description: string
   level: CourseLevel
   type: string
+  moduleGroup: ModuleGroup
 } & Base
 
 export type ModuleGroupDuration = {

@@ -98,6 +98,7 @@ export const buildCourse = build<Course>({
     trainer: buildProfile(),
     dates: {},
     modulesAgg: {},
+    moduleGroupIds: [],
   },
 })
 
