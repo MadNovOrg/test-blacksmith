@@ -275,18 +275,19 @@ export const CourseView: React.FC<CourseViewProps> = () => {
   )
 
   const onCourseSubmit = async () => {
-    setSubmitError(undefined)
-    try {
-      await fetcher(SetCourseStatus, {
-        id: courseData?.course.id,
-        status: CourseStatus.PUBLISHED,
-      })
-      // TODO redirect to course details page when available
-      navigate({
-        pathname: '/trainer-base/course',
-      })
-    } catch (e: unknown) {
-      setSubmitError((e as Error).message)
+    if (courseData?.course) {
+      setSubmitError(undefined)
+      try {
+        await fetcher(SetCourseStatus, {
+          id: courseData.course.id,
+          status: CourseStatus.PUBLISHED,
+        })
+        navigate({
+          pathname: `/trainer-base/course/${courseData.course.id}/participants`,
+        })
+      } catch (e: unknown) {
+        setSubmitError((e as Error).message)
+      }
     }
   }
 
