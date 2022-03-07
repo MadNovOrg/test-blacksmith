@@ -61,9 +61,11 @@ export const ResetPasswordPage = () => {
           email: yup.string(),
           password: yup
             .string()
+            .trim()
             .required(t('validation-errors.new-password-required')),
           confirmPassword: yup
             .string()
+            .trim()
             .required(t('validation-errors.confirm-password-required'))
             .oneOf(
               [yup.ref('password'), null],
