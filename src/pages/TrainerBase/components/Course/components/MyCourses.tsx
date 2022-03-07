@@ -267,7 +267,14 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() => navigate(`${c.id}/participants`)} // TODO: navigate based on status
+                        onClick={() =>
+                          navigate(
+                            c.status === CourseStatus.PENDING ||
+                              c.status === CourseStatus.DRAFT
+                              ? `view/${c.id}`
+                              : `${c.id}/participants`
+                          )
+                        }
                       >
                         {c.status === CourseStatus.PENDING ||
                         c.status === CourseStatus.DRAFT

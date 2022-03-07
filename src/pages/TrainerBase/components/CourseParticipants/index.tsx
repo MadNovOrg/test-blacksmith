@@ -25,6 +25,7 @@ import { LoadingStatus } from '@app/util'
 import { capitalize } from '@app/util'
 
 const PER_PAGE = 12
+const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const CourseParticipants = () => {
   const { id: courseId } = useParams()
@@ -145,7 +146,7 @@ export const CourseParticipants = () => {
                     onPageChange={(_, page) => setCurrentPage(page)}
                     onRowsPerPageChange={handleRowsPerPageChange}
                     rowsPerPage={perPage}
-                    rowsPerPageOptions={[12, 24, 50, 100]}
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
                     data-testid="course-participants-pagination"
                   />
                 ) : null}
