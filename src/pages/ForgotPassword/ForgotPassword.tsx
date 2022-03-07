@@ -2,14 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { Auth } from 'aws-amplify'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import {
-  Link,
-  Box,
-  Button,
-  TextField,
-  Typography,
-  FormHelperText,
-} from '@mui/material'
+import { Link, Box, Button, TextField, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -21,16 +14,9 @@ type ForgotPasswordInput = {
   email: string
 }
 
-type E = {
-  code: number
-  message: string
-}
-
 export const ForgotPasswordPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-
-  const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   const schema = useMemo(
@@ -61,19 +47,14 @@ export const ForgotPasswordPage = () => {
     try {
       // tell cognito to send either email or sms with pw reset code and link to reset form
       await Auth.forgotPassword(data.email)
-
-      navigate({
-        pathname: '/reset-password',
-        search: `?${createSearchParams({ email: data.email })}`,
-      })
     } catch (err: unknown) {
       setIsLoading(false)
-      const error = err as E
-      setErrorMessage(
-        t(`pages.forgot-password.auth-errors.${error.code}`) ||
-          t('pages.forgot-password.generic-error')
-      )
     }
+
+    navigate({
+      pathname: '/reset-password',
+      search: `?${createSearchParams({ email: data.email })}`,
+    })
   }
 
   return (
@@ -138,12 +119,6 @@ export const ForgotPasswordPage = () => {
               >
                 {t('submit')}
               </LoadingButton>
-
-              {errorMessage && (
-                <FormHelperText sx={{ mt: 2 }} error>
-                  {errorMessage}
-                </FormHelperText>
-              )}
 
               <Link
                 component={Button}
