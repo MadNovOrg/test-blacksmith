@@ -108,6 +108,7 @@
     "vite": "^2.8.4"
   },
   "jest": {
+    "testTimeout": 10000,
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [
       "<rootDir>/test/jest-setup.ts"
