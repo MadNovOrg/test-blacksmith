@@ -160,46 +160,52 @@ export default createTheme({
   breakpoints,
   typography: {
     fontFamily: ['Inter', 'sans-serif', 'Arial'].join(','),
+    h1: {
+      fontSize: '2rem',
+      fontWeight: '700',
+    },
+    h2: {
+      fontSize: '1.75rem',
+      fontWeight: '700',
+    },
+    h3: {
+      fontSize: '1.5rem',
+      fontWeight: '700',
+    },
+
+    subtitle1: {
+      fontSize: '1.25rem',
+      fontWeight: '600',
+    },
+
+    body1: {
+      fontSize: '1rem',
+      fontWeight: '400',
+    },
     body2: {
       fontSize: '0.875rem',
       fontWeight: '400',
-      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
-        fontSize: '0.75rem',
-      },
     },
-    body3: {
+
+    button: {
+      fontSize: '1rem',
+      fontWeight: '500',
+    },
+    caption: {
       fontSize: '0.75rem',
       fontWeight: '400',
-      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
-        fontSize: '0.625rem',
-      },
-    },
-    h2: {
-      fontSize: '2.25rem',
-      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
-        fontSize: '1.5rem',
-      },
-    },
-    h3: {
-      fontSize: '1.125rem',
-      [`@media screen and (max-width: ${breakpoints.values.lg}px)`]: {
-        fontSize: '0.875rem',
-      },
-    },
-    h4: {
-      fontWeight: '300',
-    },
-    h5: {
-      fontWeight: '300',
-    },
-    h6: {
-      fontWeight: '300',
-    },
-    subtitle2: {
-      fontWeight: '600',
     },
   },
   components: {
+    MuiFormControlLabel: {
+      defaultProps: {
+        componentsProps: {
+          typography: {
+            variant: 'body1',
+          },
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         root: {

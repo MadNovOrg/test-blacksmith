@@ -1,3 +1,4 @@
 table:
   name: course_invite_status
   schema: public
+is_enum: true

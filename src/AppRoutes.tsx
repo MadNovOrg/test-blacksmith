@@ -24,6 +24,7 @@ import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { LoginPage } from '@app/pages/Login'
+import { InvitationPage } from '@app/pages/Invitation'
 import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
 import { MyTrainingDashboard } from '@app/pages/MyTraining/MyTrainingDashboard'
 import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
@@ -119,6 +120,7 @@ const LoggedOutRoutes: React.FC<unknown> = () => {
       <Route path="login" element={<LoginPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
+      <Route path="invitation" element={<InvitationPage />} />
       <Route
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
