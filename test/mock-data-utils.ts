@@ -11,6 +11,7 @@ import {
   Organization,
   Profile,
   Venue,
+  CourseInvite,
 } from '@app/types'
 
 export const buildProfile = build<Profile>({
@@ -110,5 +111,13 @@ export const buildParticipant = build<CourseParticipant>({
     organization: buildOrganization(),
     contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
     course: buildCourse(),
+  },
+})
+
+export const buildInvite = build<CourseInvite>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    email: fake(f => f.internet.email()),
+    status: 'PENDING',
   },
 })

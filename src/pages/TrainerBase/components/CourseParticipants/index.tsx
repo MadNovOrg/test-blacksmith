@@ -12,6 +12,8 @@ import {
   TablePagination,
   Alert,
   Button,
+  Grid,
+  Typography,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +22,7 @@ import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import useCourse from '@app/hooks/useCourse'
 
 import { CourseHeroSummary } from './CourseHeroSummary'
+import { CourseInvites } from './CourseInvites'
 
 import { LoadingStatus } from '@app/util'
 import { capitalize } from '@app/util'
@@ -39,10 +42,11 @@ export const CourseParticipants = () => {
     data: course,
     error: courseError,
   } = useCourse(courseId ?? '')
+
   const {
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
-    total,
+    total: courseParticipantsTotal,
     error: courseParticipantsError,
   } = useCourseParticipants(courseId ?? '', {
     limit: perPage,
@@ -101,6 +105,21 @@ export const CourseParticipants = () => {
               <Alert>There was an error loading course participants.</Alert>
             ) : null}
 
+            <Grid
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{ mb: 2 }}
+            >
+              <Typography variant="subtitle2" fontSize="18px">
+                {t('pages.course-participants.attending', {
+                  attending: courseParticipantsTotal,
+                  max: course.max_participants,
+                })}
+              </Typography>
+              <CourseInvites course={course} />
+            </Grid>
+
             {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
             courseParticipants?.length ? (
               <>
@@ -138,10 +157,10 @@ export const CourseParticipants = () => {
                   </TableBody>
                 </Table>
 
-                {total ? (
+                {courseParticipantsTotal ? (
                   <TablePagination
                     component="div"
-                    count={total}
+                    count={courseParticipantsTotal}
                     page={currentPage}
                     onPageChange={(_, page) => setCurrentPage(page)}
                     onRowsPerPageChange={handleRowsPerPageChange}

@@ -13,6 +13,7 @@ type Props = {
   title?: string | React.ReactNode
   showClose?: boolean
   onClose: () => void
+  maxWidth?: number
 }
 
 export const Dialog: React.FC<Props> = ({
@@ -22,6 +23,7 @@ export const Dialog: React.FC<Props> = ({
   showClose = true,
   onClose,
   children,
+  maxWidth = 500,
 }) => {
   return (
     <MUIDialog open={open} maxWidth={false} onClose={onClose}>
@@ -48,7 +50,7 @@ export const Dialog: React.FC<Props> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent sx={{ maxWidth }}>{children}</DialogContent>
     </MUIDialog>
   )
 }

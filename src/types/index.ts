@@ -195,7 +195,7 @@ export enum InviteStatus {
 }
 
 export type CourseInvite = {
-  id: number
+  id: string
   email: string
   status: InviteStatus
 }

@@ -131,7 +131,20 @@
       "course-ended": "Course has ended.",
       "trainer": "You are the trainer",
       "hosted-by": "Hosted by {{trainer}}",
-      "back-button": "All courses"
+      "back-button": "All courses",
+      "attending": "{{attending}} of {{max}} attending",
+      "invites-left_one": "{{count}} invite left",
+      "invites-left_other": "{{count}} invites left",
+      "invite-btn": "Invite attendees",
+      "invite-modal-title": "Invite attendees",
+      "invite-modal-intro": "Attendees must upload their forms and documents to fully register to the course.",
+      "invite-send-btn": "Send invites",
+      "invite-input-placeholder": "Email address...",
+      "invite-input-hint": "Press ENTER to add multiple emails",
+      "invite-error-EMAIL_REQUIRED": "Please enter at least one email address",
+      "invite-error-INVALID_EMAILS": "Some emails are invalid",
+      "invite-error-EMAILS_ALREADY_INVITED": "All emails entered have already been invited",
+      "invite-error-LIMIT_REACHED": "Invites limit reached"
     },
     "my-training": {
       "common": {
