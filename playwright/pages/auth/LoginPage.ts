@@ -18,14 +18,14 @@ export class LoginPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.emailInput = this.page.locator('#email')
-    this.emailErrorText = this.page.locator('div[error-for="email"]')
+    this.emailErrorText = this.page.locator('#email-helper-text')
     this.passwordInput = this.page.locator('#password')
-    this.passwordErrorText = this.page.locator('div[error-for="password"]')
+    this.passwordErrorText = this.page.locator('#password-helper-text')
     this.signInButton = this.page.locator('button[data-testid="login-submit"]')
     this.forgotPasswordLink = this.page.locator(
       'a[data-testid="forgot-password-link"]'
     )
-    this.generalErrorText = this.page.locator('#error')
+    this.generalErrorText = this.page.locator('[data-testid="login-error"]')
   }
 
   async goto() {
@@ -48,9 +48,21 @@ export class LoginPage extends BasePage {
     emailError?: string
     passwordError?: string
   }) {
-    await expect(this.generalErrorText).toHaveText(errors.generalError ?? '')
-    await expect(this.emailErrorText).toHaveText(errors.emailError ?? '')
-    await expect(this.passwordErrorText).toHaveText(errors.passwordError ?? '')
+    if (errors.generalError) {
+      await expect(this.generalErrorText).toHaveText(errors.generalError)
+    } else {
+      await expect(this.generalErrorText).not.toBeVisible()
+    }
+    if (errors.emailError) {
+      await expect(this.emailErrorText).toHaveText(errors.emailError)
+    } else {
+      await expect(this.emailErrorText).not.toBeVisible()
+    }
+    if (errors.passwordError) {
+      await expect(this.passwordErrorText).toHaveText(errors.passwordError)
+    } else {
+      await expect(this.passwordErrorText).not.toBeVisible()
+    }
   }
 
   async clickForgotPasswordLink(): Promise<ForgotPasswordPage> {

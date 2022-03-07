@@ -171,7 +171,7 @@ export const LoginPage = () => {
             </LoadingButton>
 
             {loginError && (
-              <FormHelperText sx={{ mt: 2 }} error>
+              <FormHelperText sx={{ mt: 2 }} error data-testid="login-error">
                 {loginError}
               </FormHelperText>
             )}

@@ -19,6 +19,15 @@ test('login error: incorrect email', async ({ page }) => {
   await loginPage.goto()
   await loginPage.logIn('abc@def.ghi', 'jklmnop')
   await loginPage.checkErrors({
-    generalError: 'Email or password was incorrect, please try again',
+    generalError: 'Email address or password was incorrect, please try again',
+  })
+})
+
+test('login error: incorrect password', async ({ page }) => {
+  const loginPage = new LoginPage(page)
+  await loginPage.goto()
+  await loginPage.logIn(DEFAULT_USER.email, DEFAULT_USER.password + '1')
+  await loginPage.checkErrors({
+    generalError: 'Email address or password was incorrect, please try again',
   })
 })
