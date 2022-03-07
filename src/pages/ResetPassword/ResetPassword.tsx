@@ -110,7 +110,10 @@ export const ResetPasswordPage = () => {
     } catch (err: unknown) {
       setIsLoading(false)
       const error = err as E
-      setResetError(t(`pages.reset-password.auth-errors.${error.code}`))
+      setResetError(
+        t(`pages.reset-password.auth-errors.${error.code}`) ||
+          t(`pages.reset-password.auth-errors.UnknownError`)
+      )
     }
   }
 

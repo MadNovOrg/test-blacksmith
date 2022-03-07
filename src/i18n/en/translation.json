@@ -193,7 +193,6 @@
       "forgot-label": "Forgot password",
       "loading-state-part-one": "If you have trouble loading, please ",
       "loading-state-part-two": "contact us",
-
       "auth-errors": {
         "NotAuthorizedException": "Email address or password was incorrect, please try again",
         "UserNotFoundException": "User does not exist",
@@ -207,9 +206,6 @@
       "title": "If you've forgotten your password, simply enter your email address below and we'll send you a link to reset your password ",
       "email-placeholder": "Please enter your email address",
       "email-address": "Email Address",
-      "authErrors": {
-        "UserNotFoundException": "User does not exist"
-      },
       "loading-state-part-one": "If you have trouble loading, please ",
       "loading-state-part-two": "contact us"
     },
@@ -232,12 +228,13 @@
       "password-placeholder": "Please enter your password",
       "enter-passcode": "Enter Passcode",
       "title": "A six-digit authentication code has been sent to your chosen method of 2fa, please enter it below, along with your new password",
-      "authErrors": {
+      "auth-errors": {
         "NotAuthorizedException": "Incorrect username or password",
         "UserNotFoundException": "User does not exist",
         "InvalidPasswordException": "Invalid password",
         "CodeMismatchException": "Passcode is incorrect",
-        "ExpiredCodeException": "Invalid passcode"
+        "ExpiredCodeException": "Invalid passcode",
+        "UnknownError": "An error occurred. Please contact your administrator"
       }
     }
   }
