@@ -175,6 +175,10 @@
         "title": "My Upcoming Training"
       }
     },
+    "participant-course": {
+      "attending-course-label": "You are attending this course",
+      "invite-accepted": "You are now attending this course. Please complete the checklist."
+    },
     "upcoming-training": {
       "course-upcoming": "Course Upcoming",
       "course-takes-place-on": "Course takes place on",

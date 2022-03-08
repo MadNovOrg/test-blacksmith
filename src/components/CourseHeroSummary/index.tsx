@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Button,
   Container,
   Grid,
   List,
@@ -23,9 +22,14 @@ import { Course } from '@app/types'
 
 interface Props {
   course: Course
+  renderButton?: () => React.ReactNode
 }
 
-export const CourseHeroSummary: React.FC<Props> = ({ course, children }) => {
+export const CourseHeroSummary: React.FC<Props> = ({
+  course,
+  children,
+  renderButton,
+}) => {
   const { profile } = useAuth()
 
   const courseBegan = new Date() > new Date(course.schedule[0].start)
@@ -66,9 +70,7 @@ export const CourseHeroSummary: React.FC<Props> = ({ course, children }) => {
             <Typography variant="h3" marginBottom={3} fontWeight={600}>
               {course.name}
             </Typography>
-            <Button variant="contained" color="secondary" size="large">
-              {t('pages.course-participants.edit-course-button')}
-            </Button>
+            {typeof renderButton === 'function' && renderButton()}
           </Grid>
           <Grid item xs={6} md={4}>
             <Typography

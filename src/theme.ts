@@ -122,6 +122,10 @@ const theme = createTheme({
     secondary: {
       main: '#3B3A3C',
     },
+    warning: {
+      light: '#FFF8ED',
+      main: '#F2A61F',
+    },
     error: {
       main: alpha('#FF0000', 0.6),
       light: alpha('#FF0000', 0.2),
@@ -283,6 +287,19 @@ export default createTheme({
           paddingBottom: 0,
           '& .MuiAlert-icon': {
             color: theme.palette.success.main,
+          },
+          '& .MuiAlert-message': {
+            fontWeight: 600,
+            color: theme.palette.secondary.main,
+          },
+        },
+        outlinedWarning: {
+          backgroundColor: theme.palette.warning.light,
+          borderColor: theme.palette.warning.main,
+          paddingTop: 0,
+          paddingBottom: 0,
+          '& .MuiAlert-icon': {
+            color: theme.palette.warning.main,
           },
           '& .MuiAlert-message': {
             fontWeight: 600,

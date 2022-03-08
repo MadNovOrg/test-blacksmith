@@ -17,12 +17,12 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useTranslation } from 'react-i18next'
 
+import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { TableHead } from '@app/components/Table/TableHead'
 
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import useCourse from '@app/hooks/useCourse'
 
-import { CourseHeroSummary } from './CourseHeroSummary'
 import { CourseInvites } from './CourseInvites'
 
 import { LoadingStatus } from '@app/util'
@@ -108,7 +108,14 @@ export const CourseParticipants = () => {
       ) : null}
       {course ? (
         <>
-          <CourseHeroSummary course={course}>
+          <CourseHeroSummary
+            course={course}
+            renderButton={() => (
+              <Button variant="contained" color="secondary" size="large">
+                {t('pages.course-participants.edit-course-button')}
+              </Button>
+            )}
+          >
             <Button
               variant="text"
               startIcon={<ArrowBackIcon />}
