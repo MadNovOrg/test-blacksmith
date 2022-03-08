@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -18,7 +18,7 @@ import { Logo } from '@app/components/Logo'
 
 import { useAuth } from '@app/context/auth'
 
-type LocationState = { from: { pathname: string } }
+type LocationState = { from: { pathname: string; search: string } }
 
 type LoginInput = {
   email: string
@@ -39,7 +39,7 @@ export const LoginPage = () => {
     searchParams.get('email') &&
     searchParams.get('justResetPassword') === 'true'
 
-  const from = (location.state as LocationState)?.from?.pathname || '/'
+  const from = (location.state as LocationState)?.from || {}
 
   const schema = useMemo(
     () =>
@@ -69,25 +69,24 @@ export const LoginPage = () => {
     },
   })
 
-  const onSubmit = useCallback(
-    async (data: LoginInput) => {
-      setIsLoading(true)
-      setLoginError(null)
+  const onSubmit = async (data: LoginInput) => {
+    setIsLoading(true)
+    setLoginError(null)
 
-      const { error } = await auth.login(data.email, data.password)
+    const { error } = await auth.login(data.email, data.password)
 
-      if (!error) {
-        return navigate(from, { replace: true })
-      }
+    if (!error) {
+      return navigate(`${from.pathname || '/'}${from.search || ''}`, {
+        replace: true,
+      })
+    }
 
-      setIsLoading(false)
-      setLoginError(
-        t(`pages.login.auth-errors.${error.code}`) ||
-          t(`pages.login.auth-errors.UnknownError`)
-      )
-    },
-    [auth, from, navigate, t]
-  )
+    setIsLoading(false)
+    setLoginError(
+      t(`pages.login.auth-errors.${error.code}`) ||
+        t(`pages.login.auth-errors.UnknownError`)
+    )
+  }
 
   return (
     <Box

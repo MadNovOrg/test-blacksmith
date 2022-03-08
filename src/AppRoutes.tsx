@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Routes, Route, Outlet, Navigate } from 'react-router-dom'
+import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Box } from '@mui/material'
 
@@ -52,6 +52,11 @@ const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
 // TODO: consider extracting when things grow here
 const Layout: React.FC = () => {
   return <Outlet />
+}
+
+const RedirectToLogin: React.FC = () => {
+  const loc = useLocation()
+  return <Navigate replace to="login" state={{ from: loc }} />
 }
 
 const LoggedInRoutes: React.FC<unknown> = () => {
@@ -118,7 +123,7 @@ const LoggedOutRoutes: React.FC<unknown> = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="login" />} />
-      <Route path="*" element={<Navigate replace to="login" />} />
+      <Route path="*" element={<RedirectToLogin />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />

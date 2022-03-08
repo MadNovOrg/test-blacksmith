@@ -61,6 +61,7 @@ export const InvitationPage = () => {
   const [note, setNote] = useState<string>('')
 
   const token = searchParams.get('token') as string
+  const courseId = searchParams.get('courseId') as string
 
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -83,7 +84,7 @@ export const InvitationPage = () => {
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      navigate('/trainer-base/course/${courseId}/registration') // TODO: fix URL once the page is built
+      navigate(`/my-training/courses/${courseId}?acceptedInvite=true`)
       return
     }
 
@@ -163,10 +164,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                {format(new Date(invite.startDate), 'd MMMM yyyy, HH:mma')}
+                {format(new Date(invite.startDate), 'd MMMM yyyy, HH:mm a')}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {format(new Date(invite.endDate), 'd MMMM yyyy, HH:mma')}
+                {format(new Date(invite.endDate), 'd MMMM yyyy, HH:mm a')}
               </Typography>
               <Typography variant="body2" color="grey.600" gutterBottom>
                 {t('pages.course-participants.course-duration', {
@@ -220,9 +221,9 @@ export const InvitationPage = () => {
                 <FormLabel id="response-q">Are you able to attend?</FormLabel>
                 <RadioGroup
                   aria-labelledby="response-q"
-                  defaultValue="yes"
                   name="response"
                   sx={{ mt: 1 }}
+                  value={response}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setResponse(e.target.value)
                   }
