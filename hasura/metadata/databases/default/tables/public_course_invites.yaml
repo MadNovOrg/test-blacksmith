@@ -25,6 +25,13 @@ select_permissions:
     - course_id
     filter: {}
   role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - status
+    filter: {}
+  role: user
 event_triggers:
 - definition:
     enable_manual: false
