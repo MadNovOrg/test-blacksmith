@@ -6,6 +6,8 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
 
+import { SortOrder } from '@app/types'
+
 type Col = {
   id: string
   label: string
@@ -14,7 +16,7 @@ type Col = {
 
 type TableHeadProps = {
   cols: Col[]
-  order: 'asc' | 'desc'
+  order: SortOrder
   orderBy: string
   onRequestSort: (_: string) => void
 }

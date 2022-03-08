@@ -199,3 +199,5 @@ export type CourseInvite = {
   email: string
   status: InviteStatus
 }
+
+export type SortOrder = 'asc' | 'desc'

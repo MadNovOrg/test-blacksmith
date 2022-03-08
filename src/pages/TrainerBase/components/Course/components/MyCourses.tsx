@@ -26,7 +26,7 @@ import {
   ResponseType as GetMyCoursesResponseType,
   ParamsType as GetMyCourseParamsType,
 } from '@app/queries/courses/get-courses'
-import { CourseLevel, CourseStatus, CourseType } from '@app/types'
+import { CourseLevel, CourseStatus, CourseType, SortOrder } from '@app/types'
 
 type MyCoursesProps = unknown
 
@@ -90,7 +90,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
   const [statusFilter, setStatusFilter] =
     useState<FilterOption[]>(statusOptions)
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+  const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
   const [keywordDebounced] = useDebounce(keyword, 300)
 

@@ -141,11 +141,9 @@ describe('component: CourseParticipants', () => {
 
     expect(
       within(participantRow).getByText(
-        `Email: ${
-          participants[0].contactDetails?.find(
-            contact => contact.type === 'email'
-          )?.value
-        }`
+        participants[0].contactDetails?.find(
+          contact => contact.type === 'email'
+        )?.value ?? ''
       )
     )
 
@@ -185,6 +183,7 @@ describe('component: CourseParticipants', () => {
     expect(useCourseParticipantsMock.mock.calls[1]).toEqual([
       COURSE_ID,
       { limit: PER_PAGE, offset: PER_PAGE },
+      'asc',
     ])
   })
 
@@ -213,5 +212,40 @@ describe('component: CourseParticipants', () => {
     expect(
       screen.getByText('No participants registered yet for this course.')
     ).toBeInTheDocument()
+  })
+
+  it('sorts descending by participants name', () => {
+    const COURSE_ID = 'course-id'
+    const PER_PAGE = 12
+
+    const participants = new Array(PER_PAGE).map(() => buildParticipant())
+
+    useCourseParticipantsMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      total: 15,
+    })
+
+    useCourseMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: buildCourse(),
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+        <Routes>
+          <Route path="/:id/participants" element={<CourseParticipants />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    userEvent.click(screen.getByText('Name'))
+
+    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(2)
+    expect(useCourseParticipantsMock.mock.calls[1]).toEqual([
+      COURSE_ID,
+      { limit: PER_PAGE, offset: 0 },
+      'desc',
+    ])
   })
 })
