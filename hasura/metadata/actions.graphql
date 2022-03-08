@@ -5,8 +5,18 @@ type Mutation {
   ): createSubscriptionOutput
 }
 
+type Mutation {
+  declineInvite(
+    note: String
+  ): DeclineInviteOutput
+}
+
 type Query {
   fetchPlans: [PlanObject]
+}
+
+type Query {
+  getInvite: CourseInvite
 }
 
 type Query {
@@ -30,6 +40,12 @@ enum BillingInterval {
   week
   month
   year
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
 
 input PlansCreateInput {
@@ -67,5 +83,27 @@ type createSubscriptionOutput {
 
 type isUserSubscribedToMembershipResponse {
   isSubscribed: Boolean!
+}
+
+type DeclineInviteOutput {
+  status: Boolean!
+}
+
+type Invite {
+  status: InviteStatus
+}
+
+type CourseInvite {
+  id: String!
+  status: InviteStatus!
+  courseId: String!
+  courseName: String!
+  description: String!
+  trainerName: String!
+  startDate: String!
+  endDate: String!
+  venueName: String!
+  venueAddress: String!
+  venueCoordinates: String!
 }
 

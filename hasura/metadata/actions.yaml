@@ -4,11 +4,25 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
   comment: Creates a membership subscription
+- name: declineInvite
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/invite/decline'
+    forward_client_headers: true
+  permissions:
+  - role: anonymous
 - name: fetchPlans
   definition:
     kind: ""
     handler: '{{ACTIONS_HOST}}/stripe/prices/list'
   comment: Fetches membership plans
+- name: getInvite
+  definition:
+    kind: ""
+    handler: '{{ACTIONS_HOST}}/invite/get'
+    forward_client_headers: true
+  permissions:
+  - role: anonymous
 - name: isUserSubscribedToMembership
   definition:
     kind: ""
@@ -42,6 +56,17 @@ custom_types:
     - description: null
       is_deprecated: null
       value: year
+  - name: InviteStatus
+    values:
+    - description: null
+      is_deprecated: null
+      value: PENDING
+    - description: null
+      is_deprecated: null
+      value: ACCEPTED
+    - description: null
+      is_deprecated: null
+      value: DECLINED
   input_objects:
   - name: PlansCreateInput
   objects:
@@ -50,4 +75,7 @@ custom_types:
   - name: PlanObject
   - name: createSubscriptionOutput
   - name: isUserSubscribedToMembershipResponse
+  - name: DeclineInviteOutput
+  - name: Invite
+  - name: CourseInvite
   scalars: []

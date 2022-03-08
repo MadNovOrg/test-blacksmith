@@ -58,7 +58,8 @@
       "confirm-password-required": "Please re-enter the new password",
       "confirm-password-invalid": "Confirm password must be same as password",
       "otp-required": "Please enter 6 digit passcode received in email"
-    }
+    },
+    "course-registration": "Course Registration"
   },
   "components": {
     "certification-details": {

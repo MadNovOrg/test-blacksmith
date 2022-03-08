@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import {
   FormControl,
   FormLabel,
@@ -9,64 +9,110 @@ import {
   Typography,
   FormHelperText,
   Chip,
+  CircularProgress,
+  Alert,
+  Link,
+  TextField,
 } from '@mui/material'
 import CalendarIcon from '@mui/icons-material/CalendarToday'
 import PersonIcon from '@mui/icons-material/Person'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { gql } from 'graphql-request'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
+import { request, RequestDocument, Variables } from 'graphql-request'
+import { differenceInDays, format } from 'date-fns'
 
 import { Logo } from '@app/components/Logo'
 
-import { gqlRequest } from '@app/lib/gql-request'
+import {
+  QUERY as GET_INVITE_QUERY,
+  ResponseType as GetInviteResponseType,
+} from '@app/queries/invites/get-invite'
+import {
+  MUTATION as DECLINE_INVITE_MUTATION,
+  ParamsType as DeclineInviteParamsType,
+  ResponseType as DeclineInviteResponseType,
+} from '@app/queries/invites/decline-invite'
+import { InviteStatus } from '@app/types'
+import { now } from '@app/util'
 
-import { getServiceAuth } from './auth'
+const hasuraUrl = import.meta.env.VITE_HASURA_GRAPHQL_API
 
-const MUTATION = gql`
-  mutation DeclineInvite($inviteId: uuid!) {
-    update_course_invites_by_pk(
-      pk_columns: { id: $inviteId }
-      _set: { status: DECLINED }
-    ) {
-      id
-    }
-  }
-`
+function gqlRequest<T, V = Variables>(
+  document: RequestDocument,
+  variables: V,
+  token: string
+) {
+  return request<T>({
+    url: hasuraUrl,
+    document,
+    variables,
+    requestHeaders: { 'x-auth': token },
+  })
+}
 
 export const InvitationPage = () => {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
-  const [idToken, setIdToken] = useState<string>()
+  const [note, setNote] = useState<string>('')
+
+  const token = searchParams.get('token') as string
 
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const inviteId = '02f6bc03-4d23-4f0d-8ffc-71886890d599'
+  const { data, error, mutate } = useSWR<GetInviteResponseType>(
+    token ? GET_INVITE_QUERY : null,
+    (query, variables) => gqlRequest(query, variables, token)
+  )
 
-  useEffect(() => {
-    async function fn() {
-      const user = getServiceAuth()
-      await user.refreshSessionIfPossible()
-      const idToken = user.getSignInUserSession()?.getIdToken().getJwtToken()
-      setIdToken(idToken)
-    }
+  const invite = (data?.invite || {}) as GetInviteResponseType['invite']
+  const isFetching = !data && !error
+  const isSubmitted = invite.status !== InviteStatus.PENDING
+  const startsInDays = differenceInDays(new Date(invite.startDate), now())
+  const courseDuration = differenceInDays(
+    new Date(invite.endDate),
+    new Date(invite.startDate)
+  )
 
-    fn()
-  }, [])
+  const address = invite.venueAddress ? JSON.parse(invite.venueAddress) : {} // TODO: can be an array
 
   const handleSubmit = async () => {
+    if (response === 'yes') {
+      navigate('/trainer-base/course/${courseId}/registration') // TODO: fix URL once the page is built
+      return
+    }
+
     setIsLoading(true)
     setSubmitError(null)
 
     try {
-      const response = await gqlRequest(MUTATION, { inviteId }, idToken)
-      console.log(response)
+      await gqlRequest<DeclineInviteResponseType, DeclineInviteParamsType>(
+        DECLINE_INVITE_MUTATION,
+        { note },
+        token
+      )
+      mutate()
     } catch (e) {
       const err = e as Error
       console.log(err)
-      setSubmitError('Something wrong')
+      setSubmitError('Unable to submit response')
     }
 
     setIsLoading(false)
+  }
+
+  if (isFetching) {
+    return <CircularProgress size={40} />
+  }
+
+  if (error) {
+    console.log(error)
+    return null
   }
 
   return (
@@ -78,6 +124,7 @@ export const InvitationPage = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
+      overflow="scroll"
     >
       <Logo size={80} />
 
@@ -90,23 +137,22 @@ export const InvitationPage = () => {
         width={500}
       >
         <Typography variant="h3" fontWeight="600" color="grey.800" mb={3}>
-          Course Registration
+          {t('course-registration')}
         </Typography>
 
         <Typography variant="subtitle2" gutterBottom>
-          Positive Behaviour Training: Level 1
+          {invite.courseName}
         </Typography>
 
         <Typography variant="body2" color="grey.600">
-          Short description of course? Ipsum a pellentesque etiam fermentum
-          nulla consequat risus pulvinar. Etiam quis at commodo nam lectus purus
-          morbi eu amet. Sed accumsan sociis nunc condimentum eu vitae, orci
-          urna.
+          {invite.description}
         </Typography>
 
         <Box mt={3} mb={4}>
           <Chip
-            label="6 days until course begins"
+            label={t('pages.course-participants.until-course-begins', {
+              count: startsInDays,
+            })}
             size="small"
             sx={{ borderRadius: 2, mb: 1 }}
           />
@@ -117,13 +163,15 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                Begins 28 February 2022, 1:30 PM
+                {format(new Date(invite.startDate), 'd MMMM yyyy, HH:mma')}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                Ends 1 March 2022, 5:00 PM
+                {format(new Date(invite.endDate), 'd MMMM yyyy, HH:mma')}
               </Typography>
               <Typography variant="body2" color="grey.600" gutterBottom>
-                Duration 2 days
+                {t('pages.course-participants.course-duration', {
+                  count: courseDuration,
+                })}
               </Typography>
             </Box>
           </Box>
@@ -133,7 +181,11 @@ export const InvitationPage = () => {
               <PersonIcon fontSize="small" />
             </Box>
             <Box>
-              <Typography variant="body2">Hosted by Elizabeth Bark</Typography>
+              <Typography variant="body2">
+                {t('pages.course-participants.hosted-by', {
+                  trainer: invite.trainerName,
+                })}
+              </Typography>
             </Box>
           </Box>
 
@@ -142,73 +194,106 @@ export const InvitationPage = () => {
               <LocationOnIcon fontSize="small" />
             </Box>
             <Box>
-              <Typography variant="subtitle2">South Yorkshire (S64)</Typography>
-              <Typography variant="body2">South Yorkshire S64</Typography>
-              <Typography variant="body2">8QG United Kingdom</Typography>
+              <Typography variant="subtitle2">{invite.venueName}</Typography>
+              <Typography variant="body2">{address.addressLineOne}</Typography>
+              <Typography variant="body2">{address.addressLineTwo}</Typography>
+              <Typography variant="body2">{address.city}</Typography>
+              <Typography variant="body2">{address.country}</Typography>
             </Box>
           </Box>
         </Box>
 
-        <Box mt={3} mb={2}>
-          <Typography variant="subtitle2"></Typography>
+        {isSubmitted ? (
+          <Box display="flex" flexDirection="column" alignItems="center" mb={5}>
+            <Alert variant="outlined" color="success" sx={{ mb: 3 }}>
+              Your response has been sent
+            </Alert>
 
-          <FormControl fullWidth>
-            <FormLabel id="response-q">Are you able to attend?</FormLabel>
-            <RadioGroup
-              aria-labelledby="response-q"
-              defaultValue="yes"
-              name="response"
-              sx={{ mt: 1 }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setResponse(e.target.value)
-              }
+            <Link href="/" variant="body1" fontWeight="600">
+              Go to TeamTeach.co.uk
+            </Link>
+          </Box>
+        ) : (
+          <>
+            <Box mt={3} mb={2}>
+              <FormControl fullWidth>
+                <FormLabel id="response-q">Are you able to attend?</FormLabel>
+                <RadioGroup
+                  aria-labelledby="response-q"
+                  defaultValue="yes"
+                  name="response"
+                  sx={{ mt: 1 }}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setResponse(e.target.value)
+                  }
+                >
+                  <FormControlLabel
+                    value="yes"
+                    control={<Radio />}
+                    label="I will attend"
+                    sx={{
+                      border: 1,
+                      borderColor: 'grey.700',
+                      ml: 0,
+                      height: 50,
+                      borderBottom: 0,
+                      borderTopLeftRadius: 4,
+                      borderTopRightRadius: 4,
+                    }}
+                  />
+                  <FormControlLabel
+                    value="no"
+                    control={<Radio />}
+                    label="I will not attend"
+                    sx={{
+                      border: 1,
+                      borderColor: 'grey.700',
+                      ml: 0,
+                      height: 50,
+                      borderBottomLeftRadius: 4,
+                      borderBottomRightRadius: 4,
+                    }}
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              {response === 'no' && (
+                <Box width="80%" mt={2}>
+                  <TextField
+                    id="note"
+                    variant="standard"
+                    label="Leave a note (optional)"
+                    placeholder="Leave a note (optional)"
+                    fullWidth
+                    value={note}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setNote(e.target.value)
+                    }
+                  />
+                </Box>
+              )}
+            </Box>
+
+            <LoadingButton
+              loading={isLoading}
+              type="button"
+              variant="contained"
+              color="primary"
+              data-testid="login-submit"
+              size="large"
+              onClick={handleSubmit}
             >
-              <FormControlLabel
-                value="yes"
-                control={<Radio />}
-                label="I will attend"
-                sx={{
-                  border: 1,
-                  borderColor: 'grey.700',
-                  ml: 0,
-                  height: 50,
-                  borderBottom: 0,
-                  borderTopLeftRadius: 4,
-                  borderTopRightRadius: 4,
-                }}
-              />
-              <FormControlLabel
-                value="no"
-                control={<Radio />}
-                label="I will not attend"
-                sx={{
-                  border: 1,
-                  borderColor: 'grey.700',
-                  ml: 0,
-                  height: 50,
-                  borderBottomLeftRadius: 4,
-                  borderBottomRightRadius: 4,
-                }}
-              />
-            </RadioGroup>
-          </FormControl>
-        </Box>
-        <LoadingButton
-          loading={isLoading}
-          type="button"
-          variant="contained"
-          color="primary"
-          data-testid="login-submit"
-          size="large"
-          onClick={handleSubmit}
-        >
-          {response === 'yes' ? 'Continue to registration' : 'Send response'}
-        </LoadingButton>
+              {response === 'yes'
+                ? 'Continue to registration'
+                : 'Send response'}
+            </LoadingButton>
 
-        {submitError && (
-          <FormHelperText sx={{ mt: 2 }} error>
-            {submitError}
-          </FormHelperText>
+            {submitError && (
+              <FormHelperText sx={{ mt: 2 }} error>
+                {submitError}
+              </FormHelperText>
+            )}
+          </>
         )}
       </Box>
     </Box>

@@ -127,6 +127,10 @@ const theme = createTheme({
       light: alpha('#FF0000', 0.2),
       dark: alpha('#FF0000', 0.8),
     },
+    success: {
+      main: '#9EB934',
+      light: '#F0F4DD',
+    },
   },
 })
 
@@ -266,6 +270,23 @@ export default createTheme({
           '&.Mui-selected': {
             color: theme.palette.common.black,
             backgroundColor: theme.palette.common.white,
+          },
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        outlinedSuccess: {
+          backgroundColor: theme.palette.success.light,
+          borderColor: theme.palette.success.main,
+          paddingTop: 0,
+          paddingBottom: 0,
+          '& .MuiAlert-icon': {
+            color: theme.palette.success.main,
+          },
+          '& .MuiAlert-message': {
+            fontWeight: 600,
+            color: theme.palette.secondary.main,
           },
         },
       },

@@ -28,8 +28,9 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
       HASURA_GRAPHQL_ADMIN_SECRET: tth-hasura-key
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_MbPqfM7i4/.well-known/jwks.json","claims_format":"stringified_json"}'
-      EVENTS_HOST: 'https://vjil7l5fmc.execute-api.eu-west-2.amazonaws.com/dev'
-      ACTIONS_HOST: 'https://vjil7l5fmc.execute-api.eu-west-2.amazonaws.com/dev'
+      EVENTS_HOST: 'http://docker.for.mac.localhost:5000'
+      ACTIONS_HOST: 'http://docker.for.mac.localhost:5000'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
 
 volumes:
   tth-data:

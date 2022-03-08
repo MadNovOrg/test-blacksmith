@@ -9,9 +9,13 @@ Object {
         class="MuiBox-root css-1nrbtl5"
       >
         <div
-          class="css-sm43lu"
-          size="80"
-        />
+          class="MuiBox-root css-mf869q"
+        >
+          <div
+            height="80"
+            width="80"
+          />
+        </div>
         <div
           class="MuiBox-root css-1cb30mv"
         >
@@ -139,9 +143,13 @@ Object {
       class="MuiBox-root css-1nrbtl5"
     >
       <div
-        class="css-sm43lu"
-        size="80"
-      />
+        class="MuiBox-root css-mf869q"
+      >
+        <div
+          height="80"
+          width="80"
+        />
+      </div>
       <div
         class="MuiBox-root css-1cb30mv"
       >
