@@ -26,9 +26,6 @@ declare module '@mui/material/styles' {
       purple: ColorPartial
       fuschia: ColorPartial
     }
-    typography: {
-      body3: string
-    }
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
@@ -40,18 +37,6 @@ declare module '@mui/material/styles' {
       purple?: ColorPartial
       fuschia?: ColorPartial
     }
-  }
-  interface TypographyVariants {
-    body3: React.CSSProperties
-  }
-  interface TypographyVariantsOptions {
-    body3?: React.CSSProperties
-  }
-}
-
-declare module '@mui/material/Typography' {
-  interface TypographyPropsVariantOverrides {
-    body3: true
   }
 }
 

@@ -33,7 +33,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
         flexDirection: 'column',
         textAlign: {
           xs: 'left',
-          lg: 'right',
+          md: 'right',
         },
       }}
     >

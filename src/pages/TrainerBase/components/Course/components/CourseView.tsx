@@ -347,6 +347,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
       )}
       {data && courseData?.course && (
         <Box
+          pt={{ xs: 6, md: 10 }}
           pb={6}
           margin="auto"
           maxWidth={{
@@ -370,11 +371,8 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                 xs: 'repeat(3, 1fr)',
                 md: 'repeat(8, 1fr)',
               },
-              columnGap: 4,
-              rowGap: {
-                xs: 3,
-                md: 4,
-              },
+              columnGap: { xs: 2, md: 4 },
+              rowGap: { xs: 3, md: 4 },
             }}
           >
             <Box gridColumn="1 / 4">
@@ -457,7 +455,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
                 display="flex"
                 flexDirection="row-reverse"
                 flexWrap="wrap"
-                my={2}
+                my={{ xs: 4, md: 2 }}
                 mx={-1}
               >
                 {mandatoryModules.length ? (

@@ -50,11 +50,11 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
                           p: 1,
                           width: {
                             xs: '6rem',
-                            lg: '7rem',
+                            md: '7rem',
                           },
                           height: {
                             xs: '6rem',
-                            lg: '7rem',
+                            md: '7rem',
                           },
                           color: 'white',
                           borderRadius: '0.375rem',
@@ -77,11 +77,11 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
               p: 1,
               width: {
                 xs: '6rem',
-                lg: '7rem',
+                md: '7rem',
               },
               height: {
                 xs: '6rem',
-                lg: '7rem',
+                md: '7rem',
               },
               color: 'white',
               borderRadius: '0.375rem',
