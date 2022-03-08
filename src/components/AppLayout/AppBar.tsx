@@ -26,6 +26,22 @@ import { Logo } from '../Logo'
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
+  minHeight: 40,
+
+  '& .MuiTabs-indicator': {
+    backgroundColor: theme.palette.primary.main,
+    top: 0,
+    height: '1px',
+  },
+
+  '& .MuiButtonBase-root': {
+    textTransform: 'none',
+
+    '&.Mui-selected': {
+      color: theme.palette.common.black,
+      backgroundColor: theme.palette.common.white,
+    },
+  },
 }))
 
 // TODO: will be generated later based on user/role

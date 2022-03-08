@@ -254,13 +254,9 @@ export default createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
-          minHeight: 40,
-          backgroundColor: theme.palette.grey[100],
-
           '& .MuiTabs-indicator': {
-            backgroundColor: theme.palette.primary.main,
-            top: 0,
-            height: '1px',
+            backgroundColor: theme.palette.grey[500],
+            height: '2px',
           },
         },
       },
@@ -268,12 +264,12 @@ export default createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
+          padding: '10px',
           textTransform: 'none',
-          minHeight: 40,
 
           '&.Mui-selected': {
-            color: theme.palette.common.black,
-            backgroundColor: theme.palette.common.white,
+            color: theme.palette.text.primary,
+            fontWeight: 400,
           },
         },
       },
@@ -305,6 +301,13 @@ export default createTheme({
             fontWeight: 600,
             color: theme.palette.secondary.main,
           },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        filled: {
+          fontWeight: 500,
         },
       },
     },

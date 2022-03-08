@@ -175,7 +175,14 @@
     },
     "participant-course": {
       "attending-course-label": "You are attending this course",
-      "invite-accepted": "You are now attending this course. Please complete the checklist."
+      "invite-accepted": "You are now attending this course. Please complete the checklist.",
+      "checklist-tab-title": "Course checklist",
+      "resources-tab-title": "Resources",
+      "personal-data-document-title": "Personal Data and Health & Safety Consent Form",
+      "open-form-button": "Open form",
+      "course-summary-evaluation-title": "Course summary evaluation",
+      "course-summary-button-after-completion": "Available after course",
+      "resources-empty-message": "Trainer will provide course materials here"
     },
     "upcoming-training": {
       "course-upcoming": "Course Upcoming",
