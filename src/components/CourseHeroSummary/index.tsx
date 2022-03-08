@@ -19,6 +19,7 @@ import { useAuth } from '@app/context/auth'
 
 import theme from '@app/theme'
 import { Course } from '@app/types'
+import { now } from '@app/util'
 
 interface Props {
   course: Course
@@ -50,7 +51,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
     courseBeginsForMessage = t(
       'pages.course-participants.until-course-begins',
       {
-        count: differenceInDays(new Date(), new Date(course.schedule[0].start)),
+        count: differenceInDays(new Date(course.schedule[0].start), now()),
       }
     )
   }

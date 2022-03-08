@@ -74,8 +74,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
           {`${t('pages.trainer-base.create-course.new-course.course-type')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {data.deliveryType &&
-            t(`common.course.delivery-type.${data.deliveryType}`)}
+          {data.deliveryType && t(`course-delivery-type.${data.deliveryType}`)}
         </Typography>
       </Box>
     </Box>

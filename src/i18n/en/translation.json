@@ -27,12 +27,10 @@
     "cancel": "Cancel",
     "clear": "Clear",
     "discard-changes": "Discard Changes",
-    "course": {
-      "delivery-type": {
-        "F2F": "Face to face",
-        "BLENDED": "Blended",
-        "VIRTUAL": "Virtual"
-      }
+    "course-delivery-type": {
+      "F2F": "Face to face",
+      "BLENDED": "Blended",
+      "VIRTUAL": "Virtual"
     },
     "course-levels": {
       "LEVEL_1": "Level One",
