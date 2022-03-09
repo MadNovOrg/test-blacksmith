@@ -14,7 +14,7 @@ function App() {
   const config = useMemo(
     () => ({
       fetcher,
-      onError: (e: string) => console.error('fetcher error', e),
+      onError: () => console.error('fetcher error, check network tab'),
     }),
     [fetcher]
   )

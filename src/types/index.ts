@@ -198,3 +198,8 @@ export type CourseInvite = {
 }
 
 export type SortOrder = 'asc' | 'desc'
+
+export type GqlError = {
+  code: string
+  message: string
+}

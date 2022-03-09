@@ -21,10 +21,11 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
-import { request, RequestDocument, Variables } from 'graphql-request'
 import { differenceInDays, format } from 'date-fns'
 
 import { Logo } from '@app/components/Logo'
+
+import { gqlRequest } from '@app/lib/gql-request'
 
 import {
   QUERY as GET_INVITE_QUERY,
@@ -35,23 +36,8 @@ import {
   ParamsType as DeclineInviteParamsType,
   ResponseType as DeclineInviteResponseType,
 } from '@app/queries/invites/decline-invite'
-import { InviteStatus } from '@app/types'
+import { GqlError, InviteStatus } from '@app/types'
 import { now } from '@app/util'
-
-const hasuraUrl = import.meta.env.VITE_HASURA_GRAPHQL_API
-
-function gqlRequest<T, V = Variables>(
-  document: RequestDocument,
-  variables: V,
-  token: string
-) {
-  return request<T>({
-    url: hasuraUrl,
-    document,
-    variables,
-    requestHeaders: { 'x-auth': token },
-  })
-}
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
@@ -66,9 +52,9 @@ export const InvitationPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const { data, error, mutate } = useSWR<GetInviteResponseType>(
+  const { data, error, mutate } = useSWR<GetInviteResponseType, GqlError>(
     token ? GET_INVITE_QUERY : null,
-    (query, variables) => gqlRequest(query, variables, token)
+    (query, variables) => gqlRequest(query, variables, token, 'x-auth')
   )
 
   const invite = (data?.invite || {}) as GetInviteResponseType['invite']
@@ -112,7 +98,15 @@ export const InvitationPage = () => {
   }
 
   if (error) {
-    console.log(error)
+    // TODO: Need designs
+    if (error.code === 'EXPIRED') {
+      return (
+        <Box>
+          <Typography>Invitation expired</Typography>
+        </Box>
+      )
+    }
+
     return null
   }
 
