@@ -11,7 +11,7 @@ export type ParamsType = {
   courseId: string
   limit?: number
   offset?: number
-  orderBy: Record<string, SortOrder>
+  orderBy: { profile: Record<'givenName' | 'familyName', SortOrder> }
 }
 
 export const QUERY = gql`
@@ -19,7 +19,9 @@ export const QUERY = gql`
     $courseId: uuid!
     $limit: Int
     $offset: Int
-    $orderBy: [course_participant_order_by!] = { firstName: asc, lastName: asc }
+    $orderBy: [course_participant_order_by!] = {
+      profile: { givenName: asc, familyName: asc }
+    }
   ) {
     courseParticipants: course_participant(
       where: { course_id: { _eq: $courseId } }
@@ -28,14 +30,19 @@ export const QUERY = gql`
       order_by: $orderBy
     ) {
       id
-      firstName
-      lastName
+      profile {
+        givenName
+        familyName
+        contactDetails
+        organizations {
+          organization {
+            id
+            name
+          }
+        }
+      }
       invoiceID
       bookingDate
-      organization {
-        name
-      }
-      contactDetails
     }
     courseParticipantsAggregation: course_participant_aggregate(
       where: { course_id: { _eq: $courseId } }

@@ -49,10 +49,7 @@ export const ParticipantCourse = () => {
     contact => contact.type === 'email'
   )
 
-  const { mutate: acceptInvite } = useSWR<unknown, ParamsType>([
-    MUTATION,
-    { courseId, email: participantEmailContact?.value },
-  ])
+  const { mutate: acceptInvite } = useSWR<unknown, ParamsType>([MUTATION])
 
   if (participantEmailContact?.value && acceptedInvite) {
     acceptInvite()

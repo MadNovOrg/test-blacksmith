@@ -26,6 +26,7 @@ export const defaultProviders: Providers = {
       preferences: [],
       createdAt: '',
       updatedAt: '',
+      organizations: [],
     },
     loading: false,
   },

@@ -14,22 +14,6 @@ import {
   CourseInvite,
 } from '@app/types'
 
-export const buildProfile = build<Profile>({
-  fields: {
-    id: fake(f => f.datatype.uuid()),
-    createdAt: new Date().toISOString(),
-    givenName: fake(f => f.name.firstName()),
-    familyName: fake(f => f.name.lastName()),
-    title: fake(f => f.random.word()),
-    status: '',
-    addresses: {},
-    attributes: [],
-    contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
-    tags: null,
-    preferences: {},
-  },
-})
-
 export const buildAddress = build<Address>({
   fields: {
     id: fake(f => f.datatype.uuid()),
@@ -59,6 +43,23 @@ export const buildOrganization = build<Organization>({
     attributes: [{ attribute: 'value' }],
     addresses: [buildAddress()],
     preferences: [],
+  },
+})
+
+export const buildProfile = build<Profile>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    givenName: fake(f => f.name.firstName()),
+    familyName: fake(f => f.name.lastName()),
+    title: fake(f => f.random.word()),
+    status: '',
+    addresses: {},
+    attributes: [],
+    contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
+    tags: null,
+    preferences: {},
+    organizations: [{ organization: buildOrganization() }],
   },
 })
 
@@ -106,10 +107,7 @@ export const buildCourse = build<Course>({
 export const buildParticipant = build<CourseParticipant>({
   fields: {
     id: fake(f => f.datatype.uuid()),
-    firstName: fake(f => f.name.firstName()),
-    lastName: fake(f => f.name.lastName()),
-    organization: buildOrganization(),
-    contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
+    profile: buildProfile(),
     course: buildCourse(),
   },
 })

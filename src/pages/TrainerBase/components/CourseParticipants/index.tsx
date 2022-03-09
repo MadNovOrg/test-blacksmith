@@ -184,16 +184,20 @@ export const CourseParticipants = () => {
                         data-testid={`course-participant-row-${courseParticipant.id}`}
                       >
                         <TableCell>
-                          {courseParticipant.firstName}{' '}
-                          {courseParticipant.lastName}
+                          {courseParticipant.profile.givenName}{' '}
+                          {courseParticipant.profile.familyName}
                         </TableCell>
                         <TableCell>
-                          {courseParticipant.contactDetails.map(
+                          {courseParticipant.profile.contactDetails.map(
                             contact => contact.value
                           )}
                         </TableCell>
                         <TableCell>
-                          {courseParticipant.organization?.name}
+                          {courseParticipant.profile.organizations.map(org => (
+                            <Typography key={org.organization.id}>
+                              {org.organization.name}
+                            </Typography>
+                          ))}
                         </TableCell>
                         <TableCell></TableCell>
                       </TableRow>

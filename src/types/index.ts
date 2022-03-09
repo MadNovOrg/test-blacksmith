@@ -70,6 +70,7 @@ export type Profile = {
   attributes: string[]
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
+  organizations: Array<{ organization: Organization }>
 } & Base
 
 export enum CourseType {
@@ -177,15 +178,11 @@ export type CourseSchedule = {
 
 export type CourseParticipant = {
   id: string
-  firstName?: string
-  lastName?: string
   bookingDate?: Date
-  organization?: Organization
   invoiceID?: string
   registrationId?: string
-  organizationId?: string
   course: Course
-  contactDetails: Record<string, string>[]
+  profile: Profile
 }
 
 export enum InviteStatus {

@@ -24,7 +24,7 @@ export default function useCourseParticipants(
       courseId: courseId,
       limit: pagination?.limit,
       offset: pagination?.offset,
-      orderBy: { firstName: order, lastName: order },
+      orderBy: { profile: { givenName: order, familyName: order } },
     },
   ])
 
