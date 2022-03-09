@@ -1,5 +1,8 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
+import InfoIcon from '@mui/icons-material/InfoOutlined'
+
+import { IconDialog } from '@app/components/IconDialog'
 
 import { ModuleGroup } from '@app/types'
 import { formatDurationShort } from '@app/util'
@@ -27,14 +30,43 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
     color="white"
     bgcolor={bgColor}
     borderRadius="0.375rem"
-    justifyContent="center"
     {...props}
   >
-    <Typography mb={1} variant="caption" fontWeight="600" textAlign="center">
+    <Typography
+      variant="caption"
+      sx={{
+        fontWeight: 600,
+        textAlign: 'left',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 3,
+        WebkitBoxOrient: 'vertical',
+        height: {
+          xs: '4rem',
+          md: '5rem',
+        },
+        wordBreak: 'break-word',
+      }}
+    >
       {data.name}
     </Typography>
     <Typography variant="caption" position="absolute" bottom={3} left={4}>
       {formatDurationShort(data.duration.aggregate.sum.duration)}
     </Typography>
+    <Box position="absolute" bottom={0} right={0}>
+      <IconDialog icon={<InfoIcon />}>
+        <>
+          <Typography variant="body2" fontWeight="600">
+            {data.name}:
+          </Typography>
+          {data.modules.map(module => (
+            <Typography variant="body2" key={module.id}>
+              {module.name}
+            </Typography>
+          ))}
+        </>
+      </IconDialog>
+    </Box>
   </Box>
 )
