@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-import { Logo } from '@app/components/Logo'
+import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 
 type ForgotPasswordInput = {
   email: string
@@ -58,82 +58,62 @@ export const ForgotPasswordPage = () => {
   }
 
   return (
-    <Box
-      bgcolor="grey.200"
-      width="100%"
-      height="100%"
-      p={10}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-    >
-      <Logo size={80} />
+    <AppLayoutMinimal>
+      <Typography variant="h6" fontWeight="600" color="grey.800" gutterBottom>
+        Reset password
+      </Typography>
+
+      <Typography variant="body2">
+        {t('pages.forgot-password.title')}
+      </Typography>
 
       <Box
-        mt={5}
-        bgcolor="common.white"
-        py={5}
-        px={10}
-        borderRadius={2}
-        width={500}
-        textAlign="center"
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        data-testid="LoginForm"
+        noValidate
+        autoComplete="off"
+        sx={{ mt: 4 }}
       >
-        <Typography variant="h6" fontWeight="600" color="grey.800" gutterBottom>
-          Reset password
-        </Typography>
+        <Box component="section">
+          <Box mb={4}>
+            <TextField
+              id="email"
+              variant="standard"
+              label={t('pages.forgot-password.email-address')}
+              placeholder={t('pages.forgot-password.email-placeholder')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              {...register('email')}
+              fullWidth
+            />
+          </Box>
 
-        <Typography variant="body2">
-          {t('pages.forgot-password.title')}
-        </Typography>
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <LoadingButton
+              loading={isLoading}
+              type="submit"
+              variant="contained"
+              color="primary"
+              data-testid="forgot-pass-submit"
+              size="large"
+            >
+              {t('submit')}
+            </LoadingButton>
 
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          data-testid="LoginForm"
-          noValidate
-          autoComplete="off"
-          sx={{ mt: 4 }}
-        >
-          <Box component="section">
-            <Box mb={4}>
-              <TextField
-                id="email"
-                variant="standard"
-                label={t('pages.forgot-password.email-address')}
-                placeholder={t('pages.forgot-password.email-placeholder')}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-                {...register('email')}
-                fullWidth
-              />
-            </Box>
-
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <LoadingButton
-                loading={isLoading}
-                type="submit"
-                variant="contained"
-                color="primary"
-                data-testid="forgot-pass-submit"
-                size="large"
-              >
-                {t('submit')}
-              </LoadingButton>
-
-              <Link
-                component={Button}
-                color="primary"
-                size="large"
-                sx={{ mt: 4 }}
-                href="/login"
-                data-testid="cancel-link"
-              >
-                {t('cancel')}
-              </Link>
-            </Box>
+            <Link
+              component={Button}
+              color="primary"
+              size="large"
+              sx={{ mt: 4 }}
+              href="/login"
+              data-testid="cancel-link"
+            >
+              {t('cancel')}
+            </Link>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </AppLayoutMinimal>
   )
 }

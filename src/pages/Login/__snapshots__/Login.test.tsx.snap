@@ -6,7 +6,7 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="MuiBox-root css-1nrbtl5"
+        class="MuiBox-root css-16d3e73"
       >
         <div
           class="MuiBox-root css-mf869q"
@@ -17,7 +17,7 @@ Object {
           />
         </div>
         <div
-          class="MuiBox-root css-1cb30mv"
+          class="MuiBox-root css-1prhbtn"
         >
           <h6
             class="MuiTypography-root MuiTypography-h6 css-1ujikh7-MuiTypography-root"
@@ -111,23 +111,20 @@ Object {
                   class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                 />
               </button>
-              <button
-                class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-1d9tfpj-MuiButtonBase-root-MuiButton-root"
-                tabindex="0"
-                type="button"
+              <a
+                class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-t3lr28-MuiTypography-root-MuiLink-root"
+                data-testid="sign-up-link"
+                href="/sign-up"
               >
                 Or Sign up for an account
-                <span
-                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                />
-              </button>
+              </a>
             </div>
           </form>
           <div
             class="MuiBox-root css-h8m1q6"
           >
             <a
-              class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1xi64lh-MuiTypography-root-MuiLink-root"
               data-testid="forgot-password-link"
               href="/forgot-password"
             >
@@ -140,7 +137,7 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="MuiBox-root css-1nrbtl5"
+      class="MuiBox-root css-16d3e73"
     >
       <div
         class="MuiBox-root css-mf869q"
@@ -151,7 +148,7 @@ Object {
         />
       </div>
       <div
-        class="MuiBox-root css-1cb30mv"
+        class="MuiBox-root css-1prhbtn"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6 css-1ujikh7-MuiTypography-root"
@@ -245,23 +242,20 @@ Object {
                 class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
               />
             </button>
-            <button
-              class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-1d9tfpj-MuiButtonBase-root-MuiButton-root"
-              tabindex="0"
-              type="button"
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-t3lr28-MuiTypography-root-MuiLink-root"
+              data-testid="sign-up-link"
+              href="/sign-up"
             >
               Or Sign up for an account
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
+            </a>
           </div>
         </form>
         <div
           class="MuiBox-root css-h8m1q6"
         >
           <a
-            class="MuiTypography-root MuiTypography-subtitle1 MuiLink-root MuiLink-underlineAlways css-1vmwua3-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1xi64lh-MuiTypography-root-MuiLink-root"
             data-testid="forgot-password-link"
             href="/forgot-password"
           >
