@@ -28,8 +28,8 @@ test('reset password', async ({ page }) => {
   const newPassword = `$qweRTY${new Date().getMilliseconds()}`
   const forgotPasswordPage = new ForgotPasswordPage(page)
   await forgotPasswordPage.goto()
-  await forgotPasswordPage.submitEmail(users.trainer.email)
-  const email = await getLatestEmail(users.trainer.email)
+  await forgotPasswordPage.submitEmail(users.resetPassword.email)
+  const email = await getLatestEmail(users.resetPassword.email)
   const emailPage = new EmailPage(page)
   await emailPage.renderContent(email.html)
   const resetPasswordPage = await emailPage.clickResetPasswordLink()
@@ -38,7 +38,7 @@ test('reset password', async ({ page }) => {
     newPassword,
     newPassword
   )
-  const homePage = await loginPage.logIn(users.trainer.email, newPassword)
+  const homePage = await loginPage.logIn(users.resetPassword.email, newPassword)
   await homePage.userMenu.checkIsVisible()
 })
 

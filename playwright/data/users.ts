@@ -13,4 +13,10 @@ export const users: { [key: string]: User } = {
     email: 'trainer@teamteach.testinator.com',
     password: 'Test12345!',
   },
+  resetPassword: {
+    givenName: 'Logan',
+    familyName: 'Password',
+    email: 'password@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
 }
