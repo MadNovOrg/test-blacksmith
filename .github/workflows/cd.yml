@@ -46,8 +46,8 @@ jobs:
         run: npm run build
         env:
           VITE_AWS_REGION: eu-west-2
-          VITE_COGNITO_USER_POOL_ID: eu-west-2_MbPqfM7i4
-          VITE_COGNITO_USER_POOL_CLIENT_ID: 7s0cqsg26utmorpp4lllfakji1
+          VITE_COGNITO_USER_POOL_ID: eu-west-2_JYEuK9iJg
+          VITE_COGNITO_USER_POOL_CLIENT_ID: fj4mk6om0itrhifsm3kki5h2m
           VITE_HASURA_GRAPHQL_API: '${{ secrets.HASURA_ENDPOINT }}/v1/graphql'
 
       - name: Deploy to S3 bucket
@@ -67,7 +67,7 @@ jobs:
 
       - name: Install Hasura CLI
         run: |
-          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.1.1 bash
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.3.0 bash
 
       - name: Apply Hasura migrations
         working-directory: ./hasura
