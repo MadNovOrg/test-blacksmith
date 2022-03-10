@@ -28,7 +28,7 @@
     "clear": "Clear",
     "discard-changes": "Discard Changes",
     "course-delivery-type": {
-      "F2F": "Face to face",
+      "F2F": "Face to Face",
       "BLENDED": "Blended",
       "VIRTUAL": "Virtual"
     },
