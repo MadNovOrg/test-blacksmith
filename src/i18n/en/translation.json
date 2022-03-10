@@ -48,6 +48,9 @@
       "DRAFT": "Draft",
       "PUBLISHED": "Published"
     },
+    "validation-hints": {
+      "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
+    },
     "validation-errors": {
       "email-required": "Please enter your email",
       "email-invalid": "Please enter a valid email address",
@@ -222,9 +225,8 @@
       "loading-state-part-two": "contact us",
       "auth-errors": {
         "NotAuthorizedException": "Email address or password was incorrect, please try again",
-        "UserNotFoundException": "User does not exist",
         "401": "New password required",
-        "UnknownError": "An error occurred. Please contact your administrator"
+        "UnknownError": "Email address or password was incorrect, please try again"
       }
     },
     "forgot-password": {
@@ -245,7 +247,6 @@
       "please-contact": "please contact us",
       "reset": "Reset Password",
       "incorrect-username-or-password": "Incorrect username or password",
-      "user-does-not-exist": "User does not exist",
       "enter-password": "Please enter a password",
       "invalid-password": "Invalid password",
       "incorrect-passcode": "Passcode is incorrect",
@@ -257,11 +258,11 @@
       "title": "A six-digit authentication code has been sent to your chosen method of 2fa, please enter it below, along with your new password",
       "auth-errors": {
         "NotAuthorizedException": "Incorrect username or password",
-        "UserNotFoundException": "User does not exist",
-        "InvalidPasswordException": "Invalid password",
+        "InvalidPasswordException": "Password does not conform to policy",
         "CodeMismatchException": "Passcode is incorrect",
         "ExpiredCodeException": "Invalid passcode",
-        "UnknownError": "An error occurred. Please contact your administrator"
+        "UnknownError": "An error occurred. Please contact your administrator",
+        "LimitExceededException": "Attempt limit exceeded, please try again after some time"
       }
     }
   }

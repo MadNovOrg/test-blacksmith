@@ -48,6 +48,7 @@ export const ResetPasswordPage = () => {
   const [resetError, setResetError] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
   const [resent, setResent] = useState(false)
+  const [showPasswordReqs, setShowPasswordReqs] = useState(false)
 
   const handleResend = async () => {
     setResent(true)
@@ -196,8 +197,9 @@ export const ResetPasswordPage = () => {
               </Typography>
               <Typography variant="body1">{email}</Typography>
             </Box>
-            <Box mb={4}>
+            <Box mb={1}>
               <TextField
+                onFocus={() => setShowPasswordReqs(true)}
                 id="password"
                 type="password"
                 variant="standard"
@@ -210,6 +212,16 @@ export const ResetPasswordPage = () => {
                 fullWidth
               />
             </Box>
+
+            <div>
+              {showPasswordReqs ? (
+                <Box mb={2}>
+                  <FormHelperText>
+                    {t('validation-hints.pw-format')}
+                  </FormHelperText>
+                </Box>
+              ) : null}
+            </div>
 
             <Box mb={4}>
               <TextField
