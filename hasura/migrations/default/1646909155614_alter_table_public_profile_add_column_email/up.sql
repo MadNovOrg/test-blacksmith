@@ -3,7 +3,7 @@ alter table "public"."profile" add column "email" text null;
 with subquery as (
     select p.id as profile_id, details.value as email
     from profile p, jsonb_to_recordset(p.contact_details) as details(type text, value text)
-    where type = 'email'
+    where jsonb_typeof(contact_details) = 'array' and type = 'email'
 )
 update "public"."profile" set email = subquery.email
 from subquery
