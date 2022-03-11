@@ -283,7 +283,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           status: CourseStatus.PUBLISHED,
         })
         navigate({
-          pathname: `/trainer-base/course/${courseData.course.id}/participants`,
+          pathname: `/trainer-base/course/${courseData.course.id}/participants?courseJustSubmitted=true`,
         })
       } catch (e: unknown) {
         setSubmitError((e as Error).message)

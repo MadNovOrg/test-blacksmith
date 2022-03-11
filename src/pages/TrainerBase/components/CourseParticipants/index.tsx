@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   Container,
   Table,
@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { TableHead } from '@app/components/Table/TableHead'
+import { Expire } from '@app/components/Expire'
 
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import useCourse from '@app/hooks/useCourse'
@@ -33,11 +34,14 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const CourseParticipants = () => {
   const { id: courseId } = useParams()
+  const [searchParams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [order, setOrder] = useState<SortOrder>('asc')
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const courseJustSubmitted = searchParams.get('courseJustSubmitted') === 'true'
 
   const {
     status: courseLoadingStatus,
@@ -162,6 +166,14 @@ export const CourseParticipants = () => {
                   max: course.max_participants,
                 })}
               </Typography>
+
+              {courseJustSubmitted && (
+                <Expire delay={3000}>
+                  <Alert variant="outlined" color="success">
+                    {`You have successfully created your ${course.name} Course`}
+                  </Alert>
+                </Expire>
+              )}
               <CourseInvites course={course} />
             </Grid>
 
