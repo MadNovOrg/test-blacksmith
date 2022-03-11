@@ -59,7 +59,10 @@ export const ForgotPasswordPage = () => {
 
   return (
     <AppLayoutMinimal>
-      <Typography variant="h6" fontWeight="600" color="grey.800" gutterBottom>
+      <Typography
+        variant="h3"
+        sx={{ mb: 3, textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
+      >
         Reset password
       </Typography>
 

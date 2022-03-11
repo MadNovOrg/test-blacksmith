@@ -36,24 +36,24 @@ export const SignUpPage: React.FC = () => {
           href="/login"
           data-testid="back-to-login"
           sx={{
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: 600,
             color: 'grey.800',
             display: 'flex',
             alignItems: 'center',
             position: 'absolute',
-            left: 20,
-            top: 20,
+            left: 10,
+            top: 10,
           }}
         >
-          <ArrowBackIcon sx={{ mr: 1 }} />
+          <ArrowBackIcon sx={{ mr: '.3em', fontSize: '1.5em' }} />
           {t('pages.signup.back-to-login')}
         </Link>
       ) : null}
 
       <Typography
         variant="h3"
-        sx={{ mt: 3, textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
+        sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
       >
         {t('pages.signup.heading')}
       </Typography>

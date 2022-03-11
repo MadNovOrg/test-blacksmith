@@ -87,7 +87,10 @@ export const LoginPage = () => {
         <Typography variant="body2">{t('pages.login.reset-pass')}</Typography>
       ) : null}
 
-      <Typography variant="h6" fontWeight="600" color="grey.800">
+      <Typography
+        variant="h3"
+        sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
+      >
         Log in to Team Teach
       </Typography>
 
@@ -160,7 +163,7 @@ export const LoginPage = () => {
         </Box>
       </Box>
 
-      <Box mt={8}>
+      <Box sx={{ mt: 8, textAlign: 'center' }}>
         <Link
           href="/forgot-password"
           data-testid="forgot-password-link"
