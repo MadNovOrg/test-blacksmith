@@ -1,5 +1,7 @@
 --45045398-f757-4ece-85c0-bdf2d95d7cee, 913777a7-07fd-46d6-8ad8-d7498f630aea, bd42bbfb-9b7d-4028-ba50-6f8bbb6884d6
 
+UPDATE course SET max_participants = 25 WHERE id = '45045398-f757-4ece-85c0-bdf2d95d7cee';
+
 -- insert participants to profile table
 INSERT INTO profile (id, given_name, family_name, email) VALUES
 ('fdedead5-1218-4332-8199-8b2bdce414a7', 'John', 'Doe', 'john.doe@gmail.com'),
