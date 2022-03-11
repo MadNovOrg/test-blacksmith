@@ -3,11 +3,14 @@ import React from 'react'
 import deepmerge from 'deepmerge'
 import { DeepPartial } from 'ts-essentials'
 import Chance from 'chance'
-
 import '@app/i18n/config'
+import { ThemeProvider } from '@mui/material'
+
 import { AuthContext, ContextType } from '@app/context/auth'
 
 import { defaultProviders, Providers } from './providers'
+
+import theme from '@app/theme'
 
 const chance = new Chance()
 
@@ -20,7 +23,7 @@ function render(
   const wrapper: React.FC = ({ children }) => {
     return (
       <AuthContext.Provider value={context.auth as ContextType}>
-        {children}
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </AuthContext.Provider>
     )
   }

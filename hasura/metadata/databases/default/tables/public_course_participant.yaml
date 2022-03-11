@@ -2,6 +2,7 @@ table:
   name: course_participant
   schema: public
 configuration:
+  comment: null
   custom_column_names:
     booking_date: bookingDate
     invoice_id: invoiceID
@@ -16,6 +17,19 @@ object_relationships:
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      invite:
+        email:
+          _eq: X-Hasura-User-Email
+    columns:
+    - course_id
+    - invite_id
+    set:
+      profile_id: x-hasura-User-Id
+  role: user
 select_permissions:
 - permission:
     allow_aggregations: true

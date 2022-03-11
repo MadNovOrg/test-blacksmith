@@ -30,7 +30,9 @@ update_permissions:
     check: null
     columns:
     - status
-    filter: {}
+    filter:
+      email:
+        _eq: X-Hasura-User-Email
   role: user
 event_triggers:
 - definition:

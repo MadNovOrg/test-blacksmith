@@ -17,19 +17,15 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useTranslation } from 'react-i18next'
 import InfoIcon from '@mui/icons-material/Info'
-import useSWR from 'swr'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { styled } from '@mui/system'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 
-import { useAuth } from '@app/context/auth'
-
 import useCourse from '@app/hooks/useCourse'
 
 import { LoadingStatus } from '@app/util'
-import { MUTATION, ParamsType } from '@app/queries/invites/accept-invite'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -42,18 +38,6 @@ export const ParticipantCourse = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const acceptedInvite = searchParams.get('acceptedInvite') as string
-
-  const { profile } = useAuth()
-
-  const participantEmailContact = profile?.contactDetails.find(
-    contact => contact.type === 'email'
-  )
-
-  const { mutate: acceptInvite } = useSWR<unknown, ParamsType>([MUTATION])
-
-  if (participantEmailContact?.value && acceptedInvite) {
-    acceptInvite()
-  }
 
   const {
     status: courseLoadingStatus,
@@ -116,6 +100,7 @@ export const ParticipantCourse = () => {
                   variant="outlined"
                   color="success"
                   sx={{ marginBottom: 2, display: 'inline-flex' }}
+                  data-testid="accepted-invite-alert"
                 >
                   {t('pages.participant-course.invite-accepted')}
                 </Alert>

@@ -70,7 +70,7 @@ export const InvitationPage = () => {
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      navigate(`/my-training/courses/${courseId}?acceptedInvite=true`)
+      navigate(`/my-training/accept-invite/${courseId}`)
       return
     }
 
