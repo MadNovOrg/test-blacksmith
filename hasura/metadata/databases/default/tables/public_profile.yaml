@@ -2,6 +2,7 @@ table:
   name: profile
   schema: public
 configuration:
+  comment: null
   custom_column_names:
     contact_details: contactDetails
     created_at: createdAt
@@ -39,18 +40,19 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
-    - id
-    - given_name
-    - family_name
-    - title
-    - tags
-    - status
-    - contact_details
-    - attributes
     - addresses
-    - preferences
-    - original_record
+    - attributes
+    - contact_details
     - created_at
+    - email
+    - family_name
+    - given_name
+    - id
+    - original_record
+    - preferences
+    - status
+    - tags
+    - title
     - updated_at
     filter: {}
   role: user

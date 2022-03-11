@@ -71,6 +71,7 @@ export type Profile = {
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
   organizations: Array<{ organization: Organization }>
+  email: string
 } & Base
 
 export enum CourseType {

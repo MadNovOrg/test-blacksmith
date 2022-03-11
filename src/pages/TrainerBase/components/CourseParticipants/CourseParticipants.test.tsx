@@ -139,13 +139,7 @@ describe('component: CourseParticipants', () => {
       )
     ).toBeInTheDocument()
 
-    expect(
-      within(participantRow).getByText(
-        participants[0].profile.contactDetails?.find(
-          contact => contact.type === 'email'
-        )?.value ?? ''
-      )
-    )
+    expect(within(participantRow).getByText(participants[0].profile.email))
 
     expect(
       within(participantRow).getByText(

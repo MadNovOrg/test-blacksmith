@@ -33,6 +33,7 @@ export const QUERY = gql`
       profile {
         givenName
         familyName
+        email
         contactDetails
         organizations {
           organization {

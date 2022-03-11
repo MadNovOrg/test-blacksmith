@@ -30,6 +30,7 @@ export const PROFILE = gql`
     status
     createdAt
     updatedAt
+    email
   }
 `
 

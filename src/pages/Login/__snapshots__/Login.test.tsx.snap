@@ -273,12 +273,9 @@ Object {
       "profile": Object {
         "addresses": Array [],
         "attributes": Array [],
-        "contactDetails": Array [
-          Object {
-            "email": "john.smith@example.com",
-          },
-        ],
+        "contactDetails": Array [],
         "createdAt": "",
+        "email": "john.smith@example.com",
         "familyName": "Smith",
         "givenName": "John",
         "id": "cacb559d-b85d-5e64-b623-37252520ebda",

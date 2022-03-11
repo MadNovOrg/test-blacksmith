@@ -188,6 +188,7 @@ export const CourseParticipants = () => {
                           {courseParticipant.profile.familyName}
                         </TableCell>
                         <TableCell>
+                          {courseParticipant.profile.email}
                           {courseParticipant.profile.contactDetails.map(
                             contact => contact.value
                           )}
