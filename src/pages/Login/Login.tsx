@@ -110,6 +110,7 @@ export const LoginPage = () => {
               error={!!errors.email}
               helperText={errors.email?.message}
               {...register('email')}
+              autoFocus
               fullWidth
               inputProps={{ 'data-testid': 'input-email' }}
             />
@@ -151,10 +152,8 @@ export const LoginPage = () => {
 
           <Link
             href="/sign-up"
-            fontWeight="600"
-            color="primary.main"
-            mt={4}
             data-testid="sign-up-link"
+            sx={{ mt: 4, color: 'primary.main', fontWeight: '600' }}
           >
             {t('pages.login.sign-up-message')}
           </Link>
@@ -164,9 +163,8 @@ export const LoginPage = () => {
       <Box mt={8}>
         <Link
           href="/forgot-password"
-          fontWeight="600"
-          color="primary.main"
           data-testid="forgot-password-link"
+          sx={{ color: 'primary.main', fontWeight: '600' }}
         >
           {t('pages.login.forgot-label')}
         </Link>

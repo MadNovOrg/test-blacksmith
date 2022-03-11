@@ -31,7 +31,6 @@ export const AppLayoutMinimal: React.FC<Props> = ({
         px={10}
         borderRadius={2}
         width={width}
-        textAlign="center"
         position="relative"
       >
         {children}
