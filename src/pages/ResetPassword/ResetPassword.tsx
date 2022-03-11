@@ -195,7 +195,9 @@ export const ResetPasswordPage = () => {
               <Typography variant="body2" gutterBottom>
                 Changing password for:
               </Typography>
-              <Typography variant="body1">{email}</Typography>
+              <Typography variant="body1" data-testid="email">
+                {email}
+              </Typography>
             </Box>
             <Box mb={1}>
               <TextField
@@ -279,7 +281,7 @@ export const ResetPasswordPage = () => {
             </LoadingButton>
 
             {resetError && (
-              <FormHelperText sx={{ mt: 2 }} error>
+              <FormHelperText sx={{ mt: 2 }} error data-testid="form-error">
                 {resetError}
               </FormHelperText>
             )}

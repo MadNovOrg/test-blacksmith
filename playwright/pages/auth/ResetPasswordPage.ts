@@ -15,6 +15,7 @@ export class ResetPasswordPage extends BasePage {
   readonly confirmationCodeInputs: Locator
   readonly resetPasswordButton: Locator
   readonly passwordErrorText: Locator
+  readonly generalErrorText: Locator
 
   constructor(page: Page) {
     super(page)
@@ -30,6 +31,7 @@ export class ResetPasswordPage extends BasePage {
     this.resetPasswordButton = this.page.locator(
       'button[data-testid="reset-password"]'
     )
+    this.generalErrorText = this.page.locator('[data-testid="form-error"]')
   }
 
   async goto() {
@@ -69,6 +71,10 @@ export class ResetPasswordPage extends BasePage {
 
   async checkPasswordError(text: string) {
     await expect(this.passwordErrorText).toHaveText(text)
+  }
+
+  async checkGeneralError(text: string) {
+    await expect(this.generalErrorText).toHaveText(text)
   }
 
   async fillPassCode(value: string) {

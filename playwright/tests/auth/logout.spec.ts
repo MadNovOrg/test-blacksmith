@@ -1,7 +1,11 @@
+import { test } from '@playwright/test'
+
+import { stateFilePath } from '../../hooks/global-setup'
 import { Option } from '../../components/UserMenu'
-import { trainerTest as test } from '../../fixtures/auth'
 import { HomePage } from '../../pages/HomePage'
 import { LoginPage } from '../../pages/auth/LoginPage'
+
+test.use({ storageState: stateFilePath('trainer') })
 
 test('logout @smoke', async ({ page }) => {
   const homePage = new HomePage(page)

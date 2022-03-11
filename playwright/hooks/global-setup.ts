@@ -1,24 +1,22 @@
 import { rm } from 'fs'
 
-import { chromium } from '@playwright/test'
+import { Browser, chromium } from '@playwright/test'
 
-import { DEFAULT_USER, TEMP_DIR } from '../constants'
+import { TEMP_DIR } from '../constants'
 import { HomePage } from '../pages/HomePage'
 import { LoginPage } from '../pages/auth/LoginPage'
+import { users } from '../data/users'
 
-export const stateFilePath = (role: string) =>
-  `${TEMP_DIR}/storage-${role}.json`
+export const stateFilePath = (userKey: string) =>
+  `${TEMP_DIR}/storage-${userKey}.json`
 
-const login = async (role: string) => {
-  const browser = await chromium.launch()
-  const context = await browser.newContext()
-  const page = await context.newPage()
+const login = async (browser: Browser, userKey: string) => {
+  const page = await browser.newPage()
   const loginPage = new LoginPage(page)
   await loginPage.goto()
-  await loginPage.logIn(DEFAULT_USER.email, DEFAULT_USER.password)
+  await loginPage.logIn(users[userKey].email, users[userKey].password)
   await new HomePage(page).userMenu.checkIsVisible()
-  await context.storageState({ path: stateFilePath(role) })
-  await browser.close()
+  await page.context().storageState({ path: stateFilePath(userKey) })
 }
 
 async function globalSetup() {
@@ -26,7 +24,11 @@ async function globalSetup() {
     rm(TEMP_DIR, { recursive: true, force: true }, () => {
       console.log('Removed temp directory')
     })
-    await login('trainer')
+    const browser = await chromium.launch()
+    await login(browser, 'admin')
+    await login(browser, 'trainer')
+    await login(browser, 'trainerWithOrg')
+    await browser.close()
   }
 }
 
