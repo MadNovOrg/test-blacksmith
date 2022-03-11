@@ -6,9 +6,10 @@ import { Link, Box, Button, TextField, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
+
+import { yup, schemas } from '@app/schemas'
 
 type ForgotPasswordInput = {
   email: string
@@ -19,18 +20,7 @@ export const ForgotPasswordPage = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
-  const schema = useMemo(
-    () =>
-      yup
-        .object({
-          email: yup
-            .string()
-            .email(t('validation-errors.email-invalid'))
-            .required(t('validation-errors.email-required')),
-        })
-        .required(),
-    [t]
-  )
+  const schema = useMemo(() => yup.object({ email: schemas.email(t) }), [t])
 
   const {
     register,
@@ -63,17 +53,16 @@ export const ForgotPasswordPage = () => {
         variant="h3"
         sx={{ mb: 3, textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
       >
-        Reset password
+        {t('pages.forgot-password.title')}
       </Typography>
 
       <Typography variant="body2">
-        {t('pages.forgot-password.title')}
+        {t('pages.forgot-password.subtitle')}
       </Typography>
 
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
-        data-testid="LoginForm"
         noValidate
         autoComplete="off"
         sx={{ mt: 4 }}
@@ -89,6 +78,7 @@ export const ForgotPasswordPage = () => {
               helperText={errors.email?.message}
               {...register('email')}
               fullWidth
+              inputProps={{ 'data-testid': 'forgot-email-input' }}
             />
           </Box>
 
