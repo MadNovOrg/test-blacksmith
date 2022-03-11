@@ -54,36 +54,37 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('99ac246d-1b0a-4075-bff6-1550330c5ea8', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com
 ('9e148a44-ee2f-446d-a188-da5dfdb0f6ac', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'); -- password@teamteach.testinator.com
 
+-- Skipping adding any roles until roles functionality is implemented
 -- Adding all roles to all dev users
-INSERT INTO profile_role (profile_id, role_id) SELECT '434de6da-cdc5-431b-b109-022854319d69', id FROM role; -- jonpaul.little@teamteach.co.uk
-INSERT INTO profile_role (profile_id, role_id) SELECT '77eaddad-ba95-4ab7-9ef7-801b347d6502', id FROM role; -- andrew.winterbotham@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT 'fa65eb40-e964-481c-a42d-7c6c7a20c7b0', id FROM role; -- grzegorz.ilach@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT 'bb665826-8ff0-45f7-a75f-babdad3d8e17', id FROM role; -- salman.mitha@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT '83156e3f-a075-43b5-b345-dacb06d5b057', id FROM role; -- aneesa.ramzan@teamteach.co.uk
-INSERT INTO profile_role (profile_id, role_id) SELECT 'aa0302db-e4b4-4fb0-9b54-42082f57b0fd', id FROM role; -- spyridon.chortis@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT '99a03e41-f518-49a2-98cd-c77cb2e33483', id FROM role; -- maksym.barvinskyi@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT 'ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', id FROM role; -- lefteris.paraskevas@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT '7eb8bd38-3048-4416-90d2-4b2299e4633b', id FROM role; -- alex.parra@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT '7584edda-3772-447c-9162-25f7fc6a9b38', id FROM role; -- danijel.maksimovic@nearform.com
-INSERT INTO profile_role (profile_id, role_id) SELECT '8fc963f5-1942-4e70-9107-7a84fe2e68d5', id FROM role; -- piotr.piech@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '434de6da-cdc5-431b-b109-022854319d69', id FROM role; -- jonpaul.little@teamteach.co.uk
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '77eaddad-ba95-4ab7-9ef7-801b347d6502', id FROM role; -- andrew.winterbotham@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT 'fa65eb40-e964-481c-a42d-7c6c7a20c7b0', id FROM role; -- grzegorz.ilach@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT 'bb665826-8ff0-45f7-a75f-babdad3d8e17', id FROM role; -- salman.mitha@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '83156e3f-a075-43b5-b345-dacb06d5b057', id FROM role; -- aneesa.ramzan@teamteach.co.uk
+-- INSERT INTO profile_role (profile_id, role_id) SELECT 'aa0302db-e4b4-4fb0-9b54-42082f57b0fd', id FROM role; -- spyridon.chortis@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '99a03e41-f518-49a2-98cd-c77cb2e33483', id FROM role; -- maksym.barvinskyi@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT 'ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', id FROM role; -- lefteris.paraskevas@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '7eb8bd38-3048-4416-90d2-4b2299e4633b', id FROM role; -- alex.parra@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '7584edda-3772-447c-9162-25f7fc6a9b38', id FROM role; -- danijel.maksimovic@nearform.com
+-- INSERT INTO profile_role (profile_id, role_id) SELECT '8fc963f5-1942-4e70-9107-7a84fe2e68d5', id FROM role; -- piotr.piech@nearform.com
 
 -- Adding roles to test users
-INSERT INTO profile_role (profile_id, role_id) VALUES
-('13a223a8-2184-42f1-ba37-b49e115e59a2', (SELECT id from role WHERE name = 'trainer')), -- trainer@teamteach.testinator.com
-('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', (SELECT id from role WHERE name = 'trainer')), -- trainer.with.org@teamteach.testinator.com
-('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'trainer')), -- trainer.and.user@teamteach.testinator.com
-('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'participant')),
-('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', (SELECT id from role WHERE name = 'trainer')), -- assistant@teamteach.testinator.com
-('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from role WHERE name = 'trainer')), -- assistant.with.org@teamteach.testinator.com
-('6b72504a-6447-4b30-9909-e8e6fc1d300f', (SELECT id from role WHERE name = 'participant')), -- user1@teamteach.testinator.com
-('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'participant')), -- user2@teamteach.testinator.com
-('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'participant')), -- user1.with.org@teamteach.testinator.com
-('a39bb4b3-a07a-4610-8da1-b0ce885cc263', (SELECT id from role WHERE name = 'participant')), -- user2.with.org@teamteach.testinator.com
-('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'tt-admin')), -- admin@teamteach.testinator.com
-('48c9c19b-e7bf-4309-9679-52d5619d27dd', (SELECT id from role WHERE name = 'tt-ops')), -- ops@teamteach.testinator.com
-('48812860-89a5-41be-95c9-b8889e88bffd', (SELECT id from role WHERE name = 'tt-ops')), -- moderator@teamteach.testinator.com
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'trainer')), -- org.admin@teamteach.testinator.com
-('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', (SELECT id from role WHERE name = 'trainer')); -- password@teamteach.testinator.com
+-- INSERT INTO profile_role (profile_id, role_id) VALUES
+-- ('13a223a8-2184-42f1-ba37-b49e115e59a2', (SELECT id from role WHERE name = 'trainer')), -- trainer@teamteach.testinator.com
+-- ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', (SELECT id from role WHERE name = 'trainer')), -- trainer.with.org@teamteach.testinator.com
+-- ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'trainer')), -- trainer.and.user@teamteach.testinator.com
+-- ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', (SELECT id from role WHERE name = 'participant')),
+-- ('4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', (SELECT id from role WHERE name = 'trainer')), -- assistant@teamteach.testinator.com
+-- ('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', (SELECT id from role WHERE name = 'trainer')), -- assistant.with.org@teamteach.testinator.com
+-- ('6b72504a-6447-4b30-9909-e8e6fc1d300f', (SELECT id from role WHERE name = 'participant')), -- user1@teamteach.testinator.com
+-- ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'participant')), -- user2@teamteach.testinator.com
+-- ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'participant')), -- user1.with.org@teamteach.testinator.com
+-- ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', (SELECT id from role WHERE name = 'participant')), -- user2.with.org@teamteach.testinator.com
+-- ('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'tt-admin')), -- admin@teamteach.testinator.com
+-- ('48c9c19b-e7bf-4309-9679-52d5619d27dd', (SELECT id from role WHERE name = 'tt-ops')), -- ops@teamteach.testinator.com
+-- ('48812860-89a5-41be-95c9-b8889e88bffd', (SELECT id from role WHERE name = 'tt-ops')), -- moderator@teamteach.testinator.com
+-- ('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'trainer')), -- org.admin@teamteach.testinator.com
+-- ('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', (SELECT id from role WHERE name = 'trainer')); -- password@teamteach.testinator.com
 
 INSERT INTO organization (id, name, original_record) VALUES
 ('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}'),
