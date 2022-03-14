@@ -11,7 +11,9 @@ export type ParamsType = {
   courseId: string
   limit?: number
   offset?: number
-  orderBy: { profile: Record<'givenName' | 'familyName', SortOrder> }
+  orderBy:
+    | { profile: Record<'givenName' | 'familyName', SortOrder> }
+    | { profile: { email: SortOrder } }
 }
 
 export const QUERY = gql`

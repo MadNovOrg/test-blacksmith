@@ -134,6 +134,7 @@ const theme = createTheme({
     success: {
       main: '#9EB934',
       light: '#F0F4DD',
+      dark: '#394700',
     },
   },
 })

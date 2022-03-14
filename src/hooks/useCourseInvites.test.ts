@@ -23,9 +23,9 @@ describe('useCourseInvites', () => {
     useSWRMock.mockReturnValue(useSWRMockDefaults)
 
     const { result } = renderHook(() => useCourseInvites())
-    const { list } = result.current
+    const { data } = result.current
 
-    expect(list).toStrictEqual([])
+    expect(data).toStrictEqual([])
     expect(useSWRMock).toBeCalledWith(null)
   })
 
@@ -34,10 +34,15 @@ describe('useCourseInvites', () => {
 
     const courseId = chance.guid()
     const { result } = renderHook(() => useCourseInvites(courseId))
-    const { list } = result.current
+    const { data } = result.current
 
-    expect(list).toStrictEqual([])
-    expect(useSWRMock).toBeCalledWith([expect.anything(), { courseId }])
+    expect(data).toStrictEqual([])
+    expect(useSWRMock).toBeCalledWith([
+      expect.any(String),
+      expect.objectContaining({
+        courseId,
+      }),
+    ])
   })
 
   it('should mutate when refetch is called', async () => {

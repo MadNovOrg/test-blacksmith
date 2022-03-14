@@ -6,14 +6,17 @@ import { CourseInvites } from './CourseInvites'
 
 import { render, waitForCalls, chance, userEvent } from '@test/index'
 import { buildCourse, buildInvite } from '@test/mock-data-utils'
+import { LoadingStatus } from '@app/util'
 
 jest.mock('@app/hooks/useCourseInvites')
 const useCourseInvitesMock = jest.mocked(useCourseInvites)
 const useCourseInvitesDefaults = {
-  list: [],
+  data: [],
   total: 0,
+  status: LoadingStatus.FETCHING,
   error: undefined,
   send: jest.fn(),
+  resend: jest.fn(),
   refetch: jest.fn(),
 }
 
@@ -48,7 +51,7 @@ describe('CourseInvites', () => {
     const course = buildCourse({ overrides: { max_participants: 3 } })
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
-      list: [buildInvite(), buildInvite(), buildInvite()],
+      data: [buildInvite(), buildInvite(), buildInvite()],
     })
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -62,7 +65,7 @@ describe('CourseInvites', () => {
     const course = buildCourse()
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
-      list: [
+      data: [
         buildInvite(),
         buildInvite({ overrides: { status: 'ACCEPTED' } }),
         buildInvite({ overrides: { status: 'DECLINED' } }),

@@ -1,14 +1,34 @@
 table:
   name: course_invites
   schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    created_at: createdAt
+    updated_at: updatedAt
+  custom_root_fields: {}
 object_relationships:
 - name: course
   using:
     foreign_key_constraint_on: course_id
+- name: participant
+  using:
+    manual_configuration:
+      column_mapping:
+        id: invite_id
+      insertion_order: null
+      remote_table:
+        name: course_participant
+        schema: public
 insert_permissions:
 - permission:
     backend_only: false
-    check: {}
+    check:
+      course:
+        leaders:
+          profile:
+            id:
+              _eq: X-Hasura-User-Id
     columns:
     - course_id
     - email
@@ -17,13 +37,19 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
-    - id
-    - email
-    - status
-    - created_at
-    - updated_at
     - course_id
-    filter: {}
+    - created_at
+    - email
+    - id
+    - note
+    - status
+    - updated_at
+    filter:
+      course:
+        leaders:
+          profile:
+            id:
+              _eq: X-Hasura-User-Id
   role: user
 update_permissions:
 - permission:
@@ -31,8 +57,20 @@ update_permissions:
     columns:
     - status
     filter:
-      email:
-        _eq: X-Hasura-User-Email
+      course:
+        leaders:
+          profile:
+            id:
+              _eq: X-Hasura-User-Id
+  role: user
+delete_permissions:
+- permission:
+    filter:
+      course:
+        leaders:
+          profile:
+            id:
+              _eq: X-Hasura-User-Id
   role: user
 event_triggers:
 - definition:

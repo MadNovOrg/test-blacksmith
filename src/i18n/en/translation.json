@@ -48,6 +48,11 @@
       "DRAFT": "Draft",
       "PUBLISHED": "Published"
     },
+    "course-invite-status": {
+      "PENDING": "Pending",
+      "ACCEPTED": "Attending",
+      "DECLINED": "Declined"
+    },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
@@ -161,7 +166,16 @@
       "invite-error-EMAIL_REQUIRED": "Please enter at least one email address",
       "invite-error-INVALID_EMAILS": "Some emails are invalid",
       "invite-error-EMAILS_ALREADY_INVITED": "All emails entered have already been invited",
-      "invite-error-LIMIT_REACHED": "Invites limit reached"
+      "invite-error-LIMIT_REACHED": "Invites limit reached",
+      "status": "Status",
+      "documents": "Documents",
+      "tabs": {
+        "attending": "Attending ({{number}})",
+        "pending": "Pending ({{number}})",
+        "declined": "Declined ({{number}})"
+      },
+      "resend-invite": "Resend invite",
+      "invite-sent": "Invite sent."
     },
     "my-training": {
       "common": {

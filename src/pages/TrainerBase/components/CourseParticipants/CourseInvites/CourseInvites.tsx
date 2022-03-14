@@ -33,7 +33,7 @@ export const CourseInvites = ({ course }: Props) => {
   const [emails, setEmails] = useState<string[]>([])
 
   const invites = useCourseInvites(course?.id)
-  const invitesNotDeclined = invites.list.filter(
+  const invitesNotDeclined = invites.data.filter(
     i => i.status !== InviteStatus.DECLINED
   )
   const invitesLeft = course

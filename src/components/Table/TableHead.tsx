@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
+import { SxProps } from '@mui/material'
 
 import { SortOrder } from '@app/types'
 
@@ -19,6 +20,7 @@ type TableHeadProps = {
   order: SortOrder
   orderBy: string
   onRequestSort: (_: string) => void
+  sx?: SxProps
 }
 
 export const TableHead: React.FC<TableHeadProps> = ({
@@ -26,11 +28,12 @@ export const TableHead: React.FC<TableHeadProps> = ({
   order,
   orderBy,
   onRequestSort,
+  sx,
 }) => {
   const createSortHandler = (col: string) => () => onRequestSort(col)
 
   return (
-    <MuiTableHead>
+    <MuiTableHead sx={sx}>
       <TableRow>
         {cols.map(c => (
           <TableCell

@@ -48,7 +48,6 @@ describe('component: CourseParticipants', () => {
   })
 
   it('displays a course overview', () => {
-    const COURSE_ID = 'course-id'
     const course = buildCourse()
 
     useCourseMock.mockReturnValue({
@@ -61,7 +60,7 @@ describe('component: CourseParticipants', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
@@ -73,11 +72,11 @@ describe('component: CourseParticipants', () => {
   })
 
   it('displays a spinner while loading course participants and course has loaded', () => {
-    const COURSE_ID = 'course-id'
+    const course = buildCourse()
 
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: buildCourse(),
+      data: course,
     })
 
     useCourseParticipantsMock.mockReturnValue({
@@ -85,7 +84,7 @@ describe('component: CourseParticipants', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
@@ -98,7 +97,7 @@ describe('component: CourseParticipants', () => {
   })
 
   it('displays a table if a course has participants', () => {
-    const COURSE_ID = 'course-id'
+    const course = buildCourse()
 
     const participants = [
       buildParticipant(),
@@ -114,11 +113,11 @@ describe('component: CourseParticipants', () => {
 
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: buildCourse(),
+      data: course,
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
@@ -149,7 +148,7 @@ describe('component: CourseParticipants', () => {
   })
 
   it('paginates course participants', () => {
-    const COURSE_ID = 'course-id'
+    const course = buildCourse()
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -162,29 +161,32 @@ describe('component: CourseParticipants', () => {
 
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: buildCourse(),
+      data: course,
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
       </MemoryRouter>
     )
 
+    useCourseParticipantsMock.mockClear()
+
     userEvent.click(screen.getByTitle('Go to next page'))
 
-    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(2)
-    expect(useCourseParticipantsMock.mock.calls[1]).toEqual([
-      COURSE_ID,
-      { limit: PER_PAGE, offset: PER_PAGE },
+    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
+    expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
+      course.id,
+      'name',
       'asc',
+      { limit: PER_PAGE, offset: PER_PAGE },
     ])
   })
 
   it('displays a message if a course does not have participants', () => {
-    const COURSE_ID = 'course-id'
+    const course = buildCourse()
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -194,11 +196,11 @@ describe('component: CourseParticipants', () => {
 
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: buildCourse(),
+      data: course,
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
@@ -211,7 +213,7 @@ describe('component: CourseParticipants', () => {
   })
 
   it('sorts descending by participants name', () => {
-    const COURSE_ID = 'course-id'
+    const course = buildCourse()
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -224,24 +226,27 @@ describe('component: CourseParticipants', () => {
 
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: buildCourse(),
+      data: course,
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
+      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
         <Routes>
           <Route path="/:id/participants" element={<CourseParticipants />} />
         </Routes>
       </MemoryRouter>
     )
 
+    useCourseParticipantsMock.mockClear()
+
     userEvent.click(screen.getByText('Name'))
 
-    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(2)
-    expect(useCourseParticipantsMock.mock.calls[1]).toEqual([
-      COURSE_ID,
-      { limit: PER_PAGE, offset: 0 },
+    expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
+    expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
+      course.id,
+      'name',
       'desc',
+      { limit: PER_PAGE, offset: 0 },
     ])
   })
 })

@@ -1,43 +1,38 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
-  Container,
-  Table,
-  TableCell,
-  TableRow,
-  TableBody,
-  CircularProgress,
-  Stack,
-  TablePagination,
   Alert,
   Button,
+  CircularProgress,
+  Container,
   Grid,
+  Stack,
+  Tab,
   Typography,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useTranslation } from 'react-i18next'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
-import { TableHead } from '@app/components/Table/TableHead'
 import { Expire } from '@app/components/Expire'
 
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import useCourse from '@app/hooks/useCourse'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import useCourseInvites from '@app/hooks/useCourseInvites'
 
 import { CourseInvites } from './CourseInvites'
 
 import { LoadingStatus } from '@app/util'
-import { SortOrder } from '@app/types'
-
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
+import { AttendingTab } from '@app/pages/TrainerBase/components/CourseParticipants/AttendingTab'
+import { InviteStatus } from '@app/types'
+import { InvitesTab } from '@app/pages/TrainerBase/components/CourseParticipants/InvitesTab'
 
 export const CourseParticipants = () => {
   const { id: courseId } = useParams()
   const [searchParams] = useSearchParams()
-  const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
-  const [order, setOrder] = useState<SortOrder>('asc')
+  const [selectedTab, setSelectedTab] = useState('0')
+
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -48,49 +43,19 @@ export const CourseParticipants = () => {
     data: course,
     error: courseError,
   } = useCourse(courseId ?? '')
-
   const {
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
-  } = useCourseParticipants(
+  } = useCourseParticipants(courseId ?? '')
+  const { total: pendingTotal } = useCourseInvites(
     courseId ?? '',
-    {
-      limit: perPage,
-      offset: perPage * currentPage,
-    },
-    order
+    InviteStatus.PENDING
   )
-
-  const handleRowsPerPageChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setCurrentPage(0)
-    },
-    []
-  )
-
-  const cols = useMemo(
-    () => [
-      { id: 'name', label: t('pages.course-participants.name'), sorting: true },
-      {
-        id: 'contact',
-        label: t('pages.course-participants.contact'),
-        sorting: false,
-      },
-      {
-        id: 'organisation',
-        label: t('pages.course-participants.organisation'),
-        sorting: false,
-      },
-      {
-        id: 'prerequisites',
-        label: t('pages.course-participants.Prerequisites'),
-        sorting: false,
-      },
-    ],
-    [t]
+  const { total: declinedTotal } = useCourseInvites(
+    courseId ?? '',
+    InviteStatus.DECLINED
   )
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
@@ -177,61 +142,48 @@ export const CourseParticipants = () => {
               <CourseInvites course={course} />
             </Grid>
 
-            {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
-            courseParticipants?.length ? (
-              <>
-                <Table>
-                  <TableHead
-                    cols={cols}
-                    order={order}
-                    orderBy="name"
-                    onRequestSort={() => {
-                      setOrder(order === 'asc' ? 'desc' : 'asc')
-                    }}
-                  />
-                  <TableBody>
-                    {courseParticipants?.map(courseParticipant => (
-                      <TableRow
-                        key={courseParticipant.id}
-                        data-testid={`course-participant-row-${courseParticipant.id}`}
-                      >
-                        <TableCell>
-                          {courseParticipant.profile.givenName}{' '}
-                          {courseParticipant.profile.familyName}
-                        </TableCell>
-                        <TableCell>
-                          {courseParticipant.profile.email}
-                          {courseParticipant.profile.contactDetails.map(
-                            contact => contact.value
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {courseParticipant.profile.organizations.map(org => (
-                            <Typography key={org.organization.id}>
-                              {org.organization.name}
-                            </Typography>
-                          ))}
-                        </TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+            <TabContext value={selectedTab}>
+              <TabList
+                onChange={(_, selectedTab: React.SetStateAction<string>) =>
+                  setSelectedTab(selectedTab)
+                }
+              >
+                <Tab
+                  label={t('pages.course-participants.tabs.attending', {
+                    number: courseParticipantsTotal,
+                  })}
+                  value="0"
+                />
+                <Tab
+                  label={t('pages.course-participants.tabs.pending', {
+                    number: pendingTotal,
+                  })}
+                  value="1"
+                />
+                <Tab
+                  label={t('pages.course-participants.tabs.declined', {
+                    number: declinedTotal,
+                  })}
+                  value="2"
+                />
+              </TabList>
 
-                {courseParticipantsTotal ? (
-                  <TablePagination
-                    component="div"
-                    count={courseParticipantsTotal}
-                    page={currentPage}
-                    onPageChange={(_, page) => setCurrentPage(page)}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    rowsPerPage={perPage}
-                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-                    data-testid="course-participants-pagination"
-                  />
-                ) : null}
-              </>
-            ) : null}
+              <TabPanel value="0">
+                <AttendingTab course={course} />
+              </TabPanel>
+              <TabPanel value="1">
+                <InvitesTab
+                  course={course}
+                  inviteStatus={InviteStatus.PENDING}
+                />
+              </TabPanel>
+              <TabPanel value="2">
+                <InvitesTab
+                  course={course}
+                  inviteStatus={InviteStatus.DECLINED}
+                />
+              </TabPanel>
+            </TabContext>
           </Container>
         </>
       ) : (
