@@ -1,0 +1,56 @@
+name: CI/CD-DEV
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.3.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm t
+
+      - name: Build web
+        run: npm run build
+
+  dev-cd:
+    name: DEV
+    needs: build
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name == 'push'
+    uses: ./.github/workflows/pipeline.yml
+    secrets:
+      service_role_arn: ${{ secrets.IAM_SERVICE_DEV }}
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_DEV }}
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_DEV }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_DEV }}
+      s3_bucket: ${{ secrets.S3_BUCKET_DEV }}
+

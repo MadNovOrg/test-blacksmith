@@ -1,0 +1,85 @@
+name: Pipeline
+
+on:
+  workflow_call:
+    secrets:
+      cognito_user_pool_id:
+        required: true
+      cognito_user_pool_client_id:
+        required: true
+      hasura_endpoint:
+        required: true
+      s3_bucket:
+        required: true
+      service_role_arn:
+        required: true
+      aws_access_key_id:
+        required: true
+      aws_secret_access_key:
+        required: true
+      hasura_admin_pass:
+        required: true
+
+jobs:
+  build-deploy:
+    name: CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          aws-region: eu-west-2
+          role-to-assume: ${{ secrets.service_role_arn }}
+          role-duration-seconds: 1200
+          role-skip-session-tagging: true
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.3.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Build web
+        run: npm run build
+        env:
+          VITE_AWS_REGION: eu-west-2
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.cognito_user_pool_id }}
+          VITE_COGNITO_USER_POOL_CLIENT_ID: ${{ secrets.cognito_user_pool_client_id }}
+          VITE_HASURA_GRAPHQL_API: '${{ secrets.hasura_endpoint }}/v1/graphql'
+
+      - name: Deploy to S3 bucket
+        run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
+
+  hasura_migrations:
+    name: Hasura migrations
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET: ${{ secrets.hasura_admin_pass }}
+      ENDPOINT: ${{ secrets.hasura_endpoint }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Install Hasura CLI
+        run: |
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.3.0 bash
+
+      - name: Apply Hasura migrations
+        working-directory: ./hasura
+        run: |
+          echo Hasura Metadata Apply
+          hasura metadata apply --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Migrate Apply
+          hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Metadata Reload
+          hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT

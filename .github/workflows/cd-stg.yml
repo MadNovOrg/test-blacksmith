@@ -1,0 +1,18 @@
+name: CD-STG
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stg-cd:
+    name: STG
+    uses: ./.github/workflows/pipeline.yml
+    secrets:
+      cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
+      cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
+      hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_STG }}
+      s3_bucket: ${{ secrets.S3_BUCKET_STG }}
+      service_role_arn: ${{ secrets.IAM_SERVICE_STG }}
+      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG }}
