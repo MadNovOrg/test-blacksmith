@@ -1,17 +1,27 @@
 import { gql } from 'graphql-request'
 
-export type ParamsType = { courseId: string; email: string }
-export type ResponseType = { acceptInvite: { returning: [{ id: string }] } }
+import { InviteStatus } from '@app/types'
+
+export type ParamsType = { inviteId: string; courseId: string }
+
+export type ResponseType = {
+  acceptInvite: { status: InviteStatus }
+  addParticipant: { id: string }
+}
 
 export const MUTATION = gql`
-  mutation UpdateCourseInvite($courseId: uuid!, $email: String!) {
-    acceptInvite: update_course_invites(
-      where: { course_id: { _eq: $courseId }, email: { _eq: $email } }
+  mutation AcceptInvite($inviteId: uuid!, $courseId: uuid!) {
+    acceptInvite: update_course_invites_by_pk(
+      pk_columns: { id: $inviteId }
       _set: { status: ACCEPTED }
     ) {
-      returning {
-        id
-      }
+      status
+    }
+
+    addParticipant: insert_course_participant_one(
+      object: { course_id: $courseId, invite_id: $inviteId }
+    ) {
+      id
     }
   }
 `

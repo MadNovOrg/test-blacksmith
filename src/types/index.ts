@@ -155,7 +155,12 @@ export type Availability = {
 export type Venue = {
   id: string
   name: string
-  address: { [key: string]: string }
+  address: {
+    addressLineOne: string
+    addressLineTwo: string
+    city: string
+    country: string
+  }
 }
 
 export type TrainerSchedule = {

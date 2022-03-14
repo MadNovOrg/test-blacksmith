@@ -104,6 +104,6 @@ type CourseInvite {
   endDate: String!
   venueName: String!
   venueAddress: String!
-  venueCoordinates: String!
+  venueCoordinates: String
 }
 

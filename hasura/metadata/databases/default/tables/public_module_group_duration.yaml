@@ -2,6 +2,7 @@ table:
   name: module_group_duration
   schema: public
 configuration:
+  comment: null
   custom_column_names:
     course_delivery_type: courseDeliveryType
     created_at: createdAt

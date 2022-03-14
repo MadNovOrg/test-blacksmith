@@ -9,9 +9,12 @@ export const useFetcher = () => {
   const auth = useAuth()
 
   return useCallback(
-    function <T>(query: RequestDocument, variables?: Variables): Promise<T> {
+    function <T, V = Variables>(
+      query: RequestDocument,
+      variables?: V
+    ): Promise<T> {
       return gqlRequest(query, variables, auth.idToken)
     },
-    [auth]
+    [auth.idToken]
   )
 }

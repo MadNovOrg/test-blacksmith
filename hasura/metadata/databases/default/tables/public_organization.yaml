@@ -2,6 +2,7 @@ table:
   name: organization
   schema: public
 configuration:
+  comment: null
   custom_column_names:
     contact_details: contactDetails
     created_at: createdAt

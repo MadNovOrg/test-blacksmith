@@ -1,5 +1,7 @@
 import { gql } from 'graphql-request'
 
+import { Venue } from '@app/types'
+
 export type ResponseType = {
   invite: {
     id: string
@@ -11,7 +13,7 @@ export type ResponseType = {
     startDate: string
     endDate: string
     venueName: string
-    venueAddress: string
+    venueAddress: Venue['address']
     venueCoordinates: string
   }
 }

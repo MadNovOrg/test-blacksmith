@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useMemo, useState } from 'react'
 import {
   FormControl,
   FormLabel,
@@ -22,6 +22,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 import { differenceInDays, format } from 'date-fns'
+import jwtDecode from 'jwt-decode'
 
 import { Logo } from '@app/components/Logo'
 
@@ -46,8 +47,15 @@ export const InvitationPage = () => {
   const [response, setResponse] = useState('yes')
   const [note, setNote] = useState<string>('')
 
-  const token = searchParams.get('token') as string
-  const courseId = searchParams.get('courseId') as string
+  const { token, inviteId, courseId } = useMemo(() => {
+    const token = searchParams.get('token') as string
+    const courseId = searchParams.get('courseId') as string
+
+    const decoded = jwtDecode<{ invite_id: string }>(token)
+    const inviteId = decoded.invite_id
+
+    return { token, inviteId, courseId }
+  }, [searchParams])
 
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -66,11 +74,11 @@ export const InvitationPage = () => {
     new Date(invite.startDate)
   )
 
-  const address = invite.venueAddress ? JSON.parse(invite.venueAddress) : {} // TODO: can be an array
+  const address = invite.venueAddress // TODO: can be an array
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      navigate(`/my-training/accept-invite/${courseId}`)
+      navigate(`/my-training/accept-invite/${inviteId}?courseId=${courseId}`)
       return
     }
 
@@ -190,10 +198,14 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="subtitle2">{invite.venueName}</Typography>
-              <Typography variant="body2">{address.addressLineOne}</Typography>
-              <Typography variant="body2">{address.addressLineTwo}</Typography>
-              <Typography variant="body2">{address.city}</Typography>
-              <Typography variant="body2">{address.country}</Typography>
+              <Typography variant="body2">
+                {address?.addressLineOne || ''}
+              </Typography>
+              <Typography variant="body2">
+                {address?.addressLineTwo || ''}
+              </Typography>
+              <Typography variant="body2">{address?.city || ''}</Typography>
+              <Typography variant="body2">{address?.country || ''}</Typography>
             </Box>
           </Box>
         </Box>
