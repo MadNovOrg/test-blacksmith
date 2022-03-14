@@ -89,7 +89,8 @@ export const InvitationPage = () => {
       await gqlRequest<DeclineInviteResponseType, DeclineInviteParamsType>(
         DECLINE_INVITE_MUTATION,
         { note },
-        token
+        token,
+        'x-auth'
       )
       mutate()
     } catch (e) {
