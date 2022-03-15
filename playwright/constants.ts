@@ -1,6 +1,6 @@
 import { users } from './data/users'
 
-const TARGET_ENV = process.env.TARGET ?? 'local'
+const TARGET_ENV = (process.env.TARGET ?? 'local').toLowerCase()
 
 let BASE_URL: string
 let DEFAULT_USER: { email: string; password: string }

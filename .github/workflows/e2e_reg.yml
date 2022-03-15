@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        default: 'DEV'
-        description: 'Environment - "DEV/STG"'
+        default: 'dev'
+        description: 'Environment - "dev/stg"'
         required: true
         type: choice
         options:
-        - DEV
-        - STG
+        - dev
+        - stg
   schedule:
     - cron: '30 21 * * 1-5'
 
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: 'true'
-      DEFAULT_TARGET: 'DEV'
+      DEFAULT_TARGET: 'dev'
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
