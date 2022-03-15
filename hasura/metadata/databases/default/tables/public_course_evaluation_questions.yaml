@@ -1,0 +1,3 @@
+table:
+  name: course_evaluation_questions
+  schema: public
