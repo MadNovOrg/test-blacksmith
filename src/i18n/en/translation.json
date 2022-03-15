@@ -177,6 +177,13 @@
       "resend-invite": "Resend invite",
       "invite-sent": "Invite sent."
     },
+    "course-grading-details": {
+      "title": "Grading details",
+      "back-button-text": "Back to course details",
+      "course-error-alert-text": "There was an error loading the course",
+      "attendance-step": "Attendance",
+      "modules-step": "Modules and holds"
+    },
     "my-training": {
       "common": {
         "my-certification-and-credentials": "My Certifications & Credentials"

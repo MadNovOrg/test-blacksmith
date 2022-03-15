@@ -18,7 +18,9 @@ import { MyCalendar as TrainerCalendar } from './pages/TrainerBase/components//M
 import { ManageAvailability as TrainerAvailability } from './pages/TrainerBase/components//Management/components/ManageAvailability'
 import { ManageExpenses as TrainerExpenses } from './pages/TrainerBase/components//Management/components/ManageExpenses'
 import { ParticipantCourse } from './pages/MyTraining/ParticipantCourse'
+import { CourseGradingDetails } from './pages/TrainerBase/components/CourseGradingDetails'
 import { AcceptInvite } from './pages/MyTraining/AcceptInvite'
+import { CourseAttendance } from './pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
@@ -78,6 +80,13 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                   path=":id/participants"
                   element={<CourseParticipants />}
                 />
+                <Route
+                  path=":id/grading-details"
+                  element={<CourseGradingDetails />}
+                >
+                  <Route element={<CourseAttendance />} index />
+                  <Route path="modules" element={<h1>Modules</h1>} />
+                </Route>
               </Route>
               <Route path="management" element={<TrainerManagement />}>
                 <Route index element={<Navigate replace to="calendar" />} />
