@@ -72,6 +72,9 @@ select_permissions:
       - leaders:
           profile_id:
             _eq: X-Hasura-User-Id
+      - participants:
+          profile_id:
+            _eq: X-Hasura-User-Id
   role: user
 update_permissions:
 - permission:
