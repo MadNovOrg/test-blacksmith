@@ -1,0 +1,19 @@
+- role_name: trainer
+  role_set:
+    - user
+
+- role_name: org-admin
+  role_set:
+    - trainer
+
+- role_name: mta-admin
+  role_set:
+    - org-admin
+
+- role_name: tt-ops
+  role_set:
+    - mta-admin
+
+- role_name: tt-admin
+  role_set:
+    - tt-ops
