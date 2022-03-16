@@ -3,9 +3,10 @@ import React from 'react'
 import CheckIcon from '@mui/icons-material/Check'
 
 const Circle = styled('span', {
-  shouldForwardProp: prop => prop !== 'completed',
+  shouldForwardProp: prop => prop !== 'completed' && prop !== 'line',
 })<{
   completed?: boolean
+  line?: boolean
 }>(props => ({
   borderRadius: '50%',
   border: '1px solid',
@@ -25,11 +26,11 @@ const Circle = styled('span', {
   display: 'inline-flex',
 
   '&:after': {
-    content: "''",
+    content: props.line ? "''" : null,
     position: 'absolute',
     width: 1,
     height: 30,
-    backgroundColor: 'inherit',
+    backgroundColor: props.theme.palette.success.main,
     top: 'calc(100% + 6px)',
   },
 }))
@@ -51,7 +52,7 @@ export const StepItem: React.FC<StepItemProps> = ({
       mb={5}
       data-testid={`step-item-${index}`}
     >
-      <Circle completed={completed}>
+      <Circle completed={completed} line={index === 1}>
         {completed ? (
           <CheckIcon />
         ) : (

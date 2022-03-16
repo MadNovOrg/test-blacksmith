@@ -184,6 +184,17 @@
       "attendance-step": "Attendance",
       "modules-step": "Modules and holds"
     },
+    "course-attendance": {
+      "title": "Attendance",
+      "page-description-line1": "Please confirm an individual’s attendance and that ID checks were completed.",
+      "page-description-line2": "It is an automatic fail if an individual did not attend.",
+      "next-page-button-text": "Next: Confirm modules and holds",
+      "master-checkbox-label-checked": "Deselect all",
+      "master-checkbox-label-unchecked": "Select all",
+      "participant-attended-chip-label": "Attended + ID checked",
+      "participant-not-attended-chip-label": "Did not attend",
+      "attending-count": "{{count}} selected"
+    },
     "my-training": {
       "common": {
         "my-certification-and-credentials": "My Certifications & Credentials"

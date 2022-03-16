@@ -42,3 +42,18 @@ select_permissions:
     - registration_id
     filter: {}
   role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - attended
+    filter:
+      _or:
+      - course:
+          trainer_profile_id:
+            _eq: X-Hasura-User-Id
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  role: user
