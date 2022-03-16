@@ -44,7 +44,6 @@ export const CourseParticipants = () => {
     error: courseError,
   } = useCourse(courseId ?? '')
   const {
-    data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
@@ -108,14 +107,6 @@ export const CourseParticipants = () => {
             {courseParticipantsError ? (
               <Alert severity="error">
                 There was an error loading course participants.
-              </Alert>
-            ) : null}
-
-            {!courseParticipantsError &&
-            courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
-            !courseParticipants?.length ? (
-              <Alert severity="info">
-                {t('pages.course-participants.no-participants-registered')}
               </Alert>
             ) : null}
 

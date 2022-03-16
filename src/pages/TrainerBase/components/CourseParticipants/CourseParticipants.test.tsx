@@ -185,33 +185,6 @@ describe('component: CourseParticipants', () => {
     ])
   })
 
-  it('displays a message if a course does not have participants', () => {
-    const course = buildCourse()
-
-    useCourseParticipantsMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: [],
-      total: 0,
-    })
-
-    useCourseMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: course,
-    })
-
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    expect(
-      screen.getByText('No participants registered yet for this course.')
-    ).toBeInTheDocument()
-  })
-
   it('sorts descending by participants name', () => {
     const course = buildCourse()
     const PER_PAGE = 12
