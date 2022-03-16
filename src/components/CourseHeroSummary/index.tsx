@@ -17,6 +17,8 @@ import { t } from 'i18next'
 
 import { useAuth } from '@app/context/auth'
 
+import useCourse from '@app/hooks/useCourse'
+
 import theme from '@app/theme'
 import { Course } from '@app/types'
 import { now } from '@app/util'
@@ -32,9 +34,8 @@ export const CourseHeroSummary: React.FC<Props> = ({
   renderButton,
 }) => {
   const { profile } = useAuth()
+  const { courseBegan, courseEnded } = useCourse(course?.id)
 
-  const courseBegan = new Date() > new Date(course.schedule[0].start)
-  const courseEnded = new Date() > new Date(course.schedule[0].end)
   const courseBeginsFor = courseBegan
     ? 0
     : differenceInDays(new Date(), new Date(course.schedule[0].start))

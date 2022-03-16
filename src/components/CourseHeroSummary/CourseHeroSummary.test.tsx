@@ -1,14 +1,27 @@
 import React from 'react'
 import { add, format, sub } from 'date-fns'
+import useSWR from 'swr'
 
 import { CourseHeroSummary } from '.'
 
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 import { render, screen } from '@test/index'
 
+jest.mock('swr')
+const useSWRMock = jest.mocked(useSWR)
+const useSWRMockDefaults = {
+  data: undefined,
+  mutate: jest.fn(),
+  isValidating: false,
+}
+
 describe('component: CourseHeroSummary', () => {
   it('displays basic course information', () => {
     const course = buildCourse()
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
+    })
 
     render(<CourseHeroSummary course={course} />)
 
@@ -24,6 +37,10 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
+    })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -41,6 +58,10 @@ describe('component: CourseHeroSummary', () => {
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
     })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
+    })
 
     render(<CourseHeroSummary course={course} />)
 
@@ -56,6 +77,10 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
+    })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -75,6 +100,10 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
+    })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -99,6 +128,10 @@ describe('component: CourseHeroSummary', () => {
         },
       },
     })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
+    })
 
     render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
@@ -117,6 +150,10 @@ describe('component: CourseHeroSummary', () => {
         },
       },
     })
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
+    })
 
     render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
@@ -127,6 +164,10 @@ describe('component: CourseHeroSummary', () => {
 
   it('displays course venue information', () => {
     const course = buildCourse()
+    useSWRMock.mockReturnValue({
+      ...useSWRMockDefaults,
+      data: { course },
+    })
 
     render(<CourseHeroSummary course={course} />)
 

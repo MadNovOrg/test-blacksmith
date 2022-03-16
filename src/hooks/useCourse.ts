@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import { isPast } from 'date-fns'
 
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import {
@@ -11,6 +12,8 @@ export default function useCourse(courseId: string): {
   data?: ResponseType['course']
   error?: Error
   status: LoadingStatus
+  courseBegan?: boolean
+  courseEnded?: boolean
 } {
   const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
     QUERY,
@@ -21,5 +24,7 @@ export default function useCourse(courseId: string): {
     data: data?.course,
     error,
     status: getSWRLoadingStatus(data, error),
+    courseBegan: data ? isPast(new Date(data.course.schedule[0].start)) : false,
+    courseEnded: data ? isPast(new Date(data.course.schedule[0].end)) : false,
   }
 }

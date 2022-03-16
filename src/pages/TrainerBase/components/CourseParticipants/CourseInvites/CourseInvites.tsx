@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Dialog } from '@app/components/Dialog'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
+import useCourse from '@app/hooks/useCourse'
 
 import { Course, InviteStatus } from '@app/types'
 
@@ -31,6 +32,8 @@ export const CourseInvites = ({ course }: Props) => {
   const [saving, setSaving] = useState(false)
   const [newEmail, setNewEmail] = useState('')
   const [emails, setEmails] = useState<string[]>([])
+
+  const { courseBegan } = useCourse(course?.id ?? '')
 
   const invites = useCourseInvites(course?.id)
   const invitesNotDeclined = invites.data.filter(
@@ -135,22 +138,26 @@ export const CourseInvites = ({ course }: Props) => {
   return (
     <>
       <Grid container item xs="auto" alignItems="center">
-        <Typography variant="subtitle2" data-testid="invites-left">
-          {t('pages.course-participants.invites-left', {
-            count: invitesLeft - emails.length,
-          })}
-        </Typography>
+        {!courseBegan && (
+          <>
+            <Typography variant="subtitle2" data-testid="invites-left">
+              {t('pages.course-participants.invites-left', {
+                count: invitesLeft - emails.length,
+              })}
+            </Typography>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{ ml: 2 }}
-          onClick={() => setShowModal(true)}
-          disabled={invitesLeft === 0}
-          data-testid="course-invite-btn"
-        >
-          {t('pages.course-participants.invite-btn')}
-        </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ ml: 2 }}
+              onClick={() => setShowModal(true)}
+              disabled={invitesLeft === 0}
+              data-testid="course-invite-btn"
+            >
+              {t('pages.course-participants.invite-btn')}
+            </Button>
+          </>
+        )}
       </Grid>
 
       <Dialog
