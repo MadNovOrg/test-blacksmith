@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 
 import useCourse from '@app/hooks/useCourse'
@@ -10,6 +9,7 @@ import { CourseParticipants } from '.'
 import { render, screen, within } from '@test/index'
 import { LoadingStatus } from '@app/util'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
+import { Course } from '@app/types'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useCourseParticipants')
@@ -20,60 +20,14 @@ const useCourseParticipantsMock = useCourseParticipants as jest.MockedFunction<
 >
 
 describe('component: CourseParticipants', () => {
+  let course: Course
+
   afterEach(() => {
     jest.clearAllMocks()
+    course = buildCourse()
   })
 
-  it('displays a spinner while loading a course and participants', () => {
-    const COURSE_ID = 'course-id'
-
-    useCourseMock.mockReturnValue({
-      status: LoadingStatus.FETCHING,
-    })
-
-    useCourseParticipantsMock.mockReturnValue({
-      status: LoadingStatus.FETCHING,
-    })
-
-    render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
-    expect(useCourseMock).toHaveBeenCalledWith(COURSE_ID)
-  })
-
-  it('displays a course overview', () => {
-    const course = buildCourse()
-
-    useCourseMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: course,
-    })
-
-    useCourseParticipantsMock.mockReturnValue({
-      status: LoadingStatus.IDLE,
-    })
-
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
-
-    expect(screen.queryByTestId('course-fetching')).not.toBeInTheDocument()
-    expect(screen.getByText(course.name)).toBeInTheDocument()
-  })
-
-  it('displays a spinner while loading course participants and course has loaded', () => {
-    const course = buildCourse()
-
+  it('displays a spinner while loading course participants', () => {
     useCourseMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: course,
@@ -83,13 +37,7 @@ describe('component: CourseParticipants', () => {
       status: LoadingStatus.FETCHING,
     })
 
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
+    render(<CourseParticipants course={course} />)
 
     expect(
       screen.getByTestId('course-participants-fetching')
@@ -97,8 +45,6 @@ describe('component: CourseParticipants', () => {
   })
 
   it('displays a table if a course has participants', () => {
-    const course = buildCourse()
-
     const participants = [
       buildParticipant(),
       buildParticipant(),
@@ -116,13 +62,7 @@ describe('component: CourseParticipants', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
+    render(<CourseParticipants course={course} />)
 
     participants.forEach(participant => {
       expect(screen.getByTestId(`course-participant-row-${participant.id}`))
@@ -148,7 +88,6 @@ describe('component: CourseParticipants', () => {
   })
 
   it('paginates course participants', () => {
-    const course = buildCourse()
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -164,13 +103,7 @@ describe('component: CourseParticipants', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
+    render(<CourseParticipants course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -186,7 +119,6 @@ describe('component: CourseParticipants', () => {
   })
 
   it('sorts descending by participants name', () => {
-    const course = buildCourse()
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -202,13 +134,7 @@ describe('component: CourseParticipants', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter initialEntries={[`/${course.id}/participants`]}>
-        <Routes>
-          <Route path="/:id/participants" element={<CourseParticipants />} />
-        </Routes>
-      </MemoryRouter>
-    )
+    render(<CourseParticipants course={course} />)
 
     useCourseParticipantsMock.mockClear()
 

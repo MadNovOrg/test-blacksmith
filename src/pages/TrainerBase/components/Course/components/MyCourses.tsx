@@ -209,7 +209,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 {data?.course?.map(c => (
                   <TableRow key={c.id}>
                     <TableCell>
-                      <Link href={`view/${c.id}`}>
+                      <Link href={`${c.id}/modules`}>
                         <Typography variant="subtitle2" gutterBottom>
                           {t(`course-levels.${c.level}`)}
                         </Typography>
@@ -271,8 +271,8 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                           navigate(
                             c.status === CourseStatus.PENDING ||
                               c.status === CourseStatus.DRAFT
-                              ? `view/${c.id}`
-                              : `${c.id}/participants`
+                              ? `${c.id}/modules`
+                              : `${c.id}/details`
                           )
                         }
                       >

@@ -44,7 +44,7 @@ import {
 import { formatDurationShort, getPercentage } from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
 
-type CourseViewProps = unknown
+type CourseBuilderProps = unknown
 
 const MAX_COURSE_DURATION_MAP = {
   normal: {
@@ -61,7 +61,7 @@ const MAX_COURSE_DURATION_MAP = {
   },
 }
 
-export const CourseView: React.FC<CourseViewProps> = () => {
+export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
   const fetcher = useFetcher()
@@ -283,7 +283,7 @@ export const CourseView: React.FC<CourseViewProps> = () => {
           status: CourseStatus.PUBLISHED,
         })
         navigate({
-          pathname: `/trainer-base/course/${courseData.course.id}/participants?courseJustSubmitted=true`,
+          pathname: `/trainer-base/course/${courseData.course.id}/details?courseJustSubmitted=true`,
         })
       } catch (e: unknown) {
         setSubmitError((e as Error).message)

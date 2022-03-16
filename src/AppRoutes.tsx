@@ -9,8 +9,7 @@ import { useAuth } from '@app/context/auth'
 
 import { MyProfilePage } from './pages/MyProfile'
 import { Course } from './pages/TrainerBase/components/Course'
-import { CourseView } from './pages/TrainerBase/components/Course/components/CourseView'
-import { CourseParticipants } from './pages/TrainerBase/components/CourseParticipants'
+import { CourseBuilder } from './pages/TrainerBase/components/Course/components/CourseBuilder'
 import { MyCourses } from './pages/TrainerBase/components/Course/components/MyCourses'
 import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboard'
 import { Management as TrainerManagement } from './pages/TrainerBase/components/Management'
@@ -40,6 +39,7 @@ import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
+import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
 
 const Dashboard = React.lazy(() => import('@app/pages/admin/dashboard'))
 const Organizations = React.lazy(
@@ -75,11 +75,8 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route index element={<TrainerDashboard />} />
               <Route path="course" element={<Course />}>
                 <Route index element={<MyCourses />} />
-                <Route path="view/:id" element={<CourseView />} />
-                <Route
-                  path=":id/participants"
-                  element={<CourseParticipants />}
-                />
+                <Route path=":id/modules" element={<CourseBuilder />} />
+                <Route path=":id/details" element={<CourseDetails />} />
                 <Route
                   path=":id/grading-details"
                   element={<CourseGradingDetails />}

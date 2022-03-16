@@ -62,7 +62,7 @@ export const CourseGradingDetails = () => {
                 startIcon={<ArrowBackIcon />}
                 sx={{ marginBottom: 2 }}
                 onClick={() =>
-                  navigate(`/trainer-base/course/${courseId}/participants`)
+                  navigate(`/trainer-base/course/${courseId}/details`)
                 }
               >
                 {t('pages.course-grading-details.back-button-text')}

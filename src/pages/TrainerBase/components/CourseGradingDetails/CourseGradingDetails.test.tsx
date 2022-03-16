@@ -99,7 +99,7 @@ describe('page: CourseGradingDetails', () => {
             element={<CourseGradingDetails />}
           ></Route>
           <Route
-            path={`/trainer-base/course/${course.id}/participants`}
+            path={`/trainer-base/course/${course.id}/details`}
             element={<p>Course participants page</p>}
           />
         </Routes>
