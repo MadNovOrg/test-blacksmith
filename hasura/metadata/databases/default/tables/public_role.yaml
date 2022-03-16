@@ -19,8 +19,9 @@ array_relationships:
 select_permissions:
 - permission:
     columns:
+    - id
     - name
     - data
-    - id
+    - rank
     filter: {}
   role: user
