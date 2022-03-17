@@ -65,7 +65,7 @@ update_permissions:
                 _eq: X-Hasura-User-Id
       - _and:
         - email:
-            _eq: X-Hasura-User-Emai
+            _eq: X-Hasura-User-Email
         - status:
             _eq: PENDING
   role: user
