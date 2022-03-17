@@ -84,11 +84,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
           label: t('pages.course-participants.organisation'),
           sorting: false,
         },
-        {
-          id: 'status',
-          label: t('pages.course-participants.status'),
-          sorting: false,
-        },
         isBlendedCourse
           ? {
               id: 'bl-status',
@@ -144,16 +139,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
                         {org.organization.name}
                       </Typography>
                     ))}
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={t('course-invite-status.ACCEPTED')}
-                      color="success"
-                      sx={{
-                        color: 'success.dark',
-                        backgroundColor: 'success.light',
-                      }}
-                    />
                   </TableCell>
                   {isBlendedCourse && (
                     <TableCell>
