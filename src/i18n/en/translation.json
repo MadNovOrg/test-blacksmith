@@ -14,6 +14,7 @@
     "organization": "Organization",
     "course-type": "Course Type",
     "course-status": "Course Status",
+    "bl-status": "Blended Learning Status",
     "my-courses": "My Courses",
     "x-items": "{{num}} items",
     "search": "Search",
@@ -52,6 +53,12 @@
       "PENDING": "Pending",
       "ACCEPTED": "Attending",
       "DECLINED": "Declined"
+    },
+    "blended-learning-status": {
+      "ASSIGNED": "Assigned",
+      "NOT_STARTED": "Not started",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed"
     },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"

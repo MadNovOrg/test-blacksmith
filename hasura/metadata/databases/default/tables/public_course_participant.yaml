@@ -38,6 +38,7 @@ select_permissions:
     columns:
     - booking_date
     - course_id
+    - go1_enrolment_status
     - id
     - invoice_id
     - profile_id

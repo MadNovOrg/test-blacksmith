@@ -15,7 +15,12 @@ import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 
 import { LoadingStatus } from '@app/util'
-import { Course, SortOrder } from '@app/types'
+import {
+  BlendedLearningStatus,
+  Course,
+  CourseDeliveryType,
+  SortOrder,
+} from '@app/types'
 
 type TabProperties = {
   course: Course
@@ -30,6 +35,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
+  const isBlendedCourse = course.deliveryType === CourseDeliveryType.BLENDED
 
   const {
     data: courseParticipants,
@@ -61,30 +67,42 @@ export const AttendingTab = ({ course }: TabProperties) => {
   )
 
   const cols = useMemo(
-    () => [
-      { id: 'name', label: t('pages.course-participants.name'), sorting: true },
-      {
-        id: 'contact',
-        label: t('pages.course-participants.contact'),
-        sorting: true,
-      },
-      {
-        id: 'organisation',
-        label: t('pages.course-participants.organisation'),
-        sorting: false,
-      },
-      {
-        id: 'status',
-        label: t('pages.course-participants.status'),
-        sorting: false,
-      },
-      {
-        id: 'documents',
-        label: t('pages.course-participants.documents'),
-        sorting: false,
-      },
-    ],
-    [t]
+    () =>
+      [
+        {
+          id: 'name',
+          label: t('pages.course-participants.name'),
+          sorting: true,
+        },
+        {
+          id: 'contact',
+          label: t('pages.course-participants.contact'),
+          sorting: true,
+        },
+        {
+          id: 'organisation',
+          label: t('pages.course-participants.organisation'),
+          sorting: false,
+        },
+        {
+          id: 'status',
+          label: t('pages.course-participants.status'),
+          sorting: false,
+        },
+        isBlendedCourse
+          ? {
+              id: 'bl-status',
+              label: t('bl-status'),
+              sorting: true,
+            }
+          : null,
+        {
+          id: 'documents',
+          label: t('pages.course-participants.documents'),
+          sorting: false,
+        },
+      ].filter(Boolean),
+    [t, isBlendedCourse]
   )
 
   return (
@@ -129,7 +147,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={t('common.course-invite-status.ACCEPTED')}
+                      label={t('course-invite-status.ACCEPTED')}
                       color="success"
                       sx={{
                         color: 'success.dark',
@@ -137,6 +155,23 @@ export const AttendingTab = ({ course }: TabProperties) => {
                       }}
                     />
                   </TableCell>
+                  {isBlendedCourse && (
+                    <TableCell>
+                      {courseParticipant.go1EnrolmentStatus && (
+                        <Chip
+                          label={t(
+                            `blended-learning-status.${courseParticipant.go1EnrolmentStatus}`
+                          )}
+                          color={
+                            courseParticipant.go1EnrolmentStatus ===
+                            BlendedLearningStatus.COMPLETED
+                              ? 'success'
+                              : 'warning'
+                          }
+                        />
+                      )}
+                    </TableCell>
+                  )}
                   <TableCell>View</TableCell>
                 </TableRow>
               ))}

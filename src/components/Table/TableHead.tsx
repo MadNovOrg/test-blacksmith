@@ -15,7 +15,7 @@ type Col = {
   sorting?: boolean
 }
 
-type TableHeadProps = {
+export type TableHeadProps = {
   cols: Col[]
   order: SortOrder
   orderBy: string

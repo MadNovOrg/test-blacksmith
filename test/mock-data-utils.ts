@@ -12,6 +12,7 @@ import {
   Profile,
   Venue,
   CourseInvite,
+  BlendedLearningStatus,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -110,6 +111,7 @@ export const buildParticipant = build<CourseParticipant>({
     id: fake(f => f.datatype.uuid()),
     profile: buildProfile(),
     course: buildCourse(),
+    go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
   },
 })
 

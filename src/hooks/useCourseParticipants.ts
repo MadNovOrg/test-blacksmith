@@ -25,6 +25,9 @@ export default function useCourseParticipants(
   if (sortBy === 'contact') {
     orderBy = { profile: { email: order } }
   }
+  if (sortBy === 'bl-status') {
+    orderBy = { go1EnrolmentStatus: order }
+  }
   const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
     QUERY,
     {

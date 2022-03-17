@@ -189,6 +189,14 @@ export type CourseParticipant = {
   registrationId?: string
   course: Course
   profile: Profile
+  go1EnrolmentStatus: BlendedLearningStatus
+}
+
+export enum BlendedLearningStatus {
+  'ASSIGNED' = 'ASSIGNED',
+  'NOT_STARTED' = 'NOT_STARTED',
+  'COMPLETED' = 'COMPLETED',
+  'IN_PROGRESS' = 'IN_PROGRESS',
 }
 
 export enum InviteStatus {

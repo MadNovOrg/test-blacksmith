@@ -14,6 +14,7 @@ export type ParamsType = {
   orderBy:
     | { profile: Record<'givenName' | 'familyName', SortOrder> }
     | { profile: { email: SortOrder } }
+    | { go1EnrolmentStatus: SortOrder }
 }
 
 export const QUERY = gql`
@@ -46,6 +47,7 @@ export const QUERY = gql`
       }
       invoiceID
       bookingDate
+      go1EnrolmentStatus
     }
     courseParticipantsAggregation: course_participant_aggregate(
       where: { course_id: { _eq: $courseId } }
