@@ -1,14 +1,38 @@
+import { Link, Outlet } from 'react-router-dom'
 import React from 'react'
 
-type MembershipAreaPageProps = unknown
+const navigation = [
+  {
+    name: 'Membership Details',
+    href: '/membership-area/details',
+    current: false,
+  },
+  {
+    name: 'Blog',
+    href: '/membership-area/blog',
+    current: false,
+  },
+]
 
-export const MembershipAreaPage: React.FC<MembershipAreaPageProps> = () => {
+export function MembershipAreaPage() {
   return (
-    <div>
-      <div className="p-8 clear-rightpb-8 font-light text-2xl sm:text-4xl">
-        Membership Details
-        <div className="mt-8"></div>
+    <section>
+      <div>
+        <nav aria-label="Sidebar">
+          {navigation.map(item => (
+            <Link
+              key={item.name}
+              to={item.href}
+              aria-current={item.current ? 'page' : undefined}
+            >
+              <span className="truncate">{item.name}</span>
+            </Link>
+          ))}
+        </nav>
       </div>
-    </div>
+      <div>
+        <Outlet />
+      </div>
+    </section>
   )
 }

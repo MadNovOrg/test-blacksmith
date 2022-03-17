@@ -20,6 +20,9 @@ import { ParticipantCourse } from './pages/MyTraining/ParticipantCourse'
 import { CourseGradingDetails } from './pages/TrainerBase/components/CourseGradingDetails'
 import { AcceptInvite } from './pages/MyTraining/AcceptInvite'
 import { CourseAttendance } from './pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
+import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
+import { BlogPage } from './pages/MembershipArea/BlogPage'
+import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
@@ -117,10 +120,12 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="trainees" element={<Trainees />} />
               <Route path="plans" element={<Plans />} />
             </Route>
-            <Route
-              path="membership-area"
-              element={<MembershipAreaPage />}
-            ></Route>
+            <Route path="membership-area" element={<MembershipAreaPage />}>
+              <Route index element={<Navigate to="details" />} />
+              <Route path="details" element={<MembershipDetailsPage />} />
+              <Route path="blog" element={<BlogPage />} />
+              <Route path="blog/:postId" element={<BlogPostPage />} />
+            </Route>
           </Route>
         </Routes>
       </Suspense>

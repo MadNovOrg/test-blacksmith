@@ -209,3 +209,13 @@ export type GqlError = {
   code: string
   message: string
 }
+
+export type BlogPost = {
+  id: string
+  title: {
+    rendered: string
+  }
+  content: {
+    rendered: string
+  }
+}
