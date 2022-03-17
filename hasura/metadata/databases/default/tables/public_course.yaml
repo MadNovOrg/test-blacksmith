@@ -9,6 +9,7 @@ configuration:
     course_status: status
     course_type: type
     created_at: createdAt
+    grading_confirmed: gradingConfirmed
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -56,9 +57,10 @@ select_permissions:
     - course_status
     - course_type
     - created_at
+    - grading_confirmed
     - id
-    - min_participants
     - max_participants
+    - min_participants
     - name
     - organization_id
     - reaccreditation
@@ -81,6 +83,7 @@ update_permissions:
     check: null
     columns:
     - course_status
+    - grading_confirmed
     filter:
       _or:
       - trainer:
