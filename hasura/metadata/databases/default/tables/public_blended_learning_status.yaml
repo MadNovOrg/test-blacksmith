@@ -1,0 +1,4 @@
+table:
+  name: blended_learning_status
+  schema: public
+is_enum: true

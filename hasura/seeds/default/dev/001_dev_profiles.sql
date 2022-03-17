@@ -3,6 +3,7 @@ INSERT INTO profile (id, given_name, family_name, email) VALUES
 ('77eaddad-ba95-4ab7-9ef7-801b347d6502', 'Andrew', 'Winterbotham', 'andrew.winterbotham@nearform.com'),
 ('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'Greg', 'Ilach', 'grzegorz.ilach@nearform.com'),
 ('bb665826-8ff0-45f7-a75f-babdad3d8e17', 'Salman', 'Mitha', 'salman.mitha@nearform.com'),
+('1aadd944-4876-46c1-a8e6-36122636dffa', 'Salman', 'M Learner', 'salman.mitha+learner@nearform.com'),
 ('83156e3f-a075-43b5-b345-dacb06d5b057', 'Aneesa', 'Ramzan', 'aneesa.ramzan@teamteach.co.uk'),
 ('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'Spyridon', 'Chortis', 'spyridon.chortis@nearform.com'),
 ('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', 'maksym.barvinskyi@nearform.com'),
@@ -31,6 +32,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('f0a23d6a-fcea-43fd-b418-ce138ed3bd1a', '77eaddad-ba95-4ab7-9ef7-801b347d6502', 'cognito'), -- andrew.winterbotham@nearform.com
 ('740b9591-757a-44d2-ade5-35c70ed76cdf', 'fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'cognito'), -- grzegorz.ilach@nearform.com
 ('4b3bd6d5-5f58-4dee-adfe-3ed1838c7b64', 'bb665826-8ff0-45f7-a75f-babdad3d8e17', 'cognito'), -- salman.mitha@nearform.com
+('3f03a312-dab3-47ff-beb0-f9e2f8a99e8b', '1aadd944-4876-46c1-a8e6-36122636dffa', 'cognito'), -- salman.mitha+learner@nearform.com
 ('2bc05586-55fb-4f3f-b9a5-64ed8cdaed61', '83156e3f-a075-43b5-b345-dacb06d5b057', 'cognito'), -- aneesa.ramzan@teamteach.co.uk
 ('323da9cb-e3fc-4eef-9bcc-716ffbe41d1a', 'aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'cognito'), -- spyridon.chortis@nearform.com
 ('07c545cc-3c1d-4b2c-bb6f-632ac7a1d91f', '99a03e41-f518-49a2-98cd-c77cb2e33483', 'cognito'), -- maksym.barvinskyi@nearform.com

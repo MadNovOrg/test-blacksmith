@@ -8,6 +8,7 @@ configuration:
     created_at: createdAt
     family_name: familyName
     given_name: givenName
+    go1_id: go1Id
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:

@@ -26,10 +26,6 @@ type Query {
 }
 
 type Mutation {
-  linkGo1: LinkProfileResult
-}
-
-type Mutation {
   plansCreate(
     data: PlansCreateInput!
   ): PlansCreateResult

@@ -1,3 +1,4 @@
+- "!include public_blended_learning_status.yaml"
 - "!include public_color.yaml"
 - "!include public_course.yaml"
 - "!include public_course_delivery_type.yaml"

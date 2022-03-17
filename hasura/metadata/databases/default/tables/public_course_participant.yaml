@@ -5,6 +5,8 @@ configuration:
   comment: null
   custom_column_names:
     booking_date: bookingDate
+    go1_enrolment_id: go1EnrolmentId
+    go1_enrolment_status: go1EnrolmentStatus
     invoice_id: invoiceID
   custom_root_fields: {}
 object_relationships:
@@ -57,3 +59,14 @@ update_permissions:
             profile_id:
               _eq: X-Hasura-User-Id
   role: user
+event_triggers:
+- definition:
+    enable_manual: false
+    insert:
+      columns: "*"
+  name: go1_link
+  retry_conf:
+    interval_sec: 10
+    num_retries: 3
+    timeout_sec: 10
+  webhook: "{{EVENTS_HOST}}/go1/link"

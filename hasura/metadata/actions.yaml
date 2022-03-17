@@ -28,13 +28,6 @@ actions:
     kind: ""
     handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
   comment: Checks whether user is subscribed to membership
-- name: linkGo1
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/go1-profile'
-    forward_client_headers: true
-  permissions:
-  - role: user
 - name: plansCreate
   definition:
     kind: synchronous
