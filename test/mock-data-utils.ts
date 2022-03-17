@@ -1,4 +1,4 @@
-import { build, fake } from '@jackfranklin/test-data-bot'
+import { build, fake, perBuild } from '@jackfranklin/test-data-bot'
 
 import {
   Address,
@@ -109,8 +109,8 @@ export const buildCourse = build<Course>({
 export const buildParticipant = build<CourseParticipant>({
   fields: {
     id: fake(f => f.datatype.uuid()),
-    profile: buildProfile(),
-    course: buildCourse(),
+    profile: perBuild(() => buildProfile()),
+    course: perBuild(() => buildCourse()),
     go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
   },
 })

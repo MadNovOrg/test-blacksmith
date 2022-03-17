@@ -45,7 +45,8 @@ export const CourseAttendance = () => {
     return participantsData.map(participant => ({
       name: `${participant.profile.givenName} ${participant.profile.familyName}`,
       id: participant.id,
-      attending: storedAttendance[participant.id] ?? true,
+      attending:
+        participant.attended ?? storedAttendance[participant.id] ?? true,
     }))
   }, [ATTENDANCE_KEY, participantsData])
 

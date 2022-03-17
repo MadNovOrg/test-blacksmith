@@ -33,6 +33,7 @@ export const QUERY = gql`
       order_by: $orderBy
     ) {
       id
+      attended
       profile {
         givenName
         familyName

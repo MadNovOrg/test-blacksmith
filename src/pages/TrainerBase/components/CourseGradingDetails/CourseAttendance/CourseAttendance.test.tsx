@@ -8,9 +8,8 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseAttendance } from './index'
 
 import { LoadingStatus } from '@app/util'
-import { render, screen, waitForText } from '@test/index'
-import { buildParticipant, buildProfile } from '@test/mock-data-utils'
-import { CourseParticipant } from '@app/types'
+import { render, screen, waitForText, within } from '@test/index'
+import { buildParticipant } from '@test/mock-data-utils'
 import { MUTATION } from '@app/queries/courses/save-course-attendance'
 
 jest.mock('@app/hooks/useCourseParticipants')
@@ -20,26 +19,6 @@ jest.mock('@app/hooks/use-fetcher', () => ({
 
 const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
 const useFetcherMock = jest.mocked(useFetcher)
-
-function buildParticipants(): CourseParticipant[] {
-  return [
-    buildParticipant({
-      overrides: {
-        profile: buildProfile(),
-      },
-    }),
-    buildParticipant({
-      overrides: {
-        profile: buildProfile(),
-      },
-    }),
-    buildParticipant({
-      overrides: {
-        profile: buildProfile(),
-      },
-    }),
-  ]
-}
 
 describe('component: CourseAttendance', () => {
   afterEach(() => {
@@ -69,7 +48,11 @@ describe('component: CourseAttendance', () => {
 
   it('displays course participants', () => {
     const COURSE_ID = 'course-id'
-    const participants = buildParticipants()
+    const participants = [
+      buildParticipant(),
+      buildParticipant(),
+      buildParticipant(),
+    ]
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -100,9 +83,56 @@ describe('component: CourseAttendance', () => {
     })
   })
 
+  it('displays save attendance for participant if no local storage backup', () => {
+    const COURSE_ID = 'course-id'
+    const participants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
+        <Routes>
+          <Route
+            path="/:id/grading-details"
+            element={<CourseAttendance />}
+          ></Route>
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(
+      within(
+        screen.getByTestId(`participant-attendance-${participants[0].id}`)
+      ).getByText('Did not attend')
+    ).toBeInTheDocument()
+
+    expect(
+      within(
+        screen.getByTestId(`participant-attendance-${participants[1].id}`)
+      ).getByText('Attended + ID checked')
+    ).toBeInTheDocument()
+
+    expect(
+      within(
+        screen.getByTestId(`participant-attendance-${participants[2].id}`)
+      ).getByText('Attended + ID checked')
+    ).toBeInTheDocument()
+  })
+
   it('saves to local storage when attendance changes', () => {
     const COURSE_ID = 'course-id'
-    const participants = buildParticipants()
+    const participants = [
+      buildParticipant(),
+      buildParticipant(),
+      buildParticipant(),
+    ]
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -137,7 +167,11 @@ describe('component: CourseAttendance', () => {
 
   it('displays attendance from local storage if it exists for the course', () => {
     const COURSE_ID = 'course-id'
-    const participants = buildParticipants()
+    const participants = [
+      buildParticipant(),
+      buildParticipant(),
+      buildParticipant(),
+    ]
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -176,7 +210,11 @@ describe('component: CourseAttendance', () => {
     useFetcherMock.mockReturnValue(fetcherMock)
 
     const COURSE_ID = 'course-id'
-    const participants = buildParticipants()
+    const participants = [
+      buildParticipant(),
+      buildParticipant(),
+      buildParticipant(),
+    ]
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,

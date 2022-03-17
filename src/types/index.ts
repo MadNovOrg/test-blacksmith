@@ -189,6 +189,7 @@ export type CourseParticipant = {
   registrationId?: string
   course: Course
   profile: Profile
+  attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
 }
 

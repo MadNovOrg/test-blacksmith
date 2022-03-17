@@ -36,6 +36,7 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
+    - attended
     - booking_date
     - course_id
     - go1_enrolment_status
