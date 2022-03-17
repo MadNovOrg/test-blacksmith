@@ -57,11 +57,17 @@ update_permissions:
     columns:
     - status
     filter:
-      course:
-        leaders:
-          profile:
-            id:
-              _eq: X-Hasura-User-Id
+      _or:
+      - course:
+          leaders:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
+      - _and:
+        - email:
+            _eq: X-Hasura-User-Emai
+        - status:
+            _eq: PENDING
   role: user
 delete_permissions:
 - permission:
