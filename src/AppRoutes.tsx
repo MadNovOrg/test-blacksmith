@@ -153,6 +153,11 @@ const LoggedOutRoutes: React.FC<unknown> = () => {
 
 export const AppRoutes: React.FC<unknown> = () => {
   const auth = useAuth()
+  const location = useLocation()
+
+  if (location.pathname === '/invitation') {
+    return <InvitationPage />
+  }
 
   if (auth.loading) {
     return (
