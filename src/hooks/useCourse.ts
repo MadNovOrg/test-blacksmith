@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { isPast } from 'date-fns'
+import { KeyedMutator } from 'swr/dist/types'
 
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import {
@@ -12,19 +12,18 @@ export default function useCourse(courseId: string): {
   data?: ResponseType['course']
   error?: Error
   status: LoadingStatus
-  courseBegan?: boolean
-  courseEnded?: boolean
+  mutate: KeyedMutator<ResponseType>
 } {
-  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
-    QUERY,
-    { id: courseId },
-  ])
+  const { data, error, mutate } = useSWR<
+    ResponseType,
+    Error,
+    [string, ParamsType]
+  >([QUERY, { id: courseId }])
 
   return {
     data: data?.course,
     error,
     status: getSWRLoadingStatus(data, error),
-    courseBegan: data ? isPast(new Date(data.course.schedule[0].start)) : false,
-    courseEnded: data ? isPast(new Date(data.course.schedule[0].end)) : false,
+    mutate,
   }
 }

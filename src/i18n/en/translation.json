@@ -152,6 +152,25 @@
         "status": "Status"
       }
     },
+    "course-details": {
+      "tabs": {
+        "attendees": {
+          "title": "Attendees"
+        },
+        "grading": {
+          "title": "Grading",
+          "grading-details-confirmation": {
+            "line1": "You are now at the end of your course and ready to grade.",
+            "line2": "The following details need to be confirmed before grading each attendee individually:",
+            "line3": "Confirm an individual’s attendance and that ID checks were completed.",
+            "line4": "It is an automatic fail if an individual did not attend.",
+            "line5": "Confirm modules and holds covered or not covered in the course.",
+            "line6": "This informs the modules and holds the attendee will be graded on at an individual level.",
+            "confirm-grading-details": "Confirm grading details"
+          }
+        }
+      }
+    },
     "course-participants": {
       "edit-course-button": "Edit course details",
       "course-beggins": "Begins",

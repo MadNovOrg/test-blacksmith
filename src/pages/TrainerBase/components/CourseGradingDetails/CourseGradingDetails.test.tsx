@@ -19,6 +19,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: undefined,
       status: LoadingStatus.FETCHING,
     })
@@ -29,7 +30,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
         </Routes>
       </MemoryRouter>
     )
@@ -41,6 +42,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: undefined,
       status: LoadingStatus.ERROR,
     })
@@ -51,7 +53,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
         </Routes>
       </MemoryRouter>
     )
@@ -65,6 +67,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -75,7 +78,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
         </Routes>
       </MemoryRouter>
     )
@@ -87,6 +90,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -97,7 +101,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
           <Route
             path={`/trainer-base/course/${course.id}/details`}
             element={<p>Course participants page</p>}
@@ -115,6 +119,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -125,7 +130,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
         </Routes>
       </MemoryRouter>
     )
@@ -140,6 +145,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -150,7 +156,7 @@ describe('page: CourseGradingDetails', () => {
           <Route
             path="/:id/grading-details"
             element={<CourseGradingDetails />}
-          ></Route>
+          />
         </Routes>
       </MemoryRouter>
     )
@@ -167,6 +173,7 @@ describe('page: CourseGradingDetails', () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })

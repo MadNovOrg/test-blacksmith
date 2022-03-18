@@ -17,11 +17,9 @@ import { t } from 'i18next'
 
 import { useAuth } from '@app/context/auth'
 
-import useCourse from '@app/hooks/useCourse'
-
 import theme from '@app/theme'
 import { Course } from '@app/types'
-import { now } from '@app/util'
+import { courseEnded, courseStarted, now } from '@app/util'
 
 interface Props {
   course: Course
@@ -34,17 +32,16 @@ export const CourseHeroSummary: React.FC<Props> = ({
   renderButton,
 }) => {
   const { profile } = useAuth()
-  const { courseBegan, courseEnded } = useCourse(course?.id)
 
-  const courseBeginsFor = courseBegan
+  const courseBeginsFor = courseStarted(course)
     ? 0
     : differenceInDays(new Date(), new Date(course.schedule[0].start))
 
   let courseBeginsForMessage
 
-  if (courseEnded) {
+  if (courseEnded(course)) {
     courseBeginsForMessage = t('pages.course-participants.course-ended')
-  } else if (courseBegan) {
+  } else if (courseStarted(course)) {
     courseBeginsForMessage = t('pages.course-participants.course-began')
   } else if (courseBeginsFor === 0) {
     courseBeginsForMessage = t('pages.course-participants.course-begins-today')

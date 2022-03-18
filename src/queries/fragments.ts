@@ -83,6 +83,7 @@ export const COURSE = gql`
     reaccreditation
     min_participants
     max_participants
+    gradingConfirmed
   }
 `
 

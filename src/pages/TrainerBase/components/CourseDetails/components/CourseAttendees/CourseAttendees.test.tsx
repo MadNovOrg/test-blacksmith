@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import useCourse from '@app/hooks/useCourse'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 
-import { CourseParticipants } from '.'
+import { CourseAttendees } from '.'
 
 import { render, screen, within } from '@test/index'
 import { LoadingStatus } from '@app/util'
@@ -19,7 +19,7 @@ const useCourseParticipantsMock = useCourseParticipants as jest.MockedFunction<
   typeof useCourseParticipants
 >
 
-describe('component: CourseParticipants', () => {
+describe('component: CourseAttendees', () => {
   let course: Course
 
   afterEach(() => {
@@ -29,6 +29,7 @@ describe('component: CourseParticipants', () => {
 
   it('displays a spinner while loading course participants', () => {
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
@@ -37,7 +38,7 @@ describe('component: CourseParticipants', () => {
       status: LoadingStatus.FETCHING,
     })
 
-    render(<CourseParticipants course={course} />)
+    render(<CourseAttendees course={course} />)
 
     expect(
       screen.getByTestId('course-participants-fetching')
@@ -58,11 +59,12 @@ describe('component: CourseParticipants', () => {
     })
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
 
-    render(<CourseParticipants course={course} />)
+    render(<CourseAttendees course={course} />)
 
     participants.forEach(participant => {
       expect(screen.getByTestId(`course-participant-row-${participant.id}`))
@@ -99,11 +101,12 @@ describe('component: CourseParticipants', () => {
     })
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
 
-    render(<CourseParticipants course={course} />)
+    render(<CourseAttendees course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -130,11 +133,12 @@ describe('component: CourseParticipants', () => {
     })
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
       data: course,
     })
 
-    render(<CourseParticipants course={course} />)
+    render(<CourseAttendees course={course} />)
 
     useCourseParticipantsMock.mockClear()
 

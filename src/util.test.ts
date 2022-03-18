@@ -1,4 +1,6 @@
-import { formatDateRange } from './util'
+import { formatDateRange, courseStarted, courseEnded } from './util'
+
+import { buildCourse } from '@test/mock-data-utils'
 
 describe('formatDateRange', () => {
   it('returns single date with month when within same day', () => {
@@ -25,5 +27,33 @@ describe('formatDateRange', () => {
     expect(formatDateRange(from, to)).toEqual(
       '8th February 2022 - 9th March 2023'
     )
+  })
+})
+
+describe('courseStarted', () => {
+  it('should return false', () => {
+    const course = buildCourse()
+    course.schedule[0].start = new Date(2030, 0, 1)
+    expect(courseStarted(course)).toBeFalsy()
+  })
+
+  it('should return true', () => {
+    const course = buildCourse()
+    course.schedule[0].start = new Date(2000, 0, 1)
+    expect(courseStarted(course)).toBeTruthy()
+  })
+})
+
+describe('courseEnded', () => {
+  it('should return false', () => {
+    const course = buildCourse()
+    course.schedule[0].end = new Date(2030, 0, 1)
+    expect(courseEnded(course)).toBeFalsy()
+  })
+
+  it('should return true', () => {
+    const course = buildCourse()
+    course.schedule[0].end = new Date(2000, 0, 1)
+    expect(courseEnded(course)).toBeTruthy()
   })
 })

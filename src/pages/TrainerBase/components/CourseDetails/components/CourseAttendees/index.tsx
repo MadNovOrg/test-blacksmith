@@ -18,17 +18,15 @@ import useCourseInvites from '@app/hooks/useCourseInvites'
 import { CourseInvites } from './CourseInvites'
 
 import { LoadingStatus } from '@app/util'
-import { AttendingTab } from '@app/pages/TrainerBase/components/CourseParticipants/AttendingTab'
 import { Course, InviteStatus } from '@app/types'
-import { InvitesTab } from '@app/pages/TrainerBase/components/CourseParticipants/InvitesTab'
+import { AttendingTab } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees/AttendingTab'
+import { InvitesTab } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees/InvitesTab'
 
-type CourseParticipantsProps = {
+type CourseAttendeesProps = {
   course: Course
 }
 
-export const CourseParticipants: React.FC<CourseParticipantsProps> = ({
-  course,
-}) => {
+export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
   const { id: courseId } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
 

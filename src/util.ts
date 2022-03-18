@@ -1,4 +1,6 @@
-import { format } from 'date-fns'
+import { format, isPast } from 'date-fns'
+
+import { Course } from '@app/types'
 
 export const noop = () => {
   // empty
@@ -95,3 +97,8 @@ export function getSWRLoadingStatus(
 
   return status
 }
+
+export const courseStarted = (course: Course) =>
+  isPast(new Date(course.schedule[0].start))
+export const courseEnded = (course: Course) =>
+  isPast(new Date(course.schedule[0].end))

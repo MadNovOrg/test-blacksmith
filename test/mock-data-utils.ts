@@ -102,6 +102,7 @@ export const buildCourse = build<Course>({
     min_participants: 6,
     max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
+    gradingConfirmed: null,
     reaccreditation: () => false,
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],

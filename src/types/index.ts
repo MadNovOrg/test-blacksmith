@@ -16,6 +16,7 @@ export type Course = {
   organization: Organization
   schedule: CourseSchedule[]
   trainer?: Profile
+  gradingConfirmed: boolean
   dates: {
     aggregate: {
       start: { date: string }

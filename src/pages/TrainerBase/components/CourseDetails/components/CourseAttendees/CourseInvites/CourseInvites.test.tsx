@@ -1,12 +1,18 @@
 import React from 'react'
+import { add, sub } from 'date-fns'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
 
 import { CourseInvites } from './CourseInvites'
 
 import { render, waitForCalls, chance, userEvent } from '@test/index'
-import { buildCourse, buildInvite } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildInvite,
+} from '@test/mock-data-utils'
 import { LoadingStatus } from '@app/util'
+import { Course } from '@app/types'
 
 jest.mock('@app/hooks/useCourseInvites')
 const useCourseInvitesMock = jest.mocked(useCourseInvites)
@@ -25,8 +31,20 @@ describe('CourseInvites', () => {
     jest.clearAllMocks()
   })
 
+  let course: Course
+  beforeEach(() => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { days: 2 }).toISOString(),
+        end: add(new Date(), { days: 4 }).toISOString(),
+      },
+    })
+    course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+  })
+
   it('renders as expected', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { queryByTestId } = render(<CourseInvites course={course} />)
@@ -36,8 +54,26 @@ describe('CourseInvites', () => {
     expect(queryByTestId('course-invite-btn')).toBeInTheDocument()
   })
 
+  it('does not render after course started', async () => {
+    course = buildCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              start: sub(new Date(), { days: 2 }).toISOString(),
+              end: add(new Date(), { days: 4 }).toISOString(),
+            },
+          }),
+        ],
+      },
+    })
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    const { queryByTestId } = render(<CourseInvites course={course} />)
+    expect(queryByTestId('course-invite-btn')).not.toBeInTheDocument()
+  })
+
   it('shows modal when clicked', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -48,7 +84,10 @@ describe('CourseInvites', () => {
   })
 
   it('renders invite button disabled when no invites left', async () => {
-    const course = buildCourse({ overrides: { max_participants: 3 } })
+    course = {
+      ...course,
+      max_participants: 3,
+    }
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
       data: [buildInvite(), buildInvite(), buildInvite()],
@@ -62,7 +101,6 @@ describe('CourseInvites', () => {
   })
 
   it('shows correct invites left count', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue({
       ...useCourseInvitesDefaults,
       data: [
@@ -83,7 +121,6 @@ describe('CourseInvites', () => {
   })
 
   it('does not accept invalid emails', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -104,7 +141,6 @@ describe('CourseInvites', () => {
   })
 
   it('calls invites.send with a single valid email address', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -125,7 +161,6 @@ describe('CourseInvites', () => {
   })
 
   it('calls invites.send with a csv email addresses', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -146,7 +181,6 @@ describe('CourseInvites', () => {
   })
 
   it('calls invites.send when all emails are valid', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
@@ -170,7 +204,6 @@ describe('CourseInvites', () => {
   })
 
   it('calls invites.send with left overs (not tagged)', async () => {
-    const course = buildCourse()
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)

@@ -18,6 +18,7 @@ describe('page: ParticipantCourse', () => {
     const course = buildCourse()
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -46,6 +47,7 @@ describe('page: ParticipantCourse', () => {
     const course = buildCourse()
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
@@ -72,6 +74,7 @@ describe('page: ParticipantCourse', () => {
     const course = buildCourse()
 
     useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
