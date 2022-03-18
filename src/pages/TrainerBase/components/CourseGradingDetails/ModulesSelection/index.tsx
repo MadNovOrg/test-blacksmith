@@ -122,7 +122,7 @@ export const ModulesSelection = () => {
       } else {
         localStorage.removeItem(STORAGE_KEY)
 
-        navigate(`/trainer-base/course/${courseId}/participants`)
+        navigate(`/trainer-base/course/${courseId}/details`)
       }
     } catch (err) {
       setSavingSelectionStatus(LoadingStatus.ERROR)

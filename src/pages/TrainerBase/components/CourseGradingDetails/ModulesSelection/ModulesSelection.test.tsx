@@ -186,7 +186,7 @@ describe('page: ModulesSelection', () => {
             element={<ModulesSelection />}
           />
           <Route
-            path="/trainer-base/course/:id/participants"
+            path="/trainer-base/course/:id/details"
             element={<h1>Manage page</h1>}
           />
         </Routes>
