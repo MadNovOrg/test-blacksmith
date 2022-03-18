@@ -20,6 +20,7 @@ import { ParticipantCourse } from './pages/MyTraining/ParticipantCourse'
 import { CourseGradingDetails } from './pages/TrainerBase/components/CourseGradingDetails'
 import { AcceptInvite } from './pages/MyTraining/AcceptInvite'
 import { CourseAttendance } from './pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
+import { ModulesSelection } from './pages/TrainerBase/components/CourseGradingDetails/ModulesSelection'
 import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
 import { BlogPage } from './pages/MembershipArea/BlogPage'
 import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
@@ -85,7 +86,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                   element={<CourseGradingDetails />}
                 >
                   <Route element={<CourseAttendance />} index />
-                  <Route path="modules" element={<h1>Modules</h1>} />
+                  <Route path="modules" element={<ModulesSelection />} />
                 </Route>
               </Route>
               <Route path="management" element={<TrainerManagement />}>

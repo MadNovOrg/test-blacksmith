@@ -31,6 +31,7 @@ export type Course = {
 } & Base
 
 export type CourseModule = {
+  covered?: boolean
   course: Course
   module: Module
 } & Base

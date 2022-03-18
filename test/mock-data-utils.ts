@@ -12,6 +12,10 @@ import {
   Profile,
   Venue,
   CourseInvite,
+  ModuleGroup,
+  Color,
+  Module,
+  CourseModule,
   BlendedLearningStatus,
 } from '@app/types'
 
@@ -120,5 +124,39 @@ export const buildInvite = build<CourseInvite>({
     id: fake(f => f.datatype.uuid()),
     email: fake(f => f.internet.email()),
     status: 'PENDING',
+  },
+})
+
+export const buildModuleGroup = build<ModuleGroup>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    name: fake(f => f.random.words(3)),
+    level: CourseLevel.LEVEL_1,
+    mandatory: () => false,
+    modules: [],
+    color: Color.FUSCHIA,
+    duration: {},
+  },
+})
+
+export const buildModule = build<Module>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words(3)),
+    createdAt: new Date().toISOString(),
+    description: fake(f => f.random.words(3)),
+    level: CourseLevel.LEVEL_1,
+    type: '',
+    moduleGroup: perBuild(() => buildModuleGroup()),
+  },
+})
+
+export const buildCourseModule = build<CourseModule>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    course: perBuild(() => buildCourse()),
+    module: perBuild(() => buildModule()),
   },
 })

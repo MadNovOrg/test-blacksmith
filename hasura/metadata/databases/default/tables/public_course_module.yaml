@@ -33,15 +33,30 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
-    - created_at
-    - updated_at
     - course_id
+    - covered
+    - created_at
     - id
     - module_id
+    - updated_at
     filter:
       course:
         leaders:
           profile_id:
+            _eq: X-Hasura-User-Id
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - covered
+    filter:
+      course:
+        leaders:
+          profile_id:
+            _eq: X-Hasura-User-Id
+        trainer:
+          id:
             _eq: X-Hasura-User-Id
   role: user
 delete_permissions:

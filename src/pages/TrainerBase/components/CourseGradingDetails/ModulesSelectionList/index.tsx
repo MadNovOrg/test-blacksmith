@@ -20,7 +20,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   boxShadow: 'none',
 
   '& .MuiButtonBase-root': {
-    padding: '2px 10px 2px 5px',
+    padding: theme.spacing(0.5, 1.5),
     alignItems: 'center',
   },
 
@@ -29,7 +29,7 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   },
 }))
 
-type HoldsRecord = Record<string, boolean>
+export type HoldsRecord = Record<string, boolean>
 
 export interface Props {
   moduleGroups: Array<{
@@ -144,7 +144,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
               />
             </FormGroup>
           </AccordionSummary>
-          <AccordionDetails sx={{ paddingLeft: 4.5 }}>
+          <AccordionDetails sx={{ paddingLeft: 4 }}>
             {group.modules.map(module => (
               <FormGroup key={module.id} sx={{ marginBottom: 2 }}>
                 <FormControlLabel

@@ -212,6 +212,13 @@
       "participant-not-attended-chip-label": "Did not attend",
       "attending-count": "{{count}} selected"
     },
+    "modules-selection": {
+      "title": "Modules and holds",
+      "page-description-line1": "Please confirm modules and holds covered or not covered in the course.",
+      "page-description-line2": "This informs the modules and holds the attendee will be graded on at an individual level.",
+      "save-button-text": "Confirm grading details",
+      "back-button-text": "Back to attendees"
+    },
     "my-training": {
       "common": {
         "my-certification-and-credentials": "My Certifications & Credentials"
