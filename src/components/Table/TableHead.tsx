@@ -44,7 +44,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
               active={orderBy === c.id}
               direction={orderBy === c.id ? order : 'asc'}
               onClick={createSortHandler(c.id)}
-              disabled={c.sorting === false}
+              disabled={!c.sorting}
             >
               {c.label}
               {orderBy === c.id ? (

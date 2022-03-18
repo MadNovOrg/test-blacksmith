@@ -47,7 +47,7 @@ import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
 
 const Dashboard = React.lazy(() => import('@app/pages/admin/dashboard'))
 const Organizations = React.lazy(
-  () => import('@app/pages/admin/components/organizations')
+  () => import('@app/pages/admin/components/Organizations')
 )
 const Trainers = React.lazy(
   () => import('@app/pages/admin/components/trainers')

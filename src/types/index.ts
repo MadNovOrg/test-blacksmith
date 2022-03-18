@@ -56,6 +56,7 @@ export type Organization = {
   tags: string[]
   status: string
   contactDetails: ContactDetail[]
+  members_aggregate: { [key: string]: { [key: string]: number } }
   attributes: { [name: string]: string }
   addresses: Address[]
   preferences: { [name: string]: string }

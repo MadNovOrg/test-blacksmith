@@ -43,6 +43,9 @@ export const buildOrganization = build<Organization>({
       fake(f => f.random.word()),
       fake(f => f.random.word()),
     ],
+    members_aggregate: {
+      aggregate: { count: fake(f => f.datatype.number(100)) },
+    },
     status: 'ENABLED',
     contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
     attributes: [{ attribute: 'value' }],
