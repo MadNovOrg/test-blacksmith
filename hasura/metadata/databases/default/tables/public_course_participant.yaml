@@ -19,6 +19,14 @@ object_relationships:
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
+array_relationships:
+- name: gradings
+  using:
+    foreign_key_constraint_on:
+      column: course_participant_id
+      table:
+        name: course_participant_grading
+        schema: public
 insert_permissions:
 - permission:
     backend_only: false
@@ -40,6 +48,7 @@ select_permissions:
     - booking_date
     - course_id
     - go1_enrolment_status
+    - graded
     - id
     - invoice_id
     - profile_id
@@ -51,6 +60,7 @@ update_permissions:
     check: null
     columns:
     - attended
+    - graded
     filter:
       _or:
       - course:
