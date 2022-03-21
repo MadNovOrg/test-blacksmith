@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useCourseModules from '@app/hooks/useCourseModules'
 import { useFetcher } from '@app/hooks/use-fetcher'
 
-import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
+import { HoldsRecord, ModulesSelectionList } from '../../ModulesSelectionList'
 
 import { LoadingStatus } from '@app/util'
 import {

@@ -12,6 +12,8 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
+import { FullHeightPage } from '@app/components/FullHeightPage'
+
 import useCourse from '@app/hooks/useCourse'
 
 import { CourseGradingSteps } from './CourseGradingSteps'
@@ -32,12 +34,7 @@ export const CourseGradingDetails = () => {
   const { data: course, status } = useCourse(courseId ?? '')
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.grey[100],
-        minHeight: 'calc(100vh - 114px)',
-      }}
-    >
+    <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {status === LoadingStatus.FETCHING ? (
           <Stack
@@ -86,6 +83,6 @@ export const CourseGradingDetails = () => {
           </>
         ) : null}
       </Container>
-    </Box>
+    </FullHeightPage>
   )
 }

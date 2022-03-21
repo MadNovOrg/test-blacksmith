@@ -220,6 +220,21 @@
       "attendance-step": "Attendance",
       "modules-step": "Modules and holds"
     },
+    "course-grading": {
+      "title": "Final grading",
+      "attendees-list-title": "{{count}} attendee(s)",
+      "attendees-list-title-all": "All attendees",
+      "grading-menu-title": "Final grade",
+      "grading-menu-description": "Once grade is submitted, this cannot be modified.",
+      "grade-pass": "Pass",
+      "grade-observe-only": "Observe only",
+      "grade-fail": "Fail",
+      "modules-selection-title": "Grade the attendee(s) for each module and hold",
+      "modules-selection-description": "Any markings below will be reflected on the attendee’s certificate.",
+      "feedback-field-title": "Written feedback",
+      "feedback-field-placeholder": "Any notes attendee(s) (optional)",
+      "submit-button-text": "Submit final grade"
+    },
     "course-attendance": {
       "title": "Attendance",
       "page-description-line1": "Please confirm an individual’s attendance and that ID checks were completed.",

@@ -24,6 +24,7 @@ import { ModulesSelection } from './pages/TrainerBase/components/CourseGradingDe
 import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
 import { BlogPage } from './pages/MembershipArea/BlogPage'
 import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
+import { CourseGrading } from './pages/TrainerBase/components/CourseGrading'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
@@ -81,6 +82,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                 <Route index element={<MyCourses />} />
                 <Route path=":id/modules" element={<CourseBuilder />} />
                 <Route path=":id/details" element={<CourseDetails />} />
+                <Route path=":id/grading" element={<CourseGrading />} />
                 <Route
                   path=":id/grading-details"
                   element={<CourseGradingDetails />}
