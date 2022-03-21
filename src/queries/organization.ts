@@ -1,9 +1,8 @@
 import { gql } from 'graphql-request'
 
-import { ORGANIZATION, PROFILE } from './fragments'
+import { PROFILE } from './fragments'
 
 export const getOrganizationWithKeyContacts = gql`
-  ${ORGANIZATION}
   ${PROFILE}
   query ($id: uuid!) {
     organization: organization_by_pk(id: $id) {

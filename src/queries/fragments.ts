@@ -16,6 +16,7 @@ export const ORGANIZATION = gql`
 `
 
 export const PROFILE = gql`
+  ${ORGANIZATION}
   fragment Profile on profile {
     id
     givenName
@@ -26,8 +27,14 @@ export const PROFILE = gql`
     addresses
     attributes
     contactDetails
-    organizations
-    roles
+    organizations {
+      ...Organization
+    }
+    roles {
+      role {
+        name
+      }
+    }
     preferences
     status
     createdAt
