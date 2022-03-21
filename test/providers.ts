@@ -28,6 +28,7 @@ export const defaultProviders: Providers = {
       createdAt: '',
       updatedAt: '',
       organizations: [],
+      roles: [],
     },
     loading: false,
   },

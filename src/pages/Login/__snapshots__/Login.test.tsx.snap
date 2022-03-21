@@ -281,6 +281,7 @@ Object {
         "id": "cacb559d-b85d-5e64-b623-37252520ebda",
         "organizations": Array [],
         "preferences": Array [],
+        "roles": Array [],
         "status": "active",
         "tags": Array [],
         "title": "Mr",

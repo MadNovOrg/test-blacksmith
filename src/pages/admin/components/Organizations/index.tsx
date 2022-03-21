@@ -10,6 +10,7 @@ import {
   TableRow,
 } from '@mui/material'
 import useSWR from 'swr'
+import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 
@@ -30,13 +31,21 @@ const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const Organizations: React.FC<OrganizationsProps> = () => {
+  const { t } = useTranslation()
   const cols = useMemo(
     () => [
-      { id: 'name', label: 'Name', sorting: true },
-      { id: 'status', label: 'Status' },
-      { id: 'members_count', label: 'Members Count' },
+      {
+        id: 'name',
+        label: t('pages.admin.organizations.columns.name'),
+        sorting: true,
+      },
+      { id: 'status', label: t('pages.admin.organizations.columns.status') },
+      {
+        id: 'members_count',
+        label: t('pages.admin.organizations.columns.members-count'),
+      },
     ],
-    []
+    [t]
   )
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)

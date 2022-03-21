@@ -10,6 +10,7 @@
     },
     "filter-by": " Filter By",
     "level": " Level",
+	"role": "Role",
     "course-name": "Course Name",
     "organization": "Organization",
     "course-type": "Course Type",
@@ -60,6 +61,13 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed"
     },
+	"role-names": {
+	  "admin": "Administrator",
+	  "org-admin": "Organization Administrator",
+	  "trainer": "Trainer",
+	  "tt-ops": "Team Teach Operations",
+	  "user": "User"
+	},
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
@@ -401,6 +409,15 @@
         "ExpiredCodeException": "Verification code expired. Please request new code.",
         "UnknownError": "An error occurred. Please try again."
       }
-    }
+    },
+	"admin":  {
+	  "organizations": {
+		"columns": {
+		  "name": "Name",
+		  "status": "Status",
+		  "members-count": "Members Count"
+		}
+	  }
+	}
   }
 }

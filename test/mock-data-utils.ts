@@ -68,6 +68,7 @@ export const buildProfile = build<Profile>({
     email: fake(f => f.internet.email()),
     tags: null,
     preferences: {},
+    roles: [{ role: { name: fake(f => f.random.word()) } }],
     organizations: [{ organization: buildOrganization() }],
   },
 })

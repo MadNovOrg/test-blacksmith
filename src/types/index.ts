@@ -74,8 +74,21 @@ export type Profile = {
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
   organizations: Array<{ organization: Organization }>
+  roles: Array<{ role: Role }>
   email: string
 } & Base
+
+export type Role = {
+  name: string
+}
+
+export enum RoleName {
+  ADMIN = 'admin',
+  ORG_ADMIN = 'org-admin',
+  TT_OPS = 'tt-ops',
+  TRAINER = 'trainer',
+  USER = 'user',
+}
 
 export enum CourseType {
   OPEN = 'OPEN',

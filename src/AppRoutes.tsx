@@ -45,11 +45,10 @@ import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
+import { AdminPage } from '@app/pages/admin'
+import { Organizations } from '@app/pages/admin/components/Organizations'
+import { Contacts } from '@app/pages/admin/components/Contacts'
 
-const Dashboard = React.lazy(() => import('@app/pages/admin/dashboard'))
-const Organizations = React.lazy(
-  () => import('@app/pages/admin/components/Organizations')
-)
 const Trainers = React.lazy(
   () => import('@app/pages/admin/components/trainers')
 )
@@ -116,9 +115,10 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="profiles" element={<ProfileListPage />} />
               <Route path="profiles/:id" element={<ProfilePage />} />
             </Route>
-            <Route path="admin" element={<Dashboard />}>
+            <Route path="admin" element={<AdminPage />}>
               <Route index element={<Navigate to="organizations" />} />
               <Route path="organizations" element={<Organizations />} />
+              <Route path="contacts" element={<Contacts />} />
               <Route path="trainers" element={<Trainers />} />
               <Route path="trainees" element={<Trainees />} />
               <Route path="plans" element={<Plans />} />

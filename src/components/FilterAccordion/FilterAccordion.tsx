@@ -16,12 +16,14 @@ type FilterAccordionProps = {
   title: string
   options: FilterOption[]
   onChange: (_: FilterOption[]) => void
+  defaultExpanded?: boolean
 }
 
 export const FilterAccordion: React.FC<FilterAccordionProps> = ({
   title,
   options,
   onChange,
+  defaultExpanded,
 }) => {
   const handleChange = (item: FilterOption) =>
     onChange(
@@ -31,7 +33,7 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
     )
 
   return (
-    <Accordion elevation={0}>
+    <Accordion elevation={0} defaultExpanded={defaultExpanded}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="body2">{title}</Typography>
       </AccordionSummary>

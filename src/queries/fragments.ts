@@ -26,6 +26,8 @@ export const PROFILE = gql`
     addresses
     attributes
     contactDetails
+    organizations
+    roles
     preferences
     status
     createdAt
