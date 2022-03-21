@@ -9,7 +9,7 @@ import { CourseAttendees } from '.'
 import { render, screen, within } from '@test/index'
 import { LoadingStatus } from '@app/util'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
-import { Course } from '@app/types'
+import { Course, CourseParticipant } from '@app/types'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useCourseParticipants')
@@ -85,6 +85,34 @@ describe('component: CourseAttendees', () => {
     expect(
       within(participantRow).getByText(
         participants[0].profile.organizations[0].organization?.name ?? ''
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('displays a message if no one has registered yet', () => {
+    const participants: CourseParticipant[] = []
+
+    useCourseParticipantsMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      total: participants.length,
+    })
+
+    useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
+      status: LoadingStatus.SUCCESS,
+      data: course,
+    })
+
+    render(<CourseAttendees course={course} />)
+
+    const noAttendeesMesage = screen.getByTestId(
+      'course-participants-zero-message'
+    )
+
+    expect(
+      within(noAttendeesMesage).getByText(
+        'Attendees will appear here once fully registered'
       )
     ).toBeInTheDocument()
   })

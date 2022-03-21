@@ -1,4 +1,5 @@
 import {
+  Box,
   Chip,
   Table,
   TableBody,
@@ -176,7 +177,19 @@ export const AttendingTab = ({ course }: TabProperties) => {
             />
           ) : null}
         </>
-      ) : null}
+      ) : (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          mt={4}
+          data-testid="course-participants-zero-message"
+        >
+          <Typography variant="body1" color="grey.500">
+            {t('pages.course-participants.none-registered-message')}
+          </Typography>
+        </Box>
+      )}
     </>
   )
 }

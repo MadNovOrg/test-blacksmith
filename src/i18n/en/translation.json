@@ -182,6 +182,7 @@
       }
     },
     "course-participants": {
+      "none-registered-message": "Attendees will appear here once fully registered",
       "edit-course-button": "Edit course details",
       "course-beggins": "Begins",
       "course-ends": "Ends",
