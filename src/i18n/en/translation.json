@@ -10,7 +10,7 @@
     },
     "filter-by": " Filter By",
     "level": " Level",
-	"role": "Role",
+    "role": "Role",
     "course-name": "Course Name",
     "organization": "Organization",
     "course-type": "Course Type",
@@ -29,6 +29,8 @@
     "cancel": "Cancel",
     "clear": "Clear",
     "discard-changes": "Discard Changes",
+    "yes": "Yes",
+    "no": "No",
     "course-delivery-type": {
       "F2F": "Face to Face",
       "BLENDED": "Blended",
@@ -61,13 +63,13 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed"
     },
-	"role-names": {
-	  "admin": "Administrator",
-	  "org-admin": "Organization Administrator",
-	  "trainer": "Trainer",
-	  "tt-ops": "Team Teach Operations",
-	  "user": "User"
-	},
+    "role-names": {
+      "admin": "Administrator",
+      "org-admin": "Organization Administrator",
+      "trainer": "Trainer",
+      "tt-ops": "Team Teach Operations",
+      "user": "User"
+    },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
@@ -410,14 +412,53 @@
         "UnknownError": "An error occurred. Please try again."
       }
     },
-	"admin":  {
-	  "organizations": {
-		"columns": {
-		  "name": "Name",
-		  "status": "Status",
-		  "members-count": "Members Count"
-		}
-	  }
-	}
+    "admin": {
+      "organizations": {
+        "columns": {
+          "name": "Name",
+          "status": "Status",
+          "members-count": "Members Count"
+        }
+      }
+    }
+  },
+  "course-evaluation": {
+    "heading":"Course Summary Evaluation",
+    "all-fields-mandatory": "All fields are mandatory",
+    "signature-desc": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience.",
+    "provide-details": "Please provide details",
+    "your-response": "Your response",
+    "signature": "Signature",
+    "invalid-signature": "Signature should match first and last name of your profile",
+    "submit": "Submit course evaluation",
+    "saved": "Your feedback has been saved",
+    "required-field": "This is a required question",
+    "groups": {
+      "TRAINING_RATING": "Rating of training",
+      "TRAINING_RELEVANCE": "Relevance of training",
+      "TRAINER_STANDARDS": "Standards of trainers",
+      "MATERIALS_AND_VENUE": "Materials and venue"
+    },
+    "questions": {
+      "PERTINENCE_TO_WORK_ROLE": "Pertinence to work role",
+      "ATTITUDE_AND_APPROACH_OF_TRAINERS": "Attitude and approach of trainers",
+      "KNOWLEDGE_OF_SUBJECT": "Knowledge of subject",
+      "PREPARATION_AND_ORGANISATION": "Preparation and organisation",
+      "GROUP_PARTICIPATION": "Group participation",
+      "WORKBOOK_AND_PRESENTATION_MATERIALS": "Workbook and presentation materials",
+      "SUITABILITY_OF_TRAINING_ENVIRONMENT": "Suitability of training environment",
+      "LUNCH_REFRESHMENTS": "Lunch & refreshments",
+      "ISSUES_ARISING_FROM_COURSE": "Were there any issues arising from the course?",
+      "SIGNATURE": "SIGNATURE",
+      "OBJECTIVES_CLEARLY_STATED": "Objectives clearly stated",
+      "OBJECTIVES_ACHIEVED": "Objectives achieved",
+      "EMPHASIS_ON_DEESCALATION": "Emphasis on de-escalation/holistic response 1",
+      "RISK_REDUCTION": "Risk reduction/safety as paramount concern",
+      "VALUE_OF_TRAINING": "Value of training",
+      "KEY_STRENGTHS_OF_COURSE": "What would you describe as the key strengths of this course?",
+      "SUGGESTIONS": "What follow up or changes can you suggest to further develop our practice?",
+      "ANY_INJURIES": "Were there any injuries?"
+    },
+    "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our Privacy Policy for more."
   }
 }

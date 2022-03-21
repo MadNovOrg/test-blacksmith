@@ -48,6 +48,7 @@ import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
 import { AdminPage } from '@app/pages/admin'
 import { Organizations } from '@app/pages/admin/components/Organizations'
 import { Contacts } from '@app/pages/admin/components/Contacts'
+import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
 
 const Trainers = React.lazy(
   () => import('@app/pages/admin/components/trainers')
@@ -104,6 +105,10 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                 element={<MyUpcomingTraining />}
               />
               <Route path="courses/:id" element={<ParticipantCourse />} />
+              <Route
+                path="courses/:id/evaluation"
+                element={<CourseEvaluation />}
+              />
               <Route path="accept-invite/:id" element={<AcceptInvite />} />
               <Route path="certifications" element={<MyCertifications />} />
               <Route path="resources" element={<MyResources />} />

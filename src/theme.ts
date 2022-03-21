@@ -172,6 +172,11 @@ export default createTheme({
       fontWeight: '600',
     },
 
+    subtitle2: {
+      fontSize: '1.25rem',
+      fontWeight: '500',
+    },
+
     body1: {
       fontSize: '1rem',
       fontWeight: '400',
@@ -309,6 +314,50 @@ export default createTheme({
       styleOverrides: {
         filled: {
           fontWeight: 500,
+        },
+      },
+    },
+    MuiRating: {
+      styleOverrides: {
+        iconEmpty: {
+          color: theme.palette.grey[300],
+          '& .rating-label': {
+            visibility: 'hidden',
+          },
+        },
+        iconActive: {
+          '&.rating-1': {
+            color: theme.palette.error.dark,
+          },
+          '&.rating-2': {
+            color: theme.palette.error.main,
+          },
+          '&.rating-3': {
+            color: theme.palette.warning.main,
+          },
+          '&.rating-4': {
+            color: theme.palette.success.main,
+          },
+          '&.rating-5': {
+            color: '#59C13D',
+          },
+        },
+        iconFilled: {
+          '&.rating-1': {
+            color: theme.palette.error.dark,
+          },
+          '&.rating-2': {
+            color: theme.palette.error.main,
+          },
+          '&.rating-3': {
+            color: theme.palette.warning.main,
+          },
+          '&.rating-4': {
+            color: theme.palette.success.main,
+          },
+          '&.rating-5': {
+            color: '#59C13D',
+          },
         },
       },
     },

@@ -244,3 +244,34 @@ export type BlogPost = {
     rendered: string
   }
 }
+
+export type CourseEvaluationAnswer = {
+  question_id: string
+  notes: string | undefined
+  course_evaluation_id: string
+  answer: string
+}
+
+export enum CourseEvaluationQuestionGroup {
+  TRAINING_RATING = 'TRAINING_RATING',
+  TRAINING_RELEVANCE = 'TRAINING_RELEVANCE',
+  TRAINER_STANDARDS = 'TRAINER_STANDARDS',
+  MATERIALS_AND_VENUE = 'MATERIALS_AND_VENUE',
+}
+
+export enum CourseEvaluationQuestionType {
+  BOOLEAN = 'BOOLEAN',
+  TEXT = 'TEXT',
+  RATING = 'RATING',
+  BOOLEAN_REASON_Y = 'BOOLEAN_REASON_Y',
+  BOOLEAN_REASON_N = 'BOOLEAN_REASON_N',
+}
+
+export type CourseEvaluationQuestion = {
+  id: string
+  type: CourseEvaluationQuestionType
+  questionKey: string
+  group: CourseEvaluationQuestionGroup
+  displayOrder: number
+  required: number
+}

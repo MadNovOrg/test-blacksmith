@@ -1,51 +1,57 @@
 table:
   name: course_evaluation_answers
   schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    course_id: courseId
+    question_id: questionId
+  custom_root_fields: {}
 object_relationships:
-- name: course_evaluation
+- name: course
   using:
-    foreign_key_constraint_on: course_evaluation_id
+    foreign_key_constraint_on: course_id
 - name: course_evaluation_question
   using:
     foreign_key_constraint_on: question_id
+- name: participant
+  using:
+    manual_configuration:
+      column_mapping:
+        course_id: course_id
+        profile_id: profile_id
+      insertion_order: null
+      remote_table:
+        name: course_participant
+        schema: public
+- name: profile
+  using:
+    foreign_key_constraint_on: profile_id
 insert_permissions:
 - permission:
     backend_only: false
     check:
-      _and:
-      - course_evaluation:
-          course_participant:
-            profile_id:
-              _eq: X-Hasura-User-Id
-      - course_evaluation:
-          course:
-            participants:
-              profile_id:
-                _eq: X-Hasura-User-Id
+      participant:
+        profile_id:
+          _eq: X-Hasura-User-Id
     columns:
     - answer
-    - course_evaluation_id
+    - course_id
     - id
+    - profile_id
     - question_id
+    set:
+      profile_id: x-hasura-User-Id
   role: user
 select_permissions:
 - permission:
     columns:
     - answer
-    - course_evaluation_id
+    - course_id
     - id
     - question_id
     filter:
-      _and:
-      - course_evaluation:
-          course_participant:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
-      - course_evaluation:
-          course:
-            participants:
-              profile:
-                id:
-                  _eq: X-Hasura-User-Id
+      participant:
+        profile_id:
+          _eq: X-Hasura-User-Id
   role: user

@@ -1,0 +1,4 @@
+table:
+  name: course_evaluation_question_type
+  schema: public
+is_enum: true

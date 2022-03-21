@@ -1,3 +1,21 @@
 table:
   name: course_evaluation_questions
   schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    display_order: displayOrder
+    question_key: questionKey
+  custom_root_fields: {}
+select_permissions:
+- permission:
+    columns:
+    - display_order
+    - group
+    - id
+    - question
+    - question_key
+    - required
+    - type
+    filter: {}
+  role: user

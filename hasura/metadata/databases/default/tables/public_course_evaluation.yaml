@@ -5,41 +5,20 @@ object_relationships:
 - name: course
   using:
     foreign_key_constraint_on: course_id
-- name: course_participant
-  using:
-    foreign_key_constraint_on: participant_id
 insert_permissions:
 - permission:
     backend_only: false
-    check:
-      _and:
-      - course_participant:
-          profile_id:
-            _eq: X-Hasura-User-Id
-      - course:
-          participants:
-            profile_id:
-              _eq: X-Hasura-User-Id
+    check: {}
     columns:
-    - signed
     - course_id
     - id
-    - participant_id
+    - signed
   role: user
 select_permissions:
 - permission:
     columns:
-    - signed
     - course_id
     - id
-    - participant_id
-    filter:
-      _and:
-      - course_participant:
-          profile_id:
-            _eq: X-Hasura-User-Id
-      - course:
-          participants:
-            profile_id:
-              _eq: X-Hasura-User-Id
+    - signed
+    filter: {}
   role: user
