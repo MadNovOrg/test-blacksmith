@@ -21,13 +21,13 @@ jest.mock('react-router-dom', () => ({
 
 describe('Login', () => {
   it('matches snapshot', async () => {
-    const view = render(
+    const { container } = render(
       <MemoryRouter>
         <LoginPage />
       </MemoryRouter>
     )
 
-    expect(view).toMatchSnapshot()
+    expect(container).toMatchSnapshot()
   })
 
   it('shows error when email is empty', async () => {

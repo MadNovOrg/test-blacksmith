@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import MuiAppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
@@ -19,6 +19,7 @@ import { Button, Tab, Tabs } from '@mui/material'
 
 import { useAuth } from '@app/context/auth'
 
+import { useMainNavTabs } from '@app/hooks/useMainNavTabs'
 import { useRouteMatch } from '@app/hooks/use-route-match'
 
 import { DrawerMenu } from '../DrawerMenu'
@@ -44,35 +45,13 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }))
 
-// TODO: will be generated later based on user/role
-const tabs = [
-  {
-    id: '/trainer-base',
-    title: 'Trainer Base',
-  },
-  {
-    id: '/my-training',
-    title: 'My Training',
-  },
-  {
-    id: '/my-organization',
-    title: 'My Organization',
-  },
-  {
-    id: '/admin',
-    title: 'Admin',
-  },
-  {
-    id: '/membership-area',
-    title: 'Membership Area',
-  },
-]
-
 export const AppBar = () => {
   const { t } = useTranslation()
   const { profile, logout } = useAuth()
   const [anchorElUser, setAnchorElUser] =
     React.useState<HTMLButtonElement | null>(null)
+
+  const tabs = useMainNavTabs()
   const routeMatch = useRouteMatch(tabs)
   const currentTab = routeMatch?.pattern?.path ?? tabs[0].id
 
@@ -90,7 +69,7 @@ export const AppBar = () => {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box display="flex" alignItems="center">
-            <Logo size={40} />
+            <Logo size={40} data-testid="app-logo" />
             <Link
               underline="none"
               component={RRLink}
@@ -182,7 +161,7 @@ export const AppBar = () => {
       </MuiAppBar>
 
       <Box sx={{ justifyContent: 'space-between' }} marginTop="-1px">
-        <StyledTabs value={currentTab}>
+        <StyledTabs value={currentTab} data-testid="main-nav">
           {tabs.map(t => (
             <Tab
               key={t.id}

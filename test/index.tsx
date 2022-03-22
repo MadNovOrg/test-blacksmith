@@ -6,7 +6,8 @@ import Chance from 'chance'
 import '@app/i18n/config'
 import { ThemeProvider } from '@mui/material'
 
-import { AuthContext, ContextType } from '@app/context/auth'
+import { AuthContext } from '@app/context/auth'
+import { injectACL } from '@app/context/auth/permissions'
 
 import { defaultProviders, Providers } from './providers'
 
@@ -22,7 +23,7 @@ function render(
 
   const wrapper: React.FC = ({ children }) => {
     return (
-      <AuthContext.Provider value={context.auth as ContextType}>
+      <AuthContext.Provider value={injectACL(context.auth)}>
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </AuthContext.Provider>
     )

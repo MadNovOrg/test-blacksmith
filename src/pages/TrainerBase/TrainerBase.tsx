@@ -1,11 +1,18 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 
-type TrainerBasePageProps = unknown
+import { useAuth } from '@app/context/auth'
 
-export const TrainerBasePage: React.FC<TrainerBasePageProps> = () => {
+export const TrainerBasePage = () => {
+  const { acl } = useAuth()
+
+  // IMPROVEMENT: Extract to reusable component
+  if (!acl.canViewTrainerBase()) {
+    return <Navigate to="/my-training" />
+  }
+
   return (
-    <div>
+    <div data-testid="trainer-base-wrap">
       <Outlet />
     </div>
   )

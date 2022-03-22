@@ -1,18 +1,21 @@
-import { Profile } from '@app/types'
+import type { ContextType as AuthContextType } from '@app/context/auth'
+
+import { RoleName } from '@app/types'
 
 export interface Providers {
   auth: {
     login: jest.Mock
     logout: jest.Mock
-    profile?: Profile
+    profile: AuthContextType['profile']
     loading: boolean
   }
 }
 
 export const defaultProviders: Providers = {
   auth: {
-    login: jest.fn(async () => ({})),
-    logout: jest.fn(async () => undefined),
+    login: jest.fn().mockResolvedValue(undefined),
+    logout: jest.fn().mockResolvedValue(undefined),
+    loading: false,
     profile: {
       id: 'cacb559d-b85d-5e64-b623-37252520ebda',
       givenName: 'John',
@@ -28,8 +31,7 @@ export const defaultProviders: Providers = {
       createdAt: '',
       updatedAt: '',
       organizations: [],
-      roles: [],
+      roles: [{ role: { name: RoleName.USER } }],
     },
-    loading: false,
   },
 }

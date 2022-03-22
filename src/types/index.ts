@@ -79,7 +79,7 @@ export type Profile = {
 } & Base
 
 export type Role = {
-  name: string
+  name: RoleName
 }
 
 export enum RoleName {

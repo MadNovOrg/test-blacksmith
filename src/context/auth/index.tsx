@@ -5,8 +5,10 @@ import useSWR from 'swr'
 
 import { gqlRequest } from '@app/lib/gql-request'
 
+import { injectACL, ACL } from './permissions'
+
 import { getUserProfile } from '@app/queries/users'
-import { Profile } from '@app/types'
+import { Profile, RoleName } from '@app/types'
 
 type E = {
   code: number
@@ -15,7 +17,13 @@ type E = {
 
 type State = {
   loading: boolean
-  claims?: { [key: string]: string }
+  claims?: {
+    'x-hasura-user-id': string
+    'x-hasura-user-email': string
+    'x-hasura-allowed-roles': RoleName[]
+    'x-hasura-default-role': RoleName
+    'x-hasura-tt-organizations': string
+  }
   accessToken?: string
   idToken?: string
 }
@@ -26,6 +34,7 @@ export interface ContextType extends State {
   login: (_: string, __: string) => Promise<LoginResult>
   logout: () => Promise<void>
   profile?: Profile
+  acl: ACL
 }
 
 const initialState: State = {
@@ -115,15 +124,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setState({ loading: false })
   }, [])
 
-  const value = useMemo<ContextType>(
-    () => ({
+  const value = useMemo<ContextType>(() => {
+    return injectACL({
       login,
       logout,
       profile: data?.profile,
       ...state,
-    }),
-    [login, logout, data, state]
-  )
+    })
+  }, [login, logout, data, state])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
