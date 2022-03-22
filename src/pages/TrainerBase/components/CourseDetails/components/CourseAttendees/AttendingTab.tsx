@@ -42,9 +42,13 @@ export const AttendingTab = ({ course }: TabProperties) => {
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
-  } = useCourseParticipants(course?.id ?? '', sortColumn, order, {
-    limit: perPage,
-    offset: perPage * currentPage,
+  } = useCourseParticipants(course?.id ?? '', {
+    sortBy: sortColumn,
+    order,
+    pagination: {
+      limit: perPage,
+      offset: perPage * currentPage,
+    },
   })
 
   const handleRowsPerPageChange = useCallback(

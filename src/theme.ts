@@ -38,6 +38,18 @@ declare module '@mui/material/styles' {
       fuschia?: ColorPartial
     }
   }
+
+  interface PaletteOptions {
+    tertiary: {
+      main: string
+    }
+  }
+}
+
+declare module '@mui/material/SvgIcon' {
+  interface SvgIconPropsColorOverrides {
+    tertiary: true
+  }
 }
 
 const theme = createTheme({
@@ -121,6 +133,9 @@ const theme = createTheme({
     },
     secondary: {
       main: '#3B3A3C',
+    },
+    tertiary: {
+      main: '#6B398A',
     },
     warning: {
       light: '#FFF8ED',

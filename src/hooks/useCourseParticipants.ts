@@ -8,17 +8,26 @@ import {
 } from '@app/queries/participants/get-course-participants'
 import { SortOrder } from '@app/types'
 
+export type CourseParticipantCriteria = {
+  attended?: { _eq: boolean }
+}
+
 export default function useCourseParticipants(
   courseId: string,
-  sortBy = 'name',
-  order: SortOrder = 'asc',
-  pagination?: { limit: number; offset: number }
+  options?: {
+    sortBy?: string
+    order?: SortOrder
+    pagination?: { limit: number; offset: number }
+    where?: CourseParticipantCriteria
+  }
 ): {
   data?: ResponseType['courseParticipants']
   error?: Error
   total?: number
   status: LoadingStatus
 } {
+  const sortBy = options?.sortBy ?? 'name'
+  const order = options?.order ?? 'asc'
   let orderBy: ParamsType['orderBy'] = {
     profile: { givenName: order, familyName: order },
   }
@@ -32,8 +41,9 @@ export default function useCourseParticipants(
     QUERY,
     {
       courseId: courseId,
-      limit: pagination?.limit,
-      offset: pagination?.offset,
+      limit: options?.pagination?.limit,
+      offset: options?.pagination?.offset,
+      where: options?.where,
       orderBy,
     },
   ])

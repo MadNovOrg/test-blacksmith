@@ -69,7 +69,7 @@ export const Contacts: React.FC<ContactsProps> = () => {
         label: 'Status',
       },
     ],
-    [t]
+    []
   )
   const roleOptions = useMemo<FilterOption[]>(() => {
     return Object.values(RoleName).map<FilterOption>(role => ({

@@ -15,6 +15,7 @@ export type ParamsType = {
     | { profile: Record<'givenName' | 'familyName', SortOrder> }
     | { profile: { email: SortOrder } }
     | { go1EnrolmentStatus: SortOrder }
+  where?: object
 }
 
 export const QUERY = gql`
@@ -25,9 +26,10 @@ export const QUERY = gql`
     $orderBy: [course_participant_order_by!] = {
       profile: { givenName: asc, familyName: asc }
     }
+    $where: course_participant_bool_exp = {}
   ) {
     courseParticipants: course_participant(
-      where: { course_id: { _eq: $courseId } }
+      where: { _and: [{ course_id: { _eq: $courseId } }, $where] }
       limit: $limit
       offset: $offset
       order_by: $orderBy
@@ -49,9 +51,13 @@ export const QUERY = gql`
       invoiceID
       bookingDate
       go1EnrolmentStatus
+      gradings {
+        grade
+        feedback
+      }
     }
     courseParticipantsAggregation: course_participant_aggregate(
-      where: { course_id: { _eq: $courseId } }
+      where: { _and: [{ course_id: { _eq: $courseId } }, $where] }
     ) {
       aggregate {
         count

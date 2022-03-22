@@ -31,6 +31,7 @@
     "discard-changes": "Discard Changes",
     "yes": "Yes",
     "no": "No",
+    "view": "View",
     "course-delivery-type": {
       "F2F": "Face to Face",
       "BLENDED": "Blended",
@@ -62,6 +63,11 @@
       "NOT_STARTED": "Not started",
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed"
+    },
+    "grade": {
+      "PASS": "Pass",
+      "FAIL": "Fail",
+      "OBSERVE_ONLY": "Observe only"
     },
     "role-names": {
       "admin": "Administrator",
@@ -177,7 +183,12 @@
             "line5": "Confirm modules and holds covered or not covered in the course.",
             "line6": "This informs the modules and holds the attendee will be graded on at an individual level.",
             "confirm-grading-details": "Confirm grading details"
-          }
+          },
+          "grade": "Grade",
+          "attendees": "{{ number }} attendees",
+          "grade-selected": "Grade selected ({{ number }})",
+          "grade-all-attendees": "Grade all attendees",
+          "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading."
         }
       }
     },

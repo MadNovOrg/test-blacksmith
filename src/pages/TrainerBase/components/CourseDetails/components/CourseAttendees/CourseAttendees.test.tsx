@@ -143,9 +143,14 @@ describe('component: CourseAttendees', () => {
     expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
-      'name',
-      'asc',
-      { limit: PER_PAGE, offset: PER_PAGE },
+      {
+        order: 'asc',
+        pagination: {
+          limit: PER_PAGE,
+          offset: PER_PAGE,
+        },
+        sortBy: 'name',
+      },
     ])
   })
 
@@ -175,9 +180,14 @@ describe('component: CourseAttendees', () => {
     expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
-      'name',
-      'desc',
-      { limit: PER_PAGE, offset: 0 },
+      {
+        order: 'desc',
+        pagination: {
+          limit: PER_PAGE,
+          offset: 0,
+        },
+        sortBy: 'name',
+      },
     ])
   })
 })

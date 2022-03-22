@@ -17,6 +17,8 @@ import {
   Module,
   CourseModule,
   BlendedLearningStatus,
+  CourseParticipantGrading,
+  Grade,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -115,12 +117,23 @@ export const buildCourse = build<Course>({
   },
 })
 
+export const buildParticipantGrading = build<CourseParticipantGrading>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    grade: Grade.PASS,
+    feedback: '',
+  },
+})
+
 export const buildParticipant = build<CourseParticipant>({
   fields: {
     id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
     profile: perBuild(() => buildProfile()),
     course: perBuild(() => buildCourse()),
     go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
+    gradings: [buildParticipantGrading()],
   },
 })
 

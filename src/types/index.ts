@@ -198,8 +198,18 @@ export type CourseSchedule = {
   venue: Venue
 } & Base
 
+export enum Grade {
+  PASS = 'PASS',
+  OBSERVE_ONLY = 'OBSERVE_ONLY',
+  FAIL = 'FAIL',
+}
+
+export type CourseParticipantGrading = {
+  grade: Grade
+  feedback: string
+} & Base
+
 export type CourseParticipant = {
-  id: string
   bookingDate?: Date
   invoiceID?: string
   registrationId?: string
@@ -207,7 +217,8 @@ export type CourseParticipant = {
   profile: Profile
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
-}
+  gradings: CourseParticipantGrading[]
+} & Base
 
 export enum BlendedLearningStatus {
   'ASSIGNED' = 'ASSIGNED',

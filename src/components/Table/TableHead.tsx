@@ -13,6 +13,7 @@ type Col = {
   id: string
   label: string
   sorting?: boolean
+  component?: React.ReactNode
 }
 
 export type TableHeadProps = {
@@ -40,6 +41,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
             key={c.id}
             sortDirection={orderBy === c.id ? order : false}
           >
+            {c.component}
             <TableSortLabel
               active={orderBy === c.id}
               direction={orderBy === c.id ? order : 'asc'}
