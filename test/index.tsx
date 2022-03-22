@@ -1,6 +1,6 @@
 import { waitFor, render as _render, screen } from '@testing-library/react'
 import React from 'react'
-import deepmerge from 'deepmerge'
+import { deepmerge } from 'deepmerge-ts'
 import { DeepPartial } from 'ts-essentials'
 import Chance from 'chance'
 import '@app/i18n/config'

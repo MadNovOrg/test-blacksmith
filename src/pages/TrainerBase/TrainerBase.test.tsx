@@ -17,29 +17,26 @@ jest.mock('react-router-dom', () => ({
 
 describe('page: TrainerBase', () => {
   it('redirects to my-training if ACL fails', async () => {
-    const roles = [{ role: { name: RoleName.USER } }]
+    const allowedRoles = new Set([RoleName.USER])
 
     render(
       <MemoryRouter>
         <TrainerBasePage />
       </MemoryRouter>,
-      { auth: { profile: { roles } } }
+      { auth: { profile: { allowedRoles } } }
     )
 
     expect(mockNavigate).toBeCalledWith({ to: '/my-training' })
   })
 
   it('renders TrainerBaser if ACL passes', async () => {
-    const roles = [
-      { role: { name: RoleName.USER } },
-      { role: { name: RoleName.TRAINER } },
-    ]
+    const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
     render(
       <MemoryRouter>
         <TrainerBasePage />
       </MemoryRouter>,
-      { auth: { profile: { roles } } }
+      { auth: { profile: { allowedRoles } } }
     )
 
     expect(mockNavigate).not.toBeCalled()

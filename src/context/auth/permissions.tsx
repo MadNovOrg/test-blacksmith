@@ -11,13 +11,12 @@ export type ACL = {
 }
 
 export function injectACL<T extends ACLInput>(auth: T) {
-  const roles = auth.profile?.roles ?? []
-  const roleNames = new Set(roles.map(({ role }) => role.name))
+  const allowedRoles = auth.profile?.allowedRoles ?? new Set()
 
   const acl = Object.freeze({
-    isAdmin: () => roleNames.has(RoleName.ADMIN),
+    isAdmin: () => allowedRoles.has(RoleName.ADMIN),
 
-    isTrainer: () => roleNames.has(RoleName.TRAINER),
+    isTrainer: () => allowedRoles.has(RoleName.TRAINER),
 
     canViewTrainerBase: () => acl.isTrainer(),
   })

@@ -32,6 +32,7 @@ export const defaultProviders: Providers = {
       updatedAt: '',
       organizations: [],
       roles: [{ role: { name: RoleName.USER } }],
+      allowedRoles: new Set([RoleName.USER]),
     },
   },
 }

@@ -36,13 +36,13 @@ describe('component: AppBar', () => {
 
   describe('Trainer Base tab', () => {
     it('hides tab if user does not have proper role', async () => {
-      const roles = [{ role: { name: RoleName.USER } }]
+      const allowedRoles = new Set([RoleName.USER])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { roles } } }
+        { auth: { profile: { allowedRoles } } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -51,16 +51,13 @@ describe('component: AppBar', () => {
     })
 
     it('shows tab if user has proper role', async () => {
-      const roles = [
-        { role: { name: RoleName.USER } },
-        { role: { name: RoleName.TRAINER } },
-      ]
+      const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { roles } } }
+        { auth: { profile: { allowedRoles } } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -72,13 +69,13 @@ describe('component: AppBar', () => {
 
   describe('Admin tab', () => {
     it('hides tab if user does not have proper role', async () => {
-      const roles = [{ role: { name: RoleName.USER } }]
+      const allowedRoles = new Set([RoleName.USER])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { roles } } }
+        { auth: { profile: { allowedRoles } } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -87,16 +84,13 @@ describe('component: AppBar', () => {
     })
 
     it('shows tab if user has proper role', async () => {
-      const roles = [
-        { role: { name: RoleName.USER } },
-        { role: { name: RoleName.ADMIN } },
-      ]
+      const allowedRoles = new Set([RoleName.USER, RoleName.ADMIN])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { roles } } }
+        { auth: { profile: { allowedRoles } } }
       )
 
       const nav = screen.getByTestId('main-nav')

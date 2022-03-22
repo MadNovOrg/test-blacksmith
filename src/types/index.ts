@@ -74,7 +74,8 @@ export type Profile = {
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
   organizations: Array<{ organization: Organization }>
-  roles: Array<{ role: Role }>
+  roles: Array<{ role: Role }> // roles assigned in profile_role
+  allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
   email: string
 } & Base
 

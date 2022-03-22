@@ -57,11 +57,10 @@ async function getAuthenticatedUser() {
         claims: JSON.parse(claims),
         accessToken: accessToken.getJwtToken(),
         idToken: idToken.getJwtToken(),
-      }
+      } as Omit<State, 'loading'>
     }
   } catch (err) {
     // console.log(err)
-    return null
   }
 }
 
@@ -69,6 +68,10 @@ type AuthProviderProps = { children: React.ReactNode }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, setState] = useState<State>(initialState)
+
+  useEffect(() => {
+    getAuthenticatedUser().then(data => setState({ loading: false, ...data }))
+  }, [])
 
   const { data } = useSWR<{ profile: Profile }>(
     state.claims
@@ -81,17 +84,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     gqlRequest
   )
 
-  useEffect(() => {
-    getAuthenticatedUser()
-      .then(data => {
-        if (data) {
-          setState({ loading: false, ...data })
-        } else {
-          setState({ loading: false })
-        }
-      })
-      .catch(() => setState({ loading: false }))
-  }, [])
+  const profile = useMemo(() => {
+    if (data?.profile) {
+      return {
+        ...data.profile,
+        allowedRoles: new Set(state.claims?.['x-hasura-allowed-roles'] ?? []),
+      } as Profile
+    }
+  }, [data, state])
 
   const login = useCallback<ContextType['login']>(async (email, password) => {
     try {
@@ -128,10 +128,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return injectACL({
       login,
       logout,
-      profile: data?.profile,
+      profile,
       ...state,
     })
-  }, [login, logout, data, state])
+  }, [login, logout, state, profile])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
