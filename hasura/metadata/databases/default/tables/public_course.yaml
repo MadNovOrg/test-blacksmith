@@ -50,6 +50,25 @@ array_relationships:
         schema: public
 select_permissions:
 - permission:
+    columns:
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - created_at
+    - description
+    - max_participants
+    - min_participants
+    - name
+    - updated_at
+    filter:
+      _and:
+      - course_type:
+          _eq: OPEN
+      - course_status:
+          _eq: PUBLISHED
+  role: anonymous
+- permission:
     allow_aggregations: true
     columns:
     - course_delivery_type
