@@ -7,6 +7,7 @@ const config: PlaywrightTestConfig = {
     trace: 'on',
     screenshot: 'only-on-failure',
     video: 'on',
+    timezoneId: 'UTC',
   },
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
   expect: {

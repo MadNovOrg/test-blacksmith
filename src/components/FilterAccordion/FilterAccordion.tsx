@@ -34,7 +34,7 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
 
   return (
     <Accordion elevation={0} defaultExpanded={defaultExpanded}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="filter-by">
         <Typography variant="body2">{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
@@ -50,6 +50,7 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
                 variant: 'body2',
                 fontWeight: o.selected ? '600' : undefined,
               }}
+              data-testid="filter-item"
             />
             <ListItemIcon sx={{ color: 'inherit', justifyContent: 'flex-end' }}>
               {o.selected && (

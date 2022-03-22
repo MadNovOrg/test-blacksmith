@@ -193,12 +193,13 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
               variant="filled"
               size="small"
               placeholder={t('search')}
+              data-testid="search"
               onChange={e => setKeyword(e.target.value)}
             />
           </Box>
 
           <TableContainer component={Paper} elevation={0}>
-            <Table sx={{ minWidth: 650 }}>
+            <Table sx={{ minWidth: 650 }} data-testid="courses-table">
               <TableHead
                 cols={cols}
                 order={order}

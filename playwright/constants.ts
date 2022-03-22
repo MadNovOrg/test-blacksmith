@@ -1,21 +1,19 @@
-import { users } from './data/users'
-
 const TARGET_ENV = (process.env.TARGET ?? 'local').toLowerCase()
 
 let BASE_URL: string
-let DEFAULT_USER: { email: string; password: string }
+let HASURA_BASE_URL: string
 
 switch (TARGET_ENV) {
   case 'local':
     BASE_URL = 'http://localhost:3000'
-    DEFAULT_USER = users.admin
+    HASURA_BASE_URL = 'http://localhost:8080'
     break
   case 'dev':
     BASE_URL = 'https://web.dev.teamteachhub.co.uk'
-    DEFAULT_USER = users.admin
+    HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
     break
 }
 
 const TEMP_DIR = './tmp'
 
-export { TARGET_ENV, BASE_URL, DEFAULT_USER, TEMP_DIR }
+export { TARGET_ENV, BASE_URL, TEMP_DIR, HASURA_BASE_URL }
