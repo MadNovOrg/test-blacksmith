@@ -41,7 +41,7 @@ jobs:
     name: DEV
     needs: build
     if: |
-      github.ref == 'refs/heads/main' && 
+      github.ref == 'refs/heads/main' &&
       github.event_name == 'push'
     uses: ./.github/workflows/pipeline.yml
     secrets:
@@ -52,5 +52,5 @@ jobs:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_DEV }}
       hasura_endpoint: ${{ secrets.HASURA_ENDPOINT_DEV }}
+      wp_host: ${{ secrets.WP_HOST_DEV }}
       s3_bucket: ${{ secrets.S3_BUCKET_DEV }}
-
