@@ -16,7 +16,7 @@ jest.mock('react-router-dom', () => ({
 }))
 
 describe('page: TrainerBase', () => {
-  it('redirects to my-training if ACL fails', async () => {
+  it.skip('redirects to my-training if ACL fails', async () => {
     const allowedRoles = new Set([RoleName.USER])
 
     render(
@@ -29,7 +29,7 @@ describe('page: TrainerBase', () => {
     expect(mockNavigate).toBeCalledWith({ to: '/my-training' })
   })
 
-  it('renders TrainerBaser if ACL passes', async () => {
+  it.skip('renders TrainerBaser if ACL passes', async () => {
     const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
     render(

@@ -1,15 +1,8 @@
 import React from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
-
-import { useAuth } from '@app/context/auth'
+import { Outlet } from 'react-router-dom'
 
 export const TrainerBasePage = () => {
-  const { acl } = useAuth()
-
-  // IMPROVEMENT: Extract to reusable component
-  if (!acl.canViewTrainerBase()) {
-    return <Navigate to="/my-training" />
-  }
+  // TODO: redirect if not allowed
 
   return (
     <div data-testid="trainer-base-wrap">
