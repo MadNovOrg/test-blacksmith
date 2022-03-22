@@ -56,6 +56,7 @@
     "react-otp-input-rc-17": "^2.4.1-minor",
     "react-router-dom": "^6.2.1",
     "react-use": "^17.3.2",
+    "string-strip-html": "^8.3.0",
     "swr": "^1.2.1",
     "use-debounce": "^7.0.1",
     "vite-plugin-svgr": "^1.0.1",

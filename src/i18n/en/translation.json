@@ -432,7 +432,17 @@
           "members-count": "Members Count"
         }
       }
-    }
+    },
+	"membership": {
+	  "details": {
+		"title": "Membership Details"
+	  },
+	  "blog": {
+		"title": "Most Recent Blog Posts",
+		"no-post-id-error": "No post ID has been provided"
+	  },
+	  "error": "Error loading"
+	}
   },
   "course-evaluation": {
     "heading":"Course Summary Evaluation",

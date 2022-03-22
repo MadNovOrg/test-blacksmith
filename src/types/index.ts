@@ -247,14 +247,41 @@ export type GqlError = {
   message: string
 }
 
-export type BlogPost = {
-  id: string
+export type WPBlogPost = {
+  id: number
   title: {
     rendered: string
   }
   content: {
     rendered: string
   }
+  excerpt: {
+    rendered: string
+  }
+  date: string
+  featured_media: number
+  categories: number[]
+}
+
+export type WPCategory = {
+  id: number
+  name: string
+}
+
+export type WPMedia = {
+  id: number
+  source_url: string
+  alt_text: string
+}
+
+export type BlogPost = {
+  id: number
+  title: string
+  content: string
+  excerpt: string
+  date: string
+  featured_media?: WPMedia
+  category?: WPCategory
 }
 
 export type CourseEvaluationAnswer = {

@@ -1,39 +1,21 @@
-import {
-  Box,
-  CircularProgress,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from '@mui/material'
+import { List, Typography } from '@mui/material'
 import React from 'react'
-import { Link as RRLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
-import { useBlogPostList } from '../../hooks/useBlogPosts'
+import { BlogPostListItem } from './BlogPostListItem'
 
-export const BlogPostList: React.FC = () => {
-  const [posts, loading] = useBlogPostList()
+import { WPBlogPost } from '@app/types'
 
-  if (loading) {
-    return (
-      <Box position="relative" width="100%">
-        <CircularProgress />
-      </Box>
-    )
-  }
-
+export const BlogPostList: React.FC<{ posts: WPBlogPost[] }> = ({ posts }) => {
+  const { t } = useTranslation()
   return (
-    <List>
-      {posts.map(post => (
-        <ListItem key={post.id}>
-          <ListItemButton
-            component={RRLink}
-            to={`/membership-area/blog/${post.id}`}
-          >
-            <ListItemText primary={post.title.rendered} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      <Typography variant="h6">{t('pages.membership.blog.title')}</Typography>
+      <List>
+        {posts.map(post => (
+          <BlogPostListItem post={post} key={post.id} />
+        ))}
+      </List>
+    </>
   )
 }

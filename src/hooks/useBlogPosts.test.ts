@@ -20,13 +20,11 @@ describe('useBlogPostList', () => {
     useSWRMock.mockReturnValue(
       useSWRMockDefaults([
         {
-          id: '1',
-          title: {
-            rendered: 'This is the title',
-          },
-          content: {
-            rendered: 'Some content',
-          },
+          id: 1,
+          title: 'This is the title',
+          content: 'Some content',
+          excerpt: 'Some excerpt',
+          date: 'Some date',
         },
       ])
     )
@@ -36,10 +34,14 @@ describe('useBlogPostList', () => {
     const { result } = renderHook(() => useBlogPostList())
 
     expect(result.current[0].length).toBe(1)
-    expect(result.current[0][0]?.id).toEqual('1')
-    expect(result.current[0][0]?.title?.rendered).toEqual('This is the title')
-    expect(result.current[0][0]?.content?.rendered).toEqual('Some content')
-    expect(result.current[1]).toBe(false)
+    expect(result.current[0][0]).toEqual({
+      id: 1,
+      title: 'This is the title',
+      content: 'Some content',
+      excerpt: 'Some excerpt',
+      date: 'Some date',
+    })
+    expect(result.current[2]).toBe(false)
   })
 })
 
@@ -47,13 +49,11 @@ describe('useBlogPost', () => {
   beforeEach(() => {
     useSWRMock.mockReturnValue(
       useSWRMockDefaults({
-        id: '1',
-        title: {
-          rendered: 'This is the title',
-        },
-        content: {
-          rendered: 'Some content',
-        },
+        id: 1,
+        title: 'This is the title',
+        content: 'Some content',
+        excerpt: 'Some excerpt',
+        date: 'Some date',
       })
     )
   })
@@ -62,9 +62,13 @@ describe('useBlogPost', () => {
     const { result } = renderHook(() => useBlogPost('1'))
 
     expect(result.current[0]).not.toBeUndefined()
-    expect(result.current[0]?.id).toEqual('1')
-    expect(result.current[0]?.title?.rendered).toEqual('This is the title')
-    expect(result.current[0]?.content?.rendered).toEqual('Some content')
+    expect(result.current[0]).toEqual({
+      id: 1,
+      title: 'This is the title',
+      content: 'Some content',
+      excerpt: 'Some excerpt',
+      date: 'Some date',
+    })
     expect(result.current[1]).toBe(false)
   })
 })
