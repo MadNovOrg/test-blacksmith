@@ -7,36 +7,79 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
-export const CourseGradingMenu = () => {
+import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+import { noop } from '@app/util'
+
+interface Props {
+  onChange?: (grade: Grade) => void
+  courseLevel: CourseLevel
+  courseDeliveryType: CourseDeliveryType
+}
+
+type GradeOption = { key: Grade; label: string; icon: React.ReactNode }
+
+export const CourseGradingMenu: React.FC<Props> = ({
+  onChange = noop,
+  courseDeliveryType,
+  courseLevel,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLSpanElement | null>(null)
-  const [selectedIndex, setSelectedIndex] = React.useState(1)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
   const open = Boolean(anchorEl)
   const { t } = useTranslation()
 
-  const options: Array<{ label: string; icon: React.ReactNode }> = useMemo(
-    () => [
-      {
-        icon: <CheckCircleIcon color="success" sx={{ mr: 1 }} />,
-        label: t('pages.course-grading.grade-pass'),
-      },
-      {
-        icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
-        label: t('pages.course-grading.grade-observe-only'),
-      },
-      {
-        icon: <CancelIcon color="error" sx={{ mr: 1 }} />,
-        label: t('pages.course-grading.grade-fail'),
-      },
-    ],
-    [t]
-  )
+  const options: GradeOption[] = useMemo(() => {
+    const passOption: GradeOption = {
+      key: Grade.PASS,
+      icon: <CheckCircleIcon color="success" sx={{ mr: 1 }} />,
+      label: t('pages.course-grading.grade-pass'),
+    }
+
+    const failOption: GradeOption = {
+      key: Grade.FAIL,
+      icon: <CancelIcon color="error" sx={{ mr: 1 }} />,
+      label: t('pages.course-grading.grade-fail'),
+    }
+
+    const observeOnlyOption: GradeOption = {
+      key: Grade.OBSERVE_ONLY,
+      icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
+      label: t('pages.course-grading.grade-observe-only'),
+    }
+
+    const assistOnlyOption: GradeOption = {
+      key: Grade.ASSIST_ONLY,
+      icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
+      label: t('pages.course-grading.grade-assist-only'),
+    }
+
+    if (
+      (courseDeliveryType === CourseDeliveryType.VIRTUAL &&
+        courseLevel === CourseLevel.LEVEL_1) ||
+      courseDeliveryType === CourseDeliveryType.BLENDED
+    ) {
+      return [passOption, failOption]
+    }
+
+    if (
+      courseDeliveryType === CourseDeliveryType.F2F &&
+      [CourseLevel.ADVANCED, CourseLevel.INTERMEDIATE].includes(courseLevel)
+    ) {
+      return [passOption, assistOnlyOption, failOption]
+    }
+
+    return [passOption, observeOnlyOption, failOption]
+  }, [t, courseDeliveryType, courseLevel])
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: React.SetStateAction<number>
+    index: React.SetStateAction<number>,
+    key: Grade
   ) => {
     setSelectedIndex(index)
     setAnchorEl(null)
+
+    onChange(key)
   }
 
   const handleClose = () => {
@@ -49,6 +92,7 @@ export const CourseGradingMenu = () => {
         onClick={event => setAnchorEl(event.currentTarget)}
         display="flex"
         sx={{ cursor: 'pointer' }}
+        data-testid="course-grading-menu-selected"
       >
         {options[selectedIndex].icon}
         {options[selectedIndex].label}
@@ -63,12 +107,13 @@ export const CourseGradingMenu = () => {
           'aria-labelledby': 'lock-button',
           role: 'listbox',
         }}
+        data-testid="course-grading-options"
       >
         {options.map((option, index) => (
           <MenuItem
-            key={option.label}
+            key={option.key}
             selected={index === selectedIndex}
-            onClick={event => handleMenuItemClick(event, index)}
+            onClick={event => handleMenuItemClick(event, index, option.key)}
           >
             {option.icon}
             {option.label}

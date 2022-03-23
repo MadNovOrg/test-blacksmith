@@ -35,6 +35,7 @@ const gradeToIconMap = {
   PASS: <CheckCircleIcon color="success" />,
   OBSERVE_ONLY: <CheckCircleIcon color="tertiary" />,
   FAIL: <CancelIcon color="error" />,
+  ASSIST_ONLY: <CheckCircleIcon color="tertiary" />,
 }
 
 export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {

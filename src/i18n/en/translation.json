@@ -250,12 +250,17 @@
       "grading-menu-description": "Once grade is submitted, this cannot be modified.",
       "grade-pass": "Pass",
       "grade-observe-only": "Observe only",
+      "grade-assist-only": "Assist only",
       "grade-fail": "Fail",
       "modules-selection-title": "Grade the attendee(s) for each module and hold",
       "modules-selection-description": "Any markings below will be reflected on the attendee’s certificate.",
       "feedback-field-title": "Written feedback",
       "feedback-field-placeholder": "Any notes attendee(s) (optional)",
-      "submit-button-text": "Submit final grade"
+      "submit-button-text": "Submit final grade",
+      "modal-title": "Grading confirmation",
+      "modal-description": "Are you sure you want to confirm your grading against attendees? Please note you will not be able to make changes after this has been submitted.",
+      "modal-cancel-btn-text": "Cancel",
+      "modal-confirm-btn-text": "Confirm"
     },
     "course-attendance": {
       "title": "Attendance",
@@ -433,19 +438,19 @@
         }
       }
     },
-	"membership": {
-	  "details": {
-		"title": "Membership Details"
-	  },
-	  "blog": {
-		"title": "Most Recent Blog Posts",
-		"no-post-id-error": "No post ID has been provided"
-	  },
-	  "error": "Error loading"
-	}
+    "membership": {
+      "details": {
+        "title": "Membership Details"
+      },
+      "blog": {
+        "title": "Most Recent Blog Posts",
+        "no-post-id-error": "No post ID has been provided"
+      },
+      "error": "Error loading"
+    }
   },
   "course-evaluation": {
-    "heading":"Course Summary Evaluation",
+    "heading": "Course Summary Evaluation",
     "all-fields-mandatory": "All fields are mandatory",
     "signature-desc": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience.",
     "provide-details": "Please provide details",

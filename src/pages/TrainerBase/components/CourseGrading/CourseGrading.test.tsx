@@ -4,26 +4,34 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import useCourse from '@app/hooks/useCourse'
 import useCourseModules from '@app/hooks/useCourseModules'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { useFetcher } from '@app/hooks/use-fetcher'
 
 import { CourseGrading } from './'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, userEvent, waitForText } from '@test/index'
 import { LoadingStatus } from '@app/util'
 import {
   buildCourse,
   buildCourseModule,
   buildParticipant,
 } from '@test/mock-data-utils'
+import { MUTATION } from '@app/queries/grading/save-course-grading'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useCourseModules')
 jest.mock('@app/hooks/useCourseParticipants')
+jest.mock('@app/hooks/use-fetcher')
 
 const useCourseMocked = jest.mocked(useCourse)
 const useCourseModulesMocked = jest.mocked(useCourseModules)
 const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
+const useFetcherMock = jest.mocked(useFetcher)
 
 describe('page: CourseGrading', () => {
+  afterEach(() => {
+    localStorage.clear()
+  })
+
   it('displays spinner while loading course grading data', () => {
     const COURSE_ID = 'course-id'
 
@@ -187,7 +195,163 @@ describe('page: CourseGrading', () => {
     expect(screen.getByText('2 attendee(s)')).toBeInTheDocument()
   })
 
-  it.todo('stores modules selection when changed')
-  it.todo('displays modules selection from local storage if previously edited')
-  it.todo('saves grades for participants')
+  it('displays confirmation modal when clicked on submit button', () => {
+    const COURSE_ID = 'course-id'
+
+    const course = buildCourse()
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: course,
+      mutate: jest.fn(),
+    })
+
+    useCourseModulesMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseModules,
+    })
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseParticipants,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
+        <Routes>
+          <Route path="/:id/grading" element={<CourseGrading />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    userEvent.click(screen.getByText('Submit final grade'))
+
+    expect(screen.getByText('Grading confirmation')).toBeVisible()
+    expect(screen.getByText('Cancel')).toBeVisible()
+    expect(screen.getByText('Confirm')).toBeVisible()
+  })
+
+  it('closes modal when saving is not confirmed', () => {
+    const COURSE_ID = 'course-id'
+
+    const course = buildCourse()
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: course,
+      mutate: jest.fn(),
+    })
+
+    useCourseModulesMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseModules,
+    })
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseParticipants,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
+        <Routes>
+          <Route path="/:id/grading" element={<CourseGrading />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    userEvent.click(screen.getByText('Submit final grade'))
+
+    userEvent.click(screen.getByText('Cancel'))
+
+    expect(screen.queryByText('Grading confirmation')).not.toBeVisible()
+  })
+
+  it('saves grades for participants when an intent for saving is confirmed', async () => {
+    const COURSE_ID = 'course-id'
+    const fetcherMock = jest.fn()
+
+    useFetcherMock.mockReturnValue(fetcherMock)
+    fetcherMock.mockResolvedValue({
+      saveGrades: { affectedRows: 2 },
+      saveParticipantsGraded: { affectedRows: 2 },
+    })
+
+    const course = buildCourse()
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: course,
+      mutate: jest.fn(),
+    })
+
+    useCourseModulesMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseModules,
+    })
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseParticipants,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
+        <Routes>
+          <Route path="/:id/grading" element={<CourseGrading />} />
+          <Route
+            path="/trainer-base/course/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    userEvent.type(
+      screen.getByPlaceholderText('Any notes attendee(s) (optional)'),
+      'Feedback'
+    )
+
+    userEvent.click(screen.getByText('Submit final grade'))
+    userEvent.click(screen.getByText('Confirm'))
+
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
+    expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {
+      participantGrades: [
+        {
+          course_participant_id: courseParticipants[1].id,
+          module_id: courseModules[0].module.id,
+          grade: 'PASS',
+          feedback: 'Feedback',
+        },
+      ],
+      participantIds: [courseParticipants[1].id],
+    })
+
+    await waitForText('Course details')
+  })
 })

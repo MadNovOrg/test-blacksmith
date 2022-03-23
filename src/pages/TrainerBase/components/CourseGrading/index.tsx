@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Box,
   Stack,
@@ -20,26 +20,43 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { LoadingButton } from '@mui/lab'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Dialog } from '@app/components/Dialog'
 
 import useCourse from '@app/hooks/useCourse'
 import useCourseModules from '@app/hooks/useCourseModules'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { useFetcher } from '@app/hooks/use-fetcher'
 
-import { ModulesSelectionList } from '../ModulesSelectionList'
+import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
 import { CourseGradingMenu } from '../CourseGradingMenu'
 
 import { LoadingStatus } from '@app/util'
 import theme from '@app/theme'
+import {
+  MUTATION,
+  ParamsType,
+  ResponseType,
+} from '@app/queries/grading/save-course-grading'
+import { Grade } from '@app/types'
 
 export const CourseGrading = () => {
   const { id: courseId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const participantIds = searchParams.get('participants')?.split(',')
+  const [modalOpened, setModalOpened] = useState(false)
+  const [savingGradesStatus, setSavingGradesStatus] = useState(
+    LoadingStatus.IDLE
+  )
+  const [grade, setGrade] = useState(Grade.PASS)
+  const [feedback, setFeedback] = useState('')
+
+  const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
 
   const { data: course, status } = useCourse(courseId ?? '')
   const { data: courseModules } = useCourseModules(courseId ?? '')
   const { data: courseParticipants } = useCourseParticipants(courseId ?? '')
+  const fetcher = useFetcher()
 
   const STORAGE_KEY = `modules-selection-${courseId}`
 
@@ -96,6 +113,77 @@ export const CourseGrading = () => {
 
     return Object.values(groups)
   }, [STORAGE_KEY, courseModules])
+
+  const openConfirmationModal = () => {
+    setModalOpened(true)
+  }
+
+  const closeConfirmationModal = () => {
+    setModalOpened(false)
+  }
+
+  const saveGrades = async () => {
+    try {
+      setSavingGradesStatus(LoadingStatus.FETCHING)
+
+      const grades: Array<{
+        course_participant_id: string
+        module_id: string
+        grade: Grade
+        feedback?: string
+      }> = []
+
+      const attendedParticipants: string[] = []
+
+      filteredCourseParticipants?.forEach(participant => {
+        if (!participant.attended) {
+          return
+        }
+
+        attendedParticipants.push(participant.id)
+
+        for (const id in modulesSelectionRef.current) {
+          if (modulesSelectionRef.current[id]) {
+            grades.push({
+              course_participant_id: participant.id,
+              module_id: id,
+              grade,
+              feedback,
+            })
+          }
+        }
+      })
+
+      await fetcher<ResponseType, ParamsType>(MUTATION, {
+        participantIds: attendedParticipants,
+        participantGrades: grades,
+      })
+
+      localStorage.removeItem(STORAGE_KEY)
+      navigate(`/trainer-base/course/${courseId}/details`)
+    } catch (err) {
+      setSavingGradesStatus(LoadingStatus.ERROR)
+    }
+  }
+
+  useEffect(() => {
+    const initialSelection: Record<string, boolean> = {}
+
+    moduleGroups.forEach(group => {
+      group.modules.forEach(module => {
+        if (module.covered) {
+          initialSelection[module.id] = true
+        }
+      })
+    })
+
+    modulesSelectionRef.current = initialSelection
+  }, [moduleGroups])
+
+  const handleModuleSelectionChange = (selection: HoldsRecord) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selection))
+    modulesSelectionRef.current = selection
+  }
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -183,7 +271,11 @@ export const CourseGrading = () => {
                   {t('pages.course-grading.grading-menu-description')}
                 </Typography>
 
-                <CourseGradingMenu />
+                <CourseGradingMenu
+                  onChange={grade => setGrade(grade)}
+                  courseLevel={course.level}
+                  courseDeliveryType={course.deliveryType}
+                />
               </Box>
 
               {courseModules ? (
@@ -195,7 +287,10 @@ export const CourseGrading = () => {
                     {t('pages.course-grading.modules-selection-description')}
                   </Typography>
 
-                  <ModulesSelectionList moduleGroups={moduleGroups} />
+                  <ModulesSelectionList
+                    moduleGroups={moduleGroups}
+                    onChange={handleModuleSelectionChange}
+                  />
 
                   <Typography variant="h6" fontWeight="500" mb={1} mt={4}>
                     {t('pages.course-grading.feedback-field-title')}
@@ -214,11 +309,16 @@ export const CourseGrading = () => {
                       placeholder={t(
                         'pages.course-grading.feedback-field-placeholder'
                       )}
+                      value={feedback}
+                      onChange={e => setFeedback(e.target.value)}
                       sx={{ display: 'block' }}
                     />
                   </Box>
                   <Box display="flex" justifyContent="right">
-                    <LoadingButton variant="contained">
+                    <LoadingButton
+                      variant="contained"
+                      onClick={openConfirmationModal}
+                    >
                       {t('pages.course-grading.submit-button-text')}
                     </LoadingButton>
                   </Box>
@@ -227,6 +327,28 @@ export const CourseGrading = () => {
             </Box>
           </>
         ) : null}
+        <Dialog
+          open={modalOpened}
+          onClose={closeConfirmationModal}
+          title={t('pages.course-grading.modal-title')}
+        >
+          <Typography>{t('pages.course-grading.modal-description')}</Typography>
+          <Box mt={4} display="flex" justifyContent="right">
+            <Button
+              sx={{ marginRight: 1 }}
+              onClick={() => closeConfirmationModal()}
+            >
+              {t('pages.course-grading.modal-cancel-btn-text')}
+            </Button>
+            <LoadingButton
+              variant="contained"
+              loading={savingGradesStatus === LoadingStatus.FETCHING}
+              onClick={() => saveGrades()}
+            >
+              {t('pages.course-grading.modal-confirm-btn-text')}
+            </LoadingButton>
+          </Box>
+        </Dialog>
       </Container>
     </FullHeightPage>
   )

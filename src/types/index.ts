@@ -199,12 +199,6 @@ export type CourseSchedule = {
   venue: Venue
 } & Base
 
-export enum Grade {
-  PASS = 'PASS',
-  OBSERVE_ONLY = 'OBSERVE_ONLY',
-  FAIL = 'FAIL',
-}
-
 export type CourseParticipantGrading = {
   grade: Grade
   feedback: string
@@ -282,6 +276,13 @@ export type BlogPost = {
   date: string
   featured_media?: WPMedia
   category?: WPCategory
+}
+
+export enum Grade {
+  PASS = 'PASS',
+  FAIL = 'FAIL',
+  OBSERVE_ONLY = 'OBSERVE_ONLY',
+  ASSIST_ONLY = 'ASSIST_ONLY',
 }
 
 export type CourseEvaluationAnswer = {
