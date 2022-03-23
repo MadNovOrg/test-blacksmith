@@ -31,6 +31,20 @@ insert_permissions:
 - permission:
     backend_only: false
     check:
+      course:
+        trainer_profile_id:
+          _eq: X-Hasura-User-Id
+    columns:
+    - answer
+    - course_id
+    - profile_id
+    - question_id
+    set:
+      profile_id: x-hasura-User-Id
+  role: trainer
+- permission:
+    backend_only: false
+    check:
       participant:
         profile_id:
           _eq: X-Hasura-User-Id

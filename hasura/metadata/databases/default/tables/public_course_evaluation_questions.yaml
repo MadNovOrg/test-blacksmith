@@ -17,5 +17,21 @@ select_permissions:
     - question_key
     - required
     - type
+    filter:
+      _or:
+      - type:
+          _neq: RATING
+      - type:
+          _is_null: true
+  role: trainer
+- permission:
+    columns:
+    - display_order
+    - group
+    - id
+    - question
+    - question_key
+    - required
+    - type
     filter: {}
   role: user

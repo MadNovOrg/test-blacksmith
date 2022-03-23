@@ -25,6 +25,7 @@ import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
 import { BlogPage } from './pages/MembershipArea/BlogPage'
 import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
 import { CourseGrading } from './pages/TrainerBase/components/CourseGrading'
+import { TrainerFeedback } from './pages/TrainerBase/components/TrainerFeedback'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { TrainerBasePage } from '@app/pages/TrainerBase'
@@ -69,6 +70,8 @@ const RedirectToLogin: React.FC = () => {
 }
 
 const LoggedInRoutes: React.FC<unknown> = () => {
+  const { acl } = useAuth()
+
   return (
     <AppLayout>
       <Suspense fallback={() => 'Loading'}>
@@ -76,28 +79,37 @@ const LoggedInRoutes: React.FC<unknown> = () => {
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate replace to="trainer-base" />} />
             <Route path="my-profile" element={<MyProfilePage />} />
-            <Route path="trainer-base" element={<TrainerBasePage />}>
-              <Route index element={<TrainerDashboard />} />
-              <Route path="course" element={<Course />}>
-                <Route index element={<MyCourses />} />
-                <Route path=":id/modules" element={<CourseBuilder />} />
-                <Route path=":id/details" element={<CourseDetails />} />
-                <Route path=":id/grading" element={<CourseGrading />} />
-                <Route
-                  path=":id/grading-details"
-                  element={<CourseGradingDetails />}
-                >
-                  <Route element={<CourseAttendance />} index />
-                  <Route path="modules" element={<ModulesSelection />} />
+            {acl.canViewTrainerBase() ? (
+              <Route path="trainer-base" element={<TrainerBasePage />}>
+                <Route index element={<TrainerDashboard />} />
+                <Route path="course" element={<Course />}>
+                  <Route index element={<MyCourses />} />
+                  <Route path=":id">
+                    <Route index element={<Navigate replace to="details" />} />
+                    <Route path="modules" element={<CourseBuilder />} />
+                    <Route path="details" element={<CourseDetails />} />
+                    <Route path="grading" element={<CourseGrading />} />
+                    <Route path="evaluation" element={<TrainerFeedback />} />
+                  </Route>
+                  <Route
+                    path=":id/grading-details"
+                    element={<CourseGradingDetails />}
+                  >
+                    <Route element={<CourseAttendance />} index />
+                    <Route path="modules" element={<ModulesSelection />} />
+                  </Route>
+                </Route>
+                <Route path="management" element={<TrainerManagement />}>
+                  <Route index element={<Navigate replace to="calendar" />} />
+                  <Route path="calendar" element={<TrainerCalendar />} />
+                  <Route
+                    path="availability"
+                    element={<TrainerAvailability />}
+                  />
+                  <Route path="expenses" element={<TrainerExpenses />} />
                 </Route>
               </Route>
-              <Route path="management" element={<TrainerManagement />}>
-                <Route index element={<Navigate replace to="calendar" />} />
-                <Route path="calendar" element={<TrainerCalendar />} />
-                <Route path="availability" element={<TrainerAvailability />} />
-                <Route path="expenses" element={<TrainerExpenses />} />
-              </Route>
-            </Route>
+            ) : null}
             <Route path="my-training" element={<MyTrainingPage />}>
               <Route index element={<MyTrainingDashboard />} />
               <Route

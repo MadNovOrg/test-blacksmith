@@ -1,10 +1,13 @@
 import {
   Alert,
+  Box,
   Button,
   CircularProgress,
   Container,
   Stack,
+  styled,
   Tab,
+  tabClasses,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import React, { useState } from 'react'
@@ -20,11 +23,39 @@ import useCourse from '@app/hooks/useCourse'
 import { courseEnded, LoadingStatus } from '@app/util'
 import { CourseAttendees } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees'
 import { CourseGrading } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseGrading'
+import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
 
 const CourseDetailsTabs = {
   ATTENDEES: 'ATTENDEES',
   GRADING: 'GRADING',
-}
+  EVALUATION: 'EVALUATION',
+} as const
+
+const StyledTabList = styled(TabList)(({ theme }) => ({
+  padding: theme.spacing(1, 0),
+  minHeight: theme.spacing(5),
+
+  '& .MuiTabs-indicator': {
+    display: 'none',
+  },
+}))
+
+const StyledTab = styled(Tab)(({ theme }) => ({
+  minHeight: theme.spacing(4),
+  height: theme.spacing(4),
+
+  '& + &': {
+    marginLeft: theme.spacing(3),
+  },
+
+  [`&.${tabClasses.selected}`]: {
+    background: theme.palette.grey[100],
+    borderRadius: theme.spacing(0.5),
+    ...theme.typography.body1,
+    fontWeight: '500',
+    border: 0,
+  },
+}))
 
 export const CourseDetails = () => {
   const { t } = useTranslation()
@@ -32,7 +63,9 @@ export const CourseDetails = () => {
   const { id: courseId } = useParams()
   const [searchParams] = useSearchParams()
   const courseJustSubmitted = searchParams.get('courseJustSubmitted') === 'true'
-  const [selectedTab, setSelectedTab] = useState(CourseDetailsTabs.ATTENDEES)
+  const [selectedTab, setSelectedTab] = useState<
+    keyof typeof CourseDetailsTabs
+  >(CourseDetailsTabs.ATTENDEES)
 
   const {
     status: courseLoadingStatus,
@@ -77,32 +110,43 @@ export const CourseDetails = () => {
                 </Button>
               </CourseHeroSummary>
 
-              <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
-                {courseJustSubmitted && (
-                  <Expire delay={3000}>
-                    <Alert variant="outlined" color="success">
-                      {`You have successfully created your ${course.name} Course`}
-                    </Alert>
-                  </Expire>
-                )}
-
-                <TabContext value={selectedTab}>
-                  <TabList
-                    onChange={(_, selectedTab: React.SetStateAction<string>) =>
-                      setSelectedTab(selectedTab)
-                    }
-                  >
-                    <Tab
-                      label={t('pages.course-details.tabs.attendees.title')}
-                      value={CourseDetailsTabs.ATTENDEES}
-                    />
-                    {courseHasEnded ? (
-                      <Tab
-                        label={t('pages.course-details.tabs.grading.title')}
-                        value={CourseDetailsTabs.GRADING}
+              <TabContext value={selectedTab}>
+                <Box borderBottom={1} borderColor="divider">
+                  <Container>
+                    <StyledTabList
+                      onChange={(
+                        _,
+                        selectedTab: React.SetStateAction<
+                          keyof typeof CourseDetailsTabs
+                        >
+                      ) => setSelectedTab(selectedTab)}
+                    >
+                      <StyledTab
+                        label={t('pages.course-details.tabs.attendees.title')}
+                        value={CourseDetailsTabs.ATTENDEES}
                       />
-                    ) : null}
-                  </TabList>
+                      {courseHasEnded ? (
+                        <StyledTab
+                          label={t('pages.course-details.tabs.grading.title')}
+                          value={CourseDetailsTabs.GRADING}
+                        />
+                      ) : null}
+                      <StyledTab
+                        label={t('pages.course-details.tabs.evaluation.title')}
+                        value={CourseDetailsTabs.EVALUATION}
+                      />
+                    </StyledTabList>
+                  </Container>
+                </Box>
+
+                <Container sx={{ pb: 2 }}>
+                  {courseJustSubmitted && (
+                    <Expire delay={3000}>
+                      <Alert variant="outlined" color="success">
+                        {`You have successfully created your ${course.name} Course`}
+                      </Alert>
+                    </Expire>
+                  )}
 
                   <TabPanel value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendees course={course} />
@@ -112,8 +156,12 @@ export const CourseDetails = () => {
                       <CourseGrading course={course} />
                     </TabPanel>
                   ) : null}
-                </TabContext>
-              </Container>
+
+                  <TabPanel value={CourseDetailsTabs.EVALUATION}>
+                    <EvaluationSummary />
+                  </TabPanel>
+                </Container>
+              </TabContext>
             </>
           )}
         </>

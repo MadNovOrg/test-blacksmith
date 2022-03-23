@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form'
 
 import { BackButton } from '@app/components/BackButton'
 import { QuestionGroup } from '@app/components/QuestionGroup'
-import { RatingQuestion } from '@app/components/RatingQuestion'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
 
 import { useAuth } from '@app/context/auth'
@@ -22,7 +21,6 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 
 import {
   CourseEvaluationQuestion,
-  CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
 } from '@app/types'
 import {
@@ -36,20 +34,13 @@ import {
 } from '@app/queries/course-evaluation/get-answers'
 import { MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/queries/course-evaluation/save-evaluation'
 
-const groups = [
-  CourseEvaluationQuestionGroup.TRAINING_RATING,
-  CourseEvaluationQuestionGroup.TRAINING_RELEVANCE,
-  CourseEvaluationQuestionGroup.TRAINER_STANDARDS,
-  CourseEvaluationQuestionGroup.MATERIALS_AND_VENUE,
-]
-
 const booleanQuestionTypes = [
   CourseEvaluationQuestionType.BOOLEAN,
   CourseEvaluationQuestionType.BOOLEAN_REASON_Y,
   CourseEvaluationQuestionType.BOOLEAN_REASON_N,
 ]
 
-export const CourseEvaluation = () => {
+export const TrainerFeedback = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { id: courseId } = useParams()
@@ -68,7 +59,7 @@ export const CourseEvaluation = () => {
     GET_COURSE_EVALUATION_QUESTIONS_QUERY
   )
 
-  const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
+  const { UNGROUPED: ungroupedQuestions } = groupBy(
     questions?.questions,
     q => q.group || 'UNGROUPED'
   )
@@ -158,10 +149,10 @@ export const CourseEvaluation = () => {
         <Grid container>
           <Grid item md={3}>
             <Box mt={5} pr={3}>
-              <BackButton label="Back to checklist" />
+              <BackButton label={t('back')} />
 
               <Typography variant="h2" gutterBottom my={2}>
-                {t('course-evaluation.heading')}
+                {t('course-evaluation.trainer-heading')}
               </Typography>
 
               <Typography variant="h6" gutterBottom>
@@ -171,26 +162,6 @@ export const CourseEvaluation = () => {
           </Grid>
 
           <Grid item md={7} pt={10}>
-            {groups.map(g => (
-              <QuestionGroup
-                key={g}
-                title={t(`course-evaluation.groups.${g}`)}
-                description={t('course-evaluation.all-fields-mandatory')}
-              >
-                {groupedQuestions[g]?.map(q => (
-                  <RatingQuestion
-                    key={q.id}
-                    title={t(`course-evaluation.questions.${q.questionKey}`)}
-                    value={values[q.id]}
-                    onChange={v => {
-                      setValue(q.id, v ? `${v}` : '')
-                    }}
-                    error={errors[q.id]?.message}
-                  />
-                ))}
-              </QuestionGroup>
-            ))}
-
             {ungroupedQuestions?.map(q => {
               if (booleanQuestionTypes.includes(q.type)) {
                 return (
@@ -271,17 +242,6 @@ export const CourseEvaluation = () => {
           >
             {t('course-evaluation.submit')}
           </LoadingButton>
-
-          <Typography
-            maxWidth={600}
-            color="grey.500"
-            sx={{ mt: 4 }}
-            gutterBottom={true}
-            align="center"
-            variant="body2"
-          >
-            {t('course-evaluation.disclaimer')}
-          </Typography>
         </Box>
       </Container>
     </Box>
