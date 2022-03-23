@@ -5,3 +5,12 @@ object_relationships:
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
+select_permissions:
+- permission:
+    columns:
+    - type
+    - course_id
+    - id
+    - profile_id
+    filter: {}
+  role: user
