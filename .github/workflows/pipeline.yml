@@ -19,6 +19,8 @@ on:
         required: true
       hasura_admin_pass:
         required: true
+      wp_host:
+        required: true
 
 jobs:
   build-deploy:
