@@ -29,7 +29,7 @@ export default function useCourseParticipants(
   const sortBy = options?.sortBy ?? 'name'
   const order = options?.order ?? 'asc'
   let orderBy: ParamsType['orderBy'] = {
-    profile: { givenName: order, familyName: order },
+    profile: { fullName: order },
   }
   if (sortBy === 'contact') {
     orderBy = { profile: { email: order } }

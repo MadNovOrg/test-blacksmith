@@ -8,11 +8,11 @@ import { BlogPostGridItem } from './BlogPostGridItem'
 
 import { WPBlogPost } from '@app/types'
 
-const TabPanel: React.FC<{ index: number; value: number; children: any }> = ({
-  index,
-  value,
-  children,
-}) => {
+const TabPanel: React.FC<{
+  index: number
+  value: number
+  children: React.ReactNode
+}> = ({ index, value, children }) => {
   return (
     <div
       role="tabpanel"

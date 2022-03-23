@@ -138,7 +138,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
                     {course.trainer.id === profile?.id
                       ? t('pages.course-participants.trainer')
                       : t('pages.course-participants.hosted-by', {
-                          trainer: `${course.trainer.givenName} ${course.trainer.familyName}`,
+                          trainer: `${course.trainer.fullName}`,
                         })}
                   </ListItemText>
                 </ListItem>

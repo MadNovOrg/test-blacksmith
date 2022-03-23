@@ -230,8 +230,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                           />
                         </TableCell>
                         <TableCell>
-                          {courseParticipant.profile.givenName}{' '}
-                          {courseParticipant.profile.familyName}
+                          {courseParticipant.profile.fullName}
                         </TableCell>
                         <TableCell>
                           {courseParticipant.profile.email}

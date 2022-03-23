@@ -69,9 +69,7 @@ function Trainees() {
           {data.profiles.map(profile => (
             <div key={profile.id} className="flex pt-4">
               <div className="flex-1">
-                <h4>
-                  {profile.givenName} {profile.familyName}
-                </h4>
+                <h4>{profile.fullName}</h4>
               </div>
               <div>
                 <div className="ml-2 flex-shrink-0 flex">

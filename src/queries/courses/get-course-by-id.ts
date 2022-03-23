@@ -20,6 +20,7 @@ export const QUERY = gql`
         id
         givenName
         familyName
+        fullName
       }
       schedule {
         ...CourseSchedule

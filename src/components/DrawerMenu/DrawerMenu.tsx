@@ -45,7 +45,7 @@ export const DrawerMenu: React.FC = () => {
             endIcon={<ArrowDropDownIcon />}
             color="info"
           >
-            {profile?.givenName} {profile?.familyName}
+            {profile?.fullName}
           </Button>
         </Box>
 

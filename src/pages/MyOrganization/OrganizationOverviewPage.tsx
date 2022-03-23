@@ -79,10 +79,7 @@ export const OrganizationOverviewPage: React.FC<
             <div className="font-bold text-sm">
               {t('pages.my-organization.overview.contact-name')}:
             </div>
-            <div>
-              {data.organization.members[0]?.profile['givenName']}{' '}
-              {data.organization.members[0]?.profile['familyName']}
-            </div>
+            <div>{data.organization.members[0]?.profile.fullName}</div>
           </div>
           <div>
             <div className="font-bold text-sm">

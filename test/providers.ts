@@ -20,6 +20,7 @@ export const defaultProviders: Providers = {
       id: 'cacb559d-b85d-5e64-b623-37252520ebda',
       givenName: 'John',
       familyName: 'Smith',
+      fullName: 'John Smith',
       title: 'Mr',
       status: 'active',
       contactDetails: [],

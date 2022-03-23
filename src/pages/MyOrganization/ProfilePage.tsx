@@ -6,8 +6,7 @@ type ProfilePageProps = unknown
 
 export const ProfilePage: React.FC<ProfilePageProps> = () => {
   const profile = {
-    givenName: 'User',
-    familyName: 'Name',
+    fullName: 'User Name',
   }
 
   const certification = {
@@ -24,7 +23,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = () => {
   return (
     <div className="px-8">
       <div className="pb-8 font-light text-2xl sm:text-4xl">
-        {profile.givenName} {profile.familyName}
+        {profile.fullName}
       </div>
 
       <CertificationDetails certification={certification} />

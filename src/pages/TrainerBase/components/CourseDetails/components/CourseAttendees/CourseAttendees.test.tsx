@@ -75,9 +75,7 @@ describe('component: CourseAttendees', () => {
     )
 
     expect(
-      within(participantRow).getByText(
-        `${participants[0].profile.givenName} ${participants[0].profile.familyName}`
-      )
+      within(participantRow).getByText(`${participants[0].profile.fullName}`)
     ).toBeInTheDocument()
 
     expect(within(participantRow).getByText(participants[0].profile.email))

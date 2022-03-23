@@ -21,6 +21,7 @@ export const PROFILE = gql`
     id
     givenName
     familyName
+    fullName
     title
     tags
     status

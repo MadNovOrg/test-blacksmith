@@ -62,6 +62,7 @@ export const buildProfile = build<Profile>({
     createdAt: new Date().toISOString(),
     givenName: fake(f => f.name.firstName()),
     familyName: fake(f => f.name.lastName()),
+    fullName: '',
     title: fake(f => f.random.word()),
     status: '',
     addresses: {},
@@ -73,6 +74,10 @@ export const buildProfile = build<Profile>({
     roles: [{ role: { name: fake(f => f.random.word()) } }],
     organizations: [{ organization: buildOrganization() }],
   },
+  postBuild: profile => ({
+    ...profile,
+    fullName: `${profile.givenName} ${profile.familyName}`,
+  }),
 })
 
 export const buildVenue = build<Venue>({

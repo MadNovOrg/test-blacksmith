@@ -12,7 +12,7 @@ export type ParamsType = {
   limit?: number
   offset?: number
   orderBy:
-    | { profile: Record<'givenName' | 'familyName', SortOrder> }
+    | { profile: Record<'fullName', SortOrder> }
     | { profile: { email: SortOrder } }
     | { go1EnrolmentStatus: SortOrder }
   where?: object
@@ -23,9 +23,7 @@ export const QUERY = gql`
     $courseId: uuid!
     $limit: Int
     $offset: Int
-    $orderBy: [course_participant_order_by!] = {
-      profile: { givenName: asc, familyName: asc }
-    }
+    $orderBy: [course_participant_order_by!] = { profile: { fullName: asc } }
     $where: course_participant_bool_exp = {}
   ) {
     courseParticipants: course_participant(
@@ -37,8 +35,7 @@ export const QUERY = gql`
       id
       attended
       profile {
-        givenName
-        familyName
+        fullName
         email
         contactDetails
         organizations {

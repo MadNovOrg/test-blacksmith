@@ -253,7 +253,7 @@ export const CourseGrading = () => {
                           <Avatar />
                         </ListItemAvatar>
                         <ListItemText
-                          primary={`${participant.profile.givenName} ${participant.profile.familyName}`}
+                          primary={`${participant.profile.fullName}`}
                         />
                       </ListItem>
                     ) : null

@@ -119,15 +119,11 @@ describe('page: CourseGrading', () => {
     const notAttendedParticipant = courseParticipants[0]
 
     expect(
-      screen.getByText(
-        `${attendedParticipant.profile.givenName} ${attendedParticipant.profile.familyName}`
-      )
+      screen.getByText(`${attendedParticipant.profile.fullName}`)
     ).toBeInTheDocument()
 
     expect(
-      screen.queryByText(
-        `${notAttendedParticipant.profile.givenName} ${notAttendedParticipant.profile.familyName}`
-      )
+      screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
     ).not.toBeInTheDocument()
 
     expect(screen.getByText('All attendees')).toBeInTheDocument()
@@ -180,16 +176,12 @@ describe('page: CourseGrading', () => {
 
     selectedParticipants.forEach(participant => {
       expect(
-        screen.getByText(
-          `${participant.profile.givenName} ${participant.profile.familyName}`
-        )
+        screen.getByText(`${participant.profile.fullName}`)
       ).toBeInTheDocument()
     })
 
     expect(
-      screen.queryByText(
-        `${notSelectedParticipant.profile.givenName} ${notSelectedParticipant.profile.familyName}`
-      )
+      screen.queryByText(`${notSelectedParticipant.profile.fullName}`)
     ).not.toBeInTheDocument()
 
     expect(screen.getByText('2 attendee(s)')).toBeInTheDocument()

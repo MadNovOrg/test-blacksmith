@@ -48,9 +48,7 @@ export const ProfileListPage: React.FC<ProfileListPageProps> = () => {
                 key={profile.id}
                 className="w-full py-3 border-b border-grey-200 flex place-content-between hover:border-black hover:font-bold"
               >
-                <span>
-                  {profile.givenName} {profile.familyName}
-                </span>
+                <span>{profile.fullName}</span>
                 <ArrowRightIcon />
               </NavLink>
             ))}

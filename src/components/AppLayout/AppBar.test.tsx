@@ -21,7 +21,7 @@ describe('component: AppBar', () => {
   })
 
   it('renders user name in profile button', async () => {
-    const profile = { givenName: chance.first(), familyName: chance.last() }
+    const profile = { fullName: `${chance.first()} ${chance.last()}` }
 
     render(
       <MemoryRouter>
@@ -31,7 +31,7 @@ describe('component: AppBar', () => {
     )
 
     const btn = screen.getByTestId('user-menu-btn')
-    expect(btn).toHaveTextContent(`${profile.givenName} ${profile.familyName}`)
+    expect(btn).toHaveTextContent(`${profile.fullName}`)
   })
 
   describe('Trainer Base tab', () => {

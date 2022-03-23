@@ -94,7 +94,7 @@ export const AppBar = () => {
               startIcon={<ArrowDropDownIcon />}
               data-testid="user-menu-btn"
             >
-              {profile?.givenName} {profile?.familyName}
+              {profile?.fullName}
             </Button>
             <Menu
               elevation={1}

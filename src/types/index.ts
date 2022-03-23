@@ -66,6 +66,7 @@ export type Organization = {
 export type Profile = {
   givenName: string
   familyName: string
+  fullName: string
   title: string
   tags: string[] | null
   status: string

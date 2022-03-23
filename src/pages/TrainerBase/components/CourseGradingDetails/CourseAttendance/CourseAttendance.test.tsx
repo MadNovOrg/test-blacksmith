@@ -76,9 +76,7 @@ describe('component: CourseAttendance', () => {
 
     participants.forEach(participant => {
       expect(
-        screen.getByText(
-          `${participant.profile.givenName} ${participant.profile.familyName}`
-        )
+        screen.getByText(`${participant.profile.fullName}`)
       ).toBeInTheDocument()
     })
   })

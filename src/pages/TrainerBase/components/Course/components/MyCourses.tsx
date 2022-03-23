@@ -134,7 +134,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }
 
     return obj
-  }, [levelFilter, typeFilter, statusFilter, keywordDebounced])
+  }, [profile, levelFilter, typeFilter, statusFilter, keywordDebounced])
 
   const { data, error } = useSWR<
     GetMyCoursesResponseType,

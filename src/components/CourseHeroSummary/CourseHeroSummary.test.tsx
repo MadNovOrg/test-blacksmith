@@ -123,8 +123,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: {
         trainer: {
           id: 'not-current-user',
-          givenName: 'John',
-          familyName: 'Doe',
+          fullName: 'John Doe',
         },
       },
     })

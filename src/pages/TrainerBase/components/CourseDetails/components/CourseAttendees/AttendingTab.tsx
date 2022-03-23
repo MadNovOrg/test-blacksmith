@@ -128,10 +128,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
                   key={courseParticipant.id}
                   data-testid={`course-participant-row-${courseParticipant.id}`}
                 >
-                  <TableCell>
-                    {courseParticipant.profile.givenName}{' '}
-                    {courseParticipant.profile.familyName}
-                  </TableCell>
+                  <TableCell>{courseParticipant.profile.fullName}</TableCell>
                   <TableCell>
                     {courseParticipant.profile.email}
                     {courseParticipant.profile.contactDetails.map(
