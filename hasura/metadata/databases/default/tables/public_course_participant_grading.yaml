@@ -29,3 +29,45 @@ insert_permissions:
     - grade
     - module_id
   role: user
+select_permissions:
+- permission:
+    columns:
+    - feedback
+    - grade
+    - created_at
+    - updated_at
+    - course_participant_id
+    - id
+    - module_id
+    filter:
+      _or:
+      - course_participant:
+          course:
+            trainer:
+              id:
+                _eq: X-Hasura-User-Id
+      - course_participant:
+          course:
+            leaders:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - feedback
+    - grade
+    filter:
+      _or:
+      - course_participant:
+          course:
+            trainer:
+              id:
+                _eq: X-Hasura-User-Id
+      - course_participant:
+          course:
+            leaders:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  role: user
