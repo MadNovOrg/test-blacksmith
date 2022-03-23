@@ -50,13 +50,13 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
           sx={style}
           value="YES"
           control={<Radio />}
-          label={t('yes') as string}
+          label={t<string>('yes')}
         />
         <FormControlLabel
           sx={style}
           value="NO"
           control={<Radio />}
-          label={t('no') as string}
+          label={t<string>('no')}
         />
       </RadioGroup>
       {type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&

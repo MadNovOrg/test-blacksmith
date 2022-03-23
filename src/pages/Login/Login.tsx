@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
+import { LinkBehavior } from '@app/components/LinkBehavior'
 
 import { useAuth } from '@app/context/auth'
 
@@ -155,6 +156,8 @@ export const LoginPage = () => {
 
           <Link
             href="/sign-up"
+            component={LinkBehavior}
+            state={from ? { from } : undefined}
             data-testid="sign-up-link"
             sx={{ mt: 4, color: 'primary.main', fontWeight: '600' }}
           >

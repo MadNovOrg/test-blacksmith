@@ -214,18 +214,20 @@ export const InvitationPage = () => {
         {isSubmitted ? (
           <Box display="flex" flexDirection="column" alignItems="center" mb={5}>
             <Alert variant="outlined" color="success" sx={{ mb: 3 }}>
-              Your response has been sent
+              {t('invitation.response-sent')}
             </Alert>
 
             <Link href="/" variant="body1" fontWeight="600">
-              Go to TeamTeach.co.uk
+              {t('invitation.goto-tt')}
             </Link>
           </Box>
         ) : (
           <>
             <Box mt={3} mb={2}>
               <FormControl fullWidth>
-                <FormLabel id="response-q">Are you able to attend?</FormLabel>
+                <FormLabel id="response-q">
+                  {t('invitation.can-attend-q')}
+                </FormLabel>
                 <RadioGroup
                   aria-labelledby="response-q"
                   name="response"
@@ -238,7 +240,7 @@ export const InvitationPage = () => {
                   <FormControlLabel
                     value="yes"
                     control={<Radio />}
-                    label="I will attend"
+                    label={t<string>('invitation.will-attend')}
                     sx={{
                       border: 1,
                       borderColor: 'grey.700',
@@ -252,7 +254,7 @@ export const InvitationPage = () => {
                   <FormControlLabel
                     value="no"
                     control={<Radio />}
-                    label="I will not attend"
+                    label={t<string>('invitation.wont-attend')}
                     sx={{
                       border: 1,
                       borderColor: 'grey.700',
@@ -270,8 +272,8 @@ export const InvitationPage = () => {
                   <TextField
                     id="note"
                     variant="standard"
-                    label="Leave a note (optional)"
-                    placeholder="Leave a note (optional)"
+                    label={t('invitation.leave-note-op')}
+                    placeholder={t('invitation.leave-note-op')}
                     fullWidth
                     value={note}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -292,8 +294,8 @@ export const InvitationPage = () => {
               onClick={handleSubmit}
             >
               {response === 'yes'
-                ? 'Continue to registration'
-                : 'Send response'}
+                ? t('invitation.continue-registration')
+                : t('invitation.send-response')}
             </LoadingButton>
 
             {submitError && (
