@@ -150,8 +150,8 @@ export const CourseHeroSummary: React.FC<Props> = ({
                 </ListItemIcon>
                 <ListItemText>
                   {[
-                    course.schedule[0].venue.name,
-                    course.schedule[0].venue.address.city,
+                    course.schedule[0].venue?.name,
+                    course.schedule[0].venue?.address.city,
                   ].join(', ')}
                 </ListItemText>
               </ListItem>

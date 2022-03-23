@@ -197,7 +197,7 @@ export type CourseSchedule = {
   start: Date
   end: Date
   course?: Course
-  venue: Venue
+  venue?: Venue
 } & Base
 
 export type CourseParticipantGrading = {
