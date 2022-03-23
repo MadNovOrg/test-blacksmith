@@ -13,7 +13,7 @@ export type Course = {
   max_participants: number
   status: CourseStatus
   reaccreditation: boolean
-  organization: Organization
+  organization?: Organization
   schedule: CourseSchedule[]
   trainer?: Profile
   gradingConfirmed: boolean

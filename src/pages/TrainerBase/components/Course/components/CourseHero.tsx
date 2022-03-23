@@ -42,7 +42,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
           {`${t('pages.trainer-base.create-course.new-course.organization')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {data.organization.name}
+          {data.organization?.name}
         </Typography>
       </Box>
       <Box>
