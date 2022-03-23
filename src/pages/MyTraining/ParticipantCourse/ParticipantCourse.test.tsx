@@ -5,7 +5,11 @@ import useCourse from '@app/hooks/useCourse'
 
 import { ParticipantCourse } from '.'
 
-import { buildCourse } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildEndedCourse,
+  buildNotStartedCourse,
+} from '@test/mock-data-utils'
 import { LoadingStatus } from '@app/util'
 import { render, screen } from '@test/index'
 
@@ -16,7 +20,6 @@ const useCourseMock = jest.mocked(useCourse)
 describe('page: ParticipantCourse', () => {
   it('displays course hero info', () => {
     const course = buildCourse()
-
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       data: course,
@@ -45,13 +48,11 @@ describe('page: ParticipantCourse', () => {
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
     const course = buildCourse()
-
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       data: course,
       status: LoadingStatus.SUCCESS,
     })
-
     render(
       <MemoryRouter
         initialEntries={[
@@ -72,7 +73,29 @@ describe('page: ParticipantCourse', () => {
 
   it('displays tabs with course checklist and resources', () => {
     const course = buildCourse()
+    useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
+      data: course,
+      status: LoadingStatus.SUCCESS,
+    })
+    render(
+      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+        <Routes>
+          <Route
+            path={`/my-training/courses/:id`}
+            element={<ParticipantCourse />}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
 
+    expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
+    expect(screen.getByLabelText('Course checklist')).toBeInTheDocument()
+    expect(screen.getByLabelText('Resources')).toBeInTheDocument()
+  })
+
+  it('has course evaluation button disabled if course has not started yet', () => {
+    const course = buildNotStartedCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       data: course,
@@ -90,8 +113,28 @@ describe('page: ParticipantCourse', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
-    expect(screen.getByLabelText('Course checklist')).toBeInTheDocument()
-    expect(screen.getByLabelText('Resources')).toBeInTheDocument()
+    expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
+  })
+
+  it('has course evaluation button enabled if course has ended', () => {
+    const course = buildEndedCourse()
+    useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
+      data: course,
+      status: LoadingStatus.SUCCESS,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+        <Routes>
+          <Route
+            path={`/my-training/courses/:id`}
+            element={<ParticipantCourse />}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
   })
 })

@@ -1,4 +1,5 @@
 import { build, fake, perBuild } from '@jackfranklin/test-data-bot'
+import { add, sub } from 'date-fns'
 
 import {
   Address,
@@ -88,6 +89,30 @@ export const buildVenue = build<Venue>({
   },
 })
 
+export const buildCourseScheduleEndedCourse = build<CourseSchedule>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    name: fake(f => f.random.words(3)),
+    type: fake(f => f.random.word()),
+    start: sub(new Date(), { days: 2 }).toISOString(),
+    end: sub(new Date(), { days: 1 }).toISOString(),
+    venue: buildVenue(),
+  },
+})
+
+export const buildCourseScheduleNotStartedCourse = build<CourseSchedule>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    name: fake(f => f.random.words(3)),
+    type: fake(f => f.random.word()),
+    start: add(new Date(), { days: 1 }).toISOString(),
+    end: add(new Date(), { days: 2 }).toISOString(),
+    venue: buildVenue(),
+  },
+})
+
 export const buildCourseSchedule = build<CourseSchedule>({
   fields: {
     id: fake(f => f.datatype.uuid()),
@@ -117,6 +142,60 @@ export const buildCourse = build<Course>({
     level: CourseLevel.LEVEL_1,
     trainer: buildProfile(),
     dates: {},
+    modulesAgg: {},
+    moduleGroupIds: [],
+  },
+})
+
+export const buildEndedCourse = build<Course>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words(3)),
+    status: '',
+    createdAt: new Date().toISOString(),
+    type: CourseType.OPEN,
+    min_participants: 6,
+    max_participants: 12,
+    deliveryType: CourseDeliveryType.F2F,
+    gradingConfirmed: null,
+    reaccreditation: () => false,
+    organization: buildOrganization(),
+    schedule: [buildCourseScheduleEndedCourse()],
+    level: CourseLevel.LEVEL_1,
+    trainer: buildProfile(),
+    dates: {
+      aggregate: {
+        start: { date: sub(new Date(), { days: 2 }).toISOString() },
+        end: { date: sub(new Date(), { days: 1 }).toISOString() },
+      },
+    },
+    modulesAgg: {},
+    moduleGroupIds: [],
+  },
+})
+
+export const buildNotStartedCourse = build<Course>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words(3)),
+    status: '',
+    createdAt: new Date().toISOString(),
+    type: CourseType.OPEN,
+    min_participants: 6,
+    max_participants: 12,
+    deliveryType: CourseDeliveryType.F2F,
+    gradingConfirmed: null,
+    reaccreditation: () => false,
+    organization: buildOrganization(),
+    schedule: [buildCourseScheduleNotStartedCourse()],
+    level: CourseLevel.LEVEL_1,
+    trainer: buildProfile(),
+    dates: {
+      aggregate: {
+        start: { date: add(new Date(), { days: 1 }).toISOString() },
+        end: { date: add(new Date(), { days: 2 }).toISOString() },
+      },
+    },
     modulesAgg: {},
     moduleGroupIds: [],
   },

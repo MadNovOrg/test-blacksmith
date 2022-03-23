@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import {
   Container,
   CircularProgress,
@@ -25,7 +25,7 @@ import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 
 import useCourse from '@app/hooks/useCourse'
 
-import { LoadingStatus } from '@app/util'
+import { LoadingStatus, courseEnded } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -34,6 +34,7 @@ const ChecklistItem = styled(Box)(({ theme }) => ({
 }))
 
 export const ParticipantCourse = () => {
+  const navigate = useNavigate()
   const { id: courseId } = useParams()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
@@ -64,6 +65,7 @@ export const ParticipantCourse = () => {
   }
 
   const attendingLabel = t('pages.participant-course.attending-course-label')
+  const courseHasEnded = course && courseEnded(course)
 
   return (
     <>
@@ -145,10 +147,20 @@ export const ParticipantCourse = () => {
                     )}
                   </Typography>
                   <Chip label="Incomplete" sx={{ marginRight: 2 }} />
-                  <Button variant="contained" color="secondary" disabled>
-                    {t(
-                      'pages.participant-course.course-summary-button-after-completion'
-                    )}
+                  <Button
+                    data-testid="evaluate-course-cta"
+                    onClick={() =>
+                      navigate(`/my-training/courses/${courseId}/evaluation`)
+                    }
+                    variant="contained"
+                    color="secondary"
+                    disabled={!courseHasEnded}
+                  >
+                    {!courseHasEnded
+                      ? t(
+                          'pages.participant-course.course-summary-button-after-completion'
+                        )
+                      : t('pages.participant-course.evaluate-course')}
                   </Button>
                 </ChecklistItem>
               </TabPanel>

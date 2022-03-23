@@ -308,6 +308,7 @@
       }
     },
     "participant-course": {
+      "evaluate-course": "Evaluate course",
       "attending-course-label": "You are attending this course",
       "invite-accepted": "You are now attending this course. Please complete the checklist.",
       "checklist-tab-title": "Course checklist",
