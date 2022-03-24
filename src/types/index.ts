@@ -285,6 +285,7 @@ export enum Grade {
   FAIL = 'FAIL',
   OBSERVE_ONLY = 'OBSERVE_ONLY',
   ASSIST_ONLY = 'ASSIST_ONLY',
+  INCOMPLETE = 'INCOMPLETE',
 }
 
 export type CourseEvaluationAnswer = {

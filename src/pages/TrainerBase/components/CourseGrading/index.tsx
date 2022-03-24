@@ -143,14 +143,16 @@ export const CourseGrading = () => {
         attendedParticipants.push(participant.id)
 
         for (const id in modulesSelectionRef.current) {
-          if (modulesSelectionRef.current[id]) {
-            grades.push({
-              course_participant_id: participant.id,
-              module_id: id,
-              grade,
-              feedback,
-            })
-          }
+          const participantGrade = modulesSelectionRef.current[id]
+            ? grade
+            : Grade.INCOMPLETE
+
+          grades.push({
+            course_participant_id: participant.id,
+            module_id: id,
+            grade: participantGrade,
+            feedback,
+          })
         }
       })
 

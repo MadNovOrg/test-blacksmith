@@ -355,6 +355,7 @@ describe('page: CourseGrading', () => {
     const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
     ]
     const courseParticipants = [
@@ -395,6 +396,8 @@ describe('page: CourseGrading', () => {
       'Feedback'
     )
 
+    userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+
     userEvent.click(screen.getByText('Submit final grade'))
     userEvent.click(screen.getByText('Confirm'))
 
@@ -404,6 +407,12 @@ describe('page: CourseGrading', () => {
         {
           course_participant_id: courseParticipants[1].id,
           module_id: courseModules[0].module.id,
+          grade: 'INCOMPLETE',
+          feedback: 'Feedback',
+        },
+        {
+          course_participant_id: courseParticipants[1].id,
+          module_id: courseModules[1].module.id,
           grade: 'PASS',
           feedback: 'Feedback',
         },
