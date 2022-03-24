@@ -41,9 +41,7 @@ describe('page: ParticipantCourse', () => {
     expect(
       screen.getByLabelText('You are attending this course')
     ).toBeInTheDocument()
-    expect(
-      screen.queryByTestId('accepted-invite-alert')
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId('success-alert')).not.toBeInTheDocument()
   })
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
@@ -56,7 +54,7 @@ describe('page: ParticipantCourse', () => {
     render(
       <MemoryRouter
         initialEntries={[
-          `/my-training/courses/${course.id}?acceptedInvite=true`,
+          `/my-training/courses/${course.id}?success=invite_accepted`,
         ]}
       >
         <Routes>
@@ -68,7 +66,7 @@ describe('page: ParticipantCourse', () => {
       </MemoryRouter>
     )
 
-    expect(screen.getByTestId('accepted-invite-alert')).toBeInTheDocument()
+    expect(screen.getByTestId('success-alert')).toBeInTheDocument()
   })
 
   it('displays tabs with course checklist and resources', () => {

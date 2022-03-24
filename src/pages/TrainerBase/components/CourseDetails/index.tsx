@@ -57,12 +57,20 @@ const StyledTab = styled(Tab)(({ theme }) => ({
   },
 }))
 
+const successAlerts = {
+  course_submitted:
+    'pages.trainer-base.create-course.new-course.submitted-course',
+  course_evaluated: 'course-evaluation.saved',
+}
+
 export const CourseDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { id: courseId } = useParams()
   const [searchParams] = useSearchParams()
-  const courseJustSubmitted = searchParams.get('courseJustSubmitted') === 'true'
+  const alertType = searchParams.get('success') as keyof typeof successAlerts
+  const alertMessage = alertType ? successAlerts[alertType] : null
+
   const [selectedTab, setSelectedTab] = useState<
     keyof typeof CourseDetailsTabs
   >(CourseDetailsTabs.ATTENDEES)
@@ -140,13 +148,20 @@ export const CourseDetails = () => {
                 </Box>
 
                 <Container sx={{ pb: 2 }}>
-                  {courseJustSubmitted && (
+                  {alertMessage ? (
                     <Expire delay={3000}>
-                      <Alert variant="outlined" color="success">
-                        {`You have successfully created your ${course.name} Course`}
-                      </Alert>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        mt={2}
+                      >
+                        <Alert variant="outlined" color="success">
+                          {t(alertMessage, { name: course?.name })}
+                        </Alert>
+                      </Box>
                     </Expire>
-                  )}
+                  ) : null}
 
                   <TabPanel value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendees course={course} />

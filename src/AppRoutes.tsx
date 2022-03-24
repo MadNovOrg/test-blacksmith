@@ -122,11 +122,12 @@ const LoggedInRoutes = () => {
                 path="upcoming-training"
                 element={<MyUpcomingTraining />}
               />
-              <Route path="courses/:id" element={<ParticipantCourse />} />
-              <Route
-                path="courses/:id/evaluation"
-                element={<CourseEvaluation />}
-              />
+              <Route path="courses">
+                <Route path=":id">
+                  <Route index element={<ParticipantCourse />} />
+                  <Route path="evaluation" element={<CourseEvaluation />} />
+                </Route>
+              </Route>
               <Route path="accept-invite/:id" element={<AcceptInvite />} />
               <Route path="certifications" element={<MyCertifications />} />
               <Route path="resources" element={<MyResources />} />

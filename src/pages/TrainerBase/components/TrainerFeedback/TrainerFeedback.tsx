@@ -1,8 +1,14 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
-import { useParams } from 'react-router-dom'
-import { Alert, Container, Grid, TextField, Typography } from '@mui/material'
+import { useNavigate, useParams } from 'react-router-dom'
+import {
+  Container,
+  FormHelperText,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material'
 import { Box } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { groupBy, map } from 'lodash-es'
@@ -28,11 +34,9 @@ import {
   ResponseType as GetCourseEvaluationQuestionsResponseType,
 } from '@app/queries/course-evaluation/get-questions'
 import {
-  QUERY as GET_COURSE_EVALUATION_ANSWERS_QUERY,
-  ResponseType as GetCourseEvaluationAnswersResponseType,
-  ParamsType as GetCourseEvaluationAnswersParamsType,
-} from '@app/queries/course-evaluation/get-answers'
-import { MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/queries/course-evaluation/save-evaluation'
+  MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
+  ResponseType as SaveCourseEvaluationResponseType,
+} from '@app/queries/course-evaluation/save-evaluation'
 
 const booleanQuestionTypes = [
   CourseEvaluationQuestionType.BOOLEAN,
@@ -43,14 +47,10 @@ const booleanQuestionTypes = [
 export const TrainerFeedback = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const navigate = useNavigate()
+  const [error, setError] = useState<string | null>(null)
   const { id: courseId } = useParams()
   const { profile } = useAuth()
-
-  const { data: evaluation, mutate: refetchAnswers } = useSWR<
-    GetCourseEvaluationAnswersResponseType,
-    Error,
-    [string, GetCourseEvaluationAnswersParamsType]
-  >([GET_COURSE_EVALUATION_ANSWERS_QUERY, { courseId: courseId as string }])
 
   const { data: course } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
@@ -118,29 +118,23 @@ export const TrainerFeedback = () => {
         }
       })
 
-      await fetcher(SAVE_COURSE_EVALUATION_ANSWERS_MUTATION, { answers })
+      const response = await fetcher<SaveCourseEvaluationResponseType>(
+        SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
+        {
+          answers,
+        }
+      )
       setLoading(false)
-      refetchAnswers()
+
+      if (!response.inserted?.rows?.length) {
+        return setError(t('course-evaluation.error-submitting'))
+      }
+
+      navigate('../details?success=course_evaluated')
     } catch (err: unknown) {
-      // TODO: display generic error mesaage to user? Need designs
+      setError(t('course-evaluation.error-submitting'))
       setLoading(false)
     }
-  }
-
-  if (evaluation?.answers.length) {
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        mt={5}
-        mb={5}
-      >
-        <Alert variant="outlined" color="success" sx={{ mb: 3 }}>
-          {t('course-evaluation.saved')}
-        </Alert>
-      </Box>
-    )
   }
 
   return (
@@ -242,6 +236,12 @@ export const TrainerFeedback = () => {
           >
             {t('course-evaluation.submit')}
           </LoadingButton>
+
+          {error && (
+            <Box mt={2}>
+              <FormHelperText error>{error}</FormHelperText>
+            </Box>
+          )}
         </Box>
       </Container>
     </Box>

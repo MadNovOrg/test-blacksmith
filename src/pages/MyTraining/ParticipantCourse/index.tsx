@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useTranslation } from 'react-i18next'
-import InfoIcon from '@mui/icons-material/Info'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { styled } from '@mui/system'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
@@ -33,12 +32,18 @@ const ChecklistItem = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }))
 
+const successAlerts = {
+  invite_accepted: 'pages.participant-course.invite-accepted',
+  course_evaluated: 'course-evaluation.saved',
+} as const
+
 export const ParticipantCourse = () => {
   const navigate = useNavigate()
   const { id: courseId } = useParams()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
-  const acceptedInvite = searchParams.get('acceptedInvite') as string
+  const alertType = searchParams.get('success') as keyof typeof successAlerts
+  const alertMessage = alertType ? successAlerts[alertType] : null
 
   const {
     status: courseLoadingStatus,
@@ -95,19 +100,18 @@ export const ParticipantCourse = () => {
           </CourseHeroSummary>
 
           <Container sx={{ marginTop: 4 }}>
-            {acceptedInvite && (
+            {alertMessage ? (
               <Box display="flex" flexDirection="column" alignItems="center">
                 <Alert
-                  icon={<InfoIcon />}
                   variant="outlined"
                   color="success"
-                  sx={{ marginBottom: 2, display: 'inline-flex' }}
-                  data-testid="accepted-invite-alert"
+                  sx={{ mb: 3 }}
+                  data-testid="success-alert"
                 >
-                  {t('pages.participant-course.invite-accepted')}
+                  {t(alertMessage)}
                 </Alert>
               </Box>
-            )}
+            ) : null}
 
             <TabContext value={activeTab}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

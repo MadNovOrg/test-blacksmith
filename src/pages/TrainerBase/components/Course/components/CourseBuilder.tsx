@@ -283,7 +283,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           status: CourseStatus.PUBLISHED,
         })
         navigate({
-          pathname: `/trainer-base/course/${courseData.course.id}/details?courseJustSubmitted=true`,
+          pathname: `/trainer-base/course/${courseData.course.id}/details?success=course_submitted`,
         })
       } catch (e: unknown) {
         setSubmitError((e as Error).message)

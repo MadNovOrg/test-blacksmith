@@ -56,7 +56,7 @@ export const AcceptInvite = () => {
   if (success) {
     return (
       <Navigate
-        to={`/my-training/courses/${courseId}?acceptedInvite=true`}
+        to={`/my-training/courses/${courseId}?success=invite_accepted`}
         replace
       />
     )

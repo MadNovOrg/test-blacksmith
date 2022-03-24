@@ -156,6 +156,7 @@
           "mandatory-modules": "Mandatory modules",
           "estimated-duration": "Estimated duration",
           "submit-course": "Submit Course",
+          "submitted-course": "You have successfully created your {{name}} Course",
           "duration-exceeded": "You have exceeded the minimum duration for this course, you must remove a module in order to add more.",
           "organization": "Organization"
         }
@@ -453,7 +454,8 @@
     "signature": "Signature",
     "invalid-signature": "Signature should match first and last name of your profile",
     "submit": "Submit course evaluation",
-    "saved": "Your feedback has been saved",
+    "saved": "Your course evaluation feedback has been submitted",
+    "error-submitting": "There was an error saving your feedback",
     "required-field": "This is a required question",
     "complete-my-evaluation": "Complete my evaluation",
     "trainer-evaluate": "Submit your Trainer Summary Evaluation to view evaluation summary and complete this course.",
