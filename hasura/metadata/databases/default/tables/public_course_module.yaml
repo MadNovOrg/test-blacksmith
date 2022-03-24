@@ -18,17 +18,21 @@ insert_permissions:
 - permission:
     backend_only: false
     check:
-      course:
-        leaders:
-          profile_id:
+      _or:
+      - course:
+          trainer_profile_id:
             _eq: X-Hasura-User-Id
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
     columns:
     - id
     - created_at
     - updated_at
     - course_id
     - module_id
-  role: user
+  role: trainer
 select_permissions:
 - permission:
     allow_aggregations: true
@@ -40,30 +44,39 @@ select_permissions:
     - module_id
     - updated_at
     filter:
-      course:
-        leaders:
-          profile_id:
+      _or:
+      - course:
+          trainer_profile_id:
             _eq: X-Hasura-User-Id
-  role: user
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  role: trainer
 update_permissions:
 - permission:
     check: null
     columns:
     - covered
     filter:
-      course:
-        leaders:
-          profile_id:
+      _or:
+      - course:
+          trainer_profile_id:
             _eq: X-Hasura-User-Id
-        trainer:
-          id:
-            _eq: X-Hasura-User-Id
-  role: user
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  role: trainer
 delete_permissions:
 - permission:
     filter:
-      course:
-        leaders:
-          profile_id:
+      _or:
+      - course:
+          trainer_profile_id:
             _eq: X-Hasura-User-Id
-  role: user
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  role: trainer
