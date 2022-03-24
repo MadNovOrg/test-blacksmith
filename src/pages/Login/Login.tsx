@@ -70,9 +70,8 @@ export const LoginPage = () => {
     const { error } = await auth.login(data.email, data.password)
 
     if (!error) {
-      return navigate(`${from.pathname || '/'}${from.search || ''}`, {
-        replace: true,
-      })
+      const to = `${from.pathname || '/'}${from.search || ''}`
+      return navigate(to, { replace: true })
     }
 
     setIsLoading(false)

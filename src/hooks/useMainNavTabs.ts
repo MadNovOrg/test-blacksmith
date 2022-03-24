@@ -7,14 +7,14 @@ export const useMainNavTabs = () => {
   return useMemo(() => {
     return [
       {
-        id: '/trainer-base',
-        title: 'Trainer Base',
-        show: acl.canViewTrainerBase(),
-      },
-      {
         id: '/my-training',
         title: 'My Training',
         show: true,
+      },
+      {
+        id: '/trainer-base',
+        title: 'Trainer Base',
+        show: acl.canViewTrainerBase(),
       },
       {
         id: '/my-organization',
@@ -22,14 +22,14 @@ export const useMainNavTabs = () => {
         show: true,
       },
       {
-        id: '/admin',
-        title: 'Admin',
-        show: acl.isAdmin(),
-      },
-      {
         id: '/membership-area',
         title: 'Membership Area',
         show: true,
+      },
+      {
+        id: '/admin',
+        title: 'Admin',
+        show: acl.isAdmin(),
       },
     ].filter(t => t.show)
   }, [acl])

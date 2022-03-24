@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useMemo } from 'react'
 import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Box } from '@mui/material'
@@ -59,26 +59,31 @@ const Trainees = React.lazy(
 )
 const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
 
-// TODO: consider extracting when things grow here
-const Layout: React.FC = () => {
-  return <Outlet />
-}
+const Layout = () => <Outlet />
 
-const RedirectToLogin: React.FC = () => {
+const RedirectToLogin = () => {
   const loc = useLocation()
   return <Navigate replace to="login" state={{ from: loc }} />
 }
 
-const LoggedInRoutes: React.FC<unknown> = () => {
+const LoggedInRoutes = () => {
   const { acl } = useAuth()
+
+  const startPage = useMemo(() => {
+    if (acl.canViewTrainerBase()) return 'trainer-base'
+    return 'my-training'
+  }, [acl])
 
   return (
     <AppLayout>
       <Suspense fallback={() => 'Loading'}>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate replace to="trainer-base" />} />
+            <Route path="login" element={<Navigate replace to="/" />} />
+            <Route index element={<Navigate replace to={startPage} />} />
+
             <Route path="my-profile" element={<MyProfilePage />} />
+
             {acl.canViewTrainerBase() ? (
               <Route path="trainer-base" element={<TrainerBasePage />}>
                 <Route index element={<TrainerDashboard />} />
@@ -110,6 +115,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
                 </Route>
               </Route>
             ) : null}
+
             <Route path="my-training" element={<MyTrainingPage />}>
               <Route index element={<MyTrainingDashboard />} />
               <Route
@@ -126,12 +132,14 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="resources" element={<MyResources />} />
               <Route path="membership" element={<MyMembership />} />
             </Route>
+
             <Route path="my-organization" element={<MyOrganizationPage />}>
               <Route index element={<Navigate to="overview" />} />
               <Route path="overview" element={<OrganizationOverviewPage />} />
               <Route path="profiles" element={<ProfileListPage />} />
               <Route path="profiles/:id" element={<ProfilePage />} />
             </Route>
+
             <Route path="admin" element={<AdminPage />}>
               <Route index element={<Navigate to="organizations" />} />
               <Route path="organizations" element={<Organizations />} />
@@ -140,6 +148,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
               <Route path="trainees" element={<Trainees />} />
               <Route path="plans" element={<Plans />} />
             </Route>
+
             <Route path="membership-area" element={<MembershipAreaPage />}>
               <Route index element={<Navigate to="details" />} />
               <Route path="details" element={<MembershipDetailsPage />} />
@@ -153,7 +162,7 @@ const LoggedInRoutes: React.FC<unknown> = () => {
   )
 }
 
-const LoggedOutRoutes: React.FC<unknown> = () => {
+const LoggedOutRoutes = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="login" />} />
@@ -171,7 +180,7 @@ const LoggedOutRoutes: React.FC<unknown> = () => {
   )
 }
 
-export const AppRoutes: React.FC<unknown> = () => {
+export const AppRoutes = () => {
   const auth = useAuth()
   const location = useLocation()
 

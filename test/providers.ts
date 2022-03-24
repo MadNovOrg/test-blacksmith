@@ -1,4 +1,4 @@
-import type { ContextType as AuthContextType } from '@app/context/auth'
+import type { AuthContextType } from '@app/context/auth/types'
 
 import { RoleName } from '@app/types'
 
