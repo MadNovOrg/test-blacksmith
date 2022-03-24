@@ -7,7 +7,32 @@ configuration:
     created_at: createdAt
     updated_at: updatedAt
   custom_root_fields: {}
+array_relationships:
+- name: schedule
+  using:
+    foreign_key_constraint_on:
+      column: venue_id
+      table:
+        name: course_schedule
+        schema: public
 select_permissions:
+- permission:
+    columns:
+    - id
+    - created_at
+    - updated_at
+    - name
+    - address
+    - geoCoordinates
+    filter:
+      schedule:
+        course:
+          _and:
+          - course_type:
+              _eq: OPEN
+          - course_status:
+              _eq: PUBLISHED
+  role: anonymous
 - permission:
     columns:
     - address

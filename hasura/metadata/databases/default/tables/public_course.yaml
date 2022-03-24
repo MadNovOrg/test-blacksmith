@@ -57,9 +57,11 @@ select_permissions:
     - course_type
     - created_at
     - description
+    - id
     - max_participants
     - min_participants
     - name
+    - reaccreditation
     - updated_at
     filter:
       _and:
