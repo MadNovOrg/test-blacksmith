@@ -213,6 +213,7 @@ export type CourseParticipant = {
   profile: Profile
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
+  graded?: boolean
   gradings: CourseParticipantGrading[]
 } & Base
 

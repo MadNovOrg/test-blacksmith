@@ -129,6 +129,73 @@ describe('page: CourseGrading', () => {
     expect(screen.getByText('All attendees')).toBeInTheDocument()
   })
 
+  it("doesn't display already graded participants", () => {
+    const COURSE_ID = 'course-id'
+
+    const course = buildCourse()
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: true, graded: true },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: course,
+      mutate: jest.fn(),
+    })
+
+    useCourseModulesMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseModules,
+    })
+
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseParticipants,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
+        <Routes>
+          <Route path="/:id/grading" element={<CourseGrading />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByText(course.name)).toBeInTheDocument()
+
+    const coveredModuleGroup = screen.getByTestId(
+      `module-group-${courseModules[0].module.moduleGroup.id}`
+    )
+
+    expect(
+      within(coveredModuleGroup).getByLabelText(courseModules[0].module.name)
+    ).toBeChecked()
+
+    expect(
+      screen.queryByTestId(
+        `module-group-${courseModules[1].module.moduleGroup.id}`
+      )
+    ).not.toBeInTheDocument()
+
+    const attendedParticipant = courseParticipants[1]
+    const notAttendedParticipant = courseParticipants[0]
+
+    expect(
+      screen.getByText(`${attendedParticipant.profile.fullName}`)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByText(`${notAttendedParticipant.profile.fullName}`)
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByText('All attendees')).toBeInTheDocument()
+  })
+
   it('displays selected participants from query param', () => {
     const COURSE_ID = 'course-id'
 

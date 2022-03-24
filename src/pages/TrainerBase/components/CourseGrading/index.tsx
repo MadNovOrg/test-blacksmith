@@ -58,7 +58,7 @@ export const CourseGrading = () => {
   const { data: courseParticipants } = useCourseParticipants(courseId ?? '')
   const fetcher = useFetcher()
 
-  const STORAGE_KEY = `modules-selection-${courseId}`
+  const STORAGE_KEY = `grading-modules-selection-${courseId}`
 
   const filteredCourseParticipants = useMemo(() => {
     if (!participantIds || !participantIds.length) {
@@ -136,7 +136,7 @@ export const CourseGrading = () => {
       const attendedParticipants: string[] = []
 
       filteredCourseParticipants?.forEach(participant => {
-        if (!participant.attended) {
+        if (!participant.attended || participant.graded) {
           return
         }
 
@@ -247,7 +247,7 @@ export const CourseGrading = () => {
                   }}
                 >
                   {filteredCourseParticipants?.map(participant => {
-                    return participant.attended ? (
+                    return participant.attended && !participant.graded ? (
                       <ListItem disableGutters key={participant.id}>
                         <ListItemAvatar>
                           <Avatar />
