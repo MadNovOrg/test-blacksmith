@@ -25,6 +25,9 @@ import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
 import { BlogPage } from './pages/MembershipArea/BlogPage'
 import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
 import { CourseGrading } from './pages/TrainerBase/components/CourseGrading'
+import { CreateCourse } from './pages/TrainerBase/components/CreateCourse'
+import { CreateCourseForm } from './pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
+import { AssignTrainers } from './pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
 import { TrainerFeedback } from './pages/TrainerBase/components/TrainerFeedback'
 
 import { MyTrainingPage } from '@app/pages/MyTraining'
@@ -112,6 +115,10 @@ const LoggedInRoutes = () => {
                     element={<TrainerAvailability />}
                   />
                   <Route path="expenses" element={<TrainerExpenses />} />
+                </Route>
+                <Route path="new" element={<CreateCourse />}>
+                  <Route index element={<CreateCourseForm />} />
+                  <Route path="assign-trainers" element={<AssignTrainers />} />
                 </Route>
               </Route>
             ) : null}
