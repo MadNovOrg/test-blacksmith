@@ -16,20 +16,10 @@ export const OrganizationOverviewPage: React.FC<
   const auth = useAuth()
   const { t } = useTranslation()
 
-  const orgs =
-    auth.claims &&
-    JSON.parse(
-      '[' +
-        auth.claims['x-hasura-tt-organizations'].slice(
-          1,
-          auth.claims['x-hasura-tt-organizations'].length - 1
-        ) +
-        ']'
-    )
-  console.log(orgs)
+  const orgId = auth.organizationIds?.[0]
 
   const { data, error } = useSWR(
-    auth?.claims ? [getOrganizationWithKeyContacts, { id: orgs[0] }] : null
+    orgId ? [getOrganizationWithKeyContacts, { id: orgId }] : null
   )
 
   const renderLocation = (org: { addresses: [Address] }) => {

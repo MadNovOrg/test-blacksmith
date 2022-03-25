@@ -8,28 +8,26 @@ export type E = { code: number; message: string }
 export type LoginResult = { error?: E }
 
 export type AuthState = {
-  loading: boolean
-  claims?: {
-    'x-hasura-user-id': string
-    'x-hasura-user-email': string
-    'x-hasura-allowed-roles': RoleName[]
-    'x-hasura-default-role': RoleName
-    'x-hasura-tt-organizations': string
-  }
-  accessToken?: string
-  idToken?: string
+  token?: string
   profile?: Profile
+  organizationIds?: string[]
+  defaultRole?: RoleName
+  allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
 }
 
 export interface AuthContextType extends AuthState {
+  loading: boolean
   login: (email: string, password: string) => Promise<LoginResult>
   logout: () => Promise<void>
   acl: ACL
 }
 
-export type ACLInput = {
-  profile: AuthContextType['profile']
-  acl?: ACL
+export type Claims = {
+  'x-hasura-user-id': string
+  'x-hasura-user-email': string
+  'x-hasura-allowed-roles': RoleName[]
+  'x-hasura-default-role': RoleName
+  'x-hasura-tt-organizations': string
 }
 
 export type ACL = {

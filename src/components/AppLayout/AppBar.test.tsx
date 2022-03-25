@@ -42,7 +42,7 @@ describe('component: AppBar', () => {
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { allowedRoles } } }
+        { auth: { allowedRoles } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -57,7 +57,7 @@ describe('component: AppBar', () => {
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { allowedRoles } } }
+        { auth: { allowedRoles } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -75,7 +75,7 @@ describe('component: AppBar', () => {
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { allowedRoles } } }
+        { auth: { allowedRoles } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -90,7 +90,7 @@ describe('component: AppBar', () => {
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { profile: { allowedRoles } } }
+        { auth: { allowedRoles } }
       )
 
       const nav = screen.getByTestId('main-nav')

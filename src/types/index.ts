@@ -64,6 +64,7 @@ export type Organization = {
 } & Base
 
 export type Profile = {
+  email: string
   givenName: string
   familyName: string
   fullName: string
@@ -76,8 +77,6 @@ export type Profile = {
   preferences: { [key: string]: string }[]
   organizations: Array<{ organization: Organization }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
-  allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
-  email: string
 } & Base
 
 export type Role = {

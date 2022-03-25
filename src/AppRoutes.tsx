@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react'
 import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
 import { AppLayout } from '@app/components/AppLayout'
 
@@ -62,14 +62,44 @@ const Trainees = React.lazy(
 )
 const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
 
-const Layout = () => <Outlet />
+export const AppRoutes = () => {
+  const auth = useAuth()
+  const location = useLocation()
 
-const RedirectToLogin = () => {
-  const loc = useLocation()
-  return <Navigate replace to="login" state={{ from: loc }} />
+  if (location.pathname === '/invitation') {
+    return <InvitationPage />
+  }
+
+  if (auth.loading) {
+    return <AppLoading />
+  }
+
+  if (!auth.profile) {
+    return <LoggedOutRoutes />
+  }
+
+  return <LoggedInRoutes />
 }
 
-const LoggedInRoutes = () => {
+function LoggedOutRoutes() {
+  return (
+    <Routes>
+      <Route index element={<Navigate replace to="login" />} />
+      <Route path="*" element={<RedirectToLogin />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="reset-password" element={<ResetPasswordPage />} />
+      <Route path="sign-up" element={<SignUpPage />} />
+      <Route path="invitation" element={<InvitationPage />} />
+      <Route
+        path="contacted-confirmation"
+        element={<ContactedConfirmationPage />}
+      />
+    </Routes>
+  )
+}
+
+function LoggedInRoutes() {
   const { acl } = useAuth()
 
   const startPage = useMemo(() => {
@@ -79,7 +109,7 @@ const LoggedInRoutes = () => {
 
   return (
     <AppLayout>
-      <Suspense fallback={() => 'Loading'}>
+      <Suspense fallback={<SuspenseLoading />}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="login" element={<Navigate replace to="/" />} />
@@ -170,51 +200,46 @@ const LoggedInRoutes = () => {
   )
 }
 
-const LoggedOutRoutes = () => {
+function Layout() {
+  return <Outlet />
+}
+
+function RedirectToLogin() {
+  const loc = useLocation()
+  return <Navigate replace to="login" state={{ from: loc }} />
+}
+
+function AppLoading() {
   return (
-    <Routes>
-      <Route index element={<Navigate replace to="login" />} />
-      <Route path="*" element={<RedirectToLogin />} />
-      <Route path="login" element={<LoginPage />} />
-      <Route path="forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="reset-password" element={<ResetPasswordPage />} />
-      <Route path="sign-up" element={<SignUpPage />} />
-      <Route path="invitation" element={<InvitationPage />} />
-      <Route
-        path="contacted-confirmation"
-        element={<ContactedConfirmationPage />}
-      />
-    </Routes>
+    <Box
+      sx={{
+        display: 'flex',
+        minHeight: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 5,
+      }}
+    >
+      <CircularProgress size={60} />
+    </Box>
   )
 }
 
-export const AppRoutes = () => {
-  const auth = useAuth()
-  const location = useLocation()
-
-  if (location.pathname === '/invitation') {
-    return <InvitationPage />
-  }
-
-  if (auth.loading) {
-    return (
-      <Box position="relative" width="100vw" height="100vh">
-        <CircularProgress
-          sx={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-          size={60}
-        />
-      </Box>
-    )
-  }
-
-  if (!auth.accessToken) {
-    return <LoggedOutRoutes />
-  }
-
-  return <LoggedInRoutes />
+function SuspenseLoading() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        p: 5,
+      }}
+    >
+      <CircularProgress size={40} />
+      <Typography variant="body1" sx={{ mt: 2, fontSize: 12 }}>
+        Loading...
+      </Typography>
+    </Box>
+  )
 }

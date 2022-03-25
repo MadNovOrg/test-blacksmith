@@ -9,18 +9,20 @@ export const AuthContext = React.createContext({} as AuthContextType)
 export const useAuth = () => React.useContext(AuthContext)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [state, setState] = useState<AuthState>({ loading: true })
+  const [loading, setLoading] = useState(true)
+  const [state, setState] = useState<AuthState>({})
 
   const loadProfile = useCallback(async (user: CognitoUser) => {
-    const data = (await fetchUserProfile(user)) as Omit<AuthState, 'loading'>
-    setState({ loading: false, ...data })
+    const data = await fetchUserProfile(user)
+    setState({ ...data })
+    setLoading(false)
   }, [])
 
   // On initial load, check if user is logged in and load the profile
   useEffect(() => {
     Auth.currentAuthenticatedUser()
       .then(loadProfile)
-      .catch(() => setState({ loading: false }))
+      .catch(() => setLoading(false))
   }, [loadProfile])
 
   const login = useCallback(
@@ -38,17 +40,17 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const logout = useCallback(async () => {
     await Auth.signOut()
-    setState({ loading: false })
+    setState({})
   }, [])
 
   const value = useMemo(() => {
     return injectACL({
       ...state,
-      profile: state.profile,
+      loading,
       login,
       logout,
     })
-  }, [login, logout, state])
+  }, [login, logout, state, loading])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

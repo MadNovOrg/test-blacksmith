@@ -13,8 +13,8 @@ export const useFetcher = () => {
       query: RequestDocument,
       variables?: V
     ): Promise<T> {
-      return gqlRequest(query, variables, auth.idToken)
+      return gqlRequest(query, variables, auth.token)
     },
-    [auth.idToken]
+    [auth.token]
   )
 }

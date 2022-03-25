@@ -1,8 +1,9 @@
 import { gqlRequest } from '@app/lib/gql-request'
 
-import type { CognitoUser, Profile } from './types'
+import type { CognitoUser, Profile, Claims } from './types'
 
 import { getUserProfile } from '@app/queries/users'
+import { RoleName } from '@app/types'
 
 export async function fetchUserProfile(user: CognitoUser) {
   try {
@@ -10,8 +11,9 @@ export async function fetchUserProfile(user: CognitoUser) {
     if (!session) return
 
     const idToken = session.getIdToken()
-    const accessToken = session.getAccessToken()
-    const claims = JSON.parse(idToken.payload['https://hasura.io/jwt/claims'])
+    const claims = JSON.parse(
+      idToken.payload['https://hasura.io/jwt/claims']
+    ) as Claims
 
     const { profile } = await gqlRequest<{ profile: Profile }>(
       getUserProfile,
@@ -19,14 +21,14 @@ export async function fetchUserProfile(user: CognitoUser) {
       idToken.getJwtToken()
     )
 
+    const orgIdsPgLiteral = claims['x-hasura-tt-organizations'] ?? '{}'
+
     return {
-      claims,
-      accessToken: accessToken.getJwtToken(),
-      idToken: idToken.getJwtToken(),
-      profile: {
-        ...profile,
-        allowedRoles: new Set(claims?.['x-hasura-allowed-roles'] ?? []),
-      },
+      token: idToken.getJwtToken(),
+      profile,
+      organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
+      defaultRole: claims['x-hasura-default-role'] || RoleName.USER,
+      allowedRoles: new Set(claims['x-hasura-allowed-roles'] ?? []),
     }
   } catch (err) {
     console.error(err)

@@ -23,7 +23,7 @@ describe('page: TrainerBase', () => {
       <MemoryRouter>
         <TrainerBasePage />
       </MemoryRouter>,
-      { auth: { profile: { allowedRoles } } }
+      { auth: { allowedRoles } }
     )
 
     expect(mockNavigate).toBeCalledWith({ to: '/my-training' })
@@ -36,7 +36,7 @@ describe('page: TrainerBase', () => {
       <MemoryRouter>
         <TrainerBasePage />
       </MemoryRouter>,
-      { auth: { profile: { allowedRoles } } }
+      { auth: { allowedRoles } }
     )
 
     expect(mockNavigate).not.toBeCalled()

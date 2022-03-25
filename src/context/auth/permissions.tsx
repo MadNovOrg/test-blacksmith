@@ -1,9 +1,11 @@
-import type { ACLInput } from './types'
+import { MarkOptional } from 'ts-essentials'
+
+import type { AuthContextType } from './types'
 
 import { RoleName } from '@app/types'
 
-export function injectACL<T extends ACLInput>(auth: T) {
-  const allowedRoles = auth.profile?.allowedRoles ?? new Set()
+export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+  const allowedRoles = auth.allowedRoles ?? new Set()
 
   const acl = Object.freeze({
     isAdmin: () => allowedRoles.has(RoleName.ADMIN),

@@ -1,13 +1,14 @@
+import { MarkOptional } from 'ts-essentials'
+
 import type { AuthContextType } from '@app/context/auth/types'
 
 import { RoleName } from '@app/types'
 
 export interface Providers {
-  auth: {
+  auth: MarkOptional<AuthContextType, 'acl'> & {
     login: jest.Mock
     logout: jest.Mock
-    profile: AuthContextType['profile']
-    loading: boolean
+    acl?: AuthContextType['acl']
   }
 }
 
@@ -16,6 +17,7 @@ export const defaultProviders: Providers = {
     login: jest.fn().mockResolvedValue(undefined),
     logout: jest.fn().mockResolvedValue(undefined),
     loading: false,
+    allowedRoles: new Set([RoleName.USER]),
     profile: {
       id: 'cacb559d-b85d-5e64-b623-37252520ebda',
       givenName: 'John',
@@ -33,7 +35,6 @@ export const defaultProviders: Providers = {
       updatedAt: '',
       organizations: [],
       roles: [{ role: { name: RoleName.USER } }],
-      allowedRoles: new Set([RoleName.USER]),
     },
   },
 }
