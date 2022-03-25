@@ -21,6 +21,7 @@ export type Email = {
 export type Course = {
   id?: string
   name: string
+  description: string
   organization?: Organization
   level: CourseLevel
   deliveryType: CourseDeliveryType

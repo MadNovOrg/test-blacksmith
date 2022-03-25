@@ -12,6 +12,14 @@ switch (TARGET_ENV) {
     BASE_URL = 'https://web.dev.teamteachhub.co.uk'
     HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
     break
+  case 'stg':
+    BASE_URL = 'https://web.stg.teamteachhub.co.uk'
+    HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
+    break
+  case 'prod':
+    BASE_URL = 'https://teamteachhub.co.uk'
+    HASURA_BASE_URL = 'https://hasura.teamteachhub.co.uk'
+    break
 }
 
 const TEMP_DIR = './tmp'
