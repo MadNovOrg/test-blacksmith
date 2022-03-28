@@ -48,6 +48,7 @@ select_permissions:
     - attended
     - booking_date
     - course_id
+    - date_graded
     - go1_enrolment_status
     - grade
     - grading_feedback
@@ -70,6 +71,7 @@ update_permissions:
               _eq: X-Hasura-User-Id
     columns:
     - attended
+    - date_graded
     - grade
     - grading_feedback
     filter:
