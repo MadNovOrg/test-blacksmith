@@ -7,7 +7,7 @@ actions:
 - name: createZoomMeeting
   definition:
     kind: synchronous
-    handler: '{{ACTIONS_HOST}}/zoom'
+    handler: '{{ACTIONS_HOST}}/zoom/create-meeting'
     forward_client_headers: true
   permissions:
   - role: tt-ops
