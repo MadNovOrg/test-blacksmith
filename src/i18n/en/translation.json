@@ -114,6 +114,9 @@
     "location-autocomplete": {
       "min-chars-label": "Please type at least 3 characters for suggestions.",
       "google-maps-api-error": "Unknown error while communicating with Google Maps API."
+    },
+    "suspense-loading": {
+      "text": "Loading..."
     }
   },
   "pages": {
@@ -456,8 +459,8 @@
     }
   },
   "course-evaluation": {
-    "heading":"Course Summary Evaluation",
-    "trainer-heading":"Trainer summary evaluation",
+    "heading": "Course Summary Evaluation",
+    "trainer-heading": "Trainer summary evaluation",
     "all-fields-mandatory": "All fields are mandatory",
     "signature-desc": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience.",
     "provide-details": "Please provide details",

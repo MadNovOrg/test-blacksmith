@@ -1,49 +1,26 @@
 import React, { Suspense, useMemo } from 'react'
-import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import { AppLayout } from '@app/components/AppLayout'
 
 import { useAuth } from '@app/context/auth'
 
-import { MyProfilePage } from '@app/pages/MyProfile'
-import { ParticipantCourse } from '@app/pages/MyTraining/ParticipantCourse'
-import { AcceptInvite } from '@app/pages/MyTraining/AcceptInvite'
-import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
-import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
-import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
-import { MyTrainingPage } from '@app/pages/MyTraining'
-import { MyOrganizationPage } from '@app/pages/MyOrganization'
-import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
-import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { LoginPage } from '@app/pages/Login'
 import { SignUpPage } from '@app/pages/SignUp'
 import { InvitationPage } from '@app/pages/Invitation'
-import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
-import { MyTrainingDashboard } from '@app/pages/MyTraining/MyTrainingDashboard'
-import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
-import { MyResources } from '@app/pages/MyTraining/MyResources'
-import { MyMembership } from '@app/pages/MyTraining/MyMembership'
-import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
 import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
-import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { AdminPage } from '@app/pages/admin'
-import { Organizations } from '@app/pages/admin/components/Organizations'
-import { Contacts } from '@app/pages/admin/components/Contacts'
-import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
 
-const Trainers = React.lazy(
-  () => import('@app/pages/admin/components/trainers')
-)
-const Trainees = React.lazy(
-  () => import('@app/pages/admin/components/trainees')
-)
-const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
-
-const TrainerBaseRoutes = React.lazy(() => import('./trainer-base'))
+const ProfileRoutes = React.lazy(() => import('./profile'))
+const MyTrainingRoutes = React.lazy(() => import('./my-training'))
+const MyOrgRoutes = React.lazy(() => import('./my-training'))
+const MembershipRoutes = React.lazy(() => import('./membership'))
+const TrainerRoutes = React.lazy(() => import('./trainer-base'))
+const AdminRoutes = React.lazy(() => import('./admin'))
 
 export const AppRoutes = () => {
   const auth = useAuth()
@@ -94,65 +71,34 @@ function LoggedInRoutes() {
     <AppLayout>
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="login" element={<Navigate replace to="/" />} />
-            <Route index element={<Navigate replace to={startPage} />} />
+          <Route path="login" element={<Navigate replace to="/" />} />
+          <Route index element={<Navigate replace to={startPage} />} />
 
-            <Route path="my-profile" element={<MyProfilePage />} />
+          <Route path="my-profile/*" element={<ProfileRoutes />} />
 
-            {acl.canViewTrainerBase() ? (
-              <Route path="trainer-base/*" element={<TrainerBaseRoutes />} />
-            ) : null}
+          {acl.canViewMyTraining() ? (
+            <Route path="my-training/*" element={<MyTrainingRoutes />} />
+          ) : null}
 
-            <Route path="my-training" element={<MyTrainingPage />}>
-              <Route index element={<MyTrainingDashboard />} />
-              <Route
-                path="upcoming-training"
-                element={<MyUpcomingTraining />}
-              />
-              <Route path="courses">
-                <Route path=":id">
-                  <Route index element={<ParticipantCourse />} />
-                  <Route path="evaluation" element={<CourseEvaluation />} />
-                </Route>
-              </Route>
-              <Route path="accept-invite/:id" element={<AcceptInvite />} />
-              <Route path="certifications" element={<MyCertifications />} />
-              <Route path="resources" element={<MyResources />} />
-              <Route path="membership" element={<MyMembership />} />
-            </Route>
+          {acl.canViewTrainerBase() ? (
+            <Route path="trainer-base/*" element={<TrainerRoutes />} />
+          ) : null}
 
-            <Route path="my-organization" element={<MyOrganizationPage />}>
-              <Route index element={<Navigate to="overview" />} />
-              <Route path="overview" element={<OrganizationOverviewPage />} />
-              <Route path="profiles" element={<ProfileListPage />} />
-              <Route path="profiles/:id" element={<ProfilePage />} />
-            </Route>
+          {acl.canViewMyOrganization() ? (
+            <Route path="my-organization/*" element={<MyOrgRoutes />} />
+          ) : null}
 
-            <Route path="admin" element={<AdminPage />}>
-              <Route index element={<Navigate to="organizations" />} />
-              <Route path="organizations" element={<Organizations />} />
-              <Route path="contacts" element={<Contacts />} />
-              <Route path="trainers" element={<Trainers />} />
-              <Route path="trainees" element={<Trainees />} />
-              <Route path="plans" element={<Plans />} />
-            </Route>
+          {acl.canViewMembership() ? (
+            <Route path="membership-area/*" element={<MembershipRoutes />} />
+          ) : null}
 
-            <Route path="membership-area" element={<MembershipAreaPage />}>
-              <Route index element={<Navigate to="details" />} />
-              <Route path="details" element={<MembershipDetailsPage />} />
-              <Route path="blog" element={<BlogPage />} />
-              <Route path="blog/:postId" element={<BlogPostPage />} />
-            </Route>
-          </Route>
+          {acl.canViewAdmin() ? (
+            <Route path="admin/*" element={<AdminRoutes />} />
+          ) : null}
         </Routes>
       </Suspense>
     </AppLayout>
   )
-}
-
-function Layout() {
-  return <Outlet />
 }
 
 function RedirectToLogin() {
@@ -178,6 +124,8 @@ function AppLoading() {
 }
 
 function SuspenseLoading() {
+  const { t } = useTranslation()
+
   return (
     <Box
       sx={{
@@ -189,7 +137,7 @@ function SuspenseLoading() {
     >
       <CircularProgress size={40} />
       <Typography variant="body1" sx={{ mt: 2, fontSize: 12 }}>
-        Loading...
+        {t('components.suspense-loading.text')}
       </Typography>
     </Box>
   )

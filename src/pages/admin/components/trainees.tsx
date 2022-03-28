@@ -5,7 +5,7 @@ import { CircularProgress } from '@mui/material'
 import { getProfileWithCriteria } from '@app/queries/users'
 import { Profile } from '@app/types'
 
-function Trainees() {
+export function Trainees() {
   const [pagination, setPagination] = useState({
     limit: 20,
     offset: 0,
@@ -129,5 +129,3 @@ function Trainees() {
     </>
   )
 }
-
-export default Trainees

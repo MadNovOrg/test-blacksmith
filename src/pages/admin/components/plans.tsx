@@ -2,7 +2,7 @@ import React from 'react'
 
 type MyMembershipProps = unknown
 
-const Plans: React.FC<MyMembershipProps> = () => {
+export const Plans: React.FC<MyMembershipProps> = () => {
   return (
     <div className="flex">
       <div className="p-8">
@@ -11,5 +11,3 @@ const Plans: React.FC<MyMembershipProps> = () => {
     </div>
   )
 }
-
-export default Plans

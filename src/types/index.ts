@@ -84,11 +84,13 @@ export type Role = {
 }
 
 export enum RoleName {
-  ADMIN = 'admin',
-  ORG_ADMIN = 'org-admin',
-  TT_OPS = 'tt-ops',
-  TRAINER = 'trainer',
   USER = 'user',
+  TRAINER = 'trainer',
+  ORG_ADMIN = 'org-admin',
+  // MTA_ADMIN = 'mta-admin',
+  TT_OPS = 'tt-ops',
+  TT_ADMIN = 'tt-admin',
+  ADMIN = 'admin',
 }
 
 export enum CourseType {

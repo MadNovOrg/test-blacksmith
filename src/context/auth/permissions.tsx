@@ -12,7 +12,30 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isTrainer: () => allowedRoles.has(RoleName.TRAINER),
 
-    canViewTrainerBase: () => acl.isTrainer(),
+    canViewMyTraining: () => {
+      const roles = [RoleName.USER]
+      return roles.some(r => allowedRoles.has(r))
+    },
+
+    canViewTrainerBase: () => {
+      const roles = [RoleName.TRAINER]
+      return roles.some(r => allowedRoles.has(r))
+    },
+
+    canViewMyOrganization: () => {
+      const roles = [RoleName.USER, RoleName.ORG_ADMIN]
+      return roles.some(r => allowedRoles.has(r))
+    },
+
+    canViewMembership: () => {
+      const roles = [RoleName.USER, RoleName.TRAINER]
+      return roles.some(r => allowedRoles.has(r))
+    },
+
+    canViewAdmin: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.ADMIN]
+      return roles.some(r => allowedRoles.has(r))
+    },
   })
 
   return { ...auth, acl }
