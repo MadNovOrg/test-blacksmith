@@ -1,0 +1,57 @@
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+
+import { TrainerBasePage } from '@app/pages/TrainerBase'
+import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
+import { CourseGrading } from '@app/pages/TrainerBase/components/CourseGrading'
+import { CreateCourse } from '@app/pages/TrainerBase/components/CreateCourse'
+import { CreateCourseForm } from '@app/pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
+import { AssignTrainers } from '@app/pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
+import { TrainerFeedback } from '@app/pages/TrainerBase/components/TrainerFeedback'
+import { CourseAttendance } from '@app/pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
+import { ModulesSelection } from '@app/pages/TrainerBase/components/CourseGradingDetails/ModulesSelection'
+import { CourseGradingDetails } from '@app/pages/TrainerBase/components/CourseGradingDetails'
+import { Course } from '@app/pages/TrainerBase/components/Course'
+import { CourseBuilder } from '@app/pages/TrainerBase/components/Course/components/CourseBuilder'
+import { MyCourses } from '@app/pages/TrainerBase/components/Course/components/MyCourses'
+import { TrainerDashboard } from '@app/pages/TrainerBase/components/TrainerDashboard'
+import { Management as TrainerManagement } from '@app/pages/TrainerBase/components/Management'
+import { MyCalendar as TrainerCalendar } from '@app/pages/TrainerBase/components/Management/components/MyCalendar'
+import { ManageAvailability as TrainerAvailability } from '@app/pages/TrainerBase/components/Management/components/ManageAvailability'
+import { ManageExpenses as TrainerExpenses } from '@app/pages/TrainerBase/components/Management/components/ManageExpenses'
+
+const TrainerBaseRoutes = () => {
+  return (
+    <Routes>
+      <Route element={<TrainerBasePage />}>
+        <Route index element={<TrainerDashboard />} />
+        <Route path="course" element={<Course />}>
+          <Route index element={<MyCourses />} />
+          <Route path=":id">
+            <Route index element={<Navigate replace to="details" />} />
+            <Route path="modules" element={<CourseBuilder />} />
+            <Route path="details" element={<CourseDetails />} />
+            <Route path="grading" element={<CourseGrading />} />
+            <Route path="evaluation" element={<TrainerFeedback />} />
+          </Route>
+          <Route path=":id/grading-details" element={<CourseGradingDetails />}>
+            <Route element={<CourseAttendance />} index />
+            <Route path="modules" element={<ModulesSelection />} />
+          </Route>
+        </Route>
+        <Route path="management" element={<TrainerManagement />}>
+          <Route index element={<Navigate replace to="calendar" />} />
+          <Route path="calendar" element={<TrainerCalendar />} />
+          <Route path="availability" element={<TrainerAvailability />} />
+          <Route path="expenses" element={<TrainerExpenses />} />
+        </Route>
+        <Route path="new" element={<CreateCourse />}>
+          <Route index element={<CreateCourseForm />} />
+          <Route path="assign-trainers" element={<AssignTrainers />} />
+        </Route>
+      </Route>
+    </Routes>
+  )
+}
+
+export default TrainerBaseRoutes

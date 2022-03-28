@@ -7,31 +7,13 @@ import { AppLayout } from '@app/components/AppLayout'
 
 import { useAuth } from '@app/context/auth'
 
-import { MyProfilePage } from './pages/MyProfile'
-import { Course } from './pages/TrainerBase/components/Course'
-import { CourseBuilder } from './pages/TrainerBase/components/Course/components/CourseBuilder'
-import { MyCourses } from './pages/TrainerBase/components/Course/components/MyCourses'
-import { TrainerDashboard } from './pages/TrainerBase/components/TrainerDashboard'
-import { Management as TrainerManagement } from './pages/TrainerBase/components/Management'
-import { MyCalendar as TrainerCalendar } from './pages/TrainerBase/components//Management/components/MyCalendar'
-import { ManageAvailability as TrainerAvailability } from './pages/TrainerBase/components//Management/components/ManageAvailability'
-import { ManageExpenses as TrainerExpenses } from './pages/TrainerBase/components//Management/components/ManageExpenses'
-import { ParticipantCourse } from './pages/MyTraining/ParticipantCourse'
-import { CourseGradingDetails } from './pages/TrainerBase/components/CourseGradingDetails'
-import { AcceptInvite } from './pages/MyTraining/AcceptInvite'
-import { CourseAttendance } from './pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
-import { ModulesSelection } from './pages/TrainerBase/components/CourseGradingDetails/ModulesSelection'
-import { MembershipDetailsPage } from './pages/MembershipArea/MemberShipDetails'
-import { BlogPage } from './pages/MembershipArea/BlogPage'
-import { BlogPostPage } from './pages/MembershipArea/BlogPostPage'
-import { CourseGrading } from './pages/TrainerBase/components/CourseGrading'
-import { CreateCourse } from './pages/TrainerBase/components/CreateCourse'
-import { CreateCourseForm } from './pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
-import { AssignTrainers } from './pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
-import { TrainerFeedback } from './pages/TrainerBase/components/TrainerFeedback'
-
+import { MyProfilePage } from '@app/pages/MyProfile'
+import { ParticipantCourse } from '@app/pages/MyTraining/ParticipantCourse'
+import { AcceptInvite } from '@app/pages/MyTraining/AcceptInvite'
+import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
+import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MyTrainingPage } from '@app/pages/MyTraining'
-import { TrainerBasePage } from '@app/pages/TrainerBase'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
@@ -48,7 +30,6 @@ import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
 import { AdminPage } from '@app/pages/admin'
 import { Organizations } from '@app/pages/admin/components/Organizations'
 import { Contacts } from '@app/pages/admin/components/Contacts'
@@ -61,6 +42,8 @@ const Trainees = React.lazy(
   () => import('@app/pages/admin/components/trainees')
 )
 const Plans = React.lazy(() => import('@app/pages/admin/components/plans'))
+
+const TrainerBaseRoutes = React.lazy(() => import('./trainer-base'))
 
 export const AppRoutes = () => {
   const auth = useAuth()
@@ -118,39 +101,7 @@ function LoggedInRoutes() {
             <Route path="my-profile" element={<MyProfilePage />} />
 
             {acl.canViewTrainerBase() ? (
-              <Route path="trainer-base" element={<TrainerBasePage />}>
-                <Route index element={<TrainerDashboard />} />
-                <Route path="course" element={<Course />}>
-                  <Route index element={<MyCourses />} />
-                  <Route path=":id">
-                    <Route index element={<Navigate replace to="details" />} />
-                    <Route path="modules" element={<CourseBuilder />} />
-                    <Route path="details" element={<CourseDetails />} />
-                    <Route path="grading" element={<CourseGrading />} />
-                    <Route path="evaluation" element={<TrainerFeedback />} />
-                  </Route>
-                  <Route
-                    path=":id/grading-details"
-                    element={<CourseGradingDetails />}
-                  >
-                    <Route element={<CourseAttendance />} index />
-                    <Route path="modules" element={<ModulesSelection />} />
-                  </Route>
-                </Route>
-                <Route path="management" element={<TrainerManagement />}>
-                  <Route index element={<Navigate replace to="calendar" />} />
-                  <Route path="calendar" element={<TrainerCalendar />} />
-                  <Route
-                    path="availability"
-                    element={<TrainerAvailability />}
-                  />
-                  <Route path="expenses" element={<TrainerExpenses />} />
-                </Route>
-                <Route path="new" element={<CreateCourse />}>
-                  <Route index element={<CreateCourseForm />} />
-                  <Route path="assign-trainers" element={<AssignTrainers />} />
-                </Route>
-              </Route>
+              <Route path="trainer-base/*" element={<TrainerBaseRoutes />} />
             ) : null}
 
             <Route path="my-training" element={<MyTrainingPage />}>

@@ -2,7 +2,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
 
-import { AppRoutes } from './AppRoutes'
+import { AppRoutes } from './routes'
 import { useFetcher } from './hooks/use-fetcher'
 import theme from './theme'
 
