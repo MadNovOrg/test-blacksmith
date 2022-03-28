@@ -110,6 +110,10 @@
       "dbs-certificate": "DBS Certificate",
       "feedback": "Feedback",
       "view-or-download-here": "View or download here"
+    },
+    "location-autocomplete": {
+      "min-chars-label": "Please type at least 3 characters for suggestions.",
+      "google-maps-api-error": "Unknown error while communicating with Google Maps API."
     }
   },
   "pages": {
