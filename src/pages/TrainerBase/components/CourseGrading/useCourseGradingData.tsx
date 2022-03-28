@@ -1,0 +1,81 @@
+import useSWR from 'swr'
+import { gql } from 'graphql-request'
+
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
+import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+
+type ParamsType = {
+  id: string
+}
+
+type ResponseType = {
+  course: {
+    id: string
+    name: string
+    level: CourseLevel
+    deliveryType: CourseDeliveryType
+    participants: Array<{
+      id: string
+      profile: { fullName: string }
+      attended: boolean
+      grade?: Grade
+    }>
+    modules: Array<{
+      id: string
+      covered: boolean
+      module: {
+        id: string
+        name: string
+        moduleGroup: { id: string; name: string }
+      }
+    }>
+  }
+}
+
+const QUERY = gql`
+  query CourseGradingData($id: uuid!) {
+    course: course_by_pk(id: $id) {
+      id
+      name
+      level
+      deliveryType
+      participants {
+        id
+        profile {
+          fullName
+        }
+        attended
+        grade
+      }
+      modules {
+        id
+        covered
+        module {
+          id
+          name
+          moduleGroup {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`
+
+export default function useCourseGradingData(courseId: string): {
+  data?: ResponseType['course']
+  status: LoadingStatus
+  error?: Error
+} {
+  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
+    QUERY,
+    { id: courseId },
+  ])
+
+  return {
+    data: data?.course,
+    error,
+    status: getSWRLoadingStatus(data, error),
+  }
+}

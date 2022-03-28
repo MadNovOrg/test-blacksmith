@@ -1,10 +1,9 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import useCourse from '@app/hooks/useCourse'
-import useCourseModules from '@app/hooks/useCourseModules'
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useFetcher } from '@app/hooks/use-fetcher'
+
+import useCourseGradingData from './useCourseGradingData'
 
 import { CourseGrading } from './'
 
@@ -18,15 +17,11 @@ import {
 import { MUTATION } from '@app/queries/grading/save-course-grading'
 import { Grade } from '@app/types'
 
-jest.mock('@app/hooks/useCourse')
-jest.mock('@app/hooks/useCourseModules')
-jest.mock('@app/hooks/useCourseParticipants')
+jest.mock('./useCourseGradingData')
 jest.mock('@app/hooks/use-fetcher')
 
-const useCourseMocked = jest.mocked(useCourse)
-const useCourseModulesMocked = jest.mocked(useCourseModules)
-const useCourseParticipantsMocked = jest.mocked(useCourseParticipants)
 const useFetcherMock = jest.mocked(useFetcher)
+const useCourseGradingDataMock = jest.mocked(useCourseGradingData)
 
 describe('page: CourseGrading', () => {
   afterEach(() => {
@@ -36,18 +31,7 @@ describe('page: CourseGrading', () => {
   it('displays spinner while loading course grading data', () => {
     const COURSE_ID = 'course-id'
 
-    useCourseMocked.mockReturnValue({
-      status: LoadingStatus.FETCHING,
-      data: undefined,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.FETCHING,
-      data: undefined,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.FETCHING,
       data: undefined,
     })
@@ -76,20 +60,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(
@@ -143,20 +120,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(
@@ -211,20 +181,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(
@@ -268,20 +231,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(
@@ -312,20 +268,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(
@@ -364,20 +313,13 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseMocked.mockReturnValue({
+    useCourseGradingDataMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
-      data: course,
-      mutate: jest.fn(),
-    })
-
-    useCourseModulesMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseModules,
-    })
-
-    useCourseParticipantsMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: courseParticipants,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
     })
 
     render(

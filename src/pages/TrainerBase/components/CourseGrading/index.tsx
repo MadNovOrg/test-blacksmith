@@ -22,13 +22,12 @@ import { LoadingButton } from '@mui/lab'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Dialog } from '@app/components/Dialog'
 
-import useCourse from '@app/hooks/useCourse'
-import useCourseModules from '@app/hooks/useCourseModules'
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useFetcher } from '@app/hooks/use-fetcher'
 
 import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
 import { CourseGradingMenu } from '../CourseGradingMenu'
+
+import useCourseGradingData from './useCourseGradingData'
 
 import { LoadingStatus } from '@app/util'
 import theme from '@app/theme'
@@ -43,7 +42,7 @@ export const CourseGrading = () => {
   const { id: courseId } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const participantIds = searchParams.get('participants')?.split(',')
+
   const [modalOpened, setModalOpened] = useState(false)
   const [savingGradesStatus, setSavingGradesStatus] = useState(
     LoadingStatus.IDLE
@@ -53,25 +52,27 @@ export const CourseGrading = () => {
 
   const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
 
-  const { data: course, status } = useCourse(courseId ?? '')
-  const { data: courseModules } = useCourseModules(courseId ?? '')
-  const { data: courseParticipants } = useCourseParticipants(courseId ?? '')
+  const { data: course, status } = useCourseGradingData(courseId ?? '')
   const fetcher = useFetcher()
 
   const STORAGE_KEY = `grading-modules-selection-${courseId}`
 
+  const participantIds = useMemo(() => {
+    return new Set(searchParams.get('participants')?.split(',') ?? [])
+  }, [searchParams])
+
   const filteredCourseParticipants = useMemo(() => {
-    if (!participantIds || !participantIds.length) {
-      return courseParticipants
+    if (!participantIds || !participantIds.size) {
+      return course?.participants
     }
 
-    return courseParticipants?.filter(participant =>
-      participantIds.includes(participant.id)
+    return course?.participants?.filter(participant =>
+      participantIds.has(participant.id)
     )
-  }, [courseParticipants, participantIds])
+  }, [course?.participants, participantIds])
 
   const moduleGroups = useMemo(() => {
-    if (!courseModules) {
+    if (!course?.modules) {
       return []
     }
 
@@ -89,7 +90,7 @@ export const CourseGrading = () => {
       rawStoredSelection ?? '{}'
     )
 
-    courseModules.forEach(courseModule => {
+    course.modules.forEach(courseModule => {
       if (!courseModule.covered) {
         return
       }
@@ -112,7 +113,7 @@ export const CourseGrading = () => {
     })
 
     return Object.values(groups)
-  }, [STORAGE_KEY, courseModules])
+  }, [STORAGE_KEY, course?.modules])
 
   const openConfirmationModal = () => {
     setModalOpened(true)
@@ -228,7 +229,7 @@ export const CourseGrading = () => {
                   fontWeight={600}
                   mb={1}
                 >
-                  {!participantIds
+                  {!participantIds.size
                     ? t('pages.course-grading.attendees-list-title-all')
                     : t('pages.course-grading.attendees-list-title', {
                         count: filteredCourseParticipants?.length,
@@ -276,7 +277,7 @@ export const CourseGrading = () => {
                 />
               </Box>
 
-              {courseModules ? (
+              {course?.modules?.length ? (
                 <Box flex={1}>
                   <Typography variant="h6" fontWeight="500" mb={1}>
                     {t('pages.course-grading.modules-selection-title')}
