@@ -4,6 +4,14 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
   comment: Creates a membership subscription
+- name: createZoomMeeting
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/zoom'
+    forward_client_headers: true
+  permissions:
+  - role: tt-ops
+  - role: tt-admin
 - name: declineInvite
   definition:
     kind: synchronous
@@ -71,4 +79,5 @@ custom_types:
   - name: DeclineInviteOutput
   - name: Invite
   - name: CourseInvite
+  - name: ZoomMeeting
   scalars: []

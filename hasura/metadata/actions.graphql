@@ -6,6 +6,10 @@ type Mutation {
 }
 
 type Mutation {
+  createZoomMeeting: ZoomMeeting
+}
+
+type Mutation {
   declineInvite(
     note: String
   ): DeclineInviteOutput
@@ -101,5 +105,9 @@ type CourseInvite {
   venueName: String!
   venueAddress: String!
   venueCoordinates: String
+}
+
+type ZoomMeeting {
+  joinUrl: String!
 }
 
