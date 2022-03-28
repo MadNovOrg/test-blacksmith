@@ -5,6 +5,7 @@ configuration:
   comment: null
   custom_column_names:
     booking_date: bookingDate
+    date_graded: dateGraded
     go1_enrolment_id: go1EnrolmentId
     go1_enrolment_status: go1EnrolmentStatus
     invoice_id: invoiceID
@@ -20,12 +21,12 @@ object_relationships:
   using:
     foreign_key_constraint_on: profile_id
 array_relationships:
-- name: gradings
+- name: gradingModules
   using:
     foreign_key_constraint_on:
       column: course_participant_id
       table:
-        name: course_participant_grading
+        name: course_participant_module
         schema: public
 insert_permissions:
 - permission:
@@ -48,7 +49,8 @@ select_permissions:
     - booking_date
     - course_id
     - go1_enrolment_status
-    - graded
+    - grade
+    - grading_feedback
     - id
     - invoice_id
     - profile_id
@@ -57,10 +59,19 @@ select_permissions:
   role: user
 update_permissions:
 - permission:
-    check: null
+    check:
+      _or:
+      - course:
+          trainer_profile_id:
+            _eq: X-Hasura-User-Id
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
     columns:
     - attended
-    - graded
+    - grade
+    - grading_feedback
     filter:
       _or:
       - course:
@@ -70,6 +81,8 @@ update_permissions:
           leaders:
             profile_id:
               _eq: X-Hasura-User-Id
+    set:
+      profile_id: x-hasura-User-Id
   role: user
 event_triggers:
 - definition:

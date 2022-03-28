@@ -126,39 +126,35 @@ export const CourseGrading = () => {
     try {
       setSavingGradesStatus(LoadingStatus.FETCHING)
 
-      const grades: Array<{
+      const modules: Array<{
         course_participant_id: string
         module_id: string
-        grade: Grade
-        feedback?: string
+        completed: boolean
       }> = []
 
       const attendedParticipants: string[] = []
 
       filteredCourseParticipants?.forEach(participant => {
-        if (!participant.attended || participant.graded) {
+        if (!participant.attended || participant.grade) {
           return
         }
 
         attendedParticipants.push(participant.id)
 
         for (const id in modulesSelectionRef.current) {
-          const participantGrade = modulesSelectionRef.current[id]
-            ? grade
-            : Grade.INCOMPLETE
-
-          grades.push({
+          modules.push({
             course_participant_id: participant.id,
             module_id: id,
-            grade: participantGrade,
-            feedback,
+            completed: modulesSelectionRef.current[id],
           })
         }
       })
 
       await fetcher<ResponseType, ParamsType>(MUTATION, {
+        modules,
         participantIds: attendedParticipants,
-        participantGrades: grades,
+        grade,
+        feedback,
       })
 
       localStorage.removeItem(STORAGE_KEY)
@@ -249,7 +245,7 @@ export const CourseGrading = () => {
                   }}
                 >
                   {filteredCourseParticipants?.map(participant => {
-                    return participant.attended && !participant.graded ? (
+                    return participant.attended && !participant.grade ? (
                       <ListItem disableGutters key={participant.id}>
                         <ListItemAvatar>
                           <Avatar />

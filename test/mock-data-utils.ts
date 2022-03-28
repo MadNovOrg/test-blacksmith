@@ -18,8 +18,7 @@ import {
   Module,
   CourseModule,
   BlendedLearningStatus,
-  CourseParticipantGrading,
-  Grade,
+  CourseParticipantModule,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -201,34 +200,6 @@ export const buildNotStartedCourse = build<Course>({
   },
 })
 
-export const buildParticipantGrading = build<CourseParticipantGrading>({
-  fields: {
-    id: fake(f => f.datatype.uuid()),
-    createdAt: new Date().toISOString(),
-    grade: Grade.PASS,
-    feedback: '',
-  },
-})
-
-export const buildParticipant = build<CourseParticipant>({
-  fields: {
-    id: fake(f => f.datatype.uuid()),
-    createdAt: new Date().toISOString(),
-    profile: perBuild(() => buildProfile()),
-    course: perBuild(() => buildCourse()),
-    go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
-    gradings: [buildParticipantGrading()],
-  },
-})
-
-export const buildInvite = build<CourseInvite>({
-  fields: {
-    id: fake(f => f.datatype.uuid()),
-    email: fake(f => f.internet.email()),
-    status: 'PENDING',
-  },
-})
-
 export const buildModuleGroup = build<ModuleGroup>({
   fields: {
     id: fake(f => f.datatype.uuid()),
@@ -260,5 +231,34 @@ export const buildCourseModule = build<CourseModule>({
     createdAt: new Date().toISOString(),
     course: perBuild(() => buildCourse()),
     module: perBuild(() => buildModule()),
+  },
+})
+
+export const buildParticipantModule = build<CourseParticipantModule>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    module: perBuild(() => buildModule()),
+    completed: perBuild(() => true),
+  },
+})
+
+export const buildParticipant = build<CourseParticipant>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    profile: perBuild(() => buildProfile()),
+    course: perBuild(() => buildCourse()),
+    go1EnrolmentStatus: BlendedLearningStatus.IN_PROGRESS,
+    gradingModules: [buildParticipantModule(), buildParticipantModule()],
+    grade: perBuild(() => null),
+    gradingFeedback: fake(f => f.random.word()),
+  },
+})
+
+export const buildInvite = build<CourseInvite>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    email: fake(f => f.internet.email()),
+    status: 'PENDING',
   },
 })

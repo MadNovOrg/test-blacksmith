@@ -3,32 +3,35 @@ import { gql } from 'graphql-request'
 import { Grade } from '@app/types'
 
 export type ParamsType = {
-  participantGrades: Array<{
+  modules: Array<{
     course_participant_id: string
     module_id: string
-    grade: Grade
-    feedback?: string
+    completed: boolean
   }>
   participantIds: string[]
+  grade: Grade
+  feedback: string
 }
 
 export type ResponseType = {
-  saveGrades: { affectedRows: number }
-  saveParticipantsGraded: { affectedRows: number }
+  saveModules: { affectedRows: number }
+  saveParticipantsGrade: { affectedRows: number }
 }
 
 export const MUTATION = gql`
   mutation SaveCourseGrading(
-    $participantGrades: [course_participant_grading_insert_input!]!
+    $modules: [course_participant_module_insert_input!]!
     $participantIds: [uuid!]
+    $grade: grade_enum!
+    $feedback: String
   ) {
-    saveGrades: insert_course_participant_grading(objects: $participantGrades) {
+    saveModules: insert_course_participant_module(objects: $modules) {
       affectedRows: affected_rows
     }
 
-    saveParticipantsGraded: update_course_participant(
+    saveParticipantsGrade: update_course_participant(
       where: { id: { _in: $participantIds } }
-      _set: { graded: true }
+      _set: { grade: $grade, grading_feedback: $feedback, dateGraded: "${new Date().toISOString()}" }
     ) {
       affectedRows: affected_rows
     }

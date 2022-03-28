@@ -36,7 +36,6 @@ const gradeToIconMap = {
   OBSERVE_ONLY: <CheckCircleIcon color="tertiary" />,
   FAIL: <CancelIcon color="error" />,
   ASSIST_ONLY: <CheckCircleIcon color="tertiary" />,
-  INCOMPLETE: <CancelIcon color="tertiary" />,
 }
 
 export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
@@ -62,7 +61,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
 
   const cols = useMemo(() => {
     const participantsWithoutGrades = (attendingParticipants ?? []).filter(
-      participant => participant.gradings.length === 0
+      participant => !participant.grade
     )
     return [
       {
@@ -227,7 +226,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                                 event.target.checked
                               )
                             }
-                            disabled={courseParticipant.gradings.length > 0}
+                            disabled={Boolean(courseParticipant.grade)}
                           />
                         </TableCell>
                         <TableCell>
@@ -247,21 +246,15 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                           ))}
                         </TableCell>
                         <TableCell>
-                          {courseParticipant.gradings.length > 0 ? (
+                          {courseParticipant.grade ? (
                             <Box display="flex" mb={2} alignItems="center">
-                              {
-                                gradeToIconMap[
-                                  courseParticipant.gradings[0].grade
-                                ]
-                              }
+                              {gradeToIconMap[courseParticipant.grade]}
                               <Typography
                                 display="inline"
                                 variant="body1"
                                 sx={{ mx: 1 }}
                               >
-                                {t(
-                                  `common.grade.${courseParticipant.gradings[0].grade}`
-                                )}
+                                {t(`common.grade.${courseParticipant.grade}`)}
                               </Typography>
                               <Link
                                 component="button"

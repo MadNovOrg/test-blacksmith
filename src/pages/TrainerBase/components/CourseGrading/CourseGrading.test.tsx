@@ -16,6 +16,7 @@ import {
   buildParticipant,
 } from '@test/mock-data-utils'
 import { MUTATION } from '@app/queries/grading/save-course-grading'
+import { Grade } from '@app/types'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useCourseModules')
@@ -138,7 +139,7 @@ describe('page: CourseGrading', () => {
       { ...buildCourseModule(), covered: false },
     ]
     const courseParticipants = [
-      { ...buildParticipant(), attended: true, graded: true },
+      { ...buildParticipant(), attended: true, grade: Grade.PASS },
       { ...buildParticipant(), attended: true },
     ]
 
@@ -348,8 +349,8 @@ describe('page: CourseGrading', () => {
 
     useFetcherMock.mockReturnValue(fetcherMock)
     fetcherMock.mockResolvedValue({
-      saveGrades: { affectedRows: 2 },
-      saveParticipantsGraded: { affectedRows: 2 },
+      saveModules: { affectedRows: 2 },
+      saveParticipantsGrade: { affectedRows: 2 },
     })
 
     const course = buildCourse()
@@ -403,21 +404,21 @@ describe('page: CourseGrading', () => {
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {
-      participantGrades: [
+      modules: [
         {
           course_participant_id: courseParticipants[1].id,
           module_id: courseModules[0].module.id,
-          grade: 'INCOMPLETE',
-          feedback: 'Feedback',
+          completed: false,
         },
         {
           course_participant_id: courseParticipants[1].id,
           module_id: courseModules[1].module.id,
-          grade: 'PASS',
-          feedback: 'Feedback',
+          completed: true,
         },
       ],
       participantIds: [courseParticipants[1].id],
+      grade: 'PASS',
+      feedback: 'Feedback',
     })
 
     await waitForText('Course details')

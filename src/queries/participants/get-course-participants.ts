@@ -48,10 +48,7 @@ export const QUERY = gql`
       invoiceID
       bookingDate
       go1EnrolmentStatus
-      gradings {
-        grade
-        feedback
-      }
+      grade
     }
     courseParticipantsAggregation: course_participant_aggregate(
       where: { _and: [{ course_id: { _eq: $courseId } }, $where] }

@@ -12,7 +12,7 @@
 - "!include public_course_level.yaml"
 - "!include public_course_module.yaml"
 - "!include public_course_participant.yaml"
-- "!include public_course_participant_grading.yaml"
+- "!include public_course_participant_module.yaml"
 - "!include public_course_schedule.yaml"
 - "!include public_course_status.yaml"
 - "!include public_course_type.yaml"
