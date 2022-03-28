@@ -119,3 +119,23 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
   },
 ]
+
+export const UNIQUE_COURSE: () => Course = () => ({
+  name: `Positive behaviour ${Date.now()}`,
+  description: 'Some description.',
+  level: CourseLevel.LEVEL_1,
+  status: CourseStatus.PENDING,
+  deliveryType: CourseDeliveryType.F2F,
+  type: CourseType.OPEN,
+  reaccreditation: false,
+  organization: { name: 'London First School' },
+  schedule: [
+    {
+      name: 'name',
+      type: 'PHYSICAL',
+      start: new Date('2022-07-10T09:00:00Z'),
+      end: new Date('2022-07-10T17:00:00Z'),
+      venue: 'Queen Elizabeth II Centre',
+    },
+  ],
+})

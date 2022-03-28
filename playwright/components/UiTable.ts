@@ -4,11 +4,19 @@ export class UiTable {
   readonly root: Locator
   readonly headers: Locator
   readonly rows: Locator
+  readonly firstRowCells: Locator
 
   constructor(root: Locator) {
     this.root = root
     this.headers = this.root.locator('th')
     this.rows = this.root.locator('tbody tr')
+    this.firstRowCells = this.root.locator('tbody tr >> nth=0 >> td')
+  }
+
+  async getRowsCount(): Promise<number> {
+    const headersCount = await this.headers.count()
+    await expect(this.firstRowCells).toHaveCount(headersCount)
+    return this.rows.count()
   }
 
   async getHeaders(): Promise<string[]> {
@@ -20,7 +28,7 @@ export class UiTable {
   async getRows(): Promise<object> {
     const result = []
     const headers = await this.getHeaders()
-    const rowsCount = await this.rows.count()
+    const rowsCount = await this.getRowsCount()
     for (let i = 0; i < rowsCount; i++) {
       const resultRow = {}
       for (let j = 0; j < headers.length; j++) {
@@ -37,5 +45,37 @@ export class UiTable {
 
   async checkIsVisible() {
     await expect(this.root).toBeVisible({ timeout: 20000 })
+  }
+
+  async getCellById(
+    idColumnName: string,
+    idValue: string,
+    columnName: string
+  ): Promise<Locator> {
+    const headers = await this.getHeaders()
+    const columnIndex = headers.indexOf(idColumnName)
+    const rowsCount = await this.getRowsCount()
+    for (let i = 0; i < rowsCount; i++) {
+      const idCell = this.rows.nth(i).locator('td').nth(columnIndex)
+      if ((await idCell.textContent()).includes(idValue)) {
+        return this.rows.nth(i).locator('td').nth(headers.indexOf(columnName))
+      }
+    }
+    throw Error(
+      `No cell found with text "${idValue}" under column "${idColumnName}"`
+    )
+  }
+
+  async getCellWithText(columnName: string, text: string): Promise<Locator> {
+    const headers = await this.getHeaders()
+    const columnIndex = headers.indexOf(columnName)
+    const rowsCount = await this.getRowsCount()
+    for (let i = 0; i < rowsCount; i++) {
+      const cell = this.rows.nth(i).locator('td').nth(columnIndex)
+      if ((await cell.textContent()).includes(text)) {
+        return cell
+      }
+    }
+    throw Error(`No cell found with text "${text}"`)
   }
 }

@@ -66,6 +66,28 @@ export const getProfileId = async (email: string): Promise<string> => {
   return response.profile[0].id
 }
 
+export const setCourseDates = async (
+  course: Course,
+  newStart: Date,
+  newEnd: Date
+) => {
+  const query = gql`
+    mutation MyMutation {
+      update_course_schedule(
+        where: { course_id: { _eq: "${course.id}" } }
+        _set: { start: "${newStart.toISOString()}", end: "${newEnd.toISOString()}" }
+      ) {
+        affected_rows
+      }
+    }
+  `
+  try {
+    await getClient().request(query)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 export const insertCourse = async (
   course: Course,
   trainer: User
@@ -82,6 +104,7 @@ export const insertCourse = async (
     mutation MyMutation {
       insert_course(objects: {
         deliveryType: ${course.deliveryType},
+        description: "${course.description}",
         leaders: {
           data: {
             profile_id: "${await getProfileId(trainer.email)}",
@@ -111,6 +134,7 @@ export const insertCourse = async (
   `
   const response = await getClient().request(query)
   course.id = response.insert_course.returning[0].id
+  console.log(`Inserted course with ID ${course.id}`)
   return course
 }
 
@@ -123,5 +147,24 @@ export const makeSureTrainerHasCourses = async (
     if (!existingCourses.map(c => c.name).includes(course.name)) {
       await insertCourse(course, trainer)
     }
+  }
+}
+
+export const deleteCourse = async (id: string) => {
+  console.log(`Deleting the course with id "${id}"`)
+  const query = gql`
+    mutation MyMutation {
+      delete_course_leader(where: { course_id: { _eq: "${id}" } }) { affected_rows }
+      delete_course_schedule(where: { course_id: { _eq: "${id}" } }) { affected_rows }
+      delete_course_module(where: { courseId: { _eq: "${id}" } }) { affected_rows }
+      delete_course_invites(where: { course_id: { _eq: "${id}" } }) { affected_rows }
+      delete_course_participant(where: { course_id: { _eq: "${id}" } }) { affected_rows }
+      delete_course(where: { id: { _eq: "${id}" } }) { affected_rows }
+    }
+  `
+  try {
+    await getClient().request(query)
+  } catch (e) {
+    console.error(e)
   }
 }

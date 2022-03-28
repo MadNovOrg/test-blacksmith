@@ -6,6 +6,8 @@ import { UiTable } from '../../components/UiTable'
 import { Course } from '../../data/types'
 import { toCourseTableRow } from '../../data/mappings'
 
+import { CourseBuilderPage } from './CoursesBuilderPage'
+
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator
   readonly filterBy: (text: string) => Locator
@@ -44,5 +46,20 @@ export class MyCoursesPage extends BasePage {
     for (const item of items) {
       await this.filterItem(item).click()
     }
+  }
+
+  async clickCourseName(name: string): Promise<CourseBuilderPage> {
+    const cell = await this.coursesTable.getCellWithText('Course Name', name)
+    await cell.locator('a').click()
+    return new CourseBuilderPage(this.page)
+  }
+
+  async checkCourseStatus(courseName: string, status: string) {
+    const cell = await this.coursesTable.getCellById(
+      'Course Name',
+      courseName,
+      'Status'
+    )
+    await expect(cell).toHaveText(status)
   }
 }

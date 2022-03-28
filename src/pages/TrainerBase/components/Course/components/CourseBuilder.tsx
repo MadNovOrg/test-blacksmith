@@ -382,7 +382,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                 })}
               </Typography>
             </Box>
-            <Box gridColumn={{ xs: 'span 3', md: '5 / 9' }}>
+            <Box
+              gridColumn={{ xs: 'span 3', md: '5 / 9' }}
+              data-testid="course-info"
+            >
               <CourseHero data={courseData.course} />
             </Box>
 
@@ -406,6 +409,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
               <Droppable droppableId="all-modules" direction="horizontal">
                 {(provided, snapshot) => (
                   <Box
+                    data-testid="all-modules"
                     display="flex"
                     flexWrap="wrap"
                     mt={{
@@ -436,6 +440,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                               }
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
+                              data-testid="module-card"
                             />
                           </div>
                         )}
@@ -457,6 +462,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                 flexWrap="wrap"
                 my={{ xs: 4, md: 2 }}
                 mx={-1}
+                data-testid="course-modules"
               >
                 {mandatoryModules.length ? (
                   <Box>
@@ -531,6 +537,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     (!courseModuleSlots?.filter(slot => !!slot.module).length &&
                       !mandatoryModules?.length)
                   }
+                  data-testid="submit-button"
                 >
                   {t(
                     'pages.trainer-base.create-course.new-course.submit-course'
@@ -547,6 +554,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     variant="outlined"
                     color="warning"
                     onClick={onClearCourse}
+                    data-testid="clear-button"
                   >
                     {t('clear')}
                   </Button>

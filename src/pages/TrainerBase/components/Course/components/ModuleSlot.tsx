@@ -39,6 +39,7 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
                     data={module}
                     {...draggableProvided.draggableProps}
                     {...draggableProvided.dragHandleProps}
+                    data-testid="module-card"
                   />
                   {draggableSnapshot.isDragging &&
                     droppableSnapshot.isDraggingOver && (
@@ -92,6 +93,7 @@ export const ModuleSlot: React.FC<ModuleSlotProps> = ({
             }}
             {...droppableProvided.droppableProps}
             ref={droppableProvided.innerRef}
+            data-testid="empty-slot"
           >
             {droppableProvided.placeholder}
           </Box>

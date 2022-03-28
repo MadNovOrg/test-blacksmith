@@ -48,10 +48,17 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
         },
         wordBreak: 'break-word',
       }}
+      data-testid="module-name"
     >
       {data.name}
     </Typography>
-    <Typography variant="caption" position="absolute" bottom={3} left={4}>
+    <Typography
+      variant="caption"
+      position="absolute"
+      bottom={3}
+      left={4}
+      data-testid="module-duration"
+    >
       {formatDurationShort(data.duration.aggregate.sum.duration)}
     </Typography>
     <Box position="absolute" bottom={0} right={0}>
