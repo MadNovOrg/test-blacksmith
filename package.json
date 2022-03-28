@@ -132,6 +132,9 @@
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/playwright"
+    ],
+    "transformIgnorePatterns": [
+      "/!node_modules\\/lodash-es/"
     ]
   },
   "lint-staged": {

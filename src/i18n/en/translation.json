@@ -280,6 +280,13 @@
       "modal-cancel-btn-text": "Cancel",
       "modal-confirm-btn-text": "Confirm"
     },
+    "participant-grading": {
+      "title": "View grade",
+      "attendee-title": "Attendee(s)",
+      "modules-title": "Completed modules and holds",
+      "completed-modules-subtitle": "{{completedNum}} of {{totalNum}} completed",
+      "incomplete-list-subtitle": "Incomplete"
+    },
     "course-attendance": {
       "title": "Attendance",
       "page-description-line1": "Please confirm an individual’s attendance and that ID checks were completed.",

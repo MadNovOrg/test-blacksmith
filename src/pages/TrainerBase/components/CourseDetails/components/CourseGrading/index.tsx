@@ -17,10 +17,9 @@ import {
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import CancelIcon from '@mui/icons-material/Cancel'
 
 import { TableHead } from '@app/components/Table/TableHead'
+import { Grade } from '@app/components/Grade'
 
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 
@@ -29,13 +28,6 @@ import { LoadingStatus } from '@app/util'
 
 type CourseGradingProps = {
   course: Course
-}
-
-const gradeToIconMap = {
-  PASS: <CheckCircleIcon color="success" />,
-  OBSERVE_ONLY: <CheckCircleIcon color="tertiary" />,
-  FAIL: <CancelIcon color="error" />,
-  ASSIST_ONLY: <CheckCircleIcon color="tertiary" />,
 }
 
 export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
@@ -248,22 +240,14 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                         <TableCell>
                           {courseParticipant.grade ? (
                             <Box display="flex" mb={2} alignItems="center">
-                              {gradeToIconMap[courseParticipant.grade]}
-                              <Typography
-                                display="inline"
-                                variant="body1"
-                                sx={{ mx: 1 }}
-                              >
-                                {t(`common.grade.${courseParticipant.grade}`)}
-                              </Typography>
+                              <Grade grade={courseParticipant.grade} />
                               <Link
-                                component="button"
                                 variant="body2"
                                 sx={{
                                   fontWeight: 600,
                                   color: theme.colors.navy[500],
                                 }}
-                                href={`/trainer-base/course/${course.id}/grading?participants=${courseParticipant.id}`}
+                                href={`/trainer-base/course/${course.id}/grading/${courseParticipant.id}`}
                               >
                                 {t('common.view')}
                               </Link>

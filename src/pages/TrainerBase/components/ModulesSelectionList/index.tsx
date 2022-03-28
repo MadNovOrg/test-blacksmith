@@ -9,25 +9,9 @@ import {
   Typography,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { styled } from '@mui/system'
 
 import { noop } from '@app/util'
 import theme from '@app/theme'
-
-const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  border: 'none',
-  backgroundColor: theme.palette.common.white,
-  boxShadow: 'none',
-
-  '& .MuiButtonBase-root': {
-    padding: theme.spacing(0.5, 1.5),
-    alignItems: 'center',
-  },
-
-  ':before': {
-    display: 'none',
-  },
-}))
 
 export type HoldsRecord = Record<string, boolean>
 
@@ -106,7 +90,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
   return (
     <>
       {moduleGroups.map(group => (
-        <StyledAccordion
+        <Accordion
           key={group.id}
           defaultExpanded
           disableGutters
@@ -169,7 +153,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
               </FormGroup>
             ))}
           </AccordionDetails>
-        </StyledAccordion>
+        </Accordion>
       ))}
     </>
   )

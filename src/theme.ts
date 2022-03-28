@@ -376,5 +376,22 @@ export default createTheme({
         },
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          border: 'none',
+          backgroundColor: theme.palette.common.white,
+          boxShadow: 'none',
+          '& .MuiButtonBase-root': {
+            padding: theme.spacing(0.5, 1.5),
+            alignItems: 'center',
+          },
+
+          ':before': {
+            display: 'none',
+          },
+        },
+      },
+    },
   },
 })
