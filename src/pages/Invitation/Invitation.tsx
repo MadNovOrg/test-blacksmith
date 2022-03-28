@@ -62,7 +62,8 @@ export const InvitationPage = () => {
 
   const { data, error, mutate } = useSWR<GetInviteResponseType, GqlError>(
     token ? GET_INVITE_QUERY : null,
-    (query, variables) => gqlRequest(query, variables, token, 'x-auth')
+    (query, variables) =>
+      gqlRequest(query, variables, { headers: { 'x-auth': `Bearer ${token}` } })
   )
 
   const invite = (data?.invite || {}) as GetInviteResponseType['invite']
@@ -89,8 +90,7 @@ export const InvitationPage = () => {
       await gqlRequest<DeclineInviteResponseType, DeclineInviteParamsType>(
         DECLINE_INVITE_MUTATION,
         { note },
-        token,
-        'x-auth'
+        { headers: { 'x-auth': `Bearer ${token}` } }
       )
       mutate()
     } catch (e) {

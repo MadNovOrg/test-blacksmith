@@ -46,6 +46,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   const value = useMemo(() => {
     return injectACL({
       ...state,
+      activeRole: state.defaultRole,
       loading,
       login,
       logout,

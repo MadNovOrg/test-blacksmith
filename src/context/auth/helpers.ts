@@ -18,7 +18,7 @@ export async function fetchUserProfile(user: CognitoUser) {
     const { profile } = await gqlRequest<{ profile: Profile }>(
       getUserProfile,
       { id: claims['x-hasura-user-id'] },
-      idToken.getJwtToken()
+      { token: idToken.getJwtToken() }
     )
 
     const orgIdsPgLiteral = claims['x-hasura-tt-organizations'] ?? '{}'

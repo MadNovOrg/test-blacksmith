@@ -6,15 +6,15 @@ import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 
 export const useFetcher = () => {
-  const auth = useAuth()
+  const { token, activeRole } = useAuth()
 
   return useCallback(
     function <T, V = Variables>(
       query: RequestDocument,
       variables?: V
     ): Promise<T> {
-      return gqlRequest(query, variables, auth.token)
+      return gqlRequest(query, variables, { token, role: activeRole })
     },
-    [auth.token]
+    [token, activeRole]
   )
 }

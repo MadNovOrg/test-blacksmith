@@ -13,6 +13,7 @@ export type AuthState = {
   organizationIds?: string[]
   defaultRole?: RoleName
   allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
+  activeRole?: RoleName
 }
 
 export interface AuthContextType extends AuthState {
