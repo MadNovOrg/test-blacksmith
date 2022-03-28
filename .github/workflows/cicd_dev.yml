@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+permissions:
+      id-token: write
+      contents: read  
+      
 jobs:
   build:
     name: CI
@@ -46,8 +50,6 @@ jobs:
     uses: ./.github/workflows/pipeline.yml
     secrets:
       service_role_arn: ${{ secrets.IAM_SERVICE_DEV }}
-      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_DEV }}
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_DEV }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_DEV }}

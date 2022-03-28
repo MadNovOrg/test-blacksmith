@@ -13,10 +13,6 @@ on:
         required: true
       service_role_arn:
         required: true
-      aws_access_key_id:
-        required: true
-      aws_secret_access_key:
-        required: true
       hasura_admin_pass:
         required: true
       wp_host:
@@ -35,12 +31,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.aws_access_key_id }}
-          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
           aws-region: eu-west-2
           role-to-assume: ${{ secrets.service_role_arn }}
           role-duration-seconds: 1200
-          role-skip-session-tagging: true
 
       - name: Build
         uses: actions/setup-node@v2

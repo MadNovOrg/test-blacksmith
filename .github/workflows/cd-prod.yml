@@ -3,6 +3,10 @@ name: CD-PROD
 on:
   workflow_dispatch:
 
+permissions:
+      id-token: write
+      contents: read  
+
 jobs:
   prod-cd:
     name: PROD
@@ -14,7 +18,5 @@ jobs:
       wp_host: ${{ secrets.WP_HOST_PROD }}
       s3_bucket: ${{ secrets.S3_BUCKET_PROD }}
       service_role_arn: ${{ secrets.IAM_SERVICE_PROD }}
-      aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_PROD }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
