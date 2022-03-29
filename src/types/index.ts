@@ -65,6 +65,7 @@ export type Organization = {
 
 export type Profile = {
   email: string
+  id: string
   givenName: string
   familyName: string
   fullName: string
@@ -109,6 +110,7 @@ export enum CourseLevel {
   LEVEL_2 = 'LEVEL_2',
   ADVANCED = 'ADVANCED',
   INTERMEDIATE = 'INTERMEDIATE',
+  BILD_ACT = 'BILD_ACT',
 }
 
 export enum CourseDeliveryType {
@@ -216,6 +218,7 @@ export type CourseParticipant = {
   go1EnrolmentStatus: BlendedLearningStatus
   grade?: Grade
   gradingFeedback?: string
+  dateGraded?: string
   gradingModules: CourseParticipantModule[]
 } & Base
 

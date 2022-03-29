@@ -46,6 +46,17 @@ select_permissions:
               profile_id:
                 _eq: X-Hasura-User-Id
   role: trainer
+- permission:
+    columns:
+    - completed
+    - course_participant_id
+    - id
+    - module_id
+    filter:
+      course_participant:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  role: user
 delete_permissions:
 - permission:
     filter:

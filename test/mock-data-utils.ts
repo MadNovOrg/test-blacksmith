@@ -252,6 +252,7 @@ export const buildParticipant = build<CourseParticipant>({
     gradingModules: [buildParticipantModule(), buildParticipantModule()],
     grade: perBuild(() => null),
     gradingFeedback: fake(f => f.random.word()),
+    dateGraded: new Date().toISOString(),
   },
 })
 

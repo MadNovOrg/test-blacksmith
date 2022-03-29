@@ -16,6 +16,7 @@ export const QUERY = gql`
   query GetCourseById($id: uuid!) {
     course: course_by_pk(id: $id) {
       ...Course
+      level
       trainer {
         id
         givenName
@@ -30,6 +31,16 @@ export const QUERY = gql`
       }
       organization {
         ...Organization
+      }
+      dates: schedule_aggregate {
+        aggregate {
+          start: min {
+            date: start
+          }
+          end: max {
+            date: end
+          }
+        }
       }
       moduleGroupIds: modules {
         module {

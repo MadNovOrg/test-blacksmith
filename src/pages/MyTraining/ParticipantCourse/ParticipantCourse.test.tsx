@@ -9,16 +9,28 @@ import {
   buildCourse,
   buildEndedCourse,
   buildNotStartedCourse,
+  buildParticipant,
 } from '@test/mock-data-utils'
 import { LoadingStatus } from '@app/util'
 import { render, screen } from '@test/index'
 
 jest.mock('@app/hooks/useCourse')
 
+const mockUseSWR = jest.fn()
+
+jest.mock('swr', () => ({
+  __esModule: true,
+  default: () => mockUseSWR(),
+}))
+
 const useCourseMock = jest.mocked(useCourse)
 
 describe('page: ParticipantCourse', () => {
   it('displays course hero info', () => {
+    mockUseSWR.mockReturnValue({
+      data: { course_participant: [buildParticipant()] },
+    })
+
     const course = buildCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -45,6 +57,9 @@ describe('page: ParticipantCourse', () => {
   })
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
+    mockUseSWR.mockReturnValue({
+      data: { course_participant: [buildParticipant()] },
+    })
     const course = buildCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -70,6 +85,10 @@ describe('page: ParticipantCourse', () => {
   })
 
   it('displays tabs with course checklist and resources', () => {
+    mockUseSWR.mockReturnValue({
+      data: { course_participant: [buildParticipant()] },
+    })
+
     const course = buildCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -93,6 +112,10 @@ describe('page: ParticipantCourse', () => {
   })
 
   it('has course evaluation button disabled if course has not started yet', () => {
+    mockUseSWR.mockReturnValue({
+      data: { course_participant: [buildParticipant()] },
+    })
+
     const course = buildNotStartedCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -115,6 +138,10 @@ describe('page: ParticipantCourse', () => {
   })
 
   it('has course evaluation button enabled if course has ended', () => {
+    mockUseSWR.mockReturnValue({
+      data: { course_participant: [buildParticipant()] },
+    })
+
     const course = buildEndedCourse()
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),

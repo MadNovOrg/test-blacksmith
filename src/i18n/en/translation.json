@@ -6,7 +6,11 @@
       "level-one": "Level One",
       "level-two": "Level Two",
       "advanced": "Advanced",
-      "bild-act-certified": "BILD ACT Certified"
+      "bild-act-certified": "BILD ACT Certified",
+      "level_1": "Level One",
+      "level_2": "Level Two",
+      "bild_act": "BILD ACT Certified",
+      "intermediate": "Intermediate"
     },
     "filter-by": " Filter By",
     "level": " Level",
@@ -105,7 +109,30 @@
       "confirm-password-invalid": "Confirm password must be same as password",
       "otp-required": "Please enter 6 digit passcode received in email"
     },
-    "course-registration": "Course Registration"
+    "course-registration": "Course Registration",
+    "course-certificate": {
+      "not-graded-yet": "You have not been graded on this course yet. Your certificate will appaear here if you receive a passing grade",
+      "incomplete": "Incomplete",
+      "modules-list-title": "Completed modules and holds",
+      "download-certificate": "Download certificate",
+      "certified-message": "Team Teach Certified",
+      "fail-title": "Fail",
+      "pass-title": "Pass",
+      "observer_only-title": "Observe Only Pass",
+      "assist_only-title": "Assist Only Pass",
+      "certificate-footer": "The certified individual has undertaken a course in the above subject and has been awarded a certificate from Team team ltd. in accordance with the ICM quality award. Team teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
+      "certification-number-message": "Your certification number is ",
+      "certification-valid-until-message": "Your certification is valid until",
+      "title": "CERTIFICATE",
+      "levels-limitation-message": "The individual named above is not qualified to teach or cascade to others any part of the Team Teach programme.",
+      "physical-limitation-message": "Physical techniques are not covered under this certification",
+      "issue-date": "Issue date",
+      "number": "Certification number",
+      "valid-until": "Valid until",
+      "cert-error": "Error generating certificate",
+      "cert-loading": "Loading certificate...",
+      "completed-message": "Has successfully completed the following Team teach course:"
+    }
   },
   "components": {
     "not-found": {
@@ -357,6 +384,8 @@
       }
     },
     "participant-course": {
+      "certification-course-not-ended": "You will see your certificate here once the course is over and you have recvieved a passing grade",
+      "certification-tab-title": "Certification",
       "evaluate-course": "Evaluate course",
       "attending-course-label": "You are attending this course",
       "invite-accepted": "You are now attending this course. Please complete the checklist.",

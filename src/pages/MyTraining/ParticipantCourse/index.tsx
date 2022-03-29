@@ -19,12 +19,18 @@ import { useTranslation } from 'react-i18next'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { styled } from '@mui/system'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import useSWR from 'swr'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 
+import { useAuth } from '@app/context/auth'
+
 import useCourse from '@app/hooks/useCourse'
 
+import { CourseCertification } from './CourseCertification'
+
 import { LoadingStatus, courseEnded } from '@app/util'
+import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -38,6 +44,7 @@ const successAlerts = {
 } as const
 
 export const ParticipantCourse = () => {
+  const { profile } = useAuth()
   const navigate = useNavigate()
   const { id: courseId } = useParams()
   const { t } = useTranslation()
@@ -56,6 +63,10 @@ export const ParticipantCourse = () => {
   const handleActiveTabChange = (_: unknown, newValue: string) => {
     setActiveTab(newValue)
   }
+
+  const profileId = profile?.id
+  const { data } = useSWR([GetParticipant, { profileId, courseId }])
+  const courseParticipant = data?.course_participant
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -77,7 +88,7 @@ export const ParticipantCourse = () => {
       {courseError ? (
         <Alert severity="error">There was an error loading a course.</Alert>
       ) : null}
-      {course ? (
+      {course && courseParticipant ? (
         <>
           <CourseHeroSummary
             course={course}
@@ -127,6 +138,12 @@ export const ParticipantCourse = () => {
                     label={t('pages.participant-course.resources-tab-title')}
                     value="resources"
                   />
+                  <Tab
+                    label={t(
+                      'pages.participant-course.certification-tab-title'
+                    )}
+                    value="certification"
+                  />
                 </TabList>
               </Box>
               <TabPanel
@@ -173,6 +190,31 @@ export const ParticipantCourse = () => {
                 value="resources"
               >
                 {t('pages.participant-course.resources-empty-message')}
+              </TabPanel>
+
+              <TabPanel
+                sx={{ paddingLeft: 0, paddingRight: 0 }}
+                value="certification"
+              >
+                {!courseHasEnded ? (
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    mb={5}
+                  >
+                    <Alert variant="outlined" color="warning" sx={{ mb: 3 }}>
+                      {t(
+                        'pages.participant-course.certification-course-not-ended'
+                      )}
+                    </Alert>
+                  </Box>
+                ) : (
+                  <CourseCertification
+                    courseParticipant={courseParticipant[0]}
+                    course={course}
+                  />
+                )}
               </TabPanel>
             </TabContext>
           </Container>
