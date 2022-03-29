@@ -35,8 +35,8 @@
     "yes": "Yes",
     "no": "No",
     "view": "View",
-	"last-modified": "Last modified {{date}}",
-	"ago": "ago",
+    "last-modified": "Last modified {{date}}",
+    "ago": "ago",
     "course-delivery-type": {
       "F2F": "Face to Face",
       "BLENDED": "Blended",
@@ -75,11 +75,12 @@
       "OBSERVE_ONLY": "Observe only"
     },
     "role-names": {
-      "admin": "Administrator",
-      "org-admin": "Organization Administrator",
+      "user": "User",
       "trainer": "Trainer",
+      "org-admin": "Organization Administrator",
       "tt-ops": "Team Teach Operations",
-      "user": "User"
+      "tt-admin": "Team Teach Administrator",
+      "admin": "Administrator"
     },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
@@ -107,6 +108,10 @@
     "course-registration": "Course Registration"
   },
   "components": {
+    "not-found": {
+      "title": "Page not found",
+      "info": "Please use the main navigation to find you way."
+    },
     "certification-details": {
       "certification-passed": "Certification Passed",
       "course-passed-on": "Course passed on",
@@ -129,6 +134,14 @@
       "closed-course-label": "Closed course",
       "indirect-course-label": "Indirect course",
       "bulk-import-label": "Bulk import open courses"
+    },
+    "role-switcher": {
+      "subtitle": "Switch Role",
+      "user": "User",
+      "trainer": "Trainer",
+      "org-admin": "Organization Admin",
+      "tt-ops": "Team Teach Ops",
+      "tt-admin": "Team Teach Admin"
     }
   },
   "pages": {

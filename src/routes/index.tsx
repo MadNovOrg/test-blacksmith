@@ -1,10 +1,11 @@
-import React, { Suspense, useMemo } from 'react'
+import React, { Suspense, useCallback, useMemo } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { AppLayout } from '@app/components/AppLayout'
+import { NotFound } from '@app/components/NotFound'
 
 import { useAuth } from '@app/context/auth'
 
@@ -14,6 +15,7 @@ import { InvitationPage } from '@app/pages/Invitation'
 import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
+import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
 const MyTrainingRoutes = React.lazy(() => import('./my-training'))
@@ -60,41 +62,64 @@ function LoggedOutRoutes() {
 }
 
 function LoggedInRoutes() {
-  const { acl } = useAuth()
+  const { acl, activeRole } = useAuth()
 
   const startPage = useMemo(() => {
-    if (acl.canViewTrainerBase()) return 'trainer-base'
-    return 'my-training'
-  }, [acl])
+    switch (activeRole ?? RoleName.USER) {
+      case RoleName.USER:
+        return '/my-training'
+      case RoleName.TRAINER:
+        return '/trainer-base'
+      case RoleName.ORG_ADMIN:
+        return '/my-organization'
+      case RoleName.TT_OPS:
+      case RoleName.TT_ADMIN:
+        return '/admin'
+      default:
+        return '/my-profile'
+    }
+  }, [activeRole])
+
+  const Root = useCallback(
+    () => <Navigate replace to={startPage} />,
+    [startPage]
+  )
 
   return (
     <AppLayout>
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
-          <Route path="login" element={<Navigate replace to="/" />} />
-          <Route index element={<Navigate replace to={startPage} />} />
+          <Route index element={<Root />} />
 
           <Route path="my-profile/*" element={<ProfileRoutes />} />
 
-          {acl.canViewMyTraining() ? (
-            <Route path="my-training/*" element={<MyTrainingRoutes />} />
-          ) : null}
+          <Route
+            path="/my-training/*"
+            element={acl.canViewMyTraining() ? <MyTrainingRoutes /> : <Root />}
+          />
 
-          {acl.canViewTrainerBase() ? (
-            <Route path="trainer-base/*" element={<TrainerRoutes />} />
-          ) : null}
+          <Route
+            path="trainer-base/*"
+            element={acl.canViewTrainerBase() ? <TrainerRoutes /> : <Root />}
+          />
 
-          {acl.canViewMyOrganization() ? (
-            <Route path="my-organization/*" element={<MyOrgRoutes />} />
-          ) : null}
+          <Route
+            path="my-organization/*"
+            element={acl.canViewMyOrganization() ? <MyOrgRoutes /> : <Root />}
+          />
 
-          {acl.canViewMembership() ? (
-            <Route path="membership-area/*" element={<MembershipRoutes />} />
-          ) : null}
+          <Route
+            path="membership-area/*"
+            element={acl.canViewMembership() ? <MembershipRoutes /> : <Root />}
+          />
 
-          {acl.canViewAdmin() ? (
-            <Route path="admin/*" element={<AdminRoutes />} />
-          ) : null}
+          <Route
+            path="admin/*"
+            element={acl.canViewAdmin() ? <AdminRoutes /> : <Root />}
+          />
+
+          <Route path="/login/*" element={<Root />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </AppLayout>

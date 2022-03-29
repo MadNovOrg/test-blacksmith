@@ -17,6 +17,8 @@ import { useTranslation } from 'react-i18next'
 import { styled } from '@mui/system'
 import { Button, Tab, Tabs } from '@mui/material'
 
+import { RoleSwitcher } from '@app/components/RoleSwitcher'
+
 import { useAuth } from '@app/context/auth'
 
 import { useMainNavTabs } from '@app/hooks/useMainNavTabs'
@@ -69,16 +71,18 @@ export const AppBar = () => {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box display="flex" alignItems="center">
-            <Logo size={40} data-testid="app-logo" />
             <Link
               underline="none"
               component={RRLink}
               to="/"
-              sx={{ marginLeft: 2 }}
               variant="h5"
+              sx={{ display: 'flex', alignItems: 'center' }}
             >
-              {t('appTitle')}
+              <Logo size={40} data-testid="app-logo" />
+              <Box sx={{ marginLeft: 2 }}>{t('appTitle')}</Box>
             </Link>
+
+            <RoleSwitcher />
           </Box>
 
           <Box

@@ -54,6 +54,7 @@ function waitForText(text: string, timeout?: number): Promise<void> {
 // Re-export everything
 export * from '@testing-library/react'
 export { default as userEvent } from '@testing-library/user-event'
+export * from './mockCognitoToProfile'
 export {
   render,
   defaultProviders as providers,

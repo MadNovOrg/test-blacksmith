@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom'
 
+import '@test/mockCognitoToProfile'
+
 global.afterEach(() => {
-  jest.resetAllMocks()
+  jest.clearAllMocks()
 })

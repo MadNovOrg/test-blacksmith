@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Auth } from 'aws-amplify'
 
-import { fetchUserProfile } from './helpers'
+import { fetchUserProfile, lsActiveRoleClient } from './helpers'
 import type { AuthContextType, CognitoUser, AuthState, E } from './types'
 import { injectACL } from './permissions'
+
+import { RoleName } from '@app/types'
 
 export const AuthContext = React.createContext({} as AuthContextType)
 export const useAuth = () => React.useContext(AuthContext)
@@ -43,15 +45,25 @@ export const AuthProvider: React.FC = ({ children }) => {
     setState({})
   }, [])
 
+  const changeRole = useCallback(
+    (activeRole: RoleName) => {
+      if (!state.profile) return
+
+      lsActiveRoleClient(state.profile).set(activeRole)
+      setState(prev => ({ ...prev, activeRole }))
+    },
+    [state]
+  )
+
   const value = useMemo(() => {
     return injectACL({
       ...state,
-      activeRole: state.defaultRole,
       loading,
       login,
       logout,
+      changeRole,
     })
-  }, [login, logout, state, loading])
+  }, [login, logout, changeRole, state, loading])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

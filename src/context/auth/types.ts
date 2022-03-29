@@ -20,6 +20,7 @@ export interface AuthContextType extends AuthState {
   loading: boolean
   login: (email: string, password: string) => Promise<LoginResult>
   logout: () => Promise<void>
+  changeRole: (role: RoleName) => void
   acl: ACL
 }
 

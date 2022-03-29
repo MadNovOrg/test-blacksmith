@@ -8,7 +8,7 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()
 
   const acl = Object.freeze({
-    isAdmin: () => allowedRoles.has(RoleName.ADMIN),
+    isAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
 
     isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
 
@@ -18,27 +18,27 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     canViewMyTraining: () => {
       const roles = [RoleName.USER]
-      return roles.some(r => allowedRoles.has(r))
+      return roles.some(r => r === auth.activeRole)
     },
 
     canViewTrainerBase: () => {
       const roles = [RoleName.TRAINER]
-      return roles.some(r => allowedRoles.has(r))
+      return roles.some(r => r === auth.activeRole)
     },
 
     canViewMyOrganization: () => {
       const roles = [RoleName.USER, RoleName.ORG_ADMIN]
-      return roles.some(r => allowedRoles.has(r))
+      return roles.some(r => r === auth.activeRole)
     },
 
     canViewMembership: () => {
       const roles = [RoleName.USER, RoleName.TRAINER]
-      return roles.some(r => allowedRoles.has(r))
+      return roles.some(r => r === auth.activeRole)
     },
 
     canViewAdmin: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.ADMIN]
-      return roles.some(r => allowedRoles.has(r))
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
     },
   })
 

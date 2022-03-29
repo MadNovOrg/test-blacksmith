@@ -1,6 +1,8 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
+import { NotFound } from '@app/components/NotFound'
+
 import { TrainerBasePage } from '@app/pages/TrainerBase'
 import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
 import { CourseGrading } from '@app/pages/TrainerBase/components/CourseGrading'
@@ -57,6 +59,8 @@ const TrainerBaseRoutes = () => {
           <Route path="expenses" element={<TrainerExpenses />} />
         </Route>
       </Route>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

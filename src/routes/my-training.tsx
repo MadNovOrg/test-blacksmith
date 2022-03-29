@@ -1,6 +1,8 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
+import { NotFound } from '@app/components/NotFound'
+
 import { MyTrainingPage } from '@app/pages/MyTraining'
 import { ParticipantCourse } from '@app/pages/MyTraining/ParticipantCourse'
 import { AcceptInvite } from '@app/pages/MyTraining/AcceptInvite'
@@ -28,6 +30,8 @@ const MyTrainingRoutes = () => {
         <Route path="resources" element={<MyResources />} />
         <Route path="membership" element={<MyMembership />} />
       </Route>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

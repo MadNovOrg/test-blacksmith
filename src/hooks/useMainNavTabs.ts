@@ -9,7 +9,7 @@ export const useMainNavTabs = () => {
       {
         id: '/my-training',
         title: 'My Training',
-        show: true,
+        show: acl.canViewMyTraining(),
       },
       {
         id: '/trainer-base',
@@ -19,17 +19,17 @@ export const useMainNavTabs = () => {
       {
         id: '/my-organization',
         title: 'My Organization',
-        show: true,
+        show: acl.canViewMyOrganization(),
       },
       {
         id: '/membership-area',
         title: 'Membership Area',
-        show: true,
+        show: acl.canViewMembership(),
       },
       {
         id: '/admin',
         title: 'Admin',
-        show: acl.isAdmin(),
+        show: acl.canViewAdmin(),
       },
     ].filter(t => t.show)
   }, [acl])

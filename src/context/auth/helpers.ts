@@ -1,36 +1,54 @@
-import { gqlRequest } from '@app/lib/gql-request'
+import type { CognitoUser, Profile, AuthState } from './types'
+import cognitoToProfile from './cognitoToProfile'
 
-import type { CognitoUser, Profile, Claims } from './types'
-
-import { getUserProfile } from '@app/queries/users'
 import { RoleName } from '@app/types'
 
-export async function fetchUserProfile(user: CognitoUser) {
+// Roles allowed in switcher
+const ActiveRoles = new Set([
+  RoleName.USER,
+  RoleName.TRAINER,
+  RoleName.ORG_ADMIN,
+  RoleName.TT_OPS,
+  RoleName.TT_ADMIN,
+])
+
+export async function fetchUserProfile(
+  user: CognitoUser
+): Promise<Required<AuthState> | void> {
   try {
-    const session = user.getSignInUserSession()
-    if (!session) return
+    const { profile, claims, token = '' } = await cognitoToProfile(user)
 
-    const idToken = session.getIdToken()
-    const claims = JSON.parse(
-      idToken.payload['https://hasura.io/jwt/claims']
-    ) as Claims
+    if (!profile) {
+      throw Error(`No profile for ${claims?.['x-hasura-user-id'] ?? 'unknown'}`)
+    }
 
-    const { profile } = await gqlRequest<{ profile: Profile }>(
-      getUserProfile,
-      { id: claims['x-hasura-user-id'] },
-      { token: idToken.getJwtToken() }
-    )
+    const defaultRole = RoleName.USER
+    const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
+    const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
+    const lsActiveRole = lsActiveRoleClient(profile)
+    const lsRole = lsActiveRole.get() ?? defaultRole
+    const activeRole = allowedRoles.has(lsRole) ? lsRole : defaultRole
+    lsActiveRole.set(activeRole)
 
-    const orgIdsPgLiteral = claims['x-hasura-tt-organizations'] ?? '{}'
+    const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
 
     return {
-      token: idToken.getJwtToken(),
+      token,
       profile,
       organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
-      defaultRole: claims['x-hasura-default-role'] || RoleName.USER,
-      allowedRoles: new Set(claims['x-hasura-allowed-roles'] ?? []),
+      defaultRole,
+      allowedRoles,
+      activeRole,
     }
   } catch (err) {
     console.error(err)
+  }
+}
+
+export function lsActiveRoleClient({ id }: Profile) {
+  const key = `auth-active-role-${id}`
+  return {
+    get: () => (localStorage.getItem(key) ?? undefined) as RoleName | undefined,
+    set: (role: RoleName) => localStorage.setItem(key, role),
   }
 }

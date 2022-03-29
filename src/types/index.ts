@@ -90,7 +90,6 @@ export enum RoleName {
   // MTA_ADMIN = 'mta-admin',
   TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
-  ADMIN = 'admin',
 }
 
 export enum CourseType {

@@ -36,13 +36,13 @@ describe('component: AppBar', () => {
 
   describe('Trainer Base tab', () => {
     it('hides tab if user does not have proper role', async () => {
-      const allowedRoles = new Set([RoleName.USER])
+      const activeRole = RoleName.USER
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { allowedRoles } }
+        { auth: { activeRole } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -51,13 +51,14 @@ describe('component: AppBar', () => {
     })
 
     it('shows tab if user has proper role', async () => {
+      const activeRole = RoleName.TRAINER
       const allowedRoles = new Set([RoleName.USER, RoleName.TRAINER])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { allowedRoles } }
+        { auth: { allowedRoles, activeRole } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -69,13 +70,13 @@ describe('component: AppBar', () => {
 
   describe('Admin tab', () => {
     it('hides tab if user does not have proper role', async () => {
-      const allowedRoles = new Set([RoleName.USER])
+      const activeRole = RoleName.USER
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { allowedRoles } }
+        { auth: { activeRole } }
       )
 
       const nav = screen.getByTestId('main-nav')
@@ -84,13 +85,14 @@ describe('component: AppBar', () => {
     })
 
     it('shows tab if user has proper role', async () => {
-      const allowedRoles = new Set([RoleName.USER, RoleName.ADMIN])
+      const activeRole = RoleName.TT_ADMIN
+      const allowedRoles = new Set([RoleName.USER, RoleName.TT_ADMIN])
 
       render(
         <MemoryRouter>
           <AppBar />
         </MemoryRouter>,
-        { auth: { allowedRoles } }
+        { auth: { allowedRoles, activeRole } }
       )
 
       const nav = screen.getByTestId('main-nav')
