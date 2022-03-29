@@ -1,4 +1,4 @@
-import { format, isPast } from 'date-fns'
+import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
 
 import { Course } from '@app/types'
 
@@ -41,6 +41,19 @@ export const formatDateForInput = (value: string | Date) => {
     typeof value === 'string' ? new Date(value) : value,
     'yyyy-MM-dd'
   )
+}
+
+export const formatDateForDraft = (
+  value: string | Date,
+  wordToAppend: string
+) => {
+  const date = typeof value === 'string' ? new Date(value) : value
+
+  if (differenceInDays(Date.now(), date) >= 1) {
+    return format(date, 'MMMM d, yyyy')
+  }
+
+  return `${formatDistanceToNow(date)} ${wordToAppend}`
 }
 
 export const formatDurationShort = (durationInMinutes: number) => {

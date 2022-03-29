@@ -12,6 +12,7 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   CircularProgress,
   Typography,
   useTheme,
@@ -41,7 +42,11 @@ import {
   AvailableModule,
   ModuleGroupSlot,
 } from '@app/pages/TrainerBase/components/Course'
-import { formatDurationShort, getPercentage } from '@app/util'
+import {
+  formatDateForDraft,
+  formatDurationShort,
+  getPercentage,
+} from '@app/util'
 import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
 
 type CourseBuilderProps = unknown
@@ -376,6 +381,27 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             }}
           >
             <Box gridColumn="1 / 4">
+              {courseData?.course?.status === CourseStatus.DRAFT && (
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center' }}
+                  mb={{ xs: 2, md: 3 }}
+                >
+                  <Chip
+                    label={t(`course-statuses.${courseData.course.status}`)}
+                    color="secondary"
+                    size="small"
+                    sx={{ marginRight: 2 }}
+                  />
+                  <Typography variant="body2">
+                    {t('common.last-modified', {
+                      date: formatDateForDraft(
+                        courseData.course.updatedAt || new Date(),
+                        t('common.ago')
+                      ),
+                    })}
+                  </Typography>
+                </Box>
+              )}
               <Typography variant="body2">
                 {t('pages.trainer-base.create-course.new-course.description', {
                   duration: maxDuration ? maxDuration / 60 : 0,

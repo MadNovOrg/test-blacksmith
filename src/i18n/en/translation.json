@@ -32,6 +32,8 @@
     "yes": "Yes",
     "no": "No",
     "view": "View",
+	"last-modified": "Last modified {{date}}",
+	"ago": "ago",
     "course-delivery-type": {
       "F2F": "Face to Face",
       "BLENDED": "Blended",
