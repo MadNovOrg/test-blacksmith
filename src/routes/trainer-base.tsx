@@ -27,6 +27,10 @@ const TrainerBaseRoutes = () => {
       <Route element={<TrainerBasePage />}>
         <Route index element={<TrainerDashboard />} />
         <Route path="course" element={<Course />}>
+          <Route path="new" element={<CreateCourse />}>
+            <Route index element={<CreateCourseForm />} />
+            <Route path="assign-trainers" element={<AssignTrainers />} />
+          </Route>
           <Route index element={<MyCourses />} />
           <Route path=":id">
             <Route index element={<Navigate replace to="details" />} />
@@ -49,10 +53,6 @@ const TrainerBaseRoutes = () => {
           <Route path="calendar" element={<TrainerCalendar />} />
           <Route path="availability" element={<TrainerAvailability />} />
           <Route path="expenses" element={<TrainerExpenses />} />
-        </Route>
-        <Route path="new" element={<CreateCourse />}>
-          <Route index element={<CreateCourseForm />} />
-          <Route path="assign-trainers" element={<AssignTrainers />} />
         </Route>
       </Route>
     </Routes>

@@ -33,6 +33,8 @@ export type Claims = {
 
 export type ACL = {
   isAdmin: () => boolean
+  isTTAdmin: () => boolean
+  isTTOps: () => boolean
   isTrainer: () => boolean
   canViewMyTraining: () => boolean
   canViewTrainerBase: () => boolean

@@ -10,6 +10,10 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const acl = Object.freeze({
     isAdmin: () => allowedRoles.has(RoleName.ADMIN),
 
+    isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
+
+    isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
+
     isTrainer: () => allowedRoles.has(RoleName.TRAINER),
 
     canViewMyTraining: () => {

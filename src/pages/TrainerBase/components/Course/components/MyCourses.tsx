@@ -23,6 +23,8 @@ import { TableHead } from '@app/components/Table/TableHead'
 
 import { useAuth } from '@app/context/auth'
 
+import { CreateCourseMenu } from '../../CreateCourseMenu'
+
 import {
   QUERY as GetMyCourses,
   ResponseType as GetMyCoursesResponseType,
@@ -189,10 +191,19 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
         </Box>
 
         <Box flex={1}>
-          <Typography variant="h5">{t('my-courses')}</Typography>
-          <Typography variant="subtitle2">
-            {t('x-items', { num: data?.course?.length })}
-          </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box>
+              <Typography variant="h5">{t('my-courses')}</Typography>
+              <Typography variant="subtitle2">
+                {t('x-items', { num: data?.course?.length })}
+              </Typography>
+            </Box>
+            <CreateCourseMenu />
+          </Box>
 
           <Box mt={4}>
             <TextField

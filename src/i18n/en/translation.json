@@ -119,6 +119,13 @@
     },
     "suspense-loading": {
       "text": "Loading..."
+    },
+    "create-course-menu": {
+      "button-text": "Create course",
+      "open-course-label": "Open course",
+      "closed-course-label": "Closed course",
+      "indirect-course-label": "Indirect course",
+      "bulk-import-label": "Bulk import open courses"
     }
   },
   "pages": {
