@@ -37,6 +37,7 @@ import {
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
 import { Grade } from '@app/types'
+import { CourseDetailsTabs } from '@app/pages/TrainerBase/components/CourseDetails'
 
 export const CourseGrading = () => {
   const { id: courseId } = useParams()
@@ -159,7 +160,9 @@ export const CourseGrading = () => {
       })
 
       localStorage.removeItem(STORAGE_KEY)
-      navigate(`/trainer-base/course/${courseId}/details`)
+      navigate(
+        `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+      )
     } catch (err) {
       setSavingGradesStatus(LoadingStatus.ERROR)
     }
@@ -210,7 +213,9 @@ export const CourseGrading = () => {
                 startIcon={<ArrowBackIcon />}
                 sx={{ marginBottom: 2 }}
                 onClick={() =>
-                  navigate(`/trainer-base/course/${courseId}/details`)
+                  navigate(
+                    `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+                  )
                 }
               >
                 {t('pages.course-grading-details.back-button-text')}

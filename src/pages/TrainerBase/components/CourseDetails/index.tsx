@@ -25,11 +25,11 @@ import { CourseAttendees } from '@app/pages/TrainerBase/components/CourseDetails
 import { CourseGrading } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseGrading'
 import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
 
-const CourseDetailsTabs = {
-  ATTENDEES: 'ATTENDEES',
-  GRADING: 'GRADING',
-  EVALUATION: 'EVALUATION',
-} as const
+export enum CourseDetailsTabs {
+  ATTENDEES = 'ATTENDEES',
+  GRADING = 'GRADING',
+  EVALUATION = 'EVALUATION',
+}
 
 const StyledTabList = styled(TabList)(({ theme }) => ({
   padding: theme.spacing(1, 0),
@@ -71,9 +71,10 @@ export const CourseDetails = () => {
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
 
-  const [selectedTab, setSelectedTab] = useState<
-    keyof typeof CourseDetailsTabs
-  >(CourseDetailsTabs.ATTENDEES)
+  const tabToSelect = (searchParams.get('tab') ??
+    CourseDetailsTabs.ATTENDEES) as CourseDetailsTabs
+
+  const [selectedTab, setSelectedTab] = useState<CourseDetailsTabs>(tabToSelect)
 
   const {
     status: courseLoadingStatus,
@@ -124,9 +125,7 @@ export const CourseDetails = () => {
                     <StyledTabList
                       onChange={(
                         _,
-                        selectedTab: React.SetStateAction<
-                          keyof typeof CourseDetailsTabs
-                        >
+                        selectedTab: React.SetStateAction<CourseDetailsTabs>
                       ) => setSelectedTab(selectedTab)}
                     >
                       <StyledTab
