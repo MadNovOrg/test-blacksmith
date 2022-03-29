@@ -64,4 +64,13 @@ describe('component: RoleSwitcher', () => {
       expect(screen.queryByTestId('RoleSwitcher-list')).not.toBeInTheDocument()
     })
   })
+
+  it('returns null if user has only one role', async () => {
+    const activeRole = RoleName.USER
+    const allowedRoles = new Set([RoleName.USER])
+
+    render(<RoleSwitcher />, { auth: { allowedRoles, activeRole } })
+
+    expect(screen.queryByTestId('RoleSwitcher-btn')).not.toBeInTheDocument()
+  })
 })

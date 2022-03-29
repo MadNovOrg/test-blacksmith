@@ -26,6 +26,8 @@ export const RoleSwitcher = () => {
     navigate('/')
   }
 
+  if (!roles.length) return null
+
   return (
     <>
       <Button
