@@ -5,15 +5,13 @@ configuration:
   comment: null
   custom_column_names:
     course_id: courseId
+    profile_id: profileId
     question_id: questionId
   custom_root_fields: {}
 object_relationships:
 - name: course
   using:
     foreign_key_constraint_on: course_id
-- name: course_evaluation_question
-  using:
-    foreign_key_constraint_on: question_id
 - name: participant
   using:
     manual_configuration:
@@ -27,6 +25,9 @@ object_relationships:
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
+- name: question
+  using:
+    foreign_key_constraint_on: question_id
 insert_permissions:
 - permission:
     backend_only: false
@@ -58,6 +59,23 @@ insert_permissions:
       profile_id: x-hasura-User-Id
   role: user
 select_permissions:
+- permission:
+    columns:
+    - answer
+    - course_id
+    - id
+    - profile_id
+    - question_id
+    filter:
+      _or:
+      - course:
+          trainer_profile_id:
+            _eq: X-Hasura-User-Id
+      - course:
+          leaders:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  role: trainer
 - permission:
     columns:
     - answer

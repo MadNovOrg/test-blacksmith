@@ -1,14 +1,61 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Container } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import useSWR from 'swr'
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Link,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material'
+
+import { TableHead } from '@app/components/Table/TableHead'
+
+import {
+  QUERY as GET_EVALUATION_QUERY,
+  ResponseType as GetEvaluationResponseType,
+  ParamsType as GetEvaluationParamsType,
+} from '@app/queries/course-evaluation/get-evaluations'
+import { SortOrder } from '@app/types'
+import { noop } from '@app/util'
 
 export const EvaluationSummary = () => {
   const navigate = useNavigate()
+  const params = useParams()
   const { t } = useTranslation()
+  const courseId = params.id as string
+
+  const cols = useMemo(
+    () => [
+      { id: 'name', label: t('name') },
+      { id: 'contact', label: t('contact') },
+      { id: 'org', label: t('organization') },
+      { id: 'evaluation', label: t('evaluation') },
+    ],
+    [t]
+  )
+
+  const [order] = useState<SortOrder>('asc')
+  const [orderBy] = useState(cols[0].id)
+
+  const { data, error } = useSWR<
+    GetEvaluationResponseType,
+    Error,
+    [string, GetEvaluationParamsType]
+  >([GET_EVALUATION_QUERY, { courseId }])
+  const loading = !data && !error
 
   return (
-    <Container sx={{ py: 2 }}>
+    <Container>
       <Alert
         variant="outlined"
         color="warning"
@@ -23,10 +70,71 @@ export const EvaluationSummary = () => {
             {t('course-evaluation.complete-my-evaluation')}
           </Button>
         }
-        sx={{ py: 1, '.MuiAlert-action': { alignItems: 'center', p: 0 } }}
+        sx={{
+          py: 1,
+          mb: 2,
+          '.MuiAlert-action': { alignItems: 'center', p: 0 },
+        }}
       >
         {t('course-evaluation.trainer-evaluate')}
       </Alert>
+
+      <Box>
+        <Typography variant="subtitle1">
+          {t('pages.course-details.tabs.evaluation.title')}
+        </Typography>
+        <Typography variant="body1" color="grey.500">
+          {t('pages.course-details.tabs.evaluation.desc')}
+        </Typography>
+
+        <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
+          <Table sx={{ minWidth: 650 }} data-testid="courses-table">
+            <TableHead
+              cols={cols}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={noop}
+              sx={{
+                '& .MuiTableRow-root': {
+                  backgroundColor: 'grey.300',
+                },
+              }}
+            />
+            <TableBody>
+              {data?.evaluations?.map(e => (
+                <TableRow key={e.id}>
+                  <TableCell>{e.profile.fullName}</TableCell>
+                  <TableCell>{e.profile.email}</TableCell>
+                  <TableCell>
+                    {e.profile.organizations
+                      ?.map(o => o.organization.name)
+                      .join(', ')}
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      href={`../view-evaluation?profile_id=${e.profileId}`}
+                      variant="body2"
+                      fontWeight="600"
+                      color="primary"
+                    >
+                      {t(
+                        'pages.course-details.tabs.evaluation.view-evaluation'
+                      )}
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              )) ??
+                (loading && (
+                  <TableRow>
+                    <TableCell colSpan={9} align="center">
+                      <CircularProgress />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Container>
   )
 }

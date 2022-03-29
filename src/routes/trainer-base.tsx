@@ -20,6 +20,7 @@ import { MyCalendar as TrainerCalendar } from '@app/pages/TrainerBase/components
 import { ManageAvailability as TrainerAvailability } from '@app/pages/TrainerBase/components/Management/components/ManageAvailability'
 import { ManageExpenses as TrainerExpenses } from '@app/pages/TrainerBase/components/Management/components/ManageExpenses'
 import { ParticipantGrading } from '@app/pages/TrainerBase/components/CourseGrading/components/ParticipantGrading'
+import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
 
 const TrainerBaseRoutes = () => {
   return (
@@ -36,6 +37,7 @@ const TrainerBaseRoutes = () => {
             <Route index element={<Navigate replace to="details" />} />
             <Route path="modules" element={<CourseBuilder />} />
             <Route path="details" element={<CourseDetails />} />
+            <Route path="view-evaluation" element={<CourseEvaluation />} />
             <Route path="grading" element={<CourseGrading />} />
             <Route
               path="grading/:participantId"

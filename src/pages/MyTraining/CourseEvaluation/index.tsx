@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   Container,
   FormHelperText,
@@ -36,6 +36,11 @@ import {
   ResponseType as GetCourseEvaluationQuestionsResponseType,
 } from '@app/queries/course-evaluation/get-questions'
 import {
+  QUERY as GET_ANSWERS_QUERY,
+  ParamsType as GetAnswersParamsType,
+  ResponseType as GetAnswersResponseType,
+} from '@app/queries/course-evaluation/get-answers'
+import {
   MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
   ResponseType as SaveCourseEvaluationResponseType,
 } from '@app/queries/course-evaluation/save-evaluation'
@@ -62,8 +67,12 @@ export const CourseEvaluation = () => {
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
-  const { id: courseId } = useParams()
+  const params = useParams()
+  const [searchParams] = useSearchParams()
   const { profile } = useAuth()
+  const courseId = params.id as string
+  const profileId = searchParams.get('profile_id') as string
+  const readOnly = !!profileId
 
   const { data: course } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
@@ -71,6 +80,11 @@ export const CourseEvaluation = () => {
   const { data: questions } = useSWR<GetCourseEvaluationQuestionsResponseType>(
     GET_COURSE_EVALUATION_QUESTIONS_QUERY
   )
+  const { data: evaluation } = useSWR<
+    GetAnswersResponseType,
+    Error,
+    [string, GetAnswersParamsType] | null
+  >(profileId ? [GET_ANSWERS_QUERY, { courseId, profileId }] : null)
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
     questions?.questions,
@@ -116,6 +130,17 @@ export const CourseEvaluation = () => {
     watch,
     formState: { errors },
   } = useForm<Record<string, string>>({ resolver: yupResolver(schema) })
+
+  useEffect(() => {
+    if (!evaluation?.answers) return
+
+    evaluation.answers.forEach(a => {
+      if (a.question.type === CourseEvaluationQuestionType.BOOLEAN_REASON_N) {
+        setValue
+      }
+      setValue(a.question.id, a.answer)
+    })
+  }, [setValue, evaluation])
 
   const values = watch()
 
@@ -166,6 +191,10 @@ export const CourseEvaluation = () => {
               <Typography variant="h6" gutterBottom>
                 {course?.name}
               </Typography>
+
+              <Box>
+                <Typography variant="body1">Attendee</Typography>
+              </Box>
             </Box>
           </Grid>
 
@@ -189,6 +218,7 @@ export const CourseEvaluation = () => {
                       setValue(q.id, v ? `${v}` : '')
                     }}
                     error={errors[q.id]?.message}
+                    readOnly={readOnly}
                   />
                 ))}
               </QuestionGroup>
@@ -204,12 +234,15 @@ export const CourseEvaluation = () => {
                   >
                     <BooleanQuestion
                       value={((values[q.id] ?? '') as string).split('-')[0]}
-                      reason=""
+                      reason={
+                        ((values[q.id] ?? '') as string).split('-')[1] ?? ''
+                      }
                       type={q.type}
                       onChange={(value, reason) =>
                         setValue(q.id, `${value}-${reason}`)
                       }
                       infoText={t('course-evaluation.provide-details')}
+                      disabled={readOnly}
                     />
                   </QuestionGroup>
                 )
@@ -228,6 +261,7 @@ export const CourseEvaluation = () => {
                       placeholder={t('course-evaluation.your-response')}
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
                       {...register(q.id)}
+                      disabled={readOnly}
                     />
                   </QuestionGroup>
                 )
@@ -236,62 +270,67 @@ export const CourseEvaluation = () => {
               return null
             })}
 
-            <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
-              {t('course-evaluation.signature')}
-            </Typography>
-            <Typography variant="body1" color="grey.600" gutterBottom>
-              {t('course-evaluation.signature-desc')}
-            </Typography>
-
-            {signatureQuestion && (
-              <TextField
-                sx={{ mt: 1 }}
-                variant="standard"
-                placeholder="Full name"
-                inputProps={{ sx: { bgcolor: 'common.white', px: 1, py: 1.5 } }}
-                fullWidth
-                {...register(signatureQuestion.id)}
-                error={!!errors[signatureQuestion.id]}
-                helperText={errors[signatureQuestion.id]?.message}
-              />
+            {!readOnly && signatureQuestion && (
+              <>
+                <Typography variant="h6" gutterBottom sx={{ mt: 6 }}>
+                  {t('course-evaluation.signature')}
+                </Typography>
+                <Typography variant="body1" color="grey.600" gutterBottom>
+                  {t('course-evaluation.signature-desc')}
+                </Typography>
+                <TextField
+                  sx={{ mt: 1 }}
+                  variant="standard"
+                  placeholder="Full name"
+                  inputProps={{
+                    sx: { bgcolor: 'common.white', px: 1, py: 1.5 },
+                  }}
+                  fullWidth
+                  {...register(signatureQuestion.id)}
+                  error={!!errors[signatureQuestion.id]}
+                  helperText={errors[signatureQuestion.id]?.message}
+                />
+              </>
             )}
           </Grid>
         </Grid>
 
-        <Box
-          sx={{ mt: 6 }}
-          alignItems="center"
-          display="flex"
-          flexDirection="column"
-        >
-          <LoadingButton
-            loading={loading}
-            type="submit"
-            variant="contained"
-            color="primary"
-            data-testid="submit-course-evaluation"
-            size="large"
+        {!readOnly ? (
+          <Box
+            sx={{ mt: 6 }}
+            alignItems="center"
+            display="flex"
+            flexDirection="column"
           >
-            {t('course-evaluation.submit')}
-          </LoadingButton>
+            <LoadingButton
+              loading={loading}
+              type="submit"
+              variant="contained"
+              color="primary"
+              data-testid="submit-course-evaluation"
+              size="large"
+            >
+              {t('course-evaluation.submit')}
+            </LoadingButton>
 
-          {error && (
-            <Box mt={2}>
-              <FormHelperText error>{error}</FormHelperText>
-            </Box>
-          )}
+            {error && (
+              <Box mt={2}>
+                <FormHelperText error>{error}</FormHelperText>
+              </Box>
+            )}
 
-          <Typography
-            maxWidth={600}
-            color="grey.500"
-            sx={{ mt: 4 }}
-            gutterBottom={true}
-            align="center"
-            variant="body2"
-          >
-            {t('course-evaluation.disclaimer')}
-          </Typography>
-        </Box>
+            <Typography
+              maxWidth={600}
+              color="grey.500"
+              sx={{ mt: 4 }}
+              gutterBottom={true}
+              align="center"
+              variant="body2"
+            >
+              {t('course-evaluation.disclaimer')}
+            </Typography>
+          </Box>
+        ) : null}
       </Container>
     </Box>
   )

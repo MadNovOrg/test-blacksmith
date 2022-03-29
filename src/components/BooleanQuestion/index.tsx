@@ -14,6 +14,7 @@ type BooleanQuestionProps = {
   reason: string
   onChange: (value: string, reason: string) => void
   infoText?: string
+  disabled?: boolean
 }
 
 const style = {
@@ -35,6 +36,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
   reason,
   onChange,
   infoText,
+  disabled = false,
 }) => {
   const { t } = useTranslation()
 
@@ -51,12 +53,14 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
           value="YES"
           control={<Radio />}
           label={t<string>('yes')}
+          disabled={disabled}
         />
         <FormControlLabel
           sx={style}
           value="NO"
           control={<Radio />}
           label={t<string>('no')}
+          disabled={disabled}
         />
       </RadioGroup>
       {type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&
@@ -70,6 +74,8 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
               error={false}
               fullWidth
               inputProps={{ sx: { px: 1, py: 1.5 } }}
+              value={reason}
+              disabled={disabled}
             />
           </Box>
         )}
@@ -77,10 +83,15 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
         value === 'NO' && (
           <Box mt={2}>
             <TextField
+              sx={{ bgcolor: 'common.white', mt: 1 }}
               onChange={event => onChange(value, event.target.value)}
               variant="standard"
               placeholder={infoText}
               error={false}
+              fullWidth
+              inputProps={{ sx: { px: 1, py: 1.5 } }}
+              value={reason}
+              disabled={disabled}
             />
           </Box>
         )}

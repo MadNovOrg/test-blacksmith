@@ -48,7 +48,7 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
 
   return (
     <>
-      <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
+      <Container>
         {!course ||
         courseParticipantsLoadingStatus === LoadingStatus.FETCHING ? (
           <Stack
@@ -108,16 +108,16 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
                 />
               </TabList>
 
-              <TabPanel value="0">
+              <TabPanel value="0" sx={{ px: 0 }}>
                 <AttendingTab course={course} />
               </TabPanel>
-              <TabPanel value="1">
+              <TabPanel value="1" sx={{ px: 0 }}>
                 <InvitesTab
                   course={course}
                   inviteStatus={InviteStatus.PENDING}
                 />
               </TabPanel>
-              <TabPanel value="2">
+              <TabPanel value="2" sx={{ px: 0 }}>
                 <InvitesTab
                   course={course}
                   inviteStatus={InviteStatus.DECLINED}

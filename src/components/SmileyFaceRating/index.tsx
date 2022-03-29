@@ -62,11 +62,13 @@ const IconContainer: React.FC<IconContainerProps> = ({
 export type SmileyFaceRatingProps = {
   value: string
   onChange: (_: number | null) => void
+  readOnly?: boolean
 }
 
 export const SmileyFaceRating: React.FC<SmileyFaceRatingProps> = ({
   value,
   onChange,
+  readOnly = false,
 }) => {
   return (
     <Rating
@@ -76,6 +78,7 @@ export const SmileyFaceRating: React.FC<SmileyFaceRatingProps> = ({
       IconContainerComponent={IconContainer}
       highlightSelectedOnly
       size="large"
+      readOnly={readOnly}
     />
   )
 }

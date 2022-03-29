@@ -12,7 +12,10 @@
     "level": " Level",
     "role": "Role",
     "course-name": "Course Name",
+    "contact": "Contact",
     "organization": "Organization",
+    "evaluation": "Evaluation",
+    "name": "Name",
     "course-type": "Course Type",
     "course-status": "Course Status",
     "bl-status": "Blended Learning Status",
@@ -215,7 +218,9 @@
           "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading."
         },
         "evaluation": {
-          "title": "Evaluation Summary"
+          "title": "Evaluation Summary",
+          "desc": "View an attendee's course evaluation and a summary of all evaluations.",
+          "view-evaluation": "View Evaluation"
         }
       }
     },
