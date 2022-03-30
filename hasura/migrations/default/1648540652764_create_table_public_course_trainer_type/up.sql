@@ -2,6 +2,8 @@ CREATE TABLE "public"."course_trainer_type" ("name" text NOT NULL, PRIMARY KEY (
 
 INSERT INTO "public"."course_trainer_type"("name") VALUES (E'LEADER'), (E'ASSISTANT'), (E'MODERATOR');
 
+UPDATE "public"."course_leader" SET type = UPPER(type);
+
 alter table "public"."course_leader"
     add constraint "course_leader_type_fkey"
         foreign key ("type")
