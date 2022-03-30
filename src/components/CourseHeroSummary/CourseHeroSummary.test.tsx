@@ -172,7 +172,7 @@ describe('component: CourseHeroSummary', () => {
 
     expect(
       screen.getByText(
-        `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.address.city}`
+        `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.city}`
       )
     ).toBeInTheDocument()
   })

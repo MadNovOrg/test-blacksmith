@@ -84,7 +84,12 @@ export const buildVenue = build<Venue>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     name: fake(f => f.random.words(3)),
-    address: { city: fake(f => f.address.city()) },
+    city: fake(f => f.address.city()),
+    addressLineOne: fake(f => f.address.streetAddress()),
+    postCode: fake(f => f.address.zipCode()),
+    geoCoordinates: fake(
+      f => `(${f.address.latitude()},${f.address.longitude()})`
+    ),
   },
 })
 

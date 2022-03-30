@@ -34,7 +34,7 @@ export const MyCalendar: React.FC<MyCalendarProps> = () => {
         name: s.name,
         start: s.start,
         end: s.end,
-        address: s.venue.address,
+        city: s.venue.city,
         attendees: c.participants.aggregate.count,
       }))
     })
@@ -94,7 +94,7 @@ export const MyCalendar: React.FC<MyCalendarProps> = () => {
               >
                 {/* TODO: find out color logic for events */}
                 <EventCard startDate={s.start} endDate={s.end}>
-                  <Typography variant="body2">{s.address['city']}</Typography>
+                  <Typography variant="body2">{s.city}</Typography>
                   <Typography variant="body2">{s.name}</Typography>
                   <Typography variant="body2">
                     {s.attendees} Attendees

@@ -4,7 +4,11 @@ table:
 configuration:
   comment: null
   custom_column_names:
+    address_line_one: addressLineOne
+    address_line_two: addressLineTwo
     created_at: createdAt
+    geo_coordinates: geoCoordinates
+    post_code: postCode
     updated_at: updatedAt
   custom_root_fields: {}
 array_relationships:
@@ -18,12 +22,15 @@ array_relationships:
 select_permissions:
 - permission:
     columns:
-    - id
+    - address_line_one
+    - address_line_two
+    - city
     - created_at
-    - updated_at
+    - geo_coordinates
+    - id
     - name
-    - address
-    - geoCoordinates
+    - post_code
+    - updated_at
     filter:
       schedule:
         course:
@@ -35,10 +42,14 @@ select_permissions:
   role: anonymous
 - permission:
     columns:
-    - address
-    - name
+    - address_line_one
+    - address_line_two
+    - city
     - created_at
-    - updated_at
+    - geo_coordinates
     - id
+    - name
+    - post_code
+    - updated_at
     filter: {}
   role: user

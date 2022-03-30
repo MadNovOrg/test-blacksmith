@@ -75,7 +75,7 @@ export const InvitationPage = () => {
     new Date(invite.startDate)
   )
 
-  const address = invite.venueAddress // TODO: can be an array
+  const address = invite.venueAddress
 
   const handleSubmit = async () => {
     if (response === 'yes') {
@@ -206,7 +206,7 @@ export const InvitationPage = () => {
                 {address?.addressLineTwo || ''}
               </Typography>
               <Typography variant="body2">{address?.city || ''}</Typography>
-              <Typography variant="body2">{address?.country || ''}</Typography>
+              <Typography variant="body2">{address?.postCode || ''}</Typography>
             </Box>
           </Box>
         </Box>

@@ -37,9 +37,9 @@ INSERT INTO public.course_leader (profile_id, course_id, type) VALUES
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', '6770c5e1-f21b-45e9-a1f4-084b079937ec', 'LEADER'),
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', '64abf3d3-b7ab-4d8e-b625-bf921ecf5ebc', 'LEADER');
 
-INSERT INTO public.venue (id, name, address, "geoCoordinates") VALUES
-('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', '{ "city": "New York", "country": "America", "addressLineOne": "10 Whitehart Lane", "addressLineTwo": "Kings Street" }'::jsonb, '(40.730610, -73.935242)'::point),
-('2fa3a402-3aa0-4d7a-bbf9-e3dda59cd18b', 'Queen Elizabeth II Centre', '{ "city": "New York", "country": "America", "addressLineOne": "10 Whitehart Lane", "addressLineTwo": "Kings Street" }'::jsonb, '(40.730610, -73.935242)'::point);
+INSERT INTO public.venue (id, name, city, address_line_one, address_line_two, post_code, geo_coordinates) VALUES
+('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point),
+('2fa3a402-3aa0-4d7a-bbf9-e3dda59cd18b', 'Queen Elizabeth II Centre', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point);
 
 INSERT INTO public.course_schedule (name, type, start, "end", course_id, venue_id) VALUES
 ('name', 'PHYSICAL', '2022-04-05T09:00:00+00:00', '2022-04-05T17:00:00+00:00', '45045398-f757-4ece-85c0-bdf2d95d7cee', 'bd4e4af5-8822-485c-bf48-16fe0d50729b'),

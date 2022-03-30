@@ -181,12 +181,11 @@ export type Availability = {
 export type Venue = {
   id: string
   name: string
-  address: {
-    addressLineOne: string
-    addressLineTwo: string
-    city: string
-    country: string
-  }
+  addressLineOne: string
+  addressLineTwo?: string
+  city: string
+  postCode: string
+  geoCoordinates: string
 }
 
 export type TrainerSchedule = {

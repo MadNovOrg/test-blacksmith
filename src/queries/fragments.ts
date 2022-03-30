@@ -115,6 +115,10 @@ export const VENUE = gql`
     createdAt
     updatedAt
     name
-    address
+    city
+    addressLineOne
+    addressLineTwo
+    postCode
+    geoCoordinates
   }
 `

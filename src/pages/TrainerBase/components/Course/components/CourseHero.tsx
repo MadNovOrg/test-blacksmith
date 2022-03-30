@@ -22,7 +22,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
     )
     if (data.schedule[0].venue) {
       const venue = data.schedule[0].venue
-      location = [venue.name, venue.address?.city].join(', ')
+      location = [venue.name, venue.city].join(', ')
     }
   }
 

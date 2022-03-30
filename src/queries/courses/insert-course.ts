@@ -34,18 +34,7 @@ export type ParamsType = {
           type: string
           start: Date
           end: Date
-          venue: {
-            data: {
-              name: string
-              address?: {
-                city?: string
-                country?: string
-                addressLineOne?: string
-                addressLineTwo?: string
-              }
-              geoCoordinates: string
-            }
-          }
+          venue_id: string
         }
       ]
     }
