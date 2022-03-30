@@ -395,19 +395,6 @@ VALUES (
     ),
     (
         'Experiencing Feeling',
-        'LEVEL_1',
-        'THEORY', (
-            SELECT
-                id
-            FROM
-                module_group
-            WHERE
-                name = 'Personal Space & Body Language' AND
-                course_level = 'LEVEL_1'
-        )
-    ),
-    (
-        'Experiencing Feeling',
         'LEVEL_2',
         'THEORY', (
             SELECT
