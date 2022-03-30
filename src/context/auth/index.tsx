@@ -47,10 +47,12 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const changeRole = useCallback(
     (activeRole: RoleName) => {
-      if (!state.profile) return
+      if (!state.profile) return state.activeRole
+      if (!state.allowedRoles?.has(activeRole)) return state.activeRole
 
       lsActiveRoleClient(state.profile).set(activeRole)
       setState(prev => ({ ...prev, activeRole }))
+      return activeRole
     },
     [state]
   )

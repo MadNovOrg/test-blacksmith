@@ -1,4 +1,4 @@
-import type { CognitoUser, Profile, AuthState } from './types'
+import type { CognitoUser, AuthState } from './types'
 import cognitoToProfile from './cognitoToProfile'
 
 import { RoleName } from '@app/types'
@@ -45,9 +45,10 @@ export async function fetchUserProfile(
   }
 }
 
-export function lsActiveRoleClient({ id }: Profile) {
-  const key = `auth-active-role-${id}`
+export function lsActiveRoleClient({ id }: { id: string }) {
+  const key = `auth-active-role-${id ?? ''}`
   return {
+    key,
     get: () => (localStorage.getItem(key) ?? undefined) as RoleName | undefined,
     set: (role: RoleName) => localStorage.setItem(key, role),
   }

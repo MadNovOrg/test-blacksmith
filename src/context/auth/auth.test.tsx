@@ -1,7 +1,7 @@
 import { Auth } from 'aws-amplify'
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react-hooks'
 
-import { ActiveRoles } from './helpers'
+import { ActiveRoles, lsActiveRoleClient } from './helpers'
 
 import { useAuth, AuthProvider } from './index'
 
@@ -15,6 +15,8 @@ import { RoleName } from '@app/types'
 const render = () => {
   return renderHook(() => useAuth(), { wrapper: AuthProvider })
 }
+
+const lsKey = (id: string) => lsActiveRoleClient({ id }).key
 
 describe('context: Auth', () => {
   it('returns expected shape', async () => {
@@ -86,7 +88,9 @@ describe('context: Auth', () => {
   })
 
   it('stores activeRole in localStorage', async () => {
-    const lsSet = jest.spyOn(window.localStorage.__proto__, 'setItem')
+    const key = lsKey(defaultCognitoProfile.profile?.id ?? '')
+    expect(localStorage.getItem(key)).toBeNull()
+
     const roles = [RoleName.USER, RoleName.TRAINER]
     mockCognitoToProfile({ claims: { 'x-hasura-allowed-roles': roles } })
 
@@ -94,13 +98,13 @@ describe('context: Auth', () => {
     await waitForNextUpdate()
 
     expect(result.current.activeRole).toBe(RoleName.USER)
-    const key = `auth-active-role-${defaultCognitoProfile.profile?.id}`
-    expect(lsSet).toBeCalledWith(key, RoleName.USER)
+    expect(localStorage.getItem(key)).toBe(result.current.activeRole)
   })
 
   it('gets activeRole from localStorage', async () => {
-    const key = `auth-active-role-${defaultCognitoProfile.profile?.id}`
+    const key = lsKey(defaultCognitoProfile.profile?.id ?? '')
     localStorage.setItem(key, RoleName.TRAINER)
+
     const roles = [RoleName.USER, RoleName.TRAINER]
     mockCognitoToProfile({
       claims: {
@@ -113,5 +117,163 @@ describe('context: Auth', () => {
     await waitForNextUpdate()
 
     expect(result.current.activeRole).toBe(RoleName.TRAINER)
+    expect(localStorage.getItem(key)).toBe(result.current.activeRole)
+  })
+
+  it('parses organization ids as expected', async () => {
+    const [id1, id2] = [chance.guid(), chance.guid()]
+    mockCognitoToProfile({
+      claims: { 'x-hasura-tt-organizations': `{"${id1}", "${id2}"}` },
+    })
+
+    const { result, waitForNextUpdate } = render()
+    await waitForNextUpdate()
+
+    expect(result.current.organizationIds).toStrictEqual([id1, id2])
+  })
+
+  describe('login', () => {
+    it('logs in when inputs are valid', async () => {
+      const [email, pass] = [chance.email(), chance.string()]
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+      await act(result.current.logout)
+      expect(result.current.token).toBeUndefined()
+
+      mockCognitoToProfile({ profile: { email } })
+      await act(async () => {
+        await result.current.login(email, pass)
+      })
+
+      expect(Auth.signIn).toBeCalledWith(email, pass)
+      expect(result.current.profile?.email).toBe(email)
+    })
+
+    it('returns error if Auth.signIn fails', async () => {
+      const [email, pass] = [chance.email(), chance.string()]
+      const signInMock = jest.mocked(Auth.signIn)
+      signInMock.mockRejectedValueOnce(Error('Failed for tests'))
+      const cognitoToProfileMock = mockCognitoToProfile({})
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+      await act(result.current.logout)
+
+      expect(cognitoToProfileMock).toBeCalledTimes(1)
+
+      const resp = await result.current.login(email, pass)
+      expect(resp).toStrictEqual({ error: Error('Failed for tests') })
+      expect(cognitoToProfileMock).toBeCalledTimes(1) // not called again
+    })
+
+    it('returns error if profile GraphQL fails', async () => {
+      jest.spyOn(console, 'error').mockImplementation(() => null)
+
+      const [email, pass] = [chance.email(), chance.string()]
+      const cognitoToProfileMock = mockCognitoToProfile({})
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+      await act(result.current.logout)
+
+      expect(cognitoToProfileMock).toBeCalledTimes(1)
+
+      cognitoToProfileMock.mockRejectedValueOnce(Error('Failed for tests'))
+
+      await act(async () => {
+        const resp = await result.current.login(email, pass)
+        expect(resp).toStrictEqual({ error: undefined })
+      })
+
+      expect(cognitoToProfileMock).toBeCalledTimes(2)
+      expect(console.error).toBeCalledWith(Error('Failed for tests'))
+    })
+  })
+
+  describe('logout', () => {
+    it('logs out of Cognito and erases state', async () => {
+      const key = lsKey(defaultCognitoProfile.profile?.id ?? '')
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+
+      expect(result.current.token).toBeTruthy()
+      expect(result.current.profile?.id).toBeTruthy()
+      expect(result.current.activeRole).toBe(RoleName.USER)
+      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+
+      await act(result.current.logout)
+
+      expect(Auth.signOut).toBeCalledWith()
+      expect(result.current.token).toBeUndefined()
+      expect(result.current.profile).toBeUndefined()
+      expect(result.current.activeRole).toBeUndefined()
+
+      // ActiveRole is kept so that re-login picks up last role before logout
+      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+    })
+  })
+
+  describe('changeRole', () => {
+    it('does nothing if not logged in', async () => {
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+
+      await act(result.current.logout)
+
+      expect(result.current.profile).toBeUndefined()
+      expect(result.current.activeRole).toBeUndefined()
+
+      const newRole = result.current.changeRole(RoleName.TRAINER)
+      expect(newRole).toBeUndefined()
+      expect(result.current.activeRole).toBeUndefined()
+    })
+
+    it('does nothing if role not in allowedRoles', async () => {
+      const roles = [RoleName.USER, RoleName.TRAINER]
+      mockCognitoToProfile({
+        claims: {
+          'x-hasura-default-role': RoleName.USER,
+          'x-hasura-allowed-roles': roles,
+        },
+      })
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+
+      const oldRole = result.current.activeRole
+      expect(oldRole).toBe(RoleName.USER)
+
+      const newRole = result.current.changeRole(RoleName.TT_ADMIN)
+
+      expect(newRole).toBe(oldRole)
+      expect(result.current.activeRole).toBe(oldRole)
+    })
+
+    it('updates activeRole when valid', async () => {
+      const key = lsKey(defaultCognitoProfile.profile?.id ?? '')
+      const roles = [RoleName.USER, RoleName.TRAINER]
+      mockCognitoToProfile({
+        claims: {
+          'x-hasura-default-role': RoleName.USER,
+          'x-hasura-allowed-roles': roles,
+        },
+      })
+
+      const { result, waitForNextUpdate } = render()
+      await waitForNextUpdate()
+
+      expect(result.current.activeRole).toBe(RoleName.USER)
+      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+
+      act(() => {
+        const newRole = result.current.changeRole(RoleName.TRAINER)
+        expect(newRole).toBe(RoleName.TRAINER)
+      })
+
+      expect(result.current.activeRole).toBe(RoleName.TRAINER)
+      expect(localStorage.getItem(key)).toBe(RoleName.TRAINER)
+    })
   })
 })
