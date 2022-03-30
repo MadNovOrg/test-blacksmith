@@ -4,4 +4,5 @@ import '@test/mockCognitoToProfile'
 
 global.afterEach(() => {
   jest.clearAllMocks()
+  localStorage.clear()
 })

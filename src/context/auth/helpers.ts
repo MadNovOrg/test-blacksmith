@@ -4,7 +4,7 @@ import cognitoToProfile from './cognitoToProfile'
 import { RoleName } from '@app/types'
 
 // Roles allowed in switcher
-const ActiveRoles = new Set([
+export const ActiveRoles = new Set([
   RoleName.USER,
   RoleName.TRAINER,
   RoleName.ORG_ADMIN,
