@@ -10,6 +10,7 @@ import { CreateCourse } from '@app/pages/TrainerBase/components/CreateCourse'
 import { CreateCourseForm } from '@app/pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
 import { AssignTrainers } from '@app/pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
 import { TrainerFeedback } from '@app/pages/TrainerBase/components/TrainerFeedback'
+import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
 import { CourseAttendance } from '@app/pages/TrainerBase/components/CourseGradingDetails/CourseAttendance'
 import { ModulesSelection } from '@app/pages/TrainerBase/components/CourseGradingDetails/ModulesSelection'
 import { CourseGradingDetails } from '@app/pages/TrainerBase/components/CourseGradingDetails'
@@ -39,13 +40,16 @@ const TrainerBaseRoutes = () => {
             <Route index element={<Navigate replace to="details" />} />
             <Route path="modules" element={<CourseBuilder />} />
             <Route path="details" element={<CourseDetails />} />
-            <Route path="view-evaluation" element={<CourseEvaluation />} />
             <Route path="grading" element={<CourseGrading />} />
             <Route
               path="grading/:participantId"
               element={<ParticipantGrading />}
             />
-            <Route path="evaluation" element={<TrainerFeedback />} />
+            <Route path="evaluation">
+              <Route path="submit" element={<TrainerFeedback />} />
+              <Route path="view" element={<CourseEvaluation />} />
+              <Route path="summary" element={<EvaluationSummary />} />
+            </Route>
           </Route>
           <Route path=":id/grading-details" element={<CourseGradingDetails />}>
             <Route element={<CourseAttendance />} index />

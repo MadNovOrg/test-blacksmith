@@ -19,6 +19,9 @@ import {
 } from '@mui/material'
 
 import { TableHead } from '@app/components/Table/TableHead'
+import { LinkBehavior } from '@app/components/LinkBehavior'
+
+import { useAuth } from '@app/context/auth'
 
 import {
   QUERY as GET_EVALUATION_QUERY,
@@ -31,8 +34,10 @@ import { noop } from '@app/util'
 export const EvaluationSummary = () => {
   const navigate = useNavigate()
   const params = useParams()
+  const { profile } = useAuth()
   const { t } = useTranslation()
   const courseId = params.id as string
+  const profileId = profile?.id as string
 
   const cols = useMemo(
     () => [
@@ -51,7 +56,7 @@ export const EvaluationSummary = () => {
     GetEvaluationResponseType,
     Error,
     [string, GetEvaluationParamsType]
-  >([GET_EVALUATION_QUERY, { courseId }])
+  >([GET_EVALUATION_QUERY, { courseId, profileId }])
   const loading = !data && !error
 
   return (
@@ -65,7 +70,7 @@ export const EvaluationSummary = () => {
             variant="contained"
             color="primary"
             size="small"
-            onClick={() => navigate('../evaluation')}
+            onClick={() => navigate('../evaluation/submit')}
           >
             {t('course-evaluation.complete-my-evaluation')}
           </Button>
@@ -80,12 +85,31 @@ export const EvaluationSummary = () => {
       </Alert>
 
       <Box>
-        <Typography variant="subtitle1">
-          {t('pages.course-details.tabs.evaluation.title')}
-        </Typography>
-        <Typography variant="body1" color="grey.500">
-          {t('pages.course-details.tabs.evaluation.desc')}
-        </Typography>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
+          <Box>
+            <Typography variant="subtitle1">
+              {t('pages.course-details.tabs.evaluation.title')}
+            </Typography>
+            <Typography variant="body1" color="grey.500">
+              {t('pages.course-details.tabs.evaluation.desc')}
+            </Typography>
+          </Box>
+          <Box>
+            <Button
+              component={LinkBehavior}
+              variant="contained"
+              color="primary"
+              size="small"
+              href="../evaluation/summary"
+            >
+              {t('pages.course-details.tabs.evaluation.button')}
+            </Button>
+          </Box>
+        </Box>
 
         <TableContainer component={Paper} elevation={0} sx={{ mt: 2 }}>
           <Table sx={{ minWidth: 650 }} data-testid="courses-table">
@@ -112,7 +136,7 @@ export const EvaluationSummary = () => {
                   </TableCell>
                   <TableCell>
                     <Link
-                      href={`../view-evaluation?profile_id=${e.profileId}`}
+                      href={`../evaluation/view?profile_id=${e.profileId}`}
                       variant="body2"
                       fontWeight="600"
                       color="primary"

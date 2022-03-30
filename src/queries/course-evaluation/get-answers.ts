@@ -6,6 +6,7 @@ export type ResponseType = {
   answers: {
     id: string
     question: { id: string; type: CourseEvaluationQuestionType }
+    profile: { fullName: string }
     answer: string
   }[]
 }
@@ -23,6 +24,9 @@ export const QUERY = gql`
       question {
         id
         type
+      }
+      profile {
+        fullName
       }
       answer
     }

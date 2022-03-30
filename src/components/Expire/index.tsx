@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box } from '@mui/material'
+import { useMountedState } from 'react-use'
 
 type ExpireProps = {
   children: React.ReactNode
@@ -7,13 +8,14 @@ type ExpireProps = {
 }
 
 export const Expire: React.FC<ExpireProps> = ({ children, delay }) => {
+  const isMounted = useMountedState()
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     setTimeout(() => {
-      setVisible(false)
+      if (isMounted()) setVisible(false)
     }, delay)
-  }, [delay])
+  }, [delay, isMounted])
 
   return visible ? <Box>{children}</Box> : null
 }

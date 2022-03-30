@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
+  Avatar,
   Container,
   FormHelperText,
   Grid,
@@ -192,9 +193,28 @@ export const CourseEvaluation = () => {
                 {course?.name}
               </Typography>
 
-              <Box>
-                <Typography variant="body1">Attendee</Typography>
-              </Box>
+              {readOnly && (
+                <Box>
+                  <Typography variant="body1">Attendee</Typography>
+
+                  <Box
+                    borderRadius={1}
+                    bgcolor="common.white"
+                    p={2}
+                    mt={1}
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <Avatar
+                      alt="avatar"
+                      src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                    />
+                    <Typography variant="body1" sx={{ ml: 2 }}>
+                      {evaluation?.answers?.[0].profile.fullName}
+                    </Typography>
+                  </Box>
+                </Box>
+              )}
             </Box>
           </Grid>
 
@@ -226,6 +246,8 @@ export const CourseEvaluation = () => {
 
             {ungroupedQuestions?.map(q => {
               if (booleanQuestionTypes.includes(q.type)) {
+                const value = (values[q.id] ?? '').split('-')
+
                 return (
                   <QuestionGroup
                     key={q.id}
@@ -233,10 +255,8 @@ export const CourseEvaluation = () => {
                     error={errors[q.id]?.message}
                   >
                     <BooleanQuestion
-                      value={((values[q.id] ?? '') as string).split('-')[0]}
-                      reason={
-                        ((values[q.id] ?? '') as string).split('-')[1] ?? ''
-                      }
+                      value={value[0]}
+                      reason={value[1] ?? ''}
                       type={q.type}
                       onChange={(value, reason) =>
                         setValue(q.id, `${value}-${reason}`)

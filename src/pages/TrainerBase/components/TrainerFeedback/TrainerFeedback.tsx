@@ -76,6 +76,8 @@ export const TrainerFeedback = () => {
     const obj: Record<string, yup.AnySchema> = {}
 
     questions?.questions.forEach(q => {
+      if (q.type === CourseEvaluationQuestionType.RATING) return
+
       const s = yup.string()
 
       if (q.questionKey === 'SIGNATURE') {
@@ -130,7 +132,7 @@ export const TrainerFeedback = () => {
         return setError(t('course-evaluation.error-submitting'))
       }
 
-      navigate('../details?success=course_evaluated')
+      navigate('../../details?success=course_evaluated')
     } catch (err: unknown) {
       setError(t('course-evaluation.error-submitting'))
       setLoading(false)
@@ -158,6 +160,8 @@ export const TrainerFeedback = () => {
           <Grid item md={7} pt={10}>
             {ungroupedQuestions?.map(q => {
               if (booleanQuestionTypes.includes(q.type)) {
+                const value = (values[q.id] ?? '').split('-')
+
                 return (
                   <QuestionGroup
                     key={q.id}
@@ -165,8 +169,8 @@ export const TrainerFeedback = () => {
                     error={errors[q.id]?.message}
                   >
                     <BooleanQuestion
-                      value={((values[q.id] ?? '') as string).split('-')[0]}
-                      reason=""
+                      value={value[0]}
+                      reason={value[1] || ''}
                       type={q.type}
                       onChange={(value, reason) =>
                         setValue(q.id, `${value}-${reason}`)

@@ -259,6 +259,7 @@
         },
         "evaluation": {
           "title": "Evaluation Summary",
+          "button": "View Evaluation Summary",
           "desc": "View an attendee's course evaluation and a summary of all evaluations.",
           "view-evaluation": "View Evaluation"
         }
