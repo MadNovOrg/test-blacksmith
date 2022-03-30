@@ -1,6 +1,6 @@
 import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
 
-import { Course } from '@app/types'
+import { Course, CourseParticipantModule } from '@app/types'
 
 export const noop = () => {
   // empty
@@ -115,3 +115,40 @@ export const courseStarted = (course: Course) =>
   isPast(new Date(course.schedule[0].start))
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
+
+export const transformModulesToGroups = (
+  courseModules: CourseParticipantModule[]
+): Array<{
+  id: string
+  name: string
+  modules: Array<{ id: string; name: string; completed: boolean }>
+}> => {
+  const groups: Record<
+    string,
+    {
+      id: string
+      name: string
+      modules: Array<{ id: string; name: string; completed: boolean }>
+    }
+  > = {}
+
+  courseModules.forEach(courseModule => {
+    const moduleGroup = groups[courseModule.module.moduleGroup.id]
+
+    if (!moduleGroup) {
+      groups[courseModule.module.moduleGroup.id] = {
+        id: courseModule.module.moduleGroup.id,
+        name: courseModule.module.moduleGroup.name,
+        modules: [],
+      }
+    }
+
+    groups[courseModule.module.moduleGroup.id].modules.push({
+      id: courseModule.module.id,
+      name: courseModule.module.name,
+      completed: courseModule.completed,
+    })
+  })
+
+  return Object.values(groups)
+}

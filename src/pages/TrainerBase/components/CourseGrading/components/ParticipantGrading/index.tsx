@@ -26,45 +26,7 @@ import { BackButton } from '@app/components/BackButton'
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
 
 import theme from '@app/theme'
-import { LoadingStatus } from '@app/util'
-import { CourseParticipantModule } from '@app/types'
-
-function transformModulesToGroups(
-  courseModules: CourseParticipantModule[]
-): Array<{
-  id: string
-  name: string
-  modules: Array<{ id: string; name: string; completed: boolean }>
-}> {
-  const groups: Record<
-    string,
-    {
-      id: string
-      name: string
-      modules: Array<{ id: string; name: string; completed: boolean }>
-    }
-  > = {}
-
-  courseModules.forEach(courseModule => {
-    const moduleGroup = groups[courseModule.module.moduleGroup.id]
-
-    if (!moduleGroup) {
-      groups[courseModule.module.moduleGroup.id] = {
-        id: courseModule.module.moduleGroup.id,
-        name: courseModule.module.moduleGroup.name,
-        modules: [],
-      }
-    }
-
-    groups[courseModule.module.moduleGroup.id].modules.push({
-      id: courseModule.module.id,
-      name: courseModule.module.name,
-      completed: courseModule.completed,
-    })
-  })
-
-  return Object.values(groups)
-}
+import { LoadingStatus, transformModulesToGroups } from '@app/util'
 
 export const ParticipantGrading = () => {
   const { participantId, id: courseId } = useParams()

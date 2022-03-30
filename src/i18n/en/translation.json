@@ -111,7 +111,13 @@
     },
     "course-registration": "Course Registration",
     "course-certificate": {
-      "not-graded-yet": "You have not been graded on this course yet. Your certificate will appaear here if you receive a passing grade",
+      "duration-message": {
+        "level_1": "Level One - {{courseDuration}} hours",
+        "level_2": "Level Two - {{courseDuration}} hours",
+        "bild_act": "BILD ACT Certified - {{courseDuration}} hours",
+        "intermediate": "Intermediate - {{courseDuration}} hours"
+      },
+      "not-graded-yet": "You have not been graded on this course yet. Your certificate will appear here if you receive a passing grade",
       "incomplete": "Incomplete",
       "modules-list-title": "Completed modules and holds",
       "download-certificate": "Download certificate",

@@ -22,12 +22,11 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import useSWR from 'swr'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
+import { CourseCertification } from '@app/components/CourseCertification'
 
 import { useAuth } from '@app/context/auth'
 
 import useCourse from '@app/hooks/useCourse'
-
-import { CourseCertification } from './CourseCertification'
 
 import { LoadingStatus, courseEnded } from '@app/util'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
