@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
-import { Container } from 'aws-amplify-react'
-import { Box, CircularProgress, Grid, Tab, Tabs } from '@mui/material'
+import {
+  Container,
+  Box,
+  CircularProgress,
+  Grid,
+  Tab,
+  Tabs,
+} from '@mui/material'
 
 import { useCategoriesList } from '@app/hooks/useBlogPosts'
 

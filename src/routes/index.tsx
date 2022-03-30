@@ -19,7 +19,7 @@ import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
 const MyTrainingRoutes = React.lazy(() => import('./my-training'))
-const MyOrgRoutes = React.lazy(() => import('./my-training'))
+const MyOrgRoutes = React.lazy(() => import('./my-organization'))
 const MembershipRoutes = React.lazy(() => import('./membership'))
 const TrainerRoutes = React.lazy(() => import('./trainer-base'))
 const AdminRoutes = React.lazy(() => import('./admin'))
