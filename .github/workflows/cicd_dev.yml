@@ -16,6 +16,7 @@ jobs:
   build:
     name: CI
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -27,7 +28,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm i
+        run: npm set-script prepare "" && npm ci 
 
       - name: Lint
         run: npm run lint
