@@ -119,6 +119,12 @@ export enum CourseDeliveryType {
   VIRTUAL = 'VIRTUAL',
 }
 
+export enum CourseTrainerType {
+  LEADER = 'LEADER',
+  ASSISTANT = 'ASSISTANT',
+  MODERATOR = 'MODERATOR',
+}
+
 export enum Color {
   NAVY = 'navy',
   LIME = 'lime',

@@ -108,7 +108,7 @@ export const insertCourse = async (
         leaders: {
           data: {
             profile_id: "${await getProfileId(trainer.email)}",
-            type: "leader"
+            type: "LEADER"
           }
         },
         level: ${course.level},

@@ -15,6 +15,7 @@
 - "!include public_course_participant_module.yaml"
 - "!include public_course_schedule.yaml"
 - "!include public_course_status.yaml"
+- "!include public_course_trainer_type.yaml"
 - "!include public_course_type.yaml"
 - "!include public_grade.yaml"
 - "!include public_identity.yaml"

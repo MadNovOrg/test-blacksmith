@@ -12,30 +12,30 @@ VALUES ('45045398-f757-4ece-85c0-bdf2d95d7cee', 'Lorem ipsum dolor sit amet, con
     ('64abf3d3-b7ab-4d8e-b625-bf921ecf5ebc', 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'OPEN', 'VIRTUAL', 'LEVEL_2', null, false, '13a223a8-2184-42f1-ba37-b49e115e59a2');
 
 INSERT INTO public.course_leader (profile_id, course_id, type)
-SELECT profile.id, '45045398-f757-4ece-85c0-bdf2d95d7cee', 'leader'
+SELECT profile.id, '45045398-f757-4ece-85c0-bdf2d95d7cee', 'LEADER'
 FROM public.profile profile
          JOIN public.organization_member organization_member ON profile.id = organization_member.profile_id
 WHERE organization_member.organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d';
 INSERT INTO public.course_leader (profile_id, course_id, type)
-SELECT profile.id, '913777a7-07fd-46d6-8ad8-d7498f630aea', 'leader'
+SELECT profile.id, '913777a7-07fd-46d6-8ad8-d7498f630aea', 'LEADER'
 FROM public.profile profile
          JOIN public.organization_member organization_member ON profile.id = organization_member.profile_id
 WHERE organization_member.organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d';
 INSERT INTO public.course_leader (profile_id, course_id, type)
-SELECT profile.id, 'bd42bbfb-9b7d-4028-ba50-6f8bbb6884d6', 'leader'
+SELECT profile.id, 'bd42bbfb-9b7d-4028-ba50-6f8bbb6884d6', 'LEADER'
 FROM public.profile profile
          JOIN public.organization_member organization_member ON profile.id = organization_member.profile_id
 WHERE organization_member.organization_id = '55320dc6-cfb0-41fb-9000-ca7eb9d2894d';
 
 INSERT INTO public.course_leader (profile_id, course_id, type) VALUES
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 'f1fd057b-547d-470b-aad8-b946a9eb8adc', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 'c6c576cb-e3bf-482a-8b50-df0f5e0afc55', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', '32e3324a-d27e-4c05-952d-5bb4e6e61e19', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 'f37ef3b0-d705-4ade-99bb-5879dd218dbd', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', '7ea83d8f-9eaa-46e1-9e2b-49170ddb1666', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 'eba38da7-aa4d-4aed-a269-2db6d93f09fc', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', '6770c5e1-f21b-45e9-a1f4-084b079937ec', 'leader'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', '64abf3d3-b7ab-4d8e-b625-bf921ecf5ebc', 'leader');
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'f1fd057b-547d-470b-aad8-b946a9eb8adc', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'c6c576cb-e3bf-482a-8b50-df0f5e0afc55', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '32e3324a-d27e-4c05-952d-5bb4e6e61e19', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'f37ef3b0-d705-4ade-99bb-5879dd218dbd', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '7ea83d8f-9eaa-46e1-9e2b-49170ddb1666', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 'eba38da7-aa4d-4aed-a269-2db6d93f09fc', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '6770c5e1-f21b-45e9-a1f4-084b079937ec', 'LEADER'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', '64abf3d3-b7ab-4d8e-b625-bf921ecf5ebc', 'LEADER');
 
 INSERT INTO public.venue (id, name, address, "geoCoordinates") VALUES
 ('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', '{ "city": "New York", "country": "America", "addressLineOne": "10 Whitehart Lane", "addressLineTwo": "Kings Street" }'::jsonb, '(40.730610, -73.935242)'::point),
