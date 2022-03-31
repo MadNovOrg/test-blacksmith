@@ -53,3 +53,9 @@ export type CourseTableRow = {
   Status: string
   '': string
 }
+
+export type ModuleGroup = {
+  id?: string
+  name: string
+  duration: string
+}

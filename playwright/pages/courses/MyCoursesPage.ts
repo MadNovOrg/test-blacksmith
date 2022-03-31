@@ -6,7 +6,7 @@ import { UiTable } from '../../components/UiTable'
 import { Course } from '../../data/types'
 import { toCourseTableRow } from '../../data/mappings'
 
-import { CourseBuilderPage } from './CoursesBuilderPage'
+import { CourseBuilderPage } from './CourseBuilderPage'
 
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator

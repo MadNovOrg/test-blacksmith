@@ -14,7 +14,7 @@ switch (TARGET_ENV) {
     break
   case 'stg':
     BASE_URL = 'https://web.stg.teamteachhub.co.uk'
-    HASURA_BASE_URL = 'https://hasura.dev.teamteachhub.co.uk'
+    HASURA_BASE_URL = 'https://hasura.stg.teamteachhub.co.uk'
     break
   case 'prod':
     BASE_URL = 'https://teamteachhub.co.uk'

@@ -155,7 +155,11 @@ export const CourseDetails = () => {
                         alignItems="center"
                         mt={2}
                       >
-                        <Alert variant="outlined" color="success">
+                        <Alert
+                          variant="outlined"
+                          color="success"
+                          data-testid="success-message"
+                        >
                           {t(alertMessage, { name: course?.name })}
                         </Alert>
                       </Box>

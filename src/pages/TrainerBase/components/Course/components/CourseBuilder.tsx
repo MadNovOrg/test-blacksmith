@@ -394,7 +394,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     size="small"
                     sx={{ marginRight: 2 }}
                   />
-                  <Typography variant="body2">
+                  <Typography variant="body2" data-testid="draft-text">
                     {t('common.last-modified', {
                       date: formatDateForDraft(
                         courseData.course.updatedAt || new Date(),

@@ -1,16 +1,19 @@
 import { Page } from '@playwright/test'
 
 import { UserMenu } from '../components/UserMenu'
+import { RoleSwitcher } from '../components/RoleSwitcher'
 import { BASE_URL } from '../constants'
 
 import { BasePage } from './BasePage'
 
 export class HomePage extends BasePage {
   readonly userMenu: UserMenu
+  readonly roleSwitcher: RoleSwitcher
 
   constructor(page: Page) {
     super(page)
     this.userMenu = new UserMenu(this.page)
+    this.roleSwitcher = new RoleSwitcher(this.page)
   }
 
   async goto() {

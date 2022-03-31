@@ -67,14 +67,14 @@ export const getProfileId = async (email: string): Promise<string> => {
 }
 
 export const setCourseDates = async (
-  course: Course,
+  courseId: string,
   newStart: Date,
   newEnd: Date
 ) => {
   const query = gql`
     mutation MyMutation {
       update_course_schedule(
-        where: { course_id: { _eq: "${course.id}" } }
+        where: { course_id: { _eq: "${courseId}" } }
         _set: { start: "${newStart.toISOString()}", end: "${newEnd.toISOString()}" }
       ) {
         affected_rows
@@ -100,6 +100,7 @@ export const insertCourse = async (
   const venue = course.schedule[0].venue
     ? `, venue_id: "${await getVenueId(course.schedule[0].venue)}"`
     : ''
+  const trainerId = await getProfileId(trainer.email)
   const query = gql`
     mutation MyMutation {
       insert_course(objects: {
@@ -108,13 +109,14 @@ export const insertCourse = async (
         leaders: {
           data: {
             profile_id: "${await getProfileId(trainer.email)}",
-            type: "LEADER"
+            type: LEADER
           }
         },
         level: ${course.level},
         name: "${course.name}",
         reaccreditation: ${course.reaccreditation},
         status: ${course.status},
+        trainer_profile_id: "${trainerId}",
         type: ${course.type},
         schedule: {
           data: {

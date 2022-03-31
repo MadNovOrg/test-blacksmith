@@ -44,6 +44,7 @@ const ProgressBar: React.FC<ProgressBarProps> = function ({
           fontWeight: 'bold',
           color: 'white',
         }}
+        data-testid="progress-bar-label"
       >
         {label ? label : `${rounded}%`}
       </Box>
