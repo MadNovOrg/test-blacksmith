@@ -32,7 +32,7 @@ test('course draft', async ({ page, course }) => {
   await courseBuilderPage.checkSelectedModulesContain(modules)
 })
 
-test.only('course draft: clear modules', async ({ page, course }) => {
+test('course draft: clear modules', async ({ page, course }) => {
   const modules = ['Personal Safety', 'Neck Disengagement']
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
