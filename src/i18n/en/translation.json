@@ -272,7 +272,9 @@
       }
     },
     "course-participants": {
-      "none-registered-message": "Attendees will appear here once fully registered",
+      "none-registered-message": "No invites accepted",
+      "none-pending-message": "No invites pending",
+      "none-declined-message": "No invites declined",
       "edit-course-button": "Edit course details",
       "course-beggins": "Begins",
       "course-ends": "Ends",

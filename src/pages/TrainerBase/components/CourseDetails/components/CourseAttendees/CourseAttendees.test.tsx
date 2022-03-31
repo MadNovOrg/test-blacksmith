@@ -109,9 +109,7 @@ describe('component: CourseAttendees', () => {
     )
 
     expect(
-      within(noAttendeesMesage).getByText(
-        'Attendees will appear here once fully registered'
-      )
+      within(noAttendeesMesage).getByText('No invites accepted')
     ).toBeInTheDocument()
   })
 

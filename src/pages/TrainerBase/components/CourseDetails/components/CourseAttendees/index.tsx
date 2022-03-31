@@ -93,18 +93,21 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
                     number: courseParticipantsTotal,
                   })}
                   value="0"
+                  data-testid="tabParticipants"
                 />
                 <Tab
                   label={t('pages.course-participants.tabs.pending', {
                     number: pendingTotal,
                   })}
                   value="1"
+                  data-testid="tabPending"
                 />
                 <Tab
                   label={t('pages.course-participants.tabs.declined', {
                     number: declinedTotal,
                   })}
                   value="2"
+                  data-testid="tabDeclined"
                 />
               </TabList>
 

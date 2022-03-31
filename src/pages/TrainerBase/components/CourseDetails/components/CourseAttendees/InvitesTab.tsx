@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Snackbar,
   Table,
@@ -7,6 +8,7 @@ import {
   TableCell,
   TablePagination,
   TableRow,
+  Typography,
 } from '@mui/material'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -128,7 +130,21 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
               rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
               data-testid="course-invites-pagination"
             />
-          ) : null}
+          ) : (
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              mt={4}
+              data-testid="no-invites-message"
+            >
+              <Typography variant="body1" color="grey.500">
+                {t(
+                  `pages.course-participants.none-${inviteStatus.toLocaleLowerCase()}-message`
+                )}
+              </Typography>
+            </Box>
+          )}
         </>
       )}
       <Snackbar
