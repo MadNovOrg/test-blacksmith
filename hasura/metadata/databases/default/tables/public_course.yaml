@@ -4,6 +4,7 @@ table:
 configuration:
   comment: null
   custom_column_names:
+    aol_cost_of_course: aolCostOfCourse
     course_delivery_type: deliveryType
     course_level: level
     course_status: status
@@ -73,11 +74,13 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
+    - aol_cost_of_course
     - course_delivery_type
     - course_level
     - course_status
     - course_type
     - created_at
+    - go1integration
     - grading_confirmed
     - id
     - max_participants

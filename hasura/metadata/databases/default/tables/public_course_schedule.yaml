@@ -6,6 +6,7 @@ configuration:
   custom_column_names:
     created_at: createdAt
     updated_at: updatedAt
+    virtual_link: virtualLink
   custom_root_fields: {}
 object_relationships:
 - name: course
@@ -17,15 +18,16 @@ object_relationships:
 select_permissions:
 - permission:
     columns:
-    - id
-    - created_at
-    - updated_at
-    - name
-    - type
-    - start
-    - end
     - course_id
+    - created_at
+    - end
+    - id
+    - name
+    - start
+    - type
+    - updated_at
     - venue_id
+    - virtual_link
     filter:
       course:
         _and:
@@ -35,10 +37,10 @@ select_permissions:
             _eq: PUBLISHED
   role: anonymous
 - permission:
-    allow_aggregations: true
     columns:
     - name
     - type
+    - virtual_link
     - created_at
     - end
     - start
@@ -46,5 +48,20 @@ select_permissions:
     - course_id
     - id
     - venue_id
+    filter: {}
+  role: trainer
+- permission:
+    allow_aggregations: true
+    columns:
+    - course_id
+    - created_at
+    - end
+    - id
+    - name
+    - start
+    - type
+    - updated_at
+    - venue_id
+    - virtual_link
     filter: {}
   role: user
