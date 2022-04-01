@@ -10,6 +10,7 @@ actions:
     handler: '{{ACTIONS_HOST}}/zoom/create-meeting'
     forward_client_headers: true
   permissions:
+  - role: trainer
   - role: tt-ops
   - role: tt-admin
 - name: declineInvite

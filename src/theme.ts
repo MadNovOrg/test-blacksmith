@@ -227,6 +227,13 @@ export default createTheme({
         },
       },
     },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: theme.palette.grey[100],
+        },
+      },
+    },
     MuiTableHead: {
       styleOverrides: {
         root: {

@@ -2,6 +2,8 @@ import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
 
 import { Course, CourseParticipantModule } from '@app/types'
 
+export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
+
 export const noop = () => {
   // empty
 }
@@ -39,7 +41,7 @@ export const formatDateRange = (dateFrom: Date, dateTo: Date): string => {
 export const formatDateForInput = (value: string | Date) => {
   return format(
     typeof value === 'string' ? new Date(value) : value,
-    'yyyy-MM-dd'
+    INPUT_DATE_FORMAT
   )
 }
 
