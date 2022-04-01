@@ -154,9 +154,26 @@
       "feedback": "Feedback",
       "view-or-download-here": "View or download here"
     },
-    "location-autocomplete": {
+    "venue-selector": {
+      "placeholder": "Start typing venue name or address",
       "min-chars-label": "Please type at least 3 characters for suggestions.",
-      "google-maps-api-error": "Unknown error while communicating with Google Maps API."
+      "google-maps-api-error": "Unknown error while communicating with Google Maps API.",
+      "suggestions": "Suggestions",
+      "venues": "Venues",
+      "modal": {
+        "title": "Confirm venue details",
+        "description": "Before you add this venue, please confirm the location details below.",
+        "submit": "Add as venue",
+        "fields": {
+          "name": "Venue name",
+          "addressLineOne": "Address line 1",
+          "addressLineTwo": "Address line 2 (optional)",
+          "city": "Town/City",
+          "postCode": "Postcode"
+        }
+      },
+      "no-results": "No results found.",
+      "add-new-venue": "Add new venue?"
     },
     "suspense-loading": {
       "text": "Loading..."

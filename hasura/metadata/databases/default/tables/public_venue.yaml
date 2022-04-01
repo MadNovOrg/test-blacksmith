@@ -8,6 +8,7 @@ configuration:
     address_line_two: addressLineTwo
     created_at: createdAt
     geo_coordinates: geoCoordinates
+    google_places_id: googlePlacesId
     post_code: postCode
     updated_at: updatedAt
   custom_root_fields: {}
@@ -19,6 +20,20 @@ array_relationships:
       table:
         name: course_schedule
         schema: public
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - address_line_one
+    - address_line_two
+    - city
+    - created_at
+    - geo_coordinates
+    - google_places_id
+    - name
+    - post_code
+  role: trainer
 select_permissions:
 - permission:
     columns:
@@ -47,6 +62,21 @@ select_permissions:
     - city
     - created_at
     - geo_coordinates
+    - google_places_id
+    - id
+    - name
+    - post_code
+    - updated_at
+    filter: {}
+  role: trainer
+- permission:
+    columns:
+    - address_line_one
+    - address_line_two
+    - city
+    - created_at
+    - geo_coordinates
+    - google_places_id
     - id
     - name
     - post_code

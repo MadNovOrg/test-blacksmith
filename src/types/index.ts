@@ -186,6 +186,7 @@ export type Venue = {
   city: string
   postCode: string
   geoCoordinates: string
+  googlePlacesId?: string
 }
 
 export type TrainerSchedule = {
