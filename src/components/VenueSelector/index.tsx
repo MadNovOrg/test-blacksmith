@@ -8,6 +8,7 @@ import {
   List,
   SxProps,
   TextField,
+  TextFieldProps,
   Typography,
   useTheme,
 } from '@mui/material'
@@ -40,6 +41,7 @@ export type VenueSelectorProps = {
   value?: Venue
   onChange: (value: Venue | undefined) => void
   sx?: SxProps
+  textFieldProps?: TextFieldProps
 }
 
 function getOptionLabel(value: AutocompletePrediction | Venue) {
@@ -60,6 +62,7 @@ const VenueSelector: React.FC<VenueSelectorProps> = function ({
   value,
   onChange,
   sx,
+  textFieldProps,
   ...props
 }) {
   const { t } = useTranslation()
@@ -217,6 +220,7 @@ const VenueSelector: React.FC<VenueSelectorProps> = function ({
           )}
           renderInput={params => (
             <TextField
+              {...textFieldProps}
               {...params}
               placeholder={t('components.venue-selector.placeholder')}
               helperText={error}

@@ -324,6 +324,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
                 trigger('venueId')
               }}
               value={venue}
+              textFieldProps={{ variant: 'filled' }}
             />
             {errors.venueId?.message ? (
               <FormHelperText error>{errors.venueId?.message}</FormHelperText>
