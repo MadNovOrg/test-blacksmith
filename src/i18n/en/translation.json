@@ -280,7 +280,10 @@
       }
     },
     "create-course": {
-      "title": "Create a course",
+      "OPEN-course-title": "Open course creation",
+      "CLOSED-course-title": "Closed course creation",
+      "INDIRECT-course-title": "Indirect course creation",
+      "validation-notice": "All fields are mandatory.",
       "back-button-text": "All courses",
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",

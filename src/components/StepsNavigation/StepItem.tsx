@@ -38,12 +38,14 @@ const Circle = styled('span', {
 interface StepItemProps {
   completed: boolean
   index: number
+  line?: boolean
 }
 
 export const StepItem: React.FC<StepItemProps> = ({
   completed,
   index,
   children,
+  line = false,
 }) => {
   return (
     <Box
@@ -52,7 +54,7 @@ export const StepItem: React.FC<StepItemProps> = ({
       mb={5}
       data-testid={`step-item-${index}`}
     >
-      <Circle completed={completed} line={index === 1}>
+      <Circle completed={completed} line={line}>
         {completed ? (
           <CheckIcon />
         ) : (

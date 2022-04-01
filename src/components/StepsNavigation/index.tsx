@@ -25,6 +25,7 @@ export const StepsNavigation: React.FC<Props> = ({
           key={step.key}
           completed={completedStepsSet.has(step.key)}
           index={index + 1}
+          line={steps.length - 1 !== index}
         >
           <Typography fontWeight={completedStepsSet.has(step.key) ? 700 : 400}>
             {step.label}
