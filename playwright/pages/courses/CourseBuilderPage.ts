@@ -132,6 +132,7 @@ export class CourseBuilderPage extends BasePage {
 
   async clickClearButton() {
     await this.clearButton.click()
+    await delay(2000)
   }
 
   async checkModulesNotSelected(modules: string[]) {

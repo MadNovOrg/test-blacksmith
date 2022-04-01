@@ -13,9 +13,13 @@ export class UiTable {
     this.firstRowCells = this.root.locator('tbody tr >> nth=0 >> td')
   }
 
-  async getRowsCount(): Promise<number> {
+  async waitToLoad() {
     const headersCount = await this.headers.count()
     await expect(this.firstRowCells).toHaveCount(headersCount)
+  }
+
+  async getRowsCount(): Promise<number> {
+    await this.waitToLoad()
     return this.rows.count()
   }
 

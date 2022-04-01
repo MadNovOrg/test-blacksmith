@@ -11,12 +11,12 @@ import { MODULES_SETUP } from '../../../data/modules'
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
-      await insertCourse(data.course, users.trainerWithOrg)
+      await insertCourse(data.course, users.trainer)
       await use(data.course)
       await deleteCourse(data.course.id)
     },
   })
-  test.use({ storageState: stateFilePath('trainerWithOrg') })
+  test.use({ storageState: stateFilePath('trainer') })
 
   test(`build course: ${data.name}`, async ({ page, course }) => {
     test.skip(

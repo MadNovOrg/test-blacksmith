@@ -11,12 +11,12 @@ import { users } from '../../../data/users'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    await insertCourse(course, users.trainerWithOrg)
+    await insertCourse(course, users.trainer)
     await use(course)
     await deleteCourse(course.id)
   },
 })
-test.use({ storageState: stateFilePath('trainerWithOrg') })
+test.use({ storageState: stateFilePath('trainer') })
 
 test('course draft', async ({ page, course }) => {
   const modules = ['Personal Safety']
@@ -40,7 +40,6 @@ test('course draft: clear modules', async ({ page, course }) => {
   await courseBuilderPage.dragModulesToRight(modules)
   await courseBuilderPage.clickClearButton()
   await page.goBack()
-  await myCoursesPage.checkCourseStatus(course.name, 'Draft')
   await myCoursesPage.clickCourseName(course.name)
   await courseBuilderPage.checkModulesNotSelected(modules)
 })
