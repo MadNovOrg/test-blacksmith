@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import { CircularProgress } from '@mui/material'
 
 import { getProfileWithCriteria } from '@app/queries/users'
-import { Profile } from '@app/types'
+import { Profile, RoleName } from '@app/types'
 
 export function Trainers() {
   const [pagination, setPagination] = useState({
@@ -24,7 +24,7 @@ export function Trainers() {
       where: {
         roles: {
           role: {
-            name: { _eq: 'Presenter' },
+            name: { _eq: RoleName.TRAINER },
           },
         },
       },

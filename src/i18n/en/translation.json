@@ -228,6 +228,12 @@
       "max-participants-required": "Maximum number of attendees is required field",
       "venue-required": "Venue is required field",
       "zoom-meeting-url-required": "Zoom meeting URL is required field"
+    },
+    "searchTrainers": {
+      "loading": "Loading...",
+      "noResults": "No trainers found. Try another search term.",
+      "placeholder": "Search for elligible trainers...",
+      "maxReachedPlaceholder": "(max allowed reached)"
     }
   },
   "pages": {
@@ -295,7 +301,13 @@
       "back-button-text": "All courses",
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",
-      "step-navigation-course-builder": "Course builder"
+      "step-navigation-course-builder": "Course builder",
+      "assign-trainers": {
+        "lead-title": "Lead Trainer",
+        "lead-placeholder": "Search for a lead trainer...",
+        "assistant-title": "Assistant Trainer(s)",
+        "assistant-placeholder": "Search for assistant trainers..."
+      }
     },
     "course-details": {
       "tabs": {
