@@ -7,12 +7,13 @@ import { Box, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { CourseEvaluationQuestionType } from '@app/types'
+import { noop } from '@app/util'
 
 type BooleanQuestionProps = {
   type: CourseEvaluationQuestionType
   value: string
   reason: string
-  onChange: (value: string, reason: string) => void
+  onChange?: (value: string, reason: string) => void
   infoText?: string
   disabled?: boolean
 }
@@ -34,7 +35,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
   type,
   value,
   reason,
-  onChange,
+  onChange = noop,
   infoText,
   disabled = false,
 }) => {

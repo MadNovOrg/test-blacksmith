@@ -39,10 +39,15 @@ declare module '@mui/material/styles' {
     }
   }
 
+  interface Palette {
+    green: Palette['primary']
+  }
+
   interface PaletteOptions {
     tertiary: {
       main: string
     }
+    green: PaletteOptions['primary']
   }
 }
 
@@ -150,6 +155,9 @@ const theme = createTheme({
       main: '#9EB934',
       light: '#F0F4DD',
       dark: '#394700',
+    },
+    green: {
+      main: '#59C13D',
     },
   },
 })

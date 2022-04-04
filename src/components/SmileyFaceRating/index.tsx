@@ -6,28 +6,28 @@ import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Box, IconContainerProps, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
-// TODO: i18n
 const customIcons = {
   1: {
     icon: <SentimentVeryDissatisfiedIcon fontSize="inherit" />,
-    label: 'Poor',
+    label: 'poor',
   },
   2: {
     icon: <SentimentDissatisfiedIcon fontSize="inherit" />,
-    label: 'Fair',
+    label: 'fair',
   },
   3: {
     icon: <SentimentSatisfiedIcon fontSize="inherit" />,
-    label: 'Average',
+    label: 'average',
   },
   4: {
     icon: <SentimentSatisfiedAltIcon fontSize="inherit" />,
-    label: 'Good',
+    label: 'good',
   },
   5: {
     icon: <SentimentVerySatisfiedIcon fontSize="inherit" />,
-    label: 'Excellent',
+    label: 'excellent',
   },
 }
 
@@ -37,27 +37,31 @@ const IconContainer: React.FC<IconContainerProps> = ({
   value,
   className,
   ...rest
-}) => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    p={0.5}
-    fontSize={50}
-    className={`${className} rating-${value}`}
-    {...rest}
-  >
-    {customIcons[value as Value].icon}
-    <Typography
-      color="common.black"
-      variant="caption"
-      fontWeight="500"
-      className="rating-label"
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      p={0.5}
+      fontSize={50}
+      className={`${className} rating-${value}`}
+      {...rest}
     >
-      {customIcons[value as Value].label}
-    </Typography>
-  </Box>
-)
+      {customIcons[value as Value].icon}
+      <Typography
+        color="common.black"
+        variant="caption"
+        fontWeight="500"
+        className="rating-label"
+      >
+        {t(customIcons[value as Value].label)}
+      </Typography>
+    </Box>
+  )
+}
 
 export type SmileyFaceRatingProps = {
   value: string

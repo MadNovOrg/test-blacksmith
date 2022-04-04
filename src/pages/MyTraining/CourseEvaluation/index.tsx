@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
-  Avatar,
   Container,
   FormHelperText,
   Grid,
@@ -12,7 +11,7 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { groupBy, map } from 'lodash-es'
+import { groupBy, map, uniqBy } from 'lodash-es'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
@@ -21,6 +20,7 @@ import { BackButton } from '@app/components/BackButton'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingQuestion } from '@app/components/RatingQuestion'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
+import { AttendeeMenu } from '@app/components/AttendeeMenu'
 
 import { useAuth } from '@app/context/auth'
 
@@ -45,6 +45,11 @@ import {
   MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
   ResponseType as SaveCourseEvaluationResponseType,
 } from '@app/queries/course-evaluation/save-evaluation'
+import {
+  QUERY as GET_FEEDBACK_USERS_QUERY,
+  ResponseType as GetFeedbackUsersResponseType,
+  ParamsType as GetFeedbackUsersParamsType,
+} from '@app/queries/course-evaluation/get-feedback-users'
 
 const groups = [
   CourseEvaluationQuestionGroup.TRAINING_RATING,
@@ -81,11 +86,36 @@ export const CourseEvaluation = () => {
   const { data: questions } = useSWR<GetCourseEvaluationQuestionsResponseType>(
     GET_COURSE_EVALUATION_QUESTIONS_QUERY
   )
+
   const { data: evaluation } = useSWR<
     GetAnswersResponseType,
     Error,
     [string, GetAnswersParamsType] | null
   >(profileId ? [GET_ANSWERS_QUERY, { courseId, profileId }] : null)
+
+  const { data: usersData } = useSWR<
+    GetFeedbackUsersResponseType,
+    Error,
+    [string, GetFeedbackUsersParamsType] | null
+  >(profileId ? [GET_FEEDBACK_USERS_QUERY, { courseId }] : null)
+
+  const attendees = useMemo(() => {
+    return uniqBy(
+      usersData?.users?.flatMap(a =>
+        a.profile.id === profile?.id
+          ? []
+          : [
+              {
+                id: a.profile.id,
+                name: a.profile.fullName,
+                avatar:
+                  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80', // TODO:
+              },
+            ]
+      ) ?? [],
+      u => u.id
+    )
+  }, [usersData, profile])
 
   const { UNGROUPED: ungroupedQuestions, ...groupedQuestions } = groupBy(
     questions?.questions,
@@ -195,23 +225,16 @@ export const CourseEvaluation = () => {
 
               {readOnly && (
                 <Box>
-                  <Typography variant="body1">Attendee</Typography>
+                  <Typography variant="body1">{t('attendee')}</Typography>
 
-                  <Box
-                    borderRadius={1}
-                    bgcolor="common.white"
-                    p={2}
-                    mt={1}
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Avatar
-                      alt="avatar"
-                      src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                  <Box mt={2}>
+                    <AttendeeMenu
+                      options={attendees}
+                      value={profileId}
+                      onSelect={(id: string) =>
+                        navigate(`.?profile_id=${id}`, { replace: true })
+                      }
                     />
-                    <Typography variant="body1" sx={{ ml: 2 }}>
-                      {evaluation?.answers?.[0].profile.fullName}
-                    </Typography>
                   </Box>
                 </Box>
               )}

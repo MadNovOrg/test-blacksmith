@@ -15,11 +15,14 @@
     "filter-by": " Filter By",
     "level": " Level",
     "role": "Role",
+    "complete": "Complete",
+    "incomplete": "Incomplete",
     "course-name": "Course Name",
     "contact": "Contact",
     "organization": "Organization",
     "evaluation": "Evaluation",
     "name": "Name",
+    "attendee": "Attendee",
     "course-type": "Course Type",
     "course-status": "Course Status",
     "bl-status": "Blended Learning Status",
@@ -35,6 +38,11 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "clear": "Clear",
+    "poor": "Poor",
+    "fair": "Fair",
+    "average": "Average",
+    "good": "Good",
+    "excellent": "Excellent",
     "discard-changes": "Discard Changes",
     "yes": "Yes",
     "no": "No",
@@ -314,8 +322,11 @@
         "evaluation": {
           "title": "Evaluation Summary",
           "button": "View Evaluation Summary",
+          "full-summary": "Full Evaluation Summary",
           "desc": "View an attendee's course evaluation and a summary of all evaluations.",
-          "view-evaluation": "View Evaluation"
+          "view-evaluation": "View Evaluation",
+          "attendee-feedback": "Attendee Feedback",
+          "trainer-feedback": "Trainer Feedback"
         }
       }
     },

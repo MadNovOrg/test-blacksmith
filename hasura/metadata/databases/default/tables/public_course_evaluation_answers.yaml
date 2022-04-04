@@ -81,6 +81,7 @@ select_permissions:
     - answer
     - course_id
     - id
+    - profile_id
     - question_id
     filter:
       participant:

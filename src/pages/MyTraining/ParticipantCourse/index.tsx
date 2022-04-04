@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import {
   Container,
@@ -30,6 +30,11 @@ import useCourse from '@app/hooks/useCourse'
 
 import { LoadingStatus, courseEnded } from '@app/util'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import {
+  QUERY as GET_FEEDBACK_USERS_QUERY,
+  ResponseType as GetFeedbackUsersResponseType,
+  ParamsType as GetFeedbackUsersParamsType,
+} from '@app/queries/course-evaluation/get-feedback-users'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -45,11 +50,12 @@ const successAlerts = {
 export const ParticipantCourse = () => {
   const { profile } = useAuth()
   const navigate = useNavigate()
-  const { id: courseId } = useParams()
+  const params = useParams()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
+  const courseId = params.id as string
 
   const {
     status: courseLoadingStatus,
@@ -67,6 +73,17 @@ export const ParticipantCourse = () => {
   const { data } = useSWR([GetParticipant, { profileId, courseId }])
   const courseParticipant = data?.course_participant
 
+  const { data: usersData, error } = useSWR<
+    GetFeedbackUsersResponseType,
+    Error,
+    [string, GetFeedbackUsersParamsType]
+  >([GET_FEEDBACK_USERS_QUERY, { courseId }])
+  const loading = !usersData && !error
+
+  const didAttendeeSubmitFeedback = useMemo(() => {
+    return !!usersData?.users.find(u => u.profile.id === profileId)
+  }, [usersData, profileId])
+
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
       <Stack
@@ -81,6 +98,8 @@ export const ParticipantCourse = () => {
 
   const attendingLabel = t('pages.participant-course.attending-course-label')
   const courseHasEnded = course && courseEnded(course)
+  const canSubmitFeedback =
+    !loading && courseHasEnded && !didAttendeeSubmitFeedback
 
   return (
     <>
@@ -166,7 +185,10 @@ export const ParticipantCourse = () => {
                       'pages.participant-course.course-summary-evaluation-title'
                     )}
                   </Typography>
-                  <Chip label="Incomplete" sx={{ marginRight: 2 }} />
+                  <Chip
+                    label={canSubmitFeedback ? t('incomplete') : t('complete')}
+                    sx={{ marginRight: 2 }}
+                  />
                   <Button
                     data-testid="evaluate-course-cta"
                     onClick={() =>
@@ -174,7 +196,7 @@ export const ParticipantCourse = () => {
                     }
                     variant="contained"
                     color="secondary"
-                    disabled={!courseHasEnded}
+                    disabled={!canSubmitFeedback}
                   >
                     {!courseHasEnded
                       ? t(

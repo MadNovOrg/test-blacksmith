@@ -23,7 +23,7 @@ import useCourse from '@app/hooks/useCourse'
 import { courseEnded, LoadingStatus } from '@app/util'
 import { CourseAttendees } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees'
 import { CourseGrading } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseGrading'
-import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
+import { EvaluationSummaryTab } from '@app/pages/TrainerBase/components/EvaluationSummaryTab'
 
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',
@@ -176,7 +176,7 @@ export const CourseDetails = () => {
                   ) : null}
 
                   <TabPanel value={CourseDetailsTabs.EVALUATION}>
-                    <EvaluationSummary />
+                    <EvaluationSummaryTab />
                   </TabPanel>
                 </Container>
               </TabContext>
