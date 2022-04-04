@@ -10,7 +10,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "typecheck": "tsc",
-    "test": "jest",
+    "test": "jest --collectCoverage",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test --config=playwright/playwright.config.ts --project=chromium",
     "test:e2e:firefox": "playwright test --config=playwright/playwright.config.ts --project=firefox",
@@ -120,6 +120,15 @@
   "jest": {
     "testTimeout": 10000,
     "testEnvironment": "jsdom",
+    "coverageReporters": [
+      "text",
+      "text-summary"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx,js,jsx}",
+      "!src/**/*.stories.{ts,tsx,js,jsx}",
+      "!src/**/*.d.ts"
+    ],
     "roots": [
       "<rootDir>/src/",
       "<rootDir>/test/"
