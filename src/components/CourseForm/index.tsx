@@ -35,7 +35,7 @@ import {
   Venue,
 } from '@app/types'
 import { yup } from '@app/schemas'
-import { INPUT_DATE_FORMAT } from '@app/util'
+import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
 
 const FormPanel = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -43,7 +43,7 @@ const FormPanel = styled(Box)(({ theme }) => ({
 }))
 
 export type FormValues = {
-  courseLevel: CourseLevel | null
+  courseLevel: CourseLevel | ''
   blendedLearning: boolean
   reaccreditation: boolean
   deliveryType: CourseDeliveryType | null
@@ -129,7 +129,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      courseLevel: null,
+      courseLevel: '',
       blendedLearning: false,
       reaccreditation: false,
       deliveryType: CourseDeliveryType.F2F,
@@ -352,6 +352,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
                 control={control}
                 render={({ field }) => (
                   <DatePicker
+                    mask={DATE_MASK}
                     label={t('components.course-form.start-date-placeholder')}
                     inputFormat={INPUT_DATE_FORMAT}
                     value={field.value}
@@ -394,6 +395,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
                 render={({ field }) => (
                   <DatePicker
                     label={t('components.course-form.end-date-placeholder')}
+                    mask={DATE_MASK}
                     inputFormat={INPUT_DATE_FORMAT}
                     value={field.value}
                     onChange={handleEndDateTimeChange}

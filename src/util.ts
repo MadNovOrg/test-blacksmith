@@ -3,6 +3,7 @@ import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
 import { Course, CourseParticipantModule } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
+export const DATE_MASK = '____-__-__'
 
 export const noop = () => {
   // empty
