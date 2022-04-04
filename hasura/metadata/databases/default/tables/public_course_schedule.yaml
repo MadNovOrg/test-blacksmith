@@ -37,6 +37,7 @@ select_permissions:
             _eq: PUBLISHED
   role: anonymous
 - permission:
+    allow_aggregations: true
     columns:
     - name
     - type
