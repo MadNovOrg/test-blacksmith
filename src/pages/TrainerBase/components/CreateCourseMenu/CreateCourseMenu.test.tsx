@@ -26,7 +26,7 @@ describe('components: CreateCourseMenu', () => {
       </MemoryRouter>,
       {
         auth: {
-          allowedRoles: generateRolesUpTo(RoleName.TT_ADMIN),
+          activeRole: RoleName.TT_ADMIN,
         },
       }
     )
@@ -52,7 +52,7 @@ describe('components: CreateCourseMenu', () => {
       </MemoryRouter>,
       {
         auth: {
-          allowedRoles: generateRolesUpTo(RoleName.TT_ADMIN),
+          activeRole: RoleName.TT_ADMIN,
         },
       }
     )
@@ -78,7 +78,7 @@ describe('components: CreateCourseMenu', () => {
       </MemoryRouter>,
       {
         auth: {
-          allowedRoles: generateRolesUpTo(RoleName.TT_ADMIN),
+          activeRole: RoleName.TT_ADMIN,
         },
       }
     )
@@ -104,7 +104,7 @@ describe('components: CreateCourseMenu', () => {
       </MemoryRouter>,
       {
         auth: {
-          allowedRoles: generateRolesUpTo(RoleName.TT_OPS),
+          activeRole: RoleName.TT_OPS,
         },
       }
     )
@@ -126,7 +126,12 @@ describe('components: CreateCourseMenu', () => {
           <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
-      { auth: { allowedRoles: generateRolesUpTo(RoleName.TRAINER) } }
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          allowedRoles: generateRolesUpTo(RoleName.TRAINER),
+        },
+      }
     )
 
     userEvent.click(screen.getByText('Create course'))

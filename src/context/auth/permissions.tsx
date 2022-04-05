@@ -1,6 +1,6 @@
 import { MarkOptional } from 'ts-essentials'
 
-import { RoleName } from '@app/types'
+import { CourseType, RoleName } from '@app/types'
 
 import type { AuthContextType } from './types'
 
@@ -39,6 +39,28 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewAdmin: () => {
       const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
+    },
+
+    canCreateCourse: (type: CourseType) => {
+      if (auth.activeRole === RoleName.TT_ADMIN) {
+        return true
+      }
+
+      if (
+        auth.activeRole === RoleName.TT_OPS &&
+        [CourseType.OPEN, CourseType.CLOSED].includes(type)
+      ) {
+        return true
+      }
+
+      if (
+        auth.activeRole === RoleName.TRAINER &&
+        type === CourseType.INDIRECT
+      ) {
+        return true
+      }
+
+      return false
     },
   })
 

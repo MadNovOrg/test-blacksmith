@@ -1,4 +1,4 @@
-import type { Profile, RoleName } from '@app/types'
+import type { CourseType, Profile, RoleName } from '@app/types'
 
 export type { Profile } from '@app/types'
 
@@ -42,4 +42,5 @@ export type ACL = {
   canViewMyOrganization: () => boolean
   canViewMembership: () => boolean
   canViewAdmin: () => boolean
+  canCreateCourse: (type: CourseType) => boolean
 }

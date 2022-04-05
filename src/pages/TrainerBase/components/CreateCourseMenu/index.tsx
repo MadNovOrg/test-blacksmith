@@ -9,6 +9,8 @@ import { CourseType } from '@app/types'
 
 const CREATE_COURSE_PATH = '/trainer-base/course/new'
 
+type Options = Array<{ key: CourseType; label: string }>
+
 export const CreateCourseMenu = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null)
   const open = Boolean(anchorEl)
@@ -16,30 +18,31 @@ export const CreateCourseMenu = () => {
   const { acl } = useAuth()
   const { t } = useTranslation()
 
-  const options: Array<{ key: CourseType; label: string }> = useMemo(() => {
-    if (acl.isTTOps()) {
-      const opts = [
-        {
-          key: CourseType.CLOSED,
-          label: t('components.create-course-menu.closed-course-label'),
-        },
-        {
-          key: CourseType.OPEN,
-          label: t('components.create-course-menu.open-course-label'),
-        },
-      ]
+  const options: Options = useMemo(() => {
+    const opts: Options = []
 
-      if (acl.isTTAdmin()) {
-        opts.push({
-          key: CourseType.INDIRECT,
-          label: t('components.create-course-menu.indirect-course-label'),
-        })
-      }
-
-      return opts
+    if (acl.canCreateCourse(CourseType.CLOSED)) {
+      opts.push({
+        key: CourseType.CLOSED,
+        label: t('components.create-course-menu.closed-course-label'),
+      })
     }
 
-    return []
+    if (acl.canCreateCourse(CourseType.OPEN)) {
+      opts.push({
+        key: CourseType.OPEN,
+        label: t('components.create-course-menu.open-course-label'),
+      })
+    }
+
+    if (acl.canCreateCourse(CourseType.INDIRECT) && !acl.isTrainer()) {
+      opts.push({
+        key: CourseType.INDIRECT,
+        label: t('components.create-course-menu.indirect-course-label'),
+      })
+    }
+
+    return opts
   }, [acl, t])
 
   const handleClose = () => {
