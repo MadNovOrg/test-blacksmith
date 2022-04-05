@@ -2,8 +2,6 @@ alter table "public"."course_leader" rename to "course_trainer";
 
 alter table "public"."course_trainer" add constraint "course_trainer_course_id_profile_id_key" unique ("course_id", "profile_id");
 
-CREATE UNIQUE INDEX "course_trainer_unique_leader" ON "course_trainer" ("course_id") WHERE type = 'LEADER';
-
 alter table "public"."course" drop constraint "course_trainer_profile_id_fkey";
 
 alter table "public"."course" drop column "trainer_profile_id";

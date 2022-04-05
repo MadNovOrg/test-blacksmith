@@ -1,7 +1,5 @@
 DROP FUNCTION IF EXISTS course_lead_trainer(course_row course);
 
-DROP INDEX "public"."course_trainer_unique_leader";
-
 alter table "public"."course_trainer" drop constraint "course_trainer_course_id_profile_id_key";
 
 alter table "public"."course_trainer" rename to "course_leader";
