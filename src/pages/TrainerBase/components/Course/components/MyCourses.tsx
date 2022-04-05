@@ -99,10 +99,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
 
   const where = useMemo(() => {
     const obj: Record<string, object> = {
-      _or: [
-        { trainer_profile_id: { _eq: profile?.id } },
-        { leaders: { profile_id: { _eq: profile?.id } } },
-      ],
+      _or: [{ trainers: { profile_id: { _eq: profile?.id } } }],
     }
 
     const selectedLevels = levelFilter.flatMap(item =>

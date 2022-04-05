@@ -1,5 +1,5 @@
 table:
-  name: course_leader
+  name: course_trainer
   schema: public
 object_relationships:
 - name: profile

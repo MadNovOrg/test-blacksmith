@@ -60,29 +60,17 @@ select_permissions:
   role: user
 update_permissions:
 - permission:
-    check:
-      _or:
-      - course:
-          trainer_profile_id:
-            _eq: X-Hasura-User-Id
-      - course:
-          leaders:
-            profile_id:
-              _eq: X-Hasura-User-Id
+    check: {}
     columns:
     - attended
     - date_graded
     - grade
     - grading_feedback
     filter:
-      _or:
-      - course:
-          trainer_profile_id:
+      course:
+        trainers:
+          profile_id:
             _eq: X-Hasura-User-Id
-      - course:
-          leaders:
-            profile_id:
-              _eq: X-Hasura-User-Id
   role: user
 event_triggers:
 - definition:

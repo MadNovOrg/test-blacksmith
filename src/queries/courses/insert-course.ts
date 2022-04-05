@@ -17,10 +17,9 @@ export type ParamsType = {
     reaccreditation?: boolean
     go1Integration?: boolean
     description?: string
-    trainer_profile_id?: string
     min_participants?: number
     max_participants?: number
-    leaders?: {
+    trainers?: {
       data: [
         {
           profile_id: string

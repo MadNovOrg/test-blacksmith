@@ -21,7 +21,7 @@ const getClient = () => {
 
 export const getTrainerCourses = async (trainer: User): Promise<Course[]> => {
   const query = gql`query MyQuery {
-    course(where: {leaders: {profile: {email: {_eq: "${trainer.email}"}}}}, order_by: {name: asc}) {
+    course(where: {trainers: {profile: {email: {_eq: "${trainer.email}"}}}}, order_by: {name: asc}) {
       id
       deliveryType
       level
@@ -101,15 +101,17 @@ export const insertCourse = async (
   const venue = course.schedule[0].venue
     ? `, venue_id: "${await getVenueId(course.schedule[0].venue)}"`
     : ''
+
   const trainerId = await getProfileId(trainer.email)
+
   const query = gql`
     mutation MyMutation {
       insert_course(objects: {
         deliveryType: ${course.deliveryType},
         description: "${course.description}",
-        leaders: {
+        trainers: {
           data: {
-            profile_id: "${await getProfileId(trainer.email)}",
+            profile_id: "${trainerId}",
             type: LEADER
           }
         },
@@ -117,7 +119,6 @@ export const insertCourse = async (
         name: "${course.name}",
         reaccreditation: ${course.reaccreditation},
         status: ${course.status},
-        trainer_profile_id: "${trainerId}",
         type: ${course.type},
         schedule: {
           data: {
@@ -157,7 +158,7 @@ export const deleteCourse = async (id: string) => {
   console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {
-      delete_course_leader(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_trainer(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_schedule(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_module(where: { courseId: { _eq: ${id} } }) { affected_rows }
       delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }

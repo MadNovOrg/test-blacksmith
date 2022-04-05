@@ -18,17 +18,7 @@ object_relationships:
 - name: organization
   using:
     foreign_key_constraint_on: organization_id
-- name: trainer
-  using:
-    foreign_key_constraint_on: trainer_profile_id
 array_relationships:
-- name: leaders
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_leader
-        schema: public
 - name: modules
   using:
     foreign_key_constraint_on:
@@ -50,6 +40,19 @@ array_relationships:
       table:
         name: course_schedule
         schema: public
+- name: trainers
+  using:
+    foreign_key_constraint_on:
+      column: course_id
+      table:
+        name: course_trainer
+        schema: public
+computed_fields:
+- definition:
+    function:
+      name: course_lead_trainer
+      schema: public
+  name: trainer
 insert_permissions:
 - permission:
     backend_only: false
@@ -65,7 +68,6 @@ insert_permissions:
     - organization_id
     - reaccreditation
     - description
-    - trainer_profile_id
     - course_status
     - min_participants
     - max_participants
@@ -112,14 +114,10 @@ select_permissions:
     - name
     - organization_id
     - reaccreditation
-    - trainer_profile_id
     - updated_at
     filter:
       _or:
-      - trainer:
-          id:
-            _eq: X-Hasura-User-Id
-      - leaders:
+      - trainers:
           profile_id:
             _eq: X-Hasura-User-Id
       - participants:
@@ -133,11 +131,7 @@ update_permissions:
     - course_status
     - grading_confirmed
     filter:
-      _or:
-      - trainer:
-          id:
-            _eq: X-Hasura-User-Id
-      - leaders:
-          profile_id:
-            _eq: X-Hasura-User-Id
+      trainers:
+        profile_id:
+          _eq: X-Hasura-User-Id
   role: user

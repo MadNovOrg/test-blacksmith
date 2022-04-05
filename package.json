@@ -19,8 +19,10 @@
     "hasura": "env-cmd -f ./hasura/.env hasura --project hasura",
     "hasura:console": "npm run hasura -- console",
     "hasura:squash": "npm run hasura -- migrate squash",
+    "hasura:migrate:all:up": "npm run hasura -- migrate apply --database-name default",
+    "hasura:migrate:all:down": "npm run hasura -- migrate apply --down all --database-name default",
     "hasura:seed:create": "npm run hasura -- seed create",
-    "hasura:seed:apply": "npm run hasura -- seed apply",
+    "hasura:seed:apply": "npm run hasura -- seed apply --database-name default",
     "hasura:metadata:apply": "npm run hasura -- metadata apply",
     "hasura:migrate:apply": "npm run hasura -- migrate apply",
     "prepare": "husky install"

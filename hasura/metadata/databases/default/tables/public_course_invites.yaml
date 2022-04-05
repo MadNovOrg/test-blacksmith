@@ -25,7 +25,7 @@ insert_permissions:
     backend_only: false
     check:
       course:
-        leaders:
+        trainers:
           profile:
             id:
               _eq: X-Hasura-User-Id
@@ -46,7 +46,7 @@ select_permissions:
     - updated_at
     filter:
       course:
-        leaders:
+        trainers:
           profile:
             id:
               _eq: X-Hasura-User-Id
@@ -59,7 +59,7 @@ update_permissions:
     filter:
       _or:
       - course:
-          leaders:
+          trainers:
             profile:
               id:
                 _eq: X-Hasura-User-Id
@@ -73,7 +73,7 @@ delete_permissions:
 - permission:
     filter:
       course:
-        leaders:
+        trainers:
           profile:
             id:
               _eq: X-Hasura-User-Id
