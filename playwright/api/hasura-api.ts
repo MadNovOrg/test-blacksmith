@@ -12,6 +12,7 @@ const getClient = () => {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
         authorization: `Bearer ${getAdminIdToken()}`,
+        'x-hasura-role': 'admin',
       },
     })
   }

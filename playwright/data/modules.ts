@@ -496,7 +496,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     durationAfter: '3hrs 5mins',
   },
   {
-    name: 'advanced f2f',
+    name: 'advanced f2f @smoke',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.ADVANCED
