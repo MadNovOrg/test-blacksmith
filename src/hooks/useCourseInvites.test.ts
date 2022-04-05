@@ -1,9 +1,9 @@
-import useSWR from 'swr'
 import { renderHook } from '@testing-library/react-hooks'
-
-import useCourseInvites from './useCourseInvites'
+import useSWR from 'swr'
 
 import { chance } from '@test/index'
+
+import useCourseInvites from './useCourseInvites'
 
 jest.mock('swr')
 const useSWRMock = jest.mocked(useSWR)

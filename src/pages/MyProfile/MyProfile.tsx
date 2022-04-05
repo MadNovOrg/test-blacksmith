@@ -1,8 +1,7 @@
-import React from 'react'
 import { Box, Button, Typography } from '@mui/material'
+import React from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
 import {
   MUTATION as LinkGo1Profile,
   ResponseType as LinkGo1ProfileResponseType,

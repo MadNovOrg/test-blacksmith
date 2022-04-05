@@ -1,12 +1,12 @@
 import useSWR from 'swr'
 
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/participants/get-course-participants'
 import { SortOrder } from '@app/types'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type CourseParticipantCriteria = {
   attended?: { _eq: boolean }

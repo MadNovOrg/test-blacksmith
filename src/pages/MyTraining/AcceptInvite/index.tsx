@@ -1,9 +1,8 @@
+import { Alert, CircularProgress, Container } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
-import { Alert, CircularProgress, Container } from '@mui/material'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
 import {
   MUTATION as ACCEPT_INVITE_MUTATION,
   ParamsType as AcceptInviteParamsType,

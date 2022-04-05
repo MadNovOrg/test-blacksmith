@@ -1,12 +1,12 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
+import { insertCourse, deleteCourse } from '../../../api/hasura-api'
+import { MODULES_SETUP } from '../../../data/modules'
+import { Course } from '../../../data/types'
+import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
-import { Course } from '../../../data/types'
-import { insertCourse, deleteCourse } from '../../../api/hasura-api'
-import { users } from '../../../data/users'
-import { MODULES_SETUP } from '../../../data/modules'
 
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({

@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
-import { MODULE, MODULE_GROUP } from '../fragments'
-
 import { CourseDeliveryType, CourseLevel, ModuleGroup } from '@app/types'
+
+import { MODULE, MODULE_GROUP } from '../fragments'
 
 export type ResponseType = { groups: ModuleGroup[] }
 

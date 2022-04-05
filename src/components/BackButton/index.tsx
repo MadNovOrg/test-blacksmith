@@ -1,8 +1,8 @@
-import React from 'react'
-import { To, useNavigate } from 'react-router-dom'
-import { Button } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Button } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { To, useNavigate } from 'react-router-dom'
 
 type BackButtonProps = {
   label?: string

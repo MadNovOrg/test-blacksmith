@@ -1,15 +1,15 @@
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
-import useCourseModules from '@app/hooks/useCourseModules'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { ModulesSelection } from './index'
+import useCourseModules from '@app/hooks/useCourseModules'
+import { MUTATION } from '@app/queries/courses/save-course-modules-selection'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, within, userEvent, waitForText } from '@test/index'
-import { LoadingStatus } from '@app/util'
 import { buildCourseModule } from '@test/mock-data-utils'
-import { MUTATION } from '@app/queries/courses/save-course-modules-selection'
+
+import { ModulesSelection } from './index'
 
 jest.mock('@app/hooks/useCourseModules')
 jest.mock('@app/hooks/use-fetcher')

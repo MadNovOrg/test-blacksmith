@@ -1,10 +1,10 @@
-import React from 'react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import addDays from 'date-fns/addDays'
-
-import { Calendar } from '.'
+import React from 'react'
 
 import { now } from '@app/util'
+
+import { Calendar } from '.'
 
 export default {
   title: 'components/Calendar',

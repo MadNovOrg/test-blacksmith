@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Stack,
@@ -15,29 +16,26 @@ import {
   InputBase,
 } from '@mui/material'
 import { t } from 'i18next'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { LoadingButton } from '@mui/lab'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Dialog } from '@app/components/Dialog'
-
+import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
-import { CourseGradingMenu } from '../CourseGradingMenu'
-
-import useCourseGradingData from './useCourseGradingData'
-
-import { LoadingStatus } from '@app/util'
-import theme from '@app/theme'
+import { CourseDetailsTabs } from '@app/pages/TrainerBase/components/CourseDetails'
 import {
   MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
+import theme from '@app/theme'
 import { Grade } from '@app/types'
-import { CourseDetailsTabs } from '@app/pages/TrainerBase/components/CourseDetails'
+import { LoadingStatus } from '@app/util'
+
+import { CourseGradingMenu } from '../CourseGradingMenu'
+import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
+
+import useCourseGradingData from './useCourseGradingData'
 
 export const CourseGrading = () => {
   const { id: courseId } = useParams()

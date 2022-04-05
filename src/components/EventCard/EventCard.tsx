@@ -1,5 +1,5 @@
-import React from 'react'
 import { Typography, Avatar, Box } from '@mui/material'
+import React from 'react'
 
 import { formatDateRange } from '@app/util'
 

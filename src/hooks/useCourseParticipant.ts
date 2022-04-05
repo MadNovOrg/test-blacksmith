@@ -1,11 +1,11 @@
 import useSWR from 'swr'
 
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/participants/get-course-participant-by-id'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export default function useCourseParticipant(participantId: string): {
   data?: ResponseType['participant']

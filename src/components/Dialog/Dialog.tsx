@@ -1,11 +1,11 @@
-import React from 'react'
+import CloseIcon from '@mui/icons-material/Close'
 import {
   IconButton,
   Dialog as MUIDialog,
   DialogTitle,
   DialogContent,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import React from 'react'
 
 type Props = {
   id?: string

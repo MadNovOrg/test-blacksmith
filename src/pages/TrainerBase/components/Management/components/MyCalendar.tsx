@@ -1,14 +1,13 @@
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { RangeInput } from '@mui/lab/DateRangePicker/RangeTypes'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import StaticDateRangePicker from '@mui/lab/StaticDateRangePicker'
+import { Typography, Box, TextField } from '@mui/material'
+import { styled } from '@mui/system'
 import React, { useMemo, useState } from 'react'
 import useSWR from 'swr'
-import { Typography, Box, TextField } from '@mui/material'
-import StaticDateRangePicker from '@mui/lab/StaticDateRangePicker'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import { styled } from '@mui/system'
-import { RangeInput } from '@mui/lab/DateRangePicker/RangeTypes'
 
 import { EventCard } from '@app/components/EventCard'
-
 import {
   QUERY as GetTrainerSchedule,
   ResponseType as GetTrainerScheduleResponseType,

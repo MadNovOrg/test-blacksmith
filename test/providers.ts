@@ -1,7 +1,6 @@
 import { MarkOptional } from 'ts-essentials'
 
 import type { AuthContextType } from '@app/context/auth/types'
-
 import { RoleName } from '@app/types'
 
 export const profile = {

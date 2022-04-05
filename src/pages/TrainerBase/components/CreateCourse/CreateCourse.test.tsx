@@ -1,10 +1,11 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { CreateCourse } from '.'
+import { CourseType } from '@app/types'
 
 import { render, within, screen } from '@test/index'
-import { CourseType } from '@app/types'
+
+import { CreateCourse } from '.'
 
 describe('page: CreateCourse', () => {
   it("doesn't mark any step as done if on course details page", () => {

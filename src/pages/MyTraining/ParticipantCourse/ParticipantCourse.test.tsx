@@ -1,19 +1,19 @@
 import React from 'react'
-import useSWR from 'swr'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import useSWR from 'swr'
 
 import useCourse from '@app/hooks/useCourse'
+import { LoadingStatus } from '@app/util'
 
-import { ParticipantCourse } from '.'
-
+import { render, screen } from '@test/index'
 import {
   buildCourse,
   buildEndedCourse,
   buildNotStartedCourse,
   buildParticipant,
 } from '@test/mock-data-utils'
-import { LoadingStatus } from '@app/util'
-import { render, screen } from '@test/index'
+
+import { ParticipantCourse } from '.'
 
 jest.mock('@app/hooks/useCourse')
 

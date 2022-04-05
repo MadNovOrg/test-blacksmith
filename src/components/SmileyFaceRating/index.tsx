@@ -1,11 +1,11 @@
-import React from 'react'
-import Rating from '@mui/material/Rating'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
 import { Box, IconContainerProps, Typography } from '@mui/material'
+import Rating from '@mui/material/Rating'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const customIcons = {

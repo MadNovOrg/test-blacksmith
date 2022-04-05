@@ -1,3 +1,5 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Alert,
   Box,
@@ -9,21 +11,17 @@ import {
   Tab,
   tabClasses,
 } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import React, { useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { Expire } from '@app/components/Expire'
-
 import useCourse from '@app/hooks/useCourse'
-
-import { courseEnded, LoadingStatus } from '@app/util'
 import { CourseAttendees } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees'
 import { CourseGrading } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/TrainerBase/components/EvaluationSummaryTab'
+import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',

@@ -1,15 +1,14 @@
-import React from 'react'
 import { Box, Typography, Container } from '@mui/material'
 import { t } from 'i18next'
+import React from 'react'
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom'
 
-import { FullHeightPage } from '@app/components/FullHeightPage'
 import { BackButton } from '@app/components/BackButton'
-
-import { CreateCourseSteps } from './components/CreateCourseSteps'
-
+import { FullHeightPage } from '@app/components/FullHeightPage'
 import theme from '@app/theme'
 import { CourseType } from '@app/types'
+
+import { CreateCourseSteps } from './components/CreateCourseSteps'
 
 export const CreateCourse = () => {
   const location = useLocation()

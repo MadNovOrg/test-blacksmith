@@ -2,8 +2,8 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
-
-import { ParticipantGrading } from '.'
+import { Grade } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
 import {
@@ -12,8 +12,8 @@ import {
   buildParticipant,
   buildParticipantModule,
 } from '@test/mock-data-utils'
-import { LoadingStatus } from '@app/util'
-import { Grade } from '@app/types'
+
+import { ParticipantGrading } from '.'
 
 jest.mock('@app/hooks/useCourseParticipant')
 

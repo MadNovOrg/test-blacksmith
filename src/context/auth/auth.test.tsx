@@ -1,16 +1,17 @@
-import { Auth } from 'aws-amplify'
 import { renderHook, act } from '@testing-library/react-hooks'
+import { Auth } from 'aws-amplify'
 
-import { ActiveRoles, lsActiveRoleClient } from './helpers'
-
-import { useAuth, AuthProvider } from './index'
+import { RoleName } from '@app/types'
 
 import {
   mockCognitoToProfile,
   defaultCognitoProfile,
   chance,
 } from '@test/index'
-import { RoleName } from '@app/types'
+
+import { ActiveRoles, lsActiveRoleClient } from './helpers'
+
+import { useAuth, AuthProvider } from './index'
 
 const render = () => {
   return renderHook(() => useAuth(), { wrapper: AuthProvider })

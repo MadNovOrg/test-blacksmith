@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { SearchTrainers } from './SearchTrainers'
-
 import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
+
+import { SearchTrainers } from './SearchTrainers'
 
 const mockSearch = jest.fn().mockResolvedValue({ trainers: [] })
 jest.mock('./useQueryTrainers.ts', () => ({

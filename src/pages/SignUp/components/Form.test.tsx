@@ -1,8 +1,6 @@
-import React from 'react'
-import { Auth } from 'aws-amplify'
 import { CognitoUser, CodeDeliveryDetails } from 'amazon-cognito-identity-js'
-
-import { SignUpForm } from './Form'
+import { Auth } from 'aws-amplify'
+import React from 'react'
 
 import {
   render,
@@ -12,6 +10,8 @@ import {
   waitForCalls,
   waitForText,
 } from '@test/index'
+
+import { SignUpForm } from './Form'
 
 const defaultProps = {
   onSignUp: jest.fn(),

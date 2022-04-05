@@ -1,5 +1,4 @@
-import * as yup from 'yup'
-import React, { useCallback, useState } from 'react'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Grid,
   Button,
@@ -8,13 +7,12 @@ import {
   Autocomplete,
   FormHelperText,
 } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import * as yup from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
-
 import useCourseInvites from '@app/hooks/useCourseInvites'
-
 import { Course, InviteStatus } from '@app/types'
 import { courseStarted } from '@app/util'
 

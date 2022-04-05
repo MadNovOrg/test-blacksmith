@@ -2,13 +2,12 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { NotFound } from '@app/components/NotFound'
-
 import { AdminPage } from '@app/pages/admin'
-import { Organizations } from '@app/pages/admin/components/Organizations'
 import { Contacts } from '@app/pages/admin/components/Contacts'
-import { Trainers } from '@app/pages/admin/components/trainers'
-import { Trainees } from '@app/pages/admin/components/trainees'
+import { Organizations } from '@app/pages/admin/components/Organizations'
 import { Plans } from '@app/pages/admin/components/plans'
+import { Trainees } from '@app/pages/admin/components/trainees'
+import { Trainers } from '@app/pages/admin/components/trainers'
 
 const AdminRoutes = () => {
   return (

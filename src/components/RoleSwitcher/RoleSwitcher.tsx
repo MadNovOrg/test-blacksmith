@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react'
-import { Button, Menu, MenuItem } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { useNavigate } from 'react-router-dom'
+import { Button, Menu, MenuItem } from '@mui/material'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-
 import { RoleName } from '@app/types'
 
 export const RoleSwitcher = () => {

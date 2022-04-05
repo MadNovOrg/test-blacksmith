@@ -1,5 +1,4 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   Alert,
@@ -11,13 +10,12 @@ import {
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Divider from '@mui/material/Divider'
-import MUIImage from 'mui-image'
-import { add, differenceInHours, format } from 'date-fns'
 import pdf from '@react-pdf/renderer'
-
-import { CertificateDocument } from '@app/components/CertificatePDF'
+import { add, differenceInHours, format } from 'date-fns'
+import MUIImage from 'mui-image'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CertificateAssistIcon,
@@ -27,8 +25,9 @@ import {
   cpdImage,
   ntaImage,
 } from '@app/assets'
-import { transformModulesToGroups } from '@app/util'
+import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Course, CourseParticipant, Grade } from '@app/types'
+import { transformModulesToGroups } from '@app/util'
 
 // workaround for using recat-pdf with vite
 const { PDFDownloadLink } = pdf

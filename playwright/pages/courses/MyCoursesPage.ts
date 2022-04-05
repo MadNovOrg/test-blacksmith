@@ -1,10 +1,10 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
-import { BasePage } from '../BasePage'
 import { UiTable } from '../../components/UiTable'
-import { Course } from '../../data/types'
+import { BASE_URL } from '../../constants'
 import { toCourseTableRow } from '../../data/mappings'
+import { Course } from '../../data/types'
+import { BasePage } from '../BasePage'
 
 import { CourseBuilderPage } from './CourseBuilderPage'
 

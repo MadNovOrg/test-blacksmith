@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import CloseIcon from '@mui/icons-material/Close'
 import {
   Box,
   ClickAwayListener,
@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import React, { useState } from 'react'
 
 type IconDialogProps = {
   icon: React.ReactNode

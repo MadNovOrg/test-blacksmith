@@ -1,10 +1,10 @@
-import React from 'react'
 import {
   Box,
   LinearProgress,
   linearProgressClasses,
   useTheme,
 } from '@mui/material'
+import React from 'react'
 
 export type ProgressBarProps = {
   percentage: number

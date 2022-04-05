@@ -1,17 +1,16 @@
-import { waitFor, render as _render, screen } from '@testing-library/react'
-import React from 'react'
-import { deepmerge } from 'deepmerge-ts'
-import { DeepPartial } from 'ts-essentials'
-import Chance from 'chance'
-import '@app/i18n/config'
 import { ThemeProvider } from '@mui/material'
+import { waitFor, render as _render, screen } from '@testing-library/react'
+import Chance from 'chance'
+import { deepmerge } from 'deepmerge-ts'
+import React from 'react'
+import { DeepPartial } from 'ts-essentials'
 
+import '@app/i18n/config'
 import { AuthContext } from '@app/context/auth'
 import { injectACL } from '@app/context/auth/permissions'
+import theme from '@app/theme'
 
 import { defaultProviders, Providers } from './providers'
-
-import theme from '@app/theme'
 
 const chance = new Chance()
 

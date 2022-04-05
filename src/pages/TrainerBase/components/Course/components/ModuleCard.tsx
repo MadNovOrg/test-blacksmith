@@ -1,9 +1,8 @@
-import React from 'react'
-import { Box, Typography } from '@mui/material'
 import InfoIcon from '@mui/icons-material/InfoOutlined'
+import { Box, Typography } from '@mui/material'
+import React from 'react'
 
 import { IconDialog } from '@app/components/IconDialog'
-
 import { ModuleGroup } from '@app/types'
 import { formatDurationShort } from '@app/util'
 

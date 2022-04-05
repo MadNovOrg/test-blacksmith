@@ -1,9 +1,9 @@
-import React from 'react'
 import userEvent from '@testing-library/user-event'
-
-import { CourseAttendanceList } from './index'
+import React from 'react'
 
 import { render, screen, chance, within } from '@test/index'
+
+import { CourseAttendanceList } from './index'
 
 describe('component: CourseAttendanceList', () => {
   it('selects single participant as attended', () => {

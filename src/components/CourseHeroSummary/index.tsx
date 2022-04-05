@@ -1,4 +1,6 @@
-import React from 'react'
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
+import PinDropIcon from '@mui/icons-material/PinDrop'
+import TodayIcon from '@mui/icons-material/Today'
 import {
   Box,
   Container,
@@ -9,14 +11,11 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import TodayIcon from '@mui/icons-material/Today'
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
-import PinDropIcon from '@mui/icons-material/PinDrop'
 import { differenceInDays, format } from 'date-fns'
 import { t } from 'i18next'
+import React from 'react'
 
 import { useAuth } from '@app/context/auth'
-
 import theme from '@app/theme'
 import { Course } from '@app/types'
 import { courseEnded, courseStarted, now } from '@app/util'

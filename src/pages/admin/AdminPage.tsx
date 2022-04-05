@@ -1,8 +1,8 @@
-import React from 'react'
-import { Link as RRLink, Outlet } from 'react-router-dom'
 import { Tab, Tabs } from '@mui/material'
 import Box from '@mui/material/Box'
 import { styled } from '@mui/system'
+import React from 'react'
+import { Link as RRLink, Outlet } from 'react-router-dom'
 
 import { useRouteMatch } from '@app/hooks/use-route-match'
 

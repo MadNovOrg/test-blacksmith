@@ -1,8 +1,8 @@
-import useSWR from 'swr'
 import { gql } from 'graphql-request'
+import useSWR from 'swr'
 
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 type ParamsType = {
   id: string

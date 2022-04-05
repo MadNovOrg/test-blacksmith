@@ -1,11 +1,11 @@
-import React from 'react'
 import { add, format, sub } from 'date-fns'
+import React from 'react'
 import useSWR from 'swr'
 
-import { CourseHeroSummary } from '.'
-
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 import { render, screen } from '@test/index'
+import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+
+import { CourseHeroSummary } from '.'
 
 jest.mock('swr')
 const useSWRMock = jest.mocked(useSWR)

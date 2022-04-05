@@ -1,11 +1,11 @@
-import React from 'react'
+import { SxProps } from '@mui/material'
+import Box from '@mui/material/Box'
+import TableCell from '@mui/material/TableCell'
 import MuiTableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
 import TableSortLabel from '@mui/material/TableSortLabel'
-import Box from '@mui/material/Box'
 import { visuallyHidden } from '@mui/utils'
-import { SxProps } from '@mui/material'
+import React from 'react'
 
 import { SortOrder } from '@app/types'
 

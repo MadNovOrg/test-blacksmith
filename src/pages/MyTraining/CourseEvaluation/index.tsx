@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Container,
   FormHelperText,
@@ -10,46 +8,45 @@ import {
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { groupBy, map, uniqBy } from 'lodash-es'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import useSWR from 'swr'
+import * as yup from 'yup'
 
+import { AttendeeMenu } from '@app/components/AttendeeMenu'
 import { BackButton } from '@app/components/BackButton'
+import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingQuestion } from '@app/components/RatingQuestion'
-import { BooleanQuestion } from '@app/components/BooleanQuestion'
-import { AttendeeMenu } from '@app/components/AttendeeMenu'
-
 import { useAuth } from '@app/context/auth'
-
-import useCourse from '@app/hooks/useCourse'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import {
-  CourseEvaluationQuestion,
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationQuestionType,
-} from '@app/types'
-import {
-  QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
-  ResponseType as GetCourseEvaluationQuestionsResponseType,
-} from '@app/queries/course-evaluation/get-questions'
+import useCourse from '@app/hooks/useCourse'
 import {
   QUERY as GET_ANSWERS_QUERY,
   ParamsType as GetAnswersParamsType,
   ResponseType as GetAnswersResponseType,
 } from '@app/queries/course-evaluation/get-answers'
 import {
-  MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
-  ResponseType as SaveCourseEvaluationResponseType,
-} from '@app/queries/course-evaluation/save-evaluation'
-import {
   QUERY as GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
   ParamsType as GetFeedbackUsersParamsType,
 } from '@app/queries/course-evaluation/get-feedback-users'
+import {
+  QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
+  ResponseType as GetCourseEvaluationQuestionsResponseType,
+} from '@app/queries/course-evaluation/get-questions'
+import {
+  MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
+  ResponseType as SaveCourseEvaluationResponseType,
+} from '@app/queries/course-evaluation/save-evaluation'
+import {
+  CourseEvaluationQuestion,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationQuestionType,
+} from '@app/types'
 
 const groups = [
   CourseEvaluationQuestionGroup.TRAINING_RATING,

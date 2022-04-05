@@ -1,14 +1,14 @@
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import userEvent from '@testing-library/user-event'
 
 import useCourse from '@app/hooks/useCourse'
-
-import { CourseGradingDetails } from '.'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
-import { LoadingStatus } from '@app/util'
+
+import { CourseGradingDetails } from '.'
 
 jest.mock('@app/hooks/useCourse')
 

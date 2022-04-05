@@ -1,9 +1,8 @@
 import { Box, CircularProgress, Container, Grid } from '@mui/material'
 import React from 'react'
 
-import { FeaturedBlogPost } from '@app/components/Blog/FeaturedBlogPost'
 import { BlogPostGrid } from '@app/components/Blog/BlogPostGrid'
-
+import { FeaturedBlogPost } from '@app/components/Blog/FeaturedBlogPost'
 import { useBlogPostList } from '@app/hooks/useBlogPosts'
 
 import { BlogPostList } from '../../components/Blog/BlogPostList'

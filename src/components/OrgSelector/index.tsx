@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Autocomplete,
   CircularProgress,
@@ -6,14 +5,15 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
-import { Organization } from '@app/types'
 import {
   QUERY,
   ResponseType,
 } from '@app/queries/organization/get-organizations'
+import { Organization } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type OrgSelectorProps = {

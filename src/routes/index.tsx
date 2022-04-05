@@ -1,20 +1,18 @@
-import React, { Suspense, useCallback, useMemo } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import CircularProgress from '@mui/material/CircularProgress'
 import { Box, Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import React, { Suspense, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
 import { NotFound } from '@app/components/NotFound'
-
 import { useAuth } from '@app/context/auth'
-
-import { LoginPage } from '@app/pages/Login'
-import { SignUpPage } from '@app/pages/SignUp'
-import { InvitationPage } from '@app/pages/Invitation'
-import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
-import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
+import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
+import { InvitationPage } from '@app/pages/Invitation'
+import { LoginPage } from '@app/pages/Login'
+import { ResetPasswordPage } from '@app/pages/ResetPassword'
+import { SignUpPage } from '@app/pages/SignUp'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))

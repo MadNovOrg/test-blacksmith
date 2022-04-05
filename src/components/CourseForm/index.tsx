@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { LocalizationProvider, DatePicker, TimePicker } from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {
   FormControl,
   FormControlLabel,
@@ -14,18 +16,14 @@ import {
   Typography,
 } from '@mui/material'
 import { Box, styled } from '@mui/system'
-import { LocalizationProvider, DatePicker, TimePicker } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { setHours, setMinutes } from 'date-fns'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { DeepNonNullable, noop } from 'ts-essentials'
-import { setHours, setMinutes } from 'date-fns'
 
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-
-import VenueSelector from '../VenueSelector'
-
+import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
   Course,
@@ -34,8 +32,9 @@ import {
   CourseType,
   Venue,
 } from '@app/types'
-import { yup } from '@app/schemas'
 import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
+
+import VenueSelector from '../VenueSelector'
 
 const FormPanel = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),

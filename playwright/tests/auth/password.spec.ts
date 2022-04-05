@@ -5,9 +5,9 @@ import { TARGET_ENV } from '../../constants'
 import { users } from '../../data/users'
 import { ForgotPasswordPage } from '../../pages/auth/ForgotPasswordPage'
 import { LoginPage } from '../../pages/auth/LoginPage'
-import { EmailPage } from '../../pages/EmailPage'
-import { contactYouText } from '../../pages/contact/texts'
 import { ResetPasswordPage } from '../../pages/auth/ResetPasswordPage'
+import { contactYouText } from '../../pages/contact/texts'
+import { EmailPage } from '../../pages/EmailPage'
 
 const test = base.extend<{ resetPasswordPage: ResetPasswordPage }>({
   resetPasswordPage: async ({ page }, use) => {

@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
-import { COURSE, COURSE_SCHEDULE, VENUE, ORGANIZATION } from '../fragments'
-
 import { Course } from '@app/types'
+
+import { COURSE, COURSE_SCHEDULE, VENUE, ORGANIZATION } from '../fragments'
 
 export type ResponseType = { course: Course }
 

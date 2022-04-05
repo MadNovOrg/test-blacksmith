@@ -1,9 +1,9 @@
-import React from 'react'
-import CalendarIcon from '@mui/icons-material/CalendarToday'
 import ChartBarIcon from '@mui/icons-material/BarChart'
+import CalendarIcon from '@mui/icons-material/CalendarToday'
 import FolderIcon from '@mui/icons-material/FolderOpen'
 import InboxIcon from '@mui/icons-material/Inbox'
 import UsersIcon from '@mui/icons-material/People'
+import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 function classNames(...classes: string[]) {

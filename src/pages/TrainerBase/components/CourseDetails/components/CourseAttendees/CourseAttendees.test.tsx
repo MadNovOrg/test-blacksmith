@@ -1,15 +1,15 @@
-import React from 'react'
 import userEvent from '@testing-library/user-event'
+import React from 'react'
 
 import useCourse from '@app/hooks/useCourse'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-
-import { CourseAttendees } from '.'
+import { Course, CourseParticipant } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
-import { LoadingStatus } from '@app/util'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
-import { Course, CourseParticipant } from '@app/types'
+
+import { CourseAttendees } from '.'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useCourseParticipants')

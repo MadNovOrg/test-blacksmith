@@ -1,6 +1,6 @@
-import React, { useMemo, useState } from 'react'
-import { Avatar, Button, Menu, MenuItem } from '@mui/material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { Avatar, Button, Menu, MenuItem } from '@mui/material'
+import React, { useMemo, useState } from 'react'
 
 import { noop } from '@app/util'
 

@@ -1,9 +1,9 @@
-import React from 'react'
 import { add, sub } from 'date-fns'
+import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
-
-import { CourseInvites } from './CourseInvites'
+import { Course } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, waitForCalls, chance, userEvent } from '@test/index'
 import {
@@ -11,8 +11,8 @@ import {
   buildCourseSchedule,
   buildInvite,
 } from '@test/mock-data-utils'
-import { LoadingStatus } from '@app/util'
-import { Course } from '@app/types'
+
+import { CourseInvites } from './CourseInvites'
 
 jest.mock('@app/hooks/useCourseInvites')
 const useCourseInvitesMock = jest.mocked(useCourseInvites)

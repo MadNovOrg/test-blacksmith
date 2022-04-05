@@ -2,11 +2,10 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { NotFound } from '@app/components/NotFound'
-
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
 import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
+import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 
 const MembershipRoutes = () => {
   return (

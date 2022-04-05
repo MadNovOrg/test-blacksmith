@@ -1,36 +1,34 @@
-import React, { useMemo, useState } from 'react'
-import useSWR from 'swr'
-import format from 'date-fns/format'
-import { useTranslation } from 'react-i18next'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Button, Chip, CircularProgress, Container } from '@mui/material'
+import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
+import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Button, Chip, CircularProgress, Container } from '@mui/material'
-import { useDebounce } from 'use-debounce'
+import Typography from '@mui/material/Typography'
+import format from 'date-fns/format'
+import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import useSWR from 'swr'
+import { useDebounce } from 'use-debounce'
 
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { TableHead } from '@app/components/Table/TableHead'
-
 import { useAuth } from '@app/context/auth'
-
-import { CreateCourseMenu } from '../../CreateCourseMenu'
-
 import {
   QUERY as GetMyCourses,
   ResponseType as GetMyCoursesResponseType,
   ParamsType as GetMyCourseParamsType,
 } from '@app/queries/courses/get-courses'
 import { CourseLevel, CourseStatus, CourseType, SortOrder } from '@app/types'
+
+import { CreateCourseMenu } from '../../CreateCourseMenu'
 
 type MyCoursesProps = unknown
 

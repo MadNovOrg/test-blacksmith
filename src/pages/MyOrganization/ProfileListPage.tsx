@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
-import ArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 import { Profile } from '@app/types'
 

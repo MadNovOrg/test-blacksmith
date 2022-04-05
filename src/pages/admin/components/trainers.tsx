@@ -1,6 +1,6 @@
+import { CircularProgress } from '@mui/material'
 import React, { useState } from 'react'
 import useSWR from 'swr'
-import { CircularProgress } from '@mui/material'
 
 import { getProfileWithCriteria } from '@app/queries/users'
 import { Profile, RoleName } from '@app/types'

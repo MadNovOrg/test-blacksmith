@@ -1,5 +1,5 @@
-import useSWR from 'swr'
 import { stripHtml } from 'string-strip-html'
+import useSWR from 'swr'
 
 import { BlogPost, WPBlogPost, WPCategory, WPMedia } from '@app/types'
 

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Dialog } from './Dialog'
-
 import { render, fireEvent, waitForCalls } from '@test/index'
+
+import { Dialog } from './Dialog'
 
 describe('Dialog', () => {
   it('does not render children when open is false', async () => {

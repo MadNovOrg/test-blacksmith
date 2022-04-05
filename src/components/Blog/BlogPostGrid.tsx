@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Container,
   Box,
@@ -7,12 +6,12 @@ import {
   Tab,
   Tabs,
 } from '@mui/material'
+import React, { useState } from 'react'
 
 import { useCategoriesList } from '@app/hooks/useBlogPosts'
+import { WPBlogPost } from '@app/types'
 
 import { BlogPostGridItem } from './BlogPostGridItem'
-
-import { WPBlogPost } from '@app/types'
 
 const TabPanel: React.FC<{
   index: number

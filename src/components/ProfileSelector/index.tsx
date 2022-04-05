@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   Autocomplete,
   CircularProgress,
@@ -6,15 +5,16 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
-import { Profile } from '@app/types'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/profile/find-profiles'
+import { Profile } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type ProfileSelectorProps = {

@@ -1,6 +1,6 @@
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography } from '@mui/material'
 
 import { Course } from '@app/types'
 import { formatDateWithTime } from '@app/util'

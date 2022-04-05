@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { IconButton } from '@mui/material'
 import clsx from 'clsx'
 import {
   format,
@@ -18,9 +20,7 @@ import {
   startOfDay,
   startOfToday,
 } from 'date-fns'
-import { IconButton } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import React, { useMemo, useState } from 'react'
 
 type CalendarProps = {
   highlight?: {

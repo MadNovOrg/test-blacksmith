@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test'
 
-import { UserMenu } from '../components/UserMenu'
 import { RoleSwitcher } from '../components/RoleSwitcher'
+import { UserMenu } from '../components/UserMenu'
 import { BASE_URL } from '../constants'
 
 import { BasePage } from './BasePage'

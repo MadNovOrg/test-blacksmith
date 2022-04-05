@@ -1,23 +1,20 @@
-import React, { useMemo, useState } from 'react'
+import clsx from 'clsx'
 import { isAfter, isBefore, isSameDay, isValid as isDateValid } from 'date-fns'
+import React, { useMemo, useState } from 'react'
 import { useForm, FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import clsx from 'clsx'
 import useSWR from 'swr'
 
 import { Calendar } from '@app/components/Calendar'
-
 import { useAuth } from '@app/context/auth'
-
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { MUTATION as InsertAvailability } from '@app/queries/trainer/manage-availability/insert-availability'
-import { MUTATION as UpdateAvailability } from '@app/queries/trainer/manage-availability/update-availability'
 import { MUTATION as DeleteAvailability } from '@app/queries/trainer/manage-availability/delete-availability'
 import {
   QUERY as GetAvailability,
   ResponseType as GetAvailabilityResponseType,
 } from '@app/queries/trainer/manage-availability/get-availability'
+import { MUTATION as InsertAvailability } from '@app/queries/trainer/manage-availability/insert-availability'
+import { MUTATION as UpdateAvailability } from '@app/queries/trainer/manage-availability/update-availability'
 import { AvailabilityType } from '@app/types'
 import { formatDateForInput } from '@app/util'
 

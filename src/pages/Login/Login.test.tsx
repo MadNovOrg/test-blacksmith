@@ -1,8 +1,6 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { LoginPage } from './Login'
-
 import {
   render,
   providers,
@@ -12,6 +10,8 @@ import {
   screen,
   waitForText,
 } from '@test/index'
+
+import { LoginPage } from './Login'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({

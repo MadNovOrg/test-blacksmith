@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { CourseGradingMenu } from '.'
-
 import { CourseLevel, CourseDeliveryType } from '@app/types'
+
 import { render, screen, userEvent, within } from '@test/index'
+
+import { CourseGradingMenu } from '.'
 
 describe('component: CourseGradingMenu', () => {
   it('displays correct option for virtual L1 course', () => {

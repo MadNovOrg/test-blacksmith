@@ -1,20 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Typography, Box, CircularProgress, Stack } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
+import { Typography, Box, CircularProgress, Stack } from '@mui/material'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import useCourseModules from '@app/hooks/useCourseModules'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { HoldsRecord, ModulesSelectionList } from '../../ModulesSelectionList'
-
-import { LoadingStatus } from '@app/util'
+import useCourseModules from '@app/hooks/useCourseModules'
 import {
   MUTATION,
   ResponseType,
   ParamsType,
 } from '@app/queries/courses/save-course-modules-selection'
+import { LoadingStatus } from '@app/util'
+
+import { HoldsRecord, ModulesSelectionList } from '../../ModulesSelectionList'
 
 export const ModulesSelection = () => {
   const { t } = useTranslation()

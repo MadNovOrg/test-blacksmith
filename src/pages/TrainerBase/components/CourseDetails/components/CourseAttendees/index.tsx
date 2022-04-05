@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Alert,
   CircularProgress,
@@ -9,18 +8,18 @@ import {
   Tab,
   Typography,
 } from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { useParams } from 'react-router-dom'
 
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-
-import { CourseInvites } from './CourseInvites'
-
-import { LoadingStatus } from '@app/util'
-import { Course, InviteStatus } from '@app/types'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { AttendingTab } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees/AttendingTab'
 import { InvitesTab } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseAttendees/InvitesTab'
+import { Course, InviteStatus } from '@app/types'
+import { LoadingStatus } from '@app/util'
+
+import { CourseInvites } from './CourseInvites'
 
 type CourseAttendeesProps = {
   course: Course

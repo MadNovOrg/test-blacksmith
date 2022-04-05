@@ -1,16 +1,16 @@
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
-import userEvent from '@testing-library/user-event'
 
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { CourseAttendance } from './index'
-
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { LoadingStatus } from '@app/util'
+
 import { render, screen, waitForText, within } from '@test/index'
 import { buildParticipant } from '@test/mock-data-utils'
-import { MUTATION } from '@app/queries/courses/save-course-attendance'
+
+import { CourseAttendance } from './index'
 
 jest.mock('@app/hooks/useCourseParticipants')
 jest.mock('@app/hooks/use-fetcher', () => ({

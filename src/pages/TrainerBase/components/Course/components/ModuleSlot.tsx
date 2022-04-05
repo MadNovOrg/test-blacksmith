@@ -1,9 +1,9 @@
+import { Box, useTheme } from '@mui/material'
 import React from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { Box, useTheme } from '@mui/material'
 
-import { ModuleGroup } from '@app/types'
 import { ModuleCard } from '@app/pages/TrainerBase/components/Course/components/ModuleCard'
+import { ModuleGroup } from '@app/types'
 
 type ModuleSlotProps = {
   module?: ModuleGroup

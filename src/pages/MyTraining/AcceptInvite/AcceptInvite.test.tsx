@@ -2,11 +2,11 @@ import React from 'react'
 import { MemoryRouter, Routes, Route, useParams } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { AcceptInvite } from '.'
+import { InviteStatus } from '@app/types'
 
 import { render, waitForText } from '@test/index'
-import { InviteStatus } from '@app/types'
+
+import { AcceptInvite } from '.'
 
 jest.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: jest.fn(),

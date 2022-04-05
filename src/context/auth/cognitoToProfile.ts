@@ -1,8 +1,7 @@
 import { gqlRequest } from '@app/lib/gql-request'
+import { getUserProfile } from '@app/queries/users'
 
 import type { CognitoUser, Profile, Claims } from './types'
-
-import { getUserProfile } from '@app/queries/users'
 
 /**
  * Must be in a dedicated file for mock testing

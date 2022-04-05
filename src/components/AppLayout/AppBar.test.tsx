@@ -1,10 +1,11 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { AppBar } from './AppBar'
+import { RoleName } from '@app/types'
 
 import { chance, render, screen, within } from '@test/index'
-import { RoleName } from '@app/types'
+
+import { AppBar } from './AppBar'
 
 describe('component: AppBar', () => {
   it('renders logo as expected', async () => {

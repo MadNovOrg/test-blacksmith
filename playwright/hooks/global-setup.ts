@@ -3,8 +3,8 @@ import { rm } from 'fs'
 import { Browser, chromium } from '@playwright/test'
 
 import { TEMP_DIR } from '../constants'
-import { LoginPage } from '../pages/auth/LoginPage'
 import { users } from '../data/users'
+import { LoginPage } from '../pages/auth/LoginPage'
 
 export const stateFilePath = (userKey: string) =>
   `${TEMP_DIR}/storage-${userKey}.json`

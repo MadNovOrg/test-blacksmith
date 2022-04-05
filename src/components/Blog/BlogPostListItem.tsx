@@ -11,7 +11,6 @@ import React from 'react'
 import { Link as RRLink } from 'react-router-dom'
 
 import { useExpandedBlogPost } from '@app/hooks/useBlogPosts'
-
 import { WPBlogPost } from '@app/types'
 
 export const BlogPostListItem: React.FC<{ post: WPBlogPost }> = ({ post }) => {

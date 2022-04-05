@@ -1,14 +1,13 @@
-import React, { useMemo, useState } from 'react'
-import { Auth } from 'aws-amplify'
-import { createSearchParams, useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { Link, Box, Button, TextField, Typography } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { Link, Box, Button, TextField, Typography } from '@mui/material'
+import { Auth } from 'aws-amplify'
+import React, { useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
-
 import { yup, schemas } from '@app/schemas'
 
 type ForgotPasswordInput = {

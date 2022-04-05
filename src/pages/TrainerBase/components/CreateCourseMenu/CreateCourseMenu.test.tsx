@@ -1,12 +1,13 @@
+import { Typography } from '@mui/material'
 import React from 'react'
 import { MemoryRouter, Routes, Route, useSearchParams } from 'react-router-dom'
-import { Typography } from '@mui/material'
 
-import { CreateCourseMenu } from '.'
+import { RoleName } from '@app/types'
 
 import { render, userEvent, screen, within, waitForText } from '@test/index'
-import { RoleName } from '@app/types'
 import { generateRolesUpTo } from '@test/utils'
+
+import { CreateCourseMenu } from '.'
 
 const CourseTypeMock = () => {
   const [searchParams] = useSearchParams()

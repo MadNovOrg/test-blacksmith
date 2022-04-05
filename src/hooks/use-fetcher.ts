@@ -2,7 +2,6 @@ import { RequestDocument, Variables } from 'graphql-request'
 import { useCallback } from 'react'
 
 import { useAuth } from '@app/context/auth'
-
 import { gqlRequest } from '@app/lib/gql-request'
 
 export const useFetcher = () => {

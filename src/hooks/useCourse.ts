@@ -1,12 +1,12 @@
 import useSWR from 'swr'
 import { KeyedMutator } from 'swr/dist/types'
 
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/courses/get-course-by-id'
+import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export default function useCourse(courseId: string): {
   data?: ResponseType['course']

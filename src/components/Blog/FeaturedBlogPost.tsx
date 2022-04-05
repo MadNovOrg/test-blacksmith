@@ -10,7 +10,6 @@ import {
 import React from 'react'
 
 import { useExpandedBlogPost } from '@app/hooks/useBlogPosts'
-
 import { WPBlogPost } from '@app/types'
 
 type FeaturedBlogPostProps = {

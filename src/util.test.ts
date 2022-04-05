@@ -1,11 +1,11 @@
+import { buildCourse } from '@test/mock-data-utils'
+
 import {
   formatDateRange,
   courseStarted,
   courseEnded,
   formatDateForDraft,
 } from './util'
-
-import { buildCourse } from '@test/mock-data-utils'
 
 describe('formatDateRange', () => {
   it('returns single date with month when within same day', () => {

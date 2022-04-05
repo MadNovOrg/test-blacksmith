@@ -1,4 +1,3 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import {
   CircularProgress,
   Container,
@@ -9,11 +8,11 @@ import {
   TablePagination,
   TableRow,
 } from '@mui/material'
-import useSWR from 'swr'
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
 
 import { TableHead } from '@app/components/Table/TableHead'
-
 import {
   ParamsType as GetOrganizationsParamsType,
   QUERY as GetOrganizations,

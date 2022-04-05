@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
-import { Box } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
+import { Box } from '@mui/material'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,16 +9,14 @@ import {
   FormValues,
   ValidFormFiels,
 } from '@app/components/CourseForm'
-
 import { useFetcher } from '@app/hooks/use-fetcher'
-
 import {
   MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/insert-course'
-import { generateCourseName, LoadingStatus } from '@app/util'
 import { CourseType } from '@app/types'
+import { generateCourseName, LoadingStatus } from '@app/util'
 
 function assertCourseDataValid(
   data: FormValues,

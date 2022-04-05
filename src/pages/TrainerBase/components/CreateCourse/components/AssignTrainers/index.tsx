@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useMemo } from 'react'
 import { Typography, Box } from '@mui/material'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SearchTrainers } from './SearchTrainers'

@@ -1,8 +1,6 @@
-import React from 'react'
 import { Auth } from 'aws-amplify'
+import React from 'react'
 import { MemoryRouter, createSearchParams } from 'react-router-dom'
-
-import { ForgotPasswordPage } from './ForgotPassword'
 
 import {
   screen,
@@ -12,6 +10,8 @@ import {
   chance,
   waitForCalls,
 } from '@test/index'
+
+import { ForgotPasswordPage } from './ForgotPassword'
 
 const AuthMock = jest.mocked(Auth)
 

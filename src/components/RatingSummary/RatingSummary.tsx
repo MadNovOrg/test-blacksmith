@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { groupBy } from 'lodash-es'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { RatingProgress } from '../RatingProgress'
 
 import {
   CourseEvaluationQuestionType,
   CourseEvaluationQuestionGroup,
 } from '@app/types'
+
+import { RatingProgress } from '../RatingProgress'
 
 const labels = ['excellent', 'good', 'average', 'fair', 'poor']
 const colors = [

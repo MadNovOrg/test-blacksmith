@@ -1,10 +1,11 @@
 import React from 'react'
 import { getI18n } from 'react-i18next'
 
-import { RoleSwitcher } from './RoleSwitcher'
+import { RoleName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
-import { RoleName } from '@app/types'
+
+import { RoleSwitcher } from './RoleSwitcher'
 
 const { t } = getI18n()
 const RoleUserLabel = t(`components.role-switcher.${RoleName.USER}`)

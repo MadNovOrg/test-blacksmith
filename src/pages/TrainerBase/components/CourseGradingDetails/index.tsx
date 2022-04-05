@@ -1,4 +1,4 @@
-import React from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   Alert,
   Box,
@@ -8,18 +8,16 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
-
 import useCourse from '@app/hooks/useCourse'
+import theme from '@app/theme'
+import { LoadingStatus } from '@app/util'
 
 import { CourseGradingSteps } from './CourseGradingSteps'
-
-import { LoadingStatus } from '@app/util'
-import theme from '@app/theme'
 
 export const CourseGradingDetails = () => {
   const { id: courseId } = useParams()

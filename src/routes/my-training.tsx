@@ -2,16 +2,15 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import { NotFound } from '@app/components/NotFound'
-
 import { MyTrainingPage } from '@app/pages/MyTraining'
-import { ParticipantCourse } from '@app/pages/MyTraining/ParticipantCourse'
 import { AcceptInvite } from '@app/pages/MyTraining/AcceptInvite'
-import { MyTrainingDashboard } from '@app/pages/MyTraining/MyTrainingDashboard'
-import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
-import { MyResources } from '@app/pages/MyTraining/MyResources'
-import { MyMembership } from '@app/pages/MyTraining/MyMembership'
-import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
 import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
+import { MyCertifications } from '@app/pages/MyTraining/MyCertifications'
+import { MyMembership } from '@app/pages/MyTraining/MyMembership'
+import { MyResources } from '@app/pages/MyTraining/MyResources'
+import { MyTrainingDashboard } from '@app/pages/MyTraining/MyTrainingDashboard'
+import { MyUpcomingTraining } from '@app/pages/MyTraining/MyUpcomingTraining'
+import { ParticipantCourse } from '@app/pages/MyTraining/ParticipantCourse'
 
 const MyTrainingRoutes = () => {
   return (

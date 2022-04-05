@@ -2,20 +2,20 @@ import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import useCourseGradingData from './useCourseGradingData'
-
-import { CourseGrading } from './'
+import { MUTATION } from '@app/queries/grading/save-course-grading'
+import { Grade } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, within, userEvent, waitForText } from '@test/index'
-import { LoadingStatus } from '@app/util'
 import {
   buildCourse,
   buildCourseModule,
   buildParticipant,
 } from '@test/mock-data-utils'
-import { MUTATION } from '@app/queries/grading/save-course-grading'
-import { Grade } from '@app/types'
+
+import useCourseGradingData from './useCourseGradingData'
+
+import { CourseGrading } from './'
 
 jest.mock('./useCourseGradingData')
 jest.mock('@app/hooks/use-fetcher')

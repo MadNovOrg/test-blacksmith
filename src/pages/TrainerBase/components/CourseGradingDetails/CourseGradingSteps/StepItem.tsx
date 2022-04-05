@@ -1,6 +1,6 @@
+import CheckIcon from '@mui/icons-material/Check'
 import { Box, styled, Typography } from '@mui/material'
 import React from 'react'
-import CheckIcon from '@mui/icons-material/Check'
 
 const Circle = styled('span', {
   shouldForwardProp: prop => prop !== 'completed' && prop !== 'line',

@@ -1,7 +1,3 @@
-import React, { useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
 import {
   Alert,
   Box,
@@ -17,12 +13,14 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
 
-import { TableHead } from '@app/components/Table/TableHead'
 import { LinkBehavior } from '@app/components/LinkBehavior'
-
+import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-
 import {
   QUERY as GET_EVALUATION_QUERY,
   ResponseType as GetEvaluationResponseType,

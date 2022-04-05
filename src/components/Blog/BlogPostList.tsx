@@ -2,9 +2,9 @@ import { List, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BlogPostListItem } from './BlogPostListItem'
-
 import { WPBlogPost } from '@app/types'
+
+import { BlogPostListItem } from './BlogPostListItem'
 
 export const BlogPostList: React.FC<{ posts: WPBlogPost[] }> = ({ posts }) => {
   const { t } = useTranslation()

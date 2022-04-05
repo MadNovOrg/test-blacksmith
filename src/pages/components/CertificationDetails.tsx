@@ -1,9 +1,9 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { format, formatDistanceToNow } from 'date-fns'
-import QRCode from 'qrcode.react'
 import CheckIcon from '@mui/icons-material/Check'
 import PdfIcon from '@mui/icons-material/PictureAsPdf'
+import { format, formatDistanceToNow } from 'date-fns'
+import QRCode from 'qrcode.react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 type CertificationDetailsProps = {
   // TODO replace mock with proper model when it's ready

@@ -1,16 +1,16 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { stateFilePath } from '../../../hooks/global-setup'
-import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
-import { Course } from '../../../data/types'
-import { COURSES_TO_VIEW } from '../../../data/courses'
+import { CourseLevel } from '../../../../src/types'
 import {
   makeSureTrainerHasCourses,
   getTrainerCourses,
 } from '../../../api/hasura-api'
+import { COURSES_TO_VIEW } from '../../../data/courses'
+import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
-import { CourseLevel } from '../../../../src/types'
+import { stateFilePath } from '../../../hooks/global-setup'
+import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const test = base.extend<{
   coursesToView: Course[]

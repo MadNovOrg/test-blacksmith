@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Availability } from '@app/types'
 import { AVAILABILITY } from '@app/queries/fragments'
+import { Availability } from '@app/types'
 
 export type ResponseType = Availability
 

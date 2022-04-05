@@ -1,10 +1,11 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { TrainerBasePage } from './TrainerBase'
+import { RoleName } from '@app/types'
 
 import { render, screen } from '@test/index'
-import { RoleName } from '@app/types'
+
+import { TrainerBasePage } from './TrainerBase'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({

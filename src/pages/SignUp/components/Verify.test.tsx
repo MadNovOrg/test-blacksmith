@@ -1,9 +1,9 @@
-import React from 'react'
 import { Auth } from 'aws-amplify'
-
-import { SignUpVerify } from './Verify'
+import React from 'react'
 
 import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
+
+import { SignUpVerify } from './Verify'
 
 const defaultProps = {
   username: chance.email(),

@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
 import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import React, { useMemo } from 'react'
 
 import { StepItem } from './StepItem'
 

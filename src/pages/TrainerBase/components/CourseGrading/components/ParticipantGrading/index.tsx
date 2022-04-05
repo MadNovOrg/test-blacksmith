@@ -15,16 +15,14 @@ import {
   Typography,
 } from '@mui/material'
 import { t } from 'i18next'
+import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { groupBy } from 'lodash-es'
 
+import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Grade } from '@app/components/Grade'
-import { BackButton } from '@app/components/BackButton'
-
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
-
 import theme from '@app/theme'
 import { LoadingStatus, transformModulesToGroups } from '@app/util'
 

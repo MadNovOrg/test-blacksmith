@@ -1,4 +1,3 @@
-import React, { useCallback, useMemo, useState } from 'react'
 import {
   Box,
   Button,
@@ -15,14 +14,13 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { TableHead } from '@app/components/Table/TableHead'
 import { Grade } from '@app/components/Grade'
-
+import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-
 import { Course, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

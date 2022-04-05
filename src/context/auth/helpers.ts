@@ -1,7 +1,7 @@
-import type { CognitoUser, AuthState } from './types'
-import cognitoToProfile from './cognitoToProfile'
-
 import { RoleName } from '@app/types'
+
+import cognitoToProfile from './cognitoToProfile'
+import type { CognitoUser, AuthState } from './types'
 
 // Roles allowed in switcher
 export const ActiveRoles = new Set([

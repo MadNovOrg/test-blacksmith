@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Profile } from '@app/types'
 import { PROFILE } from '@app/queries/fragments'
+import { Profile } from '@app/types'
 
 export type ResponseType = { profiles: Profile[] }
 

@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks'
 import useSWR from 'swr'
 
-import { useBlogPost, useBlogPostList } from './useBlogPosts'
-
 import { BlogPost } from '@app/types'
+
+import { useBlogPost, useBlogPostList } from './useBlogPosts'
 
 jest.mock('swr')
 const useSWRMock = jest.mocked(useSWR)

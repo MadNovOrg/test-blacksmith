@@ -1,11 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import { Auth } from 'aws-amplify'
-import {
-  createSearchParams,
-  useSearchParams,
-  useNavigate,
-} from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
   TextField,
@@ -15,11 +9,17 @@ import {
   Link,
   Button,
 } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { Auth } from 'aws-amplify'
+import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { useTranslation } from 'react-i18next'
 import CodeInput from 'react-otp-input-rc-17'
+import {
+  createSearchParams,
+  useSearchParams,
+  useNavigate,
+} from 'react-router-dom'
+import * as yup from 'yup'
 
 import { Logo } from '@app/components/Logo'
 

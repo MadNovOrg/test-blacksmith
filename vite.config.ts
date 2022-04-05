@@ -1,9 +1,9 @@
 import path from 'path'
 
-import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import svgrPlugin from 'vite-plugin-svgr'
+import { defineConfig } from 'vite'
 import shimReactPdf from 'vite-plugin-shim-react-pdf'
+import svgrPlugin from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({

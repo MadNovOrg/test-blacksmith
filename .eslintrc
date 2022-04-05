@@ -20,28 +20,12 @@
   "rules": {
     "import/order": ["error", {
       "newlines-between": "always",
-      "pathGroups": [{
-        "pattern": "@app/components/**",
-        "group": "external",
-        "position": "after"
-      }, {
-        "pattern": "@app/context/**",
-        "group": "external",
-        "position": "after"
-      }, {
-        "pattern": "@app/lib/**",
-        "group": "external",
-        "position": "after"
-      }, {
-        "pattern": "@app/hooks/**",
-        "group": "external",
-        "position": "after"
-      }, {
-        "pattern": "@app/types/**",
-        "group": "external",
-        "position": "after"
-      }],
-      "pathGroupsExcludedImportTypes": ["builtin"]
+      "alphabetize": { "order": "asc", "caseInsensitive": true },
+      "pathGroupsExcludedImportTypes": ["builtin"],
+      "pathGroups": [
+        {"pattern": "@app/**", "group": "external", "position": "after"},
+        {"pattern": "@test/**", "group": "external", "position": "after"}
+      ]
     }],
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/explicit-module-boundary-types": 0,

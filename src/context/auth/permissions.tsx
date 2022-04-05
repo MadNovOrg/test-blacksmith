@@ -1,8 +1,8 @@
 import { MarkOptional } from 'ts-essentials'
 
-import type { AuthContextType } from './types'
-
 import { RoleName } from '@app/types'
+
+import type { AuthContextType } from './types'
 
 export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()

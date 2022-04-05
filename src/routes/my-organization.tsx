@@ -2,7 +2,6 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { NotFound } from '@app/components/NotFound'
-
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'

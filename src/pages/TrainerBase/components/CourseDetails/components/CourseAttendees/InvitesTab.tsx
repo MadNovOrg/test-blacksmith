@@ -14,11 +14,9 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
-
 import useCourseInvites from '@app/hooks/useCourseInvites'
-
-import { LoadingStatus } from '@app/util'
 import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 type TabProperties = {
   course: Course

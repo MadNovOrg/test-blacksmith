@@ -1,11 +1,11 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-import SchoolIcon from '@mui/icons-material/School'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined'
+import SchoolIcon from '@mui/icons-material/School'
 import { Box, Container, Grid, Typography } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { DashboardCard } from '@app/pages/TrainerBase/components/TrainerDashboard/components/DashboardCard'
 

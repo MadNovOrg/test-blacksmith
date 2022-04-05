@@ -1,9 +1,9 @@
-import React from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Container, Link } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import React from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 type ManagementProps = unknown
 

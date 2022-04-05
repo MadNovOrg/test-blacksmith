@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
   TextField,
@@ -6,11 +7,10 @@ import {
   Checkbox,
   Typography,
 } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
-import { useTranslation } from 'react-i18next'
-import { useForm } from 'react-hook-form'
 import { Auth } from 'aws-amplify'
-import { yupResolver } from '@hookform/resolvers/yup'
+import React, { useState, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import { FormProps, FormInputs, getFormSchema } from '../helpers'
 

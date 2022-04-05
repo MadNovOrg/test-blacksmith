@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import { Wrapper } from '@googlemaps/react-wrapper'
 import {
   Autocomplete,
   Box,
@@ -12,28 +12,27 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { Wrapper } from '@googlemaps/react-wrapper'
-import { useTranslation } from 'react-i18next'
-import { debounce } from 'lodash-es'
-import parse from 'autosuggest-highlight/parse'
 import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
+import { debounce } from 'lodash-es'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { Dialog } from '@app/components/Dialog'
 import VenueForm, {
   VenueFormProps,
 } from '@app/components/VenueSelector/VenueForm'
-import { Dialog } from '@app/components/Dialog'
-
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import powerByGoogleImg from './powered-by-google.png'
-import { getGoogleMapsSuggestions, getPlaceDetails } from './maps-utils'
-
-import { Venue } from '@app/types'
 import {
   ParamsType as FindVenuesParams,
   QUERY as FindVenuesQuery,
   ResponseType as FindVenuesResponse,
 } from '@app/queries/venue/find-venues'
+import { Venue } from '@app/types'
+
+import { getGoogleMapsSuggestions, getPlaceDetails } from './maps-utils'
+import powerByGoogleImg from './powered-by-google.png'
+
 import AutocompletePrediction = google.maps.places.AutocompletePrediction
 import PlaceResult = google.maps.places.PlaceResult
 

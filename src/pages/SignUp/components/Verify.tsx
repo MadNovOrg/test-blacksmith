@@ -1,15 +1,15 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
+import { Box, InputLabel, FormHelperText, Typography } from '@mui/material'
+import { Auth } from 'aws-amplify'
 import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { Box, InputLabel, FormHelperText, Typography } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
-import CodeInput from 'react-otp-input-rc-17'
 import { useTranslation } from 'react-i18next'
-import { Auth } from 'aws-amplify'
-import { yupResolver } from '@hookform/resolvers/yup'
-
-import { VerifyProps, VerifyInputs, getVerifySchema } from '../helpers'
+import CodeInput from 'react-otp-input-rc-17'
 
 import { EMAIL_VERIFY_LEN } from '@app/schemas'
+
+import { VerifyProps, VerifyInputs, getVerifySchema } from '../helpers'
 
 export const SignUpVerify: React.FC<VerifyProps> = ({
   username,

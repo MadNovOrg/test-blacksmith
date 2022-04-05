@@ -2,10 +2,9 @@ import { gql } from 'graphql-request'
 import { useCallback } from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { RoleName } from '@app/types'
 
 import type { Trainer } from './types'
-
-import { RoleName } from '@app/types'
 
 const getTrainers = gql`
   query ($limit: Int = 20, $offset: Int = 0, $where: profile_bool_exp) {

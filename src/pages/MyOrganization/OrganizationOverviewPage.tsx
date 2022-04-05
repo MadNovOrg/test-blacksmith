@@ -1,12 +1,11 @@
-import React from 'react'
-import useSWR from 'swr'
-import { useTranslation } from 'react-i18next'
 import { CircularProgress } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
 
 import { useAuth } from '@app/context/auth'
-
-import { Address, ContactDetail } from '@app/types'
 import { getOrganizationWithKeyContacts } from '@app/queries/organization'
+import { Address, ContactDetail } from '@app/types'
 
 type OrganizationOverviewPageProps = unknown
 

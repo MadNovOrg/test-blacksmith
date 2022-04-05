@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Organization } from '@app/types'
 import { ORGANIZATION } from '@app/queries/fragments'
+import { Organization } from '@app/types'
 
 export type ResponseType = {
   orgs: Organization[]

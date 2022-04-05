@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react'
+import SearchIcon from '@mui/icons-material/Search'
 import {
   Box,
   Autocomplete,
@@ -11,15 +11,15 @@ import {
   AutocompleteRenderOptionState,
   Typography,
 } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import { useDebouncedCallback } from 'use-debounce'
-import { useMountedState } from 'react-use'
+import React, { HTMLAttributes, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useQueryTrainers } from './useQueryTrainers'
-import type { Trainer } from './types'
+import { useMountedState } from 'react-use'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { noop } from '@app/util'
+
+import type { Trainer } from './types'
+import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
   placeholder?: string

@@ -1,6 +1,6 @@
+import type { TFunction } from 'react-i18next'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
-import type { TFunction } from 'react-i18next'
 
 YupPassword(yup)
 

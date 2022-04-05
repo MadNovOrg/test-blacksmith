@@ -1,7 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
-import { useNavigate, useParams } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Container,
   FormHelperText,
@@ -10,25 +8,20 @@ import {
   Typography,
 } from '@mui/material'
 import { Box } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { groupBy, map } from 'lodash-es'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
+import * as yup from 'yup'
 
 import { BackButton } from '@app/components/BackButton'
-import { QuestionGroup } from '@app/components/QuestionGroup'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
-
+import { QuestionGroup } from '@app/components/QuestionGroup'
 import { useAuth } from '@app/context/auth'
-
-import useCourse from '@app/hooks/useCourse'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import {
-  CourseEvaluationQuestion,
-  CourseEvaluationQuestionType,
-} from '@app/types'
+import useCourse from '@app/hooks/useCourse'
 import {
   QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
   ResponseType as GetCourseEvaluationQuestionsResponseType,
@@ -37,6 +30,10 @@ import {
   MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
   ResponseType as SaveCourseEvaluationResponseType,
 } from '@app/queries/course-evaluation/save-evaluation'
+import {
+  CourseEvaluationQuestion,
+  CourseEvaluationQuestionType,
+} from '@app/types'
 
 const booleanQuestionTypes = [
   CourseEvaluationQuestionType.BOOLEAN,

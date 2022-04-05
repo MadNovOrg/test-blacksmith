@@ -1,7 +1,3 @@
-import React, { useEffect, useMemo } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
 import {
   Box,
   Button,
@@ -12,17 +8,19 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/system'
 import { groupBy, map, uniqBy } from 'lodash-es'
+import React, { useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useLocation, useParams } from 'react-router-dom'
+import useSWR from 'swr'
 
+import { AttendeeMenu } from '@app/components/AttendeeMenu'
 import { BackButton } from '@app/components/BackButton'
-import { RatingSummary } from '@app/components/RatingSummary'
-import { RatingProgress } from '@app/components/RatingProgress'
-import { QuestionGroup } from '@app/components/QuestionGroup'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { LinkBehavior } from '@app/components/LinkBehavior'
-import { AttendeeMenu } from '@app/components/AttendeeMenu'
-
+import { QuestionGroup } from '@app/components/QuestionGroup'
+import { RatingProgress } from '@app/components/RatingProgress'
+import { RatingSummary } from '@app/components/RatingSummary'
 import { useAuth } from '@app/context/auth'
-
 import {
   QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
   ResponseType as GetEvaluationsSummaryResponseType,

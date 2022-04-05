@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   AccordionDetails,
@@ -8,10 +8,10 @@ import {
   FormGroup,
   Typography,
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import React, { useMemo, useState } from 'react'
 
-import { noop } from '@app/util'
 import theme from '@app/theme'
+import { noop } from '@app/util'
 
 export type HoldsRecord = Record<string, boolean>
 

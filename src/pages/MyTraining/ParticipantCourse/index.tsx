@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react'
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Container,
   CircularProgress,
@@ -14,27 +15,23 @@ import {
   Typography,
   Chip,
 } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { useTranslation } from 'react-i18next'
-import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { styled } from '@mui/system'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 
-import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { CourseCertification } from '@app/components/CourseCertification'
-
+import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { useAuth } from '@app/context/auth'
-
 import useCourse from '@app/hooks/useCourse'
-
-import { LoadingStatus, courseEnded } from '@app/util'
-import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   QUERY as GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
   ParamsType as GetFeedbackUsersParamsType,
 } from '@app/queries/course-evaluation/get-feedback-users'
+import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
+import { LoadingStatus, courseEnded } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],

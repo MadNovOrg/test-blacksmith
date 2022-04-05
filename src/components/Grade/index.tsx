@@ -1,8 +1,8 @@
-import React from 'react'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
-import { useTranslation } from 'react-i18next'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Box, Typography } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Grade as GradeEnum } from '@app/types'
 

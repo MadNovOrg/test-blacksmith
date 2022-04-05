@@ -1,20 +1,19 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { LoadingButton } from '@mui/lab'
 import { Box, Typography, CircularProgress, Stack } from '@mui/material'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
-import { LoadingButton } from '@mui/lab'
 
-import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { CourseAttendanceList } from '../CourseAttendanceList'
-
-import { LoadingStatus } from '@app/util'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import {
   MUTATION,
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/save-course-attendance'
+import { LoadingStatus } from '@app/util'
+
+import { CourseAttendanceList } from '../CourseAttendanceList'
 
 export const CourseAttendance = () => {
   const { id: courseId } = useParams()

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { ModulesSelectionList, Props } from '.'
-
 import { render, chance, screen, within, userEvent } from '@test/index'
+
+import { ModulesSelectionList, Props } from '.'
 
 describe('component: ModulesSelectionList', () => {
   it('renders module groups and modules within groups', () => {

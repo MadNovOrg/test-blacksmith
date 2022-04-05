@@ -3,14 +3,13 @@ import useSWR from 'swr'
 import * as yup from 'yup'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-
 import {
   QUERY,
   ResponseType,
   ParamsType,
 } from '@app/queries/invites/get-course-invites'
-import { MUTATION as SaveInvites } from '@app/queries/invites/save-course-invites'
 import { MUTATION as RecreateInvite } from '@app/queries/invites/recreate-course-invite'
+import { MUTATION as SaveInvites } from '@app/queries/invites/save-course-invites'
 import { CourseInvite, InviteStatus, SortOrder } from '@app/types'
 import { getSWRLoadingStatus } from '@app/util'
 

@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Venue } from '@app/types'
 import { VENUE } from '@app/queries/fragments'
+import { Venue } from '@app/types'
 
 export type ResponseType = {
   venues: Venue[]

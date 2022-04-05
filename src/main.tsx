@@ -1,7 +1,7 @@
+import { Amplify } from 'aws-amplify'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { Amplify } from 'aws-amplify'
 
 import { AuthProvider } from '@app/context/auth'
 

@@ -1,7 +1,7 @@
-import React from 'react'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { Box, Card, IconButton, Typography } from '@mui/material'
 import { styled } from '@mui/system'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import React from 'react'
 
 type DashboardCardProps = {
   icon: React.ReactNode

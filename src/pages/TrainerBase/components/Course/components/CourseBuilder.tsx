@@ -1,13 +1,3 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import useSWR from 'swr'
-import {
-  DragDropContext,
-  DragDropContextProps,
-  Draggable,
-  Droppable,
-} from 'react-beautiful-dnd'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import {
   Alert,
   Box,
@@ -17,19 +7,25 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  DragDropContext,
+  DragDropContextProps,
+  Draggable,
+  Droppable,
+} from 'react-beautiful-dnd'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+import useSWR from 'swr'
 
 import ProgressBar from '@app/components/ProgressBar'
-
 import { useFetcher } from '@app/hooks/use-fetcher'
-
-import { ModuleCard } from './ModuleCard'
-
-import { CourseLevel, CourseStatus, ModuleGroup } from '@app/types'
 import {
-  ParamsType as GetModuleGroupsParamsType,
-  QUERY as GetModuleGroups,
-  ResponseType as GetModuleGroupsResponseType,
-} from '@app/queries/modules/get-module-groups'
+  AvailableModule,
+  ModuleGroupSlot,
+} from '@app/pages/TrainerBase/components/Course'
+import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
+import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
 import {
   ParamsType as GetCourseByIdParamsType,
   QUERY as GetCourseById,
@@ -37,17 +33,19 @@ import {
 } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
-import { ModuleSlot } from '@app/pages/TrainerBase/components/Course/components/ModuleSlot'
 import {
-  AvailableModule,
-  ModuleGroupSlot,
-} from '@app/pages/TrainerBase/components/Course'
+  ParamsType as GetModuleGroupsParamsType,
+  QUERY as GetModuleGroups,
+  ResponseType as GetModuleGroupsResponseType,
+} from '@app/queries/modules/get-module-groups'
+import { CourseLevel, CourseStatus, ModuleGroup } from '@app/types'
 import {
   formatDateForDraft,
   formatDurationShort,
   getPercentage,
 } from '@app/util'
-import { CourseHero } from '@app/pages/TrainerBase/components/Course/components/CourseHero'
+
+import { ModuleCard } from './ModuleCard'
 
 type CourseBuilderProps = unknown
 

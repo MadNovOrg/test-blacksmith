@@ -1,9 +1,9 @@
 import { DeepPartial } from 'ts-essentials'
 
 import cognitoToProfile from '@app/context/auth/cognitoToProfile'
+import { RoleName, Profile } from '@app/types'
 
 import { profile } from '@test/providers'
-import { RoleName, Profile } from '@app/types'
 
 jest.mock('@app/context/auth/cognitoToProfile')
 
