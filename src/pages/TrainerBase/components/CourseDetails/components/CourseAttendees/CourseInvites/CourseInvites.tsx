@@ -1,11 +1,11 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
-  Grid,
-  Button,
-  Typography,
-  TextField,
   Autocomplete,
+  Button,
   FormHelperText,
+  Grid,
+  TextField,
+  Typography,
 } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ import * as yup from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, InviteStatus } from '@app/types'
+import { Course, CourseType, InviteStatus } from '@app/types'
 import { courseStarted } from '@app/util'
 
 type Props = {
@@ -109,6 +109,7 @@ export const CourseInvites = ({ course }: Props) => {
   }, [invites, emails, closeModal, newEmail, invitesLeft])
 
   const courseHasStarted = course && courseStarted(course)
+  const isOpenCourse = course && course.type === CourseType.OPEN
 
   const renderInput = useCallback(
     params => (
@@ -136,7 +137,7 @@ export const CourseInvites = ({ course }: Props) => {
   return (
     <>
       <Grid container item xs="auto" alignItems="center">
-        {!courseHasStarted && (
+        {!courseHasStarted && !isOpenCourse && (
           <>
             <Typography variant="subtitle2" data-testid="invites-left">
               {t('pages.course-participants.invites-left', {

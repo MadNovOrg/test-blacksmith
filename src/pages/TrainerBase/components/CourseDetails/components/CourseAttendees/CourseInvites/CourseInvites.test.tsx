@@ -2,10 +2,10 @@ import { add, sub } from 'date-fns'
 import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course } from '@app/types'
+import { Course, CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, waitForCalls, chance, userEvent } from '@test/index'
+import { chance, render, userEvent, waitForCalls } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -69,6 +69,17 @@ describe('CourseInvites', () => {
     })
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
+    const { queryByTestId } = render(<CourseInvites course={course} />)
+    expect(queryByTestId('course-invite-btn')).not.toBeInTheDocument()
+  })
+
+  it('does not render if it is an open course', async () => {
+    course = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+      },
+    })
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
     const { queryByTestId } = render(<CourseInvites course={course} />)
     expect(queryByTestId('course-invite-btn')).not.toBeInTheDocument()
   })

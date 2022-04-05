@@ -135,7 +135,7 @@ export const buildCourse = build<Course>({
     name: fake(f => f.random.words(3)),
     status: '',
     createdAt: new Date().toISOString(),
-    type: CourseType.OPEN,
+    type: CourseType.CLOSED,
     min_participants: 6,
     max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
