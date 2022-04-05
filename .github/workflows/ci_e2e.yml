@@ -56,7 +56,7 @@ jobs:
           npm run hasura -- metadata apply
           npm run hasura -- migrate apply --all-databases
           npm run hasura -- metadata reload
-          PGPASSWORD=root psql -h localhost -U postgres -d tth-db -q -f hasura/seeds/default/dev/001_dev_profiles.sql
+          npm run hasura -- seed apply --database-name default
           npm run dev &
           npx playwright install chromium
 
