@@ -234,6 +234,12 @@
       "noResults": "No trainers found. Try another search term.",
       "placeholder": "Search for elligible trainers...",
       "maxReachedPlaceholder": "(max allowed reached)"
+    },
+    "profile-selector": {
+      "placeholder": "Search for a profile"
+    },
+    "org-selector": {
+      "placeholder": "Organization name"
     }
   },
   "pages": {
