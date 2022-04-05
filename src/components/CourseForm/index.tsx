@@ -7,10 +7,8 @@ import {
   FormHelperText,
   Grid,
   InputLabel,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   TextField,
   Typography,
@@ -36,6 +34,8 @@ import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
 
 import VenueSelector from '../VenueSelector'
 
+import { CourseLevelDropdown } from './components/CourseLevelDropdown'
+
 const FormPanel = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   backgroundColor: theme.palette.common.white,
@@ -45,7 +45,7 @@ export type FormValues = {
   courseLevel: CourseLevel | ''
   blendedLearning: boolean
   reaccreditation: boolean
-  deliveryType: CourseDeliveryType | null
+  deliveryType: CourseDeliveryType
   startDateTime: Date | null
   endDateTime: Date | null
   minParticipants: number | null
@@ -152,6 +152,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
   })
 
   const deliveryType = watch('deliveryType')
+  const courseLevel = watch('courseLevel')
 
   useEffect(() => {
     onChange(getValues(), formState.isValid)
@@ -257,20 +258,12 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             name="courseLevel"
             control={control}
             render={({ field }) => (
-              <Select {...field}>
-                <MenuItem value={CourseLevel.LEVEL_1}>
-                  {t('common.course-levels.LEVEL_1')}
-                </MenuItem>
-                <MenuItem value={CourseLevel.LEVEL_2}>
-                  {t('common.course-levels.LEVEL_2')}
-                </MenuItem>
-                <MenuItem value={CourseLevel.INTERMEDIATE}>
-                  {t('common.course-levels.INTERMEDIATE')}
-                </MenuItem>
-                <MenuItem value={CourseLevel.ADVANCED}>
-                  {t('common.course-levels.ADVANCED')}
-                </MenuItem>
-              </Select>
+              <CourseLevelDropdown
+                value={field.value}
+                onChange={field.onChange}
+                deliveryType={deliveryType}
+                courseType={CourseType.CLOSED}
+              />
             )}
           />
           {errors.courseLevel?.message ? (
@@ -283,7 +276,12 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
           render={({ field }) => (
             <FormControlLabel
               sx={{ marginRight: theme.spacing(5) }}
-              control={<Switch {...field} />}
+              control={
+                <Switch
+                  {...field}
+                  disabled={courseLevel === CourseLevel.ADVANCED}
+                />
+              }
               label={
                 t('components.course-form.blended-learning-label') as string
               }
@@ -315,6 +313,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             value={deliveryType}
             onChange={e => {
               setValue('deliveryType', e.target.value as CourseDeliveryType)
+              resetField('courseLevel')
               resetField('venueId')
               resetField('zoomMeetingUrl')
             }}
