@@ -15,11 +15,12 @@ export type ParamsType = {
     level?: CourseLevel
     organization_id?: string
     reaccreditation?: boolean
+    go1Integration?: boolean
     description?: string
-    trainer_profile_id: string
+    trainer_profile_id?: string
     min_participants?: number
     max_participants?: number
-    leaders: {
+    leaders?: {
       data: [
         {
           profile_id: string
@@ -34,7 +35,8 @@ export type ParamsType = {
           type: string
           start: Date
           end: Date
-          venue_id: string
+          venue_id?: string
+          virtualLink?: string
         }
       ]
     }
@@ -42,13 +44,19 @@ export type ParamsType = {
 }
 
 export type ResponseType = {
-  affectedRows: number
+  insertCourse: {
+    affectedRows: number
+    inserted: Array<{ id: string }>
+  }
 }
 
 export const MUTATION = gql`
   mutation InsertCourse($course: course_insert_input!) {
-    insert_course(objects: [$course]) {
+    insertCourse: insert_course(objects: [$course]) {
       affectedRows: affected_rows
+      inserted: returning {
+        id
+      }
     }
   }
 `

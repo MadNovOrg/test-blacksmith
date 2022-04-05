@@ -1,6 +1,7 @@
 import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
+import { TFunction } from 'i18next'
 
-import { Course, CourseParticipantModule } from '@app/types'
+import { Course, CourseLevel, CourseParticipantModule } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
 export const DATE_MASK = '____-__-__'
@@ -154,4 +155,19 @@ export const transformModulesToGroups = (
   })
 
   return Object.values(groups)
+}
+
+export const generateCourseName = (
+  courseData: Pick<Course, 'level' | 'reaccreditation'>,
+  t: TFunction
+) => {
+  let courseLevelLabel = t(`common.course-levels.${courseData.level}`)
+
+  if (courseData.level === CourseLevel.ADVANCED) {
+    courseLevelLabel = `${courseLevelLabel} ${t('common.modules')}`
+  }
+
+  return `${t('common.course-name-prefix')}: ${courseLevelLabel} ${
+    courseData.reaccreditation ? t('common.reaccreditation') : null
+  }`
 }

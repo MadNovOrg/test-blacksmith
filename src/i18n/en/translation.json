@@ -49,6 +49,9 @@
     "view": "View",
     "last-modified": "Last modified {{date}}",
     "ago": "ago",
+    "course-name-prefix": "Positive behaviour training",
+    "reaccreditation": "Reaccreditation",
+    "modules": "Modules",
     "course-delivery-type": {
       "F2F": "Face to Face",
       "BLENDED": "Blended",
@@ -308,6 +311,7 @@
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",
       "step-navigation-course-builder": "Course builder",
+      "next-page-button-text": "Select trainer(s)",
       "assign-trainers": {
         "lead-title": "Lead Trainer",
         "lead-placeholder": "Search for a lead trainer...",

@@ -17,6 +17,7 @@ export type Course = {
   schedule: CourseSchedule[]
   trainer?: Profile
   gradingConfirmed: boolean
+  go1Integration?: boolean
   dates: {
     aggregate: {
       start: { date: string }
@@ -206,6 +207,7 @@ export type CourseSchedule = {
   end: Date
   course?: Course
   venue?: Venue
+  virtualLink?: string
 } & Base
 
 export type CourseParticipantModule = {

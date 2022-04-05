@@ -19,7 +19,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { noop } from 'ts-essentials'
+import { DeepNonNullable, noop } from 'ts-essentials'
 import { setHours, setMinutes } from 'date-fns'
 
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
@@ -55,6 +55,10 @@ export type FormValues = {
   zoomMeetingUrl: string | null
 }
 
+export type ValidFormFiels = DeepNonNullable<
+  Omit<FormValues, 'courseLevel'> & { courseLevel: CourseLevel }
+>
+
 interface Props {
   type?: CourseType
   course?: Course
@@ -80,18 +84,24 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
         deliveryType: yup
           .mixed()
           .oneOf([CourseDeliveryType.F2F, CourseDeliveryType.VIRTUAL]),
-        venueId: yup.string().when('deliveryType', {
-          is: CourseDeliveryType.F2F,
-          then: schema =>
-            schema.required(t('components.course-form.venue-required')),
-        }),
-        zoomMeetingUrl: yup.string().when('deliveryType', {
-          is: CourseDeliveryType.VIRTUAL,
-          then: schema =>
-            schema.required(
-              t('components.course-form.zoom-meeting-url-required')
-            ),
-        }),
+        venueId: yup
+          .string()
+          .nullable()
+          .when('deliveryType', {
+            is: CourseDeliveryType.F2F,
+            then: schema =>
+              schema.required(t('components.course-form.venue-required')),
+          }),
+        zoomMeetingUrl: yup
+          .string()
+          .nullable()
+          .when('deliveryType', {
+            is: CourseDeliveryType.VIRTUAL,
+            then: schema =>
+              schema.required(
+                t('components.course-form.zoom-meeting-url-required')
+              ),
+          }),
         startDateTime: yup.date().required(),
         endDateTime: yup
           .date()
@@ -141,6 +151,8 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
       maxParticipants: null,
     },
   })
+
+  const deliveryType = watch('deliveryType')
 
   useEffect(() => {
     onChange(getValues(), formState.isValid)
@@ -215,7 +227,12 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
     setValue('endDateTime', dateToSet)
   }
 
-  const deliveryType = watch('deliveryType')
+  useEffect(() => {
+    if (deliveryType === CourseDeliveryType.VIRTUAL) {
+      trigger('zoomMeetingUrl')
+    }
+  }, [deliveryType, trigger])
+
   const errors = formState.errors
 
   return (
@@ -296,10 +313,11 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             row
             aria-labelledby="demo-row-radio-buttons-group-label"
             name="row-radio-buttons-group"
-            value={watch('deliveryType')}
+            value={deliveryType}
             onChange={e => {
               setValue('deliveryType', e.target.value as CourseDeliveryType)
               resetField('venueId')
+              resetField('zoomMeetingUrl')
             }}
           >
             <FormControlLabel
