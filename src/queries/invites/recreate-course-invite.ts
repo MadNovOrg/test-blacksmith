@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 export const MUTATION = gql`
   mutation RecreateCourseInvite(
     $inviteId: uuid!
-    $courseId: uuid
+    $courseId: Int
     $email: String
   ) {
     delete_course_invites_by_pk(id: $inviteId) {

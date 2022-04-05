@@ -75,7 +75,7 @@ export const setCourseDates = async (
   const query = gql`
     mutation MyMutation {
       update_course_schedule(
-        where: { course_id: { _eq: "${courseId}" } }
+        where: { course_id: { _eq: ${courseId} } }
         _set: { start: "${newStart.toISOString()}", end: "${newEnd.toISOString()}" }
       ) {
         affected_rows
@@ -157,12 +157,12 @@ export const deleteCourse = async (id: string) => {
   console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {
-      delete_course_leader(where: { course_id: { _eq: "${id}" } }) { affected_rows }
-      delete_course_schedule(where: { course_id: { _eq: "${id}" } }) { affected_rows }
-      delete_course_module(where: { courseId: { _eq: "${id}" } }) { affected_rows }
-      delete_course_invites(where: { course_id: { _eq: "${id}" } }) { affected_rows }
-      delete_course_participant(where: { course_id: { _eq: "${id}" } }) { affected_rows }
-      delete_course(where: { id: { _eq: "${id}" } }) { affected_rows }
+      delete_course_leader(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_schedule(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_module(where: { courseId: { _eq: ${id} } }) { affected_rows }
+      delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_participant(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course(where: { id: { _eq: ${id} } }) { affected_rows }
     }
   `
   try {

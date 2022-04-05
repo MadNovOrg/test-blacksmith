@@ -19,7 +19,7 @@ export type ResponseType = {
 export type ParamsType = { courseId: string }
 
 export const QUERY = gql`
-  query GetEvaluations($courseId: uuid!) {
+  query GetEvaluations($courseId: Int!) {
     evaluations: course_evaluation_answers(
       where: { courseId: { _eq: $courseId } }
       distinct_on: profileId

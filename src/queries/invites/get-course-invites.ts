@@ -17,7 +17,7 @@ export type ParamsType = {
 
 export const QUERY = gql`
   query GetCourseInvites(
-    $courseId: uuid!
+    $courseId: Int!
     $limit: Int = 20
     $offset: Int = 0
     $where: course_invites_bool_exp = {}

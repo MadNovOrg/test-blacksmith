@@ -20,7 +20,7 @@ export type ParamsType = {
 
 export const QUERY = gql`
   query CourseParticipants(
-    $courseId: uuid!
+    $courseId: Int!
     $limit: Int
     $offset: Int
     $orderBy: [course_participant_order_by!] = { profile: { fullName: asc } }

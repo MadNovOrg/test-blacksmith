@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 
 export const GetParticipant = gql`
-  query GetCourseParticipantId($profileId: uuid!, $courseId: uuid!) {
+  query GetCourseParticipantId($profileId: uuid!, $courseId: Int!) {
     course_participant(
       where: { course_id: { _eq: $courseId }, profile_id: { _eq: $profileId } }
     ) {

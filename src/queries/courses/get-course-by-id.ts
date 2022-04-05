@@ -13,7 +13,7 @@ export const QUERY = gql`
   ${COURSE_SCHEDULE}
   ${VENUE}
   ${ORGANIZATION}
-  query GetCourseById($id: uuid!) {
+  query GetCourseById($id: Int!) {
     course: course_by_pk(id: $id) {
       ...Course
       level

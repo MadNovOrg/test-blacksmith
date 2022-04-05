@@ -16,7 +16,7 @@ export const MUTATION = gql`
   mutation SaveModuleSelection(
     $coveredModules: [uuid!]!
     $notCoveredModules: [uuid!]!
-    $courseId: uuid!
+    $courseId: Int!
   ) {
     saveCovered: update_course_module(
       where: {

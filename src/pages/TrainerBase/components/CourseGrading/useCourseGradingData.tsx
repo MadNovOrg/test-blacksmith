@@ -33,7 +33,7 @@ type ResponseType = {
 }
 
 const QUERY = gql`
-  query CourseGradingData($id: uuid!) {
+  query CourseGradingData($id: Int!) {
     course: course_by_pk(id: $id) {
       id
       name

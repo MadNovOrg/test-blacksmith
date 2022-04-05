@@ -14,7 +14,7 @@ export type ResponseType = {
 export type ParamsType = { courseId: string; profileId: string }
 
 export const QUERY = gql`
-  query GetEvaluation($courseId: uuid!, $profileId: uuid!) {
+  query GetEvaluation($courseId: Int!, $profileId: uuid!) {
     answers: course_evaluation_answers(
       where: {
         _and: { profileId: { _eq: $profileId }, courseId: { _eq: $courseId } }

@@ -16,7 +16,7 @@ export type ParamsType = {
 
 export const MUTATION = gql`
   mutation saveCourseModules(
-    $courseId: uuid!
+    $courseId: Int!
     $modules: [course_module_insert_input!]!
   ) {
     deleted: delete_course_module(where: { courseId: { _eq: $courseId } }) {

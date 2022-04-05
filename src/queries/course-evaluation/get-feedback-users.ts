@@ -9,7 +9,7 @@ export type ResponseType = {
 export type ParamsType = { courseId: string }
 
 export const QUERY = gql`
-  query GetFeedbackUsers($courseId: uuid!) {
+  query GetFeedbackUsers($courseId: Int!) {
     users: course_evaluation_answers(
       where: { _and: { courseId: { _eq: $courseId } } }
       distinct_on: profileId
