@@ -12,7 +12,7 @@ WHERE "id" IN (
   	FROM "public"."course_trainer"
 	) "course_trainer_dups"
 	WHERE "course_trainer_dups"."row" > 1 AND "type" = 'LEADER'
-)
+);
 
 -- This index would fail without the mutation above
 CREATE UNIQUE INDEX "course_trainer_unique_leader" ON "course_trainer" ("course_id") WHERE type = 'LEADER';
