@@ -1,10 +1,13 @@
-import { buildCourse } from '@test/mock-data-utils'
+import { buildCourse, buildProfile } from '@test/mock-data-utils'
 
+import { CourseTrainerType } from './types'
 import {
   formatDateRange,
   courseStarted,
   courseEnded,
   formatDateForDraft,
+  getCourseTrainer,
+  getCourseAssistants,
 } from './util'
 
 describe('formatDateRange', () => {
@@ -93,5 +96,92 @@ describe('courseEnded', () => {
     const course = buildCourse()
     course.schedule[0].end = new Date(2000, 0, 1)
     expect(courseEnded(course)).toBeTruthy()
+  })
+})
+
+describe('getCourseTrainer', () => {
+  it('returns lead trainer when it exists', () => {
+    const lead = buildProfile()
+    const assistant1 = buildProfile()
+    const assistant2 = buildProfile()
+
+    const course = buildCourse({
+      overrides: {
+        trainers: [
+          { type: CourseTrainerType.ASSISTANT, profile: assistant1 },
+          { type: CourseTrainerType.LEADER, profile: lead },
+          { type: CourseTrainerType.ASSISTANT, profile: assistant2 },
+        ],
+      },
+    })
+
+    const trainer = getCourseTrainer(course)
+    expect(trainer).not.toBeUndefined()
+    expect(trainer?.profile?.id).toBe(lead.id)
+    expect(trainer?.profile?.fullName).toBe(lead.fullName)
+  })
+
+  it('returns undefined when no lead trainer exists', () => {
+    const assistant1 = buildProfile()
+    const assistant2 = buildProfile()
+    const assistant3 = buildProfile()
+
+    const course = buildCourse({
+      overrides: {
+        trainers: [
+          { type: CourseTrainerType.ASSISTANT, profile: assistant1 },
+          { type: CourseTrainerType.ASSISTANT, profile: assistant2 },
+          { type: CourseTrainerType.ASSISTANT, profile: assistant3 },
+        ],
+      },
+    })
+
+    const trainer = getCourseTrainer(course)
+    expect(trainer).toBeUndefined()
+  })
+})
+
+describe('getCourseAssistants', () => {
+  it('returns assistants when they exist', () => {
+    const lead = buildProfile()
+    const assistant1 = buildProfile()
+    const assistant2 = buildProfile()
+
+    const course = buildCourse({
+      overrides: {
+        trainers: [
+          { type: CourseTrainerType.ASSISTANT, profile: assistant1 },
+          { type: CourseTrainerType.LEADER, profile: lead },
+          { type: CourseTrainerType.ASSISTANT, profile: assistant2 },
+        ],
+      },
+    })
+
+    const assistants = getCourseAssistants(course)
+    expect(assistants).toHaveLength(2)
+
+    const notAssistants = assistants.filter(a => {
+      return a.type !== CourseTrainerType.ASSISTANT
+    })
+    expect(notAssistants).toHaveLength(0)
+
+    const a1 = assistants.find(a => a?.profile?.id === assistant1.id)
+    expect(a1?.profile?.fullName).toBe(assistant1.fullName)
+
+    const a2 = assistants.find(a => a?.profile?.id === assistant2.id)
+    expect(a2?.profile?.fullName).toBe(assistant2.fullName)
+  })
+
+  it('returns empty array when no assistants exist', () => {
+    const lead = buildProfile()
+
+    const course = buildCourse({
+      overrides: {
+        trainers: [{ type: CourseTrainerType.LEADER, profile: lead }],
+      },
+    })
+
+    const assistants = getCourseAssistants(course)
+    expect(assistants).toHaveLength(0)
   })
 })

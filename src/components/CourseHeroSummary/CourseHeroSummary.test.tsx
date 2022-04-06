@@ -3,7 +3,12 @@ import React from 'react'
 import useSWR from 'swr'
 
 import { render, screen } from '@test/index'
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseSchedule,
+  buildCourseTrainer,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import { CourseHeroSummary } from '.'
 
@@ -119,14 +124,18 @@ describe('component: CourseHeroSummary', () => {
   it('displays correct trainer info if a logged in user is not a trainer', () => {
     const LOGGED_IN_USER_ID = 'current-user'
 
-    const course = buildCourse({
+    const profile = buildProfile({
       overrides: {
-        trainer: {
-          id: 'not-current-user',
-          fullName: 'John Doe',
-        },
+        id: 'not-current-user',
+        givenName: 'John',
+        familyName: 'Doe',
       },
     })
+
+    const course = buildCourse({
+      overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
+    })
+
     useSWRMock.mockReturnValue({
       ...useSWRMockDefaults,
       data: { course },
@@ -142,13 +151,12 @@ describe('component: CourseHeroSummary', () => {
   it('displays correct trainer info if a logged in user is a trainer', () => {
     const LOGGED_IN_USER_ID = 'current-user'
 
+    const profile = buildProfile({ overrides: { id: LOGGED_IN_USER_ID } })
+
     const course = buildCourse({
-      overrides: {
-        trainer: {
-          id: LOGGED_IN_USER_ID,
-        },
-      },
+      overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
+
     useSWRMock.mockReturnValue({
       ...useSWRMockDefaults,
       data: { course },

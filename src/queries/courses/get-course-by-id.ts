@@ -17,11 +17,15 @@ export const QUERY = gql`
     course: course_by_pk(id: $id) {
       ...Course
       level
-      trainer {
+      trainers {
         id
-        givenName
-        familyName
-        fullName
+        type
+        profile {
+          id
+          givenName
+          familyName
+          fullName
+        }
       }
       schedule {
         ...CourseSchedule

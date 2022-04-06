@@ -13,12 +13,12 @@ import {
 } from '@mui/material'
 import { differenceInDays, format } from 'date-fns'
 import { t } from 'i18next'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 import { Course } from '@app/types'
-import { courseEnded, courseStarted, now } from '@app/util'
+import { courseEnded, courseStarted, getCourseTrainer, now } from '@app/util'
 
 interface Props {
   course: Course
@@ -31,6 +31,8 @@ export const CourseHeroSummary: React.FC<Props> = ({
   renderButton,
 }) => {
   const { profile } = useAuth()
+
+  const courseTrainer = useMemo(() => getCourseTrainer(course), [course])
 
   const courseBeginsFor = courseStarted(course)
     ? 0
@@ -128,16 +130,16 @@ export const CourseHeroSummary: React.FC<Props> = ({
           </Grid>
           <Grid item xs={6} md={4}>
             <List dense disablePadding>
-              {course.trainer ? (
+              {courseTrainer?.profile ? (
                 <ListItem>
                   <ListItemIcon>
                     <PersonOutlineIcon />
                   </ListItemIcon>
                   <ListItemText>
-                    {course.trainer.id === profile?.id
+                    {courseTrainer.profile.id === profile?.id
                       ? t('pages.course-participants.trainer')
                       : t('pages.course-participants.hosted-by', {
-                          trainer: `${course.trainer.fullName}`,
+                          trainer: `${courseTrainer.profile.fullName}`,
                         })}
                   </ListItemText>
                 </ListItem>

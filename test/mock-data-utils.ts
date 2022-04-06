@@ -19,6 +19,8 @@ import {
   CourseModule,
   BlendedLearningStatus,
   CourseParticipantModule,
+  CourseTrainerType,
+  CourseTrainer,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -133,6 +135,14 @@ export const buildCourseSchedule = build<CourseSchedule>({
   },
 })
 
+export const buildCourseTrainer = build<CourseTrainer>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    type: CourseTrainerType.LEADER,
+    profile: buildProfile(),
+  },
+})
+
 export const buildCourse = build<Course>({
   fields: {
     id: fake(f => f.datatype.uuid()),
@@ -148,7 +158,7 @@ export const buildCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
     level: CourseLevel.LEVEL_1,
-    trainer: buildProfile(),
+    trainers: [buildCourseTrainer()],
     dates: {},
     modulesAgg: {},
     moduleGroupIds: [],
@@ -170,7 +180,7 @@ export const buildEndedCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseScheduleEndedCourse()],
     level: CourseLevel.LEVEL_1,
-    trainer: buildProfile(),
+    trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
         start: { date: sub(new Date(), { days: 2 }).toISOString() },
@@ -197,7 +207,7 @@ export const buildNotStartedCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseScheduleNotStartedCourse()],
     level: CourseLevel.LEVEL_1,
-    trainer: buildProfile(),
+    trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
         start: { date: add(new Date(), { days: 1 }).toISOString() },

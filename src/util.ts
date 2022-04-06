@@ -6,6 +6,7 @@ import {
   CourseLevel,
   CourseParticipantModule,
   CourseType,
+  CourseTrainerType,
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
@@ -124,6 +125,16 @@ export const courseStarted = (course: Course) =>
   isPast(new Date(course.schedule[0].start))
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
+
+export const getCourseTrainer = (course: Course) => {
+  const { trainers = [] } = course
+  return trainers.find(t => t.type === CourseTrainerType.LEADER)
+}
+
+export const getCourseAssistants = (course: Course) => {
+  const { trainers = [] } = course
+  return trainers.filter(t => t.type === CourseTrainerType.ASSISTANT)
+}
 
 export const transformModulesToGroups = (
   courseModules: CourseParticipantModule[]

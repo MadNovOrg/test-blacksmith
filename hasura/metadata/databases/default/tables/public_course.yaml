@@ -47,12 +47,6 @@ array_relationships:
       table:
         name: course_trainer
         schema: public
-computed_fields:
-- definition:
-    function:
-      name: course_lead_trainer
-      schema: public
-  name: trainer
 insert_permissions:
 - permission:
     backend_only: false

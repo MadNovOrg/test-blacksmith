@@ -15,7 +15,7 @@ export type Course = {
   reaccreditation: boolean
   organization?: Organization
   schedule: CourseSchedule[]
-  trainer?: Profile
+  trainers?: CourseTrainer[]
   gradingConfirmed: boolean
   go1Integration?: boolean
   dates: {
@@ -129,6 +129,12 @@ export enum CourseDeliveryType {
   BLENDED = 'BLENDED',
   VIRTUAL = 'VIRTUAL',
   MIXED = 'MIXED',
+}
+
+export type CourseTrainer = {
+  id: string
+  type: CourseTrainerType
+  profile: Profile
 }
 
 export enum CourseTrainerType {
