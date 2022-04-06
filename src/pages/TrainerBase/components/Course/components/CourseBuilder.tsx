@@ -2,7 +2,6 @@ import {
   Alert,
   Box,
   Button,
-  Chip,
   CircularProgress,
   Typography,
   useTheme,
@@ -20,6 +19,7 @@ import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
 import ProgressBar from '@app/components/ProgressBar'
+import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   AvailableModule,
@@ -392,10 +392,9 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                   sx={{ display: 'flex', alignItems: 'center' }}
                   mb={{ xs: 2, md: 3 }}
                 >
-                  <Chip
-                    label={t(`course-statuses.${courseData.course.status}`)}
-                    color="secondary"
-                    size="small"
+                  <StatusChip
+                    status={courseData.course.status}
+                    type={StatusChipType.COURSE}
                     sx={{ marginRight: 2 }}
                   />
                   <Typography variant="body2" data-testid="draft-text">

@@ -1,5 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Button, Chip, CircularProgress, Container } from '@mui/material'
+import { Button, CircularProgress, Container } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Paper from '@mui/material/Paper'
@@ -19,6 +19,7 @@ import { useDebounce } from 'use-debounce'
 
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
+import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
@@ -286,11 +287,9 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      {/* TODO: finalize color */}
-                      <Chip
-                        label={t(`course-statuses.${c.status}`)}
-                        color="secondary"
-                        size="small"
+                      <StatusChip
+                        status={c.status}
+                        type={StatusChipType.COURSE}
                       />
                     </TableCell>
                     <TableCell>
