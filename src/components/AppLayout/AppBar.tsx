@@ -3,7 +3,6 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForwardIos'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import { Button, Tab, Tabs } from '@mui/material'
 import MuiAppBar from '@mui/material/AppBar'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -22,6 +21,7 @@ import { useAuth } from '@app/context/auth'
 import { useRouteMatch } from '@app/hooks/use-route-match'
 import { useMainNavTabs } from '@app/hooks/useMainNavTabs'
 
+import { Avatar } from '../Avatar'
 import { DrawerMenu } from '../DrawerMenu'
 import { Logo } from '../Logo'
 
@@ -113,7 +113,7 @@ export const AppBar = () => {
                 <ListItemText disableTypography>
                   <Link
                     component={RRLink}
-                    to="/my-profile"
+                    to="/profile"
                     variant="body2"
                     data-testid="profile-link"
                   >
@@ -150,10 +150,7 @@ export const AppBar = () => {
                 </ListItemIcon>
               </MenuItem>
             </Menu>
-            <Avatar
-              alt="avatar"
-              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-            />
+            <Avatar src={profile?.avatar} name={profile?.fullName} />
           </Box>
 
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

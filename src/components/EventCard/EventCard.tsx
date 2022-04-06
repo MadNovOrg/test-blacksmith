@@ -17,7 +17,7 @@ export const EventCard: React.FC<EventCardProps> = ({
   return (
     <Box>
       <Box display="flex" alignItems="center">
-        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}> </Avatar>
+        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}></Avatar>
         <Typography variant="h6">
           {formatDateRange(new Date(startDate), new Date(endDate))}
         </Typography>

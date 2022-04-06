@@ -1,8 +1,10 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { Avatar, Button, Menu, MenuItem } from '@mui/material'
+import { Button, Menu, MenuItem } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 
 import { noop } from '@app/util'
+
+import { Avatar } from '../Avatar'
 
 type AttendeeMenuProps = {
   options: {
@@ -78,7 +80,7 @@ export const AttendeeMenu: React.FC<AttendeeMenuProps> = ({
             }}
             disableRipple
           >
-            <Avatar alt="avatar" src={u.avatar} sx={{ mr: 1 }} />
+            <Avatar src={u.avatar} name={u.name} sx={{ mr: 1 }} />
             {u.name}
           </MenuItem>
         ))}

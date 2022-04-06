@@ -29,7 +29,9 @@ export const PROFILE = gql`
     attributes
     contactDetails
     organizations {
-      ...Organization
+      organization {
+        ...Organization
+      }
     }
     roles {
       role {
@@ -41,6 +43,9 @@ export const PROFILE = gql`
     createdAt
     updatedAt
     email
+    phone
+    dob
+    jobTitle
   }
 `
 

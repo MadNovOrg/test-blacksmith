@@ -9,6 +9,7 @@ configuration:
     family_name: familyName
     given_name: givenName
     go1_id: go1Id
+    job_title: jobTitle
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -52,11 +53,14 @@ select_permissions:
     - attributes
     - contact_details
     - created_at
+    - dob
     - email
     - family_name
     - given_name
     - id
+    - job_title
     - original_record
+    - phone
     - preferences
     - status
     - tags
@@ -65,6 +69,19 @@ select_permissions:
     computed_fields:
     - fullName
     filter: {}
+  role: user
+update_permissions:
+- permission:
+    check: null
+    columns:
+    - dob
+    - family_name
+    - given_name
+    - job_title
+    - phone
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
   role: user
 event_triggers:
 - definition:

@@ -70,6 +70,10 @@ export type Profile = {
   givenName: string
   familyName: string
   fullName: string
+  phone: string
+  dob: string
+  jobTitle: string
+  avatar: string
   title: string
   tags: string[] | null
   status: string

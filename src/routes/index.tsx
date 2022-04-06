@@ -74,7 +74,7 @@ function LoggedInRoutes() {
       case RoleName.TT_ADMIN:
         return '/admin'
       default:
-        return '/my-profile'
+        return '/profile'
     }
   }, [activeRole])
 
@@ -89,7 +89,7 @@ function LoggedInRoutes() {
         <Routes>
           <Route index element={<Root />} />
 
-          <Route path="my-profile/*" element={<ProfileRoutes />} />
+          <Route path="profile/*" element={<ProfileRoutes />} />
 
           <Route
             path="/my-training/*"

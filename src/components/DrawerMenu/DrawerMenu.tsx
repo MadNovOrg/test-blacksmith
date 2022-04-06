@@ -1,12 +1,14 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import CloseIcon from '@mui/icons-material/Close'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Link, Avatar, Box, Button, Drawer, IconButton } from '@mui/material'
+import { Link, Box, Button, Drawer, IconButton } from '@mui/material'
 import { styled } from '@mui/system'
 import React from 'react'
 import { useToggle } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
+
+import { Avatar } from '../Avatar'
 
 const StyledLink = styled(Link)(({ theme }) => ({
   marginBottom: theme.spacing(1),
@@ -35,10 +37,7 @@ export const DrawerMenu: React.FC = () => {
           display="flex"
           sx={{ borderBottom: 1, borderBottomColor: 'lime.500' }}
         >
-          <Avatar
-            alt="avatar"
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-          />
+          <Avatar src={profile?.avatar} name={profile?.fullName} />
           <Button
             onClick={() => console.log('open')}
             sx={{ marginLeft: 1 }}
