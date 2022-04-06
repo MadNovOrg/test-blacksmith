@@ -17,16 +17,22 @@ import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
-import { FilterAccordion } from '@app/components/FilterAccordion'
 import type { FilterOption } from '@app/components/FilterAccordion'
+import { FilterAccordion } from '@app/components/FilterAccordion'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
+  ParamsType as GetMyCourseParamsType,
   QUERY as GetMyCourses,
   ResponseType as GetMyCoursesResponseType,
-  ParamsType as GetMyCourseParamsType,
 } from '@app/queries/courses/get-courses'
-import { CourseLevel, CourseStatus, CourseType, SortOrder } from '@app/types'
+import {
+  Course,
+  CourseLevel,
+  CourseStatus,
+  CourseType,
+  SortOrder,
+} from '@app/types'
 
 import { CreateCourseMenu } from '../../CreateCourseMenu'
 
@@ -149,6 +155,16 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     setOrderBy(col)
   }
 
+  const handleNavigation = (course: Course) => {
+    if (
+      course.status === CourseStatus.DRAFT ||
+      course.status === CourseStatus.PENDING
+    ) {
+      return `${course.id}/modules`
+    }
+    return `${course.id}/details`
+  }
+
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
       <Box display="flex">
@@ -224,7 +240,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 {data?.course?.map(c => (
                   <TableRow key={c.id}>
                     <TableCell>
-                      <Link href={`${c.id}/modules`}>
+                      <Link href={handleNavigation(c)}>
                         <Typography variant="subtitle2" gutterBottom>
                           {t(`course-levels.${c.level}`)}
                         </Typography>
@@ -282,14 +298,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() =>
-                          navigate(
-                            c.status === CourseStatus.PENDING ||
-                              c.status === CourseStatus.DRAFT
-                              ? `${c.id}/modules`
-                              : `${c.id}/details`
-                          )
-                        }
+                        onClick={() => navigate(handleNavigation(c))}
                       >
                         {c.status === CourseStatus.PENDING ||
                         c.status === CourseStatus.DRAFT

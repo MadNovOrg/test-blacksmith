@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
+import { BackButton } from '@app/components/BackButton'
 import ProgressBar from '@app/components/ProgressBar'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -350,6 +351,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           <CircularProgress sx={{ m: 'auto' }} size={64} />
         </Box>
       )}
+
       {data && courseData?.course && (
         <Box
           pt={{ xs: 6, md: 10 }}
@@ -360,6 +362,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             md: '1040px',
           }}
         >
+          <BackButton
+            label={t('pages.course-participants.back-button')}
+            to="/trainer-base/course"
+          />
           <Typography variant="h2">{courseData.course.name}</Typography>
 
           {submitError && (
