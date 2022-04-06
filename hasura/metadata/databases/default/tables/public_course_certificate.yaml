@@ -1,0 +1,54 @@
+table:
+  name: course_certificate
+  schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    course_id: courseId
+    course_participant_id: courseParticipantId
+  custom_root_fields: {}
+object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
+- name: participant
+  using:
+    foreign_key_constraint_on: course_participant_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check:
+      course:
+        trainers:
+          profile_id:
+            _eq: X-Hasura-User-Id
+    columns:
+    - course_id
+    - course_participant_id
+    - number
+  role: trainer
+select_permissions:
+- permission:
+    columns:
+    - course_id
+    - number
+    - created_at
+    - updated_at
+    - course_participant_id
+    - id
+    filter:
+      course:
+        trainers:
+          profile_id:
+            _eq: X-Hasura-User-Id
+  role: trainer
+- permission:
+    columns:
+    - course_id
+    - number
+    - created_at
+    - updated_at
+    - course_participant_id
+    - id
+    filter: {}
+  role: tt-admin

@@ -1,7 +1,12 @@
 import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
 import { TFunction } from 'i18next'
 
-import { Course, CourseLevel, CourseParticipantModule } from '@app/types'
+import {
+  Course,
+  CourseLevel,
+  CourseParticipantModule,
+  CourseType,
+} from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
 export const DATE_MASK = '____-__-__'
@@ -170,4 +175,26 @@ export const generateCourseName = (
   return `${t('common.course-name-prefix')}: ${courseLevelLabel} ${
     courseData.reaccreditation ? t('common.reaccreditation') : ''
   }`
+}
+
+const COURSE_TYPE_TO_PREFIX = {
+  [CourseType.OPEN]: 'OP',
+  [CourseType.CLOSED]: 'CL',
+  [CourseType.INDIRECT]: 'INDR',
+}
+
+const COURSE_LEVEL_TO_PREFIX = {
+  [CourseLevel.LEVEL_1]: 'L1',
+  [CourseLevel.LEVEL_2]: 'L2',
+  [CourseLevel.ADVANCED]: 'ADV',
+  [CourseLevel.INTERMEDIATE]: 'INT',
+  [CourseLevel.BILD_ACT]: 'ACT',
+}
+
+export const getCertificateNumberPrefix = (
+  type: CourseType,
+  level: CourseLevel,
+  courseId: string
+): string => {
+  return `${COURSE_TYPE_TO_PREFIX[type]}-${COURSE_LEVEL_TO_PREFIX[level]}-${courseId}`
 }

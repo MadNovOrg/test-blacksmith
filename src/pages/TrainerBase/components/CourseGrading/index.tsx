@@ -30,7 +30,7 @@ import {
 } from '@app/queries/grading/save-course-grading'
 import theme from '@app/theme'
 import { Grade } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { getCertificateNumberPrefix, LoadingStatus } from '@app/util'
 
 import { CourseGradingMenu } from '../CourseGradingMenu'
 import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
@@ -123,6 +123,8 @@ export const CourseGrading = () => {
   }
 
   const saveGrades = async () => {
+    if (!course) return
+
     try {
       setSavingGradesStatus(LoadingStatus.FETCHING)
 
@@ -150,8 +152,22 @@ export const CourseGrading = () => {
         }
       })
 
+      const certificates =
+        grade !== Grade.FAIL
+          ? attendedParticipants.map(participant => ({
+              courseId: course.id,
+              courseParticipantId: participant,
+              number: getCertificateNumberPrefix(
+                course.type,
+                course.level,
+                course.id
+              ),
+            }))
+          : []
+
       await fetcher<ResponseType, ParamsType>(MUTATION, {
         modules,
+        certificates,
         participantIds: attendedParticipants,
         grade,
         feedback,

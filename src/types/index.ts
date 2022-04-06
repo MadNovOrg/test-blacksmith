@@ -1,4 +1,4 @@
-type Base = {
+export type Base = {
   id: string
   createdAt: string
   updatedAt?: string
@@ -36,6 +36,12 @@ export type CourseModule = {
   covered?: boolean
   course: Course
   module: Module
+} & Base
+
+export type CourseCertificate = {
+  number: string
+  courseId: string
+  courseParticipantId: string
 } & Base
 
 export type Address = {

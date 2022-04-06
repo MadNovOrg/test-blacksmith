@@ -358,6 +358,13 @@ describe('page: CourseGrading', () => {
           completed: true,
         },
       ],
+      certificates: [
+        {
+          courseId: course.id,
+          courseParticipantId: courseParticipants[1].id,
+          number: `CL-L1-${course.id}`,
+        },
+      ],
       participantIds: [courseParticipants[1].id],
       grade: 'PASS',
       feedback: 'Feedback',

@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request'
 import useSWR from 'swr'
 
-import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+import { CourseDeliveryType, CourseLevel, CourseType, Grade } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 type ParamsType = {
@@ -12,6 +12,7 @@ type ResponseType = {
   course: {
     id: string
     name: string
+    type: CourseType
     level: CourseLevel
     deliveryType: CourseDeliveryType
     participants: Array<{
@@ -37,6 +38,7 @@ const QUERY = gql`
     course: course_by_pk(id: $id) {
       id
       name
+      type
       level
       deliveryType
       participants {
