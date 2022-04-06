@@ -1,86 +1,176 @@
-import { Typography, Box } from '@mui/material'
-import React, { useState, useCallback, useMemo } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { LoadingButton } from '@mui/lab'
+import {
+  Typography,
+  Box,
+  FormHelperText,
+  Button,
+  CircularProgress,
+  Alert,
+  Stack,
+} from '@mui/material'
+import React, { useCallback, useMemo } from 'react'
+import { useForm, Controller, NestedValue, Resolver } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
+
+import useCourse from '@app/hooks/useCourse'
+import { yup } from '@app/schemas'
+import { LoadingStatus } from '@app/util'
 
 import { SearchTrainers } from './SearchTrainers'
 import { Trainer } from './types'
 
-type State = { lead?: Trainer; assistants?: Trainer[] }
+type FormValues = {
+  lead: NestedValue<Trainer[]>
+  assistant: NestedValue<Trainer[]>
+}
 
 export const AssignTrainers = () => {
-  // TODO: get course id from url and load needed infos
-
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
-  const [trainers, setTrainers] = useState({} as State)
+  const { courseId = '' } = useParams()
+  const { data: course, status: courseStatus } = useCourse(courseId)
 
-  const leadValue = useMemo(
-    () => (trainers.lead ? [trainers.lead] : []),
-    [trainers.lead]
-  )
+  const minAssistants = useMemo(() => {
+    const { max_participants = 0 } = course ?? {}
+    return Math.floor((max_participants ?? 0) / 12)
+  }, [course])
 
-  const assistantsValue = useMemo(
-    () => trainers?.assistants ?? [],
-    [trainers.assistants]
-  )
+  const schema = useMemo(() => {
+    return yup.object({
+      lead: yup
+        .array()
+        .min(1, t('pages.create-course.assign-trainers.lead-error-min'))
+        .max(1, t('pages.create-course.assign-trainers.lead-error-max')),
+      assistant: yup.array().min(
+        minAssistants,
+        t('pages.create-course.assign-trainers.assistant-hint', {
+          count: minAssistants,
+        })
+      ),
+    })
+  }, [t, minAssistants])
 
-  const onChangeLead = useCallback((trainers: Trainer[]) => {
-    setTrainers(prev => ({ ...prev, lead: trainers[0] }))
-  }, [])
-
-  const onChangeAssistants = useCallback((trainers: Trainer[]) => {
-    setTrainers(prev => ({ ...prev, assistants: trainers }))
-  }, [])
+  const { getValues, control, formState } = useForm<FormValues>({
+    mode: 'onChange',
+    defaultValues: { lead: [], assistant: [] },
+    resolver: yupResolver(schema) as unknown as Resolver<FormValues>, // fixed in v8. See https://github.com/react-hook-form/react-hook-form/issues/7888
+  })
 
   const notLead = useCallback(
     (matches: Trainer[]) => {
-      const ids = new Set(leadValue.map(t => t.id))
+      const lead = getValues('lead')
+      const ids = new Set(lead.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
     },
-    [leadValue]
+    [getValues]
   )
 
   const notAssistant = useCallback(
     (matches: Trainer[]) => {
-      const ids = new Set(assistantsValue.map(t => t.id))
+      const assistants = getValues('assistant')
+      const ids = new Set(assistants.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
     },
-    [assistantsValue]
+    [getValues]
   )
 
+  if (courseStatus === LoadingStatus.FETCHING) {
+    return (
+      <Stack direction="row" justifyContent="center">
+        <CircularProgress size={40} />
+      </Stack>
+    )
+  }
+
+  if (courseStatus === LoadingStatus.ERROR || !course) {
+    return (
+      <Alert severity="error" variant="filled">
+        {t('pages.create-course.assign-trainers.course-not-found')}
+      </Alert>
+    )
+  }
+
   return (
-    <Box sx={{ '> * + *': { mt: 5 } }}>
+    <Stack component="form" spacing={5}>
       <Box>
         <Typography variant="subtitle1">
           {t('pages.create-course.assign-trainers.lead-title')}
         </Typography>
-        <SearchTrainers
-          max={1}
-          placeholder={t(
-            'pages.create-course.assign-trainers.lead-placeholder'
+        <Controller
+          name="lead"
+          control={control}
+          render={({ field }) => (
+            <SearchTrainers
+              max={1}
+              autoFocus={true}
+              value={field.value}
+              onChange={field.onChange}
+              matchesFilter={notAssistant}
+            />
           )}
-          autoFocus={true}
-          value={leadValue}
-          onChange={onChangeLead}
-          matchesFilter={notAssistant}
         />
+        {formState.errors.lead ? (
+          <FormHelperText error>{formState.errors.lead.message}</FormHelperText>
+        ) : null}
       </Box>
-      <Box>
-        <Typography variant="subtitle1">
-          {t('pages.create-course.assign-trainers.assistant-title')}
-        </Typography>
-        <SearchTrainers
-          max={3}
-          placeholder={t(
-            'pages.create-course.assign-trainers.assistant-placeholder'
-          )}
-          value={assistantsValue}
-          onChange={onChangeAssistants}
-          matchesFilter={notLead}
-        />
-      </Box>
-    </Box>
 
-    // TODO: Save selected trainers
+      {minAssistants > 0 ? (
+        <Box>
+          <Typography variant="subtitle1">
+            {t('pages.create-course.assign-trainers.assistant-title', {
+              count: minAssistants,
+            })}
+          </Typography>
+          <Controller
+            name="assistant"
+            control={control}
+            render={({ field }) => (
+              <SearchTrainers
+                max={3}
+                value={field.value}
+                onChange={field.onChange}
+                matchesFilter={notLead}
+              />
+            )}
+          />
+          {formState.errors.assistant ? (
+            <FormHelperText error>
+              {formState.errors.assistant.message}
+            </FormHelperText>
+          ) : (
+            <FormHelperText>
+              {t('pages.create-course.assign-trainers.assistant-hint', {
+                count: minAssistants,
+              })}
+            </FormHelperText>
+          )}
+        </Box>
+      ) : null}
+
+      <Box display="flex" justifyContent="space-between">
+        <Button
+          sx={{ marginTop: 4 }}
+          onClick={() => navigate(`../../new?type=${course?.type}`)}
+          startIcon={<ArrowBackIcon />}
+        >
+          {t('pages.create-course.assign-trainers.back-btn')}
+        </Button>
+
+        <LoadingButton
+          variant="contained"
+          disabled={!formState.isValid}
+          sx={{ marginTop: 4 }}
+          onClick={() => console.log(getValues())}
+          endIcon={<ArrowForwardIcon />}
+        >
+          {t('pages.create-course.assign-trainers.submit-btn')}
+        </LoadingButton>
+      </Box>
+    </Stack>
   )
 }

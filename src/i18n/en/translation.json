@@ -236,7 +236,7 @@
     "searchTrainers": {
       "loading": "Loading...",
       "noResults": "No trainers found. Try another search term.",
-      "placeholder": "Search for elligible trainers...",
+      "placeholder": "Search eligible trainers...",
       "maxReachedPlaceholder": "(max allowed reached)"
     },
     "profile-selector": {
@@ -314,10 +314,16 @@
       "step-navigation-course-builder": "Course builder",
       "next-page-button-text": "Select trainer(s)",
       "assign-trainers": {
+        "course-not-found": "Course not found",
         "lead-title": "Lead Trainer",
-        "lead-placeholder": "Search for a lead trainer...",
-        "assistant-title": "Assistant Trainer(s)",
-        "assistant-placeholder": "Search for assistant trainers..."
+        "lead-error-min": "Lead trainer is required",
+        "lead-error-max": "There can be only one Lead trainer",
+        "assistant-title_one": "Assistant Trainer",
+        "assistant-title_other": "Assistant Trainers",
+        "assistant-hint_one": "At least one assistant trainer needed",
+        "assistant-hint_other": "Minimum {{count}} assistant trainers needed",
+        "back-btn": "Course details",
+        "submit-btn": "Create course"
       }
     },
     "course-details": {

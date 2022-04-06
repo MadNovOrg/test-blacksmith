@@ -77,7 +77,7 @@ export const CreateCourseForm = () => {
         if (response.insertCourse.inserted.length === 1) {
           setSavingStatus(LoadingStatus.SUCCESS)
 
-          navigate(`../assign-trainers/${response.insertCourse.inserted[0].id}`)
+          navigate(`assign-trainers/${response.insertCourse.inserted[0].id}`)
         }
       }
     } catch (err) {

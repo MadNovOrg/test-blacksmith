@@ -32,7 +32,10 @@ const TrainerBaseRoutes = () => {
         <Route path="course" element={<Course />}>
           <Route path="new" element={<CreateCourse />}>
             <Route index element={<CreateCourseForm />} />
-            <Route path="assign-trainers" element={<AssignTrainers />} />
+            <Route
+              path="assign-trainers/:courseId"
+              element={<AssignTrainers />}
+            />
           </Route>
           <Route index element={<MyCourses />} />
           <Route path=":id">

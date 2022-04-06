@@ -27,13 +27,13 @@ type Props = {
   maxReachedPlaceholder?: string
   autoFocus?: boolean
   value?: Trainer[]
-  onChange?: (trainers: Trainer[]) => void
+  onChange?: (ev: { target: { value: Trainer[] } }) => void
   matchesFilter?: (matches: Trainer[]) => Trainer[]
 }
 
 const T_PREFIX = 'components.searchTrainers'
 
-export const SearchTrainers = ({
+export function SearchTrainers({
   placeholder,
   max = Infinity,
   maxReachedPlaceholder,
@@ -41,7 +41,7 @@ export const SearchTrainers = ({
   value = undefined,
   onChange = noop,
   matchesFilter = t => t,
-}: Props) => {
+}: Props) {
   const { t } = useTranslation()
   const isMounted = useMountedState()
   const [loading, setLoading] = useState(false)
@@ -96,7 +96,7 @@ export const SearchTrainers = ({
     (ev: React.SyntheticEvent, updated: Trainer[]) => {
       const newSelection = updated.length <= max ? updated : selected
       if (!isControlled) setSelected(newSelection)
-      onChange(newSelection)
+      onChange({ target: { value: newSelection } })
     },
     [isControlled, max, onChange, selected]
   )

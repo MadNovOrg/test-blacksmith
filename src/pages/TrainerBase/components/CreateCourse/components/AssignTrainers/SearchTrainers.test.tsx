@@ -148,7 +148,7 @@ describe('component: SearchTrainers', () => {
     expect(matches).toHaveLength(1)
     userEvent.click(matches[0])
 
-    expect(onChange).toBeCalledWith([trainers[2]])
+    expect(onChange).toBeCalledWith({ target: { value: [trainers[2]] } })
   })
 
   it('shows info message when no matches are found', async () => {
