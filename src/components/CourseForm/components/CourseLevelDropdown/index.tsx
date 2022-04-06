@@ -57,6 +57,10 @@ export const CourseLevelDropdown: React.FC<Props> = ({
       return [levelOneOption, levelTwoOption, advancedOption]
     }
 
+    if (deliveryType === CourseDeliveryType.MIXED) {
+      return [levelOneOption, levelTwoOption]
+    }
+
     return []
   }, [deliveryType, courseType, t])
 

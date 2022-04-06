@@ -108,4 +108,21 @@ describe('component: CourseLevelDropdown', () => {
     expect(screen.getByText('Level Two')).toBeInTheDocument()
     expect(screen.getByText('Advanced')).toBeInTheDocument()
   })
+
+  it('renders correct options for open mixed course', () => {
+    render(
+      <CourseLevelDropdown
+        value=""
+        onChange={noop}
+        courseType={CourseType.INDIRECT}
+        deliveryType={CourseDeliveryType.MIXED}
+      />
+    )
+
+    userEvent.click(screen.getByRole('button'))
+
+    expect(screen.getByText('Level One')).toBeInTheDocument()
+    expect(screen.getByText('Level Two')).toBeInTheDocument()
+    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
+  })
 })

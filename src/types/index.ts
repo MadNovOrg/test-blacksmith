@@ -118,6 +118,7 @@ export enum CourseDeliveryType {
   F2F = 'F2F',
   BLENDED = 'BLENDED',
   VIRTUAL = 'VIRTUAL',
+  MIXED = 'MIXED',
 }
 
 export enum CourseTrainerType {

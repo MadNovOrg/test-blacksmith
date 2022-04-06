@@ -49,7 +49,7 @@
     "view": "View",
     "last-modified": "Last modified {{date}}",
     "ago": "ago",
-    "course-name-prefix": "Positive behaviour training",
+    "course-name-prefix": "Positive Behaviour Training",
     "reaccreditation": "Reaccreditation",
     "modules": "Modules",
     "course-delivery-type": {
@@ -213,6 +213,7 @@
       "location-section-title": "Location",
       "f2f-option-label": "Face to face",
       "virtual-option-label": "Virtual",
+      "mixed-option-label": "Both",
       "start-datepicker-section-title": "Starts",
       "start-date-placeholder": "Start date",
       "start-time-placeholder": "Start time",

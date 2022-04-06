@@ -82,12 +82,16 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
         reaccreditation: yup.bool(),
         deliveryType: yup
           .mixed()
-          .oneOf([CourseDeliveryType.F2F, CourseDeliveryType.VIRTUAL]),
+          .oneOf([
+            CourseDeliveryType.F2F,
+            CourseDeliveryType.VIRTUAL,
+            CourseDeliveryType.MIXED,
+          ]),
         venueId: yup
           .string()
           .nullable()
           .when('deliveryType', {
-            is: CourseDeliveryType.F2F,
+            is: CourseDeliveryType.F2F || CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
@@ -95,7 +99,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
           .string()
           .nullable()
           .when('deliveryType', {
-            is: CourseDeliveryType.VIRTUAL,
+            is: CourseDeliveryType.VIRTUAL || CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(
                 t('components.course-form.zoom-meeting-url-required')
@@ -313,7 +317,7 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             value={deliveryType}
             onChange={e => {
               setValue('deliveryType', e.target.value as CourseDeliveryType)
-              resetField('courseLevel')
+
               resetField('venueId')
               resetField('zoomMeetingUrl')
             }}
@@ -325,13 +329,29 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             />
             <FormControlLabel
               value={CourseDeliveryType.VIRTUAL}
-              control={<Radio />}
+              control={
+                <Radio
+                  disabled={
+                    courseLevel === CourseLevel.ADVANCED ||
+                    courseLevel === CourseLevel.LEVEL_2
+                  }
+                />
+              }
               label={t('components.course-form.virtual-option-label') as string}
+            />
+            <FormControlLabel
+              value={CourseDeliveryType.MIXED}
+              control={
+                <Radio disabled={courseLevel === CourseLevel.ADVANCED} />
+              }
+              label={t('components.course-form.mixed-option-label') as string}
             />
           </RadioGroup>
         </FormControl>
 
-        {deliveryType === CourseDeliveryType.F2F ? (
+        {[CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
+          deliveryType
+        ) ? (
           <>
             <VenueSelector
               onChange={venue => {
@@ -346,7 +366,11 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
               <FormHelperText error>{errors.venueId?.message}</FormHelperText>
             ) : null}
           </>
-        ) : (
+        ) : null}
+
+        {[CourseDeliveryType.VIRTUAL, CourseDeliveryType.MIXED].includes(
+          deliveryType
+        ) ? (
           <TextField
             fullWidth
             variant="filled"
@@ -354,8 +378,9 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             disabled
             helperText={errors.zoomMeetingUrl?.message}
             error={Boolean(errors.zoomMeetingUrl?.message)}
+            sx={{ marginTop: 2 }}
           />
-        )}
+        ) : null}
 
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Typography mb={2} mt={2} fontWeight={600}>

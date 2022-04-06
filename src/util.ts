@@ -168,6 +168,6 @@ export const generateCourseName = (
   }
 
   return `${t('common.course-name-prefix')}: ${courseLevelLabel} ${
-    courseData.reaccreditation ? t('common.reaccreditation') : null
+    courseData.reaccreditation ? t('common.reaccreditation') : ''
   }`
 }
