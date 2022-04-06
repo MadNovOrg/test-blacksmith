@@ -293,7 +293,9 @@ export const EvaluationSummary = () => {
                       pb={0}
                     >
                       {answers.map(a => (
-                        <QuestionText key={a.id}>{a.answer}</QuestionText>
+                        <QuestionText key={a.id}>
+                          {a.answer || 'N/A'}
+                        </QuestionText>
                       ))}
                     </Box>
                   </Box>
@@ -336,7 +338,9 @@ export const EvaluationSummary = () => {
                     )}
                   >
                     <Box bgcolor="common.white" px={1} py={2}>
-                      <QuestionText key={a.id}>{a.answer}</QuestionText>
+                      <QuestionText key={a.id}>
+                        {a.answer || 'N/A'}
+                      </QuestionText>
                     </Box>
                   </QuestionGroup>
                 )

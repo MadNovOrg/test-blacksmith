@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import EditIcon from '@mui/icons-material/Edit'
 import { DatePicker, LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -147,16 +146,23 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               {profile.email}
             </Typography>
 
-            <Button
-              variant="contained"
-              color="primary"
-              component={LinkBehavior}
-              href="edit"
-              startIcon={<EditIcon />}
-              sx={{ mt: 5 }}
-            >
-              {t('edit-profile')}
-            </Button>
+            <Box mt={5}>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => console.log('TBD')}
+                sx={{ mr: 1 }}
+              >
+                {t('remove')}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => console.log('TBD')}
+              >
+                {t('change')}
+              </Button>
+            </Box>
           </Grid>
 
           <Grid

@@ -12,6 +12,8 @@
       "bild_act": "BILD ACT Certified",
       "intermediate": "Intermediate"
     },
+    "change": "Change",
+    "remove": "Remove",
     "action": "Action",
     "view-cert": "View Certificate",
     "certificate": "Certificate",
@@ -670,7 +672,7 @@
       "SIGNATURE": "SIGNATURE",
       "OBJECTIVES_CLEARLY_STATED": "Objectives clearly stated",
       "OBJECTIVES_ACHIEVED": "Objectives achieved",
-      "EMPHASIS_ON_DEESCALATION": "Emphasis on de-escalation/holistic response 1",
+      "EMPHASIS_ON_DEESCALATION": "Emphasis on de-escalation/holistic response",
       "RISK_REDUCTION": "Risk reduction/safety as paramount concern",
       "VALUE_OF_TRAINING": "Value of training",
       "KEY_STRENGTHS_OF_COURSE": "What would you describe as the key strengths of this course?",
