@@ -52,3 +52,12 @@ select_permissions:
     - id
     filter: {}
   role: tt-admin
+- permission:
+    columns:
+    - number
+    filter:
+      participant:
+        profile:
+          id:
+            _eq: X-Hasura-User-Id
+  role: user

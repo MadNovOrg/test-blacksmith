@@ -239,6 +239,7 @@ export type CourseParticipant = {
   gradingFeedback?: string
   dateGraded?: string
   gradingModules: CourseParticipantModule[]
+  certificate?: CourseCertificate
 } & Base
 
 export enum BlendedLearningStatus {

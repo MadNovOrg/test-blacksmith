@@ -22,6 +22,9 @@ export const GetParticipant = gql`
           }
         }
       }
+      certificate {
+        number
+      }
     }
   }
 `

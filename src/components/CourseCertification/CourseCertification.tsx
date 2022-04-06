@@ -3,16 +3,16 @@ import {
   Accordion,
   Alert,
   Box,
+  Button,
   Container,
   Grid,
-  Button,
   Typography,
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
-import { add, differenceInHours, format } from 'date-fns'
+import { add, format } from 'date-fns'
 import MUIImage from 'mui-image'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,8 +21,8 @@ import {
   CertificateAssistIcon,
   CertificateObserveIcon,
   CertificatePassIcon,
-  icmImage,
   cpdImage,
+  icmImage,
   ntaImage,
 } from '@app/assets'
 import { CertificateDocument } from '@app/components/CertificatePDF'
@@ -39,8 +39,8 @@ type ModuleObject = {
 
 const gradesToCertificateIconMapping = {
   PASS: <CertificatePassIcon width={200} height={200} />,
-  OBSERVE_ONLY: <CertificateAssistIcon width={200} height={200} />,
-  ASSIST_ONLY: <CertificateObserveIcon width={200} height={200} />,
+  OBSERVE_ONLY: <CertificateObserveIcon width={200} height={200} />,
+  ASSIST_ONLY: <CertificateAssistIcon width={200} height={200} />,
   FAIL: null,
 }
 
@@ -264,10 +264,10 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
             key={moduleGroupWithModules.id}
             moduleGroupName={moduleGroupWithModules.name}
             completedModules={moduleGroupWithModules.modules.filter(
-              module => module.completed === true
+              module => module.completed
             )}
             uncompletedModules={moduleGroupWithModules.modules.filter(
-              module => module.completed === false
+              module => !module.completed
             )}
           />
         )
@@ -287,13 +287,8 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  // TODO : change when we know what this should be
-  const certificationNumber = courseParticipant.id
-
+  const certificationNumber = courseParticipant.certificate?.number ?? ''
   const grade = courseParticipant?.grade
-
-  const startDate = course.dates.aggregate.start.date
-  const endDate = course.dates.aggregate.end.date
 
   if (!courseParticipant?.grade || !courseParticipant.dateGraded) {
     return (
@@ -340,10 +335,6 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                     <CertificateDocument
                       participantName={courseParticipant.profile?.fullName}
                       courseName={course.name}
-                      courseDuration={differenceInHours(
-                        new Date(endDate),
-                        new Date(startDate)
-                      )}
                       courseLevel={course.level}
                       grade={grade as Grade}
                       courseDeliveryType={courseDeliveryType}

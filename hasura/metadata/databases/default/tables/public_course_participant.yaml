@@ -11,6 +11,15 @@ configuration:
     invoice_id: invoiceID
   custom_root_fields: {}
 object_relationships:
+- name: certificate
+  using:
+    manual_configuration:
+      column_mapping:
+        id: course_participant_id
+      insertion_order: null
+      remote_table:
+        name: course_certificate
+        schema: public
 - name: course
   using:
     foreign_key_constraint_on: course_id

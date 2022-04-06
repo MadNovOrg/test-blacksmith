@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
 type CertificateDocumentProps = {
   participantName: string
   courseName: string
-  courseDuration: number
   courseLevel: CourseLevel
   grade: Grade
   courseDeliveryType: CourseDeliveryType
@@ -76,7 +75,6 @@ type CertificateDocumentProps = {
 export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
   participantName,
   courseName,
-  courseDuration,
   courseLevel,
   grade,
   courseDeliveryType,
@@ -106,12 +104,6 @@ export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
         </Text>
         <Text style={{ ...styles.text, ...styles.largerText }}>
           {courseName}
-        </Text>
-        <Text style={{ ...styles.text, ...styles.largestText, ...styles.blue }}>
-          {t(
-            `common.course-certificate.duration-message.${courseLevel?.toLowerCase()}`,
-            { courseDuration }
-          )}
         </Text>
 
         {[
