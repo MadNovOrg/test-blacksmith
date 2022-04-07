@@ -21,7 +21,7 @@ describe('components: CreateCourseMenu', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
+          <Route path="/courses/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
       {
@@ -47,7 +47,7 @@ describe('components: CreateCourseMenu', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
+          <Route path="/courses/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
       {
@@ -73,7 +73,7 @@ describe('components: CreateCourseMenu', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
+          <Route path="/courses/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
       {
@@ -99,7 +99,7 @@ describe('components: CreateCourseMenu', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
+          <Route path="/courses/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
       {
@@ -123,7 +123,7 @@ describe('components: CreateCourseMenu', () => {
       <MemoryRouter initialEntries={['/']}>
         <Routes>
           <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/trainer-base/course/new" element={<CourseTypeMock />} />
+          <Route path="/courses/new" element={<CourseTypeMock />} />
         </Routes>
       </MemoryRouter>,
       {

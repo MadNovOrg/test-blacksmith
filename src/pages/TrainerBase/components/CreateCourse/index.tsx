@@ -26,7 +26,7 @@ export const CreateCourse = () => {
         <Box mb={2}>
           <BackButton
             label={t('pages.create-course.back-button-text')}
-            to="/trainer-base/course"
+            to="/courses"
           />
         </Box>
         <Box display="flex">

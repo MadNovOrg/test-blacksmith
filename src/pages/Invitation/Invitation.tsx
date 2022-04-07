@@ -128,7 +128,7 @@ export const InvitationPage = () => {
       alignItems="center"
       overflow="scroll"
     >
-      <Logo size={80} />
+      <Logo width={80} height={80} />
 
       <Box
         mt={5}

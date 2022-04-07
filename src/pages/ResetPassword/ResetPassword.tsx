@@ -130,7 +130,7 @@ export const ResetPasswordPage = () => {
       flexDirection="column"
       alignItems="center"
     >
-      <Logo size={80} />
+      <Logo width={80} height={80} />
 
       <Box mt={2} width={400} textAlign="center">
         <Typography variant="body2" gutterBottom>

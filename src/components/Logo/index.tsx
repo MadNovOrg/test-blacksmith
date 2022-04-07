@@ -1,10 +1,25 @@
-import { Box } from '@mui/material'
 import React from 'react'
 
-import { ReactComponent as LogoSvg } from './logo-color.svg'
+import { ReactComponent as LogoPartial } from './logo-color.svg'
+import { ReactComponent as LogoFull } from './logo-full.svg'
 
-export const Logo: React.FC<{ size: number }> = ({ size = 40, ...rest }) => (
-  <Box display="inline-block" height={size} width={size}>
-    <LogoSvg width={size} height={size} {...rest} />
-  </Box>
-)
+const map = {
+  partial: LogoPartial,
+  full: LogoFull,
+}
+
+type LogoProps = {
+  variant?: 'partial' | 'full'
+  width?: number
+  height?: number
+}
+
+export const Logo: React.FC<LogoProps> = ({
+  variant = 'partial',
+  width = 40,
+  height = 40,
+  ...rest
+}) => {
+  const Comp = map[variant]
+  return <Comp width={width} height={height} {...rest} />
+}

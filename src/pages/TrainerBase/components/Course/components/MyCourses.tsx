@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Button, CircularProgress, Container } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
+import { BackButton } from '@app/components/BackButton'
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
@@ -171,13 +171,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
       <Box display="flex">
         <Box width={250} display="flex" flexDirection="column" pr={4}>
           <Box display="flex" mb={6}>
-            <Button
-              variant="text"
-              onClick={() => navigate(-1)}
-              startIcon={<ArrowBackIcon />}
-            >
-              Back
-            </Button>
+            <BackButton />
           </Box>
           <Typography variant="body2">{t('filter-by')}</Typography>
 

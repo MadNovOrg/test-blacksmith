@@ -18,7 +18,7 @@ export const ContactedConfirmationPage = () => {
       flexDirection="column"
       alignItems="center"
     >
-      <Logo size={80} />
+      <Logo width={80} height={80} />
 
       <Box
         mt={5}

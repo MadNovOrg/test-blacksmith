@@ -22,7 +22,7 @@ export const AppLayoutMinimal: React.FC<Props> = ({
       alignItems="center"
       overflow="scroll"
     >
-      <Logo size={80} />
+      <Logo width={80} height={80} />
       <Box
         mt={5}
         bgcolor="common.white"

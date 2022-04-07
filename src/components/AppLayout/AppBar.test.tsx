@@ -17,8 +17,8 @@ describe('component: AppBar', () => {
 
     const logo = screen.getByTestId('app-logo')
     expect(logo).toBeInTheDocument()
-    expect(logo).toHaveAttribute('width', '40')
-    expect(logo).toHaveAttribute('height', '40')
+    expect(logo).toHaveAttribute('width', '230')
+    expect(logo).toHaveAttribute('height', '48')
   })
 
   it('renders user name in profile button', async () => {

@@ -7,42 +7,30 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { CourseType } from '@app/types'
 
-const CREATE_COURSE_PATH = '/trainer-base/course/new'
+const CREATE_COURSE_PATH = '/courses/new'
 
 type Options = Array<{ key: CourseType; label: string }>
 
 export const CreateCourseMenu = () => {
-  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
   const { acl } = useAuth()
   const { t } = useTranslation()
 
   const options: Options = useMemo(() => {
-    const opts: Options = []
-
-    if (acl.canCreateCourse(CourseType.CLOSED)) {
-      opts.push({
-        key: CourseType.CLOSED,
-        label: t('components.create-course-menu.closed-course-label'),
-      })
-    }
-
-    if (acl.canCreateCourse(CourseType.OPEN)) {
-      opts.push({
-        key: CourseType.OPEN,
-        label: t('components.create-course-menu.open-course-label'),
-      })
-    }
-
-    if (acl.canCreateCourse(CourseType.INDIRECT) && !acl.isTrainer()) {
-      opts.push({
-        key: CourseType.INDIRECT,
-        label: t('components.create-course-menu.indirect-course-label'),
-      })
-    }
-
-    return opts
+    return Object.values(CourseType).flatMap(type =>
+      acl.canCreateCourse(type)
+        ? [
+            {
+              key: type,
+              label: t(
+                `components.create-course-menu.${type.toLowerCase()}-course-label`
+              ),
+            },
+          ]
+        : []
+    )
   }, [acl, t])
 
   const handleClose = () => {
@@ -52,11 +40,11 @@ export const CreateCourseMenu = () => {
   const handleMenuButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (options.length) {
-      setAnchorEl(event.currentTarget)
-    } else {
-      navigate(`${CREATE_COURSE_PATH}?type=INDIRECT`)
+    if (options.length === 1) {
+      return navigate(`${CREATE_COURSE_PATH}?type=${options[0].key}`)
     }
+
+    setAnchorEl(event.currentTarget)
   }
 
   return (
@@ -71,23 +59,14 @@ export const CreateCourseMenu = () => {
       </Button>
       {options.length ? (
         <Menu
-          id="lock-menu"
+          id="course-type-menu"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'lock-button',
-            role: 'listbox',
-          }}
+          MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
           data-testid="create-course-options"
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         >
           {options.map(option => (
             <MenuItem
@@ -99,6 +78,7 @@ export const CreateCourseMenu = () => {
               {option.label}
             </MenuItem>
           ))}
+
           <MenuItem disabled>
             {t('components.create-course-menu.bulk-import-label')}
           </MenuItem>

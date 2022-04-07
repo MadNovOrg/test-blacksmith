@@ -11,8 +11,19 @@ import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { InvitationPage } from '@app/pages/Invitation'
 import { LoginPage } from '@app/pages/Login'
+import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
 import { ResetPasswordPage } from '@app/pages/ResetPassword'
 import { SignUpPage } from '@app/pages/SignUp'
+import { CourseBuilder } from '@app/pages/TrainerBase/components/Course/components/CourseBuilder'
+import { MyCourses } from '@app/pages/TrainerBase/components/Course/components/MyCourses'
+import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
+import { CourseGrading } from '@app/pages/TrainerBase/components/CourseGrading'
+import { ParticipantGrading } from '@app/pages/TrainerBase/components/CourseGrading/components/ParticipantGrading'
+import { CreateCourse } from '@app/pages/TrainerBase/components/CreateCourse'
+import { AssignTrainers } from '@app/pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
+import { CreateCourseForm } from '@app/pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
+import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
+import { TrainerFeedback } from '@app/pages/TrainerBase/components/TrainerFeedback'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
@@ -62,17 +73,18 @@ function LoggedOutRoutes() {
 function LoggedInRoutes() {
   const { acl, activeRole } = useAuth()
 
+  // TODO: may not need it
   const startPage = useMemo(() => {
     switch (activeRole ?? RoleName.USER) {
       case RoleName.USER:
-        return '/my-training'
+        return '/courses'
       case RoleName.TRAINER:
-        return '/trainer-base'
+        return '/courses'
       case RoleName.ORG_ADMIN:
-        return '/my-organization'
+        return '/courses'
       case RoleName.TT_OPS:
       case RoleName.TT_ADMIN:
-        return '/admin'
+        return '/courses'
       default:
         return '/profile'
     }
@@ -90,6 +102,33 @@ function LoggedInRoutes() {
           <Route index element={<Root />} />
 
           <Route path="profile/*" element={<ProfileRoutes />} />
+
+          <Route path="/courses">
+            <Route index element={<MyCourses />} />
+            <Route path="new" element={<CreateCourse />}>
+              <Route index element={<CreateCourseForm />} />
+              <Route
+                path="assign-trainers/:courseId"
+                element={<AssignTrainers />}
+              />
+            </Route>
+
+            <Route path=":id">
+              <Route index element={<Navigate replace to="details" />} />
+              <Route path="modules" element={<CourseBuilder />} />
+              <Route path="details" element={<CourseDetails />} />
+              <Route path="grading" element={<CourseGrading />} />
+              <Route
+                path="grading/:participantId"
+                element={<ParticipantGrading />}
+              />
+              <Route path="evaluation">
+                <Route path="submit" element={<TrainerFeedback />} />
+                <Route path="view" element={<CourseEvaluation />} />
+                <Route path="summary" element={<EvaluationSummary />} />
+              </Route>
+            </Route>
+          </Route>
 
           <Route
             path="/my-training/*"
