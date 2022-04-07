@@ -67,7 +67,12 @@ export const CourseHeroSummary: React.FC<Props> = ({
         <Grid container spacing={3}>
           <Grid item xs={6} md={4}>
             {children}
-            <Typography variant="h3" marginBottom={3} fontWeight={600}>
+            <Typography
+              variant="h3"
+              marginBottom={3}
+              fontWeight={600}
+              data-testid="course-name"
+            >
               {course.name}
             </Typography>
             {typeof renderButton === 'function' && renderButton()}

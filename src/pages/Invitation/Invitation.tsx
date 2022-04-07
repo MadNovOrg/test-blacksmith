@@ -248,6 +248,7 @@ export const InvitationPage = () => {
                       borderTopLeftRadius: 4,
                       borderTopRightRadius: 4,
                     }}
+                    data-testid="will-attend"
                   />
                   <FormControlLabel
                     value="no"
@@ -261,6 +262,7 @@ export const InvitationPage = () => {
                       borderBottomLeftRadius: 4,
                       borderBottomRightRadius: 4,
                     }}
+                    data-testid="wont-attend"
                   />
                 </RadioGroup>
               </FormControl>

@@ -1,5 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request'
 
+import { CourseLevel } from '../../src/types'
 import { HASURA_BASE_URL } from '../constants'
 import { Course, User } from '../data/types'
 import { getAdminIdToken } from '../util'
@@ -68,7 +69,7 @@ export const getProfileId = async (email: string): Promise<string> => {
 }
 
 export const setCourseDates = async (
-  courseId: string,
+  courseId: number,
   newStart: Date,
   newEnd: Date
 ) => {
@@ -154,7 +155,7 @@ export const makeSureTrainerHasCourses = async (
   }
 }
 
-export const deleteCourse = async (id: string) => {
+export const deleteCourse = async (id: number) => {
   console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {
@@ -164,6 +165,49 @@ export const deleteCourse = async (id: string) => {
       delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_participant(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course(where: { id: { _eq: ${id} } }) { affected_rows }
+    }
+  `
+  try {
+    await getClient().request(query)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const getModuleIds = async (
+  moduleGroups: string[],
+  level: CourseLevel
+): Promise<string[]> => {
+  const query = gql`
+    query MyQuery {
+      module_group(
+        where: {
+          name: { _in: ${moduleGroups} }
+          _and: { level: { _eq: ${level} } }
+        }
+      ) {
+        modules {
+          id
+        }
+      }
+    }
+  `
+  const response = await getClient().request(query)
+  return response.module_group.flatMap(m => m.modules.flatMap(i => i.id))
+}
+
+export const insertCourseModules = async (
+  courseId: number,
+  moduleIds: string[]
+) => {
+  const modules = moduleIds.map(id => ({ courseId: courseId, moduleId: id }))
+  const query = gql`
+    mutation MyMutation {
+      insert_course_module(
+        objects: ${JSON.stringify(modules)}
+      ) {
+        affected_rows
+      }
     }
   `
   try {

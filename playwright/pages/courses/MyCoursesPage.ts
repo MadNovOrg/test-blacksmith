@@ -7,6 +7,7 @@ import { Course } from '../../data/types'
 import { BasePage } from '../BasePage'
 
 import { CourseBuilderPage } from './CourseBuilderPage'
+import { CourseDetailsPage } from './CourseDetailsPage'
 
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator
@@ -55,8 +56,14 @@ export class MyCoursesPage extends BasePage {
     return new CourseBuilderPage(this.page)
   }
 
+  async clickCourseManageButton(name: string): Promise<CourseDetailsPage> {
+    const cell = await this.coursesTable.getCell('Course Name', name, '')
+    await cell.locator('button').click()
+    return new CourseDetailsPage(this.page)
+  }
+
   async checkCourseStatus(courseName: string, status: string) {
-    const cell = await this.coursesTable.getCellById(
+    const cell = await this.coursesTable.getCell(
       'Course Name',
       courseName,
       'Status'

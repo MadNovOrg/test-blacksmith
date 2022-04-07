@@ -129,16 +129,19 @@ export const CourseDetails = () => {
                       <StyledTab
                         label={t('pages.course-details.tabs.attendees.title')}
                         value={CourseDetailsTabs.ATTENDEES}
+                        data-testid="attendees-tab"
                       />
                       {courseHasEnded ? (
                         <StyledTab
                           label={t('pages.course-details.tabs.grading.title')}
                           value={CourseDetailsTabs.GRADING}
+                          data-testid="grading-tab"
                         />
                       ) : null}
                       <StyledTab
                         label={t('pages.course-details.tabs.evaluation.title')}
                         value={CourseDetailsTabs.EVALUATION}
+                        data-testid="evaluation-tab"
                       />
                     </StyledTabList>
                   </Container>

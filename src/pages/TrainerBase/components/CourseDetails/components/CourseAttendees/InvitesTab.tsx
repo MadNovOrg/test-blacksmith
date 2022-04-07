@@ -80,7 +80,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
     <>
       {status === LoadingStatus.SUCCESS && (
         <>
-          <Table>
+          <Table data-testid="invites-table">
             <TableHead
               cols={cols}
               order={order}

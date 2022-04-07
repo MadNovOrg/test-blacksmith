@@ -108,7 +108,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
       courseParticipants?.length ? (
         <>
-          <Table>
+          <Table data-testid="attending-table">
             <TableHead
               cols={cols}
               order={order}

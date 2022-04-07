@@ -535,3 +535,16 @@ export const MODULES_SETUP: ModuleSetup[] = [
     durationAfter: '7hrs',
   },
 ]
+
+export const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
+  [
+    CourseLevel.LEVEL_1,
+    [
+      'Theory',
+      'Personal Space & Body Language',
+      'Elevated Risks',
+      'Physical Warm Up',
+      'Personal Safety',
+    ],
+  ],
+])

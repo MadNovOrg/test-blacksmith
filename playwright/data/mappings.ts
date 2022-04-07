@@ -1,6 +1,6 @@
 import translation from '../../src/i18n/en/translation.json'
 
-import { Course, CourseTableRow } from './types'
+import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 
 const statusActions = {
   PENDING: 'Build',
@@ -38,3 +38,10 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
     '': statusActions[course.status],
   }
 }
+
+export const toAttendeesTableRow: (user: User) => AttendeesTableRow = user => ({
+  Name: `${user.givenName} ${user.familyName}`,
+  Contact: user.email,
+  Organisation: user.organization ? user.organization.name : '',
+  Documents: 'View',
+})

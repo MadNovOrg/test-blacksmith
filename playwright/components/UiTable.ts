@@ -51,7 +51,7 @@ export class UiTable {
     await expect(this.root).toBeVisible({ timeout: 20000 })
   }
 
-  async getCellById(
+  async getCell(
     idColumnName: string,
     idValue: string,
     columnName: string

@@ -10,6 +10,7 @@ export type User = {
   familyName: string
   email: string
   password: string
+  organization?: Organization
 }
 
 export type Email = {
@@ -19,7 +20,7 @@ export type Email = {
 }
 
 export type Course = {
-  id?: string
+  id?: number
   name: string
   description: string
   organization?: Organization
@@ -58,4 +59,11 @@ export type ModuleGroup = {
   id?: string
   name: string
   duration: string
+}
+
+export type AttendeesTableRow = {
+  Name: string
+  Contact: string
+  Organisation: string
+  Documents: string
 }

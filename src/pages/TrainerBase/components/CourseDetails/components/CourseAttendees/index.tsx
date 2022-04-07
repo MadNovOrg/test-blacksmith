@@ -71,7 +71,11 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
               alignItems="center"
               sx={{ mb: 2 }}
             >
-              <Typography variant="subtitle2" fontSize="18px">
+              <Typography
+                variant="subtitle2"
+                fontSize="18px"
+                data-testid="attending"
+              >
                 {t('pages.course-participants.attending', {
                   attending: courseParticipantsTotal,
                   max: course.max_participants,
