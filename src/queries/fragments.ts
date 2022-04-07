@@ -99,6 +99,7 @@ export const COURSE = gql`
     min_participants
     max_participants
     gradingConfirmed
+    go1Integration
   }
 `
 

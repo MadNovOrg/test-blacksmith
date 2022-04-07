@@ -17,7 +17,7 @@ export type Course = {
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
-  go1Integration?: boolean
+  go1Integration: boolean
   dates: {
     aggregate: {
       start: { date: string }
@@ -126,7 +126,6 @@ export enum CourseLevel {
 
 export enum CourseDeliveryType {
   F2F = 'F2F',
-  BLENDED = 'BLENDED',
   VIRTUAL = 'VIRTUAL',
   MIXED = 'MIXED',
 }

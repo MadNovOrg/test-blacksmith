@@ -1,15 +1,15 @@
-INSERT INTO public.course (id, description, name, course_type, course_delivery_type, course_level, organization_id, reaccreditation)
+INSERT INTO public.course (id, description, name, course_type, course_delivery_type, course_level, organization_id, reaccreditation, go1_integration)
 VALUES
-    (10000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false),
-    (10001, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', 'LEVEL_2', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false),
-    (10002, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Advanced Modules', 'OPEN', 'F2F', 'ADVANCED', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false),
-    (10003, 'Some description.', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1', null, false),
-    (10004, 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', 'LEVEL_2', null, false),
-    (10005, 'Very long description of the course.', 'Positive Behaviour Training: Advanced Modules', 'CLOSED', 'F2F', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false),
-    (10006, 'Some description.', 'Positive Behaviour Training: Level One', 'CLOSED', 'BLENDED', 'LEVEL_1', null, false),
-    (10007, 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'CLOSED', 'BLENDED', 'LEVEL_2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false),
-    (10008, 'Very long description of the course.', 'Positive Behaviour Training: Advanced Modules', 'CLOSED', 'BLENDED', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false),
-    (10009, 'Some description.', 'Positive Behaviour Training: Level One', 'INDIRECT', 'VIRTUAL', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false);
+    (10000, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false),
+    (10001, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', 'LEVEL_2', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false),
+    (10002, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 'Positive Behaviour Training: Advanced Modules', 'OPEN', 'F2F', 'ADVANCED', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d', false, false),
+    (10003, 'Some description.', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1', null, false, false),
+    (10004, 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'OPEN', 'F2F', 'LEVEL_2', null, false, false),
+    (10005, 'Very long description of the course.', 'Positive Behaviour Training: Advanced Modules', 'CLOSED', 'F2F', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false),
+    (10006, 'Some description.', 'Positive Behaviour Training: Level One', 'CLOSED', 'F2F', 'LEVEL_1', null, false, true),
+    (10007, 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'CLOSED', 'F2F', 'LEVEL_2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, true),
+    (10008, 'Very long description of the course.', 'Positive Behaviour Training: Advanced Modules', 'CLOSED', 'F2F', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, true),
+    (10009, 'Some description.', 'Positive Behaviour Training: Level One', 'INDIRECT', 'VIRTUAL', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false);
 
 SELECT setval('course_id_seq', 10010);
 

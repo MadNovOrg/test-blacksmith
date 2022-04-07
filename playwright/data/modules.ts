@@ -144,7 +144,8 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_1
       course.type = CourseType.CLOSED
-      course.deliveryType = CourseDeliveryType.BLENDED
+      course.deliveryType = CourseDeliveryType.F2F
+      course.go1Integration = true
       return course
     })(),
     mandatoryModules: [
@@ -354,7 +355,8 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
-      course.deliveryType = CourseDeliveryType.BLENDED
+      course.deliveryType = CourseDeliveryType.F2F
+      course.go1Integration = true
       return course
     })(),
     mandatoryModules: [
@@ -427,8 +429,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
-      course.deliveryType = CourseDeliveryType.BLENDED
+      course.deliveryType = CourseDeliveryType.F2F
       course.reaccreditation = true
+      course.go1Integration = true
       return course
     })(),
     mandatoryModules: [

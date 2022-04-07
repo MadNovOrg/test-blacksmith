@@ -30,6 +30,7 @@ export type Course = {
   status: CourseStatus
   reaccreditation: boolean
   schedule: CourseSchedule[]
+  go1Integration?: boolean
 }
 
 export type CourseSchedule = {

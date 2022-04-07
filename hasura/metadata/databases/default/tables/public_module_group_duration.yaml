@@ -6,6 +6,7 @@ configuration:
   custom_column_names:
     course_delivery_type: courseDeliveryType
     created_at: createdAt
+    go1_integration: go1Integration
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -16,12 +17,13 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
-    - reaccreditation
-    - duration
     - course_delivery_type
     - created_at
-    - updated_at
+    - duration
+    - go1_integration
     - id
     - module_group_id
+    - reaccreditation
+    - updated_at
     filter: {}
   role: user

@@ -56,7 +56,7 @@ export const CourseGradingMenu: React.FC<Props> = ({
     if (
       (courseDeliveryType === CourseDeliveryType.VIRTUAL &&
         courseLevel === CourseLevel.LEVEL_1) ||
-      courseDeliveryType === CourseDeliveryType.BLENDED
+      courseDeliveryType === CourseDeliveryType.MIXED
     ) {
       return [passOption, failOption]
     }

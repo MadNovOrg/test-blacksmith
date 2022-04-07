@@ -13,12 +13,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import {
-  BlendedLearningStatus,
-  Course,
-  CourseDeliveryType,
-  SortOrder,
-} from '@app/types'
+import { BlendedLearningStatus, Course, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 type TabProperties = {
@@ -34,7 +29,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
-  const isBlendedCourse = course.deliveryType === CourseDeliveryType.BLENDED
+  const isBlendedCourse = course.go1Integration
 
   const {
     data: courseParticipants,

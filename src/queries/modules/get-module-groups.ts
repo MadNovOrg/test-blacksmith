@@ -10,6 +10,7 @@ export type ParamsType = {
   level: CourseLevel
   courseDeliveryType: CourseDeliveryType
   reaccreditation: boolean
+  go1Integration: boolean
 }
 
 export const QUERY = gql`
@@ -19,6 +20,7 @@ export const QUERY = gql`
     $level: course_level_enum!
     $courseDeliveryType: course_delivery_type_enum!
     $reaccreditation: Boolean!
+    $go1Integration: Boolean!
   ) {
     groups: module_group(where: { level: { _eq: $level } }) {
       ...ModuleGroup
@@ -29,6 +31,7 @@ export const QUERY = gql`
         where: {
           reaccreditation: { _eq: $reaccreditation }
           courseDeliveryType: { _eq: $courseDeliveryType }
+          go1Integration: { _eq: $go1Integration }
         }
         limit: 1
       ) {

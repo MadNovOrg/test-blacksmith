@@ -104,6 +104,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             level: courseData?.course.level,
             courseDeliveryType: courseData?.course.deliveryType,
             reaccreditation: courseData?.course.reaccreditation,
+            go1Integration: courseData?.course.go1Integration,
           },
         ]
       : null

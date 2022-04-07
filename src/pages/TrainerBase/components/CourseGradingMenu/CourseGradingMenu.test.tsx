@@ -101,7 +101,7 @@ describe('component: CourseGradingMenu', () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.LEVEL_1}
-        courseDeliveryType={CourseDeliveryType.BLENDED}
+        courseDeliveryType={CourseDeliveryType.MIXED}
       />
     )
 

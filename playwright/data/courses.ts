@@ -67,7 +67,8 @@ export const COURSES_TO_VIEW: Course[] = [
     description: 'Some description.',
     level: CourseLevel.LEVEL_2,
     status: CourseStatus.PENDING,
-    deliveryType: CourseDeliveryType.BLENDED,
+    deliveryType: CourseDeliveryType.F2F,
+    go1Integration: true,
     type: CourseType.INDIRECT,
     reaccreditation: false,
     schedule: [
@@ -128,6 +129,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
   deliveryType: CourseDeliveryType.F2F,
   type: CourseType.OPEN,
   reaccreditation: false,
+  go1Integration: false,
   organization: { name: 'London First School' },
   schedule: [
     {
