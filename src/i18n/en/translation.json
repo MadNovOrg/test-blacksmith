@@ -366,7 +366,8 @@
           "attendees": "{{ number }} attendees",
           "grade-selected": "Grade selected ({{ number }})",
           "grade-all-attendees": "Grade all attendees",
-          "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading."
+          "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading.",
+		  "modify-grading-details": "Modify grading details"
         },
         "evaluation": {
           "title": "Evaluation Summary",

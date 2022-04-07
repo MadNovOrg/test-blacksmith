@@ -14,6 +14,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import useCourse from '@app/hooks/useCourse'
+import { CourseDetailsTabs } from '@app/pages/TrainerBase/components/CourseDetails'
 import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
@@ -57,7 +58,9 @@ export const CourseGradingDetails = () => {
                 startIcon={<ArrowBackIcon />}
                 sx={{ marginBottom: 2 }}
                 onClick={() =>
-                  navigate(`/trainer-base/course/${courseId}/details`)
+                  navigate(
+                    `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+                  )
                 }
               >
                 {t('pages.course-grading-details.back-button-text')}

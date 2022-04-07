@@ -1,15 +1,16 @@
 import { LoadingButton } from '@mui/lab'
-import { Typography, Box, CircularProgress, Stack } from '@mui/material'
+import { Box, CircularProgress, Stack, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseModules from '@app/hooks/useCourseModules'
+import { CourseDetailsTabs } from '@app/pages/TrainerBase/components/CourseDetails'
 import {
   MUTATION,
-  ResponseType,
   ParamsType,
+  ResponseType,
 } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
@@ -121,7 +122,9 @@ export const ModulesSelection = () => {
       } else {
         localStorage.removeItem(STORAGE_KEY)
 
-        navigate(`/trainer-base/course/${courseId}/details`)
+        navigate(
+          `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+        )
       }
     } catch (err) {
       setSavingSelectionStatus(LoadingStatus.ERROR)

@@ -1,3 +1,4 @@
+import { Edit } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import { styled } from '@mui/system'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -27,6 +29,13 @@ import { LoadingStatus } from '@app/util'
 type CourseGradingProps = {
   course: Course
 }
+
+const StyledLink = styled(Link, {
+  shouldForwardProp: prop => prop !== 'disabled',
+})<{ disabled?: boolean; color?: string }>(({ theme, disabled }) => ({
+  pointerEvents: disabled ? 'none' : 'auto',
+  color: disabled ? theme.palette.grey[500] : theme.palette.primary.main,
+}))
 
 export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
   const { t } = useTranslation()
@@ -49,10 +58,11 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
     },
   })
 
+  const participantsWithoutGrades = (attendingParticipants ?? []).filter(
+    participant => !participant.grade
+  )
+
   const cols = useMemo(() => {
-    const participantsWithoutGrades = (attendingParticipants ?? []).filter(
-      participant => !participant.grade
-    )
     return [
       {
         id: 'selection',
@@ -98,6 +108,9 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
     ].filter(Boolean)
   }, [attendingParticipants, selectedParticipants.length, t])
 
+  const canEditGradingDetails =
+    participantsWithoutGrades?.length === attendingParticipants?.length
+
   const handleSortChange = useCallback(
     columnName => {
       if (sortColumn === columnName) {
@@ -133,9 +146,32 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
               </Stack>
             ) : (
               <>
-                <Typography variant="subtitle1" color="grey.800">
-                  {t('pages.course-details.tabs.grading.title')}
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle1" color="grey.800">
+                    {t('pages.course-details.tabs.grading.title')}
+                  </Typography>
+                  <StyledLink
+                    disabled={!canEditGradingDetails}
+                    href={`/trainer-base/course/${course.id}/grading-details`}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                    ml={{ xs: 2, md: 3 }}
+                  >
+                    <Edit fontSize="small" sx={{ marginRight: '0.3em' }} />
+                    <Typography variant="body2" fontWeight={600}>
+                      {t(
+                        'pages.course-details.tabs.grading.modify-grading-details'
+                      )}
+                    </Typography>
+                  </StyledLink>
+                </Box>
 
                 <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
                   {t('pages.course-details.tabs.grading.description')}
