@@ -157,7 +157,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                   </Typography>
                   <StyledLink
                     disabled={!canEditGradingDetails}
-                    href={`/trainer-base/course/${course.id}/grading-details`}
+                    href={`/courses/${course.id}/grading-details`}
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
@@ -196,7 +196,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                       disabled={selectedParticipants.length === 0}
                       onClick={() =>
                         navigate(
-                          `/trainer-base/course/${
+                          `/courses/${
                             course.id
                           }/grading?participants=${selectedParticipants.join(
                             ','
@@ -212,9 +212,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                       variant="contained"
                       color="primary"
                       sx={{ ml: 2 }}
-                      onClick={() =>
-                        navigate(`/trainer-base/course/${course.id}/grading`)
-                      }
+                      onClick={() => navigate(`/courses/${course.id}/grading`)}
                     >
                       {t(
                         'pages.course-details.tabs.grading.grade-all-attendees'
@@ -281,7 +279,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                                   fontWeight: 600,
                                   color: theme.colors.navy[500],
                                 }}
-                                href={`/trainer-base/course/${course.id}/grading/${courseParticipant.id}`}
+                                href={`/courses/${course.id}/grading/${courseParticipant.id}`}
                               >
                                 {t('common.view')}
                               </Link>
@@ -293,7 +291,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                               size="small"
                               onClick={() =>
                                 navigate(
-                                  `/trainer-base/course/${course.id}/grading?participants=${courseParticipant.id}`
+                                  `/courses/${course.id}/grading?participants=${courseParticipant.id}`
                                 )
                               }
                             >
@@ -359,7 +357,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                 color="primary"
                 size="small"
                 onClick={() =>
-                  navigate(`/trainer-base/course/${course.id}/grading-details`)
+                  navigate(`/courses/${course.id}/grading-details`)
                 }
               >
                 {t(

@@ -123,7 +123,7 @@ export const ModulesSelection = () => {
         localStorage.removeItem(STORAGE_KEY)
 
         navigate(
-          `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+          `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
         )
       }
     } catch (err) {
@@ -165,7 +165,7 @@ export const ModulesSelection = () => {
             <LoadingButton
               loading={savingSelectionStatus === LoadingStatus.FETCHING}
               onClick={() => {
-                navigate(`/trainer-base/course/${courseId}/grading-details`)
+                navigate(`/courses/${courseId}/grading-details`)
               }}
             >
               {t('pages.modules-selection.back-button-text')}

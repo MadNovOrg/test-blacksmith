@@ -325,9 +325,9 @@ describe('page: CourseGrading', () => {
     render(
       <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
         <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
+          <Route path=":id/grading" element={<CourseGrading />} />
           <Route
-            path="/trainer-base/course/:id/details"
+            path="/courses/:id/details"
             element={<h1>Course details</h1>}
           />
         </Routes>

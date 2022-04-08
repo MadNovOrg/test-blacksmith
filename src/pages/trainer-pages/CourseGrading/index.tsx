@@ -177,9 +177,7 @@ export const CourseGrading = () => {
       })
 
       localStorage.removeItem(STORAGE_KEY)
-      navigate(
-        `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
-      )
+      navigate(`/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`)
     } catch (err) {
       setSavingGradesStatus(LoadingStatus.ERROR)
     }
@@ -231,7 +229,7 @@ export const CourseGrading = () => {
                 sx={{ marginBottom: 2 }}
                 onClick={() =>
                   navigate(
-                    `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+                    `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
                   )
                 }
               >

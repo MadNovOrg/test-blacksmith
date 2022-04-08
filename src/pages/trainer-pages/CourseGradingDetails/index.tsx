@@ -59,7 +59,7 @@ export const CourseGradingDetails = () => {
                 sx={{ marginBottom: 2 }}
                 onClick={() =>
                   navigate(
-                    `/trainer-base/course/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
+                    `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
                   )
                 }
               >

@@ -10,9 +10,9 @@ import { CreateCourse } from '.'
 describe('page: CreateCourse', () => {
   it("doesn't mark any step as done if on course details page", () => {
     render(
-      <MemoryRouter initialEntries={[`/trainer-base/course/new`]}>
+      <MemoryRouter initialEntries={[`/courses/new`]}>
         <Routes>
-          <Route path="/trainer-base/course/new" element={<CreateCourse />}>
+          <Route path="/courses/new" element={<CreateCourse />}>
             <Route index element={<h1>Create course form page</h1>} />
           </Route>
         </Routes>
@@ -29,11 +29,9 @@ describe('page: CreateCourse', () => {
 
   it('marks course details page as done if on assign trainers page', () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/trainer-base/course/new/assign-trainers`]}
-      >
+      <MemoryRouter initialEntries={[`/courses/new/assign-trainers`]}>
         <Routes>
-          <Route path="/trainer-base/course/new" element={<CreateCourse />}>
+          <Route path="/courses/new" element={<CreateCourse />}>
             <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
           </Route>
         </Routes>
@@ -52,11 +50,9 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating open course', () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/trainer-base/course/new?type=${CourseType.OPEN}`]}
-      >
+      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.OPEN}`]}>
         <Routes>
-          <Route path="/trainer-base/course/new" element={<CreateCourse />}>
+          <Route path="/courses/new" element={<CreateCourse />}>
             <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
           </Route>
         </Routes>
@@ -68,11 +64,9 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating closed course', () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/trainer-base/course/new?type=${CourseType.CLOSED}`]}
-      >
+      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.CLOSED}`]}>
         <Routes>
-          <Route path="/trainer-base/course/new" element={<CreateCourse />}>
+          <Route path="/courses/new" element={<CreateCourse />}>
             <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
           </Route>
         </Routes>
@@ -85,12 +79,10 @@ describe('page: CreateCourse', () => {
   it('renders correct title when creating indirect course', () => {
     render(
       <MemoryRouter
-        initialEntries={[
-          `/trainer-base/course/new?type=${CourseType.INDIRECT}`,
-        ]}
+        initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}
       >
         <Routes>
-          <Route path="/trainer-base/course/new" element={<CreateCourse />}>
+          <Route path="/courses/new" element={<CreateCourse />}>
             <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
           </Route>
         </Routes>

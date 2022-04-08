@@ -83,7 +83,7 @@ export const CourseDetails = () => {
                   variant="text"
                   startIcon={<ArrowBackIcon />}
                   sx={{ marginBottom: 2 }}
-                  onClick={() => navigate('/trainer-base/course')}
+                  onClick={() => navigate('/courses')}
                 >
                   {t('pages.course-participants.back-button')}
                 </Button>

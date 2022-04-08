@@ -65,7 +65,7 @@ export const ParticipantGrading = () => {
             <Box mb={2}>
               <BackButton
                 label={t('pages.course-grading-details.back-button-text')}
-                to={`/trainer-base/course/${courseId}/details`}
+                to={`/courses/${courseId}/details`}
               />
             </Box>
             <Box display="flex">

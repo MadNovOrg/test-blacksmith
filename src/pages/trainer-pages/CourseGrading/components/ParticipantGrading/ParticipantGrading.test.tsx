@@ -34,9 +34,7 @@ describe('page: ParticipantGrading', () => {
 
     render(
       <MemoryRouter
-        initialEntries={[
-          `/trainer-base/course/course-id/grading/${participant.id}`,
-        ]}
+        initialEntries={[`/courses/course-id/grading/${participant.id}`]}
       >
         <ParticipantGrading />
       </MemoryRouter>
@@ -91,9 +89,7 @@ describe('page: ParticipantGrading', () => {
 
     render(
       <MemoryRouter
-        initialEntries={[
-          `/trainer-base/course/course-id/grading/${participant.id}`,
-        ]}
+        initialEntries={[`/courses/course-id/grading/${participant.id}`]}
       >
         <ParticipantGrading />
       </MemoryRouter>

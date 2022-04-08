@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
-import { BackButton } from '@app/components/BackButton'
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -125,9 +124,6 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     <Container maxWidth="lg" sx={{ pt: 2 }}>
       <Box display="flex">
         <Box width={250} display="flex" flexDirection="column" pr={4}>
-          <Box display="flex" mb={6}>
-            <BackButton />
-          </Box>
           <Typography variant="body2">{t('filter-by')}</Typography>
 
           <Box display="flex" flexDirection="column">

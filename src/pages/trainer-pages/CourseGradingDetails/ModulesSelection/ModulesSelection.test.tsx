@@ -185,10 +185,7 @@ describe('page: ModulesSelection', () => {
             path="/:id/grading-details/modules"
             element={<ModulesSelection />}
           />
-          <Route
-            path="/trainer-base/course/:id/details"
-            element={<h1>Manage page</h1>}
-          />
+          <Route path="/courses/:id/details" element={<h1>Manage page</h1>} />
         </Routes>
       </MemoryRouter>
     )
@@ -222,7 +219,7 @@ describe('page: ModulesSelection', () => {
             element={<ModulesSelection />}
           />
           <Route
-            path="/trainer-base/course/:id/grading-details"
+            path="/courses/:id/grading-details"
             element={<h1>Attendance page</h1>}
           />
         </Routes>
