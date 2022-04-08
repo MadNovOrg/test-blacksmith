@@ -5,6 +5,7 @@ configuration:
   comment: null
   custom_column_names:
     aol_cost_of_course: aolCostOfCourse
+    contact_profile_id: contactProfileId
     course_delivery_type: deliveryType
     course_level: level
     course_status: status
@@ -15,6 +16,9 @@ configuration:
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
+- name: contactProfile
+  using:
+    foreign_key_constraint_on: contact_profile_id
 - name: organization
   using:
     foreign_key_constraint_on: organization_id
@@ -52,22 +56,23 @@ insert_permissions:
     backend_only: false
     check: {}
     columns:
-    - id
-    - created_at
-    - updated_at
-    - name
-    - course_type
+    - aol_cost_of_course
+    - contact_profile_id
     - course_delivery_type
     - course_level
+    - course_status
+    - course_type
+    - created_at
+    - description
+    - go1_integration
+    - grading_confirmed
+    - id
+    - max_participants
+    - min_participants
+    - name
     - organization_id
     - reaccreditation
-    - description
-    - course_status
-    - min_participants
-    - max_participants
-    - grading_confirmed
-    - go1_integration
-    - aol_cost_of_course
+    - updated_at
   role: trainer
 select_permissions:
 - permission:
@@ -95,6 +100,7 @@ select_permissions:
     allow_aggregations: true
     columns:
     - aol_cost_of_course
+    - contact_profile_id
     - course_delivery_type
     - course_level
     - course_status

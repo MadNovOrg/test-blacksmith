@@ -106,7 +106,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
         sorting: false,
       },
     ].filter(Boolean)
-  }, [attendingParticipants, selectedParticipants.length, t])
+  }, [selectedParticipants.length, participantsWithoutGrades, t])
 
   const canEditGradingDetails =
     participantsWithoutGrades?.length === attendingParticipants?.length

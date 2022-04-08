@@ -14,8 +14,10 @@ export type ParamsType = {
     deliveryType: CourseDeliveryType
     level?: CourseLevel
     organization_id?: string
+    contactProfileId?: string
     reaccreditation?: boolean
     go1Integration?: boolean
+    aolCostOfCourse?: number
     description?: string
     min_participants?: number
     max_participants?: number

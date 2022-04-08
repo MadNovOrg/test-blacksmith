@@ -24,6 +24,7 @@ export type ProfileSelectorProps = {
   sx?: SxProps
   textFieldProps?: TextFieldProps
   placeholder?: string
+  disabled?: boolean
 }
 
 const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
@@ -33,6 +34,7 @@ const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
   sx,
   textFieldProps,
   placeholder,
+  disabled,
   ...props
 }) {
   const { t } = useTranslation()
@@ -51,12 +53,14 @@ const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
 
   return (
     <Autocomplete
+      disabled={disabled}
       sx={sx}
       value={selected}
       onChange={(_, newValue) => {
         if (value) {
           setSelected(newValue ?? undefined)
         }
+
         onChange(newValue ?? undefined)
       }}
       options={options}

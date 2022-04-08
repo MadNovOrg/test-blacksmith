@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { LocalizationProvider, DatePicker, TimePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -12,6 +13,7 @@ import {
   Switch,
   TextField,
   Typography,
+  InputAdornment,
 } from '@mui/material'
 import { Box, styled } from '@mui/system'
 import { setHours, setMinutes } from 'date-fns'
@@ -28,10 +30,14 @@ import {
   CourseDeliveryType,
   CourseLevel,
   CourseType,
+  Organization,
+  Profile,
   Venue,
 } from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
 
+import OrgSelector from '../OrgSelector'
+import ProfileSelector from '../ProfileSelector'
 import VenueSelector from '../VenueSelector'
 
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
@@ -42,6 +48,8 @@ const FormPanel = styled(Box)(({ theme }) => ({
 }))
 
 export type FormValues = {
+  organizationId: string | null
+  contactProfileId: string | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean
   reaccreditation: boolean
@@ -52,9 +60,11 @@ export type FormValues = {
   maxParticipants: number | null
   venueId: string | null
   zoomMeetingUrl: string | null
+  usesAOL: boolean
+  courseCost: number | null
 }
 
-export type ValidFormFiels = DeepNonNullable<
+export type ValidFormFields = DeepNonNullable<
   Omit<FormValues, 'courseLevel'> & { courseLevel: CourseLevel }
 >
 
@@ -64,17 +74,39 @@ interface Props {
   onChange?: (values: FormValues, isValid: boolean) => void
 }
 
-export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
+export const CourseForm: React.FC<Props> = ({
+  onChange = noop,
+  type = CourseType.OPEN,
+}) => {
   const { t } = useTranslation()
   const zoomMeetingUrl = useZoomMeetingLink()
 
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [endTime, setEndTime] = useState<Date | null>(null)
   const [venue, setVenue] = useState<Venue>()
+  const [organization, setOrganization] = useState<Organization>()
+  const [contactProfile, setContactProfile] = useState<Profile>()
+
+  const hasOrganizationField = [
+    CourseType.CLOSED,
+    CourseType.INDIRECT,
+  ].includes(type)
+  const hasContactProfileField = type === CourseType.CLOSED
+  const hasMinParticipantField = type === CourseType.OPEN
 
   const schema = useMemo(
     () =>
       yup.object({
+        ...(hasOrganizationField
+          ? {
+              organizationId: yup.string().required(),
+            }
+          : null),
+        ...(hasContactProfileField
+          ? {
+              contactProfileId: yup.string().required(),
+            }
+          : null),
         courseLevel: yup
           .string()
           .required(t('components.course-form.course-level-required')),
@@ -99,7 +131,9 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
           .string()
           .nullable()
           .when('deliveryType', {
-            is: CourseDeliveryType.VIRTUAL || CourseDeliveryType.MIXED,
+            is: (val: CourseDeliveryType) =>
+              val === CourseDeliveryType.VIRTUAL ||
+              val === CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(
                 t('components.course-form.zoom-meeting-url-required')
@@ -113,20 +147,34 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             yup.ref('startDateTime'),
             t('components.course-form.end-date-before-start-date')
           ),
-        minParticipants: yup
-          .number()
-          .required(t('components.course-form.min-participants-required'))
-          .lessThan(
-            yup.ref('maxParticipants', {}),
-            t('components.course-form.min-participants-less-than')
-          ),
+        ...(hasMinParticipantField
+          ? {
+              minParticipants: yup
+                .number()
+                .positive()
+                .required(t('components.course-form.min-participants-required'))
+                .lessThan(
+                  yup.ref('maxParticipants', {}),
+                  t('components.course-form.min-participants-less-than')
+                ),
+            }
+          : null),
         maxParticipants: yup
           .number()
           .positive()
           .required(t('components.course-form.min-participants-required')),
+        usesAOL: yup.boolean(),
+        courseCost: yup
+          .number()
+          .nullable()
+          .positive()
+          .when('usesAOL', {
+            is: true,
+            then: schema => schema.required('Provide the price of the course'),
+          }),
       }),
 
-    [t]
+    [t, hasOrganizationField, hasContactProfileField, hasMinParticipantField]
   )
 
   const {
@@ -142,6 +190,8 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
+      organizationId: null,
+      contactProfileId: null,
       courseLevel: '',
       blendedLearning: false,
       reaccreditation: false,
@@ -152,11 +202,14 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
       endDateTime: null,
       minParticipants: null,
       maxParticipants: null,
+      usesAOL: false,
+      courseCost: null,
     },
   })
 
   const deliveryType = watch('deliveryType')
   const courseLevel = watch('courseLevel')
+  const usesAOL = type === CourseType.INDIRECT ? watch('usesAOL') : false
 
   useEffect(() => {
     onChange(getValues(), formState.isValid)
@@ -245,6 +298,52 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
         {t('components.course-form.general-details-title')}
       </Typography>
       <FormPanel mb={2}>
+        {hasOrganizationField ? (
+          <>
+            <Typography mb={2} fontWeight={600}>
+              {t('components.course-form.organization-label')}
+            </Typography>
+            <OrgSelector
+              value={organization}
+              onChange={value => {
+                setValue('organizationId', value?.id ?? '', {
+                  shouldValidate: true,
+                })
+
+                setOrganization(value)
+              }}
+              textFieldProps={{ variant: 'filled' }}
+              sx={{ marginBottom: 2 }}
+            />
+          </>
+        ) : null}
+        {hasContactProfileField ? (
+          <>
+            <Typography mb={2} fontWeight={600}>
+              {t('components.course-form.contact-person-label')}
+            </Typography>
+
+            <ProfileSelector
+              value={contactProfile}
+              onChange={profile => {
+                setValue('contactProfileId', profile?.id ?? '', {
+                  shouldValidate: true,
+                })
+
+                setContactProfile(profile)
+              }}
+              sx={{ marginBottom: 2 }}
+              textFieldProps={{
+                variant: 'filled',
+              }}
+              disabled={!getValues('organizationId')}
+              placeholder={t(
+                'components.course-form.contact-person-placeholder'
+              )}
+            />
+          </>
+        ) : null}
+
         <Typography mb={2} fontWeight={600}>
           {t('components.course-form.course-level-section-title')}
         </Typography>
@@ -472,6 +571,45 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
             </Grid>
           </Grid>
         </LocalizationProvider>
+
+        {type === CourseType.INDIRECT ? (
+          <>
+            <Typography mt={2} fontWeight={600}>
+              {t('components.course-form.aol-title')}
+            </Typography>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={e => {
+                    setValue('usesAOL', e.target.checked, {
+                      shouldValidate: true,
+                    })
+                    if (!e.target.checked) {
+                      resetField('courseCost')
+                    }
+                  }}
+                />
+              }
+              label={t('components.course-form.aol-label') as string}
+            />
+
+            {usesAOL ? (
+              <TextField
+                variant="filled"
+                placeholder={t(
+                  'components.course-form.course-cost-placeholder'
+                )}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">£</InputAdornment>
+                  ),
+                }}
+                {...register('courseCost')}
+              />
+            ) : null}
+          </>
+        ) : null}
       </FormPanel>
       <Typography variant="h5" fontWeight={500} gutterBottom>
         {t('components.course-form.attendees-section-title')}
@@ -483,24 +621,31 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
         <Typography variant="body2" mb={2}>
           {t('components.course-form.attendees-description')}
         </Typography>
+
         <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              label={t('components.course-form.min-attendees-placeholder')}
-              variant="filled"
-              fullWidth
-              type="number"
-              {...register('minParticipants')}
-              error={Boolean(errors.minParticipants)}
-              helperText={errors.minParticipants?.message}
-              inputProps={{ min: 1 }}
-            />
-          </Grid>
+          {hasMinParticipantField ? (
+            <Grid item xs={6}>
+              <TextField
+                label={t('components.course-form.min-attendees-placeholder')}
+                variant="filled"
+                fullWidth
+                type="number"
+                {...register('minParticipants')}
+                error={Boolean(errors.minParticipants)}
+                helperText={errors.minParticipants?.message}
+                inputProps={{ min: 1 }}
+              />
+            </Grid>
+          ) : null}
 
           <Grid item xs={6}>
             <TextField
               id="filled-basic"
-              label={t('components.course-form.max-attendees-placeholder')}
+              label={t(
+                type === CourseType.OPEN
+                  ? 'components.course-form.max-attendees-placeholder'
+                  : 'components.course-form.num-attendees-placeholder'
+              )}
               variant="filled"
               fullWidth
               type="number"
@@ -508,7 +653,11 @@ export const CourseForm: React.FC<Props> = ({ onChange = noop }) => {
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
-              onBlur={() => trigger('minParticipants')}
+              onBlur={() => {
+                if (hasMinParticipantField) {
+                  trigger('minParticipants')
+                }
+              }}
             />
           </Grid>
         </Grid>

@@ -2,12 +2,12 @@ import { LoadingButton } from '@mui/lab'
 import { Box } from '@mui/material'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import {
   CourseForm,
   FormValues,
-  ValidFormFiels,
+  ValidFormFields,
 } from '@app/components/CourseForm'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -21,7 +21,7 @@ import { generateCourseName, LoadingStatus } from '@app/util'
 function assertCourseDataValid(
   data: FormValues,
   isValid: boolean
-): asserts data is ValidFormFiels {
+): asserts data is ValidFormFields {
   if (!isValid) {
     throw new Error()
   }
@@ -34,6 +34,10 @@ export const CreateCourseForm = () => {
   const fetcher = useFetcher()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
+  const courseType =
+    CourseType[searchParams.get('type') as CourseType] ?? CourseType.OPEN
 
   const saveCourse = async () => {
     try {
@@ -56,9 +60,20 @@ export const CreateCourseForm = () => {
             level: courseData.courseLevel,
             reaccreditation: courseData.reaccreditation,
             go1Integration: courseData.blendedLearning,
-            min_participants: courseData.minParticipants,
+            ...(courseData.minParticipants
+              ? { min_participants: courseData.minParticipants }
+              : null),
             max_participants: courseData.maxParticipants,
-            type: CourseType.OPEN,
+            type: courseType,
+            ...(courseData.organizationId
+              ? { organization_id: courseData.organizationId }
+              : null),
+            ...(courseData.organizationId
+              ? { contactProfileId: courseData.contactProfileId }
+              : null),
+            ...(courseData.usesAOL
+              ? { aolCostOfCourse: courseData.courseCost }
+              : null),
             schedule: {
               data: [
                 {
@@ -93,6 +108,7 @@ export const CreateCourseForm = () => {
           courseDataRef.current = data
           setCourseDataValid(isValid)
         }}
+        type={courseType}
       />
 
       <Box display="flex" justifyContent="flex-end">

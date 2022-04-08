@@ -14,9 +14,11 @@ export type Course = {
   status: CourseStatus
   reaccreditation: boolean
   organization?: Organization
+  contactProfile?: Profile
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
+  aolCostOfCourse?: number
   go1Integration: boolean
   dates: {
     aggregate: {
