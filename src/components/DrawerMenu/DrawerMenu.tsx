@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { Link, Box, Button, Drawer, IconButton } from '@mui/material'
 import { styled } from '@mui/system'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
@@ -15,6 +16,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }))
 
 export const DrawerMenu: React.FC = () => {
+  const { t } = useTranslation()
   const { profile } = useAuth()
   const [open, toggle] = useToggle(false)
 
@@ -40,7 +42,7 @@ export const DrawerMenu: React.FC = () => {
           <Avatar src={profile?.avatar} name={profile?.fullName} />
           <Button
             onClick={() => console.log('open')}
-            sx={{ marginLeft: 1 }}
+            sx={{ ml: 1 }}
             endIcon={<ArrowDropDownIcon />}
             color="info"
           >
@@ -49,19 +51,9 @@ export const DrawerMenu: React.FC = () => {
         </Box>
 
         <Box px={5} py={3} display="flex" flexDirection="column">
-          <StyledLink href="/trainer-base" variant="body2" onClick={toggle}>
-            Trainer Base
+          <StyledLink href="/courses" variant="body2" onClick={toggle}>
+            {t('courses')}
           </StyledLink>
-
-          <Box pl={2}>
-            <StyledLink
-              href="/trainer-base/course"
-              variant="body2"
-              onClick={toggle}
-            >
-              My Courses
-            </StyledLink>
-          </Box>
         </Box>
       </Drawer>
     </>

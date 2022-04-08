@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 import {
   Trainer,
   SetCourseTrainerInput,
-} from '@app/pages/TrainerBase/components/CreateCourse/components/AssignTrainers/types'
+} from '@app/pages/CreateCourse/components/AssignTrainers/types'
 import { Course, CourseTrainerType } from '@app/types'
 
 export const SetCourseTrainer = gql`

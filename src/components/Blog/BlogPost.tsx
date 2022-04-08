@@ -2,7 +2,7 @@ import { CircularProgress, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useBlogPost } from '../../hooks/useBlogPosts'
+import { useBlogPost } from '@app/hooks/useBlogPosts'
 
 type BlogPostProps = {
   postId: string

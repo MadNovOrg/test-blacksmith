@@ -46,6 +46,7 @@ select_permissions:
             _eq: X-Hasura-User-Id
   role: trainer
 - permission:
+    allow_aggregations: true
     columns:
     - id
     - module_id

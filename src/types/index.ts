@@ -102,7 +102,6 @@ export enum RoleName {
   USER = 'user',
   TRAINER = 'trainer',
   ORG_ADMIN = 'org-admin',
-  // MTA_ADMIN = 'mta-admin',
   TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
 }

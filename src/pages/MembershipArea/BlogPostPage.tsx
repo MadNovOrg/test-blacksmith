@@ -3,7 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
-import { BlogPost } from '../../components/Blog/BlogPost'
+import { BlogPost } from '@app/components/Blog/BlogPost'
 
 export const BlogPostPage: React.FC = () => {
   const { t } = useTranslation()

@@ -59,7 +59,6 @@ describe('component: RoleSwitcher', () => {
     userEvent.click(roleSwitcherRoles[0])
 
     expect(context.auth.changeRole).toBeCalledWith(RoleName.USER)
-    expect(mockNavigate).toBeCalledWith('/')
 
     await waitFor(() => {
       expect(screen.queryByTestId('RoleSwitcher-list')).not.toBeInTheDocument()

@@ -1,37 +1,33 @@
 import { Box, Typography } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { Suspense, useCallback, useMemo } from 'react'
+import React, { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
-import { NotFound } from '@app/components/NotFound'
 import { useAuth } from '@app/context/auth'
+import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
+import { LoginPage } from '@app/pages/common/Login'
+import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
+import { SignUpPage } from '@app/pages/common/SignUp'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
-import { ForgotPasswordPage } from '@app/pages/ForgotPassword'
 import { InvitationPage } from '@app/pages/Invitation'
-import { LoginPage } from '@app/pages/Login'
-import { CourseEvaluation } from '@app/pages/MyTraining/CourseEvaluation'
-import { ResetPasswordPage } from '@app/pages/ResetPassword'
-import { SignUpPage } from '@app/pages/SignUp'
-import { CourseBuilder } from '@app/pages/TrainerBase/components/Course/components/CourseBuilder'
-import { MyCourses } from '@app/pages/TrainerBase/components/Course/components/MyCourses'
-import { CourseDetails } from '@app/pages/TrainerBase/components/CourseDetails'
-import { CourseGrading } from '@app/pages/TrainerBase/components/CourseGrading'
-import { ParticipantGrading } from '@app/pages/TrainerBase/components/CourseGrading/components/ParticipantGrading'
-import { CreateCourse } from '@app/pages/TrainerBase/components/CreateCourse'
-import { AssignTrainers } from '@app/pages/TrainerBase/components/CreateCourse/components/AssignTrainers'
-import { CreateCourseForm } from '@app/pages/TrainerBase/components/CreateCourse/components/CreateCourseForm'
-import { EvaluationSummary } from '@app/pages/TrainerBase/components/EvaluationSummary'
-import { TrainerFeedback } from '@app/pages/TrainerBase/components/TrainerFeedback'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
-const MyTrainingRoutes = React.lazy(() => import('./my-training'))
-const MyOrgRoutes = React.lazy(() => import('./my-organization'))
-const MembershipRoutes = React.lazy(() => import('./membership'))
-const TrainerRoutes = React.lazy(() => import('./trainer-base'))
-const AdminRoutes = React.lazy(() => import('./admin'))
+const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
+const UserRoutes = React.lazy(() => import('./user-routes'))
+const OrgAdminRoutes = React.lazy(() => import('./org-admin-routes'))
+const TTOpsRoutes = React.lazy(() => import('./tt-ops-routes'))
+const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
+
+const roleRoutesMap = {
+  [RoleName.TRAINER]: TrainerRoutes,
+  [RoleName.USER]: UserRoutes,
+  [RoleName.ORG_ADMIN]: OrgAdminRoutes,
+  [RoleName.TT_OPS]: TTOpsRoutes,
+  [RoleName.TT_ADMIN]: TTAdminRoutes,
+} as const
 
 export const AppRoutes = () => {
   const auth = useAuth()
@@ -71,92 +67,23 @@ function LoggedOutRoutes() {
 }
 
 function LoggedInRoutes() {
-  const { acl, activeRole } = useAuth()
+  const { activeRole } = useAuth()
 
-  // TODO: may not need it
-  const startPage = useMemo(() => {
-    switch (activeRole ?? RoleName.USER) {
-      case RoleName.USER:
-        return '/courses'
-      case RoleName.TRAINER:
-        return '/courses'
-      case RoleName.ORG_ADMIN:
-        return '/courses'
-      case RoleName.TT_OPS:
-      case RoleName.TT_ADMIN:
-        return '/courses'
-      default:
-        return '/profile'
-    }
-  }, [activeRole])
+  if (!activeRole) return null
 
-  const Root = useCallback(
-    () => <Navigate replace to={startPage} />,
-    [startPage]
-  )
+  const RouteComp = roleRoutesMap[activeRole]
 
   return (
     <AppLayout>
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
-          <Route index element={<Root />} />
+          <Route index element={<Navigate replace to="courses" />} />
 
           <Route path="profile/*" element={<ProfileRoutes />} />
 
-          <Route path="/courses">
-            <Route index element={<MyCourses />} />
-            <Route path="new" element={<CreateCourse />}>
-              <Route index element={<CreateCourseForm />} />
-              <Route
-                path="assign-trainers/:courseId"
-                element={<AssignTrainers />}
-              />
-            </Route>
+          <Route path="*" element={<RouteComp />} />
 
-            <Route path=":id">
-              <Route index element={<Navigate replace to="details" />} />
-              <Route path="modules" element={<CourseBuilder />} />
-              <Route path="details" element={<CourseDetails />} />
-              <Route path="grading" element={<CourseGrading />} />
-              <Route
-                path="grading/:participantId"
-                element={<ParticipantGrading />}
-              />
-              <Route path="evaluation">
-                <Route path="submit" element={<TrainerFeedback />} />
-                <Route path="view" element={<CourseEvaluation />} />
-                <Route path="summary" element={<EvaluationSummary />} />
-              </Route>
-            </Route>
-          </Route>
-
-          <Route
-            path="/my-training/*"
-            element={acl.canViewMyTraining() ? <MyTrainingRoutes /> : <Root />}
-          />
-
-          <Route
-            path="trainer-base/*"
-            element={acl.canViewTrainerBase() ? <TrainerRoutes /> : <Root />}
-          />
-
-          <Route
-            path="my-organization/*"
-            element={acl.canViewMyOrganization() ? <MyOrgRoutes /> : <Root />}
-          />
-
-          <Route
-            path="membership-area/*"
-            element={acl.canViewMembership() ? <MembershipRoutes /> : <Root />}
-          />
-
-          <Route
-            path="admin/*"
-            element={acl.canViewAdmin() ? <AdminRoutes /> : <Root />}
-          />
-
-          <Route path="/login/*" element={<Root />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="login/*" element={<Navigate replace to="/" />} />
         </Routes>
       </Suspense>
     </AppLayout>

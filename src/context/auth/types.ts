@@ -37,10 +37,9 @@ export type ACL = {
   isTTAdmin: () => boolean
   isTTOps: () => boolean
   isTrainer: () => boolean
-  canViewMyTraining: () => boolean
-  canViewTrainerBase: () => boolean
   canViewMyOrganization: () => boolean
   canViewMembership: () => boolean
   canViewAdmin: () => boolean
   canCreateCourse: (type: CourseType) => boolean
+  canViewContacts: () => boolean
 }

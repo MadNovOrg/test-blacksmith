@@ -12,9 +12,20 @@
       "bild_act": "BILD ACT Certified",
       "intermediate": "Intermediate"
     },
+    "errors": {
+      "loading-participants": "There was an error loading course participants",
+      "loading-course": "There was an error loading a course"
+    },
+    "home": "Home",
+    "courses": "Courses",
+    "contacts": "Contacts",
+    "community": "Community",
     "change": "Change",
     "remove": "Remove",
+    "admin": "Administrator",
     "my-profile": "My Profile",
+    "my-membership": "My Membership",
+    "my-org": "My Organization",
     "notifications": "Notifications",
     "logout": "Logout",
     "action": "Action",
@@ -84,7 +95,8 @@
       "LEVEL_1": "Level One",
       "LEVEL_2": "Level Two",
       "ADVANCED": "Advanced",
-      "INTERMEDIATE": "Intermediate"
+      "INTERMEDIATE": "Intermediate",
+      "BILD_ACT": "BILD Act"
     },
     "course-types": {
       "OPEN": "Open",
@@ -177,7 +189,7 @@
   "components": {
     "not-found": {
       "title": "Page not found",
-      "info": "Please use the main navigation to find you way."
+      "info": "Either you followed an invalid link or you do not have access to view this page. Please use the main navigation to find your way."
     },
     "certification-details": {
       "certification-passed": "Certification Passed",

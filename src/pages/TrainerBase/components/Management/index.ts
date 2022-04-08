@@ -1,1 +1,0 @@
-export { Management } from './Management'

@@ -292,7 +292,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
 
   if (!courseParticipant?.grade || !courseParticipant.dateGraded) {
     return (
-      <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
+      <Container sx={{ py: 2 }}>
         <Alert variant="outlined" color="warning">
           {t('common.course-certificate.not-graded-yet')}
         </Alert>

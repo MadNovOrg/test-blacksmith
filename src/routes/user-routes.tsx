@@ -1,0 +1,58 @@
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+
+import { NotFound } from '@app/pages/common/NotFound'
+import { MembershipAreaPage } from '@app/pages/MembershipArea'
+import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
+import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
+import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { MyOrganizationPage } from '@app/pages/MyOrganization'
+import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
+import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
+import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
+import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
+import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
+import { MyCertifications } from '@app/pages/user-pages/MyCertifications'
+import { MyCourses } from '@app/pages/user-pages/MyCourses'
+
+const UserRoutes = () => {
+  return (
+    <Routes>
+      <Route path="courses">
+        <Route index element={<MyCourses />} />
+
+        <Route path=":id">
+          <Route path="details" element={<CourseDetails />} />
+          <Route path="evaluation" element={<CourseEvaluation />} />
+        </Route>
+
+        <Route path="accept-invite/:id" element={<AcceptInvite />} />
+      </Route>
+
+      <Route path="certifications" element={<MyCertifications />} />
+
+      <Route path="my-organization" element={<MyOrganizationPage />}>
+        <Route index element={<Navigate replace to="overview" />} />
+        <Route path="overview" element={<OrganizationOverviewPage />} />
+        <Route path="profiles">
+          <Route index element={<ProfileListPage />} />
+          <Route path=":id" element={<ProfilePage />} />
+        </Route>
+      </Route>
+
+      <Route path="membership-area" element={<MembershipAreaPage />}>
+        <Route index element={<Navigate replace to="details" />} />
+        <Route path="details" element={<MembershipDetailsPage />} />
+        <Route path="blog">
+          <Route index element={<BlogPage />} />
+          <Route path=":postId" element={<BlogPostPage />} />
+        </Route>
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  )
+}
+
+export default UserRoutes

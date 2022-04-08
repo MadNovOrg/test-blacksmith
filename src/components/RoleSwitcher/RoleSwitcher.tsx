@@ -2,7 +2,6 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { Button, Menu, MenuItem } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { RoleName } from '@app/types'
@@ -10,7 +9,6 @@ import { RoleName } from '@app/types'
 export const RoleSwitcher = () => {
   const { t } = useTranslation()
   const auth = useAuth()
-  const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
@@ -22,7 +20,7 @@ export const RoleSwitcher = () => {
   const changeRole = (role: RoleName) => () => {
     auth.changeRole(role)
     setAnchorEl(null)
-    navigate('/')
+    // navigate('/') // TODO: Double check if this is really not needed
   }
 
   if (!roles.length) return null
