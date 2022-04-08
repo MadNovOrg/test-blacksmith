@@ -282,10 +282,14 @@
       "maxReachedPlaceholder": "(max allowed reached)"
     },
     "profile-selector": {
-      "placeholder": "Search for a profile"
+      "placeholder": "Search for a profile",
+      "min-chars": "Start typing to get suggestions",
+      "no-results": "No results found."
     },
     "org-selector": {
-      "placeholder": "Organisation name"
+      "placeholder": "Organisation name",
+      "min-chars": "Start typing to get suggestions",
+      "no-results": "No organisations found"
     }
   },
   "pages": {

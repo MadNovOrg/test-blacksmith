@@ -325,6 +325,7 @@ export const CourseForm: React.FC<Props> = ({
 
             <ProfileSelector
               value={contactProfile}
+              orgId={getValues('organizationId') ?? undefined}
               onChange={profile => {
                 setValue('contactProfileId', profile?.id ?? '', {
                   shouldValidate: true,

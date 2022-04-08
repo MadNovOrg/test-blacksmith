@@ -5,17 +5,17 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material'
-import React, { useState } from 'react'
+import { debounce } from 'lodash-es'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/profile/find-profiles'
 import { Profile } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type ProfileSelectorProps = {
   value?: Profile
@@ -39,23 +39,65 @@ const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
 }) {
   const { t } = useTranslation()
   const [selected, setSelected] = useState(value)
+  const [options, setOptions] = useState<Profile[]>([])
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const fetcher = useFetcher()
 
-  const where = orgId
-    ? { organizations: { organization_id: { _eq: orgId } } }
-    : undefined
-  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
-    QUERY,
-    { where },
-  ])
-  const loading = getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING
+  const debouncedQuery = useMemo(
+    () =>
+      debounce(async query => {
+        const results = await fetcher<ResponseType, ParamsType>(QUERY, {
+          where: {
+            ...(orgId
+              ? { organizations: { organization_id: { _eq: orgId } } }
+              : null),
+            fullName: { _ilike: `${query}` },
+          },
+        })
 
-  const options: Profile[] = data?.profiles ?? []
+        setLoading(false)
+
+        if (results.profiles) {
+          setOptions(results.profiles)
+        }
+      }),
+    [fetcher, orgId]
+  )
+
+  const handleInputChange = (_: unknown, value: string, reason: string) => {
+    if (reason === 'input' && value && value.length >= 2) {
+      setLoading(true)
+      setOptions([])
+
+      debouncedQuery(`%${value}%`)
+    }
+
+    setQuery(value)
+  }
+
+  const noOptionsText =
+    query.length < 2
+      ? t('components.profile-selector.min-chars')
+      : t('components.profile-selector.no-results')
 
   return (
     <Autocomplete
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => {
+        setOpen(false)
+        setLoading(false)
+        debouncedQuery.cancel()
+      }}
+      data-testid="profile-selector"
       disabled={disabled}
       sx={sx}
       value={selected}
+      openOnFocus
+      clearOnBlur={false}
+      onInputChange={handleInputChange}
       onChange={(_, newValue) => {
         if (value) {
           setSelected(newValue ?? undefined)
@@ -65,6 +107,7 @@ const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
       }}
       options={options}
       getOptionLabel={option => option.fullName}
+      noOptionsText={noOptionsText}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={loading}
       disableClearable={true}

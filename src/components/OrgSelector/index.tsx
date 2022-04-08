@@ -5,16 +5,17 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material'
-import React, { useState } from 'react'
+import { debounce } from 'lodash-es'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
 import {
+  ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/organization/get-organizations'
 import { Organization } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type OrgSelectorProps = {
   value?: Organization
@@ -34,16 +35,59 @@ const OrgSelector: React.FC<OrgSelectorProps> = function ({
 }) {
   const { t } = useTranslation()
   const [selected, setSelected] = useState(value)
+  const [options, setOptions] = useState<Organization[]>([])
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const fetcher = useFetcher()
 
-  const { data, error } = useSWR<ResponseType, Error>(QUERY)
-  const loading = getSWRLoadingStatus(data, error) === LoadingStatus.FETCHING
+  const debouncedQuery = useMemo(
+    () =>
+      debounce(async query => {
+        const results = await fetcher<ResponseType, ParamsType>(QUERY, {
+          name: query,
+        })
 
-  const options: Organization[] = data?.orgs ?? []
+        setLoading(false)
+
+        if (results.orgs) {
+          setOptions(results.orgs)
+        }
+      }),
+    [fetcher]
+  )
+
+  const handleInputChange = (_: unknown, value: string, reason: string) => {
+    if (reason === 'input' && value && value.length >= 2) {
+      setLoading(true)
+      setOptions([])
+
+      debouncedQuery(`%${value}%`)
+    }
+
+    setQuery(value)
+  }
+
+  const noOptionsText =
+    query.length < 2
+      ? t('components.org-selector.min-chars')
+      : t('components.org-selector.no-results')
 
   return (
     <Autocomplete
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => {
+        setOpen(false)
+        setLoading(false)
+        debouncedQuery.cancel()
+      }}
+      data-testid="org-selector"
       sx={sx}
       value={selected}
+      openOnFocus
+      clearOnBlur={false}
+      onInputChange={handleInputChange}
       onChange={(_, newValue) => {
         if (value) {
           setSelected(newValue ?? undefined)
@@ -52,6 +96,7 @@ const OrgSelector: React.FC<OrgSelectorProps> = function ({
       }}
       options={options}
       getOptionLabel={option => option.name}
+      noOptionsText={noOptionsText}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={loading}
       disableClearable={true}
