@@ -70,6 +70,7 @@ export const AssignTrainers = () => {
   }, [t, assistMin])
 
   const form = useForm<FormValues>({
+    mode: 'onChange',
     defaultValues: { lead: [], assist: [] },
     resolver: yupResolver(schema) as unknown as Resolver<FormValues>, // fixed in v8. See https://github.com/react-hook-form/react-hook-form/issues/7888
   })
