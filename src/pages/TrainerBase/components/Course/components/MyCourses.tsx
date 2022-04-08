@@ -21,7 +21,6 @@ import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
-import { useAuth } from '@app/context/auth'
 import {
   ParamsType as GetMyCourseParamsType,
   QUERY as GetMyCourses,
@@ -55,7 +54,6 @@ const sorts: Record<string, object> = {
 export const MyCourses: React.FC<MyCoursesProps> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { profile } = useAuth()
 
   const cols = useMemo(
     () => [
@@ -105,9 +103,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [keywordDebounced] = useDebounce(keyword, 300)
 
   const where = useMemo(() => {
-    const obj: Record<string, object> = {
-      _or: [{ trainers: { profile_id: { _eq: profile?.id } } }],
-    }
+    const obj: Record<string, object> = {}
 
     const selectedLevels = levelFilter.flatMap(item =>
       item.selected ? item.id : []
@@ -138,7 +134,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }
 
     return obj
-  }, [profile, levelFilter, typeFilter, statusFilter, keywordDebounced])
+  }, [levelFilter, typeFilter, statusFilter, keywordDebounced])
 
   const { data, error } = useSWR<
     GetMyCoursesResponseType,

@@ -7,7 +7,6 @@ import {
   AutocompleteRenderInputParams,
   AutocompleteRenderGetTagProps,
   Chip,
-  Avatar,
   AutocompleteRenderOptionState,
   Typography,
 } from '@mui/material'
@@ -16,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useMountedState } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { Avatar } from '@app/components/Avatar'
 import { noop } from '@app/util'
 
 import type { Trainer } from './types'
@@ -201,7 +201,7 @@ function renderOption(
       sx={{ display: 'flex', gap: 2 }}
       data-testid="SearchTrainers-option"
     >
-      <Avatar sx={{ width: 32, height: 32 }} alt={option.fullName} />
+      <Avatar size={32} src={option.avatar} name={option.fullName} />
       <Box sx={{ flex: 1 }}>
         <Typography variant="body1">{option.fullName}</Typography>
         <Typography variant="body2">Principal</Typography>
@@ -218,10 +218,11 @@ function renderSelected(
   return selected.map((s, index) => (
     <Chip
       {...getTagProps({ index })}
-      avatar={<Avatar alt={s.fullName} />}
+      avatar={<Avatar src={s.avatar} name={s.fullName} />}
       key={s.id}
       label={s.fullName}
       disabled={false}
+      data-testid="SearchTrainers-selected"
     />
   ))
 }

@@ -74,6 +74,27 @@ insert_permissions:
     - reaccreditation
     - updated_at
   role: trainer
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - go1_integration
+    - grading_confirmed
+    - reaccreditation
+    - id
+    - max_participants
+    - min_participants
+    - aol_cost_of_course
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - description
+    - name
+    - created_at
+    - updated_at
+    - organization_id
+  role: tt-ops
 select_permissions:
 - permission:
     columns:
@@ -96,6 +117,27 @@ select_permissions:
       - course_status:
           _eq: PUBLISHED
   role: anonymous
+- permission:
+    allow_aggregations: true
+    columns:
+    - go1_integration
+    - grading_confirmed
+    - reaccreditation
+    - id
+    - max_participants
+    - min_participants
+    - aol_cost_of_course
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - description
+    - name
+    - created_at
+    - updated_at
+    - organization_id
+    filter: {}
+  role: tt-ops
 - permission:
     allow_aggregations: true
     columns:
@@ -126,6 +168,27 @@ select_permissions:
   role: user
 update_permissions:
 - permission:
+    check: {}
+    columns:
+    - go1_integration
+    - grading_confirmed
+    - reaccreditation
+    - id
+    - max_participants
+    - min_participants
+    - aol_cost_of_course
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - description
+    - name
+    - created_at
+    - updated_at
+    - organization_id
+    filter: {}
+  role: tt-ops
+- permission:
     check: null
     columns:
     - course_status
@@ -135,3 +198,7 @@ update_permissions:
         profile_id:
           _eq: X-Hasura-User-Id
   role: user
+delete_permissions:
+- permission:
+    filter: {}
+  role: tt-ops

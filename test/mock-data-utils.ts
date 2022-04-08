@@ -139,9 +139,21 @@ export const buildCourseTrainer = build<CourseTrainer>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     type: CourseTrainerType.LEADER,
-    profile: buildProfile(),
+    profile: perBuild(() => buildProfile()),
   },
 })
+
+export const buildCourseLeader = (overrides?: Partial<CourseTrainer>) => {
+  return buildCourseTrainer({
+    overrides: { ...overrides, type: CourseTrainerType.LEADER },
+  })
+}
+
+export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
+  return buildCourseTrainer({
+    overrides: { ...overrides, type: CourseTrainerType.ASSISTANT },
+  })
+}
 
 export const buildCourse = build<Course>({
   fields: {

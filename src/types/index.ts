@@ -5,6 +5,7 @@ export type Base = {
 }
 
 export type Course = {
+  id: number
   name: string
   level: CourseLevel
   deliveryType: CourseDeliveryType

@@ -345,6 +345,9 @@ export default createTheme({
         filled: {
           fontWeight: 500,
         },
+        avatar: {
+          color: '#fff',
+        },
       },
     },
     MuiRating: {

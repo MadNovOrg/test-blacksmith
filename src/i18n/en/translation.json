@@ -348,10 +348,10 @@
         "lead-title": "Lead Trainer",
         "lead-error-min": "Lead trainer is required",
         "lead-error-max": "There can be only one Lead trainer",
-        "assistant-title_one": "Assistant Trainer",
-        "assistant-title_other": "Assistant Trainers",
-        "assistant-hint_one": "At least one assistant trainer needed",
-        "assistant-hint_other": "Minimum {{count}} assistant trainers needed",
+        "assist-title_one": "Assistant Trainer",
+        "assist-title_other": "Assistant Trainers",
+        "assist-hint_one": "At least one assistant trainer needed",
+        "assist-hint_other": "Minimum {{count}} assistant trainers needed",
         "back-btn": "Course details",
         "submit-btn": "Create course"
       }

@@ -94,10 +94,10 @@ export function capitalize(str: string): string {
 }
 
 export enum LoadingStatus {
-  IDLE,
-  SUCCESS,
-  FETCHING,
-  ERROR,
+  IDLE = 'IDLE',
+  SUCCESS = 'SUCCESS',
+  FETCHING = 'FETCHING',
+  ERROR = 'ERROR',
 }
 
 export function getSWRLoadingStatus(

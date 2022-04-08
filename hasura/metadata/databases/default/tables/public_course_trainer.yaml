@@ -5,7 +5,25 @@ object_relationships:
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - course_id
+    - type
+    - id
+    - profile_id
+  role: tt-ops
 select_permissions:
+- permission:
+    columns:
+    - course_id
+    - type
+    - id
+    - profile_id
+    filter: {}
+  role: tt-ops
 - permission:
     columns:
     - type
@@ -14,3 +32,17 @@ select_permissions:
     - profile_id
     filter: {}
   role: user
+update_permissions:
+- permission:
+    check: {}
+    columns:
+    - course_id
+    - type
+    - id
+    - profile_id
+    filter: {}
+  role: tt-ops
+delete_permissions:
+- permission:
+    filter: {}
+  role: tt-ops
