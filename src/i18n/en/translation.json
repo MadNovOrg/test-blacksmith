@@ -360,6 +360,10 @@
       "step-navigation-assign-trainer": "Assign trainer(s)",
       "step-navigation-course-builder": "Course builder",
       "next-page-button-text": "Select trainer(s)",
+      "indirect-course-button-text": "Course builder",
+      "assign-trainers-title": "Assign an assist trainer",
+      "assists-needed_one": "{{count}} assist trainer needed.",
+      "assists-needed_other": "{{count}} assist trainers needed.",
       "assign-trainers": {
         "course-not-found": "Course not found",
         "lead-title": "Lead Trainer",
@@ -371,6 +375,11 @@
         "assist-hint_other": "Minimum {{count}} assistant trainers needed",
         "back-btn": "Course details",
         "submit-btn": "Create course"
+      },
+      "form": {
+        "health-leaflet-copy": "I acknowledge I must send the health and safety leaflet at least 2 weeks before the course begins. (If the course is starting in less than 2 weeks, send as soon as possible before the course begins.)",
+        "practice-protocol-copy": "I acknowledge I will confirm practice protocols and a first aider.",
+        "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
       }
     },
     "course-details": {

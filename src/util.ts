@@ -209,3 +209,7 @@ export const getCertificateNumberPrefix = (
 ): string => {
   return `${COURSE_TYPE_TO_PREFIX[type]}-${COURSE_LEVEL_TO_PREFIX[level]}-${courseId}`
 }
+
+export const getNumberOfAssistants = (maxParticipants: number) => {
+  return Math.floor((maxParticipants ?? 0) / 12)
+}

@@ -17,7 +17,7 @@ import {
 } from '@mui/material'
 import { Box, styled } from '@mui/system'
 import { setHours, setMinutes } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { DeepNonNullable, noop } from 'ts-essentials'
@@ -74,7 +74,7 @@ interface Props {
   onChange?: (values: FormValues, isValid: boolean) => void
 }
 
-export const CourseForm: React.FC<Props> = ({
+const CourseForm: React.FC<Props> = ({
   onChange = noop,
   type = CourseType.OPEN,
 }) => {
@@ -188,7 +188,7 @@ export const CourseForm: React.FC<Props> = ({
     resetField,
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
-    mode: 'onChange',
+    mode: 'all',
     defaultValues: {
       organizationId: null,
       contactProfileId: null,
@@ -207,13 +207,15 @@ export const CourseForm: React.FC<Props> = ({
     },
   })
 
-  const deliveryType = watch('deliveryType')
-  const courseLevel = watch('courseLevel')
-  const usesAOL = type === CourseType.INDIRECT ? watch('usesAOL') : false
+  const formValues = watch()
+
+  const deliveryType = formValues.deliveryType
+  const courseLevel = formValues.courseLevel
+  const usesAOL = type === CourseType.INDIRECT ? formValues.usesAOL : false
 
   useEffect(() => {
-    onChange(getValues(), formState.isValid)
-  }, [formState, getValues, onChange])
+    onChange(formValues, formState.isValid)
+  }, [formState, getValues, onChange, formValues])
 
   useEffect(() => {
     register('courseLevel')
@@ -666,3 +668,5 @@ export const CourseForm: React.FC<Props> = ({
     </form>
   )
 }
+
+export default memo(CourseForm)

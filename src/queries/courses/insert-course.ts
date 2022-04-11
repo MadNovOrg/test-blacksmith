@@ -22,12 +22,10 @@ export type ParamsType = {
     min_participants?: number
     max_participants?: number
     trainers?: {
-      data: [
-        {
-          profile_id: string
-          type: CourseTrainerType
-        }
-      ]
+      data: Array<{
+        profile_id: string
+        type: CourseTrainerType
+      }>
     }
     schedule: {
       data: [

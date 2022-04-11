@@ -30,7 +30,12 @@ import {
 } from '@app/queries/courses/set-course-trainers'
 import { yup } from '@app/schemas'
 import { CourseTrainerType } from '@app/types'
-import { getCourseAssistants, getCourseTrainer, LoadingStatus } from '@app/util'
+import {
+  getCourseAssistants,
+  getCourseTrainer,
+  getNumberOfAssistants,
+  LoadingStatus,
+} from '@app/util'
 
 import { SearchTrainers } from './SearchTrainers'
 import { Trainer, SetCourseTrainerVars } from './types'
@@ -51,7 +56,7 @@ export const AssignTrainers = () => {
 
   const assistMin = useMemo(() => {
     const { max_participants = 0 } = course ?? {}
-    return Math.floor((max_participants ?? 0) / 12)
+    return getNumberOfAssistants(max_participants)
   }, [course])
 
   const schema = useMemo(() => {
