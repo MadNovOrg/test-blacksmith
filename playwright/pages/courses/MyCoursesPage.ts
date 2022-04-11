@@ -28,7 +28,7 @@ export class MyCoursesPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/trainer-base/course`, this.tableRoot)
+    await super.goto(`${BASE_URL}/courses`, this.tableRoot)
     await this.coursesTable.waitToLoad()
   }
 

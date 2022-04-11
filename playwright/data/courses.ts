@@ -100,25 +100,6 @@ export const COURSES_TO_VIEW: Course[] = [
       },
     ],
   },
-  {
-    name: 'Positive behaviour Inter F2F',
-    description: 'Some description.',
-    level: CourseLevel.INTERMEDIATE,
-    status: CourseStatus.PENDING,
-    deliveryType: CourseDeliveryType.F2F,
-    type: CourseType.CLOSED,
-    reaccreditation: false,
-    organization: { name: 'London First School' },
-    schedule: [
-      {
-        name: 'name',
-        type: 'PHYSICAL',
-        start: new Date('2022-07-22T09:00:00Z'),
-        end: new Date('2022-07-23T16:00:00Z'),
-        venue: 'Queen Elizabeth II Centre',
-      },
-    ],
-  },
 ]
 
 export const UNIQUE_COURSE: () => Course = () => ({

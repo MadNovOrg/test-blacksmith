@@ -24,7 +24,7 @@ const test = base.extend<{ course: Course }>({
     course.type = CourseType.CLOSED
     course.status = CourseStatus.PUBLISHED
     const moduleIds = await getModuleIds(
-      MODULES_BY_LEVEL[course.level],
+      MODULES_BY_LEVEL.get(course.level),
       course.level
     )
     await insertCourse(course, users.trainer)

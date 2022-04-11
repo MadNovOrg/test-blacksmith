@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request'
 
-import { CourseLevel } from '../../src/types'
+import { CourseLevel, InviteStatus } from '../../src/types'
 import { HASURA_BASE_URL } from '../constants'
 import { Course, User } from '../data/types'
 import { getAdminIdToken } from '../util'
@@ -116,6 +116,7 @@ export const insertCourse = async (
             type: LEADER
           }
         },
+        go1Integration: ${course.go1Integration ? 'true' : 'false'},
         level: ${course.level},
         name: "${course.name}",
         reaccreditation: ${course.reaccreditation},
@@ -182,7 +183,7 @@ export const getModuleIds = async (
     query MyQuery {
       module_group(
         where: {
-          name: { _in: ${moduleGroups} }
+          name: { _in: ${JSON.stringify(moduleGroups)} }
           _and: { level: { _eq: ${level} } }
         }
       ) {
@@ -202,16 +203,50 @@ export const insertCourseModules = async (
 ) => {
   const modules = moduleIds.map(id => ({ courseId: courseId, moduleId: id }))
   const query = gql`
-    mutation MyMutation {
-      insert_course_module(
-        objects: ${JSON.stringify(modules)}
-      ) {
+    mutation MyMutation($objects: [course_module_insert_input!] = []) {
+      insert_course_module(objects: $objects) {
         affected_rows
       }
     }
   `
   try {
-    await getClient().request(query)
+    await getClient().request(query, { objects: modules })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const insertCourseParticipants = async (
+  courseId: number,
+  users: User[],
+  bookingDate: Date
+) => {
+  const participants = []
+  for (const user of users) {
+    const profileId = await getProfileId(user.email)
+    participants.push({
+      attended: true,
+      bookingDate: bookingDate.toISOString(),
+      course_id: courseId,
+      invite: {
+        data: {
+          course_id: courseId,
+          email: user.email,
+          status: InviteStatus.ACCEPTED,
+        },
+      },
+      profile_id: profileId,
+    })
+  }
+  const query = gql`
+    mutation MyMutation($objects: [course_participant_insert_input!] = []) {
+      insert_course_participant(objects: $objects) {
+        affected_rows
+      }
+    }
+  `
+  try {
+    await getClient().request(query, { objects: participants })
   } catch (e) {
     console.error(e)
   }

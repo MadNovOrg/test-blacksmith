@@ -64,7 +64,7 @@ export class CourseDetailsPage extends BasePage {
 
   async goto(courseId: string) {
     await super.goto(
-      `${BASE_URL}/trainer-base/course/${courseId}/details`,
+      `${BASE_URL}/courses/${courseId}/details`,
       this.header.courseName
     )
   }
