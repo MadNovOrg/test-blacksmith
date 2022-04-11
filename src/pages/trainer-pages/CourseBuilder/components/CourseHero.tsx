@@ -82,6 +82,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
         </Typography>
         <Typography display="inline" variant="body2">
           {data.deliveryType && t(`course-delivery-type.${data.deliveryType}`)}
+          {data.go1Integration ? ` (${t('common.blended-learning')})` : ''}
         </Typography>
       </Box>
     </Box>

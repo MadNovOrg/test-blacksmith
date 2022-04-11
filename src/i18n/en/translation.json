@@ -59,6 +59,7 @@
     "course-type": "Course Type",
     "course-status": "Course Status",
     "bl-status": "Blended Learning Status",
+    "blended-learning": "Blended Learning",
     "my-courses": "My Courses",
     "x-items": "{{num}} items",
     "search": "Search",
