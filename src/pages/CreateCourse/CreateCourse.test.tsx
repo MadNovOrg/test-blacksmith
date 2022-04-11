@@ -91,4 +91,22 @@ describe('page: CreateCourse', () => {
 
     expect(screen.getByText('Indirect course creation')).toBeInTheDocument()
   })
+
+  it('displays correct steps for the indirect course', () => {
+    render(
+      <MemoryRouter
+        initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}
+      >
+        <Routes>
+          <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const nav = screen.getByTestId('create-course-nav')
+
+    expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
+  })
 })

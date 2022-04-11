@@ -41,7 +41,10 @@ export const CreateCourse = () => {
               </Typography>
             </Box>
 
-            <CreateCourseSteps completedSteps={completedSteps} />
+            <CreateCourseSteps
+              completedSteps={completedSteps}
+              type={courseType}
+            />
           </Box>
 
           <Box flex={1}>
