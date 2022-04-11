@@ -14,7 +14,8 @@
     },
     "errors": {
       "loading-participants": "There was an error loading course participants",
-      "loading-course": "There was an error loading a course"
+      "loading-course": "There was an error loading a course",
+      "course-not-found": "Course not found"
     },
     "home": "Home",
     "courses": "Courses",

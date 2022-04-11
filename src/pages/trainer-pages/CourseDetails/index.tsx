@@ -178,8 +178,8 @@ export const CourseDetails = () => {
           )}
         </>
       ) : (
-        <Container sx={{ py: 2 }}>
-          <Alert severity="warning">Course not found.</Alert>
+        <Container sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
+          <Alert severity="error">{t('errors.course-not-found')}</Alert>
         </Container>
       )}
     </>

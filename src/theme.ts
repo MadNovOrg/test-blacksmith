@@ -338,6 +338,10 @@ export default createTheme({
             color: theme.palette.secondary.main,
           },
         },
+        standardError: {
+          backgroundColor: '#fdeded',
+          color: '#5f2120',
+        },
       },
     },
     MuiChip: {
