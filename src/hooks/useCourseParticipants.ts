@@ -8,9 +8,13 @@ import {
 import { SortOrder } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
-export type CourseParticipantCriteria = {
-  attended?: { _eq: boolean }
-}
+export type CourseParticipantCriteria =
+  | {
+      attended?: { _eq: boolean }
+    }
+  | {
+      certificate: { id: { _is_null: boolean } }
+    }
 
 export default function useCourseParticipants(
   courseId: string,

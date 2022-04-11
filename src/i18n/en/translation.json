@@ -404,6 +404,14 @@
           "view-evaluation": "View Evaluation",
           "attendee-feedback": "Attendee Feedback",
           "trainer-feedback": "Trainer Feedback"
+        },
+        "certifications": {
+          "title": "Certifications",
+          "download-selected": "Download selected ({{ number }})",
+          "download-all-certifications": "Download all certifications",
+          "grade": "Grade",
+          "certificate": "Certificate",
+          "view-certificate": "View certificate"
         }
       }
     },

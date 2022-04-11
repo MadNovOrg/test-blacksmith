@@ -6,6 +6,7 @@ configuration:
   custom_column_names:
     course_id: courseId
     course_participant_id: courseParticipantId
+    expiry_date: expiryDate
   custom_root_fields: {}
 object_relationships:
 - name: course
@@ -25,17 +26,19 @@ insert_permissions:
     columns:
     - course_id
     - course_participant_id
+    - expiry_date
     - number
   role: trainer
 select_permissions:
 - permission:
     columns:
     - course_id
-    - number
-    - created_at
-    - updated_at
     - course_participant_id
+    - created_at
+    - expiry_date
     - id
+    - number
+    - updated_at
     filter:
       course:
         trainers:
@@ -45,15 +48,17 @@ select_permissions:
 - permission:
     columns:
     - course_id
-    - number
-    - created_at
-    - updated_at
     - course_participant_id
+    - created_at
+    - expiry_date
     - id
+    - number
+    - updated_at
     filter: {}
   role: tt-admin
 - permission:
     columns:
+    - expiry_date
     - number
     filter:
       participant:

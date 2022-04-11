@@ -33,6 +33,7 @@ export type Course = {
     }
   }
   moduleGroupIds: { module: { moduleGroup: { id: string } } }[]
+  certificateCount?: { aggregate: { count: number } }
 } & Base
 
 export type CourseModule = {
@@ -45,6 +46,7 @@ export type CourseCertificate = {
   number: string
   courseId: string
   courseParticipantId: string
+  expiryDate: string
 } & Base
 
 export type Address = {

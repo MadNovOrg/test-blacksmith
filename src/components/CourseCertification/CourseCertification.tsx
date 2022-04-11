@@ -12,7 +12,7 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
-import { add, format } from 'date-fns'
+import { format } from 'date-fns'
 import MUIImage from 'mui-image'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -71,14 +71,6 @@ const UncompletedList: React.FC<UncompletedListProps> = ({
       })}
     </Box>
   )
-}
-
-const validUntilMonthsByCourseLevel = {
-  LEVEL_1: 36,
-  LEVEL_2: 24,
-  ADVANCED: 12,
-  BILD_ACT: 12,
-  INTERMEDIATE: 12,
 }
 
 type ModuleGroupAccordionProps = {
@@ -305,10 +297,6 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
     : new Date(0)
   const courseDeliveryType = course.deliveryType
 
-  const expiryDate = add(dateIssued, {
-    months: validUntilMonthsByCourseLevel[course.level],
-  }).toISOString()
-
   return (
     <Box>
       <Container>
@@ -339,7 +327,9 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                       grade={grade as Grade}
                       courseDeliveryType={courseDeliveryType}
                       certificationNumber={certificationNumber}
-                      expiryDate={expiryDate}
+                      expiryDate={
+                        courseParticipant.certificate?.expiryDate ?? ''
+                      }
                     />
                   }
                   fileName="certificate.pdf"
@@ -361,7 +351,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
               course={course}
               grade={grade as Grade}
               courseParticipant={courseParticipant}
-              expiryDate={expiryDate}
+              expiryDate={courseParticipant.certificate?.expiryDate ?? ''}
               certificationNumber={certificationNumber}
               dateIssued={dateIssued.toISOString()}
             />

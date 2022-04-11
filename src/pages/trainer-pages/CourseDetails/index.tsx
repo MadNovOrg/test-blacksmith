@@ -19,12 +19,14 @@ import useCourse from '@app/hooks/useCourse'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
+import { CourseCertifications } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseCertifications'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',
   GRADING = 'GRADING',
   EVALUATION = 'EVALUATION',
+  CERTIFICATIONS = 'CERTIFICATIONS',
 }
 
 const successAlerts = {
@@ -115,6 +117,15 @@ export const CourseDetails = () => {
                         value={CourseDetailsTabs.EVALUATION}
                         data-testid="evaluation-tab"
                       />
+                      {course.certificateCount?.aggregate.count ? (
+                        <PillTab
+                          label={t(
+                            'pages.course-details.tabs.certifications.title'
+                          )}
+                          value={CourseDetailsTabs.CERTIFICATIONS}
+                          data-testid="certifications-tab"
+                        />
+                      ) : null}
                     </PillTabList>
                   </Container>
                 </Box>
@@ -152,6 +163,15 @@ export const CourseDetails = () => {
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.EVALUATION}>
                     <EvaluationSummaryTab />
                   </TabPanel>
+
+                  {course.certificateCount?.aggregate.count ? (
+                    <TabPanel
+                      sx={{ px: 0 }}
+                      value={CourseDetailsTabs.CERTIFICATIONS}
+                    >
+                      <CourseCertifications course={course} />
+                    </TabPanel>
+                  ) : null}
                 </Container>
               </TabContext>
             </>

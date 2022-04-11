@@ -15,6 +15,7 @@ import {
   ListItemText,
   InputBase,
 } from '@mui/material'
+import { add } from 'date-fns'
 import { t } from 'i18next'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
@@ -39,6 +40,14 @@ import {
 
 import { CourseGradingMenu } from './components/CourseGradingMenu'
 import useCourseGradingData from './useCourseGradingData'
+
+const validUntilMonthsByCourseLevel = {
+  LEVEL_1: 36,
+  LEVEL_2: 24,
+  ADVANCED: 12,
+  BILD_ACT: 12,
+  INTERMEDIATE: 12,
+}
 
 export const CourseGrading = () => {
   const { id: courseId } = useParams()
@@ -165,6 +174,9 @@ export const CourseGrading = () => {
                 course.level,
                 course.id
               ),
+              expiryDate: add(new Date(), {
+                months: validUntilMonthsByCourseLevel[course.level],
+              }).toISOString(),
             }))
           : []
 
