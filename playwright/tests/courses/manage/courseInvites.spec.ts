@@ -27,7 +27,7 @@ const test = base.extend<{ course: Course }>({
       MODULES_BY_LEVEL.get(course.level),
       course.level
     )
-    await insertCourse(course, users.trainer)
+    await insertCourse(course, users.trainer.email)
     await insertCourseModules(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)

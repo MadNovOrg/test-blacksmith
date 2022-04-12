@@ -20,11 +20,12 @@ const getClient = () => {
   return graphQLClient
 }
 
-export const getTrainerCourses = async (trainer: User): Promise<Course[]> => {
+export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   const query = gql`query MyQuery {
-    course(where: {trainers: {profile: {email: {_eq: "${trainer.email}"}}}}, order_by: {name: asc}) {
+    course(where: {trainers: {profile: {email: {_eq: "${email}"}}}}, order_by: {name: asc}) {
       id
       deliveryType
+      description
       level
       name
       reaccreditation
@@ -92,7 +93,7 @@ export const setCourseDates = async (
 
 export const insertCourse = async (
   course: Course,
-  trainer: User
+  email: string
 ): Promise<Course> => {
   const organization = course.organization
     ? `, organization_id: "${await getOrganizationId(
@@ -103,7 +104,7 @@ export const insertCourse = async (
     ? `, venue_id: "${await getVenueId(course.schedule[0].venue)}"`
     : ''
 
-  const trainerId = await getProfileId(trainer.email)
+  const trainerId = await getProfileId(email)
 
   const query = gql`
     mutation MyMutation {
@@ -146,12 +147,12 @@ export const insertCourse = async (
 
 export const makeSureTrainerHasCourses = async (
   courses: Course[],
-  trainer: User
+  email: string
 ) => {
-  const existingCourses = await getTrainerCourses(trainer)
+  const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
-    if (!existingCourses.map(c => c.name).includes(course.name)) {
-      await insertCourse(course, trainer)
+    if (!existingCourses.map(c => c.description).includes(course.description)) {
+      await insertCourse(course, email)
     }
   }
 }
@@ -163,8 +164,9 @@ export const deleteCourse = async (id: number) => {
       delete_course_trainer(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_schedule(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_module(where: { courseId: { _eq: ${id} } }) { affected_rows }
-      delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_certificate(where: {courseId: {_eq: ${id}}}) { affected_rows }
       delete_course_participant(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course(where: { id: { _eq: ${id} } }) { affected_rows }
     }
   `

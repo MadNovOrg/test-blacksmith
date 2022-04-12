@@ -16,6 +16,7 @@
     "test:e2e:firefox": "playwright test --config=playwright/playwright.config.ts --project=firefox",
     "test:e2e:webkit": "playwright test --config=playwright/playwright.config.ts --project=webkit",
     "test:e2e:smoke": "npm run test:e2e -- --grep @smoke",
+    "test:e2e:data": "npm run test:e2e -- --grep @data",
     "hasura": "env-cmd -f ./hasura/.env hasura --project hasura",
     "hasura:console": "npm run hasura -- console",
     "hasura:squash": "npm run hasura -- migrate squash",

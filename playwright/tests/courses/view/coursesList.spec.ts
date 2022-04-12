@@ -18,19 +18,19 @@ const test = base.extend<{
   oneTwoLevelCourses: Course[]
 }>({
   coursesToView: async ({}, use) => {
-    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg)
-    const courses = await getTrainerCourses(users.trainerWithOrg)
+    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
+    const courses = await getTrainerCourses(users.trainerWithOrg.email)
     await use(courses)
   },
   courseToSearch: async ({}, use) => {
     const course = COURSES_TO_VIEW[0]
-    await makeSureTrainerHasCourses([course], users.trainerWithOrg)
-    const courses = await getTrainerCourses(users.trainerWithOrg)
+    await makeSureTrainerHasCourses([course], users.trainerWithOrg.email)
+    const courses = await getTrainerCourses(users.trainerWithOrg.email)
     await use(courses.find(c => c.name === course.name))
   },
   oneTwoLevelCourses: async ({}, use) => {
-    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg)
-    const courses = await getTrainerCourses(users.trainerWithOrg)
+    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
+    const courses = await getTrainerCourses(users.trainerWithOrg.email)
     await use(
       courses.filter(
         c => c.level == CourseLevel.LEVEL_1 || c.level == CourseLevel.LEVEL_2

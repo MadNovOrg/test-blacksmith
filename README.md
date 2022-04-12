@@ -61,3 +61,8 @@ TBD
 - `npx playwright install` - only the first time on each machine, this installs the browsers (chromium, firefox and webkit) via npm
 - `npm run test:e2e` - runs all the tests (filtering will be possible when there are more tests)
 - `npm run test:e2e -- --headed` - runs tests in a visible browser
+
+## Insert test data
+To insert or refresh some courses for a specific trainer, you can run the following commands:
+- `TRAINER=trainer@email.com npm run test:e2e:data` - deletes all current trainer's courses and inserts new ones, see [insertTestData.spec.ts](playwright/tests/insertTestData.spec.ts) for details
+- `TARGET=dev TRAINER=trainer@email.com npm run test:e2e:data` - runs the same for `dev` environment. You can use also `stg` and `prod`
