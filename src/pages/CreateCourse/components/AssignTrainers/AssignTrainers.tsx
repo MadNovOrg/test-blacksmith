@@ -24,12 +24,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
-import {
-  SetCourseTrainer,
-  profileToInput,
-} from '@app/queries/courses/set-course-trainers'
+import { SetCourseTrainer } from '@app/queries/courses/set-course-trainers'
 import { yup } from '@app/schemas'
-import { CourseTrainerType } from '@app/types'
+import {
+  Course,
+  CourseTrainerType,
+  SetCourseTrainerVars,
+  SetCourseTrainerInput,
+} from '@app/types'
 import {
   getCourseAssistants,
   getCourseTrainer,
@@ -38,11 +40,11 @@ import {
 } from '@app/util'
 
 import { SearchTrainers } from './SearchTrainers'
-import { Trainer, SetCourseTrainerVars } from './types'
+import { SearchTrainer } from './SearchTrainers/types'
 
 type FormValues = {
-  lead: NestedValue<Trainer[]>
-  assist: NestedValue<Trainer[]>
+  lead: NestedValue<SearchTrainer[]>
+  assist: NestedValue<SearchTrainer[]>
 }
 
 export const AssignTrainers = () => {
@@ -95,7 +97,7 @@ export const AssignTrainers = () => {
   }, [course, form])
 
   const notLead = useCallback(
-    (matches: Trainer[]) => {
+    (matches: SearchTrainer[]) => {
       const lead = form.getValues('lead')
       const ids = new Set(lead.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
@@ -104,7 +106,7 @@ export const AssignTrainers = () => {
   )
 
   const notAssistant = useCallback(
-    (matches: Trainer[]) => {
+    (matches: SearchTrainer[]) => {
       const assistants = form.getValues('assist')
       const ids = new Set(assistants.map(t => t.id))
       return matches.filter(m => !ids.has(m.id))
@@ -177,6 +179,7 @@ export const AssignTrainers = () => {
           control={form.control}
           render={({ field }) => (
             <SearchTrainers
+              courseSchedule={course.schedule[0]}
               max={1}
               autoFocus={true}
               value={field.value}
@@ -204,6 +207,7 @@ export const AssignTrainers = () => {
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
+                courseSchedule={course.schedule[0]}
                 max={3}
                 value={field.value}
                 onChange={field.onChange}
@@ -248,4 +252,12 @@ export const AssignTrainers = () => {
       </Box>
     </Stack>
   )
+}
+
+function profileToInput(course: Course, type: CourseTrainerType) {
+  return (p: SearchTrainer): SetCourseTrainerInput => ({
+    course_id: course.id,
+    profile_id: p.id,
+    type,
+  })
 }

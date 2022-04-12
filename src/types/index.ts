@@ -351,3 +351,21 @@ export type CourseEvaluationQuestion = {
   displayOrder: number
   required: number
 }
+
+export type SetCourseTrainerInput = {
+  course_id: number
+  profile_id: string
+  type: CourseTrainerType
+}
+
+export type SetCourseTrainerVars = {
+  courseId: number
+  trainers: SetCourseTrainerInput[]
+}
+
+export enum SearchTrainerAvailability {
+  AVAILABLE = 'AVAILABLE',
+  UNAVAILABLE = 'UNAVAILABLE',
+  PENDING = 'PENDING',
+  EXPIRED = 'EXPIRED',
+}

@@ -13,17 +13,17 @@ VALUES
 
 SELECT setval('course_id_seq', 10010);
 
-INSERT INTO public.course_trainer (profile_id, course_id, type) VALUES
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10000, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10001, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10002, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10003, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10004, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10005, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10006, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10007, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10008, 'LEADER'),
-('13a223a8-2184-42f1-ba37-b49e115e59a2', 10009, 'LEADER');
+INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10000, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10001, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10002, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10003, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10004, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10005, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10006, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10007, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10008, 'LEADER', 'ACCEPTED'),
+('13a223a8-2184-42f1-ba37-b49e115e59a2', 10009, 'LEADER', 'ACCEPTED');
 
 INSERT INTO public.venue (id, name, city, address_line_one, address_line_two, post_code, geo_coordinates) VALUES
 ('bd4e4af5-8822-485c-bf48-16fe0d50729b', 'Birchwood Academy', 'New York', '10 Whitehart Lane', 'Kings Street', 'NY 10014', '(40.730610, -73.935242)'::point),

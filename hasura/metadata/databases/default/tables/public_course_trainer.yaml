@@ -2,6 +2,9 @@ table:
   name: course_trainer
   schema: public
 object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
 - name: profile
   using:
     foreign_key_constraint_on: profile_id
@@ -37,9 +40,10 @@ select_permissions:
 - permission:
     columns:
     - course_id
-    - type
     - id
     - profile_id
+    - status
+    - type
     filter: {}
   role: tt-ops
 - permission:

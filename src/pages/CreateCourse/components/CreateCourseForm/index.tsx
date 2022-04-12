@@ -31,7 +31,7 @@ import {
 } from '@app/util'
 
 import { SearchTrainers } from '../AssignTrainers/SearchTrainers'
-import { Trainer } from '../AssignTrainers/types'
+import { SearchTrainer } from '../AssignTrainers/SearchTrainers/types'
 
 function assertCourseDataValid(
   data: FormValues,
@@ -45,7 +45,7 @@ function assertCourseDataValid(
 export const CreateCourseForm = () => {
   const [courseData, setCourseData] = useState<FormValues>()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
-  const [assistants, setAssistants] = useState<Trainer[]>([])
+  const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
   const fetcher = useFetcher()
@@ -207,6 +207,10 @@ export const CreateCourseForm = () => {
                 })}
               </Typography>
               <SearchTrainers
+                courseSchedule={{
+                  start: courseData?.startDateTime ?? undefined,
+                  end: courseData?.endDateTime ?? undefined,
+                }}
                 matchesFilter={matches =>
                   matches.filter(t => t.id !== profile?.id)
                 }

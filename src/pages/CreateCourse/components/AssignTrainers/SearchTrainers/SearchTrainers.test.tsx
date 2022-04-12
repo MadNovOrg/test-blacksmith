@@ -1,8 +1,13 @@
 import React from 'react'
 
-import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
+import { InviteStatus, SearchTrainerAvailability } from '@app/types'
 
+import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
+
+import { setAvailability } from './helpers'
 import { SearchTrainers } from './SearchTrainers'
+import { SearchTrainer, SearchTrainerBookings } from './types'
 
 const mockSearch = jest.fn().mockResolvedValue({ trainers: [] })
 jest.mock('./useQueryTrainers.ts', () => ({
@@ -11,7 +16,11 @@ jest.mock('./useQueryTrainers.ts', () => ({
 
 describe('component: SearchTrainers', () => {
   it('renders as expected', async () => {
-    const { container } = render(<SearchTrainers />)
+    const course = buildCourse()
+
+    const { container } = render(
+      <SearchTrainers courseSchedule={course.schedule[0]} />
+    )
 
     const input = screen.getByTestId('SearchTrainers-input')
     expect(input).toBeInTheDocument()
@@ -26,8 +35,15 @@ describe('component: SearchTrainers', () => {
   })
 
   it('uses provided placeholder', async () => {
+    const course = buildCourse()
+
     const placeholder = chance.sentence()
-    render(<SearchTrainers placeholder={placeholder} />)
+    render(
+      <SearchTrainers
+        courseSchedule={course.schedule[0]}
+        placeholder={placeholder}
+      />
+    )
 
     const input = screen.getByPlaceholderText(placeholder)
     expect(input).toBeInTheDocument()
@@ -35,7 +51,11 @@ describe('component: SearchTrainers', () => {
   })
 
   it('calls search trainers when input term length is >= 3', async () => {
-    const { container } = render(<SearchTrainers />)
+    const course = buildCourse()
+
+    const { container } = render(
+      <SearchTrainers courseSchedule={course.schedule[0]} />
+    )
     const input = screen.getByTestId('SearchTrainers-input')
     const loadingIcon = container.querySelector('.MuiCircularProgress-root')
 
@@ -60,6 +80,8 @@ describe('component: SearchTrainers', () => {
   })
 
   it('shows options matching search term', async () => {
+    const course = buildCourse()
+
     const lastName = 'Smith'
     mockSearch.mockResolvedValueOnce({
       trainers: [
@@ -70,7 +92,7 @@ describe('component: SearchTrainers', () => {
       ],
     })
 
-    render(<SearchTrainers />)
+    render(<SearchTrainers courseSchedule={course.schedule[0]} />)
     const input = screen.getByTestId('SearchTrainers-input')
 
     userEvent.type(input, lastName.slice(0, 4))
@@ -80,17 +102,18 @@ describe('component: SearchTrainers', () => {
   })
 
   it('calls matchesFilter to further filter options', async () => {
-    const trainers = [
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-    ]
+    const course = buildCourse()
 
+    const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
     const matchesFilter = jest.fn().mockReturnValueOnce([trainers[2]])
-    render(<SearchTrainers matchesFilter={matchesFilter} />)
+    render(
+      <SearchTrainers
+        courseSchedule={course.schedule[0]}
+        matchesFilter={matchesFilter}
+      />
+    )
     const input = screen.getByTestId('SearchTrainers-input')
 
     userEvent.type(input, trainers[2].fullName.slice(0, 4))
@@ -103,6 +126,8 @@ describe('component: SearchTrainers', () => {
   })
 
   it('enforces max selected items when max is set', async () => {
+    const course = buildCourse()
+
     const lastName = 'Smith'
     mockSearch.mockResolvedValueOnce({
       trainers: [
@@ -113,7 +138,7 @@ describe('component: SearchTrainers', () => {
       ],
     })
 
-    render(<SearchTrainers max={1} />)
+    render(<SearchTrainers courseSchedule={course.schedule[0]} max={1} />)
     const input = screen.getByTestId('SearchTrainers-input')
 
     userEvent.type(input, lastName.slice(0, 4))
@@ -128,17 +153,15 @@ describe('component: SearchTrainers', () => {
   })
 
   it('calls onChange when a trainer is selected', async () => {
-    const trainers = [
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-      { id: chance.guid(), fullName: chance.name() },
-    ]
+    const course = buildCourse()
 
+    const trainers = makeTrainers()
     mockSearch.mockResolvedValueOnce({ trainers })
 
     const onChange = jest.fn()
-    render(<SearchTrainers onChange={onChange} />)
+    render(
+      <SearchTrainers courseSchedule={course.schedule[0]} onChange={onChange} />
+    )
     const input = screen.getByTestId('SearchTrainers-input')
 
     userEvent.type(input, trainers[2].fullName.slice(0, 4))
@@ -152,9 +175,11 @@ describe('component: SearchTrainers', () => {
   })
 
   it('shows info message when no matches are found', async () => {
+    const course = buildCourse()
+
     mockSearch.mockResolvedValueOnce({ trainers: [] })
 
-    render(<SearchTrainers />)
+    render(<SearchTrainers courseSchedule={course.schedule[0]} />)
     const input = screen.getByTestId('SearchTrainers-input')
 
     userEvent.type(input, chance.last().slice(0, 4))
@@ -164,4 +189,112 @@ describe('component: SearchTrainers', () => {
     const noMatchTxt = 'No trainers found. Try another search term.'
     expect(screen.getByText(noMatchTxt)).toBeInTheDocument()
   })
+
+  describe('setAvailability', () => {
+    it('should not fail when trainers is empty array', () => {
+      const trainers: SearchTrainer[] = []
+      const schedules: SearchTrainerBookings[] = []
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers.length).toBe(0)
+    })
+
+    it('should set availability AVAILABLE when no trainers are booked', () => {
+      const trainers = makeTrainers()
+      const schedules: SearchTrainerBookings[] = []
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers.length).toBe(4)
+      trainers.forEach(t => {
+        expect(t.availability).toBe(SearchTrainerAvailability.AVAILABLE)
+      })
+    })
+
+    it('should set availability AVAILABLE when trainer has only declined bookings', () => {
+      const trainers = makeTrainers()
+      const schedules: SearchTrainerBookings[] = [
+        makeSchedule(trainers[0].id, InviteStatus.DECLINED),
+      ]
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers.length).toBe(4)
+      trainers.forEach(t => {
+        expect(t.availability).toBe(SearchTrainerAvailability.AVAILABLE)
+      })
+    })
+
+    it('should set availability UNAVAILABLE when trainer has accepted bookings', () => {
+      const trainers = makeTrainers()
+      const schedules: SearchTrainerBookings[] = [
+        makeSchedule(trainers[0].id, InviteStatus.ACCEPTED),
+      ]
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers[0].availability).toBe(
+        SearchTrainerAvailability.UNAVAILABLE
+      )
+      trainers.slice(1).forEach(t => {
+        expect(t.availability).toBe(SearchTrainerAvailability.AVAILABLE)
+      })
+    })
+
+    it('should set availability PENDING when trainer hasnt yet accepted/declined', () => {
+      const trainers = makeTrainers()
+      const schedules: SearchTrainerBookings[] = [
+        makeSchedule(trainers[0].id, InviteStatus.PENDING),
+      ]
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers[0].availability).toBe(SearchTrainerAvailability.PENDING)
+      trainers.slice(1).forEach(t => {
+        expect(t.availability).toBe(SearchTrainerAvailability.AVAILABLE)
+      })
+    })
+
+    it('should set availability UNAVAILABLE when trainer has mixed statuses', () => {
+      const trainers = makeTrainers()
+      const schedules: SearchTrainerBookings[] = [
+        makeSchedule(trainers[0].id, InviteStatus.DECLINED),
+        makeSchedule(trainers[1].id, InviteStatus.PENDING),
+        makeSchedule(trainers[0].id, InviteStatus.PENDING),
+        makeSchedule(trainers[0].id, InviteStatus.ACCEPTED),
+      ]
+
+      setAvailability(trainers, schedules)
+
+      expect(trainers[0].availability).toBe(
+        SearchTrainerAvailability.UNAVAILABLE
+      )
+      expect(trainers[1].availability).toBe(SearchTrainerAvailability.PENDING)
+      trainers.slice(2).forEach(t => {
+        expect(t.availability).toBe(SearchTrainerAvailability.AVAILABLE)
+      })
+    })
+  })
 })
+
+/**
+ * Helpers ----
+ */
+
+function makeTrainers(): SearchTrainer[] {
+  return [
+    { id: chance.guid(), fullName: chance.name(), avatar: '' },
+    { id: chance.guid(), fullName: chance.name(), avatar: '' },
+    { id: chance.guid(), fullName: chance.name(), avatar: '' },
+    { id: chance.guid(), fullName: chance.name(), avatar: '' },
+  ]
+}
+
+function makeSchedule(profile_id: string, status: InviteStatus) {
+  return {
+    profile_id,
+    status,
+    course: { schedule: [{ start: '', end: '' }] },
+  }
+}

@@ -4,6 +4,9 @@ import { render, screen, within, chance } from '@test/index'
 
 import { Avatar } from './Avatar'
 
+const givenName = () => chance.first()
+const familyName = () => chance.last().replace(' ', '')
+
 describe('component: Avatar', () => {
   it('renders as expected without props', async () => {
     const { container } = render(<Avatar />)
@@ -26,7 +29,7 @@ describe('component: Avatar', () => {
 
   it('renders image from src provided even if name is provided', async () => {
     const img = chance.url()
-    const [firstName, lastName] = [chance.first(), chance.last()]
+    const [firstName, lastName] = [givenName(), familyName()]
     const initials = `${firstName[0]}${lastName[0]}`
 
     const { container } = render(<Avatar src={img} />)
@@ -38,7 +41,7 @@ describe('component: Avatar', () => {
 
   describe('renders initials when src is missing', () => {
     it('supports names with first and last', async () => {
-      const [firstName, lastName] = [chance.first(), chance.last()]
+      const [firstName, lastName] = [givenName(), familyName()]
       const initials = `${firstName[0]}${lastName[0]}`
 
       render(<Avatar name={`${firstName} ${lastName}`} />)
@@ -47,7 +50,7 @@ describe('component: Avatar', () => {
     })
 
     it('supports names with first, middle and last', async () => {
-      const [firstName, lastName] = [chance.first(), chance.last()]
+      const [firstName, lastName] = [givenName(), familyName()]
       const initials = `${firstName[0]}${lastName[0]}`
 
       render(<Avatar name={`${firstName} ??? ${lastName}`} />)
@@ -56,7 +59,7 @@ describe('component: Avatar', () => {
     })
 
     it('supports single names', async () => {
-      const [firstName] = [chance.first()]
+      const [firstName] = [givenName()]
       const initials = firstName[0]
 
       render(<Avatar name={firstName} />)

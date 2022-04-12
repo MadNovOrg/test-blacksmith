@@ -16,24 +16,27 @@ import { useMountedState } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
+import { SearchTrainerAvailability } from '@app/types'
 import { noop } from '@app/util'
 
-import type { Trainer } from './types'
+import { SearchTrainer, SearchTrainersSchedule } from './types'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
+  courseSchedule: SearchTrainersSchedule
   placeholder?: string
   max?: number
   maxReachedPlaceholder?: string
   autoFocus?: boolean
-  value?: Trainer[]
-  onChange?: (ev: { target: { value: Trainer[] } }) => void
-  matchesFilter?: (matches: Trainer[]) => Trainer[]
+  value?: SearchTrainer[]
+  onChange?: (ev: { target: { value: SearchTrainer[] } }) => void
+  matchesFilter?: (matches: SearchTrainer[]) => SearchTrainer[]
 }
 
 const T_PREFIX = 'components.searchTrainers'
 
 export function SearchTrainers({
+  courseSchedule,
   placeholder,
   max = Infinity,
   maxReachedPlaceholder,
@@ -46,9 +49,9 @@ export function SearchTrainers({
   const isMounted = useMountedState()
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
-  const [matches, setMatches] = useState([] as Trainer[])
-  const [_selected, setSelected] = useState([] as Trainer[])
-  const { search } = useQueryTrainers()
+  const [matches, setMatches] = useState([] as SearchTrainer[])
+  const [_selected, setSelected] = useState([] as SearchTrainer[])
+  const { search } = useQueryTrainers({ schedule: courseSchedule })
 
   const isControlled = value != null
   const selected = isControlled ? value : _selected
@@ -93,7 +96,7 @@ export function SearchTrainers({
   )
 
   const onSelected = useCallback(
-    (ev: React.SyntheticEvent, updated: Trainer[]) => {
+    (ev: React.SyntheticEvent, updated: SearchTrainer[]) => {
       const newSelection = updated.length <= max ? updated : selected
       if (!isControlled) setSelected(newSelection)
       onChange({ target: { value: newSelection } })
@@ -191,7 +194,7 @@ function renderTextField({
 
 function renderOption(
   props: HTMLAttributes<HTMLLIElement>,
-  option: Trainer,
+  option: SearchTrainer,
   _state: AutocompleteRenderOptionState
 ) {
   return (
@@ -206,13 +209,13 @@ function renderOption(
         <Typography variant="body1">{option.fullName}</Typography>
         <Typography variant="body2">Principal</Typography>
       </Box>
-      <Status label="Available" />
+      <TrainerAvailabilityStatus availability={option.availability} />
     </Box>
   )
 }
 
 function renderSelected(
-  selected: Trainer[],
+  selected: SearchTrainer[],
   getTagProps: AutocompleteRenderGetTagProps
 ) {
   return selected.map((s, index) => (
@@ -227,6 +230,25 @@ function renderSelected(
   ))
 }
 
-function Status({ label }: { label: string }) {
-  return <Chip variant="filled" label={label} />
+function TrainerAvailabilityStatus({
+  availability,
+}: {
+  availability?: SearchTrainerAvailability
+}) {
+  const { t } = useTranslation()
+
+  const colors = {
+    [SearchTrainerAvailability.AVAILABLE]: 'success',
+    [SearchTrainerAvailability.PENDING]: 'warning',
+    [SearchTrainerAvailability.EXPIRED]: 'error',
+    [SearchTrainerAvailability.UNAVAILABLE]: 'default',
+  } as const
+
+  return availability ? (
+    <Chip
+      variant="filled"
+      color={colors[availability]}
+      label={t(`common.trainer-availability.${availability}`)}
+    />
+  ) : null
 }

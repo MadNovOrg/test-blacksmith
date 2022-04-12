@@ -1,11 +1,5 @@
 import { gql } from 'graphql-request'
 
-import {
-  Trainer,
-  SetCourseTrainerInput,
-} from '@app/pages/CreateCourse/components/AssignTrainers/types'
-import { Course, CourseTrainerType } from '@app/types'
-
 export const SetCourseTrainer = gql`
   mutation SetCourseTrainers(
     $courseId: Int!
@@ -24,11 +18,3 @@ export const SetCourseTrainer = gql`
     }
   }
 `
-
-export const profileToInput = (course: Course, type: CourseTrainerType) => {
-  return (p: Trainer): SetCourseTrainerInput => ({
-    course_id: course.id,
-    profile_id: p.id,
-    type,
-  })
-}
