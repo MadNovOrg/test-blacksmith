@@ -49,8 +49,8 @@ export function SearchTrainers({
   const isMounted = useMountedState()
   const [loading, setLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
-  const [matches, setMatches] = useState([] as SearchTrainer[])
-  const [_selected, setSelected] = useState([] as SearchTrainer[])
+  const [matches, setMatches] = useState<SearchTrainer[]>([])
+  const [_selected, setSelected] = useState<SearchTrainer[]>([])
   const { search } = useQueryTrainers({ schedule: courseSchedule })
 
   const isControlled = value != null
