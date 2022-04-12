@@ -36,12 +36,9 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
         <Routes>
-          <Route
-            path={`/my-training/courses/:id`}
-            element={<CourseDetails />}
-          />
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>
       </MemoryRouter>
     )
@@ -74,14 +71,11 @@ describe('page: CourseDetails', () => {
     render(
       <MemoryRouter
         initialEntries={[
-          `/my-training/courses/${course.id}?success=invite_accepted`,
+          `/courses/${course.id}/details?success=invite_accepted`,
         ]}
       >
         <Routes>
-          <Route
-            path={`/my-training/courses/:id`}
-            element={<CourseDetails />}
-          />
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>
       </MemoryRouter>
     )
@@ -108,12 +102,9 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
         <Routes>
-          <Route
-            path={`/my-training/courses/:id`}
-            element={<CourseDetails />}
-          />
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>
       </MemoryRouter>
     )
@@ -142,12 +133,9 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
         <Routes>
-          <Route
-            path={`/my-training/courses/:id`}
-            element={<CourseDetails />}
-          />
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>
       </MemoryRouter>
     )
@@ -174,12 +162,9 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/my-training/courses/${course.id}`]}>
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
         <Routes>
-          <Route
-            path={`/my-training/courses/:id`}
-            element={<CourseDetails />}
-          />
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
         </Routes>
       </MemoryRouter>
     )

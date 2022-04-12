@@ -195,9 +195,7 @@ export const CourseDetails = () => {
                   />
                   <Button
                     data-testid="evaluate-course-cta"
-                    onClick={() =>
-                      navigate(`/my-training/courses/${courseId}/evaluation`)
-                    }
+                    onClick={() => navigate(`/courses/${courseId}/evaluation`)}
                     variant="contained"
                     color="secondary"
                     disabled={!canSubmitFeedback}

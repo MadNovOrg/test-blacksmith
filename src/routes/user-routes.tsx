@@ -26,9 +26,9 @@ const UserRoutes = () => {
           <Route path="details" element={<CourseDetails />} />
           <Route path="evaluation" element={<CourseEvaluation />} />
         </Route>
-
-        <Route path="accept-invite/:id" element={<AcceptInvite />} />
       </Route>
+
+      <Route path="accept-invite/:id" element={<AcceptInvite />} />
 
       <Route path="certifications" element={<MyCertifications />} />
 

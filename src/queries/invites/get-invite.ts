@@ -12,9 +12,9 @@ export type ResponseType = {
     endDate: string
     venueName: string
     venueAddress: {
-      city: string
       addressLineOne: string
       addressLineTwo: string
+      city: string
       postCode: string
     }
     venueCoordinates: string
@@ -35,7 +35,12 @@ export const QUERY = gql`
       startDate
       endDate
       venueName
-      venueAddress
+      venueAddress {
+        addressLineOne
+        addressLineTwo
+        city
+        postCode
+      }
       venueCoordinates
     }
   }

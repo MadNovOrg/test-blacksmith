@@ -103,11 +103,18 @@ type CourseInvite {
   startDate: String!
   endDate: String!
   venueName: String!
-  venueAddress: String!
+  venueAddress: Address
   venueCoordinates: String
 }
 
 type ZoomMeeting {
   joinUrl: String!
+}
+
+type Address {
+  addressLineOne: String
+  addressLineTwo: String
+  city: String
+  postCode: String
 }
 

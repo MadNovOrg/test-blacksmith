@@ -77,7 +77,7 @@ export const InvitationPage = () => {
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      navigate(`/my-training/accept-invite/${inviteId}?courseId=${courseId}`)
+      navigate(`/accept-invite/${inviteId}?courseId=${courseId}`)
       return
     }
 
@@ -196,7 +196,9 @@ export const InvitationPage = () => {
               <LocationOnIcon fontSize="small" />
             </Box>
             <Box>
-              <Typography variant="subtitle2">{invite.venueName}</Typography>
+              <Typography variant="body2" fontWeight="600">
+                {invite.venueName}
+              </Typography>
               <Typography variant="body2">
                 {address?.addressLineOne || ''}
               </Typography>

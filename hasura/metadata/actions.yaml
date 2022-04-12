@@ -81,4 +81,5 @@ custom_types:
   - name: Invite
   - name: CourseInvite
   - name: ZoomMeeting
+  - name: Address
   scalars: []

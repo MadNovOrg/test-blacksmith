@@ -37,17 +37,12 @@ describe('page: AcceptInvite', () => {
 
     render(
       <MemoryRouter
-        initialEntries={[
-          `/my-training/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`,
-        ]}
+        initialEntries={[`/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`]}
       >
         <Routes>
+          <Route path="/accept-invite/:id" element={<AcceptInvite />} />
           <Route
-            path="/my-training/accept-invite/:id"
-            element={<AcceptInvite />}
-          />
-          <Route
-            path="/my-training/courses/:id"
+            path="/courses/:id/details"
             element={<DummyParticipantPage />}
           />
         </Routes>
@@ -64,14 +59,11 @@ describe('page: AcceptInvite', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/my-training/accept-invite/course-id`]}>
+      <MemoryRouter initialEntries={[`/accept-invite/course-id`]}>
         <Routes>
+          <Route path="/accept-invite/:id" element={<AcceptInvite />} />
           <Route
-            path="/my-training/accept-invite/:id"
-            element={<AcceptInvite />}
-          />
-          <Route
-            path="/my-training/courses/:id"
+            path="/courses/:id/details"
             element={<p>Participant page</p>}
           />
         </Routes>
