@@ -5,15 +5,16 @@ import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 
 export const useFetcher = () => {
-  const { token, activeRole } = useAuth()
+  const { getJWT, activeRole } = useAuth()
 
   return useCallback(
-    function <T, V = Variables>(
+    async function <T, V = Variables>(
       query: RequestDocument,
       variables?: V
     ): Promise<T> {
+      const token = await getJWT()
       return gqlRequest(query, variables, { token, role: activeRole })
     },
-    [token, activeRole]
+    [getJWT, activeRole]
   )
 }

@@ -23,7 +23,14 @@ describe('context: Auth', () => {
   it('returns expected shape', async () => {
     const { result, waitForNextUpdate } = render()
 
-    const expectedKeys = ['loading', 'login', 'logout', 'changeRole', 'acl']
+    const expectedKeys = [
+      'loading',
+      'login',
+      'logout',
+      'getJWT',
+      'changeRole',
+      'acl',
+    ]
 
     // On first render we haven't loaded the user yet
     expect(Object.keys(result.current)).toStrictEqual(expectedKeys)
@@ -32,7 +39,6 @@ describe('context: Auth', () => {
 
     // After auto-signin we should have the user data
     expect(Object.keys(result.current)).toStrictEqual([
-      'token',
       'profile',
       'organizationIds',
       'defaultRole',
@@ -48,25 +54,24 @@ describe('context: Auth', () => {
 
     const { result, waitForNextUpdate } = render()
     expect(result.current.loading).toBe(true)
-    expect(result.current.token).toBeUndefined()
+    expect(result.current.profile).toBeUndefined()
 
     await waitForNextUpdate()
     expect(result.current.loading).toBe(false)
-    expect(result.current.token).toBeUndefined()
+    expect(result.current.profile).toBeUndefined()
   })
 
   it('sets user and profile data as expected', async () => {
-    const { token, profile, claims } = defaultCognitoProfile
+    const { profile, claims } = defaultCognitoProfile
     const roles = claims['x-hasura-allowed-roles']
 
     const { result, waitForNextUpdate } = render()
 
-    expect(result.current.token).toBeUndefined()
+    expect(result.current.profile).toBeUndefined()
     expect(result.current.profile).toBeUndefined()
 
     await waitForNextUpdate()
 
-    expect(result.current.token).toBe(token)
     expect(result.current.profile).toStrictEqual(profile)
     expect(result.current.defaultRole).toBe(RoleName.USER)
     expect(result.current.activeRole).toBe(RoleName.USER)
@@ -140,7 +145,7 @@ describe('context: Auth', () => {
       const { result, waitForNextUpdate } = render()
       await waitForNextUpdate()
       await act(result.current.logout)
-      expect(result.current.token).toBeUndefined()
+      expect(result.current.profile).toBeUndefined()
 
       mockCognitoToProfile({ profile: { email } })
       await act(async () => {
@@ -199,7 +204,6 @@ describe('context: Auth', () => {
       const { result, waitForNextUpdate } = render()
       await waitForNextUpdate()
 
-      expect(result.current.token).toBeTruthy()
       expect(result.current.profile?.id).toBeTruthy()
       expect(result.current.activeRole).toBe(RoleName.USER)
       expect(localStorage.getItem(key)).toBe(RoleName.USER)
@@ -207,7 +211,6 @@ describe('context: Auth', () => {
       await act(result.current.logout)
 
       expect(Auth.signOut).toBeCalledWith()
-      expect(result.current.token).toBeUndefined()
       expect(result.current.profile).toBeUndefined()
       expect(result.current.activeRole).toBeUndefined()
 

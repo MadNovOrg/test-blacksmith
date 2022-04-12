@@ -22,5 +22,5 @@ export default async function (user: CognitoUser) {
     { token }
   )
 
-  return { profile: profile ?? undefined, claims, token }
+  return { profile: profile ?? undefined, claims }
 }

@@ -45,6 +45,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     setState({})
   }, [])
 
+  const getJWT = useCallback(async () => {
+    const session = await Auth.currentSession()
+    return session.getIdToken().getJwtToken()
+  }, [])
+
   const changeRole = useCallback(
     (activeRole: RoleName) => {
       if (!state.profile) return state.activeRole
@@ -63,9 +68,10 @@ export const AuthProvider: React.FC = ({ children }) => {
       loading,
       login,
       logout,
+      getJWT,
       changeRole,
     })
-  }, [login, logout, changeRole, state, loading])
+  }, [login, logout, getJWT, changeRole, state, loading])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

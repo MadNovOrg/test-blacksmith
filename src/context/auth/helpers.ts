@@ -16,7 +16,7 @@ export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
   try {
-    const { profile, claims, token = '' } = await cognitoToProfile(user)
+    const { profile, claims } = await cognitoToProfile(user)
 
     if (!profile) {
       throw Error(`No profile for ${claims?.['x-hasura-user-id'] ?? 'unknown'}`)
@@ -33,7 +33,6 @@ export async function fetchUserProfile(
     const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
 
     return {
-      token,
       profile,
       organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
       defaultRole,

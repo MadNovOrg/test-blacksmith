@@ -40,6 +40,7 @@ export const defaultProviders: Providers = {
     login: jest.fn().mockResolvedValue(undefined),
     logout: jest.fn().mockResolvedValue(undefined),
     changeRole: jest.fn().mockResolvedValue(undefined),
+    getJWT: jest.fn().mockResolvedValue(undefined),
     loading: false,
     defaultRole: RoleName.USER,
     allowedRoles: new Set([RoleName.USER]),
