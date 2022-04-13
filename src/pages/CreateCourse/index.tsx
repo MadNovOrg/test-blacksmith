@@ -5,6 +5,7 @@ import { Outlet, useLocation, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 import { CourseType } from '@app/types'
@@ -31,32 +32,36 @@ export const CreateCourse = () => {
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
-        <Box mb={2}>
-          <BackButton
-            label={t('pages.create-course.back-button-text')}
-            to="/courses"
-          />
-        </Box>
         <Box display="flex">
           <Box width={400} display="flex" flexDirection="column" pr={4}>
-            <Box mb={7}>
-              <Typography variant="h2" mb={2}>
-                {t(`pages.create-course.${courseType}-course-title`)}
-              </Typography>
+            <Sticky top={20}>
+              <Box mb={2}>
+                <BackButton
+                  label={t('pages.create-course.back-button-text')}
+                  to="/courses"
+                />
+              </Box>
+              <Box mb={7}>
+                <Typography variant="h2" mb={2}>
+                  {t(`pages.create-course.${courseType}-course-title`)}
+                </Typography>
 
-              <Typography color={theme.palette.grey[700]}>
-                {t('pages.create-course.validation-notice')}
-              </Typography>
-            </Box>
+                <Typography color={theme.palette.grey[700]}>
+                  {t('pages.create-course.validation-notice')}
+                </Typography>
+              </Box>
 
-            <CreateCourseSteps
-              completedSteps={completedSteps}
-              type={courseType}
-            />
+              <CreateCourseSteps
+                completedSteps={completedSteps}
+                type={courseType}
+              />
+            </Sticky>
           </Box>
 
           <Box flex={1}>
-            <Outlet />
+            <Box mt={8}>
+              <Outlet />
+            </Box>
           </Box>
         </Box>
       </Container>

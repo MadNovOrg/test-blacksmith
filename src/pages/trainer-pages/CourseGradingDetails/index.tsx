@@ -1,8 +1,6 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   Container,
   Stack,
@@ -10,9 +8,11 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 
+import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Sticky } from '@app/components/Sticky'
 import useCourse from '@app/hooks/useCourse'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
@@ -23,7 +23,6 @@ import { CourseGradingSteps } from './CourseGradingSteps'
 export const CourseGradingDetails = () => {
   const { id: courseId } = useParams()
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const location = useLocation()
 
   const completedSteps = !location.pathname.includes('modules')
@@ -52,33 +51,29 @@ export const CourseGradingDetails = () => {
         ) : null}
         {course ? (
           <>
-            <Box mb={2}>
-              <Button
-                variant="text"
-                startIcon={<ArrowBackIcon />}
-                sx={{ marginBottom: 2 }}
-                onClick={() =>
-                  navigate(
-                    `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
-                  )
-                }
-              >
-                {t('pages.course-grading-details.back-button-text')}
-              </Button>
-            </Box>
             <Box display="flex">
               <Box width={400} display="flex" flexDirection="column" pr={4}>
-                <Typography variant="h2" mb={2}>
-                  {t('pages.course-grading-details.title')}
-                </Typography>
-                <Typography variant="h3" mb={5}>
-                  {course?.name}
-                </Typography>
-                <CourseGradingSteps completedSteps={completedSteps} />
+                <Sticky top={20}>
+                  <Box mb={2}>
+                    <BackButton
+                      to={`/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`}
+                      label={t('pages.course-grading-details.back-button-text')}
+                    />
+                  </Box>
+                  <Typography variant="h2" mb={2}>
+                    {t('pages.course-grading-details.title')}
+                  </Typography>
+                  <Typography variant="h3" mb={5}>
+                    {course?.name}
+                  </Typography>
+                  <CourseGradingSteps completedSteps={completedSteps} />
+                </Sticky>
               </Box>
 
               <Box flex={1}>
-                <Outlet />
+                <Box mt={8}>
+                  <Outlet />
+                </Box>
               </Box>
             </Box>
           </>
