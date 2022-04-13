@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 
-import { ModuleGroup } from './data/types'
+import { CourseTableRow, ModuleGroup } from './data/types'
 import { stateFilePath } from './hooks/global-setup'
 
 type KeyValue = {
@@ -21,6 +21,15 @@ export const getAdminIdToken: () => string = () => {
 export const sortModulesByName = (a: ModuleGroup, b: ModuleGroup) => {
   if (a.name < b.name) return -1
   if (a.name > b.name) return 1
+  return 0
+}
+
+export const sortCoursesByAllFields = (
+  a: CourseTableRow,
+  b: CourseTableRow
+) => {
+  if (JSON.stringify(a) < JSON.stringify(b)) return -1
+  if (JSON.stringify(a) > JSON.stringify(b)) return 1
   return 0
 }
 

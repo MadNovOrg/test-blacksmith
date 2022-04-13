@@ -3,7 +3,8 @@ import { expect, Locator, Page } from '@playwright/test'
 import { UiTable } from '../../components/UiTable'
 import { BASE_URL } from '../../constants'
 import { toCourseTableRow } from '../../data/mappings'
-import { Course } from '../../data/types'
+import { Course, CourseTableRow } from '../../data/types'
+import { sortCoursesByAllFields as rowsByAllFields } from '../../util'
 import { BasePage } from '../BasePage'
 
 import { CourseBuilderPage } from './CourseBuilderPage'
@@ -32,10 +33,13 @@ export class MyCoursesPage extends BasePage {
     await this.coursesTable.waitToLoad()
   }
 
+  // compares the courses table rows ignoring the order
   async checkRows(courses: Course[]) {
     await expect(this.coursesTable.rows).toHaveCount(courses.length)
     const expectedRows = courses.map(toCourseTableRow)
-    const actualRows = await this.coursesTable.getRows()
+    expectedRows.sort(rowsByAllFields)
+    const actualRows = (await this.coursesTable.getRows()) as CourseTableRow[]
+    actualRows.sort(rowsByAllFields)
     expect(actualRows).toEqual(expectedRows)
   }
 
@@ -50,22 +54,42 @@ export class MyCoursesPage extends BasePage {
     }
   }
 
-  async clickCourseName(name: string): Promise<CourseBuilderPage> {
-    const cell = await this.coursesTable.getCellWithText('Course Name', name)
-    await cell.locator('a').click()
+  async clickCourseBuildButton(courseId: number): Promise<CourseBuilderPage> {
+    const cell = await this.coursesTable.getCell(
+      'Course Name',
+      async cell => {
+        return (await cell.locator('a').getAttribute('href')).includes(
+          `/${courseId}/`
+        )
+      },
+      ''
+    )
+    await cell.locator('button').click()
     return new CourseBuilderPage(this.page)
   }
 
-  async clickCourseManageButton(name: string): Promise<CourseDetailsPage> {
-    const cell = await this.coursesTable.getCell('Course Name', name, '')
+  async clickCourseManageButton(courseId: number): Promise<CourseDetailsPage> {
+    const cell = await this.coursesTable.getCell(
+      'Course Name',
+      async cell => {
+        return (await cell.locator('a').getAttribute('href')).includes(
+          `/${courseId}/`
+        )
+      },
+      ''
+    )
     await cell.locator('button').click()
     return new CourseDetailsPage(this.page)
   }
 
-  async checkCourseStatus(courseName: string, status: string) {
+  async checkCourseStatus(courseId: number, status: string) {
     const cell = await this.coursesTable.getCell(
       'Course Name',
-      courseName,
+      async cell => {
+        return (await cell.locator('a').getAttribute('href')).includes(
+          `/${courseId}/`
+        )
+      },
       'Status'
     )
     await expect(cell).toHaveText(status)

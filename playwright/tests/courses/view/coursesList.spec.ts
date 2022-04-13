@@ -14,7 +14,8 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const test = base.extend<{
   coursesToView: Course[]
-  courseToSearch: Course
+  courseSearchText: string
+  searchResults: Course[]
   oneTwoLevelCourses: Course[]
 }>({
   coursesToView: async ({}, use) => {
@@ -22,11 +23,15 @@ const test = base.extend<{
     const courses = await getTrainerCourses(users.trainerWithOrg.email)
     await use(courses)
   },
-  courseToSearch: async ({}, use) => {
-    const course = COURSES_TO_VIEW[0]
-    await makeSureTrainerHasCourses([course], users.trainerWithOrg.email)
+  courseSearchText: async ({}, use) => {
+    await use(COURSES_TO_VIEW[0].name.slice(1).toLocaleLowerCase())
+  },
+  searchResults: async ({ courseSearchText }, use) => {
+    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
     const courses = await getTrainerCourses(users.trainerWithOrg.email)
-    await use(courses.find(c => c.name === course.name))
+    await use(
+      courses.filter(c => c.name.toLocaleLowerCase().includes(courseSearchText))
+    )
   },
   oneTwoLevelCourses: async ({}, use) => {
     await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
@@ -46,12 +51,11 @@ test('my courses view @smoke', async ({ page, coursesToView }) => {
   await myCoursesPage.checkRows(coursesToView)
 })
 
-test('my courses search', async ({ page, courseToSearch }) => {
-  const searchString = courseToSearch.name.slice(1)
+test('my courses search', async ({ page, courseSearchText, searchResults }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(searchString)
-  await myCoursesPage.checkRows([courseToSearch])
+  await myCoursesPage.searchCourse(courseSearchText)
+  await myCoursesPage.checkRows(searchResults)
 })
 
 test('my courses filter', async ({ page, oneTwoLevelCourses }) => {

@@ -9,6 +9,7 @@ import {
   insertCourse,
   insertCourseModules,
 } from '../../../api/hasura-api'
+import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { MODULES_BY_LEVEL } from '../../../data/modules'
 import { Course } from '../../../data/types'
@@ -36,6 +37,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('trainer') })
 
 test('course invites', async ({ page, course }) => {
+  test.skip(TARGET_ENV === 'local')
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   const courseDetailsPage = await myCoursesPage.clickCourseManageButton(
