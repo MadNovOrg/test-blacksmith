@@ -17,9 +17,9 @@ import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import useCourse from '@app/hooks/useCourse'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
+import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
-import { CourseCertifications } from '@app/pages/TrainerBase/components/CourseDetails/components/CourseCertifications'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {

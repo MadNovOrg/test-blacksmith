@@ -129,3 +129,13 @@ export const VENUE = gql`
     googlePlacesId
   }
 `
+
+export const CERTIFICATE = gql`
+  fragment Certificate on course_certificate {
+    id
+    createdAt
+    updatedAt
+    number
+    expiryDate
+  }
+`

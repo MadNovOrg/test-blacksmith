@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { AdminPage } from '@app/pages/admin'
+import { Certifications } from '@app/pages/admin-pages/Certifications'
 import Contacts from '@app/pages/admin/components/Contacts'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { Plans } from '@app/pages/admin/components/plans'
@@ -40,6 +41,8 @@ const TTAdminRoutes = () => {
         <Route path="trainees" element={<Trainees />} />
         <Route path="plans" element={<Plans />} />
       </Route>
+
+      <Route path="certifications" element={<Certifications />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

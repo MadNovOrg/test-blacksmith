@@ -4,7 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { CertificationDetails } from '@app/pages/components/CertificationDetails'
+import { CertificationDetails } from '@app/components/CertificationDetails'
 
 type MyCertificationsProps = unknown
 

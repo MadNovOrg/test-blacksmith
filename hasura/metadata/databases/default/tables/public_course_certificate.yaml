@@ -6,7 +6,9 @@ configuration:
   custom_column_names:
     course_id: courseId
     course_participant_id: courseParticipantId
+    created_at: createdAt
     expiry_date: expiryDate
+    updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
 - name: course

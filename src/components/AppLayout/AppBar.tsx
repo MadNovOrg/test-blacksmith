@@ -64,6 +64,11 @@ export const AppBar = () => {
             <Link component={StyledNavLink} to="/community">
               {t('community')}
             </Link>
+            {acl.canViewCertifications() && (
+              <Link component={StyledNavLink} to="/certifications">
+                {t('common.certifications')}
+              </Link>
+            )}
           </Box>
           <Box
             sx={{

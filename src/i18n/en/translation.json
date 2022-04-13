@@ -192,7 +192,11 @@
       "cert-error": "Error generating certificate",
       "cert-loading": "Loading certificate...",
       "completed-message": "Has successfully completed the following Team teach course:"
-    }
+    },
+    "items": "items",
+    "from": "From",
+    "to": "To",
+    "date-range": "Date range"
   },
   "components": {
     "not-found": {
@@ -298,6 +302,21 @@
       "placeholder": "Organisation name",
       "min-chars": "Start typing to get suggestions",
       "no-results": "No organisations found"
+    },
+    "certification-list": {
+      "title": "Certifications",
+      "download-selected": "Download selected ({{ number }})",
+      "download-all-certifications": "Download all certifications",
+      "grade": "Grade",
+      "certificate": "Certificate",
+      "view-certificate": "View certificate",
+      "contact": "Contact",
+      "name": "Name",
+      "status": "Status",
+      "statuses": {
+        "expired": "Expired",
+        "active": "Active"
+      }
     }
   },
   "pages": {
@@ -422,12 +441,7 @@
           "trainer-feedback": "Trainer Feedback"
         },
         "certifications": {
-          "title": "Certifications",
-          "download-selected": "Download selected ({{ number }})",
-          "download-all-certifications": "Download all certifications",
-          "grade": "Grade",
-          "certificate": "Certificate",
-          "view-certificate": "View certificate"
+          "title": "Certifications"
         }
       }
     },
