@@ -1,5 +1,7 @@
 import { gql } from 'graphql-request'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
+
+import { LoadingStatus } from '@app/util'
 
 import { useFetcher } from './use-fetcher'
 
@@ -13,22 +15,31 @@ const QUERY = gql`
   }
 `
 
-export default function useZoomMeetingLink(): string {
+export default function useZoomMeetingLink(): {
+  meetingUrl: string
+  generateLink: () => void
+  status: LoadingStatus
+} {
   const fetcher = useFetcher()
 
   const [meetingUrl, setMeetingUrl] = useState('')
+  const [status, setStatus] = useState(LoadingStatus.IDLE)
 
-  useEffect(() => {
-    async function generateLink() {
-      const data = await fetcher<ResponseType>(QUERY)
-
-      if (data?.createZoomMeeting?.joinUrl) {
-        setMeetingUrl(data.createZoomMeeting.joinUrl)
-      }
+  const generateLink = useCallback(async () => {
+    if (meetingUrl) {
+      return meetingUrl
     }
 
-    generateLink()
-  }, [fetcher])
+    setStatus(LoadingStatus.FETCHING)
 
-  return meetingUrl
+    const data = await fetcher<ResponseType>(QUERY)
+
+    setStatus(LoadingStatus.SUCCESS)
+
+    if (data?.createZoomMeeting?.joinUrl) {
+      setMeetingUrl(data.createZoomMeeting.joinUrl)
+    }
+  }, [fetcher, meetingUrl])
+
+  return { meetingUrl, generateLink, status }
 }

@@ -2,6 +2,8 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
+import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
+import { LoadingStatus } from '@app/util'
 
 import { render, userEvent, screen, waitFor } from '@test/index'
 
@@ -14,10 +16,16 @@ jest.mock('@app/components/VenueSelector', () => ({
 jest.mock('@app/hooks/useZoomMeetingLink')
 
 const VenueSelectorMocked = jest.mocked(VenueSelector)
+const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingLink)
 
 describe('component: CreateCourseForm', () => {
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>test</p>)
+    useZoomMeetingUrlMocked.mockReturnValue({
+      meetingUrl: '',
+      generateLink: jest.fn(),
+      status: LoadingStatus.SUCCESS,
+    })
   })
 
   it('conditionally renders assign assists for indirect course type', async () => {

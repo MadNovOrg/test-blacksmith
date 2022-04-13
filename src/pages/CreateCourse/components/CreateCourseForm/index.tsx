@@ -23,7 +23,7 @@ import {
   ResponseType,
 } from '@app/queries/courses/insert-course'
 import theme from '@app/theme'
-import { CourseTrainerType, CourseType } from '@app/types'
+import { CourseDeliveryType, CourseTrainerType, CourseType } from '@app/types'
 import {
   generateCourseName,
   getNumberOfAssistants,
@@ -121,7 +121,7 @@ export const CreateCourseForm = () => {
             ...(courseData.usesAOL
               ? { aolCostOfCourse: courseData.courseCost }
               : null),
-            ...(assistants.length && profile?.id
+            ...(profile?.id
               ? {
                   trainers: {
                     data: [
@@ -142,7 +142,12 @@ export const CreateCourseForm = () => {
                 {
                   start: courseData.startDateTime,
                   end: courseData.endDateTime,
-                  virtualLink: courseData.zoomMeetingUrl,
+                  virtualLink: [
+                    CourseDeliveryType.VIRTUAL,
+                    CourseDeliveryType.MIXED,
+                  ].includes(courseData.deliveryType)
+                    ? courseData.zoomMeetingUrl
+                    : undefined,
                   venue_id: courseData.venueId,
                   name: 'name', // @todo cleanup the data model for these two fields
                   type: 'PHYSICAL',

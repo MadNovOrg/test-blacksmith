@@ -1,7 +1,9 @@
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 
+import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
 import { CourseLevel, CourseType } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, within, waitFor } from '@test/index'
 
@@ -16,10 +18,16 @@ jest.mock('../VenueSelector', () => ({
 jest.mock('@app/hooks/useZoomMeetingLink')
 
 const VenueSelectorMocked = jest.mocked(VenueSelector)
+const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingUrl)
 
 describe('component: CourseForm', () => {
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>venue selector mock</p>)
+    useZoomMeetingUrlMocked.mockReturnValue({
+      meetingUrl: '',
+      status: LoadingStatus.SUCCESS,
+      generateLink: jest.fn(),
+    })
   })
 
   it('allows LEVEL 1 course to be of any delivery type', async () => {
@@ -127,7 +135,7 @@ describe('component: CourseForm', () => {
     })
 
     expect(
-      screen.getByText('End date must be before the start date')
+      screen.getByText('End date must be after the start date')
     ).toBeInTheDocument()
   })
 

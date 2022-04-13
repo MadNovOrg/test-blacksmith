@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
   InputAdornment,
+  CircularProgress,
 } from '@mui/material'
 import { Box, styled } from '@mui/system'
 import { setHours, setMinutes } from 'date-fns'
@@ -34,7 +35,7 @@ import {
   Profile,
   Venue,
 } from '@app/types'
-import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
+import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -79,7 +80,11 @@ const CourseForm: React.FC<Props> = ({
   type = CourseType.OPEN,
 }) => {
   const { t } = useTranslation()
-  const zoomMeetingUrl = useZoomMeetingLink()
+  const {
+    meetingUrl: zoomMeetingUrl,
+    generateLink: generateZoomLink,
+    status: zoomLinkStatus,
+  } = useZoomMeetingLink()
 
   const [startTime, setStartTime] = useState<Date | null>(null)
   const [endTime, setEndTime] = useState<Date | null>(null)
@@ -221,6 +226,11 @@ const CourseForm: React.FC<Props> = ({
   const courseLevel = formValues.courseLevel
   const usesAOL = type === CourseType.INDIRECT ? formValues.usesAOL : false
 
+  const hasZoomMeetingUrl = [
+    CourseDeliveryType.VIRTUAL,
+    CourseDeliveryType.MIXED,
+  ].includes(deliveryType)
+
   useEffect(() => {
     onChange(formValues, formState.isValid)
   }, [formState, getValues, onChange, formValues])
@@ -231,7 +241,8 @@ const CourseForm: React.FC<Props> = ({
 
   useEffect(() => {
     setValue('zoomMeetingUrl', zoomMeetingUrl)
-  }, [zoomMeetingUrl, setValue])
+    trigger('zoomMeetingUrl')
+  }, [zoomMeetingUrl, setValue, trigger])
 
   useEffect(() => {
     const startDate = getValues('startDateTime')
@@ -262,6 +273,12 @@ const CourseForm: React.FC<Props> = ({
       trigger('endDateTime')
     }
   }, [endTime, getValues, setValue, trigger])
+
+  useEffect(() => {
+    if (hasZoomMeetingUrl) {
+      generateZoomLink()
+    }
+  }, [hasZoomMeetingUrl, generateZoomLink])
 
   const handleStartDateTimeChange = (date: Date | null) => {
     let dateToSet = date
@@ -478,18 +495,32 @@ const CourseForm: React.FC<Props> = ({
           </>
         ) : null}
 
-        {[CourseDeliveryType.VIRTUAL, CourseDeliveryType.MIXED].includes(
-          deliveryType
-        ) ? (
+        {hasZoomMeetingUrl ? (
           <TextField
             fullWidth
             variant="filled"
             value={zoomMeetingUrl}
             disabled
-            helperText={errors.zoomMeetingUrl?.message}
-            error={Boolean(errors.zoomMeetingUrl?.message)}
+            helperText={
+              zoomLinkStatus === LoadingStatus.ERROR
+                ? errors.zoomMeetingUrl?.message
+                : null
+            }
+            error={Boolean(
+              errors.zoomMeetingUrl?.message &&
+                zoomLinkStatus === LoadingStatus.ERROR
+            )}
             sx={{ marginTop: 2 }}
             label={t('components.course-form.zoom-meeting-url-label') as string}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  {zoomLinkStatus === LoadingStatus.FETCHING ? (
+                    <CircularProgress size={20} />
+                  ) : null}
+                </InputAdornment>
+              ),
+            }}
           />
         ) : null}
 
@@ -666,16 +697,12 @@ const CourseForm: React.FC<Props> = ({
               variant="filled"
               fullWidth
               type="number"
-              {...register('maxParticipants')}
+              {...register('maxParticipants', {
+                deps: ['minParticipants'],
+              })}
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
-              onBlur={e => {
-                register('maxParticipants').onBlur(e)
-                if (hasMinParticipantField) {
-                  trigger('minParticipants')
-                }
-              }}
             />
           </Grid>
         </Grid>
