@@ -139,10 +139,14 @@ const CourseForm: React.FC<Props> = ({
                 t('components.course-form.zoom-meeting-url-required')
               ),
           }),
-        startDateTime: yup.date().required(),
+        startDateTime: yup
+          .date()
+          .nullable()
+          .required(t('components.course-form.start-date-required')),
         endDateTime: yup
           .date()
-          .required()
+          .nullable()
+          .required(t('components.course-form.end-date-required'))
           .min(
             yup.ref('startDateTime'),
             t('components.course-form.end-date-before-start-date')
@@ -151,6 +155,9 @@ const CourseForm: React.FC<Props> = ({
           ? {
               minParticipants: yup
                 .number()
+                .typeError(
+                  t('components.course-form.min-participants-required')
+                )
                 .positive()
                 .required(t('components.course-form.min-participants-required'))
                 .lessThan(
@@ -161,6 +168,7 @@ const CourseForm: React.FC<Props> = ({
           : null),
         maxParticipants: yup
           .number()
+          .typeError(t('components.course-form.min-participants-required'))
           .positive()
           .required(t('components.course-form.min-participants-required')),
         usesAOL: yup.boolean(),
@@ -266,7 +274,7 @@ const CourseForm: React.FC<Props> = ({
       )
     }
 
-    setValue('startDateTime', dateToSet)
+    setValue('startDateTime', dateToSet, { shouldValidate: true })
 
     if (endDate) {
       trigger('endDateTime')
@@ -283,7 +291,7 @@ const CourseForm: React.FC<Props> = ({
       )
     }
 
-    setValue('endDateTime', dateToSet)
+    setValue('endDateTime', dateToSet, { shouldValidate: true })
   }
 
   useEffect(() => {
@@ -521,7 +529,12 @@ const CourseForm: React.FC<Props> = ({
                 value={startTime}
                 onChange={value => setStartTime(value)}
                 renderInput={params => (
-                  <TextField variant="filled" {...params} fullWidth />
+                  <TextField
+                    variant="filled"
+                    {...params}
+                    fullWidth
+                    error={Boolean(errors.startDateTime)}
+                  />
                 )}
               />
             </Grid>
@@ -656,7 +669,8 @@ const CourseForm: React.FC<Props> = ({
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
-              onBlur={() => {
+              onBlur={e => {
+                register('maxParticipants').onBlur(e)
                 if (hasMinParticipantField) {
                   trigger('minParticipants')
                 }
