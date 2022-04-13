@@ -115,6 +115,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.7",
     "lint-staged": "^12.3.4",
+    "mock-match-media": "^0.3.0",
     "prettier": "^2.5.1",
     "storybook-builder-vite": "^0.1.18",
     "ts-essentials": "9.1.2",

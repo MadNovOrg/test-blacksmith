@@ -57,7 +57,7 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
   return addressPart?.long_name || ''
 }
 
-const VenueSelector: React.FC<VenueSelectorProps> = function ({
+export const VenueSelector: React.FC<VenueSelectorProps> = function ({
   value,
   onChange,
   sx,
@@ -297,5 +297,3 @@ const VenueSelector: React.FC<VenueSelectorProps> = function ({
     </>
   )
 }
-
-export default VenueSelector

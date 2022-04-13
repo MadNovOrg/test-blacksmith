@@ -7,7 +7,7 @@ import { QUERY } from '@app/queries/profile/find-profiles'
 import { render, screen, userEvent, within, waitFor } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
-import ProfileSelector from '.'
+import { ProfileSelector } from '.'
 
 jest.mock('@app/hooks/use-fetcher')
 

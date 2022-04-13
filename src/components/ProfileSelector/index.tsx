@@ -27,7 +27,7 @@ export type ProfileSelectorProps = {
   disabled?: boolean
 }
 
-const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
+export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
   value,
   onChange,
   orgId,
@@ -135,5 +135,3 @@ const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
     />
   )
 }
-
-export default ProfileSelector

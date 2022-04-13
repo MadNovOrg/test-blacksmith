@@ -283,6 +283,7 @@
       "min-participants-less-than": "Minimum number of attendees must be less than the maximum number of attendees",
       "max-participants-required": "Maximum number of attendees is required field",
       "venue-required": "Venue is required field",
+      "zoom-meeting-url-label": "Zoom meeting url",
       "zoom-meeting-url-required": "Zoom meeting URL is required field",
       "contact-person-placeholder": "Contact name",
       "aol-title": "Area Operating License (AOL)",

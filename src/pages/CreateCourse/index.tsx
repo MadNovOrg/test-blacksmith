@@ -5,20 +5,28 @@ import { Outlet, useLocation, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 import { CourseType } from '@app/types'
+
+import { NotFound } from '../common/NotFound'
 
 import { CreateCourseSteps } from './components/CreateCourseSteps'
 
 export const CreateCourse = () => {
   const location = useLocation()
   const [searchParams] = useSearchParams()
+  const { acl } = useAuth()
 
   const courseType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
 
   const completedSteps = !location.pathname.includes('assign-trainer')
     ? []
     : ['course-details']
+
+  if (!acl.canCreateCourse(courseType)) {
+    return <NotFound />
+  }
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>

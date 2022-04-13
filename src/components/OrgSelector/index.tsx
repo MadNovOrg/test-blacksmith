@@ -25,7 +25,7 @@ export type OrgSelectorProps = {
   placeholder?: string
 }
 
-const OrgSelector: React.FC<OrgSelectorProps> = function ({
+export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   value,
   onChange,
   sx,
@@ -122,5 +122,3 @@ const OrgSelector: React.FC<OrgSelectorProps> = function ({
     />
   )
 }
-
-export default OrgSelector

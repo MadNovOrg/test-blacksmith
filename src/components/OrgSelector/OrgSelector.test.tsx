@@ -7,7 +7,7 @@ import { QUERY } from '@app/queries/organization/get-organizations'
 import { render, screen, userEvent, within, waitFor } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
-import OrgSelector from '.'
+import { OrgSelector } from '.'
 
 jest.mock('@app/hooks/use-fetcher')
 

@@ -36,9 +36,9 @@ import {
 } from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK } from '@app/util'
 
-import OrgSelector from '../OrgSelector'
-import ProfileSelector from '../ProfileSelector'
-import VenueSelector from '../VenueSelector'
+import { OrgSelector } from '../OrgSelector'
+import { ProfileSelector } from '../ProfileSelector'
+import { VenueSelector } from '../VenueSelector'
 
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 
@@ -489,6 +489,7 @@ const CourseForm: React.FC<Props> = ({
             helperText={errors.zoomMeetingUrl?.message}
             error={Boolean(errors.zoomMeetingUrl?.message)}
             sx={{ marginTop: 2 }}
+            label={t('components.course-form.zoom-meeting-url-label') as string}
           />
         ) : null}
 

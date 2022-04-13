@@ -183,7 +183,6 @@ export const CreateCourseForm = () => {
 
   const handleCourseFormChange = useCallback(
     (data: FormValues, isValid: boolean) => {
-      console.log({ data })
       setCourseData(data)
       setCourseDataValid(isValid)
     },

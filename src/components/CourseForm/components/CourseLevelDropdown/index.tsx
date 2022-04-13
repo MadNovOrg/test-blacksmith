@@ -65,9 +65,18 @@ export const CourseLevelDropdown: React.FC<Props> = ({
   }, [deliveryType, courseType, t])
 
   return (
-    <Select value={value} onChange={onChange}>
+    <Select
+      value={value}
+      onChange={onChange}
+      data-testid="course-level-select"
+      id="course-level"
+    >
       {options.map(option => (
-        <MenuItem key={option.value} value={option.value}>
+        <MenuItem
+          key={option.value}
+          value={option.value}
+          data-testid={`course-level-option-${option.value}`}
+        >
           {option.label}
         </MenuItem>
       ))}
