@@ -15,7 +15,11 @@
     "errors": {
       "loading-participants": "There was an error loading course participants",
       "loading-course": "There was an error loading a course",
-      "course-not-found": "Course not found"
+      "course-not-found": "Course not found",
+      "generic": {
+        "record-not-found": "Record not found.",
+        "loading-error": "There was an error loading data."
+      }
     },
     "home": "Home",
     "courses": "Courses",

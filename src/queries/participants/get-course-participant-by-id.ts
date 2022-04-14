@@ -2,10 +2,13 @@ import { gql } from 'graphql-request'
 
 import { CourseParticipant } from '@app/types'
 
+import { CERTIFICATE } from '../fragments'
+
 export type ParamsType = { id: string }
 export type ResponseType = { participant: CourseParticipant }
 
 export const QUERY = gql`
+  ${CERTIFICATE}
   query CourseParticipant($id: uuid!) {
     participant: course_participant_by_pk(id: $id) {
       id
@@ -26,6 +29,7 @@ export const QUERY = gql`
         }
       }
       grade
+      dateGraded
       gradingModules {
         id
         completed
@@ -37,6 +41,9 @@ export const QUERY = gql`
             name
           }
         }
+      }
+      certificate {
+        ...Certificate
       }
     }
   }

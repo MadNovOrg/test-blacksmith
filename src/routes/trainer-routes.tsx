@@ -10,6 +10,7 @@ import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
 import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
@@ -43,6 +44,10 @@ const TrainerBaseRoutes = () => {
           <Route
             path="grading/:participantId"
             element={<ParticipantGrading />}
+          />
+          <Route
+            path="certification/:participantId"
+            element={<CourseCertificationDetails />}
           />
           <Route path="evaluation">
             <Route path="submit" element={<TrainerFeedback />} />

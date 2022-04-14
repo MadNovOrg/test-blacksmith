@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
@@ -46,6 +47,7 @@ export const CertificationList: React.FC<CertificationListProps> = ({
   hideTitle,
   columns = ['name', 'contact', 'organization', 'grade'],
 }) => {
+  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const [selectedParticipants, setSelectedParticipants] = useState<
@@ -315,7 +317,9 @@ export const CertificationList: React.FC<CertificationListProps> = ({
                     variant="contained"
                     color="primary"
                     sx={{ ml: 2 }}
-                    onClick={() => downloadCertificates([courseParticipant])}
+                    onClick={() =>
+                      navigate(`../certification/${courseParticipant.id}`)
+                    }
                   >
                     {t('components.certification-list.view-certificate')}
                   </Button>
