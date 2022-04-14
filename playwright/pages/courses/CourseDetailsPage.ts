@@ -58,7 +58,7 @@ export class CourseDetailsPage extends BasePage {
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
     this.invitePopUp = new InviteAttendeesPopUp(this.page)
     this.attendeesTable = new UiTable(
-      this.page.locator('data-testid=attendees-table')
+      this.page.locator('data-testid=attending-table')
     )
   }
 

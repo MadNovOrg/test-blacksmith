@@ -11,14 +11,11 @@ export class CourseParticipantPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.header = new CourseHeader(this.page)
-    this.successMessage = this.page.locator('data-testid=success-message')
+    this.successMessage = this.page.locator('data-testid=success-alert')
   }
 
   async goto(courseId: string) {
-    await super.goto(
-      `${BASE_URL}/my-training/courses/${courseId}`,
-      this.header.courseName
-    )
+    await super.goto(`${BASE_URL}/courses/${courseId}`, this.header.courseName)
   }
 
   async checkSuccessMessage(text: string) {

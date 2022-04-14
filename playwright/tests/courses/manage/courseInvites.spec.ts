@@ -34,14 +34,18 @@ const test = base.extend<{ course: Course }>({
     await deleteCourse(course.id)
   },
 })
-test.use({ storageState: stateFilePath('trainer') })
 
-test('course invites', async ({ page, course }) => {
+test('course invites', async ({ browser, course }) => {
   test.skip(TARGET_ENV === 'local')
+  test.setTimeout(60000)
+  const trainerContext = await browser.newContext({
+    storageState: stateFilePath('trainer'),
+  })
+  const page = await trainerContext.newPage()
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   const courseDetailsPage = await myCoursesPage.clickCourseManageButton(
-    course.name
+    course.id
   )
   await courseDetailsPage.checkInvitesLeftText('12 invites left')
   await courseDetailsPage.clickInviteAttendeesButton()
@@ -50,7 +54,7 @@ test('course invites', async ({ page, course }) => {
   await courseDetailsPage.checkInvitesLeftText('11 invites left')
   await courseDetailsPage.checkAttendingText('0 of 12 attending')
 
-  const otherPage = await page.context().browser().newPage()
+  const otherPage = await browser.newPage()
   const email = await getLatestEmail(users.user1WithOrg.email)
   const emailPage = new EmailPage(otherPage)
   await emailPage.renderContent(email.html)
@@ -58,7 +62,7 @@ test('course invites', async ({ page, course }) => {
   const loginPage = await invitationPage.acceptInvitation()
   await loginPage.logIn(users.user1WithOrg.email, users.user1WithOrg.password)
   const participantPage = new CourseParticipantPage(loginPage.page)
-  participantPage.checkSuccessMessage(
+  await participantPage.checkSuccessMessage(
     'You are now attending this course. Please complete the checklist.'
   )
 
