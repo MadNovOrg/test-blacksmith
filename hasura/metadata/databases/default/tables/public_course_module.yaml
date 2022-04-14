@@ -33,6 +33,23 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
+    - id
+    - created_at
+    - updated_at
+    - module_id
+    - covered
+    - course_id
+    filter:
+      course:
+        _and:
+        - course_type:
+            _eq: OPEN
+        - course_status:
+            _eq: PUBLISHED
+  role: anonymous
+- permission:
+    allow_aggregations: true
+    columns:
     - course_id
     - covered
     - created_at

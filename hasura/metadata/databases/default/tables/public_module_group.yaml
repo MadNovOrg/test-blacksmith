@@ -25,6 +25,17 @@ array_relationships:
         schema: public
 select_permissions:
 - permission:
+    columns:
+    - mandatory
+    - color
+    - course_level
+    - name
+    - created_at
+    - updated_at
+    - id
+    filter: {}
+  role: anonymous
+- permission:
     allow_aggregations: true
     columns:
     - color
