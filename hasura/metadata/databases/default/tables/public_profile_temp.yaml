@@ -1,0 +1,32 @@
+table:
+  schema: public
+  name: profile_temp
+configuration:
+  custom_root_fields: {}
+  comment: null
+  custom_column_names:
+    course_id: courseId
+    job_title: jobTitle
+    given_name: givenName
+    accept_tcs: acceptTnc
+    family_name: familyName
+    created_at: createdAt
+    accept_marketing: acceptMarketing
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - id
+        - email
+        - given_name
+        - family_name
+        - phone
+        - dob
+        - accept_marketing
+        - accept_tcs
+        - sector
+        - job_title
+        - course_id
+        - created_at
+      backend_only: false

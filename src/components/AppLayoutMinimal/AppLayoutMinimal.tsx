@@ -24,10 +24,10 @@ export const AppLayoutMinimal: React.FC<Props> = ({
     >
       <Logo width={80} height={80} />
       <Box
-        mt={5}
+        mt={3}
         bgcolor="common.white"
         py={5}
-        px={10}
+        px={8}
         borderRadius={2}
         width={width}
         position="relative"

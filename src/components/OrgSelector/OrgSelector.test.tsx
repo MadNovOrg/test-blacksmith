@@ -1,7 +1,7 @@
 import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { gqlRequest } from '@app/lib/gql-request'
 import { QUERY } from '@app/queries/organization/get-organizations'
 
 import { render, screen, userEvent, within, waitFor } from '@test/index'
@@ -9,9 +9,8 @@ import { buildOrganization } from '@test/mock-data-utils'
 
 import { OrgSelector } from '.'
 
-jest.mock('@app/hooks/use-fetcher')
-
-const useFetcherMock = jest.mocked(useFetcher)
+jest.mock('@app/lib/gql-request')
+const gqlRequestMock = jest.mocked(gqlRequest)
 
 describe('component: OrgSelector', () => {
   it("doesn't display options initially", () => {
@@ -25,9 +24,8 @@ describe('component: OrgSelector', () => {
 
   it('loads organizations when the user types organization name', async () => {
     const ORG_SEARCH_NAME = 'Organization'
-    const fetcherMock = jest.fn()
 
-    fetcherMock.mockResolvedValue({
+    gqlRequestMock.mockResolvedValue({
       orgs: [
         buildOrganization({
           overrides: {
@@ -37,8 +35,6 @@ describe('component: OrgSelector', () => {
       ],
     })
 
-    useFetcherMock.mockReturnValue(fetcherMock)
-
     render(<OrgSelector onChange={noop} />)
 
     userEvent.type(
@@ -47,8 +43,8 @@ describe('component: OrgSelector', () => {
     )
 
     await waitFor(() => {
-      expect(fetcherMock).toHaveBeenCalledTimes(1)
-      expect(fetcherMock).toHaveBeenCalledWith(QUERY, {
+      expect(gqlRequestMock).toHaveBeenCalledTimes(1)
+      expect(gqlRequestMock).toHaveBeenCalledWith(QUERY, {
         name: `%${ORG_SEARCH_NAME}%`,
       })
       expect(
@@ -59,7 +55,6 @@ describe('component: OrgSelector', () => {
 
   it('calls callback when the user makes the selection', async () => {
     const ORG_SEARCH_NAME = 'Organization'
-    const fetcherMock = jest.fn()
     const onChangeMock = jest.fn()
     const organization = buildOrganization({
       overrides: {
@@ -67,11 +62,9 @@ describe('component: OrgSelector', () => {
       },
     })
 
-    fetcherMock.mockResolvedValue({
+    gqlRequestMock.mockResolvedValue({
       orgs: [organization],
     })
-
-    useFetcherMock.mockReturnValue(fetcherMock)
 
     render(<OrgSelector onChange={onChangeMock} />)
 

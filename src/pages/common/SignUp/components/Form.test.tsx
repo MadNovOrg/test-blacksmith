@@ -2,6 +2,8 @@ import { CognitoUser, CodeDeliveryDetails } from 'amazon-cognito-identity-js'
 import { Auth } from 'aws-amplify'
 import React from 'react'
 
+import { gqlRequest } from '@app/lib/gql-request'
+
 import {
   render,
   screen,
@@ -13,18 +15,24 @@ import {
 
 import { SignUpForm } from './Form'
 
+jest.mock('@app/lib/gql-request')
+
 const defaultProps = {
   onSignUp: jest.fn(),
 }
 
 const AuthMock = jest.mocked(Auth)
+const gqlRequestMock = jest.mocked(gqlRequest)
 
 describe('page: SignUpForm', () => {
+  gqlRequestMock.mockResolvedValue({})
+
   it('renders as expected', async () => {
     const props = { ...defaultProps }
     render(<SignUpForm {...props} />)
 
     expect(screen.getByTestId('signup-form-btn')).toBeInTheDocument()
+    expect(gqlRequestMock).not.toBeCalled()
     expect(AuthMock.signUp).not.toBeCalled()
   })
 
@@ -42,6 +50,7 @@ describe('page: SignUpForm', () => {
     screen.getByText('Confirm Password is required')
     screen.getByText('Accepting our T&C is required')
 
+    expect(gqlRequestMock).not.toBeCalled()
     expect(AuthMock.signUp).not.toBeCalled()
   })
 
@@ -57,6 +66,7 @@ describe('page: SignUpForm', () => {
 
     await waitForText('Please enter a valid email address')
 
+    expect(gqlRequestMock).not.toBeCalled()
     expect(AuthMock.signUp).not.toBeCalled()
   })
 
@@ -73,6 +83,7 @@ describe('page: SignUpForm', () => {
 
       await waitForText('Password must be at least 8 characters')
 
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
 
@@ -88,6 +99,7 @@ describe('page: SignUpForm', () => {
 
       await waitForText('Password must contain at least 1 uppercase letter')
 
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
 
@@ -103,6 +115,7 @@ describe('page: SignUpForm', () => {
 
       await waitForText('Password must contain at least 1 lowercase letter')
 
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
 
@@ -118,6 +131,7 @@ describe('page: SignUpForm', () => {
 
       await waitForText('Password must contain at least 1 number')
 
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
 
@@ -133,6 +147,7 @@ describe('page: SignUpForm', () => {
 
       await waitForText('Password must contain at least 1 special character')
 
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
 
@@ -159,6 +174,7 @@ describe('page: SignUpForm', () => {
       await waitForText('Confirm password must be same as password')
 
       expect(passInput.getAttribute('aria-invalid')).toBe('false')
+      expect(gqlRequestMock).not.toBeCalled()
       expect(AuthMock.signUp).not.toBeCalled()
     })
   })
@@ -202,6 +218,7 @@ describe('page: SignUpForm', () => {
     // Simulate a failure
     AuthMock.signUp.mockRejectedValueOnce({ code: 'SOME_ERROR' })
     userEvent.click(submitBtn)
+    await waitForCalls(gqlRequestMock)
     await waitForCalls(AuthMock.signUp)
     await waitForText('An error occurred. Please try again.')
 
@@ -216,6 +233,16 @@ describe('page: SignUpForm', () => {
     userEvent.click(submitBtn)
     await waitForCalls(AuthMock.signUp)
 
+    expect(gqlRequestMock).toBeCalledWith(expect.any(String), {
+      input: {
+        email,
+        givenName,
+        familyName,
+        acceptMarketing: false,
+        acceptTnc: true,
+      },
+    })
+
     expect(AuthMock.signUp).toBeCalledWith({
       username: email,
       password: pass,
@@ -223,8 +250,6 @@ describe('page: SignUpForm', () => {
         email,
         given_name: givenName,
         family_name: familyName,
-        'custom:accept_marketing': '0',
-        'custom:accept_tcs': '1',
       },
     })
 

@@ -9,7 +9,7 @@ import { debounce } from 'lodash-es'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFetcher } from '@app/hooks/use-fetcher'
+import { gqlRequest } from '@app/lib/gql-request'
 import {
   ParamsType,
   QUERY,
@@ -39,12 +39,11 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
-  const fetcher = useFetcher()
 
   const debouncedQuery = useMemo(
     () =>
       debounce(async query => {
-        const results = await fetcher<ResponseType, ParamsType>(QUERY, {
+        const results = await gqlRequest<ResponseType, ParamsType>(QUERY, {
           name: query,
         })
 
@@ -54,7 +53,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
           setOptions(results.orgs)
         }
       }),
-    [fetcher]
+    []
   )
 
   const handleInputChange = (_: unknown, value: string, reason: string) => {
@@ -95,7 +94,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         onChange(newValue ?? undefined)
       }}
       options={options}
-      getOptionLabel={option => option.name}
+      getOptionLabel={option => option.name || ''}
       noOptionsText={noOptionsText}
       isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={loading}

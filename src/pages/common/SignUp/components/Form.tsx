@@ -12,6 +12,13 @@ import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { gqlRequest } from '@app/lib/gql-request'
+import {
+  MUTATION,
+  ResponseType,
+  ParamsType,
+} from '@app/queries/profile/insert-profile-temp'
+
 import { FormProps, FormInputs, getFormSchema } from '../helpers'
 
 export const SignUpForm: React.FC<FormProps> = ({ onSignUp }) => {
@@ -32,6 +39,16 @@ export const SignUpForm: React.FC<FormProps> = ({ onSignUp }) => {
     setSignUpError('')
 
     try {
+      const input = {
+        email: data.email,
+        givenName: data.givenName,
+        familyName: data.familyName,
+        acceptMarketing: data.marketing,
+        acceptTnc: data.tcs,
+      }
+
+      await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })
+
       const resp = await Auth.signUp({
         username: data.email,
         password: data.password,
@@ -40,8 +57,6 @@ export const SignUpForm: React.FC<FormProps> = ({ onSignUp }) => {
           email: data.email,
           given_name: data.givenName,
           family_name: data.familyName,
-          'custom:accept_marketing': data.marketing ? '1' : '0',
-          'custom:accept_tcs': data.tcs ? '1' : '0',
         },
       })
 

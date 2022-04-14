@@ -46,9 +46,15 @@
     "first-name": "First Name",
     "surname": "Surname",
     "email": "Email",
+    "other": "Other",
+    "sector": "Sector",
+    "select-sector": "Please select a sector to see positions",
+    "position": "Position",
+    "sector-placeholder": "Sector",
     "country-code": "Country Code",
     "phone": "Phone",
     "dob": "Date of Birth",
+    "dob-optional": "Date of Birth (optional)",
     "org-name": "Organization Name",
     "filter-by": " Filter By",
     "level": " Level",
@@ -97,6 +103,7 @@
       "BLENDED": "Blended",
       "VIRTUAL": "Virtual"
     },
+    "marketting-label-short": "I agree to receive marketing materials with information on courses and offers.",
     "course-levels": {
       "LEVEL_1": "Level One",
       "LEVEL_2": "Level Two",
@@ -165,7 +172,8 @@
       "new-password-required": "Please enter a new password",
       "confirm-password-required": "Please re-enter the new password",
       "confirm-password-invalid": "Confirm password must be same as password",
-      "otp-required": "Please enter 6 digit passcode received in email"
+      "otp-required": "Please enter 6 digit passcode received in email",
+      "other-position-required": "Please enter your job position"
     },
     "course-registration": "Course Registration",
     "course-certificate": {

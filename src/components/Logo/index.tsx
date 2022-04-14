@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 import { ReactComponent as LogoPartial } from './logo-color.svg'
@@ -21,5 +22,9 @@ export const Logo: React.FC<LogoProps> = ({
   ...rest
 }) => {
   const Comp = map[variant]
-  return <Comp width={width} height={height} {...rest} />
+  return (
+    <Box display="flex" alignItems="center">
+      <Comp width={width} height={height} {...rest} />
+    </Box>
+  )
 }
