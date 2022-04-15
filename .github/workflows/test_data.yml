@@ -1,0 +1,49 @@
+name: Populate test data
+
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: "Trainer's email"
+        required: true
+        type: string
+      environment:
+        default: 'dev'
+        description: 'Environment - "dev/stg/prod"'
+        required: true
+        type: choice
+        options:
+        - dev
+        - stg
+        - prod
+
+jobs:
+  data:
+    name: Populate test data
+    runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+      DEFAULT_TARGET: 'dev'
+    steps:
+      - name: Set the email and target
+        run: |
+          echo "TRAINER=${{ github.event.inputs.email }}" >> $GITHUB_ENV
+          echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.3.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm set-script prepare "" && npm ci 
+
+      - name: Playwright setup
+        run: npx playwright install chromium
+
+      - name: Playwright tests
+        run: npm run test:e2e:data
