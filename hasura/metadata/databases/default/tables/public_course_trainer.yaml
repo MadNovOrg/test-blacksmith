@@ -40,6 +40,15 @@ select_permissions:
 - permission:
     columns:
     - course_id
+    - status
+    - type
+    - id
+    - profile_id
+    filter: {}
+  role: trainer
+- permission:
+    columns:
+    - course_id
     - id
     - profile_id
     - status
@@ -65,6 +74,9 @@ update_permissions:
     filter: {}
   role: tt-ops
 delete_permissions:
+- permission:
+    filter: {}
+  role: trainer
 - permission:
     filter: {}
   role: tt-ops

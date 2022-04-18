@@ -11,6 +11,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
+import { EditCourse } from '@app/pages/EditCourse'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 
 const TTOpsRoutes = () => {
@@ -26,6 +27,8 @@ const TTOpsRoutes = () => {
             element={<AssignTrainers />}
           />
         </Route>
+
+        <Route path="edit/:id" element={<EditCourse />} />
 
         <Route path=":id">
           <Route path="details" element={<div>TBD</div>} />

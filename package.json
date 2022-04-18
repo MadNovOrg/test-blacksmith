@@ -128,6 +128,7 @@
     "testTimeout": 10000,
     "testEnvironment": "jsdom",
     "coverageReporters": [
+      "lcov",
       "text",
       "text-summary"
     ],

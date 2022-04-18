@@ -2,10 +2,17 @@ import React from 'react'
 import Router from 'react-router-dom'
 
 import useCourse from '@app/hooks/useCourse'
-import { Course, CourseTrainer } from '@app/types'
+import { Course, CourseTrainer, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within, waitForCalls, userEvent } from '@test/index'
+import {
+  render,
+  screen,
+  within,
+  waitForCalls,
+  waitFor,
+  userEvent,
+} from '@test/index'
 import {
   buildCourse,
   buildCourseAssistant,
@@ -39,7 +46,10 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse(undefined, LoadingStatus.FETCHING)
 
-    render(<AssignTrainers />)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
+
     await waitForCalls(mockUseCourse)
 
     expect(mockUseCourse).toBeCalledWith(course.id)
@@ -54,7 +64,9 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse()
 
-    render(<AssignTrainers />)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
     await waitForCalls(mockUseCourse)
 
     expect(mockUseCourse).toBeCalledWith(course.id)
@@ -69,8 +81,9 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse(course)
 
-    render(<AssignTrainers />)
-    await waitForCalls(mockUseCourse)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
 
     expect(mockUseCourse).toBeCalledWith(course.id)
     expect(screen.queryByTestId('AssignTrainers-loading')).toBeNull()
@@ -98,8 +111,9 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse(course)
 
-    render(<AssignTrainers />)
-    await waitForCalls(mockUseCourse)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
 
     const lead = screen.getByTestId('AssignTrainers-lead')
     expect(lead).toBeInTheDocument()
@@ -132,8 +146,9 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse(course)
 
-    render(<AssignTrainers />)
-    await waitForCalls(mockUseCourse)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
 
     const lead = screen.getByTestId('AssignTrainers-lead')
     const leadPicked = within(lead).queryAllByTestId(selectedTestId)
@@ -146,7 +161,9 @@ describe('component: AssignTrainers', () => {
     expect(assistPicked[0]).toHaveTextContent(assistTrainer1.profile.fullName)
     expect(assistPicked[1]).toHaveTextContent(assistTrainer2.profile.fullName)
 
-    expect(screen.getByTestId('AssignTrainers-submit')).not.toBeDisabled()
+    await waitFor(() => {
+      expect(screen.getByTestId('AssignTrainers-submit')).not.toBeDisabled()
+    })
   })
 
   it('submits when form is valid', async () => {
@@ -159,11 +176,14 @@ describe('component: AssignTrainers', () => {
     useParamsMock.mockReturnValue({ courseId: course.id })
     mockUseCourseResponse(course)
 
-    render(<AssignTrainers />)
-    await waitForCalls(mockUseCourse)
+    await waitFor(() => {
+      render(<AssignTrainers />, { auth: { activeRole: RoleName.TT_ADMIN } })
+    })
 
-    const submitBtn = screen.getByTestId('AssignTrainers-submit')
-    userEvent.click(submitBtn)
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('AssignTrainers-submit')
+      userEvent.click(submitBtn)
+    })
 
     await waitForCalls(mockNavigate)
 

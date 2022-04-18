@@ -132,6 +132,7 @@ export const buildCourseSchedule = build<CourseSchedule>({
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     venue: buildVenue(),
+    virtualLink: fake(f => f.internet.url()),
   },
 })
 
@@ -166,7 +167,7 @@ export const buildCourse = build<Course>({
     max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
     gradingConfirmed: null,
-    reaccreditation: () => false,
+    reaccreditation: perBuild(() => false),
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
@@ -175,6 +176,8 @@ export const buildCourse = build<Course>({
     dates: {},
     modulesAgg: {},
     moduleGroupIds: [],
+    contactProfileId: null,
+    aolCostOfCourse: null,
   },
 })
 
@@ -189,7 +192,7 @@ export const buildEndedCourse = build<Course>({
     max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
     gradingConfirmed: null,
-    reaccreditation: () => false,
+    reaccreditation: perBuild(() => false),
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseScheduleEndedCourse()],
@@ -217,7 +220,7 @@ export const buildNotStartedCourse = build<Course>({
     max_participants: 12,
     deliveryType: CourseDeliveryType.F2F,
     gradingConfirmed: null,
-    reaccreditation: () => false,
+    reaccreditation: perBuild(() => false),
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseScheduleNotStartedCourse()],

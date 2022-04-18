@@ -100,6 +100,7 @@ export const COURSE = gql`
     max_participants
     gradingConfirmed
     go1Integration
+    aolCostOfCourse
   }
 `
 
@@ -112,6 +113,7 @@ export const COURSE_SCHEDULE = gql`
     type
     start
     end
+    virtualLink
   }
 `
 

@@ -76,7 +76,12 @@ export const CourseDetails = () => {
               <CourseHeroSummary
                 course={course}
                 renderButton={() => (
-                  <Button variant="contained" color="secondary" size="large">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    onClick={() => navigate(`/courses/edit/${courseId}`)}
+                  >
                     {t('pages.course-participants.edit-course-button')}
                   </Button>
                 )}

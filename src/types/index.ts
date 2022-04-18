@@ -16,6 +16,7 @@ export type Course = {
   reaccreditation: boolean
   organization?: Organization
   contactProfile?: Profile
+  contactProfileId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
@@ -369,3 +370,7 @@ export enum SearchTrainerAvailability {
   PENDING = 'PENDING',
   EXPIRED = 'EXPIRED',
 }
+
+export type SearchTrainer = {
+  availability?: SearchTrainerAvailability
+} & Pick<Profile, 'id' | 'fullName' | 'avatar'>

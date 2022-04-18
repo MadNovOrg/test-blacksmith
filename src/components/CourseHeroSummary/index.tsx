@@ -32,7 +32,10 @@ export const CourseHeroSummary: React.FC<Props> = ({
 }) => {
   const { profile } = useAuth()
 
-  const courseTrainer = useMemo(() => getCourseTrainer(course), [course])
+  const courseTrainer = useMemo(
+    () => getCourseTrainer(course.trainers ?? []),
+    [course]
+  )
 
   const courseBeginsFor = courseStarted(course)
     ? 0

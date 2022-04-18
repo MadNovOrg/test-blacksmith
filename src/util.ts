@@ -7,6 +7,9 @@ import {
   CourseParticipantModule,
   CourseType,
   CourseTrainerType,
+  CourseTrainer,
+  SetCourseTrainerInput,
+  SearchTrainer,
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
@@ -126,13 +129,11 @@ export const courseStarted = (course: Course) =>
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
 
-export const getCourseTrainer = (course: Course) => {
-  const { trainers = [] } = course
+export const getCourseTrainer = (trainers: CourseTrainer[]) => {
   return trainers.find(t => t.type === CourseTrainerType.LEADER)
 }
 
-export const getCourseAssistants = (course: Course) => {
-  const { trainers = [] } = course
+export const getCourseAssistants = (trainers: CourseTrainer[]) => {
   return trainers.filter(t => t.type === CourseTrainerType.ASSISTANT)
 }
 
@@ -212,4 +213,12 @@ export const getCertificateNumberPrefix = (
 
 export const getNumberOfAssistants = (maxParticipants: number) => {
   return Math.floor((maxParticipants ?? 0) / 12)
+}
+
+export const profileToInput = (course: Course, type: CourseTrainerType) => {
+  return (p: SearchTrainer): SetCourseTrainerInput => ({
+    course_id: course.id,
+    profile_id: p.id,
+    type,
+  })
 }

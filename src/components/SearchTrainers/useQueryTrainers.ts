@@ -2,14 +2,10 @@ import { endOfDay, startOfDay } from 'date-fns'
 import { useCallback } from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { RoleName } from '@app/types'
+import { RoleName, SearchTrainer } from '@app/types'
 
 import { setAvailability, GET_TRAINERS, GET_TRAINERS_SCHEDULE } from './helpers'
-import {
-  SearchTrainer,
-  SearchTrainerBookings,
-  SearchTrainersSchedule,
-} from './types'
+import { SearchTrainerBookings, SearchTrainersSchedule } from './types'
 
 type Props = {
   schedule: SearchTrainersSchedule

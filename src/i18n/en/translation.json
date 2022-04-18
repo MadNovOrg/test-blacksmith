@@ -423,6 +423,11 @@
         "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
       }
     },
+    "edit-course": {
+      "title": "Edit course",
+      "course-not-found": "There was an error loading the course",
+      "save-button-text": "Save changes"
+    },
     "course-details": {
       "tabs": {
         "attendees": {

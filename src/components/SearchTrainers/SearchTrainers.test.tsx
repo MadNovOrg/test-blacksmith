@@ -1,13 +1,17 @@
 import React from 'react'
 
-import { InviteStatus, SearchTrainerAvailability } from '@app/types'
+import {
+  InviteStatus,
+  SearchTrainer,
+  SearchTrainerAvailability,
+} from '@app/types'
 
 import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { setAvailability } from './helpers'
 import { SearchTrainers } from './SearchTrainers'
-import { SearchTrainer, SearchTrainerBookings } from './types'
+import { SearchTrainerBookings } from './types'
 
 const mockSearch = jest.fn().mockResolvedValue({ trainers: [] })
 jest.mock('./useQueryTrainers.ts', () => ({

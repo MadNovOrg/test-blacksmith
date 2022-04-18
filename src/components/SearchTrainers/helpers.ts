@@ -1,8 +1,12 @@
 import { gql } from 'graphql-request'
 
-import { InviteStatus, SearchTrainerAvailability } from '@app/types'
+import {
+  InviteStatus,
+  SearchTrainer,
+  SearchTrainerAvailability,
+} from '@app/types'
 
-import { SearchTrainer, SearchTrainerBookings } from './types'
+import { SearchTrainerBookings } from './types'
 
 export const GET_TRAINERS = gql`
   query ($limit: Int = 20, $offset: Int = 0, $where: profile_bool_exp) {

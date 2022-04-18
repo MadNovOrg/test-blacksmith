@@ -1,11 +1,13 @@
+import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 
 import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
-import { CourseLevel, CourseType } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { INPUT_DATE_FORMAT, LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, within, waitFor } from '@test/index'
+import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
 import { VenueSelector } from '../VenueSelector'
 
@@ -31,7 +33,9 @@ describe('component: CourseForm', () => {
   })
 
   it('allows LEVEL 1 course to be of any delivery type', async () => {
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     const select = screen.getByTestId('course-level-select')
 
@@ -49,7 +53,9 @@ describe('component: CourseForm', () => {
   })
 
   it('limits LEVEL 2 course to be either F2F or MIXED type', async () => {
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     const select = screen.getByTestId('course-level-select')
 
@@ -67,7 +73,9 @@ describe('component: CourseForm', () => {
   })
 
   it('limits ADVANCED course to only be F2F type', async () => {
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     const select = screen.getByTestId('course-level-select')
 
@@ -84,10 +92,12 @@ describe('component: CourseForm', () => {
     expect(screen.getByLabelText('Both')).toBeDisabled()
   })
 
-  it('displays venue selector if F2F delivery type', () => {
+  it('displays venue selector if F2F delivery type', async () => {
     VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
 
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     userEvent.click(screen.getByLabelText('Face to face'))
 
@@ -95,10 +105,12 @@ describe('component: CourseForm', () => {
     expect(screen.queryByLabelText('Zoom meeting url')).not.toBeInTheDocument()
   })
 
-  it('displays venue selector and zoom meeting field if MIXED delivery type', () => {
+  it('displays venue selector and zoom meeting field if MIXED delivery type', async () => {
     VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
 
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     userEvent.click(screen.getByLabelText('Both'))
 
@@ -109,7 +121,9 @@ describe('component: CourseForm', () => {
   it('displays zoom meeting url field if VIRTUAL delivery type', async () => {
     VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
 
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     await waitFor(() => {
       userEvent.click(screen.getByLabelText('Virtual'))
@@ -125,7 +139,9 @@ describe('component: CourseForm', () => {
       pointer: 'fine',
     })
 
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     await waitFor(() => {
       userEvent.paste(screen.getByLabelText('Start date'), '2022-04-12')
@@ -140,7 +156,9 @@ describe('component: CourseForm', () => {
   })
 
   it('validates that min participants is smaller than max participants', async () => {
-    render(<CourseForm type={CourseType.OPEN} />)
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
 
     await waitFor(() => {
       userEvent.type(screen.getByLabelText('Minimum'), '6')
@@ -154,29 +172,80 @@ describe('component: CourseForm', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays organisation selector and contact profile selector if course type is closed', () => {
-    render(<CourseForm type={CourseType.CLOSED} />)
+  it('displays organisation selector and contact profile selector if course type is closed', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />)
+    })
 
     expect(screen.getByTestId('org-selector')).toBeInTheDocument()
     expect(screen.getByTestId('profile-selector')).toBeInTheDocument()
   })
 
-  it('renders correct organisation fields for indirect course type', () => {
-    render(<CourseForm type={CourseType.INDIRECT} />)
+  it('renders correct organisation fields for indirect course type', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.INDIRECT} />)
+    })
 
     expect(screen.getByTestId('org-selector')).toBeInTheDocument()
     expect(screen.queryByTestId('profile-selector')).not.toBeInTheDocument()
   })
 
-  it('does not render minimum participants for closed course type', () => {
-    render(<CourseForm type={CourseType.CLOSED} />)
+  it('does not render minimum participants for closed course type', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />)
+    })
 
     expect(screen.queryByLabelText('Minimum')).not.toBeInTheDocument()
   })
 
-  it('does not render minimum participants for indirect course type', () => {
-    render(<CourseForm type={CourseType.INDIRECT} />)
+  it('does not render minimum participants for indirect course type', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.INDIRECT} />)
+    })
 
     expect(screen.queryByLabelText('Minimum')).not.toBeInTheDocument()
+  })
+
+  it('displays course values if passed as prop', async () => {
+    const course = {
+      ...buildCourse(),
+      go1Integration: true,
+      reaccreditation: true,
+      deliveryType: CourseDeliveryType.MIXED,
+      aolCostOfCourse: 2000,
+      schedule: [
+        buildCourseSchedule({ overrides: { virtualLink: 'zoom-meeting' } }),
+      ],
+    }
+
+    await waitFor(() => {
+      render(<CourseForm course={course} type={CourseType.INDIRECT} />)
+    })
+
+    expect(screen.getByPlaceholderText('Organisation name')).toHaveValue(
+      course.organization?.name
+    )
+    expect(screen.getByDisplayValue(course.level)).toBeInTheDocument()
+    expect(screen.getByLabelText('Go1: Blended learning')).toBeChecked()
+    expect(screen.getByLabelText('Reaccreditation')).toBeChecked()
+    expect(screen.getByLabelText('Both')).toBeChecked()
+    expect(screen.getByLabelText('Zoom meeting url')).toHaveValue(
+      'zoom-meeting'
+    )
+    expect(screen.getByLabelText('Start date')).toHaveValue(
+      format(new Date(course.schedule[0].start), INPUT_DATE_FORMAT)
+    )
+    expect(screen.getByLabelText('Start time')).toHaveValue(
+      format(new Date(course.schedule[0].start), 'hh:mm aaa')
+    )
+    expect(
+      screen.getByLabelText('I will be using an AOL for this course')
+    ).toBeChecked()
+    expect(screen.getByPlaceholderText('Cost of course')).toHaveValue(
+      String(course.aolCostOfCourse)
+    )
+    expect(screen.getByLabelText('Number of attendees')).toHaveValue(
+      course.max_participants
+    )
   })
 })

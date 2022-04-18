@@ -5,6 +5,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
+import { EditCourse } from '@app/pages/EditCourse'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
 import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
@@ -35,6 +36,8 @@ const TrainerBaseRoutes = () => {
             element={<AssignTrainers />}
           />
         </Route>
+
+        <Route path="edit/:id" element={<EditCourse />} />
 
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />

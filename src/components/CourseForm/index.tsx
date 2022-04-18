@@ -78,6 +78,7 @@ interface Props {
 const CourseForm: React.FC<Props> = ({
   onChange = noop,
   type = CourseType.OPEN,
+  course,
 }) => {
   const { t } = useTranslation()
   const {
@@ -86,11 +87,21 @@ const CourseForm: React.FC<Props> = ({
     status: zoomLinkStatus,
   } = useZoomMeetingLink()
 
-  const [startTime, setStartTime] = useState<Date | null>(null)
-  const [endTime, setEndTime] = useState<Date | null>(null)
-  const [venue, setVenue] = useState<Venue>()
-  const [organization, setOrganization] = useState<Organization>()
-  const [contactProfile, setContactProfile] = useState<Profile>()
+  const [startTime, setStartTime] = useState<Date | null>(
+    course?.schedule[0].start ? new Date(course.schedule[0].start) : null
+  )
+  const [endTime, setEndTime] = useState<Date | null>(
+    course?.schedule[0].end ? new Date(course.schedule[0].end) : null
+  )
+  const [venue, setVenue] = useState<Venue | undefined>(
+    course?.schedule[0].venue ?? undefined
+  )
+  const [organization, setOrganization] = useState<Organization | undefined>(
+    course?.organization ?? undefined
+  )
+  const [contactProfile, setContactProfile] = useState<Profile | undefined>(
+    course?.contactProfile ?? undefined
+  )
 
   const hasOrganizationField = [
     CourseType.CLOSED,
@@ -203,20 +214,24 @@ const CourseForm: React.FC<Props> = ({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      organizationId: null,
-      contactProfileId: null,
-      courseLevel: '',
-      blendedLearning: false,
-      reaccreditation: false,
-      deliveryType: CourseDeliveryType.F2F,
-      venueId: null,
-      zoomMeetingUrl: null,
-      startDateTime: null,
-      endDateTime: null,
-      minParticipants: null,
-      maxParticipants: null,
-      usesAOL: false,
-      courseCost: null,
+      organizationId: course?.organization?.id ?? null,
+      contactProfileId: course?.contactProfile?.id ?? null,
+      courseLevel: course?.level ?? '',
+      blendedLearning: course?.go1Integration ?? false,
+      reaccreditation: course?.reaccreditation ?? false,
+      deliveryType: course?.deliveryType ?? CourseDeliveryType.F2F,
+      venueId: course?.schedule[0].venue?.id ?? null,
+      zoomMeetingUrl: course?.schedule[0].virtualLink ?? null,
+      startDateTime: course?.schedule[0].start
+        ? new Date(course.schedule[0].start)
+        : null,
+      endDateTime: course?.schedule[0].end
+        ? new Date(course.schedule[0].end)
+        : null,
+      minParticipants: course?.min_participants ?? null,
+      maxParticipants: course?.max_participants ?? null,
+      usesAOL: Boolean(course?.aolCostOfCourse) ?? false,
+      courseCost: course?.aolCostOfCourse ?? null,
     },
   })
 
@@ -236,13 +251,11 @@ const CourseForm: React.FC<Props> = ({
   }, [formState, getValues, onChange, formValues])
 
   useEffect(() => {
-    register('courseLevel')
-  }, [register])
-
-  useEffect(() => {
-    setValue('zoomMeetingUrl', zoomMeetingUrl)
-    trigger('zoomMeetingUrl')
-  }, [zoomMeetingUrl, setValue, trigger])
+    if (!course?.schedule[0].virtualLink) {
+      setValue('zoomMeetingUrl', zoomMeetingUrl)
+      trigger('zoomMeetingUrl')
+    }
+  }, [zoomMeetingUrl, setValue, trigger, course])
 
   useEffect(() => {
     const startDate = getValues('startDateTime')
@@ -273,12 +286,6 @@ const CourseForm: React.FC<Props> = ({
       trigger('endDateTime')
     }
   }, [endTime, getValues, setValue, trigger])
-
-  useEffect(() => {
-    if (hasZoomMeetingUrl) {
-      generateZoomLink()
-    }
-  }, [hasZoomMeetingUrl, generateZoomLink])
 
   const handleStartDateTimeChange = (date: Date | null) => {
     let dateToSet = date
@@ -316,6 +323,12 @@ const CourseForm: React.FC<Props> = ({
       trigger('zoomMeetingUrl')
     }
   }, [deliveryType, trigger])
+
+  useEffect(() => {
+    if (hasZoomMeetingUrl && !course?.schedule[0].virtualLink) {
+      generateZoomLink()
+    }
+  }, [hasZoomMeetingUrl, generateZoomLink, course])
 
   const errors = formState.errors
 
@@ -410,6 +423,7 @@ const CourseForm: React.FC<Props> = ({
               control={
                 <Switch
                   {...field}
+                  checked={formValues.blendedLearning}
                   disabled={courseLevel === CourseLevel.ADVANCED}
                 />
               }
@@ -425,7 +439,9 @@ const CourseForm: React.FC<Props> = ({
           control={control}
           render={({ field }) => (
             <FormControlLabel
-              control={<Switch {...field} />}
+              control={
+                <Switch {...field} checked={formValues.reaccreditation} />
+              }
               label={
                 t('components.course-form.reaccreditation-label') as string
               }
@@ -499,7 +515,7 @@ const CourseForm: React.FC<Props> = ({
           <TextField
             fullWidth
             variant="filled"
-            value={zoomMeetingUrl}
+            {...register('zoomMeetingUrl')}
             disabled
             helperText={
               zoomLinkStatus === LoadingStatus.ERROR
@@ -636,6 +652,7 @@ const CourseForm: React.FC<Props> = ({
                       resetField('courseCost')
                     }
                   }}
+                  checked={usesAOL}
                 />
               }
               label={t('components.course-form.aol-label') as string}

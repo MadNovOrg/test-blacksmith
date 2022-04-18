@@ -157,6 +157,28 @@ select_permissions:
     - name
     - created_at
     - updated_at
+    - contact_profile_id
+    - organization_id
+    filter: {}
+  role: tt-admin
+- permission:
+    allow_aggregations: true
+    columns:
+    - go1_integration
+    - grading_confirmed
+    - reaccreditation
+    - id
+    - max_participants
+    - min_participants
+    - aol_cost_of_course
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - description
+    - name
+    - created_at
+    - updated_at
     - organization_id
     filter: {}
   role: tt-ops
@@ -189,6 +211,30 @@ select_permissions:
             _eq: X-Hasura-User-Id
   role: user
 update_permissions:
+- permission:
+    check: null
+    columns:
+    - aol_cost_of_course
+    - contact_profile_id
+    - course_delivery_type
+    - course_level
+    - course_status
+    - created_at
+    - description
+    - go1_integration
+    - grading_confirmed
+    - id
+    - max_participants
+    - min_participants
+    - name
+    - organization_id
+    - reaccreditation
+    - updated_at
+    filter:
+      trainers:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  role: trainer
 - permission:
     check: {}
     columns:

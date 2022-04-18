@@ -15,6 +15,7 @@ import CourseForm, {
   FormValues,
   ValidFormFields,
 } from '@app/components/CourseForm'
+import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -23,15 +24,17 @@ import {
   ResponseType,
 } from '@app/queries/courses/insert-course'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseTrainerType, CourseType } from '@app/types'
+import {
+  CourseDeliveryType,
+  CourseTrainerType,
+  CourseType,
+  SearchTrainer,
+} from '@app/types'
 import {
   generateCourseName,
   getNumberOfAssistants,
   LoadingStatus,
 } from '@app/util'
-
-import { SearchTrainers } from '../AssignTrainers/SearchTrainers'
-import { SearchTrainer } from '../AssignTrainers/SearchTrainers/types'
 
 function assertCourseDataValid(
   data: FormValues,

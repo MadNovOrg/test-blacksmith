@@ -62,6 +62,12 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return false
     },
+
+    canAssignLeadTrainer: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
+
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return { ...auth, acl }

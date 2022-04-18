@@ -16,10 +16,10 @@ import { useMountedState } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
-import { SearchTrainerAvailability } from '@app/types'
+import { SearchTrainer, SearchTrainerAvailability } from '@app/types'
 import { noop } from '@app/util'
 
-import { SearchTrainer, SearchTrainersSchedule } from './types'
+import { SearchTrainersSchedule } from './types'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {

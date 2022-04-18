@@ -1,13 +1,4 @@
-import type {
-  Profile,
-  InviteStatus,
-  CourseSchedule,
-  SearchTrainerAvailability,
-} from '@app/types'
-
-export type SearchTrainer = {
-  availability?: SearchTrainerAvailability
-} & Pick<Profile, 'id' | 'fullName' | 'avatar'>
+import type { InviteStatus, CourseSchedule } from '@app/types'
 
 export type SearchTrainersSchedule = Partial<
   Pick<CourseSchedule, 'start' | 'end'>
