@@ -1,0 +1,92 @@
+name: APP_ROLLBACK
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Application Rollback: Environment - "DEV/STG/PROD"'
+        required: true
+        type: choice
+        options:
+        - DEV
+        - STG
+        - PROD
+
+permissions:
+      id-token: write
+      contents: read  
+
+env:
+  AWS_REGION: eu-west-2
+  ENV_NAME: ${{ github.event.inputs.environment }}
+
+jobs:
+  app-rb:
+    name: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Source Code Rollback Action
+        run: git reset --hard HEAD~1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets[format('IAM_SERVICE_{0}', env.ENV_NAME)] }}
+          role-duration-seconds: 1200
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.3.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm set-script prepare "" && npm ci 
+
+      - name: Build web
+        run: npm run build
+        env:
+          VITE_AWS_REGION: eu-west-2
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets[format('COGNITO_POOL_ID_{0}', env.ENV_NAME)] }}
+          VITE_COGNITO_USER_POOL_CLIENT_ID: ${{ secrets[format('COGNITO_CLIENT_ID_{0}', env.ENV_NAME)] }}
+          VITE_HASURA_GRAPHQL_API: "${{ secrets[format('HASURA_ENDPOINT_{0}', env.ENV_NAME)] }}/v1/graphql"
+          VITE_BASE_WORDPRESS_URL: "${{ secrets[format('WP_HOST_{0}', env.ENV_NAME)] }}/wp-json/wp/v2"
+          VITE_GMAPS_KEY: ${{ secrets.GMAPS_KEY }}
+
+      - name: Deploy to S3 bucket
+        run: aws s3 sync ./dist/ ${{ secrets[format('S3_BUCKET_{0}', env.ENV_NAME)] }} --delete
+
+  hasura_migrations:
+    name: Hasura migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Source Code Rollback Action
+        run: git reset --hard HEAD~1
+
+      - name: Install Hasura CLI
+        run: |
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.3.0 bash
+
+      - name: Hasura migrations access
+        run: |
+          echo "SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', env.ENV_NAME)] }}" >> ${GITHUB_ENV}
+          echo "ENDPOINT=${{ secrets[format('HASURA_ENDPOINT_{0}', env.ENV_NAME)] }}" >> ${GITHUB_ENV}
+
+      - name: Apply Hasura migrations
+        working-directory: ./hasura
+        run: |
+          echo Hasura Metadata Apply
+          hasura metadata apply --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Migrate Apply
+          hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Metadata Reload
+          hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
