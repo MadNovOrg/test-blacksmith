@@ -43,6 +43,20 @@ array_relationships:
         schema: public
 select_permissions:
 - permission:
+    columns:
+    - addresses
+    - attributes
+    - contact_details
+    - created_at
+    - id
+    - name
+    - preferences
+    - status
+    - tags
+    - updated_at
+    filter: {}
+  role: anonymous
+- permission:
     allow_aggregations: true
     columns:
     - name
