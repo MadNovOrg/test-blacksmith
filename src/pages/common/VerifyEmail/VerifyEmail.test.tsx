@@ -2,6 +2,9 @@ import { Auth } from 'aws-amplify'
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
+import { AuthContextType } from '@app/context/auth/types'
+
 import {
   render,
   screen,
@@ -13,13 +16,20 @@ import {
 
 import { VerifyEmailPage } from './VerifyEmail'
 
+jest.mock('@app/context/auth', () => ({
+  ...jest.requireActual('@app/context/auth'),
+  useAuth: jest.fn().mockReturnValue({ loadProfile: jest.fn() }),
+}))
+
 jest.mock('aws-amplify', () => ({
   Auth: {
     verifyCurrentUserAttribute: jest.fn().mockResolvedValue({}),
     verifyCurrentUserAttributeSubmit: jest.fn().mockResolvedValue({}),
+    currentUserPoolUser: jest.fn(),
   },
 }))
 const AuthMock = jest.mocked(Auth)
+const useAuthMock = jest.mocked(useAuth)
 
 describe('page: VerifyEmailPage', () => {
   const setup = () => {
@@ -98,6 +108,8 @@ describe('page: VerifyEmailPage', () => {
   })
 
   it('calls cognito submit when code is valid', async () => {
+    AuthMock.verifyCurrentUserAttributeSubmit.mockResolvedValue('')
+
     setup()
 
     userEvent.click(screen.getByTestId('signup-verify-now-btn'))
@@ -118,6 +130,9 @@ describe('page: VerifyEmailPage', () => {
     expect(AuthMock.verifyCurrentUserAttributeSubmit).toBeCalledWith(
       'email',
       code
+    )
+    await waitFor(() =>
+      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument()
     )
   })
 
@@ -190,5 +205,45 @@ describe('page: VerifyEmailPage', () => {
 
     await waitForCalls(AuthMock.verifyCurrentUserAttribute, 2)
     expect(AuthMock.verifyCurrentUserAttribute).toBeCalledWith('email')
+  })
+
+  it('reloads profile before navigating away', async () => {
+    AuthMock.verifyCurrentUserAttributeSubmit.mockResolvedValue('')
+
+    const refreshSessionIfPossibleMock = jest.fn().mockResolvedValue('')
+    AuthMock.currentUserPoolUser.mockResolvedValue({
+      refreshSessionIfPossible: refreshSessionIfPossibleMock,
+    })
+
+    const loadProfileMock = jest.fn().mockResolvedValue('')
+    useAuthMock.mockReturnValue({
+      loadProfile: loadProfileMock,
+    } as unknown as AuthContextType)
+
+    setup()
+
+    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await waitFor(() =>
+      expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
+    )
+
+    const code = '123456'
+    code.split('').forEach((n, i) => {
+      const iN = screen.getByTestId(`signup-verify-code-${i}`)
+      userEvent.type(iN, n)
+    })
+
+    const submitBtn = screen.getByTestId('signup-verify-btn')
+    userEvent.click(submitBtn)
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument()
+    )
+
+    userEvent.click(screen.getByTestId('btn-goto-login'))
+
+    await waitForCalls(AuthMock.currentUserPoolUser)
+    await waitForCalls(refreshSessionIfPossibleMock)
+    await waitForCalls(loadProfileMock)
   })
 })

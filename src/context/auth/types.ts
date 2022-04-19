@@ -1,3 +1,5 @@
+import { CognitoUser } from 'amazon-cognito-identity-js'
+
 import type { CourseType, Profile, RoleName } from '@app/types'
 
 export type { Profile } from '@app/types'
@@ -22,6 +24,7 @@ export interface AuthContextType extends AuthState {
   logout: () => Promise<void>
   getJWT: () => Promise<string>
   changeRole: (role: RoleName) => void
+  loadProfile: (user: CognitoUser) => Promise<void>
   acl: ACL
 }
 

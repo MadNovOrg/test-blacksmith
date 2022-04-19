@@ -1,11 +1,12 @@
 import { Box, Typography, Button } from '@mui/material'
+import { Auth } from 'aws-amplify'
 import { TFunction } from 'i18next'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
-import { LinkBehavior } from '@app/components/LinkBehavior'
+import { useAuth } from '@app/context/auth'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
@@ -31,10 +32,20 @@ export const getVerifySchema = (t: TFunction) => {
 export const VerifyEmailPage: React.FC<Props> = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const { loadProfile } = useAuth()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
   const state = (location.state || {}) as LocationState
   const from = state.from || {}
+
+  const handleContinue = async () => {
+    const currentUser = await Auth.currentUserPoolUser()
+    await currentUser.refreshSessionIfPossible()
+    await loadProfile(currentUser)
+
+    const to = `${from.pathname || '/'}${from.search || ''}`
+    return navigate(to, { replace: true })
+  }
 
   return (
     <AppLayoutMinimal width={628}>
@@ -55,10 +66,8 @@ export const VerifyEmailPage: React.FC<Props> = () => {
             variant="contained"
             color="primary"
             size="large"
-            component={LinkBehavior}
-            href="/login"
-            state={from ? { from } : undefined}
-            replace
+            onClick={handleContinue}
+            data-testid="btn-goto-login"
           >
             {t('pages.signup.success-btn')}
           </Button>

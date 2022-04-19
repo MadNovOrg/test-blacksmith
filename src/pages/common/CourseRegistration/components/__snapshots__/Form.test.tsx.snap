@@ -1026,6 +1026,7 @@ Object {
       "changeRole": [MockFunction],
       "defaultRole": "user",
       "getJWT": [MockFunction],
+      "loadProfile": [MockFunction],
       "loading": false,
       "login": [MockFunction],
       "logout": [MockFunction],

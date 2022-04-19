@@ -45,6 +45,7 @@ export const defaultProviders: Providers = {
     defaultRole: RoleName.USER,
     allowedRoles: new Set([RoleName.USER]),
     activeRole: RoleName.USER,
+    loadProfile: jest.fn().mockResolvedValue(undefined),
     profile,
   },
 }
