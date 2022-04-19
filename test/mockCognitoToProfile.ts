@@ -18,6 +18,7 @@ export const defaultCognitoProfile = {
     'x-hasura-default-role': RoleName.USER,
     'x-hasura-tt-organizations': '{}',
   },
+  emailVerified: true,
 }
 
 mock.mockResolvedValue(defaultCognitoProfile)
@@ -29,5 +30,6 @@ export const mockCognitoToProfile = ({
   return mock.mockResolvedValueOnce({
     profile: { ...defaultCognitoProfile.profile, ...profile } as Profile,
     claims: { ...defaultCognitoProfile.claims, ...claims },
+    emailVerified: true,
   })
 }

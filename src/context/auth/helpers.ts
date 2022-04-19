@@ -16,13 +16,13 @@ export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
   try {
-    const { profile, claims } = await cognitoToProfile(user)
+    const { profile, claims, emailVerified } = await cognitoToProfile(user)
 
     if (!profile) {
       throw Error(`No profile for ${claims?.['x-hasura-user-id'] ?? 'unknown'}`)
     }
 
-    const defaultRole = RoleName.USER
+    const defaultRole = claims?.['x-hasura-default-role'] || RoleName.USER
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
     const lsActiveRole = lsActiveRoleClient(profile)
@@ -38,6 +38,7 @@ export async function fetchUserProfile(
       defaultRole,
       allowedRoles,
       activeRole,
+      verified: emailVerified,
     }
   } catch (err) {
     console.error(err)

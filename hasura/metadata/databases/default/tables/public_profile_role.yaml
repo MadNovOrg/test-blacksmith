@@ -11,6 +11,18 @@ object_relationships:
 select_permissions:
 - permission:
     columns:
+    - _source
+    - created_at
+    - updated_at
+    - id
+    - profile_id
+    - role_id
+    filter:
+      profile_id:
+        _eq: X-Hasura-User-Id
+  role: unverified
+- permission:
+    columns:
     - id
     - profile_id
     - role_id

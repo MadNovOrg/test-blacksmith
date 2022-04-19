@@ -22,6 +22,7 @@
       }
     },
     "home": "Home",
+    "add": "Add",
     "courses": "Courses",
     "contacts": "Contacts",
     "community": "Community",
@@ -175,6 +176,9 @@
       "otp-required": "Please enter 6 digit passcode received in email",
       "other-position-required": "Please enter your job position"
     },
+    "create-free-account": "Create your free Team Teach Hub account",
+    "have-account": "Have an account?",
+    "login": "Login",
     "course-registration": "Course Registration",
     "course-certificate": {
       "duration-message": {
@@ -316,7 +320,10 @@
     "org-selector": {
       "placeholder": "Organisation name",
       "min-chars": "Start typing to get suggestions",
-      "no-results": "No organisations found"
+      "no-results": "No organisations found",
+      "modal": {
+        "title": "Add Organization"
+      }
     },
     "certification-list": {
       "title": "Certifications",
@@ -681,7 +688,9 @@
     },
     "signup": {
       "back-to-login": "Back to login",
+      "didnt-get-mail": "Didn't get the email?",
       "heading": "Sign up for Team Teach",
+      "verify-heading": "Email Verification",
       "email-label": "Email Address",
       "email-placeholder": "Please enter your email address",
       "givenName-label": "Given name",
@@ -702,6 +711,9 @@
       "verify-hint": "A six-digit authentication code has been sent to your email, please enter it below.",
       "verify-code-label": "Verification code",
       "verify-btn": "Verify",
+      "verify-now": "Verify Now",
+      "verify-later": "Verify Later",
+      "resend": "Resend",
       "verify-resend-btn": "Resend verification email",
       "success-hint": "Thank you for signing up. \n You can now login to your Team Teach account.",
       "success-btn": "Go to Login",

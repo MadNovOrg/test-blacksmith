@@ -47,6 +47,34 @@ computed_fields:
   name: fullName
 select_permissions:
 - permission:
+    columns:
+    - family_name
+    - given_name
+    - stripe_customer_id
+    - title
+    - dob
+    - go1_id
+    - addresses
+    - attributes
+    - contact_details
+    - go1_profile
+    - original_record
+    - preferences
+    - tags
+    - email
+    - job_title
+    - phone
+    - status
+    - created_at
+    - updated_at
+    - id
+    computed_fields:
+    - fullName
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: unverified
+- permission:
     allow_aggregations: true
     columns:
     - addresses

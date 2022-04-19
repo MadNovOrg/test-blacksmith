@@ -102,6 +102,7 @@ export type Role = {
 }
 
 export enum RoleName {
+  UNVERIFIED = 'unverified',
   USER = 'user',
   TRAINER = 'trainer',
   ORG_ADMIN = 'org-admin',

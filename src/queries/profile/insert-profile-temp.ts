@@ -14,6 +14,7 @@ export type ParamsType = {
     sector?: string
     jobTitle?: string
     courseId?: number
+    organizationId?: string | null
   }
 }
 

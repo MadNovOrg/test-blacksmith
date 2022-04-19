@@ -49,7 +49,7 @@ export const SignUpForm: React.FC<FormProps> = ({ onSignUp }) => {
 
       await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })
 
-      const resp = await Auth.signUp({
+      await Auth.signUp({
         username: data.email,
         password: data.password,
         attributes: {
@@ -60,11 +60,7 @@ export const SignUpForm: React.FC<FormProps> = ({ onSignUp }) => {
         },
       })
 
-      onSignUp({
-        username: data.email,
-        userSub: resp.userSub,
-        confirmed: resp.userConfirmed,
-      })
+      onSignUp(data.email, data.password)
     } catch (err) {
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'

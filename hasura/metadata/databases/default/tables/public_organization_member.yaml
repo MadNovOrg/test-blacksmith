@@ -25,6 +25,19 @@ array_relationships:
         schema: public
 select_permissions:
 - permission:
+    columns:
+    - id
+    - profile_id
+    - organization_id
+    - member_type
+    - _source
+    - created_at
+    - updated_at
+    filter:
+      profile_id:
+        _eq: X-Hasura-User-Id
+  role: unverified
+- permission:
     allow_aggregations: true
     columns:
     - created_at

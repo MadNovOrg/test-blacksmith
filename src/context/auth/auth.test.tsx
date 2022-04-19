@@ -44,6 +44,7 @@ describe('context: Auth', () => {
       'defaultRole',
       'allowedRoles',
       'activeRole',
+      'verified',
       ...expectedKeys,
     ])
   })

@@ -215,6 +215,10 @@ export const getNumberOfAssistants = (maxParticipants: number) => {
   return Math.floor((maxParticipants ?? 0) / 12)
 }
 
+export const requiredMsg = (t: TFunction, name: string) => {
+  return t('validation-errors.required-field', { name: t(name) })
+}
+
 export const profileToInput = (course: Course, type: CourseTrainerType) => {
   return (p: SearchTrainer): SetCourseTrainerInput => ({
     course_id: course.id,

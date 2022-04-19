@@ -24,7 +24,7 @@ const defaultProps = {
 const AuthMock = jest.mocked(Auth)
 const gqlRequestMock = jest.mocked(gqlRequest)
 
-describe('page: SignUpForm', () => {
+describe('Form', () => {
   gqlRequestMock.mockResolvedValue({})
 
   it('renders as expected', async () => {
@@ -253,10 +253,6 @@ describe('page: SignUpForm', () => {
       },
     })
 
-    expect(props.onSignUp).toBeCalledWith({
-      username: email,
-      userSub: userId,
-      confirmed: true,
-    })
+    expect(props.onSignUp).toBeCalledWith(email, pass)
   })
 })

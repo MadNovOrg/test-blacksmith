@@ -6,10 +6,13 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
 import { useAuth } from '@app/context/auth'
+import { CourseBookingPage } from '@app/pages/common/CourseBooking'
+import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { SignUpPage } from '@app/pages/common/SignUp'
+import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
 import { RoleName } from '@app/types'
@@ -58,10 +61,21 @@ function LoggedOutRoutes() {
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="sign-up" element={<SignUpPage />} />
       <Route path="invitation" element={<InvitationPage />} />
+      <Route path="registration" element={<CourseRegistrationPage />} />
       <Route
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
       />
+    </Routes>
+  )
+}
+
+function UnverifiedUserRoutes() {
+  return (
+    <Routes>
+      <Route index element={<Navigate replace to="booking" />} />
+      <Route path="verify" element={<VerifyEmailPage />} />
+      <Route path="booking" element={<CourseBookingPage />} />
     </Routes>
   )
 }
@@ -71,6 +85,10 @@ function LoggedInRoutes() {
 
   if (!activeRole) return null
 
+  if (activeRole === RoleName.UNVERIFIED) {
+    return <UnverifiedUserRoutes />
+  }
+
   const RouteComp = roleRoutesMap[activeRole]
 
   return (
@@ -78,6 +96,8 @@ function LoggedInRoutes() {
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
           <Route index element={<Navigate replace to="courses" />} />
+
+          <Route path="booking" element={<CourseBookingPage />} />
 
           <Route path="profile/*" element={<ProfileRoutes />} />
 

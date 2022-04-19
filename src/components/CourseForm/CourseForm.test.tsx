@@ -13,6 +13,10 @@ import { VenueSelector } from '../VenueSelector'
 
 import CourseForm from '.'
 
+jest.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: jest.fn().mockReturnValue(<div>Org Selector</div>),
+}))
+
 jest.mock('../VenueSelector', () => ({
   VenueSelector: jest.fn(),
 }))
@@ -177,7 +181,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    expect(screen.getByTestId('org-selector')).toBeInTheDocument()
+    expect(screen.getByText('Org Selector')).toBeInTheDocument()
     expect(screen.getByTestId('profile-selector')).toBeInTheDocument()
   })
 
@@ -186,7 +190,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.INDIRECT} />)
     })
 
-    expect(screen.getByTestId('org-selector')).toBeInTheDocument()
+    expect(screen.getByText('Org Selector')).toBeInTheDocument()
     expect(screen.queryByTestId('profile-selector')).not.toBeInTheDocument()
   })
 
@@ -222,9 +226,6 @@ describe('component: CourseForm', () => {
       render(<CourseForm course={course} type={CourseType.INDIRECT} />)
     })
 
-    expect(screen.getByPlaceholderText('Organisation name')).toHaveValue(
-      course.organization?.name
-    )
     expect(screen.getByDisplayValue(course.level)).toBeInTheDocument()
     expect(screen.getByLabelText('Go1: Blended learning')).toBeChecked()
     expect(screen.getByLabelText('Reaccreditation')).toBeChecked()

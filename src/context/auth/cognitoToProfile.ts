@@ -22,5 +22,9 @@ export default async function (user: CognitoUser) {
     { token }
   )
 
-  return { profile: profile ?? undefined, claims }
+  return {
+    profile: profile ?? undefined,
+    claims,
+    emailVerified: idToken.payload.email_verified,
+  }
 }

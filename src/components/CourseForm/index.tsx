@@ -31,7 +31,6 @@ import {
   CourseDeliveryType,
   CourseLevel,
   CourseType,
-  Organization,
   Profile,
   Venue,
 } from '@app/types'
@@ -95,9 +94,6 @@ const CourseForm: React.FC<Props> = ({
   )
   const [venue, setVenue] = useState<Venue | undefined>(
     course?.schedule[0].venue ?? undefined
-  )
-  const [organization, setOrganization] = useState<Organization | undefined>(
-    course?.organization ?? undefined
   )
   const [contactProfile, setContactProfile] = useState<Profile | undefined>(
     course?.contactProfile ?? undefined
@@ -344,13 +340,8 @@ const CourseForm: React.FC<Props> = ({
               {t('components.course-form.organization-label')}
             </Typography>
             <OrgSelector
-              value={organization}
               onChange={value => {
-                setValue('organizationId', value?.id ?? '', {
-                  shouldValidate: true,
-                })
-
-                setOrganization(value)
+                setValue('organizationId', value, { shouldValidate: true })
               }}
               textFieldProps={{ variant: 'filled' }}
               sx={{ marginBottom: 2 }}
