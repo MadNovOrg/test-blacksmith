@@ -555,6 +555,7 @@ const CourseForm: React.FC<Props> = ({
                         error={Boolean(errors.startDateTime)}
                         helperText={errors.startDateTime?.message}
                         onBlur={field.onBlur}
+                        data-testid="start-date"
                       />
                     )}
                   />
@@ -573,6 +574,7 @@ const CourseForm: React.FC<Props> = ({
                     {...params}
                     fullWidth
                     error={Boolean(errors.startDateTime)}
+                    data-testid="start-time"
                   />
                 )}
               />
@@ -602,6 +604,7 @@ const CourseForm: React.FC<Props> = ({
                         error={Boolean(errors.endDateTime)}
                         helperText={errors.endDateTime?.message}
                         onBlur={field.onBlur}
+                        data-testid="end-date"
                       />
                     )}
                   />
@@ -620,6 +623,7 @@ const CourseForm: React.FC<Props> = ({
                     {...params}
                     fullWidth
                     error={Boolean(errors.endDateTime)}
+                    data-testid="end-time"
                   />
                 )}
               />
@@ -690,6 +694,7 @@ const CourseForm: React.FC<Props> = ({
                 error={Boolean(errors.minParticipants)}
                 helperText={errors.minParticipants?.message}
                 inputProps={{ min: 1 }}
+                data-testid="min-attendees"
               />
             </Grid>
           ) : null}
@@ -711,6 +716,7 @@ const CourseForm: React.FC<Props> = ({
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
+              data-testid="max-attendees"
             />
           </Grid>
         </Grid>

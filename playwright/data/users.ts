@@ -7,6 +7,12 @@ export const users: { [key: string]: User } = {
     email: 'admin@teamteach.testinator.com',
     password: 'Test12345!',
   },
+  ops: {
+    givenName: 'Lucas',
+    familyName: 'Ops',
+    email: 'ops@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
   trainer: {
     givenName: 'John',
     familyName: 'Trainer',
@@ -19,6 +25,24 @@ export const users: { [key: string]: User } = {
     email: 'trainer.with.org@teamteach.testinator.com',
     password: 'Test12345!',
     organization: { name: 'London First School' },
+  },
+  trainer2: {
+    givenName: 'Steven',
+    familyName: 'Trainer',
+    email: 'trainer.and.user@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
+  assistant: {
+    givenName: 'Liam',
+    familyName: 'Assistant',
+    email: 'assistant@teamteach.testinator.com',
+    password: 'Test12345!',
+  },
+  assistant2: {
+    givenName: 'Noah',
+    familyName: 'Assistant',
+    email: 'assistant.with.org@teamteach.testinator.com',
+    password: 'Test12345!',
   },
   resetPassword: {
     givenName: 'Logan',

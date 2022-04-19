@@ -1,6 +1,9 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { CreateCourseMenu } from '../../components/CreateCourseMenu'
+import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
+import { UserMenu } from '../../components/UserMenu'
 import { BASE_URL } from '../../constants'
 import { toCourseTableRow } from '../../data/mappings'
 import { Course, CourseTableRow } from '../../data/types'
@@ -16,9 +19,14 @@ export class MyCoursesPage extends BasePage {
   readonly filterItem: (text: string) => Locator
   readonly tableRoot: Locator
   readonly coursesTable: UiTable
+  readonly createCourseMenu: CreateCourseMenu
+  readonly userMenu: UserMenu
+  readonly roleSwitcher: RoleSwitcher
 
   constructor(page: Page) {
     super(page)
+    this.userMenu = new UserMenu(this.page)
+    this.roleSwitcher = new RoleSwitcher(this.page)
     this.searchInput = this.page.locator('[data-testid="search"] input')
     this.filterBy = (text: string) =>
       this.page.locator(`[data-testid="filter-by"]:has-text("${text}")`)
@@ -26,11 +34,16 @@ export class MyCoursesPage extends BasePage {
       this.page.locator(`[data-testid="filter-item"]:has-text("${text}")`)
     this.tableRoot = this.page.locator('table[data-testid="courses-table"]')
     this.coursesTable = new UiTable(this.tableRoot)
+    this.createCourseMenu = new CreateCourseMenu(this.page)
   }
 
   async goto() {
     await super.goto(`${BASE_URL}/courses`, this.tableRoot)
     await this.coursesTable.waitToLoad()
+  }
+
+  async tryToOpen() {
+    await this.page.goto(BASE_URL)
   }
 
   // compares the courses table rows ignoring the order

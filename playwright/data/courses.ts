@@ -25,6 +25,8 @@ export const COURSES_TO_VIEW: Course[] = [
         end: setNextMonth(new Date('2022-07-10T17:00:00Z')),
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Level One',
@@ -43,6 +45,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Level One Reaccreditation',
@@ -62,6 +66,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Level Two',
@@ -81,6 +87,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Level Two Reaccreditation',
@@ -100,6 +108,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Level Two',
@@ -120,6 +130,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
   {
     name: 'Positive Behaviour Training: Advanced Modules',
@@ -139,6 +151,8 @@ export const COURSES_TO_VIEW: Course[] = [
         venue: 'Queen Elizabeth II Centre',
       },
     ],
+    min_participants: 6,
+    max_participants: 11,
   },
 ]
 
@@ -161,4 +175,6 @@ export const UNIQUE_COURSE: () => Course = () => ({
       venue: 'Queen Elizabeth II Centre',
     },
   ],
+  min_participants: 6,
+  max_participants: 11,
 })

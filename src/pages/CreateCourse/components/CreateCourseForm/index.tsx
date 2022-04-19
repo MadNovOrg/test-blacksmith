@@ -287,6 +287,7 @@ export const CreateCourseForm = () => {
           onClick={saveCourse}
           loading={savingStatus === LoadingStatus.FETCHING}
           endIcon={<ArrowForwardIcon />}
+          data-testid="next-page-btn"
         >
           {courseType === CourseType.INDIRECT
             ? t('pages.create-course.indirect-course-button-text')

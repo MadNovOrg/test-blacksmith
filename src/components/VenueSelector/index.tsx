@@ -236,6 +236,7 @@ export const VenueSelector: React.FC<VenueSelectorProps> = function ({
                   </React.Fragment>
                 ),
               }}
+              data-testid="venue-selector"
             />
           )}
           renderOption={(props, option, { inputValue }) => {

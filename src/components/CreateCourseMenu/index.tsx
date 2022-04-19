@@ -74,12 +74,13 @@ export const CreateCourseMenu = () => {
               onClick={() =>
                 navigate(`${CREATE_COURSE_PATH}?type=${option.key}`)
               }
+              data-testid={`create-course-${option.key}`}
             >
               {option.label}
             </MenuItem>
           ))}
 
-          <MenuItem disabled>
+          <MenuItem disabled data-testid="bulk-import-option">
             {t('components.create-course-menu.bulk-import-label')}
           </MenuItem>
         </Menu>

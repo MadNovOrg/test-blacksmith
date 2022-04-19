@@ -13,12 +13,12 @@ const login = async (browser: Browser, userKey: string, role: string) => {
   const page = await browser.newPage()
   const loginPage = new LoginPage(page)
   await loginPage.goto()
-  const homePage = await loginPage.logIn(
+  const myCoursesPage = await loginPage.logIn(
     users[userKey].email,
     users[userKey].password
   )
-  await homePage.userMenu.checkIsVisible()
-  await homePage.roleSwitcher.selectRole(role)
+  await myCoursesPage.userMenu.checkIsVisible()
+  await myCoursesPage.roleSwitcher.selectRole(role)
   await page.context().storageState({ path: stateFilePath(userKey) })
 }
 
@@ -29,6 +29,7 @@ async function globalSetup() {
     })
     const browser = await chromium.launch()
     await login(browser, 'admin', 'Team Teach Admin')
+    await login(browser, 'ops', 'Team Teach Ops')
     await login(browser, 'trainer', 'Trainer')
     await login(browser, 'trainerWithOrg', 'Trainer')
     await browser.close()

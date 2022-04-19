@@ -27,6 +27,8 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
       deliveryType
       description
       level
+      min_participants
+      max_participants
       name
       reaccreditation
       organization {
@@ -119,6 +121,8 @@ export const insertCourse = async (
         },
         go1Integration: ${course.go1Integration ? 'true' : 'false'},
         level: ${course.level},
+        min_participants: ${course.min_participants},
+        max_participants: ${course.max_participants},
         name: "${course.name}",
         reaccreditation: ${course.reaccreditation},
         status: ${course.status},

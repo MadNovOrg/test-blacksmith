@@ -31,6 +31,8 @@ export type Course = {
   reaccreditation: boolean
   schedule: CourseSchedule[]
   go1Integration?: boolean
+  min_participants: number
+  max_participants: number
 }
 
 export type CourseSchedule = {

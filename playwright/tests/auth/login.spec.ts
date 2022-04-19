@@ -6,11 +6,11 @@ import { LoginPage } from '../../pages/auth/LoginPage'
 test('login successfully @smoke', async ({ page }) => {
   const loginPage = new LoginPage(page)
   await loginPage.goto()
-  const homePage = await loginPage.logIn(
+  const myCoursesPage = await loginPage.logIn(
     users.trainer.email,
     users.trainer.password
   )
-  await homePage.userMenu.checkIsVisible()
+  await myCoursesPage.userMenu.checkIsVisible()
 })
 
 test('login error: incorrect email', async ({ page }) => {
