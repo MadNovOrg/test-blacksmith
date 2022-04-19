@@ -32,6 +32,12 @@ actions:
     forward_client_headers: true
   permissions:
   - role: anonymous
+- name: getTrainersLevels
+  definition:
+    kind: ""
+    handler: '{{ACTIONS_HOST}}/trainers/levels'
+  permissions:
+  - role: trainer
 - name: isUserSubscribedToMembership
   definition:
     kind: ""
@@ -69,8 +75,51 @@ custom_types:
     - description: null
       is_deprecated: null
       value: DECLINED
+  - name: CourseLevel
+    values:
+    - description: null
+      is_deprecated: null
+      value: LEVEL_1
+    - description: null
+      is_deprecated: null
+      value: LEVEL_2
+    - description: null
+      is_deprecated: null
+      value: INTERMEDIATE
+    - description: null
+      is_deprecated: null
+      value: ADVANCED
+    - description: null
+      is_deprecated: null
+      value: BILD_ACT
+  - name: SearchTrainerAvailability
+    values:
+    - description: null
+      is_deprecated: null
+      value: UNAVAILABLE
+    - description: null
+      is_deprecated: null
+      value: AVAILABLE
+    - description: null
+      is_deprecated: null
+      value: PENDING
+    - description: null
+      is_deprecated: null
+      value: EXPIRED
+  - name: CourseTrainerType
+    values:
+    - description: null
+      is_deprecated: null
+      value: LEADER
+    - description: null
+      is_deprecated: null
+      value: ASSISTANT
+    - description: null
+      is_deprecated: null
+      value: MODERATOR
   input_objects:
   - name: PlansCreateInput
+  - name: GetTrainersLevelsInput
   objects:
   - name: LinkProfileResult
   - name: PlansCreateResult
@@ -82,4 +131,5 @@ custom_types:
   - name: CourseInvite
   - name: ZoomMeeting
   - name: Address
+  - name: TrainerLevels
   scalars: []

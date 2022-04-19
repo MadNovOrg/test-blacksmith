@@ -16,13 +16,20 @@ import { useMountedState } from 'react-use'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
-import { SearchTrainer, SearchTrainerAvailability } from '@app/types'
+import {
+  SearchTrainer,
+  SearchTrainerAvailability,
+  CourseTrainerType,
+  CourseLevel,
+} from '@app/types'
 import { noop } from '@app/util'
 
 import { SearchTrainersSchedule } from './types'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
+  trainerType: CourseTrainerType
+  courseLevel: CourseLevel
   courseSchedule: SearchTrainersSchedule
   placeholder?: string
   max?: number
@@ -36,6 +43,8 @@ type Props = {
 const T_PREFIX = 'components.searchTrainers'
 
 export function SearchTrainers({
+  trainerType,
+  courseLevel,
   courseSchedule,
   placeholder,
   max = Infinity,
@@ -51,7 +60,11 @@ export function SearchTrainers({
   const [inputValue, setInputValue] = useState('')
   const [matches, setMatches] = useState<SearchTrainer[]>([])
   const [_selected, setSelected] = useState<SearchTrainer[]>([])
-  const { search } = useQueryTrainers({ schedule: courseSchedule })
+  const { search } = useQueryTrainers({
+    trainerType,
+    courseLevel,
+    schedule: courseSchedule,
+  })
 
   const isControlled = value != null
   const selected = isControlled ? value : _selected

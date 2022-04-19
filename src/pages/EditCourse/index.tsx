@@ -30,7 +30,7 @@ import {
   UPDATE_COURSE_MUTATION,
 } from '@app/queries/courses/update-course'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseTrainerType } from '@app/types'
+import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
 import { generateCourseName, LoadingStatus, profileToInput } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
@@ -218,6 +218,7 @@ export const EditCourse: React.FC<unknown> = () => {
                 courseData.endDateTime ? (
                   <ChooseTrainers
                     maxParticipants={courseData?.maxParticipants ?? 0}
+                    courseLevel={courseData.courseLevel || CourseLevel.LEVEL_1}
                     courseSchedule={{
                       start: courseData.startDateTime,
                       end: courseData.endDateTime,

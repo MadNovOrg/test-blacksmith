@@ -1,16 +1,10 @@
-import type { InviteStatus, CourseSchedule } from '@app/types'
+import type { TrainerExtra } from '@app/util/eligibleTrainers'
 
-export type SearchTrainersSchedule = Partial<
-  Pick<CourseSchedule, 'start' | 'end'>
->
+export type GetTrainersLevelsResp = {
+  getTrainersLevels: Array<TrainerExtra & { profile_id: string }>
+}
 
-export type SearchTrainerBookings = {
-  profile_id: string
-  status: InviteStatus
-  course: {
-    schedule: Array<{
-      start: string
-      end: string
-    }>
-  }
+export type SearchTrainersSchedule = {
+  start?: Date | string
+  end?: Date | string
 }

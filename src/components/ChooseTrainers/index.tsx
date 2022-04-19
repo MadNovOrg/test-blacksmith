@@ -14,7 +14,13 @@ import { noop } from 'ts-essentials'
 
 import { useAuth } from '@app/context/auth'
 import { yup } from '@app/schemas'
-import { CourseTrainer, CourseSchedule, SearchTrainer } from '@app/types'
+import {
+  CourseTrainer,
+  CourseSchedule,
+  SearchTrainer,
+  CourseTrainerType,
+  CourseLevel,
+} from '@app/types'
 import {
   getCourseAssistants,
   getCourseTrainer,
@@ -33,6 +39,7 @@ type NestedFormValues = {
 type Props = {
   maxParticipants: number
   trainers?: CourseTrainer[]
+  courseLevel: CourseLevel
   courseSchedule: Pick<CourseSchedule, 'start' | 'end'>
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
@@ -40,6 +47,7 @@ type Props = {
 
 const ChooseTrainers: React.FC<Props> = ({
   maxParticipants,
+  courseLevel,
   courseSchedule,
   trainers = [],
   onChange = noop,
@@ -120,7 +128,7 @@ const ChooseTrainers: React.FC<Props> = ({
   }, [maxParticipants, form])
 
   return (
-    <Stack component="form" data-testid="AssignTrainers-form">
+    <Stack component="form" spacing={5} data-testid="AssignTrainers-form">
       {acl.canAssignLeadTrainer() ? (
         <Box data-testid="AssignTrainers-lead">
           <Typography variant="subtitle1">
@@ -131,6 +139,8 @@ const ChooseTrainers: React.FC<Props> = ({
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
+                trainerType={CourseTrainerType.LEADER}
+                courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
                 max={1}
                 autoFocus={autoFocus}
@@ -160,8 +170,9 @@ const ChooseTrainers: React.FC<Props> = ({
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
+                trainerType={CourseTrainerType.ASSISTANT}
+                courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
-                max={3}
                 value={field.value}
                 onChange={field.onChange}
                 matchesFilter={notLead}

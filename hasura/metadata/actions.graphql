@@ -24,6 +24,12 @@ type Query {
 }
 
 type Query {
+  getTrainersLevels(
+    input: GetTrainersLevelsInput!
+  ): [TrainerLevels]
+}
+
+type Query {
   isUserSubscribedToMembership(
     customerId: String!
   ): isUserSubscribedToMembershipResponse
@@ -48,6 +54,27 @@ enum InviteStatus {
   DECLINED
 }
 
+enum CourseLevel {
+  LEVEL_1
+  LEVEL_2
+  INTERMEDIATE
+  ADVANCED
+  BILD_ACT
+}
+
+enum SearchTrainerAvailability {
+  UNAVAILABLE
+  AVAILABLE
+  PENDING
+  EXPIRED
+}
+
+enum CourseTrainerType {
+  LEADER
+  ASSISTANT
+  MODERATOR
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -56,6 +83,14 @@ input PlansCreateInput {
   recurring_count: Int!
   trial_type: BillingInterval!
   trial_count: Int!
+}
+
+input GetTrainersLevelsInput {
+  ids: [uuid!]!
+  trainerType: CourseTrainerType!
+  courseLevel: CourseLevel!
+  courseStart: date!
+  courseEnd: date!
 }
 
 type LinkProfileResult {
@@ -116,5 +151,11 @@ type Address {
   addressLineTwo: String
   city: String
   postCode: String
+}
+
+type TrainerLevels {
+  profile_id: uuid!
+  levels: [CourseLevel!]!
+  availability: SearchTrainerAvailability!
 }
 

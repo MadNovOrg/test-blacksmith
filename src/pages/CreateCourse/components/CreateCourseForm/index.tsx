@@ -26,6 +26,7 @@ import {
 import theme from '@app/theme'
 import {
   CourseDeliveryType,
+  CourseLevel,
   CourseTrainerType,
   CourseType,
   SearchTrainer,
@@ -214,6 +215,8 @@ export const CreateCourseForm = () => {
                 })}
               </Typography>
               <SearchTrainers
+                trainerType={CourseTrainerType.ASSISTANT}
+                courseLevel={courseData?.courseLevel || CourseLevel.LEVEL_1}
                 courseSchedule={{
                   start: courseData?.startDateTime ?? undefined,
                   end: courseData?.endDateTime ?? undefined,

@@ -12,6 +12,8 @@ import {
   SearchTrainer,
 } from '@app/types'
 
+export * from './eligibleTrainers'
+
 export const INPUT_DATE_FORMAT = 'yyyy-MM-dd'
 export const DATE_MASK = '____-__-__'
 

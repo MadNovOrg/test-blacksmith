@@ -125,8 +125,8 @@ export enum CourseStatus {
 export enum CourseLevel {
   LEVEL_1 = 'LEVEL_1',
   LEVEL_2 = 'LEVEL_2',
-  ADVANCED = 'ADVANCED',
   INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
   BILD_ACT = 'BILD_ACT',
 }
 
@@ -374,6 +374,7 @@ export enum SearchTrainerAvailability {
 
 export type SearchTrainer = {
   availability?: SearchTrainerAvailability
+  levels?: CourseLevel[]
 } & Pick<Profile, 'id' | 'fullName' | 'avatar'>
 
 export type CourseCertificateChangelog = {

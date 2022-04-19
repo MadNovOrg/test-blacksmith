@@ -1,13 +1,5 @@
 import { gql } from 'graphql-request'
 
-import {
-  InviteStatus,
-  SearchTrainer,
-  SearchTrainerAvailability,
-} from '@app/types'
-
-import { SearchTrainerBookings } from './types'
-
 export const GET_TRAINERS = gql`
   query ($limit: Int = 20, $offset: Int = 0, $where: profile_bool_exp) {
     trainers: profile(limit: $limit, offset: $offset, where: $where) {
@@ -17,62 +9,26 @@ export const GET_TRAINERS = gql`
   }
 `
 
-export const GET_TRAINERS_SCHEDULE = gql`
-  query ($trainerIds: [uuid!]!, $start: timestamptz, $end: timestamptz) {
-    schedules: course_trainer(
-      where: {
-        profile_id: { _in: $trainerIds }
-        course: {
-          schedule: {
-            _or: [
-              { start: { _gte: $start, _lte: $end } }
-              { end: { _gte: $start, _lte: $end } }
-            ]
-          }
-        }
+export const GET_TRAINERS_LEVELS = gql`
+  query (
+    $ids: [uuid!]!
+    $trainerType: CourseTrainerType!
+    $courseLevel: CourseLevel!
+    $courseStart: date!
+    $courseEnd: date!
+  ) {
+    getTrainersLevels(
+      input: {
+        ids: $ids
+        trainerType: $trainerType
+        courseLevel: $courseLevel
+        courseStart: $courseStart
+        courseEnd: $courseEnd
       }
     ) {
       profile_id
-      status
-      course {
-        schedule {
-          start
-          end
-        }
-      }
+      availability
+      levels
     }
   }
 `
-
-export function setAvailability(
-  trainers: SearchTrainer[],
-  schedules: SearchTrainerBookings[]
-) {
-  const trainersBooked = new Set()
-  const trainersPending = new Set()
-  schedules.forEach(s => {
-    switch (s.status) {
-      case InviteStatus.ACCEPTED:
-        trainersBooked.add(s.profile_id)
-        trainersPending.delete(s.profile_id)
-        break
-      case InviteStatus.PENDING:
-        if (!trainersBooked.has(s.profile_id)) {
-          trainersPending.add(s.profile_id)
-        }
-        break
-      case InviteStatus.DECLINED:
-        break // if declined then is available for this
-    }
-  })
-
-  trainers.forEach(t => {
-    if (trainersPending.has(t.id)) {
-      t.availability = SearchTrainerAvailability.PENDING
-    } else if (trainersBooked.has(t.id)) {
-      t.availability = SearchTrainerAvailability.UNAVAILABLE
-    } else {
-      t.availability = SearchTrainerAvailability.AVAILABLE
-    }
-  })
-}

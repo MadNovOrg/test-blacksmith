@@ -85,6 +85,7 @@ export const AssignTrainers = () => {
     <Stack spacing={5}>
       <ChooseTrainers
         maxParticipants={course.max_participants}
+        courseLevel={course.level}
         courseSchedule={course.schedule[0]}
         onChange={handleTrainersDataChange}
         trainers={course.trainers}
