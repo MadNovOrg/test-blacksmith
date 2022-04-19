@@ -141,3 +141,14 @@ export const CERTIFICATE = gql`
     expiryDate
   }
 `
+
+export const CERTIFICATE_CHANGELOG = gql`
+  fragment CertificateChangelog on course_certificate_changelog {
+    id
+    createdAt
+    updatedAt
+    oldGrade
+    newGrade
+    notes
+  }
+`

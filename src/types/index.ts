@@ -375,3 +375,11 @@ export enum SearchTrainerAvailability {
 export type SearchTrainer = {
   availability?: SearchTrainerAvailability
 } & Pick<Profile, 'id' | 'fullName' | 'avatar'>
+
+export type CourseCertificateChangelog = {
+  oldGrade: Grade
+  newGrade: Grade
+  notes: string
+  author: Profile
+  participant: CourseParticipant
+} & Base

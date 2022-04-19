@@ -1,0 +1,47 @@
+table:
+  name: course_certificate_changelog
+  schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    author_id: authorId
+    created_at: createdAt
+    new_grade: newGrade
+    old_grade: oldGrade
+    participant_id: participantId
+    updated_at: updatedAt
+  custom_root_fields: {}
+object_relationships:
+- name: author
+  using:
+    foreign_key_constraint_on: author_id
+- name: participant
+  using:
+    foreign_key_constraint_on: participant_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - author_id
+    - created_at
+    - id
+    - new_grade
+    - notes
+    - old_grade
+    - participant_id
+    - updated_at
+  role: tt-admin
+select_permissions:
+- permission:
+    columns:
+    - author_id
+    - created_at
+    - id
+    - new_grade
+    - notes
+    - old_grade
+    - participant_id
+    - updated_at
+    filter: {}
+  role: tt-admin

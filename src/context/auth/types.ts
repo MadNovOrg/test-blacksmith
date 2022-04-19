@@ -45,4 +45,5 @@ export type ACL = {
   canAssignLeadTrainer: () => boolean
   canViewContacts: () => boolean
   canViewCertifications: () => boolean
+  canOverrideGrades: () => boolean
 }

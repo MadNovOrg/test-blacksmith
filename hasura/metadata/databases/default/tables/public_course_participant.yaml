@@ -68,6 +68,26 @@ select_permissions:
     allow_aggregations: true
     columns:
     - attended
+    - course_id
+    - go1_enrolment_id
+    - go1_enrolment_status
+    - grade
+    - grading_feedback
+    - booking_date
+    - created_at
+    - date_graded
+    - updated_at
+    - id
+    - invite_id
+    - invoice_id
+    - profile_id
+    - registration_id
+    filter: {}
+  role: tt-admin
+- permission:
+    allow_aggregations: true
+    columns:
+    - attended
     - booking_date
     - course_id
     - date_graded
@@ -81,6 +101,13 @@ select_permissions:
     filter: {}
   role: user
 update_permissions:
+- permission:
+    check: null
+    columns:
+    - grade
+    - updated_at
+    filter: {}
+  role: tt-admin
 - permission:
     check: {}
     columns:

@@ -156,6 +156,7 @@
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
     "validation-errors": {
+      "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
       "email-required": "Please enter your email",
       "email-invalid": "Please enter a valid email address",
@@ -207,7 +208,14 @@
       "valid-until": "Valid until",
       "cert-error": "Error generating certificate",
       "cert-loading": "Loading certificate...",
-      "completed-message": "Has successfully completed the following Team teach course:"
+      "completed-message": "Has successfully completed the following Team teach course:",
+      "modify-grade": "Modify grade",
+      "change-log": "Change log",
+      "modify-grade-modal": {
+        "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
+        "please-add-a-note": "Please add a note*",
+        "confirm-modification": "Confirm modification"
+      }
     },
     "items": "items",
     "from": "From",
@@ -339,6 +347,11 @@
         "expired": "Expired",
         "active": "Active"
       }
+    },
+    "changelog-modal": {
+      "administrator": "Administrator",
+      "date": "Date",
+      "change": "Change"
     }
   },
   "pages": {

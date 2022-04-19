@@ -20,6 +20,7 @@ import { t } from 'i18next'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -38,7 +39,6 @@ import {
   ModulesSelectionList,
 } from '../CourseGradingDetails/ModulesSelectionList'
 
-import { CourseGradingMenu } from './components/CourseGradingMenu'
 import useCourseGradingData from './useCourseGradingData'
 
 const validUntilMonthsByCourseLevel = {

@@ -75,6 +75,15 @@ select_permissions:
   role: trainer
 - permission:
     columns:
+    - course_id
+    - answer
+    - id
+    - profile_id
+    - question_id
+    filter: {}
+  role: tt-admin
+- permission:
+    columns:
     - answer
     - course_id
     - id

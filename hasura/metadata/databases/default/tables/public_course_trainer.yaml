@@ -39,12 +39,21 @@ insert_permissions:
 select_permissions:
 - permission:
     columns:
+      - course_id
+      - status
+      - type
+      - id
+      - profile_id
+    filter: { }
+  role: tt-admin
+- permission:
+    columns:
     - course_id
     - status
     - type
     - id
     - profile_id
-    filter: {}
+    filter: { }
   role: trainer
 - permission:
     columns:

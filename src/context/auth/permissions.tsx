@@ -68,6 +68,12 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return roles.some(r => r === auth.activeRole)
     },
+
+    canOverrideGrades: () => {
+      const roles = [RoleName.TT_ADMIN]
+
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return { ...auth, acl }

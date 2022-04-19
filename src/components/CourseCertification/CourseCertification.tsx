@@ -2,6 +2,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   Alert,
+  Avatar,
   Box,
   Button,
   Container,
@@ -14,8 +15,9 @@ import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
 import { format } from 'date-fns'
 import MUIImage from 'mui-image'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import useSWR from 'swr'
 
 import {
   CertificateAssistIcon,
@@ -26,6 +28,16 @@ import {
   ntaImage,
 } from '@app/assets'
 import { CertificateDocument } from '@app/components/CertificatePDF'
+import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
+import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
+import { Dialog } from '@app/components/Dialog'
+import { useAuth } from '@app/context/auth'
+import {
+  ParamsType as GetCertificateChangelogsParamsType,
+  QUERY as GetCertificateChangelogsQuery,
+  ResponseType as GetCertificateChangelogsResponseType,
+} from '@app/queries/grading/get-certificate-changelog'
+import theme from '@app/theme'
 import { Course, CourseParticipant, Grade } from '@app/types'
 import { transformModulesToGroups } from '@app/util'
 
@@ -278,6 +290,15 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
   courseParticipant,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
+  const [showChangelogModal, setShowChangelogModal] = useState(false)
+
+  const { data: changeLogsData } = useSWR<
+    GetCertificateChangelogsResponseType,
+    Error,
+    [string, GetCertificateChangelogsParamsType]
+  >([GetCertificateChangelogsQuery, { participantId: courseParticipant.id }])
 
   const certificationNumber = courseParticipant.certificate?.number ?? ''
   const grade = courseParticipant?.grade
@@ -301,49 +322,96 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
     <Box>
       <Container>
         <Grid container>
-          <Grid item md={3}>
-            <Box sx={{ mb: 2 }}>
-              {grade ? gradesToCertificateIconMapping[grade] : null}
-            </Box>
-            {grade !== Grade.FAIL ? (
-              <Button
-                data-testid="download-certificate-button"
-                size="large"
-                variant="contained"
-                color="primary"
-                sx={{
-                  mb: {
-                    sm: 10,
-                  },
-                }}
-              >
-                <PDFDownloadLink
-                  style={{ color: 'white' }}
-                  document={
-                    <CertificateDocument
-                      participantName={courseParticipant.profile?.fullName}
-                      courseName={course.name}
-                      courseLevel={course.level}
-                      grade={grade as Grade}
-                      courseDeliveryType={courseDeliveryType}
-                      certificationNumber={certificationNumber}
-                      expiryDate={
-                        courseParticipant.certificate?.expiryDate ?? ''
-                      }
-                    />
-                  }
-                  fileName="certificate.pdf"
+          <Grid item md={3} px={4}>
+            <Grid container gap={2}>
+              <Box sx={{ mb: 2 }} mx="auto">
+                {grade ? gradesToCertificateIconMapping[grade] : null}
+              </Box>
+
+              {acl.canOverrideGrades() ? (
+                <Box mb={3}>
+                  <Typography color={theme.palette.grey[700]} fontWeight={600}>
+                    {t('common.attendee')}
+                  </Typography>
+
+                  <Box
+                    pt={1}
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={1}
+                  >
+                    <Avatar />
+                    <Typography variant="body1">
+                      {courseParticipant.profile.fullName}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : null}
+
+              {grade !== Grade.FAIL ? (
+                <Button
+                  fullWidth
+                  data-testid="download-certificate-button"
+                  size="large"
+                  variant="contained"
+                  color="primary"
                 >
-                  {({ loading, error }) =>
-                    loading
-                      ? t('common.course-certificate.cert-loading')
-                      : error
-                      ? t('common.course-certificate.cert-error')
-                      : t('common.course-certificate.download-certificate')
-                  }
-                </PDFDownloadLink>
-              </Button>
-            ) : null}
+                  <PDFDownloadLink
+                    style={{ color: 'white' }}
+                    document={
+                      <CertificateDocument
+                        participantName={courseParticipant.profile?.fullName}
+                        courseName={course.name}
+                        courseLevel={course.level}
+                        grade={grade as Grade}
+                        courseDeliveryType={courseDeliveryType}
+                        certificationNumber={certificationNumber}
+                        expiryDate={
+                          courseParticipant.certificate?.expiryDate ?? ''
+                        }
+                      />
+                    }
+                    fileName="certificate.pdf"
+                  >
+                    {({ loading, error }) =>
+                      loading
+                        ? t('common.course-certificate.cert-loading')
+                        : error
+                        ? t('common.course-certificate.cert-error')
+                        : t('common.course-certificate.download-certificate')
+                    }
+                  </PDFDownloadLink>
+                </Button>
+              ) : null}
+
+              {acl.canOverrideGrades() ? (
+                <Box mt={2}>
+                  <Button
+                    fullWidth
+                    data-testid="modify-grade-button"
+                    size="large"
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => setShowModifyGradeModal(true)}
+                  >
+                    {t('common.course-certificate.modify-grade')}
+                  </Button>
+                  {changeLogsData?.changelogs.length ? (
+                    <Button
+                      fullWidth
+                      data-testid="change-log-button"
+                      size="large"
+                      variant="text"
+                      color="primary"
+                      onClick={() => setShowChangelogModal(true)}
+                    >
+                      {t('common.course-certificate.change-log')}
+                    </Button>
+                  ) : null}
+                </Box>
+              ) : null}
+            </Grid>
           </Grid>
 
           <Grid item md={7}>
@@ -358,6 +426,29 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
           </Grid>
         </Grid>
       </Container>
+
+      <Dialog
+        open={showModifyGradeModal}
+        onClose={() => setShowModifyGradeModal(false)}
+        title={t('common.course-certificate.modify-grade')}
+        maxWidth={800}
+      >
+        <ModifyGradeModal
+          participant={courseParticipant}
+          onClose={() => setShowModifyGradeModal(false)}
+        />
+      </Dialog>
+
+      <Dialog
+        open={showChangelogModal}
+        onClose={() => setShowChangelogModal(false)}
+        title={t('common.course-certificate.change-log')}
+        maxWidth={800}
+      >
+        {changeLogsData?.changelogs.length ? (
+          <ChangelogModal changelogs={changeLogsData?.changelogs} />
+        ) : null}
+      </Dialog>
     </Box>
   )
 }

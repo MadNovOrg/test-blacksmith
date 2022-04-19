@@ -16,6 +16,8 @@ export const QUERY = gql`
       course {
         id
         name
+        level
+        deliveryType
       }
       profile {
         fullName

@@ -14,6 +14,7 @@ interface Props {
   onChange?: (grade: Grade) => void
   courseLevel: CourseLevel
   courseDeliveryType: CourseDeliveryType
+  initialValue?: Grade
 }
 
 type GradeOption = { key: Grade; label: string; icon: React.ReactNode }
@@ -22,9 +23,9 @@ export const CourseGradingMenu: React.FC<Props> = ({
   onChange = noop,
   courseDeliveryType,
   courseLevel,
+  initialValue,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLSpanElement | null>(null)
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
   const open = Boolean(anchorEl)
   const { t } = useTranslation()
 
@@ -70,6 +71,10 @@ export const CourseGradingMenu: React.FC<Props> = ({
 
     return [passOption, observeOnlyOption, failOption]
   }, [t, courseDeliveryType, courseLevel])
+
+  const [selectedIndex, setSelectedIndex] = React.useState<number>(
+    initialValue ? options.findIndex(option => option.key === initialValue) : 0
+  )
 
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,

@@ -2,3 +2,9 @@ table:
   name: course_evaluation_question_group
   schema: public
 is_enum: true
+select_permissions:
+- permission:
+    columns:
+    - name
+    filter: {}
+  role: tt-admin

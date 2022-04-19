@@ -13,6 +13,10 @@ import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { EditCourse } from '@app/pages/EditCourse'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
+import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
+import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 
 const TTAdminRoutes = () => {
@@ -32,7 +36,16 @@ const TTAdminRoutes = () => {
         <Route path="edit/:id" element={<EditCourse />} />
 
         <Route path=":id">
-          <Route path="details" element={<div>TBD</div>} />
+          <Route path="details" element={<CourseDetails />} />
+          <Route path="grading" element={<CourseGrading />} />
+          <Route
+            path="grading/:participantId"
+            element={<ParticipantGrading />}
+          />
+          <Route
+            path="certification/:participantId"
+            element={<CourseCertificationDetails />}
+          />
         </Route>
       </Route>
 

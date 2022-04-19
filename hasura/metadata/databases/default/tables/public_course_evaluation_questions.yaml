@@ -21,6 +21,17 @@ select_permissions:
   role: trainer
 - permission:
     columns:
+    - required
+    - display_order
+    - group
+    - question
+    - question_key
+    - type
+    - id
+    filter: {}
+  role: tt-admin
+- permission:
+    columns:
     - display_order
     - group
     - id
