@@ -16,6 +16,7 @@ export const CourseRegistrationPage: React.FC = () => {
   const [searchParams] = useSearchParams()
 
   const courseId = searchParams.get('course_id')
+  const quantity = searchParams.get('quantity')
 
   const onSignUp = (email: string, password: string) => {
     // delay auto-login just in case
@@ -28,8 +29,8 @@ export const CourseRegistrationPage: React.FC = () => {
     }, 500)
   }
 
-  if (!courseId) {
-    return <div>No course id</div>
+  if (!courseId || !quantity) {
+    return <div>Invalid link</div>
   }
 
   return (
@@ -57,7 +58,7 @@ export const CourseRegistrationPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Form onSignUp={onSignUp} courseId={+courseId} />
+      <Form onSignUp={onSignUp} courseId={+courseId} quantity={+quantity} />
     </AppLayoutMinimal>
   )
 }

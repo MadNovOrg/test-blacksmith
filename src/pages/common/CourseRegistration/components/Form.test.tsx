@@ -7,6 +7,7 @@ import { Form } from './Form'
 const defaultProps = {
   onSignUp: jest.fn(),
   courseId: 123,
+  quantity: 2,
 }
 
 jest.mock('@app/components/OrgSelector', () => ({

@@ -32,9 +32,8 @@ import {
   ParamsType,
 } from '@app/queries/profile/insert-profile-temp'
 
-import { FormProps, FormInputs, getFormSchema } from '../helpers'
-
 import { positions, sectors } from './org-data'
+import { FormInputs, getFormSchema } from './types'
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -42,7 +41,13 @@ const TextField = styled(MuiTextField)(() => ({
   },
 }))
 
-export const Form: React.FC<FormProps> = ({ onSignUp, courseId }) => {
+type Props = {
+  onSignUp: (email: string, password: string) => void
+  courseId: number
+  quantity: number
+}
+
+export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [isLoading, setLoading] = useState(false)
@@ -86,6 +91,7 @@ export const Form: React.FC<FormProps> = ({ onSignUp, courseId }) => {
         jobTitle: `${data.position}-${data.otherPosition}`,
         courseId,
         organizationId: data.orgId,
+        quantity,
       }
 
       await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })

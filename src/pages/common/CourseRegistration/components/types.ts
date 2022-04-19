@@ -1,12 +1,7 @@
 import { schemas, yup, TFunction } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
-import { sectors } from './components/org-data'
-
-export type FormProps = {
-  onSignUp: (email: string, password: string) => void
-  courseId?: number
-}
+import { sectors } from './org-data'
 
 type Sector = keyof typeof sectors
 
@@ -56,10 +51,4 @@ export const getFormSchema = (t: TFunction) => {
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
   })
-}
-
-export type SignUpResult = {
-  username: string
-  userSub: string
-  confirmed: boolean
 }

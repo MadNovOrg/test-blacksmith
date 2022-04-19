@@ -15,6 +15,7 @@ export type ParamsType = {
     jobTitle?: string
     courseId?: number
     organizationId?: string | null
+    quantity?: number | null
   }
 }
 

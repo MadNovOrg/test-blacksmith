@@ -30,5 +30,6 @@ insert_permissions:
     - job_title
     - organization_id
     - phone
+    - quantity
     - sector
   role: anonymous
