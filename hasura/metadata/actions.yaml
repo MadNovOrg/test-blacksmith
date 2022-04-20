@@ -4,15 +4,6 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
   comment: Creates a membership subscription
-- name: createZoomMeeting
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/zoom/create-meeting'
-    forward_client_headers: true
-  permissions:
-  - role: trainer
-  - role: tt-ops
-  - role: tt-admin
 - name: declineInvite
   definition:
     kind: synchronous
@@ -48,6 +39,15 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/prices/create'
   comment: Creates a membership plan
+- name: upsertZoomMeeting
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/zoom/upsert-meeting'
+  permissions:
+  - role: tt-ops
+  - role: tt-admin
+  - role: trainer
+  comment: Creates or updates Zoom meeting with start date
 custom_types:
   enums:
   - name: BillingInterval
@@ -119,6 +119,7 @@ custom_types:
       value: MODERATOR
   input_objects:
   - name: PlansCreateInput
+  - name: UpsertZoomMeetingInput
   - name: GetTrainersLevelsInput
   objects:
   - name: LinkProfileResult
@@ -129,7 +130,9 @@ custom_types:
   - name: DeclineInviteOutput
   - name: Invite
   - name: CourseInvite
-  - name: ZoomMeeting
   - name: Address
+  - name: UpsertZoomMeetingPayload
+  - name: ZoomMeeting
+  - name: ZoomMeetingNotFoundError
   - name: TrainerLevels
   scalars: []

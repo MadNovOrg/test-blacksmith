@@ -1,0 +1,137 @@
+import { renderHook, act } from '@testing-library/react-hooks'
+import { formatISO } from 'date-fns'
+
+import { LoadingStatus } from '@app/util'
+
+import { waitFor } from '@test/index'
+
+import { useFetcher } from '../use-fetcher'
+
+import useZoomMeetingLink, { QUERY } from '.'
+
+jest.mock('../use-fetcher')
+
+const useFetcherMocked = jest.mocked(useFetcher)
+
+describe('hook: useZoomMeetingLink', () => {
+  it("doesn't generate the meeting link when mounted", () => {
+    const fetcherMock = jest.fn()
+
+    useFetcherMocked.mockReturnValue(fetcherMock)
+
+    renderHook(() => useZoomMeetingLink())
+
+    expect(fetcherMock).not.toHaveBeenCalled()
+  })
+
+  it('generates link when generate function is called', async () => {
+    const MOCK_MEETING_URL = 'meeting-url'
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      upsertZoomMeeting: {
+        meeting: {
+          joinUrl: MOCK_MEETING_URL,
+        },
+      },
+    })
+
+    useFetcherMocked.mockReturnValue(fetcherMock)
+
+    const { result } = renderHook(() => useZoomMeetingLink())
+
+    act(() => {
+      result.current.generateLink()
+    })
+
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
+
+    await waitFor(() => {
+      expect(result.current).toEqual({
+        generateLink: expect.any(Function),
+        status: LoadingStatus.SUCCESS,
+        meetingUrl: MOCK_MEETING_URL,
+      })
+    })
+  })
+
+  it("doesn't call the api if meeting url is already generated", async () => {
+    const MOCK_MEETING_URL = 'meeting-url'
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      upsertZoomMeeting: {
+        meeting: {
+          joinUrl: MOCK_MEETING_URL,
+          id: '123',
+        },
+      },
+    })
+
+    useFetcherMocked.mockReturnValue(fetcherMock)
+
+    const { result, waitForNextUpdate } = renderHook(() => useZoomMeetingLink())
+
+    act(() => {
+      result.current.generateLink()
+    })
+
+    await waitForNextUpdate()
+
+    act(() => {
+      result.current.generateLink()
+    })
+
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('generates link when start time changes', async () => {
+    const MOCK_MEETING_URL = 'meeting-url'
+    const MOCK_MEETING_ID = 'meeting-id'
+    const startTime = formatISO(new Date())
+
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      upsertZoomMeeting: {
+        meeting: {
+          id: MOCK_MEETING_ID,
+          joinUrl: MOCK_MEETING_URL,
+        },
+      },
+    })
+
+    useFetcherMocked.mockReturnValue(fetcherMock)
+
+    const { result, waitForNextUpdate, rerender } = renderHook(
+      ({ startTime }) => useZoomMeetingLink(startTime),
+      {
+        initialProps: { startTime: '' },
+      }
+    )
+
+    act(() => {
+      result.current.generateLink()
+    })
+
+    await waitForNextUpdate({})
+
+    act(() => {
+      rerender({ startTime })
+    })
+
+    await waitFor(() => {
+      expect(fetcherMock).toHaveBeenCalledTimes(2)
+
+      expect(fetcherMock.mock.calls[0]).toEqual([QUERY, { input: {} }])
+
+      expect(fetcherMock.mock.calls[1]).toEqual([
+        QUERY,
+        {
+          input: {
+            id: expect.any(String),
+            startTime,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          },
+        },
+      ])
+    })
+  })
+})

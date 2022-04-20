@@ -17,7 +17,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { Box, styled } from '@mui/system'
-import { setHours, setMinutes } from 'date-fns'
+import { formatISO, setHours, setMinutes } from 'date-fns'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -80,11 +80,6 @@ const CourseForm: React.FC<Props> = ({
   course,
 }) => {
   const { t } = useTranslation()
-  const {
-    meetingUrl: zoomMeetingUrl,
-    generateLink: generateZoomLink,
-    status: zoomLinkStatus,
-  } = useZoomMeetingLink()
 
   const [startTime, setStartTime] = useState<Date | null>(
     course?.schedule[0].start ? new Date(course.schedule[0].start) : null
@@ -232,6 +227,14 @@ const CourseForm: React.FC<Props> = ({
   })
 
   const formValues = watch()
+
+  const {
+    meetingUrl: zoomMeetingUrl,
+    generateLink: generateZoomLink,
+    status: zoomLinkStatus,
+  } = useZoomMeetingLink(
+    formValues.startDateTime ? formatISO(formValues.startDateTime) : undefined
+  )
 
   const deliveryType = formValues.deliveryType
   const courseLevel = formValues.courseLevel

@@ -6,13 +6,7 @@ type Mutation {
 }
 
 type Mutation {
-  createZoomMeeting: ZoomMeeting
-}
-
-type Mutation {
-  declineInvite(
-    note: String
-  ): DeclineInviteOutput
+  declineInvite(note: String): DeclineInviteOutput
 }
 
 type Query {
@@ -24,9 +18,7 @@ type Query {
 }
 
 type Query {
-  getTrainersLevels(
-    input: GetTrainersLevelsInput!
-  ): [TrainerLevels]
+  getTrainersLevels(input: GetTrainersLevelsInput!): [TrainerLevels]
 }
 
 type Query {
@@ -36,9 +28,11 @@ type Query {
 }
 
 type Mutation {
-  plansCreate(
-    data: PlansCreateInput!
-  ): PlansCreateResult
+  plansCreate(data: PlansCreateInput!): PlansCreateResult
+}
+
+type Mutation {
+  upsertZoomMeeting(input: UpsertZoomMeetingInput): UpsertZoomMeetingPayload
 }
 
 enum BillingInterval {
@@ -83,6 +77,18 @@ input PlansCreateInput {
   recurring_count: Int!
   trial_type: BillingInterval!
   trial_count: Int!
+}
+
+input UpsertZoomMeetingInput {
+  id: Float
+  """
+  ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z'
+  """
+  startTime: String
+  """
+  Timezone string, e.g. Europe/London
+  """
+  timezone: String
 }
 
 input GetTrainersLevelsInput {
@@ -142,10 +148,6 @@ type CourseInvite {
   venueCoordinates: String
 }
 
-type ZoomMeeting {
-  joinUrl: String!
-}
-
 type Address {
   addressLineOne: String
   addressLineTwo: String
@@ -153,9 +155,23 @@ type Address {
   postCode: String
 }
 
+type UpsertZoomMeetingPayload {
+  success: Boolean!
+  meeting: ZoomMeeting
+  userError: ZoomMeetingNotFoundError
+}
+
+type ZoomMeeting {
+  id: Int!
+  joinUrl: String!
+}
+
+type ZoomMeetingNotFoundError {
+  id: String!
+}
+
 type TrainerLevels {
   profile_id: uuid!
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability!
 }
-
