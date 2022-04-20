@@ -182,56 +182,41 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
 
       {grade !== Grade.FAIL ? (
         <>
-          <Box
-            sx={{
-              gap: { sm: 2, md: 6 },
-              mt: 6,
-              color: 'grey.500',
-              alignItems: 'center',
-              display: 'flex',
-            }}
-          >
-            <Typography variant="body2" gutterBottom>
-              {t('common.course-certificate.issue-date')}
-            </Typography>
+          <Grid container spacing={2} mt={4}>
+            <Grid item xs={4} sx={{ color: 'grey.500' }}>
+              <Typography variant="body2">
+                {t('common.course-certificate.issue-date')}
+              </Typography>
+            </Grid>
 
-            <Typography variant="body2" gutterBottom sx={{ ml: { md: 2 } }}>
-              {t('common.course-certificate.number')}
-            </Typography>
+            <Grid item xs={4} sx={{ color: 'grey.500' }}>
+              <Typography variant="body2">
+                {t('common.course-certificate.number')}
+              </Typography>
+            </Grid>
 
-            <Typography variant="body2" gutterBottom sx={{ ml: 15 }}>
-              {t('common.course-certificate.valid-until')}
-            </Typography>
-          </Box>
+            <Grid item xs={4} sx={{ color: 'grey.500' }}>
+              <Typography variant="body2">
+                {t('common.course-certificate.valid-until')}
+              </Typography>
+            </Grid>
 
-          <Box
-            sx={{
-              gap: { sm: 2, md: 6 },
-              mt: 1,
-              position: 'relative',
-              display: 'flex',
-            }}
-          >
-            <Typography variant="body2" gutterBottom>
-              {format(new Date(dateIssued), 'd MMMM yyyy')}
-            </Typography>
+            <Grid item xs={4}>
+              <Typography variant="body2">
+                {format(new Date(dateIssued), 'd MMMM yyyy')}
+              </Typography>
+            </Grid>
 
-            <Typography
-              variant="caption"
-              gutterBottom
-              sx={{ maxWidth: '50%', ml: { md: -2.5 } }}
-            >
-              {certificationNumber}
-            </Typography>
+            <Grid item xs={4}>
+              <Typography variant="caption">{certificationNumber}</Typography>
+            </Grid>
 
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ ml: { sm: 10, md: 2 } }}
-            >
-              {format(new Date(expiryDate), 'd MMMM yyyy')}
-            </Typography>
-          </Box>
+            <Grid item xs={4}>
+              <Typography variant="body2">
+                {format(new Date(expiryDate), 'd MMMM yyyy')}
+              </Typography>
+            </Grid>
+          </Grid>
 
           <Box
             sx={{

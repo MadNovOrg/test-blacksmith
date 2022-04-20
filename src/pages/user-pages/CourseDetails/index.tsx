@@ -160,12 +160,14 @@ export const CourseDetails = () => {
                     label={t('pages.participant-course.resources-tab-title')}
                     value="resources"
                   />
-                  <PillTab
-                    label={t(
-                      'pages.participant-course.certification-tab-title'
-                    )}
-                    value="certification"
-                  />
+                  {courseParticipant[0].certificate ? (
+                    <PillTab
+                      label={t(
+                        'pages.participant-course.certification-tab-title'
+                      )}
+                      value="certification"
+                    />
+                  ) : null}
                 </PillTabList>
               </Container>
             </Box>
@@ -213,27 +215,29 @@ export const CourseDetails = () => {
                 {t('pages.participant-course.resources-empty-message')}
               </TabPanel>
 
-              <TabPanel sx={{ px: 0 }} value="certification">
-                {!courseHasEnded ? (
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    mb={5}
-                  >
-                    <Alert variant="outlined" color="warning" sx={{ mb: 3 }}>
-                      {t(
-                        'pages.participant-course.certification-course-not-ended'
-                      )}
-                    </Alert>
-                  </Box>
-                ) : (
-                  <CourseCertification
-                    courseParticipant={courseParticipant[0]}
-                    course={course}
-                  />
-                )}
-              </TabPanel>
+              {courseParticipant[0].certificate ? (
+                <TabPanel sx={{ px: 0 }} value="certification">
+                  {!courseHasEnded ? (
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      mb={5}
+                    >
+                      <Alert variant="outlined" color="warning" sx={{ mb: 3 }}>
+                        {t(
+                          'pages.participant-course.certification-course-not-ended'
+                        )}
+                      </Alert>
+                    </Box>
+                  ) : (
+                    <CourseCertification
+                      courseParticipant={courseParticipant[0]}
+                      course={course}
+                    />
+                  )}
+                </TabPanel>
+              ) : null}
             </Container>
           </TabContext>
         </>
