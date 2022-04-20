@@ -10,6 +10,7 @@ import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
+import { NotFound } from '@app/pages/common/NotFound'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { SignUpPage } from '@app/pages/common/SignUp'
 import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
@@ -76,6 +77,7 @@ function UnverifiedUserRoutes() {
       <Route index element={<Navigate replace to="booking" />} />
       <Route path="verify" element={<VerifyEmailPage />} />
       <Route path="booking" element={<CourseBookingPage />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }

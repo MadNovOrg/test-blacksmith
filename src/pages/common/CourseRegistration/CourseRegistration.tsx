@@ -24,8 +24,7 @@ export const CourseRegistrationPage: React.FC = () => {
       await login(email, password)
       // when login completes, we have an active profile of unverified user,
       // router sets in the available routes and we navigate to verify
-      // TODO: Can test properly only on dev
-      navigate('/verify')
+      navigate('/verify', { replace: true })
     }, 500)
   }
 

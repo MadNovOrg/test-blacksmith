@@ -2,25 +2,16 @@ import MuiAppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
-import { styled } from '@mui/system'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { NavLink } from 'react-router-dom'
 
 import { RoleSwitcher } from '@app/components/RoleSwitcher'
 import { useAuth } from '@app/context/auth'
 
 import { DrawerMenu } from '../DrawerMenu'
 import { Logo } from '../Logo'
+import { StyledNavLink } from '../StyledNavLink'
 import { UserMenu } from '../UserMenu'
-
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
-  padding: theme.spacing(0.5, 3),
-
-  '&.active': {
-    fontWeight: '600',
-  },
-}))
 
 export const AppBar = () => {
   const { t } = useTranslation()

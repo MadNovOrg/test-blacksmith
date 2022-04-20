@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
+import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
 import { useAuth } from '@app/context/auth'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
@@ -48,7 +48,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
   }
 
   return (
-    <AppLayoutMinimal width={628}>
+    <UnverifiedLayout width={628}>
       <Typography
         variant="h3"
         sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
@@ -78,6 +78,6 @@ export const VerifyEmailPage: React.FC<Props> = () => {
           onSuccess={() => setSuccess(true)}
         />
       )}
-    </AppLayoutMinimal>
+    </UnverifiedLayout>
   )
 }

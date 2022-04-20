@@ -5,14 +5,54 @@ exports[`page: VerifyEmailPage matchs snapshot 1`] = `
   <div
     class="MuiBox-root css-16d3e73"
   >
-    <div
-      class="MuiBox-root css-70qvj9"
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionFixed mui-fixed css-1jvst5f-MuiPaper-root-MuiAppBar-root"
     >
       <div
-        height="80"
-        width="80"
-      />
-    </div>
+        class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1k7giva-MuiToolbar-root"
+      >
+        <div
+          class="MuiBox-root css-0"
+        />
+        <div
+          class="MuiBox-root css-70qvj9"
+        >
+          <div
+            class="MuiBox-root css-70qvj9"
+          >
+            <div
+              data-testid="app-logo"
+              height="48"
+              width="230"
+            />
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <a
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-kboeec-MuiButtonBase-root-MuiButton-root"
+            href="/verify"
+            tabindex="0"
+          >
+            Verify
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </a>
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-kboeec-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="button"
+          >
+            Logout
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+    </header>
     <div
       class="MuiBox-root css-1wlfb0w"
     >

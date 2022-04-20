@@ -50,7 +50,7 @@ type Props = {
 export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
-  const [isLoading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [signUpError, setError] = useState('')
 
   const schema = useMemo(() => getFormSchema(t), [t])
@@ -112,9 +112,8 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
       const { code = 'UnknownError' } = err as Error & { code: string }
       const errors = 'pages.signup.form-errors.'
       setError(t(`${errors}${code}`) || t(`${errors}UnknownError`))
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   const sectorOptions = useMemo(
@@ -378,7 +377,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
 
         <Box display="flex" flexDirection="column" alignItems="center">
           <LoadingButton
-            loading={isLoading}
+            loading={loading}
             type="submit"
             variant="contained"
             color="primary"
