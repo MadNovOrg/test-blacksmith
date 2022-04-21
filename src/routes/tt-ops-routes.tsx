@@ -22,10 +22,7 @@ const TTOpsRoutes = () => {
 
         <Route path="new" element={<CreateCourse />}>
           <Route index element={<CreateCourseForm />} />
-          <Route
-            path="assign-trainers/:courseId"
-            element={<AssignTrainers />}
-          />
+          <Route path="assign-trainers" element={<AssignTrainers />} />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

@@ -1,53 +1,25 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, CircularProgress, Alert, Stack } from '@mui/material'
+import { Box, Button, Alert, Stack } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import useCourse from '@app/hooks/useCourse'
-import { SetCourseTrainer } from '@app/queries/courses/set-course-trainers'
-import { CourseTrainerType, SetCourseTrainerVars } from '@app/types'
-import { LoadingStatus, profileToInput } from '@app/util'
+import { CourseTrainerType } from '@app/types'
+import { LoadingStatus } from '@app/util'
+
+import { useSaveCourse } from '../../useSaveCourse'
+import { useCreateCourse } from '../CreateCourseProvider'
 
 export const AssignTrainers = () => {
   const { t } = useTranslation()
+  const { courseData } = useCreateCourse()
   const navigate = useNavigate()
-  const fetcher = useFetcher()
-  const [saving, setSaving] = useState(false)
   const [trainers, setTrainers] = useState<FormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
-
-  const { courseId = '' } = useParams()
-  const { data: course, status: courseStatus } = useCourse(courseId)
-
-  const saveTrainers = useCallback(async () => {
-    const lead = trainers?.lead ?? []
-    const assist = trainers?.assist ?? []
-
-    if (!course || !trainersDataValid) return
-
-    setSaving(true)
-    const vars: SetCourseTrainerVars = {
-      courseId: course.id,
-      trainers: [
-        ...lead.map(profileToInput(course, CourseTrainerType.LEADER)),
-        ...assist.map(profileToInput(course, CourseTrainerType.ASSISTANT)),
-      ],
-    }
-
-    try {
-      await fetcher(SetCourseTrainer, vars)
-      setSaving(false)
-      navigate('/courses')
-    } catch (error) {
-      console.error(error)
-      setSaving(false)
-    }
-  }, [fetcher, course, navigate, trainersDataValid, trainers])
+  const { savingStatus, saveCourse } = useSaveCourse()
 
   const handleTrainersDataChange = useCallback(
     (data: FormValues, isValid: boolean) => {
@@ -57,19 +29,24 @@ export const AssignTrainers = () => {
     []
   )
 
-  if (courseStatus === LoadingStatus.FETCHING) {
-    return (
-      <Stack
-        direction="row"
-        justifyContent="center"
-        data-testid="AssignTrainers-loading"
-      >
-        <CircularProgress size={40} />
-      </Stack>
-    )
+  const handleSaveButtonClick = async () => {
+    if (courseData && trainers) {
+      await saveCourse(courseData, [
+        ...trainers.assist.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.ASSISTANT,
+        })),
+        ...trainers.lead.map(trainer => ({
+          profile_id: trainer.id,
+          type: CourseTrainerType.LEADER,
+        })),
+      ])
+
+      navigate('/courses')
+    }
   }
 
-  if (!course || courseStatus === LoadingStatus.ERROR) {
+  if (!courseData) {
     return (
       <Alert
         severity="error"
@@ -81,19 +58,21 @@ export const AssignTrainers = () => {
     )
   }
 
-  return course ? (
+  return courseData ? (
     <Stack spacing={5}>
       <ChooseTrainers
-        maxParticipants={course.max_participants}
-        courseLevel={course.level}
-        courseSchedule={course.schedule[0]}
+        maxParticipants={courseData.maxParticipants}
+        courseLevel={courseData.courseLevel}
+        courseSchedule={{
+          start: courseData.startDateTime,
+          end: courseData.endDateTime,
+        }}
         onChange={handleTrainersDataChange}
-        trainers={course.trainers}
       />
       <Box display="flex" justifyContent="space-between">
         <Button
           sx={{ marginTop: 4 }}
-          onClick={() => navigate(`../../new?type=${course?.type}`)}
+          onClick={() => navigate(`../../new?type=${courseData.type}`)}
           startIcon={<ArrowBackIcon />}
         >
           {t('pages.create-course.assign-trainers.back-btn')}
@@ -103,11 +82,11 @@ export const AssignTrainers = () => {
           type="submit"
           variant="contained"
           disabled={!trainersDataValid}
-          loading={saving}
+          loading={savingStatus === LoadingStatus.FETCHING}
           sx={{ marginTop: 4 }}
           endIcon={<ArrowForwardIcon />}
           data-testid="AssignTrainers-submit"
-          onClick={saveTrainers}
+          onClick={handleSaveButtonClick}
         >
           {t('pages.create-course.assign-trainers.submit-btn')}
         </LoadingButton>

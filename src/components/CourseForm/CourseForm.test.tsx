@@ -4,7 +4,11 @@ import React from 'react'
 
 import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
-import { INPUT_DATE_FORMAT, LoadingStatus } from '@app/util'
+import {
+  courseToCourseInput,
+  INPUT_DATE_FORMAT,
+  LoadingStatus,
+} from '@app/util'
 
 import { render, screen, userEvent, within, waitFor } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
@@ -223,7 +227,12 @@ describe('component: CourseForm', () => {
     }
 
     await waitFor(() => {
-      render(<CourseForm course={course} type={CourseType.INDIRECT} />)
+      render(
+        <CourseForm
+          course={courseToCourseInput(course)}
+          type={CourseType.INDIRECT}
+        />
+      )
     })
 
     expect(screen.getByDisplayValue(course.level)).toBeInTheDocument()

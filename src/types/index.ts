@@ -1,3 +1,5 @@
+import { DeepNonNullable } from 'ts-essentials'
+
 export type Base = {
   id: string
   createdAt: string
@@ -384,3 +386,25 @@ export type CourseCertificateChangelog = {
   author: Profile
   participant: CourseParticipant
 } & Base
+
+export type CourseInput = {
+  type: CourseType | null
+  organizationId: string | null
+  contactProfile: Profile | null
+  courseLevel: CourseLevel | ''
+  blendedLearning: boolean
+  reaccreditation: boolean
+  deliveryType: CourseDeliveryType
+  startDateTime: Date | null
+  endDateTime: Date | null
+  minParticipants: number | null
+  maxParticipants: number | null
+  venue: Venue | null
+  zoomMeetingUrl: string | null
+  usesAOL: boolean
+  courseCost: number | null
+}
+
+export type ValidCourseInput = DeepNonNullable<
+  Omit<CourseInput, 'courseLevel'> & { courseLevel: CourseLevel }
+>

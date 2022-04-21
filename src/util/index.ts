@@ -10,6 +10,7 @@ import {
   CourseTrainer,
   SetCourseTrainerInput,
   SearchTrainer,
+  CourseInput,
 } from '@app/types'
 
 export * from './eligibleTrainers'
@@ -227,4 +228,24 @@ export const profileToInput = (course: Course, type: CourseTrainerType) => {
     profile_id: p.id,
     type,
   })
+}
+
+export const courseToCourseInput = (course: Course): CourseInput => {
+  return {
+    type: course.type,
+    deliveryType: course.deliveryType,
+    organizationId: course.organization?.id ?? null,
+    contactProfile: course.contactProfile ?? null,
+    blendedLearning: course.go1Integration,
+    reaccreditation: course.reaccreditation,
+    courseLevel: course.level,
+    zoomMeetingUrl: course.schedule[0].virtualLink ?? null,
+    venue: course.schedule[0].venue ?? null,
+    minParticipants: course.min_participants,
+    maxParticipants: course.max_participants,
+    startDateTime: course.schedule[0].start,
+    endDateTime: course.schedule[0].end,
+    courseCost: course.aolCostOfCourse ?? null,
+    usesAOL: Boolean(course.aolCostOfCourse),
+  }
 }

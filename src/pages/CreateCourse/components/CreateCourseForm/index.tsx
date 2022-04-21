@@ -11,48 +11,42 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-import CourseForm, {
-  FormValues,
-  ValidFormFields,
-} from '@app/components/CourseForm'
+import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/courses/insert-course'
 import theme from '@app/theme'
 import {
-  CourseDeliveryType,
   CourseLevel,
   CourseTrainerType,
   CourseType,
   SearchTrainer,
+  CourseInput,
+  ValidCourseInput,
 } from '@app/types'
-import {
-  generateCourseName,
-  getNumberOfAssistants,
-  LoadingStatus,
-} from '@app/util'
+import { getNumberOfAssistants, LoadingStatus } from '@app/util'
+
+import { useSaveCourse } from '../../useSaveCourse'
+import { useCreateCourse } from '../CreateCourseProvider'
 
 function assertCourseDataValid(
-  data: FormValues,
+  data: CourseInput,
   isValid: boolean
-): asserts data is ValidFormFields {
+): asserts data is ValidCourseInput {
   if (!isValid) {
     throw new Error()
   }
 }
 
 export const CreateCourseForm = () => {
-  const [courseData, setCourseData] = useState<FormValues>()
-  const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
+  const { courseData: storedCourseData, storeCourseData } = useCreateCourse()
+  const { savingStatus, saveCourse } = useSaveCourse()
+
+  const [courseData, setCourseData] = useState<CourseInput | undefined>(
+    storedCourseData
+  )
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
-  const fetcher = useFetcher()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { profile } = useAuth()
@@ -92,91 +86,30 @@ export const CreateCourseForm = () => {
     }
   }, [minAssistants])
 
-  const saveCourse = async () => {
-    try {
-      if (courseData) {
+  const handleNextStepButtonClick = async () => {
+    if (courseData) {
+      if (courseType === CourseType.INDIRECT && profile) {
         assertCourseDataValid(courseData, courseDataValid)
-        setSavingStatus(LoadingStatus.FETCHING)
-
-        const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
-          course: {
-            name: generateCourseName(
-              {
-                level: courseData.courseLevel,
-                reaccreditation: courseData.reaccreditation,
-              },
-              t
-            ),
-            deliveryType: courseData.deliveryType,
-            level: courseData.courseLevel,
-            reaccreditation: courseData.reaccreditation,
-            go1Integration: courseData.blendedLearning,
-            ...(courseData.minParticipants
-              ? { min_participants: courseData.minParticipants }
-              : null),
-            max_participants: courseData.maxParticipants,
-            type: courseType,
-            ...(courseData.organizationId
-              ? { organization_id: courseData.organizationId }
-              : null),
-            ...(courseData.organizationId
-              ? { contactProfileId: courseData.contactProfileId }
-              : null),
-            ...(courseData.usesAOL
-              ? { aolCostOfCourse: courseData.courseCost }
-              : null),
-            ...(profile?.id
-              ? {
-                  trainers: {
-                    data: [
-                      ...assistants.map(assistant => ({
-                        profile_id: assistant.id,
-                        type: CourseTrainerType.ASSISTANT,
-                      })),
-                      {
-                        profile_id: profile.id,
-                        type: CourseTrainerType.LEADER,
-                      },
-                    ],
-                  },
-                }
-              : null),
-            schedule: {
-              data: [
-                {
-                  start: courseData.startDateTime,
-                  end: courseData.endDateTime,
-                  virtualLink: [
-                    CourseDeliveryType.VIRTUAL,
-                    CourseDeliveryType.MIXED,
-                  ].includes(courseData.deliveryType)
-                    ? courseData.zoomMeetingUrl
-                    : undefined,
-                  venue_id: courseData.venueId,
-                  name: 'name', // @todo cleanup the data model for these two fields
-                  type: 'PHYSICAL',
-                },
-              ],
-            },
+        const insertedId = await saveCourse(
+          {
+            ...courseData,
+            type: CourseType.INDIRECT,
           },
-        })
+          [
+            { profile_id: profile.id, type: CourseTrainerType.LEADER },
+            ...assistants.map(assistant => ({
+              profile_id: assistant.id,
+              type: CourseTrainerType.ASSISTANT,
+            })),
+          ]
+        )
 
-        if (response.insertCourse.inserted.length === 1) {
-          setSavingStatus(LoadingStatus.SUCCESS)
-
-          const insertedId = response.insertCourse.inserted[0].id
-
-          const to =
-            courseType === CourseType.INDIRECT
-              ? `/courses/${insertedId}/modules`
-              : `assign-trainers/${insertedId}`
-
-          navigate(to)
-        }
+        navigate(`/courses/${insertedId}/modules`)
+      } else {
+        assertCourseDataValid(courseData, courseDataValid)
+        storeCourseData({ ...courseData, type: courseType })
+        navigate(`./assign-trainers`)
       }
-    } catch (err) {
-      console.log(err)
-      setSavingStatus(LoadingStatus.ERROR)
     }
   }
 
@@ -191,7 +124,7 @@ export const CreateCourseForm = () => {
   }
 
   const handleCourseFormChange = useCallback(
-    (data: FormValues, isValid: boolean) => {
+    (data: CourseInput, isValid: boolean) => {
       setCourseData(data)
       setCourseDataValid(isValid)
     },
@@ -200,7 +133,11 @@ export const CreateCourseForm = () => {
 
   return (
     <Box paddingBottom={5}>
-      <CourseForm onChange={handleCourseFormChange} type={courseType} />
+      <CourseForm
+        onChange={handleCourseFormChange}
+        type={courseType}
+        course={storedCourseData}
+      />
 
       {courseType === CourseType.INDIRECT ? (
         <>
@@ -284,7 +221,7 @@ export const CreateCourseForm = () => {
           variant="contained"
           disabled={!nextStepEnabled}
           sx={{ marginTop: 4 }}
-          onClick={saveCourse}
+          onClick={handleNextStepButtonClick}
           loading={savingStatus === LoadingStatus.FETCHING}
           endIcon={<ArrowForwardIcon />}
           data-testid="next-page-btn"

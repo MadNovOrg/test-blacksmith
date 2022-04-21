@@ -12,6 +12,7 @@ import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
 
+import { CreateCourseProvider } from './components/CreateCourseProvider'
 import { CreateCourseSteps } from './components/CreateCourseSteps'
 
 export const CreateCourse = () => {
@@ -60,7 +61,9 @@ export const CreateCourse = () => {
 
           <Box flex={1}>
             <Box mt={8}>
-              <Outlet />
+              <CreateCourseProvider>
+                <Outlet />
+              </CreateCourseProvider>
             </Box>
           </Box>
         </Box>

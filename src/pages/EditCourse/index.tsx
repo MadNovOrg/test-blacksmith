@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -15,10 +15,7 @@ import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
-import CourseForm, {
-  FormValues,
-  ValidFormFields,
-} from '@app/components/CourseForm'
+import CourseForm from '@app/components/CourseForm'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
@@ -30,15 +27,26 @@ import {
   UPDATE_COURSE_MUTATION,
 } from '@app/queries/courses/update-course'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
-import { generateCourseName, LoadingStatus, profileToInput } from '@app/util'
+import {
+  CourseDeliveryType,
+  CourseInput,
+  CourseLevel,
+  CourseTrainerType,
+  ValidCourseInput,
+} from '@app/types'
+import {
+  courseToCourseInput,
+  generateCourseName,
+  LoadingStatus,
+  profileToInput,
+} from '@app/util'
 
 import { NotFound } from '../common/NotFound'
 
 function assertCourseDataValid(
-  data: FormValues,
+  data: CourseInput,
   isValid: boolean
-): asserts data is ValidFormFields {
+): asserts data is ValidCourseInput {
   if (!isValid) {
     throw new Error()
   }
@@ -49,7 +57,7 @@ export const EditCourse: React.FC<unknown> = () => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const navigate = useNavigate()
-  const [courseData, setCourseData] = useState<FormValues>()
+  const [courseData, setCourseData] = useState<CourseInput>()
   const [courseDataValid, setCourseDataValid] = useState(false)
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
@@ -63,7 +71,7 @@ export const EditCourse: React.FC<unknown> = () => {
   } = useCourse(id ?? '')
 
   const handleCourseFormChange = useCallback(
-    (data: FormValues, isValid: boolean) => {
+    (data: CourseInput, isValid: boolean) => {
       setCourseData(data)
       setCourseDataValid(isValid)
     },
@@ -77,6 +85,14 @@ export const EditCourse: React.FC<unknown> = () => {
     },
     []
   )
+
+  const courseInput: CourseInput | undefined = useMemo(() => {
+    if (course) {
+      return courseToCourseInput(course)
+    }
+
+    return undefined
+  }, [course])
 
   const saveChanges = async () => {
     try {
@@ -126,8 +142,8 @@ export const EditCourse: React.FC<unknown> = () => {
               ...(courseData.organizationId
                 ? { organization_id: courseData.organizationId }
                 : null),
-              ...(courseData.contactProfileId
-                ? { contactProfileId: courseData.contactProfileId }
+              ...(courseData.contactProfile
+                ? { contactProfileId: courseData.contactProfile.id }
                 : null),
               ...(courseData.usesAOL
                 ? { aolCostOfCourse: courseData.courseCost }
@@ -136,7 +152,7 @@ export const EditCourse: React.FC<unknown> = () => {
             trainers,
             scheduleId: course?.schedule[0].id,
             scheduleInput: {
-              venue_id: courseData.venueId,
+              venue_id: courseData.venue.id,
               virtualLink:
                 courseData.deliveryType === CourseDeliveryType.F2F
                   ? ''
@@ -207,7 +223,7 @@ export const EditCourse: React.FC<unknown> = () => {
               <Box mt={8}>
                 <Box mb={2}>
                   <CourseForm
-                    course={course}
+                    course={courseInput}
                     type={course?.type}
                     onChange={handleCourseFormChange}
                   />

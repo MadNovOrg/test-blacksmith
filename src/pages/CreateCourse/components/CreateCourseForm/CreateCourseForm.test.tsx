@@ -7,6 +7,8 @@ import { LoadingStatus } from '@app/util'
 
 import { render, userEvent, screen, waitFor } from '@test/index'
 
+import { CreateCourseProvider } from '../CreateCourseProvider'
+
 import { CreateCourseForm } from '.'
 
 jest.mock('@app/components/VenueSelector', () => ({
@@ -32,7 +34,14 @@ describe('component: CreateCourseForm', () => {
     render(
       <MemoryRouter initialEntries={['/?type=INDIRECT']}>
         <Routes>
-          <Route path="/" element={<CreateCourseForm />} />
+          <Route
+            path="/"
+            element={
+              <CreateCourseProvider>
+                <CreateCourseForm />
+              </CreateCourseProvider>
+            }
+          />
         </Routes>
       </MemoryRouter>
     )
