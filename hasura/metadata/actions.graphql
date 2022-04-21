@@ -6,7 +6,9 @@ type Mutation {
 }
 
 type Mutation {
-  declineInvite(note: String): DeclineInviteOutput
+  declineInvite(
+    note: String
+  ): DeclineInviteOutput
 }
 
 type Query {
@@ -18,7 +20,9 @@ type Query {
 }
 
 type Query {
-  getTrainersLevels(input: GetTrainersLevelsInput!): [TrainerLevels]
+  getTrainersLevels(
+    input: GetTrainersLevelsInput!
+  ): [TrainerLevels]
 }
 
 type Query {
@@ -28,11 +32,15 @@ type Query {
 }
 
 type Mutation {
-  plansCreate(data: PlansCreateInput!): PlansCreateResult
+  plansCreate(
+    data: PlansCreateInput!
+  ): PlansCreateResult
 }
 
 type Mutation {
-  upsertZoomMeeting(input: UpsertZoomMeetingInput): UpsertZoomMeetingPayload
+  upsertZoomMeeting(
+    input: UpsertZoomMeetingInput
+  ): UpsertZoomMeetingPayload
 }
 
 enum BillingInterval {
@@ -81,14 +89,8 @@ input PlansCreateInput {
 
 input UpsertZoomMeetingInput {
   id: Float
-  """
-  ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z'
-  """
-  startTime: String
-  """
-  Timezone string, e.g. Europe/London
-  """
-  timezone: String
+  """ ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z' """ startTime: String
+  """ Timezone string, e.g. Europe/London """ timezone: String
 }
 
 input GetTrainersLevelsInput {
@@ -175,3 +177,4 @@ type TrainerLevels {
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability!
 }
+
