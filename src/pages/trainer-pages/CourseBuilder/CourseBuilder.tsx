@@ -21,6 +21,7 @@ import { BackButton } from '@app/components/BackButton'
 import ProgressBar from '@app/components/ProgressBar'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { NotFound } from '@app/pages/common/NotFound'
 import {
   ParamsType as GetCourseByIdParamsType,
   QUERY as GetCourseById,
@@ -38,6 +39,8 @@ import {
   formatDateForDraft,
   formatDurationShort,
   getPercentage,
+  getSWRLoadingStatus,
+  LoadingStatus,
 } from '@app/util'
 
 import { CourseHero } from './components/CourseHero'
@@ -89,7 +92,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     Error,
     [string, GetCourseByIdParamsType] | null
   >(courseId ? [GetCourseById, { id: courseId }] : null)
-  const { data, error: moduleDataError } = useSWR<
+
+  const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
+
+  const { data: modulesData, error: moduleDataError } = useSWR<
     GetModuleGroupsResponseType,
     Error,
     [string, GetModuleGroupsParamsType] | null
@@ -106,6 +112,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         ]
       : null
   )
+
+  const modulesLoadingStatus = getSWRLoadingStatus(modulesData, moduleDataError)
 
   const estimatedCourseDuration = useMemo(() => {
     if (!mandatoryModules || !courseModuleSlots) return 0
@@ -126,7 +134,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   }, [courseData])
 
   useEffect(() => {
-    if (availableModules.length === 0 && data && courseData) {
+    if (availableModules.length === 0 && modulesData && courseData) {
       const addedModuleGroupIds = new Set<string>(
         courseData.course.moduleGroupIds.map(
           courseModule => courseModule.module.moduleGroup.id
@@ -136,7 +144,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         mandatory: [] as ModuleGroup[],
         nonMandatory: [] as ModuleGroup[],
       }
-      data.groups.forEach(group =>
+      modulesData.groups.forEach(group =>
         modules[group.mandatory ? 'mandatory' : 'nonMandatory'].push(group)
       )
       setMandatoryModules(modules.mandatory)
@@ -159,12 +167,12 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         }))
       )
     }
-  }, [availableModules, mandatoryModules, data, courseData])
+  }, [availableModules, mandatoryModules, modulesData, courseData])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     async result => {
       const { draggableId, source, destination } = result
-      if (!data || !destination) return
+      if (!modulesData || !destination) return
 
       if (destination.droppableId === source.droppableId) {
         return
@@ -271,7 +279,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       availableModules,
       courseData,
       courseModuleSlots,
-      data,
+      modulesData,
       fetcher,
       mandatoryModules,
       mutateCourse,
@@ -335,20 +343,31 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     }
   }
 
+  if (courseLoadingStatus === LoadingStatus.SUCCESS && !courseData?.course) {
+    return (
+      <NotFound
+        title="Ooops!"
+        description={t('common.errors.course-not-found')}
+      />
+    )
+  }
+
   return (
     <DragDropContext onDragEnd={handleDrop}>
-      {(courseDataError || moduleDataError) && (
+      {(courseLoadingStatus === LoadingStatus.ERROR ||
+        modulesLoadingStatus === LoadingStatus.ERROR) && (
         <Alert severity="error" variant="filled">
           {t('internal-error')}
         </Alert>
       )}
-      {!data && !courseDataError && !moduleDataError && (
-        <Box display="flex" margin="auto">
-          <CircularProgress sx={{ m: 'auto' }} size={64} />
-        </Box>
-      )}
+      {courseLoadingStatus === LoadingStatus.FETCHING ||
+        (modulesLoadingStatus === LoadingStatus.FETCHING && (
+          <Box display="flex" margin="auto">
+            <CircularProgress sx={{ m: 'auto' }} size={64} />
+          </Box>
+        ))}
 
-      {data && courseData?.course && (
+      {modulesData && courseData?.course && (
         <Box
           pt={{ xs: 6, md: 10 }}
           pb={6}

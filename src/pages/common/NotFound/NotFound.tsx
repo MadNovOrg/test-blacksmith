@@ -4,16 +4,28 @@ import { useTranslation } from 'react-i18next'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
 
-export const NotFound = () => {
+type Props = {
+  showTitle?: boolean
+  title?: string
+  description?: string
+}
+
+export const NotFound: React.FC<Props> = ({
+  title,
+  description,
+  showTitle = true,
+}) => {
   const { t } = useTranslation()
 
   return (
     <Stack flex={1} alignItems="center">
-      <Typography variant="h2" mt={10}>
-        {t('components.not-found.title')}
-      </Typography>
+      {showTitle ? (
+        <Typography variant="h2" mt={10}>
+          {title ? title : t('components.not-found.title')}
+        </Typography>
+      ) : null}
       <Typography variant="body1" mt={4}>
-        {t('components.not-found.info')}
+        {description ?? t('components.not-found.info')}
       </Typography>
 
       <Button
