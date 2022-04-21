@@ -34,7 +34,7 @@ export const Dialog: React.FC<Props> = ({
           alignItems: 'center',
         }}
       >
-        {title ?? null}
+        <div>{title ?? null}</div>
         {showClose ? (
           <IconButton
             data-testid={id ? `dialog-${id}-close` : 'dialog-close'}

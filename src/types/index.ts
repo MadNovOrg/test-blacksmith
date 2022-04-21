@@ -141,6 +141,7 @@ export enum CourseDeliveryType {
 export type CourseTrainer = {
   id: string
   type: CourseTrainerType
+  status: InviteStatus
   profile: Profile
 }
 

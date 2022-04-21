@@ -365,6 +365,23 @@
       "administrator": "Administrator",
       "date": "Date",
       "change": "Change"
+    },
+    "accept-decline-course": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "declined": "Declined",
+      "modal_ACCEPT": {
+        "title": "Ready to build the course?",
+        "msg": "After you have accepted a course, you must confirm the modules and holds that will be covered.",
+        "cancel": "Cancel",
+        "submit": "Continue to course builder"
+      },
+      "modal_DECLINE": {
+        "title": "Not able to deliver this course?",
+        "msg": "",
+        "cancel": "Cancel",
+        "submit": "Decline"
+      }
     }
   },
   "pages": {

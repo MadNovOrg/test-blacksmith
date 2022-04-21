@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { CourseStatus, CourseType } from '../../../../src/types'
+import { CourseStatus, CourseType, InviteStatus } from '../../../../src/types'
 import { getLatestEmail } from '../../../api/email-api'
 import {
   deleteCourse,
@@ -28,7 +28,7 @@ const test = base.extend<{ course: Course }>({
       MODULES_BY_LEVEL.get(course.level),
       course.level
     )
-    await insertCourse(course, users.trainer.email)
+    await insertCourse(course, users.trainer.email, InviteStatus.ACCEPTED)
     await insertCourseModules(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)

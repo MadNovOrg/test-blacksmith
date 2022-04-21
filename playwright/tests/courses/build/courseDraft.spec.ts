@@ -1,6 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
+import { InviteStatus } from '../../../../src/types'
 import { insertCourse, deleteCourse } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -11,7 +12,7 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    await insertCourse(course, users.trainer.email)
+    await insertCourse(course, users.trainer.email, InviteStatus.ACCEPTED)
     await use(course)
     await deleteCourse(course.id)
   },

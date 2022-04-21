@@ -95,7 +95,8 @@ export const setCourseDates = async (
 
 export const insertCourse = async (
   course: Course,
-  email: string
+  email: string,
+  trainerStatus = InviteStatus.PENDING
 ): Promise<Course> => {
   const organization = course.organization
     ? `, organization_id: "${await getOrganizationId(
@@ -116,7 +117,8 @@ export const insertCourse = async (
         trainers: {
           data: {
             profile_id: "${trainerId}",
-            type: LEADER
+            type: LEADER,
+            status: ${trainerStatus}
           }
         },
         go1Integration: ${course.go1Integration ? 'true' : 'false'},

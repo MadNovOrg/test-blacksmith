@@ -1,4 +1,9 @@
-import { buildCourse, buildProfile } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildCourseAssistant,
+  buildCourseLeader,
+  buildProfile,
+} from '@test/mock-data-utils'
 
 import { CourseTrainerType } from './types'
 import {
@@ -106,9 +111,9 @@ describe('getCourseTrainer', () => {
     const assistant2 = buildProfile()
 
     const trainer = getCourseTrainer([
-      { id: '1', type: CourseTrainerType.ASSISTANT, profile: assistant1 },
-      { id: '2', type: CourseTrainerType.LEADER, profile: lead },
-      { id: '3', type: CourseTrainerType.ASSISTANT, profile: assistant2 },
+      buildCourseAssistant({ profile: assistant1 }),
+      buildCourseLeader({ profile: lead }),
+      buildCourseAssistant({ profile: assistant2 }),
     ])
     expect(trainer).not.toBeUndefined()
     expect(trainer?.profile?.id).toBe(lead.id)
@@ -121,9 +126,9 @@ describe('getCourseTrainer', () => {
     const assistant3 = buildProfile()
 
     const trainer = getCourseTrainer([
-      { id: '1', type: CourseTrainerType.ASSISTANT, profile: assistant1 },
-      { id: '2', type: CourseTrainerType.ASSISTANT, profile: assistant2 },
-      { id: '3', type: CourseTrainerType.ASSISTANT, profile: assistant3 },
+      buildCourseAssistant({ profile: assistant1 }),
+      buildCourseAssistant({ profile: assistant2 }),
+      buildCourseAssistant({ profile: assistant3 }),
     ])
     expect(trainer).toBeUndefined()
   })
@@ -136,9 +141,9 @@ describe('getCourseAssistants', () => {
     const assistant2 = buildProfile()
 
     const assistants = getCourseAssistants([
-      { id: '1', type: CourseTrainerType.ASSISTANT, profile: assistant1 },
-      { id: '2', type: CourseTrainerType.LEADER, profile: lead },
-      { id: '3', type: CourseTrainerType.ASSISTANT, profile: assistant2 },
+      buildCourseAssistant({ profile: assistant1 }),
+      buildCourseLeader({ profile: lead }),
+      buildCourseAssistant({ profile: assistant2 }),
     ])
     expect(assistants).toHaveLength(2)
 
@@ -158,7 +163,7 @@ describe('getCourseAssistants', () => {
     const lead = buildProfile()
 
     const assistants = getCourseAssistants([
-      { id: '1', type: CourseTrainerType.LEADER, profile: lead },
+      buildCourseLeader({ profile: lead }),
     ])
     expect(assistants).toHaveLength(0)
   })

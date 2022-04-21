@@ -21,6 +21,7 @@ import {
   CourseParticipantModule,
   CourseTrainerType,
   CourseTrainer,
+  InviteStatus,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -73,7 +74,7 @@ export const buildProfile = build<Profile>({
     email: fake(f => f.internet.email()),
     avatar: fake(f => f.internet.avatar()),
     phone: fake(f => f.phone.phoneNumber()),
-    dob: fake(f => f.date.past()),
+    dob: fake(f => f.date.past().toISOString().substring(0, 10)),
     jobTitle: fake(f => f.name.jobTitle()),
     tags: null,
     preferences: {},
@@ -140,6 +141,7 @@ export const buildCourseTrainer = build<CourseTrainer>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     type: CourseTrainerType.LEADER,
+    status: InviteStatus.ACCEPTED,
     profile: perBuild(() => buildProfile()),
   },
 })

@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { test } from '@playwright/test'
 
-import { CourseStatus, CourseType } from '../../src/types'
+import { CourseStatus, CourseType, InviteStatus } from '../../src/types'
 import {
   getTrainerCourses,
   insertCourse,
@@ -36,7 +36,7 @@ test('insert test @data', async () => {
     course.status = CourseStatus.PUBLISHED
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2022-03-15T16:00:00Z')
-    await insertCourse(course, email)
+    await insertCourse(course, email, InviteStatus.ACCEPTED)
 
     const moduleIds = await getModuleIds(
       MODULES_BY_LEVEL.get(course.level),

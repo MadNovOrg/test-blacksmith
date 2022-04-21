@@ -39,13 +39,13 @@ insert_permissions:
 select_permissions:
 - permission:
     columns:
-      - course_id
-      - status
-      - type
-      - id
-      - profile_id
-    filter: { }
-  role: tt-admin
+    - course_id
+    - status
+    - type
+    - id
+    - profile_id
+    filter: {}
+  role: trainer
 - permission:
     columns:
     - course_id
@@ -53,8 +53,8 @@ select_permissions:
     - type
     - id
     - profile_id
-    filter: { }
-  role: trainer
+    filter: {}
+  role: tt-admin
 - permission:
     columns:
     - course_id
@@ -73,6 +73,14 @@ select_permissions:
     filter: {}
   role: user
 update_permissions:
+- permission:
+    check: null
+    columns:
+    - status
+    filter:
+      profile_id:
+        _eq: X-Hasura-User-Id
+  role: trainer
 - permission:
     check: {}
     columns:

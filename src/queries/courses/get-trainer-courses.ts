@@ -23,6 +23,14 @@ export const QUERY = gql`
       organization {
         name
       }
+      trainers {
+        id
+        type
+        status
+        profile {
+          id
+        }
+      }
       dates: schedule_aggregate {
         aggregate {
           start: min {

@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import format from 'date-fns/format'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
@@ -31,8 +31,12 @@ import {
   CourseLevel,
   CourseStatus,
   CourseType,
+  InviteStatus,
   SortOrder,
+  CourseTrainerType,
 } from '@app/types'
+
+import { AcceptDeclineCourse, AcceptDeclineProps } from './AcceptDeclineCourse'
 
 type MyCoursesProps = unknown
 
@@ -134,7 +138,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     return obj
   }, [levelFilter, typeFilter, statusFilter, keywordDebounced])
 
-  const { data, error } = useSWR<
+  const { data, error, mutate } = useSWR<
     GetMyCoursesResponseType,
     Error,
     [string, GetMyCourseParamsType]
@@ -159,6 +163,15 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }
     return `${course.id}/details`
   }
+
+  const onAcceptedOrDeclined = useCallback<AcceptDeclineProps['onUpdate']>(
+    (course, trainer, status) => {
+      const isLead = trainer.type === CourseTrainerType.LEADER
+      const isAccepted = status === InviteStatus.ACCEPTED
+      isLead && isAccepted ? navigate(handleNavigation(course)) : mutate()
+    },
+    [mutate, navigate]
+  )
 
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -244,7 +257,11 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                               'dd MMM'
                             )}
                           </Typography>
-                          <Typography variant="body2" color="grey.500">
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
                             {format(
                               new Date(c.dates.aggregate.start.date),
                               'hh:mm aa'
@@ -262,7 +279,11 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                               'dd MMM'
                             )}
                           </Typography>
-                          <Typography variant="body2" color="grey.500">
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
                             {format(
                               new Date(c.dates.aggregate.end.date),
                               'hh:mm aa'
@@ -278,17 +299,22 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => navigate(handleNavigation(c))}
+                      <AcceptDeclineCourse
+                        course={c}
+                        onUpdate={onAcceptedOrDeclined}
                       >
-                        {c.status === CourseStatus.PENDING ||
-                        c.status === CourseStatus.DRAFT
-                          ? t('build')
-                          : t('manage')}
-                      </Button>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          onClick={() => navigate(handleNavigation(c))}
+                        >
+                          {c.status === CourseStatus.PENDING ||
+                          c.status === CourseStatus.DRAFT
+                            ? t('build')
+                            : t('manage')}
+                        </Button>
+                      </AcceptDeclineCourse>
                     </TableCell>
                   </TableRow>
                 )) ??
