@@ -7,6 +7,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppLayout } from '@app/components/AppLayout'
 import { useAuth } from '@app/context/auth'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
+import { CourseBookingReviewPage } from '@app/pages/common/CourseBookingReview'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
@@ -76,7 +77,10 @@ function UnverifiedUserRoutes() {
     <Routes>
       <Route index element={<Navigate replace to="booking" />} />
       <Route path="verify" element={<VerifyEmailPage />} />
-      <Route path="booking" element={<CourseBookingPage />} />
+      <Route path="booking">
+        <Route index element={<CourseBookingPage />} />
+        <Route path="review" element={<CourseBookingReviewPage />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

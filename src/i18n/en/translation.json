@@ -34,6 +34,7 @@
     "my-org": "My Organization",
     "notifications": "Notifications",
     "logout": "Logout",
+    "registration": "Registration",
     "action": "Action",
     "view-cert": "View Certificate",
     "certificate": "Certificate",
@@ -45,8 +46,16 @@
     "personal-details": "Personal Details",
     "org-details": "Organization Details",
     "first-name": "First Name",
+    "last-name": "Last Name",
     "surname": "Surname",
     "email": "Email",
+    "work-phone": "Work phone",
+    "registrants": "Registrants",
+    "important": "Important",
+    "subtotal": "Subtotal",
+    "vat": "VAT",
+    "promo-code": "Promo code",
+    "amount-due": "Amount due",
     "other": "Other",
     "sector": "Sector",
     "select-sector": "Please select a sector to see positions",
@@ -55,6 +64,7 @@
     "country-code": "Country Code",
     "phone": "Phone",
     "dob": "Date of Birth",
+    "qty": "Quantity",
     "dob-optional": "Date of Birth (optional)",
     "org-name": "Organization Name",
     "filter-by": " Filter By",
@@ -157,6 +167,7 @@
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
     "validation-errors": {
+      "max-registrants": "Only {{num}} registrants are allowed",
       "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
       "email-required": "Please enter your email",
@@ -178,6 +189,7 @@
       "otp-required": "Please enter 6 digit passcode received in email",
       "other-position-required": "Please enter your job position"
     },
+    "validation-notice": "All fields are mandatory.",
     "create-free-account": "Create your free Team Teach Hub account",
     "have-account": "Have an account?",
     "login": "Login",
@@ -356,6 +368,24 @@
     }
   },
   "pages": {
+    "book-course": {
+      "title": "Book a course",
+      "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",
+      "order-details": "Order details",
+      "payment-details": "Payment details",
+      "apply-promo": "Apply promo or voucher code",
+      "step-1": "Booking details",
+      "step-2": "Review & confirm",
+      "complete-booking": "Complete booking",
+      "order-summary": "Order summary",
+      "confirm-title": "Please confirm to complete booking",
+      "review-tnc": "I confirm that I wish to participate in the course even if it starts during my 14 day cancellation period. I understand that I will lose my right to cancel the contract once the course is complete and that I must pay for services provided prior to cancellation.",
+      "payment-method": "Payment method",
+      "pay-by-cc": "Pay by credit card",
+      "pay-by-inv": "Pay by invoice",
+      "pay-by-cc-info": "Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.",
+      "pay-by-inv-info": "An invoice will be sent to you requiring payment within 30 days."
+    },
     "home": {
       "title": "Home"
     },

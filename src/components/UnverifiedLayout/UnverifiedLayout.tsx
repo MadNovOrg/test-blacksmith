@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Toolbar } from '@mui/material'
+import { AppBar, Box, Button, Container, Toolbar } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,14 +7,9 @@ import { useAuth } from '@app/context/auth'
 
 import { LinkBehavior } from '../LinkBehavior'
 
-type Props = {
-  width?: number
-}
+type Props = unknown
 
-export const UnverifiedLayout: React.FC<Props> = ({
-  width = 500,
-  children,
-}) => {
+export const UnverifiedLayout: React.FC<Props> = ({ children }) => {
   const { t } = useTranslation()
   const { logout } = useAuth()
 
@@ -63,17 +58,13 @@ export const UnverifiedLayout: React.FC<Props> = ({
           </Box>
         </Toolbar>
       </AppBar>
-      <Box
-        mt={3}
-        bgcolor="common.white"
-        py={5}
-        px={8}
-        borderRadius={2}
-        width={width}
-        position="relative"
+
+      <Container
+        maxWidth="lg"
+        sx={{ pt: 2, display: 'flex', justifyContent: 'center' }}
       >
         {children}
-      </Box>
+      </Container>
     </Box>
   )
 }

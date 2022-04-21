@@ -342,6 +342,15 @@ export default createTheme({
           backgroundColor: '#fdeded',
           color: '#5f2120',
         },
+        filledInfo: {
+          backgroundColor: '#E4F1F3',
+          color: theme.palette.secondary.dark,
+
+          '& .MuiAlert-icon': {
+            alignItems: 'center',
+            color: '#0290A1',
+          },
+        },
       },
     },
     MuiChip: {

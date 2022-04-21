@@ -48,36 +48,46 @@ export const VerifyEmailPage: React.FC<Props> = () => {
   }
 
   return (
-    <UnverifiedLayout width={628}>
-      <Typography
-        variant="h3"
-        sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
+    <UnverifiedLayout>
+      <Box
+        mt={3}
+        bgcolor="common.white"
+        py={5}
+        px={8}
+        borderRadius={2}
+        width={628}
+        position="relative"
       >
-        {t('pages.signup.verify-heading')}
-      </Typography>
+        <Typography
+          variant="h3"
+          sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
+        >
+          {t('pages.signup.verify-heading')}
+        </Typography>
 
-      {success ? (
-        <Box>
-          <Typography sx={{ my: 6 }}>
-            {t('pages.signup.success-hint')}
-          </Typography>
+        {success ? (
+          <Box>
+            <Typography sx={{ my: 6 }}>
+              {t('pages.signup.success-hint')}
+            </Typography>
 
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={handleContinue}
-            data-testid="btn-goto-login"
-          >
-            {t('pages.signup.success-btn')}
-          </Button>
-        </Box>
-      ) : (
-        <Form
-          onVerifyLater={() => navigate('/')}
-          onSuccess={() => setSuccess(true)}
-        />
-      )}
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleContinue}
+              data-testid="btn-goto-login"
+            >
+              {t('pages.signup.success-btn')}
+            </Button>
+          </Box>
+        ) : (
+          <Form
+            onVerifyLater={() => navigate('/')}
+            onSuccess={() => setSuccess(true)}
+          />
+        )}
+      </Box>
     </UnverifiedLayout>
   )
 }
