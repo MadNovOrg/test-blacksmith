@@ -151,4 +151,33 @@ describe('component: ModulesSelectionList', () => {
       [moduleGroups[1].modules[1].id]: true,
     })
   })
+
+  it('marks group as indeterminate if only some modules are checked within the group', () => {
+    const moduleGroups: Props['moduleGroups'] = [
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        modules: [
+          { id: chance.guid(), name: chance.name(), covered: true },
+          { id: chance.guid(), name: chance.name(), covered: true },
+        ],
+      },
+      {
+        id: chance.guid(),
+        name: chance.name(),
+        modules: [
+          { id: chance.guid(), name: chance.name(), covered: true },
+          { id: chance.guid(), name: chance.name(), covered: false },
+        ],
+      },
+    ]
+
+    render(<ModulesSelectionList moduleGroups={moduleGroups} />)
+
+    expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
+    expect(screen.getByLabelText(moduleGroups[1].name)).toHaveAttribute(
+      'data-indeterminate',
+      'true'
+    )
+  })
 })
