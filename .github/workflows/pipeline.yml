@@ -60,6 +60,7 @@ jobs:
 
   hasura_migrations:
     name: Hasura migrations
+    needs: build-deploy
     runs-on: ubuntu-latest
 
     env:

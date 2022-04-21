@@ -40,7 +40,28 @@ The `hasura` folder contains all the configuration.
 
 ## Deployment
 
-TBD
+### DEV
+- When a PR is created CI pipeline runs. The same applies on branch push as long as the PR is active.
+- Once the PR is merged deployment pipeline runs using some input related to DEV environment
+- Once deployment is done Hasura migrations job is running 
+
+### STG
+- It is only being triggered by the Github Action `CD-STG`
+- Expects:
+    - The branch to perform the run from. Default is `main` 
+
+### PROD
+- It is only being triggered by the Github Action `CD-PROD`
+- Expects:
+    - The branch to perform the run from. Default is `main` 
+
+## Rollbacks
+
+### All Envs
+- It is only being triggered by the Github Action `APP-ROLLBACK`
+- Expects:
+    - The branch to perform the run from. Default is `main` 
+    - The environment to perform the rollback action to
 
 ## Technology
 
