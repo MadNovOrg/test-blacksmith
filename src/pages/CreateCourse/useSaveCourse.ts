@@ -74,7 +74,7 @@ export function useSaveCourse(): {
                     ].includes(courseData.deliveryType)
                       ? courseData.zoomMeetingUrl
                       : undefined,
-                    venue_id: courseData.venue.id,
+                    venue_id: courseData.venue?.id,
                   },
                 ],
               },
