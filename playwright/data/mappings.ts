@@ -3,7 +3,7 @@ import translation from '../../src/i18n/en/translation.json'
 import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 
 const statusActions = {
-  PENDING: 'Build',
+  PENDING: 'AcceptDecline',
   DRAFT: 'Build',
   PUBLISHED: 'Manage',
 }
