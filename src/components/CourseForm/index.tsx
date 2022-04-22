@@ -31,6 +31,7 @@ import {
   CourseLevel,
   CourseType,
   CourseInput,
+  Course,
 } from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
@@ -47,22 +48,24 @@ const FormPanel = styled(Box)(({ theme }) => ({
 
 interface Props {
   type?: CourseType
-  course?: CourseInput
+  courseInput?: CourseInput
+  course?: Course
   onChange?: (values: CourseInput, isValid: boolean) => void
 }
 
 const CourseForm: React.FC<Props> = ({
   onChange = noop,
   type = CourseType.OPEN,
+  courseInput,
   course,
 }) => {
   const { t } = useTranslation()
 
   const [startTime, setStartTime] = useState<Date | null>(
-    course?.startDateTime ? new Date(course.startDateTime) : null
+    courseInput?.startDateTime ? new Date(courseInput.startDateTime) : null
   )
   const [endTime, setEndTime] = useState<Date | null>(
-    course?.endDateTime ? new Date(course.endDateTime) : null
+    courseInput?.endDateTime ? new Date(courseInput.endDateTime) : null
   )
 
   const hasOrganizationField = [
@@ -176,22 +179,24 @@ const CourseForm: React.FC<Props> = ({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      organizationId: course?.organizationId ?? null,
-      contactProfile: course?.contactProfile ?? null,
-      courseLevel: course?.courseLevel ?? '',
-      blendedLearning: course?.blendedLearning ?? false,
-      reaccreditation: course?.reaccreditation ?? false,
-      deliveryType: course?.deliveryType ?? CourseDeliveryType.F2F,
-      venue: course?.venue ?? null,
-      zoomMeetingUrl: course?.zoomMeetingUrl ?? null,
-      startDateTime: course?.startDateTime
-        ? new Date(course.startDateTime)
+      organizationId: courseInput?.organizationId ?? null,
+      contactProfile: courseInput?.contactProfile ?? null,
+      courseLevel: courseInput?.courseLevel ?? '',
+      blendedLearning: courseInput?.blendedLearning ?? false,
+      reaccreditation: courseInput?.reaccreditation ?? false,
+      deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,
+      venue: courseInput?.venue ?? null,
+      zoomMeetingUrl: courseInput?.zoomMeetingUrl ?? null,
+      startDateTime: courseInput?.startDateTime
+        ? new Date(courseInput.startDateTime)
         : null,
-      endDateTime: course?.endDateTime ? new Date(course.endDateTime) : null,
-      minParticipants: course?.minParticipants ?? null,
-      maxParticipants: course?.maxParticipants ?? null,
-      usesAOL: Boolean(course?.courseCost) ?? false,
-      courseCost: course?.courseCost ?? null,
+      endDateTime: courseInput?.endDateTime
+        ? new Date(courseInput.endDateTime)
+        : null,
+      minParticipants: courseInput?.minParticipants ?? null,
+      maxParticipants: courseInput?.maxParticipants ?? null,
+      usesAOL: Boolean(courseInput?.courseCost) ?? false,
+      courseCost: courseInput?.courseCost ?? null,
     },
   })
 
@@ -219,11 +224,11 @@ const CourseForm: React.FC<Props> = ({
   }, [formState, getValues, onChange, formValues])
 
   useEffect(() => {
-    if (!course?.zoomMeetingUrl) {
+    if (!courseInput?.zoomMeetingUrl) {
       setValue('zoomMeetingUrl', zoomMeetingUrl)
       trigger('zoomMeetingUrl')
     }
-  }, [zoomMeetingUrl, setValue, trigger, course])
+  }, [zoomMeetingUrl, setValue, trigger, courseInput])
 
   useEffect(() => {
     const startDate = getValues('startDateTime')
@@ -293,10 +298,10 @@ const CourseForm: React.FC<Props> = ({
   }, [deliveryType, trigger])
 
   useEffect(() => {
-    if (hasZoomMeetingUrl && !course?.zoomMeetingUrl) {
+    if (hasZoomMeetingUrl && !courseInput?.zoomMeetingUrl) {
       generateZoomLink()
     }
-  }, [hasZoomMeetingUrl, generateZoomLink, course])
+  }, [hasZoomMeetingUrl, generateZoomLink, courseInput])
 
   const errors = formState.errors
 
@@ -312,6 +317,7 @@ const CourseForm: React.FC<Props> = ({
               {t('components.course-form.organization-label')}
             </Typography>
             <OrgSelector
+              value={course?.organization}
               onChange={value => {
                 setValue('organizationId', value, { shouldValidate: true })
               }}

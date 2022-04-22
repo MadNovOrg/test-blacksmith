@@ -36,6 +36,10 @@ export const QUERY = gql`
       organization {
         ...Organization
       }
+      contactProfile {
+        id
+        fullName
+      }
       dates: schedule_aggregate {
         aggregate {
           start: min {

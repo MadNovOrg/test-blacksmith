@@ -30,6 +30,7 @@ export type OrgSelectorProps = {
   placeholder?: string
   allowAdding?: boolean
   error?: string
+  value?: Organization
 }
 
 export const OrgSelector: React.FC<OrgSelectorProps> = function ({

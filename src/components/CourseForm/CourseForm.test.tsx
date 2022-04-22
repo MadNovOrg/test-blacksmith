@@ -229,7 +229,7 @@ describe('component: CourseForm', () => {
     await waitFor(() => {
       render(
         <CourseForm
-          course={courseToCourseInput(course)}
+          courseInput={courseToCourseInput(course)}
           type={CourseType.INDIRECT}
         />
       )

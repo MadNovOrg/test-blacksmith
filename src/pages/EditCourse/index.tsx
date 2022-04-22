@@ -87,11 +87,7 @@ export const EditCourse: React.FC<unknown> = () => {
   )
 
   const courseInput: CourseInput | undefined = useMemo(() => {
-    if (course) {
-      return courseToCourseInput(course)
-    }
-
-    return undefined
+    return course ? courseToCourseInput(course) : undefined
   }, [course])
 
   const saveChanges = async () => {
@@ -223,7 +219,8 @@ export const EditCourse: React.FC<unknown> = () => {
               <Box mt={8}>
                 <Box mb={2}>
                   <CourseForm
-                    course={courseInput}
+                    courseInput={courseInput}
+                    course={course}
                     type={course?.type}
                     onChange={handleCourseFormChange}
                   />

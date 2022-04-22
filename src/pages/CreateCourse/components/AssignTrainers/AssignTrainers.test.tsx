@@ -3,7 +3,7 @@ import React from 'react'
 import { RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
@@ -25,7 +25,7 @@ const placeholder = 'Search eligible trainers...'
 const selectedTestId = 'SearchTrainers-selected'
 
 describe('component: AssignTrainers', () => {
-  it('renders alert if course is not found', () => {
+  it('renders alert if course is not found', async () => {
     render(
       <CreateCourseProvider>
         <AssignTrainers />
@@ -33,12 +33,15 @@ describe('component: AssignTrainers', () => {
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-alert')).toBeInTheDocument()
+    })
+
     expect(screen.queryByTestId('AssignTrainers-loading')).toBeNull()
-    expect(screen.queryByTestId('AssignTrainers-alert')).toBeInTheDocument()
     expect(screen.queryByTestId('AssignTrainers-form')).toBeNull()
   })
 
-  it('renders form if course data is in context', () => {
+  it('renders form if course data is in context', async () => {
     const overrides = { max_participants: 11, trainers: [] }
     const course = buildCourse({ overrides })
 
@@ -51,9 +54,12 @@ describe('component: AssignTrainers', () => {
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
+    })
+
     expect(screen.queryByTestId('AssignTrainers-loading')).toBeNull()
     expect(screen.queryByTestId('AssignTrainers-alert')).toBeNull()
-    expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
   })
 
   it('shows assistants when participants are enough', async () => {
@@ -68,6 +74,10 @@ describe('component: AssignTrainers', () => {
       </CreateCourseProvider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('AssignTrainers-form')).toBeInTheDocument()
+    })
 
     const lead = screen.getByTestId('AssignTrainers-lead')
     expect(lead).toBeInTheDocument()
