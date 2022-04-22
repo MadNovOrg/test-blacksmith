@@ -126,10 +126,11 @@ export const CourseHeroSummary: React.FC<Props> = ({
                 <ListItemText inset>
                   <Typography variant="body2">
                     {t('pages.course-participants.course-duration', {
-                      count: differenceInDays(
-                        new Date(course.schedule[0].end),
-                        new Date(course.schedule[0].start)
-                      ),
+                      count:
+                        differenceInDays(
+                          new Date(course.schedule[0].end),
+                          new Date(course.schedule[0].start)
+                        ) + 1,
                     })}
                   </Typography>
                 </ListItemText>
