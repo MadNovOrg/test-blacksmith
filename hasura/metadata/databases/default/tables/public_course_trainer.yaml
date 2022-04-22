@@ -97,3 +97,14 @@ delete_permissions:
 - permission:
     filter: {}
   role: tt-ops
+event_triggers:
+- definition:
+    enable_manual: false
+    insert:
+      columns: "*"
+  name: course_trainer_assigned
+  retry_conf:
+    interval_sec: 10
+    num_retries: 0
+    timeout_sec: 60
+  webhook: "{{EVENTS_HOST}}/email/course-trainer-assigned"
