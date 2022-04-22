@@ -29,6 +29,7 @@ export const Dialog: React.FC<Props> = ({
     <MUIDialog open={open} maxWidth={false} onClose={onClose}>
       <DialogTitle
         sx={{
+          maxWidth,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -41,9 +42,11 @@ export const Dialog: React.FC<Props> = ({
             aria-label="close"
             onClick={onClose}
             sx={{
-              ml: 2,
+              mt: -0.5,
+              ml: 1,
               mr: -1.5,
               color: 'grey.500',
+              alignSelf: 'flex-start',
             }}
           >
             <CloseIcon />

@@ -377,8 +377,8 @@
         "submit": "Continue to course builder"
       },
       "modal_DECLINE": {
-        "title": "Not able to deliver this course?",
-        "msg": "",
+        "title": "Are you sure you want to decline this course?",
+        "msg": "You will no longer have access to this course once you have declined.",
         "cancel": "Cancel",
         "submit": "Decline"
       }
