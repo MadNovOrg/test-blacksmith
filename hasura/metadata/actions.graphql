@@ -141,7 +141,7 @@ type CourseInvite {
   status: InviteStatus!
   courseId: String!
   courseName: String!
-  description: String!
+  description: String
   trainerName: String!
   startDate: String!
   endDate: String!
