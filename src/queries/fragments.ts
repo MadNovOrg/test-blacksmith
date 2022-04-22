@@ -109,8 +109,6 @@ export const COURSE_SCHEDULE = gql`
     id
     createdAt
     updatedAt
-    name
-    type
     start
     end
     virtualLink

@@ -36,8 +36,6 @@ export type Course = {
 }
 
 export type CourseSchedule = {
-  name: string
-  type: string
   start: Date
   end: Date
   venue?: string

@@ -30,8 +30,6 @@ export type ParamsType = {
     schedule: {
       data: [
         {
-          name: string
-          type: string
           start: Date
           end: Date
           venue_id?: string

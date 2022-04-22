@@ -75,8 +75,6 @@ export function useSaveCourse(): {
                       ? courseData.zoomMeetingUrl
                       : undefined,
                     venue_id: courseData.venue.id,
-                    name: 'name', // @todo cleanup the data model for these two fields
-                    type: 'PHYSICAL',
                   },
                 ],
               },

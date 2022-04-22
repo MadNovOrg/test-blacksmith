@@ -104,8 +104,6 @@ export const buildCourseScheduleEndedCourse = build<CourseSchedule>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     createdAt: new Date().toISOString(),
-    name: fake(f => f.random.words(3)),
-    type: fake(f => f.random.word()),
     start: sub(new Date(), { days: 2 }).toISOString(),
     end: sub(new Date(), { days: 1 }).toISOString(),
     venue: buildVenue(),
@@ -116,8 +114,6 @@ export const buildCourseScheduleNotStartedCourse = build<CourseSchedule>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     createdAt: new Date().toISOString(),
-    name: fake(f => f.random.words(3)),
-    type: fake(f => f.random.word()),
     start: add(new Date(), { days: 1 }).toISOString(),
     end: add(new Date(), { days: 2 }).toISOString(),
     venue: buildVenue(),
@@ -128,8 +124,6 @@ export const buildCourseSchedule = build<CourseSchedule>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     createdAt: new Date().toISOString(),
-    name: fake(f => f.random.words(3)),
-    type: fake(f => f.random.word()),
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     venue: buildVenue(),

@@ -26,7 +26,6 @@
 - "!include public_module_category.yaml"
 - "!include public_module_group.yaml"
 - "!include public_module_group_duration.yaml"
-- "!include public_module_medium.yaml"
 - "!include public_organization.yaml"
 - "!include public_organization_group.yaml"
 - "!include public_organization_member.yaml"

@@ -226,8 +226,6 @@ export type TrainerSchedule = {
 } & Base
 
 export type CourseSchedule = {
-  name: string
-  type: string
   start: Date
   end: Date
   course?: Course

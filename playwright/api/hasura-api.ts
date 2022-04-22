@@ -37,7 +37,6 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
       schedule {
         start
         end
-        type
       }
       status
       type
@@ -131,10 +130,8 @@ export const insertCourse = async (
         type: ${course.type},
         schedule: {
           data: {
-            name: "${course.schedule[0].name}",
             start: "${course.schedule[0].start.toISOString()}",
-            end: "${course.schedule[0].end.toISOString()}",
-            type: ${course.schedule[0].type}${venue}
+            end: "${course.schedule[0].end.toISOString()}"${venue}
           }
         }
         ${organization}
