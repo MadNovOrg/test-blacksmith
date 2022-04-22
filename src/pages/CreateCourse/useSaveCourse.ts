@@ -10,11 +10,16 @@ import {
 import {
   CourseDeliveryType,
   CourseTrainerType,
+  InviteStatus,
   ValidCourseInput,
 } from '@app/types'
 import { generateCourseName, LoadingStatus } from '@app/util'
 
-type TrainerInput = { profile_id: string; type: CourseTrainerType }
+type TrainerInput = {
+  profile_id: string
+  type: CourseTrainerType
+  status?: InviteStatus
+}
 
 export function useSaveCourse(): {
   savingStatus: LoadingStatus

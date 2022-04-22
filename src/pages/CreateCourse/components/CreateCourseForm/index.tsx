@@ -22,6 +22,7 @@ import {
   SearchTrainer,
   CourseInput,
   ValidCourseInput,
+  InviteStatus,
 } from '@app/types'
 import { getNumberOfAssistants, LoadingStatus } from '@app/util'
 
@@ -87,29 +88,29 @@ export const CreateCourseForm = () => {
   }, [minAssistants])
 
   const handleNextStepButtonClick = async () => {
-    if (courseData) {
-      if (courseType === CourseType.INDIRECT && profile) {
-        assertCourseDataValid(courseData, courseDataValid)
-        const insertedId = await saveCourse(
-          {
-            ...courseData,
-            type: CourseType.INDIRECT,
-          },
-          [
-            { profile_id: profile.id, type: CourseTrainerType.LEADER },
-            ...assistants.map(assistant => ({
-              profile_id: assistant.id,
-              type: CourseTrainerType.ASSISTANT,
-            })),
-          ]
-        )
+    if (!courseData || !profile) return
 
-        navigate(`/courses/${insertedId}/modules`)
-      } else {
-        assertCourseDataValid(courseData, courseDataValid)
-        storeCourseData({ ...courseData, type: courseType })
-        navigate(`./assign-trainers`)
-      }
+    assertCourseDataValid(courseData, courseDataValid)
+
+    if (courseType === CourseType.INDIRECT) {
+      const trainers = [
+        {
+          profile_id: profile.id,
+          type: CourseTrainerType.LEADER,
+          status: InviteStatus.ACCEPTED,
+        },
+        ...assistants.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.ASSISTANT,
+          status: InviteStatus.PENDING,
+        })),
+      ]
+
+      const id = await saveCourse({ ...courseData, type: courseType }, trainers)
+      navigate(`/courses/${id}/modules`)
+    } else {
+      storeCourseData({ ...courseData, type: courseType })
+      navigate('./assign-trainers')
     }
   }
 
