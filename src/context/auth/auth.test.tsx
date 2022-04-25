@@ -30,6 +30,7 @@ describe('context: Auth', () => {
       'getJWT',
       'changeRole',
       'loadProfile',
+      'reloadCurrentProfile',
       'acl',
     ]
 

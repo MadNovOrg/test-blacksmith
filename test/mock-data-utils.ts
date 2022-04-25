@@ -80,6 +80,8 @@ export const buildProfile = build<Profile>({
     preferences: {},
     roles: [{ role: { name: fake(f => f.random.word()) } }],
     organizations: [{ organization: buildOrganization() }],
+    dietaryRestrictions: null,
+    disabilities: null,
   },
   postBuild: profile => ({
     ...profile,

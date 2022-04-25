@@ -24,6 +24,8 @@ export const profile = {
   updatedAt: '',
   organizations: [],
   roles: [{ role: { name: RoleName.USER } }],
+  dietaryRestrictions: null,
+  disabilities: null,
 } as AuthContextType['profile']
 
 export interface Providers {
@@ -46,6 +48,7 @@ export const defaultProviders: Providers = {
     allowedRoles: new Set([RoleName.USER]),
     activeRole: RoleName.USER,
     loadProfile: jest.fn().mockResolvedValue(undefined),
+    reloadCurrentProfile: jest.fn().mockResolvedValue(undefined),
     profile,
   },
 }

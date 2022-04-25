@@ -28,6 +28,8 @@ export const PROFILE = gql`
     addresses
     attributes
     contactDetails
+    dietaryRestrictions
+    disabilities
     organizations {
       organization {
         ...Organization

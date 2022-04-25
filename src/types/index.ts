@@ -91,6 +91,8 @@ export type Profile = {
   title: string
   tags: string[] | null
   status: string
+  dietaryRestrictions: string | null
+  disabilities: string | null
   addresses: { [key: string]: string }[]
   attributes: string[]
   contactDetails: { [key: string]: string }[]

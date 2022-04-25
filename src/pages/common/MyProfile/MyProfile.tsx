@@ -56,7 +56,13 @@ const mockedCerts = [
   },
 ]
 
-const DetailsRow = ({ label, value }: { label: string; value: string }) => (
+const DetailsRow = ({
+  label,
+  value,
+}: {
+  label: string
+  value: string | null
+}) => (
   <Box display="flex" alignItems="center" mb={2}>
     <Typography flex={1} color="grey.700">
       {label}
@@ -137,6 +143,14 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
               <DetailsRow label={t('phone')} value={profile.phone} />
               <DetailsRow label={t('dob')} value={profile.dob} />
               <DetailsRow label={t('job-title')} value={profile.jobTitle} />
+              <DetailsRow
+                label={t('dietary-restrictions')}
+                value={profile.dietaryRestrictions}
+              />
+              <DetailsRow
+                label={t('disabilities')}
+                value={profile.disabilities}
+              />
             </Box>
 
             <Typography variant="subtitle2" mb={1} mt={3}>

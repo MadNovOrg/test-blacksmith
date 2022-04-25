@@ -10,6 +10,8 @@ export type ParamsType = {
     phone: string
     dob: Date | null
     jobTitle: string
+    dietaryRestrictions: string | null
+    disabilities: string | null
   }
 }
 

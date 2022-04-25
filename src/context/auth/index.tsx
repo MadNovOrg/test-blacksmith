@@ -27,6 +27,10 @@ export const AuthProvider: React.FC = ({ children }) => {
       .catch(() => setLoading(false))
   }, [loadProfile])
 
+  const reloadCurrentProfile = useCallback(() => {
+    return Auth.currentAuthenticatedUser().then(loadProfile)
+  }, [loadProfile])
+
   const login = useCallback(
     async (email, password) => {
       try {
@@ -71,8 +75,18 @@ export const AuthProvider: React.FC = ({ children }) => {
       getJWT,
       changeRole,
       loadProfile,
+      reloadCurrentProfile,
     })
-  }, [login, logout, getJWT, changeRole, state, loading, loadProfile])
+  }, [
+    login,
+    logout,
+    getJWT,
+    changeRole,
+    state,
+    loading,
+    loadProfile,
+    reloadCurrentProfile,
+  ])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

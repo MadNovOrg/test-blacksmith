@@ -25,6 +25,7 @@ export interface AuthContextType extends AuthState {
   getJWT: () => Promise<string>
   changeRole: (role: RoleName) => void
   loadProfile: (user: CognitoUser) => Promise<void>
+  reloadCurrentProfile: () => Promise<void>
   acl: ACL
 }
 

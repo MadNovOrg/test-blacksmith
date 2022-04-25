@@ -6,6 +6,7 @@ configuration:
   custom_column_names:
     contact_details: contactDetails
     created_at: createdAt
+    dietary_restrictions: dietaryRestrictions
     family_name: familyName
     given_name: givenName
     go1_id: go1Id
@@ -48,26 +49,28 @@ computed_fields:
 select_permissions:
 - permission:
     columns:
-    - family_name
-    - given_name
-    - stripe_customer_id
-    - title
-    - dob
-    - go1_id
     - addresses
     - attributes
     - contact_details
-    - go1_profile
-    - original_record
-    - preferences
-    - tags
-    - email
-    - job_title
-    - phone
-    - status
     - created_at
-    - updated_at
+    - dietary_restrictions
+    - disabilities
+    - dob
+    - email
+    - family_name
+    - given_name
+    - go1_id
+    - go1_profile
     - id
+    - job_title
+    - original_record
+    - phone
+    - preferences
+    - status
+    - stripe_customer_id
+    - tags
+    - title
+    - updated_at
     computed_fields:
     - fullName
     filter:
@@ -81,6 +84,8 @@ select_permissions:
     - attributes
     - contact_details
     - created_at
+    - dietary_restrictions
+    - disabilities
     - dob
     - email
     - family_name
@@ -102,6 +107,8 @@ update_permissions:
 - permission:
     check: null
     columns:
+    - dietary_restrictions
+    - disabilities
     - dob
     - family_name
     - given_name

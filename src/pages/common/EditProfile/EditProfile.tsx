@@ -10,10 +10,15 @@ import {
   TextField as MuiTextField,
   Typography,
 } from '@mui/material'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
@@ -33,6 +38,8 @@ type ProfileInput = {
   phone: string
   dob: Date | null
   jobTitle: string
+  disabilities: string | null
+  dietaryRestrictions: string | null
 }
 
 type EditProfilePageProps = unknown
@@ -46,34 +53,94 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
   },
 }))
 
+enum DietaryRestrictionRadioValues {
+  NO = 'NO',
+  YES = 'YES',
+}
+enum DisabilitiesRadioValues {
+  NO = 'NO',
+  YES = 'YES',
+  RATHER_NOT_SAY = 'RATHER_NOT_SAY',
+}
+
 export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
-  const { profile } = useAuth()
+  const { profile, reloadCurrentProfile } = useAuth()
+  const navigate = useNavigate()
 
-  const schema = useMemo(
-    () =>
-      yup
-        .object({
-          firstName: yup
+  const [dietaryRestrictionsRadioValue, setDietaryRestrictionsRadioValue] =
+    useState<DietaryRestrictionRadioValues | null>(null)
+  const [disabilitiesRadioValue, setDisabilitiesRadioValue] =
+    useState<DisabilitiesRadioValues | null>(null)
+
+  const ratherNotSayText = t<string>('rather-not-say')
+
+  useEffect(() => {
+    const restriction = profile?.dietaryRestrictions
+    const disabilities = profile?.disabilities
+    if (restriction !== null && !dietaryRestrictionsRadioValue) {
+      setDietaryRestrictionsRadioValue(
+        restriction
+          ? DietaryRestrictionRadioValues.YES
+          : DietaryRestrictionRadioValues.NO
+      )
+    }
+    if (disabilities !== null && !disabilitiesRadioValue) {
+      setDisabilitiesRadioValue(
+        disabilities
+          ? disabilities === ratherNotSayText
+            ? DisabilitiesRadioValues.RATHER_NOT_SAY
+            : DisabilitiesRadioValues.YES
+          : DisabilitiesRadioValues.NO
+      )
+    }
+  }, [
+    dietaryRestrictionsRadioValue,
+    disabilitiesRadioValue,
+    profile,
+    ratherNotSayText,
+  ])
+
+  const schema = useMemo(() => {
+    const disabilitiesSchema =
+      disabilitiesRadioValue === DisabilitiesRadioValues.YES
+        ? yup
             .string()
             .required(
-              t('validation-errors.required-field', { name: t('first-name') })
-            ),
-          surname: yup
-            .string()
-            .required(
-              t('validation-errors.required-field', { name: t('surname') })
-            ),
-          countryCode: yup.string(),
-          phone: yup.string(),
-          dob: yup.date().nullable(),
-          org: yup.string(),
-        })
-        .required(),
-    [t]
-  )
+              t('validation-errors.required-field', { name: t('disabilities') })
+            )
+        : yup.string().nullable()
+    const dietaryRestrictionsSchema =
+      dietaryRestrictionsRadioValue === DietaryRestrictionRadioValues.YES
+        ? yup.string().required(
+            t('validation-errors.required-field', {
+              name: t('dietary-restrictions'),
+            })
+          )
+        : yup.string().nullable()
+    return yup
+      .object({
+        firstName: yup
+          .string()
+          .required(
+            t('validation-errors.required-field', { name: t('first-name') })
+          ),
+        surname: yup
+          .string()
+          .required(
+            t('validation-errors.required-field', { name: t('surname') })
+          ),
+        countryCode: yup.string(),
+        phone: yup.string(),
+        dob: yup.date().nullable(),
+        org: yup.string(),
+        disabilities: disabilitiesSchema,
+        dietaryRestrictions: dietaryRestrictionsSchema,
+      })
+      .required()
+  }, [t, disabilitiesRadioValue, dietaryRestrictionsRadioValue])
 
   const {
     register,
@@ -90,6 +157,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
       phone: profile?.phone || '',
       dob: profile?.dob ? new Date(profile.dob) : null,
       jobTitle: profile?.jobTitle || '',
+      disabilities: profile?.disabilities || null,
+      dietaryRestrictions: profile?.dietaryRestrictions || null,
     },
   })
   const values = watch()
@@ -110,11 +179,15 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             phone: data.phone,
             dob: data.dob,
             jobTitle: data.jobTitle,
+            disabilities: data.disabilities,
+            dietaryRestrictions: data.dietaryRestrictions,
           },
         }
       )
 
       setLoading(false)
+      await reloadCurrentProfile()
+      navigate('..')
     } catch (err) {
       setLoading(false)
     }
@@ -280,6 +353,107 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     inputProps={{ 'data-testid': 'job-title' }}
                   />
                 </Grid>
+              </Grid>
+
+              <Grid item md={12} pt={2}>
+                <FormControl>
+                  <Typography variant="body1" fontWeight={600}>
+                    {t('dietary-restrictions-question')}
+                  </Typography>
+                  <RadioGroup
+                    onChange={(event, newValue: string) => {
+                      setDietaryRestrictionsRadioValue(
+                        newValue as DietaryRestrictionRadioValues
+                      )
+                      setValue('dietaryRestrictions', '')
+                    }}
+                    row
+                    value={dietaryRestrictionsRadioValue}
+                  >
+                    <FormControlLabel
+                      value={DietaryRestrictionRadioValues.NO}
+                      control={<Radio />}
+                      label={t<string>('no')}
+                    />
+                    <FormControlLabel
+                      value={DietaryRestrictionRadioValues.YES}
+                      control={<Radio />}
+                      label={t<string>('yes')}
+                    />
+                  </RadioGroup>
+                  {dietaryRestrictionsRadioValue ===
+                  DietaryRestrictionRadioValues.YES ? (
+                    <Box>
+                      <TextField
+                        onChange={event =>
+                          setValue('dietaryRestrictions', event.target.value)
+                        }
+                        label={t('dietary-restrictions-text-label')}
+                        variant="standard"
+                        fullWidth
+                        required
+                        error={!!errors.dietaryRestrictions}
+                        helperText={errors.dietaryRestrictions?.message}
+                        value={values.dietaryRestrictions}
+                      />
+                    </Box>
+                  ) : null}
+                </FormControl>
+              </Grid>
+
+              <Grid item md={12} pt={2}>
+                <FormControl>
+                  <Typography variant="body1" fontWeight={600}>
+                    {t('disabilities-question')}
+                  </Typography>
+                  <RadioGroup
+                    onChange={(event, newValue: string) => {
+                      setValue(
+                        'disabilities',
+                        newValue === DisabilitiesRadioValues.RATHER_NOT_SAY
+                          ? ratherNotSayText
+                          : ''
+                      )
+                      setDisabilitiesRadioValue(
+                        newValue as DisabilitiesRadioValues
+                      )
+                    }}
+                    row
+                    value={disabilitiesRadioValue}
+                  >
+                    <FormControlLabel
+                      value={DisabilitiesRadioValues.NO}
+                      control={<Radio />}
+                      label={t<string>('no')}
+                    />
+                    <FormControlLabel
+                      value={DisabilitiesRadioValues.YES}
+                      control={<Radio />}
+                      label={t<string>('yes')}
+                    />
+                    <FormControlLabel
+                      value={DisabilitiesRadioValues.RATHER_NOT_SAY}
+                      control={<Radio />}
+                      label={ratherNotSayText}
+                    />
+                  </RadioGroup>
+                  {disabilitiesRadioValue === DisabilitiesRadioValues.YES ? (
+                    <Box>
+                      <TextField
+                        onChange={event =>
+                          setValue('disabilities', event.target.value)
+                        }
+                        label={t('disabilities-text-label')}
+                        variant="standard"
+                        fullWidth
+                        required
+                        error={!!errors.disabilities}
+                        helperText={errors.disabilities?.message}
+                        value={values.disabilities}
+                      />
+                    </Box>
+                  ) : null}
+                </FormControl>
               </Grid>
             </Box>
 
