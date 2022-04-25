@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test } from '@playwright/test'
 
-import { CourseStatus, CourseType, InviteStatus } from '../../src/types'
+import { CourseStatus, CourseType, InviteStatus } from '@app/types'
+
 import {
   getTrainerCourses,
   insertCourse,

@@ -1,4 +1,4 @@
-import translation from '../../src/i18n/en/translation.json'
+import translation from '@app/i18n/en/translation.json'
 
 import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 

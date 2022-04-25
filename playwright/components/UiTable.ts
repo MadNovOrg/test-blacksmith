@@ -67,14 +67,18 @@ export class UiTable {
     const headers = await this.getHeaders()
     const columnIndex = headers.indexOf(idColumnName)
     const rowsCount = await this.getRowsCount()
+    const idCells = []
     for (let i = 0; i < rowsCount; i++) {
       const idCell = this.rows.nth(i).locator('td').nth(columnIndex)
       if (await match(idCell)) {
         return this.rows.nth(i).locator('td').nth(headers.indexOf(columnName))
       }
+      idCells.push(await idCell.innerHTML())
     }
     throw Error(
-      `No cell found with match "${match.toString()}" under column "${idColumnName}"`
+      `No cell found with match "${match.toString()}" under column "${idColumnName}"
+      Cells inner HTML:
+      ${idCells.join('\n')}`
     )
   }
 

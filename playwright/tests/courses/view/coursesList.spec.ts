@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { CourseLevel } from '../../../../src/types'
+import { CourseLevel } from '@app/types'
+
 import {
   makeSureTrainerHasCourses,
   getTrainerCourses,

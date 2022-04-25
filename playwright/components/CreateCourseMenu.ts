@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { CourseType } from '../../src/types'
+import { CourseType } from '@app/types'
+
 import { CreateCoursePage } from '../pages/courses/CreateCoursePage'
 
 export class CreateCourseMenu {
@@ -13,11 +14,12 @@ export class CreateCourseMenu {
     this.createCourseButton = this.page.locator(
       'data-testid=create-course-menu-button'
     )
-    this.option = text => this.page.locator(`data-testid="${text}"`)
+    this.option = text => this.page.locator(`data-testid=${text}`)
   }
 
-  async clickCreateCourseButton() {
+  async clickCreateCourseButton(): Promise<CreateCoursePage> {
     await this.createCourseButton.click()
+    return new CreateCoursePage(this.page)
   }
 
   async selectCreateCourseOption(type: CourseType): Promise<CreateCoursePage> {

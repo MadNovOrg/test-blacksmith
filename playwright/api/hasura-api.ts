@@ -1,6 +1,7 @@
 import { GraphQLClient, gql } from 'graphql-request'
 
-import { CourseLevel, InviteStatus } from '../../src/types'
+import { CourseLevel, InviteStatus } from '@app/types'
+
 import { HASURA_BASE_URL } from '../constants'
 import { Course, User } from '../data/types'
 import { getAdminIdToken } from '../util'
@@ -102,6 +103,9 @@ export const insertCourse = async (
         course.organization.name
       )}"`
     : ''
+  const contactProfile = course.contactProfile
+    ? `, contactProfileId: "${await getProfileId(course.contactProfile.email)}"`
+    : ''
   const venue = course.schedule[0].venue
     ? `, venue_id: "${await getVenueId(course.schedule[0].venue)}"`
     : ''
@@ -135,6 +139,7 @@ export const insertCourse = async (
           }
         }
         ${organization}
+        ${contactProfile}
       }) {
         returning {
           id
@@ -161,6 +166,10 @@ export const makeSureTrainerHasCourses = async (
 }
 
 export const deleteCourse = async (id: number) => {
+  if (!id) {
+    console.log(`Cannot delete the course without id`)
+    return
+  }
   console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {

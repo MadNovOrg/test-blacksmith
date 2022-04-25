@@ -3,7 +3,8 @@ import {
   CourseLevel,
   CourseStatus,
   CourseType,
-} from '../../src/types'
+} from '@app/types'
+
 import { setNextMonth } from '../util'
 
 import { Course } from './types'
@@ -19,10 +20,9 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        name: 'name',
-        type: 'WEBINAR',
         start: setNextMonth(new Date('2022-07-10T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-10T17:00:00Z')),
+        virtualLink: 'https://zoom.us/dummy.link',
       },
     ],
     min_participants: 6,
@@ -38,8 +38,6 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
         end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
         venue: 'Queen Elizabeth II Centre',
@@ -59,8 +57,6 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
         end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
         venue: 'Queen Elizabeth II Centre',
@@ -80,8 +76,6 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
         venue: 'Queen Elizabeth II Centre',
@@ -101,8 +95,6 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
         venue: 'Queen Elizabeth II Centre',
@@ -123,8 +115,6 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
         venue: 'Queen Elizabeth II Centre',
@@ -144,8 +134,6 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        name: 'name',
-        type: 'PHYSICAL',
         start: setNextMonth(new Date('2022-07-18T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-19T16:00:00Z')),
         venue: 'Queen Elizabeth II Centre',

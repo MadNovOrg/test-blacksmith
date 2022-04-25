@@ -1,8 +1,10 @@
 import { Locator, Page } from '@playwright/test'
 
-import { CourseDeliveryType, CourseLevel } from '../../../src/types'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+
 import { BASE_URL } from '../../constants'
 import { Course } from '../../data/types'
+import { toUiTime } from '../../util'
 import { BasePage } from '../BasePage'
 
 import { AssignTrainersPage } from './AssignTrainersPage'
@@ -24,6 +26,7 @@ export class CreateCoursePage extends BasePage {
   readonly endTimeInput: Locator
   readonly minAttendeesInput: Locator
   readonly maxAttendeesInput: Locator
+  readonly acknowledgeCheckboxes: Locator
   readonly nextPageButton: Locator
 
   constructor(page: Page) {
@@ -59,6 +62,9 @@ export class CreateCoursePage extends BasePage {
     )
     this.maxAttendeesInput = this.page.locator(
       '[data-testid="max-attendees"] input'
+    )
+    this.acknowledgeCheckboxes = this.page.locator(
+      '[data-testid="acknowledge-checks"] input'
     )
     this.nextPageButton = this.page.locator('data-testid=next-page-btn')
   }
@@ -103,25 +109,21 @@ export class CreateCoursePage extends BasePage {
   }
 
   async setStartDateTime(dateTime: Date) {
-    await this.startDateInput.type(dateTime.toISOString().substring(0, 10))
-    await this.startTimeInput.type(
-      `${dateTime.getHours()}:${dateTime.getMinutes()}`
-    )
+    await this.startTimeInput.fill(toUiTime(dateTime))
+    await this.startDateInput.fill(dateTime.toISOString().substring(0, 10))
   }
 
   async setEndDateTime(dateTime: Date) {
-    await this.endDateInput.type(dateTime.toISOString().substring(0, 10))
-    await this.endTimeInput.type(
-      `${dateTime.getHours()}:${dateTime.getMinutes()}`
-    )
+    await this.endTimeInput.fill(toUiTime(dateTime))
+    await this.endDateInput.fill(dateTime.toISOString().substring(0, 10))
   }
 
   async setMinAttendees(value: number) {
-    await this.minAttendeesInput.type(value.toString())
+    await this.minAttendeesInput.fill(value.toString())
   }
 
   async setMaxAttendees(value: number) {
-    await this.maxAttendeesInput.type(value.toString())
+    await this.maxAttendeesInput.fill(value.toString())
   }
 
   async clickAssignTrainersButton(): Promise<AssignTrainersPage> {
@@ -129,7 +131,34 @@ export class CreateCoursePage extends BasePage {
     return new AssignTrainersPage(this.page)
   }
 
-  async fillOpenCourseDetails(course: Course) {
+  async clickCreateCourseButton(): Promise<number> {
+    const responses = await Promise.all([
+      this.page.waitForResponse(
+        res =>
+          res.request().url().includes('/graphql') &&
+          res.request().postData().includes('insert_course')
+      ),
+      this.nextPageButton.click(),
+    ])
+    const data = await responses[0].json()
+    return data.data.insertCourse.inserted[0].id
+  }
+
+  async checkAcknowledgeCheckboxes() {
+    const count = await this.acknowledgeCheckboxes.count()
+    for (let i = 0; i < count; i++) {
+      await this.acknowledgeCheckboxes.nth(i).check()
+    }
+  }
+
+  async fillCourseDetails(course: Course) {
+    if (course.type !== CourseType.OPEN) {
+      await this.selectOrganisation(course.organization.name)
+    }
+    if (course.type === CourseType.CLOSED) {
+      const name = `${course.contactProfile.givenName} ${course.contactProfile.familyName}`
+      await this.selectContact(name)
+    }
     await this.selectCourseLevel(course.level)
     if (course.go1Integration) await this.selectGo1()
     if (course.reaccreditation) await this.selectReaccreditation()
@@ -139,7 +168,12 @@ export class CreateCoursePage extends BasePage {
     }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)
-    await this.setMinAttendees(course.min_participants)
+    if (course.type === CourseType.OPEN) {
+      await this.setMinAttendees(course.min_participants)
+    }
     await this.setMaxAttendees(course.max_participants)
+    if (course.type === CourseType.INDIRECT) {
+      await this.checkAcknowledgeCheckboxes()
+    }
   }
 }

@@ -171,7 +171,7 @@ export const CreateCourseForm = () => {
             </>
           ) : null}
 
-          <FormGroup sx={{ marginTop: 3 }}>
+          <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
             <FormControlLabel
               control={
                 <Checkbox

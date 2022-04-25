@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { CourseStatus, CourseType, InviteStatus } from '../../../../src/types'
+import { CourseStatus, CourseType, InviteStatus } from '@app/types'
+
 import { getLatestEmail } from '../../../api/email-api'
 import {
   deleteCourse,

@@ -43,3 +43,12 @@ export const setNextMonth = (date: Date) => {
   }
   return new Date(date.setMonth(nextMonth))
 }
+
+export const toUiTime = (date: Date) => {
+  return date.toLocaleString('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'UTC',
+  })
+}

@@ -1,4 +1,4 @@
-import { CourseDeliveryType, CourseLevel, CourseType } from '../../src/types'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { UNIQUE_COURSE } from './courses'
 import { Course, ModuleGroup } from './types'

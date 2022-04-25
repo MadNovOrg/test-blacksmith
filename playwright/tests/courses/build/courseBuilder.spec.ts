@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { InviteStatus } from '../../../../src/types'
+import { InviteStatus } from '@app/types'
+
 import { insertCourse, deleteCourse } from '../../../api/hasura-api'
 import { MODULES_SETUP } from '../../../data/modules'
 import { Course } from '../../../data/types'

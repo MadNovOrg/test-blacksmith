@@ -3,7 +3,7 @@ import {
   CourseLevel,
   CourseStatus,
   CourseType,
-} from '../../src/types'
+} from '@app/types'
 
 export type User = {
   givenName: string
@@ -33,12 +33,14 @@ export type Course = {
   go1Integration?: boolean
   min_participants: number
   max_participants: number
+  contactProfile?: User
 }
 
 export type CourseSchedule = {
   start: Date
   end: Date
   venue?: string
+  virtualLink?: string
 }
 
 export type Organization = {

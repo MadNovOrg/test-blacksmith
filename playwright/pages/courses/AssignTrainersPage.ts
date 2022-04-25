@@ -29,7 +29,7 @@ export class AssignTrainersPage extends BasePage {
     this.selectedAssistants = this.page.locator(
       '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-selected"]'
     )
-    this.createButton = this.page.locator('data-testid="AssignTrainers-submit"')
+    this.createButton = this.page.locator('data-testid=AssignTrainers-submit')
   }
 
   async goto(courseType: string) {
@@ -46,7 +46,7 @@ export class AssignTrainersPage extends BasePage {
   }
 
   async selectTrainer(trainer: User) {
-    await this.trainerInput.type(`${trainer.givenName} ${trainer.familyName}`)
+    await this.trainerInput.type(`${trainer.givenName}`)
     await expect(this.autocompleteOptions).toHaveCount(1)
     await this.autocompleteOptions.first().click()
   }
