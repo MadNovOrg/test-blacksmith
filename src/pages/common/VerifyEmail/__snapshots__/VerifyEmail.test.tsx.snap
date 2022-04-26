@@ -3,10 +3,10 @@
 exports[`page: VerifyEmailPage matchs snapshot 1`] = `
 <div>
   <div
-    class="MuiBox-root css-16d3e73"
+    class="MuiBox-root css-180t3ph"
   >
     <header
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionFixed mui-fixed css-1jvst5f-MuiPaper-root-MuiAppBar-root"
+      class="MuiPaper-root MuiPaper-outlined MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionFixed mui-fixed css-146r89d-MuiPaper-root-MuiAppBar-root"
     >
       <div
         class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1k7giva-MuiToolbar-root"
@@ -54,7 +54,10 @@ exports[`page: VerifyEmailPage matchs snapshot 1`] = `
       </div>
     </header>
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg css-1ghz6u7-MuiContainer-root"
+      class="css-co2nuf"
+    />
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-kmbqtc-MuiContainer-root"
     >
       <div
         class="MuiBox-root css-1wlfb0w"

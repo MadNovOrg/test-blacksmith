@@ -2,6 +2,7 @@
   "common": {
     "appTitle": "Team Teach Hub",
     "internal-error": "Internal error occurred.",
+    "currency": "{{amount, price}}",
     "certificates": {
       "level-one": "Level One",
       "level-two": "Level Two",
@@ -57,10 +58,14 @@
     "email": "Email",
     "work-phone": "Work phone",
     "registrants": "Registrants",
+    "emails": "Emails",
+    "enter-emails": "Enter registrant email(s)",
     "important": "Important",
     "subtotal": "Subtotal",
     "vat": "VAT",
+    "enter-promo-code": "Enter promo code",
     "promo-code": "Promo code",
+    "code": "Code",
     "amount-due": "Amount due",
     "other": "Other",
     "sector": "Sector",
@@ -100,6 +105,7 @@
     "back": "Back",
     "submit": "Submit",
     "cancel": "Cancel",
+    "apply": "Apply",
     "save-changes": "Save Changes",
     "clear": "Clear",
     "poor": "Poor",
@@ -408,7 +414,10 @@
       "pay-by-cc": "Pay by credit card",
       "pay-by-inv": "Pay by invoice",
       "pay-by-cc-info": "Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.",
-      "pay-by-inv-info": "An invoice will be sent to you requiring payment within 30 days."
+      "pay-by-inv-info": "An invoice will be sent to you requiring payment within 30 days.",
+      "back-to-booking": "Back to booking details",
+      "order-success-info": "Your order has been successfully submitted.",
+      "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved."
     },
     "home": {
       "title": "Home"
@@ -856,5 +865,9 @@
     "can-attend-q": "Are you able to attend?",
     "goto-tt": "Go to TeamTeach.co.uk",
     "response-sent": "Your response has been sent"
+  },
+  "dates": {
+    "long": "{{date, EEE, dd MMM yyyy}}",
+    "timeFromTo": "{{from, hh:mm aa}} - {{to, hh:mm aa}}"
   }
 }

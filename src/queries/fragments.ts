@@ -106,6 +106,19 @@ export const COURSE = gql`
   }
 `
 
+export const COURSE_DATES = gql`
+  fragment CourseDates on course_schedule_aggregate {
+    aggregate {
+      start: min {
+        date: start
+      }
+      end: max {
+        date: end
+      }
+    }
+  }
+`
+
 export const COURSE_SCHEDULE = gql`
   fragment CourseSchedule on course_schedule {
     id

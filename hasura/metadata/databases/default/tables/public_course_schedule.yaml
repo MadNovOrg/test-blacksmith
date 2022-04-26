@@ -92,6 +92,22 @@ select_permissions:
     allow_aggregations: true
     columns:
     - course_id
+    - virtual_link
+    - created_at
+    - end
+    - start
+    - updated_at
+    - id
+    - venue_id
+    filter:
+      course:
+        course_type:
+          _eq: OPEN
+  role: unverified
+- permission:
+    allow_aggregations: true
+    columns:
+    - course_id
     - created_at
     - end
     - id

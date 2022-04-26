@@ -166,6 +166,29 @@ select_permissions:
     filter: {}
   role: tt-ops
 - permission:
+    columns:
+    - go1_integration
+    - grading_confirmed
+    - reaccreditation
+    - id
+    - max_participants
+    - min_participants
+    - aol_cost_of_course
+    - course_delivery_type
+    - course_level
+    - course_status
+    - course_type
+    - description
+    - name
+    - created_at
+    - updated_at
+    - contact_profile_id
+    - organization_id
+    filter:
+      course_type:
+        _eq: OPEN
+  role: unverified
+- permission:
     allow_aggregations: true
     columns:
     - aol_cost_of_course

@@ -6,6 +6,7 @@ import { Logo } from '@app/components/Logo'
 import { useAuth } from '@app/context/auth'
 
 import { LinkBehavior } from '../LinkBehavior'
+import { ToolbarOffset } from '../ToolbarOffset'
 
 type Props = unknown
 
@@ -14,17 +15,13 @@ export const UnverifiedLayout: React.FC<Props> = ({ children }) => {
   const { logout } = useAuth()
 
   return (
-    <Box
-      bgcolor="grey.200"
-      width="100%"
-      height="100%"
-      p={10}
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      overflow="scroll"
-    >
-      <AppBar color="transparent" elevation={0} variant="elevation">
+    <Box bgcolor="grey.200" flex={1}>
+      <AppBar
+        color="transparent"
+        elevation={0}
+        variant="outlined"
+        position="fixed"
+      >
         <Toolbar
           sx={{ justifyContent: 'space-between', bgcolor: 'common.white' }}
         >
@@ -59,9 +56,11 @@ export const UnverifiedLayout: React.FC<Props> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
+      <ToolbarOffset />
+
       <Container
         maxWidth="lg"
-        sx={{ pt: 2, display: 'flex', justifyContent: 'center' }}
+        sx={{ py: 3, display: 'flex', justifyContent: 'center' }}
       >
         {children}
       </Container>
