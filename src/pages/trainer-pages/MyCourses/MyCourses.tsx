@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography'
 import format from 'date-fns/format'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
@@ -56,6 +56,7 @@ const sorts: Record<string, object> = {
 export const MyCourses: React.FC<MyCoursesProps> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const [searchParams] = useSearchParams()
 
   const cols = useMemo(
     () => [
@@ -94,7 +95,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }))
   }, [t])
 
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
 
   const [levelFilter, setLevelFilter] = useState<FilterOption[]>(levelOptions)
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
@@ -132,7 +133,10 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }
 
     if (keywordDebounced.trim().length) {
-      obj.name = { _ilike: `%${keywordDebounced}%` }
+      obj._or = [
+        { name: { _ilike: `%${keywordDebounced}%` } },
+        { id: { _eq: Number(keywordDebounced) } },
+      ]
     }
 
     return obj
@@ -168,6 +172,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     (course, trainer, status) => {
       const isLead = trainer.type === CourseTrainerType.LEADER
       const isAccepted = status === InviteStatus.ACCEPTED
+      setKeyword('')
       isLead && isAccepted ? navigate(handleNavigation(course)) : mutate()
     },
     [mutate, navigate]
