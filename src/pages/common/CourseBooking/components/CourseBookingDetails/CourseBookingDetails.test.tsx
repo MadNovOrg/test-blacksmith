@@ -1,11 +1,10 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { Course } from '@app/types'
-
 import { render } from '@test/index'
 
 import { useBooking } from '../BookingContext'
+import { positions, sectors } from '../org-data'
 
 import { CourseBookingDetails } from './CourseBookingDetails'
 
@@ -13,11 +12,16 @@ jest.mock('../BookingContext', () => ({
   useBooking: jest.fn(),
 }))
 
+jest.mock('@app/components/OrgSelector', () => ({
+  OrgSelector: jest.fn().mockReturnValue(<div />),
+}))
+
 const useBookingMock = jest.mocked(useBooking)
 
 describe('CourseBookingDetails', () => {
   useBookingMock.mockReturnValue({
     course: {
+      id: 11,
       name: 'My Course 1',
       dates: {
         aggregate: {
@@ -25,7 +29,9 @@ describe('CourseBookingDetails', () => {
           end: { date: new Date('2022-04-10T12:00:00').toISOString() },
         },
       },
-    } as Course,
+      maxParticipants: 12,
+      participants: { aggregate: { count: 3 } },
+    },
     addPromo: jest.fn(),
     removePromo: jest.fn(),
     booking: {
@@ -34,7 +40,13 @@ describe('CourseBookingDetails', () => {
       promoCodes: [],
       quantity: 3,
       vat: 10,
+      orgId: '',
+      sector: '',
+      position: '',
+      otherPosition: '',
     },
+    positions,
+    sectors,
     availableSeats: 5,
     ready: true,
     setBooking: jest.fn(),

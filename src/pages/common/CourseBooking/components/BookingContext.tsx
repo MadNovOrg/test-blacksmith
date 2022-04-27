@@ -9,7 +9,12 @@ import React, {
 import useSWR from 'swr'
 
 import { QUERY, ResponseType } from '@app/queries/profile/get-temp-profile'
-import { Course } from '@app/types'
+
+import { positions, sectors } from './org-data'
+
+export type Sector = keyof typeof sectors | ''
+
+type CourseDetails = ResponseType['tempProfiles'][0]['course']
 
 type State = {
   emails: string[]
@@ -17,14 +22,20 @@ type State = {
   price: number
   vat: number
   promoCodes: string[]
+  orgId: string | null
+  sector: Sector
+  position: string
+  otherPosition: string
 }
 
 type ContextType = {
-  course: Course
+  course: CourseDetails
   booking: State
   ready: boolean
   availableSeats: number
   totalPrice: number
+  positions: typeof positions
+  sectors: typeof sectors
   setBooking: (_: Partial<State>) => void
   addPromo: (_: string) => void
   removePromo: (_: string) => void
@@ -45,7 +56,7 @@ type Props = unknown
 export const BookingProvider: React.FC<Props> = ({ children }) => {
   const [ready, setReady] = useState(false)
   const [availableSeats, setAvailableSeats] = useState(0)
-  const [course, setCourse] = useState<Course>({} as Course) // safe
+  const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
   const { data } = useSWR<ResponseType>(QUERY)
   const [profile] = data?.tempProfiles || []
@@ -53,7 +64,10 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (!profile) return
 
-    setAvailableSeats(5)
+    setAvailableSeats(
+      profile.course.maxParticipants -
+        profile.course.participants.aggregate.count
+    )
     setCourse(profile.course)
     setBooking({
       quantity: profile.quantity,
@@ -61,6 +75,10 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       price: 100,
       vat: 20,
       promoCodes: [],
+      orgId: '',
+      sector: '',
+      position: '',
+      otherPosition: '',
     })
     setReady(true)
   }, [profile])
@@ -97,6 +115,8 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       ready,
       booking,
       availableSeats,
+      positions,
+      sectors,
       setBooking: s => setBooking(prev => ({ ...prev, ...s })),
       addPromo,
       removePromo,

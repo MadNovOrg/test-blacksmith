@@ -73,6 +73,7 @@
     "sector": "Sector",
     "select-sector": "Please select a sector to see positions",
     "position": "Position",
+    "position-name": "Position name",
     "sector-placeholder": "Sector",
     "country-code": "Country Code",
     "phone": "Phone",
@@ -184,7 +185,7 @@
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
     "validation-errors": {
-      "max-registrants": "Only {{num}} registrants are allowed",
+      "max-registrants": "Please enter emails of registrants for the quantity you selected",
       "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
       "email-required": "Please enter your email",

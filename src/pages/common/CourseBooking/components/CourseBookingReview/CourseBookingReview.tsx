@@ -136,7 +136,7 @@ export const CourseBookingReview: React.FC = () => {
             </Typography>
           </Box>
         ))}
-        <Divider sx={{ my: 2 }} />
+        {booking.promoCodes.length ? <Divider sx={{ my: 2 }} /> : null}
         <Box display="flex" justifyContent="space-between">
           <Typography fontWeight="500">{t('amount-due')} (GBP)</Typography>
           <Typography fontWeight="500">
@@ -169,6 +169,7 @@ export const CourseBookingReview: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={handleConfirmBooking}
+          disabled={!accept}
         >
           {t('pages.book-course.complete-booking')}
         </Button>

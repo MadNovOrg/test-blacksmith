@@ -175,9 +175,6 @@ Object {
           <hr
             class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
           />
-          <hr
-            class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
-          />
           <div
             class="MuiBox-root css-gg4vpm"
           >
@@ -255,14 +252,12 @@ Object {
             />
           </button>
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
-            tabindex="0"
+            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+            disabled=""
+            tabindex="-1"
             type="button"
           >
             Complete booking
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
           </button>
         </div>
       </div>
@@ -439,9 +434,6 @@ Object {
         <hr
           class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
         />
-        <hr
-          class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
-        />
         <div
           class="MuiBox-root css-gg4vpm"
         >
@@ -519,14 +511,12 @@ Object {
           />
         </button>
         <button
-          class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
-          tabindex="0"
+          class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+          disabled=""
+          tabindex="-1"
           type="button"
         >
           Complete booking
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </button>
       </div>
     </div>

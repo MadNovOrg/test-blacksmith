@@ -10,10 +10,6 @@ const defaultProps = {
   quantity: 2,
 }
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn().mockReturnValue(<div />),
-}))
-
 describe('Form', () => {
   it('matches snapshot', async () => {
     const props = { ...defaultProps }

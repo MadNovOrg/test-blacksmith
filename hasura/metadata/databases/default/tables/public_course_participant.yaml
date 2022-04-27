@@ -87,6 +87,15 @@ select_permissions:
 - permission:
     allow_aggregations: true
     columns:
+    - id
+    filter:
+      course:
+        course_type:
+          _eq: OPEN
+  role: unverified
+- permission:
+    allow_aggregations: true
+    columns:
     - attended
     - booking_date
     - course_id

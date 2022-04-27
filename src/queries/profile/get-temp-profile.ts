@@ -6,7 +6,17 @@ import { COURSE_DATES } from '../fragments'
 
 export type ResponseType = {
   tempProfiles: {
-    course: Course
+    course: {
+      id: number
+      name: string
+      dates: Course['dates']
+      maxParticipants: number
+      participants: {
+        aggregate: {
+          count: number
+        }
+      }
+    }
     quantity: number
   }[]
 }
@@ -20,6 +30,12 @@ export const QUERY = gql`
         name
         dates: schedule_aggregate {
           ...CourseDates
+        }
+        maxParticipants: max_participants
+        participants: participants_aggregate {
+          aggregate {
+            count
+          }
         }
       }
       quantity
