@@ -339,8 +339,13 @@ export default createTheme({
           },
         },
         standardError: {
+          border: '1px solid',
+          borderColor: theme.palette.error.dark,
           backgroundColor: '#fdeded',
-          color: '#5f2120',
+          color: theme.palette.grey[900],
+          '& .MuiAlert-icon': {
+            color: theme.palette.error.dark,
+          },
         },
         filledInfo: {
           backgroundColor: '#E4F1F3',

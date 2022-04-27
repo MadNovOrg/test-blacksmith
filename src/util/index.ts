@@ -202,8 +202,10 @@ const COURSE_LEVEL_TO_PREFIX = {
   [CourseLevel.LEVEL_1]: 'L1',
   [CourseLevel.LEVEL_2]: 'L2',
   [CourseLevel.ADVANCED]: 'ADV',
-  [CourseLevel.INTERMEDIATE]: 'INT',
   [CourseLevel.BILD_ACT]: 'ACT',
+  [CourseLevel.INTERMEDIATE_TRAINER]: 'INT-T',
+  [CourseLevel.ADVANCED_TRAINER]: 'ADV-T',
+  [CourseLevel.BILD_ACT_TRAINER]: 'ACT-T',
 }
 
 export const getCertificateNumberPrefix = (

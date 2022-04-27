@@ -1,0 +1,4 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- UPDATE course_level SET name = 'INTERMEDIATE_TRAINER' WHERE name = 'INTERMEDIATE';
+-- INSERT INTO course_level(name) VALUES ('ADVANCED_TRAINER'), ('BILD_ACT_TRAINER');

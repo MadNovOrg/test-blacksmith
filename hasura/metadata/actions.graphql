@@ -59,9 +59,11 @@ enum InviteStatus {
 enum CourseLevel {
   LEVEL_1
   LEVEL_2
-  INTERMEDIATE
   ADVANCED
   BILD_ACT
+  INTERMEDIATE_TRAINER
+  ADVANCED_TRAINER
+  BILD_ACT_TRAINER
 }
 
 enum SearchTrainerAvailability {

@@ -61,10 +61,10 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for advanced F2F course', () => {
+  it('displays correct options for advanced trainer F2F course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.ADVANCED}
+        courseLevel={CourseLevel.ADVANCED_TRAINER}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )
@@ -79,10 +79,10 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for intermediate F2F course', () => {
+  it('displays correct options for intermediate trainer F2F course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.INTERMEDIATE}
+        courseLevel={CourseLevel.INTERMEDIATE_TRAINER}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )

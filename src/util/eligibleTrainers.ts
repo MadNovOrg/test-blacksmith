@@ -32,27 +32,46 @@ function isEligible(
 
   const levelsMap: Record<CourseLevel, () => boolean> = {
     [CourseLevel.LEVEL_1]: () => {
-      const allowedLevels = [CourseLevel.INTERMEDIATE, CourseLevel.ADVANCED]
+      const allowedLevels = [
+        CourseLevel.INTERMEDIATE_TRAINER,
+        CourseLevel.ADVANCED_TRAINER,
+      ]
       return allowedLevels.some(l => activeLevels.has(l))
     },
 
     [CourseLevel.LEVEL_2]: () => {
-      const allowedLevels = [CourseLevel.INTERMEDIATE, CourseLevel.ADVANCED]
+      const allowedLevels = [
+        CourseLevel.INTERMEDIATE_TRAINER,
+        CourseLevel.ADVANCED_TRAINER,
+      ]
       return allowedLevels.some(l => activeLevels.has(l))
     },
 
-    [CourseLevel.INTERMEDIATE]: () => {
-      const allowedLevels = [CourseLevel.INTERMEDIATE, CourseLevel.ADVANCED]
+    [CourseLevel.INTERMEDIATE_TRAINER]: () => {
+      const allowedLevels = [
+        CourseLevel.INTERMEDIATE_TRAINER,
+        CourseLevel.ADVANCED_TRAINER,
+      ]
       return isSeniorOrPrincipal && allowedLevels.some(l => activeLevels.has(l))
     },
 
     [CourseLevel.ADVANCED]: () => {
-      const allowedLevels = [CourseLevel.ADVANCED]
+      const allowedLevels = [CourseLevel.ADVANCED_TRAINER]
+      return isSeniorOrPrincipal && allowedLevels.some(l => activeLevels.has(l))
+    },
+
+    [CourseLevel.ADVANCED_TRAINER]: () => {
+      const allowedLevels = [CourseLevel.ADVANCED_TRAINER]
       return isSeniorOrPrincipal && allowedLevels.some(l => activeLevels.has(l))
     },
 
     [CourseLevel.BILD_ACT]: () => {
-      const allowedLevels = [CourseLevel.BILD_ACT]
+      const allowedLevels = [CourseLevel.BILD_ACT_TRAINER]
+      return isSeniorOrPrincipal && allowedLevels.some(l => activeLevels.has(l))
+    },
+
+    [CourseLevel.BILD_ACT_TRAINER]: () => {
+      const allowedLevels = [CourseLevel.BILD_ACT_TRAINER]
       return isSeniorOrPrincipal && allowedLevels.some(l => activeLevels.has(l))
     },
   }

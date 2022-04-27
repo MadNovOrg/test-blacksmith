@@ -31,7 +31,7 @@ import {
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
 import theme from '@app/theme'
-import { Grade } from '@app/types'
+import { CourseLevel, Grade } from '@app/types'
 import { getCertificateNumberPrefix, LoadingStatus } from '@app/util'
 
 import {
@@ -42,11 +42,13 @@ import {
 import useCourseGradingData from './useCourseGradingData'
 
 const validUntilMonthsByCourseLevel = {
-  LEVEL_1: 36,
-  LEVEL_2: 24,
-  ADVANCED: 12,
-  BILD_ACT: 12,
-  INTERMEDIATE: 12,
+  [CourseLevel.LEVEL_1]: 36,
+  [CourseLevel.LEVEL_2]: 24,
+  [CourseLevel.ADVANCED]: 12,
+  [CourseLevel.BILD_ACT]: 12,
+  [CourseLevel.INTERMEDIATE_TRAINER]: 12,
+  [CourseLevel.BILD_ACT_TRAINER]: 12,
+  [CourseLevel.ADVANCED_TRAINER]: 12,
 }
 
 export const CourseGrading = () => {

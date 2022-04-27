@@ -85,13 +85,19 @@ custom_types:
       value: LEVEL_2
     - description: null
       is_deprecated: null
-      value: INTERMEDIATE
+      value: INTERMEDIATE_TRAINER
     - description: null
       is_deprecated: null
       value: ADVANCED
     - description: null
       is_deprecated: null
       value: BILD_ACT
+    - description: null
+      is_deprecated: null
+      value: BILD_ACT_TRAINER
+    - description: null
+      is_deprecated: null
+      value: ADVANCED_TRAINER
   - name: SearchTrainerAvailability
     values:
     - description: null

@@ -64,7 +64,9 @@ export const CourseGradingMenu: React.FC<Props> = ({
 
     if (
       courseDeliveryType === CourseDeliveryType.F2F &&
-      [CourseLevel.ADVANCED, CourseLevel.INTERMEDIATE].includes(courseLevel)
+      [CourseLevel.ADVANCED_TRAINER, CourseLevel.INTERMEDIATE_TRAINER].includes(
+        courseLevel
+      )
     ) {
       return [passOption, assistOnlyOption, failOption]
     }

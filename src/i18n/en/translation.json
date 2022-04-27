@@ -11,7 +11,9 @@
       "level_1": "Level One",
       "level_2": "Level Two",
       "bild_act": "BILD ACT Certified",
-      "intermediate": "Intermediate"
+      "intermediate_trainer": "Intermediate Trainer",
+      "bild_act_trainer": "BILD ACT Trainer",
+      "advanced_trainer": "Advanced Trainer"
     },
     "errors": {
       "loading-participants": "There was an error loading course participants",
@@ -133,8 +135,10 @@
       "LEVEL_1": "Level One",
       "LEVEL_2": "Level Two",
       "ADVANCED": "Advanced",
-      "INTERMEDIATE": "Intermediate",
-      "BILD_ACT": "BILD Act"
+      "BILD_ACT": "BILD Act",
+      "INTERMEDIATE_TRAINER": "Intermediate Trainer",
+      "BILD_ACT_TRAINER": "BILD Act Trainer",
+      "ADVANCED_TRAINER": "Advanced Trainer"
     },
     "course-types": {
       "OPEN": "Open",
@@ -211,8 +215,11 @@
       "duration-message": {
         "level_1": "Level One - {{courseDuration}} hours",
         "level_2": "Level Two - {{courseDuration}} hours",
+        "advanced": "Advanced - {{courseDuration}} hours",
         "bild_act": "BILD ACT Certified - {{courseDuration}} hours",
-        "intermediate": "Intermediate - {{courseDuration}} hours"
+        "intermediate_trainer": "Intermediate Trainer - {{courseDuration}} hours",
+        "advanced_trainer": "Advanced Trainer - {{courseDuration}} hours",
+        "bild_act_trainer": "BILD ACT Trainer - {{courseDuration}} hours"
       },
       "not-graded-yet": "You have not been graded on this course yet. Your certificate will appear here if you receive a passing grade",
       "incomplete": "Incomplete",
@@ -811,6 +818,9 @@
           "members-count": "Members Count"
         }
       }
+    },
+    "my-profile": {
+      "missing-details-header": "Please complete your profile by providing the following details:"
     }
   },
   "course-evaluation": {

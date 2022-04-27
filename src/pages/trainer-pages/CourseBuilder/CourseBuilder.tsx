@@ -54,14 +54,18 @@ const MAX_COURSE_DURATION_MAP = {
   normal: {
     [CourseLevel.LEVEL_1]: 6 * 60, // 1 training day
     [CourseLevel.LEVEL_2]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.INTERMEDIATE]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.INTERMEDIATE_TRAINER]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.BILD_ACT_TRAINER]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.ADVANCED_TRAINER]: 5 * 6 * 60, // 5 training days
     [CourseLevel.ADVANCED]: 4 * 6 * 60, // 4 training days
     [CourseLevel.BILD_ACT]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
   },
   reaccreditation: {
     [CourseLevel.LEVEL_1]: 6 * 60, // 1 training day
     [CourseLevel.LEVEL_2]: 6 * 60, // 1 training day
-    [CourseLevel.INTERMEDIATE]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.INTERMEDIATE_TRAINER]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.BILD_ACT_TRAINER]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.ADVANCED_TRAINER]: 2 * 6 * 60, // 2 training days
     [CourseLevel.ADVANCED]: 3 * 6 * 60, // 3 training days
     [CourseLevel.BILD_ACT]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
   },

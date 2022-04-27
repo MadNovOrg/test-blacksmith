@@ -1,6 +1,7 @@
 import PassIcon from '@mui/icons-material/CheckCircle'
 import EditIcon from '@mui/icons-material/Edit'
 import {
+  Alert,
   Box,
   Button,
   Chip,
@@ -85,6 +86,18 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
     [t]
   )
 
+  const missingPrefs = useMemo(() => {
+    if (!profile) return []
+    const missing = []
+    if (profile.dietaryRestrictions === null) {
+      missing.push(t('dietary-restrictions'))
+    }
+    if (profile.disabilities === null) {
+      missing.push(t('disabilities'))
+    }
+    return missing
+  }, [profile, t])
+
   const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[2].id)
 
@@ -133,6 +146,22 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             </Button>
           </Grid>
           <Grid item md={8}>
+            {missingPrefs && missingPrefs.length > 0 ? (
+              <Alert
+                variant="standard"
+                color="error"
+                severity="error"
+                sx={{ mb: 4 }}
+              >
+                <div>{t('pages.my-profile.missing-details-header')}</div>
+                <ul>
+                  {missingPrefs.map(msg => (
+                    <li key={msg}>{msg}</li>
+                  ))}
+                </ul>
+              </Alert>
+            ) : null}
+
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
             </Typography>
@@ -145,11 +174,17 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
               <DetailsRow label={t('job-title')} value={profile.jobTitle} />
               <DetailsRow
                 label={t('dietary-restrictions')}
-                value={profile.dietaryRestrictions}
+                value={
+                  profile.dietaryRestrictions === ''
+                    ? '--'
+                    : profile.dietaryRestrictions
+                }
               />
               <DetailsRow
                 label={t('disabilities')}
-                value={profile.disabilities}
+                value={
+                  profile.disabilities === '' ? '--' : profile.disabilities
+                }
               />
             </Box>
 
