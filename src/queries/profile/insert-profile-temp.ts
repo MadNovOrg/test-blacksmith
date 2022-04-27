@@ -13,9 +13,9 @@ export type ParamsType = {
     dob?: string | null
     sector?: string
     jobTitle?: string
-    courseId?: number
     organizationId?: string | null
-    quantity?: number | null
+    courseId: number | null
+    quantity: number | null
   }
 }
 

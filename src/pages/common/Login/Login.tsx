@@ -153,7 +153,7 @@ export const LoginPage = () => {
           )}
 
           <Link
-            href="/sign-up"
+            href="/registration"
             component={LinkBehavior}
             state={from ? { from } : undefined}
             data-testid="sign-up-link"

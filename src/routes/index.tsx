@@ -12,7 +12,6 @@ import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { NotFound } from '@app/pages/common/NotFound'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
-import { SignUpPage } from '@app/pages/common/SignUp'
 import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
@@ -60,7 +59,6 @@ function LoggedOutRoutes() {
       <Route path="login" element={<LoginPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
-      <Route path="sign-up" element={<SignUpPage />} />
       <Route path="invitation" element={<InvitationPage />} />
       <Route path="registration" element={<CourseRegistrationPage />} />
       <Route

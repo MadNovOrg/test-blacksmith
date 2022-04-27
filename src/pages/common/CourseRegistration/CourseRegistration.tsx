@@ -28,10 +28,6 @@ export const CourseRegistrationPage: React.FC = () => {
     }, 500)
   }
 
-  if (!courseId || !quantity) {
-    return <div>Invalid link</div>
-  }
-
   return (
     <AppLayoutMinimal width={628}>
       <Box display="flex" flexDirection="column" alignItems="center">
@@ -57,7 +53,11 @@ export const CourseRegistrationPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Form onSignUp={onSignUp} courseId={+courseId} quantity={+quantity} />
+      <Form
+        onSignUp={onSignUp}
+        courseId={courseId ? +courseId : null}
+        quantity={quantity ? +quantity : null}
+      />
     </AppLayoutMinimal>
   )
 }

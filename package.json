@@ -55,6 +55,7 @@
     "jszip": "^3.9.1",
     "jwt-decode": "^3.1.2",
     "lodash-es": "^4.17.21",
+    "material-ui-phone-number": "^3.0.0",
     "mui-image": "^1.0.4",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",

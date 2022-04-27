@@ -111,7 +111,7 @@ exports[`Login matches snapshot 1`] = `
           <a
             class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-1owe9u7-MuiTypography-root-MuiLink-root"
             data-testid="sign-up-link"
-            href="/sign-up"
+            href="/registration"
           >
             or Sign up for an account
           </a>

@@ -11,20 +11,18 @@ import {
   Typography,
   Grid,
   styled,
-  MenuItem,
   InputAdornment,
   IconButton,
 } from '@mui/material'
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { Auth } from 'aws-amplify'
 import { format } from 'date-fns'
-import { map } from 'lodash-es'
+import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
-import { OrgSelector } from '@app/components/OrgSelector'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION,
@@ -32,8 +30,9 @@ import {
   ParamsType,
 } from '@app/queries/profile/insert-profile-temp'
 
-import { positions, sectors } from './org-data'
 import { FormInputs, getFormSchema } from './types'
+
+const onlyCountries = ['au', 'gb']
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -43,8 +42,8 @@ const TextField = styled(MuiTextField)(() => ({
 
 type Props = {
   onSignUp: (email: string, password: string) => void
-  courseId: number
-  quantity: number
+  courseId: number | null
+  quantity: number | null
 }
 
 export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
@@ -64,11 +63,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      countryCode: '+44',
-      orgId: '',
-      sector: '',
-      position: '',
-      otherPosition: '',
+      phone: '',
     },
   })
 
@@ -87,10 +82,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
         dob: data.dob ? format(data.dob, 'yyyy-MM-dd') : null,
         acceptMarketing: data.marketing,
         acceptTnc: data.tcs,
-        sector: data.sector,
-        jobTitle: `${data.position}-${data.otherPosition}`,
         courseId,
-        organizationId: data.orgId,
         quantity,
       }
 
@@ -116,17 +108,6 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
     }
   }
 
-  const sectorOptions = useMemo(
-    () =>
-      map(sectors, (label, value) => ({
-        label,
-        value,
-      })),
-    []
-  )
-
-  const positionOptions = values.sector ? positions[values.sector] : []
-
   return (
     <>
       <Box
@@ -151,8 +132,10 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
               helperText={errors.firstName?.message}
               {...register('firstName')}
               inputProps={{ 'data-testid': 'input-first-name' }}
+              sx={{ bgcolor: 'grey.100' }}
               autoFocus
               fullWidth
+              required
             />
           </Grid>
           <Grid item md={6}>
@@ -165,7 +148,9 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
               helperText={errors.surname?.message}
               {...register('surname')}
               inputProps={{ 'data-testid': 'input-surname' }}
+              sx={{ bgcolor: 'grey.100' }}
               fullWidth
+              required
             />
           </Grid>
         </Grid>
@@ -180,7 +165,9 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             helperText={errors.email?.message}
             {...register('email')}
             inputProps={{ 'data-testid': 'input-email' }}
+            sx={{ bgcolor: 'grey.100' }}
             fullWidth
+            required
           />
 
           <Box display="flex" mt={1}>
@@ -193,34 +180,6 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
           </Box>
         </Box>
 
-        <Grid container spacing={3} mb={3}>
-          <Grid item md={3}>
-            <TextField
-              id="country-code"
-              label={t('country-code')}
-              variant="standard"
-              placeholder={t('country-code-placeholder')}
-              {...register('countryCode')}
-              inputProps={{ 'data-testid': 'input-country-code' }}
-              sx={{ minWidth: 100 }}
-              fullWidth
-            />
-          </Grid>
-          <Grid item md={9}>
-            <TextField
-              id="phone"
-              label={t('phone')}
-              variant="standard"
-              placeholder={t('phone-placeholder')}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-              {...register('phone')}
-              inputProps={{ 'data-testid': 'input-phone' }}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-
         <Box mb={3}>
           <TextField
             id="signup-pass"
@@ -232,7 +191,9 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             helperText={errors.password?.message || ''}
             {...register('password')}
             fullWidth
+            required
             inputProps={{ 'data-testid': 'input-pass' }}
+            sx={{ bgcolor: 'grey.100' }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -249,6 +210,26 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
           />
         </Box>
 
+        <Box mb={3}>
+          <MuiPhoneNumber
+            label={t('phone')}
+            onlyCountries={onlyCountries}
+            defaultCountry="gb"
+            variant="standard"
+            sx={{ bgcolor: 'grey.100' }}
+            inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
+            countryCodeEditable={false}
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
+            value={values.phone}
+            onChange={p =>
+              setValue('phone', p as string, { shouldValidate: true })
+            }
+            fullWidth
+            required
+          />
+        </Box>
+
         <Box>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DesktopDatePicker
@@ -262,6 +243,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
                   label={t('dob-optional')}
                   variant="standard"
                   inputProps={{ 'data-testid': 'input-dob' }}
+                  sx={{ bgcolor: 'grey.100' }}
                   fullWidth
                 />
               )}
@@ -269,93 +251,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
           </LocalizationProvider>
         </Box>
 
-        <Typography variant="body1" mt={3} mb={1} fontWeight="600">
-          {t('org-details')}
-        </Typography>
-
-        <Box mb={3}>
-          <OrgSelector
-            allowAdding
-            onChange={value => {
-              setValue('orgId', value, { shouldValidate: true })
-            }}
-            textFieldProps={{ variant: 'standard' }}
-            sx={{ marginBottom: 2 }}
-            error={errors.orgId?.message}
-          />
-        </Box>
-
-        <Box mb={3}>
-          <TextField
-            select
-            value={values.sector}
-            {...register('sector')}
-            variant="standard"
-            fullWidth
-            label={t('sector')}
-            error={!!errors.sector}
-          >
-            <MenuItem value="" disabled>
-              {t('sector')}
-            </MenuItem>
-            {sectorOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </TextField>
-          {errors.sector ? (
-            <FormHelperText>{errors.sector?.message}</FormHelperText>
-          ) : null}
-        </Box>
-
-        <Box mb={3}>
-          <TextField
-            select
-            value={values.position}
-            {...register('position')}
-            variant="standard"
-            fullWidth
-            label={t('position')}
-            error={!!errors.position}
-          >
-            <MenuItem value="" disabled>
-              {positionOptions.length ? t('position') : t('select-sector')}
-            </MenuItem>
-            {positionOptions.map(option => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-            {positionOptions.length ? (
-              <MenuItem value="other">{t('other')}</MenuItem>
-            ) : null}
-          </TextField>
-          {errors.sector ? (
-            <FormHelperText>{errors.sector?.message}</FormHelperText>
-          ) : null}
-
-          <Box mt={1}>
-            {values.position === 'other' ? (
-              <TextField
-                id="other-position"
-                variant="standard"
-                label={t('position')}
-                placeholder={t('position-placeholder')}
-                error={!!errors.otherPosition}
-                helperText={errors.otherPosition?.message || ''}
-                {...register('otherPosition')}
-                fullWidth
-                inputProps={{ 'data-testid': 'other-position-input' }}
-              />
-            ) : null}
-          </Box>
-        </Box>
-
         <Box sx={{ my: 5 }}>
-          <Typography sx={{ fontWeight: 600, mb: 1 }}>
-            {t('pages.signup.tcs-title')}
-          </Typography>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ flex: 'auto', transform: 'translate(-12px, -8px)' }}>
               <Checkbox
@@ -366,7 +262,11 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             </Box>
             <Box>
               <Typography variant="body2">
-                {t('pages.signup.tcs-label')}
+                <Trans i18nKey="pages.signup.tcs-label">
+                  I accept the <a href="">Terms of Business</a> and agree to
+                  Team Teach processing my personal data in accordance with our
+                  <a href="">Privacy Policy</a>
+                </Trans>
               </Typography>
               {errors.tcs ? (
                 <FormHelperText error>{errors.tcs.message}</FormHelperText>

@@ -782,7 +782,7 @@
       "marketing-label": "By ticking this box you agree to receive marketing materials with information on courses and offers from Team Teach.",
       "marketing-hint": "Your details will be processed in accordance with the Team Teach Ltd Privacy Policy",
       "tcs-title": "Terms & Conditions",
-      "tcs-label": "By ticking this box I accept the Terms of Business and agree to Team Teach processing my personal data in accordance with our Privacy Policy",
+      "tcs-label": "I accept the <1>Terms of Business</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
       "tcs-required": "Accepting our T&C is required",
       "submit-btn": "Create account",
       "verify-hint": "A six-digit authentication code has been sent to your email, please enter it below.",

@@ -23,15 +23,22 @@ Object {
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-myzee5-MuiGrid-root"
           >
             <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
             >
               <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="true"
                 for="firstName"
                 id="firstName-label"
               >
                 First Name
+                <span
+                  aria-hidden="true"
+                  class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+                >
+                   
+                  *
+                </span>
               </label>
               <div
                 class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -43,6 +50,7 @@ Object {
                   id="firstName"
                   name="firstName"
                   placeholder=""
+                  required=""
                   type="text"
                   value=""
                 />
@@ -53,15 +61,22 @@ Object {
             class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-myzee5-MuiGrid-root"
           >
             <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
             >
               <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
                 for="surname"
                 id="surname-label"
               >
                 Surname
+                <span
+                  aria-hidden="true"
+                  class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+                >
+                   
+                  *
+                </span>
               </label>
               <div
                 class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -73,6 +88,7 @@ Object {
                   id="surname"
                   name="surname"
                   placeholder=""
+                  required=""
                   type="text"
                   value=""
                 />
@@ -84,15 +100,22 @@ Object {
           class="MuiBox-root css-i3pbo"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
               for="email"
               id="email-label"
             >
               Email
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -104,6 +127,7 @@ Object {
                 id="email"
                 name="email"
                 placeholder=""
+                required=""
                 type="text"
                 value=""
               />
@@ -148,82 +172,25 @@ Object {
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-18lu0av-MuiGrid-root"
-        >
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-3 css-1r4kmna-MuiGrid-root"
-          >
-            <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-3xjif0-MuiFormControl-root-MuiTextField-root"
-            >
-              <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
-                data-shrink="true"
-                for="country-code"
-                id="country-code-label"
-              >
-                Country Code
-              </label>
-              <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-              >
-                <input
-                  aria-invalid="false"
-                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                  data-testid="input-country-code"
-                  id="country-code"
-                  name="countryCode"
-                  placeholder=""
-                  type="text"
-                  value=""
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-9 css-15jhwrw-MuiGrid-root"
-          >
-            <div
-              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-            >
-              <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-                data-shrink="false"
-                for="phone"
-                id="phone-label"
-              >
-                Phone
-              </label>
-              <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-              >
-                <input
-                  aria-invalid="false"
-                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                  data-testid="input-phone"
-                  id="phone"
-                  name="phone"
-                  placeholder="Mobile/work phone"
-                  type="text"
-                  value=""
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
           class="MuiBox-root css-i3pbo"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
               for="signup-pass"
               id="signup-pass-label"
             >
               Password
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -235,6 +202,7 @@ Object {
                 id="signup-pass"
                 name="password"
                 placeholder="Please enter your password"
+                required=""
                 type="password"
                 value=""
               />
@@ -268,16 +236,126 @@ Object {
           </div>
         </div>
         <div
+          class="MuiBox-root css-i3pbo"
+        >
+          <div
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+              for="mui-1"
+              id="mui-1-label"
+            >
+              Phone
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-rsxlbu-MuiInputBase-root-MuiInput-root"
+            >
+              <div
+                class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium MuiPhoneNumber-positionStart css-ittuaa-MuiInputAdornment-root"
+              >
+                <span
+                  class="notranslate"
+                >
+                  ​
+                </span>
+                <button
+                  aria-haspopup="true"
+                  aria-label="Select country"
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiPhoneNumber-flagButton css-1h7flgg-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    class="margin"
+                    viewBox="0 85.333 512 341.333"
+                  >
+                    <path
+                      d="M0 85.333h512V426.67H0z"
+                      fill="#FFF"
+                    />
+                    <path
+                      d="M288 85.33h-64v138.666H0v64h224v138.666h64V287.996h224v-64H288z"
+                      fill="#D80027"
+                    />
+                    <path
+                      d="M393.785 315.358L512 381.034v-65.676zm-82.133 0L512 426.662v-31.474l-143.693-79.83zm146.982 111.304l-146.982-81.664v81.664z"
+                      fill="#0052B4"
+                    />
+                    <path
+                      d="M311.652 315.358L512 426.662v-31.474l-143.693-79.83z"
+                      fill="#FFF"
+                    />
+                    <path
+                      d="M311.652 315.358L512 426.662v-31.474l-143.693-79.83z"
+                      fill="#D80027"
+                    />
+                    <path
+                      d="M90.341 315.356L0 365.546v-50.19zm110.007 14.154v97.151H25.491z"
+                      fill="#0052B4"
+                    />
+                    <path
+                      d="M143.693 315.358L0 395.188v31.474l200.348-111.304z"
+                      fill="#D80027"
+                    />
+                    <path
+                      d="M118.215 196.634L0 130.958v65.676zm82.133 0L0 85.33v31.474l143.693 79.83zM53.366 85.33l146.982 81.664V85.33z"
+                      fill="#0052B4"
+                    />
+                    <path
+                      d="M200.348 196.634L0 85.33v31.474l143.693 79.83z"
+                      fill="#FFF"
+                    />
+                    <path
+                      d="M200.348 196.634L0 85.33v31.474l143.693 79.83z"
+                      fill="#D80027"
+                    />
+                    <path
+                      d="M421.659 196.636L512 146.446v50.19zm-110.007-14.154V85.331h174.857z"
+                      fill="#0052B4"
+                    />
+                    <path
+                      d="M368.307 196.634L512 116.804V85.33L311.652 196.634z"
+                      fill="#D80027"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+              <input
+                aria-invalid="false"
+                class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedStart css-1bsm28j-MuiInputBase-input-MuiInput-input"
+                data-testid="input-phone"
+                id="mui-1"
+                placeholder="+1 (702) 123-4567"
+                required=""
+                type="tel"
+                value="+44"
+              />
+            </div>
+          </div>
+        </div>
+        <div
           class="MuiBox-root css-0"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
           >
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
-              for="mui-1"
-              id="mui-1-label"
+              for="mui-2"
+              id="mui-2-label"
             >
               Date of Birth (optional)
             </label>
@@ -288,7 +366,7 @@ Object {
                 aria-invalid="false"
                 class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
                 data-testid="input-dob"
-                id="mui-1"
+                id="mui-2"
                 type="text"
                 value=""
               />
@@ -320,135 +398,9 @@ Object {
             </div>
           </div>
         </div>
-        <p
-          class="MuiTypography-root MuiTypography-body1 css-14cl6j5-MuiTypography-root"
-        >
-          Organization Details
-        </p>
-        <div
-          class="MuiBox-root css-i3pbo"
-        >
-          <div />
-        </div>
-        <div
-          class="MuiBox-root css-i3pbo"
-        >
-          <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-          >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="false"
-              for="mui-2"
-              id="mui-2-label"
-            >
-              Sector
-            </label>
-            <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-              variant="standard"
-            >
-              <div
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="mui-2-label mui-2"
-                class="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
-                id="mui-2"
-                role="button"
-                tabindex="0"
-              >
-                <span
-                  class="notranslate"
-                >
-                  ​
-                </span>
-              </div>
-              <input
-                aria-hidden="true"
-                class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
-                name="sector"
-                tabindex="-1"
-                value=""
-              />
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
-                data-testid="ArrowDropDownIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M7 10l5 5 5-5z"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div
-          class="MuiBox-root css-i3pbo"
-        >
-          <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-          >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="false"
-              for="mui-3"
-              id="mui-3-label"
-            >
-              Position
-            </label>
-            <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-              variant="standard"
-            >
-              <div
-                aria-expanded="false"
-                aria-haspopup="listbox"
-                aria-labelledby="mui-3-label mui-3"
-                class="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
-                id="mui-3"
-                role="button"
-                tabindex="0"
-              >
-                <span
-                  class="notranslate"
-                >
-                  ​
-                </span>
-              </div>
-              <input
-                aria-hidden="true"
-                class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
-                name="position"
-                tabindex="-1"
-                value=""
-              />
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
-                data-testid="ArrowDropDownIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M7 10l5 5 5-5z"
-                />
-              </svg>
-            </div>
-          </div>
-          <div
-            class="MuiBox-root css-164r41r"
-          />
-        </div>
         <div
           class="MuiBox-root css-rm9e7r"
         >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-uv925-MuiTypography-root"
-          >
-            Terms & Conditions
-          </p>
           <div
             class="MuiBox-root css-k008qs"
           >
@@ -487,7 +439,18 @@ Object {
               <p
                 class="MuiTypography-root MuiTypography-body2 css-hewe8b-MuiTypography-root"
               >
-                By ticking this box I accept the Terms of Business and agree to Team Teach processing my personal data in accordance with our Privacy Policy
+                I accept the 
+                <a
+                  href=""
+                >
+                  Terms of Business
+                </a>
+                 and agree to Team Teach processing my personal data in accordance with our 
+                <a
+                  href=""
+                >
+                  Privacy Policy
+                </a>
               </p>
             </div>
           </div>
@@ -498,7 +461,7 @@ Object {
           <button
             class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             data-testid="signup-form-btn"
-            id="mui-4"
+            id="mui-3"
             tabindex="0"
             type="submit"
           >
@@ -530,15 +493,22 @@ Object {
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-myzee5-MuiGrid-root"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
               for="firstName"
               id="firstName-label"
             >
               First Name
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -550,6 +520,7 @@ Object {
                 id="firstName"
                 name="firstName"
                 placeholder=""
+                required=""
                 type="text"
                 value=""
               />
@@ -560,15 +531,22 @@ Object {
           class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-myzee5-MuiGrid-root"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
           >
             <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
               for="surname"
               id="surname-label"
             >
               Surname
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
             </label>
             <div
               class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -580,6 +558,7 @@ Object {
                 id="surname"
                 name="surname"
                 placeholder=""
+                required=""
                 type="text"
                 value=""
               />
@@ -591,15 +570,22 @@ Object {
         class="MuiBox-root css-i3pbo"
       >
         <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
         >
           <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
             for="email"
             id="email-label"
           >
             Email
+            <span
+              aria-hidden="true"
+              class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+            >
+               
+              *
+            </span>
           </label>
           <div
             class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -611,6 +597,7 @@ Object {
               id="email"
               name="email"
               placeholder=""
+              required=""
               type="text"
               value=""
             />
@@ -655,82 +642,25 @@ Object {
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-18lu0av-MuiGrid-root"
-      >
-        <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-3 css-1r4kmna-MuiGrid-root"
-        >
-          <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-3xjif0-MuiFormControl-root-MuiTextField-root"
-          >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="true"
-              for="country-code"
-              id="country-code-label"
-            >
-              Country Code
-            </label>
-            <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-            >
-              <input
-                aria-invalid="false"
-                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                data-testid="input-country-code"
-                id="country-code"
-                name="countryCode"
-                placeholder=""
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-9 css-15jhwrw-MuiGrid-root"
-        >
-          <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-          >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="false"
-              for="phone"
-              id="phone-label"
-            >
-              Phone
-            </label>
-            <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-            >
-              <input
-                aria-invalid="false"
-                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                data-testid="input-phone"
-                id="phone"
-                name="phone"
-                placeholder="Mobile/work phone"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
         class="MuiBox-root css-i3pbo"
       >
         <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
         >
           <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
             for="signup-pass"
             id="signup-pass-label"
           >
             Password
+            <span
+              aria-hidden="true"
+              class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+            >
+               
+              *
+            </span>
           </label>
           <div
             class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -742,6 +672,7 @@ Object {
               id="signup-pass"
               name="password"
               placeholder="Please enter your password"
+              required=""
               type="password"
               value=""
             />
@@ -775,16 +706,126 @@ Object {
         </div>
       </div>
       <div
+        class="MuiBox-root css-i3pbo"
+      >
+        <div
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
+        >
+          <label
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
+            data-shrink="true"
+            for="mui-1"
+            id="mui-1-label"
+          >
+            Phone
+            <span
+              aria-hidden="true"
+              class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+            >
+               
+              *
+            </span>
+          </label>
+          <div
+            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-rsxlbu-MuiInputBase-root-MuiInput-root"
+          >
+            <div
+              class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium MuiPhoneNumber-positionStart css-ittuaa-MuiInputAdornment-root"
+            >
+              <span
+                class="notranslate"
+              >
+                ​
+              </span>
+              <button
+                aria-haspopup="true"
+                aria-label="Select country"
+                class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiPhoneNumber-flagButton css-1h7flgg-MuiButtonBase-root-MuiIconButton-root"
+                tabindex="0"
+                type="button"
+              >
+                <svg
+                  class="margin"
+                  viewBox="0 85.333 512 341.333"
+                >
+                  <path
+                    d="M0 85.333h512V426.67H0z"
+                    fill="#FFF"
+                  />
+                  <path
+                    d="M288 85.33h-64v138.666H0v64h224v138.666h64V287.996h224v-64H288z"
+                    fill="#D80027"
+                  />
+                  <path
+                    d="M393.785 315.358L512 381.034v-65.676zm-82.133 0L512 426.662v-31.474l-143.693-79.83zm146.982 111.304l-146.982-81.664v81.664z"
+                    fill="#0052B4"
+                  />
+                  <path
+                    d="M311.652 315.358L512 426.662v-31.474l-143.693-79.83z"
+                    fill="#FFF"
+                  />
+                  <path
+                    d="M311.652 315.358L512 426.662v-31.474l-143.693-79.83z"
+                    fill="#D80027"
+                  />
+                  <path
+                    d="M90.341 315.356L0 365.546v-50.19zm110.007 14.154v97.151H25.491z"
+                    fill="#0052B4"
+                  />
+                  <path
+                    d="M143.693 315.358L0 395.188v31.474l200.348-111.304z"
+                    fill="#D80027"
+                  />
+                  <path
+                    d="M118.215 196.634L0 130.958v65.676zm82.133 0L0 85.33v31.474l143.693 79.83zM53.366 85.33l146.982 81.664V85.33z"
+                    fill="#0052B4"
+                  />
+                  <path
+                    d="M200.348 196.634L0 85.33v31.474l143.693 79.83z"
+                    fill="#FFF"
+                  />
+                  <path
+                    d="M200.348 196.634L0 85.33v31.474l143.693 79.83z"
+                    fill="#D80027"
+                  />
+                  <path
+                    d="M421.659 196.636L512 146.446v50.19zm-110.007-14.154V85.331h174.857z"
+                    fill="#0052B4"
+                  />
+                  <path
+                    d="M368.307 196.634L512 116.804V85.33L311.652 196.634z"
+                    fill="#D80027"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+            <input
+              aria-invalid="false"
+              class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedStart css-1bsm28j-MuiInputBase-input-MuiInput-input"
+              data-testid="input-phone"
+              id="mui-1"
+              placeholder="+1 (702) 123-4567"
+              required=""
+              type="tel"
+              value="+44"
+            />
+          </div>
+        </div>
+      </div>
+      <div
         class="MuiBox-root css-0"
       >
         <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
         >
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
-            for="mui-1"
-            id="mui-1-label"
+            for="mui-2"
+            id="mui-2-label"
           >
             Date of Birth (optional)
           </label>
@@ -795,7 +836,7 @@ Object {
               aria-invalid="false"
               class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
               data-testid="input-dob"
-              id="mui-1"
+              id="mui-2"
               type="text"
               value=""
             />
@@ -827,135 +868,9 @@ Object {
           </div>
         </div>
       </div>
-      <p
-        class="MuiTypography-root MuiTypography-body1 css-14cl6j5-MuiTypography-root"
-      >
-        Organization Details
-      </p>
-      <div
-        class="MuiBox-root css-i3pbo"
-      >
-        <div />
-      </div>
-      <div
-        class="MuiBox-root css-i3pbo"
-      >
-        <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-        >
-          <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-            data-shrink="false"
-            for="mui-2"
-            id="mui-2-label"
-          >
-            Sector
-          </label>
-          <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-            variant="standard"
-          >
-            <div
-              aria-expanded="false"
-              aria-haspopup="listbox"
-              aria-labelledby="mui-2-label mui-2"
-              class="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
-              id="mui-2"
-              role="button"
-              tabindex="0"
-            >
-              <span
-                class="notranslate"
-              >
-                ​
-              </span>
-            </div>
-            <input
-              aria-hidden="true"
-              class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
-              name="sector"
-              tabindex="-1"
-              value=""
-            />
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
-              data-testid="ArrowDropDownIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7 10l5 5 5-5z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div
-        class="MuiBox-root css-i3pbo"
-      >
-        <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-12pda69-MuiFormControl-root-MuiTextField-root"
-        >
-          <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-            data-shrink="false"
-            for="mui-3"
-            id="mui-3-label"
-          >
-            Position
-          </label>
-          <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
-            variant="standard"
-          >
-            <div
-              aria-expanded="false"
-              aria-haspopup="listbox"
-              aria-labelledby="mui-3-label mui-3"
-              class="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
-              id="mui-3"
-              role="button"
-              tabindex="0"
-            >
-              <span
-                class="notranslate"
-              >
-                ​
-              </span>
-            </div>
-            <input
-              aria-hidden="true"
-              class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
-              name="position"
-              tabindex="-1"
-              value=""
-            />
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
-              data-testid="ArrowDropDownIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7 10l5 5 5-5z"
-              />
-            </svg>
-          </div>
-        </div>
-        <div
-          class="MuiBox-root css-164r41r"
-        />
-      </div>
       <div
         class="MuiBox-root css-rm9e7r"
       >
-        <p
-          class="MuiTypography-root MuiTypography-body1 css-uv925-MuiTypography-root"
-        >
-          Terms & Conditions
-        </p>
         <div
           class="MuiBox-root css-k008qs"
         >
@@ -994,7 +909,18 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body2 css-hewe8b-MuiTypography-root"
             >
-              By ticking this box I accept the Terms of Business and agree to Team Teach processing my personal data in accordance with our Privacy Policy
+              I accept the 
+              <a
+                href=""
+              >
+                Terms of Business
+              </a>
+               and agree to Team Teach processing my personal data in accordance with our 
+              <a
+                href=""
+              >
+                Privacy Policy
+              </a>
             </p>
           </div>
         </div>
@@ -1005,7 +931,7 @@ Object {
         <button
           class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
           data-testid="signup-form-btn"
-          id="mui-4"
+          id="mui-3"
           tabindex="0"
           type="submit"
         >
