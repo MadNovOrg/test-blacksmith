@@ -192,13 +192,13 @@ export const generateCourseName = (
   }`
 }
 
-const COURSE_TYPE_TO_PREFIX = {
+export const COURSE_TYPE_TO_PREFIX = {
   [CourseType.OPEN]: 'OP',
   [CourseType.CLOSED]: 'CL',
   [CourseType.INDIRECT]: 'INDR',
 }
 
-const COURSE_LEVEL_TO_PREFIX = {
+export const COURSE_LEVEL_TO_PREFIX = {
   [CourseLevel.LEVEL_1]: 'L1',
   [CourseLevel.LEVEL_2]: 'L2',
   [CourseLevel.ADVANCED]: 'ADV',

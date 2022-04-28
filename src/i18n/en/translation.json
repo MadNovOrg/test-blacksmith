@@ -42,6 +42,8 @@
     "view-cert": "View Certificate",
     "certificate": "Certificate",
     "certifications": "Certifications",
+    "certification-details": "Certification details",
+    "certification-warning": "Attending a course without appropriate certification will effect accreditation.",
     "phone-placeholder": "Mobile/work phone",
     "job-title-placeholder": "Your job title",
     "job-title": "Job Title",
@@ -249,7 +251,10 @@
         "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
         "please-add-a-note": "Please add a note*",
         "confirm-modification": "Confirm modification"
-      }
+      },
+      "expired-on": "Expired on",
+      "active-until": "Active until",
+      "expires-in": "expires in"
     },
     "items": "items",
     "from": "From",
@@ -821,7 +826,8 @@
       }
     },
     "my-profile": {
-      "missing-details-header": "Please complete your profile by providing the following details:"
+      "missing-details-header": "Please complete your profile by providing the following details:",
+      "add-certificate": "Add certificate"
     }
   },
   "course-evaluation": {
