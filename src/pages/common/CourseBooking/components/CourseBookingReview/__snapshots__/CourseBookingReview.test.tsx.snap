@@ -30,7 +30,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
             >
-              Salman
+              John
             </p>
           </div>
           <div
@@ -44,7 +44,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
             >
-              Mitha
+              Smith
             </p>
           </div>
           <div
@@ -58,7 +58,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
             >
-              salman.mitha@nearform.com
+              john.smith@example.com
             </p>
           </div>
           <div
@@ -72,7 +72,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
             >
-              +44 123456789
+              +44 1234555
             </p>
           </div>
         </div>
@@ -132,8 +132,76 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Pay by credit card
+            Pay by invoice
           </p>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
+          />
+          <p
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
+          >
+            Payment method
+          </p>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Billing address
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+            />
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              First Name
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+            />
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Last Name
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+            />
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Work email
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+            />
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Phone
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+            />
+          </div>
           <hr
             class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
           />
@@ -289,7 +357,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
           >
-            Salman
+            John
           </p>
         </div>
         <div
@@ -303,7 +371,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
           >
-            Mitha
+            Smith
           </p>
         </div>
         <div
@@ -317,7 +385,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
           >
-            salman.mitha@nearform.com
+            john.smith@example.com
           </p>
         </div>
         <div
@@ -331,7 +399,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
           >
-            +44 123456789
+            +44 1234555
           </p>
         </div>
       </div>
@@ -391,8 +459,76 @@ Object {
         <p
           class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
         >
-          Pay by credit card
+          Pay by invoice
         </p>
+        <hr
+          class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
+        />
+        <p
+          class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
+        >
+          Payment method
+        </p>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Billing address
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+          />
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            First Name
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+          />
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Last Name
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+          />
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Work email
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+          />
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Phone
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+          />
+        </div>
         <hr
           class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
         />

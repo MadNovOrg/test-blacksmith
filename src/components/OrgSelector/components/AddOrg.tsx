@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
+import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION,
@@ -13,25 +14,37 @@ import {
   ParamsType,
 } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
+import { Address, Organization } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 type Props = {
-  onSuccess: (id: string, name: string) => void
+  onSuccess: (org: Organization) => void
   onClose: VoidFunction
   name: string
 }
 
-type Inputs = {
+type FormInput = {
   name: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  country: string
+  postCode: string
 }
 
 export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
   const { t } = useTranslation()
+  const { getJWT } = useAuth()
   const [loading, setLoading] = useState(false)
 
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'org-name')),
+      addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
+      addressLine2: yup.string(),
+      city: yup.string().required(requiredMsg(t, 'addr.city')),
+      country: yup.string().required(requiredMsg(t, 'addr.country')),
+      postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
     })
   }, [t])
 
@@ -39,24 +52,44 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<FormInput>({
     resolver: yupResolver(schema),
     defaultValues: {
       name,
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      country: '',
+      postCode: '',
     },
   })
 
-  const onSubmit = async (data: Inputs) => {
+  const onSubmit = async (data: FormInput) => {
     setLoading(true)
 
     try {
-      const vars = { name: data.name }
-
-      const resp = await gqlRequest<ResponseType, ParamsType>(MUTATION, vars)
+      const vars = {
+        name: data.name,
+        addresses: [
+          {
+            line1: data.addressLine1,
+            line2: data.addressLine2,
+            city: data.city,
+            country: data.country,
+            postCode: data.postCode,
+          } as Address, // TODO: Fix type when backend is updated,
+        ],
+      }
+      const token = await getJWT()
+      const { org } = await gqlRequest<ResponseType, ParamsType>(
+        MUTATION,
+        vars,
+        { token }
+      )
       setLoading(false)
 
-      if (resp.org.id) {
-        onSuccess(resp.org.id, name)
+      if (org.id) {
+        onSuccess(org)
       }
     } catch (err) {
       // TODO: handle error
@@ -74,23 +107,96 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     >
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
         noValidate
         autoComplete="off"
         aria-autocomplete="none"
+        width={400}
       >
-        <TextField
-          id="orgName"
-          label={t('org-name')}
-          variant="standard"
-          placeholder={t('org-name-placeholder')}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-          {...register('name')}
-          inputProps={{ 'data-testid': 'org-name' }}
-          autoFocus
-          fullWidth
-        />
+        <Box mb={3}>
+          <TextField
+            id="orgName"
+            label={t('org-name')}
+            variant="standard"
+            placeholder={t('org-name-placeholder')}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            {...register('name')}
+            inputProps={{ 'data-testid': 'org-name' }}
+            autoFocus
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="line1"
+            label={t('addr.line1')}
+            variant="standard"
+            placeholder={t('addr.line1-placeholder')}
+            error={!!errors.addressLine1}
+            helperText={errors.addressLine1?.message}
+            {...register('addressLine1')}
+            inputProps={{ 'data-testid': 'addr-line1' }}
+            autoFocus
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="line2"
+            label={t('addr.line2')}
+            variant="standard"
+            placeholder={t('addr.line2-placeholder')}
+            error={!!errors.addressLine2}
+            helperText={errors.addressLine2?.message}
+            {...register('addressLine2')}
+            inputProps={{ 'data-testid': 'addr-line2' }}
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="city"
+            label={t('addr.city')}
+            variant="standard"
+            placeholder={t('addr.city')}
+            error={!!errors.city}
+            helperText={errors.city?.message}
+            {...register('city')}
+            inputProps={{ 'data-testid': 'city' }}
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="country"
+            label={t('addr.country')}
+            variant="standard"
+            placeholder={t('addr.country')}
+            error={!!errors.country}
+            helperText={errors.country?.message}
+            {...register('country')}
+            inputProps={{ 'data-testid': 'country' }}
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="postCode"
+            label={t('addr.postCode')}
+            variant="standard"
+            placeholder={t('addr.postCode')}
+            error={!!errors.postCode}
+            helperText={errors.postCode?.message}
+            {...register('postCode')}
+            inputProps={{ 'data-testid': 'postCode' }}
+            fullWidth
+          />
+        </Box>
 
         <Box display="flex" justifyContent="flex-end" mt={3}>
           <Button
@@ -103,7 +209,8 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
           </Button>
           <LoadingButton
             loading={loading}
-            type="submit"
+            onClick={handleSubmit(onSubmit)}
+            type="button"
             variant="contained"
             color="primary"
             sx={{ ml: 1 }}

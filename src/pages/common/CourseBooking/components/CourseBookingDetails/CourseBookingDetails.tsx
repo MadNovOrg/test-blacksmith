@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  Grid,
   IconButton,
   InputLabel,
   MenuItem,
@@ -20,26 +21,33 @@ import {
   Typography,
 } from '@mui/material'
 import { map } from 'lodash-es'
+import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useMemo } from 'react'
-import { FieldError, useForm } from 'react-hook-form'
+import { Controller, FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { OrgSelector } from '@app/components/OrgSelector'
 import { yup } from '@app/schemas'
-import { requiredMsg } from '@app/util'
+import { PaymentMethod } from '@app/types'
+import { requiredMsg, normalizeAddr } from '@app/util'
 
-import { Sector, useBooking } from '../BookingContext'
+import { InvoiceDetails, Sector, useBooking } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
 
 type FormInputs = {
   quantity: number
   emails: string[]
-  orgId: string | null
+  orgId: string
   sector: Sector
   position: string
   otherPosition: string
+  paymentMethod: PaymentMethod
+
+  invoiceDetails?: InvoiceDetails
 }
+
+const onlyCountries = ['au', 'gb']
 
 /**
  * This is done as a workaround to the issue where RHF doesn't set types correctly for
@@ -103,6 +111,7 @@ export const CourseBookingDetails: React.FC = () => {
         .string()
         .required(requiredMsg(t, 'org-name'))
         .typeError(requiredMsg(t, 'org-name')),
+
       sector: yup.string().required(),
       position: yup.string().required(),
       otherPosition: yup.string().when('position', {
@@ -110,6 +119,30 @@ export const CourseBookingDetails: React.FC = () => {
         then: yup
           .string()
           .required(t('validation-errors.other-position-required')),
+      }),
+
+      paymentMethod: yup
+        .string()
+        .oneOf(Object.values(PaymentMethod))
+        .required(),
+
+      invoiceDetails: yup.object({
+        orgId: yup
+          .string()
+          .required(requiredMsg(t, 'org-name'))
+          .typeError(requiredMsg(t, 'org-name')),
+
+        firstName: yup.string().required(requiredMsg(t, 'first-name')),
+        surname: yup.string().required(requiredMsg(t, 'last-name')),
+
+        email: yup
+          .string()
+          .email(t('validation-errors.email-invalid'))
+          .required(requiredMsg(t, 'email')),
+
+        phone: yup.string().required(requiredMsg(t, 'phone')),
+
+        purchaseOrder: yup.string(),
       }),
     })
   }, [t])
@@ -119,6 +152,7 @@ export const CourseBookingDetails: React.FC = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    control,
     setValue,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
@@ -129,6 +163,7 @@ export const CourseBookingDetails: React.FC = () => {
       sector: booking.sector,
       position: booking.position,
       otherPosition: booking.otherPosition,
+      paymentMethod: PaymentMethod.INVOICE,
     },
   })
 
@@ -238,8 +273,8 @@ export const CourseBookingDetails: React.FC = () => {
         <Box mb={3}>
           <OrgSelector
             allowAdding
-            onChange={value => {
-              setValue('orgId', value, { shouldValidate: true })
+            onChange={org => {
+              setValue('orgId', org.id, { shouldValidate: true })
             }}
             textFieldProps={{ variant: 'standard' }}
             sx={{ marginBottom: 2 }}
@@ -379,56 +414,173 @@ export const CourseBookingDetails: React.FC = () => {
       <Box bgcolor="common.white" p={2} mb={4}>
         <FormControl
           sx={{
-            '& .MuiRadio-root': {
-              paddingY: 0,
-            },
-
-            '& .MuiFormControlLabel-root': {
-              alignItems: 'flex-start',
-              mb: 2,
-            },
+            '& .MuiRadio-root': { paddingY: 0 },
+            '& .MuiFormControlLabel-root': { alignItems: 'flex-start', mb: 2 },
           }}
         >
           <FormLabel id="payment-method" sx={{ mb: 2, fontWeight: '600' }}>
             {t('pages.book-course.payment-method')}
           </FormLabel>
-          <RadioGroup
-            aria-labelledby="payment-method"
-            name="controlled-radio-buttons-group"
-            value={'cc'}
-            onChange={() => console.log('TBD')}
-          >
-            <FormControlLabel
-              value="cc"
-              control={<Radio />}
-              label={
-                <Box>
-                  <Typography gutterBottom fontWeight="500">
-                    {t('pages.book-course.pay-by-cc')}
-                  </Typography>
-                  <Typography variant="body2" color="grey.700">
-                    {t('pages.book-course.pay-by-cc-info')}
-                  </Typography>
-                </Box>
-              }
-            />
-            <FormControlLabel
-              value="invoice"
-              control={<Radio />}
-              disabled
-              label={
-                <Box>
-                  <Typography gutterBottom fontWeight="500">
-                    {t('pages.book-course.pay-by-inv')}
-                  </Typography>
-                  <Typography variant="body2" color="grey.700">
-                    {t('pages.book-course.pay-by-inv-info')}
-                  </Typography>
-                </Box>
-              }
-            />
-          </RadioGroup>
+          <Controller
+            rules={{ required: true }}
+            control={control}
+            name="paymentMethod"
+            render={({ field }) => {
+              return (
+                <RadioGroup aria-labelledby="payment-method" {...field}>
+                  <FormControlLabel
+                    value={PaymentMethod.CC}
+                    control={<Radio />}
+                    label={
+                      <Box>
+                        <Typography gutterBottom fontWeight="500">
+                          {t('pages.book-course.pay-by-cc')}
+                        </Typography>
+                        <Typography variant="body2" color="grey.700">
+                          {t('pages.book-course.pay-by-cc-info')}
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                  <FormControlLabel
+                    value={PaymentMethod.INVOICE}
+                    control={<Radio />}
+                    label={
+                      <Box>
+                        <Typography gutterBottom fontWeight="500">
+                          {t('pages.book-course.pay-by-inv')}
+                        </Typography>
+                        <Typography variant="body2" color="grey.700">
+                          {t('pages.book-course.pay-by-inv-info')}
+                        </Typography>
+                      </Box>
+                    }
+                  />
+                </RadioGroup>
+              )
+            }}
+          />
         </FormControl>
+
+        {values.paymentMethod === PaymentMethod.INVOICE ? (
+          <Box bgcolor="grey.100" p={2}>
+            <Typography variant="body1" fontWeight="600">
+              Invoice contact details
+            </Typography>
+
+            <Box mt={3}>
+              <Box mb={3}>
+                <OrgSelector
+                  allowAdding
+                  onChange={org => {
+                    setValue('invoiceDetails.orgId', org.id, {
+                      shouldValidate: true,
+                    })
+                    setValue(
+                      'invoiceDetails.billingAddress',
+                      normalizeAddr(org.addresses[0])?.join(',') || '',
+                      { shouldValidate: true }
+                    )
+                  }}
+                  textFieldProps={{ variant: 'standard' }}
+                  sx={{ marginBottom: 2 }}
+                  error={errors.orgId?.message}
+                />
+              </Box>
+
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={6}>
+                  <TextField
+                    id="firstName"
+                    label={t('first-name')}
+                    variant="standard"
+                    placeholder={t('first-name-placeholder')}
+                    error={!!errors.invoiceDetails?.firstName}
+                    helperText={errors.invoiceDetails?.firstName?.message}
+                    {...register('invoiceDetails.firstName')}
+                    inputProps={{ 'data-testid': 'input-first-name' }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    autoFocus
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    id="surname"
+                    label={t('surname')}
+                    variant="standard"
+                    placeholder={t('surname-placeholder')}
+                    error={!!errors.invoiceDetails?.surname}
+                    helperText={errors.invoiceDetails?.surname?.message}
+                    {...register('invoiceDetails.surname')}
+                    inputProps={{ 'data-testid': 'input-surname' }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
+
+              <Box mb={3}>
+                <TextField
+                  id="email"
+                  label={t('email')}
+                  variant="standard"
+                  placeholder={t('email-placeholder')}
+                  error={!!errors.invoiceDetails?.email}
+                  helperText={errors.invoiceDetails?.email?.message}
+                  {...register('invoiceDetails.email')}
+                  inputProps={{ 'data-testid': 'input-email' }}
+                  sx={{ bgcolor: 'grey.100' }}
+                  fullWidth
+                  required
+                />
+              </Box>
+
+              <Box mb={3}>
+                <MuiPhoneNumber
+                  label={t('phone')}
+                  onlyCountries={onlyCountries}
+                  defaultCountry="gb"
+                  variant="standard"
+                  sx={{ bgcolor: 'grey.100' }}
+                  inputProps={{
+                    sx: { height: 40 },
+                    'data-testid': 'input-phone',
+                  }}
+                  countryCodeEditable={false}
+                  error={!!errors.invoiceDetails?.phone}
+                  helperText={errors.invoiceDetails?.phone?.message}
+                  value={values.invoiceDetails?.phone || ''}
+                  onChange={p =>
+                    setValue('invoiceDetails.phone', p as string, {
+                      shouldValidate: true,
+                    })
+                  }
+                  fullWidth
+                  required
+                />
+              </Box>
+
+              <Box mb={3} maxWidth={300}>
+                <TextField
+                  id="purchaseOrder"
+                  label={t('po')}
+                  variant="standard"
+                  placeholder={t('po-placeholder')}
+                  error={!!errors.invoiceDetails?.purchaseOrder}
+                  helperText={errors.invoiceDetails?.purchaseOrder?.message}
+                  {...register('invoiceDetails.purchaseOrder')}
+                  inputProps={{ 'data-testid': 'input-po' }}
+                  sx={{ bgcolor: 'grey.100' }}
+                  fullWidth
+                  required
+                />
+              </Box>
+            </Box>
+          </Box>
+        ) : null}
       </Box>
 
       <Box display="flex" justifyContent="space-between">

@@ -48,6 +48,13 @@ insert_permissions:
     columns:
     - name
   role: anonymous
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - addresses
+    - name
+  role: unverified
 select_permissions:
 - permission:
     columns:

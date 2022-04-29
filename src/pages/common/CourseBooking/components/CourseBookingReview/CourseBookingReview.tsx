@@ -12,18 +12,31 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import { useAuth } from '@app/context/auth'
+import { PaymentMethod } from '@app/types'
 
 import { useBooking } from '../BookingContext'
 
+const InfoRow: React.FC<{ label: React.ReactNode; value: React.ReactNode }> = ({
+  label,
+  value = '',
+}) => (
+  <Box display="flex" justifyContent="space-between" mb={1}>
+    <Typography color="grey.700">{label}</Typography>
+    <Typography>{value}</Typography>
+  </Box>
+)
 export const CourseBookingReview: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { course, booking, totalPrice } = useBooking()
+  const { profile } = useAuth()
+  const { course, booking, totalPrice, placeOrder } = useBooking()
 
   const [accept, setAccept] = useState(false)
 
-  const handleConfirmBooking = () => {
-    // TODO: payment, insert order, etc
+  const handleConfirmBooking = async () => {
+    const order = await placeOrder()
+    console.log(order)
     navigate('../done')
   }
 
@@ -37,25 +50,10 @@ export const CourseBookingReview: React.FC = () => {
           {t('pages.book-course.your-info')}
         </Typography>
 
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">{t('first-name')}</Typography>
-          <Typography>Salman</Typography>
-        </Box>
-
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">{t('last-name')}</Typography>
-          <Typography>Mitha</Typography>
-        </Box>
-
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">{t('email')}</Typography>
-          <Typography>salman.mitha@nearform.com</Typography>
-        </Box>
-
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">{t('work-phone')}</Typography>
-          <Typography>+44 123456789</Typography>
-        </Box>
+        <InfoRow label={t('first-name')} value={profile?.givenName} />
+        <InfoRow label={t('last-name')} value={profile?.familyName} />
+        <InfoRow label={t('email')} value={profile?.email} />
+        <InfoRow label={t('work-phone')} value={profile?.phone} />
       </Box>
 
       <Box bgcolor="common.white" p={2} mb={3}>
@@ -91,8 +89,34 @@ export const CourseBookingReview: React.FC = () => {
           {t('pages.book-course.payment-method')}
         </Typography>
         <Typography color="grey.700">
-          {t('pages.book-course.pay-by-cc')}
+          {booking.paymentMethod === PaymentMethod.CC
+            ? t('pages.book-course.pay-by-cc')
+            : null}
+          {booking.paymentMethod === PaymentMethod.INVOICE
+            ? t('pages.book-course.pay-by-inv')
+            : null}
         </Typography>
+        <Divider sx={{ my: 2 }} />
+        <Typography gutterBottom fontWeight="600">
+          {t('pages.book-course.payment-method')}
+        </Typography>
+        <InfoRow
+          label={t('pages.book-course.billing-address')}
+          value={booking.invoiceDetails?.billingAddress}
+        />
+        <InfoRow
+          label={t('first-name')}
+          value={booking.invoiceDetails?.firstName}
+        />
+        <InfoRow
+          label={t('last-name')}
+          value={booking.invoiceDetails?.surname}
+        />
+        <InfoRow
+          label={t('work-email')}
+          value={booking.invoiceDetails?.email}
+        />
+        <InfoRow label={t('phone')} value={booking.invoiceDetails?.phone} />
         <Divider sx={{ my: 2 }} />
         <Typography gutterBottom fontWeight="600">
           {t('registrants')}

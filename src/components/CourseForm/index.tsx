@@ -318,8 +318,8 @@ const CourseForm: React.FC<Props> = ({
             </Typography>
             <OrgSelector
               value={course?.organization}
-              onChange={value => {
-                setValue('organizationId', value, { shouldValidate: true })
+              onChange={org => {
+                setValue('organizationId', org.id, { shouldValidate: true })
               }}
               textFieldProps={{ variant: 'filled' }}
               sx={{ marginBottom: 2 }}

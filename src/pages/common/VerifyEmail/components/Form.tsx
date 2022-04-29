@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
+  Stack,
   Box,
   InputLabel,
   FormHelperText,
@@ -77,14 +78,14 @@ export const Form: React.FC<Props> = ({ onVerifyLater, onSuccess }) => {
   }
 
   return (
-    <Box
+    <Stack
       component="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      alignItems="center"
     >
       {verify ? (
         <>
-          <Typography sx={{ mt: 4, textAlign: 'center' }}>
+          <Typography textAlign="center" color="grey.700">
             {t('pages.signup.verify-hint')}
           </Typography>
 
@@ -128,17 +129,23 @@ export const Form: React.FC<Props> = ({ onVerifyLater, onSuccess }) => {
           </LoadingButton>
         </>
       ) : (
-        <LoadingButton
-          loading={reSending}
-          variant="contained"
-          color="primary"
-          data-testid="signup-verify-now-btn"
-          size="large"
-          sx={{ mt: 4 }}
-          onClick={handleResend}
-        >
-          {t('pages.signup.verify-now')}
-        </LoadingButton>
+        <Box justifyContent="center" textAlign="center">
+          <Typography variant="body1" color="grey.700">
+            {t('pages.signup.verify-subtitle')}
+          </Typography>
+
+          <LoadingButton
+            loading={reSending}
+            variant="contained"
+            color="primary"
+            data-testid="signup-verify-now-btn"
+            size="large"
+            sx={{ mt: 4 }}
+            onClick={handleResend}
+          >
+            {t('pages.signup.verify-now')}
+          </LoadingButton>
+        </Box>
       )}
 
       <Button
@@ -168,6 +175,6 @@ export const Form: React.FC<Props> = ({ onVerifyLater, onSuccess }) => {
           </LoadingButton>
         </Box>
       ) : null}
-    </Box>
+    </Stack>
   )
 }

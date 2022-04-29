@@ -20,11 +20,12 @@ import {
   ResponseType,
 } from '@app/queries/organization/get-organizations'
 import { Organization } from '@app/types'
+import { normalizeAddr } from '@app/util'
 
 import { AddOrg } from './components/AddOrg'
 
 export type OrgSelectorProps = {
-  onChange: (value: string | null) => void
+  onChange: (org: Organization) => void
   sx?: SxProps
   textFieldProps?: TextFieldProps
   placeholder?: string
@@ -68,13 +69,13 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
 
   const handleClose = () => setAdding(null)
 
-  const handleSuccess = (id: string, name: string) => {
+  const handleSuccess = (org: Organization) => {
     setAdding(null)
-    setQuery(name)
+    setQuery(org.name)
     mutate()
 
     // TODO: Not auto selecting the newly added org, needs fixing
-    onChange(id)
+    onChange(org)
   }
 
   const handleInputChange = (_: unknown, value: string) => {
@@ -93,7 +94,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
       return setTimeout(() => setAdding(org.name))
     }
 
-    onChange(org.id)
+    onChange(org)
   }
 
   const noOptionsText =
@@ -107,15 +108,15 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
 
   const options = useMemo<Organization[]>(() => {
     const orgs = data?.orgs || []
-    const searchedOrg = query.trim()
-    const hasExactMatch = orgs.find(o => o.name === searchedOrg)
+    const searchedOrg = query.trim().toLowerCase()
+    const hasExactMatch = orgs.find(o => o.name.toLowerCase() === searchedOrg)
 
     return orgs.concat(
-      allowAdding && searchedOrg.length && orgs.length && !hasExactMatch
+      allowAdding && searchedOrg.length && !hasExactMatch && !loading
         ? ({ id: 'NEW_ORG', name: query } as Organization)
         : []
     )
-  }, [data, query, allowAdding])
+  }, [data, query, allowAdding, loading])
 
   return (
     <>
@@ -158,6 +159,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         )}
         renderOption={(props, option) => {
           const isNew = option.id === 'NEW_ORG'
+          const addr = normalizeAddr(option.addresses?.[0])
 
           return (
             <Box
@@ -178,8 +180,16 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
                 flex={1}
                 pr={2}
                 fontStyle={isNew ? 'italic' : undefined}
+                component="span"
+                display="flex"
+                alignItems="center"
               >
                 {getOptionLabel(option)}
+                {addr && (
+                  <Typography variant="body2" color="grey.700" ml={1}>
+                    ({addr.join(', ')})
+                  </Typography>
+                )}
               </Typography>
               {isNew ? (
                 <Button

@@ -88,6 +88,6 @@ describe('component: OrgSelector', () => {
     )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
-    expect(onChangeMock).toHaveBeenCalledWith(organization.id)
+    expect(onChangeMock).toHaveBeenCalledWith(organization)
   })
 })

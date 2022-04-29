@@ -1,0 +1,67 @@
+table:
+  name: order
+  schema: public
+configuration:
+  comment: null
+  custom_column_names:
+    billing_address: billingAddress
+    billing_email: billingEmail
+    billing_family_name: billingFamilyName
+    billing_given_name: billingGivenName
+    billing_phone: billingPhone
+    course_id: courseId
+    created_at: createdAt
+    order_total: orderTotal
+    organization_id: organizationId
+    payment_method: paymentMethod
+    profile_id: profileId
+  custom_root_fields: {}
+object_relationships:
+- name: course
+  using:
+    foreign_key_constraint_on: course_id
+- name: organization
+  using:
+    foreign_key_constraint_on: organization_id
+insert_permissions:
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - billing_address
+    - billing_email
+    - billing_family_name
+    - billing_given_name
+    - billing_phone
+    - course_id
+    - id
+    - organization_id
+    - payment_method
+    - quantity
+    - registrants
+    set:
+      profile_id: x-hasura-User-Id
+  role: unverified
+select_permissions:
+- permission:
+    columns:
+    - order_total
+    - price
+    - vat
+    - course_id
+    - quantity
+    - registrants
+    - billing_address
+    - billing_email
+    - billing_family_name
+    - billing_given_name
+    - billing_phone
+    - payment_method
+    - created_at
+    - id
+    - organization_id
+    - profile_id
+    filter:
+      profile_id:
+        _eq: X-Hasura-User-Id
+  role: unverified

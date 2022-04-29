@@ -63,25 +63,34 @@ exports[`page: VerifyEmailPage matchs snapshot 1`] = `
         class="MuiBox-root css-1wlfb0w"
       >
         <h3
-          class="MuiTypography-root MuiTypography-h3 css-2w99rx-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-h3 css-ouwfu7-MuiTypography-root"
         >
-          Email Verification
+          Verify your email
         </h3>
         <form
-          class="MuiBox-root css-dvxtzn"
+          class="css-163ljxj-MuiStack-root"
         >
-          <button
-            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
-            data-testid="signup-verify-now-btn"
-            id="mui-1"
-            tabindex="0"
-            type="button"
+          <div
+            class="MuiBox-root css-nntn6c"
           >
-            Verify Now
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Please verify your email in order to access features within the Team Teach Hub.
+            </p>
+            <button
+              class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+              data-testid="signup-verify-now-btn"
+              id="mui-1"
+              tabindex="0"
+              type="button"
+            >
+              Send verification code
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
           <button
             class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-e432cs-MuiButtonBase-root-MuiButton-root"
             data-testid="signup-verify-later-btn"

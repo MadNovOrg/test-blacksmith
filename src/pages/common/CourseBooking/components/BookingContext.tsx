@@ -8,7 +8,14 @@ import React, {
 } from 'react'
 import useSWR from 'swr'
 
+import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  MUTATION,
+  ResponseType as InsertOrderResponseType,
+  ParamsType as InsertOrderParamsType,
+} from '@app/queries/order/insert-order'
 import { QUERY, ResponseType } from '@app/queries/profile/get-temp-profile'
+import { Order, PaymentMethod } from '@app/types'
 
 import { positions, sectors } from './org-data'
 
@@ -16,16 +23,29 @@ export type Sector = keyof typeof sectors | ''
 
 type CourseDetails = ResponseType['tempProfiles'][0]['course']
 
+export type InvoiceDetails = {
+  orgId: string | null
+  billingAddress: string
+  firstName: string
+  surname: string
+  email: string
+  phone: string
+  purchaseOrder: string
+}
+
 type State = {
   emails: string[]
   quantity: number
   price: number
   vat: number
   promoCodes: string[]
-  orgId: string | null
+  orgId: string
   sector: Sector
   position: string
   otherPosition: string
+  paymentMethod: PaymentMethod
+
+  invoiceDetails?: InvoiceDetails
 }
 
 type ContextType = {
@@ -39,6 +59,7 @@ type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: string) => void
   removePromo: (_: string) => void
+  placeOrder: () => Promise<Order | null>
 }
 
 const initialContext = {}
@@ -54,6 +75,7 @@ const Context = React.createContext<ContextType>(initialContext as ContextType)
 type Props = unknown
 
 export const BookingProvider: React.FC<Props> = ({ children }) => {
+  const fetcher = useFetcher()
   const [ready, setReady] = useState(false)
   const [availableSeats, setAvailableSeats] = useState(0)
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
@@ -79,6 +101,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       sector: '',
       position: '',
       otherPosition: '',
+      paymentMethod: PaymentMethod.INVOICE,
     })
     setReady(true)
   }, [profile])
@@ -108,6 +131,31 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     )
   }, [ready, booking])
 
+  const placeOrder = useCallback(async () => {
+    // TODO: Fix for CC
+    if (!booking.invoiceDetails) return null
+
+    const response = await fetcher<
+      InsertOrderResponseType,
+      InsertOrderParamsType
+    >(MUTATION, {
+      input: {
+        courseId: course.id,
+        quantity: booking.quantity,
+        paymentMethod: booking.paymentMethod,
+        billingAddress: booking.invoiceDetails.billingAddress,
+        billingGivenName: booking.invoiceDetails.firstName,
+        billingFamilyName: booking.invoiceDetails.surname,
+        billingEmail: booking.invoiceDetails.email,
+        billingPhone: booking.invoiceDetails.phone,
+        registrants: booking.emails,
+        organizationId: booking.orgId,
+      },
+    })
+
+    return response.order
+  }, [booking, fetcher, course])
+
   const value = useMemo<ContextType>(
     () => ({
       totalPrice,
@@ -120,8 +168,18 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       setBooking: s => setBooking(prev => ({ ...prev, ...s })),
       addPromo,
       removePromo,
+      placeOrder,
     }),
-    [ready, booking, course, addPromo, removePromo, totalPrice, availableSeats]
+    [
+      ready,
+      booking,
+      course,
+      addPromo,
+      removePromo,
+      totalPrice,
+      availableSeats,
+      placeOrder,
+    ]
   )
 
   if (!ready) {

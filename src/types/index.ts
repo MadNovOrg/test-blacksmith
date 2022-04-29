@@ -105,6 +105,11 @@ export type Role = {
   name: RoleName
 }
 
+export enum PaymentMethod {
+  CC = 'CC',
+  INVOICE = 'INVOICE',
+}
+
 export enum RoleName {
   UNVERIFIED = 'unverified',
   USER = 'user',
@@ -411,3 +416,8 @@ export type CourseInput = {
 export type ValidCourseInput = DeepNonNullable<
   Omit<CourseInput, 'courseLevel'> & { courseLevel: CourseLevel }
 >
+
+export type Order = {
+  id: string
+  // TODO: add when needed
+}

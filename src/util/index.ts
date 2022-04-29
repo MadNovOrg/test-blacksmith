@@ -11,6 +11,7 @@ import {
   SetCourseTrainerInput,
   SearchTrainer,
   CourseInput,
+  Address,
 } from '@app/types'
 
 export * from './eligibleTrainers'
@@ -250,4 +251,10 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     courseCost: course.aolCostOfCourse ?? null,
     usesAOL: Boolean(course.aolCostOfCourse),
   }
+}
+
+export const normalizeAddr = (addr: Address | undefined) => {
+  if (!addr) return null
+
+  return [addr.line1, addr.line2, addr.city, addr.country, addr.postCode]
 }

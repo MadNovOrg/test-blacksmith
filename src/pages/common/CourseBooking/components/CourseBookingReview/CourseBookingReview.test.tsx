@@ -1,6 +1,8 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
+import { PaymentMethod } from '@app/types'
+
 import { render } from '@test/index'
 
 import { useBooking } from '../BookingContext'
@@ -41,6 +43,7 @@ describe('CourseBookingReview', () => {
       sector: '',
       position: '',
       otherPosition: '',
+      paymentMethod: PaymentMethod.INVOICE,
     },
     positions,
     sectors,
@@ -48,6 +51,7 @@ describe('CourseBookingReview', () => {
     ready: true,
     setBooking: jest.fn(),
     totalPrice: 45,
+    placeOrder: jest.fn(),
   })
 
   it('matches snapshot', async () => {

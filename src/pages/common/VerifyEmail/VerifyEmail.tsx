@@ -58,10 +58,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
         width={628}
         position="relative"
       >
-        <Typography
-          variant="h3"
-          sx={{ textAlign: 'center', fontWeight: 600, color: 'grey.800' }}
-        >
+        <Typography variant="h3" textAlign="center" fontWeight="600" mb={2}>
           {t('pages.signup.verify-heading')}
         </Typography>
 
