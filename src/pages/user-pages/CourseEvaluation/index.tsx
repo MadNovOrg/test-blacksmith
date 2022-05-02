@@ -197,7 +197,7 @@ export const CourseEvaluation = () => {
         return setError(t('course-evaluation.error-submitting'))
       }
 
-      navigate('../?success=course_evaluated')
+      navigate('../details?success=course_evaluated')
     } catch (err: unknown) {
       setError(t('course-evaluation.error-submitting'))
       setLoading(false)
