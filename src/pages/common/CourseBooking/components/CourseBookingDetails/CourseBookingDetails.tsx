@@ -465,7 +465,7 @@ export const CourseBookingDetails: React.FC = () => {
         {values.paymentMethod === PaymentMethod.INVOICE ? (
           <Box bgcolor="grey.100" p={2}>
             <Typography variant="body1" fontWeight="600">
-              Invoice contact details
+              {t('invoice-contact')}
             </Typography>
 
             <Box mt={3}>

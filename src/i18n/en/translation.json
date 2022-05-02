@@ -32,6 +32,8 @@
     "change": "Change",
     "remove": "Remove",
     "admin": "Administrator",
+    "invoice-contact": "Invoice contact details",
+    "no-booking": "Unable to find booking",
     "my-profile": "My Profile",
     "my-membership": "My Membership",
     "my-org": "My Organization",

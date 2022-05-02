@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
-import { gqlRequest } from '@app/lib/gql-request'
 import {
   ParamsType,
   QUERY,
@@ -49,23 +48,17 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [adding, setAdding] = useState<string | null>(null)
-  const [queryDebounced] = useDebounce(query, 300)
+  const [q] = useDebounce(query, 300)
+  const shouldSearch = q.trim().length > 0
 
   const {
     data,
     error: searchError,
     mutate,
-  } = useSWR<ResponseType, Error, [string, ParamsType]>(
-    [
-      QUERY,
-      {
-        name:
-          queryDebounced?.length >= 2 ? `%${queryDebounced}%` : queryDebounced,
-      },
-    ],
-    gqlRequest
+  } = useSWR<ResponseType, Error, [string, ParamsType] | null>(
+    shouldSearch ? [QUERY, { name: q?.length >= 2 ? `%${q}%` : q }] : null
   )
-  const loading = !data && !searchError
+  const loading = !data && !searchError && shouldSearch
 
   const handleClose = () => setAdding(null)
 
@@ -76,10 +69,6 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
 
     // TODO: Not auto selecting the newly added org, needs fixing
     onChange(org)
-  }
-
-  const handleInputChange = (_: unknown, value: string) => {
-    setQuery(value)
   }
 
   const handleChange = (
@@ -128,7 +117,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         sx={sx}
         openOnFocus
         clearOnBlur={false}
-        onInputChange={handleInputChange}
+        onInputChange={(_, v) => setQuery(v)}
         onChange={handleChange}
         options={options || []}
         getOptionLabel={getOptionLabel}
@@ -195,7 +184,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={() => setAdding(queryDebounced)}
+                  onClick={() => setAdding(q)}
                   size="small"
                 >
                   {t('add')}

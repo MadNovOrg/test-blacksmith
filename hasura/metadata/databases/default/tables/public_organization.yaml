@@ -46,12 +46,6 @@ insert_permissions:
     backend_only: false
     check: {}
     columns:
-    - name
-  role: anonymous
-- permission:
-    backend_only: false
-    check: {}
-    columns:
     - addresses
     - name
   role: unverified
@@ -69,23 +63,6 @@ select_permissions:
     - tags
     - updated_at
     filter: {}
-  role: anonymous
-- permission:
-    columns:
-    - addresses
-    - attributes
-    - contact_details
-    - created_at
-    - id
-    - name
-    - preferences
-    - status
-    - tags
-    - updated_at
-    filter:
-      members:
-        profile_id:
-          _eq: X-Hasura-User-Id
   role: unverified
 - permission:
     allow_aggregations: true

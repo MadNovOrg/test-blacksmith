@@ -6,8 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
-import { useAuth } from '@app/context/auth'
-import { gqlRequest } from '@app/lib/gql-request'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   MUTATION,
   ResponseType,
@@ -34,7 +33,7 @@ type FormInput = {
 
 export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
   const { t } = useTranslation()
-  const { getJWT } = useAuth()
+  const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
 
   const schema = useMemo(() => {
@@ -80,12 +79,7 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
           } as Address, // TODO: Fix type when backend is updated,
         ],
       }
-      const token = await getJWT()
-      const { org } = await gqlRequest<ResponseType, ParamsType>(
-        MUTATION,
-        vars,
-        { token }
-      )
+      const { org } = await fetcher<ResponseType, ParamsType>(MUTATION, vars)
       setLoading(false)
 
       if (org.id) {

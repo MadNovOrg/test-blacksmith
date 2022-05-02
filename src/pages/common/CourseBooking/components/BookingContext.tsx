@@ -1,4 +1,4 @@
-import { CircularProgress, Stack } from '@mui/material'
+import { CircularProgress, Stack, Typography } from '@mui/material'
 import React, {
   useCallback,
   useContext,
@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -75,12 +76,14 @@ const Context = React.createContext<ContextType>(initialContext as ContextType)
 type Props = unknown
 
 export const BookingProvider: React.FC<Props> = ({ children }) => {
+  const { t } = useTranslation()
   const fetcher = useFetcher()
   const [ready, setReady] = useState(false)
   const [availableSeats, setAvailableSeats] = useState(0)
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
-  const { data } = useSWR<ResponseType>(QUERY)
+  const { data, error } = useSWR<ResponseType>(QUERY)
+  const loading = !data && !error
   const [profile] = data?.tempProfiles || []
 
   useEffect(() => {
@@ -104,7 +107,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       paymentMethod: PaymentMethod.INVOICE,
     })
     setReady(true)
-  }, [profile])
+  }, [profile, t])
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>
@@ -125,8 +128,8 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     if (!ready) return 0
 
     return (
-      booking.price +
-      (booking.price * booking.vat) / 100 -
+      booking.price * booking.quantity +
+      (booking.price * booking.quantity * booking.vat) / 100 -
       booking.promoCodes.reduce(acc => acc + 2, 0)
     )
   }, [ready, booking])
@@ -182,12 +185,16 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     ]
   )
 
-  if (!ready) {
+  if (loading) {
     return (
       <Stack alignItems="center" justifyContent="center">
         <CircularProgress />
       </Stack>
     )
+  }
+
+  if (error || !ready) {
+    return <Typography>{t('no-booking')}</Typography>
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>
