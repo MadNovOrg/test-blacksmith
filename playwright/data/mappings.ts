@@ -2,12 +2,6 @@ import translation from '@app/i18n/en/translation.json'
 
 import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 
-const statusActions = {
-  PENDING: 'AcceptDecline',
-  DRAFT: 'Build',
-  PUBLISHED: 'Manage',
-}
-
 const toUiTime = (date: Date) => {
   return date
     .toLocaleString('en-GB', {
@@ -35,7 +29,6 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
     Start: startUiTime,
     End: endUiTime,
     Status: translation.common['course-statuses'][course.status],
-    '': statusActions[course.status],
   }
 }
 

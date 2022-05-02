@@ -136,7 +136,7 @@ export class CreateCoursePage extends BasePage {
       this.page.waitForResponse(
         res =>
           res.request().url().includes('/graphql') &&
-          res.request().postData().includes('insert_course')
+          (res.request().postData() as string).includes('insert_course')
       ),
       this.nextPageButton.click(),
     ])
@@ -152,10 +152,10 @@ export class CreateCoursePage extends BasePage {
   }
 
   async fillCourseDetails(course: Course) {
-    if (course.type !== CourseType.OPEN) {
+    if (course.type !== CourseType.OPEN && course.organization) {
       await this.selectOrganisation(course.organization.name)
     }
-    if (course.type === CourseType.CLOSED) {
+    if (course.type === CourseType.CLOSED && course.contactProfile) {
       const name = `${course.contactProfile.givenName} ${course.contactProfile.familyName}`
       await this.selectContact(name)
     }
@@ -164,7 +164,7 @@ export class CreateCoursePage extends BasePage {
     if (course.reaccreditation) await this.selectReaccreditation()
     await this.selectDeliveryType(course.deliveryType)
     if (course.deliveryType !== CourseDeliveryType.VIRTUAL) {
-      await this.selectVenue(course.schedule[0].venue)
+      await this.selectVenue(course.schedule[0].venue as string)
     }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)

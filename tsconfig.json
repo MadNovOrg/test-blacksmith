@@ -28,5 +28,5 @@
       "@storybook-decorators/*": ["./.storybook/decorators/*"]
     }
   },
-  "include": ["./src", "./test"]
+  "include": ["./src", "./test", "./playwright"]
 }

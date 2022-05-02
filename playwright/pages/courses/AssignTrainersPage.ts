@@ -40,7 +40,7 @@ export class AssignTrainersPage extends BasePage {
   }
 
   async removeTrainerIfAny() {
-    if (this.selectedTrainer.isVisible()) {
+    if (await this.selectedTrainer.isVisible()) {
       await this.selectedTrainer.locator('data-testid=CancelIcon').click()
     }
   }
@@ -56,7 +56,7 @@ export class AssignTrainersPage extends BasePage {
       this.page.waitForResponse(
         res =>
           res.request().url().includes('/graphql') &&
-          res.request().postData().includes('insert_course')
+          (res.request().postData() as string).includes('insert_course')
       ),
       this.createButton.click(),
     ])

@@ -20,7 +20,7 @@ export type Email = {
 }
 
 export type Course = {
-  id?: number
+  id: number
   name: string
   description: string
   organization?: Organization
@@ -55,7 +55,6 @@ export type CourseTableRow = {
   Start: string
   End: string
   Status: string
-  '': string
 }
 
 export type ModuleGroup = {

@@ -55,6 +55,9 @@ export class CourseBuilderPage extends BasePage {
     for (const name of modules) {
       const sourceBox = await this.availableModule(name).boundingBox()
       const targetBox = await this.emptyModuleSlots.first().boundingBox()
+      if (!sourceBox || !targetBox) {
+        throw Error('Cannot get coordinates for drag and drop')
+      }
       const sourceX = sourceBox.x + sourceBox.width / 2
       const sourceY = sourceBox.y + sourceBox.height / 2
       const targetX = targetBox.x + targetBox.width / 2

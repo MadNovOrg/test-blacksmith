@@ -13,7 +13,7 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
-      await insertCourse(
+      data.course.id = await insertCourse(
         data.course,
         users.trainer.email,
         InviteStatus.ACCEPTED

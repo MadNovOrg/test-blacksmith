@@ -13,7 +13,12 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    await insertCourse(course, users.trainer.email, InviteStatus.ACCEPTED)
+    course.organization = { name: 'London First School' }
+    course.id = await insertCourse(
+      course,
+      users.trainer.email,
+      InviteStatus.ACCEPTED
+    )
     await use(course)
     await deleteCourse(course.id)
   },

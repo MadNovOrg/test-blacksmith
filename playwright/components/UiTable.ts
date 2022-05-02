@@ -23,24 +23,31 @@ export class UiTable {
     return this.rows.count()
   }
 
-  async getHeaders(): Promise<string[]> {
-    return (await this.headers.allTextContents()).map(h =>
+  async getHeaders(
+    options: { ignoreEmpty?: boolean } = { ignoreEmpty: false }
+  ): Promise<string[]> {
+    const result = (await this.headers.allTextContents()).map(h =>
       h.replace('sorted ascending', '')
     )
+    return options.ignoreEmpty ? result.filter(h => h !== '') : result
   }
 
-  async getRows(): Promise<object> {
+  async getRows(
+    options: { ignoreEmptyHeaders?: boolean } = { ignoreEmptyHeaders: false }
+  ): Promise<object> {
     const result = []
-    const headers = await this.getHeaders()
+    const headers = await this.getHeaders({
+      ignoreEmpty: options.ignoreEmptyHeaders,
+    })
     const rowsCount = await this.getRowsCount()
     for (let i = 0; i < rowsCount; i++) {
-      const resultRow = {}
+      const resultRow: { [k: string]: string } = {}
       for (let j = 0; j < headers.length; j++) {
-        resultRow[headers[j]] = await this.rows
+        resultRow[headers[j]] = (await this.rows
           .nth(i)
           .locator('td')
           .nth(j)
-          .textContent()
+          .textContent()) as string
       }
       result.push(resultRow)
     }
@@ -88,7 +95,7 @@ export class UiTable {
     const rowsCount = await this.getRowsCount()
     for (let i = 0; i < rowsCount; i++) {
       const cell = this.rows.nth(i).locator('td').nth(columnIndex)
-      if ((await cell.textContent()).includes(text)) {
+      if (((await cell.textContent()) as string).includes(text)) {
         return cell
       }
     }

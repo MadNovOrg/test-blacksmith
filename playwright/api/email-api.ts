@@ -38,6 +38,9 @@ const getEmail = async (email: string, id: string): Promise<Email> => {
     const htmlPart = (body.parts as Array<EmailPart>).find(part =>
       part.headers['content-type'].startsWith('text/html')
     )
+    if (!htmlPart) {
+      throw Error('Could not find html part of the email')
+    }
     return {
       from: body.fromfull,
       subject: body.subject,

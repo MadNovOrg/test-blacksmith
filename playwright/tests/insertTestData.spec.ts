@@ -13,13 +13,13 @@ import {
   makeSureTrainerHasCourses,
 } from '../api/hasura-api'
 import { COURSES_TO_VIEW, UNIQUE_COURSE } from '../data/courses'
-import { MODULES_BY_LEVEL } from '../data/modules'
+import { getModulesByLevel } from '../data/modules'
 import { users } from '../data/users'
 
 test('insert test @data', async () => {
   test.skip(!process.env.TRAINER)
   test.setTimeout(120000)
-  const email = process.env.TRAINER
+  const email = process.env.TRAINER ?? ''
 
   // delete all trainer's courses
   const courses = await getTrainerCourses(email)
@@ -34,13 +34,14 @@ test('insert test @data', async () => {
   for (let i = 0; i < 3; i++) {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
+    course.organization = { name: 'London First School' }
     course.status = CourseStatus.PUBLISHED
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2022-03-15T16:00:00Z')
-    await insertCourse(course, email, InviteStatus.ACCEPTED)
+    course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)
 
     const moduleIds = await getModuleIds(
-      MODULES_BY_LEVEL.get(course.level),
+      getModulesByLevel(course.level),
       course.level
     )
     await insertCourseModules(course.id, moduleIds)

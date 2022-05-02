@@ -79,6 +79,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_1
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
     })(),
@@ -144,6 +145,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_1
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.go1Integration = true
       return course
@@ -210,6 +212,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       return course
     })(),
     mandatoryModules: [
@@ -282,6 +285,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
     })(),
@@ -355,6 +359,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.go1Integration = true
       return course
@@ -429,6 +434,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.reaccreditation = true
       course.go1Integration = true
@@ -504,6 +510,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.ADVANCED
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       return course
     })(),
     mandatoryModules: [],
@@ -539,7 +546,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
   },
 ]
 
-export const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
+const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
   [
     CourseLevel.LEVEL_1,
     [
@@ -551,3 +558,13 @@ export const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
     ],
   ],
 ])
+
+export const getModulesByLevel: (level: CourseLevel) => string[] = (
+  level: CourseLevel
+) => {
+  const moduleNames = MODULES_BY_LEVEL.get(level)
+  if (!moduleNames) {
+    throw Error(`No modules by level: ${level}`)
+  }
+  return moduleNames
+}

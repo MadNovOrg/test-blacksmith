@@ -13,6 +13,15 @@ import { BasePage } from '../BasePage'
 import { CourseBuilderPage } from './CourseBuilderPage'
 import { CourseDetailsPage } from './CourseDetailsPage'
 
+const cellLinkContainsCourseId: (
+  id: number
+) => (cell: Locator) => Promise<boolean> = (id: number) => {
+  return async cell => {
+    const link = (await cell.locator('a').getAttribute('href')) as string
+    return link.includes(`/${id}/`)
+  }
+}
+
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator
   readonly filterBy: (text: string) => Locator
@@ -51,7 +60,9 @@ export class MyCoursesPage extends BasePage {
     await expect(this.coursesTable.rows).toHaveCount(courses.length)
     const expectedRows = courses.map(toCourseTableRow)
     expectedRows.sort(rowsByAllFields)
-    const actualRows = (await this.coursesTable.getRows()) as CourseTableRow[]
+    const actualRows = (await this.coursesTable.getRows({
+      ignoreEmptyHeaders: true,
+    })) as CourseTableRow[]
     actualRows.sort(rowsByAllFields)
     expect(actualRows).toEqual(expectedRows)
   }
@@ -70,11 +81,7 @@ export class MyCoursesPage extends BasePage {
   async clickCourseBuildButton(courseId: number): Promise<CourseBuilderPage> {
     const cell = await this.coursesTable.getCell(
       'Course Name',
-      async cell => {
-        return (await cell.locator('a').getAttribute('href')).includes(
-          `/${courseId}/`
-        )
-      },
+      cellLinkContainsCourseId(courseId),
       ''
     )
     await cell.locator('button').click()
@@ -84,11 +91,7 @@ export class MyCoursesPage extends BasePage {
   async clickCourseManageButton(courseId: number): Promise<CourseDetailsPage> {
     const cell = await this.coursesTable.getCell(
       'Course Name',
-      async cell => {
-        return (await cell.locator('a').getAttribute('href')).includes(
-          `/${courseId}/`
-        )
-      },
+      cellLinkContainsCourseId(courseId),
       ''
     )
     await cell.locator('button').click()
@@ -98,11 +101,7 @@ export class MyCoursesPage extends BasePage {
   async checkCourseStatus(courseId: number, status: string) {
     const cell = await this.coursesTable.getCell(
       'Course Name',
-      async cell => {
-        return (await cell.locator('a').getAttribute('href')).includes(
-          `/${courseId}/`
-        )
-      },
+      cellLinkContainsCourseId(courseId),
       'Status'
     )
     await expect(cell).toHaveText(status)

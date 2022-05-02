@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import { test as base } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
 
 import { CourseType } from '@app/types'
 
@@ -14,13 +14,14 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.INDIRECT
+    course.organization = { name: 'London First School' }
     await use(course)
     await deleteCourse(course.id)
   },
 })
 test.use({ storageState: stateFilePath('trainer') })
 
-test(`create course: indirect as trainer`, async ({ page, course }) => {
+test('create course: indirect as trainer', async ({ page, course }) => {
   const coursesListPage = new MyCoursesPage(page)
   await coursesListPage.goto()
   const createCoursePage =
@@ -29,10 +30,10 @@ test(`create course: indirect as trainer`, async ({ page, course }) => {
   course.id = await createCoursePage.clickCreateCourseButton()
   const courseBuilderPage = new CourseBuilderPage(page)
   const courseDetailsPage = await courseBuilderPage.clickSubmitButton()
-  courseDetailsPage.header.checkCourseName(course.name)
-  expect(page.url()).toContain(course.id)
+  await courseDetailsPage.header.checkCourseName(course.name)
+  expect(page.url()).toContain(course.id.toString())
 
   await coursesListPage.goto()
   await coursesListPage.coursesTable.checkIsVisible()
-  await coursesListPage.checkCourseStatus(course.id, 'Pending')
+  await coursesListPage.checkCourseStatus(course.id, 'Published')
 })

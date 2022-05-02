@@ -10,7 +10,6 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { LoginPage } from '../../../pages/auth/LoginPage'
-import { CourseBuilderPage } from '../../../pages/courses/CourseBuilderPage'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const dataSet = [
@@ -19,7 +18,6 @@ const dataSet = [
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.organization = null
       return course
     })(),
   },
@@ -29,6 +27,7 @@ const dataSet = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.contactProfile = users.orgAdmin
       return course
     })(),
@@ -38,7 +37,6 @@ const dataSet = [
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.organization = null
       course.deliveryType = CourseDeliveryType.VIRTUAL
       return course
     })(),
@@ -49,6 +47,7 @@ const dataSet = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
       course.contactProfile = users.orgAdmin
       course.reaccreditation = true
       course.deliveryType = CourseDeliveryType.MIXED
@@ -88,34 +87,3 @@ for (const data of dataSet) {
     await coursesListPage.checkCourseStatus(course.id, 'Pending')
   })
 }
-
-const test = base.extend<{ course: Course }>({
-  course: async ({}, use) => {
-    const course = UNIQUE_COURSE()
-    course.type = CourseType.INDIRECT
-    await use(course)
-    await deleteCourse(course.id)
-  },
-})
-test.use({ storageState: stateFilePath('admin') })
-
-test(`create course: indirect as admin`, async ({ page, course }) => {
-  const coursesListPage = new MyCoursesPage(page)
-  await coursesListPage.goto()
-  const createCoursePage =
-    await coursesListPage.createCourseMenu.selectCreateCourseOption(course.type)
-  await createCoursePage.fillCourseDetails(course)
-  course.id = await createCoursePage.clickCreateCourseButton()
-  const courseBuilderPage = new CourseBuilderPage(page)
-  const courseDetailsPage = await courseBuilderPage.clickSubmitButton()
-  courseDetailsPage.header.checkCourseName(course.name)
-  expect(page.url()).toContain(course.id)
-
-  await coursesListPage.userMenu.selectOption(Option.Logout)
-  const loginPage = new LoginPage(page)
-  await loginPage.logIn(users.trainer2.email, users.trainer2.password)
-  await coursesListPage.userMenu.checkIsVisible()
-  await coursesListPage.roleSwitcher.selectRole('Trainer')
-  await coursesListPage.coursesTable.checkIsVisible()
-  await coursesListPage.checkCourseStatus(course.id, 'Pending')
-})

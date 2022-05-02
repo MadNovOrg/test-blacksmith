@@ -97,7 +97,7 @@ export const insertCourse = async (
   course: Course,
   email: string,
   trainerStatus = InviteStatus.PENDING
-): Promise<Course> => {
+): Promise<number> => {
   const organization = course.organization
     ? `, organization_id: "${await getOrganizationId(
         course.organization.name
@@ -148,9 +148,12 @@ export const insertCourse = async (
     }
   `
   const response = await getClient().request(query)
-  course.id = response.insert_course.returning[0].id
-  console.log(`Inserted course with ID ${course.id}`)
-  return course
+  const id = response.insert_course.returning[0].id
+  if (id) {
+    console.log(`Inserted course with ID ${id}`)
+    return id
+  }
+  throw Error('Could not insert the course')
 }
 
 export const makeSureTrainerHasCourses = async (
@@ -160,12 +163,12 @@ export const makeSureTrainerHasCourses = async (
   const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
     if (!existingCourses.map(c => c.description).includes(course.description)) {
-      await insertCourse(course, email)
+      course.id = await insertCourse(course, email)
     }
   }
 }
 
-export const deleteCourse = async (id: number) => {
+export const deleteCourse = async (id?: number) => {
   if (!id) {
     console.log(`Cannot delete the course without id`)
     return
@@ -209,7 +212,9 @@ export const getModuleIds = async (
     }
   `
   const response = await getClient().request(query)
-  return response.module_group.flatMap(m => m.modules.flatMap(i => i.id))
+  return response.module_group.flatMap((m: { modules: { id: string }[] }) =>
+    m.modules.flatMap(i => i.id)
+  )
 }
 
 export const insertCourseModules = async (
