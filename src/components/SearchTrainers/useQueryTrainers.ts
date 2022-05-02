@@ -35,7 +35,7 @@ export const useQueryTrainers = ({
         const like = { _ilike: `${query}%` }
         const where = {
           roles: { role: { name: { _eq: RoleName.TRAINER } } },
-          _or: [{ givenName: like }, { familyName: like }],
+          _or: [{ fullName: like }, { familyName: like }],
         }
 
         const { trainers } = await fetcher<{ trainers: SearchTrainer[] }>(
