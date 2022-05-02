@@ -189,7 +189,11 @@ export const CourseDetails = () => {
                     )}
                   </Typography>
                   <Chip
-                    label={canSubmitFeedback ? t('incomplete') : t('complete')}
+                    label={
+                      !didAttendeeSubmitFeedback || !courseHasEnded
+                        ? t('incomplete')
+                        : t('complete')
+                    }
                     sx={{ marginRight: 2 }}
                   />
                   <Button
