@@ -36,8 +36,12 @@ export const CourseBookingReview: React.FC = () => {
 
   const handleConfirmBooking = async () => {
     const order = await placeOrder()
-    console.log(order)
-    navigate('../done')
+    if (!order) {
+      console.log('No order') // Temp
+      return
+    }
+
+    navigate(`../done?id=${order.id}`)
   }
 
   return (

@@ -164,6 +164,7 @@ export const CourseBookingDetails: React.FC = () => {
       position: booking.position,
       otherPosition: booking.otherPosition,
       paymentMethod: PaymentMethod.INVOICE,
+      invoiceDetails: booking.invoiceDetails,
     },
   })
 
@@ -500,7 +501,6 @@ export const CourseBookingDetails: React.FC = () => {
                     {...register('invoiceDetails.firstName')}
                     inputProps={{ 'data-testid': 'input-first-name' }}
                     sx={{ bgcolor: 'grey.100' }}
-                    autoFocus
                     fullWidth
                     required
                   />

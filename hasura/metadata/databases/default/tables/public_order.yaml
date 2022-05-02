@@ -15,6 +15,7 @@ configuration:
     organization_id: organizationId
     payment_method: paymentMethod
     profile_id: profileId
+    promo_codes: promoCodes
   custom_root_fields: {}
 object_relationships:
 - name: course
@@ -37,6 +38,7 @@ insert_permissions:
     - id
     - organization_id
     - payment_method
+    - promo_codes
     - quantity
     - registrants
     set:
@@ -45,23 +47,35 @@ insert_permissions:
 select_permissions:
 - permission:
     columns:
-    - order_total
-    - price
-    - vat
-    - course_id
-    - quantity
-    - registrants
     - billing_address
     - billing_email
     - billing_family_name
     - billing_given_name
     - billing_phone
-    - payment_method
+    - course_id
     - created_at
     - id
+    - order_total
     - organization_id
+    - payment_method
+    - price
     - profile_id
+    - promo_codes
+    - quantity
+    - registrants
+    - vat
     filter:
       profile_id:
         _eq: X-Hasura-User-Id
   role: unverified
+event_triggers:
+- definition:
+    enable_manual: false
+    insert:
+      columns: "*"
+  name: new_order
+  retry_conf:
+    interval_sec: 10
+    num_retries: 3
+    timeout_sec: 60
+  webhook: "{{EVENTS_HOST}}/order"

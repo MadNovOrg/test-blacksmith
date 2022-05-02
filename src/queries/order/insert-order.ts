@@ -16,15 +16,14 @@ export type ParamsType = {
     billingPhone: string
     registrants: string[]
     organizationId: string
+    promoCodes: string[]
   }
 }
 
 export const MUTATION = gql`
   mutation InsertOrder($input: order_insert_input!) {
-    order: insert_order(objects: [$input]) {
-      returning {
-        id
-      }
+    order: insert_order_one(object: $input) {
+      id
     }
   }
 `

@@ -1,13 +1,7 @@
 import { CircularProgress, Stack, Typography } from '@mui/material'
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
+import { useMount } from 'react-use'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -50,6 +44,7 @@ type State = {
 }
 
 type ContextType = {
+  orderId: string | null
   course: CourseDetails
   booking: State
   ready: boolean
@@ -78,16 +73,20 @@ type Props = unknown
 export const BookingProvider: React.FC<Props> = ({ children }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
+  const [error, setError] = useState(null)
   const [availableSeats, setAvailableSeats] = useState(0)
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
-  const { data, error } = useSWR<ResponseType>(QUERY)
-  const loading = !data && !error
-  const [profile] = data?.tempProfiles || []
 
-  useEffect(() => {
-    if (!profile) return
+  useMount(async () => {
+    const data = await fetcher<ResponseType>(QUERY)
+    const [profile] = data?.tempProfiles || []
+
+    if (!profile) {
+      return setError(t('no-booking'))
+    }
 
     setAvailableSeats(
       profile.course.maxParticipants -
@@ -107,7 +106,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       paymentMethod: PaymentMethod.INVOICE,
     })
     setReady(true)
-  }, [profile, t])
+  })
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>
@@ -153,14 +152,17 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         billingPhone: booking.invoiceDetails.phone,
         registrants: booking.emails,
         organizationId: booking.orgId,
+        promoCodes: booking.promoCodes,
       },
     })
 
+    setOrderId(response.order.id)
     return response.order
   }, [booking, fetcher, course])
 
   const value = useMemo<ContextType>(
     () => ({
+      orderId,
       totalPrice,
       course,
       ready,
@@ -174,6 +176,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       placeOrder,
     }),
     [
+      orderId,
       ready,
       booking,
       course,
@@ -185,16 +188,16 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     ]
   )
 
-  if (loading) {
+  if (error) {
+    return <Typography>{t('no-booking')}</Typography>
+  }
+
+  if (!ready) {
     return (
       <Stack alignItems="center" justifyContent="center">
         <CircularProgress />
       </Stack>
     )
-  }
-
-  if (error || !ready) {
-    return <Typography>{t('no-booking')}</Typography>
   }
 
   return <Context.Provider value={value}>{children}</Context.Provider>

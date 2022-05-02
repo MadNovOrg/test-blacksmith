@@ -55,6 +55,7 @@ describe('CourseBookingDetails', () => {
     setBooking: jest.fn(),
     totalPrice: 45,
     placeOrder: jest.fn(),
+    orderId: null,
   })
 
   it('matches snapshot', async () => {
