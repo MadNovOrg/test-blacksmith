@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
   Alert,
@@ -12,6 +11,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
+import { BackButton } from '@app/components/BackButton'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
@@ -86,14 +86,10 @@ export const CourseDetails = () => {
                   </Button>
                 )}
               >
-                <Button
-                  variant="text"
-                  startIcon={<ArrowBackIcon />}
-                  sx={{ marginBottom: 2 }}
-                  onClick={() => navigate('/courses')}
-                >
-                  {t('pages.course-participants.back-button')}
-                </Button>
+                <BackButton
+                  to="/courses"
+                  label={t('pages.course-participants.back-button')}
+                />
               </CourseHeroSummary>
 
               <TabContext value={selectedTab}>

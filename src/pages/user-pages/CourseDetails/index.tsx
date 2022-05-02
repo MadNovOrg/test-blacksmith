@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
@@ -20,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 
+import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { PillTabList, PillTab } from '@app/components/PillTabs'
@@ -123,13 +123,10 @@ export const CourseDetails = () => {
               </FormGroup>
             )}
           >
-            <Button
-              variant="text"
-              startIcon={<ArrowBackIcon />}
-              sx={{ marginBottom: 2 }}
-            >
-              {t('pages.course-participants.back-button')}
-            </Button>
+            <BackButton
+              to="/courses"
+              label={t('pages.course-participants.back-button')}
+            />
           </CourseHeroSummary>
 
           {alertMessage ? (
