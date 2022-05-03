@@ -19,6 +19,8 @@ on:
         required: true
       gmaps_key:
         required: true
+      stripe_key:
+        required: true
 
 jobs:
   build-deploy:
@@ -54,6 +56,7 @@ jobs:
           VITE_HASURA_GRAPHQL_API: '${{ secrets.hasura_endpoint }}/v1/graphql'
           VITE_BASE_WORDPRESS_URL: '${{ secrets.wp_host }}/wp-json/wp/v2'
           VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
+          VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
