@@ -19,6 +19,7 @@ import * as yup from 'yup'
 import { BackButton } from '@app/components/BackButton'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
+import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
@@ -141,17 +142,19 @@ export const TrainerFeedback = () => {
       <Container component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container>
           <Grid item md={3}>
-            <Box mt={5} pr={3}>
-              <BackButton label={t('back')} />
+            <Sticky top={20}>
+              <Box mt={5} pr={3}>
+                <BackButton label={t('back')} />
 
-              <Typography variant="h2" gutterBottom my={2}>
-                {t('course-evaluation.trainer-heading')}
-              </Typography>
+                <Typography variant="h2" gutterBottom my={2}>
+                  {t('course-evaluation.trainer-heading')}
+                </Typography>
 
-              <Typography variant="h6" gutterBottom>
-                {course?.name}
-              </Typography>
-            </Box>
+                <Typography variant="h6" gutterBottom>
+                  {course?.name}
+                </Typography>
+              </Box>
+            </Sticky>
           </Grid>
 
           <Grid item md={7} pt={10}>

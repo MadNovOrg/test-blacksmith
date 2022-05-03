@@ -1,4 +1,3 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -20,9 +19,11 @@ import { t } from 'i18next'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 
+import { BackButton } from '@app/components/BackButton'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Sticky } from '@app/components/Sticky'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import {
@@ -236,83 +237,78 @@ export const CourseGrading = () => {
         ) : null}
         {course ? (
           <>
-            <Box mb={2}>
-              <Button
-                variant="text"
-                startIcon={<ArrowBackIcon />}
-                sx={{ marginBottom: 2 }}
-                onClick={() =>
-                  navigate(
-                    `/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`
-                  )
-                }
-              >
-                {t('pages.course-grading-details.back-button-text')}
-              </Button>
-            </Box>
             <Box display="flex">
               <Box width={400} display="flex" flexDirection="column" pr={4}>
-                <Typography variant="h2" mb={2}>
-                  {t('pages.course-grading.title')}
-                </Typography>
-                <Typography variant="h3" mb={5}>
-                  {course?.name}
-                </Typography>
-                <Typography
-                  color={theme.palette.grey[700]}
-                  fontWeight={600}
-                  mb={1}
-                >
-                  {!participantIds.size
-                    ? t('pages.course-grading.attendees-list-title-all')
-                    : t('pages.course-grading.attendees-list-title', {
-                        count: filteredCourseParticipants?.length,
-                      })}
-                </Typography>
+                <Sticky>
+                  <Box mb={2}>
+                    <BackButton
+                      to={`/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`}
+                      label={t('pages.course-grading-details.back-button-text')}
+                    />
+                  </Box>
 
-                <List
-                  sx={{
-                    position: 'relative',
-                    overflow: 'scroll',
-                    maxHeight: 400,
-                    '& ul': { padding: 0 },
-                    marginBottom: theme.spacing(2),
-                  }}
-                >
-                  {filteredCourseParticipants?.map(participant => {
-                    return participant.attended && !participant.grade ? (
-                      <ListItem disableGutters key={participant.id}>
-                        <ListItemAvatar>
-                          <Avatar />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`${participant.profile.fullName}`}
-                        />
-                      </ListItem>
-                    ) : null
-                  })}
-                </List>
+                  <Typography variant="h2" mb={2}>
+                    {t('pages.course-grading.title')}
+                  </Typography>
+                  <Typography variant="h3" mb={5}>
+                    {course?.name}
+                  </Typography>
+                  <Typography
+                    color={theme.palette.grey[700]}
+                    fontWeight={600}
+                    mb={1}
+                  >
+                    {!participantIds.size
+                      ? t('pages.course-grading.attendees-list-title-all')
+                      : t('pages.course-grading.attendees-list-title', {
+                          count: filteredCourseParticipants?.length,
+                        })}
+                  </Typography>
 
-                <Typography
-                  color={theme.palette.grey[700]}
-                  fontWeight={600}
-                  mb={1}
-                >
-                  {t('pages.course-grading.grading-menu-title')}
-                </Typography>
-                <Typography mb={2}>
-                  {t('pages.course-grading.grading-menu-description')}
-                </Typography>
+                  <List
+                    sx={{
+                      position: 'relative',
+                      overflow: 'scroll',
+                      maxHeight: 400,
+                      '& ul': { padding: 0 },
+                      marginBottom: theme.spacing(2),
+                    }}
+                  >
+                    {filteredCourseParticipants?.map(participant => {
+                      return participant.attended && !participant.grade ? (
+                        <ListItem disableGutters key={participant.id}>
+                          <ListItemAvatar>
+                            <Avatar />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={`${participant.profile.fullName}`}
+                          />
+                        </ListItem>
+                      ) : null
+                    })}
+                  </List>
 
-                <CourseGradingMenu
-                  onChange={grade => setGrade(grade)}
-                  courseLevel={course.level}
-                  courseDeliveryType={course.deliveryType}
-                />
+                  <Typography
+                    color={theme.palette.grey[700]}
+                    fontWeight={600}
+                    mb={1}
+                  >
+                    {t('pages.course-grading.grading-menu-title')}
+                  </Typography>
+                  <Typography mb={2}>
+                    {t('pages.course-grading.grading-menu-description')}
+                  </Typography>
+
+                  <CourseGradingMenu
+                    onChange={grade => setGrade(grade)}
+                    courseLevel={course.level}
+                    courseDeliveryType={course.deliveryType}
+                  />
+                </Sticky>
               </Box>
 
               {course?.modules?.length ? (
-                <Box flex={1}>
+                <Box flex={1} mt={8}>
                   <Typography variant="h6" fontWeight="500" mb={1}>
                     {t('pages.course-grading.modules-selection-title')}
                   </Typography>

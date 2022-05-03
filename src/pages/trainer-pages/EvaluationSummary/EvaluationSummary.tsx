@@ -20,6 +20,7 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingProgress } from '@app/components/RatingProgress'
 import { RatingSummary } from '@app/components/RatingSummary'
+import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
   QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
@@ -149,50 +150,54 @@ export const EvaluationSummary = () => {
       <Container>
         <Grid container>
           <Grid item md={3}>
-            <Box mt={5} pr={3}>
-              <BackButton label={t('back')} />
+            <Sticky top={20}>
+              <Box mt={5} pr={3}>
+                <BackButton label={t('back')} />
 
-              <Typography variant="h2" gutterBottom my={2}>
-                {t('pages.course-details.tabs.evaluation.title')}
-              </Typography>
+                <Typography variant="h2" gutterBottom my={2}>
+                  {t('pages.course-details.tabs.evaluation.title')}
+                </Typography>
 
-              <Box mb={4}>
-                <AttendeeMenu
-                  options={attendees}
-                  placeholder={t(
-                    'pages.course-details.tabs.evaluation.full-summary'
-                  )}
-                />
+                <Box mb={4}>
+                  <AttendeeMenu
+                    options={attendees}
+                    placeholder={t(
+                      'pages.course-details.tabs.evaluation.full-summary'
+                    )}
+                  />
+                </Box>
+
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="flex-start"
+                >
+                  <Button
+                    component={LinkBehavior}
+                    href="#evaluation"
+                    sx={{ mb: 1 }}
+                  >
+                    {t('evaluation')}
+                  </Button>
+                  <Button
+                    component={LinkBehavior}
+                    href="#attendee-feedback"
+                    sx={{ mb: 1 }}
+                  >
+                    {t(
+                      'pages.course-details.tabs.evaluation.attendee-feedback'
+                    )}
+                  </Button>
+                  <Button
+                    component={LinkBehavior}
+                    href="#trainer-feedback"
+                    sx={{ mb: 1 }}
+                  >
+                    {t('pages.course-details.tabs.evaluation.trainer-feedback')}
+                  </Button>
+                </Box>
               </Box>
-
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="flex-start"
-              >
-                <Button
-                  component={LinkBehavior}
-                  href="#evaluation"
-                  sx={{ mb: 1 }}
-                >
-                  {t('evaluation')}
-                </Button>
-                <Button
-                  component={LinkBehavior}
-                  href="#attendee-feedback"
-                  sx={{ mb: 1 }}
-                >
-                  {t('pages.course-details.tabs.evaluation.attendee-feedback')}
-                </Button>
-                <Button
-                  component={LinkBehavior}
-                  href="#trainer-feedback"
-                  sx={{ mb: 1 }}
-                >
-                  {t('pages.course-details.tabs.evaluation.trainer-feedback')}
-                </Button>
-              </Box>
-            </Box>
+            </Sticky>
           </Grid>
 
           <Grid item md={7} pt={10}>

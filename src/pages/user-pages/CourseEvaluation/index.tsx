@@ -21,6 +21,7 @@ import { BackButton } from '@app/components/BackButton'
 import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingQuestion } from '@app/components/RatingQuestion'
+import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
@@ -209,33 +210,35 @@ export const CourseEvaluation = () => {
       <Container component="form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container>
           <Grid item md={3}>
-            <Box mt={5} pr={3}>
-              <BackButton label="Back to checklist" />
+            <Sticky top={20}>
+              <Box mt={5} pr={3}>
+                <BackButton label="Back to checklist" />
 
-              <Typography variant="h2" gutterBottom my={2}>
-                {t('course-evaluation.heading')}
-              </Typography>
+                <Typography variant="h2" gutterBottom my={2}>
+                  {t('course-evaluation.heading')}
+                </Typography>
 
-              <Typography variant="h6" gutterBottom>
-                {course?.name}
-              </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {course?.name}
+                </Typography>
 
-              {readOnly && (
-                <Box>
-                  <Typography variant="body1">{t('attendee')}</Typography>
+                {readOnly && (
+                  <Box>
+                    <Typography variant="body1">{t('attendee')}</Typography>
 
-                  <Box mt={2}>
-                    <AttendeeMenu
-                      options={attendees}
-                      value={profileId}
-                      onSelect={(id: string) =>
-                        navigate(`.?profile_id=${id}`, { replace: true })
-                      }
-                    />
+                    <Box mt={2}>
+                      <AttendeeMenu
+                        options={attendees}
+                        value={profileId}
+                        onSelect={(id: string) =>
+                          navigate(`.?profile_id=${id}`, { replace: true })
+                        }
+                      />
+                    </Box>
                   </Box>
-                </Box>
-              )}
-            </Box>
+                )}
+              </Box>
+            </Sticky>
           </Grid>
 
           <Grid item md={7} pt={10}>
