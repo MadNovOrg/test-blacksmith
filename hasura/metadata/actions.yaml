@@ -39,6 +39,13 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/prices/create'
   comment: Creates a membership plan
+- name: stripeCreatePaymentIntent
+  definition:
+    kind: synchronous
+    handler: '{{ACTIONS_HOST}}/stripe/create-payment-intent'
+  permissions:
+  - role: user
+  - role: unverified
 - name: upsertZoomMeeting
   definition:
     kind: synchronous
@@ -123,10 +130,16 @@ custom_types:
     - description: null
       is_deprecated: null
       value: MODERATOR
+  - name: Currency
+    values:
+    - description: null
+      is_deprecated: null
+      value: GBP
   input_objects:
   - name: PlansCreateInput
   - name: UpsertZoomMeetingInput
   - name: GetTrainersLevelsInput
+  - name: StripeCreatePaymentIntentInput
   objects:
   - name: LinkProfileResult
   - name: PlansCreateResult
@@ -141,4 +154,5 @@ custom_types:
   - name: ZoomMeeting
   - name: ZoomMeetingNotFoundError
   - name: TrainerLevels
+  - name: StripeCreatePaymentIntentOutput
   scalars: []

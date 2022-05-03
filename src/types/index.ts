@@ -421,3 +421,7 @@ export type Order = {
   id: string
   // TODO: add when needed
 }
+
+export enum Currency {
+  GBP = 'GBP',
+}

@@ -36,12 +36,11 @@ export const CourseBookingReview: React.FC = () => {
 
   const handleConfirmBooking = async () => {
     const order = await placeOrder()
-    if (!order) {
-      console.log('No order') // Temp
-      return
+    if (booking.paymentMethod === PaymentMethod.CC) {
+      navigate(`../payment/${order.id}`, { replace: true })
+    } else {
+      navigate(`../done?id=${order.id}`, { replace: true })
     }
-
-    navigate(`../done?id=${order.id}`)
   }
 
   return (

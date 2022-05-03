@@ -41,7 +41,7 @@
     "logout": "Logout",
     "registration": "Registration",
     "action": "Action",
-    "addr":{
+    "addr": {
       "line1": "Line 1",
       "line1-placeholder": "Address Line 1",
       "line2": "Line 2",
@@ -445,7 +445,15 @@
       "pay-by-inv-info": "An invoice will be sent to you requiring payment within 30 days.",
       "back-to-booking": "Back to booking details",
       "order-success-info": "Your order has been successfully submitted.",
-      "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved."
+      "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.",
+      "payment-cc-title": "Pay by Credit Card",
+      "payment-cc-subtitle": "Enter your card details below and press Pay finalize your order",
+      "payment-cc-chargeInfo": "Your card will be charged:",
+      "payment-cc-submit": "Pay now",
+      "payment-cc-error-ORDER_NOT_FOUND": "Order not found",
+      "payment-cc-error-ORDER_NOT_ENRICHED": "Invalid Order",
+      "payment-cc-error-ORDER_INVALID": "Invalid Order",
+      "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment"
     },
     "home": {
       "title": "Home"

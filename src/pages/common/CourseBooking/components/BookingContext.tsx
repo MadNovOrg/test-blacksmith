@@ -5,6 +5,10 @@ import { useMount } from 'react-use'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
+  QUERY as GetOrder,
+  ResponseType as GetOrderResp,
+} from '@app/queries/order/get-order'
+import {
   MUTATION,
   ResponseType as InsertOrderResponseType,
   ParamsType as InsertOrderParamsType,
@@ -55,7 +59,7 @@ type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: string) => void
   removePromo: (_: string) => void
-  placeOrder: () => Promise<Order | null>
+  placeOrder: () => Promise<Order>
 }
 
 const initialContext = {}
@@ -105,6 +109,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       otherPosition: '',
       paymentMethod: PaymentMethod.INVOICE,
     })
+
     setReady(true)
   })
 
@@ -133,10 +138,20 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     )
   }, [ready, booking])
 
-  const placeOrder = useCallback(async () => {
-    // TODO: Fix for CC
-    if (!booking.invoiceDetails) return null
+  const waitForOrderEnriched = useCallback(
+    async (orderId: string, tries = 0, maxTries = 5): Promise<void> => {
+      const { order } = await fetcher<GetOrderResp>(GetOrder, { orderId })
+      if (tries === maxTries) return
 
+      if (!order.orderTotal) {
+        await new Promise(res => setTimeout(res, 500))
+        return waitForOrderEnriched(orderId, tries + 1)
+      }
+    },
+    [fetcher]
+  )
+
+  const placeOrder = useCallback(async () => {
     const response = await fetcher<
       InsertOrderResponseType,
       InsertOrderParamsType
@@ -145,20 +160,22 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         courseId: course.id,
         quantity: booking.quantity,
         paymentMethod: booking.paymentMethod,
-        billingAddress: booking.invoiceDetails.billingAddress,
-        billingGivenName: booking.invoiceDetails.firstName,
-        billingFamilyName: booking.invoiceDetails.surname,
-        billingEmail: booking.invoiceDetails.email,
-        billingPhone: booking.invoiceDetails.phone,
+        billingAddress: booking.invoiceDetails?.billingAddress ?? '',
+        billingGivenName: booking.invoiceDetails?.firstName ?? '',
+        billingFamilyName: booking.invoiceDetails?.surname ?? '',
+        billingEmail: booking.invoiceDetails?.email ?? '',
+        billingPhone: booking.invoiceDetails?.phone ?? '',
         registrants: booking.emails,
         organizationId: booking.orgId,
         promoCodes: booking.promoCodes,
       },
     })
 
+    await waitForOrderEnriched(response.order.id)
+
     setOrderId(response.order.id)
     return response.order
-  }, [booking, fetcher, course])
+  }, [booking, fetcher, course, waitForOrderEnriched])
 
   const value = useMemo<ContextType>(
     () => ({

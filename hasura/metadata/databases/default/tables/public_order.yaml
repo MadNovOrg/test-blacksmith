@@ -54,6 +54,7 @@ select_permissions:
     - billing_phone
     - course_id
     - created_at
+    - currency
     - id
     - order_total
     - organization_id
@@ -63,6 +64,7 @@ select_permissions:
     - promo_codes
     - quantity
     - registrants
+    - stripePaymentId
     - vat
     filter:
       profile_id:

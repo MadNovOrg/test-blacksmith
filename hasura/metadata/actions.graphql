@@ -38,6 +38,12 @@ type Mutation {
 }
 
 type Mutation {
+  stripeCreatePaymentIntent(
+    input: StripeCreatePaymentIntentInput!
+  ): StripeCreatePaymentIntentOutput
+}
+
+type Mutation {
   upsertZoomMeeting(
     input: UpsertZoomMeetingInput
   ): UpsertZoomMeetingPayload
@@ -79,6 +85,10 @@ enum CourseTrainerType {
   MODERATOR
 }
 
+enum Currency {
+  GBP
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -101,6 +111,10 @@ input GetTrainersLevelsInput {
   courseLevel: CourseLevel!
   courseStart: date!
   courseEnd: date!
+}
+
+input StripeCreatePaymentIntentInput {
+  orderId: String!
 }
 
 type LinkProfileResult {
@@ -178,5 +192,11 @@ type TrainerLevels {
   profile_id: uuid!
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability!
+}
+
+type StripeCreatePaymentIntentOutput {
+  clientSecret: String!
+  amount: Float!
+  currency: Currency!
 }
 
