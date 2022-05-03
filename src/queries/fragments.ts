@@ -152,6 +152,8 @@ export const CERTIFICATE = gql`
     updatedAt
     number
     expiryDate
+    courseName
+    courseLevel
   }
 `
 

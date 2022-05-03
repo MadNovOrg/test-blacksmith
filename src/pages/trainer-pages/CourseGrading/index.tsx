@@ -172,6 +172,8 @@ export const CourseGrading = () => {
           ? attendedParticipants.map(participant => ({
               courseId: course.id,
               courseParticipantId: participant,
+              courseName: course.name,
+              courseLevel: course.level,
               number: getCertificateNumberPrefix(
                 course.type,
                 course.level,

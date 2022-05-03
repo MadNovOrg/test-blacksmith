@@ -38,7 +38,7 @@ import {
   ResponseType as GetCertificateChangelogsResponseType,
 } from '@app/queries/grading/get-certificate-changelog'
 import theme from '@app/theme'
-import { Course, CourseParticipant, Grade } from '@app/types'
+import { Course, CourseLevel, CourseParticipant, Grade } from '@app/types'
 import { transformModulesToGroups } from '@app/util'
 
 // workaround for using recat-pdf with vite
@@ -347,8 +347,13 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                     document={
                       <CertificateDocument
                         participantName={courseParticipant.profile?.fullName}
-                        courseName={course.name}
-                        courseLevel={course.level}
+                        courseName={
+                          courseParticipant.certificate?.courseName ?? ''
+                        }
+                        courseLevel={
+                          courseParticipant.certificate?.courseLevel ??
+                          CourseLevel.LEVEL_1
+                        }
                         grade={grade as Grade}
                         courseDeliveryType={courseDeliveryType}
                         certificationNumber={certificationNumber}

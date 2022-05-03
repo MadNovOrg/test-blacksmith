@@ -21,7 +21,12 @@ import { useNavigate } from 'react-router-dom'
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
 import { TableHead } from '@app/components/Table/TableHead'
-import { CourseParticipant, SortOrder, Grade as GradeEnum } from '@app/types'
+import {
+  CourseLevel,
+  CourseParticipant,
+  Grade as GradeEnum,
+  SortOrder,
+} from '@app/types'
 
 type CertificationListProps = {
   participants: CourseParticipant[]
@@ -132,12 +137,16 @@ export const CertificationList: React.FC<CertificationListProps> = ({
   const downloadCertificates = useCallback(
     async (participants: CourseParticipant[]) => {
       const tuples: [string, JSX.Element][] = participants.map(participant => [
-        `${participant.profile?.fullName} - ${participant.course.name}.pdf`,
+        `${participant.profile?.fullName} - ${
+          participant.certificate?.courseName ?? ''
+        }.pdf`,
         <CertificateDocument
           key={participant.id}
           participantName={participant.profile?.fullName}
-          courseName={participant.course.name}
-          courseLevel={participant.course.level}
+          courseName={participant.certificate?.courseName ?? ''}
+          courseLevel={
+            participant.certificate?.courseLevel ?? CourseLevel.LEVEL_1
+          }
           grade={participant.grade ?? GradeEnum.PASS}
           courseDeliveryType={participant.course.deliveryType}
           certificationNumber={participant.certificate?.number ?? ''}

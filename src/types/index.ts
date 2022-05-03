@@ -50,6 +50,9 @@ export type CourseCertificate = {
   courseId: string
   courseParticipantId: string
   expiryDate: string
+  courseName: string
+  courseLevel: CourseLevel
+  participant?: CourseParticipant
 } & Base
 
 export type Address = {

@@ -5,6 +5,8 @@ configuration:
   comment: null
   custom_column_names:
     course_id: courseId
+    course_level: courseLevel
+    course_name: courseName
     created_at: createdAt
     expiry_date: expiryDate
     updated_at: updatedAt
@@ -41,6 +43,8 @@ insert_permissions:
             _eq: X-Hasura-User-Id
     columns:
     - course_id
+    - course_level
+    - course_name
     - expiry_date
     - number
     - profile_id
@@ -49,6 +53,8 @@ select_permissions:
 - permission:
     columns:
     - course_id
+    - course_level
+    - course_name
     - created_at
     - expiry_date
     - id
@@ -64,6 +70,7 @@ select_permissions:
 - permission:
     columns:
     - course_id
+    - course_name
     - created_at
     - expiry_date
     - id
@@ -75,6 +82,8 @@ select_permissions:
 - permission:
     columns:
     - course_id
+    - course_level
+    - course_name
     - expiry_date
     - id
     - number

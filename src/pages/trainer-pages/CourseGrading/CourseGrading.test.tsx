@@ -362,6 +362,8 @@ describe('page: CourseGrading', () => {
         {
           courseId: course.id,
           courseParticipantId: courseParticipants[1].id,
+          courseName: course.name,
+          courseLevel: course.level,
           number: `CL-L1-${course.id}`,
           expiryDate: expect.any(String),
         },
