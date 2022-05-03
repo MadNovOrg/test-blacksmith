@@ -24,7 +24,11 @@ JOIN public.course_module cmodule ON cmodule.course_id = course.id
 JOIN public.module module ON cmodule.module_id = module.id
 WHERE course.id = 10011;
 
-INSERT INTO public.course_certificate (course_id, course_participant_id, number, expiry_date)
-SELECT 10011 as course_id, participant.id as course_participant_id, 'OP-L1-10011' as number, NOW() + interval '36 months' as expiry_date
+INSERT INTO public.course_certificate (course_id, profile_id, number, expiry_date)
+SELECT 10011 as course_id, participant.profile_id as profile_id, 'OP-L1-10011' as number, NOW() + interval '36 months' as expiry_date
 FROM public.course_participant participant
 WHERE participant.course_id = 10011 AND participant.grade != 'FAIL';
+
+UPDATE course_participant SET certificate_id = certificate.id
+FROM public.course_certificate certificate
+WHERE certificate.course_id = 10011 AND course_participant.profile_id = certificate.profile_id;

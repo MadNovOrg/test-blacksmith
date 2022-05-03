@@ -15,7 +15,7 @@ object_relationships:
   using:
     manual_configuration:
       column_mapping:
-        id: course_participant_id
+        certificate_id: id
       insertion_order: null
       remote_table:
         name: course_certificate

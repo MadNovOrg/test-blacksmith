@@ -1,0 +1,3 @@
+table:
+  name: legacy_certificate
+  schema: public

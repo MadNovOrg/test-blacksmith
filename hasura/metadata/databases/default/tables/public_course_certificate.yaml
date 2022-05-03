@@ -5,7 +5,6 @@ configuration:
   comment: null
   custom_column_names:
     course_id: courseId
-    course_participant_id: courseParticipantId
     created_at: createdAt
     expiry_date: expiryDate
     updated_at: updatedAt
@@ -16,7 +15,22 @@ object_relationships:
     foreign_key_constraint_on: course_id
 - name: participant
   using:
-    foreign_key_constraint_on: course_participant_id
+    manual_configuration:
+      column_mapping:
+        id: certificate_id
+      insertion_order: null
+      remote_table:
+        name: course_participant
+        schema: public
+- name: profile
+  using:
+    manual_configuration:
+      column_mapping:
+        profile_id: id
+      insertion_order: null
+      remote_table:
+        name: profile
+        schema: public
 insert_permissions:
 - permission:
     backend_only: false
@@ -27,19 +41,19 @@ insert_permissions:
             _eq: X-Hasura-User-Id
     columns:
     - course_id
-    - course_participant_id
     - expiry_date
     - number
+    - profile_id
   role: trainer
 select_permissions:
 - permission:
     columns:
     - course_id
-    - course_participant_id
     - created_at
     - expiry_date
     - id
     - number
+    - profile_id
     - updated_at
     filter:
       course:
@@ -50,19 +64,21 @@ select_permissions:
 - permission:
     columns:
     - course_id
-    - course_participant_id
     - created_at
     - expiry_date
     - id
     - number
+    - profile_id
     - updated_at
     filter: {}
   role: tt-admin
 - permission:
     columns:
+    - course_id
     - expiry_date
     - id
     - number
+    - profile_id
     filter:
       participant:
         profile:
