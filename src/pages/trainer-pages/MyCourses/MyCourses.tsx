@@ -21,6 +21,7 @@ import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import {
   ParamsType as GetMyCourseParamsType,
   QUERY as GetMyCourses,
@@ -35,10 +36,27 @@ import {
   SortOrder,
   CourseTrainerType,
 } from '@app/types'
+import { findCourseTrainer } from '@app/util'
 
 import { AcceptDeclineCourse, AcceptDeclineProps } from './AcceptDeclineCourse'
 
 type MyCoursesProps = unknown
+
+const CourseTitle: React.FC<{ name: string; level: CourseLevel }> = ({
+  name,
+  level,
+}) => {
+  const { t } = useTranslation()
+
+  return (
+    <>
+      <Typography variant="subtitle2" gutterBottom>
+        {t(`course-levels.${level}`)}
+      </Typography>
+      <Typography variant="body2">{name}</Typography>
+    </>
+  )
+}
 
 const sorts: Record<string, object> = {
   'name-asc': { name: 'asc' },
@@ -57,6 +75,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
+  const { profile } = useAuth()
 
   const cols = useMemo(
     () => [
@@ -241,88 +260,96 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 onRequestSort={handleRequestSort}
               />
               <TableBody>
-                {data?.course?.map(c => (
-                  <TableRow key={c.id}>
-                    <TableCell>
-                      <Link href={handleNavigation(c)}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          {t(`course-levels.${c.level}`)}
-                        </Typography>
-                        <Typography variant="body2">{c.name}</Typography>
-                      </Link>
-                    </TableCell>
-                    <TableCell>{c.organization?.name}</TableCell>
-                    <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-                    <TableCell>
-                      {c.dates.aggregate.start.date && (
-                        <Box>
-                          <Typography variant="body2" gutterBottom>
-                            {format(
-                              new Date(c.dates.aggregate.start.date),
-                              'dd MMM'
-                            )}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="grey.500"
-                            whiteSpace="nowrap"
-                          >
-                            {format(
-                              new Date(c.dates.aggregate.start.date),
-                              'hh:mm aa'
-                            )}
-                          </Typography>
-                        </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {c.dates.aggregate.end.date && (
-                        <Box>
-                          <Typography variant="body2" gutterBottom>
-                            {format(
-                              new Date(c.dates.aggregate.end.date),
-                              'dd MMM'
-                            )}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="grey.500"
-                            whiteSpace="nowrap"
-                          >
-                            {format(
-                              new Date(c.dates.aggregate.end.date),
-                              'hh:mm aa'
-                            )}
-                          </Typography>
-                        </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <StatusChip
-                        status={c.status}
-                        type={StatusChipType.COURSE}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <AcceptDeclineCourse
-                        course={c}
-                        onUpdate={onAcceptedOrDeclined}
-                      >
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          onClick={() => navigate(handleNavigation(c))}
+                {data?.course?.map(c => {
+                  const courseTrainer = profile
+                    ? findCourseTrainer(c?.trainers, profile.id)
+                    : undefined
+
+                  return (
+                    <TableRow key={c.id}>
+                      <TableCell>
+                        {courseTrainer &&
+                        courseTrainer.status !== InviteStatus.ACCEPTED ? (
+                          <CourseTitle level={c.level} name={c.name} />
+                        ) : (
+                          <Link href={handleNavigation(c)}>
+                            <CourseTitle level={c.level} name={c.name} />
+                          </Link>
+                        )}
+                      </TableCell>
+                      <TableCell>{c.organization?.name}</TableCell>
+                      <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                      <TableCell>
+                        {c.dates.aggregate.start.date && (
+                          <Box>
+                            <Typography variant="body2" gutterBottom>
+                              {format(
+                                new Date(c.dates.aggregate.start.date),
+                                'dd MMM'
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="grey.500"
+                              whiteSpace="nowrap"
+                            >
+                              {format(
+                                new Date(c.dates.aggregate.start.date),
+                                'hh:mm aa'
+                              )}
+                            </Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {c.dates.aggregate.end.date && (
+                          <Box>
+                            <Typography variant="body2" gutterBottom>
+                              {format(
+                                new Date(c.dates.aggregate.end.date),
+                                'dd MMM'
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              color="grey.500"
+                              whiteSpace="nowrap"
+                            >
+                              {format(
+                                new Date(c.dates.aggregate.end.date),
+                                'hh:mm aa'
+                              )}
+                            </Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <StatusChip
+                          status={c.status}
+                          type={StatusChipType.COURSE}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <AcceptDeclineCourse
+                          course={c}
+                          onUpdate={onAcceptedOrDeclined}
                         >
-                          {c.status === CourseStatus.PENDING ||
-                          c.status === CourseStatus.DRAFT
-                            ? t('build')
-                            : t('manage')}
-                        </Button>
-                      </AcceptDeclineCourse>
-                    </TableCell>
-                  </TableRow>
-                )) ??
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={() => navigate(handleNavigation(c))}
+                          >
+                            {c.status === CourseStatus.PENDING ||
+                            c.status === CourseStatus.DRAFT
+                              ? t('build')
+                              : t('manage')}
+                          </Button>
+                        </AcceptDeclineCourse>
+                      </TableCell>
+                    </TableRow>
+                  )
+                }) ??
                   (loading && (
                     <TableRow>
                       <TableCell colSpan={9} align="center">

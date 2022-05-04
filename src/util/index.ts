@@ -258,3 +258,10 @@ export const normalizeAddr = (addr: Address | undefined) => {
 
   return [addr.line1, addr.line2, addr.city, addr.country, addr.postCode]
 }
+
+export const findCourseTrainer = (
+  trainers: CourseTrainer[] | undefined,
+  profileId: string
+): CourseTrainer | undefined => {
+  return (trainers ?? []).find(t => t.profile.id === profileId)
+}

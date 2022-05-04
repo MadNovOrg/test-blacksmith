@@ -8,6 +8,7 @@ import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
 import { Course, CourseTrainer, InviteStatus } from '@app/types'
+import { findCourseTrainer } from '@app/util'
 
 enum Action {
   ACCEPT = 'ACCEPT',
@@ -40,10 +41,9 @@ export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
   const [action, setAction] = useState<Action>()
   const [saving, setSaving] = useState(false)
 
-  const courseTrainer = useMemo(
-    () => (course.trainers ?? []).find(t => t.profile.id === profile?.id),
-    [course, profile]
-  )
+  const courseTrainer = useMemo(() => {
+    return profile ? findCourseTrainer(course.trainers, profile.id) : undefined
+  }, [course, profile])
 
   const openModal = useCallback((_action: Action) => {
     return () => setAction(_action)
