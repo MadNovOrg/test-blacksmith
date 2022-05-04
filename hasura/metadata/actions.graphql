@@ -37,6 +37,12 @@ type Mutation {
   ): PlansCreateResult
 }
 
+type Query {
+  searchTrainers(
+    input: SearchTrainersInput!
+  ): [SearchTrainer]
+}
+
 type Mutation {
   stripeCreatePaymentIntent(
     input: StripeCreatePaymentIntentInput!
@@ -115,6 +121,14 @@ input GetTrainersLevelsInput {
 
 input StripeCreatePaymentIntentInput {
   orderId: String!
+}
+
+input SearchTrainersInput {
+  query: String
+  trainerType: CourseTrainerType
+  courseLevel: CourseLevel
+  courseStart: date
+  courseEnd: date
 }
 
 type LinkProfileResult {
@@ -200,3 +214,10 @@ type StripeCreatePaymentIntentOutput {
   currency: Currency!
 }
 
+type SearchTrainer {
+  id: uuid!
+  fullName: String!
+  avatar: String
+  levels: [CourseLevel!]!
+  availability: SearchTrainerAvailability
+}

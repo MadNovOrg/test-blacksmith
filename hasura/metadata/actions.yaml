@@ -39,6 +39,12 @@ actions:
     kind: synchronous
     handler: '{{ACTIONS_HOST}}/stripe/prices/create'
   comment: Creates a membership plan
+- name: searchTrainers
+  definition:
+    kind: ""
+    handler: '{{ACTIONS_HOST}}/trainers/search'
+  permissions:
+  - role: trainer
 - name: stripeCreatePaymentIntent
   definition:
     kind: synchronous
@@ -140,6 +146,7 @@ custom_types:
   - name: UpsertZoomMeetingInput
   - name: GetTrainersLevelsInput
   - name: StripeCreatePaymentIntentInput
+  - name: SearchTrainersInput
   objects:
   - name: LinkProfileResult
   - name: PlansCreateResult
@@ -155,4 +162,5 @@ custom_types:
   - name: ZoomMeetingNotFoundError
   - name: TrainerLevels
   - name: StripeCreatePaymentIntentOutput
+  - name: SearchTrainer
   scalars: []
