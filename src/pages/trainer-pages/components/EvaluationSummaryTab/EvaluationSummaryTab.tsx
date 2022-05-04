@@ -29,7 +29,7 @@ import {
 import { SortOrder } from '@app/types'
 import { noop } from '@app/util'
 
-export const EvaluationSummaryTab = () => {
+export const EvaluationSummaryTab: React.FC<unknown> = () => {
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()
@@ -61,32 +61,45 @@ export const EvaluationSummaryTab = () => {
     return !!data?.evaluations.find(e => e.profile.id === profileId)
   }, [data, profileId])
 
+  const didAllParticipantsSubmittedEvaluation = useMemo(() => {
+    if (data?.evaluations) {
+      return (
+        data?.evaluations.length - (didTrainerSubmitFeedback ? 1 : 0) ===
+        data.courseParticipantsAggregation.aggregate.count
+      )
+    }
+
+    return false
+  }, [data, didTrainerSubmitFeedback])
+
   return (
     <Container disableGutters>
-      {!loading && !didTrainerSubmitFeedback && (
-        <Alert
-          variant="outlined"
-          color="warning"
-          severity="warning"
-          action={
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => navigate('../evaluation/submit')}
-            >
-              {t('course-evaluation.complete-my-evaluation')}
-            </Button>
-          }
-          sx={{
-            py: 1,
-            mb: 2,
-            '.MuiAlert-action': { alignItems: 'center', p: 0 },
-          }}
-        >
-          {t('course-evaluation.trainer-evaluate')}
-        </Alert>
-      )}
+      {!loading &&
+        !didTrainerSubmitFeedback &&
+        didAllParticipantsSubmittedEvaluation && (
+          <Alert
+            variant="outlined"
+            color="warning"
+            severity="warning"
+            action={
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => navigate('../evaluation/submit')}
+              >
+                {t('course-evaluation.complete-my-evaluation')}
+              </Button>
+            }
+            sx={{
+              py: 1,
+              mb: 2,
+              '.MuiAlert-action': { alignItems: 'center', p: 0 },
+            }}
+          >
+            {t('course-evaluation.trainer-evaluate')}
+          </Alert>
+        )}
 
       <Box>
         <Box
@@ -158,7 +171,7 @@ export const EvaluationSummaryTab = () => {
                 (loading && (
                   <TableRow>
                     <TableCell colSpan={9} align="center">
-                      <CircularProgress />
+                      <CircularProgress data-testid="evaluations-fetching" />
                     </TableCell>
                   </TableRow>
                 ))}

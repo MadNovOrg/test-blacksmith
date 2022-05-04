@@ -14,6 +14,11 @@ export type ResponseType = {
       }[]
     }
   }[]
+  courseParticipantsAggregation: {
+    aggregate: {
+      count: number
+    }
+  }
 }
 
 export type ParamsType = { courseId: string }
@@ -34,6 +39,14 @@ export const QUERY = gql`
             name
           }
         }
+      }
+    }
+
+    courseParticipantsAggregation: course_participant_aggregate(
+      where: { course_id: { _eq: $courseId } }
+    ) {
+      aggregate {
+        count
       }
     }
   }
