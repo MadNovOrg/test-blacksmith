@@ -15,6 +15,7 @@ import { BackButton } from '@app/components/BackButton'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
+import { useAuth } from '@app/context/auth'
 import useCourse from '@app/hooks/useCourse'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
@@ -39,6 +40,7 @@ export const CourseDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { id: courseId } = useParams()
+  const { acl } = useAuth()
   const [searchParams] = useSearchParams()
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
@@ -75,16 +77,18 @@ export const CourseDetails = () => {
             <>
               <CourseHeroSummary
                 course={course}
-                renderButton={() => (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    onClick={() => navigate(`/courses/edit/${courseId}`)}
-                  >
-                    {t('pages.course-participants.edit-course-button')}
-                  </Button>
-                )}
+                renderButton={() =>
+                  acl.canCreateCourse(course.type) && !courseEnded(course) ? (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="large"
+                      onClick={() => navigate(`/courses/edit/${courseId}`)}
+                    >
+                      {t('pages.course-participants.edit-course-button')}
+                    </Button>
+                  ) : null
+                }
               >
                 <BackButton
                   to="/courses"
