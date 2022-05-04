@@ -109,9 +109,10 @@ jobs:
           echo "Apply migrations using origin HEAD"
           git reset --hard origin/main
 
-          for ver in "${hasura_ver_down[@]}"
+          for ((ver=${#hasura_ver_down[@]}-1; ver>=0; ver--))
           do
-            hasura migrate apply --admin-secret $SECRET --endpoint $ENDPOINT --version "${ver}" --type down --database-name default
+            echo "Hasura Version: ${hasura_ver_down[$ver]}"
+            hasura migrate apply --admin-secret $SECRET --endpoint $ENDPOINT --version "${hasura_ver_down[$ver]}" --type down --database-name default
           done
 
           if ${{ github.event.inputs.git_commit_sha != 'default' }}; then
