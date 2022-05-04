@@ -179,6 +179,7 @@ export const CourseGrading = () => {
                 course.level,
                 course.id
               ),
+              certificationDate: new Date().toISOString(),
               expiryDate: add(new Date(), {
                 months: validUntilMonthsByCourseLevel[course.level],
               }).toISOString(),

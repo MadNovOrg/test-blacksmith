@@ -4,11 +4,13 @@ table:
 configuration:
   comment: null
   custom_column_names:
+    certification_date: certificationDate
     course_id: courseId
     course_level: courseLevel
     course_name: courseName
     created_at: createdAt
     expiry_date: expiryDate
+    profile_id: profileId
     updated_at: updatedAt
   custom_root_fields: {}
 object_relationships:
@@ -42,6 +44,7 @@ insert_permissions:
           profile_id:
             _eq: X-Hasura-User-Id
     columns:
+    - certification_date
     - course_id
     - course_level
     - course_name
@@ -49,9 +52,27 @@ insert_permissions:
     - number
     - profile_id
   role: trainer
+- permission:
+    backend_only: false
+    check:
+      _and:
+      - profile_id:
+          _eq: X-Hasura-User-Id
+      - course_id:
+          _is_null: true
+    columns:
+    - certification_date
+    - course_level
+    - course_name
+    - expiry_date
+    - id
+    - number
+    - profile_id
+  role: user
 select_permissions:
 - permission:
     columns:
+    - certification_date
     - course_id
     - course_level
     - course_name
@@ -69,7 +90,23 @@ select_permissions:
   role: trainer
 - permission:
     columns:
+    - certification_date
+    - expiry_date
     - course_id
+    - course_level
+    - course_name
+    - number
+    - created_at
+    - updated_at
+    - id
+    - profile_id
+    filter: {}
+  role: tt-admin
+- permission:
+    columns:
+    - certification_date
+    - course_id
+    - course_level
     - course_name
     - created_at
     - expiry_date
@@ -77,20 +114,7 @@ select_permissions:
     - number
     - profile_id
     - updated_at
-    filter: {}
-  role: tt-admin
-- permission:
-    columns:
-    - course_id
-    - course_level
-    - course_name
-    - expiry_date
-    - id
-    - number
-    - profile_id
     filter:
-      participant:
-        profile:
-          id:
-            _eq: X-Hasura-User-Id
+      profile_id:
+        _eq: X-Hasura-User-Id
   role: user

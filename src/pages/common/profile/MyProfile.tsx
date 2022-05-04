@@ -3,22 +3,27 @@ import {
   Alert,
   Box,
   Button,
+  Chip,
   CircularProgress,
   Container,
   Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
 } from '@mui/material'
-import { format, formatDistanceToNow, isPast } from 'date-fns'
+import { formatDistanceToNow, isPast } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import useProfileCertifications from '@app/hooks/useProfileCertifications'
-import theme from '@app/theme'
-import { CourseParticipant } from '@app/types'
-import { COURSE_TYPE_TO_PREFIX, LoadingStatus } from '@app/util'
+import { CourseCertificate } from '@app/types'
 
 type MyProfilePageProps = unknown
 
@@ -40,8 +45,10 @@ const DetailsRow = ({
 export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
   const { t } = useTranslation()
   const { profile, verified } = useAuth()
-  const { missingPrerequisiteCertifications, data, status } =
-    useProfileCertifications(verified ? profile?.id : undefined)
+  const navigate = useNavigate()
+  const { missingPrerequisiteCertifications, data } = useProfileCertifications(
+    verified ? profile?.id : undefined
+  )
 
   const missingPrefs = useMemo(() => {
     if (!profile) return []
@@ -58,11 +65,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
     return missing
   }, [profile, t, missingPrerequisiteCertifications])
 
-  const certificatesData = data?.filter(cp => cp.certificate) ?? []
-
   if (!profile) {
     return <CircularProgress />
   }
+
+  const certificateExpired = (expiryDate: string) =>
+    isPast(new Date(expiryDate))
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
@@ -180,78 +188,94 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
 
             {verified && (
               <>
-                <Grid
-                  mt={3}
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="stretch"
-                >
-                  <Typography variant="subtitle2">
-                    {t('certifications')}
-                  </Typography>
-                  <Button variant="outlined" color="primary">
-                    {t('pages.my-profile.add-certificate')}
-                  </Button>
-                </Grid>
-
-                <Typography variant="body2" mt={1}>
-                  {t('certification-warning')}
+                <Typography variant="subtitle2" mt={3}>
+                  {t('certifications')}
                 </Typography>
 
-                {status === LoadingStatus.FETCHING && <CircularProgress />}
-
-                {certificatesData.map((cp: CourseParticipant, index) => (
-                  <Box
-                    mt={2}
-                    bgcolor="common.white"
-                    p={3}
-                    borderRadius={1}
-                    key={cp.id}
-                  >
-                    <Typography
-                      color={theme.palette.grey[700]}
-                      fontWeight={600}
+                <Table sx={{ mt: 1 }}>
+                  <TableHead>
+                    <TableRow
+                      sx={{
+                        '&&.MuiTableRow-root': {
+                          backgroundColor: 'grey.300',
+                        },
+                        '&& .MuiTableCell-root': {
+                          px: 2,
+                          py: 1,
+                          color: 'grey.700',
+                          fontWeight: '600',
+                        },
+                      }}
                     >
-                      {cp.course.name} ({COURSE_TYPE_TO_PREFIX[cp.course.type]})
-                    </Typography>
-
-                    <Typography color={theme.palette.grey[700]} mt={1}>
-                      {cp.certificate?.number}
-                    </Typography>
-
-                    {cp.certificate?.expiryDate ? (
-                      isPast(new Date(cp.certificate.expiryDate)) ? (
-                        <Alert
-                          severity={index === 0 ? 'error' : 'info'}
-                          sx={{ mt: 1 }}
-                        >
-                          {`${t('course-certificate.expired-on')} ${format(
-                            new Date(cp.certificate.expiryDate),
-                            'P'
-                          )} (${formatDistanceToNow(
-                            new Date(cp.certificate.expiryDate)
-                          )} ${t('ago')})`}
-                        </Alert>
-                      ) : (
-                        <Alert
-                          variant="outlined"
-                          severity="success"
-                          sx={{ mt: 1 }}
-                        >
-                          {`${t('course-certificate.active-until')} ${format(
-                            new Date(cp.certificate.expiryDate),
-                            'P'
-                          )} (${t(
-                            'course-certificate.expires-in'
-                          )} ${formatDistanceToNow(
-                            new Date(cp.certificate.expiryDate)
-                          )}).`}
-                        </Alert>
-                      )
-                    ) : null}
-                  </Box>
-                ))}
+                      <TableCell>{t('course-name')}</TableCell>
+                      <TableCell>{t('certificate')}</TableCell>
+                      <TableCell>{t('status')}</TableCell>
+                      <TableCell>{t('certificate')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {(data ?? []).map((certificate: CourseCertificate) => (
+                      <TableRow
+                        key={certificate.id}
+                        sx={{
+                          '&&.MuiTableRow-root': {
+                            backgroundColor: 'common.white',
+                          },
+                        }}
+                      >
+                        <TableCell>{certificate.courseName}</TableCell>
+                        <TableCell>{certificate.number}</TableCell>
+                        <TableCell>
+                          <Grid
+                            container
+                            direction="column"
+                            mb={2}
+                            alignItems="start"
+                          >
+                            <Chip
+                              label={
+                                certificateExpired(certificate.expiryDate ?? '')
+                                  ? t(
+                                      `components.certification-list.statuses.expired`
+                                    )
+                                  : t(
+                                      `components.certification-list.statuses.active`
+                                    )
+                              }
+                              color={
+                                certificateExpired(certificate.expiryDate ?? '')
+                                  ? 'error'
+                                  : 'success'
+                              }
+                              size="small"
+                            />
+                            <Typography mt={1} variant="body2" color="grey.700">
+                              {certificateExpired(certificate.expiryDate ?? '')
+                                ? `${formatDistanceToNow(
+                                    new Date(certificate.expiryDate)
+                                  )} ${t('common.ago')}`
+                                : certificate.expiryDate}
+                            </Typography>
+                          </Grid>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{ ml: 2 }}
+                            onClick={() =>
+                              navigate(`/certification/${certificate.id}`)
+                            }
+                          >
+                            {t(
+                              'components.certification-list.view-certificate'
+                            )}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </>
             )}
           </Grid>

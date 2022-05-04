@@ -8,7 +8,7 @@ import {
   QUERY,
   ResponseType,
 } from '@app/queries/profile/get-profile-certifications'
-import { CourseCertificate, CourseLevel, CourseParticipant } from '@app/types'
+import { CourseCertificate, CourseLevel } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 const isValidCertificate = (certificate: CourseCertificate) =>
@@ -17,25 +17,23 @@ const isValidCertificate = (certificate: CourseCertificate) =>
 const prerequisiteValidations = {
   [CourseLevel.LEVEL_1]: () => true,
   [CourseLevel.LEVEL_2]: () => true,
-  [CourseLevel.ADVANCED]: (participations: CourseParticipant[]) =>
-    participations.some(p => p.course.level === CourseLevel.LEVEL_2),
+  [CourseLevel.ADVANCED]: (certificates: CourseCertificate[]) =>
+    certificates.some(c => c.courseLevel === CourseLevel.LEVEL_2),
   [CourseLevel.BILD_ACT]: () => true,
-  [CourseLevel.ADVANCED_TRAINER]: (participations: CourseParticipant[]) =>
-    participations.some(
-      p => p.course.level === CourseLevel.INTERMEDIATE_TRAINER
-    ),
-  [CourseLevel.BILD_ACT_TRAINER]: (participations: CourseParticipant[]) =>
-    participations.some(p => p.course.level === CourseLevel.BILD_ACT),
-  [CourseLevel.INTERMEDIATE_TRAINER]: (participations: CourseParticipant[]) =>
-    participations.some(
+  [CourseLevel.ADVANCED_TRAINER]: (certificates: CourseCertificate[]) =>
+    certificates.some(c => c.courseLevel === CourseLevel.INTERMEDIATE_TRAINER),
+  [CourseLevel.BILD_ACT_TRAINER]: (certificates: CourseCertificate[]) =>
+    certificates.some(c => c.courseLevel === CourseLevel.BILD_ACT),
+  [CourseLevel.INTERMEDIATE_TRAINER]: (certificates: CourseCertificate[]) =>
+    certificates.some(
       p =>
-        p.course.level === CourseLevel.LEVEL_2 ||
-        p.course.level === CourseLevel.LEVEL_1
+        p.courseLevel === CourseLevel.LEVEL_2 ||
+        p.courseLevel === CourseLevel.LEVEL_1
     ),
 }
 
 export type ReturnType = {
-  data?: CourseParticipant[]
+  data?: CourseCertificate[]
   missingPrerequisiteCertifications: boolean
   mutate: KeyedMutator<ResponseType>
   error?: Error
@@ -57,19 +55,19 @@ export default function useProfileCertifications(
 
   const missingPrerequisiteCertifications = useMemo(() => {
     if (data) {
-      const activeCertifications = data.courseParticipants.filter(
-        p => p.certificate && isValidCertificate(p.certificate)
+      const activeCertifications = data.certificates.filter(isValidCertificate)
+      const upcomingCourses = data.certificates.filter(
+        c => c.participant && !c.participant.grade
       )
-      const upcomingCourses = data.courseParticipants.filter(p => !p.grade)
-      return !upcomingCourses.every(cp =>
-        prerequisiteValidations[cp.course.level](activeCertifications)
+      return !upcomingCourses.every(c =>
+        prerequisiteValidations[c.courseLevel](activeCertifications)
       )
     }
     return false
   }, [data])
 
   return {
-    data: data?.courseParticipants,
+    data: data?.certificates,
     missingPrerequisiteCertifications,
     mutate,
     error,

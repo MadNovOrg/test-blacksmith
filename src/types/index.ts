@@ -50,6 +50,7 @@ export type CourseCertificate = {
   courseId: string
   courseParticipantId: string
   expiryDate: string
+  certificationDate: string
   courseName: string
   courseLevel: CourseLevel
   participant?: CourseParticipant
@@ -428,3 +429,15 @@ export type Order = {
 export enum Currency {
   GBP = 'GBP',
 }
+
+export type LegacyCertificate = {
+  originalRecord: never
+  number: string
+  courseName: string
+  legacyId: number
+  email: string
+  firstName: string
+  lastName: string
+  expiryDate: Date
+  certificationDate: Date
+} & Base

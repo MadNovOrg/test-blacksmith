@@ -152,6 +152,7 @@ export const CERTIFICATE = gql`
     updatedAt
     number
     expiryDate
+    certificationDate
     courseName
     courseLevel
   }
@@ -165,5 +166,15 @@ export const CERTIFICATE_CHANGELOG = gql`
     oldGrade
     newGrade
     notes
+  }
+`
+
+export const LEGACY_CERTIFICATE = gql`
+  fragment LegacyCertificate on legacy_certificate {
+    id
+    number
+    courseName
+    expiryDate
+    certificationDate
   }
 `

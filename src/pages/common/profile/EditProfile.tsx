@@ -3,6 +3,7 @@ import { DatePicker, LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
+  Alert,
   Box,
   Button,
   Container,
@@ -15,6 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
+import { format, formatDistanceToNow, isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -22,14 +24,19 @@ import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
+import { Dialog } from '@app/components/Dialog'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import useProfileCertifications from '@app/hooks/useProfileCertifications'
+import ImportCertificateModal from '@app/pages/common/profile/ImportCertificateModal'
 import {
   MUTATION as UPDATE_PROFILE_MUTATION,
   ResponseType as UpdateProfileResponseType,
   ParamsType as UpdateProfileParamsType,
 } from '@app/queries/profile/update-profile'
+import theme from '@app/theme'
+import { CourseCertificate } from '@app/types'
 
 type ProfileInput = {
   firstName: string
@@ -69,11 +76,13 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const [loading, setLoading] = useState(false)
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
+  const { data, mutate } = useProfileCertifications(profile?.id)
 
   const [dietaryRestrictionsRadioValue, setDietaryRestrictionsRadioValue] =
     useState<DietaryRestrictionRadioValues | null>(null)
   const [disabilitiesRadioValue, setDisabilitiesRadioValue] =
     useState<DisabilitiesRadioValues | null>(null)
+  const [showImportModal, setShowImportModal] = useState(false)
 
   const ratherNotSayText = t<string>('rather-not-say')
 
@@ -457,6 +466,72 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               </Grid>
             </Box>
 
+            <Grid
+              mt={3}
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="stretch"
+            >
+              <Typography variant="subtitle2">{t('certifications')}</Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => setShowImportModal(true)}
+              >
+                {t('pages.my-profile.add-certificate')}
+              </Button>
+            </Grid>
+
+            <Typography variant="body2" mt={1}>
+              {t('certification-warning')}
+            </Typography>
+
+            {(data ?? []).map((certificate: CourseCertificate, index) => (
+              <Box
+                mt={2}
+                bgcolor="common.white"
+                p={3}
+                borderRadius={1}
+                key={certificate.id}
+              >
+                <Typography color={theme.palette.grey[700]} fontWeight={600}>
+                  {certificate.courseName}
+                </Typography>
+
+                <Typography color={theme.palette.grey[700]} mt={1}>
+                  {certificate.number}
+                </Typography>
+
+                {certificate.expiryDate ? (
+                  isPast(new Date(certificate.expiryDate)) ? (
+                    <Alert
+                      severity={index === 0 ? 'error' : 'info'}
+                      sx={{ mt: 1 }}
+                    >
+                      {`${t('course-certificate.expired-on')} ${format(
+                        new Date(certificate.expiryDate),
+                        'P'
+                      )} (${formatDistanceToNow(
+                        new Date(certificate.expiryDate)
+                      )} ${t('ago')})`}
+                    </Alert>
+                  ) : (
+                    <Alert variant="outlined" severity="success" sx={{ mt: 1 }}>
+                      {`${t('course-certificate.active-until')} ${format(
+                        new Date(certificate.expiryDate),
+                        'P'
+                      )} (${t(
+                        'course-certificate.expires-in'
+                      )} ${formatDistanceToNow(
+                        new Date(certificate.expiryDate)
+                      )}).`}
+                    </Alert>
+                  )
+                ) : null}
+              </Box>
+            ))}
+
             <Box
               mt={2}
               display="flex"
@@ -485,6 +560,21 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <Dialog
+        open={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        title={t('common.course-certificate.update-certification-details')}
+        maxWidth={600}
+      >
+        <ImportCertificateModal
+          onCancel={() => setShowImportModal(false)}
+          onSubmit={async () => {
+            await mutate()
+            setShowImportModal(false)
+          }}
+        />
+      </Dialog>
     </Box>
   )
 }
