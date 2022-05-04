@@ -221,3 +221,4 @@ type SearchTrainer {
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability
 }
+

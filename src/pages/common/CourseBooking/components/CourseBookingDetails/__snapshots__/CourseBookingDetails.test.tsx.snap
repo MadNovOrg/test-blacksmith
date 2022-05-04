@@ -351,6 +351,7 @@ Object {
               >
                 <input
                   aria-autocomplete="list"
+                  aria-describedby="emails-helper-text"
                   aria-invalid="false"
                   autocapitalize="none"
                   autocomplete="off"
@@ -365,6 +366,18 @@ Object {
                   class="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment"
                 />
               </div>
+              <p
+                class="MuiFormHelperText-root MuiFormHelperText-sizeMedium css-1h4seyc-MuiFormHelperText-root"
+                id="emails-helper-text"
+              >
+                <span
+                  class="MuiTypography-root MuiTypography-caption css-i1qltp-MuiTypography-root"
+                >
+                  0
+                   / 
+                  3
+                </span>
+              </p>
             </div>
           </div>
           <div
@@ -796,19 +809,12 @@ Object {
                   class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
                 >
                   <label
-                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
                     data-shrink="false"
                     for="purchaseOrder"
                     id="purchaseOrder-label"
                   >
                     Purchase order
-                    <span
-                      aria-hidden="true"
-                      class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
-                    >
-                       
-                      *
-                    </span>
                   </label>
                   <div
                     class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -820,7 +826,6 @@ Object {
                       id="purchaseOrder"
                       name="invoiceDetails.purchaseOrder"
                       placeholder="Purchase order (optional)"
-                      required=""
                       type="text"
                       value=""
                     />
@@ -1204,6 +1209,7 @@ Object {
             >
               <input
                 aria-autocomplete="list"
+                aria-describedby="emails-helper-text"
                 aria-invalid="false"
                 autocapitalize="none"
                 autocomplete="off"
@@ -1218,6 +1224,18 @@ Object {
                 class="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment"
               />
             </div>
+            <p
+              class="MuiFormHelperText-root MuiFormHelperText-sizeMedium css-1h4seyc-MuiFormHelperText-root"
+              id="emails-helper-text"
+            >
+              <span
+                class="MuiTypography-root MuiTypography-caption css-i1qltp-MuiTypography-root"
+              >
+                0
+                 / 
+                3
+              </span>
+            </p>
           </div>
         </div>
         <div
@@ -1649,19 +1667,12 @@ Object {
                 class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
               >
                 <label
-                  class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                  class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
                   data-shrink="false"
                   for="purchaseOrder"
                   id="purchaseOrder-label"
                 >
                   Purchase order
-                  <span
-                    aria-hidden="true"
-                    class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
-                  >
-                     
-                    *
-                  </span>
                 </label>
                 <div
                   class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
@@ -1673,7 +1684,6 @@ Object {
                     id="purchaseOrder"
                     name="invoiceDetails.purchaseOrder"
                     placeholder="Purchase order (optional)"
-                    required=""
                     type="text"
                     value=""
                   />

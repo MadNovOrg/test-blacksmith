@@ -26,10 +26,12 @@ export const CourseRegistrationPage: React.FC = () => {
 
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
+  const success = searchParams.get('success') === 'true'
 
   const onSignUp = (email: string, password: string) => {
     // delay auto-login just in case
     setTimeout(async () => {
+      navigate('?success=true', { replace: true })
       await login(email, password)
       // when login completes, we have an active profile of unverified user,
       // router sets in the available routes and we navigate to verify
@@ -37,7 +39,20 @@ export const CourseRegistrationPage: React.FC = () => {
     }, 500)
   }
 
+  // This page loads for logged in as well as logged out users. When it loads
+  // for logged in user, it will have a profile for sure, in which case we need to
+  // return early instead of showing registration form and just capture booking
+  // details for the booking page
   useMount(async () => {
+    // Purpose of success flag:
+    // After the sign up, we try to auto-login and redirect the user to /verify page.
+    // However, as soon as the login happens and `profile` in auth context gets
+    // populated, react-router renders new routes that are relevant for logged in users,
+    // which re-mounts this same components because our address is still /registration
+    // Hence, before auto-login, we replace the /registration with /registraion?success=true
+    // and check the same here and skip the further steps
+    if (success) return
+
     if (!profile || !courseId || !quantity) return
 
     const input = {
@@ -54,10 +69,6 @@ export const CourseRegistrationPage: React.FC = () => {
     navigate('/booking', { replace: true })
   })
 
-  // This page loads for authed as well as unauthed users
-  // When it loads for authed, it sure has a profile, in which case
-  // We gotta return early instead of showing registration form
-  // and just capture booking details for the booking page
   if (profile) return <SuspenseLoading />
 
   return (

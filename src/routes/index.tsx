@@ -6,6 +6,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppLayout } from '@app/components/AppLayout'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
@@ -80,6 +81,7 @@ function LoggedInRoutes() {
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
           <Route path="profile/*" element={<ProfileRoutes />} />
+          <Route path="booking/*" element={<CourseBookingPage />} />
 
           {/* This is a dummy registration page to capture course/qty for course booking */}
           <Route path="registration" element={<CourseRegistrationPage />} />

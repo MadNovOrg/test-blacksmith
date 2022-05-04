@@ -153,7 +153,7 @@ export const CourseBookingDetails: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitted },
     watch,
     control,
     setValue,
@@ -364,7 +364,9 @@ export const CourseBookingDetails: React.FC = () => {
           options={[] as string[]}
           value={values.emails}
           freeSolo
-          onChange={(_, v) => setValue('emails', v, { shouldValidate: true })}
+          onChange={(_, v) =>
+            setValue('emails', v, { shouldValidate: isSubmitted })
+          }
           renderTags={(value, getTagProps) =>
             value.map((option, index) => (
               // disable key rule because getTagProps already sets correct key
@@ -401,7 +403,11 @@ export const CourseBookingDetails: React.FC = () => {
                       {getEmailError(errors.emails)}
                     </Typography>
                   </Box>
-                ) : null
+                ) : (
+                  <Typography variant="caption">
+                    {values.emails.length} / {values.quantity}
+                  </Typography>
+                )
               }
             />
           )}
@@ -578,7 +584,6 @@ export const CourseBookingDetails: React.FC = () => {
                   inputProps={{ 'data-testid': 'input-po' }}
                   sx={{ bgcolor: 'grey.100' }}
                   fullWidth
-                  required
                 />
               </Box>
             </Box>

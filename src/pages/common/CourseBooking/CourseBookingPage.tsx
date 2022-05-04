@@ -1,4 +1,4 @@
-import { Container } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
@@ -36,10 +36,12 @@ const BookingRoutes: React.FC = () => {
 
 export const CourseBookingPage: React.FC = () => {
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
-      <BookingProvider>
-        <BookingRoutes />
-      </BookingProvider>
-    </Container>
+    <Box bgcolor="grey.100">
+      <Container maxWidth="lg" sx={{ py: 3 }}>
+        <BookingProvider>
+          <BookingRoutes />
+        </BookingProvider>
+      </Container>
+    </Box>
   )
 }

@@ -54,6 +54,23 @@ insert_permissions:
     set:
       email: x-hasura-User-Email
   role: unverified
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - accept_marketing
+    - accept_tcs
+    - course_id
+    - dob
+    - family_name
+    - given_name
+    - job_title
+    - phone
+    - quantity
+    - sector
+    set:
+      email: x-hasura-User-Email
+  role: user
 select_permissions:
 - permission:
     columns:
