@@ -17,6 +17,8 @@ import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 const TTOpsRoutes = () => {
   return (
     <Routes>
+      <Route index element={<Navigate replace to="courses" />} />
+
       <Route path="courses">
         <Route index element={<MyCourses />} />
 

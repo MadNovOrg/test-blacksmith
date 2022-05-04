@@ -1,4 +1,5 @@
 import AccountIcon from '@mui/icons-material/AccountCircle'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import MembershipIcon from '@mui/icons-material/CardTravel'
 import OrgIcon from '@mui/icons-material/CorporateFare'
@@ -22,7 +23,7 @@ import { Avatar } from '../Avatar'
 export const UserMenu: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { profile, logout, acl } = useAuth()
+  const { profile, logout, acl, verified } = useAuth()
   const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(
     null
   )
@@ -69,6 +70,20 @@ export const UserMenu: React.FC = () => {
             {t('my-profile')}
           </ListItemText>
         </MenuItem>
+
+        {!verified && (
+          <MenuItem onClick={() => handleMenuClick('/verify')}>
+            <ListItemIcon>
+              <AlternateEmailIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText
+              data-testid="verify-link"
+              primaryTypographyProps={{ variant: 'body2' }}
+            >
+              {t('verify')}
+            </ListItemText>
+          </MenuItem>
+        )}
 
         {acl.canViewMyOrganization() && (
           <MenuItem onClick={() => handleMenuClick('/my-organization')}>

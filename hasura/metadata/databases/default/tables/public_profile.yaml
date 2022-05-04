@@ -107,6 +107,26 @@ update_permissions:
 - permission:
     check: null
     columns:
+    - addresses
+    - attributes
+    - contact_details
+    - dietary_restrictions
+    - disabilities
+    - dob
+    - family_name
+    - given_name
+    - job_title
+    - phone
+    - preferences
+    - tags
+    - title
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: unverified
+- permission:
+    check: null
+    columns:
     - dietary_restrictions
     - disabilities
     - dob

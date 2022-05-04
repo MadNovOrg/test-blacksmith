@@ -1,18 +1,15 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import React, { Suspense } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
+import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
-import { CourseBookingPage } from '@app/pages/common/CourseBooking/CourseBookingPage'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
-import { NotFound } from '@app/pages/common/NotFound'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
-import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
 import { RoleName } from '@app/types'
@@ -23,6 +20,7 @@ const UserRoutes = React.lazy(() => import('./user-routes'))
 const OrgAdminRoutes = React.lazy(() => import('./org-admin-routes'))
 const TTOpsRoutes = React.lazy(() => import('./tt-ops-routes'))
 const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
+const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
 
 const roleRoutesMap = {
   [RoleName.TRAINER]: TrainerRoutes,
@@ -30,6 +28,7 @@ const roleRoutesMap = {
   [RoleName.ORG_ADMIN]: OrgAdminRoutes,
   [RoleName.TT_OPS]: TTOpsRoutes,
   [RoleName.TT_ADMIN]: TTAdminRoutes,
+  [RoleName.UNVERIFIED]: UnverifiedRoutes,
 } as const
 
 export const AppRoutes = () => {
@@ -69,25 +68,10 @@ function LoggedOutRoutes() {
   )
 }
 
-function UnverifiedUserRoutes() {
-  return (
-    <Routes>
-      <Route index element={<Navigate replace to="booking" />} />
-      <Route path="verify" element={<VerifyEmailPage />} />
-      <Route path="booking/*" element={<CourseBookingPage />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  )
-}
-
 function LoggedInRoutes() {
   const { activeRole } = useAuth()
 
   if (!activeRole) return null
-
-  if (activeRole === RoleName.UNVERIFIED) {
-    return <UnverifiedUserRoutes />
-  }
 
   const RouteComp = roleRoutesMap[activeRole]
 
@@ -95,11 +79,10 @@ function LoggedInRoutes() {
     <AppLayout>
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
-          <Route index element={<Navigate replace to="courses" />} />
-
-          <Route path="booking/*" element={<CourseBookingPage />} />
-
           <Route path="profile/*" element={<ProfileRoutes />} />
+
+          {/* This is a dummy registration page to capture course/qty for course booking */}
+          <Route path="registration" element={<CourseRegistrationPage />} />
 
           <Route path="*" element={<RouteComp />} />
 
@@ -128,26 +111,6 @@ function AppLoading() {
       }}
     >
       <CircularProgress size={60} />
-    </Box>
-  )
-}
-
-function SuspenseLoading() {
-  const { t } = useTranslation()
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        p: 5,
-      }}
-    >
-      <CircularProgress size={40} />
-      <Typography variant="body1" sx={{ mt: 2, fontSize: 12 }}>
-        {t('components.suspense-loading.text')}
-      </Typography>
     </Box>
   )
 }

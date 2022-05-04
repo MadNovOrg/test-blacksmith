@@ -28,6 +28,8 @@ import { RoleName } from '@app/types'
 const TrainerBaseRoutes = () => {
   return (
     <Routes>
+      <Route index element={<Navigate replace to="courses" />} />
+
       <Route
         path="accept-invite/:id"
         element={<ChangeRole role={RoleName.USER} />}

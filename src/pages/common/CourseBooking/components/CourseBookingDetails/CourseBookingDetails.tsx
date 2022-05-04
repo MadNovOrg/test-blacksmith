@@ -126,23 +126,26 @@ export const CourseBookingDetails: React.FC = () => {
         .oneOf(Object.values(PaymentMethod))
         .required(),
 
-      invoiceDetails: yup.object({
-        orgId: yup
-          .string()
-          .required(requiredMsg(t, 'org-name'))
-          .typeError(requiredMsg(t, 'org-name')),
+      invoiceDetails: yup.object().when('paymentMethod', {
+        is: PaymentMethod.INVOICE,
+        then: yup.object({
+          orgId: yup
+            .string()
+            .required(requiredMsg(t, 'org-name'))
+            .typeError(requiredMsg(t, 'org-name')),
 
-        firstName: yup.string().required(requiredMsg(t, 'first-name')),
-        surname: yup.string().required(requiredMsg(t, 'last-name')),
+          firstName: yup.string().required(requiredMsg(t, 'first-name')),
+          surname: yup.string().required(requiredMsg(t, 'last-name')),
 
-        email: yup
-          .string()
-          .email(t('validation-errors.email-invalid'))
-          .required(requiredMsg(t, 'email')),
+          email: yup
+            .string()
+            .email(t('validation-errors.email-invalid'))
+            .required(requiredMsg(t, 'email')),
 
-        phone: yup.string().required(requiredMsg(t, 'phone')),
+          phone: yup.string().required(requiredMsg(t, 'phone')),
 
-        purchaseOrder: yup.string(),
+          purchaseOrder: yup.string(),
+        }),
       }),
     })
   }, [t])

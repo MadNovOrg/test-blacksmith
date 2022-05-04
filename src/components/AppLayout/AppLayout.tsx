@@ -9,7 +9,7 @@ type LayoutProps = {
 
 export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" flex={1}>
       <AppBar />
 
       {children}

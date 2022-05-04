@@ -15,7 +15,7 @@ import { UserMenu } from '../UserMenu'
 
 export const AppBar = () => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
+  const { acl, verified } = useAuth()
 
   return (
     <>
@@ -37,30 +37,32 @@ export const AppBar = () => {
             </Link>
             <RoleSwitcher />
           </Box>
-          <Box
-            flex={1}
-            display="flex"
-            justifyContent="center"
-            px={3}
-            color="secondary.dark"
-          >
-            <Link component={StyledNavLink} to="/courses">
-              {t('courses')}
-            </Link>
-            {acl.canViewContacts() && (
+          {verified && (
+            <Box
+              flex={1}
+              display="flex"
+              justifyContent="center"
+              px={3}
+              color="secondary.dark"
+            >
+              <Link component={StyledNavLink} to="/courses">
+                {t('courses')}
+              </Link>
+              {acl.canViewContacts() && (
+                <Link component={StyledNavLink} to="/community">
+                  {t('contacts')}
+                </Link>
+              )}
               <Link component={StyledNavLink} to="/community">
-                {t('contacts')}
+                {t('community')}
               </Link>
-            )}
-            <Link component={StyledNavLink} to="/community">
-              {t('community')}
-            </Link>
-            {acl.canViewCertifications() && (
-              <Link component={StyledNavLink} to="/certifications">
-                {t('common.certifications')}
-              </Link>
-            )}
-          </Box>
+              {acl.canViewCertifications() && (
+                <Link component={StyledNavLink} to="/certifications">
+                  {t('common.certifications')}
+                </Link>
+              )}
+            </Box>
+          )}{' '}
           <Box
             sx={{
               flexGrow: 0,
@@ -70,7 +72,6 @@ export const AppBar = () => {
           >
             <UserMenu />
           </Box>
-
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <DrawerMenu />
           </Box>

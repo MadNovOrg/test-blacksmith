@@ -208,9 +208,12 @@ select_permissions:
     - reaccreditation
     - updated_at
     filter:
-      participants:
-        profile_id:
-          _eq: X-Hasura-User-Id
+      _or:
+      - participants:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      - course_type:
+          _eq: OPEN
   role: user
 update_permissions:
 - permission:

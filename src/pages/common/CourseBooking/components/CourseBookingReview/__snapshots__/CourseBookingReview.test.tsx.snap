@@ -140,7 +140,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
           >
-            Payment method
+            Invoice contact details
           </p>
           <div
             class="MuiBox-root css-3mllz6"
@@ -467,7 +467,7 @@ Object {
         <p
           class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
         >
-          Payment method
+          Invoice contact details
         </p>
         <div
           class="MuiBox-root css-3mllz6"

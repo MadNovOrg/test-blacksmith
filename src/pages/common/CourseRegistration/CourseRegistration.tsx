@@ -2,15 +2,24 @@ import { Typography, Box, Button } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useMount } from 'react-use'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import {
+  MUTATION,
+  ResponseType,
+  ParamsType,
+} from '@app/queries/profile/insert-profile-temp'
 
 import { Form } from './components/Form'
 
 export const CourseRegistrationPage: React.FC = () => {
-  const { login } = useAuth()
+  const { login, profile } = useAuth()
+  const fetcher = useFetcher()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -27,6 +36,29 @@ export const CourseRegistrationPage: React.FC = () => {
       navigate('/verify', { replace: true })
     }, 500)
   }
+
+  useMount(async () => {
+    if (!profile || !courseId || !quantity) return
+
+    const input = {
+      givenName: profile.givenName,
+      familyName: profile.familyName,
+      acceptMarketing: true,
+      acceptTnc: true,
+      courseId: +courseId,
+      quantity: +quantity,
+    }
+
+    await fetcher<ResponseType, ParamsType>(MUTATION, { input })
+
+    navigate('/booking', { replace: true })
+  })
+
+  // This page loads for authed as well as unauthed users
+  // When it loads for authed, it sure has a profile, in which case
+  // We gotta return early instead of showing registration form
+  // and just capture booking details for the booking page
+  if (profile) return <SuspenseLoading />
 
   return (
     <AppLayoutMinimal width={628}>

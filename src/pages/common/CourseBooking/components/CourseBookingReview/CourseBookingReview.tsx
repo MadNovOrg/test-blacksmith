@@ -99,32 +99,35 @@ export const CourseBookingReview: React.FC = () => {
             ? t('pages.book-course.pay-by-inv')
             : null}
         </Typography>
-        <Divider sx={{ my: 2 }} />
-        <Typography gutterBottom fontWeight="600">
-          {t('pages.book-course.payment-method')}
-        </Typography>
-        <InfoRow
-          label={t('pages.book-course.billing-address')}
-          value={booking.invoiceDetails?.billingAddress}
-        />
-        <InfoRow
-          label={t('first-name')}
-          value={booking.invoiceDetails?.firstName}
-        />
-        <InfoRow
-          label={t('last-name')}
-          value={booking.invoiceDetails?.surname}
-        />
-        <InfoRow
-          label={t('work-email')}
-          value={booking.invoiceDetails?.email}
-        />
-        <InfoRow label={t('phone')} value={booking.invoiceDetails?.phone} />
+        {booking.paymentMethod === PaymentMethod.INVOICE && (
+          <>
+            <Divider sx={{ my: 2 }} />
+            <Typography gutterBottom fontWeight="600">
+              {t('invoice-contact')}
+            </Typography>
+            <InfoRow
+              label={t('pages.book-course.billing-address')}
+              value={booking.invoiceDetails?.billingAddress}
+            />
+            <InfoRow
+              label={t('first-name')}
+              value={booking.invoiceDetails?.firstName}
+            />
+            <InfoRow
+              label={t('last-name')}
+              value={booking.invoiceDetails?.surname}
+            />
+            <InfoRow
+              label={t('work-email')}
+              value={booking.invoiceDetails?.email}
+            />
+            <InfoRow label={t('phone')} value={booking.invoiceDetails?.phone} />
+          </>
+        )}
         <Divider sx={{ my: 2 }} />
         <Typography gutterBottom fontWeight="600">
           {t('registrants')}
         </Typography>
-
         {booking.emails.map(email => (
           <Box key={email} display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">{email}</Typography>
@@ -133,7 +136,6 @@ export const CourseBookingReview: React.FC = () => {
             </Typography>
           </Box>
         ))}
-
         <Divider sx={{ my: 2 }} />
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>

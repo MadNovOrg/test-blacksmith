@@ -433,6 +433,7 @@
       "apply-promo": "Apply promo or voucher code",
       "step-1": "Booking details",
       "step-2": "Review & confirm",
+      "step-3": "Payment",
       "complete-booking": "Complete booking",
       "order-summary": "Order summary",
       "confirm-title": "Please confirm to complete booking",
@@ -850,6 +851,7 @@
       }
     },
     "my-profile": {
+      "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
       "missing-details-header": "Please complete your profile by providing the following details:",
       "add-certificate": "Add certificate"
     }

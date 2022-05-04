@@ -1,4 +1,4 @@
-import { CircularProgress, Stack, Typography } from '@mui/material'
+import { CircularProgress, Stack } from '@mui/material'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
@@ -48,6 +48,7 @@ type State = {
 }
 
 type ContextType = {
+  error: string | null
   orderId: string | null
   course: CourseDetails
   booking: State
@@ -88,8 +89,10 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     const data = await fetcher<ResponseType>(QUERY)
     const [profile] = data?.tempProfiles || []
 
-    if (!profile) {
-      return setError(t('no-booking'))
+    if (!profile || !profile.course) {
+      setError(t('no-booking'))
+      setReady(true)
+      return
     }
 
     setAvailableSeats(
@@ -179,6 +182,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
   const value = useMemo<ContextType>(
     () => ({
+      error,
       orderId,
       totalPrice,
       course,
@@ -193,6 +197,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       placeOrder,
     }),
     [
+      error,
       orderId,
       ready,
       booking,
@@ -204,10 +209,6 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       placeOrder,
     ]
   )
-
-  if (error) {
-    return <Typography>{t('no-booking')}</Typography>
-  }
 
   if (!ready) {
     return (

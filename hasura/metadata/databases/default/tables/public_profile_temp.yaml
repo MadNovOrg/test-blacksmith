@@ -37,6 +37,23 @@ insert_permissions:
     - quantity
     - sector
   role: anonymous
+- permission:
+    backend_only: false
+    check: {}
+    columns:
+    - accept_marketing
+    - accept_tcs
+    - course_id
+    - dob
+    - family_name
+    - given_name
+    - job_title
+    - phone
+    - quantity
+    - sector
+    set:
+      email: x-hasura-User-Email
+  role: unverified
 select_permissions:
 - permission:
     columns:
@@ -58,3 +75,23 @@ select_permissions:
       email:
         _eq: X-Hasura-User-Email
   role: unverified
+- permission:
+    columns:
+    - accept_marketing
+    - accept_tcs
+    - dob
+    - course_id
+    - id
+    - quantity
+    - email
+    - family_name
+    - given_name
+    - job_title
+    - phone
+    - sector
+    - created_at
+    - organization_id
+    filter:
+      email:
+        _eq: X-Hasura-User-Email
+  role: user

@@ -3,107 +3,52 @@
 exports[`page: VerifyEmailPage matchs snapshot 1`] = `
 <div>
   <div
-    class="MuiBox-root css-180t3ph"
+    class="MuiBox-root css-1l4w6pd"
   >
-    <header
-      class="MuiPaper-root MuiPaper-outlined MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionFixed mui-fixed css-146r89d-MuiPaper-root-MuiAppBar-root"
+    <div
+      class="MuiBox-root css-1wlfb0w"
     >
-      <div
-        class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1k7giva-MuiToolbar-root"
+      <h3
+        class="MuiTypography-root MuiTypography-h3 css-ouwfu7-MuiTypography-root"
+      >
+        Verify your email
+      </h3>
+      <form
+        class="css-163ljxj-MuiStack-root"
       >
         <div
-          class="MuiBox-root css-0"
-        />
-        <div
-          class="MuiBox-root css-70qvj9"
+          class="MuiBox-root css-nntn6c"
         >
-          <div
-            class="MuiBox-root css-70qvj9"
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            <div
-              data-testid="app-logo"
-              height="48"
-              width="230"
-            />
-          </div>
-        </div>
-        <div
-          class="MuiBox-root css-0"
-        >
-          <a
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-kboeec-MuiButtonBase-root-MuiButton-root"
-            href="/verify"
-            tabindex="0"
-          >
-            Verify
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </a>
+            Please verify your email in order to access features within the Team Teach Hub.
+          </p>
           <button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-kboeec-MuiButtonBase-root-MuiButton-root"
+            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+            data-testid="signup-verify-now-btn"
+            id="mui-1"
             tabindex="0"
             type="button"
           >
-            Logout
+            Send verification code
             <span
               class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
             />
           </button>
         </div>
-      </div>
-    </header>
-    <div
-      class="css-co2nuf"
-    />
-    <div
-      class="MuiContainer-root MuiContainer-maxWidthLg css-kmbqtc-MuiContainer-root"
-    >
-      <div
-        class="MuiBox-root css-1wlfb0w"
-      >
-        <h3
-          class="MuiTypography-root MuiTypography-h3 css-ouwfu7-MuiTypography-root"
+        <button
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-e432cs-MuiButtonBase-root-MuiButton-root"
+          data-testid="signup-verify-later-btn"
+          tabindex="0"
+          type="button"
         >
-          Verify your email
-        </h3>
-        <form
-          class="css-163ljxj-MuiStack-root"
-        >
-          <div
-            class="MuiBox-root css-nntn6c"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              Please verify your email in order to access features within the Team Teach Hub.
-            </p>
-            <button
-              class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
-              data-testid="signup-verify-now-btn"
-              id="mui-1"
-              tabindex="0"
-              type="button"
-            >
-              Send verification code
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
-            </button>
-          </div>
-          <button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-e432cs-MuiButtonBase-root-MuiButton-root"
-            data-testid="signup-verify-later-btn"
-            tabindex="0"
-            type="button"
-          >
-            Verify Later
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
-        </form>
-      </div>
+          Verify Later
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </form>
     </div>
   </div>
 </div>

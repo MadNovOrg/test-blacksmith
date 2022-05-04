@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
 import { useAuth } from '@app/context/auth'
 import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
@@ -48,7 +47,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
   }
 
   return (
-    <UnverifiedLayout>
+    <Box display="flex" justifyContent="center">
       <Box
         mt={3}
         bgcolor="common.white"
@@ -85,6 +84,6 @@ export const VerifyEmailPage: React.FC<Props> = () => {
           />
         )}
       </Box>
-    </UnverifiedLayout>
+    </Box>
   )
 }

@@ -5,17 +5,21 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
-import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
+import { PaymentMethod } from '@app/types'
+
+import { useBooking } from '../BookingContext'
 
 const completedMap = {
   details: [],
   review: ['details'],
-  done: ['details', 'review'],
+  payment: ['details', 'review'],
+  done: ['details', 'review', 'payment'],
 }
 
 export const CourseBookingLayout: React.FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const { error, booking } = useBooking()
 
   const steps = useMemo(() => {
     return [
@@ -27,38 +31,37 @@ export const CourseBookingLayout: React.FC = () => {
         key: 'review',
         label: t('pages.book-course.step-2'),
       },
-    ]
-  }, [t])
+      booking.paymentMethod === PaymentMethod.CC
+        ? { key: 'payment', label: t('pages.book-course.step-3') }
+        : null,
+    ].filter(Boolean)
+  }, [t, booking])
 
   const curPage = useMemo(() => {
-    return location.pathname.split('/').pop() as keyof typeof completedMap
+    return location.pathname.split('/')[2] as keyof typeof completedMap
   }, [location])
 
   return (
-    <UnverifiedLayout>
-      <Box flex={1} display="flex">
-        <Box width={300} display="flex" flexDirection="column" pr={4}>
-          <Sticky top={20}>
-            <Box mb={7}>
-              <Typography variant="h2" mb={2}>
-                {t('pages.book-course.title')}
-              </Typography>
+    <Box flex={1} display="flex">
+      <Box width={300} display="flex" flexDirection="column" pr={4}>
+        <Sticky top={20}>
+          <Box mb={7}>
+            <Typography variant="h2" mb={2}>
+              {t('pages.book-course.title')}
+            </Typography>
 
-              <Typography color="grey.700">{t('validation-notice')}</Typography>
-            </Box>
+            <Typography color="grey.700">{t('validation-notice')}</Typography>
+          </Box>
 
-            <StepsNavigation
-              completedSteps={completedMap[curPage]}
-              steps={steps}
-              data-testid="create-course-nav"
-            />
-          </Sticky>
-        </Box>
-
-        <Box flex={1}>
-          <Outlet />
-        </Box>
+          <StepsNavigation
+            completedSteps={completedMap[curPage]}
+            steps={steps}
+            data-testid="create-course-nav"
+          />
+        </Sticky>
       </Box>
-    </UnverifiedLayout>
+
+      <Box flex={1}>{error ? error : <Outlet />}</Box>
+    </Box>
   )
 }

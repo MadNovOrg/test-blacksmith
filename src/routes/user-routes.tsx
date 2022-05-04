@@ -19,6 +19,8 @@ import { MyCourses } from '@app/pages/user-pages/MyCourses'
 const UserRoutes = () => {
   return (
     <Routes>
+      <Route index element={<Navigate replace to="courses" />} />
+
       <Route path="courses">
         <Route index element={<MyCourses />} />
 

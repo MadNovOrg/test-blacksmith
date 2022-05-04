@@ -4,7 +4,7 @@ export type ResponseType = { profile: { affectedRows: number } }
 
 export type ParamsType = {
   input: {
-    email: string
+    email?: string
     givenName: string
     familyName: string
     acceptMarketing: boolean

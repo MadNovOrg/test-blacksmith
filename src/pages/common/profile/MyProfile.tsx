@@ -39,9 +39,9 @@ const DetailsRow = ({
 
 export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, verified } = useAuth()
   const { missingPrerequisiteCertifications, data, status } =
-    useProfileCertifications(profile?.id)
+    useProfileCertifications(verified ? profile?.id : undefined)
 
   const missingPrefs = useMemo(() => {
     if (!profile) return []
@@ -60,12 +60,12 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
 
   const certificatesData = data?.filter(cp => cp.certificate) ?? []
 
-  if (!profile || status === LoadingStatus.FETCHING) {
+  if (!profile) {
     return <CircularProgress />
   }
 
   return (
-    <Box bgcolor="grey.100" pb={6} pt={3}>
+    <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
         <Grid container>
           <Grid
@@ -100,7 +100,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             </Button>
           </Grid>
           <Grid item md={8}>
-            {missingPrefs && missingPrefs.length > 0 ? (
+            {verified && missingPrefs && missingPrefs.length > 0 ? (
               <Alert
                 variant="standard"
                 color="error"
@@ -115,6 +115,30 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
                 </ul>
               </Alert>
             ) : null}
+
+            {!verified && (
+              <Alert
+                variant="standard"
+                color="error"
+                severity="error"
+                sx={{ py: 0, mb: 4 }}
+                action={
+                  <Button
+                    size="small"
+                    variant="text"
+                    color="primary"
+                    component={LinkBehavior}
+                    href="/verify"
+                  >
+                    {t('verify')}
+                  </Button>
+                }
+              >
+                <Typography variant="body2">
+                  {t('pages.my-profile.verify-email-notice')}
+                </Typography>
+              </Alert>
+            )}
 
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
@@ -154,67 +178,82 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
               />
             </Box>
 
-            <Grid
-              mt={3}
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="stretch"
-            >
-              <Typography variant="subtitle2">{t('certifications')}</Typography>
-              <Button variant="outlined" color="primary">
-                {t('pages.my-profile.add-certificate')}
-              </Button>
-            </Grid>
+            {verified && (
+              <>
+                <Grid
+                  mt={3}
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="stretch"
+                >
+                  <Typography variant="subtitle2">
+                    {t('certifications')}
+                  </Typography>
+                  <Button variant="outlined" color="primary">
+                    {t('pages.my-profile.add-certificate')}
+                  </Button>
+                </Grid>
 
-            <Typography variant="body2" mt={1}>
-              {t('certification-warning')}
-            </Typography>
-
-            {certificatesData.map((cp: CourseParticipant, index) => (
-              <Box
-                mt={2}
-                bgcolor="common.white"
-                p={3}
-                borderRadius={1}
-                key={cp.id}
-              >
-                <Typography color={theme.palette.grey[700]} fontWeight={600}>
-                  {cp.course.name} ({COURSE_TYPE_TO_PREFIX[cp.course.type]})
+                <Typography variant="body2" mt={1}>
+                  {t('certification-warning')}
                 </Typography>
 
-                <Typography color={theme.palette.grey[700]} mt={1}>
-                  {cp.certificate?.number}
-                </Typography>
+                {status === LoadingStatus.FETCHING && <CircularProgress />}
 
-                {cp.certificate?.expiryDate ? (
-                  isPast(new Date(cp.certificate.expiryDate)) ? (
-                    <Alert
-                      severity={index === 0 ? 'error' : 'info'}
-                      sx={{ mt: 1 }}
+                {certificatesData.map((cp: CourseParticipant, index) => (
+                  <Box
+                    mt={2}
+                    bgcolor="common.white"
+                    p={3}
+                    borderRadius={1}
+                    key={cp.id}
+                  >
+                    <Typography
+                      color={theme.palette.grey[700]}
+                      fontWeight={600}
                     >
-                      {`${t('course-certificate.expired-on')} ${format(
-                        new Date(cp.certificate.expiryDate),
-                        'P'
-                      )} (${formatDistanceToNow(
-                        new Date(cp.certificate.expiryDate)
-                      )} ${t('ago')})`}
-                    </Alert>
-                  ) : (
-                    <Alert variant="outlined" severity="success" sx={{ mt: 1 }}>
-                      {`${t('course-certificate.active-until')} ${format(
-                        new Date(cp.certificate.expiryDate),
-                        'P'
-                      )} (${t(
-                        'course-certificate.expires-in'
-                      )} ${formatDistanceToNow(
-                        new Date(cp.certificate.expiryDate)
-                      )}).`}
-                    </Alert>
-                  )
-                ) : null}
-              </Box>
-            ))}
+                      {cp.course.name} ({COURSE_TYPE_TO_PREFIX[cp.course.type]})
+                    </Typography>
+
+                    <Typography color={theme.palette.grey[700]} mt={1}>
+                      {cp.certificate?.number}
+                    </Typography>
+
+                    {cp.certificate?.expiryDate ? (
+                      isPast(new Date(cp.certificate.expiryDate)) ? (
+                        <Alert
+                          severity={index === 0 ? 'error' : 'info'}
+                          sx={{ mt: 1 }}
+                        >
+                          {`${t('course-certificate.expired-on')} ${format(
+                            new Date(cp.certificate.expiryDate),
+                            'P'
+                          )} (${formatDistanceToNow(
+                            new Date(cp.certificate.expiryDate)
+                          )} ${t('ago')})`}
+                        </Alert>
+                      ) : (
+                        <Alert
+                          variant="outlined"
+                          severity="success"
+                          sx={{ mt: 1 }}
+                        >
+                          {`${t('course-certificate.active-until')} ${format(
+                            new Date(cp.certificate.expiryDate),
+                            'P'
+                          )} (${t(
+                            'course-certificate.expires-in'
+                          )} ${formatDistanceToNow(
+                            new Date(cp.certificate.expiryDate)
+                          )}).`}
+                        </Alert>
+                      )
+                    ) : null}
+                  </Box>
+                ))}
+              </>
+            )}
           </Grid>
         </Grid>
       </Container>
