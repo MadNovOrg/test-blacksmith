@@ -24,7 +24,7 @@ import {
 } from '@app/types'
 import { noop } from '@app/util'
 
-import { SearchTrainersSchedule } from './types'
+import type { SearchTrainersSchedule } from './helpers'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {

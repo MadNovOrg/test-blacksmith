@@ -2,22 +2,13 @@ import { endOfDay, startOfDay } from 'date-fns'
 import { useCallback } from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+
 import {
-  RoleName,
-  SearchTrainer,
-  CourseTrainerType,
-  CourseLevel,
-} from '@app/types'
-import { eligibleTrainers } from '@app/util'
-
-import { GET_TRAINERS, GET_TRAINERS_LEVELS } from './helpers'
-import { SearchTrainersSchedule, GetTrainersLevelsResp } from './types'
-
-type Props = {
-  trainerType: CourseTrainerType
-  courseLevel: CourseLevel
-  schedule: SearchTrainersSchedule
-}
+  Props,
+  SEARCH_TRAINERS,
+  SearchTrainersInput,
+  SearchTrainersResp,
+} from './helpers'
 
 export const useQueryTrainers = ({
   trainerType,
@@ -26,37 +17,24 @@ export const useQueryTrainers = ({
 }: Props) => {
   const fetcher = useFetcher()
 
-  const courseStart = start ? startOfDay(new Date(start)) : null
-  const courseEnd = end ? endOfDay(new Date(end)) : null
+  const courseStart = start ? startOfDay(new Date(start)) : undefined
+  const courseEnd = end ? endOfDay(new Date(end)) : undefined
 
   const search = useCallback(
-    async (query: string): Promise<{ trainers: SearchTrainer[] }> => {
+    async (query: string): Promise<SearchTrainersResp> => {
       try {
-        const like = { _ilike: `${query}%` }
-        const where = {
-          roles: { role: { name: { _eq: RoleName.TRAINER } } },
-          _or: [{ fullName: like }, { familyName: like }],
+        const input = {
+          query,
+          trainerType,
+          courseLevel,
+          courseStart,
+          courseEnd,
         }
 
-        const { trainers } = await fetcher<{ trainers: SearchTrainer[] }>(
-          GET_TRAINERS,
-          { where }
+        return fetcher<SearchTrainersResp, SearchTrainersInput>(
+          SEARCH_TRAINERS,
+          { input }
         )
-
-        const { getTrainersLevels } = await fetcher<GetTrainersLevelsResp>(
-          GET_TRAINERS_LEVELS,
-          {
-            ids: trainers.map(t => t.id),
-            trainerType,
-            courseLevel,
-            courseStart,
-            courseEnd,
-          }
-        )
-
-        return {
-          trainers: eligibleTrainers(courseLevel, trainers, getTrainersLevels),
-        }
       } catch (error) {
         console.error('useQueryTrainers', error)
         return { trainers: [] }

@@ -1,34 +1,40 @@
 import { gql } from 'graphql-request'
 
-export const GET_TRAINERS = gql`
-  query ($limit: Int = 20, $offset: Int = 0, $where: profile_bool_exp) {
-    trainers: profile(limit: $limit, offset: $offset, where: $where) {
+import { SearchTrainer, CourseTrainerType, CourseLevel } from '@app/types'
+
+export type SearchTrainersSchedule = {
+  start?: Date | string
+  end?: Date | string
+}
+
+export type Props = {
+  trainerType: CourseTrainerType
+  courseLevel: CourseLevel
+  schedule: SearchTrainersSchedule
+}
+
+export type SearchTrainersInput = {
+  input: {
+    query?: string
+    courseLevel?: CourseLevel
+    trainerType?: CourseTrainerType
+    courseStart?: Date
+    courseEnd?: Date
+  }
+}
+
+export type SearchTrainersResp = {
+  trainers: SearchTrainer[]
+}
+
+export const SEARCH_TRAINERS = gql`
+  query ($input: SearchTrainersInput!) {
+    trainers: searchTrainers(input: $input) {
       id
       fullName
-    }
-  }
-`
-
-export const GET_TRAINERS_LEVELS = gql`
-  query (
-    $ids: [uuid!]!
-    $trainerType: CourseTrainerType!
-    $courseLevel: CourseLevel!
-    $courseStart: date!
-    $courseEnd: date!
-  ) {
-    getTrainersLevels(
-      input: {
-        ids: $ids
-        trainerType: $trainerType
-        courseLevel: $courseLevel
-        courseStart: $courseStart
-        courseEnd: $courseEnd
-      }
-    ) {
-      profile_id
-      availability
+      avatar
       levels
+      availability
     }
   }
 `
