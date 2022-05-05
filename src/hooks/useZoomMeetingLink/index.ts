@@ -1,3 +1,4 @@
+import { formatISO, isValid } from 'date-fns'
 import { gql } from 'graphql-request'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -32,7 +33,7 @@ export const QUERY = gql`
   }
 `
 
-export default function useZoomMeetingLink(startTime?: string): {
+export default function useZoomMeetingLink(startTime?: Date): {
   meetingUrl: string
   generateLink: () => void
   status: LoadingStatus
@@ -57,7 +58,10 @@ export default function useZoomMeetingLink(startTime?: string): {
           ? {
               input: {
                 id: meetingIdRef.current,
-                startTime,
+                startTime:
+                  isValid(startTime) && startTime
+                    ? formatISO(startTime)
+                    : undefined,
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
               },
             }

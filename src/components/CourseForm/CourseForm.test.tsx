@@ -246,7 +246,7 @@ describe('component: CourseForm', () => {
       format(new Date(course.schedule[0].start), INPUT_DATE_FORMAT)
     )
     expect(screen.getByLabelText('Start time')).toHaveValue(
-      format(new Date(course.schedule[0].start), 'hh:mm aaa')
+      format(new Date(course.schedule[0].start), 'hh:mm')
     )
     expect(
       screen.getByLabelText('I will be using an AOL for this course')

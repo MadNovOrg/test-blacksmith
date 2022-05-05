@@ -86,7 +86,7 @@ describe('hook: useZoomMeetingLink', () => {
   it('generates link when start time changes', async () => {
     const MOCK_MEETING_URL = 'meeting-url'
     const MOCK_MEETING_ID = 'meeting-id'
-    const startTime = formatISO(new Date())
+    const startTime = new Date()
 
     const fetcherMock = jest.fn()
     fetcherMock.mockResolvedValue({
@@ -100,12 +100,14 @@ describe('hook: useZoomMeetingLink', () => {
 
     useFetcherMocked.mockReturnValue(fetcherMock)
 
-    const { result, waitForNextUpdate, rerender } = renderHook(
-      ({ startTime }) => useZoomMeetingLink(startTime),
+    const { result, waitForNextUpdate, rerender } = renderHook<
       {
-        initialProps: { startTime: '' },
-      }
-    )
+        startTime: Date | undefined
+      },
+      ReturnType<typeof useZoomMeetingLink>
+    >(({ startTime }) => useZoomMeetingLink(startTime), {
+      initialProps: { startTime: undefined },
+    })
 
     act(() => {
       result.current.generateLink()
@@ -127,7 +129,7 @@ describe('hook: useZoomMeetingLink', () => {
         {
           input: {
             id: expect.any(String),
-            startTime,
+            startTime: formatISO(startTime),
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           },
         },
