@@ -1,8 +1,10 @@
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
 import TodayIcon from '@mui/icons-material/Today'
+import VideocamIcon from '@mui/icons-material/Videocam'
 import {
   Box,
+  Button,
   Container,
   Grid,
   List,
@@ -12,8 +14,8 @@ import {
   Typography,
 } from '@mui/material'
 import { differenceInDays, format } from 'date-fns'
-import { t } from 'i18next'
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
@@ -31,6 +33,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
   renderButton,
 }) => {
   const { profile } = useAuth()
+  const { t } = useTranslation()
 
   const courseTrainer = useMemo(
     () => getCourseTrainer(course.trainers ?? []),
@@ -165,6 +168,22 @@ export const CourseHeroSummary: React.FC<Props> = ({
                   ].join(', ')}
                 </ListItemText>
               </ListItem>
+              {course.schedule[0].virtualLink ? (
+                <ListItem>
+                  <ListItemIcon>
+                    <VideocamIcon />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Button
+                      href={course.schedule[0].virtualLink}
+                      component="a"
+                      target="_blank"
+                    >
+                      {t('common.join-zoom')}
+                    </Button>
+                  </ListItemText>
+                </ListItem>
+              ) : null}
             </List>
           </Grid>
         </Grid>

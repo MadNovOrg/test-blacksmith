@@ -1,6 +1,5 @@
 import { add, format, sub } from 'date-fns'
 import React from 'react'
-import useSWR from 'swr'
 
 import { render, screen } from '@test/index'
 import {
@@ -12,21 +11,9 @@ import {
 
 import { CourseHeroSummary } from '.'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
-const useSWRMockDefaults = {
-  data: undefined,
-  mutate: jest.fn(),
-  isValidating: false,
-}
-
 describe('component: CourseHeroSummary', () => {
   it('displays basic course information', () => {
     const course = buildCourse()
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
-    })
 
     render(<CourseHeroSummary course={course} />)
 
@@ -42,10 +29,6 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
-    })
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -63,10 +46,6 @@ describe('component: CourseHeroSummary', () => {
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
     })
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
-    })
 
     render(<CourseHeroSummary course={course} />)
 
@@ -82,10 +61,6 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
-    })
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -105,10 +80,6 @@ describe('component: CourseHeroSummary', () => {
     })
     const course = buildCourse({
       overrides: { schedule: [courseSchedule] },
-    })
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
     })
 
     render(<CourseHeroSummary course={course} />)
@@ -136,11 +107,6 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
-    })
-
     render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
     })
@@ -157,11 +123,6 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
-    })
-
     render(<CourseHeroSummary course={course} />, {
       auth: { profile: { id: LOGGED_IN_USER_ID } },
     })
@@ -171,10 +132,6 @@ describe('component: CourseHeroSummary', () => {
 
   it('displays course venue information', () => {
     const course = buildCourse()
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { course },
-    })
 
     render(<CourseHeroSummary course={course} />)
 
@@ -183,5 +140,25 @@ describe('component: CourseHeroSummary', () => {
         `${course.schedule[0].venue?.name}, ${course.schedule[0].venue?.city}`
       )
     ).toBeInTheDocument()
+  })
+
+  it('displays zoom link if a course has virtual element', () => {
+    const ZOOM_MEETING = 'https://zoom.us/j/123456789'
+
+    const course = buildCourse({
+      overrides: {
+        schedule: [
+          buildCourseSchedule({
+            overrides: {
+              virtualLink: ZOOM_MEETING,
+            },
+          }),
+        ],
+      },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Join via Zoom')).toBeInTheDocument()
   })
 })

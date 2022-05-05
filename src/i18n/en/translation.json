@@ -278,7 +278,8 @@
     "items": "items",
     "from": "From",
     "to": "To",
-    "date-range": "Date range"
+    "date-range": "Date range",
+    "join-zoom": "Join via Zoom"
   },
   "components": {
     "not-found": {
