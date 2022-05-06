@@ -1,11 +1,11 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useSearchParams } from 'react-router-dom'
 
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
 import { Grade } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, userEvent, waitFor } from '@test/index'
 import {
   buildModule,
   buildModuleGroup,
@@ -18,6 +18,12 @@ import { ParticipantGrading } from '.'
 jest.mock('@app/hooks/useCourseParticipant')
 
 const useCourseParticipantMocked = jest.mocked(useCourseParticipant)
+
+const MockCourseDetails = () => {
+  const [searchParams] = useSearchParams()
+
+  return <p>{searchParams.get('tab')}</p>
+}
 
 describe('page: ParticipantGrading', () => {
   it("displays participant's name and final grade", () => {
@@ -123,5 +129,35 @@ describe('page: ParticipantGrading', () => {
     ).not.toBeInTheDocument()
 
     expect(within(secondModuleGroupElem).getByText('1 of 1 completed'))
+  })
+
+  it('navigates back to the course details page with grading query param', async () => {
+    useCourseParticipantMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: buildParticipant(),
+    })
+
+    render(
+      <MemoryRouter
+        initialEntries={[`/courses/course-id/grading/participant-id`]}
+      >
+        <Routes>
+          <Route
+            element={<ParticipantGrading />}
+            path="/courses/:id/grading/:participant-id"
+          />
+          <Route
+            element={<MockCourseDetails />}
+            path={'/courses/:id/details'}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    userEvent.click(screen.getByText('Back to course details'))
+
+    await waitFor(() => {
+      expect(screen.getByText('GRADING')).toBeInTheDocument()
+    })
   })
 })

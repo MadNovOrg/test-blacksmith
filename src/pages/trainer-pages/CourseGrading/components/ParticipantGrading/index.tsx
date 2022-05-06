@@ -23,6 +23,7 @@ import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Grade } from '@app/components/Grade'
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
+import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
 import { LoadingStatus, transformModulesToGroups } from '@app/util'
 
@@ -65,7 +66,7 @@ export const ParticipantGrading = () => {
             <Box mb={2}>
               <BackButton
                 label={t('pages.course-grading-details.back-button-text')}
-                to={`/courses/${courseId}/details`}
+                to={`/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`}
               />
             </Box>
             <Box display="flex">
