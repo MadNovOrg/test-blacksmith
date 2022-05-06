@@ -29,7 +29,7 @@ select_permissions:
     - type
     - id
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     columns:
     - display_order

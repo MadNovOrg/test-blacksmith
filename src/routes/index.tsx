@@ -19,16 +19,15 @@ const ProfileRoutes = React.lazy(() => import('./profile'))
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
 const OrgAdminRoutes = React.lazy(() => import('./org-admin-routes'))
-const TTOpsRoutes = React.lazy(() => import('./tt-ops-routes'))
-const TTAdminRoutes = React.lazy(() => import('./tt-admin-routes'))
+const TTRoutes = React.lazy(() => import('./tt-routes'))
 const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
 
 const roleRoutesMap = {
   [RoleName.TRAINER]: TrainerRoutes,
   [RoleName.USER]: UserRoutes,
   [RoleName.ORG_ADMIN]: OrgAdminRoutes,
-  [RoleName.TT_OPS]: TTOpsRoutes,
-  [RoleName.TT_ADMIN]: TTAdminRoutes,
+  [RoleName.TT_OPS]: TTRoutes,
+  [RoleName.TT_ADMIN]: TTRoutes,
   [RoleName.UNVERIFIED]: UnverifiedRoutes,
 } as const
 

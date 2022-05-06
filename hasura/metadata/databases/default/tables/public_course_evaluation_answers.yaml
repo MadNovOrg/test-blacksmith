@@ -81,7 +81,7 @@ select_permissions:
     - profile_id
     - question_id
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     columns:
     - answer

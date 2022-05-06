@@ -8,11 +8,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()
 
   const acl = Object.freeze({
-    isAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
-
-    isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
+    isAdmin: () => acl.isTTOps() || acl.isTTAdmin(),
 
     isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
+
+    isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
 
     isTrainer: () => allowedRoles.has(RoleName.TRAINER),
 
@@ -37,41 +37,30 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewCertifications: () => {
-      const roles = [RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
 
     canCreateCourse: (type: CourseType) => {
-      if (auth.activeRole === RoleName.TT_ADMIN) {
-        return true
-      }
-
-      if (
-        auth.activeRole === RoleName.TT_OPS &&
-        [CourseType.OPEN, CourseType.CLOSED].includes(type)
-      ) {
-        return true
-      }
-
-      if (
-        auth.activeRole === RoleName.TRAINER &&
-        type === CourseType.INDIRECT
-      ) {
-        return true
+      switch (auth.activeRole) {
+        case RoleName.TT_ADMIN:
+          return true
+        case RoleName.TT_OPS:
+          return [CourseType.OPEN, CourseType.CLOSED].includes(type)
+        case RoleName.TRAINER:
+          return [CourseType.INDIRECT].includes(type)
       }
 
       return false
     },
 
     canAssignLeadTrainer: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
-
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
 
     canOverrideGrades: () => {
       const roles = [RoleName.TT_ADMIN]
-
       return roles.some(r => r === auth.activeRole)
     },
   })

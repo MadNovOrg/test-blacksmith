@@ -31,7 +31,7 @@ insert_permissions:
     - old_grade
     - participant_id
     - updated_at
-  role: tt-admin
+  role: tt-ops
 select_permissions:
 - permission:
     columns:
@@ -44,4 +44,4 @@ select_permissions:
     - participant_id
     - updated_at
     filter: {}
-  role: tt-admin
+  role: tt-ops

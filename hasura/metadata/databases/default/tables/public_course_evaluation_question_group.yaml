@@ -7,4 +7,4 @@ select_permissions:
     columns:
     - name
     filter: {}
-  role: tt-admin
+  role: tt-ops

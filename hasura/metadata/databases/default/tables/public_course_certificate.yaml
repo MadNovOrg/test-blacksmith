@@ -101,7 +101,7 @@ select_permissions:
     - id
     - profile_id
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     columns:
     - certification_date

@@ -41,7 +41,7 @@ insert_permissions:
     - updated_at
     - venue_id
     - virtual_link
-  role: tt-admin
+  role: tt-ops
 select_permissions:
 - permission:
     allow_aggregations: true
@@ -87,7 +87,7 @@ select_permissions:
     - venue_id
     - virtual_link
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     allow_aggregations: true
     columns:
@@ -143,4 +143,4 @@ update_permissions:
     - id
     - venue_id
     filter: {}
-  role: tt-admin
+  role: tt-ops

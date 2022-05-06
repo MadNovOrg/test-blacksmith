@@ -83,7 +83,7 @@ select_permissions:
     - profile_id
     - registration_id
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     allow_aggregations: true
     columns:
@@ -116,7 +116,7 @@ update_permissions:
     - grade
     - updated_at
     filter: {}
-  role: tt-admin
+  role: tt-ops
 - permission:
     check: {}
     columns:
