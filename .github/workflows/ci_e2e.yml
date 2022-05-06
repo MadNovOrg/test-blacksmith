@@ -27,7 +27,7 @@ jobs:
           --health-retries 5
 
       graphql-engine:
-        image: hasura/graphql-engine:v2.3.0.cli-migrations-v3
+        image: hasura/graphql-engine:v2.6.1.cli-migrations-v3
         ports:
           - 8080:8080
         env:
@@ -48,7 +48,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm set-script prepare "" && npm ci 
+        run: npm set-script prepare "" && npm ci
 
       - name: Playwright setup
         run: |

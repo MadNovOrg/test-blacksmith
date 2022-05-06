@@ -18,7 +18,7 @@ on:
 
 permissions:
       id-token: write
-      contents: read  
+      contents: read
 
 env:
   AWS_REGION: eu-west-2
@@ -57,7 +57,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm set-script prepare "" && npm ci 
+        run: npm set-script prepare "" && npm ci
 
       - name: Build web
         run: npm run build
@@ -92,7 +92,7 @@ jobs:
 
       - name: Install Hasura CLI
         run: |
-          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.3.0 bash
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.6.1 bash
 
       - name: Hasura migrations access
         run: |
@@ -125,4 +125,3 @@ jobs:
 
           echo Hasura Metadata Apply
           hasura metadata apply --admin-secret $SECRET --endpoint $ENDPOINT
-
