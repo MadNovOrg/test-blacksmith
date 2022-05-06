@@ -135,8 +135,8 @@ export const EditCourse: React.FC<unknown> = () => {
                 ? { min_participants: courseData.minParticipants }
                 : null),
               max_participants: courseData.maxParticipants,
-              ...(courseData.organizationId
-                ? { organization_id: courseData.organizationId }
+              ...(courseData.organization
+                ? { organization_id: courseData.organization.id }
                 : null),
               ...(courseData.contactProfile
                 ? { contactProfileId: courseData.contactProfile.id }
@@ -220,7 +220,6 @@ export const EditCourse: React.FC<unknown> = () => {
                 <Box mb={2}>
                   <CourseForm
                     courseInput={courseInput}
-                    course={course}
                     type={course?.type}
                     onChange={handleCourseFormChange}
                   />

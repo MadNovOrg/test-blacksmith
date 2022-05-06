@@ -31,7 +31,6 @@ import {
   CourseLevel,
   CourseType,
   CourseInput,
-  Course,
 } from '@app/types'
 import {
   INPUT_DATE_FORMAT,
@@ -55,7 +54,6 @@ const FormPanel = styled(Box)(({ theme }) => ({
 interface Props {
   type?: CourseType
   courseInput?: CourseInput
-  course?: Course
   onChange?: (values: CourseInput, isValid: boolean) => void
 }
 
@@ -63,7 +61,6 @@ const CourseForm: React.FC<Props> = ({
   onChange = noop,
   type = CourseType.OPEN,
   courseInput,
-  course,
 }) => {
   const { t } = useTranslation()
 
@@ -86,7 +83,7 @@ const CourseForm: React.FC<Props> = ({
       yup.object({
         ...(hasOrganizationField
           ? {
-              organizationId: yup.string().required(),
+              organization: yup.object().required(),
             }
           : null),
         ...(hasContactProfileField
@@ -187,7 +184,7 @@ const CourseForm: React.FC<Props> = ({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      organizationId: courseInput?.organizationId ?? null,
+      organization: courseInput?.organization ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
       courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
@@ -326,9 +323,9 @@ const CourseForm: React.FC<Props> = ({
               {t('components.course-form.organization-label')}
             </Typography>
             <OrgSelector
-              value={course?.organization}
+              value={formValues.organization ?? undefined}
               onChange={org => {
-                setValue('organizationId', org.id, { shouldValidate: true })
+                setValue('organization', org, { shouldValidate: true })
               }}
               textFieldProps={{ variant: 'filled' }}
               sx={{ marginBottom: 2 }}
@@ -343,7 +340,7 @@ const CourseForm: React.FC<Props> = ({
 
             <ProfileSelector
               value={formValues.contactProfile ?? undefined}
-              orgId={getValues('organizationId') ?? undefined}
+              orgId={getValues('organization')?.id ?? undefined}
               onChange={profile => {
                 setValue('contactProfile', profile ?? null, {
                   shouldValidate: true,
@@ -353,7 +350,7 @@ const CourseForm: React.FC<Props> = ({
               textFieldProps={{
                 variant: 'filled',
               }}
-              disabled={!getValues('organizationId')}
+              disabled={!getValues('organization')}
               placeholder={t(
                 'components.course-form.contact-person-placeholder'
               )}

@@ -56,8 +56,8 @@ export function useSaveCourse(): {
                 : null),
               max_participants: courseData.maxParticipants,
               type: courseData.type,
-              ...(courseData.organizationId
-                ? { organization_id: courseData.organizationId }
+              ...(courseData.organization
+                ? { organization_id: courseData.organization.id }
                 : null),
               ...(courseData.contactProfile
                 ? { contactProfileId: courseData.contactProfile.id }

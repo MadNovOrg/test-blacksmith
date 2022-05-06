@@ -401,7 +401,7 @@ export type CourseCertificateChangelog = {
 
 export type CourseInput = {
   type: CourseType | null
-  organizationId: string | null
+  organization: Organization | null
   contactProfile: Profile | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean

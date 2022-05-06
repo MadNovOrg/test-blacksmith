@@ -237,7 +237,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
   return {
     type: course.type,
     deliveryType: course.deliveryType,
-    organizationId: course.organization?.id ?? null,
+    organization: course.organization ?? null,
     contactProfile: course.contactProfile ?? null,
     blendedLearning: course.go1Integration,
     reaccreditation: course.reaccreditation,
