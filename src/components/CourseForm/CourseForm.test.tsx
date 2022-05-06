@@ -246,7 +246,7 @@ describe('component: CourseForm', () => {
       format(new Date(course.schedule[0].start), INPUT_DATE_FORMAT)
     )
     expect(screen.getByLabelText('Start time')).toHaveValue(
-      format(new Date(course.schedule[0].start), 'hh:mm')
+      format(new Date(course.schedule[0].start), 'HH:mm')
     )
     expect(
       screen.getByLabelText('I will be using an AOL for this course')
@@ -256,6 +256,38 @@ describe('component: CourseForm', () => {
     )
     expect(screen.getByLabelText('Number of attendees')).toHaveValue(
       course.max_participants
+    )
+  })
+
+  it('makes start time and end time mandatory fields', async () => {
+    const course = {
+      ...buildCourse(),
+      go1Integration: true,
+      reaccreditation: true,
+      deliveryType: CourseDeliveryType.MIXED,
+      aolCostOfCourse: 2000,
+      schedule: [
+        buildCourseSchedule({ overrides: { virtualLink: 'zoom-meeting' } }),
+      ],
+    }
+
+    const onChangeMock = jest.fn()
+
+    await waitFor(() => {
+      render(
+        <CourseForm
+          courseInput={courseToCourseInput(course)}
+          type={CourseType.INDIRECT}
+          onChange={onChangeMock}
+        />
+      )
+    })
+
+    userEvent.clear(screen.getByLabelText('Start time'))
+    userEvent.clear(screen.getByLabelText('End time'))
+
+    expect(onChangeMock.mock.calls[onChangeMock.mock.calls.length - 1]).toEqual(
+      [expect.any(Object), false]
     )
   })
 })

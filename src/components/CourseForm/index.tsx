@@ -226,8 +226,11 @@ const CourseForm: React.FC<Props> = ({
   ].includes(deliveryType)
 
   useEffect(() => {
-    onChange(formValues, formState.isValid)
-  }, [formState, getValues, onChange, formValues])
+    onChange(
+      formValues,
+      formState.isValid && Boolean(startTime) && Boolean(endTime)
+    )
+  }, [formState, getValues, onChange, formValues, startTime, endTime])
 
   useEffect(() => {
     if (!courseInput?.zoomMeetingUrl) {
