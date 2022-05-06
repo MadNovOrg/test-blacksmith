@@ -14,63 +14,79 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 const isValidCertificate = (certificate: CourseCertificate) =>
   !isPast(new Date(certificate.expiryDate))
 
-const prerequisiteValidations = {
-  [CourseLevel.LEVEL_1]: () => true,
-  [CourseLevel.LEVEL_2]: () => true,
-  [CourseLevel.ADVANCED]: (certificates: CourseCertificate[]) =>
-    certificates.some(c => c.courseLevel === CourseLevel.LEVEL_2),
-  [CourseLevel.BILD_ACT]: () => true,
-  [CourseLevel.ADVANCED_TRAINER]: (certificates: CourseCertificate[]) =>
-    certificates.some(c => c.courseLevel === CourseLevel.INTERMEDIATE_TRAINER),
-  [CourseLevel.BILD_ACT_TRAINER]: (certificates: CourseCertificate[]) =>
-    certificates.some(c => c.courseLevel === CourseLevel.BILD_ACT),
-  [CourseLevel.INTERMEDIATE_TRAINER]: (certificates: CourseCertificate[]) =>
-    certificates.some(
-      p =>
-        p.courseLevel === CourseLevel.LEVEL_2 ||
-        p.courseLevel === CourseLevel.LEVEL_1
-    ),
+const requiredCertificateLevel = {
+  [CourseLevel.LEVEL_1]: [],
+  [CourseLevel.LEVEL_2]: [],
+  [CourseLevel.ADVANCED]: [CourseLevel.LEVEL_2],
+  [CourseLevel.BILD_ACT]: [],
+  [CourseLevel.INTERMEDIATE_TRAINER]: [
+    CourseLevel.LEVEL_1,
+    CourseLevel.LEVEL_2,
+  ],
+  [CourseLevel.ADVANCED_TRAINER]: [CourseLevel.INTERMEDIATE_TRAINER],
+  [CourseLevel.BILD_ACT_TRAINER]: [CourseLevel.BILD_ACT],
+}
+
+export type MissingCertificateInfo = {
+  courseId: string
+  requiredCertificate: CourseLevel[] // ie. Level 1 or Level 2 required
 }
 
 export type ReturnType = {
   data?: CourseCertificate[]
-  missingPrerequisiteCertifications: boolean
+  missingCertifications: MissingCertificateInfo[]
   mutate: KeyedMutator<ResponseType>
   error?: Error
   status: LoadingStatus
 }
 
 export default function useProfileCertifications(
-  profileId?: string
+  profileId?: string,
+  courseId?: string
 ): ReturnType {
-  const { data, error, mutate } = useSWR<
-    ResponseType,
-    Error,
-    [string, ParamsType] | null
-  >(
-    profileId
-      ? [QUERY, { where: { profile: { id: { _eq: profileId } } } }]
-      : null
+  const {
+    data: certificatesData,
+    error: certificatesError,
+    mutate: certificatesMutate,
+  } = useSWR<ResponseType, Error, [string, ParamsType] | null>(
+    profileId ? [QUERY, { profileId }] : null
   )
 
-  const missingPrerequisiteCertifications = useMemo(() => {
-    if (data) {
-      const activeCertifications = data.certificates.filter(isValidCertificate)
-      const upcomingCourses = data.certificates.filter(
-        c => c.participant && !c.participant.grade
-      )
-      return !upcomingCourses.every(c =>
-        prerequisiteValidations[c.courseLevel](activeCertifications)
-      )
+  const missingCertifications = useMemo(() => {
+    if (certificatesData) {
+      const activeCertifications =
+        certificatesData.certificates.filter(isValidCertificate)
+      let courses = certificatesData.upcomingCourses
+      if (courseId) {
+        courses = courses.filter(c => c.id === parseInt(courseId))
+      }
+      return courses
+        .map(c => {
+          const requiredCertificate = requiredCertificateLevel[c.level]
+          if (requiredCertificate.length === 0) {
+            return false
+          }
+          return requiredCertificate.some(requiredLevel =>
+            activeCertifications.some(
+              activeCert => requiredLevel === activeCert.courseLevel
+            )
+          )
+            ? false
+            : {
+                courseId: c.id,
+                requiredCertificate,
+              }
+        })
+        .filter(Boolean)
     }
     return false
-  }, [data])
+  }, [certificatesData, courseId])
 
   return {
-    data: data?.certificates,
-    missingPrerequisiteCertifications,
-    mutate,
-    error,
-    status: getSWRLoadingStatus(data, error),
+    data: certificatesData?.certificates,
+    missingCertifications: missingCertifications as MissingCertificateInfo[],
+    mutate: certificatesMutate,
+    error: certificatesError,
+    status: getSWRLoadingStatus(certificatesData, certificatesError),
   }
 }

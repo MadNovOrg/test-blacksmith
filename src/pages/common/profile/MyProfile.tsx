@@ -15,11 +15,12 @@ import {
   Typography,
 } from '@mui/material'
 import { formatDistanceToNow, isPast } from 'date-fns'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
+import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import useProfileCertifications from '@app/hooks/useProfileCertifications'
@@ -46,24 +47,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
   const { t } = useTranslation()
   const { profile, verified } = useAuth()
   const navigate = useNavigate()
-  const { missingPrerequisiteCertifications, data } = useProfileCertifications(
-    verified ? profile?.id : undefined
-  )
-
-  const missingPrefs = useMemo(() => {
-    if (!profile) return []
-    const missing = []
-    if (profile.dietaryRestrictions === null) {
-      missing.push(t('dietary-restrictions'))
-    }
-    if (profile.disabilities === null) {
-      missing.push(t('disabilities'))
-    }
-    if (missingPrerequisiteCertifications) {
-      missing.push(t('certification-details'))
-    }
-    return missing
-  }, [profile, t, missingPrerequisiteCertifications])
+  const { data } = useProfileCertifications(verified ? profile?.id : undefined)
 
   if (!profile) {
     return <CircularProgress />
@@ -108,21 +92,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             </Button>
           </Grid>
           <Grid item md={8}>
-            {verified && missingPrefs && missingPrefs.length > 0 ? (
-              <Alert
-                variant="standard"
-                color="error"
-                severity="error"
-                sx={{ mb: 4 }}
-              >
-                <div>{t('pages.my-profile.missing-details-header')}</div>
-                <ul>
-                  {missingPrefs.map(msg => (
-                    <li key={msg}>{msg}</li>
-                  ))}
-                </ul>
-              </Alert>
-            ) : null}
+            {verified ? <CoursePrerequisitesAlert sx={{ mb: 4 }} /> : null}
 
             {!verified && (
               <Alert

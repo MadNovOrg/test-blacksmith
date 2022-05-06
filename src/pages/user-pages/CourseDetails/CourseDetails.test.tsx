@@ -2,6 +2,8 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
+import { Course } from '@app/types'
+
 import { render, screen } from '@test/index'
 import {
   buildCourse,
@@ -15,25 +17,33 @@ import { CourseDetails } from '.'
 jest.mock('swr')
 const useSWRMock = jest.mocked(useSWR)
 
+function registerMocks(course: Course) {
+  useSWRMock.mockReturnValueOnce({
+    data: { course },
+    mutate: jest.fn(),
+    isValidating: false,
+  })
+  useSWRMock.mockReturnValueOnce({
+    data: { course_participant: [buildParticipant()] },
+    mutate: jest.fn(),
+    isValidating: false,
+  })
+  useSWRMock.mockReturnValueOnce({
+    data: { users: [] },
+    mutate: jest.fn(),
+    isValidating: false,
+  })
+  useSWRMock.mockReturnValueOnce({
+    data: { certificates: [], upcomingCourses: [] },
+    mutate: jest.fn(),
+    isValidating: false,
+  })
+}
+
 describe('page: CourseDetails', () => {
   it('displays course hero info', () => {
     const course = buildCourse()
-
-    useSWRMock.mockReturnValueOnce({
-      data: { course },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { course_participant: [buildParticipant()] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
+    registerMocks(course)
 
     render(
       <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
@@ -52,21 +62,7 @@ describe('page: CourseDetails', () => {
 
   it('displays an alert if user has been redirected from accepting the invite', () => {
     const course = buildCourse()
-    useSWRMock.mockReturnValueOnce({
-      data: { course },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { course_participant: [buildParticipant()] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
+    registerMocks(course)
 
     render(
       <MemoryRouter
@@ -85,21 +81,7 @@ describe('page: CourseDetails', () => {
 
   it('displays tabs with course checklist and resources', () => {
     const course = buildCourse()
-    useSWRMock.mockReturnValueOnce({
-      data: { course },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { course_participant: [buildParticipant()] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
+    registerMocks(course)
 
     render(
       <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
@@ -116,21 +98,7 @@ describe('page: CourseDetails', () => {
 
   it('has course evaluation button disabled if course has not started yet', () => {
     const course = buildNotStartedCourse()
-    useSWRMock.mockReturnValueOnce({
-      data: { course },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { course_participant: [buildParticipant()] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
+    registerMocks(course)
 
     render(
       <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
@@ -145,21 +113,7 @@ describe('page: CourseDetails', () => {
 
   it('has course evaluation button enabled if course has ended', () => {
     const course = buildEndedCourse()
-    useSWRMock.mockReturnValueOnce({
-      data: { course },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { course_participant: [buildParticipant()] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
-    useSWRMock.mockReturnValueOnce({
-      data: { users: [] },
-      mutate: jest.fn(),
-      isValidating: false,
-    })
+    registerMocks(course)
 
     render(
       <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>

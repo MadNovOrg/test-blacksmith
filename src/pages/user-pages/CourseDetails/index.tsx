@@ -22,6 +22,7 @@ import useSWR from 'swr'
 import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
+import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { PillTabList, PillTab } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
 import {
@@ -103,6 +104,8 @@ export const CourseDetails = () => {
   const courseHasEnded = course && courseEnded(course)
   const canSubmitFeedback =
     !loading && courseHasEnded && !didAttendeeSubmitFeedback
+  const showCertificateTab =
+    courseParticipant?.length > 0 && courseParticipant[0].certificate
 
   return (
     <>
@@ -157,7 +160,7 @@ export const CourseDetails = () => {
                     label={t('pages.participant-course.resources-tab-title')}
                     value="resources"
                   />
-                  {courseParticipant[0].certificate ? (
+                  {showCertificateTab ? (
                     <PillTab
                       label={t(
                         'pages.participant-course.certification-tab-title'
@@ -171,6 +174,12 @@ export const CourseDetails = () => {
 
             <Container sx={{ pb: 2 }}>
               <TabPanel sx={{ px: 0 }} value="checklist">
+                <CoursePrerequisitesAlert
+                  courseId={courseId}
+                  sx={{ m: 2 }}
+                  showAction={true}
+                />
+
                 <ChecklistItem marginBottom={2} padding={2}>
                   <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
                   <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
@@ -216,7 +225,7 @@ export const CourseDetails = () => {
                 {t('pages.participant-course.resources-empty-message')}
               </TabPanel>
 
-              {courseParticipant[0].certificate ? (
+              {showCertificateTab ? (
                 <TabPanel sx={{ px: 0 }} value="certification">
                   {!courseHasEnded ? (
                     <Box

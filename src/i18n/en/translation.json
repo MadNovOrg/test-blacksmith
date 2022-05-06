@@ -139,6 +139,7 @@
     "view": "View",
     "last-modified": "Last modified {{date}}",
     "ago": "ago",
+    "or": "or",
     "course-name-prefix": "Positive Behaviour Training",
     "reaccreditation": "Reaccreditation",
     "modules": "Modules",
@@ -279,6 +280,10 @@
     "from": "From",
     "to": "To",
     "date-range": "Date range",
+    "missing-certification": "certification required for attending",
+    "course-link": "course {{id}}",
+    "go-to-profile": "Go to profile preferences",
+    "this-course": "this course",
     "join-zoom": "Join via Zoom"
   },
   "components": {
