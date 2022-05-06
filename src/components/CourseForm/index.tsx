@@ -435,7 +435,6 @@ const CourseForm: React.FC<Props> = ({
               setValue('deliveryType', e.target.value as CourseDeliveryType)
 
               resetField('venue')
-              resetField('zoomMeetingUrl')
             }}
           >
             <FormControlLabel
@@ -484,7 +483,7 @@ const CourseForm: React.FC<Props> = ({
             fullWidth
             variant="filled"
             {...register('zoomMeetingUrl')}
-            disabled
+            InputLabelProps={{ shrink: formValues.zoomMeetingUrl !== '' }}
             helperText={
               zoomLinkStatus === LoadingStatus.ERROR
                 ? errors.zoomMeetingUrl?.message
