@@ -55,7 +55,7 @@ Object {
                   Quantity
                 </label>
                 <div
-                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-1hwg30k-MuiInputBase-root-MuiInput-root"
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-8abfg5-MuiInputBase-root-MuiInput-root"
                 >
                   <select
                     aria-invalid="false"
@@ -225,7 +225,7 @@ Object {
                 Sector
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                 variant="standard"
               >
                 <div
@@ -279,7 +279,7 @@ Object {
                 Position
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                 variant="standard"
               >
                 <div
@@ -331,9 +331,7 @@ Object {
           class="MuiBox-root css-j08n2y"
         >
           <div
-            aria-expanded="false"
             class="MuiAutocomplete-root css-16awh2u-MuiAutocomplete-root"
-            role="combobox"
           >
             <div
               class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
@@ -347,17 +345,19 @@ Object {
                 Enter registrant email(s)
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1nkheju-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-autocomplete="list"
                   aria-describedby="emails-helper-text"
+                  aria-expanded="false"
                   aria-invalid="false"
                   autocapitalize="none"
                   autocomplete="off"
                   class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1bsm28j-MuiInputBase-input-MuiInput-input"
                   id="emails"
                   placeholder="Emails"
+                  role="combobox"
                   spellcheck="false"
                   type="text"
                   value=""
@@ -599,7 +599,7 @@ Object {
                       </span>
                     </label>
                     <div
-                      class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                      class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                     >
                       <input
                         aria-invalid="false"
@@ -637,7 +637,7 @@ Object {
                       </span>
                     </label>
                     <div
-                      class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                      class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                     >
                       <input
                         aria-invalid="false"
@@ -676,7 +676,7 @@ Object {
                     </span>
                   </label>
                   <div
-                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                   >
                     <input
                       aria-invalid="false"
@@ -714,7 +714,7 @@ Object {
                     </span>
                   </label>
                   <div
-                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-1nkheju-MuiInputBase-root-MuiInput-root"
                   >
                     <div
                       class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium MuiPhoneNumber-positionStart css-ittuaa-MuiInputAdornment-root"
@@ -817,7 +817,7 @@ Object {
                     Purchase order
                   </label>
                   <div
-                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                   >
                     <input
                       aria-invalid="false"
@@ -913,7 +913,7 @@ Object {
                 Quantity
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-1hwg30k-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiNativeSelect-root css-8abfg5-MuiInputBase-root-MuiInput-root"
               >
                 <select
                   aria-invalid="false"
@@ -1083,7 +1083,7 @@ Object {
               Sector
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
               variant="standard"
             >
               <div
@@ -1137,7 +1137,7 @@ Object {
               Position
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
               variant="standard"
             >
               <div
@@ -1189,9 +1189,7 @@ Object {
         class="MuiBox-root css-j08n2y"
       >
         <div
-          aria-expanded="false"
           class="MuiAutocomplete-root css-16awh2u-MuiAutocomplete-root"
-          role="combobox"
         >
           <div
             class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-1m0bcqz-MuiFormControl-root-MuiTextField-root"
@@ -1205,17 +1203,19 @@ Object {
               Enter registrant email(s)
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-rsxlbu-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1nkheju-MuiInputBase-root-MuiInput-root"
             >
               <input
                 aria-autocomplete="list"
                 aria-describedby="emails-helper-text"
+                aria-expanded="false"
                 aria-invalid="false"
                 autocapitalize="none"
                 autocomplete="off"
                 class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1bsm28j-MuiInputBase-input-MuiInput-input"
                 id="emails"
                 placeholder="Emails"
+                role="combobox"
                 spellcheck="false"
                 type="text"
                 value=""
@@ -1457,7 +1457,7 @@ Object {
                     </span>
                   </label>
                   <div
-                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                   >
                     <input
                       aria-invalid="false"
@@ -1495,7 +1495,7 @@ Object {
                     </span>
                   </label>
                   <div
-                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                    class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                   >
                     <input
                       aria-invalid="false"
@@ -1534,7 +1534,7 @@ Object {
                   </span>
                 </label>
                 <div
-                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                 >
                   <input
                     aria-invalid="false"
@@ -1572,7 +1572,7 @@ Object {
                   </span>
                 </label>
                 <div
-                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart css-1nkheju-MuiInputBase-root-MuiInput-root"
                 >
                   <div
                     class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium MuiPhoneNumber-positionStart css-ittuaa-MuiInputAdornment-root"
@@ -1675,7 +1675,7 @@ Object {
                   Purchase order
                 </label>
                 <div
-                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-rsxlbu-MuiInputBase-root-MuiInput-root"
+                  class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
                 >
                   <input
                     aria-invalid="false"
