@@ -1,33 +1,33 @@
 table:
-  name: profile_role
   schema: public
+  name: profile_role
 object_relationships:
-- name: profile
-  using:
-    foreign_key_constraint_on: profile_id
-- name: role
-  using:
-    foreign_key_constraint_on: role_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+  - name: role
+    using:
+      foreign_key_constraint_on: role_id
 select_permissions:
-- permission:
-    columns:
-    - _source
-    - created_at
-    - updated_at
-    - id
-    - profile_id
-    - role_id
-    filter:
-      profile_id:
-        _eq: X-Hasura-User-Id
-  role: unverified
-- permission:
-    columns:
-    - id
-    - profile_id
-    - role_id
-    - _source
-    - created_at
-    - updated_at
-    filter: {}
-  role: user
+  - role: unverified
+    permission:
+      columns:
+        - _source
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - role_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+        - id
+        - profile_id
+        - role_id
+        - _source
+        - created_at
+        - updated_at
+      filter: {}

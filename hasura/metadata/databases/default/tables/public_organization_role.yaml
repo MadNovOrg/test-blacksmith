@@ -1,18 +1,18 @@
 table:
-  name: organization_role
   schema: public
+  name: organization_role
 object_relationships:
-- name: organization
-  using:
-    foreign_key_constraint_on: organization_id
-- name: role
-  using:
-    foreign_key_constraint_on: role_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+  - name: role
+    using:
+      foreign_key_constraint_on: role_id
 array_relationships:
-- name: organizationRoles
-  using:
-    foreign_key_constraint_on:
-      column: organization_role_id
-      table:
-        name: organization_member_role
-        schema: public
+  - name: organizationRoles
+    using:
+      foreign_key_constraint_on:
+        column: organization_role_id
+        table:
+          schema: public
+          name: organization_member_role

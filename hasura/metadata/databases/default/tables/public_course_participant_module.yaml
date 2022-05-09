@@ -1,66 +1,66 @@
 table:
-  name: course_participant_module
   schema: public
+  name: course_participant_module
 object_relationships:
-- name: course_participant
-  using:
-    foreign_key_constraint_on: course_participant_id
-- name: module
-  using:
-    foreign_key_constraint_on: module_id
+  - name: course_participant
+    using:
+      foreign_key_constraint_on: course_participant_id
+  - name: module
+    using:
+      foreign_key_constraint_on: module_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      course_participant:
-        course:
-          trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
-    columns:
-    - completed
-    - course_participant_id
-    - module_id
-  role: trainer
+  - role: trainer
+    permission:
+      check:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - completed
+        - course_participant_id
+        - module_id
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - completed
-    - course_participant_id
-    - id
-    - module_id
-    filter:
-      course_participant:
-        course:
-          trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    columns:
-    - completed
-    - course_participant_id
-    - id
-    - module_id
-    filter: {}
-  role: tt-ops
-- permission:
-    columns:
-    - completed
-    - course_participant_id
-    - id
-    - module_id
-    filter:
-      course_participant:
-        profile_id:
-          _eq: X-Hasura-User-Id
-  role: user
+  - role: trainer
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  - role: tt-ops
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter:
+        course_participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
 delete_permissions:
-- permission:
-    filter:
-      course_participant:
-        course:
-          trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
-  role: trainer
+  - role: trainer
+    permission:
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id

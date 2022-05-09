@@ -1,4 +1,4 @@
 table:
-  name: payment_methods
   schema: public
+  name: payment_methods
 is_enum: true

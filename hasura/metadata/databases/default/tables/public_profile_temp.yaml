@@ -1,114 +1,130 @@
 table:
-  name: profile_temp
   schema: public
+  name: profile_temp
 configuration:
-  comment: null
-  custom_column_names:
-    accept_marketing: acceptMarketing
-    accept_tcs: acceptTnc
-    course_id: courseId
-    created_at: createdAt
-    family_name: familyName
-    given_name: givenName
-    job_title: jobTitle
-    organization_id: organizationId
   custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    job_title:
+      custom_name: jobTitle
+    given_name:
+      custom_name: givenName
+    accept_tcs:
+      custom_name: acceptTnc
+    family_name:
+      custom_name: familyName
+    organization_id:
+      custom_name: organizationId
+    created_at:
+      custom_name: createdAt
+    accept_marketing:
+      custom_name: acceptMarketing
+  custom_column_names:
+    course_id: courseId
+    job_title: jobTitle
+    given_name: givenName
+    accept_tcs: acceptTnc
+    family_name: familyName
+    organization_id: organizationId
+    created_at: createdAt
+    accept_marketing: acceptMarketing
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - accept_marketing
-    - accept_tcs
-    - course_id
-    - created_at
-    - dob
-    - email
-    - family_name
-    - given_name
-    - id
-    - job_title
-    - organization_id
-    - phone
-    - quantity
-    - sector
-  role: anonymous
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - accept_marketing
-    - accept_tcs
-    - course_id
-    - dob
-    - family_name
-    - given_name
-    - job_title
-    - phone
-    - quantity
-    - sector
-    set:
-      email: x-hasura-User-Email
-  role: unverified
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - accept_marketing
-    - accept_tcs
-    - course_id
-    - dob
-    - family_name
-    - given_name
-    - job_title
-    - phone
-    - quantity
-    - sector
-    set:
-      email: x-hasura-User-Email
-  role: user
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - course_id
+        - created_at
+        - dob
+        - email
+        - family_name
+        - given_name
+        - id
+        - job_title
+        - organization_id
+        - phone
+        - quantity
+        - sector
+      backend_only: false
+  - role: unverified
+    permission:
+      check: {}
+      set:
+        email: x-hasura-User-Email
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - course_id
+        - dob
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - quantity
+        - sector
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      set:
+        email: x-hasura-User-Email
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - course_id
+        - dob
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - quantity
+        - sector
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - accept_marketing
-    - accept_tcs
-    - dob
-    - course_id
-    - id
-    - quantity
-    - email
-    - family_name
-    - given_name
-    - job_title
-    - phone
-    - sector
-    - created_at
-    - organization_id
-    filter:
-      email:
-        _eq: X-Hasura-User-Email
-  role: unverified
-- permission:
-    columns:
-    - accept_marketing
-    - accept_tcs
-    - dob
-    - course_id
-    - id
-    - quantity
-    - email
-    - family_name
-    - given_name
-    - job_title
-    - phone
-    - sector
-    - created_at
-    - organization_id
-    filter:
-      email:
-        _eq: X-Hasura-User-Email
-  role: user
+  - role: unverified
+    permission:
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - dob
+        - course_id
+        - id
+        - quantity
+        - email
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - sector
+        - created_at
+        - organization_id
+      filter:
+        email:
+          _eq: X-Hasura-User-Email
+  - role: user
+    permission:
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - dob
+        - course_id
+        - id
+        - quantity
+        - email
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - sector
+        - created_at
+        - organization_id
+      filter:
+        email:
+          _eq: X-Hasura-User-Email

@@ -1,143 +1,153 @@
 table:
-  name: course_participant
   schema: public
+  name: course_participant
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    booking_date:
+      custom_name: bookingDate
+    go1_enrolment_status:
+      custom_name: go1EnrolmentStatus
+    go1_enrolment_id:
+      custom_name: go1EnrolmentId
+    date_graded:
+      custom_name: dateGraded
+    invoice_id:
+      custom_name: invoiceID
   custom_column_names:
     booking_date: bookingDate
-    date_graded: dateGraded
-    go1_enrolment_id: go1EnrolmentId
     go1_enrolment_status: go1EnrolmentStatus
+    go1_enrolment_id: go1EnrolmentId
+    date_graded: dateGraded
     invoice_id: invoiceID
-  custom_root_fields: {}
 object_relationships:
-- name: certificate
-  using:
-    manual_configuration:
-      column_mapping:
-        certificate_id: id
-      insertion_order: null
-      remote_table:
-        name: course_certificate
-        schema: public
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: invite
-  using:
-    foreign_key_constraint_on: invite_id
-- name: profile
-  using:
-    foreign_key_constraint_on: profile_id
+  - name: certificate
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: course_certificate
+        insertion_order: null
+        column_mapping:
+          certificate_id: id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: invite
+    using:
+      foreign_key_constraint_on: invite_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 array_relationships:
-- name: gradingModules
-  using:
-    foreign_key_constraint_on:
-      column: course_participant_id
-      table:
-        name: course_participant_module
-        schema: public
+  - name: gradingModules
+    using:
+      foreign_key_constraint_on:
+        column: course_participant_id
+        table:
+          schema: public
+          name: course_participant_module
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      invite:
-        email:
-          _eq: X-Hasura-User-Email
-    columns:
-    - course_id
-    - invite_id
-    set:
-      profile_id: x-hasura-User-Id
-  role: user
+  - role: user
+    permission:
+      check:
+        invite:
+          email:
+            _eq: X-Hasura-User-Email
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - course_id
+        - invite_id
+      backend_only: false
 select_permissions:
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - id
-    filter:
-      course:
-        _and:
-        - course_type:
+  - role: anonymous
+    permission:
+      columns:
+        - course_id
+        - id
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _eq: PUBLISHED
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - attended
+        - course_id
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - booking_date
+        - created_at
+        - date_graded
+        - updated_at
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - id
+      filter:
+        course:
+          course_type:
             _eq: OPEN
-        - course_status:
-            _eq: PUBLISHED
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - attended
-    - course_id
-    - go1_enrolment_id
-    - go1_enrolment_status
-    - grade
-    - grading_feedback
-    - booking_date
-    - created_at
-    - date_graded
-    - updated_at
-    - id
-    - invite_id
-    - invoice_id
-    - profile_id
-    - registration_id
-    filter: {}
-  role: tt-ops
-- permission:
-    allow_aggregations: true
-    columns:
-    - id
-    filter:
-      course:
-        course_type:
-          _eq: OPEN
-  role: unverified
-- permission:
-    allow_aggregations: true
-    columns:
-    - attended
-    - booking_date
-    - course_id
-    - date_graded
-    - go1_enrolment_status
-    - grade
-    - grading_feedback
-    - id
-    - invoice_id
-    - profile_id
-    - registration_id
-    filter: {}
-  role: user
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - course_id
+        - date_graded
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter: {}
+      allow_aggregations: true
 update_permissions:
-- permission:
-    check: null
-    columns:
-    - grade
-    - updated_at
-    filter: {}
-  role: tt-ops
-- permission:
-    check: {}
-    columns:
-    - attended
-    - date_graded
-    - grade
-    - grading_feedback
-    filter:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: user
+  - role: tt-ops
+    permission:
+      columns:
+        - grade
+        - updated_at
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+        - attended
+        - date_graded
+        - grade
+        - grading_feedback
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: {}
 event_triggers:
-- definition:
-    enable_manual: false
-    insert:
-      columns: "*"
-  name: go1_link
-  retry_conf:
-    interval_sec: 10
-    num_retries: 3
-    timeout_sec: 10
-  webhook: "{{EVENTS_HOST}}/go1/link"
+  - name: go1_link
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 3
+      interval_sec: 10
+      timeout_sec: 10
+    webhook: '{{EVENTS_HOST}}/go1/link'

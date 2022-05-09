@@ -1,25 +1,25 @@
 table:
-  name: identity
   schema: public
+  name: identity
 object_relationships:
-- name: identity_type
-  using:
-    foreign_key_constraint_on: type
-- name: profile
-  using:
-    foreign_key_constraint_on: profile_id
+  - name: identity_type
+    using:
+      foreign_key_constraint_on: type
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 select_permissions:
-- permission:
-    columns:
-    - id
-    - provider_id
-    - profile_id
-    - type
-    filter:
-      _or:
-      - provider_id:
-          _eq: X-Hasura-User-Id
-      - profile:
-          id:
-            _eq: X-Hasura-User-Id
-  role: user
+  - role: user
+    permission:
+      columns:
+        - id
+        - provider_id
+        - profile_id
+        - type
+      filter:
+        _or:
+          - provider_id:
+              _eq: X-Hasura-User-Id
+          - profile:
+              id:
+                _eq: X-Hasura-User-Id

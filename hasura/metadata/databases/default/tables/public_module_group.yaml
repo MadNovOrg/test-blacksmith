@@ -1,49 +1,55 @@
 table:
-  name: module_group
   schema: public
+  name: module_group
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    course_level:
+      custom_name: level
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
   custom_column_names:
     course_level: level
-    created_at: createdAt
     updated_at: updatedAt
-  custom_root_fields: {}
+    created_at: createdAt
 array_relationships:
-- name: durations
-  using:
-    foreign_key_constraint_on:
-      column: module_group_id
-      table:
-        name: module_group_duration
-        schema: public
-- name: modules
-  using:
-    foreign_key_constraint_on:
-      column: module_group_id
-      table:
-        name: module
-        schema: public
+  - name: durations
+    using:
+      foreign_key_constraint_on:
+        column: module_group_id
+        table:
+          schema: public
+          name: module_group_duration
+  - name: modules
+    using:
+      foreign_key_constraint_on:
+        column: module_group_id
+        table:
+          schema: public
+          name: module
 select_permissions:
-- permission:
-    columns:
-    - mandatory
-    - color
-    - course_level
-    - name
-    - created_at
-    - updated_at
-    - id
-    filter: {}
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - color
-    - course_level
-    - created_at
-    - id
-    - mandatory
-    - name
-    - updated_at
-    filter: {}
-  role: user
+  - role: anonymous
+    permission:
+      columns:
+        - mandatory
+        - color
+        - course_level
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - color
+        - course_level
+        - created_at
+        - id
+        - mandatory
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true

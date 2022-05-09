@@ -1,85 +1,99 @@
 table:
-  name: venue
   schema: public
+  name: venue
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    address_line_two:
+      custom_name: addressLineTwo
+    address_line_one:
+      custom_name: addressLineOne
+    google_places_id:
+      custom_name: googlePlacesId
+    post_code:
+      custom_name: postCode
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    geo_coordinates:
+      custom_name: geoCoordinates
   custom_column_names:
-    address_line_one: addressLineOne
     address_line_two: addressLineTwo
-    created_at: createdAt
-    geo_coordinates: geoCoordinates
+    address_line_one: addressLineOne
     google_places_id: googlePlacesId
     post_code: postCode
     updated_at: updatedAt
-  custom_root_fields: {}
+    created_at: createdAt
+    geo_coordinates: geoCoordinates
 array_relationships:
-- name: schedule
-  using:
-    foreign_key_constraint_on:
-      column: venue_id
-      table:
-        name: course_schedule
-        schema: public
+  - name: schedule
+    using:
+      foreign_key_constraint_on:
+        column: venue_id
+        table:
+          schema: public
+          name: course_schedule
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - address_line_one
-    - address_line_two
-    - city
-    - created_at
-    - geo_coordinates
-    - google_places_id
-    - name
-    - post_code
-  role: trainer
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - name
+        - post_code
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - address_line_one
-    - address_line_two
-    - city
-    - created_at
-    - geo_coordinates
-    - id
-    - name
-    - post_code
-    - updated_at
-    filter:
-      schedule:
-        course:
-          _and:
-          - course_type:
-              _eq: OPEN
-          - course_status:
-              _eq: PUBLISHED
-  role: anonymous
-- permission:
-    columns:
-    - address_line_one
-    - address_line_two
-    - city
-    - created_at
-    - geo_coordinates
-    - google_places_id
-    - id
-    - name
-    - post_code
-    - updated_at
-    filter: {}
-  role: trainer
-- permission:
-    columns:
-    - address_line_one
-    - address_line_two
-    - city
-    - created_at
-    - geo_coordinates
-    - google_places_id
-    - id
-    - name
-    - post_code
-    - updated_at
-    filter: {}
-  role: user
+  - role: anonymous
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - created_at
+        - geo_coordinates
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter:
+        schedule:
+          course:
+            _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _eq: PUBLISHED
+  - role: trainer
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter: {}

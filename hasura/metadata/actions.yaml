@@ -1,166 +1,166 @@
 actions:
-- name: createStripeSubscription
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
-  comment: Creates a membership subscription
-- name: declineInvite
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/invite/decline'
-    forward_client_headers: true
-  permissions:
-  - role: anonymous
-- name: fetchPlans
-  definition:
-    kind: ""
-    handler: '{{ACTIONS_HOST}}/stripe/prices/list'
-  comment: Fetches membership plans
-- name: getInvite
-  definition:
-    kind: ""
-    handler: '{{ACTIONS_HOST}}/invite/get'
-    forward_client_headers: true
-  permissions:
-  - role: anonymous
-- name: getTrainersLevels
-  definition:
-    kind: ""
-    handler: '{{ACTIONS_HOST}}/trainers/levels'
-  permissions:
-  - role: trainer
-- name: isUserSubscribedToMembership
-  definition:
-    kind: ""
-    handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
-  comment: Checks whether user is subscribed to membership
-- name: plansCreate
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/stripe/prices/create'
-  comment: Creates a membership plan
-- name: searchTrainers
-  definition:
-    kind: ""
-    handler: '{{ACTIONS_HOST}}/trainers/search'
-  permissions:
-  - role: trainer
-- name: stripeCreatePaymentIntent
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/stripe/create-payment-intent'
-  permissions:
-  - role: user
-  - role: unverified
-- name: upsertZoomMeeting
-  definition:
-    kind: synchronous
-    handler: '{{ACTIONS_HOST}}/zoom/upsert-meeting'
-  permissions:
-  - role: tt-ops
-  - role: tt-admin
-  - role: trainer
-  comment: Creates or updates Zoom meeting with start date
+  - name: createStripeSubscription
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
+    comment: Creates a membership subscription
+  - name: declineInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/invite/decline'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: fetchPlans
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/stripe/prices/list'
+    comment: Fetches membership plans
+  - name: getInvite
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/invite/get'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: getTrainersLevels
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/trainers/levels'
+    permissions:
+      - role: trainer
+  - name: isUserSubscribedToMembership
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
+    comment: Checks whether user is subscribed to membership
+  - name: plansCreate
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/prices/create'
+    comment: Creates a membership plan
+  - name: searchTrainers
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/trainers/search'
+    permissions:
+      - role: trainer
+  - name: stripeCreatePaymentIntent
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/create-payment-intent'
+    permissions:
+      - role: user
+      - role: unverified
+  - name: upsertZoomMeeting
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/zoom/upsert-meeting'
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+      - role: trainer
+    comment: Creates or updates Zoom meeting with start date
 custom_types:
   enums:
-  - name: BillingInterval
-    values:
-    - description: null
-      is_deprecated: null
-      value: day
-    - description: null
-      is_deprecated: null
-      value: week
-    - description: null
-      is_deprecated: null
-      value: month
-    - description: null
-      is_deprecated: null
-      value: year
-  - name: InviteStatus
-    values:
-    - description: null
-      is_deprecated: null
-      value: PENDING
-    - description: null
-      is_deprecated: null
-      value: ACCEPTED
-    - description: null
-      is_deprecated: null
-      value: DECLINED
-  - name: CourseLevel
-    values:
-    - description: null
-      is_deprecated: null
-      value: LEVEL_1
-    - description: null
-      is_deprecated: null
-      value: LEVEL_2
-    - description: null
-      is_deprecated: null
-      value: ADVANCED
-    - description: null
-      is_deprecated: null
-      value: BILD_ACT
-    - description: null
-      is_deprecated: null
-      value: INTERMEDIATE_TRAINER
-    - description: null
-      is_deprecated: null
-      value: ADVANCED_TRAINER
-    - description: null
-      is_deprecated: null
-      value: BILD_ACT_TRAINER
-  - name: SearchTrainerAvailability
-    values:
-    - description: null
-      is_deprecated: null
-      value: UNAVAILABLE
-    - description: null
-      is_deprecated: null
-      value: AVAILABLE
-    - description: null
-      is_deprecated: null
-      value: PENDING
-    - description: null
-      is_deprecated: null
-      value: EXPIRED
-  - name: CourseTrainerType
-    values:
-    - description: null
-      is_deprecated: null
-      value: LEADER
-    - description: null
-      is_deprecated: null
-      value: ASSISTANT
-    - description: null
-      is_deprecated: null
-      value: MODERATOR
-  - name: Currency
-    values:
-    - description: null
-      is_deprecated: null
-      value: GBP
+    - name: BillingInterval
+      values:
+        - value: day
+          is_deprecated: null
+          description: null
+        - value: week
+          is_deprecated: null
+          description: null
+        - value: month
+          is_deprecated: null
+          description: null
+        - value: year
+          is_deprecated: null
+          description: null
+    - name: InviteStatus
+      values:
+        - value: PENDING
+          is_deprecated: null
+          description: null
+        - value: ACCEPTED
+          is_deprecated: null
+          description: null
+        - value: DECLINED
+          is_deprecated: null
+          description: null
+    - name: CourseLevel
+      values:
+        - value: LEVEL_1
+          is_deprecated: null
+          description: null
+        - value: LEVEL_2
+          is_deprecated: null
+          description: null
+        - value: ADVANCED
+          is_deprecated: null
+          description: null
+        - value: BILD_ACT
+          is_deprecated: null
+          description: null
+        - value: INTERMEDIATE_TRAINER
+          is_deprecated: null
+          description: null
+        - value: ADVANCED_TRAINER
+          is_deprecated: null
+          description: null
+        - value: BILD_ACT_TRAINER
+          is_deprecated: null
+          description: null
+    - name: SearchTrainerAvailability
+      values:
+        - value: UNAVAILABLE
+          is_deprecated: null
+          description: null
+        - value: AVAILABLE
+          is_deprecated: null
+          description: null
+        - value: PENDING
+          is_deprecated: null
+          description: null
+        - value: EXPIRED
+          is_deprecated: null
+          description: null
+    - name: CourseTrainerType
+      values:
+        - value: LEADER
+          is_deprecated: null
+          description: null
+        - value: ASSISTANT
+          is_deprecated: null
+          description: null
+        - value: MODERATOR
+          is_deprecated: null
+          description: null
+    - name: Currency
+      values:
+        - value: GBP
+          is_deprecated: null
+          description: null
   input_objects:
-  - name: PlansCreateInput
-  - name: UpsertZoomMeetingInput
-  - name: GetTrainersLevelsInput
-  - name: StripeCreatePaymentIntentInput
-  - name: SearchTrainersInput
+    - name: PlansCreateInput
+    - name: UpsertZoomMeetingInput
+    - name: GetTrainersLevelsInput
+    - name: StripeCreatePaymentIntentInput
+    - name: SearchTrainersInput
   objects:
-  - name: LinkProfileResult
-  - name: PlansCreateResult
-  - name: PlanObject
-  - name: createSubscriptionOutput
-  - name: isUserSubscribedToMembershipResponse
-  - name: DeclineInviteOutput
-  - name: Invite
-  - name: CourseInvite
-  - name: Address
-  - name: UpsertZoomMeetingPayload
-  - name: ZoomMeeting
-  - name: ZoomMeetingNotFoundError
-  - name: TrainerLevels
-  - name: StripeCreatePaymentIntentOutput
-  - name: SearchTrainer
+    - name: LinkProfileResult
+    - name: PlansCreateResult
+    - name: PlanObject
+    - name: createSubscriptionOutput
+    - name: isUserSubscribedToMembershipResponse
+    - name: DeclineInviteOutput
+    - name: Invite
+    - name: CourseInvite
+    - name: Address
+    - name: UpsertZoomMeetingPayload
+    - name: ZoomMeeting
+    - name: ZoomMeetingNotFoundError
+    - name: TrainerLevels
+    - name: StripeCreatePaymentIntentOutput
+    - name: SearchTrainer
   scalars: []

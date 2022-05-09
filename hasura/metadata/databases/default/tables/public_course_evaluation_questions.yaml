@@ -1,43 +1,47 @@
 table:
-  name: course_evaluation_questions
   schema: public
+  name: course_evaluation_questions
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    display_order:
+      custom_name: displayOrder
+    question_key:
+      custom_name: questionKey
   custom_column_names:
     display_order: displayOrder
     question_key: questionKey
-  custom_root_fields: {}
 select_permissions:
-- permission:
-    columns:
-    - display_order
-    - group
-    - id
-    - question
-    - question_key
-    - required
-    - type
-    filter: {}
-  role: trainer
-- permission:
-    columns:
-    - required
-    - display_order
-    - group
-    - question
-    - question_key
-    - type
-    - id
-    filter: {}
-  role: tt-ops
-- permission:
-    columns:
-    - display_order
-    - group
-    - id
-    - question
-    - question_key
-    - required
-    - type
-    filter: {}
-  role: user
+  - role: trainer
+    permission:
+      columns:
+        - display_order
+        - group
+        - id
+        - question
+        - question_key
+        - required
+        - type
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - required
+        - display_order
+        - group
+        - question
+        - question_key
+        - type
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - display_order
+        - group
+        - id
+        - question
+        - question_key
+        - required
+        - type
+      filter: {}

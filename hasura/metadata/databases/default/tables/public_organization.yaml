@@ -1,82 +1,88 @@
 table:
-  name: organization
   schema: public
+  name: organization
 configuration:
-  comment: null
-  custom_column_names:
-    contact_details: contactDetails
-    created_at: createdAt
-    updated_at: updatedAt
   custom_root_fields: {}
+  column_config:
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    contact_details:
+      custom_name: contactDetails
+  custom_column_names:
+    updated_at: updatedAt
+    created_at: createdAt
+    contact_details: contactDetails
 object_relationships:
-- name: organization_status
-  using:
-    foreign_key_constraint_on: status
+  - name: organization_status
+    using:
+      foreign_key_constraint_on: status
 array_relationships:
-- name: groups
-  using:
-    foreign_key_constraint_on:
-      column: organization_id
-      table:
-        name: organization_group
-        schema: public
-- name: members
-  using:
-    foreign_key_constraint_on:
-      column: organization_id
-      table:
-        name: organization_member
-        schema: public
-- name: organizationGroupsByParentOrganizationId
-  using:
-    foreign_key_constraint_on:
-      column: parent_organization_id
-      table:
-        name: organization_group
-        schema: public
-- name: roles
-  using:
-    foreign_key_constraint_on:
-      column: organization_id
-      table:
-        name: organization_role
-        schema: public
+  - name: groups
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: organization_group
+  - name: members
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: organization_member
+  - name: organizationGroupsByParentOrganizationId
+    using:
+      foreign_key_constraint_on:
+        column: parent_organization_id
+        table:
+          schema: public
+          name: organization_group
+  - name: roles
+    using:
+      foreign_key_constraint_on:
+        column: organization_id
+        table:
+          schema: public
+          name: organization_role
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - addresses
-    - name
-  role: unverified
+  - role: unverified
+    permission:
+      check: {}
+      columns:
+        - addresses
+        - name
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - addresses
-    - attributes
-    - contact_details
-    - created_at
-    - id
-    - name
-    - preferences
-    - status
-    - tags
-    - updated_at
-    filter: {}
-  role: unverified
-- permission:
-    allow_aggregations: true
-    columns:
-    - name
-    - addresses
-    - attributes
-    - contact_details
-    - original_record
-    - preferences
-    - tags
-    - status
-    - created_at
-    - updated_at
-    - id
-    filter: {}
-  role: user
+  - role: unverified
+    permission:
+      columns:
+        - addresses
+        - attributes
+        - contact_details
+        - created_at
+        - id
+        - name
+        - preferences
+        - status
+        - tags
+        - updated_at
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - name
+        - addresses
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - status
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true

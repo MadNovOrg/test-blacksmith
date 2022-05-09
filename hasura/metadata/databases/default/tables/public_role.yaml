@@ -1,35 +1,35 @@
 table:
-  name: role
   schema: public
+  name: role
 array_relationships:
-- name: organization_roles
-  using:
-    foreign_key_constraint_on:
-      column: role_id
-      table:
-        name: organization_role
-        schema: public
-- name: profile_roles
-  using:
-    foreign_key_constraint_on:
-      column: role_id
-      table:
-        name: profile_role
-        schema: public
+  - name: organization_roles
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          schema: public
+          name: organization_role
+  - name: profile_roles
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          schema: public
+          name: profile_role
 select_permissions:
-- permission:
-    columns:
-    - name
-    - rank
-    - data
-    - id
-    filter: {}
-  role: unverified
-- permission:
-    columns:
-    - id
-    - name
-    - data
-    - rank
-    filter: {}
-  role: user
+  - role: unverified
+    permission:
+      columns:
+        - name
+        - rank
+        - data
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
+      filter: {}

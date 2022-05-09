@@ -1,41 +1,49 @@
 table:
-  name: module_group_duration
   schema: public
+  name: module_group_duration
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    go1_integration:
+      custom_name: go1Integration
+    course_delivery_type:
+      custom_name: courseDeliveryType
   custom_column_names:
-    course_delivery_type: courseDeliveryType
+    updated_at: updatedAt
     created_at: createdAt
     go1_integration: go1Integration
-    updated_at: updatedAt
-  custom_root_fields: {}
+    course_delivery_type: courseDeliveryType
 object_relationships:
-- name: moduleGroup
-  using:
-    foreign_key_constraint_on: module_group_id
+  - name: moduleGroup
+    using:
+      foreign_key_constraint_on: module_group_id
 select_permissions:
-- permission:
-    columns:
-    - id
-    - created_at
-    - updated_at
-    - module_group_id
-    - course_delivery_type
-    - reaccreditation
-    - duration
-    - go1_integration
-    filter: {}
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_delivery_type
-    - created_at
-    - duration
-    - go1_integration
-    - id
-    - module_group_id
-    - reaccreditation
-    - updated_at
-    filter: {}
-  role: user
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - module_group_id
+        - course_delivery_type
+        - reaccreditation
+        - duration
+        - go1_integration
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_delivery_type
+        - created_at
+        - duration
+        - go1_integration
+        - id
+        - module_group_id
+        - reaccreditation
+        - updated_at
+      filter: {}
+      allow_aggregations: true

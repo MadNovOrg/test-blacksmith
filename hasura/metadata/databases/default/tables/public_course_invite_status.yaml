@@ -1,4 +1,4 @@
 table:
-  name: course_invite_status
   schema: public
+  name: course_invite_status
 is_enum: true

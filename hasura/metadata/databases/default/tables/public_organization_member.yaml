@@ -1,50 +1,56 @@
 table:
-  name: organization_member
   schema: public
+  name: organization_member
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    member_type:
+      custom_name: memberType
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
   custom_column_names:
-    created_at: createdAt
     member_type: memberType
     updated_at: updatedAt
-  custom_root_fields: {}
+    created_at: createdAt
 object_relationships:
-- name: organization
-  using:
-    foreign_key_constraint_on: organization_id
-- name: profile
-  using:
-    foreign_key_constraint_on: profile_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 array_relationships:
-- name: roles
-  using:
-    foreign_key_constraint_on:
-      column: organization_member_id
-      table:
-        name: organization_member_role
-        schema: public
+  - name: roles
+    using:
+      foreign_key_constraint_on:
+        column: organization_member_id
+        table:
+          schema: public
+          name: organization_member_role
 select_permissions:
-- permission:
-    columns:
-    - id
-    - profile_id
-    - organization_id
-    - member_type
-    - _source
-    - created_at
-    - updated_at
-    filter:
-      profile_id:
-        _eq: X-Hasura-User-Id
-  role: unverified
-- permission:
-    allow_aggregations: true
-    columns:
-    - created_at
-    - id
-    - member_type
-    - organization_id
-    - profile_id
-    - updated_at
-    filter: {}
-  role: user
+  - role: unverified
+    permission:
+      columns:
+        - id
+        - profile_id
+        - organization_id
+        - member_type
+        - _source
+        - created_at
+        - updated_at
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - id
+        - member_type
+        - organization_id
+        - profile_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true

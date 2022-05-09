@@ -1,146 +1,152 @@
 table:
-  name: course_schedule
   schema: public
+  name: course_schedule
 configuration:
-  comment: null
-  custom_column_names:
-    created_at: createdAt
-    updated_at: updatedAt
-    virtual_link: virtualLink
   custom_root_fields: {}
+  column_config:
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    virtual_link:
+      custom_name: virtualLink
+  custom_column_names:
+    updated_at: updatedAt
+    created_at: createdAt
+    virtual_link: virtualLink
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: venue
-  using:
-    foreign_key_constraint_on: venue_id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: venue
+    using:
+      foreign_key_constraint_on: venue_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-  role: trainer
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-  role: tt-ops
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      backend_only: false
 select_permissions:
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-    filter:
-      course:
-        _and:
-        - course_type:
+  - role: anonymous
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _eq: PUBLISHED
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - virtual_link
+        - created_at
+        - end
+        - start
+        - updated_at
+        - id
+        - venue_id
+      filter:
+        course:
+          course_type:
             _eq: OPEN
-        - course_status:
-            _eq: PUBLISHED
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-    filter: {}
-  role: trainer
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-    filter: {}
-  role: tt-ops
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - virtual_link
-    - created_at
-    - end
-    - start
-    - updated_at
-    - id
-    - venue_id
-    filter:
-      course:
-        course_type:
-          _eq: OPEN
-  role: unverified
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - created_at
-    - end
-    - id
-    - start
-    - updated_at
-    - venue_id
-    - virtual_link
-    filter: {}
-  role: user
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
 update_permissions:
-- permission:
-    check: null
-    columns:
-    - id
-    - created_at
-    - updated_at
-    - start
-    - end
-    - venue_id
-    - virtual_link
-    - course_id
-    filter: {}
-  role: trainer
-- permission:
-    check: null
-    columns:
-    - course_id
-    - virtual_link
-    - created_at
-    - end
-    - start
-    - updated_at
-    - id
-    - venue_id
-    filter: {}
-  role: tt-ops
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - start
+        - end
+        - venue_id
+        - virtual_link
+        - course_id
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - virtual_link
+        - created_at
+        - end
+        - start
+        - updated_at
+        - id
+        - venue_id
+      filter: {}
+      check: null

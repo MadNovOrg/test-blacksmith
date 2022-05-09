@@ -1,12 +1,12 @@
 table:
-  name: profile_status
   schema: public
+  name: profile_status
 is_enum: true
 array_relationships:
-- name: profiles
-  using:
-    foreign_key_constraint_on:
-      column: status
-      table:
-        name: profile
-        schema: public
+  - name: profiles
+    using:
+      foreign_key_constraint_on:
+        column: status
+        table:
+          schema: public
+          name: profile

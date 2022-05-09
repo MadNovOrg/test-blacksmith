@@ -1,47 +1,59 @@
 table:
-  name: course_certificate_changelog
   schema: public
+  name: course_certificate_changelog
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    author_id:
+      custom_name: authorId
+    participant_id:
+      custom_name: participantId
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    old_grade:
+      custom_name: oldGrade
+    new_grade:
+      custom_name: newGrade
   custom_column_names:
     author_id: authorId
-    created_at: createdAt
-    new_grade: newGrade
-    old_grade: oldGrade
     participant_id: participantId
     updated_at: updatedAt
-  custom_root_fields: {}
+    created_at: createdAt
+    old_grade: oldGrade
+    new_grade: newGrade
 object_relationships:
-- name: author
-  using:
-    foreign_key_constraint_on: author_id
-- name: participant
-  using:
-    foreign_key_constraint_on: participant_id
+  - name: author
+    using:
+      foreign_key_constraint_on: author_id
+  - name: participant
+    using:
+      foreign_key_constraint_on: participant_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - author_id
-    - created_at
-    - id
-    - new_grade
-    - notes
-    - old_grade
-    - participant_id
-    - updated_at
-  role: tt-ops
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - author_id
+        - created_at
+        - id
+        - new_grade
+        - notes
+        - old_grade
+        - participant_id
+        - updated_at
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - author_id
-    - created_at
-    - id
-    - new_grade
-    - notes
-    - old_grade
-    - participant_id
-    - updated_at
-    filter: {}
-  role: tt-ops
+  - role: tt-ops
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - new_grade
+        - notes
+        - old_grade
+        - participant_id
+        - updated_at
+      filter: {}

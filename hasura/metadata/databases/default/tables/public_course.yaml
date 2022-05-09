@@ -1,278 +1,298 @@
 table:
-  name: course
   schema: public
+  name: course
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    aol_cost_of_course:
+      custom_name: aolCostOfCourse
+    course_type:
+      custom_name: type
+    course_status:
+      custom_name: status
+    grading_confirmed:
+      custom_name: gradingConfirmed
+    course_level:
+      custom_name: level
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    go1_integration:
+      custom_name: go1Integration
+    contact_profile_id:
+      custom_name: contactProfileId
+    course_delivery_type:
+      custom_name: deliveryType
   custom_column_names:
     aol_cost_of_course: aolCostOfCourse
-    contact_profile_id: contactProfileId
-    course_delivery_type: deliveryType
-    course_level: level
-    course_status: status
     course_type: type
+    course_status: status
+    grading_confirmed: gradingConfirmed
+    course_level: level
+    updated_at: updatedAt
     created_at: createdAt
     go1_integration: go1Integration
-    grading_confirmed: gradingConfirmed
-    updated_at: updatedAt
-  custom_root_fields: {}
+    contact_profile_id: contactProfileId
+    course_delivery_type: deliveryType
 object_relationships:
-- name: contactProfile
-  using:
-    foreign_key_constraint_on: contact_profile_id
-- name: organization
-  using:
-    foreign_key_constraint_on: organization_id
+  - name: contactProfile
+    using:
+      foreign_key_constraint_on: contact_profile_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
 array_relationships:
-- name: modules
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_module
-        schema: public
-- name: participants
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_participant
-        schema: public
-- name: schedule
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_schedule
-        schema: public
-- name: trainers
-  using:
-    foreign_key_constraint_on:
-      column: course_id
-      table:
-        name: course_trainer
-        schema: public
+  - name: modules
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_module
+  - name: participants
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_participant
+  - name: schedule
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_schedule
+  - name: trainers
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_trainer
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - aol_cost_of_course
-    - contact_profile_id
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - created_at
-    - description
-    - go1_integration
-    - grading_confirmed
-    - id
-    - max_participants
-    - min_participants
-    - name
-    - organization_id
-    - reaccreditation
-    - updated_at
-  role: trainer
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - go1_integration
-    - grading_confirmed
-    - reaccreditation
-    - id
-    - max_participants
-    - min_participants
-    - aol_cost_of_course
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - description
-    - name
-    - created_at
-    - updated_at
-    - contact_profile_id
-    - organization_id
-  role: tt-ops
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - aol_cost_of_course
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
+        - organization_id
+        - reaccreditation
+        - updated_at
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - go1_integration
+        - grading_confirmed
+        - reaccreditation
+        - id
+        - max_participants
+        - min_participants
+        - aol_cost_of_course
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - description
+        - name
+        - created_at
+        - updated_at
+        - contact_profile_id
+        - organization_id
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - created_at
-    - description
-    - id
-    - max_participants
-    - min_participants
-    - name
-    - reaccreditation
-    - updated_at
-    filter:
-      _and:
-      - course_type:
-          _eq: OPEN
-      - course_status:
-          _eq: PUBLISHED
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - go1_integration
-    - grading_confirmed
-    - reaccreditation
-    - id
-    - max_participants
-    - min_participants
-    - aol_cost_of_course
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - description
-    - name
-    - created_at
-    - updated_at
-    - contact_profile_id
-    - organization_id
-    filter:
-      trainers:
-        profile_id:
-          _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    allow_aggregations: true
-    columns:
-    - go1_integration
-    - grading_confirmed
-    - reaccreditation
-    - id
-    - max_participants
-    - min_participants
-    - aol_cost_of_course
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - description
-    - name
-    - created_at
-    - updated_at
-    - contact_profile_id
-    - organization_id
-    filter: {}
-  role: tt-ops
-- permission:
-    columns:
-    - go1_integration
-    - grading_confirmed
-    - reaccreditation
-    - id
-    - max_participants
-    - min_participants
-    - aol_cost_of_course
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - description
-    - name
-    - created_at
-    - updated_at
-    - contact_profile_id
-    - organization_id
-    filter:
-      course_type:
-        _eq: OPEN
-  role: unverified
-- permission:
-    allow_aggregations: true
-    columns:
-    - aol_cost_of_course
-    - contact_profile_id
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - created_at
-    - go1_integration
-    - grading_confirmed
-    - id
-    - max_participants
-    - min_participants
-    - name
-    - organization_id
-    - reaccreditation
-    - updated_at
-    filter:
-      _or:
-      - participants:
+  - role: anonymous
+    permission:
+      columns:
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - id
+        - max_participants
+        - min_participants
+        - name
+        - reaccreditation
+        - updated_at
+      filter:
+        _and:
+          - course_type:
+              _eq: OPEN
+          - course_status:
+              _eq: PUBLISHED
+  - role: trainer
+    permission:
+      columns:
+        - go1_integration
+        - grading_confirmed
+        - reaccreditation
+        - id
+        - max_participants
+        - min_participants
+        - aol_cost_of_course
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - description
+        - name
+        - created_at
+        - updated_at
+        - contact_profile_id
+        - organization_id
+      filter:
+        trainers:
           profile_id:
             _eq: X-Hasura-User-Id
-      - course_type:
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - go1_integration
+        - grading_confirmed
+        - reaccreditation
+        - id
+        - max_participants
+        - min_participants
+        - aol_cost_of_course
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - description
+        - name
+        - created_at
+        - updated_at
+        - contact_profile_id
+        - organization_id
+      filter: {}
+      allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - go1_integration
+        - grading_confirmed
+        - reaccreditation
+        - id
+        - max_participants
+        - min_participants
+        - aol_cost_of_course
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - description
+        - name
+        - created_at
+        - updated_at
+        - contact_profile_id
+        - organization_id
+      filter:
+        course_type:
           _eq: OPEN
-  role: user
+  - role: user
+    permission:
+      columns:
+        - aol_cost_of_course
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
+        - organization_id
+        - reaccreditation
+        - updated_at
+      filter:
+        _or:
+          - participants:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - course_type:
+              _eq: OPEN
+      allow_aggregations: true
 update_permissions:
-- permission:
-    check: null
-    columns:
-    - aol_cost_of_course
-    - contact_profile_id
-    - course_delivery_type
-    - course_level
-    - course_status
-    - created_at
-    - description
-    - go1_integration
-    - grading_confirmed
-    - id
-    - max_participants
-    - min_participants
-    - name
-    - organization_id
-    - reaccreditation
-    - updated_at
-    filter:
-      trainers:
-        profile_id:
-          _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    check: {}
-    columns:
-    - go1_integration
-    - grading_confirmed
-    - reaccreditation
-    - id
-    - max_participants
-    - min_participants
-    - aol_cost_of_course
-    - course_delivery_type
-    - course_level
-    - course_status
-    - course_type
-    - description
-    - name
-    - created_at
-    - updated_at
-    - contact_profile_id
-    - organization_id
-    filter: {}
-  role: tt-ops
-- permission:
-    check: null
-    columns:
-    - course_status
-    - grading_confirmed
-    filter:
-      trainers:
-        profile_id:
-          _eq: X-Hasura-User-Id
-  role: user
+  - role: trainer
+    permission:
+      columns:
+        - aol_cost_of_course
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - created_at
+        - description
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
+        - organization_id
+        - reaccreditation
+        - updated_at
+      filter:
+        trainers:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - go1_integration
+        - grading_confirmed
+        - reaccreditation
+        - id
+        - max_participants
+        - min_participants
+        - aol_cost_of_course
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - description
+        - name
+        - created_at
+        - updated_at
+        - contact_profile_id
+        - organization_id
+      filter: {}
+      check: {}
+  - role: user
+    permission:
+      columns:
+        - course_status
+        - grading_confirmed
+      filter:
+        trainers:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      check: null
 delete_permissions:
-- permission:
-    filter: {}
-  role: tt-ops
+  - role: tt-ops
+    permission:
+      filter: {}

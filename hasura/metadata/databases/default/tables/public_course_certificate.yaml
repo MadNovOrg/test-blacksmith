@@ -1,120 +1,136 @@
 table:
-  name: course_certificate
   schema: public
+  name: course_certificate
 configuration:
-  comment: null
-  custom_column_names:
-    certification_date: certificationDate
-    course_id: courseId
-    course_level: courseLevel
-    course_name: courseName
-    created_at: createdAt
-    expiry_date: expiryDate
-    profile_id: profileId
-    updated_at: updatedAt
   custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    course_name:
+      custom_name: courseName
+    certification_date:
+      custom_name: certificationDate
+    course_level:
+      custom_name: courseLevel
+    expiry_date:
+      custom_name: expiryDate
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    course_id: courseId
+    course_name: courseName
+    certification_date: certificationDate
+    course_level: courseLevel
+    expiry_date: expiryDate
+    updated_at: updatedAt
+    created_at: createdAt
+    profile_id: profileId
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: participant
-  using:
-    manual_configuration:
-      column_mapping:
-        id: certificate_id
-      insertion_order: null
-      remote_table:
-        name: course_participant
-        schema: public
-- name: profile
-  using:
-    manual_configuration:
-      column_mapping:
-        profile_id: id
-      insertion_order: null
-      remote_table:
-        name: profile
-        schema: public
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: participant
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: course_participant
+        insertion_order: null
+        column_mapping:
+          id: certificate_id
+  - name: profile
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: profile
+        insertion_order: null
+        column_mapping:
+          profile_id: id
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-    columns:
-    - certification_date
-    - course_id
-    - course_level
-    - course_name
-    - expiry_date
-    - number
-    - profile_id
-  role: trainer
-- permission:
-    backend_only: false
-    check:
-      _and:
-      - profile_id:
-          _eq: X-Hasura-User-Id
-      - course_id:
-          _is_null: true
-    columns:
-    - certification_date
-    - course_level
-    - course_name
-    - expiry_date
-    - id
-    - number
-    - profile_id
-  role: user
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - expiry_date
+        - number
+        - profile_id
+      backend_only: false
+  - role: user
+    permission:
+      check:
+        _and:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - course_id:
+              _is_null: true
+      columns:
+        - certification_date
+        - course_level
+        - course_name
+        - expiry_date
+        - id
+        - number
+        - profile_id
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - certification_date
-    - course_id
-    - course_level
-    - course_name
-    - created_at
-    - expiry_date
-    - id
-    - number
-    - profile_id
-    - updated_at
-    filter:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    columns:
-    - certification_date
-    - expiry_date
-    - course_id
-    - course_level
-    - course_name
-    - number
-    - created_at
-    - updated_at
-    - id
-    - profile_id
-    filter: {}
-  role: tt-ops
-- permission:
-    columns:
-    - certification_date
-    - course_id
-    - course_level
-    - course_name
-    - created_at
-    - expiry_date
-    - id
-    - number
-    - profile_id
-    - updated_at
-    filter:
-      profile_id:
-        _eq: X-Hasura-User-Id
-  role: user
+  - role: trainer
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - number
+        - profile_id
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  - role: tt-ops
+    permission:
+      columns:
+        - certification_date
+        - expiry_date
+        - course_id
+        - course_level
+        - course_name
+        - number
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - number
+        - profile_id
+        - updated_at
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id

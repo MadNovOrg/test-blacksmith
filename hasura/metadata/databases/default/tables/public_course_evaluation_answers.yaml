@@ -1,96 +1,102 @@
 table:
-  name: course_evaluation_answers
   schema: public
+  name: course_evaluation_answers
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    question_id:
+      custom_name: questionId
+    course_id:
+      custom_name: courseId
+    profile_id:
+      custom_name: profileId
   custom_column_names:
+    question_id: questionId
     course_id: courseId
     profile_id: profileId
-    question_id: questionId
-  custom_root_fields: {}
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: participant
-  using:
-    manual_configuration:
-      column_mapping:
-        course_id: course_id
-        profile_id: profile_id
-      insertion_order: null
-      remote_table:
-        name: course_participant
-        schema: public
-- name: profile
-  using:
-    foreign_key_constraint_on: profile_id
-- name: question
-  using:
-    foreign_key_constraint_on: question_id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: participant
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: course_participant
+        insertion_order: null
+        column_mapping:
+          course_id: course_id
+          profile_id: profile_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+  - name: question
+    using:
+      foreign_key_constraint_on: question_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      course:
-        trainers:
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - answer
+        - course_id
+        - profile_id
+        - question_id
+      backend_only: false
+  - role: user
+    permission:
+      check:
+        participant:
           profile_id:
             _eq: X-Hasura-User-Id
-    columns:
-    - answer
-    - course_id
-    - profile_id
-    - question_id
-    set:
-      profile_id: x-hasura-User-Id
-  role: trainer
-- permission:
-    backend_only: false
-    check:
-      participant:
-        profile_id:
-          _eq: X-Hasura-User-Id
-    columns:
-    - answer
-    - course_id
-    - id
-    - profile_id
-    - question_id
-    set:
-      profile_id: x-hasura-User-Id
-  role: user
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - answer
-    - course_id
-    - id
-    - profile_id
-    - question_id
-    filter:
-      course:
-        trainers:
+  - role: trainer
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - answer
+        - id
+        - profile_id
+        - question_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        participant:
           profile_id:
             _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    columns:
-    - course_id
-    - answer
-    - id
-    - profile_id
-    - question_id
-    filter: {}
-  role: tt-ops
-- permission:
-    columns:
-    - answer
-    - course_id
-    - id
-    - profile_id
-    - question_id
-    filter:
-      participant:
-        profile_id:
-          _eq: X-Hasura-User-Id
-  role: user

@@ -1,10 +1,10 @@
 table:
-  name: organization_member_role
   schema: public
+  name: organization_member_role
 object_relationships:
-- name: member
-  using:
-    foreign_key_constraint_on: organization_member_id
-- name: role
-  using:
-    foreign_key_constraint_on: organization_role_id
+  - name: member
+    using:
+      foreign_key_constraint_on: organization_member_id
+  - name: role
+    using:
+      foreign_key_constraint_on: organization_role_id

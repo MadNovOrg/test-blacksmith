@@ -1,91 +1,95 @@
 table:
-  name: course_invites
   schema: public
+  name: course_invites
 configuration:
-  comment: null
-  custom_column_names:
-    created_at: createdAt
-    updated_at: updatedAt
   custom_root_fields: {}
+  column_config:
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+  custom_column_names:
+    updated_at: updatedAt
+    created_at: createdAt
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: participant
-  using:
-    manual_configuration:
-      column_mapping:
-        id: invite_id
-      insertion_order: null
-      remote_table:
-        name: course_participant
-        schema: public
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: participant
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: course_participant
+        insertion_order: null
+        column_mapping:
+          id: invite_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      course:
-        trainers:
-          profile:
-            id:
-              _eq: X-Hasura-User-Id
-    columns:
-    - course_id
-    - email
-  role: user
-select_permissions:
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - created_at
-    - email
-    - id
-    - note
-    - status
-    - updated_at
-    filter:
-      course:
-        trainers:
-          profile:
-            id:
-              _eq: X-Hasura-User-Id
-  role: user
-update_permissions:
-- permission:
-    check: null
-    columns:
-    - status
-    filter:
-      _or:
-      - course:
+  - role: user
+    permission:
+      check:
+        course:
           trainers:
             profile:
               id:
                 _eq: X-Hasura-User-Id
-      - _and:
-        - email:
-            _eq: X-Hasura-User-Email
-        - status:
-            _eq: PENDING
-  role: user
+      columns:
+        - course_id
+        - email
+      backend_only: false
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - status
+      filter:
+        _or:
+          - course:
+              trainers:
+                profile:
+                  id:
+                    _eq: X-Hasura-User-Id
+          - _and:
+              - email:
+                  _eq: X-Hasura-User-Email
+              - status:
+                  _eq: PENDING
+      check: null
 delete_permissions:
-- permission:
-    filter:
-      course:
-        trainers:
-          profile:
-            id:
-              _eq: X-Hasura-User-Id
-  role: user
+  - role: user
+    permission:
+      filter:
+        course:
+          trainers:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
 event_triggers:
-- definition:
-    enable_manual: false
-    insert:
-      columns: "*"
-  name: send_invite_email
-  retry_conf:
-    interval_sec: 10
-    num_retries: 0
-    timeout_sec: 60
-  webhook: "{{EVENTS_HOST}}/email/course-invite"
+  - name: send_invite_email
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-invite'

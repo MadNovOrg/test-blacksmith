@@ -1,4 +1,4 @@
 table:
-  name: color
   schema: public
+  name: color
 is_enum: true

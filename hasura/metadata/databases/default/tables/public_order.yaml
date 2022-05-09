@@ -1,83 +1,107 @@
 table:
-  name: order
   schema: public
+  name: order
 configuration:
-  comment: null
-  custom_column_names:
-    billing_address: billingAddress
-    billing_email: billingEmail
-    billing_family_name: billingFamilyName
-    billing_given_name: billingGivenName
-    billing_phone: billingPhone
-    course_id: courseId
-    created_at: createdAt
-    order_total: orderTotal
-    organization_id: organizationId
-    payment_method: paymentMethod
-    profile_id: profileId
-    promo_codes: promoCodes
   custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    billing_family_name:
+      custom_name: billingFamilyName
+    payment_method:
+      custom_name: paymentMethod
+    billing_address:
+      custom_name: billingAddress
+    promo_codes:
+      custom_name: promoCodes
+    organization_id:
+      custom_name: organizationId
+    billing_given_name:
+      custom_name: billingGivenName
+    created_at:
+      custom_name: createdAt
+    billing_phone:
+      custom_name: billingPhone
+    billing_email:
+      custom_name: billingEmail
+    order_total:
+      custom_name: orderTotal
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    course_id: courseId
+    billing_family_name: billingFamilyName
+    payment_method: paymentMethod
+    billing_address: billingAddress
+    promo_codes: promoCodes
+    organization_id: organizationId
+    billing_given_name: billingGivenName
+    created_at: createdAt
+    billing_phone: billingPhone
+    billing_email: billingEmail
+    order_total: orderTotal
+    profile_id: profileId
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: organization
-  using:
-    foreign_key_constraint_on: organization_id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: organization
+    using:
+      foreign_key_constraint_on: organization_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check: {}
-    columns:
-    - billing_address
-    - billing_email
-    - billing_family_name
-    - billing_given_name
-    - billing_phone
-    - course_id
-    - id
-    - organization_id
-    - payment_method
-    - promo_codes
-    - quantity
-    - registrants
-    set:
-      profile_id: x-hasura-User-Id
-  role: unverified
+  - role: unverified
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+      backend_only: false
 select_permissions:
-- permission:
-    columns:
-    - billing_address
-    - billing_email
-    - billing_family_name
-    - billing_given_name
-    - billing_phone
-    - course_id
-    - created_at
-    - currency
-    - id
-    - order_total
-    - organization_id
-    - payment_method
-    - price
-    - profile_id
-    - promo_codes
-    - quantity
-    - registrants
-    - stripePaymentId
-    - vat
-    filter:
-      profile_id:
-        _eq: X-Hasura-User-Id
-  role: unverified
+  - role: unverified
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - vat
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
 event_triggers:
-- definition:
-    enable_manual: false
-    insert:
-      columns: "*"
-  name: new_order
-  retry_conf:
-    interval_sec: 10
-    num_retries: 3
-    timeout_sec: 60
-  webhook: "{{EVENTS_HOST}}/order"
+  - name: new_order
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 3
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/order'

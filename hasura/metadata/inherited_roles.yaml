@@ -1,15 +1,15 @@
 - role_name: mta-admin
   role_set:
-  - org-admin
+    - org-admin
 - role_name: org-admin
   role_set:
-  - trainer
+    - trainer
 - role_name: trainer
   role_set:
-  - user
+    - user
 - role_name: tt-admin
   role_set:
-  - tt-ops
+    - tt-ops
 - role_name: tt-ops
   role_set:
-  - mta-admin
+    - mta-admin

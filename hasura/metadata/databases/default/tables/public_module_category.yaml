@@ -1,10 +1,10 @@
 table:
-  name: module_category
   schema: public
+  name: module_category
 is_enum: true
 select_permissions:
-- permission:
-    columns:
-    - name
-    filter: {}
-  role: user
+  - role: user
+    permission:
+      columns:
+        - name
+      filter: {}

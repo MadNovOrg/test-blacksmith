@@ -1,94 +1,98 @@
 table:
-  name: course_module
   schema: public
+  name: course_module
 configuration:
-  comment: null
+  custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    module_id:
+      custom_name: moduleId
   custom_column_names:
     course_id: courseId
     module_id: moduleId
-  custom_root_fields: {}
 object_relationships:
-- name: course
-  using:
-    foreign_key_constraint_on: course_id
-- name: module
-  using:
-    foreign_key_constraint_on: module_id
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: module
+    using:
+      foreign_key_constraint_on: module_id
 insert_permissions:
-- permission:
-    backend_only: false
-    check:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-    columns:
-    - id
-    - created_at
-    - updated_at
-    - course_id
-    - module_id
-  role: trainer
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - module_id
+      backend_only: false
 select_permissions:
-- permission:
-    allow_aggregations: true
-    columns:
-    - id
-    - created_at
-    - updated_at
-    - module_id
-    - covered
-    - course_id
-    filter:
-      course:
-        _and:
-        - course_type:
-            _eq: OPEN
-        - course_status:
-            _eq: PUBLISHED
-  role: anonymous
-- permission:
-    allow_aggregations: true
-    columns:
-    - course_id
-    - covered
-    - created_at
-    - id
-    - module_id
-    - updated_at
-    filter:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: trainer
-- permission:
-    allow_aggregations: true
-    columns:
-    - id
-    - module_id
-    filter:
-      course:
-        participants:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: user
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - module_id
+        - covered
+        - course_id
+      filter:
+        course:
+          _and:
+            - course_type:
+                _eq: OPEN
+            - course_status:
+                _eq: PUBLISHED
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - covered
+        - created_at
+        - id
+        - module_id
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - id
+        - module_id
+      filter:
+        course:
+          participants:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
 update_permissions:
-- permission:
-    check: null
-    columns:
-    - covered
-    filter:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: trainer
+  - role: trainer
+    permission:
+      columns:
+        - covered
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: null
 delete_permissions:
-- permission:
-    filter:
-      course:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
-  role: trainer
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id

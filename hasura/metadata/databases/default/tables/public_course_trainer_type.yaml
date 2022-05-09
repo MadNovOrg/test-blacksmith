@@ -1,4 +1,4 @@
 table:
-  name: course_trainer_type
   schema: public
+  name: course_trainer_type
 is_enum: true
