@@ -23,6 +23,12 @@ jest.mock('@app/hooks/use-fetcher')
 const useFetcherMock = jest.mocked(useFetcher)
 const useCourseGradingDataMock = jest.mocked(useCourseGradingData)
 
+function selectGradingOption(grade: string) {
+  userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+  const menu = screen.getByTestId('course-grading-options')
+  userEvent.click(within(menu).getByText(grade))
+}
+
 describe('page: CourseGrading', () => {
   afterEach(() => {
     localStorage.clear()
@@ -248,6 +254,8 @@ describe('page: CourseGrading', () => {
       </MemoryRouter>
     )
 
+    selectGradingOption('Pass')
+
     userEvent.click(screen.getByText('Submit final grade'))
 
     expect(screen.getByText('Grading confirmation')).toBeVisible()
@@ -285,11 +293,51 @@ describe('page: CourseGrading', () => {
       </MemoryRouter>
     )
 
+    selectGradingOption('Pass')
+
     userEvent.click(screen.getByText('Submit final grade'))
 
     userEvent.click(screen.getByText('Cancel'))
 
     expect(screen.queryByText('Grading confirmation')).not.toBeVisible()
+  })
+
+  it("disables save button if a grading option isn't selected", () => {
+    const COURSE_ID = 'course-id'
+
+    const course = buildCourse()
+    const courseModules = [
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: true },
+      { ...buildCourseModule(), covered: false },
+    ]
+    const courseParticipants = [
+      { ...buildParticipant(), attended: false },
+      { ...buildParticipant(), attended: true },
+    ]
+
+    useCourseGradingDataMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: {
+        ...course,
+        participants: courseParticipants,
+        modules: courseModules,
+      },
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
+        <Routes>
+          <Route path=":id/grading" element={<CourseGrading />} />
+          <Route
+            path="/courses/:id/details"
+            element={<h1>Course details</h1>}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByText('Submit final grade')).toBeDisabled()
   })
 
   it('saves grades for participants when an intent for saving is confirmed', async () => {
@@ -341,6 +389,8 @@ describe('page: CourseGrading', () => {
 
     userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
+    selectGradingOption('Observe only')
+
     userEvent.click(screen.getByText('Submit final grade'))
     userEvent.click(screen.getByText('Confirm'))
 
@@ -370,7 +420,7 @@ describe('page: CourseGrading', () => {
         },
       ],
       participantIds: [courseParticipants[1].id],
-      grade: 'PASS',
+      grade: Grade.OBSERVE_ONLY,
       feedback: 'Feedback',
     })
 

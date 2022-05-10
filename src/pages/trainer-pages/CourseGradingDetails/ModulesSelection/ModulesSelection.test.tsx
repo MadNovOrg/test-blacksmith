@@ -191,7 +191,7 @@ describe('page: ModulesSelection', () => {
     )
 
     userEvent.click(screen.getByLabelText(courseModules[0].module.name))
-    userEvent.click(screen.getByText('Confirm grading details'))
+    userEvent.click(screen.getByText('Continue to grading attendees'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {

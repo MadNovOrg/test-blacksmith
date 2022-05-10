@@ -75,7 +75,7 @@ export const CourseGradingMenu: React.FC<Props> = ({
   }, [t, courseDeliveryType, courseLevel])
 
   const [selectedIndex, setSelectedIndex] = React.useState<number>(
-    initialValue ? options.findIndex(option => option.key === initialValue) : 0
+    initialValue ? options.findIndex(option => option.key === initialValue) : -1
   )
 
   const handleMenuItemClick = (
@@ -101,8 +101,10 @@ export const CourseGradingMenu: React.FC<Props> = ({
         sx={{ cursor: 'pointer' }}
         data-testid="course-grading-menu-selected"
       >
-        {options[selectedIndex].icon}
-        {options[selectedIndex].label}
+        {selectedIndex > -1 ? options[selectedIndex].icon : null}
+        {selectedIndex > -1
+          ? options[selectedIndex].label
+          : t('pages.course-grading.grade-select')}
         <ArrowDropDownIcon sx={{ ml: 1 }} />
       </Typography>
       <Menu

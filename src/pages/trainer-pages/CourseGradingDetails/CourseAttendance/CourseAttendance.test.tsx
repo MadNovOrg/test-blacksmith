@@ -238,7 +238,7 @@ describe('component: CourseAttendance', () => {
       screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
     )
 
-    userEvent.click(screen.getByText('Next: Confirm modules and holds'))
+    userEvent.click(screen.getByText('Next: Confirm modules and techniques'))
 
     expect(fetcherMock).toBeCalledTimes(1)
     expect(fetcherMock.mock.calls[0]).toEqual([

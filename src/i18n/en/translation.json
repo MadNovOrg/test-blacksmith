@@ -241,7 +241,7 @@
       },
       "not-graded-yet": "You have not been graded on this course yet. Your certificate will appear here if you receive a passing grade",
       "incomplete": "Incomplete",
-      "modules-list-title": "Completed modules and holds",
+      "modules-list-title": "Completed modules and techniques",
       "download-certificate": "Download certificate",
       "certified-message": "Team Teach Certified",
       "fail-title": "Fail",
@@ -426,7 +426,7 @@
       "declined": "Declined",
       "modal_ACCEPT": {
         "title": "Ready to build the course?",
-        "msg": "After you have accepted a course, you must confirm the modules and holds that will be covered.",
+        "msg": "After you have accepted a course, you must confirm the modules and techniques that will be covered.",
         "cancel": "Cancel",
         "submit": "Continue to course builder"
       },
@@ -575,8 +575,8 @@
             "line2": "The following details need to be confirmed before grading each attendee individually:",
             "line3": "Confirm an individual’s attendance and that ID checks were completed.",
             "line4": "It is an automatic fail if an individual did not attend.",
-            "line5": "Confirm modules and holds covered or not covered in the course.",
-            "line6": "This informs the modules and holds the attendee will be graded on at an individual level.",
+            "line5": "Confirm modules and techniques covered or not covered in the course.",
+            "line6": "This informs the modules and techniques the attendee will be graded on at an individual level.",
             "confirm-grading-details": "Confirm grading details"
           },
           "grade": "Grade",
@@ -650,7 +650,7 @@
       "back-button-text": "Back to course details",
       "course-error-alert-text": "There was an error loading the course",
       "attendance-step": "Attendance",
-      "modules-step": "Modules and holds"
+      "modules-step": "Modules and Techniques"
     },
     "course-grading": {
       "title": "Final grading",
@@ -658,6 +658,7 @@
       "attendees-list-title-all": "All attendees",
       "grading-menu-title": "Final grade",
       "grading-menu-description": "Once grade is submitted, this cannot be modified.",
+      "grade-select": "Please select a grade",
       "grade-pass": "Pass",
       "grade-observe-only": "Observe only",
       "grade-assist-only": "Assist only",
@@ -675,7 +676,7 @@
     "participant-grading": {
       "title": "View grade",
       "attendee-title": "Attendee(s)",
-      "modules-title": "Completed modules and holds",
+      "modules-title": "Completed modules and techniques",
       "completed-modules-subtitle": "{{completedNum}} of {{totalNum}} completed",
       "incomplete-list-subtitle": "Incomplete"
     },
@@ -683,7 +684,7 @@
       "title": "Attendance",
       "page-description-line1": "Please confirm an individual’s attendance and that ID checks were completed.",
       "page-description-line2": "It is an automatic fail if an individual did not attend.",
-      "next-page-button-text": "Next: Confirm modules and holds",
+      "next-page-button-text": "Next: Confirm modules and techniques",
       "master-checkbox-label-checked": "Deselect all",
       "master-checkbox-label-unchecked": "Select all",
       "participant-attended-chip-label": "Attended + ID checked",
@@ -691,10 +692,10 @@
       "attending-count": "{{count}} selected"
     },
     "modules-selection": {
-      "title": "Modules and holds",
-      "page-description-line1": "Please confirm modules and holds covered or not covered in the course.",
-      "page-description-line2": "This informs the modules and holds the attendee will be graded on at an individual level.",
-      "save-button-text": "Confirm grading details",
+      "title": "Modules and Techniques",
+      "page-description-line1": "Please confirm modules and techniques covered or not covered in the course.",
+      "page-description-line2": "This informs the modules and techniques the attendee will be graded on at an individual level.",
+      "save-button-text": "Continue to grading attendees",
       "back-button-text": "Back to attendees"
     },
     "my-training": {

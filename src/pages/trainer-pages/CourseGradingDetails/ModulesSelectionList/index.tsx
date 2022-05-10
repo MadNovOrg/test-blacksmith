@@ -98,7 +98,6 @@ export const ModulesSelectionList: React.FC<Props> = ({
         return (
           <Accordion
             key={group.id}
-            defaultExpanded
             disableGutters
             sx={{ marginBottom: 1 }}
             data-testid={`module-group-${group.id}`}
@@ -118,6 +117,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
                       onChange={() => {
                         toggleModuleGroupChange(group.id)
                       }}
+                      onClick={e => e.stopPropagation()}
                     />
                   }
                   label={

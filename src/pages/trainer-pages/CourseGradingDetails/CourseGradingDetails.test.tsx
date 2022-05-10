@@ -138,7 +138,9 @@ describe('page: CourseGradingDetails', () => {
     const subnav = screen.getByTestId('course-grading-details-nav')
 
     expect(within(subnav).getByText('Attendance')).toBeInTheDocument()
-    expect(within(subnav).getByText('Modules and holds')).toBeInTheDocument()
+    expect(
+      within(subnav).getByText('Modules and Techniques')
+    ).toBeInTheDocument()
   })
 
   it("doesn't mark any step as completed if on attendance page", () => {

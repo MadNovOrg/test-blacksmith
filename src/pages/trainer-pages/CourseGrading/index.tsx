@@ -61,7 +61,7 @@ export const CourseGrading = () => {
   const [savingGradesStatus, setSavingGradesStatus] = useState(
     LoadingStatus.IDLE
   )
-  const [grade, setGrade] = useState(Grade.PASS)
+  const [grade, setGrade] = useState<Grade | undefined>()
   const [feedback, setFeedback] = useState('')
 
   const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
@@ -138,7 +138,7 @@ export const CourseGrading = () => {
   }
 
   const saveGrades = async () => {
-    if (!course) return
+    if (!course || !grade) return
 
     try {
       setSavingGradesStatus(LoadingStatus.FETCHING)
@@ -350,6 +350,7 @@ export const CourseGrading = () => {
                     <LoadingButton
                       variant="contained"
                       onClick={openConfirmationModal}
+                      disabled={!grade}
                     >
                       {t('pages.course-grading.submit-button-text')}
                     </LoadingButton>
