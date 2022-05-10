@@ -74,6 +74,7 @@ jobs:
 
   hasura_migrations:
     name: Hasura migrations
+    needs: app-rb
     runs-on: ubuntu-latest
 
     steps:

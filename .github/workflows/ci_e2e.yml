@@ -37,7 +37,6 @@ jobs:
           HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256","jwk_url":"https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_JYEuK9iJg/.well-known/jwks.json","claims_format":"stringified_json"}'
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v1
 
@@ -50,13 +49,22 @@ jobs:
       - name: Install dependencies
         run: npm set-script prepare "" && npm ci
 
-      - name: Playwright setup
+      - name: Hasura Migration Validation Up/Down
         run: |
           cp hasura/.env.sample hasura/.env
           npm run hasura -- metadata apply
-          npm run hasura -- migrate apply --all-databases
+          npm run hasura -- migrate apply --database-name default
+          npm run hasura -- migrate status --database-name default
           npm run hasura -- metadata reload
           npm run hasura -- seed apply --database-name default
+          npm run hasura -- migrate apply --goto 101 --database-name default
+          npm run hasura -- migrate status --database-name default
+          npm run hasura -- migrate apply --database-name default
+          npm run hasura -- migrate status --database-name default
+          npm run hasura -- metadata reload
+
+      - name: Playwright setup
+        run: |
           npm run dev &
           npx playwright install chromium
 
