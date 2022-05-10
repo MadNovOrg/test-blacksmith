@@ -10,6 +10,7 @@ import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
@@ -20,6 +21,11 @@ const UserRoutes = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
+
+      <Route
+        path="certification/:certificateId"
+        element={<CourseCertificationDetails />}
+      />
 
       <Route path="courses">
         <Route index element={<MyCourses />} />

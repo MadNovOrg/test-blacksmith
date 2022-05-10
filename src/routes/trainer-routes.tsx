@@ -35,6 +35,11 @@ const TrainerBaseRoutes = () => {
         element={<ChangeRole role={RoleName.USER} />}
       />
 
+      <Route
+        path="certification/:certificateId"
+        element={<CourseCertificationDetails />}
+      />
+
       <Route path="courses">
         <Route index element={<MyCourses />} />
 
@@ -53,10 +58,6 @@ const TrainerBaseRoutes = () => {
           <Route
             path="grading/:participantId"
             element={<ParticipantGrading />}
-          />
-          <Route
-            path="certification/:participantId"
-            element={<CourseCertificationDetails />}
           />
           <Route path="evaluation">
             <Route path="submit" element={<TrainerFeedback />} />

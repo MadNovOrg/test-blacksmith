@@ -327,7 +327,9 @@ export const CertificationList: React.FC<CertificationListProps> = ({
                     color="primary"
                     sx={{ ml: 2 }}
                     onClick={() =>
-                      navigate(`../certification/${courseParticipant.id}`)
+                      navigate(
+                        `/certification/${courseParticipant.certificate?.id}`
+                      )
                     }
                   >
                     {t('components.certification-list.view-certificate')}

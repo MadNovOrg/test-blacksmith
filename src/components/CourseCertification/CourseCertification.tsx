@@ -5,8 +5,10 @@ import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
+  Stack,
   Typography,
 } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -33,13 +35,17 @@ import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeMod
 import { Dialog } from '@app/components/Dialog'
 import { useAuth } from '@app/context/auth'
 import {
-  ParamsType as GetCertificateChangelogsParamsType,
-  QUERY as GetCertificateChangelogsQuery,
-  ResponseType as GetCertificateChangelogsResponseType,
-} from '@app/queries/grading/get-certificate-changelog'
+  ParamsType as GetCertificateParamsType,
+  QUERY as GetCertificateQuery,
+  ResponseType as GetCertificateResponseType,
+} from '@app/queries/certificate/get-certificate'
 import theme from '@app/theme'
-import { Course, CourseLevel, CourseParticipant, Grade } from '@app/types'
-import { transformModulesToGroups } from '@app/util'
+import { CourseDeliveryType, CourseParticipant, Grade } from '@app/types'
+import {
+  getSWRLoadingStatus,
+  LoadingStatus,
+  transformModulesToGroups,
+} from '@app/util'
 
 // workaround for using recat-pdf with vite
 const { PDFDownloadLink } = pdf
@@ -143,8 +149,7 @@ const ModuleGroupAccordion: React.FC<ModuleGroupAccordionProps> = ({
 }
 
 type CertificateInfoProps = {
-  course: Course
-  courseParticipant: CourseParticipant
+  courseParticipant?: CourseParticipant
   grade: Grade
   expiryDate: string
   certificationNumber: string
@@ -152,7 +157,6 @@ type CertificateInfoProps = {
 }
 
 const CertificateInfo: React.FC<CertificateInfoProps> = ({
-  course,
   courseParticipant,
   grade,
   expiryDate,
@@ -162,9 +166,9 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
   const imageSize = '10%'
   const { t } = useTranslation()
 
-  const moduleGroupsWithModules = transformModulesToGroups(
-    courseParticipant.gradingModules
-  )
+  const moduleGroupsWithModules = courseParticipant
+    ? transformModulesToGroups(courseParticipant.gradingModules)
+    : null
 
   return (
     <Box>
@@ -177,7 +181,7 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom>
-        {course?.name}
+        {courseParticipant?.course?.name}
       </Typography>
 
       {grade !== Grade.FAIL ? (
@@ -243,52 +247,88 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
         </>
       ) : null}
 
-      <Typography variant="h3" gutterBottom>
-        {t('common.course-certificate.modules-list-title')}
-      </Typography>
+      {moduleGroupsWithModules?.length ? (
+        <>
+          <Typography variant="h3" gutterBottom>
+            {t('common.course-certificate.modules-list-title')}
+          </Typography>
+          {moduleGroupsWithModules.map(moduleGroupWithModules => {
+            return (
+              <ModuleGroupAccordion
+                key={moduleGroupWithModules.id}
+                moduleGroupName={moduleGroupWithModules.name}
+                completedModules={moduleGroupWithModules.modules.filter(
+                  module => module.completed
+                )}
+                uncompletedModules={moduleGroupWithModules.modules.filter(
+                  module => !module.completed
+                )}
+              />
+            )
+          })}
+        </>
+      ) : null}
 
-      {moduleGroupsWithModules.map(moduleGroupWithModules => {
-        return (
-          <ModuleGroupAccordion
-            key={moduleGroupWithModules.id}
-            moduleGroupName={moduleGroupWithModules.name}
-            completedModules={moduleGroupWithModules.modules.filter(
-              module => module.completed
-            )}
-            uncompletedModules={moduleGroupWithModules.modules.filter(
-              module => !module.completed
-            )}
-          />
-        )
-      })}
+      {!courseParticipant ? (
+        <Typography variant="body2">
+          {t('common.course-certificate.completed-modules-unavailable')}
+        </Typography>
+      ) : null}
     </Box>
   )
 }
 
 type CourseCertificationProps = {
-  course: Course
-  courseParticipant: CourseParticipant
+  certificateId: string
 }
 
 export const CourseCertification: React.FC<CourseCertificationProps> = ({
-  course,
-  courseParticipant,
+  certificateId,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
 
-  const { data: changeLogsData } = useSWR<
-    GetCertificateChangelogsResponseType,
+  const { data, error } = useSWR<
+    GetCertificateResponseType,
     Error,
-    [string, GetCertificateChangelogsParamsType]
-  >([GetCertificateChangelogsQuery, { participantId: courseParticipant.id }])
+    [string, GetCertificateParamsType]
+  >([GetCertificateQuery, { id: certificateId }])
+  const certificateLoadingStatus = getSWRLoadingStatus(data, error)
 
-  const certificationNumber = courseParticipant.certificate?.number ?? ''
-  const grade = courseParticipant?.grade
+  const certificate = data?.certificate
+  const courseParticipant = certificate?.participant
 
-  if (!courseParticipant?.grade || !courseParticipant.dateGraded) {
+  if (certificateLoadingStatus === LoadingStatus.FETCHING) {
+    return (
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        data-testid="certificate-fetching"
+      >
+        <CircularProgress />
+      </Stack>
+    )
+  }
+  if (
+    !certificate ||
+    !certificate.profile ||
+    certificateLoadingStatus === LoadingStatus.ERROR
+  ) {
+    return (
+      <Container sx={{ py: 2 }}>
+        <Alert severity="error" variant="filled">
+          {t('internal-error')}
+        </Alert>
+      </Container>
+    )
+  }
+
+  const certificationNumber = certificate.number ?? ''
+  const grade = courseParticipant?.grade ?? Grade.PASS
+
+  if (courseParticipant && !courseParticipant?.grade) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert variant="outlined" color="warning">
@@ -298,10 +338,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
     )
   }
 
-  const dateIssued = courseParticipant.dateGraded
-    ? new Date(courseParticipant.dateGraded)
-    : new Date(0)
-  const courseDeliveryType = course.deliveryType
+  const courseDeliveryType = courseParticipant?.course.deliveryType
 
   return (
     <Box>
@@ -328,7 +365,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                   >
                     <Avatar />
                     <Typography variant="body1">
-                      {courseParticipant.profile.fullName}
+                      {certificate.profile?.fullName}
                     </Typography>
                   </Box>
                 </Box>
@@ -346,20 +383,15 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                     style={{ color: 'white' }}
                     document={
                       <CertificateDocument
-                        participantName={courseParticipant.profile?.fullName}
-                        courseName={
-                          courseParticipant.certificate?.courseName ?? ''
-                        }
-                        courseLevel={
-                          courseParticipant.certificate?.courseLevel ??
-                          CourseLevel.LEVEL_1
-                        }
+                        participantName={certificate.profile.fullName}
+                        courseName={certificate.courseName}
+                        courseLevel={certificate.courseLevel}
                         grade={grade as Grade}
-                        courseDeliveryType={courseDeliveryType}
-                        certificationNumber={certificationNumber}
-                        expiryDate={
-                          courseParticipant.certificate?.expiryDate ?? ''
+                        courseDeliveryType={
+                          courseDeliveryType ?? CourseDeliveryType.F2F
                         }
+                        certificationNumber={certificationNumber}
+                        expiryDate={certificate.expiryDate}
                       />
                     }
                     fileName="certificate.pdf"
@@ -387,7 +419,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                   >
                     {t('common.course-certificate.modify-grade')}
                   </Button>
-                  {changeLogsData?.changelogs.length ? (
+                  {certificate.participant?.certificateChanges?.length ? (
                     <Button
                       fullWidth
                       data-testid="change-log-button"
@@ -406,39 +438,45 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
 
           <Grid item md={7}>
             <CertificateInfo
-              course={course}
               grade={grade as Grade}
               courseParticipant={courseParticipant}
-              expiryDate={courseParticipant.certificate?.expiryDate ?? ''}
+              expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
-              dateIssued={dateIssued.toISOString()}
+              dateIssued={certificate.certificationDate}
             />
           </Grid>
         </Grid>
       </Container>
 
-      <Dialog
-        open={showModifyGradeModal}
-        onClose={() => setShowModifyGradeModal(false)}
-        title={t('common.course-certificate.modify-grade')}
-        maxWidth={800}
-      >
-        <ModifyGradeModal
-          participant={courseParticipant}
-          onClose={() => setShowModifyGradeModal(false)}
-        />
-      </Dialog>
+      {courseParticipant ? (
+        <>
+          <Dialog
+            open={showModifyGradeModal}
+            onClose={() => setShowModifyGradeModal(false)}
+            title={t('common.course-certificate.modify-grade')}
+            maxWidth={800}
+          >
+            <ModifyGradeModal
+              certificateId={certificateId}
+              participant={courseParticipant}
+              onClose={() => setShowModifyGradeModal(false)}
+            />
+          </Dialog>
 
-      <Dialog
-        open={showChangelogModal}
-        onClose={() => setShowChangelogModal(false)}
-        title={t('common.course-certificate.change-log')}
-        maxWidth={800}
-      >
-        {changeLogsData?.changelogs.length ? (
-          <ChangelogModal changelogs={changeLogsData?.changelogs} />
-        ) : null}
-      </Dialog>
+          <Dialog
+            open={showChangelogModal}
+            onClose={() => setShowChangelogModal(false)}
+            title={t('common.course-certificate.change-log')}
+            maxWidth={800}
+          >
+            {certificate.participant?.certificateChanges?.length ? (
+              <ChangelogModal
+                changelogs={certificate.participant?.certificateChanges}
+              />
+            ) : null}
+          </Dialog>
+        </>
+      ) : null}
     </Box>
   )
 }

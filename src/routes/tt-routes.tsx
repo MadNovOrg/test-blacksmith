@@ -21,6 +21,11 @@ const TTAdminRoutes = () => {
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
 
+      <Route
+        path="certification/:certificateId"
+        element={<CourseCertificationDetails />}
+      />
+
       <Route path="courses">
         <Route index element={<MyCourses />} />
 
@@ -37,10 +42,6 @@ const TTAdminRoutes = () => {
           <Route
             path="grading/:participantId"
             element={<ParticipantGrading />}
-          />
-          <Route
-            path="certification/:participantId"
-            element={<CourseCertificationDetails />}
           />
         </Route>
       </Route>

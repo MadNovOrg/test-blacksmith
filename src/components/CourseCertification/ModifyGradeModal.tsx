@@ -14,18 +14,23 @@ import useSWR from 'swr'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { QUERY as GetCertificateChangelogsQuery } from '@app/queries/grading/get-certificate-changelog'
+import {
+  ParamsType as GetCertificateParamsType,
+  QUERY as GetCertificateQuery,
+  ResponseType as GetCertificateResponseType,
+} from '@app/queries/certificate/get-certificate'
 import { MUTATION, ParamsType } from '@app/queries/grading/update-grade'
-import { QUERY as GetCourseParticipantQuery } from '@app/queries/participants/get-course-participant-by-id'
 import theme from '@app/theme'
 import { CourseParticipant } from '@app/types'
 
 export type ModifyGradeModalProps = {
+  certificateId: string
   participant: CourseParticipant
   onClose: () => void
 }
 
 const ModifyGradeModal: React.FC<ModifyGradeModalProps> = function ({
+  certificateId,
   participant,
   onClose,
 }) {
@@ -37,14 +42,11 @@ const ModifyGradeModal: React.FC<ModifyGradeModalProps> = function ({
   const [showNoteError, setShowNoteError] = useState(false)
   const [grade, setGrade] = useState(participant.grade)
 
-  const { mutate: mutateCourseParticipant } = useSWR([
-    GetCourseParticipantQuery,
-    { id: participant.id },
-  ])
-  const { mutate: mutateChangelogs } = useSWR([
-    GetCertificateChangelogsQuery,
-    { participantId: participant.id },
-  ])
+  const { mutate } = useSWR<
+    GetCertificateResponseType,
+    Error,
+    [string, GetCertificateParamsType]
+  >([GetCertificateQuery, { id: certificateId }])
 
   const submitHandler = useCallback(async () => {
     if (grade && participant.grade) {
@@ -64,22 +66,12 @@ const ModifyGradeModal: React.FC<ModifyGradeModalProps> = function ({
           } catch (e: unknown) {
             setError((e as Error).message)
           }
-          await mutateCourseParticipant()
-          await mutateChangelogs()
+          await mutate()
           onClose()
         }
       }
     }
-  }, [
-    fetcher,
-    grade,
-    mutateChangelogs,
-    mutateCourseParticipant,
-    note,
-    onClose,
-    participant,
-    profile,
-  ])
+  }, [fetcher, grade, mutate, note, onClose, participant, profile])
 
   return (
     <Box p={2}>

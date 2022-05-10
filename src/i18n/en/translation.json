@@ -274,7 +274,8 @@
       "import-certificate-description": "Make sure this is an active (not expired) certificate. If you currently have a an active certificate on your profile, this action will update your certification details.",
       "enter-valid-certification-code": "Enter valid certification code",
       "update-certification": "Update certification",
-      "certification-code-incorrect": "We could not match this certificate number. If this is incorrect, please contact Team Teach."
+      "certification-code-incorrect": "We could not match this certificate number. If this is incorrect, please contact Team Teach.",
+      "completed-modules-unavailable": "Information on completed modules is unavailable."
     },
     "items": "items",
     "from": "From",

@@ -242,8 +242,7 @@ export const CourseDetails = () => {
                     </Box>
                   ) : (
                     <CourseCertification
-                      courseParticipant={courseParticipant[0]}
-                      course={course}
+                      certificateId={courseParticipant[0].certificate.id}
                     />
                   )}
                 </TabPanel>

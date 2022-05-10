@@ -57,3 +57,17 @@ select_permissions:
         - participant_id
         - updated_at
       filter: {}
+  - role: user
+    permission:
+      columns:
+        - new_grade
+        - notes
+        - old_grade
+        - created_at
+        - updated_at
+        - author_id
+        - id
+        - participant_id
+      filter:
+        author_id:
+          _eq: X-Hasura-User-Id

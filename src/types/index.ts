@@ -54,6 +54,7 @@ export type CourseCertificate = {
   courseName: string
   courseLevel: CourseLevel
   participant?: CourseParticipant
+  profile?: Profile
 } & Base
 
 export type Address = {
@@ -265,6 +266,7 @@ export type CourseParticipant = {
   dateGraded?: string
   gradingModules: CourseParticipantModule[]
   certificate?: CourseCertificate
+  certificateChanges?: CourseCertificateChangelog[]
 } & Base
 
 export enum BlendedLearningStatus {
