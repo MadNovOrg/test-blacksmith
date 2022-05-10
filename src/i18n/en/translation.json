@@ -587,9 +587,9 @@
           "modify-grading-details": "Modify grading details"
         },
         "evaluation": {
-          "title": "Evaluation Summary",
-          "button": "View Evaluation Summary",
-          "full-summary": "Full Evaluation Summary",
+          "title": "Summary Evaluation",
+          "button": "View Summary Evaluation",
+          "full-summary": "Full Summary Evaluation",
           "desc": "View an attendee's course evaluation and a summary of all evaluations.",
           "view-evaluation": "View Evaluation",
           "attendee-feedback": "Attendee Feedback",
@@ -884,7 +884,7 @@
     "error-submitting": "There was an error saving your feedback",
     "required-field": "This is a required question",
     "complete-my-evaluation": "Complete my evaluation",
-    "trainer-evaluate": "Submit your Trainer Summary Evaluation to view evaluation summary and complete this course.",
+    "trainer-evaluate": "Submit your Trainer Summary Evaluation to view summary evaluation and complete this course.",
     "groups": {
       "TRAINING_RATING": "Rating of training",
       "TRAINING_RELEVANCE": "Relevance of training",
