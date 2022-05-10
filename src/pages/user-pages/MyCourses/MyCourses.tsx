@@ -18,6 +18,7 @@ import { useDebounce } from 'use-debounce'
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import {
   ParamsType as GetMyCourseParamsType,
   QUERY as GetMyCourses,
@@ -76,9 +77,14 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
   const [keywordDebounced] = useDebounce(keyword, 300)
+  const { profile } = useAuth()
 
   const where = useMemo(() => {
-    const obj: Record<string, object> = {}
+    const obj: Record<string, object> = {
+      participants: {
+        profile_id: { _eq: profile?.id },
+      },
+    }
 
     const selectedLevels = levelFilter.flatMap(item =>
       item.selected ? item.id : []
