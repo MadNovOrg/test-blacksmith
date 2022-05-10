@@ -1,4 +1,4 @@
-import { add, format, sub } from 'date-fns'
+import { add, sub } from 'date-fns'
 import React from 'react'
 
 import { render, screen } from '@test/index'
@@ -69,8 +69,8 @@ describe('component: CourseHeroSummary', () => {
   })
 
   it('displays correct course dates', () => {
-    const courseStarts = add(new Date(), { days: 3 })
-    const courseEnds = add(new Date(), { days: 5 })
+    const courseStarts = new Date('2022-05-12T06:30:00')
+    const courseEnds = new Date('2022-05-15T07:30:00')
 
     const courseSchedule = buildCourseSchedule({
       overrides: {
@@ -84,12 +84,8 @@ describe('component: CourseHeroSummary', () => {
 
     render(<CourseHeroSummary course={course} />)
 
-    expect(
-      screen.getByText(`${format(courseStarts, 'd MMMM yyyy, HH:mma')}`)
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(`${format(courseEnds, 'd MMMM yyyy, HH:mma')}`)
-    ).toBeInTheDocument()
+    expect(screen.getByText('12 May 2022, 06:30 AM')).toBeInTheDocument()
+    expect(screen.getByText('15 May 2022, 07:30 AM')).toBeInTheDocument()
   })
 
   it('displays correct trainer info if a logged in user is not a trainer', () => {

@@ -9,7 +9,6 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import format from 'date-fns/format'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -283,20 +282,18 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                         {c.dates.aggregate.start.date && (
                           <Box>
                             <Typography variant="body2" gutterBottom>
-                              {format(
-                                new Date(c.dates.aggregate.start.date),
-                                'dd MMM'
-                              )}
+                              {t('dates.short', {
+                                date: c.dates.aggregate.start.date,
+                              })}
                             </Typography>
                             <Typography
                               variant="body2"
                               color="grey.500"
                               whiteSpace="nowrap"
                             >
-                              {format(
-                                new Date(c.dates.aggregate.start.date),
-                                'hh:mm aa'
-                              )}
+                              {t('dates.time', {
+                                date: c.dates.aggregate.start.date,
+                              })}
                             </Typography>
                           </Box>
                         )}
@@ -305,20 +302,18 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                         {c.dates.aggregate.end.date && (
                           <Box>
                             <Typography variant="body2" gutterBottom>
-                              {format(
-                                new Date(c.dates.aggregate.end.date),
-                                'dd MMM'
-                              )}
+                              {t('dates.short', {
+                                date: c.dates.aggregate.end.date,
+                              })}
                             </Typography>
                             <Typography
                               variant="body2"
                               color="grey.500"
                               whiteSpace="nowrap"
                             >
-                              {format(
-                                new Date(c.dates.aggregate.end.date),
-                                'hh:mm aa'
-                              )}
+                              {t('dates.time', {
+                                date: c.dates.aggregate.end.date,
+                              })}
                             </Typography>
                           </Box>
                         )}

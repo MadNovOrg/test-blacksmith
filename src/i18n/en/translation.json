@@ -249,8 +249,8 @@
       "observe_only-title": "Observe Only Pass",
       "assist_only-title": "Assist Only Pass",
       "certificate-footer": "The certified individual has undertaken a course in the above subject and has been awarded a certificate from Team team ltd. in accordance with the ICM quality award. Team teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
-      "certification-number-message": "Your certification number is ",
-      "certification-valid-until-message": "Your certification is valid until",
+      "certification-number-message": "Your certification number is {{num}}",
+      "certification-valid-until-message": "Your certification is valid until {{date, dd/M/yyyy}}",
       "title": "CERTIFICATE",
       "levels-limitation-message": "The individual named above is not qualified to teach or cascade to others any part of the Team Teach programme.",
       "physical-limitation-message": "Physical techniques are not covered under this certification",
@@ -267,8 +267,8 @@
         "please-add-a-note": "Please add a note*",
         "confirm-modification": "Confirm modification"
       },
-      "expired-on": "Expired on",
-      "active-until": "Active until",
+      "expired-on": "Expired on {{date, P}}",
+      "active-until": "Active until {{date, P}}",
       "expires-in": "expires in",
       "update-certification-details": "Update certificate details",
       "import-certificate-description": "Make sure this is an active (not expired) certificate. If you currently have a an active certificate on your profile, this action will update your certification details.",
@@ -294,7 +294,7 @@
     },
     "certification-details": {
       "certification-passed": "Certification Passed",
-      "course-passed-on": "Course passed on",
+      "course-passed-on": "Course passed on {{date, dd/MM/yyyy}}",
       "remaining": "remaining",
       "digital-certificate": "Digital Certificate",
       "dbs-certificate": "DBS Certificate",
@@ -924,7 +924,12 @@
     "response-sent": "Your response has been sent"
   },
   "dates": {
+    "short": "{{date, dd MMM}}",
+    "time": "{{date, hh:mm aa}}",
+    "default": "{{date, d MMMM yyyy}}",
+    "withTime": "{{date, d MMMM yyyy, hh:mm aa}}",
     "long": "{{date, EEE, dd MMM yyyy}}",
-    "timeFromTo": "{{from, hh:mm aa}} - {{to, hh:mm aa}}"
+    "timeFromTo": "{{from, hh:mm aa}} - {{to, hh:mm aa}}",
+    "fullDateTime": "{{date, PPpp}}"
   }
 }

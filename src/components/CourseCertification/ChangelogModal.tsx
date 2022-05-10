@@ -9,7 +9,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { format } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -68,7 +67,7 @@ const ChangelogModal: React.FC<ChangelogModalProps> = function ({
               </Box>
             </TableCell>
             <TableCell sx={{ verticalAlign: 'top' }}>
-              {format(new Date(changelog.createdAt), 'PPpp')}
+              {t('dates.fullDateTime', { date: changelog.createdAt })}
             </TableCell>
             <TableCell>
               <Box display="flex" alignItems="center" gap={1}>

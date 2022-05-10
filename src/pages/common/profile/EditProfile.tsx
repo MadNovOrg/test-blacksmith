@@ -16,7 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
-import { format, formatDistanceToNow, isPast } from 'date-fns'
+import { formatDistanceToNow, isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -509,23 +509,19 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                       severity={index === 0 ? 'error' : 'info'}
                       sx={{ mt: 1 }}
                     >
-                      {`${t('course-certificate.expired-on')} ${format(
-                        new Date(certificate.expiryDate),
-                        'P'
-                      )} (${formatDistanceToNow(
-                        new Date(certificate.expiryDate)
-                      )} ${t('ago')})`}
+                      {t('course-certificate.expired-on', {
+                        date: certificate.expiryDate,
+                      })}
+                      ({formatDistanceToNow(new Date(certificate.expiryDate))}{' '}
+                      {t('ago')})
                     </Alert>
                   ) : (
                     <Alert variant="outlined" severity="success" sx={{ mt: 1 }}>
-                      {`${t('course-certificate.active-until')} ${format(
-                        new Date(certificate.expiryDate),
-                        'P'
-                      )} (${t(
-                        'course-certificate.expires-in'
-                      )} ${formatDistanceToNow(
-                        new Date(certificate.expiryDate)
-                      )}).`}
+                      {t('course-certificate.active-until', {
+                        date: certificate.expiryDate,
+                      })}
+                      ({t('course-certificate.expires-in')}{' '}
+                      {formatDistanceToNow(new Date(certificate.expiryDate))}).
                     </Alert>
                   )
                 ) : null}

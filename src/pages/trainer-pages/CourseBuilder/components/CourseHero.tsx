@@ -3,7 +3,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course } from '@app/types'
-import { formatDateWithTime } from '@app/util'
 
 type CourseHeroProps = {
   data: Course
@@ -12,14 +11,8 @@ type CourseHeroProps = {
 export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
   const { t } = useTranslation()
 
-  let courseStartDate = ''
-  let courseEndDate = ''
   let location = ''
   if (data.schedule && data.schedule.length > 0) {
-    courseStartDate = formatDateWithTime(data.schedule[0].start)
-    courseEndDate = formatDateWithTime(
-      data.schedule[data.schedule.length - 1].end
-    )
     if (data.schedule[0].venue) {
       const venue = data.schedule[0].venue
       location = [venue.name, venue.city].join(', ')
@@ -65,7 +58,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
           {`${t('pages.trainer-base.create-course.new-course.starts')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {courseStartDate}
+          {t('dates.withTime', { date: data.schedule?.[0]?.start })}
         </Typography>
       </Box>
       <Box>
@@ -73,7 +66,9 @@ export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
           {`${t('pages.trainer-base.create-course.new-course.ends')}: `}
         </Typography>
         <Typography display="inline" variant="body2">
-          {courseEndDate}
+          {t('dates.withTime', {
+            date: data.schedule?.[data.schedule?.length - 1]?.end,
+          })}
         </Typography>
       </Box>
       <Box>

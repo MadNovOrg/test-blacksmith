@@ -13,7 +13,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { differenceInDays, format } from 'date-fns'
+import { differenceInDays } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -107,10 +107,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
                 <ListItemText>
                   {t('pages.course-participants.course-beggins')}{' '}
                   <Typography component="span" fontWeight={500}>
-                    {format(
-                      new Date(course.schedule[0].start),
-                      'd MMMM yyyy, HH:mma'
-                    )}
+                    {t('dates.withTime', { date: course.schedule[0].start })}
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -118,10 +115,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
                 <ListItemText inset>
                   {t('pages.course-participants.course-ends')}{' '}
                   <Typography component="span" fontWeight={500}>
-                    {format(
-                      new Date(course.schedule[0].end),
-                      'd MMMM yyyy, HH:mma'
-                    )}
+                    {t('dates.withTime', { date: course.schedule[0].end })}
                   </Typography>
                 </ListItemText>
               </ListItem>

@@ -1,5 +1,4 @@
 import pdf from '@react-pdf/renderer'
-import { format } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -123,15 +122,15 @@ export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
         ) : null}
         <Text style={styles.smallerText}>
           {' '}
-          {t('common.course-certificate.certification-number-message') +
-            ' ' +
-            certificationNumber}
+          {t('common.course-certificate.certification-number-message', {
+            num: certificationNumber,
+          })}
         </Text>
         <Text style={styles.smallerText}>
           {' '}
-          {t('common.course-certificate.certification-valid-until-message') +
-            ' ' +
-            format(new Date(expiryDate), 'dd/M/yyyy')}
+          {t('common.course-certificate.certification-valid-until-message', {
+            date: expiryDate,
+          })}
         </Text>
         <Text style={styles.footer}>
           {t('common.course-certificate.certificate-footer')}

@@ -15,7 +15,6 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
-import { format } from 'date-fns'
 import MUIImage from 'mui-image'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -207,7 +206,7 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
 
             <Grid item xs={4}>
               <Typography variant="body2">
-                {format(new Date(dateIssued), 'd MMMM yyyy')}
+                {t('dates.default', { date: dateIssued })}
               </Typography>
             </Grid>
 
@@ -217,7 +216,7 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
 
             <Grid item xs={4}>
               <Typography variant="body2">
-                {format(new Date(expiryDate), 'd MMMM yyyy')}
+                {t('dates.default', { date: expiryDate })}
               </Typography>
             </Grid>
           </Grid>

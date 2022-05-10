@@ -420,7 +420,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     {t('common.last-modified', {
                       date: formatDateForDraft(
                         courseData.course.updatedAt || new Date(),
-                        t('common.ago')
+                        t('common.ago'),
+                        t
                       ),
                     })}
                   </Typography>

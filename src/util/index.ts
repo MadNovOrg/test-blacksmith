@@ -1,4 +1,4 @@
-import { differenceInDays, format, formatDistanceToNow, isPast } from 'date-fns'
+import { differenceInDays, formatDistanceToNow, isPast } from 'date-fns'
 import { TFunction } from 'i18next'
 
 import {
@@ -23,51 +23,15 @@ export const noop = () => {
   // empty
 }
 
-export const formatDateWithTime = (value: string | Date): string => {
-  if (!value) return ''
-  return format(
-    typeof value === 'string' ? new Date(value) : value,
-    'yyyy-MM-dd HH:mm'
-  )
-}
-
-export const formatDateRange = (dateFrom: Date, dateTo: Date): string => {
-  if (!dateFrom || !dateTo) {
-    return ``
-  }
-  const sameYear = dateFrom.getFullYear() === dateTo.getFullYear()
-  const sameMonth = sameYear && dateFrom.getMonth() === dateTo.getMonth()
-  const sameDay = sameMonth && dateFrom.getDate() === dateTo.getDate()
-  if (sameDay) {
-    return format(dateFrom, 'do LLLL')
-  }
-  if (sameMonth) {
-    return `${format(dateFrom, 'do')}-${format(dateTo, 'do')} ${format(
-      dateTo,
-      'LLLL'
-    )}`
-  }
-  if (sameYear) {
-    return `${format(dateFrom, 'do LLLL')} - ${format(dateTo, 'do LLLL')}`
-  }
-  return `${format(dateFrom, 'do LLLL y')} - ${format(dateTo, 'do LLLL y')}`
-}
-
-export const formatDateForInput = (value: string | Date) => {
-  return format(
-    typeof value === 'string' ? new Date(value) : value,
-    INPUT_DATE_FORMAT
-  )
-}
-
 export const formatDateForDraft = (
   value: string | Date,
-  wordToAppend: string
+  wordToAppend: string,
+  t: TFunction
 ) => {
   const date = typeof value === 'string' ? new Date(value) : value
 
   if (differenceInDays(Date.now(), date) >= 1) {
-    return format(date, 'MMMM d, yyyy')
+    return t('dates.default', { date })
   }
 
   return `${formatDistanceToNow(date)} ${wordToAppend}`

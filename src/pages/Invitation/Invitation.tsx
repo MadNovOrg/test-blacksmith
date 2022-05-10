@@ -17,7 +17,7 @@ import {
   Link,
   TextField,
 } from '@mui/material'
-import { differenceInDays, format } from 'date-fns'
+import { differenceInDays } from 'date-fns'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -165,10 +165,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                {format(new Date(invite.startDate), 'd MMMM yyyy, HH:mm a')}
+                {t('dates.withTime', { dates: invite.startDate })}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {format(new Date(invite.endDate), 'd MMMM yyyy, HH:mm a')}
+                {t('dates.withTime', { dates: invite.endDate })}
               </Typography>
               <Typography variant="body2" color="grey.600" gutterBottom>
                 {t('pages.course-participants.course-duration', {

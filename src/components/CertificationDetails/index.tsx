@@ -1,6 +1,6 @@
 import CheckIcon from '@mui/icons-material/Check'
 import PdfIcon from '@mui/icons-material/PictureAsPdf'
-import { format, formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns'
 import QRCode from 'qrcode.react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -27,8 +27,9 @@ export const CertificationDetails: React.FC<CertificationDetailsProps> = ({
         <div className="py-2 text-2xl">{certification.title}</div>
         <div>
           <span className="font-bold">
-            {t('components.certification-details.course-passed-on')}{' '}
-            {format(certification.passDate, 'dd/MM/yyyy')}
+            {t('components.certification-details.course-passed-on', {
+              date: certification.passDate,
+            })}
           </span>{' '}
           - {formatDistanceToNow(certification.expirationDate)}{' '}
           {t('components.certification-details.remaining')}
