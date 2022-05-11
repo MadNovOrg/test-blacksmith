@@ -1,7 +1,7 @@
 import { Typography, Box, Button } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
@@ -23,6 +23,7 @@ export const CourseRegistrationPage: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const location = useLocation()
 
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
@@ -35,7 +36,7 @@ export const CourseRegistrationPage: React.FC = () => {
       await login(email, password)
       // when login completes, we have an active profile of unverified user,
       // router sets in the available routes and we navigate to verify
-      navigate('/verify', { replace: true })
+      navigate('/verify', { replace: true, state: location.state })
     }, 500)
   }
 
