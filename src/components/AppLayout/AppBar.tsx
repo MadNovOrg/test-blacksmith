@@ -61,6 +61,11 @@ export const AppBar = () => {
                   {t('common.certifications')}
                 </Link>
               )}
+              {acl.canViewOrders() && (
+                <Link component={StyledNavLink} to="/orders">
+                  {t('common.orders')}
+                </Link>
+              )}
             </Box>
           )}{' '}
           <Box

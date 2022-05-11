@@ -69,6 +69,29 @@ insert_permissions:
         - registrants
       backend_only: false
 select_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - order_total
+        - price
+        - vat
+        - course_id
+        - quantity
+        - promo_codes
+        - registrants
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - currency
+        - payment_method
+        - stripePaymentId
+        - created_at
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
   - role: unverified
     permission:
       columns:

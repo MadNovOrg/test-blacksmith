@@ -425,7 +425,17 @@ export type ValidCourseInput = DeepNonNullable<
 
 export type Order = {
   id: string
-  // TODO: add when needed
+  createdAt: Date
+  courseId: number
+  profileId: string
+  quantity: number
+  registrants: string[]
+  paymentMethod: PaymentMethod
+  orderTotal: number
+  currency: Currency | null
+  stripePaymentId: string | null
+  course: Partial<Course>
+  organization: Partial<Organization>
 }
 
 export enum Currency {

@@ -29,6 +29,7 @@
     "courses": "Courses",
     "contacts": "Contacts",
     "community": "Community",
+    "orders": "Orders",
     "change": "Change",
     "remove": "Remove",
     "admin": "Administrator",
@@ -285,7 +286,10 @@
     "course-link": "course {{id}}",
     "go-to-profile": "Go to profile preferences",
     "this-course": "this course",
-    "join-zoom": "Join via Zoom"
+    "join-zoom": "Join via Zoom",
+    "filters": {
+      "date-range": "Filter by Date"
+    }
   },
   "components": {
     "not-found": {
@@ -869,6 +873,16 @@
       "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
       "missing-details-header": "Please complete your profile by providing the following details:",
       "add-certificate": "Add certificate"
+    },
+    "orders": {
+      "cols-createdAt": "Date",
+      "cols-organization": "Organisation",
+      "cols-course": "Course",
+      "cols-orderTotal": "Total",
+      "cols-paymentMethod": "Pay by",
+      "paymentMethod-INVOICE": "Invoice",
+      "paymentMethod-CC": "Credit Card",
+      "qty": "Participants"
     }
   },
   "course-evaluation": {

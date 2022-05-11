@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Currency, PaymentMethod } from '@app/types'
+import { Order } from '@app/types'
 
 export const QUERY = gql`
   query GetOrder($orderId: uuid!) {
@@ -19,15 +19,5 @@ export const QUERY = gql`
 `
 
 export type ResponseType = {
-  order: {
-    id: string
-    courseId: number
-    profileId: string
-    quantity: number
-    registrants: string[]
-    paymentMethod: PaymentMethod
-    orderTotal: number
-    currency: Currency | null
-    stripePaymentId: string | null
-  }
+  order: Order
 }

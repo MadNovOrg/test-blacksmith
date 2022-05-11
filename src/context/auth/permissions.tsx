@@ -41,6 +41,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
 
+    canViewOrders: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canCreateCourse: (type: CourseType) => {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:

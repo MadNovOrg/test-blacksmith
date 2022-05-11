@@ -1,17 +1,18 @@
 import { SxProps } from '@mui/material'
 import Box from '@mui/material/Box'
-import TableCell from '@mui/material/TableCell'
+import TableCell, { TableCellProps } from '@mui/material/TableCell'
 import MuiTableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { SortOrder } from '@app/types'
 
-type Col = {
+export type Col = {
   id: string
-  label: string
+  label?: string
+  align?: TableCellProps['align']
   sorting?: boolean
   component?: React.ReactNode
 }
@@ -31,32 +32,48 @@ export const TableHead: React.FC<TableHeadProps> = ({
   onRequestSort,
   sx,
 }) => {
-  const createSortHandler = (col: string) => () => onRequestSort(col)
+  const createSortHandler = useCallback(
+    (col: Col) => () => onRequestSort(col.id),
+    [onRequestSort]
+  )
 
   return (
     <MuiTableHead sx={sx}>
       <TableRow>
-        {cols.map(c => (
-          <TableCell
-            key={c.id}
-            sortDirection={orderBy === c.id ? order : false}
-          >
-            {c.component}
-            <TableSortLabel
-              active={orderBy === c.id}
-              direction={orderBy === c.id ? order : 'asc'}
-              onClick={createSortHandler(c.id)}
-              disabled={!c.sorting}
+        {cols.map(col => {
+          const isCheckbox = col.id === 'selection'
+          const canSort = !isCheckbox && col.sorting
+
+          return (
+            <TableCell
+              key={col.id}
+              sortDirection={orderBy === col.id ? order : false}
+              padding={isCheckbox ? 'checkbox' : 'normal'}
+              align={col.align ?? 'left'}
             >
-              {c.label}
-              {orderBy === c.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
+              {col.component}
+              {canSort ? (
+                <TableSortLabel
+                  active={orderBy === col.id}
+                  direction={orderBy === col.id ? order : 'asc'}
+                  onClick={createSortHandler(col)}
+                  sx={{ fontWeight: 'bold' }}
+                >
+                  {col.label ?? ''}
+                  {orderBy === col.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === 'desc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : (
+                col.label ?? ''
+              )}
+            </TableCell>
+          )
+        })}
       </TableRow>
     </MuiTableHead>
   )

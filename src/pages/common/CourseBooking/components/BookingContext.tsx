@@ -60,7 +60,7 @@ type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: string) => void
   removePromo: (_: string) => void
-  placeOrder: () => Promise<Order>
+  placeOrder: () => Promise<Pick<Order, 'id'>>
 }
 
 const initialContext = {}

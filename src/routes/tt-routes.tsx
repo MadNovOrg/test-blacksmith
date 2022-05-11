@@ -15,6 +15,7 @@ import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
+import { Orders } from '@app/pages/tt-pages/Orders'
 
 const TTAdminRoutes = () => {
   return (
@@ -47,6 +48,8 @@ const TTAdminRoutes = () => {
       </Route>
 
       <Route path="certifications" element={<Certifications />} />
+
+      <Route path="orders" element={<Orders />} />
 
       <Route path="admin" element={<AdminPage />}>
         <Route index element={<Navigate replace to="organizations" />} />
