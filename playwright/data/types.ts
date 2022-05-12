@@ -50,7 +50,7 @@ export type Organization = {
 
 export type CourseTableRow = {
   'Course Name': string
-  Organization: string
+  Organisation: string
   'Course Type': string
   Start: string
   End: string

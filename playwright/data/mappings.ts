@@ -24,7 +24,7 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
     'Course Name': `${translation.common['course-levels'][course.level]}${
       course.name
     }`,
-    Organization: course.organization ? course.organization.name : '',
+    Organisation: course.organization ? course.organization.name : '',
     'Course Type': translation.common['course-types'][course.type],
     Start: startUiTime,
     End: endUiTime,

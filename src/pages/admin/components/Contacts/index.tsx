@@ -57,7 +57,7 @@ export const Contacts: React.FC<ContactsProps> = () => {
       },
       {
         id: 'organization',
-        label: 'Organization',
+        label: t('common.organization'),
       },
       {
         id: 'role',

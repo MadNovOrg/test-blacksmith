@@ -2,6 +2,7 @@ import { Tab, Tabs } from '@mui/material'
 import Box from '@mui/material/Box'
 import { styled } from '@mui/system'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link as RRLink, Outlet } from 'react-router-dom'
 
 import { useRouteMatch } from '@app/hooks/use-route-match'
@@ -28,18 +29,20 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }))
 
-const tabs = [
-  {
-    id: '/admin/organizations',
-    title: 'Organizations',
-  },
-  {
-    id: '/admin/contacts',
-    title: 'Contacts',
-  },
-]
-
 export const AdminPage: React.FC<AdminPageProps> = () => {
+  const { t } = useTranslation()
+
+  const tabs = [
+    {
+      id: '/admin/organizations',
+      title: t('common.organizations'),
+    },
+    {
+      id: '/admin/contacts',
+      title: 'Contacts',
+    },
+  ]
+
   const routeMatch = useRouteMatch(tabs)
   const currentTab = routeMatch?.pattern?.path ?? tabs[0].id
 

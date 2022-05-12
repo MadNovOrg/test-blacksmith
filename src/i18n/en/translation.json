@@ -37,7 +37,7 @@
     "no-booking": "Unable to find booking",
     "my-profile": "My Profile",
     "my-membership": "My Membership",
-    "my-org": "My Organization",
+    "my-org": "My Organisation",
     "notifications": "Notifications",
     "logout": "Logout",
     "registration": "Registration",
@@ -61,7 +61,7 @@
     "job-title": "Job Title",
     "edit-profile": "Edit Profile",
     "personal-details": "Personal Details",
-    "org-details": "Organization Details",
+    "org-details": "Organisation Details",
     "first-name": "First Name",
     "last-name": "Last Name",
     "dietary-restrictions": "Dietary restrictions",
@@ -97,7 +97,7 @@
     "dob": "Date of Birth",
     "qty": "Quantity",
     "dob-optional": "Date of Birth (optional)",
-    "org-name": "Organization Name",
+    "org-name": "Organisation Name",
     "filter-by": " Filter By",
     "level": " Level",
     "verify": "Verify",
@@ -106,7 +106,8 @@
     "incomplete": "Incomplete",
     "course-name": "Course Name",
     "contact": "Contact",
-    "organization": "Organization",
+    "organization": "Organisation",
+    "organizations": "Organisations",
     "evaluation": "Evaluation",
     "name": "Name",
     "attendee": "Attendee",
@@ -194,7 +195,7 @@
     "role-names": {
       "user": "User",
       "trainer": "Trainer",
-      "org-admin": "Organization Administrator",
+      "org-admin": "Organisation Administrator",
       "tt-ops": "Team Teach Operations",
       "tt-admin": "Team Teach Administrator",
       "admin": "Administrator"
@@ -401,7 +402,7 @@
       "min-chars": "Start typing to get suggestions",
       "no-results": "No organisations found",
       "modal": {
-        "title": "Add Organization"
+        "title": "Add Organisation"
       }
     },
     "certification-list": {
@@ -483,12 +484,12 @@
     "my-organization": {
       "overview": {
         "title": "Overview",
-        "organization-name": "Organization Name",
+        "organization-name": "Organisation Name",
         "location": "Location",
         "contact-name": "Contact Name",
         "contact-email": "Contact Email",
         "contact-number": "Contact Number",
-        "no-org-assigned": "No organization assigned to current user."
+        "no-org-assigned": "No organizasion assigned to current user."
       },
       "profiles": {
         "title": "Individual records"
@@ -519,12 +520,12 @@
           "submit-course": "Submit Course",
           "submitted-course": "You have successfully created your {{name}} Course",
           "duration-exceeded": "You have exceeded the minimum duration for this course, you must remove a module in order to add more.",
-          "organization": "Organization"
+          "organization": "Organisation"
         }
       },
       "my-courses": {
         "course-name": "Course Name",
-        "organization": "Organization",
+        "organization": "Organisation",
         "start": "Start",
         "end": "End",
         "status": "Status"
