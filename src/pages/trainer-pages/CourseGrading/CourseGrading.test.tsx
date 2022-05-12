@@ -408,17 +408,6 @@ describe('page: CourseGrading', () => {
           completed: true,
         },
       ],
-      certificates: [
-        {
-          courseId: course.id,
-          courseParticipantId: courseParticipants[1].id,
-          courseName: course.name,
-          courseLevel: course.level,
-          number: `CL-L1-${course.id}`,
-          expiryDate: expect.any(String),
-          certificationDate: expect.any(String),
-        },
-      ],
       participantIds: [courseParticipants[1].id],
       grade: Grade.OBSERVE_ONLY,
       feedback: 'Feedback',

@@ -14,7 +14,6 @@ import {
   ListItemText,
   InputBase,
 } from '@mui/material'
-import { add } from 'date-fns'
 import { t } from 'i18next'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
@@ -32,8 +31,8 @@ import {
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
 import theme from '@app/theme'
-import { CourseLevel, Grade } from '@app/types'
-import { getCertificateNumberPrefix, LoadingStatus } from '@app/util'
+import { Grade } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import {
   HoldsRecord,
@@ -41,16 +40,6 @@ import {
 } from '../CourseGradingDetails/ModulesSelectionList'
 
 import useCourseGradingData from './useCourseGradingData'
-
-const validUntilMonthsByCourseLevel = {
-  [CourseLevel.LEVEL_1]: 36,
-  [CourseLevel.LEVEL_2]: 24,
-  [CourseLevel.ADVANCED]: 12,
-  [CourseLevel.BILD_ACT]: 12,
-  [CourseLevel.INTERMEDIATE_TRAINER]: 12,
-  [CourseLevel.BILD_ACT_TRAINER]: 12,
-  [CourseLevel.ADVANCED_TRAINER]: 12,
-}
 
 export const CourseGrading = () => {
   const { id: courseId } = useParams()
@@ -167,28 +156,8 @@ export const CourseGrading = () => {
         }
       })
 
-      const certificates =
-        grade !== Grade.FAIL
-          ? attendedParticipants.map(participant => ({
-              courseId: course.id,
-              courseParticipantId: participant,
-              courseName: course.name,
-              courseLevel: course.level,
-              number: getCertificateNumberPrefix(
-                course.type,
-                course.level,
-                course.id
-              ),
-              certificationDate: new Date().toISOString(),
-              expiryDate: add(new Date(), {
-                months: validUntilMonthsByCourseLevel[course.level],
-              }).toISOString(),
-            }))
-          : []
-
       await fetcher<ResponseType, ParamsType>(MUTATION, {
         modules,
-        certificates,
         participantIds: attendedParticipants,
         grade,
         feedback,

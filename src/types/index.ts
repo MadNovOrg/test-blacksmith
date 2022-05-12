@@ -48,13 +48,13 @@ export type CourseModule = {
 export type CourseCertificate = {
   number: string
   courseId: string
-  courseParticipantId: string
   expiryDate: string
   certificationDate: string
   courseName: string
   courseLevel: CourseLevel
   participant?: CourseParticipant
-  profile?: Profile
+  profileId: string
+  profile: Profile
 } & Base
 
 export type Address = {

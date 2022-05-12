@@ -17,7 +17,7 @@ type ResponseType = {
     deliveryType: CourseDeliveryType
     participants: Array<{
       id: string
-      profile: { fullName: string }
+      profile: { id: string; fullName: string }
       attended: boolean
       grade?: Grade
     }>
@@ -44,6 +44,7 @@ const QUERY = gql`
       participants {
         id
         profile {
+          id
           fullName
         }
         attended

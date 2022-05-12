@@ -148,6 +148,17 @@ update_permissions:
               _eq: X-Hasura-User-Id
       check: {}
 event_triggers:
+  - name: create_certificate
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - grade
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/insert'
   - name: go1_link
     definition:
       enable_manual: false
