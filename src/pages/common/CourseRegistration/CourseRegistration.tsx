@@ -28,6 +28,13 @@ export const CourseRegistrationPage: React.FC = () => {
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
   const success = searchParams.get('success') === 'true'
+  const loginLocationState = location.state
+    ? location.state
+    : courseId
+    ? { from: { pathname: '/booking' } }
+    : '/'
+
+  console.log(loginLocationState)
 
   const onSignUp = (email: string, password: string) => {
     // delay auto-login just in case
@@ -91,6 +98,7 @@ export const CourseRegistrationPage: React.FC = () => {
             variant="text"
             color="primary"
             size="small"
+            state={loginLocationState}
           >
             {t('login')}
           </Button>
