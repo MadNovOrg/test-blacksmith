@@ -41,7 +41,6 @@ export const UserMenu: React.FC = () => {
     <>
       <Button
         onClick={handleOpenUserMenu}
-        sx={{ mr: 2 }}
         startIcon={<Avatar src={profile?.avatar} name={profile?.fullName} />}
         endIcon={<ArrowDropDownIcon />}
         data-testid="user-menu-btn"
