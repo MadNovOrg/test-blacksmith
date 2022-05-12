@@ -30,10 +30,14 @@ export const Orders: React.FC = () => {
     <Container maxWidth="lg" sx={{ pt: 6 }}>
       <Stack direction="row" gap={4}>
         <Box width={260}>
-          <Typography variant="h1" mb={4}>
-            {t('common.orders')}
+          <Typography variant="h1">{t('common.orders')}</Typography>
+          <Typography variant="body2" color="grey.500" mt={1}>
+            {orders.length} {t('common.items')}
           </Typography>
-          <Filters onChange={onFilterChange} />
+
+          <Box mt={5}>
+            <Filters onChange={onFilterChange} />
+          </Box>
         </Box>
         <Box flex={1}>
           <List orders={orders} sorting={sorting} loading={isLoading} />

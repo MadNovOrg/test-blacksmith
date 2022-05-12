@@ -407,6 +407,7 @@
     },
     "certification-list": {
       "title": "Certifications",
+      "organization": "Organisation",
       "download-selected": "Download selected ({{ number }})",
       "download-all-certifications": "Download all certifications",
       "grade": "Grade",
@@ -415,10 +416,8 @@
       "contact": "Contact",
       "name": "Name",
       "status": "Status",
-      "statuses": {
-        "expired": "Expired",
-        "active": "Active"
-      }
+      "status-expired": "Expired",
+      "status-active": "Active"
     },
     "changelog-modal": {
       "administrator": "Administrator",

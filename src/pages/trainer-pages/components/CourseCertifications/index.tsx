@@ -1,9 +1,10 @@
 import { CircularProgress, Container, Stack } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 
 import { CertificationList } from '@app/components/CertificationList'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { Course, SortOrder } from '@app/types'
+import { useTableSort } from '@app/hooks/useTableSort'
+import { Course } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 type CourseCertificationsProps = {
@@ -13,34 +14,14 @@ type CourseCertificationsProps = {
 export const CourseCertifications: React.FC<CourseCertificationsProps> = ({
   course,
 }) => {
-  const [order, setOrder] = useState<SortOrder>('asc')
-  const [sortColumn, setSortColumn] = useState<string>('name')
-  const handleSortChange = useCallback(
-    columnName => {
-      if (sortColumn === columnName) {
-        setOrder(prevState => (prevState === 'asc' ? 'desc' : 'asc'))
-      } else {
-        setOrder('asc')
-        setSortColumn(columnName)
-      }
-    },
-    [sortColumn]
-  )
-
-  const sortingOptions = {
-    order,
-    orderBy: sortColumn,
-    onSort: handleSortChange,
-  }
+  const sorting = useTableSort('name', 'asc')
 
   const { data: certifiedParticipants, status } = useCourseParticipants(
     course?.id ?? '',
     {
-      sortBy: 'name',
-      order,
-      where: {
-        certificate: { id: { _is_null: false } },
-      },
+      sortBy: sorting.by,
+      order: sorting.dir,
+      where: { certificate: { id: { _is_null: false } } },
     }
   )
 
@@ -57,7 +38,7 @@ export const CourseCertifications: React.FC<CourseCertificationsProps> = ({
       ) : (
         <CertificationList
           participants={certifiedParticipants ?? []}
-          sortingOptions={sortingOptions}
+          sorting={sorting}
         />
       )}
     </Container>

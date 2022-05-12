@@ -19,7 +19,12 @@ export type CourseParticipantCriteria =
       certificate: { id: { _is_null: boolean } }
     }
   | {
-      profile: { fullName: { _ilike: string } }
+      profile: {
+        _or: [
+          { fullName: { _ilike: string } },
+          { familyName: { _ilike: string } }
+        ]
+      }
     }
   | {
       certificate: { expiryDate: { _gte: Date } }

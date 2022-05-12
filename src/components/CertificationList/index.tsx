@@ -1,9 +1,9 @@
 import {
   Box,
   Button,
-  Checkbox,
   Chip,
   Grid,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,27 +14,20 @@ import { pdf } from '@react-pdf/renderer'
 import { formatDistanceToNow, isPast } from 'date-fns'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
-import { TableHead } from '@app/components/Table/TableHead'
-import {
-  CourseLevel,
-  CourseParticipant,
-  Grade as GradeEnum,
-  SortOrder,
-} from '@app/types'
+import { TableHead, Col } from '@app/components/Table/TableHead'
+import { useTableChecks } from '@app/hooks/useTableChecks'
+import type { Sorting } from '@app/hooks/useTableSort'
+import { CourseLevel, CourseParticipant, Grade as GradeEnum } from '@app/types'
 
 type CertificationListProps = {
   participants: CourseParticipant[]
-  sortingOptions: {
-    onSort: (columnName: string) => void
-    order: SortOrder
-    orderBy: string
-  }
+  sorting: Sorting
   hideTitle?: boolean
   columns?: (
     | 'name'
@@ -48,109 +41,53 @@ type CertificationListProps = {
 
 export const CertificationList: React.FC<CertificationListProps> = ({
   participants,
-  sortingOptions,
+  sorting,
   hideTitle,
   columns = ['name', 'contact', 'organization', 'grade'],
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { checkbox, selected, isSelected } = useTableChecks()
 
-  const [selectedParticipants, setSelectedParticipants] = useState<
-    CourseParticipant[]
-  >([])
+  const selectedParticipants = useMemo(
+    () => participants.filter(p => isSelected(p.id)),
+    [participants, isSelected]
+  )
+
+  const colsToShow: Set<string> = useMemo(() => new Set(columns), [columns])
+  const showCol = useCallback((id: string) => colsToShow.has(id), [colsToShow])
 
   const cols = useMemo(() => {
-    return [
-      {
-        id: 'selection',
-        label: '',
-        sorting: false,
-        component: (
-          <Checkbox
-            checked={selectedParticipants.length > 0}
-            onChange={event => {
-              setSelectedParticipants(() =>
-                event.target.checked ? participants ?? [] : []
-              )
-            }}
-          />
-        ),
-      },
-      columns.includes('name')
-        ? {
-            id: 'name',
-            label: t('components.certification-list.name'),
-            sorting: true,
-          }
-        : null,
-      columns.includes('contact')
-        ? {
-            id: 'contact',
-            label: t('components.certification-list.contact'),
-            sorting: true,
-          }
-        : null,
-      columns.includes('organization')
-        ? {
-            id: 'organisation',
-            label: t('pages.course-participants.organisation'),
-            sorting: false,
-          }
-        : null,
-      columns.includes('grade')
-        ? {
-            id: 'grade',
-            label: t('components.certification-list.grade'),
-            sorting: false,
-          }
-        : null,
-      columns.includes('certificate')
-        ? {
-            id: 'certificate',
-            label: t('components.certification-list.certificate'),
-            sorting: false,
-          }
-        : null,
-      columns.includes('status')
-        ? {
-            id: 'status',
-            label: t('components.certification-list.status'),
-            sorting: false,
-          }
-        : null,
-      {
-        id: 'actions',
-        label: t('components.certification-list.certificate'),
-        sorting: false,
-      },
-    ].filter(Boolean)
-  }, [columns, participants, selectedParticipants, t])
+    const _t = (id: string) => t(`components.certification-list.${id}`)
+    const col = (id: string, extra?: Partial<Col>, check = true) => {
+      return !check || showCol(id) ? [{ id: id, label: _t(id), ...extra }] : []
+    }
 
-  const handleParticipantSelection = useCallback((participantId, checked) => {
-    setSelectedParticipants(prevState =>
-      checked
-        ? [...prevState, participantId]
-        : prevState.filter(id => id !== participantId)
-    )
-  }, [])
+    return [
+      checkbox.headCol(participants.map(p => p.id)),
+      ...col('name', { sorting: true }),
+      ...col('contact', { sorting: true }),
+      ...col('organization'),
+      ...col('grade'),
+      ...col('certificate'),
+      ...col('status'),
+      ...col('actions', {}, false),
+    ] as Col[]
+  }, [participants, t, checkbox, showCol])
 
   const downloadCertificates = useCallback(
     async (participants: CourseParticipant[]) => {
-      const tuples: [string, JSX.Element][] = participants.map(participant => [
-        `${participant.profile?.fullName} - ${
-          participant.certificate?.courseName ?? ''
-        }.pdf`,
+      const tuples: [string, JSX.Element][] = participants.map(p => [
+        `${p.profile?.fullName} - ${p.certificate?.courseName ?? ''}.pdf`,
         <CertificateDocument
-          key={participant.id}
-          participantName={participant.profile?.fullName}
-          courseName={participant.certificate?.courseName ?? ''}
-          courseLevel={
-            participant.certificate?.courseLevel ?? CourseLevel.LEVEL_1
-          }
-          grade={participant.grade ?? GradeEnum.PASS}
-          courseDeliveryType={participant.course.deliveryType}
-          certificationNumber={participant.certificate?.number ?? ''}
-          expiryDate={participant.certificate?.expiryDate ?? ''}
+          key={p.id}
+          participantName={p.profile?.fullName}
+          courseName={p.certificate?.courseName ?? ''}
+          courseLevel={p.certificate?.courseLevel ?? CourseLevel.LEVEL_1}
+          grade={p.grade ?? GradeEnum.PASS}
+          courseDeliveryType={p.course.deliveryType}
+          certificationNumber={p.certificate?.number ?? ''}
+          expiryDate={p.certificate?.expiryDate ?? ''}
         />,
       ])
       if (tuples.length > 1) {
@@ -168,9 +105,6 @@ export const CertificationList: React.FC<CertificationListProps> = ({
     []
   )
 
-  const certificateExpired = (expiryDate: string) =>
-    isPast(new Date(expiryDate))
-
   return (
     <>
       <Grid
@@ -185,151 +119,115 @@ export const CertificationList: React.FC<CertificationListProps> = ({
           </Typography>
         ) : null}
 
-        <Box>
+        <Stack direction="row" gap={2}>
           <Button
             variant="outlined"
             color="primary"
-            disabled={selectedParticipants.length === 0}
+            disabled={selected.size === 0}
             onClick={() => downloadCertificates(selectedParticipants)}
           >
             {t('components.certification-list.download-selected', {
-              number: selectedParticipants.length,
+              number: selected.size,
             })}
           </Button>
+
           <Button
             variant="contained"
             color="primary"
-            sx={{ ml: 2 }}
             onClick={() => downloadCertificates(participants ?? [])}
           >
             {t('components.certification-list.download-all-certifications')}
           </Button>
-        </Box>
+        </Stack>
       </Grid>
 
       <Table>
         <TableHead
           cols={cols}
-          order={sortingOptions.order}
-          orderBy={sortingOptions.orderBy}
-          onRequestSort={sortingOptions.onSort}
-          sx={{
-            '& .MuiTableRow-root': {
-              backgroundColor: 'grey.300',
-            },
-          }}
+          orderBy={sorting.by}
+          order={sorting.dir}
+          onRequestSort={sorting.onSort}
+          sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
         />
         <TableBody>
-          {participants?.map(courseParticipant => {
-            const expired =
-              courseParticipant.certificate &&
-              certificateExpired(courseParticipant.certificate?.expiryDate)
+          {participants?.map(p => {
+            if (!p.certificate) return null
+
+            const expiryDate = new Date(p.certificate.expiryDate)
+            const expired = isPast(expiryDate)
+            const status = expired ? 'status-expired' : 'status-active'
+
             return (
-              <TableRow
-                key={courseParticipant.id}
-                data-testid={`attending-participant-row-${courseParticipant.id}`}
-              >
-                <TableCell>
-                  <Checkbox
-                    checked={selectedParticipants.includes(courseParticipant)}
-                    onChange={event =>
-                      handleParticipantSelection(
-                        courseParticipant,
-                        event.target.checked
-                      )
-                    }
-                  />
-                </TableCell>
-                {columns.includes('name') ? (
-                  <TableCell>{courseParticipant.profile.fullName}</TableCell>
+              <TableRow key={p.id}>
+                {checkbox.rowCell(p.id)}
+
+                {showCol('name') ? (
+                  <TableCell>{p.profile.fullName}</TableCell>
                 ) : null}
-                {columns.includes('contact') ? (
+
+                {showCol('contact') ? (
                   <TableCell>
-                    {courseParticipant.profile.email}
-                    {courseParticipant.profile.contactDetails.map(
-                      contact => contact.value
-                    )}
+                    {p.profile.email}
+                    {p.profile.contactDetails.map(contact => contact.value)}
                   </TableCell>
                 ) : null}
-                {columns.includes('organization') ? (
+
+                {showCol('organisation') ? (
                   <TableCell>
-                    {courseParticipant.profile.organizations.map(org => (
+                    {p.profile.organizations.map(org => (
                       <Typography key={org.organization.id}>
                         {org.organization.name}
                       </Typography>
                     ))}
                   </TableCell>
                 ) : null}
-                {columns.includes('grade') ? (
+
+                {showCol('grade') ? (
                   <TableCell>
-                    <Box display="flex" mb={2} alignItems="center">
-                      {courseParticipant.grade ? (
-                        <Grade grade={courseParticipant.grade} />
-                      ) : null}
+                    <Box display="flex" alignItems="center">
+                      {p.grade ? <Grade grade={p.grade} /> : null}
                     </Box>
                   </TableCell>
                 ) : null}
-                {columns.includes('certificate') ? (
+
+                {showCol('certificate') ? (
                   <TableCell>
-                    {courseParticipant.grade ? (
-                      <Grid
-                        container
-                        direction="column"
-                        mb={2}
-                        alignItems="start"
-                      >
-                        <Grade grade={courseParticipant.grade} />
-                        <Typography mt={1} variant="body2" color="grey.700">
-                          {courseParticipant.certificate?.number}
+                    {p.grade ? (
+                      <>
+                        <Grade grade={p.grade} />
+                        <Typography variant="body2" color="grey.700">
+                          {p.certificate.number}
                         </Typography>
-                      </Grid>
+                      </>
                     ) : null}
                   </TableCell>
                 ) : null}
-                {columns.includes('status') ? (
+
+                {showCol('status') ? (
                   <TableCell>
-                    {courseParticipant.certificate ? (
-                      <Grid
-                        container
-                        direction="column"
-                        mb={2}
-                        alignItems="start"
-                      >
-                        <Chip
-                          label={
-                            expired
-                              ? t(
-                                  `components.certification-list.statuses.expired`
-                                )
-                              : t(
-                                  `components.certification-list.statuses.active`
-                                )
-                          }
-                          color={expired ? 'error' : 'success'}
-                          size="small"
-                        />
-                        <Typography mt={1} variant="body2" color="grey.700">
-                          {expired
-                            ? `${formatDistanceToNow(
-                                new Date(
-                                  courseParticipant.certificate.expiryDate
-                                )
-                              )} ${t('common.ago')}`
-                            : courseParticipant.certificate.expiryDate}
-                        </Typography>
-                      </Grid>
-                    ) : null}
+                    <Chip
+                      label={t(`components.certification-list.${status}`)}
+                      color={expired ? 'error' : 'success'}
+                      size="small"
+                    />
+                    <Typography mt={1} variant="body2" color="grey.700">
+                      {expired
+                        ? `${formatDistanceToNow(expiryDate)} ${t(
+                            'common.ago'
+                          )}`
+                        : t('dates.default', { date: expiryDate })}
+                    </Typography>
                   </TableCell>
                 ) : null}
-                <TableCell>
+
+                <TableCell sx={{ width: 0 }}>
                   <Button
                     variant="contained"
                     color="primary"
-                    sx={{ ml: 2 }}
+                    size="small"
+                    sx={{ whiteSpace: 'nowrap' }}
                     onClick={() =>
-                      navigate(
-                        `/certification/${courseParticipant.certificate?.id}`
-                      )
+                      navigate(`/certification/${p.certificate?.id}`)
                     }
                   >
                     {t('components.certification-list.view-certificate')}
