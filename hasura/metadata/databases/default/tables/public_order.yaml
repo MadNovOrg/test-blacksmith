@@ -68,6 +68,25 @@ insert_permissions:
         - quantity
         - registrants
       backend_only: false
+  - role: user
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+      backend_only: false
 select_permissions:
   - role: tt-ops
     permission:
@@ -93,6 +112,31 @@ select_permissions:
         - profile_id
       filter: {}
   - role: unverified
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - vat
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: user
     permission:
       columns:
         - billing_address
