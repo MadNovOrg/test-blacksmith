@@ -43,7 +43,7 @@ export const QUERY = gql`
     }
 
     courseParticipantsAggregation: course_participant_aggregate(
-      where: { course_id: { _eq: $courseId } }
+      where: { course_id: { _eq: $courseId }, attended: { _eq: true } }
     ) {
       aggregate {
         count
