@@ -11,6 +11,7 @@ INSERT INTO profile (id, given_name, family_name, email) VALUES
 ('7eb8bd38-3048-4416-90d2-4b2299e4633b', 'Alex', 'Parra', 'alex.parra@nearform.com'),
 ('7584edda-3772-447c-9162-25f7fc6a9b38', 'Danijel', 'Maksimovic', 'danijel.maksimovic@nearform.com'),
 ('8fc963f5-1942-4e70-9107-7a84fe2e68d5', 'Piotr', 'Piech', 'piotr.piech@nearform.com'),
+('00c5f39b-785a-46f5-8475-ea2d349efaf8', 'Wilk', 'Maia', 'wilk.maia@nearform.com'),
 -- test users
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', 'trainer@teamteach.testinator.com'),
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'Mark', 'Trainer', 'trainer.with.org@teamteach.testinator.com'),
@@ -50,6 +51,7 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('6392f477-ce2f-4408-b80d-37e237b9aa11', '7eb8bd38-3048-4416-90d2-4b2299e4633b', 'cognito'), -- alex.parra@nearform.com
 ('22b8b110-a559-472a-84ca-d92880044315', '7584edda-3772-447c-9162-25f7fc6a9b38', 'cognito'), -- danijel.maksimovic@nearform.com
 ('483ae253-c815-4f63-bf40-5c2173f5ca23', '8fc963f5-1942-4e70-9107-7a84fe2e68d5', 'cognito'), -- piotr.piech@nearform.com
+('13d205f5-1e83-4e1b-a62f-4ed047507e69', '00c5f39b-785a-46f5-8475-ea2d349efaf8', 'cognito'), -- wilk.maia@nearform.com
 -- test users
 ('fa021939-81e5-4101-8f8b-c02d28b127be', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
 ('49f998c9-dfc7-4a02-8de1-2207a1bd93d9', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
@@ -88,7 +90,8 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', (SELECT id from role WHERE name = 'admin')), -- lefteris.paraskevas@nearform.com
 ('7eb8bd38-3048-4416-90d2-4b2299e4633b', (SELECT id from role WHERE name = 'admin')), -- alex.parra@nearform.com
 ('7584edda-3772-447c-9162-25f7fc6a9b38', (SELECT id from role WHERE name = 'admin')), -- danijel.maksimovic@nearform.com
-('8fc963f5-1942-4e70-9107-7a84fe2e68d5', (SELECT id from role WHERE name = 'admin')); -- piotr.piech@nearform.com
+('8fc963f5-1942-4e70-9107-7a84fe2e68d5', (SELECT id from role WHERE name = 'admin')), -- piotr.piech@nearform.com
+('00c5f39b-785a-46f5-8475-ea2d349efaf8', (SELECT id from role WHERE name = 'admin')); -- wilk.maia@nearform.com
 
 -- Adding roles to test users
 INSERT INTO profile_role (profile_id, role_id) VALUES
@@ -133,6 +136,7 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('7eb8bd38-3048-4416-90d2-4b2299e4633b', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- alex.parra@nearform.com
 ('7584edda-3772-447c-9162-25f7fc6a9b38', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- danijel.maksimovic@nearform.com
 ('8fc963f5-1942-4e70-9107-7a84fe2e68d5', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- piotr.piech@nearform.com
+('00c5f39b-785a-46f5-8475-ea2d349efaf8', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- wilk.maia@nearform.com
 -- test users
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- trainer.with.org@teamteach.testinator.com
 ('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- assistant.with.org@teamteach.testinator.com
