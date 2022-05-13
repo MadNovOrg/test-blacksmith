@@ -42,3 +42,4 @@
 - "!include public_resource.yaml"
 - "!include public_role.yaml"
 - "!include public_venue.yaml"
+- "!include public_waitlist.yaml"

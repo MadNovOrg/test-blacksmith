@@ -26,6 +26,11 @@
     },
     "home": "Home",
     "add": "Add",
+    "join-waitlist": "Join Waiting List",
+    "join-waitlist-title": "Join the course waiting list",
+    "join-waitlist-notice": "The course you are interested in is currently full. We will notify you via email if a space becomes available.",
+    "waitlist-added": "You’ve been added to the course waitlist.",
+    "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
     "courses": "Courses",
     "contacts": "Contacts",
     "community": "Community",
@@ -128,6 +133,7 @@
     "cancel": "Cancel",
     "apply": "Apply",
     "save-changes": "Save Changes",
+    "goto-tt": "Go to TeamTeach.co.uk",
     "clear": "Clear",
     "poor": "Poor",
     "fair": "Fair",
@@ -443,6 +449,12 @@
     }
   },
   "pages": {
+    "waitlist": {
+      "course-full": "Course fully booked",
+      "form-errors": {
+        "constraint-violation": "You've already added to the waiting list."
+      }
+    },
     "book-course": {
       "title": "Book a course",
       "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",

@@ -1,0 +1,34 @@
+table:
+  schema: public
+  name: waitlist
+configuration:
+  custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    given_name:
+      custom_name: givenName
+    family_name:
+      custom_name: familyName
+    org_name:
+      custom_name: orgName
+    created_at:
+      custom_name: createdAt
+  custom_column_names:
+    course_id: courseId
+    given_name: givenName
+    family_name: familyName
+    org_name: orgName
+    created_at: createdAt
+insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false

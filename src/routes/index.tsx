@@ -8,6 +8,7 @@ import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
+import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
@@ -37,6 +38,10 @@ export const AppRoutes = () => {
 
   if (location.pathname === '/invitation') {
     return <InvitationPage />
+  }
+
+  if (location.pathname === '/waitlist') {
+    return <CourseWaitlist />
   }
 
   if (auth.loading) {

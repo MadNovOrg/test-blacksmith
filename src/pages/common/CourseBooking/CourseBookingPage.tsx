@@ -8,9 +8,14 @@ import { CourseBookingDone } from './components/CourseBookingDone'
 import { CourseBookingLayout } from './components/CourseBookingLayout'
 import { CourseBookingPayment } from './components/CourseBookingPayment'
 import { CourseBookingReview } from './components/CourseBookingReview'
+import { CourseFull } from './components/CourseFull'
 
 const BookingRoutes: React.FC = () => {
-  const { booking } = useBooking()
+  const { booking, availableSeats, course } = useBooking()
+
+  if (!availableSeats) {
+    return <CourseFull courseId={course.id} />
+  }
 
   return (
     <Routes>
