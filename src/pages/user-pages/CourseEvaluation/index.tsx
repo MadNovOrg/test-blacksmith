@@ -212,7 +212,10 @@ export const CourseEvaluation = () => {
           <Grid item md={3}>
             <Sticky top={20}>
               <Box mt={5} pr={3}>
-                <BackButton label="Back to checklist" />
+                <BackButton
+                  label={t('back')}
+                  to={`/courses/${courseId}/details?tab=EVALUATION`}
+                />
 
                 <Typography variant="h2" gutterBottom my={2}>
                   {t('course-evaluation.heading')}
