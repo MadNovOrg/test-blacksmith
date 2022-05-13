@@ -103,7 +103,11 @@ export const CourseDetails = () => {
   const attendingLabel = t('pages.participant-course.attending-course-label')
   const courseHasEnded = course && courseEnded(course)
   const canSubmitFeedback =
-    !loading && courseHasEnded && !didAttendeeSubmitFeedback
+    !loading &&
+    courseHasEnded &&
+    !didAttendeeSubmitFeedback &&
+    courseParticipant?.length &&
+    courseParticipant[0].attended
   const showCertificateTab =
     courseParticipant?.length > 0 && courseParticipant[0].certificate
 

@@ -113,7 +113,29 @@ describe('page: CourseDetails', () => {
 
   it('has course evaluation button enabled if course has ended', () => {
     const course = buildEndedCourse()
-    registerMocks(course)
+
+    useSWRMock.mockReturnValueOnce({
+      data: { course },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: {
+        course_participant: [{ ...buildParticipant(), attended: true }],
+      },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { users: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { certificates: [], upcomingCourses: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
 
     render(
       <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
@@ -124,5 +146,42 @@ describe('page: CourseDetails', () => {
     )
 
     expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
+  })
+
+  it("disables evaluation button if course has ended but the participant didn't attend the course", () => {
+    const course = buildEndedCourse()
+
+    useSWRMock.mockReturnValueOnce({
+      data: { course },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: {
+        course_participant: [{ ...buildParticipant(), attended: false }],
+      },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { users: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { certificates: [], upcomingCourses: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
+        <Routes>
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
   })
 })

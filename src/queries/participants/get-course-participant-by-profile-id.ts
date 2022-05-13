@@ -14,6 +14,7 @@ export const GetParticipant = gql`
       id
       grade
       dateGraded
+      attended
       gradingModules {
         completed
         module {
