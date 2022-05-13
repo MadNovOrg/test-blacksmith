@@ -8,6 +8,7 @@ type StatusChipProps = {
   status: CourseStatus
   type: StatusChipType
   sx?: SxProps
+  [x: string]: unknown
 }
 export enum StatusChipType {
   COURSE,
@@ -22,7 +23,13 @@ const colors = {
   },
 } as const
 
-export const StatusChip: React.FC<StatusChipProps> = ({ status, type, sx }) => {
+export const StatusChip: React.FC<StatusChipProps> = ({
+  status,
+  type,
+  sx,
+  children: _children,
+  ...rest
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -31,6 +38,7 @@ export const StatusChip: React.FC<StatusChipProps> = ({ status, type, sx }) => {
       color={colors[type][status]}
       size="small"
       sx={sx}
+      {...rest}
     />
   )
 }

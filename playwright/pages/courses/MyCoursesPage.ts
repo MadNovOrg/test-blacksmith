@@ -99,11 +99,10 @@ export class MyCoursesPage extends BasePage {
   }
 
   async checkCourseStatus(courseId: number, status: string) {
-    const cell = await this.coursesTable.getCell(
-      'Course Name',
-      cellLinkContainsCourseId(courseId),
-      'Status'
+    const courseStatusChip = this.page.locator(
+      `[data-testid="course-row-${courseId}"] [data-testid="course-status-chip"] span`
     )
-    await expect(cell).toHaveText(status)
+
+    await expect(courseStatusChip).toHaveText(status)
   }
 }

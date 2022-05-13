@@ -151,10 +151,15 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     }
 
     if (keywordDebounced.trim().length) {
-      obj._or = [
-        { name: { _ilike: `%${keywordDebounced}%` } },
-        { id: { _eq: Number(keywordDebounced) } },
-      ]
+      const _or: Array<Record<string, unknown>> = []
+
+      _or.push({ name: { _ilike: `%${keywordDebounced}%` } })
+
+      if (Number(keywordDebounced)) {
+        _or.push({ id: { _eq: Number(keywordDebounced) } })
+      }
+
+      obj._or = _or
     }
 
     return obj
@@ -265,7 +270,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                     : undefined
 
                   return (
-                    <TableRow key={c.id}>
+                    <TableRow key={c.id} data-testid={`course-row-${c.id}`}>
                       <TableCell>
                         {courseTrainer &&
                         courseTrainer.status !== InviteStatus.ACCEPTED ? (
@@ -322,6 +327,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                         <StatusChip
                           status={c.status}
                           type={StatusChipType.COURSE}
+                          data-testid="course-status-chip"
                         />
                       </TableCell>
                       <TableCell>

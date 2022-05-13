@@ -48,7 +48,7 @@ export const toUiTime = (date: Date) => {
   return date.toLocaleString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
+    hour12: false,
     timeZone: 'UTC',
   })
 }
