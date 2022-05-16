@@ -26,12 +26,14 @@
     "hasura:seed:apply": "npm run hasura -- seed apply --database-name default",
     "hasura:metadata:apply": "npm run hasura -- metadata apply",
     "hasura:migrate:apply": "npm run hasura -- migrate apply",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "graphql-codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@googlemaps/react-wrapper": "^1.1.32",
+    "@graphql-codegen/cli": "^2.6.2",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.6.2",
     "@mui/lab": "^5.0.0-alpha.80",
@@ -128,7 +130,10 @@
     "typescript": "^4.6.4",
     "vite": "^2.9.8",
     "vite-plugin-shim-react-pdf": "^1.0.5",
-    "vite-plugin-svgr": "^1.1.0"
+    "vite-plugin-svgr": "^1.1.0",
+    "@graphql-codegen/typescript": "2.4.11",
+    "@graphql-codegen/typescript-operations": "2.4.0",
+    "@graphql-codegen/cli": "2.6.2"
   },
   "jest": {
     "testTimeout": 10000,

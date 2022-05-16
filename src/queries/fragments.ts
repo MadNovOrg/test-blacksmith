@@ -51,18 +51,6 @@ export const PROFILE = gql`
   }
 `
 
-export const AVAILABILITY = gql`
-  fragment Availability on availability {
-    id
-    start
-    end
-    description
-    createdAt
-    updatedAt
-    type
-  }
-`
-
 export const MODULE = gql`
   fragment Module on module {
     id

@@ -10,7 +10,7 @@ export type ParamsType = {
 }
 
 export const QUERY = gql`
-  query Courses(
+  query UserCourses(
     $orderBy: [course_order_by!] = { name: asc }
     $where: course_bool_exp = {}
   ) {

@@ -25,12 +25,12 @@ export const QUERY = gql`
       name
       schedule {
         id
-        name
         start
         end
-        type
         venue {
-          address
+          city
+          addressLineOne
+          addressLineTwo
         }
       }
       participants: participants_aggregate {
