@@ -26,7 +26,7 @@ export const AppBar = () => {
         variant="outlined"
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" gap={3}>
             <Link underline="none" href="/" variant="h5">
               <Logo
                 width={230}

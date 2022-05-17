@@ -1,10 +1,20 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { Button, Menu, MenuItem } from '@mui/material'
+import { Button, Menu, MenuItem, styled } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import { RoleName } from '@app/types'
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[200],
+  borderColor: 'transparent',
+  color: theme.palette.grey[800],
+  '&:hover': {
+    backgroundColor: theme.palette.grey[300],
+    borderColor: 'transparent',
+  },
+}))
 
 export const RoleSwitcher = () => {
   const { t } = useTranslation()
@@ -27,17 +37,16 @@ export const RoleSwitcher = () => {
 
   return (
     <>
-      <Button
+      <StyledButton
         variant="outlined"
         size="small"
         color="primary"
         onClick={ev => setAnchorEl(ev.currentTarget)}
         endIcon={<ArrowDropDownIcon />}
-        sx={{ borderRadius: 100, ml: 3, py: 0 }}
         data-testid="RoleSwitcher-btn"
       >
         {t(`components.role-switcher.${auth.activeRole}`) || auth.activeRole}
-      </Button>
+      </StyledButton>
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
@@ -54,7 +63,7 @@ export const RoleSwitcher = () => {
           <MenuItem
             key={role}
             onClick={changeRole(role)}
-            sx={{ minWidth: 140 }}
+            sx={{ minWidth: 140, fontSize: 14 }}
             data-testid="RoleSwitcher-otherRole"
           >
             {t(`components.role-switcher.${role}`) || role}

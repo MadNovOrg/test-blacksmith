@@ -347,9 +347,9 @@
       "subtitle": "Switch Role",
       "user": "User",
       "trainer": "Trainer",
-      "org-admin": "Organization Admin",
-      "tt-ops": "Team Teach Ops",
-      "tt-admin": "Team Teach Admin"
+      "org-admin": "Organisation Admin",
+      "tt-ops": "TT Ops",
+      "tt-admin": "TT Admin"
     },
     "course-form": {
       "general-details-title": "General details",
