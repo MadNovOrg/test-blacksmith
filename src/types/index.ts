@@ -267,6 +267,7 @@ export type CourseParticipant = {
   gradingModules: CourseParticipantModule[]
   certificate?: CourseCertificate
   certificateChanges?: CourseCertificateChangelog[]
+  healthSafetyConsent?: boolean
 } & Base
 
 export enum BlendedLearningStatus {

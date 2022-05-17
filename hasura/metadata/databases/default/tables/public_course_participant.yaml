@@ -12,6 +12,8 @@ configuration:
       custom_name: go1EnrolmentId
     date_graded:
       custom_name: dateGraded
+    hs_consent:
+      custom_name: healthSafetyConsent
     invoice_id:
       custom_name: invoiceID
   custom_column_names:
@@ -19,6 +21,7 @@ configuration:
     go1_enrolment_status: go1EnrolmentStatus
     go1_enrolment_id: go1EnrolmentId
     date_graded: dateGraded
+    hs_consent: healthSafetyConsent
     invoice_id: invoiceID
 object_relationships:
   - name: certificate
@@ -85,20 +88,22 @@ select_permissions:
     permission:
       columns:
         - attended
+        - booking_date
+        - certificate_id
         - course_id
+        - created_at
+        - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
         - grade
         - grading_feedback
-        - booking_date
-        - created_at
-        - date_graded
-        - updated_at
+        - hs_consent
         - id
         - invite_id
         - invoice_id
         - profile_id
         - registration_id
+        - updated_at
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -115,11 +120,13 @@ select_permissions:
       columns:
         - attended
         - booking_date
+        - certificate_id
         - course_id
         - date_graded
         - go1_enrolment_status
         - grade
         - grading_feedback
+        - hs_consent
         - id
         - invoice_id
         - profile_id
@@ -141,6 +148,7 @@ update_permissions:
         - date_graded
         - grade
         - grading_feedback
+        - hs_consent
       filter:
         course:
           trainers:
