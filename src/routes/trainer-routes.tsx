@@ -72,7 +72,7 @@ const TrainerBaseRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="membership-area" element={<MembershipAreaPage />}>
+      <Route path="membership" element={<MembershipAreaPage />}>
         <Route index element={<Navigate replace to="details" />} />
         <Route path="details" element={<MembershipDetailsPage />} />
         <Route path="blog">

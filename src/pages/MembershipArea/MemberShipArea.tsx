@@ -4,12 +4,12 @@ import { Link, Outlet } from 'react-router-dom'
 const navigation = [
   {
     name: 'Membership Details',
-    href: '/membership-area/details',
+    href: '/membership/details',
     current: false,
   },
   {
     name: 'Blog',
-    href: '/membership-area/blog',
+    href: '/membership/blog',
     current: false,
   },
 ]

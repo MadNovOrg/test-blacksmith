@@ -1,7 +1,6 @@
 import AccountIcon from '@mui/icons-material/AccountCircle'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import MembershipIcon from '@mui/icons-material/CardTravel'
 import OrgIcon from '@mui/icons-material/CorporateFare'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import NotificationsIcon from '@mui/icons-material/Notifications'
@@ -108,20 +107,6 @@ export const UserMenu: React.FC = () => {
               primaryTypographyProps={{ variant: 'body2' }}
             >
               {t('admin')}
-            </ListItemText>
-          </MenuItem>
-        )}
-
-        {acl.canViewMembership() && (
-          <MenuItem onClick={() => handleMenuClick('/membership-area')}>
-            <ListItemIcon>
-              <MembershipIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              data-testid="membership-link"
-              primaryTypographyProps={{ variant: 'body2' }}
-            >
-              {t('my-membership')}
             </ListItemText>
           </MenuItem>
         )}

@@ -49,7 +49,7 @@ export const AppBar = () => {
                 {t('courses')}
               </Link>
               {acl.canViewContacts() && (
-                <Link component={StyledNavLink} to="/community">
+                <Link component={StyledNavLink} to="/contacts">
                   {t('contacts')}
                 </Link>
               )}
@@ -64,6 +64,11 @@ export const AppBar = () => {
               {acl.canViewOrders() && (
                 <Link component={StyledNavLink} to="/orders">
                   {t('common.orders')}
+                </Link>
+              )}
+              {acl.canViewMembership() && (
+                <Link component={StyledNavLink} to="/membership">
+                  {t('common.membership')}
                 </Link>
               )}
             </Box>
