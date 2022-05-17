@@ -446,6 +446,9 @@
         "cancel": "Cancel",
         "submit": "Decline"
       }
+    },
+    "footer": {
+      "follow": "Follow Team Teach"
     }
   },
   "pages": {

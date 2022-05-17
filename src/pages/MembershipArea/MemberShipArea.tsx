@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
+import { Footer } from '@app/components/Footer'
+
 const navigation = [
   {
     name: 'Membership Details',
@@ -32,6 +34,7 @@ export function MembershipAreaPage() {
       </div>
       <div>
         <Outlet />
+        <Footer />
       </div>
     </section>
   )
