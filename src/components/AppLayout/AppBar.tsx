@@ -19,12 +19,7 @@ export const AppBar = () => {
 
   return (
     <>
-      <MuiAppBar
-        position="static"
-        color="transparent"
-        elevation={0}
-        variant="outlined"
-      >
+      <MuiAppBar>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Box display="flex" alignItems="center" gap={3}>
             <Link underline="none" href="/" variant="h5">

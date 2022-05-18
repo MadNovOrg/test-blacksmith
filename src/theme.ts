@@ -219,6 +219,17 @@ export default createTheme({
     },
   },
   components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          position: 'static',
+          boxShadow: 'none',
+          border: 'none',
+          background: 'transparent',
+          borderBottom: '1px solid rgba(0, 0, 0, .12)',
+        },
+      },
+    },
     MuiFormControlLabel: {
       defaultProps: {
         componentsProps: {
