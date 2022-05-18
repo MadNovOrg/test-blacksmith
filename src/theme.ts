@@ -207,8 +207,8 @@ export default createTheme({
     body2: {
       fontSize: '0.875rem',
       fontWeight: '400',
+      color: '#6C6A6F',
     },
-
     button: {
       fontSize: '1rem',
       fontWeight: '500',

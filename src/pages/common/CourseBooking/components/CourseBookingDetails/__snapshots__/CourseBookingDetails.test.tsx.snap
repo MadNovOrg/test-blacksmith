@@ -381,7 +381,7 @@ Object {
             </div>
           </div>
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-filledInfo MuiAlert-filled css-1q1d391-MuiPaper-root-MuiAlert-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-filledInfo MuiAlert-filled css-v1jkm9-MuiPaper-root-MuiAlert-root"
             role="alert"
           >
             <div
@@ -487,7 +487,7 @@ Object {
                       Pay by credit card
                     </p>
                     <p
-                      class="MuiTypography-root MuiTypography-body2 css-1a3ilgy-MuiTypography-root"
+                      class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                     >
                       Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.
                     </p>
@@ -549,7 +549,7 @@ Object {
                       Pay by invoice
                     </p>
                     <p
-                      class="MuiTypography-root MuiTypography-body2 css-1a3ilgy-MuiTypography-root"
+                      class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                     >
                       An invoice will be sent to you requiring payment within 30 days.
                     </p>
@@ -1239,7 +1239,7 @@ Object {
           </div>
         </div>
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-filledInfo MuiAlert-filled css-1q1d391-MuiPaper-root-MuiAlert-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-filledInfo MuiAlert-filled css-v1jkm9-MuiPaper-root-MuiAlert-root"
           role="alert"
         >
           <div
@@ -1345,7 +1345,7 @@ Object {
                     Pay by credit card
                   </p>
                   <p
-                    class="MuiTypography-root MuiTypography-body2 css-1a3ilgy-MuiTypography-root"
+                    class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                   >
                     Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.
                   </p>
@@ -1407,7 +1407,7 @@ Object {
                     Pay by invoice
                   </p>
                   <p
-                    class="MuiTypography-root MuiTypography-body2 css-1a3ilgy-MuiTypography-root"
+                    class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                   >
                     An invoice will be sent to you requiring payment within 30 days.
                   </p>
