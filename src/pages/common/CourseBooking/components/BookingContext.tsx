@@ -54,7 +54,13 @@ type ContextType = {
   booking: State
   ready: boolean
   availableSeats: number
-  totalPrice: number
+  amounts: {
+    subtotal: number
+    discount: number
+    subtotalDiscounted: number
+    vat: number
+    total: number
+  }
   positions: typeof positions
   sectors: typeof sectors
   setBooking: (_: Partial<State>) => void
@@ -131,15 +137,14 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     }))
   }, [])
 
-  const totalPrice = useMemo(() => {
-    if (!ready) return 0
-
-    return (
-      booking.price * booking.quantity +
-      (booking.price * booking.quantity * booking.vat) / 100 -
-      booking.promoCodes.reduce(acc => acc + 2, 0)
-    )
-  }, [ready, booking])
+  const amounts: ContextType['amounts'] = useMemo(() => {
+    const subtotal = !ready ? 0 : booking.price * booking.quantity
+    const discount = !ready ? 0 : booking.promoCodes.reduce(acc => acc + 2, 0)
+    const subtotalDiscounted = subtotal - discount
+    const vat = subtotalDiscounted * (booking.vat / 100)
+    const total = subtotalDiscounted + vat
+    return { subtotal, discount, subtotalDiscounted, vat, total }
+  }, [booking, ready])
 
   const waitForOrderEnriched = useCallback(
     async (orderId: string, tries = 0, maxTries = 5): Promise<void> => {
@@ -184,7 +189,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     () => ({
       error,
       orderId,
-      totalPrice,
+      amounts,
       course,
       ready,
       booking,
@@ -204,7 +209,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       course,
       addPromo,
       removePromo,
-      totalPrice,
+      amounts,
       availableSeats,
       placeOrder,
     ]

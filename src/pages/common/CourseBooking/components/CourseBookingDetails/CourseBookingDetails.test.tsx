@@ -21,6 +21,12 @@ jest.mock('@app/components/OrgSelector', () => ({
 const useBookingMock = jest.mocked(useBooking)
 
 describe('CourseBookingDetails', () => {
+  const price = 20
+  const quantity = 3
+  const vat = 10
+  const subtotal = price * quantity
+  const vatAmount = subtotal * (vat / 100)
+
   useBookingMock.mockReturnValue({
     course: {
       id: 11,
@@ -38,10 +44,10 @@ describe('CourseBookingDetails', () => {
     removePromo: jest.fn(),
     booking: {
       emails: [],
-      price: 20,
+      price,
       promoCodes: [],
-      quantity: 3,
-      vat: 10,
+      quantity,
+      vat,
       orgId: '',
       sector: '',
       position: '',
@@ -53,7 +59,13 @@ describe('CourseBookingDetails', () => {
     availableSeats: 5,
     ready: true,
     setBooking: jest.fn(),
-    totalPrice: 45,
+    amounts: {
+      subtotal,
+      discount: 0,
+      subtotalDiscounted: subtotal,
+      vat: vatAmount,
+      total: subtotal + vatAmount,
+    },
     placeOrder: jest.fn(),
     orderId: null,
     error: null,

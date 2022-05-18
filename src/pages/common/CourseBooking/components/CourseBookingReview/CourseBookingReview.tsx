@@ -30,7 +30,7 @@ export const CourseBookingReview: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile } = useAuth()
-  const { course, booking, totalPrice, placeOrder } = useBooking()
+  const { course, booking, amounts, placeOrder } = useBooking()
 
   const [accept, setAccept] = useState(false)
 
@@ -140,7 +140,7 @@ export const CourseBookingReview: React.FC = () => {
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: booking.price * booking.emails.length })}
+            {t('currency', { amount: amounts.subtotal })}
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" mb={1}>
@@ -148,10 +148,7 @@ export const CourseBookingReview: React.FC = () => {
             {t('vat')} ({booking.vat}%)
           </Typography>
           <Typography color="grey.700">
-            {t('currency', {
-              amount:
-                (booking.price * booking.emails.length * booking.vat) / 100,
-            })}
+            {t('currency', { amount: amounts.vat })}
           </Typography>
         </Box>
         <Divider sx={{ my: 2 }} />
@@ -169,7 +166,7 @@ export const CourseBookingReview: React.FC = () => {
         <Box display="flex" justifyContent="space-between">
           <Typography fontWeight="500">{t('amount-due')} (GBP)</Typography>
           <Typography fontWeight="500">
-            {t('currency', { amount: totalPrice })}
+            {t('currency', { amount: amounts.total })}
           </Typography>
         </Box>
       </Box>

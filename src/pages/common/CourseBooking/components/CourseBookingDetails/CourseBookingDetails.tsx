@@ -22,7 +22,7 @@ import {
 } from '@mui/material'
 import { map } from 'lodash-es'
 import MuiPhoneNumber from 'material-ui-phone-number'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, FieldError, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -74,7 +74,7 @@ export const CourseBookingDetails: React.FC = () => {
     course,
     availableSeats,
     booking,
-    totalPrice,
+    amounts,
     positions,
     sectors,
     addPromo,
@@ -173,6 +173,10 @@ export const CourseBookingDetails: React.FC = () => {
 
   const values = watch()
 
+  useEffect(() => {
+    setBooking({ quantity: values.quantity })
+  }, [setBooking, values.quantity])
+
   const sectorOptions = useMemo(
     () =>
       map(sectors, (label, value) => ({
@@ -239,7 +243,7 @@ export const CourseBookingDetails: React.FC = () => {
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: booking.price })}
+            {t('currency', { amount: amounts.subtotal })}
           </Typography>
         </Box>
 
@@ -248,7 +252,7 @@ export const CourseBookingDetails: React.FC = () => {
             {t('vat')} ({booking.vat}%)
           </Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: (booking.price * booking.vat) / 100 })}
+            {t('currency', { amount: amounts.vat })}
           </Typography>
         </Box>
 
@@ -265,7 +269,7 @@ export const CourseBookingDetails: React.FC = () => {
             {t('amount-due')} (GBP)
           </Typography>
           <Typography fontWeight="500" color="primary">
-            {t('currency', { amount: totalPrice })}
+            {t('currency', { amount: amounts.total })}
           </Typography>
         </Box>
       </Box>

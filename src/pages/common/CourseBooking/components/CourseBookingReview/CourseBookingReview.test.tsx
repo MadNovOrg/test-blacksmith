@@ -17,6 +17,12 @@ jest.mock('../BookingContext', () => ({
 const useBookingMock = jest.mocked(useBooking)
 
 describe('CourseBookingReview', () => {
+  const price = 20
+  const quantity = 3
+  const vat = 10
+  const subtotal = price * quantity
+  const vatAmount = subtotal * (vat / 100)
+
   useBookingMock.mockReturnValue({
     course: {
       id: 11,
@@ -50,7 +56,13 @@ describe('CourseBookingReview', () => {
     availableSeats: 5,
     ready: true,
     setBooking: jest.fn(),
-    totalPrice: 45,
+    amounts: {
+      subtotal,
+      discount: 0,
+      subtotalDiscounted: subtotal,
+      vat: vatAmount,
+      total: subtotal + vatAmount,
+    },
     placeOrder: jest.fn(),
     orderId: null,
     error: null,

@@ -223,7 +223,9 @@ Object {
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            />
+            >
+              £60.00
+            </p>
           </div>
           <div
             class="MuiBox-root css-3mllz6"
@@ -238,7 +240,9 @@ Object {
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            />
+            >
+              £6.00
+            </p>
           </div>
           <hr
             class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
@@ -255,7 +259,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
             >
-              £45.00
+              £66.00
             </p>
           </div>
         </div>
@@ -550,7 +554,9 @@ Object {
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          />
+          >
+            £60.00
+          </p>
         </div>
         <div
           class="MuiBox-root css-3mllz6"
@@ -565,7 +571,9 @@ Object {
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          />
+          >
+            £6.00
+          </p>
         </div>
         <hr
           class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
@@ -582,7 +590,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
           >
-            £45.00
+            £66.00
           </p>
         </div>
       </div>
