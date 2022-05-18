@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 
 import theme from '@app/theme'
 
-import { getCategoryLink, getPostLink, getTagLink } from '../../utils'
+import { getPostLink, getTagLink } from '../../utils'
+import { PostCategory } from '../PostCategory'
 import { PostImage } from '../PostImage'
 
 export type Props = {
@@ -58,11 +59,7 @@ export const SplitPost: React.FC<Props> = ({
             label={label}
           />
         )}
-        <Link href={getCategoryLink(category.id)}>
-          <Typography variant="body2" mb={1} sx={{ fontWeight: 500 }}>
-            {category.name}
-          </Typography>
-        </Link>
+        <PostCategory category={category} />
 
         <Typography
           variant="h5"
