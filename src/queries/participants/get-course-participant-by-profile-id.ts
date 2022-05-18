@@ -15,6 +15,7 @@ export const GetParticipant = gql`
       grade
       dateGraded
       attended
+      healthSafetyConsent
       gradingModules {
         completed
         module {

@@ -297,7 +297,9 @@
     "join-zoom": "Join via Zoom",
     "filters": {
       "date-range": "Filter by Date"
-    }
+    },
+    "submit-form": "Submit form",
+    "full-name": "Full name"
   },
   "components": {
     "not-found": {
@@ -749,10 +751,10 @@
       "evaluate-course": "Evaluate course",
       "attending-course-label": "You are attending this course",
       "invite-accepted": "You are now attending this course. Please complete the checklist.",
-      "checklist-tab-title": "Course checklist",
+      "checklist-tab-title": "Checklist",
       "resources-tab-title": "Resources",
       "personal-data-document-title": "Personal Data and Health & Safety Consent Form",
-      "open-form-button": "Open form",
+      "review-and-submit": "Review and submit",
       "course-summary-evaluation-title": "Course summary evaluation",
       "course-summary-button-after-completion": "Available after course",
       "resources-empty-message": "Trainer will provide course materials here"
@@ -900,6 +902,21 @@
       "paymentMethod-INVOICE": "Invoice",
       "paymentMethod-CC": "Credit Card",
       "qty": "Participants"
+    },
+    "hs-form": {
+      "back-to-checklist": "Back to checklist",
+      "heading": "Health & safety consent form",
+      "information": {
+        "p1": "In order for Team Teach Ltd to keep accurate and up-to-date records of your personal data, training certification and remind you of when your certification is due for renewal, we require your permission to collect and store your personal data on our training management system in accordance with our Privacy Policy.",
+        "h1": "Health guidance & training information",
+        "health-check-label": "I confirm that I have read and understood the Health Guidance & Training Information leaflet distributed prior to this course, and I agree to abide by the participant conduct instructions as issued by the lead trainer.",
+        "p2": "The Health guidance &training information leaflet should be found in the email containing the Course Instructions. If this is missing, please contact Team Teach.",
+        "h2": "Risk assessments",
+        "risk-check-label": "I agree to adhere to all Team Teach Training Protocols. Participants are encouraged to take personal responsibility for conducting their own risk assessments and may opt out of an activity at any time. Course members are asked not to offer any resistance when learning techniques during practical sessions.",
+        "h3": "Signature",
+        "p3": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience."
+      },
+      "incorrect-signature": "Incorrect signature"
     }
   },
   "course-evaluation": {

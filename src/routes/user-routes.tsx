@@ -14,6 +14,7 @@ import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCerti
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
+import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
 import { MyCertifications } from '@app/pages/user-pages/MyCertifications'
 import { MyCourses } from '@app/pages/user-pages/MyCourses'
 
@@ -33,6 +34,10 @@ const UserRoutes = () => {
         <Route path=":id">
           <Route path="details" element={<CourseDetails />} />
           <Route path="evaluation" element={<CourseEvaluation />} />
+          <Route
+            path="health-and-safety"
+            element={<CourseHealthAndSafetyForm />}
+          />
         </Route>
       </Route>
 

@@ -134,14 +134,7 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
-  - role: tt-ops
-    permission:
-      columns:
-        - grade
-        - updated_at
-      filter: {}
-      check: null
-  - role: user
+  - role: trainer
     permission:
       columns:
         - attended
@@ -154,6 +147,21 @@ update_permissions:
           trainers:
             profile_id:
               _eq: X-Hasura-User-Id
+      check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - grade
+        - updated_at
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+        - hs_consent
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
       check: {}
 event_triggers:
   - name: create_certificate

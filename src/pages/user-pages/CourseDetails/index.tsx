@@ -36,6 +36,7 @@ import {
   ResponseType as GetCourseResponseType,
   ParamsType as GetCourseParamsType,
 } from '@app/queries/user-queries/get-course-by-id'
+import { CourseParticipant } from '@app/types'
 import { LoadingStatus, courseEnded, getSWRLoadingStatus } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
@@ -75,7 +76,8 @@ export const CourseDetails = () => {
 
   const profileId = profile?.id
   const { data } = useSWR([GetParticipant, { profileId, courseId }])
-  const courseParticipant = data?.course_participant
+  const courseParticipant: CourseParticipant | null =
+    data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
   const { data: usersData, error } = useSWR<
     GetFeedbackUsersResponseType,
@@ -106,10 +108,7 @@ export const CourseDetails = () => {
     !loading &&
     courseHasEnded &&
     !didAttendeeSubmitFeedback &&
-    courseParticipant?.length &&
-    courseParticipant[0].attended
-  const showCertificateTab =
-    courseParticipant?.length > 0 && courseParticipant[0].certificate
+    courseParticipant?.attended
 
   return (
     <>
@@ -164,7 +163,7 @@ export const CourseDetails = () => {
                     label={t('pages.participant-course.resources-tab-title')}
                     value="resources"
                   />
-                  {showCertificateTab ? (
+                  {courseParticipant?.certificate ? (
                     <PillTab
                       label={t(
                         'pages.participant-course.certification-tab-title'
@@ -189,10 +188,29 @@ export const CourseDetails = () => {
                   <Typography fontWeight={500} sx={{ flexGrow: 1 }}>
                     {t('pages.participant-course.personal-data-document-title')}
                   </Typography>
-                  <Chip label="Incomplete" sx={{ marginRight: 2 }} />
-                  <Button variant="contained" color="secondary">
-                    {t('pages.participant-course.open-form-button')}
-                  </Button>
+                  {courseParticipant?.healthSafetyConsent ? (
+                    <Chip
+                      label={t('common.complete')}
+                      color="success"
+                      sx={{ marginRight: 2 }}
+                    />
+                  ) : (
+                    <>
+                      <Chip
+                        label={t('common.incomplete')}
+                        sx={{ marginRight: 2 }}
+                      />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() =>
+                          navigate(`/courses/${courseId}/health-and-safety`)
+                        }
+                      >
+                        {t('pages.participant-course.review-and-submit')}
+                      </Button>
+                    </>
+                  )}
                 </ChecklistItem>
                 <ChecklistItem padding={2}>
                   <CheckCircleOutlineIcon sx={{ marginRight: 1 }} />
@@ -229,7 +247,7 @@ export const CourseDetails = () => {
                 {t('pages.participant-course.resources-empty-message')}
               </TabPanel>
 
-              {showCertificateTab ? (
+              {courseParticipant?.certificate ? (
                 <TabPanel sx={{ px: 0 }} value="certification">
                   {!courseHasEnded ? (
                     <Box
@@ -246,7 +264,7 @@ export const CourseDetails = () => {
                     </Box>
                   ) : (
                     <CourseCertification
-                      certificateId={courseParticipant[0].certificate.id}
+                      certificateId={courseParticipant.certificate.id}
                     />
                   )}
                 </TabPanel>

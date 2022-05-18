@@ -92,7 +92,7 @@ describe('page: CourseDetails', () => {
     )
 
     expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
-    expect(screen.getByLabelText('Course checklist')).toBeInTheDocument()
+    expect(screen.getByLabelText('Checklist')).toBeInTheDocument()
     expect(screen.getByLabelText('Resources')).toBeInTheDocument()
   })
 
