@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container } from '@mui/material'
+import { Button, CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Paper from '@mui/material/Paper'
@@ -7,16 +7,15 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
-import { useDebounce } from 'use-debounce'
 
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
+import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
@@ -45,10 +44,10 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
 
   const cols = useMemo(
     () => [
-      { id: 'name', label: t('course-name') },
-      { id: 'type', label: t('course-type') },
-      { id: 'start', label: t('start') },
-      { id: 'end', label: t('end') },
+      { id: 'name', label: t('pages.my-courses.col-name') },
+      { id: 'type', label: t('pages.my-courses.col-type') },
+      { id: 'start', label: t('pages.my-courses.col-start') },
+      { id: 'end', label: t('pages.my-courses.col-end') },
       { id: 'empty', label: '', sorting: false },
     ],
     [t]
@@ -76,7 +75,7 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
   const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
-  const [keywordDebounced] = useDebounce(keyword, 300)
+
   const { profile } = useAuth()
 
   const where = useMemo(() => {
@@ -102,12 +101,13 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
       obj.type = { _in: selectedTypes }
     }
 
-    if (keywordDebounced.trim().length) {
-      obj.name = { _ilike: `%${keywordDebounced}%` }
+    const query = keyword.trim()
+    if (query.length) {
+      obj.name = { _ilike: `%${query}%` }
     }
 
     return obj
-  }, [levelFilter, typeFilter, keywordDebounced, profile?.id])
+  }, [levelFilter, typeFilter, keyword, profile?.id])
 
   const { data, error } = useSWR<
     GetMyCoursesResponseType,
@@ -117,68 +117,56 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     focusThrottleInterval: 2000,
   })
 
-  const loading = !data && !error
-
   const handleRequestSort = (col: string) => {
     const isAsc = orderBy === col && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(col)
   }
 
+  const loading = !data && !error
+  const count = data?.course?.length
+
   return (
-    <Container maxWidth="lg" sx={{ pt: 2 }}>
-      <Box display="flex">
-        <Box width={250} display="flex" flexDirection="column" pr={4}>
-          <Typography variant="body2">{t('filter-by')}</Typography>
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Box display="flex" gap={4}>
+        <Box width={250}>
+          <Typography variant="h1">{t('my-courses')}</Typography>
+          <Typography variant="body2" color="grey.500" mt={1}>
+            {loading ? <>&nbsp;</> : t('x-items', { count })}
+          </Typography>
 
-          <Box display="flex" flexDirection="column">
-            <FilterAccordion
-              options={levelFilter}
-              title={t('level')}
-              onChange={setLevelFilter}
-            />
+          <Stack gap={4} mt={4}>
+            <FilterSearch value={keyword} onChange={setKeyword} />
 
-            <FilterAccordion
-              options={typeFilter}
-              title={t('course-type')}
-              onChange={setTypeFilter}
-            />
-          </Box>
+            <Box>
+              <Typography variant="body2" fontWeight="bold">
+                {t('filter-by')}
+              </Typography>
+
+              <FilterAccordion
+                options={levelFilter}
+                title={t('level')}
+                onChange={setLevelFilter}
+              />
+
+              <FilterAccordion
+                options={typeFilter}
+                title={t('course-type')}
+                onChange={setTypeFilter}
+              />
+            </Box>
+          </Stack>
         </Box>
 
         <Box flex={1}>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Typography variant="h5">{t('my-courses')}</Typography>
-              <Typography variant="subtitle2">
-                {t('x-items', { num: data?.course?.length })}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box mt={4}>
-            <TextField
-              hiddenLabel
-              value={keyword}
-              variant="filled"
-              size="small"
-              placeholder={t('search')}
-              data-testid="search"
-              onChange={e => setKeyword(e.target.value)}
-            />
-          </Box>
-
           <TableContainer component={Paper} elevation={0}>
-            <Table sx={{ minWidth: 650 }} data-testid="courses-table">
+            <Table data-testid="courses-table">
               <TableHead
                 cols={cols}
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
+                sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
               />
               <TableBody>
                 {data?.course?.map(c => (

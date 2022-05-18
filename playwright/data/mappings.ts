@@ -21,11 +21,9 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
   const startUiTime = toUiTime(course.schedule[0].start)
   const endUiTime = toUiTime(course.schedule[0].end)
   return {
-    'Course Name': `${translation.common['course-levels'][course.level]}${
-      course.name
-    }`,
+    Name: `${translation.common['course-levels'][course.level]}${course.name}`,
     Organisation: course.organization ? course.organization.name : '',
-    'Course Type': translation.common['course-types'][course.type],
+    Type: translation.common['course-types'][course.type],
     Start: startUiTime,
     End: endUiTime,
     Status: translation.common['course-statuses'][course.status],

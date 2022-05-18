@@ -56,24 +56,28 @@ export const Certifications: React.FC<CertificationsProps> = () => {
     return { _and: conditions }
   }, [keyword, dateFrom, dateTo])
 
-  const { data: certifiedParticipants, status } = useCourseParticipants(
-    undefined,
-    { sortBy: sorting.by, order: sorting.dir, where }
-  )
+  const { data: participants, status } = useCourseParticipants(undefined, {
+    sortBy: sorting.by,
+    order: sorting.dir,
+    where,
+  })
+
+  const loading = status === LoadingStatus.FETCHING
+  const count = participants?.length ?? 0
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Box display="flex">
-        <Box width={300} pr={4}>
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Box display="flex" gap={4}>
+        <Box width={250}>
           <Typography variant="h1">{t('common.certifications')}</Typography>
-          <Typography variant="body2" color="grey.500" pt={1}>
-            {certifiedParticipants?.length ?? 0} {t('common.items')}
+          <Typography variant="body2" color="grey.500" mt={1}>
+            {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
 
-          <Box display="flex" flexDirection="column" pt={5} gap={4}>
+          <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
             <FilterDates onChange={onDatesChange} />
-          </Box>
+          </Stack>
         </Box>
 
         <Box flex={1}>
@@ -89,7 +93,7 @@ export const Certifications: React.FC<CertificationsProps> = () => {
             <CertificationList
               columns={['name', 'certificate', 'status']}
               hideTitle={true}
-              participants={certifiedParticipants ?? []}
+              participants={participants ?? []}
               sorting={sorting}
             />
           )}

@@ -121,7 +121,8 @@
     "bl-status": "Blended Learning Status",
     "blended-learning": "Blended Learning",
     "my-courses": "My Courses",
-    "x-items": "{{num}} items",
+    "x-items_one": "{{count}} item",
+    "x-items_other": "{{count}} items",
     "search": "Search",
     "status": "Status",
     "start": "Start",
@@ -536,14 +537,15 @@
           "duration-exceeded": "You have exceeded the minimum duration for this course, you must remove a module in order to add more.",
           "organization": "Organisation"
         }
-      },
-      "my-courses": {
-        "course-name": "Course Name",
-        "organization": "Organisation",
-        "start": "Start",
-        "end": "End",
-        "status": "Status"
       }
+    },
+    "my-courses": {
+      "col-name": "Name",
+      "col-type": "Type",
+      "col-organization": "Organisation",
+      "col-start": "Start",
+      "col-end": "End",
+      "col-status": "Status"
     },
     "create-course": {
       "OPEN-course-title": "Open course creation",

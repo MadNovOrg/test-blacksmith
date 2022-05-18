@@ -80,7 +80,7 @@ export class MyCoursesPage extends BasePage {
 
   async clickCourseBuildButton(courseId: number): Promise<CourseBuilderPage> {
     const cell = await this.coursesTable.getCell(
-      'Course Name',
+      'Name',
       cellLinkContainsCourseId(courseId),
       ''
     )
@@ -90,7 +90,7 @@ export class MyCoursesPage extends BasePage {
 
   async clickCourseManageButton(courseId: number): Promise<CourseDetailsPage> {
     const cell = await this.coursesTable.getCell(
-      'Course Name',
+      'Name',
       cellLinkContainsCourseId(courseId),
       ''
     )

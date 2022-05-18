@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container } from '@mui/material'
+import { Button, CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Paper from '@mui/material/Paper'
@@ -7,17 +7,16 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
-import { useDebounce } from 'use-debounce'
 
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
 import type { FilterOption } from '@app/components/FilterAccordion'
 import { FilterAccordion } from '@app/components/FilterAccordion'
+import { FilterSearch } from '@app/components/FilterSearch'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
@@ -78,12 +77,12 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
 
   const cols = useMemo(
     () => [
-      { id: 'name', label: t('course-name') },
-      { id: 'org', label: t('organization') },
-      { id: 'type', label: t('course-type') },
-      { id: 'start', label: t('start') },
-      { id: 'end', label: t('end') },
-      { id: 'status', label: t('status'), sorting: false },
+      { id: 'name', label: t('pages.my-courses.col-name') },
+      { id: 'org', label: t('pages.my-courses.col-organization') },
+      { id: 'type', label: t('pages.my-courses.col-type') },
+      { id: 'start', label: t('pages.my-courses.col-start') },
+      { id: 'end', label: t('pages.my-courses.col-end') },
+      { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
       { id: 'empty', label: '', sorting: false },
     ],
     [t]
@@ -119,9 +118,9 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
   const [statusFilter, setStatusFilter] =
     useState<FilterOption[]>(statusOptions)
+
   const [order, setOrder] = useState<SortOrder>('asc')
   const [orderBy, setOrderBy] = useState(cols[0].id)
-  const [keywordDebounced] = useDebounce(keyword, 300)
 
   const where = useMemo(() => {
     const obj: Record<string, object> = {}
@@ -150,20 +149,18 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
       obj.status = { _in: selectedStatuses }
     }
 
-    if (keywordDebounced.trim().length) {
-      const _or: Array<Record<string, unknown>> = []
-
-      _or.push({ name: { _ilike: `%${keywordDebounced}%` } })
-
-      if (Number(keywordDebounced)) {
-        _or.push({ id: { _eq: Number(keywordDebounced) } })
+    const query = keyword.trim()
+    if (query.length) {
+      const onlyDigits = /^\d+$/.test(query)
+      if (onlyDigits) {
+        obj.id = { _eq: Number(query) }
+      } else {
+        obj.name = { _ilike: `%${query}%` }
       }
-
-      obj._or = _or
     }
 
     return obj
-  }, [levelFilter, typeFilter, statusFilter, keywordDebounced])
+  }, [levelFilter, typeFilter, statusFilter, keyword])
 
   const { data, error, mutate } = useSWR<
     GetMyCoursesResponseType,
@@ -172,8 +169,6 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   >([GetMyCourses, { orderBy: sorts[`${orderBy}-${order}`], where }], {
     focusThrottleInterval: 2000,
   })
-
-  const loading = !data && !error
 
   const handleRequestSort = (col: string) => {
     const isAsc = orderBy === col && order === 'asc'
@@ -201,31 +196,45 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     [mutate, navigate]
   )
 
+  const loading = !data && !error
+  const count = data?.course?.length
+
   return (
-    <Container maxWidth="lg" sx={{ pt: 2 }}>
-      <Box display="flex">
-        <Box width={250} display="flex" flexDirection="column" pr={4}>
-          <Typography variant="body2">{t('filter-by')}</Typography>
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Box display="flex" gap={4}>
+        <Box width={250}>
+          <Typography variant="h1">{t('my-courses')}</Typography>
+          <Typography variant="body2" color="grey.500" mt={1}>
+            {loading ? <>&nbsp;</> : t('x-items', { count })}
+          </Typography>
 
-          <Box display="flex" flexDirection="column">
-            <FilterAccordion
-              options={levelFilter}
-              title={t('level')}
-              onChange={setLevelFilter}
-            />
+          <Stack gap={4} mt={4}>
+            <FilterSearch value={keyword} onChange={setKeyword} />
 
-            <FilterAccordion
-              options={typeFilter}
-              title={t('course-type')}
-              onChange={setTypeFilter}
-            />
+            <Box>
+              <Typography variant="body2" fontWeight="bold">
+                {t('filter-by')}
+              </Typography>
 
-            <FilterAccordion
-              options={statusFilter}
-              title={t('course-status')}
-              onChange={setStatusFilter}
-            />
-          </Box>
+              <FilterAccordion
+                options={levelFilter}
+                title={t('level')}
+                onChange={setLevelFilter}
+              />
+
+              <FilterAccordion
+                options={typeFilter}
+                title={t('course-type')}
+                onChange={setTypeFilter}
+              />
+
+              <FilterAccordion
+                options={statusFilter}
+                title={t('course-status')}
+                onChange={setStatusFilter}
+              />
+            </Box>
+          </Stack>
         </Box>
 
         <Box flex={1}>
@@ -233,35 +242,20 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
+            mb={2}
           >
-            <Box>
-              <Typography variant="h5">{t('my-courses')}</Typography>
-              <Typography variant="subtitle2">
-                {t('x-items', { num: data?.course?.length })}
-              </Typography>
-            </Box>
+            <Box></Box>
             <CreateCourseMenu />
           </Box>
 
-          <Box mt={4}>
-            <TextField
-              hiddenLabel
-              value={keyword}
-              variant="filled"
-              size="small"
-              placeholder={t('search')}
-              data-testid="search"
-              onChange={e => setKeyword(e.target.value)}
-            />
-          </Box>
-
           <TableContainer component={Paper} elevation={0}>
-            <Table sx={{ minWidth: 650 }} data-testid="courses-table">
+            <Table data-testid="courses-table">
               <TableHead
                 cols={cols}
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
+                sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
               />
               <TableBody>
                 {data?.course?.map(c => {

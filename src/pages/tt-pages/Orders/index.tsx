@@ -26,23 +26,27 @@ export const Orders: React.FC = () => {
     setFilters(prev => ({ ...prev, ...next }))
   }, [])
 
+  const loading = isLoading
+  const count = orders.length ?? 0
+
   return (
-    <Container maxWidth="lg" sx={{ pt: 6 }}>
-      <Stack direction="row" gap={4}>
-        <Box width={260}>
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Box display="flex" gap={4}>
+        <Box width={250}>
           <Typography variant="h1">{t('common.orders')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
-            {orders.length} {t('common.items')}
+            {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
 
-          <Box mt={5}>
+          <Stack gap={4} mt={4}>
             <Filters onChange={onFilterChange} />
-          </Box>
+          </Stack>
         </Box>
+
         <Box flex={1}>
           <List orders={orders} sorting={sorting} loading={isLoading} />
         </Box>
-      </Stack>
+      </Box>
     </Container>
   )
 }

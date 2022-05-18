@@ -49,9 +49,9 @@ export type Organization = {
 }
 
 export type CourseTableRow = {
-  'Course Name': string
+  Name: string
   Organisation: string
-  'Course Type': string
+  Type: string
   Start: string
   End: string
   Status: string

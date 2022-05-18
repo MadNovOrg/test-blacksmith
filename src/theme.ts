@@ -239,6 +239,13 @@ export default createTheme({
         },
       },
     },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          borderRadius: 0,
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         root: {
