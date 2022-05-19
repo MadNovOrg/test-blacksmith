@@ -33,6 +33,7 @@ import {
   InviteStatus,
   SortOrder,
   CourseTrainerType,
+  RoleName,
 } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
@@ -73,7 +74,8 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
-  const { profile } = useAuth()
+  const { profile, activeRole } = useAuth()
+  const isTrainer = activeRole === RoleName.TRAINER
 
   const cols = useMemo(
     () => [
@@ -203,7 +205,9 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" gap={4}>
         <Box width={250}>
-          <Typography variant="h1">{t('my-courses')}</Typography>
+          <Typography variant="h1">
+            {t(isTrainer ? 'my-courses' : 'pages.my-courses.h1')}
+          </Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
@@ -216,23 +220,25 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 {t('filter-by')}
               </Typography>
 
-              <FilterAccordion
-                options={levelFilter}
-                title={t('level')}
-                onChange={setLevelFilter}
-              />
+              <Stack gap={1}>
+                <FilterAccordion
+                  options={levelFilter}
+                  title={t('level')}
+                  onChange={setLevelFilter}
+                />
 
-              <FilterAccordion
-                options={typeFilter}
-                title={t('course-type')}
-                onChange={setTypeFilter}
-              />
+                <FilterAccordion
+                  options={typeFilter}
+                  title={t('course-type')}
+                  onChange={setTypeFilter}
+                />
 
-              <FilterAccordion
-                options={statusFilter}
-                title={t('course-status')}
-                onChange={setStatusFilter}
-              />
+                <FilterAccordion
+                  options={statusFilter}
+                  title={t('course-status')}
+                  onChange={setStatusFilter}
+                />
+              </Stack>
             </Box>
           </Stack>
         </Box>

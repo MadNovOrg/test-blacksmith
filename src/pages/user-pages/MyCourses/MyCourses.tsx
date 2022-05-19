@@ -143,17 +143,19 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 {t('filter-by')}
               </Typography>
 
-              <FilterAccordion
-                options={levelFilter}
-                title={t('level')}
-                onChange={setLevelFilter}
-              />
+              <Stack gap={1}>
+                <FilterAccordion
+                  options={levelFilter}
+                  title={t('level')}
+                  onChange={setLevelFilter}
+                />
 
-              <FilterAccordion
-                options={typeFilter}
-                title={t('course-type')}
-                onChange={setTypeFilter}
-              />
+                <FilterAccordion
+                  options={typeFilter}
+                  title={t('course-type')}
+                  onChange={setTypeFilter}
+                />
+              </Stack>
             </Box>
           </Stack>
         </Box>

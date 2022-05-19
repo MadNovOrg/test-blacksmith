@@ -1,14 +1,13 @@
-import CloseIcon from '@mui/icons-material/Close'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { IconButton } from '@mui/material'
-import Accordion from '@mui/material/Accordion'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import Check from '@mui/icons-material/Check'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import Typography from '@mui/material/Typography'
 import React from 'react'
+
+import { StyledAccordion } from './styled'
 
 export type FilterOption = { id: string; title: string; selected: boolean }
 
@@ -33,35 +32,24 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
     )
 
   return (
-    <Accordion elevation={0} defaultExpanded={defaultExpanded}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} data-testid="filter-by">
-        <Typography variant="body2">{title}</Typography>
+    <StyledAccordion defaultExpanded={defaultExpanded}>
+      <AccordionSummary expandIcon={<ArrowDropDown />} data-testid="filter-by">
+        {title}
       </AccordionSummary>
       <AccordionDetails>
         {options.map(o => (
           <ListItemButton
             key={o.id}
-            sx={{ py: 0, pr: 0, minHeight: 40 }}
+            className={o.selected ? 'selected' : ''}
             onClick={() => handleChange(o)}
           >
-            <ListItemText
-              primary={o.title}
-              primaryTypographyProps={{
-                variant: 'body2',
-                fontWeight: o.selected ? '600' : undefined,
-              }}
-              data-testid="filter-item"
-            />
-            <ListItemIcon sx={{ color: 'inherit', justifyContent: 'flex-end' }}>
-              {o.selected && (
-                <IconButton size="small">
-                  <CloseIcon />
-                </IconButton>
-              )}
+            <ListItemText primary={o.title} data-testid="filter-item" />
+            <ListItemIcon>
+              <Check />
             </ListItemIcon>
           </ListItemButton>
         ))}
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   )
 }

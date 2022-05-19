@@ -542,6 +542,7 @@
       }
     },
     "my-courses": {
+      "h1": "Courses",
       "col-name": "Name",
       "col-type": "Type",
       "col-organization": "Organisation",
