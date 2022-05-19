@@ -174,8 +174,10 @@ export const CourseBookingDetails: React.FC = () => {
   const values = watch()
 
   useEffect(() => {
-    setBooking({ quantity: values.quantity })
-  }, [setBooking, values.quantity])
+    if (booking.quantity !== values.quantity) {
+      setBooking({ quantity: values.quantity })
+    }
+  }, [booking, setBooking, values.quantity])
 
   const sectorOptions = useMemo(
     () =>
