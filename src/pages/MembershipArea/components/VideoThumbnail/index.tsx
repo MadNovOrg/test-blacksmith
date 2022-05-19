@@ -1,10 +1,10 @@
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
-import { Box, Typography } from '@mui/material'
-import { format } from 'date-fns'
+import { Box } from '@mui/material'
 import React from 'react'
 
 import theme from '@app/theme'
 
+import { Duration } from '../Duration'
 import { PostImage } from '../PostImage'
 
 type Props = {
@@ -32,7 +32,7 @@ export const VideoThumbnail: React.FC<Props> = ({
           fontSize: 60,
         }}
       />
-      <Typography
+      <Duration
         variant="body2"
         color={theme.palette.common.white}
         sx={{
@@ -40,9 +40,8 @@ export const VideoThumbnail: React.FC<Props> = ({
           bottom: theme.spacing(1),
           left: theme.spacing(1),
         }}
-      >
-        {format(duration * 1000, 'mm:ss')}
-      </Typography>
+        duration={duration}
+      />
     </Box>
   )
 }
