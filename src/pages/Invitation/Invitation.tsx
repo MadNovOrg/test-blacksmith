@@ -21,7 +21,7 @@ import { differenceInDays } from 'date-fns'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { Logo } from '@app/components/Logo'
@@ -35,12 +35,11 @@ import {
   QUERY as GET_INVITE_QUERY,
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
-import { GqlError, InviteStatus } from '@app/types'
+import { GqlError, InviteStatus, RoleName } from '@app/types'
 import { now } from '@app/util'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
   const [note, setNote] = useState<string>('')
@@ -77,7 +76,9 @@ export const InvitationPage = () => {
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      navigate(`/accept-invite/${inviteId}?courseId=${courseId}`)
+      // Using window.location instead of react-router navigate() because role from query param is picked up only on app load
+      window.location.href = `/accept-invite/${inviteId}?courseId=${courseId}&role=${RoleName.USER}`
+
       return
     }
 

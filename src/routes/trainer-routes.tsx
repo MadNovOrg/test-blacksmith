@@ -1,7 +1,6 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import { ChangeRole } from '@app/components/ChangeRole'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -23,17 +22,11 @@ import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
-import { RoleName } from '@app/types'
 
 const TrainerBaseRoutes = () => {
   return (
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
-
-      <Route
-        path="accept-invite/:id"
-        element={<ChangeRole role={RoleName.USER} />}
-      />
 
       <Route
         path="certification/:certificateId"

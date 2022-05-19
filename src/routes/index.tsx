@@ -87,7 +87,7 @@ function LoggedInRoutes() {
           <Route path="profile/*" element={<ProfileRoutes />} />
           <Route path="booking/*" element={<CourseBookingPage />} />
 
-          {/* This is a dummy registration page to capture course/qty for course booking */}
+          {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
           <Route path="registration" element={<CourseRegistrationPage />} />
 
           <Route path="*" element={<RouteComp />} />

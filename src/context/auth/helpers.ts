@@ -12,6 +12,13 @@ export const ActiveRoles = new Set([
   RoleName.TT_ADMIN,
 ])
 
+function getRequestedRole() {
+  const params = new URLSearchParams(window.location.search)
+  const requestedRole = params.get('role') as RoleName | null
+
+  return requestedRole
+}
+
 export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
@@ -26,8 +33,8 @@ export async function fetchUserProfile(
     const claimsRoles = claims?.['x-hasura-allowed-roles'] ?? []
     const allowedRoles = new Set(claimsRoles.filter(r => ActiveRoles.has(r)))
     const lsActiveRole = lsActiveRoleClient(profile)
-    const lsRole = lsActiveRole.get() ?? defaultRole
-    const activeRole = allowedRoles.has(lsRole) ? lsRole : defaultRole
+    const desiredRole = getRequestedRole() ?? lsActiveRole.get() ?? defaultRole
+    const activeRole = allowedRoles.has(desiredRole) ? desiredRole : defaultRole
     lsActiveRole.set(activeRole)
 
     const orgIdsPgLiteral = claims?.['x-hasura-tt-organizations'] ?? '{}'
