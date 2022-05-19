@@ -27,6 +27,7 @@ export const Orders: React.FC = () => {
   }, [])
 
   const loading = isLoading
+  const filtered = !!filters.from || !!filters.to
   const count = orders.length ?? 0
 
   return (
@@ -44,7 +45,12 @@ export const Orders: React.FC = () => {
         </Box>
 
         <Box flex={1}>
-          <List orders={orders} sorting={sorting} loading={isLoading} />
+          <List
+            orders={orders}
+            sorting={sorting}
+            loading={isLoading}
+            filtered={filtered}
+          />
         </Box>
       </Box>
     </Container>

@@ -452,6 +452,11 @@
     },
     "footer": {
       "follow": "Follow Team Teach"
+    },
+    "table-no-rows": {
+      "itemsName": "records",
+      "noRecords": "No {{itemsName}} to show",
+      "fixFilters": "Please adjust filter criteria"
     }
   },
   "pages": {
