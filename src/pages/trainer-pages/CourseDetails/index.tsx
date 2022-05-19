@@ -7,7 +7,7 @@ import {
   Container,
   Stack,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -45,10 +45,14 @@ export const CourseDetails = () => {
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
 
-  const tabToSelect = (searchParams.get('tab') ??
-    CourseDetailsTabs.ATTENDEES) as CourseDetailsTabs
+  const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
+  const [selectedTab, setSelectedTab] = useState(
+    initialTab || CourseDetailsTabs.ATTENDEES
+  )
 
-  const [selectedTab, setSelectedTab] = useState<CourseDetailsTabs>(tabToSelect)
+  useEffect(() => {
+    if (initialTab) setSelectedTab(initialTab)
+  }, [initialTab])
 
   const {
     status: courseLoadingStatus,
@@ -100,10 +104,7 @@ export const CourseDetails = () => {
                 <Box borderBottom={1} borderColor="divider">
                   <Container>
                     <PillTabList
-                      onChange={(
-                        _,
-                        selectedTab: React.SetStateAction<CourseDetailsTabs>
-                      ) => setSelectedTab(selectedTab)}
+                      onChange={(_, tab) => navigate(`.?tab=${tab}`)}
                     >
                       <PillTab
                         label={t('pages.course-details.tabs.attendees.title')}
