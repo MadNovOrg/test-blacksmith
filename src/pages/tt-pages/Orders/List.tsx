@@ -61,7 +61,6 @@ export const List: React.FC<Props> = ({
         orderBy={sorting.by}
         order={sorting.dir}
         onRequestSort={sorting.onSort}
-        sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
       />
       <TableBody>
         {loading ? (

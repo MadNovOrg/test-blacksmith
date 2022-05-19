@@ -227,11 +227,6 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                     order={order}
                     orderBy={sortColumn}
                     onRequestSort={handleSortChange}
-                    sx={{
-                      '& .MuiTableRow-root': {
-                        backgroundColor: 'grey.300',
-                      },
-                    }}
                   />
                   <TableBody>
                     {attendingParticipants?.map(courseParticipant => (

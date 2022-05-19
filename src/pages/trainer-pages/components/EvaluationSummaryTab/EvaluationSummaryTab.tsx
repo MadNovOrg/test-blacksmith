@@ -136,11 +136,6 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
               order={order}
               orderBy={orderBy}
               onRequestSort={noop}
-              sx={{
-                '& .MuiTableRow-root': {
-                  backgroundColor: 'grey.300',
-                },
-              }}
             />
             <TableBody>
               {data?.evaluations?.map(e =>

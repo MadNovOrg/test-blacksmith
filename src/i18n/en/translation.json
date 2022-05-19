@@ -348,7 +348,7 @@
     },
     "role-switcher": {
       "subtitle": "Switch Role",
-      "user": "User",
+      "user": "Attendee",
       "trainer": "Trainer",
       "org-admin": "Organisation Admin",
       "tt-ops": "TT Ops",

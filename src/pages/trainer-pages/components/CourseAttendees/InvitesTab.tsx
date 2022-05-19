@@ -86,11 +86,6 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
               order={order}
               orderBy="contact"
               onRequestSort={handleSortChange}
-              sx={{
-                '& .MuiTableRow-root': {
-                  backgroundColor: 'grey.300',
-                },
-              }}
             />
             <TableBody>
               {data?.map(invite => (

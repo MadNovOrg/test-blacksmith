@@ -3,6 +3,8 @@ import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
 
+const dimGrey = '#6C6A6F'
+
 declare module '@mui/system' {
   interface Theme {
     colors: {
@@ -207,7 +209,7 @@ export default createTheme({
     body2: {
       fontSize: '0.875rem',
       fontWeight: '400',
-      color: '#6C6A6F',
+      color: dimGrey,
     },
     button: {
       fontSize: '1rem',
@@ -239,6 +241,13 @@ export default createTheme({
         },
       },
     },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: theme.palette.grey[100],
+        },
+      },
+    },
     MuiTableContainer: {
       styleOverrides: {
         root: {
@@ -250,21 +259,44 @@ export default createTheme({
       styleOverrides: {
         root: {
           border: 0,
-        },
-      },
-    },
-    MuiFilledInput: {
-      styleOverrides: {
-        root: {
-          backgroundColor: theme.palette.grey[100],
+          padding: '.75rem .5rem',
+          height: 36, // for td's height acts like minHeight
+          '&.MuiTableCell-paddingCheckbox': {
+            width: 0,
+            padding: '2px .5rem 2px 2px',
+            '.MuiCheckbox-root': {
+              padding: 3,
+            },
+          },
         },
       },
     },
     MuiTableHead: {
       styleOverrides: {
         root: {
-          '& .MuiTableRow-root': {
-            backgroundColor: theme.palette.common.white,
+          '.MuiTableRow-root': {
+            backgroundColor: theme.palette.grey[100],
+          },
+          '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
+            fontSize: 13,
+            fontWeight: 'bold',
+            color: dimGrey,
+            padding: '.6em .5rem',
+            lineHeight: '1.3rem',
+          },
+          '.MuiTableSortLabel-root': {
+            '.MuiTableSortLabel-icon': {
+              fontSize: '1.2em',
+              opacity: 1,
+              color: theme.palette.grey[400],
+            },
+            '&.Mui-active': {
+              color: theme.palette.grey[800],
+              '.MuiTableSortLabel-icon': {
+                opacity: 1,
+                color: theme.palette.primary.light,
+              },
+            },
           },
         },
       },
@@ -272,8 +304,8 @@ export default createTheme({
     MuiTableBody: {
       styleOverrides: {
         root: {
-          '& .MuiTableRow-root:nth-of-type(odd)': {
-            backgroundColor: theme.palette.grey[100],
+          '.MuiTableRow-root:nth-of-type(even)': {
+            backgroundColor: theme.palette.grey[50],
           },
         },
       },

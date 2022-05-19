@@ -109,11 +109,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
               order={order}
               orderBy={sortColumn}
               onRequestSort={handleSortChange}
-              sx={{
-                '& .MuiTableRow-root': {
-                  backgroundColor: 'grey.300',
-                },
-              }}
             />
             <TableBody>
               {courseParticipants?.map(courseParticipant => (

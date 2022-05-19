@@ -261,7 +261,6 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
               />
               <TableBody>
                 {data?.course?.map(c => {

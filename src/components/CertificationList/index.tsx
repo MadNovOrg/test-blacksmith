@@ -147,7 +147,6 @@ export const CertificationList: React.FC<CertificationListProps> = ({
           orderBy={sorting.by}
           order={sorting.dir}
           onRequestSort={sorting.onSort}
-          sx={{ '& .MuiTableRow-root': { backgroundColor: 'grey.300' } }}
         />
         <TableBody>
           {participants?.map(p => {
