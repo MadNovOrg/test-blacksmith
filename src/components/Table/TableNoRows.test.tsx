@@ -26,7 +26,7 @@ describe('component: TableNoRows', () => {
     const tr = screen.getByTestId('TableNoRows')
     expect(tr).toBeInTheDocument()
 
-    const fixFilters = screen.queryByTestId('TableNoRows-fixFilters')
+    const fixFilters = screen.queryByTestId('TableNoRows-second')
     expect(fixFilters).not.toBeInTheDocument()
   })
 
@@ -45,7 +45,7 @@ describe('component: TableNoRows', () => {
     const tr = screen.getByTestId('TableNoRows')
     expect(tr).toBeInTheDocument()
 
-    const fixFilters = screen.getByTestId('TableNoRows-fixFilters')
+    const fixFilters = screen.getByTestId('TableNoRows-second')
     expect(fixFilters).toBeInTheDocument()
   })
 

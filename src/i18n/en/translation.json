@@ -455,8 +455,9 @@
     },
     "table-no-rows": {
       "itemsName": "records",
-      "noRecords": "No {{itemsName}} to show",
-      "fixFilters": "Please adjust filter criteria"
+      "noRecords-first": "No {{itemsName}} at this time",
+      "noMatches-first": "No matching {{itemsName}} found",
+      "noMatches-second": "Please adjust your filter or search criteria"
     }
   },
   "pages": {

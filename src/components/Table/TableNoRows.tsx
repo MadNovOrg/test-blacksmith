@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Box } from '@mui/material'
+import { TableRow, TableCell, Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -19,33 +19,23 @@ export const TableNoRows: React.FC<Props> = ({
 
   if (!noRecords) return null
 
+  const key = filtered ? 'noMatches' : 'noRecords'
+  const opts = {
+    itemsName: itemsName ?? t('components.table-no-rows.itemsName'),
+  }
+
   return (
     <TableRow data-testid="TableNoRows">
-      <TableCell colSpan={colSpan} sx={{ p: 0, backgroundColor: '#fff' }}>
-        <Box
-          sx={{
-            textAlign: 'center',
-            padding: '5vmax 0',
-            fontSize: '1.8rem',
-            fontWeight: '100',
-            color: t => t.palette.grey[500],
-          }}
-        >
-          {t('components.table-no-rows.noRecords', {
-            itemsName: itemsName ?? t('components.table-no-rows.itemsName'),
-          })}
+      <TableCell colSpan={colSpan}>
+        <Box sx={{ textAlign: 'center', padding: '5vmax 0' }}>
+          <Typography variant="body1" fontWeight="bold">
+            {t(`components.table-no-rows.${key}-first`, opts)}
+          </Typography>
 
           {filtered ? (
-            <Box
-              sx={{
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                color: t => t.palette.grey[600],
-              }}
-              data-testid="TableNoRows-fixFilters"
-            >
-              {t('components.table-no-rows.fixFilters')}
-            </Box>
+            <Typography variant="body2" mt={1} data-testid="TableNoRows-second">
+              {t(`components.table-no-rows.${key}-second`)}
+            </Typography>
           ) : null}
         </Box>
       </TableCell>

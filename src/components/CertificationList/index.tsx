@@ -25,8 +25,11 @@ import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { CourseLevel, CourseParticipant, Grade as GradeEnum } from '@app/types'
 
+import { TableNoRows } from '../Table/TableNoRows'
+
 type CertificationListProps = {
   participants: CourseParticipant[]
+  filtered?: boolean
   sorting: Sorting
   hideTitle?: boolean
   columns?: (
@@ -41,6 +44,7 @@ type CertificationListProps = {
 
 export const CertificationList: React.FC<CertificationListProps> = ({
   participants,
+  filtered = false,
   sorting,
   hideTitle,
   columns = ['name', 'contact', 'organization', 'grade'],
@@ -149,6 +153,13 @@ export const CertificationList: React.FC<CertificationListProps> = ({
           onRequestSort={sorting.onSort}
         />
         <TableBody>
+          <TableNoRows
+            noRecords={!participants.length}
+            filtered={filtered}
+            colSpan={cols.length}
+            itemsName={t('certifications').toLowerCase()}
+          />
+
           {participants?.map(p => {
             if (!p.certificate) return null
 

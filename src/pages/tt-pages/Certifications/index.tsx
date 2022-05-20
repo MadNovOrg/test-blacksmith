@@ -63,6 +63,7 @@ export const Certifications: React.FC<CertificationsProps> = () => {
   })
 
   const loading = status === LoadingStatus.FETCHING
+  const filtered = !!keyword || !!dateFrom || !!dateTo
   const count = participants?.length ?? 0
 
   return (
@@ -81,7 +82,7 @@ export const Certifications: React.FC<CertificationsProps> = () => {
         </Box>
 
         <Box flex={1}>
-          {status === LoadingStatus.FETCHING ? (
+          {loading ? (
             <Stack
               alignItems="center"
               justifyContent="center"
@@ -95,6 +96,7 @@ export const Certifications: React.FC<CertificationsProps> = () => {
               hideTitle={true}
               participants={participants ?? []}
               sorting={sorting}
+              filtered={filtered}
             />
           )}
         </Box>
