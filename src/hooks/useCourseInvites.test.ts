@@ -18,6 +18,11 @@ jest.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 
+const mockMatchMutate = jest.fn()
+jest.mock('@app/hooks/useMatchMutate', () => ({
+  useMatchMutate: () => mockMatchMutate,
+}))
+
 describe('useCourseInvites', () => {
   it('should not call SWR when courseId is not provided', async () => {
     useSWRMock.mockReturnValue(useSWRMockDefaults)
@@ -45,15 +50,15 @@ describe('useCourseInvites', () => {
     ])
   })
 
-  it('should mutate when refetch is called', async () => {
+  it('should mutate when invalidateCache is called', async () => {
     useSWRMock.mockReturnValue(useSWRMockDefaults)
 
     const courseId = chance.guid()
     const { result } = renderHook(() => useCourseInvites(courseId))
 
-    result.current.refetch()
+    await result.current.invalidateCache()
 
-    expect(useSWRMockDefaults.mutate).toBeCalledWith()
+    expect(mockMatchMutate).toBeCalledWith(expect.any(RegExp))
   })
 
   it('should throw when send is called with no emails', async () => {

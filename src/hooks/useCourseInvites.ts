@@ -3,8 +3,10 @@ import useSWR from 'swr'
 import * as yup from 'yup'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { useMatchMutate } from '@app/hooks/useMatchMutate'
 import {
   QUERY,
+  Matcher,
   ResponseType,
   ParamsType,
 } from '@app/queries/invites/get-course-invites'
@@ -23,18 +25,23 @@ export default function useCourseInvites(
   offset?: number
 ) {
   const fetcher = useFetcher()
+  const matchMutate = useMatchMutate()
 
   const where = status ? { status: { _eq: status } } : undefined
   const orderBy = { email: order ? order : 'asc' }
 
   // Fetch course invites
-  const {
-    data,
-    error,
-    mutate: refetch,
-  } = useSWR<ResponseType, Error, [string, ParamsType] | null>(
-    courseId ? [QUERY, { courseId, where, orderBy, limit, offset }] : null
-  )
+  const { data, error } = useSWR<
+    ResponseType,
+    Error,
+    [string, ParamsType] | null
+  >(courseId ? [QUERY, { courseId, where, orderBy, limit, offset }] : null)
+
+  const invalidateCache = useMemo(() => {
+    return async () => {
+      await matchMutate(Matcher)
+    }
+  }, [matchMutate])
 
   const invitedEmails = useMemo(() => {
     return data?.courseInvites.map(i => i.email) ?? []
@@ -58,8 +65,9 @@ export default function useCourseInvites(
 
       const invites = newEmails.map(email => ({ course_id: courseId, email }))
       await fetcher(SaveInvites, { invites })
+      await invalidateCache()
     },
-    [fetcher, courseId, invitedEmails]
+    [fetcher, invalidateCache, invitedEmails, courseId]
   )
 
   const resend = useCallback(
@@ -69,8 +77,9 @@ export default function useCourseInvites(
         email: invite.email,
         courseId,
       })
+      await invalidateCache()
     },
-    [fetcher, courseId]
+    [fetcher, courseId, invalidateCache]
   )
 
   return useMemo(
@@ -81,8 +90,8 @@ export default function useCourseInvites(
       error,
       send,
       resend,
-      refetch,
+      invalidateCache,
     }),
-    [data, error, send, resend, refetch]
+    [data, error, send, resend, invalidateCache]
   )
 }

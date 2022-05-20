@@ -23,7 +23,7 @@ const useCourseInvitesDefaults = {
   error: undefined,
   send: jest.fn(),
   resend: jest.fn(),
-  refetch: jest.fn(),
+  invalidateCache: jest.fn(),
 }
 
 describe('CourseInvites', () => {

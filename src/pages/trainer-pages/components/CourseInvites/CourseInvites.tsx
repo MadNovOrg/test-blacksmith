@@ -100,7 +100,6 @@ export const CourseInvites = ({ course }: Props) => {
     try {
       setSaving(true)
       await invites.send([...emails, ...leftOvers])
-      invites.refetch()
       closeModal()
     } catch (err) {
       setSaving(false)

@@ -33,7 +33,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const [order, setOrder] = useState<SortOrder>('asc')
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
 
-  const { data, status, total, resend, refetch } = useCourseInvites(
+  const { data, status, total, resend } = useCourseInvites(
     course?.id,
     inviteStatus,
     order,
@@ -72,7 +72,6 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
 
   const handleResendInvite = async (invite: CourseInvite) => {
     await resend(invite)
-    await refetch()
     setMessageSnackbarOpen(true)
   }
 

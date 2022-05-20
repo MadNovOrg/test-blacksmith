@@ -15,6 +15,8 @@ export type ParamsType = {
   offset?: number
 }
 
+export const Matcher = /(query GetCourseInvites)/i
+
 export const QUERY = gql`
   query GetCourseInvites(
     $courseId: Int!
