@@ -36,7 +36,7 @@ export class MyCoursesPage extends BasePage {
     super(page)
     this.userMenu = new UserMenu(this.page)
     this.roleSwitcher = new RoleSwitcher(this.page)
-    this.searchInput = this.page.locator('[data-testid="search"] input')
+    this.searchInput = this.page.locator('[data-testid="FilterSearch-Input"]')
     this.filterBy = (text: string) =>
       this.page.locator(`[data-testid="filter-by"]:has-text("${text}")`)
     this.filterItem = (text: string) =>
