@@ -31,6 +31,7 @@ services:
       EVENTS_HOST: ${HASURA_EVENTS_HOST:-http://docker.for.mac.localhost:5000}
       ACTIONS_HOST: ${HASURA_ACTIONS_HOST:-http://docker.for.mac.localhost:5000}
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      WP_GRAPHQL_ENDPOINT: 'https://dev.teamteach.co.uk/graphql'
 
 volumes:
   tth-data:
