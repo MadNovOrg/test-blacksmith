@@ -16,6 +16,7 @@ type FilterAccordionProps = {
   options: FilterOption[]
   onChange: (_: FilterOption[]) => void
   defaultExpanded?: boolean
+  'data-testid'?: string
 }
 
 export const FilterAccordion: React.FC<FilterAccordionProps> = ({
@@ -23,6 +24,7 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
   options,
   onChange,
   defaultExpanded,
+  'data-testid': testId = 'FilterAccordion',
 }) => {
   const handleChange = (item: FilterOption) =>
     onChange(
@@ -32,8 +34,8 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
     )
 
   return (
-    <StyledAccordion defaultExpanded={defaultExpanded}>
-      <AccordionSummary expandIcon={<ArrowDropDown />} data-testid="filter-by">
+    <StyledAccordion defaultExpanded={defaultExpanded} data-testid={testId}>
+      <AccordionSummary expandIcon={<ArrowDropDown />}>
         {title}
       </AccordionSummary>
       <AccordionDetails>
@@ -42,8 +44,10 @@ export const FilterAccordion: React.FC<FilterAccordionProps> = ({
             key={o.id}
             className={o.selected ? 'selected' : ''}
             onClick={() => handleChange(o)}
+            data-testid={`${testId}-option`}
+            data-id={o.id}
           >
-            <ListItemText primary={o.title} data-testid="filter-item" />
+            <ListItemText primary={o.title} />
             <ListItemIcon>
               <Check />
             </ListItemIcon>

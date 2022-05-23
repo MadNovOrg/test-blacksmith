@@ -1,45 +1,37 @@
 import { Button, CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
-import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
 
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
-import type { FilterOption } from '@app/components/FilterAccordion'
-import { FilterAccordion } from '@app/components/FilterAccordion'
+import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
+import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
+import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
+import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
-import {
-  ParamsType as GetMyCourseParamsType,
-  QUERY as GetMyCourses,
-  ResponseType as GetMyCoursesResponseType,
-} from '@app/queries/courses/get-trainer-courses'
+import { useCourses } from '@app/hooks/useCourses'
+import { useTableSort } from '@app/hooks/useTableSort'
 import {
   Course,
   CourseLevel,
   CourseStatus,
-  CourseType,
   InviteStatus,
-  SortOrder,
   CourseTrainerType,
   RoleName,
 } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 import { AcceptDeclineCourse, AcceptDeclineProps } from './AcceptDeclineCourse'
-
-type MyCoursesProps = unknown
 
 const CourseTitle: React.FC<{ name: string; level: CourseLevel }> = ({
   name,
@@ -49,106 +41,57 @@ const CourseTitle: React.FC<{ name: string; level: CourseLevel }> = ({
 
   return (
     <>
-      <Typography variant="subtitle2" gutterBottom>
-        {t(`course-levels.${level}`)}
-      </Typography>
+      <Typography>{t(`course-levels.${level}`)}</Typography>
       <Typography variant="body2">{name}</Typography>
     </>
   )
 }
 
-const sorts: Record<string, object> = {
-  'name-asc': { name: 'asc' },
-  'name-desc': { name: 'desc' },
-  'org-asc': { organization: { name: 'asc' } },
-  'org-desc': { organization: { name: 'desc' } },
-  'type-asc': { name: 'asc' },
-  'type-desc': { type: 'desc' },
-  'start-asc': { schedule_aggregate: { min: { start: 'asc' } } },
-  'start-desc': { schedule_aggregate: { min: { start: 'desc' } } },
-  'end-asc': { schedule_aggregate: { min: { end: 'asc' } } },
-  'end-desc': { schedule_aggregate: { min: { end: 'desc' } } },
-}
-
-export const MyCourses: React.FC<MyCoursesProps> = () => {
+export const MyCourses: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
+
   const { profile, activeRole } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
+  const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
     () => [
-      { id: 'name', label: t('pages.my-courses.col-name') },
-      { id: 'org', label: t('pages.my-courses.col-organization') },
-      { id: 'type', label: t('pages.my-courses.col-type') },
-      { id: 'start', label: t('pages.my-courses.col-start') },
-      { id: 'end', label: t('pages.my-courses.col-end') },
-      { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
-      { id: 'empty', label: '', sorting: false },
+      { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
+      { id: 'org', label: t('pages.my-courses.col-org'), sorting: true },
+      { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
+      { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
+      { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
+      { id: 'status', label: t('pages.my-courses.col-status') },
+      { id: 'empty', label: '' },
     ],
     [t]
   )
 
-  const levelOptions = useMemo<FilterOption[]>(() => {
-    return Object.values(CourseLevel).map<FilterOption>(level => ({
-      id: level,
-      title: t(`course-levels.${level}`),
-      selected: false,
-    }))
-  }, [t])
-
-  const typeOptions = useMemo<FilterOption[]>(() => {
-    return Object.values(CourseType).map<FilterOption>(type => ({
-      id: type,
-      title: t(`course-types.${type}`),
-      selected: false,
-    }))
-  }, [t])
-
-  const statusOptions = useMemo<FilterOption[]>(() => {
-    return Object.values(CourseStatus).map<FilterOption>(s => ({
-      id: s,
-      title: t(`course-statuses.${s}`),
-      selected: false,
-    }))
-  }, [t])
-
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
+  const [filterLevel, setFilterLevel] = useState<string[]>([])
+  const [filterType, setFilterType] = useState<string[]>([])
+  const [filterStatus, setFilterStatus] = useState<string[]>([])
 
-  const [levelFilter, setLevelFilter] = useState<FilterOption[]>(levelOptions)
-  const [typeFilter, setTypeFilter] = useState<FilterOption[]>(typeOptions)
-  const [statusFilter, setStatusFilter] =
-    useState<FilterOption[]>(statusOptions)
+  const [where, filtered] = useMemo(() => {
+    let isFiltered = false
 
-  const [order, setOrder] = useState<SortOrder>('asc')
-  const [orderBy, setOrderBy] = useState(cols[0].id)
-
-  const where = useMemo(() => {
     const obj: Record<string, object> = {}
 
-    const selectedLevels = levelFilter.flatMap(item =>
-      item.selected ? item.id : []
-    )
-
-    if (selectedLevels.length) {
-      obj.level = { _in: selectedLevels }
+    if (filterLevel.length) {
+      obj.level = { _in: filterLevel }
+      isFiltered = true
     }
 
-    const selectedTypes = typeFilter.flatMap(item =>
-      item.selected ? item.id : []
-    )
-
-    if (selectedTypes.length) {
-      obj.type = { _in: selectedTypes }
+    if (filterType.length) {
+      obj.type = { _in: filterType }
+      isFiltered = true
     }
 
-    const selectedStatuses = statusFilter.flatMap(item =>
-      item.selected ? item.id : []
-    )
-
-    if (selectedStatuses.length) {
-      obj.status = { _in: selectedStatuses }
+    if (filterStatus.length) {
+      obj.status = { _in: filterStatus }
+      isFiltered = true
     }
 
     const query = keyword.trim()
@@ -159,24 +102,17 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
       } else {
         obj.name = { _ilike: `%${query}%` }
       }
+      isFiltered = true
     }
 
-    return obj
-  }, [levelFilter, typeFilter, statusFilter, keyword])
+    return [obj, isFiltered]
+  }, [filterLevel, filterType, filterStatus, keyword])
 
-  const { data, error, mutate } = useSWR<
-    GetMyCoursesResponseType,
-    Error,
-    [string, GetMyCourseParamsType]
-  >([GetMyCourses, { orderBy: sorts[`${orderBy}-${order}`], where }], {
-    focusThrottleInterval: 2000,
+  const { courses, loading, mutate } = useCourses(RoleName.TRAINER, {
+    sorting,
+    where,
   })
-
-  const handleRequestSort = (col: string) => {
-    const isAsc = orderBy === col && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(col)
-  }
+  const count = courses.length
 
   const handleNavigation = (course: Course) => {
     if (
@@ -198,9 +134,6 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
     [mutate, navigate]
   )
 
-  const loading = !data && !error
-  const count = data?.course?.length
-
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" gap={4}>
@@ -221,23 +154,9 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
               </Typography>
 
               <Stack gap={1}>
-                <FilterAccordion
-                  options={levelFilter}
-                  title={t('level')}
-                  onChange={setLevelFilter}
-                />
-
-                <FilterAccordion
-                  options={typeFilter}
-                  title={t('course-type')}
-                  onChange={setTypeFilter}
-                />
-
-                <FilterAccordion
-                  options={statusFilter}
-                  title={t('course-status')}
-                  onChange={setStatusFilter}
-                />
+                <FilterCourseLevel onChange={setFilterLevel} />
+                <FilterCourseType onChange={setFilterType} />
+                <FilterCourseStatus onChange={setFilterStatus} />
               </Stack>
             </Box>
           </Stack>
@@ -254,112 +173,122 @@ export const MyCourses: React.FC<MyCoursesProps> = () => {
             <CreateCourseMenu />
           </Box>
 
-          <TableContainer component={Paper} elevation={0}>
-            <Table data-testid="courses-table">
-              <TableHead
-                cols={cols}
-                order={order}
-                orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-              />
-              <TableBody>
-                {data?.course?.map(c => {
-                  const courseTrainer = profile
-                    ? findCourseTrainer(c?.trainers, profile.id)
-                    : undefined
+          <Table data-testid="courses-table">
+            <TableHead
+              cols={cols}
+              order={sorting.dir}
+              orderBy={sorting.by}
+              onRequestSort={sorting.onSort}
+            />
+            <TableBody>
+              {loading && (
+                <TableRow>
+                  <TableCell colSpan={cols.length} align="center">
+                    <CircularProgress />
+                  </TableCell>
+                </TableRow>
+              )}
 
-                  return (
-                    <TableRow key={c.id} data-testid={`course-row-${c.id}`}>
-                      <TableCell>
-                        {courseTrainer &&
-                        courseTrainer.status !== InviteStatus.ACCEPTED ? (
+              <TableNoRows
+                noRecords={!loading && !count}
+                filtered={filtered}
+                colSpan={cols.length}
+                itemsName={t('courses').toLowerCase()}
+              />
+
+              {courses.map(c => {
+                const courseTrainer = profile
+                  ? findCourseTrainer(c?.trainers, profile.id)
+                  : undefined
+
+                return (
+                  <TableRow
+                    key={c.id}
+                    className="MyCoursesRow"
+                    data-testid={`course-row-${c.id}`}
+                  >
+                    <TableCell>
+                      {courseTrainer &&
+                      courseTrainer.status !== InviteStatus.ACCEPTED ? (
+                        <CourseTitle level={c.level} name={c.name} />
+                      ) : (
+                        <Link href={handleNavigation(c)}>
                           <CourseTitle level={c.level} name={c.name} />
-                        ) : (
-                          <Link href={handleNavigation(c)}>
-                            <CourseTitle level={c.level} name={c.name} />
-                          </Link>
-                        )}
-                      </TableCell>
-                      <TableCell>{c.organization?.name}</TableCell>
-                      <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-                      <TableCell>
-                        {c.dates.aggregate.start.date && (
-                          <Box>
-                            <Typography variant="body2" gutterBottom>
-                              {t('dates.short', {
-                                date: c.dates.aggregate.start.date,
-                              })}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="grey.500"
-                              whiteSpace="nowrap"
-                            >
-                              {t('dates.time', {
-                                date: c.dates.aggregate.start.date,
-                              })}
-                            </Typography>
-                          </Box>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {c.dates.aggregate.end.date && (
-                          <Box>
-                            <Typography variant="body2" gutterBottom>
-                              {t('dates.short', {
-                                date: c.dates.aggregate.end.date,
-                              })}
-                            </Typography>
-                            <Typography
-                              variant="body2"
-                              color="grey.500"
-                              whiteSpace="nowrap"
-                            >
-                              {t('dates.time', {
-                                date: c.dates.aggregate.end.date,
-                              })}
-                            </Typography>
-                          </Box>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <StatusChip
-                          status={c.status}
-                          type={StatusChipType.COURSE}
-                          data-testid="course-status-chip"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <AcceptDeclineCourse
-                          course={c}
-                          onUpdate={onAcceptedOrDeclined}
-                        >
-                          <Button
-                            variant="outlined"
-                            color="primary"
-                            size="small"
-                            onClick={() => navigate(handleNavigation(c))}
+                        </Link>
+                      )}
+                    </TableCell>
+                    <TableCell>{c.organization?.name}</TableCell>
+                    <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                    <TableCell>
+                      {c.dates.aggregate.start.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {t('dates.short', {
+                              date: c.dates.aggregate.start.date,
+                            })}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
                           >
-                            {c.status === CourseStatus.PENDING ||
-                            c.status === CourseStatus.DRAFT
-                              ? t('build')
-                              : t('manage')}
-                          </Button>
-                        </AcceptDeclineCourse>
-                      </TableCell>
-                    </TableRow>
-                  )
-                }) ??
-                  (loading && (
-                    <TableRow>
-                      <TableCell colSpan={9} align="center">
-                        <CircularProgress />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                            {t('dates.time', {
+                              date: c.dates.aggregate.start.date,
+                            })}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {c.dates.aggregate.end.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {t('dates.short', {
+                              date: c.dates.aggregate.end.date,
+                            })}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
+                            {t('dates.time', {
+                              date: c.dates.aggregate.end.date,
+                            })}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <StatusChip
+                        status={c.status}
+                        type={StatusChipType.COURSE}
+                        data-testid="course-status-chip"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <AcceptDeclineCourse
+                        course={c}
+                        onUpdate={onAcceptedOrDeclined}
+                      >
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          onClick={() => navigate(handleNavigation(c))}
+                        >
+                          {c.status === CourseStatus.PENDING ||
+                          c.status === CourseStatus.DRAFT
+                            ? t('build')
+                            : t('manage')}
+                        </Button>
+                      </AcceptDeclineCourse>
+                    </TableCell>
+                  </TableRow>
+                )
+              }) ?? null}
+            </TableBody>
+          </Table>
         </Box>
       </Box>
     </Container>

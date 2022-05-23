@@ -551,7 +551,7 @@
       "h1": "Courses",
       "col-name": "Name",
       "col-type": "Type",
-      "col-organization": "Organisation",
+      "col-org": "Organisation",
       "col-start": "Start",
       "col-end": "End",
       "col-status": "Status"

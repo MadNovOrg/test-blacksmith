@@ -171,7 +171,12 @@ export const buildCourse = build<Course>({
     schedule: [buildCourseSchedule()],
     level: CourseLevel.LEVEL_1,
     trainers: [buildCourseTrainer()],
-    dates: {},
+    dates: {
+      aggregate: {
+        start: { date: sub(new Date(), { days: 2 }).toISOString() },
+        end: { date: sub(new Date(), { days: 1 }).toISOString() },
+      },
+    },
     modulesAgg: {},
     moduleGroupIds: [],
     contactProfileId: null,
