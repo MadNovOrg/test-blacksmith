@@ -39,6 +39,16 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/stripe/prices/create'
     comment: Creates a membership plan
+  - name: podcast
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/podcasts/single'
+    comment: Podcast
+  - name: podcasts
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/podcasts'
+    comment: Podcasts list
   - name: searchTrainers
     definition:
       kind: ""
@@ -141,12 +151,23 @@ custom_types:
         - value: GBP
           is_deprecated: null
           description: null
+    - name: OrderDirection
+      values:
+        - value: ASC
+          is_deprecated: null
+          description: null
+        - value: DESC
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
     - name: GetTrainersLevelsInput
     - name: StripeCreatePaymentIntentInput
     - name: SearchTrainersInput
+    - name: Ordering
+    - name: PodcastsInput
+    - name: Paging
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -163,4 +184,7 @@ custom_types:
     - name: TrainerLevels
     - name: StripeCreatePaymentIntentOutput
     - name: SearchTrainer
+    - name: Podcast
+    - name: PodcastsPayload
+    - name: PodcastPayload
   scalars: []

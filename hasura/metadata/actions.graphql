@@ -38,6 +38,18 @@ type Mutation {
 }
 
 type Query {
+  podcast(
+    id: ID!
+  ): PodcastPayload
+}
+
+type Query {
+  podcasts(
+    input: PodcastsInput
+  ): PodcastsPayload
+}
+
+type Query {
   searchTrainers(
     input: SearchTrainersInput!
   ): [SearchTrainer]
@@ -95,6 +107,11 @@ enum Currency {
   GBP
 }
 
+enum OrderDirection {
+  ASC
+  DESC
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -129,6 +146,21 @@ input SearchTrainersInput {
   courseLevel: CourseLevel
   courseStart: date
   courseEnd: date
+}
+
+input Ordering {
+  direction: OrderDirection
+}
+
+input PodcastsInput {
+  term: String
+  order: Ordering
+  paging: Paging
+}
+
+input Paging {
+  perPage: Int
+  page: Int
 }
 
 type LinkProfileResult {
@@ -220,5 +252,23 @@ type SearchTrainer {
   avatar: String
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability
+}
+
+type Podcast {
+  id: String!
+  name: String!
+  mediaUrl: String!
+  author: String!
+  publishedDate: String!
+  thumbnail: String
+}
+
+type PodcastsPayload {
+  records: [Podcast!]!
+  total: Int!
+}
+
+type PodcastPayload {
+  podcast: Podcast
 }
 
