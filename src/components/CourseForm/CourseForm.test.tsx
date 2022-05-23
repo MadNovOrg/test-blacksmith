@@ -152,10 +152,10 @@ describe('component: CourseForm', () => {
     })
 
     await waitFor(() => {
-      userEvent.paste(screen.getByLabelText('Start date'), '2022-04-12')
-      userEvent.paste(screen.getByLabelText('Start time'), '09:00 am')
-      userEvent.paste(screen.getByLabelText('End date'), '2022-04-12')
-      userEvent.paste(screen.getByLabelText('End time'), '08:00 am')
+      userEvent.paste(screen.getByLabelText('Start date'), '12/05/2022')
+      userEvent.paste(screen.getByLabelText('Start time'), '09:00 AM')
+      userEvent.paste(screen.getByLabelText('End date'), '12/04/2022')
+      userEvent.paste(screen.getByLabelText('End time'), '08:00 AM')
     })
 
     expect(
@@ -246,7 +246,7 @@ describe('component: CourseForm', () => {
       format(new Date(course.schedule[0].start), INPUT_DATE_FORMAT)
     )
     expect(screen.getByLabelText('Start time')).toHaveValue(
-      format(new Date(course.schedule[0].start), 'HH:mm')
+      format(new Date(course.schedule[0].start), 'hh:mm aa')
     )
     expect(
       screen.getByLabelText('I will be using an AOL for this course')

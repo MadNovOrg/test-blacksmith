@@ -14,12 +14,12 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material'
-import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { Auth } from 'aws-amplify'
-import { format } from 'date-fns'
+import { zonedTimeToUtc } from 'date-fns-tz'
 import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useState, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
@@ -29,6 +29,7 @@ import {
   ResponseType,
   ParamsType,
 } from '@app/queries/profile/insert-profile-temp'
+import { DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
 
@@ -60,6 +61,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
     formState: { errors },
     watch,
     setValue,
+    control,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -72,14 +74,13 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
   const onSubmit = async (data: FormInputs) => {
     setLoading(true)
     setError('')
-
     try {
       const input = {
         email: data.email,
         givenName: data.firstName,
         familyName: data.surname,
         phone: data.phone,
-        dob: data.dob ? format(data.dob, 'yyyy-MM-dd') : null,
+        dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
         acceptMarketing: data.marketing,
         acceptTnc: data.tcs,
         courseId,
@@ -232,19 +233,30 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
 
         <Box>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DesktopDatePicker
-              label="Date desktop"
-              inputFormat="dd/MM/yyyy"
-              value={values.dob}
-              onChange={(d: Date | null) => setValue('dob', d)}
-              renderInput={params => (
-                <TextField
-                  {...params}
+            <Controller
+              name="dob"
+              control={control}
+              render={({ field }) => (
+                <DatePicker
                   label={t('dob-optional')}
-                  variant="standard"
-                  inputProps={{ 'data-testid': 'input-dob' }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  fullWidth
+                  mask={DATE_MASK}
+                  inputFormat={INPUT_DATE_FORMAT}
+                  value={field.value}
+                  onChange={(d: Date | null) => setValue('dob', d)}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      inputProps={{
+                        ...params.inputProps,
+                        'data-testid': 'input-dob',
+                      }}
+                      fullWidth
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={!!errors.dob}
+                      helperText={errors.dob?.message}
+                    />
+                  )}
                 />
               )}
             />

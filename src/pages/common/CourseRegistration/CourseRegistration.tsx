@@ -70,6 +70,7 @@ export const CourseRegistrationPage: React.FC = () => {
       acceptTnc: true,
       courseId: +courseId,
       quantity: +quantity,
+      dob: null,
     }
 
     await fetcher<ResponseType, ParamsType>(MUTATION, { input })

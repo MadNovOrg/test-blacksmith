@@ -10,7 +10,7 @@ export type ParamsType = {
     acceptMarketing: boolean
     acceptTnc: boolean
     phone?: string
-    dob?: string | null
+    dob: Date | null
     sector?: string
     jobTitle?: string
     organizationId?: string | null
