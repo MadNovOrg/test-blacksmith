@@ -78,6 +78,18 @@ actions:
       forward_client_headers: true
     permissions:
       - role: unverified
+  - name: xeroCallback
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/xero/callback'
+    permissions:
+      - role: tt-admin
+  - name: xeroConnect
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/setup'
+    permissions:
+      - role: tt-admin
 custom_types:
   enums:
     - name: BillingInterval
@@ -175,6 +187,7 @@ custom_types:
     - name: Ordering
     - name: PodcastsInput
     - name: Paging
+    - name: XeroCallbackInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -194,4 +207,6 @@ custom_types:
     - name: Podcast
     - name: PodcastsPayload
     - name: PodcastPayload
+    - name: XeroConnectOutput
+    - name: XeroCallbackOutput
   scalars: []

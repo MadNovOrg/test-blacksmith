@@ -5,6 +5,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RRLink, Outlet } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { useRouteMatch } from '@app/hooks/use-route-match'
 
 type AdminPageProps = unknown
@@ -31,6 +32,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
 
 export const AdminPage: React.FC<AdminPageProps> = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const tabs = [
     {
@@ -41,6 +43,9 @@ export const AdminPage: React.FC<AdminPageProps> = () => {
       id: '/admin/contacts',
       title: 'Contacts',
     },
+    ...(acl.canViewXeroConnect()
+      ? [{ id: '/admin/xero/connect', title: 'Xero Connect' }]
+      : []),
   ]
 
   const routeMatch = useRouteMatch(tabs)

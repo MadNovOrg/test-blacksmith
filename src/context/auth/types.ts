@@ -51,4 +51,5 @@ export type ACL = {
   canViewCertifications: () => boolean
   canViewOrders: () => boolean
   canOverrideGrades: () => boolean
+  canViewXeroConnect: () => boolean
 }

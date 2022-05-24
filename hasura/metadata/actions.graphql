@@ -73,6 +73,16 @@ type Mutation {
   ): Boolean
 }
 
+type Mutation {
+  xeroCallback(
+    input: XeroCallbackInput!
+  ): XeroCallbackOutput
+}
+
+type Query {
+  xeroConnect: XeroConnectOutput
+}
+
 enum BillingInterval {
   day
   week
@@ -167,6 +177,10 @@ input PodcastsInput {
 input Paging {
   perPage: Int
   page: Int
+}
+
+input XeroCallbackInput {
+  url: String!
 }
 
 type LinkProfileResult {
@@ -277,3 +291,12 @@ type PodcastsPayload {
 type PodcastPayload {
   podcast: Podcast
 }
+
+type XeroConnectOutput {
+  consentUrl: String
+}
+
+type XeroCallbackOutput {
+  status: Boolean!
+}
+

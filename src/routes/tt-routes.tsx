@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
 import Contacts from '@app/pages/admin/components/Contacts'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -16,8 +17,11 @@ import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/compo
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { Orders } from '@app/pages/tt-pages/Orders'
+import { XeroConnect } from '@app/pages/tt-pages/Xero'
 
 const TTAdminRoutes = () => {
+  const { acl } = useAuth()
+
   return (
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
@@ -55,6 +59,13 @@ const TTAdminRoutes = () => {
         <Route index element={<Navigate replace to="organizations" />} />
         <Route path="organizations" element={<Organizations />} />
         <Route path="contacts" element={<Contacts />} />
+
+        {acl.canViewXeroConnect() ? (
+          <Route path="xero">
+            <Route index element={<Navigate replace to="connect" />} />
+            <Route path="connect" element={<XeroConnect />} />
+          </Route>
+        ) : null}
       </Route>
 
       <Route path="*" element={<NotFound />} />

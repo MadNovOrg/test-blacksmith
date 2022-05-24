@@ -924,6 +924,13 @@
         "p3": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience."
       },
       "incorrect-signature": "Incorrect signature"
+    },
+    "xero": {
+      "connect-h1": "Xero Connection",
+      "connect-hint": "A user with access to a priviledged account must setup the Hub connection with Xero by clicking the button below.",
+      "connect-btn": "Connect to Xero",
+      "connect-done": "HUB is connected to Xero.",
+      "connect-error": "Failed to determine Xero connection status. \nPlease try again later."
     }
   },
   "course-evaluation": {
