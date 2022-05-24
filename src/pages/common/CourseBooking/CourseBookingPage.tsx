@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
@@ -11,7 +11,11 @@ import { CourseBookingReview } from './components/CourseBookingReview'
 import { CourseFull } from './components/CourseFull'
 
 const BookingRoutes: React.FC = () => {
-  const { booking, availableSeats, course } = useBooking()
+  const { booking, availableSeats, course, error } = useBooking()
+
+  if (error) {
+    return <Typography>{error}</Typography>
+  }
 
   if (!availableSeats) {
     return <CourseFull courseId={course.id} />

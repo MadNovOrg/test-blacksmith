@@ -79,7 +79,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
           </Box>
         ) : (
           <Form
-            onVerifyLater={() => navigate('/')}
+            onVerifyLater={() => navigate('/profile')}
             onSuccess={() => setSuccess(true)}
           />
         )}
