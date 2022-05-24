@@ -71,6 +71,13 @@ actions:
       - role: tt-admin
       - role: trainer
     comment: Creates or updates Zoom meeting with start date
+  - name: verifyUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/verify'
+      forward_client_headers: true
+    permissions:
+      - role: unverified
 custom_types:
   enums:
     - name: BillingInterval

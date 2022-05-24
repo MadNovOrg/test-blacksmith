@@ -67,6 +67,12 @@ type Mutation {
   ): UpsertZoomMeetingPayload
 }
 
+type Mutation {
+  verifyUser(
+    inviteId: uuid!
+  ): Boolean
+}
+
 enum BillingInterval {
   day
   week
@@ -271,4 +277,3 @@ type PodcastsPayload {
 type PodcastPayload {
   podcast: Podcast
 }
-

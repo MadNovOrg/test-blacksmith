@@ -11,7 +11,15 @@ const defaultProps = {
 }
 
 describe('Form', () => {
+  beforeAll(() => {
+    jest.useFakeTimers('modern')
+  })
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   it('matches snapshot', async () => {
+    jest.setSystemTime(new Date(2022, 4, 23))
     const props = { ...defaultProps }
     const view = render(<Form {...props} />)
 
