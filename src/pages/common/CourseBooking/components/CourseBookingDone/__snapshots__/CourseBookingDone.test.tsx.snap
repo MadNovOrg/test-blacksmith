@@ -21,9 +21,69 @@ Object {
                 class="MuiBox-root css-1swh5hj"
               >
                 <div
+                  class="MuiBox-root css-1r1aq4"
+                >
+                  <h2
+                    class="MuiTypography-root MuiTypography-h2 css-e6s9bz-MuiTypography-root"
+                  >
+                    Book a course
+                  </h2>
+                </div>
+                <div
                   class="MuiBox-root css-0"
                   data-testid="create-course-nav"
-                />
+                >
+                  <div
+                    class="MuiBox-root css-ndrivx"
+                    data-testid="step-item-1"
+                  >
+                    <span
+                      class="css-1l3276l"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                        data-testid="CheckIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                        />
+                      </svg>
+                    </span>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-7iwe82-MuiTypography-root"
+                    >
+                      Booking details
+                    </p>
+                  </div>
+                  <div
+                    class="MuiBox-root css-ndrivx"
+                    data-testid="step-item-2"
+                  >
+                    <span
+                      class="css-1ss51fo"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                        data-testid="CheckIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                        />
+                      </svg>
+                    </span>
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-7iwe82-MuiTypography-root"
+                    >
+                      Review & confirm
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -90,9 +150,69 @@ Object {
               class="MuiBox-root css-1swh5hj"
             >
               <div
+                class="MuiBox-root css-1r1aq4"
+              >
+                <h2
+                  class="MuiTypography-root MuiTypography-h2 css-e6s9bz-MuiTypography-root"
+                >
+                  Book a course
+                </h2>
+              </div>
+              <div
                 class="MuiBox-root css-0"
                 data-testid="create-course-nav"
-              />
+              >
+                <div
+                  class="MuiBox-root css-ndrivx"
+                  data-testid="step-item-1"
+                >
+                  <span
+                    class="css-1l3276l"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      data-testid="CheckIcon"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                      />
+                    </svg>
+                  </span>
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-7iwe82-MuiTypography-root"
+                  >
+                    Booking details
+                  </p>
+                </div>
+                <div
+                  class="MuiBox-root css-ndrivx"
+                  data-testid="step-item-2"
+                >
+                  <span
+                    class="css-1ss51fo"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      data-testid="CheckIcon"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                      />
+                    </svg>
+                  </span>
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-7iwe82-MuiTypography-root"
+                  >
+                    Review & confirm
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
           <div

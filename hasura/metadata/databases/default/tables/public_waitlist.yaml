@@ -6,24 +6,26 @@ configuration:
   column_config:
     course_id:
       custom_name: courseId
+    org_name:
+      custom_name: orgName
     given_name:
       custom_name: givenName
     family_name:
       custom_name: familyName
-    org_name:
-      custom_name: orgName
     created_at:
       custom_name: createdAt
   custom_column_names:
     course_id: courseId
+    org_name: orgName
     given_name: givenName
     family_name: familyName
-    org_name: orgName
     created_at: createdAt
 insert_permissions:
   - role: anonymous
     permission:
       check: {}
+      set:
+        confirmed: "true"
       columns:
         - course_id
         - email

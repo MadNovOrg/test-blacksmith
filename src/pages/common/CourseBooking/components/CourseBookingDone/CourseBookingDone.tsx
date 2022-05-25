@@ -1,24 +1,42 @@
 import { Alert, Box, Container, Stack, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   QUERY as GET_ORDER_QUERY,
   ResponseType as GetOrderResponseType,
   ParamsType as GetOrderParamsType,
 } from '@app/queries/order/get-order'
+import {
+  MUTATION as DELETE_TEMP_PROFILE,
+  ResponseType as DeleteTempProfileResponseType,
+  ParamsType as DeleteTempProfileParamsType,
+} from '@app/queries/profile/delete-temp-profile'
 import { PaymentMethod } from '@app/types'
 
 const completedSteps = ['details', 'review', 'payment']
 
 export const CourseBookingDone: React.FC = () => {
   const { t } = useTranslation()
+  const { profile } = useAuth()
+  const fetcher = useFetcher()
   const [searchParams] = useSearchParams()
   const orderId = searchParams.get('order_id') as string
+
+  useEffect(() => {
+    if (!profile) return
+
+    fetcher<DeleteTempProfileResponseType, DeleteTempProfileParamsType>(
+      DELETE_TEMP_PROFILE,
+      { email: profile.email }
+    )
+  }, [fetcher, profile])
 
   const { data, error } = useSWR<
     GetOrderResponseType,
