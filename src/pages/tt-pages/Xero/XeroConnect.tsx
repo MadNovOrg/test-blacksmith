@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 
@@ -28,9 +28,6 @@ export const XeroConnect: React.FC = () => {
   const [state, setState] = useState(initialState)
   const { loading, error, consentUrl } = state
 
-  const [searchParams] = useSearchParams()
-  const isCallback = !!searchParams.get('code')
-
   const xeroConsent = useCallback(async () => {
     setState(s => ({ ...s, loading: true }))
     try {
@@ -47,8 +44,10 @@ export const XeroConnect: React.FC = () => {
     setState(s => ({ ...s, loading: true }))
 
     try {
-      const input = { url: window.location.href }
-      await fetcher<XeroCallbackResp>(XeroCallbackQuery, { input })
+      const { status } = await fetcher<XeroCallbackResp>(XeroCallbackQuery, {
+        input: { url: window.location.href },
+      })
+      if (!status) throw Error('Failed to process callback')
       setState({ loading: false, consentUrl: '', error: false })
     } catch (err) {
       console.error(err)
@@ -59,8 +58,9 @@ export const XeroConnect: React.FC = () => {
   }, [fetcher, navigate])
 
   useEffect(() => {
-    isCallback ? xeroCallback() : xeroConsent()
-  }, [isCallback, xeroConsent, xeroCallback])
+    const sp = new URLSearchParams(window.location.search)
+    sp.has('code') ? xeroCallback() : xeroConsent()
+  }, [xeroConsent, xeroCallback])
 
   const connectToXero = useCallback(() => {
     if (consentUrl) {
@@ -76,7 +76,9 @@ export const XeroConnect: React.FC = () => {
       <Stack gap={4} alignItems="center">
         <Typography variant="h1">{t('pages.xero.connect-h1')}</Typography>
 
-        {loading ? <CircularProgress /> : null}
+        {loading ? (
+          <CircularProgress data-testid="XeroConnect-loading" />
+        ) : null}
 
         {error ? (
           <Typography>{t('pages.xero.connect-error')}</Typography>
@@ -87,7 +89,11 @@ export const XeroConnect: React.FC = () => {
             <Typography variant="body1">
               {t('pages.xero.connect-hint')}
             </Typography>
-            <Button variant="contained" onClick={connectToXero}>
+            <Button
+              variant="contained"
+              onClick={connectToXero}
+              data-testid="XeroConnect-connect"
+            >
               {t('pages.xero.connect-btn')}
             </Button>
           </>
@@ -101,7 +107,9 @@ export const XeroConnect: React.FC = () => {
                 color: t => t.palette.success.main,
               }}
             />
-            <Typography>{t('pages.xero.connect-done')}</Typography>
+            <Typography data-testid="XeroConnect-connected">
+              {t('pages.xero.connect-done')}
+            </Typography>
           </>
         ) : null}
       </Stack>
