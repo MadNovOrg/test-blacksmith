@@ -18,7 +18,9 @@ Object {
         >
           <p
             class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
-          />
+          >
+            Your information
+          </p>
           <div
             class="MuiBox-root css-3mllz6"
           >
@@ -98,12 +100,18 @@ Object {
               <p
                 class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
               >
-                Sun, 10 Apr 2022
+                Start
+                :
+                 
+                10 April 2022, 10:00 AM
               </p>
               <p
                 class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
               >
-                10:00 AM - 12:00 PM
+                End
+                :
+                 
+                10 April 2022, 12:00 PM
               </p>
             </div>
             <div
@@ -248,7 +256,7 @@ Object {
             class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
           />
           <div
-            class="MuiBox-root css-gg4vpm"
+            class="MuiBox-root css-3mllz6"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
@@ -262,6 +270,11 @@ Object {
               £66.00
             </p>
           </div>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Due on 24 May 2022
+          </p>
         </div>
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-zwxq8w-MuiFormControlLabel-root"
@@ -349,7 +362,9 @@ Object {
       >
         <p
           class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-10prckl-MuiTypography-root"
-        />
+        >
+          Your information
+        </p>
         <div
           class="MuiBox-root css-3mllz6"
         >
@@ -429,12 +444,18 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
             >
-              Sun, 10 Apr 2022
+              Start
+              :
+               
+              10 April 2022, 10:00 AM
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              10:00 AM - 12:00 PM
+              End
+              :
+               
+              10 April 2022, 12:00 PM
             </p>
           </div>
           <div
@@ -579,7 +600,7 @@ Object {
           class="MuiDivider-root MuiDivider-fullWidth css-ctpjxq-MuiDivider-root"
         />
         <div
-          class="MuiBox-root css-gg4vpm"
+          class="MuiBox-root css-3mllz6"
         >
           <p
             class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
@@ -593,6 +614,11 @@ Object {
             £66.00
           </p>
         </div>
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+        >
+          Due on 24 May 2022
+        </p>
       </div>
       <label
         class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-zwxq8w-MuiFormControlLabel-root"

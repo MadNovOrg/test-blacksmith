@@ -14,6 +14,10 @@ export const PromoCode: React.FC<Props> = ({ codes, onAdd, onRemove }) => {
   const [adding, setAdding] = useState(false)
   const [value, setValue] = useState('')
 
+  const handleCancel = () => {
+    setAdding(false)
+  }
+
   const handleApply = () => {
     onAdd(value)
     setValue('')
@@ -85,7 +89,12 @@ export const PromoCode: React.FC<Props> = ({ codes, onAdd, onRemove }) => {
               {t('apply')}
             </Button>
           ) : (
-            <Button variant="text" color="primary" size="small">
+            <Button
+              variant="text"
+              color="primary"
+              size="small"
+              onClick={handleCancel}
+            >
               {t('cancel')}
             </Button>
           )}

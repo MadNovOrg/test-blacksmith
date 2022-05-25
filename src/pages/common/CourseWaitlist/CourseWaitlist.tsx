@@ -28,7 +28,12 @@ export const CourseWaitlist: React.FC = () => {
             {t('waitlist-added')}
           </Alert>
 
-          <Typography variant="subtitle1" fontWeight="500" mb={2}>
+          <Typography
+            variant="subtitle1"
+            fontWeight="500"
+            mb={2}
+            textAlign="center"
+          >
             {t('confirmation-email-sent', { email })}
           </Typography>
 

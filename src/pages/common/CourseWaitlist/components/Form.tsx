@@ -54,6 +54,7 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
       surname: '',
       email: '',
       phone: '',
+      orgName: '',
     },
   })
 
@@ -174,8 +175,8 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
             label={t('org-name')}
             variant="standard"
             placeholder={t('orgName-placeholder')}
-            error={!!errors.email}
-            helperText={errors.email?.message}
+            error={!!errors.orgName}
+            helperText={errors.orgName?.message}
             {...register('orgName')}
             inputProps={{ 'data-testid': 'input-orgName' }}
             sx={{ bgcolor: 'grey.100' }}

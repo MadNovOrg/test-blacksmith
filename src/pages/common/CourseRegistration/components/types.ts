@@ -24,7 +24,7 @@ export const getFormSchema = (t: TFunction) => {
     phone: yup.string().required(requiredMsg(t, 'phone')),
     password: schemas.password(t),
 
-    dob: yup.date(),
+    dob: yup.date().typeError(t('validation-errors.invalid-date')),
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
   })

@@ -211,11 +211,13 @@
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
     },
     "validation-errors": {
+      "invalid-date": "Please enter a valid date",
       "max-registrants": "Please enter emails of registrants for the quantity you selected",
       "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
       "email-required": "Please enter your email",
       "email-invalid": "Please enter a valid email address",
+      "phone-invalid": "Please enter a valid phone number",
       "password-required": "Please enter your password",
       "password-min_one": "Password must be at least ${min} character",
       "password-min_other": "Password must be at least ${min} characters",
@@ -469,6 +471,7 @@
     },
     "book-course": {
       "title": "Book a course",
+      "your-info": "Your information",
       "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",
       "order-details": "Order details",
       "payment-details": "Payment details",
@@ -478,6 +481,7 @@
       "step-3": "Payment",
       "complete-booking": "Complete booking",
       "order-summary": "Order summary",
+      "due-on": "Due on {{date, dd MMM yyyy}}",
       "confirm-title": "Please confirm to complete booking",
       "review-tnc": "I confirm that I wish to participate in the course even if it starts during my 14 day cancellation period. I understand that I will lose my right to cancel the contract once the course is complete and that I must pay for services provided prior to cancellation.",
       "payment-method": "Payment method",

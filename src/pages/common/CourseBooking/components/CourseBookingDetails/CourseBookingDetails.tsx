@@ -142,7 +142,10 @@ export const CourseBookingDetails: React.FC = () => {
             .email(t('validation-errors.email-invalid'))
             .required(requiredMsg(t, 'email')),
 
-          phone: yup.string().required(requiredMsg(t, 'phone')),
+          phone: yup
+            .string()
+            .required(requiredMsg(t, 'phone'))
+            .min(10, t('validation-errors.phone-invalid')),
 
           purchaseOrder: yup.string(),
         }),
@@ -284,7 +287,7 @@ export const CourseBookingDetails: React.FC = () => {
           <OrgSelector
             allowAdding
             onChange={org => {
-              setValue('orgId', org.id, { shouldValidate: true })
+              setValue('orgId', org?.id ?? '', { shouldValidate: true })
             }}
             textFieldProps={{ variant: 'standard' }}
             sx={{ marginBottom: 2 }}
@@ -370,6 +373,7 @@ export const CourseBookingDetails: React.FC = () => {
           options={[] as string[]}
           value={values.emails}
           freeSolo
+          autoSelect
           onChange={(_, v) =>
             setValue('emails', v, { shouldValidate: isSubmitted })
           }
@@ -489,18 +493,18 @@ export const CourseBookingDetails: React.FC = () => {
                 <OrgSelector
                   allowAdding
                   onChange={org => {
-                    setValue('invoiceDetails.orgId', org.id, {
+                    setValue('invoiceDetails.orgId', org?.id ?? '', {
                       shouldValidate: true,
                     })
                     setValue(
                       'invoiceDetails.billingAddress',
-                      normalizeAddr(org.addresses[0])?.join(',') || '',
+                      normalizeAddr(org?.addresses?.[0])?.join(',') || '',
                       { shouldValidate: true }
                     )
                   }}
                   textFieldProps={{ variant: 'standard' }}
                   sx={{ marginBottom: 2 }}
-                  error={errors.orgId?.message}
+                  error={errors.invoiceDetails?.orgId?.message}
                 />
               </Box>
 

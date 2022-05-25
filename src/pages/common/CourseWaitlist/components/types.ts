@@ -19,7 +19,10 @@ export const getFormSchema = (t: TFunction) => {
     email: schemas.email(t),
     marketing: yup.boolean(),
 
-    phone: yup.string().required(requiredMsg(t, 'phone')),
+    phone: yup
+      .string()
+      .required(requiredMsg(t, 'phone'))
+      .min(10, t('validation-errors.phone-invalid')),
 
     orgName: yup.string().required(requiredMsg(t, 'org-name')),
   })

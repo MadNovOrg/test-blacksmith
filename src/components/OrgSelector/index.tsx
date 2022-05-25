@@ -24,7 +24,7 @@ import { normalizeAddr } from '@app/util'
 import { AddOrg } from './components/AddOrg'
 
 export type OrgSelectorProps = {
-  onChange: (org: Organization) => void
+  onChange: (org: Organization | null) => void
   sx?: SxProps
   textFieldProps?: TextFieldProps
   placeholder?: string
@@ -73,13 +73,11 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
 
   const handleChange = (
     event: React.SyntheticEvent,
-    org: Organization | string | null
+    org: Organization | null
   ) => {
     event.preventDefault()
 
-    if (!org || typeof org === 'string') return
-
-    if (org.id === 'NEW_ORG') {
+    if (org && org.id === 'NEW_ORG') {
       return setTimeout(() => setAdding(org.name))
     }
 

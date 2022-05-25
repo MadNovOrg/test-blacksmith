@@ -69,14 +69,15 @@ export const CourseBookingReview: React.FC = () => {
               {course.name}
             </Typography>
             <Typography gutterBottom color="grey.700">
-              {t('dates.long', {
+              {t('start')}:{' '}
+              {t('dates.withTime', {
                 date: course.dates.aggregate.start.date,
               })}
             </Typography>
             <Typography color="grey.700">
-              {t('dates.timeFromTo', {
-                from: course.dates.aggregate.start.date,
-                to: course.dates.aggregate.end.date,
+              {t('end')}:{' '}
+              {t('dates.withTime', {
+                date: course.dates.aggregate.end.date,
               })}
             </Typography>
           </Box>
@@ -163,12 +164,15 @@ export const CourseBookingReview: React.FC = () => {
           </Box>
         ))}
         {booking.promoCodes.length ? <Divider sx={{ my: 2 }} /> : null}
-        <Box display="flex" justifyContent="space-between">
+        <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography fontWeight="500">{t('amount-due')} (GBP)</Typography>
           <Typography fontWeight="500">
             {t('currency', { amount: amounts.total })}
           </Typography>
         </Box>
+        <Typography color="grey.700">
+          {t('pages.book-course.due-on', { date: new Date() })}
+        </Typography>
       </Box>
 
       <FormControlLabel

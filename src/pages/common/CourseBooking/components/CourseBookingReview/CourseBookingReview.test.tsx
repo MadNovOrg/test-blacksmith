@@ -17,6 +17,14 @@ jest.mock('../BookingContext', () => ({
 const useBookingMock = jest.mocked(useBooking)
 
 describe('CourseBookingReview', () => {
+  beforeAll(() => {
+    jest.useFakeTimers('modern')
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   const price = 20
   const quantity = 3
   const vat = 10
@@ -69,6 +77,8 @@ describe('CourseBookingReview', () => {
   })
 
   it('matches snapshot', async () => {
+    jest.setSystemTime(new Date(2022, 4, 24))
+
     const view = render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>
