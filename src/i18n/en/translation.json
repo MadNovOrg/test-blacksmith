@@ -21,7 +21,8 @@
       "course-not-found": "Course not found",
       "generic": {
         "record-not-found": "Record not found.",
-        "loading-error": "There was an error loading data."
+        "loading-error": "There was an error loading data.",
+        "invite-accept-error": "Unable to accept invitation"
       }
     },
     "home": "Home",

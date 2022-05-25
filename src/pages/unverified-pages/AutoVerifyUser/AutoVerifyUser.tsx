@@ -1,6 +1,7 @@
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { Auth } from 'aws-amplify'
-import React from 'react'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { useMount } from 'react-use'
 
@@ -13,9 +14,11 @@ import {
 } from '@app/queries/invites/verify-user'
 
 export const AutoVerifyUser = () => {
+  const [error, setError] = useState<string | null>(null)
   const params = useParams()
   const { loadProfile } = useAuth()
   const fetcher = useFetcher()
+  const { t } = useTranslation()
 
   const inviteId = params.id as string
 
@@ -23,12 +26,20 @@ export const AutoVerifyUser = () => {
     fetcher<VerifyUserResponseType, VerifyUserParamsType>(
       VERIFY_USER_MUTATION,
       { inviteId }
-    ).then(async () => {
+    ).then(async resp => {
+      if (!resp.verifyUser) {
+        setError(t('errors.generic.invite-accept-error'))
+        return
+      }
       const currentUser = await Auth.currentUserPoolUser()
       await currentUser.refreshSessionIfPossible()
       await loadProfile(currentUser)
     })
   })
+
+  if (error) {
+    return <Typography>{error}</Typography>
+  }
 
   return <CircularProgress size={50} />
 }
