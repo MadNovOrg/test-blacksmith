@@ -206,10 +206,10 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
                               label={
                                 certificateExpired(certificate.expiryDate ?? '')
                                   ? t(
-                                      `components.certification-list.statuses.expired`
+                                      `components.certification-list.status-expired`
                                     )
                                   : t(
-                                      `components.certification-list.statuses.active`
+                                      `components.certification-list.status-active`
                                     )
                               }
                               color={
