@@ -277,6 +277,7 @@ type SearchTrainer {
 type Podcast {
   id: String!
   name: String!
+  description: String
   mediaUrl: String!
   author: String!
   publishedDate: String!

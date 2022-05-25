@@ -1,4 +1,4 @@
-import { Box, Chip, Link, Typography } from '@mui/material'
+import { Box, BoxProps, Chip, Link, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,13 +13,14 @@ export type Props = {
   id: string
   title: string
   description: string
-  imageUrl: string
+  imageUrl?: string | null
   tags?: Array<{ id: string; name: string }>
-  category: { id: string; name: string }
+  category?: { id: string; name: string }
   publishedDate: string
   isVideo?: boolean
   duration?: number
-}
+  linkTo?: string
+} & BoxProps
 
 export const BlogPostItem: React.FC<Props> = ({
   imageUrl,
@@ -31,27 +32,38 @@ export const BlogPostItem: React.FC<Props> = ({
   category,
   publishedDate,
   duration,
+  linkTo,
+  ...rest
 }) => {
   const { t } = useTranslation()
 
   return (
-    <Box>
-      <Link href={getPostLink(id)} sx={{ marginBottom: 1, display: 'block' }}>
-        {isVideo && duration ? (
-          <VideoThumbnail duration={duration} imageUrl={imageUrl} alt={title} />
-        ) : (
-          <PostImage src={imageUrl} alt={title} />
-        )}
-      </Link>
+    <Box {...rest}>
+      {imageUrl ? (
+        <Link
+          href={linkTo ?? getPostLink(id)}
+          sx={{ marginBottom: 1, display: 'block' }}
+        >
+          {isVideo && duration ? (
+            <VideoThumbnail
+              duration={duration}
+              imageUrl={imageUrl}
+              alt={title}
+            />
+          ) : (
+            <PostImage src={imageUrl} alt={title} />
+          )}
+        </Link>
+      ) : null}
 
-      <PostCategory category={category} />
+      {category && <PostCategory category={category} />}
 
       <Typography
         variant="h5"
         sx={{ color: theme.palette.primary.main, fontWeight: 600 }}
         mb={2}
       >
-        <Link href={getPostLink(id)}>{title}</Link>
+        <Link href={linkTo ?? getPostLink(id)}>{title}</Link>
       </Typography>
 
       <Typography mb={2} variant="body2">

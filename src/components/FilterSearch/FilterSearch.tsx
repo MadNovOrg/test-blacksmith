@@ -1,6 +1,6 @@
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
-import { IconButton, TextField } from '@mui/material'
+import { IconButton, InputProps, TextField } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDebouncedCallback } from 'use-debounce'
@@ -11,12 +11,16 @@ type Props = {
   value?: string
   onChange?: (value: string) => void
   debounce?: number
+  placeholder?: string
+  InputProps?: InputProps
 }
 
 export const FilterSearch: React.FC<Props> = ({
   value = '',
   onChange = noop,
   debounce = 300,
+  InputProps,
+  ...rest
 }) => {
   const { t } = useTranslation()
 
@@ -52,7 +56,9 @@ export const FilterSearch: React.FC<Props> = ({
             <ClearIcon sx={{ fontSize: '1em' }} />
           </IconButton>
         ),
+        ...InputProps,
       }}
+      {...rest}
     />
   )
 }

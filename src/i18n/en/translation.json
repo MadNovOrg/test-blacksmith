@@ -532,7 +532,17 @@
         "title": "Blog",
         "no-post-id-error": "No post ID has been provided"
       },
-      "error": "Error loading"
+      "error": "Error loading",
+      "podcasts": {
+        "featured-label": "New episode",
+        "title": "Podcasts",
+        "list-title": "All podcast episodes",
+        "empty": "There are no podcasts yet.",
+        "pagination-count": "{{start}}-{{end}} of {{total}}",
+        "asc-order": "Oldest",
+        "desc-order": "Newest",
+        "search-placeholder": "Search podcasts"
+      }
     },
     "trainer-base": {
       "create-course": {

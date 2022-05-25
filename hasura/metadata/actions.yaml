@@ -48,6 +48,8 @@ actions:
     definition:
       kind: ""
       handler: '{{ACTIONS_HOST}}/podcasts'
+    permissions:
+      - role: user
     comment: Podcasts list
   - name: searchTrainers
     definition:

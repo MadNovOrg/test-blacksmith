@@ -1,6 +1,12 @@
-import { build, fake, perBuild } from '@jackfranklin/test-data-bot'
+import {
+  build,
+  BuildTimeConfig,
+  fake,
+  perBuild,
+} from '@jackfranklin/test-data-bot'
 import { add, sub } from 'date-fns'
 
+import { Podcast } from '@app/generated/graphql'
 import {
   Address,
   Course,
@@ -303,3 +309,28 @@ export const buildInvite = build<CourseInvite>({
     status: 'PENDING',
   },
 })
+
+export const buildPodcast = build<Podcast>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words()),
+    author: fake(f => f.name.findName()),
+    description: fake(f => f.lorem.sentences()),
+    publishedDate: fake(f => f.date.past().toISOString()),
+    thumbnail: fake(f => f.image.imageUrl()),
+    mediaUrl: fake(f => f.internet.url()),
+  },
+})
+
+export function buildEntities<T>(
+  count: number,
+  buildFunction: (buildTimeConfig?: BuildTimeConfig<T> | undefined) => T
+): T[] {
+  const entities: T[] = []
+
+  for (let i = 0; i < count; i++) {
+    entities.push(buildFunction())
+  }
+
+  return entities
+}

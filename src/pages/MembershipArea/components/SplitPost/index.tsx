@@ -1,4 +1,4 @@
-import { Box, Chip, Link, Typography } from '@mui/material'
+import { Box, BoxProps, Chip, Link, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -13,12 +13,13 @@ export type Props = {
   title: string
   description: string
   label: string
-  imageUrl: string
-  tags: Array<{ id: string; name: string }>
-  category: { id: string; name: string }
+  imageUrl?: string | null
+  tags?: Array<{ id: string; name: string }>
+  category?: { id: string; name: string }
   publishedDate: string
   orientation?: 'left' | 'right'
-}
+  linkTo?: string
+} & BoxProps
 
 export const SplitPost: React.FC<Props> = ({
   id,
@@ -30,6 +31,8 @@ export const SplitPost: React.FC<Props> = ({
   category,
   publishedDate,
   orientation = 'right',
+  linkTo,
+  ...rest
 }) => {
   const { t } = useTranslation()
 
@@ -38,16 +41,20 @@ export const SplitPost: React.FC<Props> = ({
       display="flex"
       alignItems="center"
       flexDirection={orientation === 'left' ? 'row' : 'row-reverse'}
+      {...rest}
     >
       <Box
         mr={orientation === 'left' ? 3 : 0}
         ml={orientation === 'right' ? 3 : 0}
+        flex={1}
       >
-        <Link href={getPostLink(id)}>
-          <PostImage src={imageUrl} alt={title} />
-        </Link>
+        {imageUrl ? (
+          <Link href={linkTo ?? getPostLink(id)}>
+            <PostImage src={imageUrl} alt={title} />
+          </Link>
+        ) : null}
       </Box>
-      <Box>
+      <Box flex={1}>
         {label && (
           <Chip
             sx={{
@@ -59,20 +66,20 @@ export const SplitPost: React.FC<Props> = ({
             label={label}
           />
         )}
-        <PostCategory category={category} />
+        {category && <PostCategory category={category} />}
 
         <Typography
           variant="h5"
           sx={{ color: theme.palette.primary.main, fontWeight: 600 }}
           mb={2}
         >
-          <Link href={getPostLink(id)}>{title}</Link>
+          <Link href={linkTo ?? getPostLink(id)}>{title}</Link>
         </Typography>
         <Typography mb={2} variant="body2">
           {description}
         </Typography>
         <Box display="flex">
-          {tags.map(tag => (
+          {tags?.map(tag => (
             <Chip
               key={tag.id}
               label={<Link href={getTagLink(tag.id)}>{tag.name}</Link>}
