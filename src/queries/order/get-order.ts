@@ -2,6 +2,8 @@ import { gql } from 'graphql-request'
 
 import { Order } from '@app/types'
 
+export type ParamsType = { orderId: string }
+
 export const QUERY = gql`
   query GetOrder($orderId: uuid!) {
     order: order_by_pk(id: $orderId) {
@@ -18,6 +20,4 @@ export const QUERY = gql`
   }
 `
 
-export type ResponseType = {
-  order: Order
-}
+export type ResponseType = { order: Order }

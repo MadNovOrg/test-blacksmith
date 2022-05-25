@@ -39,7 +39,7 @@ export const CourseBookingReview: React.FC = () => {
     if (booking.paymentMethod === PaymentMethod.CC) {
       navigate(`../payment/${order.id}`, { replace: true })
     } else {
-      navigate(`../done?id=${order.id}`, { replace: true })
+      navigate(`../done?order_id=${order.id}`, { replace: true })
     }
   }
 

@@ -43,8 +43,8 @@ export const CourseBookingPayment = () => {
   const isCallback = !!searchParams.get('payment_intent_client_secret')
 
   const onSuccess = useCallback(
-    () => navigate('../done', { replace: true }),
-    [navigate]
+    () => navigate(`../done?order_id=${orderId}`, { replace: true }),
+    [navigate, orderId]
   )
 
   useEffect(() => {

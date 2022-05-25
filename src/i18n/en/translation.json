@@ -18,6 +18,7 @@
     "errors": {
       "loading-participants": "There was an error loading course participants",
       "loading-course": "There was an error loading a course",
+      "loading-order": "Unable to find the order",
       "course-not-found": "Course not found",
       "generic": {
         "record-not-found": "Record not found.",

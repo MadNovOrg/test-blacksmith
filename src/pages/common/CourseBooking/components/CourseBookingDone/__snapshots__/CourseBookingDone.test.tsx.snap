@@ -6,82 +6,138 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="MuiBox-root css-0"
+        class="MuiBox-root css-orciji"
       >
         <div
-          class="css-lyd85o-MuiStack-root"
+          class="MuiContainer-root MuiContainer-maxWidthLg css-nd3jgp-MuiContainer-root"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-16uqwa8-MuiPaper-root-MuiAlert-root"
-            role="alert"
+            class="MuiBox-root css-i3jcei"
           >
             <div
-              class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+              class="MuiBox-root css-1n9f69o"
             >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1vooibu-MuiSvgIcon-root"
-                data-testid="SuccessOutlinedIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
+              <div
+                class="MuiBox-root css-1swh5hj"
               >
-                <path
-                  d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"
+                <div
+                  class="MuiBox-root css-0"
+                  data-testid="create-course-nav"
                 />
-              </svg>
+              </div>
             </div>
             <div
-              class="MuiAlert-message css-acap47-MuiAlert-message"
+              class="MuiBox-root css-1rr4qq7"
             >
-              Your order has been successfully submitted.
+              <div
+                class="MuiBox-root css-0"
+              >
+                <div
+                  class="css-lyd85o-MuiStack-root"
+                >
+                  <div
+                    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-16uqwa8-MuiPaper-root-MuiAlert-root"
+                    role="alert"
+                  >
+                    <div
+                      class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1vooibu-MuiSvgIcon-root"
+                        data-testid="SuccessOutlinedIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="MuiAlert-message css-acap47-MuiAlert-message"
+                    >
+                      Your order has been successfully submitted.
+                    </div>
+                  </div>
+                  <h6
+                    class="MuiTypography-root MuiTypography-subtitle1 css-12kg9eg-MuiTypography-root"
+                  >
+                    Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.
+                  </h6>
+                </div>
+              </div>
             </div>
           </div>
-          <h6
-            class="MuiTypography-root MuiTypography-subtitle1 css-12kg9eg-MuiTypography-root"
-          >
-            Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.
-          </h6>
         </div>
       </div>
     </div>
   </body>,
   "container": <div>
     <div
-      class="MuiBox-root css-0"
+      class="MuiBox-root css-orciji"
     >
       <div
-        class="css-lyd85o-MuiStack-root"
+        class="MuiContainer-root MuiContainer-maxWidthLg css-nd3jgp-MuiContainer-root"
       >
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-16uqwa8-MuiPaper-root-MuiAlert-root"
-          role="alert"
+          class="MuiBox-root css-i3jcei"
         >
           <div
-            class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+            class="MuiBox-root css-1n9f69o"
           >
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1vooibu-MuiSvgIcon-root"
-              data-testid="SuccessOutlinedIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
+            <div
+              class="MuiBox-root css-1swh5hj"
             >
-              <path
-                d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"
+              <div
+                class="MuiBox-root css-0"
+                data-testid="create-course-nav"
               />
-            </svg>
+            </div>
           </div>
           <div
-            class="MuiAlert-message css-acap47-MuiAlert-message"
+            class="MuiBox-root css-1rr4qq7"
           >
-            Your order has been successfully submitted.
+            <div
+              class="MuiBox-root css-0"
+            >
+              <div
+                class="css-lyd85o-MuiStack-root"
+              >
+                <div
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-16uqwa8-MuiPaper-root-MuiAlert-root"
+                  role="alert"
+                >
+                  <div
+                    class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1vooibu-MuiSvgIcon-root"
+                      data-testid="SuccessOutlinedIcon"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="MuiAlert-message css-acap47-MuiAlert-message"
+                  >
+                    Your order has been successfully submitted.
+                  </div>
+                </div>
+                <h6
+                  class="MuiTypography-root MuiTypography-subtitle1 css-12kg9eg-MuiTypography-root"
+                >
+                  Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.
+                </h6>
+              </div>
+            </div>
           </div>
         </div>
-        <h6
-          class="MuiTypography-root MuiTypography-subtitle1 css-12kg9eg-MuiTypography-root"
-        >
-          Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.
-        </h6>
       </div>
     </div>
   </div>,

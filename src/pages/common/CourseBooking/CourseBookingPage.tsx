@@ -4,7 +4,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { BookingProvider, useBooking } from './components/BookingContext'
 import { CourseBookingDetails } from './components/CourseBookingDetails'
-import { CourseBookingDone } from './components/CourseBookingDone'
 import { CourseBookingLayout } from './components/CourseBookingLayout'
 import { CourseBookingPayment } from './components/CourseBookingPayment'
 import { CourseBookingReview } from './components/CourseBookingReview'
@@ -33,11 +32,6 @@ const BookingRoutes: React.FC = () => {
         ) : null}
 
         <Route path="payment/:orderId" element={<CourseBookingPayment />} />
-
-        {/** TODO: constant condition for now but will be replaced with actual one when we start placing orders */}
-        {Date.now() > 0 ? (
-          <Route path="done" element={<CourseBookingDone />} />
-        ) : null}
       </Route>
     </Routes>
   )

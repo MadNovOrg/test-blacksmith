@@ -7,6 +7,7 @@ import { AppLayout } from '@app/components/AppLayout'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
+import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
@@ -86,6 +87,7 @@ function LoggedInRoutes() {
         <Routes>
           <Route path="profile/*" element={<ProfileRoutes />} />
           <Route path="booking/*" element={<CourseBookingPage />} />
+          <Route path="booking/done" element={<CourseBookingDone />} />
 
           {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
           <Route path="registration" element={<CourseRegistrationPage />} />
