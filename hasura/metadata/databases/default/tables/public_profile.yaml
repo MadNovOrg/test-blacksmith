@@ -154,17 +154,3 @@ update_permissions:
         id:
           _eq: X-Hasura-User-Id
       check: null
-event_triggers:
-  - name: create_stripe_user
-    definition:
-      enable_manual: true
-      insert:
-        columns: '*'
-      update:
-        columns:
-          - contact_details
-    retry_conf:
-      num_retries: 3
-      interval_sec: 15
-      timeout_sec: 5
-    webhook: '{{EVENTS_HOST}}/create-stripe-user'
