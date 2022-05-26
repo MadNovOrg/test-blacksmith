@@ -10,7 +10,7 @@ export const XeroConnectQuery = gql`
   }
 `
 
-export type XeroCallbackResp = { status: boolean }
+export type XeroCallbackResp = { xeroCallback: { status: boolean } }
 
 export const XeroCallbackQuery = gql`
   mutation XeroCallback($input: XeroCallbackInput!) {

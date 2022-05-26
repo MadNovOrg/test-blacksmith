@@ -44,10 +44,12 @@ export const XeroConnect: React.FC = () => {
     setState(s => ({ ...s, loading: true }))
 
     try {
-      const { status } = await fetcher<XeroCallbackResp>(XeroCallbackQuery, {
-        input: { url: window.location.href },
-      })
-      if (!status) throw Error('Failed to process callback')
+      const { xeroCallback } = await fetcher<XeroCallbackResp>(
+        XeroCallbackQuery,
+        { input: { url: window.location.href } }
+      )
+
+      if (!xeroCallback.status) throw Error('Failed to process callback')
       setState({ loading: false, consentUrl: '', error: false })
     } catch (err) {
       console.error(err)

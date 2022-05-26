@@ -60,7 +60,7 @@ describe('page: XeroConnect', () => {
     const url = `http://localhost?code=${chance.word()}`
     mockLocationHref.mockReturnValue(url)
 
-    mockFetcher.mockResolvedValueOnce({ status: true })
+    mockFetcher.mockResolvedValueOnce({ xeroCallback: { status: true } })
 
     _render(<XeroConnect />)
 
