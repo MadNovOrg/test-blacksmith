@@ -49,6 +49,7 @@
     "logout": "Logout",
     "registration": "Registration",
     "action": "Action",
+    "org-address": "Organisation address",
     "addr": {
       "line1": "Line 1",
       "line1-placeholder": "Address Line 1",

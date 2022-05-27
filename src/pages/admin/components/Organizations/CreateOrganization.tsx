@@ -25,11 +25,20 @@ import {
   MUTATION,
   ParamsType,
   ResponseType,
-} from '@app/queries/organization/create-org'
+} from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
+import { Address } from '@app/types'
 import { requiredMsg } from '@app/util'
 
-type FormInputs = { orgName: string; workEmail: string }
+type FormInputs = {
+  orgName: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  country: string
+  postCode: string
+  workEmail: string
+}
 
 export const CreateOrganization = () => {
   const theme = useTheme()
@@ -52,6 +61,11 @@ export const CreateOrganization = () => {
         .required(
           requiredMsg(t, 'pages.create-organization.fields.work-email')
         ),
+      addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
+      addressLine2: yup.string(),
+      city: yup.string().required(requiredMsg(t, 'addr.city')),
+      country: yup.string().required(requiredMsg(t, 'addr.country')),
+      postCode: yup.string().required(requiredMsg(t, 'addr.postCode')),
     })
   }, [t])
 
@@ -65,6 +79,11 @@ export const CreateOrganization = () => {
     defaultValues: {
       orgName: '',
       workEmail: '',
+      addressLine1: '',
+      addressLine2: '',
+      city: '',
+      country: '',
+      postCode: '',
     },
   })
 
@@ -77,6 +96,13 @@ export const CreateOrganization = () => {
         attributes: {
           adminEmail: data.workEmail,
         },
+        address: {
+          line1: data.addressLine1,
+          line2: data.addressLine2,
+          city: data.city,
+          country: data.country,
+          postCode: data.postCode,
+        } as Address,
       })
       navigate(`organizations/${response.org.id}`)
     } catch (e: unknown) {
@@ -132,6 +158,76 @@ export const CreateOrganization = () => {
                   {...register('orgName')}
                   inputProps={{ 'data-testid': 'input-org-name' }}
                   sx={{ bgcolor: 'grey.100' }}
+                  fullWidth
+                  required
+                />
+              </FormPanel>
+
+              <Typography variant="subtitle1">
+                {t('common.org-address')}
+              </Typography>
+
+              <FormPanel>
+                <TextField
+                  id="line1"
+                  label={t('common.addr.line1')}
+                  variant="standard"
+                  placeholder={t('common.addr.line1-placeholder')}
+                  error={!!errors.addressLine1}
+                  helperText={errors.addressLine1?.message}
+                  {...register('addressLine1')}
+                  inputProps={{ 'data-testid': 'addr-line1' }}
+                  fullWidth
+                  required
+                />
+
+                <TextField
+                  id="line2"
+                  label={t('addr.line2')}
+                  variant="standard"
+                  placeholder={t('addr.line2-placeholder')}
+                  error={!!errors.addressLine2}
+                  helperText={errors.addressLine2?.message}
+                  {...register('addressLine2')}
+                  inputProps={{ 'data-testid': 'addr-line2' }}
+                  fullWidth
+                />
+
+                <TextField
+                  id="city"
+                  label={t('addr.city')}
+                  variant="standard"
+                  placeholder={t('addr.city')}
+                  error={!!errors.city}
+                  helperText={errors.city?.message}
+                  {...register('city')}
+                  inputProps={{ 'data-testid': 'city' }}
+                  fullWidth
+                  required
+                />
+
+                <TextField
+                  id="country"
+                  label={t('addr.country')}
+                  variant="standard"
+                  placeholder={t('addr.country')}
+                  error={!!errors.country}
+                  helperText={errors.country?.message}
+                  {...register('country')}
+                  inputProps={{ 'data-testid': 'country' }}
+                  fullWidth
+                  required
+                />
+
+                <TextField
+                  id="postCode"
+                  label={t('addr.postCode')}
+                  variant="standard"
+                  placeholder={t('addr.postCode')}
+                  error={!!errors.postCode}
+                  helperText={errors.postCode?.message}
+                  {...register('postCode')}
+                  inputProps={{ 'data-testid': 'postCode' }}
                   fullWidth
                   required
                 />

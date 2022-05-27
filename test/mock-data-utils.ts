@@ -60,7 +60,7 @@ export const buildOrganization = build<Organization>({
     status: 'ENABLED',
     contactDetails: [{ type: 'email', value: fake(f => f.internet.email()) }],
     attributes: [{ attribute: 'value' }],
-    addresses: [buildAddress()],
+    address: buildAddress(),
     preferences: [],
   },
 })

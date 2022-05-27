@@ -69,15 +69,13 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     try {
       const vars = {
         name: data.name,
-        addresses: [
-          {
-            line1: data.addressLine1,
-            line2: data.addressLine2,
-            city: data.city,
-            country: data.country,
-            postCode: data.postCode,
-          } as Address, // TODO: Fix type when backend is updated,
-        ],
+        address: {
+          line1: data.addressLine1,
+          line2: data.addressLine2,
+          city: data.city,
+          country: data.country,
+          postCode: data.postCode,
+        } as Address,
       }
       const { org } = await fetcher<ResponseType, ParamsType>(MUTATION, vars)
       setLoading(false)

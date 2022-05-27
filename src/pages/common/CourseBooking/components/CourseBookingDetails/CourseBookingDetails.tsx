@@ -498,7 +498,7 @@ export const CourseBookingDetails: React.FC = () => {
                     })
                     setValue(
                       'invoiceDetails.billingAddress',
-                      normalizeAddr(org?.addresses?.[0])?.join(',') || '',
+                      normalizeAddr(org?.address)?.join(',') || '',
                       { shouldValidate: true }
                     )
                   }}

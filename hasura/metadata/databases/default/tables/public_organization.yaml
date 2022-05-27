@@ -52,6 +52,7 @@ insert_permissions:
     permission:
       check: {}
       columns:
+        - address
         - attributes
         - name
       backend_only: false
@@ -59,14 +60,14 @@ insert_permissions:
     permission:
       check: {}
       columns:
-        - addresses
+        - address
         - name
       backend_only: false
 select_permissions:
   - role: unverified
     permission:
       columns:
-        - addresses
+        - address
         - attributes
         - contact_details
         - created_at
@@ -81,7 +82,7 @@ select_permissions:
     permission:
       columns:
         - name
-        - addresses
+        - address
         - attributes
         - contact_details
         - original_record

@@ -79,7 +79,7 @@ export type Organization = {
   contactDetails: ContactDetail[]
   members_aggregate: { [key: string]: { [key: string]: number } }
   attributes: { [name: string]: string }
-  addresses: Address[]
+  address: Address
   preferences: { [name: string]: string }
 } & Base
 

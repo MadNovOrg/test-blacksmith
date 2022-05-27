@@ -146,7 +146,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         )}
         renderOption={(props, option) => {
           const isNew = option.id === 'NEW_ORG'
-          const addr = normalizeAddr(option.addresses?.[0])
+          const addr = normalizeAddr(option.address)
 
           return (
             <Box

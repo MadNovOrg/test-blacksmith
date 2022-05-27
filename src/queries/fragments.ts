@@ -8,7 +8,7 @@ export const ORGANIZATION = gql`
     status
     contactDetails
     attributes
-    addresses
+    address
     preferences
     createdAt
     updatedAt

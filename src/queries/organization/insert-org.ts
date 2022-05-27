@@ -8,14 +8,17 @@ export type ResponseType = { org: Organization }
 
 export type ParamsType = {
   name: string
-  addresses: Address[]
+  address: Address
+  attributes?: {
+    adminEmail: string
+  }
 }
 
 export const MUTATION = gql`
   ${ORGANIZATION}
-  mutation InsertOrg($name: String!, $addresses: jsonb!) {
+  mutation InsertOrg($name: String!, $address: jsonb!, $attributes: jsonb) {
     org: insert_organization_one(
-      object: { name: $name, addresses: $addresses }
+      object: { name: $name, address: $address, attributes: $attributes }
     ) {
       ...Organization
     }

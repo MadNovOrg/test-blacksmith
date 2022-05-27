@@ -6,6 +6,7 @@ import useSWR from 'swr'
 import { useAuth } from '@app/context/auth'
 import { getOrganizationWithKeyContacts } from '@app/queries/organization'
 import { Address, ContactDetail } from '@app/types'
+import { normalizeAddr } from '@app/util'
 
 type OrganizationOverviewPageProps = unknown
 
@@ -21,20 +22,9 @@ export const OrganizationOverviewPage: React.FC<
     orgId ? [getOrganizationWithKeyContacts, { id: orgId }] : null
   )
 
-  const renderLocation = (org: { addresses: [Address] }) => {
-    const physical = org.addresses.find(address => address.type === 'physical')
-    return physical
-      ? [
-          physical.line1,
-          physical.line2,
-          physical.city,
-          physical.state,
-          physical.postCode,
-          physical.country,
-        ]
-          .filter(Boolean)
-          .join(', ')
-      : ''
+  const renderLocation = (org: { address: Address }) => {
+    const normalized = normalizeAddr(org?.address)
+    return normalized ? normalized.filter(Boolean).join(', ') : ''
   }
 
   return (
