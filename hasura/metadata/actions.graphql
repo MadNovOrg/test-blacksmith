@@ -83,6 +83,12 @@ type Query {
   xeroConnect: XeroConnectOutput
 }
 
+type Query {
+  xeroContactSearch(
+    input: XeroContactSearchInput!
+  ): XeroContactSearchOutput
+}
+
 enum BillingInterval {
   day
   week
@@ -126,6 +132,12 @@ enum Currency {
 enum OrderDirection {
   ASC
   DESC
+}
+
+enum XeroContactStatus {
+  ACTIVE
+  ARCHIVED
+  GDPRREQUEST
 }
 
 input PlansCreateInput {
@@ -181,6 +193,10 @@ input Paging {
 
 input XeroCallbackInput {
   url: String!
+}
+
+input XeroContactSearchInput {
+  searchTerm: String!
 }
 
 type LinkProfileResult {
@@ -299,5 +315,40 @@ type XeroConnectOutput {
 
 type XeroCallbackOutput {
   status: Boolean!
+}
+
+type XeroContactSearchOutput {
+  contacts: [XeroContact!]!
+}
+
+type XeroContact {
+  contactID: ID!
+  contactNumber: String
+  contactStatus: XeroContactStatus!
+  updatedDateUTC: date
+  isCustomer: Boolean
+  name: String!
+  firstName: String
+  lastName: String
+  emailAddress: String
+  phones: [XeroPhone]
+  addresses: [XeroAddress]
+}
+
+type XeroPhone {
+  phoneType: String
+  phoneCountryCode: String
+  phoneAreaCode: String
+  phoneNumber: String
+}
+
+type XeroAddress {
+  addressType: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  region: String
+  postalCode: String
+  country: String
 }
 

@@ -92,6 +92,12 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/setup'
     permissions:
       - role: tt-admin
+  - name: xeroContactSearch
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/contacts/search'
+    permissions:
+      - role: tt-ops
 custom_types:
   enums:
     - name: BillingInterval
@@ -180,6 +186,17 @@ custom_types:
         - value: DESC
           is_deprecated: null
           description: null
+    - name: XeroContactStatus
+      values:
+        - value: ACTIVE
+          is_deprecated: null
+          description: null
+        - value: ARCHIVED
+          is_deprecated: null
+          description: null
+        - value: GDPRREQUEST
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -190,6 +207,7 @@ custom_types:
     - name: PodcastsInput
     - name: Paging
     - name: XeroCallbackInput
+    - name: XeroContactSearchInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -211,4 +229,8 @@ custom_types:
     - name: PodcastPayload
     - name: XeroConnectOutput
     - name: XeroCallbackOutput
+    - name: XeroContactSearchOutput
+    - name: XeroContact
+    - name: XeroPhone
+    - name: XeroAddress
   scalars: []
