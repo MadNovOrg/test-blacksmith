@@ -48,7 +48,7 @@ export const CreateCourse = () => {
                 </Typography>
 
                 <Typography color={theme.palette.grey[700]}>
-                  {t('pages.create-course.validation-notice')}
+                  {t('common.all-fields-are-mandatory')}
                 </Typography>
               </Box>
 

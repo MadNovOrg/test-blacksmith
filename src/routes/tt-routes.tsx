@@ -5,6 +5,7 @@ import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
 import Contacts from '@app/pages/admin/components/Contacts'
 import Organizations from '@app/pages/admin/components/Organizations'
+import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -55,18 +56,25 @@ const TTAdminRoutes = () => {
 
       <Route path="orders" element={<Orders />} />
 
-      <Route path="admin" element={<AdminPage />}>
-        <Route index element={<Navigate replace to="organizations" />} />
-        <Route path="organizations" element={<Organizations />} />
-        <Route path="contacts" element={<Contacts />} />
+      {acl.isTTAdmin() ? (
+        <Route path="admin" element={<AdminPage />}>
+          <Route index element={<Navigate replace to="organizations" />} />
 
-        {acl.canViewXeroConnect() ? (
-          <Route path="xero">
-            <Route index element={<Navigate replace to="connect" />} />
-            <Route path="connect" element={<XeroConnect />} />
+          <Route path="organizations">
+            <Route index element={<Organizations />} />
+            <Route path="new" element={<CreateOrganization />} />
           </Route>
-        ) : null}
-      </Route>
+
+          <Route path="contacts" element={<Contacts />} />
+
+          {acl.canViewXeroConnect() ? (
+            <Route path="xero">
+              <Route index element={<Navigate replace to="connect" />} />
+              <Route path="connect" element={<XeroConnect />} />
+            </Route>
+          ) : null}
+        </Route>
+      ) : null}
 
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -1,4 +1,5 @@
 import {
+  Button,
   CircularProgress,
   Container,
   Grid,
@@ -10,6 +11,7 @@ import {
 } from '@mui/material'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { TableHead } from '@app/components/Table/TableHead'
@@ -31,6 +33,7 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const Organizations: React.FC<OrganizationsProps> = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const cols = useMemo(
     () => [
       {
@@ -90,6 +93,9 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
           align-items="center"
           sx={{ mb: 2 }}
         >
+          <Button variant="contained" onClick={() => navigate('new')}>
+            Create Org
+          </Button>
           <Table>
             <TableHead
               cols={cols}

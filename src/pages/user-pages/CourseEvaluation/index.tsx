@@ -251,7 +251,7 @@ export const CourseEvaluation = () => {
                 title={t(`course-evaluation.groups.${g}`)}
                 description={
                   isAllRequired(groupedQuestions[g])
-                    ? t('course-evaluation.all-fields-mandatory')
+                    ? t('common.all-fields-are-mandatory')
                     : ''
                 }
               >

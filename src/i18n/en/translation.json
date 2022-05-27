@@ -303,7 +303,8 @@
       "date-range": "Filter by Date"
     },
     "submit-form": "Submit form",
-    "full-name": "Full name"
+    "full-name": "Full name",
+    "all-fields-are-mandatory": "All fields are mandatory."
   },
   "components": {
     "not-found": {
@@ -576,7 +577,6 @@
       "OPEN-course-title": "Open course creation",
       "CLOSED-course-title": "Closed course creation",
       "INDIRECT-course-title": "Indirect course creation",
-      "validation-notice": "All fields are mandatory.",
       "back-button-text": "All courses",
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",
@@ -947,12 +947,24 @@
       "connect-btn": "Connect to Xero",
       "connect-done": "HUB is connected to Xero.",
       "connect-error": "Failed to determine Xero connection status. \nPlease try again later."
+    },
+    "create-organization": {
+      "title": "Create Organisation",
+      "fields": {
+        "organization-name": "Organization name",
+        "work-email": "Work email"
+      },
+      "add-new-organization": "Add new organisation",
+      "organization-details": "Organisation details",
+      "organization-admin-details": "Organisation admin details",
+      "organization-admin-details-subtitle": "Please assign an administrator to this organisation. An Organisation Admin can invite additional users to their organisation.",
+      "email-alert": "Please make sure the email is entered correctly.",
+      "save-organization": "Save organisation"
     }
   },
   "course-evaluation": {
     "heading": "Course Summary Evaluation",
     "trainer-heading": "Trainer summary evaluation",
-    "all-fields-mandatory": "All fields are mandatory",
     "signature-desc": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience.",
     "provide-details": "Please provide details",
     "your-response": "Your response",

@@ -48,6 +48,13 @@ array_relationships:
           schema: public
           name: organization_role
 insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - attributes
+        - name
+      backend_only: false
   - role: unverified
     permission:
       check: {}

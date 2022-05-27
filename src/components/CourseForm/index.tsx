@@ -16,13 +16,13 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@mui/material'
-import { Box, styled } from '@mui/system'
 import { setHours, setMinutes } from 'date-fns'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
+import { FormPanel } from '@app/components/FormPanel'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -45,11 +45,6 @@ import { ProfileSelector } from '../ProfileSelector'
 import { VenueSelector } from '../VenueSelector'
 
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
-
-const FormPanel = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
-  backgroundColor: theme.palette.common.white,
-}))
 
 interface Props {
   type?: CourseType
