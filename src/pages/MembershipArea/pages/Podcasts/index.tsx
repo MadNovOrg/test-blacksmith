@@ -4,6 +4,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Stack,
   Typography,
 } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -100,7 +101,11 @@ export const Podcasts: React.FC = () => {
         <Typography>{t('pages.membership.podcasts.empty')}</Typography>
       ) : null}
 
-      {fetching && !featuredPodcast ? <CircularProgress /> : null}
+      {fetching && !featuredPodcast ? (
+        <Stack alignItems="center" justifyContent="center">
+          <CircularProgress />
+        </Stack>
+      ) : null}
 
       {featuredPodcast && (
         <Box mb={8}>

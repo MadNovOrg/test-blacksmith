@@ -543,7 +543,12 @@
         "pagination-count": "{{start}}-{{end}} of {{total}}",
         "asc-order": "Oldest",
         "desc-order": "Newest",
-        "search-placeholder": "Search podcasts"
+        "search-placeholder": "Search podcasts",
+        "error-loading-podcast": "There was an error loading the podcast",
+        "author": "by {{author}}",
+        "recent": "Recent podcast episodes",
+        "not-found": "Podcast not found",
+        "episode-number": "Episode #{{number}}"
       }
     },
     "trainer-base": {

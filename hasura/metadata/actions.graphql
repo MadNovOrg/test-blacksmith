@@ -298,6 +298,7 @@ type Podcast {
   author: String!
   publishedDate: String!
   thumbnail: String
+  episodeNumber: Int!
 }
 
 type PodcastsPayload {

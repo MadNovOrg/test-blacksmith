@@ -10,6 +10,7 @@ import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
 import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -75,6 +76,7 @@ const TrainerBaseRoutes = () => {
         </Route>
         <Route path="podcasts">
           <Route index element={<Podcasts />} />
+          <Route path=":id" element={<Podcast />} />
         </Route>
       </Route>
 

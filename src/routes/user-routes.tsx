@@ -6,6 +6,7 @@ import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
 import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
@@ -64,6 +65,7 @@ const UserRoutes = () => {
         </Route>
         <Route path="podcasts">
           <Route index element={<Podcasts />} />
+          <Route path=":id" element={<Podcast />} />
         </Route>
       </Route>
 

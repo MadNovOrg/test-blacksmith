@@ -33,11 +33,10 @@ type Props = {
   thumbnailUrl: string
   title: string
   author: string
-  duration: number
   mediaUrl: string
 }
 
-export const Podcast: React.FC<Props> = ({
+export const PodcastPlayer: React.FC<Props> = ({
   title,
   author,
   thumbnailUrl,
@@ -49,25 +48,37 @@ export const Podcast: React.FC<Props> = ({
   const [progress, setProgress] = useState<number>(0)
 
   useEffect(() => {
-    if (audio.current) {
-      audio.current?.addEventListener('loadedmetadata', () => {
-        if (audio.current) {
-          setSecondsLeft(audio.current.duration)
-        }
-      })
+    const audioNode = audio.current
 
-      audio.current.addEventListener('ended', () => {
-        setIsPlaying(false)
-      })
+    const onLoadedMetadata = () => {
+      if (audioNode) {
+        setSecondsLeft(audio.current.duration)
+      }
+    }
 
-      audio.current.addEventListener('timeupdate', () => {
-        if (audio.current) {
-          setSecondsLeft(audio.current.duration - audio.current.currentTime)
-          setProgress(
-            (audio.current.currentTime / audio.current.duration) * 100
-          )
-        }
-      })
+    const onEnded = () => {
+      setIsPlaying(false)
+    }
+
+    const onTimeUpdate = () => {
+      if (audioNode) {
+        setSecondsLeft(audioNode.duration - audioNode.currentTime)
+        setProgress((audioNode.currentTime / audioNode.duration) * 100)
+      }
+    }
+
+    if (audioNode) {
+      audioNode?.addEventListener('loadedmetadata', onLoadedMetadata)
+      audioNode.addEventListener('ended', onEnded)
+      audioNode.addEventListener('timeupdate', onTimeUpdate)
+    }
+
+    return () => {
+      if (audioNode) {
+        audioNode.removeEventListener('loadedmetadata', onLoadedMetadata)
+        audioNode.removeEventListener('ended', onEnded)
+        audioNode.removeEventListener('timeupdate', onTimeUpdate)
+      }
     }
   }, [])
 

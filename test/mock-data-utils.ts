@@ -319,6 +319,7 @@ export const buildPodcast = build<Podcast>({
     publishedDate: fake(f => f.date.past().toISOString()),
     thumbnail: fake(f => f.image.imageUrl()),
     mediaUrl: fake(f => f.internet.url()),
+    episodeNumber: fake(f => f.datatype.number({ max: 50, min: 1 })),
   },
 })
 

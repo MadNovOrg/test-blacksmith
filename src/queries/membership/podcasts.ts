@@ -11,6 +11,7 @@ export const QUERY = gql`
         mediaUrl
         author
         description
+        episodeNumber
       }
       total
     }

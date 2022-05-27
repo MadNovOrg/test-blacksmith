@@ -3388,6 +3388,7 @@ export type Podcast = {
   __typename?: 'Podcast';
   author: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  episodeNumber: Scalars['Int'];
   id: Scalars['String'];
   mediaUrl: Scalars['String'];
   name: Scalars['String'];
@@ -7252,6 +7253,20 @@ export type WritingSettings = {
   defaultPostFormat?: Maybe<Scalars['String']>;
   /** Convert emoticons like :-) and :-P to graphics on display. */
   useSmilies?: Maybe<Scalars['Boolean']>;
+};
+
+export type XeroCallbackInput = {
+  url: Scalars['String'];
+};
+
+export type XeroCallbackOutput = {
+  __typename?: 'XeroCallbackOutput';
+  status: Scalars['Boolean'];
+};
+
+export type XeroConnectOutput = {
+  __typename?: 'XeroConnectOutput';
+  consentUrl?: Maybe<Scalars['String']>;
 };
 
 export type ZoomMeeting = {
@@ -14121,6 +14136,8 @@ export type Mutation_Root = {
   update_xero_credential_by_pk?: Maybe<Xero_Credential>;
   /** Creates or updates Zoom meeting with start date */
   upsertZoomMeeting?: Maybe<UpsertZoomMeetingPayload>;
+  verifyUser: Scalars['Boolean'];
+  xeroCallback?: Maybe<XeroCallbackOutput>;
 };
 
 
@@ -16244,6 +16261,18 @@ export type Mutation_RootUpdate_Xero_Credential_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpsertZoomMeetingArgs = {
   input?: InputMaybe<UpsertZoomMeetingInput>;
+};
+
+
+/** mutation root */
+export type Mutation_RootVerifyUserArgs = {
+  inviteId: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootXeroCallbackArgs = {
+  input: XeroCallbackInput;
 };
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
@@ -20022,6 +20051,7 @@ export type Query_Root = {
   waitlist_by_pk?: Maybe<Waitlist>;
   /** Fields of the &#039;WritingSettings&#039; settings group */
   writingSettings?: Maybe<WritingSettings>;
+  xeroConnect?: Maybe<XeroConnectOutput>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
@@ -23825,6 +23855,18 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }> } | null };
 
+export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type XeroConnectQuery = { __typename?: 'query_root', xeroConnect?: { __typename?: 'XeroConnectOutput', consentUrl?: string | null } | null };
+
+export type XeroCallbackMutationVariables = Exact<{
+  input: XeroCallbackInput;
+}>;
+
+
+export type XeroCallbackMutation = { __typename?: 'mutation_root', xeroCallback?: { __typename?: 'XeroCallbackOutput', status: boolean } | null };
+
 export type ProfilesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -24100,12 +24142,28 @@ export type SaveCourseInvitesMutationVariables = Exact<{
 
 export type SaveCourseInvitesMutation = { __typename?: 'mutation_root', insert_course_invites?: { __typename?: 'course_invites_mutation_response', returning: Array<{ __typename?: 'course_invites', id: any }> } | null };
 
+export type VerifyUserMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
+
+
+export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
+
+export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number };
+
+export type PodcastQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type PodcastQuery = { __typename?: 'query_root', podcast?: { __typename?: 'PodcastPayload', podcast?: { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number } | null } | null, recentPodcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number }> } | null };
+
 export type PodcastsQueryVariables = Exact<{
   input: PodcastsInput;
 }>;
 
 
-export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail?: string | null, publishedDate: string, mediaUrl: string, author: string, description?: string | null }> } | null };
+export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail?: string | null, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null };
 
 export type ModuleGroupsQueryVariables = Exact<{
   level: Course_Level_Enum;
@@ -24185,6 +24243,13 @@ export type CourseParticipantsQueryVariables = Exact<{
 
 
 export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', fullName?: string | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string } | null, course: { __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level?: Course_Level_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null } }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+
+export type DeleteTempProfileMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type DeleteTempProfileMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
 
 export type FindProfilesQueryVariables = Exact<{
   where?: InputMaybe<Profile_Bool_Exp>;

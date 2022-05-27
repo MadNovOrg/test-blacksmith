@@ -43,6 +43,8 @@ actions:
     definition:
       kind: ""
       handler: '{{ACTIONS_HOST}}/podcasts/single'
+    permissions:
+      - role: user
     comment: Podcast
   - name: podcasts
     definition:
