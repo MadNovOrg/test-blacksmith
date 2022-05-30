@@ -88,12 +88,12 @@ export const InvitationPage = () => {
         CreateUserParamsType
       >(CREATE_USER_MUTATION, {}, { headers: { 'x-auth': `Bearer ${token}` } })
 
-      if (!resp.createAppUser.authChallenge) {
+      if (!resp.createUser.authChallenge) {
         // TODO: handle error?
         return
       }
 
-      const { email, authChallenge } = resp.createAppUser
+      const { email, authChallenge } = resp.createUser
       const user = await Auth.signIn(email)
       await Auth.sendCustomChallengeAnswer(user, authChallenge)
 

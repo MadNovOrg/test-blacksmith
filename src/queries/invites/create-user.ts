@@ -3,12 +3,12 @@ import { gql } from 'graphql-request'
 export type ParamsType = unknown
 
 export type ResponseType = {
-  createAppUser: { id: string; email: string; authChallenge: string | null }
+  createUser: { id: string; email: string; authChallenge: string | null }
 }
 
 export const MUTATION = gql`
-  mutation CreateAppUser {
-    createAppUser {
+  mutation CreateUser {
+    createUser {
       id
       email
       authChallenge
