@@ -4,6 +4,12 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/create'
     comment: Creates a membership subscription
+  - name: createUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/create'
+    permissions:
+      - role: anonymous
   - name: declineInvite
     definition:
       kind: synchronous
@@ -235,4 +241,5 @@ custom_types:
     - name: XeroContact
     - name: XeroPhone
     - name: XeroAddress
+    - name: CreateUserOutput
   scalars: []

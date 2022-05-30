@@ -17,15 +17,21 @@ import {
   Link,
   TextField,
 } from '@mui/material'
+import { Auth } from 'aws-amplify'
 import { differenceInDays } from 'date-fns'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { Logo } from '@app/components/Logo'
 import { gqlRequest } from '@app/lib/gql-request'
+import {
+  MUTATION as CREATE_USER_MUTATION,
+  ParamsType as CreateUserParamsType,
+  ResponseType as CreateUserResponseType,
+} from '@app/queries/invites/create-user'
 import {
   MUTATION as DECLINE_INVITE_MUTATION,
   ParamsType as DeclineInviteParamsType,
@@ -35,11 +41,12 @@ import {
   QUERY as GET_INVITE_QUERY,
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
-import { GqlError, InviteStatus, RoleName } from '@app/types'
+import { GqlError, InviteStatus } from '@app/types'
 import { now } from '@app/util'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
   const [note, setNote] = useState<string>('')
@@ -76,10 +83,21 @@ export const InvitationPage = () => {
 
   const handleSubmit = async () => {
     if (response === 'yes') {
-      // Using window.location instead of react-router navigate() because role from query param is picked up only on app load
-      window.location.href = `/accept-invite/${inviteId}?courseId=${courseId}&role=${RoleName.USER}`
+      const resp = await gqlRequest<
+        CreateUserResponseType,
+        CreateUserParamsType
+      >(CREATE_USER_MUTATION, {}, { headers: { 'x-auth': `Bearer ${token}` } })
 
-      return
+      if (!resp.createAppUser.authChallenge) {
+        // TODO: handle error?
+        return
+      }
+
+      const { email, authChallenge } = resp.createAppUser
+      const user = await Auth.signIn(email)
+      await Auth.sendCustomChallengeAnswer(user, authChallenge)
+
+      return navigate(`/accept-invite/${inviteId}?courseId=${courseId}`)
     }
 
     setIsLoading(true)

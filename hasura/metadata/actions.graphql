@@ -6,6 +6,10 @@ type Mutation {
 }
 
 type Mutation {
+  createUser: CreateUserOutput
+}
+
+type Mutation {
   declineInvite(
     note: String
   ): DeclineInviteOutput
@@ -353,3 +357,9 @@ type XeroAddress {
   country: String
 }
 
+type CreateUserOutput {
+  cognitoId: String!
+  profileId: String!
+  email: String!
+  authChallenge: String!
+}

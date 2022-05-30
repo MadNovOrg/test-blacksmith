@@ -6,6 +6,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppLayout } from '@app/components/AppLayout'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import { AutoLoginUser } from '@app/pages/common/AutoLoginUser'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
 import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
@@ -91,6 +92,7 @@ function LoggedInRoutes() {
 
           {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
           <Route path="registration" element={<CourseRegistrationPage />} />
+          <Route path="accept-invite/:id" element={<AutoLoginUser />} />
 
           <Route path="*" element={<RouteComp />} />
 
