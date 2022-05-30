@@ -37,8 +37,8 @@ export class MyCoursesPage extends BasePage {
     this.userMenu = new UserMenu(this.page)
     this.roleSwitcher = new RoleSwitcher(this.page)
     this.searchInput = this.page.locator('[data-testid="FilterSearch-Input"]')
-    this.filterBy = (text: string) =>
-      this.page.locator(`[data-testid="filter-by"]:has-text("${text}")`)
+    this.filterBy = (testId: string) =>
+      this.page.locator(`[data-testid="${testId}"]`)
     this.filterItem = (text: string) =>
       this.page.locator(`[data-testid="filter-item"]:has-text("${text}")`)
     this.tableRoot = this.page.locator('table[data-testid="courses-table"]')
@@ -71,10 +71,12 @@ export class MyCoursesPage extends BasePage {
     await this.searchInput.fill(text)
   }
 
-  async filterCourses(filterByText: string, items: string[]) {
-    await this.filterBy(filterByText).click()
+  async filterCourses(filterTestId: string, items: string[]) {
+    await this.filterBy(filterTestId).click()
     for (const item of items) {
-      await this.filterItem(item).click()
+      await this.page
+        .locator(`[data-testid="FilterCourseLevel-option"]:has-text("${item}")`)
+        .click()
     }
   }
 

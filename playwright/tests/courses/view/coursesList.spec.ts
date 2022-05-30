@@ -62,6 +62,9 @@ test('my courses search', async ({ page, courseSearchText, searchResults }) => {
 test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  await myCoursesPage.filterCourses('Level', ['Level One', 'Level Two'])
+  await myCoursesPage.filterCourses('FilterCourseLevel', [
+    'Level One',
+    'Level Two',
+  ])
   await myCoursesPage.checkRows(oneTwoLevelCourses)
 })

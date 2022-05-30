@@ -1,6 +1,8 @@
 import { Locator, Page } from '@playwright/test'
+import { format } from 'date-fns'
 
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { BASE_URL } from '../../constants'
 import { Course } from '../../data/types'
@@ -110,12 +112,12 @@ export class CreateCoursePage extends BasePage {
 
   async setStartDateTime(dateTime: Date) {
     await this.startTimeInput.fill(toUiTime(dateTime))
-    await this.startDateInput.fill(dateTime.toISOString().substring(0, 10))
+    await this.startDateInput.fill(format(dateTime, INPUT_DATE_FORMAT))
   }
 
   async setEndDateTime(dateTime: Date) {
     await this.endTimeInput.fill(toUiTime(dateTime))
-    await this.endDateInput.fill(dateTime.toISOString().substring(0, 10))
+    await this.endDateInput.fill(format(dateTime, INPUT_DATE_FORMAT))
   }
 
   async setMinAttendees(value: number) {
