@@ -8,6 +8,7 @@ actions:
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/user/create'
+      forward_client_headers: true
     permissions:
       - role: anonymous
   - name: declineInvite

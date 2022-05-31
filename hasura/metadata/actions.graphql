@@ -361,5 +361,6 @@ type CreateUserOutput {
   cognitoId: String!
   profileId: String!
   email: String!
-  authChallenge: String!
+  authChallenge: String
 }
+
