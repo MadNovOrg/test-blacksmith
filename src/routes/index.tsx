@@ -71,6 +71,7 @@ function LoggedOutRoutes() {
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
       />
+      <Route path="accept-invite/:id" element={<AutoLoginUser />} />
     </Routes>
   )
 }
@@ -92,7 +93,6 @@ function LoggedInRoutes() {
 
           {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
           <Route path="registration" element={<CourseRegistrationPage />} />
-          <Route path="accept-invite/:id" element={<AutoLoginUser />} />
 
           <Route path="*" element={<RouteComp />} />
 
