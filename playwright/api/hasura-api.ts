@@ -9,7 +9,12 @@ import {
 } from '@app/generated/graphql'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
-import { CourseLevel, InviteStatus } from '@app/types'
+import {
+  CourseLevel,
+  CourseModule,
+  CourseParticipant,
+  InviteStatus,
+} from '@app/types'
 
 import { HASURA_BASE_URL } from '../constants'
 import { Course, User } from '../data/types'
@@ -229,27 +234,40 @@ export const getModuleIds = async (
 export const insertCourseModules = async (
   courseId: number,
   moduleIds: string[]
-) => {
+): Promise<CourseModule[]> => {
   const modules = moduleIds.map(id => ({ courseId: courseId, moduleId: id }))
   const query = gql`
     mutation MyMutation($objects: [course_module_insert_input!] = []) {
       insert_course_module(objects: $objects) {
         affected_rows
+        returning {
+          module {
+            moduleGroup {
+              name
+            }
+          }
+        }
       }
     }
   `
   try {
-    await getClient().request(query, { objects: modules })
+    const response = await getClient().request<{
+      insert_course_module: { returning: CourseModule[] }
+    }>(query, { objects: modules })
+
+    return response.insert_course_module.returning
   } catch (e) {
     console.error(e)
   }
+
+  return []
 }
 
 export const insertCourseParticipants = async (
   courseId: number,
   users: User[],
   bookingDate: Date
-) => {
+): Promise<CourseParticipant[]> => {
   const participants = []
   for (const user of users) {
     const profileId = await getProfileId(user.email)
@@ -268,17 +286,32 @@ export const insertCourseParticipants = async (
     })
   }
   const query = gql`
-    mutation MyMutation($objects: [course_participant_insert_input!] = []) {
+    mutation InsertCourseParticipants(
+      $objects: [course_participant_insert_input!] = []
+    ) {
       insert_course_participant(objects: $objects) {
         affected_rows
+        returning {
+          id
+          profile {
+            id
+            fullName
+          }
+        }
       }
     }
   `
   try {
-    await getClient().request(query, { objects: participants })
+    const response = await getClient().request<{
+      insert_course_participant: { returning: CourseParticipant[] }
+    }>(query, { objects: participants })
+
+    return response.insert_course_participant.returning
   } catch (e) {
     console.error(e)
   }
+
+  return []
 }
 
 export async function getAllPodcasts(): Promise<Podcast[]> {
