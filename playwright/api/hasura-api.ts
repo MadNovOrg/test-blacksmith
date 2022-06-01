@@ -1,5 +1,14 @@
 import { GraphQLClient, gql } from 'graphql-request'
 
+import {
+  Podcast,
+  PodcastQuery,
+  PodcastQueryVariables,
+  PodcastsQuery,
+  PodcastsQueryVariables,
+} from '@app/generated/graphql'
+import PODCAST_QUERY from '@app/queries/membership/podcast'
+import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import { CourseLevel, InviteStatus } from '@app/types'
 
 import { HASURA_BASE_URL } from '../constants'
@@ -270,4 +279,26 @@ export const insertCourseParticipants = async (
   } catch (e) {
     console.error(e)
   }
+}
+
+export async function getAllPodcasts(): Promise<Podcast[]> {
+  const client = getClient()
+
+  const response = await client.request<PodcastsQuery, PodcastsQueryVariables>(
+    PODCASTS_QUERY,
+    { input: { paging: { page: 1, perPage: 1000 } } }
+  )
+
+  return response.podcasts?.records ?? []
+}
+
+export async function getPodcastById(id: string): Promise<Podcast | null> {
+  const client = getClient()
+
+  const response = await client.request<PodcastQuery, PodcastQueryVariables>(
+    PODCAST_QUERY,
+    { id }
+  )
+
+  return response.podcast?.podcast ?? null
 }

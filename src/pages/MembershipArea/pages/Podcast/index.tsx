@@ -64,7 +64,12 @@ export const Podcast: React.FC = () => {
             <Typography variant="body2" fontWeight={600} mb={3}>
               <Link href="../">{t('pages.membership.podcasts.title')}</Link>
             </Typography>
-            <Typography variant="h1" color="primary" mb={3}>
+            <Typography
+              variant="h1"
+              color="primary"
+              mb={3}
+              data-testid="podcast-title"
+            >
               {data.podcast.podcast.name}
             </Typography>
             <Typography
@@ -109,8 +114,8 @@ export const Podcast: React.FC = () => {
             rowSpacing={5}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            {data.recentPodcasts.records.map(podcast => (
-              <Grid item key={podcast.id} xs={3}>
+            {data.recentPodcasts.records.map((podcast, index) => (
+              <Grid item key={podcast.id} xs={3} data-grid-item={index}>
                 <BlogPostItem
                   id={podcast.id}
                   imageUrl={podcast.thumbnail}

@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-export const QUERY = gql`
+export default gql`
   query Podcasts($input: PodcastsInput!) {
     podcasts(input: $input) {
       records {

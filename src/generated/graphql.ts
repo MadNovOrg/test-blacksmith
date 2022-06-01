@@ -3393,7 +3393,7 @@ export type Podcast = {
   mediaUrl: Scalars['String'];
   name: Scalars['String'];
   publishedDate: Scalars['String'];
-  thumbnail?: Maybe<Scalars['String']>;
+  thumbnail: Scalars['String'];
 };
 
 export type PodcastPayload = {
@@ -4602,6 +4602,631 @@ export type RestoreCommentPayload = {
   comment?: Maybe<Comment>;
   /** The ID of the restored comment */
   restoredId?: Maybe<Scalars['ID']>;
+};
+
+export type RootMutation = {
+  __typename?: 'RootMutation';
+  /** The payload for the createCategory mutation */
+  createCategory?: Maybe<CreateCategoryPayload>;
+  /** The payload for the createComment mutation */
+  createComment?: Maybe<CreateCommentPayload>;
+  /** The payload for the createMediaItem mutation */
+  createMediaItem?: Maybe<CreateMediaItemPayload>;
+  /** The payload for the createPage mutation */
+  createPage?: Maybe<CreatePagePayload>;
+  /** The payload for the createPost mutation */
+  createPost?: Maybe<CreatePostPayload>;
+  /** The payload for the createPostFormat mutation */
+  createPostFormat?: Maybe<CreatePostFormatPayload>;
+  /** The payload for the createTag mutation */
+  createTag?: Maybe<CreateTagPayload>;
+  /** The payload for the createUser mutation */
+  createUser?: Maybe<CreateUserPayload>;
+  /** The payload for the deleteCategory mutation */
+  deleteCategory?: Maybe<DeleteCategoryPayload>;
+  /** The payload for the deleteComment mutation */
+  deleteComment?: Maybe<DeleteCommentPayload>;
+  /** The payload for the deleteMediaItem mutation */
+  deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
+  /** The payload for the deletePage mutation */
+  deletePage?: Maybe<DeletePagePayload>;
+  /** The payload for the deletePost mutation */
+  deletePost?: Maybe<DeletePostPayload>;
+  /** The payload for the deletePostFormat mutation */
+  deletePostFormat?: Maybe<DeletePostFormatPayload>;
+  /** The payload for the deleteTag mutation */
+  deleteTag?: Maybe<DeleteTagPayload>;
+  /** The payload for the deleteUser mutation */
+  deleteUser?: Maybe<DeleteUserPayload>;
+  /** Increase the count. */
+  increaseCount?: Maybe<Scalars['Int']>;
+  /** The payload for the registerUser mutation */
+  registerUser?: Maybe<RegisterUserPayload>;
+  /** The payload for the resetUserPassword mutation */
+  resetUserPassword?: Maybe<ResetUserPasswordPayload>;
+  /** The payload for the restoreComment mutation */
+  restoreComment?: Maybe<RestoreCommentPayload>;
+  /** The payload for the sendPasswordResetEmail mutation */
+  sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
+  /** The payload for the UpdateCategory mutation */
+  updateCategory?: Maybe<UpdateCategoryPayload>;
+  /** The payload for the updateComment mutation */
+  updateComment?: Maybe<UpdateCommentPayload>;
+  /** The payload for the updateMediaItem mutation */
+  updateMediaItem?: Maybe<UpdateMediaItemPayload>;
+  /** The payload for the updatePage mutation */
+  updatePage?: Maybe<UpdatePagePayload>;
+  /** The payload for the updatePost mutation */
+  updatePost?: Maybe<UpdatePostPayload>;
+  /** The payload for the UpdatePostFormat mutation */
+  updatePostFormat?: Maybe<UpdatePostFormatPayload>;
+  /** The payload for the updateSettings mutation */
+  updateSettings?: Maybe<UpdateSettingsPayload>;
+  /** The payload for the UpdateTag mutation */
+  updateTag?: Maybe<UpdateTagPayload>;
+  /** The payload for the updateUser mutation */
+  updateUser?: Maybe<UpdateUserPayload>;
+};
+
+
+export type RootMutationCreateCategoryArgs = {
+  input: CreateCategoryInput;
+};
+
+
+export type RootMutationCreateCommentArgs = {
+  input: CreateCommentInput;
+};
+
+
+export type RootMutationCreateMediaItemArgs = {
+  input: CreateMediaItemInput;
+};
+
+
+export type RootMutationCreatePageArgs = {
+  input: CreatePageInput;
+};
+
+
+export type RootMutationCreatePostArgs = {
+  input: CreatePostInput;
+};
+
+
+export type RootMutationCreatePostFormatArgs = {
+  input: CreatePostFormatInput;
+};
+
+
+export type RootMutationCreateTagArgs = {
+  input: CreateTagInput;
+};
+
+
+export type RootMutationCreateUserArgs = {
+  input: CreateUserInput;
+};
+
+
+export type RootMutationDeleteCategoryArgs = {
+  input: DeleteCategoryInput;
+};
+
+
+export type RootMutationDeleteCommentArgs = {
+  input: DeleteCommentInput;
+};
+
+
+export type RootMutationDeleteMediaItemArgs = {
+  input: DeleteMediaItemInput;
+};
+
+
+export type RootMutationDeletePageArgs = {
+  input: DeletePageInput;
+};
+
+
+export type RootMutationDeletePostArgs = {
+  input: DeletePostInput;
+};
+
+
+export type RootMutationDeletePostFormatArgs = {
+  input: DeletePostFormatInput;
+};
+
+
+export type RootMutationDeleteTagArgs = {
+  input: DeleteTagInput;
+};
+
+
+export type RootMutationDeleteUserArgs = {
+  input: DeleteUserInput;
+};
+
+
+export type RootMutationIncreaseCountArgs = {
+  count?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootMutationRegisterUserArgs = {
+  input: RegisterUserInput;
+};
+
+
+export type RootMutationResetUserPasswordArgs = {
+  input: ResetUserPasswordInput;
+};
+
+
+export type RootMutationRestoreCommentArgs = {
+  input: RestoreCommentInput;
+};
+
+
+export type RootMutationSendPasswordResetEmailArgs = {
+  input: SendPasswordResetEmailInput;
+};
+
+
+export type RootMutationUpdateCategoryArgs = {
+  input: UpdateCategoryInput;
+};
+
+
+export type RootMutationUpdateCommentArgs = {
+  input: UpdateCommentInput;
+};
+
+
+export type RootMutationUpdateMediaItemArgs = {
+  input: UpdateMediaItemInput;
+};
+
+
+export type RootMutationUpdatePageArgs = {
+  input: UpdatePageInput;
+};
+
+
+export type RootMutationUpdatePostArgs = {
+  input: UpdatePostInput;
+};
+
+
+export type RootMutationUpdatePostFormatArgs = {
+  input: UpdatePostFormatInput;
+};
+
+
+export type RootMutationUpdateSettingsArgs = {
+  input: UpdateSettingsInput;
+};
+
+
+export type RootMutationUpdateTagArgs = {
+  input: UpdateTagInput;
+};
+
+
+export type RootMutationUpdateUserArgs = {
+  input: UpdateUserInput;
+};
+
+export type RootQuery = {
+  __typename?: 'RootQuery';
+  /** Entry point to get all settings for the site */
+  allSettings?: Maybe<Settings>;
+  /** Connection between the RootQuery type and the category type */
+  categories?: Maybe<RootQueryToCategoryConnection>;
+  /** A 0bject */
+  category?: Maybe<Category>;
+  /** Returns a Comment */
+  comment?: Maybe<Comment>;
+  /** Connection between the RootQuery type and the Comment type */
+  comments?: Maybe<RootQueryToCommentConnection>;
+  /** A node used to manage content */
+  contentNode?: Maybe<ContentNode>;
+  /** Connection between the RootQuery type and the ContentNode type */
+  contentNodes?: Maybe<RootQueryToContentNodeConnection>;
+  /** Fetch a Content Type node by unique Identifier */
+  contentType?: Maybe<ContentType>;
+  /** Connection between the RootQuery type and the ContentType type */
+  contentTypes?: Maybe<RootQueryToContentTypeConnection>;
+  /** Fields of the &#039;DiscussionSettings&#039; settings group */
+  discussionSettings?: Maybe<DiscussionSettings>;
+  /** Fields of the &#039;GeneralSettings&#039; settings group */
+  generalSettings?: Maybe<GeneralSettings>;
+  /** An object of the mediaItem Type.  */
+  mediaItem?: Maybe<MediaItem>;
+  /** A mediaItem object */
+  mediaItemBy?: Maybe<MediaItem>;
+  /** Connection between the RootQuery type and the mediaItem type */
+  mediaItems?: Maybe<RootQueryToMediaItemConnection>;
+  /** A WordPress navigation menu */
+  menu?: Maybe<Menu>;
+  /** A WordPress navigation menu item */
+  menuItem?: Maybe<MenuItem>;
+  /** Connection between the RootQuery type and the MenuItem type */
+  menuItems?: Maybe<RootQueryToMenuItemConnection>;
+  /** Connection between the RootQuery type and the Menu type */
+  menus?: Maybe<RootQueryToMenuConnection>;
+  /** Fetches an object given its ID */
+  node?: Maybe<Node>;
+  /** Fetches an object given its Unique Resource Identifier */
+  nodeByUri?: Maybe<UniformResourceIdentifiable>;
+  /** An object of the page Type.  */
+  page?: Maybe<Page>;
+  /** A page object */
+  pageBy?: Maybe<Page>;
+  /** Connection between the RootQuery type and the page type */
+  pages?: Maybe<RootQueryToPageConnection>;
+  /** A WordPress plugin */
+  plugin?: Maybe<Plugin>;
+  /** Connection between the RootQuery type and the Plugin type */
+  plugins?: Maybe<RootQueryToPluginConnection>;
+  /** An object of the post Type.  */
+  post?: Maybe<Post>;
+  /** A post object */
+  postBy?: Maybe<Post>;
+  /** A 0bject */
+  postFormat?: Maybe<PostFormat>;
+  /** Connection between the RootQuery type and the postFormat type */
+  postFormats?: Maybe<RootQueryToPostFormatConnection>;
+  /** Connection between the RootQuery type and the post type */
+  posts?: Maybe<RootQueryToPostConnection>;
+  /** Fields of the &#039;ReadingSettings&#039; settings group */
+  readingSettings?: Maybe<ReadingSettings>;
+  /** Connection between the RootQuery type and the EnqueuedScript type */
+  registeredScripts?: Maybe<RootQueryToEnqueuedScriptConnection>;
+  /** Connection between the RootQuery type and the EnqueuedStylesheet type */
+  registeredStylesheets?: Maybe<RootQueryToEnqueuedStylesheetConnection>;
+  /** Connection between the RootQuery type and the ContentRevisionUnion type */
+  revisions?: Maybe<RootQueryToContentRevisionUnionConnection>;
+  /** A 0bject */
+  tag?: Maybe<Tag>;
+  /** Connection between the RootQuery type and the tag type */
+  tags?: Maybe<RootQueryToTagConnection>;
+  /** Connection between the RootQuery type and the Taxonomy type */
+  taxonomies?: Maybe<RootQueryToTaxonomyConnection>;
+  /** Fetch a Taxonomy node by unique Identifier */
+  taxonomy?: Maybe<Taxonomy>;
+  /** A node in a taxonomy used to group and relate content nodes */
+  termNode?: Maybe<TermNode>;
+  /** Connection between the RootQuery type and the TermNode type */
+  terms?: Maybe<RootQueryToTermNodeConnection>;
+  /** A Theme object */
+  theme?: Maybe<Theme>;
+  /** Connection between the RootQuery type and the Theme type */
+  themes?: Maybe<RootQueryToThemeConnection>;
+  /** Returns a user */
+  user?: Maybe<User>;
+  /** Returns a user role */
+  userRole?: Maybe<UserRole>;
+  /** Connection between the RootQuery type and the UserRole type */
+  userRoles?: Maybe<RootQueryToUserRoleConnection>;
+  /** Connection between the RootQuery type and the User type */
+  users?: Maybe<RootQueryToUserConnection>;
+  /** Returns the current user */
+  viewer?: Maybe<User>;
+  /** Fields of the &#039;WritingSettings&#039; settings group */
+  writingSettings?: Maybe<WritingSettings>;
+};
+
+
+export type RootQueryCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToCategoryConnectionWhereArgs>;
+};
+
+
+export type RootQueryCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<CategoryIdType>;
+};
+
+
+export type RootQueryCommentArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type RootQueryCommentsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToCommentConnectionWhereArgs>;
+};
+
+
+export type RootQueryContentNodeArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  contentType?: InputMaybe<ContentTypeEnum>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<ContentNodeIdTypeEnum>;
+};
+
+
+export type RootQueryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToContentNodeConnectionWhereArgs>;
+};
+
+
+export type RootQueryContentTypeArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<ContentTypeIdTypeEnum>;
+};
+
+
+export type RootQueryContentTypesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryMediaItemArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<MediaItemIdType>;
+};
+
+
+export type RootQueryMediaItemByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  mediaItemId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type RootQueryMediaItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMediaItemConnectionWhereArgs>;
+};
+
+
+export type RootQueryMenuArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<MenuNodeIdTypeEnum>;
+};
+
+
+export type RootQueryMenuItemArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<MenuItemNodeIdTypeEnum>;
+};
+
+
+export type RootQueryMenuItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMenuItemConnectionWhereArgs>;
+};
+
+
+export type RootQueryMenusArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToMenuConnectionWhereArgs>;
+};
+
+
+export type RootQueryNodeArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type RootQueryNodeByUriArgs = {
+  uri: Scalars['String'];
+};
+
+
+export type RootQueryPageArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<PageIdType>;
+};
+
+
+export type RootQueryPageByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  pageId?: InputMaybe<Scalars['Int']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type RootQueryPagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPageConnectionWhereArgs>;
+};
+
+
+export type RootQueryPluginArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type RootQueryPluginsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPluginConnectionWhereArgs>;
+};
+
+
+export type RootQueryPostArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<PostIdType>;
+};
+
+
+export type RootQueryPostByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  postId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type RootQueryPostFormatArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<PostFormatIdType>;
+};
+
+
+export type RootQueryPostFormatsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPostFormatConnectionWhereArgs>;
+};
+
+
+export type RootQueryPostsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToPostConnectionWhereArgs>;
+};
+
+
+export type RootQueryRegisteredScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryRegisteredStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryRevisionsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
+};
+
+
+export type RootQueryTagArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TagIdType>;
+};
+
+
+export type RootQueryTagsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToTagConnectionWhereArgs>;
+};
+
+
+export type RootQueryTaxonomiesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryTaxonomyArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TaxonomyIdTypeEnum>;
+};
+
+
+export type RootQueryTermNodeArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<TermNodeIdTypeEnum>;
+  taxonomy?: InputMaybe<TaxonomyEnum>;
+};
+
+
+export type RootQueryTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToTermNodeConnectionWhereArgs>;
+};
+
+
+export type RootQueryThemeArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type RootQueryThemesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryUserArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<UserNodeIdTypeEnum>;
+};
+
+
+export type RootQueryUserRoleArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type RootQueryUserRolesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryUsersArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToUserConnectionWhereArgs>;
 };
 
 /** Connection between the RootQuery type and the category type */
@@ -7255,6 +7880,17 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']>;
 };
 
+export type XeroAddress = {
+  __typename?: 'XeroAddress';
+  addressLine1?: Maybe<Scalars['String']>;
+  addressLine2?: Maybe<Scalars['String']>;
+  addressType?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+};
+
 export type XeroCallbackInput = {
   url: Scalars['String'];
 };
@@ -7267,6 +7903,44 @@ export type XeroCallbackOutput = {
 export type XeroConnectOutput = {
   __typename?: 'XeroConnectOutput';
   consentUrl?: Maybe<Scalars['String']>;
+};
+
+export type XeroContact = {
+  __typename?: 'XeroContact';
+  addresses?: Maybe<Array<Maybe<XeroAddress>>>;
+  contactID: Scalars['ID'];
+  contactNumber?: Maybe<Scalars['String']>;
+  contactStatus: XeroContactStatus;
+  emailAddress?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  isCustomer?: Maybe<Scalars['Boolean']>;
+  lastName?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  phones?: Maybe<Array<Maybe<XeroPhone>>>;
+  updatedDateUTC?: Maybe<Scalars['date']>;
+};
+
+export type XeroContactSearchInput = {
+  searchTerm: Scalars['String'];
+};
+
+export type XeroContactSearchOutput = {
+  __typename?: 'XeroContactSearchOutput';
+  contacts: Array<XeroContact>;
+};
+
+export enum XeroContactStatus {
+  Active = 'ACTIVE',
+  Archived = 'ARCHIVED',
+  Gdprrequest = 'GDPRREQUEST'
+}
+
+export type XeroPhone = {
+  __typename?: 'XeroPhone';
+  phoneAreaCode?: Maybe<Scalars['String']>;
+  phoneCountryCode?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']>;
+  phoneType?: Maybe<Scalars['String']>;
 };
 
 export type ZoomMeeting = {
@@ -13516,41 +14190,10 @@ export enum Module_Update_Column {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
-  /** The payload for the createCategory mutation */
-  createCategory?: Maybe<CreateCategoryPayload>;
-  /** The payload for the createComment mutation */
-  createComment?: Maybe<CreateCommentPayload>;
-  /** The payload for the createMediaItem mutation */
-  createMediaItem?: Maybe<CreateMediaItemPayload>;
-  /** The payload for the createPage mutation */
-  createPage?: Maybe<CreatePagePayload>;
-  /** The payload for the createPost mutation */
-  createPost?: Maybe<CreatePostPayload>;
-  /** The payload for the createPostFormat mutation */
-  createPostFormat?: Maybe<CreatePostFormatPayload>;
+  content?: Maybe<RootMutation>;
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
-  /** The payload for the createTag mutation */
-  createTag?: Maybe<CreateTagPayload>;
-  /** The payload for the createUser mutation */
-  createUser?: Maybe<CreateUserPayload>;
   declineInvite?: Maybe<DeclineInviteOutput>;
-  /** The payload for the deleteCategory mutation */
-  deleteCategory?: Maybe<DeleteCategoryPayload>;
-  /** The payload for the deleteComment mutation */
-  deleteComment?: Maybe<DeleteCommentPayload>;
-  /** The payload for the deleteMediaItem mutation */
-  deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
-  /** The payload for the deletePage mutation */
-  deletePage?: Maybe<DeletePagePayload>;
-  /** The payload for the deletePost mutation */
-  deletePost?: Maybe<DeletePostPayload>;
-  /** The payload for the deletePostFormat mutation */
-  deletePostFormat?: Maybe<DeletePostFormatPayload>;
-  /** The payload for the deleteTag mutation */
-  deleteTag?: Maybe<DeleteTagPayload>;
-  /** The payload for the deleteUser mutation */
-  deleteUser?: Maybe<DeleteUserPayload>;
   /** delete data from the table: "blended_learning_status" */
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** delete single row from the table: "blended_learning_status" */
@@ -13735,8 +14378,6 @@ export type Mutation_Root = {
   delete_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** delete single row from the table: "xero_credential" */
   delete_xero_credential_by_pk?: Maybe<Xero_Credential>;
-  /** Increase the count. */
-  increaseCount?: Maybe<Scalars['Int']>;
   /** insert data into the table: "blended_learning_status" */
   insert_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** insert a single row into the table: "blended_learning_status" */
@@ -13923,33 +14564,7 @@ export type Mutation_Root = {
   insert_xero_credential_one?: Maybe<Xero_Credential>;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
-  /** The payload for the registerUser mutation */
-  registerUser?: Maybe<RegisterUserPayload>;
-  /** The payload for the resetUserPassword mutation */
-  resetUserPassword?: Maybe<ResetUserPasswordPayload>;
-  /** The payload for the restoreComment mutation */
-  restoreComment?: Maybe<RestoreCommentPayload>;
-  /** The payload for the sendPasswordResetEmail mutation */
-  sendPasswordResetEmail?: Maybe<SendPasswordResetEmailPayload>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
-  /** The payload for the UpdateCategory mutation */
-  updateCategory?: Maybe<UpdateCategoryPayload>;
-  /** The payload for the updateComment mutation */
-  updateComment?: Maybe<UpdateCommentPayload>;
-  /** The payload for the updateMediaItem mutation */
-  updateMediaItem?: Maybe<UpdateMediaItemPayload>;
-  /** The payload for the updatePage mutation */
-  updatePage?: Maybe<UpdatePagePayload>;
-  /** The payload for the updatePost mutation */
-  updatePost?: Maybe<UpdatePostPayload>;
-  /** The payload for the UpdatePostFormat mutation */
-  updatePostFormat?: Maybe<UpdatePostFormatPayload>;
-  /** The payload for the updateSettings mutation */
-  updateSettings?: Maybe<UpdateSettingsPayload>;
-  /** The payload for the UpdateTag mutation */
-  updateTag?: Maybe<UpdateTagPayload>;
-  /** The payload for the updateUser mutation */
-  updateUser?: Maybe<UpdateUserPayload>;
   /** update data of the table: "blended_learning_status" */
   update_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** update single row of the table: "blended_learning_status" */
@@ -14142,42 +14757,6 @@ export type Mutation_Root = {
 
 
 /** mutation root */
-export type Mutation_RootCreateCategoryArgs = {
-  input: CreateCategoryInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreateCommentArgs = {
-  input: CreateCommentInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreateMediaItemArgs = {
-  input: CreateMediaItemInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreatePageArgs = {
-  input: CreatePageInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreatePostArgs = {
-  input: CreatePostInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreatePostFormatArgs = {
-  input: CreatePostFormatInput;
-};
-
-
-/** mutation root */
 export type Mutation_RootCreateStripeSubscriptionArgs = {
   customerId: Scalars['String'];
   priceId: Scalars['String'];
@@ -14185,68 +14764,8 @@ export type Mutation_RootCreateStripeSubscriptionArgs = {
 
 
 /** mutation root */
-export type Mutation_RootCreateTagArgs = {
-  input: CreateTagInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootCreateUserArgs = {
-  input: CreateUserInput;
-};
-
-
-/** mutation root */
 export type Mutation_RootDeclineInviteArgs = {
   note?: InputMaybe<Scalars['String']>;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeleteCategoryArgs = {
-  input: DeleteCategoryInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeleteCommentArgs = {
-  input: DeleteCommentInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeleteMediaItemArgs = {
-  input: DeleteMediaItemInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeletePageArgs = {
-  input: DeletePageInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeletePostArgs = {
-  input: DeletePostInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeletePostFormatArgs = {
-  input: DeletePostFormatInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeleteTagArgs = {
-  input: DeleteTagInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootDeleteUserArgs = {
-  input: DeleteUserInput;
 };
 
 
@@ -14799,12 +15318,6 @@ export type Mutation_RootDelete_Xero_CredentialArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Xero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
-};
-
-
-/** mutation root */
-export type Mutation_RootIncreaseCountArgs = {
-  count?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -15459,86 +15972,8 @@ export type Mutation_RootPlansCreateArgs = {
 
 
 /** mutation root */
-export type Mutation_RootRegisterUserArgs = {
-  input: RegisterUserInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootResetUserPasswordArgs = {
-  input: ResetUserPasswordInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootRestoreCommentArgs = {
-  input: RestoreCommentInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootSendPasswordResetEmailArgs = {
-  input: SendPasswordResetEmailInput;
-};
-
-
-/** mutation root */
 export type Mutation_RootStripeCreatePaymentIntentArgs = {
   input: StripeCreatePaymentIntentInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateCategoryArgs = {
-  input: UpdateCategoryInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateCommentArgs = {
-  input: UpdateCommentInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateMediaItemArgs = {
-  input: UpdateMediaItemInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdatePageArgs = {
-  input: UpdatePageInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdatePostArgs = {
-  input: UpdatePostInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdatePostFormatArgs = {
-  input: UpdatePostFormatInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateSettingsArgs = {
-  input: UpdateSettingsInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateTagArgs = {
-  input: UpdateTagInput;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdateUserArgs = {
-  input: UpdateUserInput;
 };
 
 
@@ -16720,7 +17155,7 @@ export type Order_Variance_Fields = {
 /** columns and relationships of "organization" */
 export type Organization = {
   __typename?: 'organization';
-  addresses: Scalars['jsonb'];
+  address: Scalars['jsonb'];
   attributes: Scalars['jsonb'];
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
@@ -16753,7 +17188,7 @@ export type Organization = {
 
 
 /** columns and relationships of "organization" */
-export type OrganizationAddressesArgs = {
+export type OrganizationAddressArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
 
@@ -16898,7 +17333,7 @@ export type Organization_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Organization_Append_Input = {
-  addresses?: InputMaybe<Scalars['jsonb']>;
+  address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -16918,7 +17353,7 @@ export type Organization_Bool_Exp = {
   _and?: InputMaybe<Array<Organization_Bool_Exp>>;
   _not?: InputMaybe<Organization_Bool_Exp>;
   _or?: InputMaybe<Array<Organization_Bool_Exp>>;
-  addresses?: InputMaybe<Jsonb_Comparison_Exp>;
+  address?: InputMaybe<Jsonb_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -16944,7 +17379,7 @@ export enum Organization_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Organization_Delete_At_Path_Input = {
-  addresses?: InputMaybe<Array<Scalars['String']>>;
+  address?: InputMaybe<Array<Scalars['String']>>;
   attributes?: InputMaybe<Array<Scalars['String']>>;
   contactDetails?: InputMaybe<Array<Scalars['String']>>;
   original_record?: InputMaybe<Array<Scalars['String']>>;
@@ -16954,7 +17389,7 @@ export type Organization_Delete_At_Path_Input = {
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Organization_Delete_Elem_Input = {
-  addresses?: InputMaybe<Scalars['Int']>;
+  address?: InputMaybe<Scalars['Int']>;
   attributes?: InputMaybe<Scalars['Int']>;
   contactDetails?: InputMaybe<Scalars['Int']>;
   original_record?: InputMaybe<Scalars['Int']>;
@@ -16964,7 +17399,7 @@ export type Organization_Delete_Elem_Input = {
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Organization_Delete_Key_Input = {
-  addresses?: InputMaybe<Scalars['String']>;
+  address?: InputMaybe<Scalars['String']>;
   attributes?: InputMaybe<Scalars['String']>;
   contactDetails?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['String']>;
@@ -17177,7 +17612,7 @@ export enum Organization_Group_Update_Column {
 
 /** input type for inserting data into table "organization" */
 export type Organization_Insert_Input = {
-  addresses?: InputMaybe<Scalars['jsonb']>;
+  address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -17707,7 +18142,7 @@ export type Organization_On_Conflict = {
 
 /** Ordering options when selecting data from "organization". */
 export type Organization_Order_By = {
-  addresses?: InputMaybe<Order_By>;
+  address?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
@@ -17732,7 +18167,7 @@ export type Organization_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Organization_Prepend_Input = {
-  addresses?: InputMaybe<Scalars['jsonb']>;
+  address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -17980,7 +18415,7 @@ export enum Organization_Role_Update_Column {
 /** select columns of table "organization" */
 export enum Organization_Select_Column {
   /** column name */
-  Addresses = 'addresses',
+  Address = 'address',
   /** column name */
   Attributes = 'attributes',
   /** column name */
@@ -18005,7 +18440,7 @@ export enum Organization_Select_Column {
 
 /** input type for updating data in table "organization" */
 export type Organization_Set_Input = {
-  addresses?: InputMaybe<Scalars['jsonb']>;
+  address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -18170,7 +18605,7 @@ export enum Organization_Status_Update_Column {
 /** update columns of table "organization" */
 export enum Organization_Update_Column {
   /** column name */
-  Addresses = 'addresses',
+  Address = 'address',
   /** column name */
   Attributes = 'attributes',
   /** column name */
@@ -19674,36 +20109,19 @@ export type Profile_Variance_Order_By = {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** Entry point to get all settings for the site */
-  allSettings?: Maybe<Settings>;
   /** fetch data from the table: "blended_learning_status" */
   blended_learning_status: Array<Blended_Learning_Status>;
   /** fetch aggregated fields from the table: "blended_learning_status" */
   blended_learning_status_aggregate: Blended_Learning_Status_Aggregate;
   /** fetch data from the table: "blended_learning_status" using primary key columns */
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
-  /** Connection between the RootQuery type and the category type */
-  categories?: Maybe<RootQueryToCategoryConnection>;
-  /** A 0bject */
-  category?: Maybe<Category>;
   /** fetch data from the table: "color" */
   color: Array<Color>;
   /** fetch aggregated fields from the table: "color" */
   color_aggregate: Color_Aggregate;
   /** fetch data from the table: "color" using primary key columns */
   color_by_pk?: Maybe<Color>;
-  /** Returns a Comment */
-  comment?: Maybe<Comment>;
-  /** Connection between the RootQuery type and the Comment type */
-  comments?: Maybe<RootQueryToCommentConnection>;
-  /** A node used to manage content */
-  contentNode?: Maybe<ContentNode>;
-  /** Connection between the RootQuery type and the ContentNode type */
-  contentNodes?: Maybe<RootQueryToContentNodeConnection>;
-  /** Fetch a Content Type node by unique Identifier */
-  contentType?: Maybe<ContentType>;
-  /** Connection between the RootQuery type and the ContentType type */
-  contentTypes?: Maybe<RootQueryToContentTypeConnection>;
+  content?: Maybe<RootQuery>;
   /** fetch data from the table: "course" */
   course: Array<Course>;
   /** fetch aggregated fields from the table: "course" */
@@ -19818,12 +20236,8 @@ export type Query_Root = {
   course_type_aggregate: Course_Type_Aggregate;
   /** fetch data from the table: "course_type" using primary key columns */
   course_type_by_pk?: Maybe<Course_Type>;
-  /** Fields of the &#039;DiscussionSettings&#039; settings group */
-  discussionSettings?: Maybe<DiscussionSettings>;
   /** Fetches membership plans */
   fetchPlans?: Maybe<Array<Maybe<PlanObject>>>;
-  /** Fields of the &#039;GeneralSettings&#039; settings group */
-  generalSettings?: Maybe<GeneralSettings>;
   getInvite?: Maybe<CourseInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   /** fetch data from the table: "grade" */
@@ -19852,20 +20266,6 @@ export type Query_Root = {
   legacy_certificate_aggregate: Legacy_Certificate_Aggregate;
   /** fetch data from the table: "legacy_certificate" using primary key columns */
   legacy_certificate_by_pk?: Maybe<Legacy_Certificate>;
-  /** An object of the mediaItem Type.  */
-  mediaItem?: Maybe<MediaItem>;
-  /** A mediaItem object */
-  mediaItemBy?: Maybe<MediaItem>;
-  /** Connection between the RootQuery type and the mediaItem type */
-  mediaItems?: Maybe<RootQueryToMediaItemConnection>;
-  /** A WordPress navigation menu */
-  menu?: Maybe<Menu>;
-  /** A WordPress navigation menu item */
-  menuItem?: Maybe<MenuItem>;
-  /** Connection between the RootQuery type and the MenuItem type */
-  menuItems?: Maybe<RootQueryToMenuItemConnection>;
-  /** Connection between the RootQuery type and the Menu type */
-  menus?: Maybe<RootQueryToMenuConnection>;
   /** fetch data from the table: "module" */
   module: Array<Module>;
   /** fetch aggregated fields from the table: "module" */
@@ -19890,10 +20290,6 @@ export type Query_Root = {
   module_group_duration_aggregate: Module_Group_Duration_Aggregate;
   /** fetch data from the table: "module_group_duration" using primary key columns */
   module_group_duration_by_pk?: Maybe<Module_Group_Duration>;
-  /** Fetches an object given its ID */
-  node?: Maybe<Node>;
-  /** Fetches an object given its Unique Resource Identifier */
-  nodeByUri?: Maybe<UniformResourceIdentifiable>;
   /** fetch data from the table: "order" */
   order: Array<Order>;
   /** fetch aggregated fields from the table: "order" */
@@ -19936,36 +20332,16 @@ export type Query_Root = {
   organization_status_aggregate: Organization_Status_Aggregate;
   /** fetch data from the table: "organization_status" using primary key columns */
   organization_status_by_pk?: Maybe<Organization_Status>;
-  /** An object of the page Type.  */
-  page?: Maybe<Page>;
-  /** A page object */
-  pageBy?: Maybe<Page>;
-  /** Connection between the RootQuery type and the page type */
-  pages?: Maybe<RootQueryToPageConnection>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
   payment_methods_aggregate: Payment_Methods_Aggregate;
   /** fetch data from the table: "payment_methods" using primary key columns */
   payment_methods_by_pk?: Maybe<Payment_Methods>;
-  /** A WordPress plugin */
-  plugin?: Maybe<Plugin>;
-  /** Connection between the RootQuery type and the Plugin type */
-  plugins?: Maybe<RootQueryToPluginConnection>;
   /** Podcast */
   podcast?: Maybe<PodcastPayload>;
   /** Podcasts list */
   podcasts?: Maybe<PodcastsPayload>;
-  /** An object of the post Type.  */
-  post?: Maybe<Post>;
-  /** A post object */
-  postBy?: Maybe<Post>;
-  /** A 0bject */
-  postFormat?: Maybe<PostFormat>;
-  /** Connection between the RootQuery type and the postFormat type */
-  postFormats?: Maybe<RootQueryToPostFormatConnection>;
-  /** Connection between the RootQuery type and the post type */
-  posts?: Maybe<RootQueryToPostConnection>;
   /** fetch data from the table: "profile" */
   profile: Array<Profile>;
   /** fetch aggregated fields from the table: "profile" */
@@ -19990,20 +20366,12 @@ export type Query_Root = {
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
-  /** Fields of the &#039;ReadingSettings&#039; settings group */
-  readingSettings?: Maybe<ReadingSettings>;
-  /** Connection between the RootQuery type and the EnqueuedScript type */
-  registeredScripts?: Maybe<RootQueryToEnqueuedScriptConnection>;
-  /** Connection between the RootQuery type and the EnqueuedStylesheet type */
-  registeredStylesheets?: Maybe<RootQueryToEnqueuedStylesheetConnection>;
   /** fetch data from the table: "resource" */
   resource: Array<Resource>;
   /** fetch aggregated fields from the table: "resource" */
   resource_aggregate: Resource_Aggregate;
   /** fetch data from the table: "resource" using primary key columns */
   resource_by_pk?: Maybe<Resource>;
-  /** Connection between the RootQuery type and the ContentRevisionUnion type */
-  revisions?: Maybe<RootQueryToContentRevisionUnionConnection>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
@@ -20011,47 +20379,20 @@ export type Query_Root = {
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
-  /** A 0bject */
-  tag?: Maybe<Tag>;
-  /** Connection between the RootQuery type and the tag type */
-  tags?: Maybe<RootQueryToTagConnection>;
-  /** Connection between the RootQuery type and the Taxonomy type */
-  taxonomies?: Maybe<RootQueryToTaxonomyConnection>;
-  /** Fetch a Taxonomy node by unique Identifier */
-  taxonomy?: Maybe<Taxonomy>;
-  /** A node in a taxonomy used to group and relate content nodes */
-  termNode?: Maybe<TermNode>;
-  /** Connection between the RootQuery type and the TermNode type */
-  terms?: Maybe<RootQueryToTermNodeConnection>;
-  /** A Theme object */
-  theme?: Maybe<Theme>;
-  /** Connection between the RootQuery type and the Theme type */
-  themes?: Maybe<RootQueryToThemeConnection>;
-  /** Returns a user */
-  user?: Maybe<User>;
-  /** Returns a user role */
-  userRole?: Maybe<UserRole>;
-  /** Connection between the RootQuery type and the UserRole type */
-  userRoles?: Maybe<RootQueryToUserRoleConnection>;
-  /** Connection between the RootQuery type and the User type */
-  users?: Maybe<RootQueryToUserConnection>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
   venue_aggregate: Venue_Aggregate;
   /** fetch data from the table: "venue" using primary key columns */
   venue_by_pk?: Maybe<Venue>;
-  /** Returns the current user */
-  viewer?: Maybe<User>;
   /** fetch data from the table: "waitlist" */
   waitlist: Array<Waitlist>;
   /** fetch aggregated fields from the table: "waitlist" */
   waitlist_aggregate: Waitlist_Aggregate;
   /** fetch data from the table: "waitlist" using primary key columns */
   waitlist_by_pk?: Maybe<Waitlist>;
-  /** Fields of the &#039;WritingSettings&#039; settings group */
-  writingSettings?: Maybe<WritingSettings>;
   xeroConnect?: Maybe<XeroConnectOutput>;
+  xeroContactSearch?: Maybe<XeroContactSearchOutput>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
@@ -20084,21 +20425,6 @@ export type Query_RootBlended_Learning_Status_By_PkArgs = {
 };
 
 
-export type Query_RootCategoriesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToCategoryConnectionWhereArgs>;
-};
-
-
-export type Query_RootCategoryArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<CategoryIdType>;
-};
-
-
 export type Query_RootColorArgs = {
   distinct_on?: InputMaybe<Array<Color_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -20119,51 +20445,6 @@ export type Query_RootColor_AggregateArgs = {
 
 export type Query_RootColor_By_PkArgs = {
   name: Scalars['String'];
-};
-
-
-export type Query_RootCommentArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type Query_RootCommentsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToCommentConnectionWhereArgs>;
-};
-
-
-export type Query_RootContentNodeArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  contentType?: InputMaybe<ContentTypeEnum>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<ContentNodeIdTypeEnum>;
-};
-
-
-export type Query_RootContentNodesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToContentNodeConnectionWhereArgs>;
-};
-
-
-export type Query_RootContentTypeArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<ContentTypeIdTypeEnum>;
-};
-
-
-export type Query_RootContentTypesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -20706,60 +20987,6 @@ export type Query_RootLegacy_Certificate_By_PkArgs = {
 };
 
 
-export type Query_RootMediaItemArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<MediaItemIdType>;
-};
-
-
-export type Query_RootMediaItemByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  mediaItemId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type Query_RootMediaItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMediaItemConnectionWhereArgs>;
-};
-
-
-export type Query_RootMenuArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<MenuNodeIdTypeEnum>;
-};
-
-
-export type Query_RootMenuItemArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<MenuItemNodeIdTypeEnum>;
-};
-
-
-export type Query_RootMenuItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMenuItemConnectionWhereArgs>;
-};
-
-
-export type Query_RootMenusArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToMenuConnectionWhereArgs>;
-};
-
-
 export type Query_RootModuleArgs = {
   distinct_on?: InputMaybe<Array<Module_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -20849,16 +21076,6 @@ export type Query_RootModule_Group_Duration_AggregateArgs = {
 
 export type Query_RootModule_Group_Duration_By_PkArgs = {
   id: Scalars['uuid'];
-};
-
-
-export type Query_RootNodeArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-};
-
-
-export type Query_RootNodeByUriArgs = {
-  uri: Scalars['String'];
 };
 
 
@@ -21023,29 +21240,6 @@ export type Query_RootOrganization_Status_By_PkArgs = {
 };
 
 
-export type Query_RootPageArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<PageIdType>;
-};
-
-
-export type Query_RootPageByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  pageId?: InputMaybe<Scalars['Int']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type Query_RootPagesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPageConnectionWhereArgs>;
-};
-
-
 export type Query_RootPayment_MethodsArgs = {
   distinct_on?: InputMaybe<Array<Payment_Methods_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -21069,20 +21263,6 @@ export type Query_RootPayment_Methods_By_PkArgs = {
 };
 
 
-export type Query_RootPluginArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type Query_RootPluginsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPluginConnectionWhereArgs>;
-};
-
-
 export type Query_RootPodcastArgs = {
   id: Scalars['ID'];
 };
@@ -21090,45 +21270,6 @@ export type Query_RootPodcastArgs = {
 
 export type Query_RootPodcastsArgs = {
   input?: InputMaybe<PodcastsInput>;
-};
-
-
-export type Query_RootPostArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  idType?: InputMaybe<PostIdType>;
-};
-
-
-export type Query_RootPostByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  postId?: InputMaybe<Scalars['Int']>;
-  slug?: InputMaybe<Scalars['String']>;
-  uri?: InputMaybe<Scalars['String']>;
-};
-
-
-export type Query_RootPostFormatArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<PostFormatIdType>;
-};
-
-
-export type Query_RootPostFormatsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPostFormatConnectionWhereArgs>;
-};
-
-
-export type Query_RootPostsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToPostConnectionWhereArgs>;
 };
 
 
@@ -21224,22 +21365,6 @@ export type Query_RootProfile_Temp_By_PkArgs = {
 };
 
 
-export type Query_RootRegisteredScriptsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type Query_RootRegisteredStylesheetsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
 export type Query_RootResourceArgs = {
   distinct_on?: InputMaybe<Array<Resource_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -21260,15 +21385,6 @@ export type Query_RootResource_AggregateArgs = {
 
 export type Query_RootResource_By_PkArgs = {
   id: Scalars['uuid'];
-};
-
-
-export type Query_RootRevisionsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToContentRevisionUnionConnectionWhereArgs>;
 };
 
 
@@ -21297,92 +21413,6 @@ export type Query_RootRole_By_PkArgs = {
 
 export type Query_RootSearchTrainersArgs = {
   input: SearchTrainersInput;
-};
-
-
-export type Query_RootTagArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TagIdType>;
-};
-
-
-export type Query_RootTagsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToTagConnectionWhereArgs>;
-};
-
-
-export type Query_RootTaxonomiesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type Query_RootTaxonomyArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TaxonomyIdTypeEnum>;
-};
-
-
-export type Query_RootTermNodeArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<TermNodeIdTypeEnum>;
-  taxonomy?: InputMaybe<TaxonomyEnum>;
-};
-
-
-export type Query_RootTermsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToTermNodeConnectionWhereArgs>;
-};
-
-
-export type Query_RootThemeArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type Query_RootThemesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type Query_RootUserArgs = {
-  id: Scalars['ID'];
-  idType?: InputMaybe<UserNodeIdTypeEnum>;
-};
-
-
-export type Query_RootUserRoleArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type Query_RootUserRolesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type Query_RootUsersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<RootQueryToUserConnectionWhereArgs>;
 };
 
 
@@ -21429,6 +21459,11 @@ export type Query_RootWaitlist_AggregateArgs = {
 
 export type Query_RootWaitlist_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootXeroContactSearchArgs = {
+  input: XeroContactSearchInput;
 };
 
 
@@ -23875,7 +23910,7 @@ export type ProfilesQueryVariables = Exact<{
 }>;
 
 
-export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type OrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -23884,7 +23919,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type InsertWaitlistMutationVariables = Exact<{
   input: Waitlist_Insert_Input;
@@ -23968,7 +24003,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type CourseModulesQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -24052,9 +24087,9 @@ export type UpdateCourseMutationVariables = Exact<{
 
 export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null };
 
-export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any };
+export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any };
 
-export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
+export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
 
@@ -24149,21 +24184,21 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
 
-export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number };
+export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number };
 
 export type PodcastQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type PodcastQuery = { __typename?: 'query_root', podcast?: { __typename?: 'PodcastPayload', podcast?: { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number } | null } | null, recentPodcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail?: string | null, episodeNumber: number }> } | null };
+export type PodcastQuery = { __typename?: 'query_root', podcast?: { __typename?: 'PodcastPayload', podcast?: { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number } | null } | null, recentPodcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number }> } | null };
 
 export type PodcastsQueryVariables = Exact<{
   input: PodcastsInput;
 }>;
 
 
-export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail?: string | null, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null };
+export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null };
 
 export type ModuleGroupsQueryVariables = Exact<{
   level: Course_Level_Enum;
@@ -24202,22 +24237,23 @@ export type Unnamed_3_QueryVariables = Exact<{
 }>;
 
 
-export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
+export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
 
 export type GetOrganizationsQueryVariables = Exact<{
   name?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any }> };
+export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any }> };
 
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
-  addresses: Scalars['jsonb'];
+  address: Scalars['jsonb'];
+  attributes?: InputMaybe<Scalars['jsonb']>;
 }>;
 
 
-export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } | null };
+export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null };
 
 export type CourseParticipantQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -24256,7 +24292,7 @@ export type FindProfilesQueryVariables = Exact<{
 }>;
 
 
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileCertificationsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -24316,14 +24352,14 @@ export type SaveHealthSafetyConsentMutation = { __typename?: 'mutation_root', up
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
 
 export type GetProfileWithCriteriaQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -24332,7 +24368,7 @@ export type GetProfileWithCriteriaQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, addresses: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];

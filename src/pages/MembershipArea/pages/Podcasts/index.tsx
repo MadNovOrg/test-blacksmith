@@ -18,7 +18,7 @@ import {
   PodcastsQuery,
   PodcastsQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY } from '@app/queries/membership/podcasts'
+import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -39,7 +39,7 @@ export const Podcasts: React.FC = () => {
   )
 
   const [{ data, fetching }] = useQuery<PodcastsQuery, PodcastsQueryVariables>({
-    query: QUERY,
+    query: PODCASTS_QUERY,
     variables: {
       input: {
         paging: {
@@ -144,8 +144,8 @@ export const Podcasts: React.FC = () => {
             rowSpacing={5}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            {allPodcasts.map(podcast => (
-              <Grid item key={podcast.id} xs={3}>
+            {allPodcasts.map((podcast, index) => (
+              <Grid item key={podcast.id} xs={3} data-grid-item={index}>
                 <BlogPostItem
                   id={podcast.id}
                   imageUrl={podcast.thumbnail}

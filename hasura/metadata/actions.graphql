@@ -301,7 +301,7 @@ type Podcast {
   mediaUrl: String!
   author: String!
   publishedDate: String!
-  thumbnail: String
+  thumbnail: String!
   episodeNumber: Int!
 }
 
