@@ -152,6 +152,7 @@ export const insertCourse = async (
             end: "${course.schedule[0].end.toISOString()}"${venue}
           }
         }
+        gradingConfirmed: ${course.gradingConfirmed}
         ${organization}
         ${contactProfile}
       }) {
@@ -233,9 +234,14 @@ export const getModuleIds = async (
 
 export const insertCourseModules = async (
   courseId: number,
-  moduleIds: string[]
+  moduleIds: string[],
+  covered?: boolean
 ): Promise<CourseModule[]> => {
-  const modules = moduleIds.map(id => ({ courseId: courseId, moduleId: id }))
+  const modules = moduleIds.map(id => ({
+    courseId: courseId,
+    moduleId: id,
+    covered: covered ?? null,
+  }))
   const query = gql`
     mutation MyMutation($objects: [course_module_insert_input!] = []) {
       insert_course_module(objects: $objects) {

@@ -313,6 +313,7 @@ export const CourseGrading = () => {
                       value={feedback}
                       onChange={e => setFeedback(e.target.value)}
                       sx={{ display: 'block' }}
+                      data-testid="feedback-input"
                     />
                   </Box>
                   <Box display="flex" justifyContent="right">

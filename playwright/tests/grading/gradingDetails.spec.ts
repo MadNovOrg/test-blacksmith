@@ -1,6 +1,5 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
-import { subDays } from 'date-fns'
 
 import { CourseModule, CourseParticipant } from '@app/types'
 
@@ -12,7 +11,7 @@ import {
   insertCourseParticipants,
 } from '../../api/hasura-api'
 import { BASE_URL } from '../../constants'
-import { UNIQUE_COURSE } from '../../data/courses'
+import { FINISHED_COURSE } from '../../data/courses'
 import { getModulesByLevel } from '../../data/modules'
 import { Course } from '../../data/types'
 import { users } from '../../data/users'
@@ -24,9 +23,7 @@ const test = base.extend<{
   modules: CourseModule[]
 }>({
   course: async ({}, use) => {
-    const course = UNIQUE_COURSE()
-    course.schedule[0].start = subDays(new Date(), 2)
-    course.schedule[0].end = subDays(new Date(), 1)
+    const course = FINISHED_COURSE()
 
     course.id = await insertCourse(course, users.trainer.email)
 

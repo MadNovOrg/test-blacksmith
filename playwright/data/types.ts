@@ -34,6 +34,7 @@ export type Course = {
   min_participants: number
   max_participants: number
   contactProfile?: User
+  gradingConfirmed: boolean
 }
 
 export type CourseSchedule = {

@@ -1,3 +1,5 @@
+import { subDays } from 'date-fns'
+
 import {
   CourseDeliveryType,
   CourseLevel,
@@ -28,6 +30,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -47,6 +50,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -67,6 +71,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -87,6 +92,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -107,6 +113,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -128,6 +135,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
   {
     id: 0,
@@ -148,6 +156,7 @@ export const COURSES_TO_VIEW: Course[] = [
     ],
     min_participants: 6,
     max_participants: 11,
+    gradingConfirmed: false,
   },
 ]
 
@@ -170,4 +179,11 @@ export const UNIQUE_COURSE: () => Course = () => ({
   ],
   min_participants: 6,
   max_participants: 11,
+  gradingConfirmed: false,
+})
+
+export const FINISHED_COURSE: () => Course = () => ({
+  ...UNIQUE_COURSE(),
+  status: CourseStatus.PUBLISHED,
+  schedule: [{ start: subDays(new Date(), 2), end: subDays(new Date(), 1) }],
 })
