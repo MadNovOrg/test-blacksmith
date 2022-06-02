@@ -9,10 +9,11 @@ import { useAuth } from '@app/context/auth'
 import { AutoLoginUser } from '@app/pages/common/AutoLoginUser'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
-import { CourseRegistrationPage } from '@app/pages/common/CourseRegistration'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
+import { RegistrationPage } from '@app/pages/common/Registration'
+import { Registration2Page } from '@app/pages/common/Registration2'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
@@ -66,12 +67,13 @@ function LoggedOutRoutes() {
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="invitation" element={<InvitationPage />} />
-      <Route path="registration" element={<CourseRegistrationPage />} />
+      <Route path="registration" element={<RegistrationPage />} />
+      <Route path="registration2" element={<Registration2Page />} />
       <Route
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
       />
-      <Route path="accept-invite/:id" element={<AutoLoginUser />} />
+      <Route path="auto-login" element={<AutoLoginUser />} />
     </Routes>
   )
 }
@@ -92,7 +94,7 @@ function LoggedInRoutes() {
           <Route path="booking/done" element={<CourseBookingDone />} />
 
           {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
-          <Route path="registration" element={<CourseRegistrationPage />} />
+          <Route path="registration" element={<RegistrationPage />} />
 
           <Route path="*" element={<RouteComp />} />
 

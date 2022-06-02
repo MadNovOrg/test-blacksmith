@@ -17,7 +17,7 @@ import {
 
 import { Form } from './components/Form'
 
-export const CourseRegistrationPage: React.FC = () => {
+export const RegistrationPage: React.FC = () => {
   const { login, profile } = useAuth()
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -33,8 +33,6 @@ export const CourseRegistrationPage: React.FC = () => {
     : courseId
     ? { from: { pathname: '/booking' } }
     : '/'
-
-  console.log(loginLocationState)
 
   const onSignUp = (email: string, password: string) => {
     // delay auto-login just in case

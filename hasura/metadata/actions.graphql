@@ -6,7 +6,9 @@ type Mutation {
 }
 
 type Mutation {
-  createUser: CreateUserOutput
+  createUser(
+    input: CreateAppUserInput!
+  ): CreateUserOutput!
 }
 
 type Mutation {
@@ -27,6 +29,10 @@ type Query {
   getTrainersLevels(
     input: GetTrainersLevelsInput!
   ): [TrainerLevels]
+}
+
+type Query {
+  initAuth: InitAuthOutput!
 }
 
 type Query {
@@ -203,6 +209,16 @@ input XeroContactSearchInput {
   searchTerm: String!
 }
 
+input CreateAppUserInput {
+  firstName: String!
+  lastName: String!
+  password: String!
+  phone: String
+  dob: String
+  acceptMarketing: Boolean!
+  acceptTnc: Boolean!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -361,6 +377,10 @@ type CreateUserOutput {
   cognitoId: String!
   profileId: String!
   email: String!
-  authChallenge: String
+}
+
+type InitAuthOutput {
+  email: String!
+  authChallenge: String!
 }
 

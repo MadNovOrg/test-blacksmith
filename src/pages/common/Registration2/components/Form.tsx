@@ -13,9 +13,9 @@ import {
   styled,
   InputAdornment,
   IconButton,
+  FormControlLabel,
 } from '@mui/material'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
-import { Auth } from 'aws-amplify'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useState, useMemo } from 'react'
@@ -25,10 +25,10 @@ import { useToggle } from 'react-use'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import {
-  MUTATION,
-  ResponseType,
-  ParamsType,
-} from '@app/queries/profile/insert-profile-temp'
+  MUTATION as CREATE_USER_MUTATION,
+  ParamsType as CreateUserParamsType,
+  ResponseType as CreateUserResponseType,
+} from '@app/queries/invites/create-user'
 import { DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
@@ -42,12 +42,11 @@ const TextField = styled(MuiTextField)(() => ({
 }))
 
 type Props = {
-  onSignUp: (email: string, password: string) => void
-  courseId: number | null
-  quantity: number | null
+  onSuccess: () => void
+  token: string
 }
 
-export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
+export const Form: React.FC<Props> = ({ onSuccess, token }) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [loading, setLoading] = useState(false)
@@ -76,30 +75,22 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
     setError('')
     try {
       const input = {
-        email: data.email,
-        givenName: data.firstName,
-        familyName: data.surname,
+        firstName: data.firstName,
+        lastName: data.surname,
+        password: data.password,
         phone: data.phone,
         dob: data.dob ? zonedTimeToUtc(data.dob, 'GMT') : null,
         acceptMarketing: data.marketing,
         acceptTnc: data.tcs,
-        courseId,
-        quantity,
       }
 
-      await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })
+      await gqlRequest<CreateUserResponseType, CreateUserParamsType>(
+        CREATE_USER_MUTATION,
+        { input },
+        { headers: { 'x-auth': `Bearer ${token}` } }
+      )
 
-      await Auth.signUp({
-        username: data.email,
-        password: data.password,
-        attributes: {
-          email: data.email,
-          given_name: data.firstName,
-          family_name: data.surname,
-        },
-      })
-
-      onSignUp(data.email, data.password)
+      onSuccess()
     } catch (err) {
       console.log(err)
       const { code = 'UnknownError' } = err as Error & { code: string }
@@ -155,31 +146,6 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             />
           </Grid>
         </Grid>
-
-        <Box mb={3}>
-          <TextField
-            id="email"
-            label={t('email')}
-            variant="standard"
-            placeholder={t('email-placeholder')}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-            {...register('email')}
-            inputProps={{ 'data-testid': 'input-email' }}
-            sx={{ bgcolor: 'grey.100' }}
-            fullWidth
-            required
-          />
-
-          <Box display="flex" mt={1}>
-            <Box sx={{ flex: 'auto', transform: 'translate(-12px, -8px)' }}>
-              <Checkbox {...register('marketing')} sx={{ pr: 0 }} />
-            </Box>
-            <Typography variant="body2">
-              {t('marketting-label-short')}
-            </Typography>
-          </Box>
-        </Box>
 
         <Box mb={3}>
           <TextField
@@ -264,26 +230,39 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
         </Box>
 
         <Box sx={{ my: 5 }}>
+          <Box display="flex" mb={2}>
+            <FormControlLabel
+              control={<Checkbox {...register('marketing')} />}
+              label={
+                <Typography variant="body2">
+                  {t('marketting-label-short')}
+                </Typography>
+              }
+            />
+          </Box>
+
           <Box sx={{ display: 'flex' }}>
-            <Box sx={{ flex: 'auto', transform: 'translate(-12px, -8px)' }}>
-              <Checkbox
-                {...register('tcs')}
-                sx={{ paddingRight: 0 }}
-                inputProps={{ 'aria-label': `T&Cs` }}
-              />
-            </Box>
-            <Box>
-              <Typography variant="body2">
-                <Trans i18nKey="pages.signup.tcs-label">
-                  I accept the <a href="">Terms of Business</a> and agree to
-                  Team Teach processing my personal data in accordance with our
-                  <a href="">Privacy Policy</a>
-                </Trans>
-              </Typography>
-              {errors.tcs ? (
-                <FormHelperText error>{errors.tcs.message}</FormHelperText>
-              ) : null}
-            </Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  {...register('tcs')}
+                  inputProps={{ 'aria-label': `T&Cs` }}
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  <Trans i18nKey="pages.signup.tcs-label">
+                    I accept the <a href="">Terms of Business</a> and agree to
+                    Team Teach processing my personal data in accordance with
+                    our
+                    <a href="">Privacy Policy</a>
+                  </Trans>
+                </Typography>
+              }
+            />
+            {errors.tcs ? (
+              <FormHelperText error>{errors.tcs.message}</FormHelperText>
+            ) : null}
           </Box>
         </Box>
 

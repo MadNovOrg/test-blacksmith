@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify'
 import { differenceInDays, formatDistanceToNow, isPast } from 'date-fns'
 import { TFunction } from 'i18next'
 
@@ -228,4 +229,10 @@ export const findCourseTrainer = (
   profileId: string
 ): CourseTrainer | undefined => {
   return (trainers ?? []).find(t => t.profile.id === profileId)
+}
+
+export function userExistsInCognito(email: string) {
+  return Auth.signIn(email, '123')
+    .then(() => true)
+    .catch(err => err.code === 'NotAuthorizedException')
 }

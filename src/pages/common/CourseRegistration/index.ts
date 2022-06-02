@@ -1,1 +1,0 @@
-export { CourseRegistrationPage } from './CourseRegistration'

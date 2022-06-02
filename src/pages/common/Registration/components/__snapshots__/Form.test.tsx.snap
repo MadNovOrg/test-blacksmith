@@ -136,11 +136,11 @@ Object {
           <div
             class="MuiBox-root css-oc1vt3"
           >
-            <div
-              class="MuiBox-root css-1yl0xms"
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
             >
               <span
-                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-1f6cxxc-MuiButtonBase-root-MuiCheckbox-root"
+                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-x1h8s1-MuiButtonBase-root-MuiCheckbox-root"
               >
                 <input
                   class="PrivateSwitchBase-input css-1m9pwf3"
@@ -163,12 +163,12 @@ Object {
                   class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                 />
               </span>
-            </div>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
-            >
-              I agree to receive marketing materials with information on courses and offers.
-            </p>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
+              >
+                I agree to receive marketing materials with information on courses and offers.
+              </p>
+            </label>
           </div>
         </div>
         <div
@@ -382,11 +382,11 @@ Object {
           <div
             class="MuiBox-root css-k008qs"
           >
-            <div
-              class="MuiBox-root css-1yl0xms"
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
             >
               <span
-                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-1f6cxxc-MuiButtonBase-root-MuiCheckbox-root"
+                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-x1h8s1-MuiButtonBase-root-MuiCheckbox-root"
               >
                 <input
                   aria-label="T&Cs"
@@ -410,10 +410,6 @@ Object {
                   class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                 />
               </span>
-            </div>
-            <div
-              class="MuiBox-root css-0"
-            >
               <p
                 class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
               >
@@ -430,7 +426,7 @@ Object {
                   Privacy Policy
                 </a>
               </p>
-            </div>
+            </label>
           </div>
         </div>
         <div
@@ -584,11 +580,11 @@ Object {
         <div
           class="MuiBox-root css-oc1vt3"
         >
-          <div
-            class="MuiBox-root css-1yl0xms"
+          <label
+            class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
           >
             <span
-              class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-1f6cxxc-MuiButtonBase-root-MuiCheckbox-root"
+              class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-x1h8s1-MuiButtonBase-root-MuiCheckbox-root"
             >
               <input
                 class="PrivateSwitchBase-input css-1m9pwf3"
@@ -611,12 +607,12 @@ Object {
                 class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
               />
             </span>
-          </div>
-          <p
-            class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
-          >
-            I agree to receive marketing materials with information on courses and offers.
-          </p>
+            <p
+              class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
+            >
+              I agree to receive marketing materials with information on courses and offers.
+            </p>
+          </label>
         </div>
       </div>
       <div
@@ -830,11 +826,11 @@ Object {
         <div
           class="MuiBox-root css-k008qs"
         >
-          <div
-            class="MuiBox-root css-1yl0xms"
+          <label
+            class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
           >
             <span
-              class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-1f6cxxc-MuiButtonBase-root-MuiCheckbox-root"
+              class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-x1h8s1-MuiButtonBase-root-MuiCheckbox-root"
             >
               <input
                 aria-label="T&Cs"
@@ -858,10 +854,6 @@ Object {
                 class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
               />
             </span>
-          </div>
-          <div
-            class="MuiBox-root css-0"
-          >
             <p
               class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
             >
@@ -878,7 +870,7 @@ Object {
                 Privacy Policy
               </a>
             </p>
-          </div>
+          </label>
         </div>
       </div>
       <div

@@ -36,6 +36,13 @@ actions:
       handler: '{{ACTIONS_HOST}}/trainers/levels'
     permissions:
       - role: trainer
+  - name: initAuth
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/user/auth'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
   - name: isUserSubscribedToMembership
     definition:
       kind: ""
@@ -217,6 +224,7 @@ custom_types:
     - name: Paging
     - name: XeroCallbackInput
     - name: XeroContactSearchInput
+    - name: CreateAppUserInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -243,4 +251,5 @@ custom_types:
     - name: XeroPhone
     - name: XeroAddress
     - name: CreateUserOutput
+    - name: InitAuthOutput
   scalars: []

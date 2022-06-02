@@ -17,21 +17,16 @@ import {
   Link,
   TextField,
 } from '@mui/material'
-import { Auth } from 'aws-amplify'
 import { differenceInDays } from 'date-fns'
 import jwtDecode from 'jwt-decode'
-import React, { ChangeEvent, useMemo, useState } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { Logo } from '@app/components/Logo'
+import { useAuth } from '@app/context/auth'
 import { gqlRequest } from '@app/lib/gql-request'
-import {
-  MUTATION as CREATE_USER_MUTATION,
-  ParamsType as CreateUserParamsType,
-  ResponseType as CreateUserResponseType,
-} from '@app/queries/invites/create-user'
 import {
   MUTATION as DECLINE_INVITE_MUTATION,
   ParamsType as DeclineInviteParamsType,
@@ -42,24 +37,31 @@ import {
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
 import { GqlError, InviteStatus } from '@app/types'
-import { now } from '@app/util'
+import { now, userExistsInCognito } from '@app/util'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { profile, logout } = useAuth()
   const [searchParams] = useSearchParams()
   const [response, setResponse] = useState('yes')
   const [note, setNote] = useState<string>('')
 
-  const { token, inviteId, courseId } = useMemo(() => {
+  const { token, inviteId, courseId, email } = useMemo(() => {
     const token = searchParams.get('token') as string
     const courseId = searchParams.get('courseId') as string
 
-    const decoded = jwtDecode<{ invite_id: string }>(token)
+    const decoded = jwtDecode<{ invite_id: string; sub: string }>(token)
     const inviteId = decoded.invite_id
 
-    return { token, inviteId, courseId }
+    return { token, inviteId, courseId, email: decoded.sub }
   }, [searchParams])
+
+  useEffect(() => {
+    if (!profile || !email || profile.email === email) return
+
+    logout()
+  }, [profile, email, logout])
 
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -82,25 +84,19 @@ export const InvitationPage = () => {
   const address = invite.venueAddress
 
   const handleSubmit = async () => {
+    setIsLoading(true)
+
     if (response === 'yes') {
-      const resp = await gqlRequest<
-        CreateUserResponseType,
-        CreateUserParamsType
-      >(CREATE_USER_MUTATION, {}, { headers: { 'x-auth': `Bearer ${token}` } })
+      const exists = await userExistsInCognito(email)
 
-      if (!resp.createUser.authChallenge) {
-        // TODO: handle error?
-        return
-      }
+      const redirectUrl = exists ? '/auto-login' : '/registration2'
+      const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
 
-      const { email, authChallenge } = resp.createUser
-      const user = await Auth.signIn(email)
-      await Auth.sendCustomChallengeAnswer(user, authChallenge)
-
-      return navigate(`/accept-invite/${inviteId}?courseId=${courseId}`)
+      return navigate(`${redirectUrl}?token=${token}&continue=${continueUrl}`, {
+        replace: true,
+      })
     }
 
-    setIsLoading(true)
     setSubmitError(null)
 
     try {
