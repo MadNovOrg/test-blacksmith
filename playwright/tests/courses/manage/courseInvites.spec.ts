@@ -41,6 +41,7 @@ const test = base.extend<{ course: Course }>({
 })
 
 test('course invites', async ({ browser, course }) => {
+  test.skip(true, "Skipping until Salman's work on automatic user creation")
   test.skip(TARGET_ENV === 'local')
   test.setTimeout(60000)
   const trainerContext = await browser.newContext({
