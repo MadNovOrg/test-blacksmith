@@ -13,7 +13,7 @@ import {
   ResponseType as VerifyUserResponseType,
 } from '@app/queries/invites/verify-user'
 
-export const AutoVerifyUser = () => {
+export const AutoVerify = () => {
   const [error, setError] = useState<string | null>(null)
   const params = useParams()
   const { loadProfile } = useAuth()

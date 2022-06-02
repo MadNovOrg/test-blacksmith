@@ -1,5 +1,5 @@
 import { Typography, Box, Button } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMount } from 'react-use'
@@ -17,6 +17,8 @@ import {
 
 import { Form } from './components/Form'
 
+const bookingState = { from: { pathname: '/booking' } }
+
 export const RegistrationPage: React.FC = () => {
   const { login, profile } = useAuth()
   const fetcher = useFetcher()
@@ -28,22 +30,20 @@ export const RegistrationPage: React.FC = () => {
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
   const success = searchParams.get('success') === 'true'
-  const loginLocationState = location.state
-    ? location.state
-    : courseId
-    ? { from: { pathname: '/booking' } }
-    : '/'
+  const loginLocationState = location.state || (courseId ? bookingState : '/')
 
-  const onSignUp = (email: string, password: string) => {
-    // delay auto-login just in case
-    setTimeout(async () => {
-      navigate('?success=true', { replace: true })
-      await login(email, password)
-      // when login completes, we have an active profile of unverified user,
-      // router sets in the available routes and we navigate to verify
-      navigate('/verify', { replace: true, state: location.state })
-    }, 500)
+  const onSignUp = async (email: string, password: string) => {
+    navigate('?success=true', { replace: true })
+    await login(email, password)
   }
+
+  // when login completes, we have an active profile of unverified user,
+  // router sets in the available routes and we navigate to verify
+  useEffect(() => {
+    if (!profile) return
+
+    navigate('/verify', { replace: true, state: loginLocationState })
+  }, [profile, navigate, loginLocationState])
 
   // This page loads for logged in as well as logged out users. When it loads
   // for logged in user, it will have a profile for sure, in which case we need to

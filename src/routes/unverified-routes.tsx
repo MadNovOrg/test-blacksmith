@@ -5,7 +5,7 @@ import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
 import { NotFound } from '@app/pages/common/NotFound'
 import { VerifyEmailPage } from '@app/pages/common/VerifyEmail'
-import { AutoVerifyUser } from '@app/pages/unverified-pages/AutoVerifyUser'
+import { AutoVerify } from '@app/pages/unverified-pages/AutoVerify'
 
 // Routes that are specific to unverified users are rendered here.
 // Booking and Profile pages are applicable to any logged in user
@@ -16,7 +16,7 @@ const UnverifiedRoutes = () => {
       <Suspense fallback={<SuspenseLoading />}>
         <Routes>
           <Route index element={<Navigate replace to="verify" />} />
-          <Route path="accept-invite/:id" element={<AutoVerifyUser />} />
+          <Route path="accept-invite/:id" element={<AutoVerify />} />
           <Route path="verify" element={<VerifyEmailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

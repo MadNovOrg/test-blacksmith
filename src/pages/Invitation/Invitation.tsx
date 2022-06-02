@@ -87,9 +87,8 @@ export const InvitationPage = () => {
     setIsLoading(true)
 
     if (response === 'yes') {
-      const exists = await userExistsInCognito(email)
-
       const isUserLoggedIn = profile?.email === email
+      const exists = isUserLoggedIn ? true : await userExistsInCognito(email)
       const nextUrl = exists ? '/auto-login' : '/auto-register'
       const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
