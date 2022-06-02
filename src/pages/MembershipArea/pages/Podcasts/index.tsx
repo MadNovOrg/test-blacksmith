@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import {
   Box,
   CircularProgress,
@@ -19,8 +18,8 @@ import {
   PodcastsQueryVariables,
 } from '@app/generated/graphql'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
-import theme from '@app/theme'
 
+import { ArrowPagination } from '../../components/ArrowPagination'
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { SplitPost } from '../../components/SplitPost'
 
@@ -84,11 +83,6 @@ export const Podcasts: React.FC = () => {
     setOrderDirection(direction)
   }
 
-  const hasPreviousPage = currentPage > 1
-  const hasNextPage = data?.podcasts
-    ? currentPage * PER_PAGE < data.podcasts.total
-    : false
-
   const hasPagination = data?.podcasts ? PER_PAGE < data.podcasts.total : false
 
   return (
@@ -125,7 +119,7 @@ export const Podcasts: React.FC = () => {
         </Box>
       )}
 
-      {allPodcasts && (
+      {allPodcasts && data?.podcasts?.total && (
         <>
           <Typography mb={3} variant="h3" color="primary">
             {t('pages.membership.podcasts.list-title')}
@@ -161,52 +155,11 @@ export const Podcasts: React.FC = () => {
             ))}
           </Grid>
           {hasPagination ? (
-            <Box
+            <ArrowPagination
+              total={data.podcasts.total}
               data-testid="podcasts-pagination"
-              display="flex"
-              mt={5}
-              justifyContent="space-between"
-            >
-              <Typography variant="body2">
-                {t('pages.membership.podcasts.pagination-count', {
-                  start: (currentPage - 1) * PER_PAGE + 1,
-                  end:
-                    currentPage * PER_PAGE > 20 ? 20 : currentPage * PER_PAGE,
-                  total: data?.podcasts?.total,
-                })}
-              </Typography>
-              <Box>
-                <ChevronLeft
-                  onClick={() => {
-                    if (hasPreviousPage) {
-                      setCurrentPage(currentPage - 1)
-                    }
-                  }}
-                  data-testid="pagination-previous-page"
-                  sx={{
-                    marginRight: 1,
-                    cursor: hasPreviousPage ? 'pointer' : 'default',
-                    color: hasPreviousPage
-                      ? 'inherit'
-                      : theme.palette.text.disabled,
-                  }}
-                />
-                <ChevronRight
-                  onClick={() => {
-                    if (hasNextPage) {
-                      setCurrentPage(currentPage + 1)
-                    }
-                  }}
-                  data-testid="pagination-next-page"
-                  sx={{
-                    cursor: hasNextPage ? 'pointer' : 'default',
-                    color: hasNextPage
-                      ? 'inherit'
-                      : theme.palette.text.disabled,
-                  }}
-                />
-              </Box>
-            </Box>
+              onPageChange={page => setCurrentPage(page)}
+            />
           ) : null}
         </>
       )}
