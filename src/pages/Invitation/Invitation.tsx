@@ -89,12 +89,12 @@ export const InvitationPage = () => {
     if (response === 'yes') {
       const exists = await userExistsInCognito(email)
 
-      const redirectUrl = exists ? '/auto-login' : '/registration2'
-      const continueUrl = encodeURIComponent(
-        `/accept-invite/${inviteId}?courseId=${courseId}`
-      )
+      const isUserLoggedIn = profile?.email === email
+      const nextUrl = exists ? '/auto-login' : '/auto-register'
+      const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
+      const qs = new URLSearchParams({ token, continue: continueUrl })
 
-      return navigate(`${redirectUrl}?token=${token}&continue=${continueUrl}`, {
+      return navigate(isUserLoggedIn ? continueUrl : `${nextUrl}?${qs}`, {
         replace: true,
       })
     }

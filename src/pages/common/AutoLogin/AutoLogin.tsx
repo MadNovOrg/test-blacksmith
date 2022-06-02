@@ -12,7 +12,7 @@ import {
   ResponseType as InitAuthResponseType,
 } from '@app/queries/invites/init-auth'
 
-export const AutoLoginUser = () => {
+export const AutoLogin = () => {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { profile, loadProfile } = useAuth()

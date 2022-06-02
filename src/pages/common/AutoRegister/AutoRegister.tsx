@@ -9,7 +9,7 @@ import { useAuth } from '@app/context/auth'
 
 import { Form } from './components/Form'
 
-export const Registration2Page: React.FC = () => {
+export const AutoRegisterPage: React.FC = () => {
   const { profile } = useAuth()
   const { t } = useTranslation()
 

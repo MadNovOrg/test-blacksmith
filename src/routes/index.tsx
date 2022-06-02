@@ -6,14 +6,14 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AppLayout } from '@app/components/AppLayout'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
-import { AutoLoginUser } from '@app/pages/common/AutoLoginUser'
+import { AutoLogin } from '@app/pages/common/AutoLogin'
+import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
 import { RegistrationPage } from '@app/pages/common/Registration'
-import { Registration2Page } from '@app/pages/common/Registration2'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
@@ -44,7 +44,7 @@ export const AppRoutes = () => {
   }
 
   if (location.pathname === '/auto-login') {
-    return <AutoLoginUser />
+    return <AutoLogin />
   }
 
   if (location.pathname === '/waitlist') {
@@ -72,7 +72,7 @@ function LoggedOutRoutes() {
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="invitation" element={<InvitationPage />} />
       <Route path="registration" element={<RegistrationPage />} />
-      <Route path="registration2" element={<Registration2Page />} />
+      <Route path="auto-register" element={<AutoRegisterPage />} />
       <Route
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
