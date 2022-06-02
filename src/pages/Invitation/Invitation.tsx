@@ -90,7 +90,9 @@ export const InvitationPage = () => {
       const exists = await userExistsInCognito(email)
 
       const redirectUrl = exists ? '/auto-login' : '/registration2'
-      const continueUrl = `/accept-invite/${inviteId}?courseId=${courseId}`
+      const continueUrl = encodeURIComponent(
+        `/accept-invite/${inviteId}?courseId=${courseId}`
+      )
 
       return navigate(`${redirectUrl}?token=${token}&continue=${continueUrl}`, {
         replace: true,

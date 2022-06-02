@@ -250,19 +250,21 @@ export const Form: React.FC<Props> = ({ onSuccess, token }) => {
                 />
               }
               label={
-                <Typography variant="body2">
-                  <Trans i18nKey="pages.signup.tcs-label">
-                    I accept the <a href="">Terms of Business</a> and agree to
-                    Team Teach processing my personal data in accordance with
-                    our
-                    <a href="">Privacy Policy</a>
-                  </Trans>
-                </Typography>
+                <>
+                  <Typography variant="body2">
+                    <Trans i18nKey="pages.signup.tcs-label">
+                      I accept the <a href="">Terms of Business</a> and agree to
+                      Team Teach processing my personal data in accordance with
+                      our
+                      <a href="">Privacy Policy</a>
+                    </Trans>
+                  </Typography>
+                  {errors.tcs ? (
+                    <FormHelperText error>{errors.tcs.message}</FormHelperText>
+                  ) : null}
+                </>
               }
             />
-            {errors.tcs ? (
-              <FormHelperText error>{errors.tcs.message}</FormHelperText>
-            ) : null}
           </Box>
         </Box>
 

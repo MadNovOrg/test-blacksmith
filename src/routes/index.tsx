@@ -43,6 +43,10 @@ export const AppRoutes = () => {
     return <InvitationPage />
   }
 
+  if (location.pathname === '/auto-login') {
+    return <AutoLoginUser />
+  }
+
   if (location.pathname === '/waitlist') {
     return <CourseWaitlist />
   }
@@ -73,7 +77,6 @@ function LoggedOutRoutes() {
         path="contacted-confirmation"
         element={<ContactedConfirmationPage />}
       />
-      <Route path="auto-login" element={<AutoLoginUser />} />
     </Routes>
   )
 }

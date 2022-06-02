@@ -410,22 +410,26 @@ Object {
                   class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                 />
               </span>
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-bvjatk-MuiTypography-root"
               >
-                I accept the 
-                <a
-                  href=""
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
                 >
-                  Terms of Business
-                </a>
-                 and agree to Team Teach processing my personal data in accordance with our 
-                <a
-                  href=""
-                >
-                  Privacy Policy
-                </a>
-              </p>
+                  I accept the 
+                  <a
+                    href=""
+                  >
+                    Terms of Business
+                  </a>
+                   and agree to Team Teach processing my personal data in accordance with our 
+                  <a
+                    href=""
+                  >
+                    Privacy Policy
+                  </a>
+                </p>
+              </span>
             </label>
           </div>
         </div>
@@ -854,22 +858,26 @@ Object {
                 class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
               />
             </span>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
+            <span
+              class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-bvjatk-MuiTypography-root"
             >
-              I accept the 
-              <a
-                href=""
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-1bc48s6-MuiTypography-root"
               >
-                Terms of Business
-              </a>
-               and agree to Team Teach processing my personal data in accordance with our 
-              <a
-                href=""
-              >
-                Privacy Policy
-              </a>
-            </p>
+                I accept the 
+                <a
+                  href=""
+                >
+                  Terms of Business
+                </a>
+                 and agree to Team Teach processing my personal data in accordance with our 
+                <a
+                  href=""
+                >
+                  Privacy Policy
+                </a>
+              </p>
+            </span>
           </label>
         </div>
       </div>
