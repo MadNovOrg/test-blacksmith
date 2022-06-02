@@ -17,7 +17,9 @@ import {
 
 import { Form } from './components/Form'
 
-const bookingState = { from: { pathname: '/booking' } }
+type LocationState = { from: { pathname: string; search: string } }
+
+const bookingState = { pathname: '/booking' }
 
 export const RegistrationPage: React.FC = () => {
   const { login, profile } = useAuth()
@@ -30,7 +32,8 @@ export const RegistrationPage: React.FC = () => {
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
   const success = searchParams.get('success') === 'true'
-  const loginLocationState = location.state || (courseId ? bookingState : '/')
+  const locationState = location.state as LocationState
+  const from = courseId ? bookingState : locationState.from
 
   const onSignUp = async (email: string, password: string) => {
     navigate('?success=true', { replace: true })
@@ -41,9 +44,8 @@ export const RegistrationPage: React.FC = () => {
   // router sets in the available routes and we navigate to verify
   useEffect(() => {
     if (!profile) return
-
-    navigate('/verify', { replace: true, state: loginLocationState })
-  }, [profile, navigate, loginLocationState])
+    navigate('/verify', { replace: true, state: { from } })
+  }, [profile, navigate, from])
 
   // This page loads for logged in as well as logged out users. When it loads
   // for logged in user, it will have a profile for sure, in which case we need to
@@ -97,7 +99,7 @@ export const RegistrationPage: React.FC = () => {
             variant="text"
             color="primary"
             size="small"
-            state={loginLocationState}
+            state={{ from }}
           >
             {t('login')}
           </Button>
