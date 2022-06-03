@@ -109,8 +109,8 @@ function LoggedInRoutes() {
 }
 
 function RedirectToLogin() {
-  const loc = useLocation()
-  return <Navigate replace to="login" state={{ from: loc }} />
+  const { pathname, search } = useLocation()
+  return <Navigate replace to="login" state={{ from: { pathname, search } }} />
 }
 
 function AppLoading() {

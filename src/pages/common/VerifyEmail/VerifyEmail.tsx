@@ -28,22 +28,30 @@ export const getVerifySchema = (t: TFunction) => {
   })
 }
 
+const defaultNextPath = { pathname: '/profile', search: '' }
+
 export const VerifyEmailPage: React.FC<Props> = () => {
   const { t } = useTranslation()
   const location = useLocation()
   const { loadProfile } = useAuth()
   const navigate = useNavigate()
   const [success, setSuccess] = useState(false)
-  const state = (location.state || {}) as LocationState
-  const from = state.from || {}
+  const locationState = (location.state || {}) as LocationState
+
+  const handleLater = async () => {
+    const from = locationState.from || defaultNextPath
+    const nextUrl = `${from.pathname}${from.search}`
+    return navigate(nextUrl, { replace: true })
+  }
 
   const handleContinue = async () => {
     const currentUser = await Auth.currentUserPoolUser()
     await currentUser.refreshSessionIfPossible()
     await loadProfile(currentUser)
 
-    const to = `${from.pathname || '/'}${from.search || ''}`
-    return navigate(to, { replace: true })
+    const from = locationState.from || defaultNextPath
+    const nextUrl = `${from.pathname}${from.search}`
+    return navigate(nextUrl, { replace: true })
   }
 
   return (
@@ -79,7 +87,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
           </Box>
         ) : (
           <Form
-            onVerifyLater={() => navigate('/profile')}
+            onVerifyLater={handleLater}
             onSuccess={() => setSuccess(true)}
           />
         )}
