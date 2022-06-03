@@ -32,7 +32,7 @@ export const RegistrationPage: React.FC = () => {
   const courseId = searchParams.get('course_id')
   const quantity = searchParams.get('quantity')
   const success = searchParams.get('success') === 'true'
-  const locationState = location.state as LocationState
+  const locationState = (location.state || {}) as LocationState
   const from = courseId ? bookingState : locationState.from
 
   const onSignUp = async (email: string, password: string) => {

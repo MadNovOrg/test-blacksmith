@@ -38,9 +38,9 @@ export const VerifyEmailPage: React.FC<Props> = () => {
   const [success, setSuccess] = useState(false)
   const locationState = (location.state || {}) as LocationState
 
-  const handleLater = async () => {
+  const continueToNextPage = async () => {
     const from = locationState.from || defaultNextPath
-    const nextUrl = `${from.pathname}${from.search}`
+    const nextUrl = `${from.pathname || '/'}${from.search || ''}`
     return navigate(nextUrl, { replace: true })
   }
 
@@ -49,9 +49,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
     await currentUser.refreshSessionIfPossible()
     await loadProfile(currentUser)
 
-    const from = locationState.from || defaultNextPath
-    const nextUrl = `${from.pathname}${from.search}`
-    return navigate(nextUrl, { replace: true })
+    return continueToNextPage()
   }
 
   return (
@@ -87,7 +85,7 @@ export const VerifyEmailPage: React.FC<Props> = () => {
           </Box>
         ) : (
           <Form
-            onVerifyLater={handleLater}
+            onVerifyLater={continueToNextPage}
             onSuccess={() => setSuccess(true)}
           />
         )}
