@@ -65,6 +65,7 @@ export const Form: React.FC<Props> = ({ onSuccess, token }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       phone: '',
+      dob: null,
     },
   })
 

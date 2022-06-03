@@ -67,6 +67,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       phone: '',
+      dob: null,
     },
   })
 

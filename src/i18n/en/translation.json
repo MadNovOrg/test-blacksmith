@@ -215,6 +215,7 @@
     },
     "validation-errors": {
       "invalid-date": "Please enter a valid date",
+      "invalid-date-optional": "Please enter a valid date or keep it empty",
       "max-registrants": "Please enter emails of registrants for the quantity you selected",
       "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
