@@ -36,7 +36,7 @@ export const RegistrationPage: React.FC = () => {
   const from = courseId ? bookingState : locationState.from
 
   const onSignUp = async (email: string, password: string) => {
-    navigate('?success=true', { replace: true })
+    navigate('?success=true', { replace: true, state: { from } })
     await login(email, password)
   }
 
