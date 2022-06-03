@@ -8,11 +8,14 @@ configuration:
       custom_name: memberType
     updated_at:
       custom_name: updatedAt
+    is_admin:
+      custom_name: isAdmin
     created_at:
       custom_name: createdAt
   custom_column_names:
     member_type: memberType
     updated_at: updatedAt
+    is_admin: isAdmin
     created_at: createdAt
 object_relationships:
   - name: organization
@@ -21,14 +24,6 @@ object_relationships:
   - name: profile
     using:
       foreign_key_constraint_on: profile_id
-array_relationships:
-  - name: roles
-    using:
-      foreign_key_constraint_on:
-        column: organization_member_id
-        table:
-          schema: public
-          name: organization_member_role
 select_permissions:
   - role: unverified
     permission:

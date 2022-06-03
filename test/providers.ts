@@ -9,7 +9,6 @@ export const profile = {
   familyName: 'Smith',
   fullName: 'John Smith',
   title: 'Mr',
-  status: 'active',
   contactDetails: [],
   email: 'john.smith@example.com',
   avatar: '',

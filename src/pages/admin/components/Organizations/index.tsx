@@ -41,7 +41,6 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
         label: t('pages.admin.organizations.columns.name'),
         sorting: true,
       },
-      { id: 'status', label: t('pages.admin.organizations.columns.status') },
       {
         id: 'members_count',
         label: t('pages.admin.organizations.columns.members-count'),
@@ -107,13 +106,12 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
               {data?.organizations.map(org => (
                 <TableRow key={org.id}>
                   <TableCell>{org.name}</TableCell>
-                  <TableCell>{org.status}</TableCell>
                   <TableCell>{org.members_aggregate.aggregate.count}</TableCell>
                 </TableRow>
               )) ??
                 (loading && (
                   <TableRow>
-                    <TableCell colSpan={9} align="center">
+                    <TableCell colSpan={cols.length} align="center">
                       <CircularProgress />
                     </TableCell>
                   </TableRow>

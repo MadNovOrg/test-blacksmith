@@ -63,10 +63,6 @@ export const Contacts: React.FC<ContactsProps> = () => {
         id: 'role',
         label: 'Role',
       },
-      {
-        id: 'status',
-        label: 'Status',
-      },
     ],
     [t]
   )
@@ -190,12 +186,11 @@ export const Contacts: React.FC<ContactsProps> = () => {
                       <TableCell>
                         {t(`role-names.${profile.roles[0]?.role?.name}`)}
                       </TableCell>
-                      <TableCell>{profile.status}</TableCell>
                     </TableRow>
                   )) ??
                     (loading && (
                       <TableRow>
-                        <TableCell colSpan={9} align="center">
+                        <TableCell colSpan={cols.length} align="center">
                           <CircularProgress />
                         </TableCell>
                       </TableRow>

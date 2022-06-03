@@ -75,7 +75,6 @@ export type ContactDetail = {
 export type Organization = {
   name: string
   tags: string[]
-  status: string
   contactDetails: ContactDetail[]
   members_aggregate: { [key: string]: { [key: string]: number } }
   attributes: { [name: string]: string }
@@ -95,7 +94,6 @@ export type Profile = {
   avatar: string
   title: string
   tags: string[] | null
-  status: string
   dietaryRestrictions: string | null
   disabilities: string | null
   addresses: { [key: string]: string }[]

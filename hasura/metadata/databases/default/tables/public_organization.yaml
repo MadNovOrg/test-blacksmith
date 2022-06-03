@@ -14,18 +14,7 @@ configuration:
     updated_at: updatedAt
     created_at: createdAt
     contact_details: contactDetails
-object_relationships:
-  - name: organization_status
-    using:
-      foreign_key_constraint_on: status
 array_relationships:
-  - name: groups
-    using:
-      foreign_key_constraint_on:
-        column: organization_id
-        table:
-          schema: public
-          name: organization_group
   - name: members
     using:
       foreign_key_constraint_on:
@@ -33,20 +22,6 @@ array_relationships:
         table:
           schema: public
           name: organization_member
-  - name: organizationGroupsByParentOrganizationId
-    using:
-      foreign_key_constraint_on:
-        column: parent_organization_id
-        table:
-          schema: public
-          name: organization_group
-  - name: roles
-    using:
-      foreign_key_constraint_on:
-        column: organization_id
-        table:
-          schema: public
-          name: organization_role
 insert_permissions:
   - role: tt-admin
     permission:
@@ -74,23 +49,21 @@ select_permissions:
         - id
         - name
         - preferences
-        - status
         - tags
         - updated_at
       filter: {}
   - role: user
     permission:
       columns:
-        - name
         - address
         - attributes
         - contact_details
+        - created_at
+        - id
+        - name
         - original_record
         - preferences
         - tags
-        - status
-        - created_at
         - updated_at
-        - id
       filter: {}
       allow_aggregations: true

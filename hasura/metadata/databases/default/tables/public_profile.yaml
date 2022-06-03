@@ -29,10 +29,6 @@ configuration:
     created_at: createdAt
     contact_details: contactDetails
     go1_id: go1Id
-object_relationships:
-  - name: profile_status
-    using:
-      foreign_key_constraint_on: status
 array_relationships:
   - name: identities
     using:
@@ -83,7 +79,6 @@ select_permissions:
         - original_record
         - phone
         - preferences
-        - status
         - stripe_customer_id
         - tags
         - title
@@ -111,7 +106,6 @@ select_permissions:
         - original_record
         - phone
         - preferences
-        - status
         - tags
         - title
         - updated_at

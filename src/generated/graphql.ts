@@ -1157,6 +1157,16 @@ export enum CourseTrainerType {
   Moderator = 'MODERATOR'
 }
 
+export type CreateAppUserInput = {
+  acceptMarketing: Scalars['Boolean'];
+  acceptTnc: Scalars['Boolean'];
+  dob?: InputMaybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  password: Scalars['String'];
+  phone?: InputMaybe<Scalars['String']>;
+};
+
 /** Input for the createCategory mutation */
 export type CreateCategoryInput = {
   /** The slug that the category will be an alias of */
@@ -1426,6 +1436,13 @@ export type CreateUserInput = {
   websiteUrl?: InputMaybe<Scalars['String']>;
   /** User's Yahoo IM account. */
   yim?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateUserOutput = {
+  __typename?: 'CreateUserOutput';
+  cognitoId: Scalars['String'];
+  email: Scalars['String'];
+  profileId: Scalars['String'];
 };
 
 /** The payload for the createUser mutation */
@@ -1924,6 +1941,12 @@ export type HierarchicalTermNode = {
   parentDatabaseId?: Maybe<Scalars['Int']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']>;
+};
+
+export type InitAuthOutput = {
+  __typename?: 'InitAuthOutput';
+  authChallenge: Scalars['String'];
+  email: Scalars['String'];
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
@@ -14193,6 +14216,7 @@ export type Mutation_Root = {
   content?: Maybe<RootMutation>;
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
+  createUser: CreateUserOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
   /** delete data from the table: "blended_learning_status" */
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
@@ -14318,26 +14342,10 @@ export type Mutation_Root = {
   delete_organization?: Maybe<Organization_Mutation_Response>;
   /** delete single row from the table: "organization" */
   delete_organization_by_pk?: Maybe<Organization>;
-  /** delete data from the table: "organization_group" */
-  delete_organization_group?: Maybe<Organization_Group_Mutation_Response>;
-  /** delete single row from the table: "organization_group" */
-  delete_organization_group_by_pk?: Maybe<Organization_Group>;
   /** delete data from the table: "organization_member" */
   delete_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** delete single row from the table: "organization_member" */
   delete_organization_member_by_pk?: Maybe<Organization_Member>;
-  /** delete data from the table: "organization_member_role" */
-  delete_organization_member_role?: Maybe<Organization_Member_Role_Mutation_Response>;
-  /** delete single row from the table: "organization_member_role" */
-  delete_organization_member_role_by_pk?: Maybe<Organization_Member_Role>;
-  /** delete data from the table: "organization_role" */
-  delete_organization_role?: Maybe<Organization_Role_Mutation_Response>;
-  /** delete single row from the table: "organization_role" */
-  delete_organization_role_by_pk?: Maybe<Organization_Role>;
-  /** delete data from the table: "organization_status" */
-  delete_organization_status?: Maybe<Organization_Status_Mutation_Response>;
-  /** delete single row from the table: "organization_status" */
-  delete_organization_status_by_pk?: Maybe<Organization_Status>;
   /** delete data from the table: "payment_methods" */
   delete_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** delete single row from the table: "payment_methods" */
@@ -14350,18 +14358,10 @@ export type Mutation_Root = {
   delete_profile_role?: Maybe<Profile_Role_Mutation_Response>;
   /** delete single row from the table: "profile_role" */
   delete_profile_role_by_pk?: Maybe<Profile_Role>;
-  /** delete data from the table: "profile_status" */
-  delete_profile_status?: Maybe<Profile_Status_Mutation_Response>;
-  /** delete single row from the table: "profile_status" */
-  delete_profile_status_by_pk?: Maybe<Profile_Status>;
   /** delete data from the table: "profile_temp" */
   delete_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** delete single row from the table: "profile_temp" */
   delete_profile_temp_by_pk?: Maybe<Profile_Temp>;
-  /** delete data from the table: "resource" */
-  delete_resource?: Maybe<Resource_Mutation_Response>;
-  /** delete single row from the table: "resource" */
-  delete_resource_by_pk?: Maybe<Resource>;
   /** delete data from the table: "role" */
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
@@ -14500,28 +14500,12 @@ export type Mutation_Root = {
   insert_order_one?: Maybe<Order>;
   /** insert data into the table: "organization" */
   insert_organization?: Maybe<Organization_Mutation_Response>;
-  /** insert data into the table: "organization_group" */
-  insert_organization_group?: Maybe<Organization_Group_Mutation_Response>;
-  /** insert a single row into the table: "organization_group" */
-  insert_organization_group_one?: Maybe<Organization_Group>;
   /** insert data into the table: "organization_member" */
   insert_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** insert a single row into the table: "organization_member" */
   insert_organization_member_one?: Maybe<Organization_Member>;
-  /** insert data into the table: "organization_member_role" */
-  insert_organization_member_role?: Maybe<Organization_Member_Role_Mutation_Response>;
-  /** insert a single row into the table: "organization_member_role" */
-  insert_organization_member_role_one?: Maybe<Organization_Member_Role>;
   /** insert a single row into the table: "organization" */
   insert_organization_one?: Maybe<Organization>;
-  /** insert data into the table: "organization_role" */
-  insert_organization_role?: Maybe<Organization_Role_Mutation_Response>;
-  /** insert a single row into the table: "organization_role" */
-  insert_organization_role_one?: Maybe<Organization_Role>;
-  /** insert data into the table: "organization_status" */
-  insert_organization_status?: Maybe<Organization_Status_Mutation_Response>;
-  /** insert a single row into the table: "organization_status" */
-  insert_organization_status_one?: Maybe<Organization_Status>;
   /** insert data into the table: "payment_methods" */
   insert_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** insert a single row into the table: "payment_methods" */
@@ -14534,18 +14518,10 @@ export type Mutation_Root = {
   insert_profile_role?: Maybe<Profile_Role_Mutation_Response>;
   /** insert a single row into the table: "profile_role" */
   insert_profile_role_one?: Maybe<Profile_Role>;
-  /** insert data into the table: "profile_status" */
-  insert_profile_status?: Maybe<Profile_Status_Mutation_Response>;
-  /** insert a single row into the table: "profile_status" */
-  insert_profile_status_one?: Maybe<Profile_Status>;
   /** insert data into the table: "profile_temp" */
   insert_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** insert a single row into the table: "profile_temp" */
   insert_profile_temp_one?: Maybe<Profile_Temp>;
-  /** insert data into the table: "resource" */
-  insert_resource?: Maybe<Resource_Mutation_Response>;
-  /** insert a single row into the table: "resource" */
-  insert_resource_one?: Maybe<Resource>;
   /** insert data into the table: "role" */
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
@@ -14689,26 +14665,10 @@ export type Mutation_Root = {
   update_organization?: Maybe<Organization_Mutation_Response>;
   /** update single row of the table: "organization" */
   update_organization_by_pk?: Maybe<Organization>;
-  /** update data of the table: "organization_group" */
-  update_organization_group?: Maybe<Organization_Group_Mutation_Response>;
-  /** update single row of the table: "organization_group" */
-  update_organization_group_by_pk?: Maybe<Organization_Group>;
   /** update data of the table: "organization_member" */
   update_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** update single row of the table: "organization_member" */
   update_organization_member_by_pk?: Maybe<Organization_Member>;
-  /** update data of the table: "organization_member_role" */
-  update_organization_member_role?: Maybe<Organization_Member_Role_Mutation_Response>;
-  /** update single row of the table: "organization_member_role" */
-  update_organization_member_role_by_pk?: Maybe<Organization_Member_Role>;
-  /** update data of the table: "organization_role" */
-  update_organization_role?: Maybe<Organization_Role_Mutation_Response>;
-  /** update single row of the table: "organization_role" */
-  update_organization_role_by_pk?: Maybe<Organization_Role>;
-  /** update data of the table: "organization_status" */
-  update_organization_status?: Maybe<Organization_Status_Mutation_Response>;
-  /** update single row of the table: "organization_status" */
-  update_organization_status_by_pk?: Maybe<Organization_Status>;
   /** update data of the table: "payment_methods" */
   update_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** update single row of the table: "payment_methods" */
@@ -14721,18 +14681,10 @@ export type Mutation_Root = {
   update_profile_role?: Maybe<Profile_Role_Mutation_Response>;
   /** update single row of the table: "profile_role" */
   update_profile_role_by_pk?: Maybe<Profile_Role>;
-  /** update data of the table: "profile_status" */
-  update_profile_status?: Maybe<Profile_Status_Mutation_Response>;
-  /** update single row of the table: "profile_status" */
-  update_profile_status_by_pk?: Maybe<Profile_Status>;
   /** update data of the table: "profile_temp" */
   update_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** update single row of the table: "profile_temp" */
   update_profile_temp_by_pk?: Maybe<Profile_Temp>;
-  /** update data of the table: "resource" */
-  update_resource?: Maybe<Resource_Mutation_Response>;
-  /** update single row of the table: "resource" */
-  update_resource_by_pk?: Maybe<Resource>;
   /** update data of the table: "role" */
   update_role?: Maybe<Role_Mutation_Response>;
   /** update single row of the table: "role" */
@@ -14760,6 +14712,12 @@ export type Mutation_Root = {
 export type Mutation_RootCreateStripeSubscriptionArgs = {
   customerId: Scalars['String'];
   priceId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCreateUserArgs = {
+  input: CreateAppUserInput;
 };
 
 
@@ -15142,18 +15100,6 @@ export type Mutation_RootDelete_Organization_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Organization_GroupArgs = {
-  where: Organization_Group_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_Group_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-/** mutation root */
 export type Mutation_RootDelete_Organization_MemberArgs = {
   where: Organization_Member_Bool_Exp;
 };
@@ -15162,42 +15108,6 @@ export type Mutation_RootDelete_Organization_MemberArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Organization_Member_By_PkArgs = {
   id: Scalars['uuid'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_Member_RoleArgs = {
-  where: Organization_Member_Role_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_Member_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_RoleArgs = {
-  where: Organization_Role_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_StatusArgs = {
-  where: Organization_Status_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Organization_Status_By_PkArgs = {
-  value: Scalars['String'];
 };
 
 
@@ -15238,18 +15148,6 @@ export type Mutation_RootDelete_Profile_Role_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Profile_StatusArgs = {
-  where: Profile_Status_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Profile_Status_By_PkArgs = {
-  value: Scalars['String'];
-};
-
-
-/** mutation root */
 export type Mutation_RootDelete_Profile_TempArgs = {
   where: Profile_Temp_Bool_Exp;
 };
@@ -15258,18 +15156,6 @@ export type Mutation_RootDelete_Profile_TempArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Profile_Temp_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_ResourceArgs = {
-  where: Resource_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Resource_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -15749,20 +15635,6 @@ export type Mutation_RootInsert_OrganizationArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Organization_GroupArgs = {
-  objects: Array<Organization_Group_Insert_Input>;
-  on_conflict?: InputMaybe<Organization_Group_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_Group_OneArgs = {
-  object: Organization_Group_Insert_Input;
-  on_conflict?: InputMaybe<Organization_Group_On_Conflict>;
-};
-
-
-/** mutation root */
 export type Mutation_RootInsert_Organization_MemberArgs = {
   objects: Array<Organization_Member_Insert_Input>;
   on_conflict?: InputMaybe<Organization_Member_On_Conflict>;
@@ -15777,51 +15649,9 @@ export type Mutation_RootInsert_Organization_Member_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Organization_Member_RoleArgs = {
-  objects: Array<Organization_Member_Role_Insert_Input>;
-  on_conflict?: InputMaybe<Organization_Member_Role_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_Member_Role_OneArgs = {
-  object: Organization_Member_Role_Insert_Input;
-  on_conflict?: InputMaybe<Organization_Member_Role_On_Conflict>;
-};
-
-
-/** mutation root */
 export type Mutation_RootInsert_Organization_OneArgs = {
   object: Organization_Insert_Input;
   on_conflict?: InputMaybe<Organization_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_RoleArgs = {
-  objects: Array<Organization_Role_Insert_Input>;
-  on_conflict?: InputMaybe<Organization_Role_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_Role_OneArgs = {
-  object: Organization_Role_Insert_Input;
-  on_conflict?: InputMaybe<Organization_Role_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_StatusArgs = {
-  objects: Array<Organization_Status_Insert_Input>;
-  on_conflict?: InputMaybe<Organization_Status_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Organization_Status_OneArgs = {
-  object: Organization_Status_Insert_Input;
-  on_conflict?: InputMaybe<Organization_Status_On_Conflict>;
 };
 
 
@@ -15868,20 +15698,6 @@ export type Mutation_RootInsert_Profile_Role_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Profile_StatusArgs = {
-  objects: Array<Profile_Status_Insert_Input>;
-  on_conflict?: InputMaybe<Profile_Status_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Profile_Status_OneArgs = {
-  object: Profile_Status_Insert_Input;
-  on_conflict?: InputMaybe<Profile_Status_On_Conflict>;
-};
-
-
-/** mutation root */
 export type Mutation_RootInsert_Profile_TempArgs = {
   objects: Array<Profile_Temp_Insert_Input>;
   on_conflict?: InputMaybe<Profile_Temp_On_Conflict>;
@@ -15892,20 +15708,6 @@ export type Mutation_RootInsert_Profile_TempArgs = {
 export type Mutation_RootInsert_Profile_Temp_OneArgs = {
   object: Profile_Temp_Insert_Input;
   on_conflict?: InputMaybe<Profile_Temp_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_ResourceArgs = {
-  objects: Array<Resource_Insert_Input>;
-  on_conflict?: InputMaybe<Resource_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Resource_OneArgs = {
-  object: Resource_Insert_Input;
-  on_conflict?: InputMaybe<Resource_On_Conflict>;
 };
 
 
@@ -16456,20 +16258,6 @@ export type Mutation_RootUpdate_Organization_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Organization_GroupArgs = {
-  _set?: InputMaybe<Organization_Group_Set_Input>;
-  where: Organization_Group_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_Group_By_PkArgs = {
-  _set?: InputMaybe<Organization_Group_Set_Input>;
-  pk_columns: Organization_Group_Pk_Columns_Input;
-};
-
-
-/** mutation root */
 export type Mutation_RootUpdate_Organization_MemberArgs = {
   _set?: InputMaybe<Organization_Member_Set_Input>;
   where: Organization_Member_Bool_Exp;
@@ -16480,48 +16268,6 @@ export type Mutation_RootUpdate_Organization_MemberArgs = {
 export type Mutation_RootUpdate_Organization_Member_By_PkArgs = {
   _set?: InputMaybe<Organization_Member_Set_Input>;
   pk_columns: Organization_Member_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_Member_RoleArgs = {
-  _set?: InputMaybe<Organization_Member_Role_Set_Input>;
-  where: Organization_Member_Role_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_Member_Role_By_PkArgs = {
-  _set?: InputMaybe<Organization_Member_Role_Set_Input>;
-  pk_columns: Organization_Member_Role_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_RoleArgs = {
-  _set?: InputMaybe<Organization_Role_Set_Input>;
-  where: Organization_Role_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_Role_By_PkArgs = {
-  _set?: InputMaybe<Organization_Role_Set_Input>;
-  pk_columns: Organization_Role_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_StatusArgs = {
-  _set?: InputMaybe<Organization_Status_Set_Input>;
-  where: Organization_Status_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Organization_Status_By_PkArgs = {
-  _set?: InputMaybe<Organization_Status_Set_Input>;
-  pk_columns: Organization_Status_Pk_Columns_Input;
 };
 
 
@@ -16580,20 +16326,6 @@ export type Mutation_RootUpdate_Profile_Role_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Profile_StatusArgs = {
-  _set?: InputMaybe<Profile_Status_Set_Input>;
-  where: Profile_Status_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Profile_Status_By_PkArgs = {
-  _set?: InputMaybe<Profile_Status_Set_Input>;
-  pk_columns: Profile_Status_Pk_Columns_Input;
-};
-
-
-/** mutation root */
 export type Mutation_RootUpdate_Profile_TempArgs = {
   _inc?: InputMaybe<Profile_Temp_Inc_Input>;
   _set?: InputMaybe<Profile_Temp_Set_Input>;
@@ -16606,20 +16338,6 @@ export type Mutation_RootUpdate_Profile_Temp_By_PkArgs = {
   _inc?: InputMaybe<Profile_Temp_Inc_Input>;
   _set?: InputMaybe<Profile_Temp_Set_Input>;
   pk_columns: Profile_Temp_Pk_Columns_Input;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_ResourceArgs = {
-  _set?: InputMaybe<Resource_Set_Input>;
-  where: Resource_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Resource_By_PkArgs = {
-  _set?: InputMaybe<Resource_Set_Input>;
-  pk_columns: Resource_Pk_Columns_Input;
 };
 
 
@@ -17159,29 +16877,14 @@ export type Organization = {
   attributes: Scalars['jsonb'];
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
-  /** An array relationship */
-  groups: Array<Organization_Group>;
-  /** An aggregate relationship */
-  groups_aggregate: Organization_Group_Aggregate;
   id: Scalars['uuid'];
   /** An array relationship */
   members: Array<Organization_Member>;
   /** An aggregate relationship */
   members_aggregate: Organization_Member_Aggregate;
   name: Scalars['String'];
-  /** An array relationship */
-  organizationGroupsByParentOrganizationId: Array<Organization_Group>;
-  /** An aggregate relationship */
-  organizationGroupsByParentOrganizationId_aggregate: Organization_Group_Aggregate;
-  /** An object relationship */
-  organization_status: Organization_Status;
   original_record?: Maybe<Scalars['jsonb']>;
   preferences: Scalars['jsonb'];
-  /** An array relationship */
-  roles: Array<Organization_Role>;
-  /** An aggregate relationship */
-  roles_aggregate: Organization_Role_Aggregate;
-  status: Organization_Status_Enum;
   tags?: Maybe<Scalars['jsonb']>;
   updatedAt: Scalars['timestamptz'];
 };
@@ -17206,26 +16909,6 @@ export type OrganizationContactDetailsArgs = {
 
 
 /** columns and relationships of "organization" */
-export type OrganizationGroupsArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization" */
-export type OrganizationGroups_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization" */
 export type OrganizationMembersArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -17246,26 +16929,6 @@ export type OrganizationMembers_AggregateArgs = {
 
 
 /** columns and relationships of "organization" */
-export type OrganizationOrganizationGroupsByParentOrganizationIdArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization" */
-export type OrganizationOrganizationGroupsByParentOrganizationId_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization" */
 export type OrganizationOriginal_RecordArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
@@ -17274,26 +16937,6 @@ export type OrganizationOriginal_RecordArgs = {
 /** columns and relationships of "organization" */
 export type OrganizationPreferencesArgs = {
   path?: InputMaybe<Scalars['String']>;
-};
-
-
-/** columns and relationships of "organization" */
-export type OrganizationRolesArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization" */
-export type OrganizationRoles_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
 };
 
 
@@ -17324,13 +16967,6 @@ export type Organization_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "organization" */
-export type Organization_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Organization_Max_Order_By>;
-  min?: InputMaybe<Organization_Min_Order_By>;
-};
-
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Organization_Append_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
@@ -17339,13 +16975,6 @@ export type Organization_Append_Input = {
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   tags?: InputMaybe<Scalars['jsonb']>;
-};
-
-/** input type for inserting array relation for remote table "organization" */
-export type Organization_Arr_Rel_Insert_Input = {
-  data: Array<Organization_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_On_Conflict>;
 };
 
 /** Boolean expression to filter rows from the table "organization". All fields are combined with a logical 'AND'. */
@@ -17357,16 +16986,11 @@ export type Organization_Bool_Exp = {
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  groups?: InputMaybe<Organization_Group_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   members?: InputMaybe<Organization_Member_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
-  organizationGroupsByParentOrganizationId?: InputMaybe<Organization_Group_Bool_Exp>;
-  organization_status?: InputMaybe<Organization_Status_Bool_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
-  roles?: InputMaybe<Organization_Role_Bool_Exp>;
-  status?: InputMaybe<Organization_Status_Enum_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -17407,225 +17031,17 @@ export type Organization_Delete_Key_Input = {
   tags?: InputMaybe<Scalars['String']>;
 };
 
-/** columns and relationships of "organization_group" */
-export type Organization_Group = {
-  __typename?: 'organization_group';
-  _source?: Maybe<Scalars['String']>;
-  created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
-  /** An object relationship */
-  organization: Organization;
-  /** An object relationship */
-  organizationByParentOrganizationId: Organization;
-  organization_id: Scalars['uuid'];
-  parent_organization_id: Scalars['uuid'];
-  updated_at: Scalars['timestamptz'];
-};
-
-/** aggregated selection of "organization_group" */
-export type Organization_Group_Aggregate = {
-  __typename?: 'organization_group_aggregate';
-  aggregate?: Maybe<Organization_Group_Aggregate_Fields>;
-  nodes: Array<Organization_Group>;
-};
-
-/** aggregate fields of "organization_group" */
-export type Organization_Group_Aggregate_Fields = {
-  __typename?: 'organization_group_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Organization_Group_Max_Fields>;
-  min?: Maybe<Organization_Group_Min_Fields>;
-};
-
-
-/** aggregate fields of "organization_group" */
-export type Organization_Group_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "organization_group" */
-export type Organization_Group_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Organization_Group_Max_Order_By>;
-  min?: InputMaybe<Organization_Group_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "organization_group" */
-export type Organization_Group_Arr_Rel_Insert_Input = {
-  data: Array<Organization_Group_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Group_On_Conflict>;
-};
-
-/** Boolean expression to filter rows from the table "organization_group". All fields are combined with a logical 'AND'. */
-export type Organization_Group_Bool_Exp = {
-  _and?: InputMaybe<Array<Organization_Group_Bool_Exp>>;
-  _not?: InputMaybe<Organization_Group_Bool_Exp>;
-  _or?: InputMaybe<Array<Organization_Group_Bool_Exp>>;
-  _source?: InputMaybe<String_Comparison_Exp>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  organization?: InputMaybe<Organization_Bool_Exp>;
-  organizationByParentOrganizationId?: InputMaybe<Organization_Bool_Exp>;
-  organization_id?: InputMaybe<Uuid_Comparison_Exp>;
-  parent_organization_id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "organization_group" */
-export enum Organization_Group_Constraint {
-  /** unique or primary key constraint */
-  OrganizationGroupOrganizationIdParentOrganizationIdKey = 'organization_group_organization_id_parent_organization_id_key',
-  /** unique or primary key constraint */
-  OrganizationGroupPkey = 'organization_group_pkey'
-}
-
-/** input type for inserting data into table "organization_group" */
-export type Organization_Group_Insert_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
-  organizationByParentOrganizationId?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
-  organization_id?: InputMaybe<Scalars['uuid']>;
-  parent_organization_id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** aggregate max on columns */
-export type Organization_Group_Max_Fields = {
-  __typename?: 'organization_group_max_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_id?: Maybe<Scalars['uuid']>;
-  parent_organization_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by max() on columns of table "organization_group" */
-export type Organization_Group_Max_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  parent_organization_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Organization_Group_Min_Fields = {
-  __typename?: 'organization_group_min_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_id?: Maybe<Scalars['uuid']>;
-  parent_organization_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "organization_group" */
-export type Organization_Group_Min_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  parent_organization_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** response of any mutation on the table "organization_group" */
-export type Organization_Group_Mutation_Response = {
-  __typename?: 'organization_group_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Organization_Group>;
-};
-
-/** on_conflict condition type for table "organization_group" */
-export type Organization_Group_On_Conflict = {
-  constraint: Organization_Group_Constraint;
-  update_columns?: Array<Organization_Group_Update_Column>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "organization_group". */
-export type Organization_Group_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization?: InputMaybe<Organization_Order_By>;
-  organizationByParentOrganizationId?: InputMaybe<Organization_Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  parent_organization_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: organization_group */
-export type Organization_Group_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "organization_group" */
-export enum Organization_Group_Select_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationId = 'organization_id',
-  /** column name */
-  ParentOrganizationId = 'parent_organization_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
-/** input type for updating data in table "organization_group" */
-export type Organization_Group_Set_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  organization_id?: InputMaybe<Scalars['uuid']>;
-  parent_organization_id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** update columns of table "organization_group" */
-export enum Organization_Group_Update_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationId = 'organization_id',
-  /** column name */
-  ParentOrganizationId = 'parent_organization_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
 /** input type for inserting data into table "organization" */
 export type Organization_Insert_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  groups?: InputMaybe<Organization_Group_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['uuid']>;
   members?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
-  organizationGroupsByParentOrganizationId?: InputMaybe<Organization_Group_Arr_Rel_Insert_Input>;
-  organization_status?: InputMaybe<Organization_Status_Obj_Rel_Insert_Input>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
-  roles?: InputMaybe<Organization_Role_Arr_Rel_Insert_Input>;
-  status?: InputMaybe<Organization_Status_Enum>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -17639,20 +17055,13 @@ export type Organization_Max_Fields = {
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
-/** order by max() on columns of table "organization" */
-export type Organization_Max_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
-};
-
 /** columns and relationships of "organization_member" */
 export type Organization_Member = {
   __typename?: 'organization_member';
   _source?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
+  isAdmin?: Maybe<Scalars['Boolean']>;
   memberType?: Maybe<Scalars['String']>;
   /** An object relationship */
   organization: Organization;
@@ -17660,31 +17069,7 @@ export type Organization_Member = {
   /** An object relationship */
   profile: Profile;
   profile_id: Scalars['uuid'];
-  /** An array relationship */
-  roles: Array<Organization_Member_Role>;
-  /** An aggregate relationship */
-  roles_aggregate: Organization_Member_Role_Aggregate;
   updatedAt: Scalars['timestamptz'];
-};
-
-
-/** columns and relationships of "organization_member" */
-export type Organization_MemberRolesArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization_member" */
-export type Organization_MemberRoles_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
 };
 
 /** aggregated selection of "organization_member" */
@@ -17731,12 +17116,12 @@ export type Organization_Member_Bool_Exp = {
   _source?: InputMaybe<String_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  isAdmin?: InputMaybe<Boolean_Comparison_Exp>;
   memberType?: InputMaybe<String_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
-  roles?: InputMaybe<Organization_Member_Role_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -17753,12 +17138,12 @@ export type Organization_Member_Insert_Input = {
   _source?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
   memberType?: InputMaybe<Scalars['String']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profile_id?: InputMaybe<Scalars['uuid']>;
-  roles?: InputMaybe<Organization_Member_Role_Arr_Rel_Insert_Input>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -17817,13 +17202,6 @@ export type Organization_Member_Mutation_Response = {
   returning: Array<Organization_Member>;
 };
 
-/** input type for inserting object relation for remote table "organization_member" */
-export type Organization_Member_Obj_Rel_Insert_Input = {
-  data: Organization_Member_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Member_On_Conflict>;
-};
-
 /** on_conflict condition type for table "organization_member" */
 export type Organization_Member_On_Conflict = {
   constraint: Organization_Member_Constraint;
@@ -17836,12 +17214,12 @@ export type Organization_Member_Order_By = {
   _source?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  isAdmin?: InputMaybe<Order_By>;
   memberType?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
   organization_id?: InputMaybe<Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profile_id?: InputMaybe<Order_By>;
-  roles_aggregate?: InputMaybe<Organization_Member_Role_Aggregate_Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
@@ -17849,209 +17227,6 @@ export type Organization_Member_Order_By = {
 export type Organization_Member_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
-
-/** columns and relationships of "organization_member_role" */
-export type Organization_Member_Role = {
-  __typename?: 'organization_member_role';
-  _source?: Maybe<Scalars['String']>;
-  created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
-  /** An object relationship */
-  member: Organization_Member;
-  organization_member_id: Scalars['uuid'];
-  organization_role_id: Scalars['uuid'];
-  /** An object relationship */
-  role: Organization_Role;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** aggregated selection of "organization_member_role" */
-export type Organization_Member_Role_Aggregate = {
-  __typename?: 'organization_member_role_aggregate';
-  aggregate?: Maybe<Organization_Member_Role_Aggregate_Fields>;
-  nodes: Array<Organization_Member_Role>;
-};
-
-/** aggregate fields of "organization_member_role" */
-export type Organization_Member_Role_Aggregate_Fields = {
-  __typename?: 'organization_member_role_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Organization_Member_Role_Max_Fields>;
-  min?: Maybe<Organization_Member_Role_Min_Fields>;
-};
-
-
-/** aggregate fields of "organization_member_role" */
-export type Organization_Member_Role_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "organization_member_role" */
-export type Organization_Member_Role_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Organization_Member_Role_Max_Order_By>;
-  min?: InputMaybe<Organization_Member_Role_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "organization_member_role" */
-export type Organization_Member_Role_Arr_Rel_Insert_Input = {
-  data: Array<Organization_Member_Role_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Member_Role_On_Conflict>;
-};
-
-/** Boolean expression to filter rows from the table "organization_member_role". All fields are combined with a logical 'AND'. */
-export type Organization_Member_Role_Bool_Exp = {
-  _and?: InputMaybe<Array<Organization_Member_Role_Bool_Exp>>;
-  _not?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-  _or?: InputMaybe<Array<Organization_Member_Role_Bool_Exp>>;
-  _source?: InputMaybe<String_Comparison_Exp>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  member?: InputMaybe<Organization_Member_Bool_Exp>;
-  organization_member_id?: InputMaybe<Uuid_Comparison_Exp>;
-  organization_role_id?: InputMaybe<Uuid_Comparison_Exp>;
-  role?: InputMaybe<Organization_Role_Bool_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "organization_member_role" */
-export enum Organization_Member_Role_Constraint {
-  /** unique or primary key constraint */
-  OrganizationMemeberRoleOrganizationMemberIdOrganizatiKey = 'organization_memeber_role_organization_member_id_organizati_key',
-  /** unique or primary key constraint */
-  OrganizationMemeberRolePkey = 'organization_memeber_role_pkey'
-}
-
-/** input type for inserting data into table "organization_member_role" */
-export type Organization_Member_Role_Insert_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  member?: InputMaybe<Organization_Member_Obj_Rel_Insert_Input>;
-  organization_member_id?: InputMaybe<Scalars['uuid']>;
-  organization_role_id?: InputMaybe<Scalars['uuid']>;
-  role?: InputMaybe<Organization_Role_Obj_Rel_Insert_Input>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** aggregate max on columns */
-export type Organization_Member_Role_Max_Fields = {
-  __typename?: 'organization_member_role_max_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_member_id?: Maybe<Scalars['uuid']>;
-  organization_role_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by max() on columns of table "organization_member_role" */
-export type Organization_Member_Role_Max_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_member_id?: InputMaybe<Order_By>;
-  organization_role_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Organization_Member_Role_Min_Fields = {
-  __typename?: 'organization_member_role_min_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_member_id?: Maybe<Scalars['uuid']>;
-  organization_role_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "organization_member_role" */
-export type Organization_Member_Role_Min_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_member_id?: InputMaybe<Order_By>;
-  organization_role_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** response of any mutation on the table "organization_member_role" */
-export type Organization_Member_Role_Mutation_Response = {
-  __typename?: 'organization_member_role_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Organization_Member_Role>;
-};
-
-/** on_conflict condition type for table "organization_member_role" */
-export type Organization_Member_Role_On_Conflict = {
-  constraint: Organization_Member_Role_Constraint;
-  update_columns?: Array<Organization_Member_Role_Update_Column>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "organization_member_role". */
-export type Organization_Member_Role_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  member?: InputMaybe<Organization_Member_Order_By>;
-  organization_member_id?: InputMaybe<Order_By>;
-  organization_role_id?: InputMaybe<Order_By>;
-  role?: InputMaybe<Organization_Role_Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: organization_member_role */
-export type Organization_Member_Role_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "organization_member_role" */
-export enum Organization_Member_Role_Select_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationMemberId = 'organization_member_id',
-  /** column name */
-  OrganizationRoleId = 'organization_role_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
-/** input type for updating data in table "organization_member_role" */
-export type Organization_Member_Role_Set_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  organization_member_id?: InputMaybe<Scalars['uuid']>;
-  organization_role_id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** update columns of table "organization_member_role" */
-export enum Organization_Member_Role_Update_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationMemberId = 'organization_member_id',
-  /** column name */
-  OrganizationRoleId = 'organization_role_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
 
 /** select columns of table "organization_member" */
 export enum Organization_Member_Select_Column {
@@ -18061,6 +17236,8 @@ export enum Organization_Member_Select_Column {
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
+  /** column name */
+  IsAdmin = 'isAdmin',
   /** column name */
   MemberType = 'memberType',
   /** column name */
@@ -18076,6 +17253,7 @@ export type Organization_Member_Set_Input = {
   _source?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
   memberType?: InputMaybe<Scalars['String']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -18090,6 +17268,8 @@ export enum Organization_Member_Update_Column {
   CreatedAt = 'createdAt',
   /** column name */
   Id = 'id',
+  /** column name */
+  IsAdmin = 'isAdmin',
   /** column name */
   MemberType = 'memberType',
   /** column name */
@@ -18107,14 +17287,6 @@ export type Organization_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "organization" */
-export type Organization_Min_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "organization" */
@@ -18146,16 +17318,11 @@ export type Organization_Order_By = {
   attributes?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
-  groups_aggregate?: InputMaybe<Organization_Group_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
-  organizationGroupsByParentOrganizationId_aggregate?: InputMaybe<Organization_Group_Aggregate_Order_By>;
-  organization_status?: InputMaybe<Organization_Status_Order_By>;
   original_record?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
-  roles_aggregate?: InputMaybe<Organization_Role_Aggregate_Order_By>;
-  status?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -18174,243 +17341,6 @@ export type Organization_Prepend_Input = {
   preferences?: InputMaybe<Scalars['jsonb']>;
   tags?: InputMaybe<Scalars['jsonb']>;
 };
-
-/** columns and relationships of "organization_role" */
-export type Organization_Role = {
-  __typename?: 'organization_role';
-  _source?: Maybe<Scalars['String']>;
-  created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
-  /** An object relationship */
-  organization: Organization;
-  /** An array relationship */
-  organizationRoles: Array<Organization_Member_Role>;
-  /** An aggregate relationship */
-  organizationRoles_aggregate: Organization_Member_Role_Aggregate;
-  organization_id: Scalars['uuid'];
-  /** An object relationship */
-  role: Role;
-  role_id: Scalars['uuid'];
-  updated_at: Scalars['timestamptz'];
-};
-
-
-/** columns and relationships of "organization_role" */
-export type Organization_RoleOrganizationRolesArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization_role" */
-export type Organization_RoleOrganizationRoles_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-/** aggregated selection of "organization_role" */
-export type Organization_Role_Aggregate = {
-  __typename?: 'organization_role_aggregate';
-  aggregate?: Maybe<Organization_Role_Aggregate_Fields>;
-  nodes: Array<Organization_Role>;
-};
-
-/** aggregate fields of "organization_role" */
-export type Organization_Role_Aggregate_Fields = {
-  __typename?: 'organization_role_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Organization_Role_Max_Fields>;
-  min?: Maybe<Organization_Role_Min_Fields>;
-};
-
-
-/** aggregate fields of "organization_role" */
-export type Organization_Role_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** order by aggregate values of table "organization_role" */
-export type Organization_Role_Aggregate_Order_By = {
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Organization_Role_Max_Order_By>;
-  min?: InputMaybe<Organization_Role_Min_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "organization_role" */
-export type Organization_Role_Arr_Rel_Insert_Input = {
-  data: Array<Organization_Role_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Role_On_Conflict>;
-};
-
-/** Boolean expression to filter rows from the table "organization_role". All fields are combined with a logical 'AND'. */
-export type Organization_Role_Bool_Exp = {
-  _and?: InputMaybe<Array<Organization_Role_Bool_Exp>>;
-  _not?: InputMaybe<Organization_Role_Bool_Exp>;
-  _or?: InputMaybe<Array<Organization_Role_Bool_Exp>>;
-  _source?: InputMaybe<String_Comparison_Exp>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  organization?: InputMaybe<Organization_Bool_Exp>;
-  organizationRoles?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-  organization_id?: InputMaybe<Uuid_Comparison_Exp>;
-  role?: InputMaybe<Role_Bool_Exp>;
-  role_id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "organization_role" */
-export enum Organization_Role_Constraint {
-  /** unique or primary key constraint */
-  OrganizationRolePkey = 'organization_role_pkey',
-  /** unique or primary key constraint */
-  OrganizationRoleRoleIdOrganizationIdKey = 'organization_role_role_id_organization_id_key'
-}
-
-/** input type for inserting data into table "organization_role" */
-export type Organization_Role_Insert_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
-  organizationRoles?: InputMaybe<Organization_Member_Role_Arr_Rel_Insert_Input>;
-  organization_id?: InputMaybe<Scalars['uuid']>;
-  role?: InputMaybe<Role_Obj_Rel_Insert_Input>;
-  role_id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** aggregate max on columns */
-export type Organization_Role_Max_Fields = {
-  __typename?: 'organization_role_max_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_id?: Maybe<Scalars['uuid']>;
-  role_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by max() on columns of table "organization_role" */
-export type Organization_Role_Max_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  role_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** aggregate min on columns */
-export type Organization_Role_Min_Fields = {
-  __typename?: 'organization_role_min_fields';
-  _source?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  organization_id?: Maybe<Scalars['uuid']>;
-  role_id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "organization_role" */
-export type Organization_Role_Min_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  role_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** response of any mutation on the table "organization_role" */
-export type Organization_Role_Mutation_Response = {
-  __typename?: 'organization_role_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Organization_Role>;
-};
-
-/** input type for inserting object relation for remote table "organization_role" */
-export type Organization_Role_Obj_Rel_Insert_Input = {
-  data: Organization_Role_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Role_On_Conflict>;
-};
-
-/** on_conflict condition type for table "organization_role" */
-export type Organization_Role_On_Conflict = {
-  constraint: Organization_Role_Constraint;
-  update_columns?: Array<Organization_Role_Update_Column>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "organization_role". */
-export type Organization_Role_Order_By = {
-  _source?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  organization?: InputMaybe<Organization_Order_By>;
-  organizationRoles_aggregate?: InputMaybe<Organization_Member_Role_Aggregate_Order_By>;
-  organization_id?: InputMaybe<Order_By>;
-  role?: InputMaybe<Role_Order_By>;
-  role_id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: organization_role */
-export type Organization_Role_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "organization_role" */
-export enum Organization_Role_Select_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationId = 'organization_id',
-  /** column name */
-  RoleId = 'role_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
-/** input type for updating data in table "organization_role" */
-export type Organization_Role_Set_Input = {
-  _source?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  organization_id?: InputMaybe<Scalars['uuid']>;
-  role_id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** update columns of table "organization_role" */
-export enum Organization_Role_Update_Column {
-  /** column name */
-  Source = '_source',
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  OrganizationId = 'organization_id',
-  /** column name */
-  RoleId = 'role_id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
 
 /** select columns of table "organization" */
 export enum Organization_Select_Column {
@@ -18431,8 +17361,6 @@ export enum Organization_Select_Column {
   /** column name */
   Preferences = 'preferences',
   /** column name */
-  Status = 'status',
-  /** column name */
   Tags = 'tags',
   /** column name */
   UpdatedAt = 'updatedAt'
@@ -18448,159 +17376,9 @@ export type Organization_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
-  status?: InputMaybe<Organization_Status_Enum>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
-
-/** columns and relationships of "organization_status" */
-export type Organization_Status = {
-  __typename?: 'organization_status';
-  /** An array relationship */
-  organizations: Array<Organization>;
-  /** An aggregate relationship */
-  organizations_aggregate: Organization_Aggregate;
-  value: Scalars['String'];
-};
-
-
-/** columns and relationships of "organization_status" */
-export type Organization_StatusOrganizationsArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Order_By>>;
-  where?: InputMaybe<Organization_Bool_Exp>;
-};
-
-
-/** columns and relationships of "organization_status" */
-export type Organization_StatusOrganizations_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Order_By>>;
-  where?: InputMaybe<Organization_Bool_Exp>;
-};
-
-/** aggregated selection of "organization_status" */
-export type Organization_Status_Aggregate = {
-  __typename?: 'organization_status_aggregate';
-  aggregate?: Maybe<Organization_Status_Aggregate_Fields>;
-  nodes: Array<Organization_Status>;
-};
-
-/** aggregate fields of "organization_status" */
-export type Organization_Status_Aggregate_Fields = {
-  __typename?: 'organization_status_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Organization_Status_Max_Fields>;
-  min?: Maybe<Organization_Status_Min_Fields>;
-};
-
-
-/** aggregate fields of "organization_status" */
-export type Organization_Status_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Organization_Status_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "organization_status". All fields are combined with a logical 'AND'. */
-export type Organization_Status_Bool_Exp = {
-  _and?: InputMaybe<Array<Organization_Status_Bool_Exp>>;
-  _not?: InputMaybe<Organization_Status_Bool_Exp>;
-  _or?: InputMaybe<Array<Organization_Status_Bool_Exp>>;
-  organizations?: InputMaybe<Organization_Bool_Exp>;
-  value?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "organization_status" */
-export enum Organization_Status_Constraint {
-  /** unique or primary key constraint */
-  OrganizationStatusPkey = 'organization_status_pkey'
-}
-
-export enum Organization_Status_Enum {
-  Active = 'active'
-}
-
-/** Boolean expression to compare columns of type "organization_status_enum". All fields are combined with logical 'AND'. */
-export type Organization_Status_Enum_Comparison_Exp = {
-  _eq?: InputMaybe<Organization_Status_Enum>;
-  _in?: InputMaybe<Array<Organization_Status_Enum>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _neq?: InputMaybe<Organization_Status_Enum>;
-  _nin?: InputMaybe<Array<Organization_Status_Enum>>;
-};
-
-/** input type for inserting data into table "organization_status" */
-export type Organization_Status_Insert_Input = {
-  organizations?: InputMaybe<Organization_Arr_Rel_Insert_Input>;
-  value?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Organization_Status_Max_Fields = {
-  __typename?: 'organization_status_max_fields';
-  value?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Organization_Status_Min_Fields = {
-  __typename?: 'organization_status_min_fields';
-  value?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "organization_status" */
-export type Organization_Status_Mutation_Response = {
-  __typename?: 'organization_status_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Organization_Status>;
-};
-
-/** input type for inserting object relation for remote table "organization_status" */
-export type Organization_Status_Obj_Rel_Insert_Input = {
-  data: Organization_Status_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Organization_Status_On_Conflict>;
-};
-
-/** on_conflict condition type for table "organization_status" */
-export type Organization_Status_On_Conflict = {
-  constraint: Organization_Status_Constraint;
-  update_columns?: Array<Organization_Status_Update_Column>;
-  where?: InputMaybe<Organization_Status_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "organization_status". */
-export type Organization_Status_Order_By = {
-  organizations_aggregate?: InputMaybe<Organization_Aggregate_Order_By>;
-  value?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: organization_status */
-export type Organization_Status_Pk_Columns_Input = {
-  value: Scalars['String'];
-};
-
-/** select columns of table "organization_status" */
-export enum Organization_Status_Select_Column {
-  /** column name */
-  Value = 'value'
-}
-
-/** input type for updating data in table "organization_status" */
-export type Organization_Status_Set_Input = {
-  value?: InputMaybe<Scalars['String']>;
-};
-
-/** update columns of table "organization_status" */
-export enum Organization_Status_Update_Column {
-  /** column name */
-  Value = 'value'
-}
 
 /** update columns of table "organization" */
 export enum Organization_Update_Column {
@@ -18620,8 +17398,6 @@ export enum Organization_Update_Column {
   OriginalRecord = 'original_record',
   /** column name */
   Preferences = 'preferences',
-  /** column name */
-  Status = 'status',
   /** column name */
   Tags = 'tags',
   /** column name */
@@ -18786,13 +17562,10 @@ export type Profile = {
   original_record: Scalars['jsonb'];
   phone?: Maybe<Scalars['String']>;
   preferences: Scalars['jsonb'];
-  /** An object relationship */
-  profile_status: Profile_Status;
   /** An array relationship */
   roles: Array<Profile_Role>;
   /** An aggregate relationship */
   roles_aggregate: Profile_Role_Aggregate;
-  status: Profile_Status_Enum;
   stripe_customer_id?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   title?: Maybe<Scalars['String']>;
@@ -18931,21 +17704,6 @@ export type Profile_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
-/** order by aggregate values of table "profile" */
-export type Profile_Aggregate_Order_By = {
-  avg?: InputMaybe<Profile_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Profile_Max_Order_By>;
-  min?: InputMaybe<Profile_Min_Order_By>;
-  stddev?: InputMaybe<Profile_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Profile_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Profile_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Profile_Sum_Order_By>;
-  var_pop?: InputMaybe<Profile_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Profile_Var_Samp_Order_By>;
-  variance?: InputMaybe<Profile_Variance_Order_By>;
-};
-
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Profile_Append_Input = {
   addresses?: InputMaybe<Scalars['jsonb']>;
@@ -18957,22 +17715,10 @@ export type Profile_Append_Input = {
   tags?: InputMaybe<Scalars['jsonb']>;
 };
 
-/** input type for inserting array relation for remote table "profile" */
-export type Profile_Arr_Rel_Insert_Input = {
-  data: Array<Profile_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Profile_On_Conflict>;
-};
-
 /** aggregate avg on columns */
 export type Profile_Avg_Fields = {
   __typename?: 'profile_avg_fields';
   go1Id?: Maybe<Scalars['Float']>;
-};
-
-/** order by avg() on columns of table "profile" */
-export type Profile_Avg_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "profile". All fields are combined with a logical 'AND'. */
@@ -19000,9 +17746,7 @@ export type Profile_Bool_Exp = {
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   phone?: InputMaybe<String_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
-  profile_status?: InputMaybe<Profile_Status_Bool_Exp>;
   roles?: InputMaybe<Profile_Role_Bool_Exp>;
-  status?: InputMaybe<Profile_Status_Enum_Comparison_Exp>;
   stripe_customer_id?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
@@ -19078,9 +17822,7 @@ export type Profile_Insert_Input = {
   original_record?: InputMaybe<Scalars['jsonb']>;
   phone?: InputMaybe<Scalars['String']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
-  profile_status?: InputMaybe<Profile_Status_Obj_Rel_Insert_Input>;
   roles?: InputMaybe<Profile_Role_Arr_Rel_Insert_Input>;
-  status?: InputMaybe<Profile_Status_Enum>;
   stripe_customer_id?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
@@ -19106,24 +17848,6 @@ export type Profile_Max_Fields = {
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
-/** order by max() on columns of table "profile" */
-export type Profile_Max_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  dietaryRestrictions?: InputMaybe<Order_By>;
-  disabilities?: InputMaybe<Order_By>;
-  dob?: InputMaybe<Order_By>;
-  email?: InputMaybe<Order_By>;
-  familyName?: InputMaybe<Order_By>;
-  givenName?: InputMaybe<Order_By>;
-  go1Id?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  jobTitle?: InputMaybe<Order_By>;
-  phone?: InputMaybe<Order_By>;
-  stripe_customer_id?: InputMaybe<Order_By>;
-  title?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
-};
-
 /** aggregate min on columns */
 export type Profile_Min_Fields = {
   __typename?: 'profile_min_fields';
@@ -19141,24 +17865,6 @@ export type Profile_Min_Fields = {
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
-};
-
-/** order by min() on columns of table "profile" */
-export type Profile_Min_Order_By = {
-  createdAt?: InputMaybe<Order_By>;
-  dietaryRestrictions?: InputMaybe<Order_By>;
-  disabilities?: InputMaybe<Order_By>;
-  dob?: InputMaybe<Order_By>;
-  email?: InputMaybe<Order_By>;
-  familyName?: InputMaybe<Order_By>;
-  givenName?: InputMaybe<Order_By>;
-  go1Id?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  jobTitle?: InputMaybe<Order_By>;
-  phone?: InputMaybe<Order_By>;
-  stripe_customer_id?: InputMaybe<Order_By>;
-  title?: InputMaybe<Order_By>;
-  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "profile" */
@@ -19206,9 +17912,7 @@ export type Profile_Order_By = {
   original_record?: InputMaybe<Order_By>;
   phone?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
-  profile_status?: InputMaybe<Profile_Status_Order_By>;
   roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Order_By>;
-  status?: InputMaybe<Order_By>;
   stripe_customer_id?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   title?: InputMaybe<Order_By>;
@@ -19471,8 +18175,6 @@ export enum Profile_Select_Column {
   /** column name */
   Preferences = 'preferences',
   /** column name */
-  Status = 'status',
-  /** column name */
   StripeCustomerId = 'stripe_customer_id',
   /** column name */
   Tags = 'tags',
@@ -19501,171 +18203,16 @@ export type Profile_Set_Input = {
   original_record?: InputMaybe<Scalars['jsonb']>;
   phone?: InputMaybe<Scalars['String']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
-  status?: InputMaybe<Profile_Status_Enum>;
   stripe_customer_id?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
-/** columns and relationships of "profile_status" */
-export type Profile_Status = {
-  __typename?: 'profile_status';
-  /** An array relationship */
-  profiles: Array<Profile>;
-  /** An aggregate relationship */
-  profiles_aggregate: Profile_Aggregate;
-  value: Scalars['String'];
-};
-
-
-/** columns and relationships of "profile_status" */
-export type Profile_StatusProfilesArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Order_By>>;
-  where?: InputMaybe<Profile_Bool_Exp>;
-};
-
-
-/** columns and relationships of "profile_status" */
-export type Profile_StatusProfiles_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Order_By>>;
-  where?: InputMaybe<Profile_Bool_Exp>;
-};
-
-/** aggregated selection of "profile_status" */
-export type Profile_Status_Aggregate = {
-  __typename?: 'profile_status_aggregate';
-  aggregate?: Maybe<Profile_Status_Aggregate_Fields>;
-  nodes: Array<Profile_Status>;
-};
-
-/** aggregate fields of "profile_status" */
-export type Profile_Status_Aggregate_Fields = {
-  __typename?: 'profile_status_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Profile_Status_Max_Fields>;
-  min?: Maybe<Profile_Status_Min_Fields>;
-};
-
-
-/** aggregate fields of "profile_status" */
-export type Profile_Status_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Profile_Status_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "profile_status". All fields are combined with a logical 'AND'. */
-export type Profile_Status_Bool_Exp = {
-  _and?: InputMaybe<Array<Profile_Status_Bool_Exp>>;
-  _not?: InputMaybe<Profile_Status_Bool_Exp>;
-  _or?: InputMaybe<Array<Profile_Status_Bool_Exp>>;
-  profiles?: InputMaybe<Profile_Bool_Exp>;
-  value?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "profile_status" */
-export enum Profile_Status_Constraint {
-  /** unique or primary key constraint */
-  ProfileStatusPkey = 'profile_status_pkey'
-}
-
-export enum Profile_Status_Enum {
-  Active = 'active'
-}
-
-/** Boolean expression to compare columns of type "profile_status_enum". All fields are combined with logical 'AND'. */
-export type Profile_Status_Enum_Comparison_Exp = {
-  _eq?: InputMaybe<Profile_Status_Enum>;
-  _in?: InputMaybe<Array<Profile_Status_Enum>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _neq?: InputMaybe<Profile_Status_Enum>;
-  _nin?: InputMaybe<Array<Profile_Status_Enum>>;
-};
-
-/** input type for inserting data into table "profile_status" */
-export type Profile_Status_Insert_Input = {
-  profiles?: InputMaybe<Profile_Arr_Rel_Insert_Input>;
-  value?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Profile_Status_Max_Fields = {
-  __typename?: 'profile_status_max_fields';
-  value?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Profile_Status_Min_Fields = {
-  __typename?: 'profile_status_min_fields';
-  value?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "profile_status" */
-export type Profile_Status_Mutation_Response = {
-  __typename?: 'profile_status_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Profile_Status>;
-};
-
-/** input type for inserting object relation for remote table "profile_status" */
-export type Profile_Status_Obj_Rel_Insert_Input = {
-  data: Profile_Status_Insert_Input;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Profile_Status_On_Conflict>;
-};
-
-/** on_conflict condition type for table "profile_status" */
-export type Profile_Status_On_Conflict = {
-  constraint: Profile_Status_Constraint;
-  update_columns?: Array<Profile_Status_Update_Column>;
-  where?: InputMaybe<Profile_Status_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "profile_status". */
-export type Profile_Status_Order_By = {
-  profiles_aggregate?: InputMaybe<Profile_Aggregate_Order_By>;
-  value?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: profile_status */
-export type Profile_Status_Pk_Columns_Input = {
-  value: Scalars['String'];
-};
-
-/** select columns of table "profile_status" */
-export enum Profile_Status_Select_Column {
-  /** column name */
-  Value = 'value'
-}
-
-/** input type for updating data in table "profile_status" */
-export type Profile_Status_Set_Input = {
-  value?: InputMaybe<Scalars['String']>;
-};
-
-/** update columns of table "profile_status" */
-export enum Profile_Status_Update_Column {
-  /** column name */
-  Value = 'value'
-}
-
 /** aggregate stddev on columns */
 export type Profile_Stddev_Fields = {
   __typename?: 'profile_stddev_fields';
   go1Id?: Maybe<Scalars['Float']>;
-};
-
-/** order by stddev() on columns of table "profile" */
-export type Profile_Stddev_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -19674,31 +18221,16 @@ export type Profile_Stddev_Pop_Fields = {
   go1Id?: Maybe<Scalars['Float']>;
 };
 
-/** order by stddev_pop() on columns of table "profile" */
-export type Profile_Stddev_Pop_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
-};
-
 /** aggregate stddev_samp on columns */
 export type Profile_Stddev_Samp_Fields = {
   __typename?: 'profile_stddev_samp_fields';
   go1Id?: Maybe<Scalars['Float']>;
 };
 
-/** order by stddev_samp() on columns of table "profile" */
-export type Profile_Stddev_Samp_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
-};
-
 /** aggregate sum on columns */
 export type Profile_Sum_Fields = {
   __typename?: 'profile_sum_fields';
   go1Id?: Maybe<Scalars['Int']>;
-};
-
-/** order by sum() on columns of table "profile" */
-export type Profile_Sum_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
 };
 
 /** Contains partial temporary profiles until account in cognito is confirmed */
@@ -20063,8 +18595,6 @@ export enum Profile_Update_Column {
   /** column name */
   Preferences = 'preferences',
   /** column name */
-  Status = 'status',
-  /** column name */
   StripeCustomerId = 'stripe_customer_id',
   /** column name */
   Tags = 'tags',
@@ -20080,31 +18610,16 @@ export type Profile_Var_Pop_Fields = {
   go1Id?: Maybe<Scalars['Float']>;
 };
 
-/** order by var_pop() on columns of table "profile" */
-export type Profile_Var_Pop_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
-};
-
 /** aggregate var_samp on columns */
 export type Profile_Var_Samp_Fields = {
   __typename?: 'profile_var_samp_fields';
   go1Id?: Maybe<Scalars['Float']>;
 };
 
-/** order by var_samp() on columns of table "profile" */
-export type Profile_Var_Samp_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
-};
-
 /** aggregate variance on columns */
 export type Profile_Variance_Fields = {
   __typename?: 'profile_variance_fields';
   go1Id?: Maybe<Scalars['Float']>;
-};
-
-/** order by variance() on columns of table "profile" */
-export type Profile_Variance_Order_By = {
-  go1Id?: InputMaybe<Order_By>;
 };
 
 export type Query_Root = {
@@ -20258,6 +18773,7 @@ export type Query_Root = {
   identity_type_aggregate: Identity_Type_Aggregate;
   /** fetch data from the table: "identity_type" using primary key columns */
   identity_type_by_pk?: Maybe<Identity_Type>;
+  initAuth: InitAuthOutput;
   /** Checks whether user is subscribed to membership */
   isUserSubscribedToMembership?: Maybe<IsUserSubscribedToMembershipResponse>;
   /** fetch data from the table: "legacy_certificate" */
@@ -20302,36 +18818,12 @@ export type Query_Root = {
   organization_aggregate: Organization_Aggregate;
   /** fetch data from the table: "organization" using primary key columns */
   organization_by_pk?: Maybe<Organization>;
-  /** fetch data from the table: "organization_group" */
-  organization_group: Array<Organization_Group>;
-  /** fetch aggregated fields from the table: "organization_group" */
-  organization_group_aggregate: Organization_Group_Aggregate;
-  /** fetch data from the table: "organization_group" using primary key columns */
-  organization_group_by_pk?: Maybe<Organization_Group>;
   /** fetch data from the table: "organization_member" */
   organization_member: Array<Organization_Member>;
   /** fetch aggregated fields from the table: "organization_member" */
   organization_member_aggregate: Organization_Member_Aggregate;
   /** fetch data from the table: "organization_member" using primary key columns */
   organization_member_by_pk?: Maybe<Organization_Member>;
-  /** fetch data from the table: "organization_member_role" */
-  organization_member_role: Array<Organization_Member_Role>;
-  /** fetch aggregated fields from the table: "organization_member_role" */
-  organization_member_role_aggregate: Organization_Member_Role_Aggregate;
-  /** fetch data from the table: "organization_member_role" using primary key columns */
-  organization_member_role_by_pk?: Maybe<Organization_Member_Role>;
-  /** fetch data from the table: "organization_role" */
-  organization_role: Array<Organization_Role>;
-  /** fetch aggregated fields from the table: "organization_role" */
-  organization_role_aggregate: Organization_Role_Aggregate;
-  /** fetch data from the table: "organization_role" using primary key columns */
-  organization_role_by_pk?: Maybe<Organization_Role>;
-  /** fetch data from the table: "organization_status" */
-  organization_status: Array<Organization_Status>;
-  /** fetch aggregated fields from the table: "organization_status" */
-  organization_status_aggregate: Organization_Status_Aggregate;
-  /** fetch data from the table: "organization_status" using primary key columns */
-  organization_status_by_pk?: Maybe<Organization_Status>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
@@ -20354,24 +18846,12 @@ export type Query_Root = {
   profile_role_aggregate: Profile_Role_Aggregate;
   /** fetch data from the table: "profile_role" using primary key columns */
   profile_role_by_pk?: Maybe<Profile_Role>;
-  /** fetch data from the table: "profile_status" */
-  profile_status: Array<Profile_Status>;
-  /** fetch aggregated fields from the table: "profile_status" */
-  profile_status_aggregate: Profile_Status_Aggregate;
-  /** fetch data from the table: "profile_status" using primary key columns */
-  profile_status_by_pk?: Maybe<Profile_Status>;
   /** fetch data from the table: "profile_temp" */
   profile_temp: Array<Profile_Temp>;
   /** fetch aggregated fields from the table: "profile_temp" */
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
-  /** fetch data from the table: "resource" */
-  resource: Array<Resource>;
-  /** fetch aggregated fields from the table: "resource" */
-  resource_aggregate: Resource_Aggregate;
-  /** fetch data from the table: "resource" using primary key columns */
-  resource_by_pk?: Maybe<Resource>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
@@ -21125,29 +19605,6 @@ export type Query_RootOrganization_By_PkArgs = {
 };
 
 
-export type Query_RootOrganization_GroupArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Group_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Group_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
 export type Query_RootOrganization_MemberArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -21168,75 +19625,6 @@ export type Query_RootOrganization_Member_AggregateArgs = {
 
 export type Query_RootOrganization_Member_By_PkArgs = {
   id: Scalars['uuid'];
-};
-
-
-export type Query_RootOrganization_Member_RoleArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Member_Role_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Member_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Query_RootOrganization_RoleArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Role_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Query_RootOrganization_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Status_Order_By>>;
-  where?: InputMaybe<Organization_Status_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Status_Order_By>>;
-  where?: InputMaybe<Organization_Status_Bool_Exp>;
-};
-
-
-export type Query_RootOrganization_Status_By_PkArgs = {
-  value: Scalars['String'];
 };
 
 
@@ -21319,29 +19707,6 @@ export type Query_RootProfile_Role_By_PkArgs = {
 };
 
 
-export type Query_RootProfile_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Status_Order_By>>;
-  where?: InputMaybe<Profile_Status_Bool_Exp>;
-};
-
-
-export type Query_RootProfile_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Status_Order_By>>;
-  where?: InputMaybe<Profile_Status_Bool_Exp>;
-};
-
-
-export type Query_RootProfile_Status_By_PkArgs = {
-  value: Scalars['String'];
-};
-
-
 export type Query_RootProfile_TempArgs = {
   distinct_on?: InputMaybe<Array<Profile_Temp_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -21362,29 +19727,6 @@ export type Query_RootProfile_Temp_AggregateArgs = {
 
 export type Query_RootProfile_Temp_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-export type Query_RootResourceArgs = {
-  distinct_on?: InputMaybe<Array<Resource_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Resource_Order_By>>;
-  where?: InputMaybe<Resource_Bool_Exp>;
-};
-
-
-export type Query_RootResource_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Resource_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Resource_Order_By>>;
-  where?: InputMaybe<Resource_Bool_Exp>;
-};
-
-
-export type Query_RootResource_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -21489,140 +19831,12 @@ export type Query_RootXero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
 };
 
-/** columns and relationships of "resource" */
-export type Resource = {
-  __typename?: 'resource';
-  created_at: Scalars['timestamptz'];
-  id: Scalars['uuid'];
-  updated_at: Scalars['timestamptz'];
-};
-
-/** aggregated selection of "resource" */
-export type Resource_Aggregate = {
-  __typename?: 'resource_aggregate';
-  aggregate?: Maybe<Resource_Aggregate_Fields>;
-  nodes: Array<Resource>;
-};
-
-/** aggregate fields of "resource" */
-export type Resource_Aggregate_Fields = {
-  __typename?: 'resource_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Resource_Max_Fields>;
-  min?: Maybe<Resource_Min_Fields>;
-};
-
-
-/** aggregate fields of "resource" */
-export type Resource_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Resource_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "resource". All fields are combined with a logical 'AND'. */
-export type Resource_Bool_Exp = {
-  _and?: InputMaybe<Array<Resource_Bool_Exp>>;
-  _not?: InputMaybe<Resource_Bool_Exp>;
-  _or?: InputMaybe<Array<Resource_Bool_Exp>>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Uuid_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "resource" */
-export enum Resource_Constraint {
-  /** unique or primary key constraint */
-  ResourcePkey = 'resource_pkey'
-}
-
-/** input type for inserting data into table "resource" */
-export type Resource_Insert_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** aggregate max on columns */
-export type Resource_Max_Fields = {
-  __typename?: 'resource_max_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** aggregate min on columns */
-export type Resource_Min_Fields = {
-  __typename?: 'resource_min_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['uuid']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
-};
-
-/** response of any mutation on the table "resource" */
-export type Resource_Mutation_Response = {
-  __typename?: 'resource_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Resource>;
-};
-
-/** on_conflict condition type for table "resource" */
-export type Resource_On_Conflict = {
-  constraint: Resource_Constraint;
-  update_columns?: Array<Resource_Update_Column>;
-  where?: InputMaybe<Resource_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "resource". */
-export type Resource_Order_By = {
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: resource */
-export type Resource_Pk_Columns_Input = {
-  id: Scalars['uuid'];
-};
-
-/** select columns of table "resource" */
-export enum Resource_Select_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
-/** input type for updating data in table "resource" */
-export type Resource_Set_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['uuid']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
-};
-
-/** update columns of table "resource" */
-export enum Resource_Update_Column {
-  /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
-  Id = 'id',
-  /** column name */
-  UpdatedAt = 'updated_at'
-}
-
 /** columns and relationships of "role" */
 export type Role = {
   __typename?: 'role';
   data: Scalars['jsonb'];
   id: Scalars['uuid'];
   name: Scalars['String'];
-  /** An array relationship */
-  organization_roles: Array<Organization_Role>;
-  /** An aggregate relationship */
-  organization_roles_aggregate: Organization_Role_Aggregate;
   /** An array relationship */
   profile_roles: Array<Profile_Role>;
   /** An aggregate relationship */
@@ -21634,26 +19848,6 @@ export type Role = {
 /** columns and relationships of "role" */
 export type RoleDataArgs = {
   path?: InputMaybe<Scalars['String']>;
-};
-
-
-/** columns and relationships of "role" */
-export type RoleOrganization_RolesArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-/** columns and relationships of "role" */
-export type RoleOrganization_Roles_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
 };
 
 
@@ -21725,7 +19919,6 @@ export type Role_Bool_Exp = {
   data?: InputMaybe<Jsonb_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
-  organization_roles?: InputMaybe<Organization_Role_Bool_Exp>;
   profile_roles?: InputMaybe<Profile_Role_Bool_Exp>;
   rank?: InputMaybe<Int_Comparison_Exp>;
 };
@@ -21763,7 +19956,6 @@ export type Role_Insert_Input = {
   data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   name?: InputMaybe<Scalars['String']>;
-  organization_roles?: InputMaybe<Organization_Role_Arr_Rel_Insert_Input>;
   profile_roles?: InputMaybe<Profile_Role_Arr_Rel_Insert_Input>;
   rank?: InputMaybe<Scalars['Int']>;
 };
@@ -21812,7 +20004,6 @@ export type Role_Order_By = {
   data?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
-  organization_roles_aggregate?: InputMaybe<Organization_Role_Aggregate_Order_By>;
   profile_roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Order_By>;
   rank?: InputMaybe<Order_By>;
 };
@@ -22089,36 +20280,12 @@ export type Subscription_Root = {
   organization_aggregate: Organization_Aggregate;
   /** fetch data from the table: "organization" using primary key columns */
   organization_by_pk?: Maybe<Organization>;
-  /** fetch data from the table: "organization_group" */
-  organization_group: Array<Organization_Group>;
-  /** fetch aggregated fields from the table: "organization_group" */
-  organization_group_aggregate: Organization_Group_Aggregate;
-  /** fetch data from the table: "organization_group" using primary key columns */
-  organization_group_by_pk?: Maybe<Organization_Group>;
   /** fetch data from the table: "organization_member" */
   organization_member: Array<Organization_Member>;
   /** fetch aggregated fields from the table: "organization_member" */
   organization_member_aggregate: Organization_Member_Aggregate;
   /** fetch data from the table: "organization_member" using primary key columns */
   organization_member_by_pk?: Maybe<Organization_Member>;
-  /** fetch data from the table: "organization_member_role" */
-  organization_member_role: Array<Organization_Member_Role>;
-  /** fetch aggregated fields from the table: "organization_member_role" */
-  organization_member_role_aggregate: Organization_Member_Role_Aggregate;
-  /** fetch data from the table: "organization_member_role" using primary key columns */
-  organization_member_role_by_pk?: Maybe<Organization_Member_Role>;
-  /** fetch data from the table: "organization_role" */
-  organization_role: Array<Organization_Role>;
-  /** fetch aggregated fields from the table: "organization_role" */
-  organization_role_aggregate: Organization_Role_Aggregate;
-  /** fetch data from the table: "organization_role" using primary key columns */
-  organization_role_by_pk?: Maybe<Organization_Role>;
-  /** fetch data from the table: "organization_status" */
-  organization_status: Array<Organization_Status>;
-  /** fetch aggregated fields from the table: "organization_status" */
-  organization_status_aggregate: Organization_Status_Aggregate;
-  /** fetch data from the table: "organization_status" using primary key columns */
-  organization_status_by_pk?: Maybe<Organization_Status>;
   /** fetch data from the table: "payment_methods" */
   payment_methods: Array<Payment_Methods>;
   /** fetch aggregated fields from the table: "payment_methods" */
@@ -22137,24 +20304,12 @@ export type Subscription_Root = {
   profile_role_aggregate: Profile_Role_Aggregate;
   /** fetch data from the table: "profile_role" using primary key columns */
   profile_role_by_pk?: Maybe<Profile_Role>;
-  /** fetch data from the table: "profile_status" */
-  profile_status: Array<Profile_Status>;
-  /** fetch aggregated fields from the table: "profile_status" */
-  profile_status_aggregate: Profile_Status_Aggregate;
-  /** fetch data from the table: "profile_status" using primary key columns */
-  profile_status_by_pk?: Maybe<Profile_Status>;
   /** fetch data from the table: "profile_temp" */
   profile_temp: Array<Profile_Temp>;
   /** fetch aggregated fields from the table: "profile_temp" */
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
-  /** fetch data from the table: "resource" */
-  resource: Array<Resource>;
-  /** fetch aggregated fields from the table: "resource" */
-  resource_aggregate: Resource_Aggregate;
-  /** fetch data from the table: "resource" using primary key columns */
-  resource_by_pk?: Maybe<Resource>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
@@ -22895,29 +21050,6 @@ export type Subscription_RootOrganization_By_PkArgs = {
 };
 
 
-export type Subscription_RootOrganization_GroupArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Group_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Group_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Group_Order_By>>;
-  where?: InputMaybe<Organization_Group_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Group_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
 export type Subscription_RootOrganization_MemberArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -22938,75 +21070,6 @@ export type Subscription_RootOrganization_Member_AggregateArgs = {
 
 export type Subscription_RootOrganization_Member_By_PkArgs = {
   id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootOrganization_Member_RoleArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Member_Role_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Member_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Member_Role_Order_By>>;
-  where?: InputMaybe<Organization_Member_Role_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Member_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootOrganization_RoleArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Role_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Role_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Role_Order_By>>;
-  where?: InputMaybe<Organization_Role_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Role_By_PkArgs = {
-  id: Scalars['uuid'];
-};
-
-
-export type Subscription_RootOrganization_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Status_Order_By>>;
-  where?: InputMaybe<Organization_Status_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Organization_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Organization_Status_Order_By>>;
-  where?: InputMaybe<Organization_Status_Bool_Exp>;
-};
-
-
-export type Subscription_RootOrganization_Status_By_PkArgs = {
-  value: Scalars['String'];
 };
 
 
@@ -23079,29 +21142,6 @@ export type Subscription_RootProfile_Role_By_PkArgs = {
 };
 
 
-export type Subscription_RootProfile_StatusArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Status_Order_By>>;
-  where?: InputMaybe<Profile_Status_Bool_Exp>;
-};
-
-
-export type Subscription_RootProfile_Status_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Profile_Status_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Profile_Status_Order_By>>;
-  where?: InputMaybe<Profile_Status_Bool_Exp>;
-};
-
-
-export type Subscription_RootProfile_Status_By_PkArgs = {
-  value: Scalars['String'];
-};
-
-
 export type Subscription_RootProfile_TempArgs = {
   distinct_on?: InputMaybe<Array<Profile_Temp_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -23122,29 +21162,6 @@ export type Subscription_RootProfile_Temp_AggregateArgs = {
 
 export type Subscription_RootProfile_Temp_By_PkArgs = {
   id: Scalars['Int'];
-};
-
-
-export type Subscription_RootResourceArgs = {
-  distinct_on?: InputMaybe<Array<Resource_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Resource_Order_By>>;
-  where?: InputMaybe<Resource_Bool_Exp>;
-};
-
-
-export type Subscription_RootResource_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Resource_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Resource_Order_By>>;
-  where?: InputMaybe<Resource_Bool_Exp>;
-};
-
-
-export type Subscription_RootResource_By_PkArgs = {
-  id: Scalars['uuid'];
 };
 
 
@@ -23910,7 +21927,7 @@ export type ProfilesQueryVariables = Exact<{
 }>;
 
 
-export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type OrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -23919,7 +21936,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type InsertWaitlistMutationVariables = Exact<{
   input: Waitlist_Insert_Input;
@@ -24003,7 +22020,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type CourseModulesQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -24087,9 +22104,9 @@ export type UpdateCourseMutationVariables = Exact<{
 
 export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null };
 
-export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any };
+export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any };
 
-export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
+export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
 
@@ -24138,6 +22155,13 @@ export type AcceptInviteMutationVariables = Exact<{
 
 export type AcceptInviteMutation = { __typename?: 'mutation_root', acceptInvite?: { __typename?: 'course_invites', status?: Course_Invite_Status_Enum | null } | null, addParticipant?: { __typename?: 'course_participant', id: any } | null };
 
+export type CreateUserMutationVariables = Exact<{
+  input: CreateAppUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'mutation_root', createUser: { __typename?: 'CreateUserOutput', cognitoId: string, profileId: string, email: string } };
+
 export type DeclineInviteMutationVariables = Exact<{
   note?: InputMaybe<Scalars['String']>;
 }>;
@@ -24160,6 +22184,11 @@ export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'CourseInvite', id: string, status: InviteStatus, courseId: string, courseName: string, description?: string | null, trainerName: string, startDate: string, endDate: string, venueName: string, venueCoordinates?: string | null, venueAddress?: { __typename?: 'Address', addressLineOne?: string | null, addressLineTwo?: string | null, city?: string | null, postCode?: string | null } | null } | null };
+
+export type InitAuthQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InitAuthQuery = { __typename?: 'query_root', initAuth: { __typename?: 'InitAuthOutput', email: string, authChallenge: string } };
 
 export type RecreateCourseInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
@@ -24237,14 +22266,14 @@ export type Unnamed_3_QueryVariables = Exact<{
 }>;
 
 
-export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
+export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
 
 export type GetOrganizationsQueryVariables = Exact<{
   name?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any }> };
+export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any }> };
 
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
@@ -24253,7 +22282,7 @@ export type InsertOrgMutationVariables = Exact<{
 }>;
 
 
-export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null };
+export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } | null };
 
 export type CourseParticipantQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -24292,7 +22321,7 @@ export type FindProfilesQueryVariables = Exact<{
 }>;
 
 
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileCertificationsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -24352,14 +22381,14 @@ export type SaveHealthSafetyConsentMutation = { __typename?: 'mutation_root', up
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
 
 export type GetProfileWithCriteriaQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -24368,7 +22397,7 @@ export type GetProfileWithCriteriaQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, status: Profile_Status_Enum, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, status: Organization_Status_Enum, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];

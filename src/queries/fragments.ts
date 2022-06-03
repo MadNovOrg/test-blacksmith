@@ -5,7 +5,6 @@ export const ORGANIZATION = gql`
     id
     name
     tags
-    status
     contactDetails
     attributes
     address
@@ -24,7 +23,6 @@ export const PROFILE = gql`
     fullName
     title
     tags
-    status
     addresses
     attributes
     contactDetails
@@ -41,7 +39,6 @@ export const PROFILE = gql`
       }
     }
     preferences
-    status
     createdAt
     updatedAt
     email

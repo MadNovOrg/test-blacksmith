@@ -13,7 +13,7 @@ For first time setup:
   1. insert row in `profile` with name and email
   2. insert row in `identity` with uuid from cognito and `profile.id` (uuid from step 1)
   3. insert row in `organization_member` with `profile.id` and organization id desired
-  4. insert row in `organization_member_role` with `organization_member.id` (uuid from step 3) and `organization_role.id` with matching `organization_id`
+  4. insert row in `profile_role` with `profile.id` (uuid from step 1) and `role.id` from desired `role` record
 - The steps above can be done locally by updating `dev_profiles.sql` seed file and running `npm run hasura:seed:apply` (needs clean database - see [here](https://github.com/TeamTeach/data) for how to populate the local database with more data)
 - Login locally at http://localhost:3000
 
