@@ -26,7 +26,12 @@ export const RatingQuestion: React.FC<Props> = ({ title, error, ...rest }) => {
         {error && <FormHelperText error>{error}</FormHelperText>}
       </Box>
 
-      <Box display="flex" flex={1} justifyContent="flex-end">
+      <Box
+        display="flex"
+        flex={1}
+        justifyContent="flex-end"
+        data-testid="course-evaluation-rating-question"
+      >
         <SmileyFaceRating {...rest} />
       </Box>
     </Box>

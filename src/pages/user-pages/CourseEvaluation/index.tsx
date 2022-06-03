@@ -217,7 +217,12 @@ export const CourseEvaluation = () => {
                   to={`/courses/${courseId}/details?tab=EVALUATION`}
                 />
 
-                <Typography variant="h2" gutterBottom my={2}>
+                <Typography
+                  variant="h2"
+                  gutterBottom
+                  my={2}
+                  data-testid="course-evaluation-heading"
+                >
                   {t('course-evaluation.heading')}
                 </Typography>
 
@@ -308,6 +313,7 @@ export const CourseEvaluation = () => {
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
                       {...register(q.id)}
                       disabled={readOnly}
+                      data-testid="course-evaluation-text-question"
                     />
                   </QuestionGroup>
                 )
@@ -335,6 +341,7 @@ export const CourseEvaluation = () => {
                   {...register(signatureQuestion.id)}
                   error={!!errors[signatureQuestion.id]}
                   helperText={errors[signatureQuestion.id]?.message}
+                  data-testid="course-evaluation-signature"
                 />
               </>
             )}
@@ -347,13 +354,13 @@ export const CourseEvaluation = () => {
             alignItems="center"
             display="flex"
             flexDirection="column"
+            data-testid="submit-course-evaluation"
           >
             <LoadingButton
               loading={loading}
               type="submit"
               variant="contained"
               color="primary"
-              data-testid="submit-course-evaluation"
               size="large"
             >
               {t('course-evaluation.submit')}

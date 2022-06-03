@@ -48,6 +48,7 @@ const IconContainer: React.FC<IconContainerProps> = ({
       p={0.5}
       fontSize={50}
       className={`${className} rating-${value}`}
+      data-testid={`rating-${value}`}
       {...rest}
     >
       {customIcons[value as Value].icon}

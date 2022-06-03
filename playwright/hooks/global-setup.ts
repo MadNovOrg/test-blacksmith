@@ -18,7 +18,9 @@ const login = async (browser: Browser, userKey: string, role: string) => {
     users[userKey].password
   )
   await myCoursesPage.userMenu.checkIsVisible()
-  await myCoursesPage.roleSwitcher.selectRole(role)
+  if (role.toLowerCase() !== 'user' && role.toLowerCase() !== 'unverified') {
+    await myCoursesPage.roleSwitcher.selectRole(role)
+  }
   await page.context().storageState({ path: stateFilePath(userKey) })
 }
 
@@ -32,6 +34,7 @@ async function globalSetup() {
     await login(browser, 'ops', 'TT Ops')
     await login(browser, 'trainer', 'Trainer')
     await login(browser, 'trainerWithOrg', 'Trainer')
+    await login(browser, 'user1', 'User')
     await browser.close()
   }
 }

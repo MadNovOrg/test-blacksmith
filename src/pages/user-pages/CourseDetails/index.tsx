@@ -226,6 +226,7 @@ export const CourseDetails = () => {
                         : t('complete')
                     }
                     sx={{ marginRight: 2 }}
+                    data-testid="evaluate-course-complete-message"
                   />
                   <Button
                     data-testid="evaluate-course-cta"

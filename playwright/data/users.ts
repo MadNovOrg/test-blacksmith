@@ -59,13 +59,13 @@ export const users: { [key: string]: User } = {
   user1: {
     givenName: 'Oliver',
     familyName: 'Participant',
-    email: 'user1g@teamteach.testinator.com',
+    email: 'user1@teamteach.testinator.com',
     password: 'Test12345!',
   },
   user2: {
     givenName: 'Elijah',
     familyName: 'Participant',
-    email: 'user2g@teamteach.testinator.com',
+    email: 'user2@teamteach.testinator.com',
     password: 'Test12345!',
   },
   user1WithOrg: {

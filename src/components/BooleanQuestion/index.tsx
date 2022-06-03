@@ -48,6 +48,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
         row
         sx={{ mt: 1 }}
         value={value}
+        data-testid="course-evaluation-boolean-question"
       >
         <FormControlLabel
           sx={style}
@@ -55,6 +56,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
           control={<Radio />}
           label={t<string>('yes')}
           disabled={disabled}
+          data-testid="rating-yes"
         />
         <FormControlLabel
           sx={style}
@@ -62,6 +64,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
           control={<Radio />}
           label={t<string>('no')}
           disabled={disabled}
+          data-testid="rating-no"
         />
       </RadioGroup>
       {type === CourseEvaluationQuestionType.BOOLEAN_REASON_Y &&
@@ -77,6 +80,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
               inputProps={{ sx: { px: 1, py: 1.5 } }}
               value={reason}
               disabled={disabled}
+              data-testid="rating-boolean-reason-yes"
             />
           </Box>
         )}
@@ -93,6 +97,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
               inputProps={{ sx: { px: 1, py: 1.5 } }}
               value={reason}
               disabled={disabled}
+              data-testid="rating-boolean-reason-no"
             />
           </Box>
         )}
