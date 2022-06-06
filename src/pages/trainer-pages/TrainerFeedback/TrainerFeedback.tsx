@@ -146,7 +146,12 @@ export const TrainerFeedback = () => {
               <Box mt={5} pr={3}>
                 <BackButton label={t('back')} />
 
-                <Typography variant="h2" gutterBottom my={2}>
+                <Typography
+                  variant="h2"
+                  gutterBottom
+                  my={2}
+                  data-testid="course-evaluation-heading"
+                >
                   {t('course-evaluation.trainer-heading')}
                 </Typography>
 
@@ -176,6 +181,7 @@ export const TrainerFeedback = () => {
                         setValue(q.id, `${value}-${reason}`)
                       }
                       infoText={t('course-evaluation.provide-details')}
+                      data-testid="course-evaluation-boolean-question"
                     />
                   </QuestionGroup>
                 )
@@ -193,6 +199,7 @@ export const TrainerFeedback = () => {
                       variant="standard"
                       placeholder={t('course-evaluation.your-response')}
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
+                      data-testid="course-evaluation-text-question"
                       {...register(q.id)}
                     />
                   </QuestionGroup>
@@ -219,6 +226,7 @@ export const TrainerFeedback = () => {
                 {...register(signatureQuestion.id)}
                 error={!!errors[signatureQuestion.id]}
                 helperText={errors[signatureQuestion.id]?.message}
+                data-testid="course-evaluation-signature"
               />
             )}
           </Grid>
@@ -229,13 +237,13 @@ export const TrainerFeedback = () => {
           alignItems="center"
           display="flex"
           flexDirection="column"
+          data-testid="submit-course-evaluation"
         >
           <LoadingButton
             loading={loading}
             type="submit"
             variant="contained"
             color="primary"
-            data-testid="submit-course-evaluation"
             size="large"
           >
             {t('course-evaluation.submit')}

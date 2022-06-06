@@ -87,6 +87,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
                 color="primary"
                 size="small"
                 onClick={() => navigate('../evaluation/submit')}
+                data-testid="trainer-evaluation-button"
               >
                 {t('course-evaluation.complete-my-evaluation')}
               </Button>
@@ -108,7 +109,10 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
           alignItems="flex-end"
         >
           <Box>
-            <Typography variant="subtitle1">
+            <Typography
+              variant="subtitle1"
+              data-testid="trainer-evaluation-title"
+            >
               {t('pages.course-details.tabs.evaluation.title')}
             </Typography>
             <Typography variant="body1" color="grey.500">
@@ -123,6 +127,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
               size="small"
               href="../evaluation/summary"
               disabled={!didTrainerSubmitFeedback}
+              data-testid="view-summary-evaluation"
             >
               {t('pages.course-details.tabs.evaluation.button')}
             </Button>
