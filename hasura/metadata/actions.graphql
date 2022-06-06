@@ -22,6 +22,12 @@ type Query {
 }
 
 type Query {
+  getCoursePricing(
+    input: GetCoursePricingInput!
+  ): GetCoursePricingOutput
+}
+
+type Query {
   getInvite: CourseInvite
 }
 
@@ -150,6 +156,12 @@ enum XeroContactStatus {
   GDPRREQUEST
 }
 
+enum CourseType {
+  OPEN
+  CLOSED
+  INDIRECT
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -217,6 +229,10 @@ input CreateAppUserInput {
   dob: String
   acceptMarketing: Boolean!
   acceptTnc: Boolean!
+}
+
+input GetCoursePricingInput {
+  courseId: Int!
 }
 
 type LinkProfileResult {
@@ -382,5 +398,15 @@ type CreateUserOutput {
 type InitAuthOutput {
   email: String!
   authChallenge: String!
+}
+
+type GetCoursePricingOutput {
+  type: CourseType
+  level: CourseLevel
+  blended: Boolean
+  reaccreditation: Boolean
+  priceAmount: Float!
+  priceCurrency: Currency!
+  xeroCode: String!
 }
 

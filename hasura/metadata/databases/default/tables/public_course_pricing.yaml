@@ -1,0 +1,16 @@
+table:
+  schema: public
+  name: course_pricing
+configuration:
+  custom_root_fields: {}
+  column_config:
+    xero_code:
+      custom_name: xeroCode
+    price_currency:
+      custom_name: priceCurrency
+    price_amount:
+      custom_name: priceAmount
+  custom_column_names:
+    xero_code: xeroCode
+    price_currency: priceCurrency
+    price_amount: priceAmount

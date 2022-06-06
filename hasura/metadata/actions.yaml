@@ -23,6 +23,11 @@ actions:
       kind: ""
       handler: '{{ACTIONS_HOST}}/stripe/prices/list'
     comment: Fetches membership plans
+  - name: getCoursePricing
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/course/price'
+    comment: getCoursePricing
   - name: getInvite
     definition:
       kind: ""
@@ -213,6 +218,17 @@ custom_types:
         - value: GDPRREQUEST
           is_deprecated: null
           description: null
+    - name: CourseType
+      values:
+        - value: OPEN
+          is_deprecated: null
+          description: null
+        - value: CLOSED
+          is_deprecated: null
+          description: null
+        - value: INDIRECT
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -225,6 +241,7 @@ custom_types:
     - name: XeroCallbackInput
     - name: XeroContactSearchInput
     - name: CreateAppUserInput
+    - name: GetCoursePricingInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -252,4 +269,5 @@ custom_types:
     - name: XeroAddress
     - name: CreateUserOutput
     - name: InitAuthOutput
+    - name: GetCoursePricingOutput
   scalars: []
