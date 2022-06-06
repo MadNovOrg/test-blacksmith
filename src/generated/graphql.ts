@@ -20,6 +20,12 @@ export type Scalars = {
   uuid: any;
 };
 
+/** A Field Group registered by ACF */
+export type AcfFieldGroup = {
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+};
+
 export type Address = {
   __typename?: 'Address';
   addressLineOne?: Maybe<Scalars['String']>;
@@ -1017,7 +1023,9 @@ export enum ContentTypeEnum {
   /** The Type of Content object */
   Page = 'PAGE',
   /** The Type of Content object */
-  Post = 'POST'
+  Post = 'POST',
+  /** The Type of Content object */
+  VideoSeries = 'VIDEO_SERIES'
 }
 
 /** The Type of Identifier used to fetch a single Content Type node. To be used along with the "id" field. Default is "ID". */
@@ -1454,6 +1462,35 @@ export type CreateUserPayload = {
   user?: Maybe<User>;
 };
 
+/** Input for the createVideoSeriesItem mutation */
+export type CreateVideoSeriesItemInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: InputMaybe<Scalars['String']>;
+  /** The excerpt of the object */
+  excerpt?: InputMaybe<Scalars['String']>;
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: InputMaybe<Scalars['Int']>;
+  /** The password used to protect the content of the object */
+  password?: InputMaybe<Scalars['String']>;
+  /** The slug of the object */
+  slug?: InputMaybe<Scalars['String']>;
+  /** The status of the object */
+  status?: InputMaybe<PostStatusEnum>;
+  /** The title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createVideoSeriesItem mutation */
+export type CreateVideoSeriesItemPayload = {
+  __typename?: 'CreateVideoSeriesItemPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The Post object mutation type. */
+  videoSeriesItem?: Maybe<VideoSeriesItem>;
+};
+
 export enum Currency {
   Gbp = 'GBP'
 }
@@ -1676,6 +1713,27 @@ export type DeleteUserPayload = {
   deletedId?: Maybe<Scalars['ID']>;
   /** The deleted user object */
   user?: Maybe<User>;
+};
+
+/** Input for the deleteVideoSeriesItem mutation */
+export type DeleteVideoSeriesItemInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** Whether the object should be force deleted instead of being moved to the trash */
+  forceDelete?: InputMaybe<Scalars['Boolean']>;
+  /** The ID of the VideoSeriesItem to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteVideoSeriesItem mutation */
+export type DeleteVideoSeriesItemPayload = {
+  __typename?: 'DeleteVideoSeriesItemPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The object before it was deleted */
+  videoSeriesItem?: Maybe<VideoSeriesItem>;
 };
 
 /** The discussion setting type */
@@ -2497,7 +2555,7 @@ export enum MenuItemNodeIdTypeEnum {
 }
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
-export type MenuItemObjectUnion = Category | Page | Post | PostFormat | Tag;
+export type MenuItemObjectUnion = Category | Page | Post | PostFormat | Tag | VideoSeriesItem;
 
 /** Connection between the MenuItem type and the Menu type */
 export type MenuItemToMenuConnectionEdge = {
@@ -3991,6 +4049,8 @@ export type PostPostFormatsNodeInput = {
 
 /** The status of the object. */
 export enum PostStatusEnum {
+  /** Objects with the acf-disabled status */
+  AcfDisabled = 'ACF_DISABLED',
   /** Objects with the auto-draft status */
   AutoDraft = 'AUTO_DRAFT',
   /** Objects with the draft status */
@@ -4645,6 +4705,8 @@ export type RootMutation = {
   createTag?: Maybe<CreateTagPayload>;
   /** The payload for the createUser mutation */
   createUser?: Maybe<CreateUserPayload>;
+  /** The payload for the createVideoSeriesItem mutation */
+  createVideoSeriesItem?: Maybe<CreateVideoSeriesItemPayload>;
   /** The payload for the deleteCategory mutation */
   deleteCategory?: Maybe<DeleteCategoryPayload>;
   /** The payload for the deleteComment mutation */
@@ -4661,6 +4723,8 @@ export type RootMutation = {
   deleteTag?: Maybe<DeleteTagPayload>;
   /** The payload for the deleteUser mutation */
   deleteUser?: Maybe<DeleteUserPayload>;
+  /** The payload for the deleteVideoSeriesItem mutation */
+  deleteVideoSeriesItem?: Maybe<DeleteVideoSeriesItemPayload>;
   /** Increase the count. */
   increaseCount?: Maybe<Scalars['Int']>;
   /** The payload for the registerUser mutation */
@@ -4689,6 +4753,8 @@ export type RootMutation = {
   updateTag?: Maybe<UpdateTagPayload>;
   /** The payload for the updateUser mutation */
   updateUser?: Maybe<UpdateUserPayload>;
+  /** The payload for the updateVideoSeriesItem mutation */
+  updateVideoSeriesItem?: Maybe<UpdateVideoSeriesItemPayload>;
 };
 
 
@@ -4732,6 +4798,11 @@ export type RootMutationCreateUserArgs = {
 };
 
 
+export type RootMutationCreateVideoSeriesItemArgs = {
+  input: CreateVideoSeriesItemInput;
+};
+
+
 export type RootMutationDeleteCategoryArgs = {
   input: DeleteCategoryInput;
 };
@@ -4769,6 +4840,11 @@ export type RootMutationDeleteTagArgs = {
 
 export type RootMutationDeleteUserArgs = {
   input: DeleteUserInput;
+};
+
+
+export type RootMutationDeleteVideoSeriesItemArgs = {
+  input: DeleteVideoSeriesItemInput;
 };
 
 
@@ -4839,6 +4915,11 @@ export type RootMutationUpdateTagArgs = {
 
 export type RootMutationUpdateUserArgs = {
   input: UpdateUserInput;
+};
+
+
+export type RootMutationUpdateVideoSeriesItemArgs = {
+  input: UpdateVideoSeriesItemInput;
 };
 
 export type RootQuery = {
@@ -4935,6 +5016,12 @@ export type RootQuery = {
   userRoles?: Maybe<RootQueryToUserRoleConnection>;
   /** Connection between the RootQuery type and the User type */
   users?: Maybe<RootQueryToUserConnection>;
+  /** An object of the VideoSeriesItem Type.  */
+  videoSeriesItem?: Maybe<VideoSeriesItem>;
+  /** A VideoSeriesItem object */
+  videoSeriesItemBy?: Maybe<VideoSeriesItem>;
+  /** Connection between the RootQuery type and the VideoSeriesItem type */
+  videoSeriesItems?: Maybe<RootQueryToVideoSeriesItemConnection>;
   /** Returns the current user */
   viewer?: Maybe<User>;
   /** Fields of the &#039;WritingSettings&#039; settings group */
@@ -5250,6 +5337,30 @@ export type RootQueryUsersArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RootQueryToUserConnectionWhereArgs>;
+};
+
+
+export type RootQueryVideoSeriesItemArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<VideoSeriesItemIdType>;
+};
+
+
+export type RootQueryVideoSeriesItemByArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+  videoSeriesItemId?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryVideoSeriesItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToVideoSeriesItemConnectionWhereArgs>;
 };
 
 /** Connection between the RootQuery type and the category type */
@@ -6194,6 +6305,64 @@ export type RootQueryToUserRoleConnectionEdge = {
   cursor?: Maybe<Scalars['String']>;
   /** The item at the end of the edge */
   node?: Maybe<UserRole>;
+};
+
+/** Connection between the RootQuery type and the VideoSeriesItem type */
+export type RootQueryToVideoSeriesItemConnection = {
+  __typename?: 'RootQueryToVideoSeriesItemConnection';
+  /** Edges for the RootQueryToVideoSeriesItemConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToVideoSeriesItemConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<VideoSeriesItem>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToVideoSeriesItemConnectionEdge = {
+  __typename?: 'RootQueryToVideoSeriesItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<VideoSeriesItem>;
+};
+
+/** Arguments for filtering the RootQueryToVideoSeriesItemConnection connection */
+export type RootQueryToVideoSeriesItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type SearchTrainer = {
@@ -7205,6 +7374,37 @@ export type UpdateUserPayload = {
   user?: Maybe<User>;
 };
 
+/** Input for the updateVideoSeriesItem mutation */
+export type UpdateVideoSeriesItemInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: InputMaybe<Scalars['String']>;
+  /** The excerpt of the object */
+  excerpt?: InputMaybe<Scalars['String']>;
+  /** The ID of the VideoSeriesItem object */
+  id: Scalars['ID'];
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: InputMaybe<Scalars['Int']>;
+  /** The password used to protect the content of the object */
+  password?: InputMaybe<Scalars['String']>;
+  /** The slug of the object */
+  slug?: InputMaybe<Scalars['String']>;
+  /** The status of the object */
+  status?: InputMaybe<PostStatusEnum>;
+  /** The title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the updateVideoSeriesItem mutation */
+export type UpdateVideoSeriesItemPayload = {
+  __typename?: 'UpdateVideoSeriesItemPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The Post object mutation type. */
+  videoSeriesItem?: Maybe<VideoSeriesItem>;
+};
+
 export type UpsertZoomMeetingInput = {
   id?: InputMaybe<Scalars['Float']>;
   /** ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z' */
@@ -7878,6 +8078,137 @@ export enum UsersConnectionSearchColumnEnum {
   /** The URL of the user\s website. */
   Url = 'URL'
 }
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
+  __typename?: 'VideoSeriesItem';
+  /** Connection between the ContentNode type and the ContentType type */
+  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+  /** The name of the Content Type the node belongs to */
+  contentTypeName: Scalars['String'];
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** Post publishing date. */
+  date?: Maybe<Scalars['String']>;
+  /** The publishing date set in GMT. */
+  dateGmt?: Maybe<Scalars['String']>;
+  /** The desired slug of the post */
+  desiredSlug?: Maybe<Scalars['String']>;
+  /** If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds */
+  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+  /** The RSS enclosure for the object */
+  enclosure?: Maybe<Scalars['String']>;
+  /** Connection between the ContentNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
+  /** Connection between the ContentNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /** The excerpt of the post. */
+  excerpt?: Maybe<Scalars['String']>;
+  /** Connection between the NodeWithFeaturedImage type and the MediaItem type */
+  featuredImage?: Maybe<NodeWithFeaturedImageToMediaItemConnectionEdge>;
+  /** The database identifier for the featured image node assigned to the content node */
+  featuredImageDatabaseId?: Maybe<Scalars['Int']>;
+  /** Globally unique ID of the featured image assigned to the node */
+  featuredImageId?: Maybe<Scalars['ID']>;
+  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  guid?: Maybe<Scalars['String']>;
+  /** The globally unique identifier of the video-series object. */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is a node in the preview state */
+  isPreview?: Maybe<Scalars['Boolean']>;
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The user that most recently edited the node */
+  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+  /** The permalink of the post */
+  link?: Maybe<Scalars['String']>;
+  /** The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time. */
+  modified?: Maybe<Scalars['String']>;
+  /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
+  modifiedGmt?: Maybe<Scalars['String']>;
+  /** Connection between the VideoSeriesItem type and the VideoSeriesItem type */
+  preview?: Maybe<VideoSeriesItemToPreviewConnectionEdge>;
+  /** The database id of the preview node */
+  previewRevisionDatabaseId?: Maybe<Scalars['Int']>;
+  /** Whether the object is a node in the preview state */
+  previewRevisionId?: Maybe<Scalars['ID']>;
+  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  slug?: Maybe<Scalars['String']>;
+  /** The current status of the object */
+  status?: Maybe<Scalars['String']>;
+  /** The template assigned to a node of content */
+  template?: Maybe<ContentTemplate>;
+  /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
+  title?: Maybe<Scalars['String']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  videoSeriesItemId: Scalars['Int'];
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;YouTube&quot; was set to Show in GraphQL. */
+  youtube?: Maybe<VideoSeriesItem_Youtube>;
+};
+
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItemEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItemEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItemExcerptArgs = {
+  format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItemTitleArgs = {
+  format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum VideoSeriesItemIdType {
+  /** Identify a resource by the Database ID. */
+  DatabaseId = 'DATABASE_ID',
+  /** Identify a resource by the (hashed) Global ID. */
+  Id = 'ID',
+  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
+  Slug = 'SLUG',
+  /** Identify a resource by the URI. */
+  Uri = 'URI'
+}
+
+/** Connection between the VideoSeriesItem type and the VideoSeriesItem type */
+export type VideoSeriesItemToPreviewConnectionEdge = {
+  __typename?: 'VideoSeriesItemToPreviewConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<VideoSeriesItem>;
+};
+
+/** Field Group */
+export type VideoSeriesItem_Youtube = AcfFieldGroup & {
+  __typename?: 'VideoSeriesItem_Youtube';
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  /** A link to the YouTube video */
+  url?: Maybe<Scalars['String']>;
+};
 
 /** Information about pagination in a connection. */
 export type WpPageInfo = {
@@ -22228,6 +22559,21 @@ export type PodcastsQueryVariables = Exact<{
 
 
 export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null };
+
+export type VideoSeriesSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null };
+
+export type VideoSeriesQueryVariables = Exact<{
+  term?: InputMaybe<Scalars['String']>;
+  orderDirection?: InputMaybe<OrderEnum>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  exclude?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null> | null } | null } | null };
 
 export type ModuleGroupsQueryVariables = Exact<{
   level: Course_Level_Enum;

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Chip, Link, Typography } from '@mui/material'
+import { Box, BoxProps, Chip, Link, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -86,3 +86,14 @@ export const BlogPostItem: React.FC<Props> = ({
     </Box>
   )
 }
+
+export const BlogPostItemSkeleton: React.FC = () => (
+  <>
+    <Skeleton variant="rectangular" height={170} sx={{ marginBottom: 2 }} />
+    <Skeleton />
+    <Skeleton />
+    <Skeleton />
+    <Skeleton sx={{ marginBottom: 2 }} />
+    <Skeleton width="50%" />
+  </>
+)

@@ -21,9 +21,8 @@ import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 
 import { ArrowPagination } from '../../components/ArrowPagination'
 import { BlogPostItem } from '../../components/BlogPostItem'
+import { OrderMenu } from '../../components/OrderMenu'
 import { SplitPost } from '../../components/SplitPost'
-
-import { OrderMenu } from './components/OrderMenu'
 
 export const PER_PAGE = 12
 

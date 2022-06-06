@@ -1,4 +1,4 @@
-import { Box, BoxProps, Chip, Link, Typography } from '@mui/material'
+import { Box, BoxProps, Chip, Link, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -95,3 +95,18 @@ export const SplitPost: React.FC<Props> = ({
     </Box>
   )
 }
+
+export const SplitPostSkeleton: React.FC<BoxProps> = ({ ...props }) => (
+  <Box {...props} display="flex" alignItems="center">
+    <Box flex={1} mr={3}>
+      <Skeleton variant="rectangular" height={350} />
+    </Box>
+    <Box flex={1}>
+      <Skeleton />
+      <Skeleton sx={{ marginBottom: 2 }} />
+      <Skeleton />
+      <Skeleton sx={{ marginBottom: 2 }} />
+      <Skeleton width="50%" />
+    </Box>
+  </Box>
+)

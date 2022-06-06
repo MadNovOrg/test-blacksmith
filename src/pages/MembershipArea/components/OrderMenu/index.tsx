@@ -17,11 +17,11 @@ export const OrderMenu: React.FC<Props> = ({ onChange = noop }) => {
   const options = [
     {
       key: OrderDirection.Desc,
-      label: t('pages.membership.podcasts.desc-order'),
+      label: t('pages.membership.components.order-menu.desc-order'),
     },
     {
       key: OrderDirection.Asc,
-      label: t('pages.membership.podcasts.asc-order'),
+      label: t('pages.membership.components.order-menu.asc-order'),
     },
   ]
 

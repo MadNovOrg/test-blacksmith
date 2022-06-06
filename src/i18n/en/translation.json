@@ -528,6 +528,15 @@
       }
     },
     "membership": {
+      "components": {
+        "order-menu": {
+          "asc-order": "Oldest",
+          "desc-order": "Newest"
+        },
+        "arrow-pagination": {
+          "pagination-count": "{{start}}-{{end}} of {{total}}"
+        }
+      },
       "details": {
         "title": "Membership Details"
       },
@@ -541,15 +550,19 @@
         "title": "Podcasts",
         "list-title": "All podcast episodes",
         "empty": "There are no podcasts yet.",
-        "pagination-count": "{{start}}-{{end}} of {{total}}",
-        "asc-order": "Oldest",
-        "desc-order": "Newest",
         "search-placeholder": "Search podcasts",
         "error-loading-podcast": "There was an error loading the podcast",
         "author": "by {{author}}",
         "recent": "Recent podcast episodes",
         "not-found": "Podcast not found",
         "episode-number": "Episode #{{number}}"
+      },
+      "video-series": {
+        "featured-label": "New video",
+        "title": "Video Series",
+        "list-title": "All videos in the series",
+        "empty": "There are no videos yet.",
+        "search-placeholder": "Search videos"
       }
     },
     "trainer-base": {

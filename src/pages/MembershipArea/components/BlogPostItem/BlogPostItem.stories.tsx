@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { BlogPostItem, Props } from '.'
+import { BlogPostItem, BlogPostItemSkeleton, Props } from '.'
 
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 
@@ -46,3 +46,9 @@ Video.args = {
   isVideo: true,
   duration: 190,
 }
+
+export const Skeleton = () => (
+  <div style={{ width: 300 }}>
+    <BlogPostItemSkeleton />
+  </div>
+)

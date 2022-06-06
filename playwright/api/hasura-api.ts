@@ -6,9 +6,12 @@ import {
   PodcastQueryVariables,
   PodcastsQuery,
   PodcastsQueryVariables,
+  VideoSeriesQuery,
+  VideoSeriesSummaryFragment,
 } from '@app/generated/graphql'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
+import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 import {
   CourseLevel,
   CourseModule,
@@ -340,4 +343,18 @@ export async function getPodcastById(id: string): Promise<Podcast | null> {
   )
 
   return response.podcast?.podcast ?? null
+}
+
+export async function getAllVideoItems(): Promise<
+  Array<VideoSeriesSummaryFragment | null>
+> {
+  const client = getClient()
+
+  const response = await client.request<VideoSeriesQuery>(VIDEO_SERIES_QUERY)
+
+  if (response.content?.videoSeriesItems?.nodes) {
+    return response.content.videoSeriesItems.nodes
+  }
+
+  return []
 }

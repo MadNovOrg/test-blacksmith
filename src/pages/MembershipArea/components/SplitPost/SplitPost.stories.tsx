@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { SplitPost, Props } from '.'
+import { SplitPost, Props, SplitPostSkeleton } from '.'
 
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 
@@ -47,3 +47,5 @@ RightOrientation.args = {
   ...props,
   orientation: 'right',
 }
+
+export const Skeleton = () => <SplitPostSkeleton />

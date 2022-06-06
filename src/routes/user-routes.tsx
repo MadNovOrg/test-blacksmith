@@ -8,6 +8,7 @@ import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
+import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
@@ -66,6 +67,9 @@ const UserRoutes = () => {
         <Route path="podcasts">
           <Route index element={<Podcasts />} />
           <Route path=":id" element={<Podcast />} />
+        </Route>
+        <Route path="video-series">
+          <Route index element={<VideoSeries />} />
         </Route>
       </Route>
 

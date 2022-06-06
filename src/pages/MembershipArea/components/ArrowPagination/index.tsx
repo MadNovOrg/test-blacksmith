@@ -32,7 +32,7 @@ export const ArrowPagination: React.FC<Props> = ({
   return (
     <Box display="flex" mt={5} justifyContent="space-between" {...rest}>
       <Typography variant="body2">
-        {t('pages.membership.podcasts.pagination-count', {
+        {t('pages.membership.components.arrow-pagination.pagination-count', {
           start: (currentPage - 1) * PER_PAGE + 1,
           end: currentPage * PER_PAGE > 20 ? 20 : currentPage * PER_PAGE,
           total,

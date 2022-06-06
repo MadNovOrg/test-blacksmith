@@ -255,7 +255,7 @@ describe('page: Podcasts', () => {
     expect(screen.getByText('13-20 of 20'))
   })
 
-  it('sorts by published date', async () => {
+  it('sorts by published date', () => {
     const podcasts = buildEntities(20, buildPodcast)
     const reversedPodcasts = podcasts.slice().reverse()
 
