@@ -19,29 +19,30 @@ export const supportedLocales: Locales = {
 
 i18n.use(initReactI18next).init({
   lng: 'en',
-  interpolation: {
-    escapeValue: false,
-    format: (value, format = 'dd/MM/yyyy', lng) => {
-      if (!value) return ''
-
-      if (format === 'price') {
-        return Intl.NumberFormat(lng, {
-          style: 'currency',
-          currency: 'GBP',
-        }).format(value)
-      }
-
-      // else it's a date
-      const d = new Date(value)
-      const dateLocale = lng ? dateLocales[lng] : undefined
-      return F(d, format, { locale: dateLocale })
-    },
-  },
   resources: supportedLocales,
   ns: Object.keys(translation),
   defaultNS: 'common',
   nsSeparator: '.',
-  parseMissingKeyHandler: () => {
-    return ''
-  },
+  parseMissingKeyHandler: () => '',
 })
+
+const dateFormats = {
+  date_default: 'd MMMM yyyy',
+  date_short: 'dd MMM',
+  date_withTime: 'd MMMM yyyy, hh:mm aa',
+  date_long: 'EEE, dd MMM yyyy',
+  date_full: 'PPpp',
+  date_onlyTime: 'hh:mm aa',
+}
+
+Object.entries(dateFormats).forEach(([name, format]) => {
+  i18n.services.formatter?.add(name, formatDates(format))
+})
+
+function formatDates(format: string) {
+  return (value: string, lng?: string) => {
+    const d = new Date(value)
+    const dateLocale = lng ? dateLocales[lng] : undefined
+    return F(d, format, { locale: dateLocale })
+  }
+}

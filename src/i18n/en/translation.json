@@ -2,7 +2,7 @@
   "common": {
     "appTitle": "Team Teach Hub",
     "internal-error": "Internal error occurred.",
-    "currency": "{{amount, price}}",
+    "currency": "{{amount, currency(GBP)}}",
     "certificates": {
       "level-one": "Level One",
       "level-two": "Level Two",
@@ -265,7 +265,7 @@
       "assist_only-title": "Assist Only Pass",
       "certificate-footer": "The certified individual has undertaken a course in the above subject and has been awarded a certificate from Team team ltd. in accordance with the ICM quality award. Team teach is an accredited, award-winning provider of positive behaviour training, equipping individuals and teams in a variety of settings to support individuals who are distressed and have challenging behaviours in ways that lead to desirable outcomes and positive relationships",
       "certification-number-message": "Your certification number is {{num}}",
-      "certification-valid-until-message": "Your certification is valid until {{date, dd/M/yyyy}}",
+      "certification-valid-until-message": "Your certification is valid until {{date, date_default}}",
       "title": "CERTIFICATE",
       "levels-limitation-message": "The individual named above is not qualified to teach or cascade to others any part of the Team Teach programme.",
       "physical-limitation-message": "Physical techniques are not covered under this certification",
@@ -282,8 +282,8 @@
         "please-add-a-note": "Please add a note*",
         "confirm-modification": "Confirm modification"
       },
-      "expired-on": "Expired on {{date, P}}",
-      "active-until": "Active until {{date, P}}",
+      "expired-on": "Expired on {{date, date_default}}",
+      "active-until": "Active until {{date, date_default}}",
       "expires-in": "expires in",
       "update-certification-details": "Update certificate details",
       "import-certificate-description": "Make sure this is an active (not expired) certificate. If you currently have a an active certificate on your profile, this action will update your certification details.",
@@ -315,7 +315,7 @@
     },
     "certification-details": {
       "certification-passed": "Certification Passed",
-      "course-passed-on": "Course passed on {{date, dd/MM/yyyy}}",
+      "course-passed-on": "Course passed on {{date, date_default}}",
       "remaining": "remaining",
       "digital-certificate": "Digital Certificate",
       "dbs-certificate": "DBS Certificate",
@@ -486,7 +486,7 @@
       "step-3": "Payment",
       "complete-booking": "Complete booking",
       "order-summary": "Order summary",
-      "due-on": "Due on {{date, dd MMM yyyy}}",
+      "due-on": "Due on {{date, date_default}}",
       "confirm-title": "Please confirm to complete booking",
       "review-tnc": "I confirm that I wish to participate in the course even if it starts during my 14 day cancellation period. I understand that I will lose my right to cancel the contract once the course is complete and that I must pay for services provided prior to cancellation.",
       "payment-method": "Payment method",
@@ -1035,12 +1035,12 @@
     "response-sent": "Your response has been sent"
   },
   "dates": {
-    "short": "{{date, dd MMM}}",
-    "time": "{{date, hh:mm aa}}",
-    "default": "{{date, d MMMM yyyy}}",
-    "withTime": "{{date, d MMMM yyyy, hh:mm aa}}",
-    "long": "{{date, EEE, dd MMM yyyy}}",
-    "timeFromTo": "{{from, hh:mm aa}} - {{to, hh:mm aa}}",
-    "fullDateTime": "{{date, PPpp}}"
+    "short": "{{date, date_short}}",
+    "time": "{{date, date_onlyTime}}",
+    "default": "{{date, date_default}}",
+    "withTime": "{{date, date_withTime}}",
+    "long": "{{date, date_long}}",
+    "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
+    "fullDateTime": "{{date, date_full}}"
   }
 }
