@@ -188,7 +188,9 @@ Object {
               class="MuiTypography-root MuiTypography-body1 css-pg6gkj-MuiTypography-root"
             >
               Amount due
-               (GBP)
+               (
+              GBP
+              )
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-pg6gkj-MuiTypography-root"
@@ -1046,7 +1048,9 @@ Object {
             class="MuiTypography-root MuiTypography-body1 css-pg6gkj-MuiTypography-root"
           >
             Amount due
-             (GBP)
+             (
+            GBP
+            )
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-pg6gkj-MuiTypography-root"

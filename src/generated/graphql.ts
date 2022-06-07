@@ -22748,6 +22748,13 @@ export type CourseModulesQueryVariables = Exact<{
 
 export type CourseModulesQuery = { __typename?: 'query_root', courseModules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }> };
 
+export type GetCoursePricingQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type GetCoursePricingQuery = { __typename?: 'query_root', pricing?: { __typename?: 'GetCoursePricingOutput', priceAmount: number, priceCurrency: Currency, xeroCode: string } | null };
+
 export type TrainerCoursesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Order_By> | Course_Order_By>;
   where?: InputMaybe<Course_Bool_Exp>;

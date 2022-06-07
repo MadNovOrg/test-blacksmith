@@ -191,6 +191,10 @@ export const CourseBookingDetails: React.FC = () => {
     [sectors]
   )
 
+  const formatCurrency = (amount: number) => {
+    return t('currency', { amount, currency: booking.currency })
+  }
+
   const positionOptions = values.sector ? positions[values.sector] : []
 
   return (
@@ -248,7 +252,7 @@ export const CourseBookingDetails: React.FC = () => {
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: amounts.subtotal })}
+            {formatCurrency(amounts.subtotal)}
           </Typography>
         </Box>
 
@@ -257,7 +261,7 @@ export const CourseBookingDetails: React.FC = () => {
             {t('vat')} ({booking.vat}%)
           </Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: amounts.vat })}
+            {formatCurrency(amounts.vat)}
           </Typography>
         </Box>
 
@@ -271,10 +275,10 @@ export const CourseBookingDetails: React.FC = () => {
 
         <Box display="flex" justifyContent="space-between">
           <Typography fontWeight="500" color="primary">
-            {t('amount-due')} (GBP)
+            {t('amount-due')} ({booking.currency})
           </Typography>
           <Typography fontWeight="500" color="primary">
-            {t('currency', { amount: amounts.total })}
+            {formatCurrency(amounts.total)}
           </Typography>
         </Box>
       </Box>

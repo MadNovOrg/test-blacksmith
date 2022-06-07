@@ -27,6 +27,9 @@ actions:
     definition:
       kind: ""
       handler: '{{ACTIONS_HOST}}/course/price'
+    permissions:
+      - role: user
+      - role: unverified
     comment: getCoursePricing
   - name: getInvite
     definition:

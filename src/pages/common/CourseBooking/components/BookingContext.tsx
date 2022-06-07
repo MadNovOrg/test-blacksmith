@@ -4,23 +4,27 @@ import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
-  QUERY as GetOrder,
+  QUERY as GET_ORDER,
   ResponseType as GetOrderResp,
 } from '@app/queries/order/get-order'
 import {
-  MUTATION,
+  MUTATION as INSERT_ORDER,
   ResponseType as InsertOrderResponseType,
   ParamsType as InsertOrderParamsType,
 } from '@app/queries/order/insert-order'
-import { QUERY, ResponseType } from '@app/queries/profile/get-temp-profile'
-import { Order, PaymentMethod } from '@app/types'
+import {
+  QUERY as GET_TEMP_PROFILE,
+  ResponseType as GetTempProfileResponseType,
+} from '@app/queries/profile/get-temp-profile'
+import { Currency, Order, PaymentMethod } from '@app/types'
 
 import { positions, sectors } from './org-data'
 
 export type Sector = keyof typeof sectors | ''
 
-type CourseDetails = ResponseType['tempProfiles'][0]['course']
+type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
 
 export type InvoiceDetails = {
   orgId: string | null
@@ -36,6 +40,7 @@ type State = {
   emails: string[]
   quantity: number
   price: number
+  currency: Currency
   vat: number
   promoCodes: string[]
   orgId: string
@@ -92,11 +97,18 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   const [booking, setBooking] = useState<State>(initialState)
 
   useMount(async () => {
-    const data = await fetcher<ResponseType>(QUERY)
+    const data = await fetcher<GetTempProfileResponseType>(GET_TEMP_PROFILE)
     const [profile] = data?.tempProfiles || []
 
     if (!profile || !profile.course) {
-      setError(t('no-booking'))
+      setError(t('error-no-booking'))
+      setReady(true)
+      return
+    }
+
+    const { pricing } = await GetCoursePricing(fetcher, profile.course.id)
+    if (!pricing) {
+      setError(t('error-no-pricing'))
       setReady(true)
       return
     }
@@ -109,7 +121,8 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     setBooking({
       quantity: profile.quantity,
       emails: [],
-      price: 100,
+      price: pricing.priceAmount,
+      currency: pricing.priceCurrency,
       vat: 20,
       promoCodes: [],
       orgId: '',
@@ -148,7 +161,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
   const waitForOrderEnriched = useCallback(
     async (orderId: string, tries = 0, maxTries = 5): Promise<void> => {
-      const { order } = await fetcher<GetOrderResp>(GetOrder, { orderId })
+      const { order } = await fetcher<GetOrderResp>(GET_ORDER, { orderId })
       if (tries === maxTries) return
 
       if (!order.orderTotal) {
@@ -163,7 +176,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     const response = await fetcher<
       InsertOrderResponseType,
       InsertOrderParamsType
-    >(MUTATION, {
+    >(INSERT_ORDER, {
       input: {
         courseId: course.id,
         quantity: booking.quantity,

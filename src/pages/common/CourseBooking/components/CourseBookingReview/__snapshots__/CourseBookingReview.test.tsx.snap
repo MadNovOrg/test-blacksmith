@@ -262,7 +262,9 @@ Object {
               class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
             >
               Amount due
-               (GBP)
+               (
+              GBP
+              )
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
@@ -606,7 +608,9 @@ Object {
             class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"
           >
             Amount due
-             (GBP)
+             (
+            GBP
+            )
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-fp5ivw-MuiTypography-root"

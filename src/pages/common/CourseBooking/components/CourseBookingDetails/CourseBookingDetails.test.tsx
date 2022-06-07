@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { PaymentMethod } from '@app/types'
+import { PaymentMethod, Currency } from '@app/types'
 
 import { render } from '@test/index'
 
@@ -19,6 +19,8 @@ jest.mock('@app/components/OrgSelector', () => ({
 }))
 
 const useBookingMock = jest.mocked(useBooking)
+
+const currency = Currency.GBP
 
 describe('CourseBookingDetails', () => {
   const price = 20
@@ -45,6 +47,7 @@ describe('CourseBookingDetails', () => {
     booking: {
       emails: [],
       price,
+      currency,
       promoCodes: [],
       quantity,
       vat,

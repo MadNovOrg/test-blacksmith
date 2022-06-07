@@ -102,7 +102,10 @@ export const List: React.FC<Props> = ({
               </TableCell>
 
               <TableCell align="right">
-                {t('currency', { amount: order.orderTotal })}
+                {t('currency', {
+                  amount: order.orderTotal,
+                  currency: order.currency,
+                })}
               </TableCell>
 
               <TableCell align="center">

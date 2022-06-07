@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { PaymentMethod } from '@app/types'
+import { PaymentMethod, Currency } from '@app/types'
 
 import { render } from '@test/index'
 
@@ -15,6 +15,8 @@ jest.mock('../BookingContext', () => ({
 }))
 
 const useBookingMock = jest.mocked(useBooking)
+
+const currency = Currency.GBP
 
 describe('CourseBookingReview', () => {
   beforeAll(() => {
@@ -50,6 +52,7 @@ describe('CourseBookingReview', () => {
     booking: {
       emails: [],
       price: 20,
+      currency,
       promoCodes: [],
       quantity: 3,
       vat: 10,

@@ -43,6 +43,10 @@ export const CourseBookingReview: React.FC = () => {
     }
   }
 
+  const formatCurrency = (amount: number) => {
+    return t('currency', { amount, currency: booking.currency })
+  }
+
   return (
     <Box>
       <Typography variant="subtitle1" fontWeight="500">
@@ -133,7 +137,10 @@ export const CourseBookingReview: React.FC = () => {
           <Box key={email} display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">{email}</Typography>
             <Typography color="grey.700">
-              {t('currency', { amount: booking.price })}
+              {t('currency', {
+                amount: booking.price,
+                currency: booking.currency,
+              })}
             </Typography>
           </Box>
         ))}
@@ -141,7 +148,7 @@ export const CourseBookingReview: React.FC = () => {
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">{t('subtotal')}</Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: amounts.subtotal })}
+            {formatCurrency(amounts.subtotal)}
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" mb={1}>
@@ -149,7 +156,7 @@ export const CourseBookingReview: React.FC = () => {
             {t('vat')} ({booking.vat}%)
           </Typography>
           <Typography color="grey.700">
-            {t('currency', { amount: amounts.vat })}
+            {formatCurrency(amounts.vat)}
           </Typography>
         </Box>
         <Divider sx={{ my: 2 }} />
@@ -165,9 +172,11 @@ export const CourseBookingReview: React.FC = () => {
         ))}
         {booking.promoCodes.length ? <Divider sx={{ my: 2 }} /> : null}
         <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography fontWeight="500">{t('amount-due')} (GBP)</Typography>
           <Typography fontWeight="500">
-            {t('currency', { amount: amounts.total })}
+            {t('amount-due')} ({booking.currency})
+          </Typography>
+          <Typography fontWeight="500">
+            {formatCurrency(amounts.total)}
           </Typography>
         </Box>
         <Typography color="grey.700">
