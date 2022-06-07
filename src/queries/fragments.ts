@@ -164,6 +164,23 @@ export const LEGACY_CERTIFICATE = gql`
   }
 `
 
+export const VideoItemSummary = gql`
+  fragment VideoItemSummary on VideoSeriesItem {
+    id
+    title
+    excerpt
+    featuredImage {
+      node {
+        mediaItemUrl
+      }
+    }
+    youtube {
+      url
+    }
+    date
+  }
+`
+
 export const Tag = gql`
   fragment TagSummary on Tag {
     id

@@ -11,6 +11,7 @@ import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetai
 import { Blog } from '@app/pages/MembershipArea/pages/Blog'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
+import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -79,6 +80,7 @@ const TrainerBaseRoutes = () => {
         </Route>
         <Route path="video-series">
           <Route index element={<VideoSeries />} />
+          <Route path=":id" element={<VideoItem />} />
         </Route>
       </Route>
 

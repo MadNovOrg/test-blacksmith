@@ -565,7 +565,9 @@
         "title": "Video Series",
         "list-title": "All videos in the series",
         "empty": "There are no videos yet.",
-        "search-placeholder": "Search videos"
+        "search-placeholder": "Search videos",
+        "recent": "Recent videos in the series",
+        "not-found": "Video series item not found"
       }
     },
     "trainer-base": {

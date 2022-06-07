@@ -22845,6 +22845,8 @@ export type CertificateChangelogFragment = { __typename?: 'course_certificate_ch
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
+export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null };
+
 export type TagSummaryFragment = { __typename?: 'Tag', id: string, name?: string | null };
 
 export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null };
@@ -22964,7 +22966,12 @@ export type PodcastsQueryVariables = Exact<{
 
 export type PodcastsQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', total: number, records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null };
 
-export type VideoSeriesSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null };
+export type VideoItemQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null> | null } | null } | null };
 
 export type VideoSeriesQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;

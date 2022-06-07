@@ -8,13 +8,17 @@ import {
   PodcastQueryVariables,
   PodcastsQuery,
   PodcastsQueryVariables,
-  PostSummaryFragment,
   VideoSeriesQuery,
-  VideoSeriesSummaryFragment,
+  VideoItemSummaryFragment,
+  VideoItemQuery,
+  VideoItemQueryVariables,
+  VideoSeriesQueryVariables,
+  PostSummaryFragment,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
+import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 import {
   CourseLevel,
@@ -349,18 +353,34 @@ export async function getPodcastById(id: string): Promise<Podcast | null> {
   return response.podcast?.podcast ?? null
 }
 
-export async function getAllVideoItems(): Promise<
-  Array<VideoSeriesSummaryFragment | null>
-> {
+export async function getVideoItems(
+  first = 1000
+): Promise<Array<VideoItemSummaryFragment | null>> {
   const client = getClient()
 
-  const response = await client.request<VideoSeriesQuery>(VIDEO_SERIES_QUERY)
+  const response = await client.request<
+    VideoSeriesQuery,
+    VideoSeriesQueryVariables
+  >(VIDEO_SERIES_QUERY, { first })
 
   if (response.content?.videoSeriesItems?.nodes) {
     return response.content.videoSeriesItems.nodes
   }
 
   return []
+}
+
+export async function getVideoItemById(
+  id: string
+): Promise<VideoItemSummaryFragment | null> {
+  const client = getClient()
+
+  const response = await client.request<
+    VideoItemQuery,
+    VideoItemQueryVariables
+  >(VIDEO_ITEM_QUERY, { id })
+
+  return response.content?.videoSeriesItem || null
 }
 
 export async function getBlogPosts(

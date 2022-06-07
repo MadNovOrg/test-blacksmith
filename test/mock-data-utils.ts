@@ -10,7 +10,7 @@ import {
   Podcast,
   PostSummaryFragment,
   TagSummaryFragment,
-  VideoSeriesSummaryFragment,
+  VideoItemSummaryFragment,
 } from '@app/generated/graphql'
 import {
   Address,
@@ -326,7 +326,7 @@ export const buildPodcast = build<Podcast>({
   },
 })
 
-export const buildVideoItem = build<VideoSeriesSummaryFragment>({
+export const buildVideoItem = build<VideoItemSummaryFragment>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     title: fake(f => f.random.words()),

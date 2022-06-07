@@ -1,20 +1,9 @@
 import { gql } from 'graphql-request'
 
+import { VideoItemSummary } from '@app/queries/fragments'
+
 export default gql`
-  fragment VideoSeriesSummary on VideoSeriesItem {
-    id
-    title
-    excerpt
-    featuredImage {
-      node {
-        mediaItemUrl
-      }
-    }
-    youtube {
-      url
-    }
-    date
-  }
+  ${VideoItemSummary}
 
   query VideoSeries(
     $term: String
@@ -42,7 +31,7 @@ export default gql`
           startCursor
         }
         nodes {
-          ...VideoSeriesSummary
+          ...VideoItemSummary
         }
       }
     }

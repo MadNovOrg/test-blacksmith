@@ -1,19 +1,19 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { VideoSeriesSummaryFragment } from '@app/generated/graphql'
+import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
-import { getAllVideoItems } from '../../api/hasura-api'
+import { getVideoItems } from '../../api/hasura-api'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
 const PER_PAGE = 12
 
 const test = base.extend<{
-  videoItems: Array<VideoSeriesSummaryFragment | null>
+  videoItems: Array<VideoItemSummaryFragment | null>
 }>({
   videoItems: async ({}, use) => {
-    const videoItems = await getAllVideoItems()
+    const videoItems = await getVideoItems()
 
     await use(videoItems)
   },

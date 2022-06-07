@@ -10,7 +10,7 @@ import {
   OrderEnum,
   VideoSeriesQuery,
   VideoSeriesQueryVariables,
-  VideoSeriesSummaryFragment,
+  VideoItemSummaryFragment,
 } from '@app/generated/graphql'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 import theme from '@app/theme'
@@ -25,7 +25,7 @@ export const PER_PAGE = 12
 export const VideoSeries = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] =
-    useState<VideoSeriesSummaryFragment | null>(null)
+    useState<VideoItemSummaryFragment | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)
   const [pagination, setPagination] = useState<
