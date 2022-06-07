@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { Container, Typography, Box, Grid } from '@mui/material'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Container, Typography, Box, Grid, IconButton } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -13,7 +13,6 @@ import {
   VideoItemSummaryFragment,
 } from '@app/generated/graphql'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
-import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
@@ -33,11 +32,9 @@ export const VideoSeries = () => {
   >({
     after: null,
     before: null,
-    first: PER_PAGE + 1, // one more for the featured video
+    first: PER_PAGE,
     last: null,
   })
-
-  const shouldSliceRef = useRef(true)
 
   const [{ data, fetching }] = useQuery<
     VideoSeriesQuery,
@@ -50,23 +47,6 @@ export const VideoSeries = () => {
       ...pagination,
     },
   })
-
-  useEffect(() => {
-    if (pagination.first !== PER_PAGE + 1) {
-      shouldSliceRef.current = false
-    }
-  }, [pagination, data])
-
-  const allItems = useMemo(() => {
-    if (data?.content?.videoSeriesItems?.nodes?.length) {
-      return data.content.videoSeriesItems.nodes.slice(
-        shouldSliceRef.current ? 1 : 0,
-        data.content.videoSeriesItems.nodes.length
-      )
-    }
-
-    return []
-  }, [data])
 
   useEffect(() => {
     if (data?.content?.videoSeriesItems?.nodes?.length && !featuredItem) {
@@ -138,7 +118,7 @@ export const VideoSeries = () => {
         />
       </Box>
 
-      {allItems.length && !fetching ? (
+      {data?.content?.videoSeriesItems?.nodes?.length && !fetching ? (
         <>
           <Grid
             container
@@ -146,7 +126,7 @@ export const VideoSeries = () => {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             data-testid="video-series-grid"
           >
-            {allItems.map((item, index) => {
+            {data.content.videoSeriesItems.nodes.map((item, index) => {
               if (!item) {
                 return null
               }
@@ -176,7 +156,9 @@ export const VideoSeries = () => {
               mt={2}
               data-testid="video-series-pagination"
             >
-              <ChevronLeft
+              <IconButton
+                disabled={!hasPreviousPage}
+                data-testid="video-series-previous-page"
                 onClick={() =>
                   setPagination({
                     ...pagination,
@@ -187,14 +169,13 @@ export const VideoSeries = () => {
                     last: PER_PAGE,
                   })
                 }
-                sx={{
-                  cursor: hasPreviousPage ? 'pointer' : 'default',
-                  color: hasPreviousPage
-                    ? 'inherit'
-                    : theme.palette.text.disabled,
-                }}
-              />
-              <ChevronRight
+              >
+                <ChevronLeft />
+              </IconButton>
+
+              <IconButton
+                disabled={!hasNextPage}
+                data-testid="video-series-next-page"
                 onClick={() =>
                   setPagination({
                     ...pagination,
@@ -204,11 +185,9 @@ export const VideoSeries = () => {
                     last: null,
                   })
                 }
-                sx={{
-                  cursor: hasNextPage ? 'pointer' : 'default',
-                  color: hasNextPage ? 'inherit' : theme.palette.text.disabled,
-                }}
-              />
+              >
+                <ChevronRight />
+              </IconButton>
             </Box>
           ) : null}
         </>

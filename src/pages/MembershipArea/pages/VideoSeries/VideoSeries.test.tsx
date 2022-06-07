@@ -7,6 +7,7 @@ import { never, fromValue } from 'wonka'
 import {
   VideoSeriesQuery,
   VideoSeriesQueryVariables,
+  WpPageInfo,
 } from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
@@ -119,7 +120,7 @@ describe('page: VideoSeries', () => {
     expect(screen.getByText('Video item page'))
   })
 
-  it('displays items other than the first one in a grid', () => {
+  it('displays items in a grid', () => {
     const videoItems = buildEntities(10, buildVideoItem)
 
     const client = {
@@ -145,11 +146,7 @@ describe('page: VideoSeries', () => {
       </Provider>
     )
 
-    expect(
-      screen.queryByTestId(`video-series-grid-item-${videoItems[0].id}`)
-    ).not.toBeInTheDocument()
-
-    videoItems.slice(1, videoItems.length).forEach(item => {
+    videoItems.forEach(item => {
       const itemElement = screen.getByTestId(
         `video-series-grid-item-${item.id}`
       )
@@ -214,24 +211,44 @@ describe('page: VideoSeries', () => {
     })
   })
 
-  it('displays pagination if there is more content', () => {
-    const videoItems = buildEntities(10, buildVideoItem)
+  it('paginates blog posts', async () => {
+    const firstBatch = buildEntities(13, buildVideoItem)
+    const secondBatch = buildEntities(12, buildVideoItem)
 
     const client = {
-      executeQuery: () =>
-        fromValue<{ data: VideoSeriesQuery }>({
+      executeQuery: ({
+        variables,
+      }: {
+        variables: VideoSeriesQueryVariables
+      }) => {
+        const videoItems = variables.after ? secondBatch : firstBatch
+        const pageInfo: WpPageInfo = {
+          ...(variables.after
+            ? {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'start-cursor',
+                endCursor: null,
+              }
+            : {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: 'end-cursor',
+              }),
+        }
+
+        return fromValue<{ data: VideoSeriesQuery }>({
           data: {
             content: {
               videoSeriesItems: {
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
+                pageInfo,
                 nodes: videoItems,
               },
             },
           },
-        }),
+        })
+      },
     }
 
     render(
@@ -244,6 +261,40 @@ describe('page: VideoSeries', () => {
       </Provider>
     )
 
-    expect(screen.getByTestId('video-series-pagination')).toBeInTheDocument()
+    userEvent.click(screen.getByTestId('video-series-next-page'))
+
+    expect(
+      within(screen.getByTestId('featured-video-series-item')).getByText(
+        firstBatch[0].title ?? ''
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+    ).not.toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+    ).toBeInTheDocument()
+
+    expect(screen.getByTestId('video-series-next-page')).toBeDisabled()
+
+    userEvent.click(screen.getByTestId('video-series-previous-page'))
+
+    expect(
+      within(screen.getByTestId('featured-video-series-item')).getByText(
+        firstBatch[0].title ?? ''
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`)
+    ).toBeInTheDocument()
+
+    expect(
+      screen.queryByTestId(`video-series-grid-item-${secondBatch[0].id}`)
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByTestId('video-series-previous-page')).toBeDisabled()
   })
 })
