@@ -1,49 +1,44 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { Container, Typography, Box, Grid } from '@mui/material'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Box, Container, Grid, IconButton, Typography } from '@mui/material'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import {
+  BlogQuery,
+  BlogQueryVariables,
   OrderEnum,
-  VideoSeriesQuery,
-  VideoSeriesQueryVariables,
-  VideoSeriesSummaryFragment,
+  PostSummaryFragment,
 } from '@app/generated/graphql'
-import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
-import theme from '@app/theme'
+import BLOG_QUERY from '@app/queries/membership/blog'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
-export const PER_PAGE = 12
+const PER_PAGE = 4
 
-export const VideoSeries = () => {
+export const Blog: React.FC = () => {
   const { t } = useTranslation()
-  const [featuredItem, setFeaturedItem] =
-    useState<VideoSeriesSummaryFragment | null>(null)
+  const [featuredPost, setFeaturedPost] = useState<PostSummaryFragment | null>(
+    null
+  )
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)
   const [pagination, setPagination] = useState<
-    Pick<VideoSeriesQueryVariables, 'first' | 'last' | 'before' | 'after'>
+    Pick<BlogQueryVariables, 'first' | 'last' | 'before' | 'after'>
   >({
     after: null,
     before: null,
-    first: PER_PAGE + 1, // one more for the featured video
+    first: PER_PAGE,
     last: null,
   })
 
-  const shouldSliceRef = useRef(true)
-
-  const [{ data, fetching }] = useQuery<
-    VideoSeriesQuery,
-    VideoSeriesQueryVariables
-  >({
-    query: VIDEO_SERIES_QUERY,
+  const [{ data, fetching }] = useQuery<BlogQuery, BlogQueryVariables>({
+    query: BLOG_QUERY,
     variables: {
       term: searchTerm,
       orderDirection,
@@ -52,62 +47,48 @@ export const VideoSeries = () => {
   })
 
   useEffect(() => {
-    if (pagination.first !== PER_PAGE + 1) {
-      shouldSliceRef.current = false
+    if (data?.content?.posts?.nodes?.length && !featuredPost) {
+      setFeaturedPost(data.content.posts.nodes[0] ?? null)
     }
-  }, [pagination, data])
+  }, [data, featuredPost])
 
-  const allItems = useMemo(() => {
-    if (data?.content?.videoSeriesItems?.nodes?.length) {
-      return data.content.videoSeriesItems.nodes.slice(
-        shouldSliceRef.current ? 1 : 0,
-        data.content.videoSeriesItems.nodes.length
-      )
-    }
-
-    return []
-  }, [data])
-
-  useEffect(() => {
-    if (data?.content?.videoSeriesItems?.nodes?.length && !featuredItem) {
-      setFeaturedItem(data.content.videoSeriesItems.nodes[0] ?? null)
-    }
-  }, [data, featuredItem])
-
-  const hasNextPage = data?.content?.videoSeriesItems?.pageInfo?.hasNextPage
-  const hasPreviousPage =
-    data?.content?.videoSeriesItems?.pageInfo?.hasPreviousPage
+  const hasNextPage = data?.content?.posts?.pageInfo?.hasNextPage
+  const hasPreviousPage = data?.content?.posts?.pageInfo?.hasPreviousPage
 
   const hasPagination = hasNextPage || hasPreviousPage
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
       <Typography variant="h1" color="primary" textAlign="center" padding={6}>
-        {t('pages.membership.video-series.title')}
+        {t('pages.membership.blog.title')}
       </Typography>
 
       <Box mb={8}>
-        {featuredItem ? (
+        {featuredPost ? (
           <SplitPost
-            id={featuredItem.id}
-            title={featuredItem.title ?? ''}
-            imageUrl={featuredItem.featuredImage?.node?.mediaItemUrl}
-            publishedDate={featuredItem.date ?? ''}
-            label={t('pages.membership.video-series.featured-label')}
-            description={sanitize(featuredItem.excerpt ?? '', {
+            id={featuredPost.id}
+            title={featuredPost.title ?? ''}
+            imageUrl={featuredPost.featuredImage?.node?.mediaItemUrl}
+            publishedDate={featuredPost.date ?? ''}
+            label={t('pages.membership.blog.featured-label')}
+            description={sanitize(featuredPost.excerpt ?? '', {
               allowedTags: [],
             })}
             orientation="left"
-            linkTo={`./${featuredItem.id}`}
-            data-testid="featured-video-series-item"
+            linkTo={`./${featuredPost.id}`}
+            data-testid="featured-post-item"
+            tags={featuredPost.tags?.nodes?.map(tag => ({
+              id: tag?.id ?? '',
+              name: tag?.name ?? '',
+            }))}
           />
         ) : fetching ? (
-          <SplitPostSkeleton data-testid="featured-video-skeleton" />
+          <SplitPostSkeleton data-testid="featured-post-skeleton" />
         ) : null}
       </Box>
 
       <Typography mb={3} variant="h3" color="primary">
-        {t('pages.membership.video-series.list-title')}
+        {t('pages.membership.blog.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
         <FilterSearch
@@ -120,7 +101,7 @@ export const VideoSeries = () => {
             })
             setSearchTerm(value)
           }}
-          placeholder={t('pages.membership.video-series.search-placeholder')}
+          placeholder={t('pages.membership.blog.search-placeholder')}
           value={searchTerm}
           InputProps={{ disableUnderline: true }}
         />
@@ -138,15 +119,15 @@ export const VideoSeries = () => {
         />
       </Box>
 
-      {allItems.length && !fetching ? (
+      {data?.content?.posts?.nodes?.length && !fetching ? (
         <>
           <Grid
             container
             rowSpacing={5}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            data-testid="video-series-grid"
+            data-testid="posts-grid"
           >
-            {allItems.map((item, index) => {
+            {data.content.posts.nodes.map((item, index) => {
               if (!item) {
                 return null
               }
@@ -162,8 +143,11 @@ export const VideoSeries = () => {
                       allowedTags: [],
                     })}
                     linkTo={`./${item.id}`}
-                    data-testid={`video-series-grid-item-${item.id}`}
-                    isVideo
+                    data-testid={`post-grid-item-${item.id}`}
+                    tags={item.tags?.nodes?.map(tag => ({
+                      id: tag?.id ?? '',
+                      name: tag?.name ?? '',
+                    }))}
                   />
                 </Grid>
               )
@@ -174,46 +158,44 @@ export const VideoSeries = () => {
               display="flex"
               justifyContent="flex-end"
               mt={2}
-              data-testid="video-series-pagination"
+              data-testid="posts-pagination"
             >
-              <ChevronLeft
+              <IconButton
+                data-testid="posts-previous-page"
+                disabled={!hasPreviousPage}
                 onClick={() =>
                   setPagination({
                     ...pagination,
                     first: null,
                     after: null,
-                    before:
-                      data?.content?.videoSeriesItems?.pageInfo?.startCursor,
+                    before: data?.content?.posts?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
                 }
-                sx={{
-                  cursor: hasPreviousPage ? 'pointer' : 'default',
-                  color: hasPreviousPage
-                    ? 'inherit'
-                    : theme.palette.text.disabled,
-                }}
-              />
-              <ChevronRight
+              >
+                <ChevronLeft />
+              </IconButton>
+
+              <IconButton
+                data-testid="posts-next-page"
+                disabled={!hasNextPage}
                 onClick={() =>
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
-                    after: data?.content?.videoSeriesItems?.pageInfo?.endCursor,
+                    after: data?.content?.posts?.pageInfo?.endCursor,
                     before: null,
                     last: null,
                   })
                 }
-                sx={{
-                  cursor: hasNextPage ? 'pointer' : 'default',
-                  color: hasNextPage ? 'inherit' : theme.palette.text.disabled,
-                }}
-              />
+              >
+                <ChevronRight />
+              </IconButton>
             </Box>
           ) : null}
         </>
       ) : (
-        <Box data-testid="video-items-grid-skeleton">
+        <Box data-testid="posts-items-grid-skeleton">
           <ItemsGridSkeleton />
         </Box>
       )}

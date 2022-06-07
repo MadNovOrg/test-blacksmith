@@ -1,14 +1,18 @@
 import { GraphQLClient, gql } from 'graphql-request'
 
 import {
+  BlogQuery,
+  BlogQueryVariables,
   Podcast,
   PodcastQuery,
   PodcastQueryVariables,
   PodcastsQuery,
   PodcastsQueryVariables,
+  PostSummaryFragment,
   VideoSeriesQuery,
   VideoSeriesSummaryFragment,
 } from '@app/generated/graphql'
+import BLOG_QUERY from '@app/queries/membership/blog'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
@@ -354,6 +358,25 @@ export async function getAllVideoItems(): Promise<
 
   if (response.content?.videoSeriesItems?.nodes) {
     return response.content.videoSeriesItems.nodes
+  }
+
+  return []
+}
+
+export async function getBlogPosts(
+  first = 1000
+): Promise<(PostSummaryFragment | null)[]> {
+  const client = getClient()
+
+  const response = await client.request<BlogQuery, BlogQueryVariables>(
+    BLOG_QUERY,
+    {
+      first,
+    }
+  )
+
+  if (response.content?.posts?.nodes) {
+    return response.content.posts.nodes
   }
 
   return []

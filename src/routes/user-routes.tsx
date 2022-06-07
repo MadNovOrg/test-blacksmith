@@ -3,9 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { NotFound } from '@app/pages/common/NotFound'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
-import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { Blog } from '@app/pages/MembershipArea/pages/Blog'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
@@ -61,8 +60,7 @@ const UserRoutes = () => {
         <Route index element={<Navigate replace to="details" />} />
         <Route path="details" element={<MembershipDetailsPage />} />
         <Route path="blog">
-          <Route index element={<BlogPage />} />
-          <Route path=":postId" element={<BlogPostPage />} />
+          <Route index element={<Blog />} />
         </Route>
         <Route path="podcasts">
           <Route index element={<Podcasts />} />

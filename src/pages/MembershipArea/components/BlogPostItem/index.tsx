@@ -70,12 +70,12 @@ export const BlogPostItem: React.FC<Props> = ({
         {description}
       </Typography>
 
-      <Box display="flex">
+      <Box display="flex" flexWrap="wrap">
         {tags.map(tag => (
           <Chip
             key={tag.id}
             label={<Link href={getTagLink(tag.id)}>{tag.name}</Link>}
-            sx={{ marginRight: 1 }}
+            sx={{ marginRight: 1, marginBottom: 1 }}
             size="small"
           />
         ))}

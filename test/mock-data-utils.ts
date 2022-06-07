@@ -6,7 +6,12 @@ import {
 } from '@jackfranklin/test-data-bot'
 import { add, sub } from 'date-fns'
 
-import { Podcast, VideoSeriesSummaryFragment } from '@app/generated/graphql'
+import {
+  Podcast,
+  PostSummaryFragment,
+  TagSummaryFragment,
+  VideoSeriesSummaryFragment,
+} from '@app/generated/graphql'
 import {
   Address,
   Course,
@@ -334,6 +339,28 @@ export const buildVideoItem = build<VideoSeriesSummaryFragment>({
     youtube: {
       url: fake(f => f.internet.url()),
     },
+    date: fake(f => f.date.past().toISOString()),
+  },
+})
+
+export const buildTag = build<TagSummaryFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words()),
+  },
+})
+
+export const buildPost = build<PostSummaryFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    title: fake(f => f.random.words()),
+    excerpt: fake(f => f.lorem.sentences()),
+    featuredImage: {
+      node: {
+        mediaItemUrl: fake(f => f.random.image()),
+      },
+    },
+    tags: [buildTag(), buildTag()],
     date: fake(f => f.date.past().toISOString()),
   },
 })

@@ -163,3 +163,32 @@ export const LEGACY_CERTIFICATE = gql`
     certificationDate
   }
 `
+
+export const Tag = gql`
+  fragment TagSummary on Tag {
+    id
+    name
+  }
+`
+
+export const PostSummary = gql`
+  ${Tag}
+
+  fragment PostSummary on Post {
+    id
+    title
+    excerpt
+    content
+    date
+    featuredImage {
+      node {
+        mediaItemUrl
+      }
+    }
+    tags {
+      nodes {
+        ...TagSummary
+      }
+    }
+  }
+`

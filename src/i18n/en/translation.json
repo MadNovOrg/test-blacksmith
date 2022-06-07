@@ -542,6 +542,9 @@
       },
       "blog": {
         "title": "Blog",
+        "featured-label": "New post",
+        "list-title": "All blog posts",
+        "search-placeholder": "Search posts", 
         "no-post-id-error": "No post ID has been provided"
       },
       "error": "Error loading",

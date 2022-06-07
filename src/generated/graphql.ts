@@ -1165,6 +1165,12 @@ export enum CourseTrainerType {
   Moderator = 'MODERATOR'
 }
 
+export enum CourseType {
+  Closed = 'CLOSED',
+  Indirect = 'INDIRECT',
+  Open = 'OPEN'
+}
+
 export type CreateAppUserInput = {
   acceptMarketing: Scalars['Boolean'];
   acceptTnc: Scalars['Boolean'];
@@ -1822,6 +1828,21 @@ export type GeneralSettings = {
   title?: Maybe<Scalars['String']>;
   /** Site URL. */
   url?: Maybe<Scalars['String']>;
+};
+
+export type GetCoursePricingInput = {
+  courseId: Scalars['Int'];
+};
+
+export type GetCoursePricingOutput = {
+  __typename?: 'GetCoursePricingOutput';
+  blended?: Maybe<Scalars['Boolean']>;
+  level?: Maybe<CourseLevel>;
+  priceAmount: Scalars['Float'];
+  priceCurrency: Currency;
+  reaccreditation?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<CourseType>;
+  xeroCode: Scalars['String'];
 };
 
 export type GetTrainersLevelsInput = {
@@ -11671,6 +11692,254 @@ export type Course_Pk_Columns_Input = {
   id: Scalars['Int'];
 };
 
+/** Prices per participant for various course variants */
+export type Course_Pricing = {
+  __typename?: 'course_pricing';
+  blended: Scalars['Boolean'];
+  id: Scalars['uuid'];
+  level: Course_Level_Enum;
+  /** Price per participant without any discounts */
+  priceAmount: Scalars['numeric'];
+  priceCurrency: Scalars['String'];
+  reaccreditation: Scalars['Boolean'];
+  type: Course_Type_Enum;
+  xeroCode: Scalars['String'];
+};
+
+/** aggregated selection of "course_pricing" */
+export type Course_Pricing_Aggregate = {
+  __typename?: 'course_pricing_aggregate';
+  aggregate?: Maybe<Course_Pricing_Aggregate_Fields>;
+  nodes: Array<Course_Pricing>;
+};
+
+/** aggregate fields of "course_pricing" */
+export type Course_Pricing_Aggregate_Fields = {
+  __typename?: 'course_pricing_aggregate_fields';
+  avg?: Maybe<Course_Pricing_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Pricing_Max_Fields>;
+  min?: Maybe<Course_Pricing_Min_Fields>;
+  stddev?: Maybe<Course_Pricing_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Pricing_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Pricing_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Pricing_Sum_Fields>;
+  var_pop?: Maybe<Course_Pricing_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Pricing_Var_Samp_Fields>;
+  variance?: Maybe<Course_Pricing_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_pricing" */
+export type Course_Pricing_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Pricing_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Course_Pricing_Avg_Fields = {
+  __typename?: 'course_pricing_avg_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "course_pricing". All fields are combined with a logical 'AND'. */
+export type Course_Pricing_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Pricing_Bool_Exp>>;
+  _not?: InputMaybe<Course_Pricing_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Pricing_Bool_Exp>>;
+  blended?: InputMaybe<Boolean_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
+  priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
+  priceCurrency?: InputMaybe<String_Comparison_Exp>;
+  reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
+  type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
+  xeroCode?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_pricing" */
+export enum Course_Pricing_Constraint {
+  /** unique or primary key constraint */
+  CoursePricingPkey = 'course_pricing_pkey',
+  /** unique or primary key constraint */
+  CoursePricingTypeLevelBlendedReaccreditationKey = 'course_pricing_type_level_blended_reaccreditation_key'
+}
+
+/** input type for incrementing numeric columns in table "course_pricing" */
+export type Course_Pricing_Inc_Input = {
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "course_pricing" */
+export type Course_Pricing_Insert_Input = {
+  blended?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Course_Type_Enum>;
+  xeroCode?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Pricing_Max_Fields = {
+  __typename?: 'course_pricing_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
+  xeroCode?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Pricing_Min_Fields = {
+  __typename?: 'course_pricing_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+  priceCurrency?: Maybe<Scalars['String']>;
+  xeroCode?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_pricing" */
+export type Course_Pricing_Mutation_Response = {
+  __typename?: 'course_pricing_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Pricing>;
+};
+
+/** on_conflict condition type for table "course_pricing" */
+export type Course_Pricing_On_Conflict = {
+  constraint: Course_Pricing_Constraint;
+  update_columns?: Array<Course_Pricing_Update_Column>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_pricing". */
+export type Course_Pricing_Order_By = {
+  blended?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  level?: InputMaybe<Order_By>;
+  priceAmount?: InputMaybe<Order_By>;
+  priceCurrency?: InputMaybe<Order_By>;
+  reaccreditation?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  xeroCode?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_pricing */
+export type Course_Pricing_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_pricing" */
+export enum Course_Pricing_Select_Column {
+  /** column name */
+  Blended = 'blended',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Level = 'level',
+  /** column name */
+  PriceAmount = 'priceAmount',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
+  Reaccreditation = 'reaccreditation',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  XeroCode = 'xeroCode'
+}
+
+/** input type for updating data in table "course_pricing" */
+export type Course_Pricing_Set_Input = {
+  blended?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  level?: InputMaybe<Course_Level_Enum>;
+  /** Price per participant without any discounts */
+  priceAmount?: InputMaybe<Scalars['numeric']>;
+  priceCurrency?: InputMaybe<Scalars['String']>;
+  reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  type?: InputMaybe<Course_Type_Enum>;
+  xeroCode?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Pricing_Stddev_Fields = {
+  __typename?: 'course_pricing_stddev_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Pricing_Stddev_Pop_Fields = {
+  __typename?: 'course_pricing_stddev_pop_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Pricing_Stddev_Samp_Fields = {
+  __typename?: 'course_pricing_stddev_samp_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Pricing_Sum_Fields = {
+  __typename?: 'course_pricing_sum_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['numeric']>;
+};
+
+/** update columns of table "course_pricing" */
+export enum Course_Pricing_Update_Column {
+  /** column name */
+  Blended = 'blended',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Level = 'level',
+  /** column name */
+  PriceAmount = 'priceAmount',
+  /** column name */
+  PriceCurrency = 'priceCurrency',
+  /** column name */
+  Reaccreditation = 'reaccreditation',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  XeroCode = 'xeroCode'
+}
+
+/** aggregate var_pop on columns */
+export type Course_Pricing_Var_Pop_Fields = {
+  __typename?: 'course_pricing_var_pop_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Pricing_Var_Samp_Fields = {
+  __typename?: 'course_pricing_var_samp_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Course_Pricing_Variance_Fields = {
+  __typename?: 'course_pricing_variance_fields';
+  /** Price per participant without any discounts */
+  priceAmount?: Maybe<Scalars['Float']>;
+};
+
 /** columns and relationships of "course_schedule" */
 export type Course_Schedule = {
   __typename?: 'course_schedule';
@@ -14613,6 +14882,10 @@ export type Mutation_Root = {
   delete_course_participant_module?: Maybe<Course_Participant_Module_Mutation_Response>;
   /** delete single row from the table: "course_participant_module" */
   delete_course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** delete data from the table: "course_pricing" */
+  delete_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
+  /** delete single row from the table: "course_pricing" */
+  delete_course_pricing_by_pk?: Maybe<Course_Pricing>;
   /** delete data from the table: "course_schedule" */
   delete_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** delete single row from the table: "course_schedule" */
@@ -14773,6 +15046,10 @@ export type Mutation_Root = {
   insert_course_participant_module_one?: Maybe<Course_Participant_Module>;
   /** insert a single row into the table: "course_participant" */
   insert_course_participant_one?: Maybe<Course_Participant>;
+  /** insert data into the table: "course_pricing" */
+  insert_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
+  /** insert a single row into the table: "course_pricing" */
+  insert_course_pricing_one?: Maybe<Course_Pricing>;
   /** insert data into the table: "course_schedule" */
   insert_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** insert a single row into the table: "course_schedule" */
@@ -14936,6 +15213,10 @@ export type Mutation_Root = {
   update_course_participant_module?: Maybe<Course_Participant_Module_Mutation_Response>;
   /** update single row of the table: "course_participant_module" */
   update_course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** update data of the table: "course_pricing" */
+  update_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
+  /** update single row of the table: "course_pricing" */
+  update_course_pricing_by_pk?: Maybe<Course_Pricing>;
   /** update data of the table: "course_schedule" */
   update_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** update single row of the table: "course_schedule" */
@@ -15246,6 +15527,18 @@ export type Mutation_RootDelete_Course_Participant_ModuleArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Course_Participant_Module_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_PricingArgs = {
+  where: Course_Pricing_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Pricing_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -15759,6 +16052,20 @@ export type Mutation_RootInsert_Course_Participant_Module_OneArgs = {
 export type Mutation_RootInsert_Course_Participant_OneArgs = {
   object: Course_Participant_Insert_Input;
   on_conflict?: InputMaybe<Course_Participant_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_PricingArgs = {
+  objects: Array<Course_Pricing_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Pricing_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Pricing_OneArgs = {
+  object: Course_Pricing_Insert_Input;
+  on_conflict?: InputMaybe<Course_Pricing_On_Conflict>;
 };
 
 
@@ -16345,6 +16652,22 @@ export type Mutation_RootUpdate_Course_Participant_ModuleArgs = {
 export type Mutation_RootUpdate_Course_Participant_Module_By_PkArgs = {
   _set?: InputMaybe<Course_Participant_Module_Set_Input>;
   pk_columns: Course_Participant_Module_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_PricingArgs = {
+  _inc?: InputMaybe<Course_Pricing_Inc_Input>;
+  _set?: InputMaybe<Course_Pricing_Set_Input>;
+  where: Course_Pricing_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Pricing_By_PkArgs = {
+  _inc?: InputMaybe<Course_Pricing_Inc_Input>;
+  _set?: InputMaybe<Course_Pricing_Set_Input>;
+  pk_columns: Course_Pricing_Pk_Columns_Input;
 };
 
 
@@ -19052,6 +19375,12 @@ export type Query_Root = {
   course_participant_module_aggregate: Course_Participant_Module_Aggregate;
   /** fetch data from the table: "course_participant_module" using primary key columns */
   course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** fetch data from the table: "course_pricing" */
+  course_pricing: Array<Course_Pricing>;
+  /** fetch aggregated fields from the table: "course_pricing" */
+  course_pricing_aggregate: Course_Pricing_Aggregate;
+  /** fetch data from the table: "course_pricing" using primary key columns */
+  course_pricing_by_pk?: Maybe<Course_Pricing>;
   /** fetch data from the table: "course_schedule" */
   course_schedule: Array<Course_Schedule>;
   /** fetch aggregated fields from the table: "course_schedule" */
@@ -19084,6 +19413,8 @@ export type Query_Root = {
   course_type_by_pk?: Maybe<Course_Type>;
   /** Fetches membership plans */
   fetchPlans?: Maybe<Array<Maybe<PlanObject>>>;
+  /** getCoursePricing */
+  getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   /** fetch data from the table: "grade" */
@@ -19581,6 +19912,29 @@ export type Query_RootCourse_Participant_Module_By_PkArgs = {
 };
 
 
+export type Query_RootCourse_PricingArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Pricing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootCourse_ScheduleArgs = {
   distinct_on?: InputMaybe<Array<Course_Schedule_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -19693,6 +20047,11 @@ export type Query_RootCourse_Type_AggregateArgs = {
 
 export type Query_RootCourse_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootGetCoursePricingArgs = {
+  input: GetCoursePricingInput;
 };
 
 
@@ -20521,6 +20880,12 @@ export type Subscription_Root = {
   course_participant_module_aggregate: Course_Participant_Module_Aggregate;
   /** fetch data from the table: "course_participant_module" using primary key columns */
   course_participant_module_by_pk?: Maybe<Course_Participant_Module>;
+  /** fetch data from the table: "course_pricing" */
+  course_pricing: Array<Course_Pricing>;
+  /** fetch aggregated fields from the table: "course_pricing" */
+  course_pricing_aggregate: Course_Pricing_Aggregate;
+  /** fetch data from the table: "course_pricing" using primary key columns */
+  course_pricing_by_pk?: Maybe<Course_Pricing>;
   /** fetch data from the table: "course_schedule" */
   course_schedule: Array<Course_Schedule>;
   /** fetch aggregated fields from the table: "course_schedule" */
@@ -21032,6 +21397,29 @@ export type Subscription_RootCourse_Participant_Module_AggregateArgs = {
 
 
 export type Subscription_RootCourse_Participant_Module_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_PricingArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Pricing_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Pricing_Order_By>>;
+  where?: InputMaybe<Course_Pricing_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Pricing_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -22457,6 +22845,10 @@ export type CertificateChangelogFragment = { __typename?: 'course_certificate_ch
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
+export type TagSummaryFragment = { __typename?: 'Tag', id: string, name?: string | null };
+
+export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null };
+
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;
   participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
@@ -22544,6 +22936,18 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', verifyUser: boolean };
 
+export type BlogQueryVariables = Exact<{
+  orderDirection?: OrderEnum;
+  term?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  last?: InputMaybe<Scalars['Int']>;
+  before?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type BlogQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+
 export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number };
 
 export type PodcastQueryVariables = Exact<{
@@ -22569,7 +22973,6 @@ export type VideoSeriesQueryVariables = Exact<{
   last?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
-  exclude?: InputMaybe<Scalars['ID']>;
 }>;
 
 

@@ -7,9 +7,8 @@ import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainer
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { EditCourse } from '@app/pages/EditCourse'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { BlogPage } from '@app/pages/MembershipArea/BlogPage'
-import { BlogPostPage } from '@app/pages/MembershipArea/BlogPostPage'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
+import { Blog } from '@app/pages/MembershipArea/pages/Blog'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
@@ -72,8 +71,7 @@ const TrainerBaseRoutes = () => {
         <Route index element={<Navigate replace to="details" />} />
         <Route path="details" element={<MembershipDetailsPage />} />
         <Route path="blog">
-          <Route index element={<BlogPage />} />
-          <Route path=":postId" element={<BlogPostPage />} />
+          <Route index element={<Blog />} />
         </Route>
         <Route path="podcasts">
           <Route index element={<Podcasts />} />

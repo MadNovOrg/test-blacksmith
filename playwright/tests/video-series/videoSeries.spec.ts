@@ -7,6 +7,8 @@ import { getAllVideoItems } from '../../api/hasura-api'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
+const PER_PAGE = 12
+
 const test = base.extend<{
   videoItems: Array<VideoSeriesSummaryFragment | null>
 }>({
@@ -49,5 +51,10 @@ test('displays video items with featured and grid display', async ({
       page.locator(`data-testid=video-series-grid-item-${videoItems[1]?.id}`)
     )
     .toBeVisible()
-  test.expect(page.locator('data-testid=video-series-pagination')).toBeVisible()
+
+  if (videoItems.length > PER_PAGE) {
+    test
+      .expect(page.locator('data-testid=video-series-pagination'))
+      .toBeVisible()
+  }
 })
