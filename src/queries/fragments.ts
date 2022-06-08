@@ -177,6 +177,7 @@ export const VideoItemSummary = gql`
     }
     youtube {
       url
+      duration
     }
     date
   }

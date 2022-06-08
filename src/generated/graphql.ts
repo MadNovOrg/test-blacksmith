@@ -22865,7 +22865,7 @@ export type CertificateChangelogFragment = { __typename?: 'course_certificate_ch
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
-export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null };
+export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null };
 
 export type TagSummaryFragment = { __typename?: 'Tag', id: string, name?: string | null };
 
@@ -22991,7 +22991,7 @@ export type VideoItemQueryVariables = Exact<{
 }>;
 
 
-export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null> | null } | null } | null };
+export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null } | null };
 
 export type VideoSeriesQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -23003,7 +23003,7 @@ export type VideoSeriesQueryVariables = Exact<{
 }>;
 
 
-export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null } | null } | null> | null } | null } | null };
+export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null } | null };
 
 export type ModuleGroupsQueryVariables = Exact<{
   level: Course_Level_Enum;

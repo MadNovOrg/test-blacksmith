@@ -176,6 +176,7 @@ export const VideoItem: React.FC = () => {
                     linkTo={`../${item.id}`}
                     data-testid={`video-series-grid-item-${item.id}`}
                     isVideo
+                    duration={item.youtube?.duration ?? undefined}
                   />
                 </Grid>
               )

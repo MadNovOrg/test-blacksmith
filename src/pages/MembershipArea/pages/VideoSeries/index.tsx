@@ -80,6 +80,8 @@ export const VideoSeries = () => {
             orientation="left"
             linkTo={`./${featuredItem.id}`}
             data-testid="featured-video-series-item"
+            isVideo
+            duration={featuredItem.youtube?.duration ?? undefined}
           />
         ) : fetching ? (
           <SplitPostSkeleton data-testid="featured-video-skeleton" />
@@ -144,6 +146,7 @@ export const VideoSeries = () => {
                     linkTo={`./${item.id}`}
                     data-testid={`video-series-grid-item-${item.id}`}
                     isVideo
+                    duration={item.youtube?.duration ?? undefined}
                   />
                 </Grid>
               )

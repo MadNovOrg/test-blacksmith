@@ -11,37 +11,54 @@ type Props = {
   duration: number
   imageUrl: string
   alt: string
+  durationPosition?: 'center' | 'bottom-left'
 }
 
 export const VideoThumbnail: React.FC<Props> = ({
   duration,
   imageUrl,
   alt,
+  durationPosition = 'bottom-left',
 }) => {
   return (
     <Box sx={{ position: 'relative' }}>
       <PostImage src={imageUrl} alt={alt} />
-      <PlayCircleIcon
-        fontSize="large"
+      <Box
         sx={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           color: theme.palette.common.white,
-          fontSize: 60,
+          textAlign: 'center',
         }}
-      />
-      <Duration
-        variant="body2"
-        color={theme.palette.common.white}
-        sx={{
-          position: 'absolute',
-          bottom: theme.spacing(1),
-          left: theme.spacing(1),
-        }}
-        duration={duration}
-      />
+      >
+        <PlayCircleIcon sx={{ fontSize: 60 }} />
+        {durationPosition === 'center' ? (
+          <Duration
+            variant="body2"
+            color={theme.palette.common.white}
+            sx={{
+              textShadow: '1px 1px 4px rgba(0, 0, 0, 0.4)',
+            }}
+            duration={duration}
+          />
+        ) : null}
+      </Box>
+
+      {durationPosition === 'bottom-left' ? (
+        <Duration
+          variant="body2"
+          color={theme.palette.common.white}
+          sx={{
+            textShadow: '1px 1px 4px rgba(0, 0, 0, 0.4)',
+            position: 'absolute',
+            bottom: theme.spacing(2),
+            left: theme.spacing(1),
+          }}
+          duration={duration}
+        />
+      ) : null}
     </Box>
   )
 }

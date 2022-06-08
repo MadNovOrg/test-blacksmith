@@ -7,6 +7,7 @@ import theme from '@app/theme'
 import { getPostLink, getTagLink } from '../../utils'
 import { PostCategory } from '../PostCategory'
 import { PostImage } from '../PostImage'
+import { VideoThumbnail } from '../VideoThumbnail'
 
 export type Props = {
   id: string
@@ -19,6 +20,8 @@ export type Props = {
   publishedDate: string
   orientation?: 'left' | 'right'
   linkTo?: string
+  isVideo?: boolean
+  duration?: number
 } & BoxProps
 
 export const SplitPost: React.FC<Props> = ({
@@ -32,6 +35,8 @@ export const SplitPost: React.FC<Props> = ({
   publishedDate,
   orientation = 'right',
   linkTo,
+  isVideo = false,
+  duration,
   ...rest
 }) => {
   const { t } = useTranslation()
@@ -50,7 +55,16 @@ export const SplitPost: React.FC<Props> = ({
       >
         {imageUrl ? (
           <Link href={linkTo ?? getPostLink(id)}>
-            <PostImage src={imageUrl} alt={title} />
+            {isVideo && duration ? (
+              <VideoThumbnail
+                duration={duration}
+                imageUrl={imageUrl}
+                alt={title}
+                durationPosition="center"
+              />
+            ) : (
+              <PostImage src={imageUrl} alt={title} />
+            )}
           </Link>
         ) : null}
       </Box>
