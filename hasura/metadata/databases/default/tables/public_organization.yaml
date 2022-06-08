@@ -8,11 +8,14 @@ configuration:
       custom_name: updatedAt
     created_at:
       custom_name: createdAt
+    xero_contact_id:
+      custom_name: xeroContactId
     contact_details:
       custom_name: contactDetails
   custom_column_names:
     updated_at: updatedAt
     created_at: createdAt
+    xero_contact_id: xeroContactId
     contact_details: contactDetails
 array_relationships:
   - name: members
@@ -30,6 +33,7 @@ insert_permissions:
         - address
         - attributes
         - name
+        - xero_contact_id
       backend_only: false
   - role: unverified
     permission:
@@ -51,6 +55,7 @@ select_permissions:
         - preferences
         - tags
         - updated_at
+        - xero_contact_id
       filter: {}
   - role: user
     permission:
@@ -65,5 +70,6 @@ select_permissions:
         - preferences
         - tags
         - updated_at
+        - xero_contact_id
       filter: {}
       allow_aggregations: true

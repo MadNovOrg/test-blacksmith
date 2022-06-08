@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -21,6 +21,7 @@ import { FormPanel } from '@app/components/FormPanel'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { OrgNameXeroAutocomplete } from '@app/pages/admin/components/Organizations/OrgNameXeroAutocomplete'
 import {
   MUTATION,
   ParamsType,
@@ -47,6 +48,7 @@ export const CreateOrganization = () => {
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [xeroId, setXeroId] = useState<string>()
 
   const schema = useMemo(() => {
     return yup.object({
@@ -73,6 +75,7 @@ export const CreateOrganization = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -103,6 +106,7 @@ export const CreateOrganization = () => {
           country: data.country,
           postCode: data.postCode,
         } as Address,
+        xeroId,
       })
       navigate(`organizations/${response.org.id}`)
     } catch (e: unknown) {
@@ -147,19 +151,20 @@ export const CreateOrganization = () => {
               </Typography>
 
               <FormPanel>
-                <TextField
-                  id="orgName"
-                  label={t(
-                    'pages.create-organization.fields.organization-name'
+                <Controller
+                  name="orgName"
+                  control={control}
+                  render={({ field }) => (
+                    <OrgNameXeroAutocomplete
+                      value={field.value}
+                      onChange={value => {
+                        const isXeroContact = typeof value === 'object'
+                        setXeroId(isXeroContact ? value.contactID : undefined)
+                        field.onChange(isXeroContact ? value.name : value)
+                      }}
+                      error={errors.orgName?.message}
+                    />
                   )}
-                  variant="standard"
-                  error={!!errors.orgName}
-                  helperText={errors.orgName?.message}
-                  {...register('orgName')}
-                  inputProps={{ 'data-testid': 'input-org-name' }}
-                  sx={{ bgcolor: 'grey.100' }}
-                  fullWidth
-                  required
                 />
               </FormPanel>
 

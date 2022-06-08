@@ -12,13 +12,24 @@ export type ParamsType = {
   attributes?: {
     adminEmail: string
   }
+  xeroId?: string
 }
 
 export const MUTATION = gql`
   ${ORGANIZATION}
-  mutation InsertOrg($name: String!, $address: jsonb!, $attributes: jsonb) {
+  mutation InsertOrg(
+    $name: String!
+    $address: jsonb!
+    $attributes: jsonb
+    $xeroId: String
+  ) {
     org: insert_organization_one(
-      object: { name: $name, address: $address, attributes: $attributes }
+      object: {
+        name: $name
+        address: $address
+        attributes: $attributes
+        xeroContactId: $xeroId
+      }
     ) {
       ...Organization
     }
