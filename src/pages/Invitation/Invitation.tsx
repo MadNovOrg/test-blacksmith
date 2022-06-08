@@ -17,7 +17,6 @@ import {
   Link,
   TextField,
 } from '@mui/material'
-import { differenceInDays } from 'date-fns'
 import jwtDecode from 'jwt-decode'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -38,6 +37,11 @@ import {
 } from '@app/queries/invites/get-invite'
 import { GqlError, InviteStatus } from '@app/types'
 import { now, userExistsInCognito } from '@app/util'
+
+import {
+  getTimeDifferenceAndContext,
+  TimeDifferenceAndContext,
+} from './helpers'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()
@@ -75,10 +79,17 @@ export const InvitationPage = () => {
   const invite = (data?.invite || {}) as GetInviteResponseType['invite']
   const isFetching = !data && !error
   const isSubmitted = invite.status !== InviteStatus.PENDING
-  const startsInDays = differenceInDays(new Date(invite.startDate), now())
-  const courseDuration = differenceInDays(
-    new Date(invite.endDate),
-    new Date(invite.startDate)
+
+  const startDate = new Date(invite.startDate)
+  const endDate = new Date(invite.endDate)
+
+  const startsIn: TimeDifferenceAndContext = getTimeDifferenceAndContext(
+    startDate,
+    now()
+  )
+  const courseDuration: TimeDifferenceAndContext = getTimeDifferenceAndContext(
+    endDate,
+    startDate
   )
 
   const address = invite.venueAddress
@@ -168,9 +179,7 @@ export const InvitationPage = () => {
 
         <Box mt={3} mb={4}>
           <Chip
-            label={t('pages.course-participants.until-course-begins', {
-              count: startsInDays,
-            })}
+            label={t('pages.course-participants.until-course-begins', startsIn)}
             size="small"
             sx={{ borderRadius: 2, mb: 1 }}
           />
@@ -181,15 +190,13 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { dates: invite.startDate })}
+                {t('dates.withTime', { date: invite.startDate })}
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {t('dates.withTime', { dates: invite.endDate })}
+                {t('dates.withTime', { date: invite.endDate })}
               </Typography>
               <Typography variant="body2" color="grey.600" gutterBottom>
-                {t('pages.course-participants.course-duration', {
-                  count: courseDuration,
-                })}
+                {t('pages.course-participants.course-duration', courseDuration)}
               </Typography>
             </Box>
           </Box>
