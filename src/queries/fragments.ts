@@ -208,5 +208,11 @@ export const PostSummary = gql`
         ...TagSummary
       }
     }
+    categories {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `

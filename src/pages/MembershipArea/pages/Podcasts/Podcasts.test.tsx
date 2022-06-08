@@ -200,7 +200,9 @@ describe('page: Podcasts', () => {
       </Provider>
     )
 
-    userEvent.click(screen.getByText(podcasts[0].name))
+    userEvent.click(
+      within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
+    )
     expect(screen.getByText('Single podcast page')).toBeInTheDocument()
   })
 

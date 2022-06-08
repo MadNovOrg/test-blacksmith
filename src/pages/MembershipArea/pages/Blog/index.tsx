@@ -148,6 +148,14 @@ export const Blog: React.FC = () => {
                       id: tag?.id ?? '',
                       name: tag?.name ?? '',
                     }))}
+                    category={
+                      item.categories?.nodes?.length
+                        ? {
+                            id: item.categories.nodes[0]?.id ?? '',
+                            name: item.categories.nodes[0]?.name ?? '',
+                          }
+                        : undefined
+                    }
                   />
                 </Grid>
               )
