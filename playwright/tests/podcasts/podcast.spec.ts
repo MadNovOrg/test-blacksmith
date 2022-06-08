@@ -22,6 +22,7 @@ test.use({ storageState: stateFilePath('trainer') })
 test.describe('podcast page', () => {
   test('displays single podcast with the player', async ({ podcast, page }) => {
     await page.goto(`${BASE_URL}/membership/podcasts/${podcast?.id}`)
+    await page.waitForLoadState('networkidle')
 
     test
       .expect(page.locator('data-testid=podcast-title'))

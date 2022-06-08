@@ -22,6 +22,7 @@ test.describe('podcasts page', () => {
     podcasts,
   }) => {
     await page.goto(`${BASE_URL}/membership/podcasts`)
+    await page.waitForLoadState('networkidle')
 
     const featuredPodcastImage = page.locator(
       '[data-testid="featured-podcast"] img'
