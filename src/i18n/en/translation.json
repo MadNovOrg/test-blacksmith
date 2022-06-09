@@ -165,11 +165,11 @@
     "course-levels": {
       "LEVEL_1": "Level One",
       "LEVEL_2": "Level Two",
-      "ADVANCED": "Advanced",
+      "ADVANCED": "Advanced Modules",
       "BILD_ACT": "BILD Act",
       "INTERMEDIATE_TRAINER": "Intermediate Trainer",
-      "BILD_ACT_TRAINER": "BILD Act Trainer",
-      "ADVANCED_TRAINER": "Advanced Trainer"
+      "ADVANCED_TRAINER": "Advanced Trainer",
+      "BILD_ACT_TRAINER": "BILD Act Trainer"
     },
     "course-types": {
       "OPEN": "Open",

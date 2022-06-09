@@ -1,128 +1,187 @@
 import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { CourseDeliveryType, CourseType } from '@app/types'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent } from '@test/index'
 
 import { CourseLevelDropdown } from './index'
 
+const getOption = (level: CourseLevel) => {
+  return screen.getByTestId(`course-level-option-${level}`)
+}
+
 describe('component: CourseLevelDropdown', () => {
-  it('renders correct options for open virtual course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.OPEN}
-        deliveryType={CourseDeliveryType.VIRTUAL}
-      />
-    )
+  describe('type OPEN', () => {
+    const courseType = CourseType.OPEN
 
-    userEvent.click(screen.getByRole('button'))
+    it('renders correctly when delivery is FACE2FACE', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.F2F}
+        />
+      )
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.queryByText('Level Two')).not.toBeInTheDocument()
-    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(3)
+
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+      expect(getOption(CourseLevel.INTERMEDIATE_TRAINER)).toBeInTheDocument()
+      expect(getOption(CourseLevel.ADVANCED_TRAINER)).toBeInTheDocument()
+    })
+
+    it('renders correctly when delivery is MIXED', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.MIXED}
+        />
+      )
+
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(0)
+    })
+
+    it('renders correctly when delivery is VIRTUAL', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.VIRTUAL}
+        />
+      )
+
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(1)
+
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+    })
   })
 
-  it('renders correct options for closed virtual course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.OPEN}
-        deliveryType={CourseDeliveryType.VIRTUAL}
-      />
-    )
+  describe('type CLOSED', () => {
+    const courseType = CourseType.CLOSED
 
-    userEvent.click(screen.getByRole('button'))
+    it('renders correctly when delivery is FACE2FACE', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.F2F}
+        />
+      )
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.queryByText('Level Two')).not.toBeInTheDocument()
-    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
-  })
-  it('renders correct options for indirect virtual course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.OPEN}
-        deliveryType={CourseDeliveryType.VIRTUAL}
-      />
-    )
+      userEvent.click(screen.getByRole('button'))
 
-    userEvent.click(screen.getByRole('button'))
+      expect(screen.queryAllByRole('option').length).toBe(5)
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.queryByText('Level Two')).not.toBeInTheDocument()
-    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
-  })
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+      expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
+      expect(getOption(CourseLevel.ADVANCED)).toBeInTheDocument()
+      expect(getOption(CourseLevel.INTERMEDIATE_TRAINER)).toBeInTheDocument()
+      expect(getOption(CourseLevel.ADVANCED_TRAINER)).toBeInTheDocument()
+    })
 
-  it('renders correct options for open F2F course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.OPEN}
-        deliveryType={CourseDeliveryType.F2F}
-      />
-    )
+    it('renders correctly when delivery is MIXED', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.MIXED}
+        />
+      )
 
-    userEvent.click(screen.getByRole('button'))
+      userEvent.click(screen.getByRole('button'))
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.getByText('Level Two')).toBeInTheDocument()
-    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
-  })
+      expect(screen.queryAllByRole('option').length).toBe(2)
 
-  it('renders correct options for closed F2F course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.CLOSED}
-        deliveryType={CourseDeliveryType.F2F}
-      />
-    )
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+      expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
+    })
 
-    userEvent.click(screen.getByRole('button'))
+    it('renders correctly when delivery is VIRTUAL', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.VIRTUAL}
+        />
+      )
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.getByText('Level Two')).toBeInTheDocument()
-    expect(screen.getByText('Advanced')).toBeInTheDocument()
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(1)
+
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+    })
   })
 
-  it('renders correct options for indirect F2F course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.INDIRECT}
-        deliveryType={CourseDeliveryType.F2F}
-      />
-    )
+  describe('type INDIRECT', () => {
+    const courseType = CourseType.INDIRECT
 
-    userEvent.click(screen.getByRole('button'))
+    it('renders correctly when delivery is FACE2FACE', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.F2F}
+        />
+      )
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.getByText('Level Two')).toBeInTheDocument()
-    expect(screen.getByText('Advanced')).toBeInTheDocument()
-  })
+      userEvent.click(screen.getByRole('button'))
 
-  it('renders correct options for open mixed course', () => {
-    render(
-      <CourseLevelDropdown
-        value=""
-        onChange={noop}
-        courseType={CourseType.INDIRECT}
-        deliveryType={CourseDeliveryType.MIXED}
-      />
-    )
+      expect(screen.queryAllByRole('option').length).toBe(3)
 
-    userEvent.click(screen.getByRole('button'))
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+      expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
+      expect(getOption(CourseLevel.ADVANCED)).toBeInTheDocument()
+    })
 
-    expect(screen.getByText('Level One')).toBeInTheDocument()
-    expect(screen.getByText('Level Two')).toBeInTheDocument()
-    expect(screen.queryByText('Advanced')).not.toBeInTheDocument()
+    it('renders correctly when delivery is MIXED', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.MIXED}
+        />
+      )
+
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(2)
+
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+      expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
+    })
+
+    it('renders correctly when delivery is VIRTUAL', () => {
+      render(
+        <CourseLevelDropdown
+          value=""
+          onChange={noop}
+          courseType={courseType}
+          deliveryType={CourseDeliveryType.VIRTUAL}
+        />
+      )
+
+      userEvent.click(screen.getByRole('button'))
+
+      expect(screen.queryAllByRole('option').length).toBe(1)
+
+      expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
+    })
   })
 })

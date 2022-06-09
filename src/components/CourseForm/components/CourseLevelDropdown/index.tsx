@@ -13,7 +13,8 @@ interface Props {
   deliveryType: CourseDeliveryType
 }
 
-type Options = Array<{ value: CourseLevel; label: string }>
+type Option = { value: CourseLevel; label: string }
+type OptionsMap = Record<CourseLevel, Option>
 
 export const CourseLevelDropdown: React.FC<Props> = ({
   value,
@@ -23,45 +24,13 @@ export const CourseLevelDropdown: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
 
-  const options: Options = useMemo(() => {
-    const levelOneOption = {
-      value: CourseLevel.LEVEL_1,
-      label: t('common.course-levels.LEVEL_1'),
-    }
+  const options: Option[] = useMemo(() => {
+    const opts = Object.values(CourseLevel).reduce((acc, level) => {
+      const opt = { value: level, label: t(`common.course-levels.${level}`) }
+      return { ...acc, [level]: opt }
+    }, {} as OptionsMap)
 
-    const levelTwoOption = {
-      value: CourseLevel.LEVEL_2,
-      label: t('common.course-levels.LEVEL_2'),
-    }
-
-    const advancedOption = {
-      value: CourseLevel.ADVANCED,
-      label: t('common.course-levels.ADVANCED'),
-    }
-
-    if (deliveryType === CourseDeliveryType.VIRTUAL) {
-      return [levelOneOption]
-    }
-
-    if (
-      deliveryType === CourseDeliveryType.F2F &&
-      courseType === CourseType.OPEN
-    ) {
-      return [levelOneOption, levelTwoOption]
-    }
-
-    if (
-      deliveryType === CourseDeliveryType.F2F &&
-      [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
-    ) {
-      return [levelOneOption, levelTwoOption, advancedOption]
-    }
-
-    if (deliveryType === CourseDeliveryType.MIXED) {
-      return [levelOneOption, levelTwoOption]
-    }
-
-    return []
+    return getOptions(opts, courseType, deliveryType)
   }, [deliveryType, courseType, t])
 
   return (
@@ -82,4 +51,76 @@ export const CourseLevelDropdown: React.FC<Props> = ({
       ))}
     </Select>
   )
+}
+
+/**
+ * Helpers
+ */
+
+function getOptions(
+  opts: OptionsMap,
+  courseType: CourseType,
+  deliveryType: CourseDeliveryType
+) {
+  const isF2F = deliveryType === CourseDeliveryType.F2F
+  const isMixed = deliveryType === CourseDeliveryType.MIXED
+  const isVirtual = deliveryType === CourseDeliveryType.VIRTUAL
+
+  const types = {
+    [CourseType.OPEN]: () => {
+      if (isMixed) {
+        return []
+      }
+
+      if (isVirtual) {
+        return [opts.LEVEL_1]
+      }
+
+      if (isF2F) {
+        // return same as if delivery not set
+      }
+
+      return [opts.LEVEL_1, opts.INTERMEDIATE_TRAINER, opts.ADVANCED_TRAINER]
+    },
+
+    [CourseType.CLOSED]: () => {
+      if (isMixed) {
+        return [opts.LEVEL_1, opts.LEVEL_2]
+      }
+
+      if (isVirtual) {
+        return [opts.LEVEL_1]
+      }
+
+      if (isF2F) {
+        // return same as if delivery not set
+      }
+
+      return [
+        opts.LEVEL_1,
+        opts.LEVEL_2,
+        opts.ADVANCED,
+        opts.INTERMEDIATE_TRAINER,
+        opts.ADVANCED_TRAINER,
+      ]
+    },
+
+    [CourseType.INDIRECT]: () => {
+      if (isMixed) {
+        return [opts.LEVEL_1, opts.LEVEL_2]
+      }
+
+      if (isVirtual) {
+        return [opts.LEVEL_1]
+      }
+
+      if (isF2F) {
+        // return same as if delivery not set
+      }
+
+      return [opts.LEVEL_1, opts.LEVEL_2, opts.ADVANCED]
+    },
+  } as Record<CourseType, () => Option[]>
+
+  return types[courseType]()
 }
