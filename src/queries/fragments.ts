@@ -209,6 +209,12 @@ export const PostSummary = gql`
         ...TagSummary
       }
     }
+    author {
+      node {
+        firstName
+        lastName
+      }
+    }
     categories {
       nodes {
         id

@@ -80,7 +80,7 @@ export const Podcast: React.FC = () => {
               {data.podcast.podcast.description}
             </Typography>
             <Typography variant="body2" mb={2}>
-              {t('pages.membership.podcasts.author', {
+              {t('pages.membership.common.author', {
                 author: data.podcast.podcast.author,
               })}
             </Typography>

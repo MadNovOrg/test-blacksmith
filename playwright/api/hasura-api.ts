@@ -14,10 +14,13 @@ import {
   VideoItemQueryVariables,
   VideoSeriesQueryVariables,
   PostSummaryFragment,
+  PostQuery,
+  PostQueryVariables,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
+import POST_QUERY from '@app/queries/membership/post'
 import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 import {
@@ -400,4 +403,17 @@ export async function getBlogPosts(
   }
 
   return []
+}
+
+export async function getPostById(
+  id: string
+): Promise<PostSummaryFragment | null> {
+  const client = getClient()
+
+  const response = await client.request<PostQuery, PostQueryVariables>(
+    POST_QUERY,
+    { id }
+  )
+
+  return response.content?.post || null
 }

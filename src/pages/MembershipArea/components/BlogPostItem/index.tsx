@@ -1,12 +1,13 @@
-import { Box, BoxProps, Chip, Link, Skeleton, Typography } from '@mui/material'
+import { Box, BoxProps, Link, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import theme from '@app/theme'
 
-import { getPostLink, getTagLink } from '../../utils'
+import { getPostLink } from '../../utils'
 import { PostCategory } from '../PostCategory'
 import { PostImage } from '../PostImage'
+import { TagChip } from '../TagChip'
 import { VideoThumbnail } from '../VideoThumbnail'
 
 export type Props = {
@@ -72,11 +73,10 @@ export const BlogPostItem: React.FC<Props> = ({
 
       <Box display="flex" flexWrap="wrap">
         {tags.map(tag => (
-          <Chip
+          <TagChip
             key={tag.id}
-            label={<Link href={getTagLink(tag.id)}>{tag.name}</Link>}
+            tag={tag}
             sx={{ marginRight: 1, marginBottom: 1 }}
-            size="small"
           />
         ))}
         <Typography variant="body2">

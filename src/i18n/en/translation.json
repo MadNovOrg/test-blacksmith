@@ -529,6 +529,9 @@
       }
     },
     "membership": {
+      "common": {
+        "author": "by {{author}}"
+      },
       "components": {
         "order-menu": {
           "asc-order": "Oldest",
@@ -546,7 +549,9 @@
         "featured-label": "New post",
         "list-title": "All blog posts",
         "search-placeholder": "Search posts", 
-        "no-post-id-error": "No post ID has been provided"
+        "no-post-id-error": "No post ID has been provided",
+        "recent": "Recent posts",
+        "not-found": "Post not found"
       },
       "error": "Error loading",
       "podcasts": {
@@ -556,7 +561,7 @@
         "empty": "There are no podcasts yet.",
         "search-placeholder": "Search podcasts",
         "error-loading-podcast": "There was an error loading the podcast",
-        "author": "by {{author}}",
+        
         "recent": "Recent podcast episodes",
         "not-found": "Podcast not found",
         "episode-number": "Episode #{{number}}"
