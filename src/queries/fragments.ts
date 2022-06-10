@@ -190,6 +190,13 @@ export const Tag = gql`
   }
 `
 
+export const Category = gql`
+  fragment CategorySummary on Category {
+    id
+    name
+  }
+`
+
 export const PostSummary = gql`
   ${Tag}
 

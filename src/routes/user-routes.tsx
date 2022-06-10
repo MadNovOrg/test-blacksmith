@@ -5,6 +5,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { Blog } from '@app/pages/MembershipArea/pages/Blog'
+import { Category } from '@app/pages/MembershipArea/pages/Category'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { Post } from '@app/pages/MembershipArea/pages/Post'
@@ -64,6 +65,7 @@ const UserRoutes = () => {
         <Route path="blog">
           <Route index element={<Blog />} />
           <Route path=":id" element={<Post />} />
+          <Route path="category/:id" element={<Category />} />
         </Route>
         <Route path="podcasts">
           <Route index element={<Podcasts />} />

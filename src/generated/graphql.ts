@@ -22869,6 +22869,8 @@ export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: str
 
 export type TagSummaryFragment = { __typename?: 'Tag', id: string, name?: string | null };
 
+export type CategorySummaryFragment = { __typename?: 'Category', id: string, name?: string | null };
+
 export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null };
 
 export type SaveCourseGradingMutationVariables = Exact<{
@@ -22969,6 +22971,19 @@ export type BlogQueryVariables = Exact<{
 
 
 export type BlogQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
+
+export type CategoryQueryVariables = Exact<{
+  id: Scalars['ID'];
+  orderDirection?: InputMaybe<OrderEnum>;
+  term?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CategoryQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', category?: { __typename?: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
 
 export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number };
 

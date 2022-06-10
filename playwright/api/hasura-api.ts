@@ -16,8 +16,11 @@ import {
   PostSummaryFragment,
   PostQuery,
   PostQueryVariables,
+  CategoryQuery,
+  CategoryQueryVariables,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
+import CATEGORY_QUERY from '@app/queries/membership/category'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import POST_QUERY from '@app/queries/membership/post'
@@ -416,4 +419,44 @@ export async function getPostById(
   )
 
   return response.content?.post || null
+}
+
+export async function getFirstCategoryIdWithPosts(): Promise<string | null> {
+  const query = gql`
+    query FirstTagWithPosts {
+      content {
+        tags(where: { hideEmpty: true }, first: 1) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  `
+
+  const client = getClient()
+  const response = await client.request<{
+    content?: { tags?: { nodes?: Array<{ id: string }> } }
+  }>(query)
+
+  if (response.content?.tags?.nodes?.length) {
+    return response.content.tags.nodes[0].id
+  }
+
+  return null
+}
+
+export async function getCategoryById(id: string) {
+  const client = getClient()
+
+  const response = await client.request<CategoryQuery, CategoryQueryVariables>(
+    CATEGORY_QUERY,
+    { id }
+  )
+
+  if (response.content?.category) {
+    return response.content.category
+  }
+
+  return null
 }

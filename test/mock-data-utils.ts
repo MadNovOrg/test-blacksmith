@@ -7,6 +7,7 @@ import {
 import { add, sub } from 'date-fns'
 
 import {
+  CategorySummaryFragment,
   Podcast,
   PostSummaryFragment,
   TagSummaryFragment,
@@ -344,6 +345,13 @@ export const buildVideoItem = build<VideoItemSummaryFragment>({
 })
 
 export const buildTag = build<TagSummaryFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: fake(f => f.random.words()),
+  },
+})
+
+export const buildCategory = build<CategorySummaryFragment>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     name: fake(f => f.random.words()),
