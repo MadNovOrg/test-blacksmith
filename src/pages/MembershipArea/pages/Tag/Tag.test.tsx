@@ -5,47 +5,50 @@ import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
 import {
-  BlogQuery,
-  BlogQueryVariables,
   OrderEnum,
+  TagQuery,
+  TagQueryVariables,
   WpPageInfo,
 } from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
-import { buildEntities, buildPost } from '@test/mock-data-utils'
+import { buildEntities, buildPost, buildTag } from '@test/mock-data-utils'
 
-import { Blog, PER_PAGE } from '.'
+import { PER_PAGE, Tag } from '.'
 
-describe('page: Blog', () => {
-  it('displays skeleton loading while fetching posts', () => {
+describe('page: Tag', () => {
+  it('displays skeleton loading while fetching tag', () => {
     const client = {
       executeQuery: () => never,
     }
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={['/blog/tag/tag-id']}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/tag/:id" element={<Tag />} />
           </Routes>
         </MemoryRouter>
       </Provider>
     )
 
-    expect(screen.getByTestId('featured-post-skeleton')).toBeInTheDocument()
     expect(screen.getByTestId('posts-items-grid-skeleton')).toBeInTheDocument()
   })
 
-  it('displays first post as a featured one', () => {
+  it('navigates to single blog post page when clicked on grid item image', () => {
     const posts = buildEntities(2, buildPost)
+    const tag = buildTag()
 
     const client = {
       executeQuery: () =>
-        fromValue<{ data: BlogQuery }>({
+        fromValue<{ data: TagQuery }>({
           data: {
             content: {
-              posts: {
-                nodes: posts,
+              tag: {
+                ...tag,
+                posts: {
+                  nodes: posts,
+                },
               },
             },
           },
@@ -54,78 +57,35 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={[`/tag/${tag.id}`]}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="tag/:id" element={<Tag />} />
+            <Route path=":id" element={<p>Post page</p>} />
           </Routes>
         </MemoryRouter>
       </Provider>
     )
 
-    expect(
-      screen.queryByTestId('featured-post-skeleton')
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByTestId('post-items-grid-skeleton')
-    ).not.toBeInTheDocument()
-
-    const featuredPost = screen.getByTestId('featured-post-item')
-
-    expect(
-      within(featuredPost).getByText(posts[0].title ?? '')
-    ).toBeInTheDocument()
-
-    expect(within(featuredPost).getByText('New post')).toBeInTheDocument()
-
-    expect(
-      within(featuredPost).getByAltText(posts[0].title ?? '')
-    ).toHaveAttribute('src', posts[0].featuredImage?.node?.mediaItemUrl ?? '')
-  })
-
-  it('navigates to single blog post page when clicked on featured image', () => {
-    const posts = buildEntities(2, buildPost)
-
-    const client = {
-      executeQuery: () =>
-        fromValue<{ data: BlogQuery }>({
-          data: {
-            content: {
-              posts: {
-                nodes: posts,
-              },
-            },
-          },
-        }),
-    }
-
-    render(
-      <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<p>Post page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
-
-    const featuredPost = screen.getByTestId('featured-post-item')
-
-    userEvent.click(within(featuredPost).getByAltText(posts[0].title ?? ''))
+    const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
+    userEvent.click(within(firstPost).getByAltText(posts[0].title ?? ''))
 
     expect(screen.getByText('Post page'))
   })
 
   it('displays items in a grid', () => {
     const posts = buildEntities(10, buildPost)
+    const tag = buildTag()
 
     const client = {
       executeQuery: () =>
-        fromValue<{ data: BlogQuery }>({
+        fromValue<{ data: TagQuery }>({
           data: {
             content: {
-              posts: {
-                nodes: posts,
+              tag: {
+                ...tag,
+                posts: {
+                  nodes: posts,
+                },
               },
             },
           },
@@ -134,9 +94,9 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={[`/tag/${tag.id}`]}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="tag/:id" element={<Tag />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -164,16 +124,20 @@ describe('page: Blog', () => {
     const posts = buildEntities(10, buildPost)
     const filteredItem = buildPost()
     const SEARCH_TERM = 'search term'
+    const tag = buildTag()
 
     const client = {
-      executeQuery: ({ variables }: { variables: BlogQueryVariables }) => {
+      executeQuery: ({ variables }: { variables: TagQueryVariables }) => {
         const items = variables.term === SEARCH_TERM ? [filteredItem] : posts
 
-        return fromValue<{ data: BlogQuery }>({
+        return fromValue<{ data: TagQuery }>({
           data: {
             content: {
-              posts: {
-                nodes: items,
+              tag: {
+                ...tag,
+                posts: {
+                  nodes: items,
+                },
               },
             },
           },
@@ -183,9 +147,9 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={[`/tag/${tag.id}`]}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="tag/:id" element={<Tag />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -200,53 +164,24 @@ describe('page: Blog', () => {
     })
   })
 
-  it('displays pagination if there is more content', () => {
-    const posts = buildEntities(10, buildPost)
-
-    const client = {
-      executeQuery: () =>
-        fromValue<{ data: BlogQuery }>({
-          data: {
-            content: {
-              posts: {
-                pageInfo: {
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
-                nodes: posts,
-              },
-            },
-          },
-        }),
-    }
-
-    render(
-      <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
-
-    expect(screen.getByTestId('posts-pagination')).toBeInTheDocument()
-  })
-
   it('sorts by published date', () => {
     const posts = buildEntities(20, buildPost)
     const reversedPosts = posts.slice().reverse()
+    const tag = buildTag()
 
     const client = {
-      executeQuery: ({ variables }: { variables: BlogQueryVariables }) => {
-        return fromValue<{ data: BlogQuery }>({
+      executeQuery: ({ variables }: { variables: TagQueryVariables }) => {
+        return fromValue<{ data: TagQuery }>({
           data: {
             content: {
-              posts: {
-                nodes:
-                  variables.orderDirection === OrderEnum.Asc
-                    ? reversedPosts.slice(0, PER_PAGE)
-                    : posts.slice(0, PER_PAGE),
+              tag: {
+                ...tag,
+                posts: {
+                  nodes:
+                    variables.orderDirection === OrderEnum.Asc
+                      ? reversedPosts.slice(0, PER_PAGE)
+                      : posts.slice(0, PER_PAGE),
+                },
               },
             },
           },
@@ -256,9 +191,9 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={[`/tag/${tag.id}`]}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="tag/:id" element={<Tag />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -287,9 +222,10 @@ describe('page: Blog', () => {
   it('paginates blog posts', async () => {
     const firstBatch = buildEntities(13, buildPost)
     const secondBatch = buildEntities(12, buildPost)
+    const tag = buildTag()
 
     const client = {
-      executeQuery: ({ variables }: { variables: BlogQueryVariables }) => {
+      executeQuery: ({ variables }: { variables: TagQueryVariables }) => {
         const posts = variables.after ? secondBatch : firstBatch
         const pageInfo: WpPageInfo = {
           ...(variables.after
@@ -307,12 +243,15 @@ describe('page: Blog', () => {
               }),
         }
 
-        return fromValue<{ data: BlogQuery }>({
+        return fromValue<{ data: TagQuery }>({
           data: {
             content: {
-              posts: {
-                pageInfo,
-                nodes: posts,
+              tag: {
+                ...tag,
+                posts: {
+                  pageInfo,
+                  nodes: posts,
+                },
               },
             },
           },
@@ -322,21 +261,15 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
+        <MemoryRouter initialEntries={[`/tag/${tag.id}`]}>
           <Routes>
-            <Route path="/blog" element={<Blog />} />
+            <Route path="tag/:id" element={<Tag />} />
           </Routes>
         </MemoryRouter>
       </Provider>
     )
 
     userEvent.click(screen.getByTestId('posts-next-page'))
-
-    expect(
-      within(screen.getByTestId('featured-post-item')).getByText(
-        firstBatch[0].title ?? ''
-      )
-    ).toBeInTheDocument()
 
     expect(
       screen.queryByTestId(`post-grid-item-${firstBatch[0].id}`)
@@ -349,12 +282,6 @@ describe('page: Blog', () => {
     expect(screen.getByTestId('posts-next-page')).toBeDisabled()
 
     userEvent.click(screen.getByTestId('posts-previous-page'))
-
-    expect(
-      within(screen.getByTestId('featured-post-item')).getByText(
-        firstBatch[0].title ?? ''
-      )
-    ).toBeInTheDocument()
 
     expect(
       screen.getByTestId(`post-grid-item-${firstBatch[0].id}`)

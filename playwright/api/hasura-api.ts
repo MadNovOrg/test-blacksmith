@@ -16,6 +16,8 @@ import {
   PostSummaryFragment,
   PostQuery,
   PostQueryVariables,
+  TagQuery,
+  TagQueryVariables,
   CategoryQuery,
   CategoryQueryVariables,
 } from '@app/generated/graphql'
@@ -24,6 +26,7 @@ import CATEGORY_QUERY from '@app/queries/membership/category'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import POST_QUERY from '@app/queries/membership/post'
+import TAG_QUERY from '@app/queries/membership/tag'
 import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 import {
@@ -421,7 +424,7 @@ export async function getPostById(
   return response.content?.post || null
 }
 
-export async function getFirstCategoryIdWithPosts(): Promise<string | null> {
+export async function getFirstTagIdWithPosts(): Promise<string | null> {
   const query = gql`
     query FirstTagWithPosts {
       content {
@@ -441,6 +444,46 @@ export async function getFirstCategoryIdWithPosts(): Promise<string | null> {
 
   if (response.content?.tags?.nodes?.length) {
     return response.content.tags.nodes[0].id
+  }
+
+  return null
+}
+
+export async function getTagById(id: string) {
+  const client = getClient()
+
+  const response = await client.request<TagQuery, TagQueryVariables>(
+    TAG_QUERY,
+    { id }
+  )
+
+  if (response.content?.tag) {
+    return response.content.tag
+  }
+
+  return null
+}
+
+export async function getFirstCategoryIdWithPosts(): Promise<string | null> {
+  const query = gql`
+    query FirstCategoryWithPosts {
+      content {
+        categories(where: { hideEmpty: true }, first: 1) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  `
+
+  const client = getClient()
+  const response = await client.request<{
+    content?: { categories?: { nodes?: Array<{ id: string }> } }
+  }>(query)
+
+  if (response.content?.categories?.nodes?.length) {
+    return response.content.categories.nodes[0].id
   }
 
   return null

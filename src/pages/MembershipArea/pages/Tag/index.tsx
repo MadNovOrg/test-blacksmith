@@ -1,35 +1,36 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { Box, Container, Grid, IconButton, Typography } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import {
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  Skeleton,
+  Typography,
+} from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router-dom'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
 
 import { FilterSearch } from '@app/components/FilterSearch'
-import {
-  BlogQuery,
-  BlogQueryVariables,
-  OrderEnum,
-  PostSummaryFragment,
-} from '@app/generated/graphql'
-import BLOG_QUERY from '@app/queries/membership/blog'
+import { OrderEnum, TagQuery, TagQueryVariables } from '@app/generated/graphql'
+import TAG_QUERY from '@app/queries/membership/tag'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
-import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const Blog: React.FC = () => {
+export const Tag: React.FC = () => {
   const { t } = useTranslation()
-  const [featuredPost, setFeaturedPost] = useState<PostSummaryFragment | null>(
-    null
-  )
+  const { id } = useParams() as { id: string }
+
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)
   const [pagination, setPagination] = useState<
-    Pick<BlogQueryVariables, 'first' | 'last' | 'before' | 'after'>
+    Pick<TagQueryVariables, 'first' | 'last' | 'before' | 'after'>
   >({
     after: null,
     before: null,
@@ -37,58 +38,31 @@ export const Blog: React.FC = () => {
     last: null,
   })
 
-  const [{ data, fetching }] = useQuery<BlogQuery, BlogQueryVariables>({
-    query: BLOG_QUERY,
+  const [{ data, fetching }] = useQuery<TagQuery, TagQueryVariables>({
+    query: TAG_QUERY,
     variables: {
+      id,
       term: searchTerm,
       orderDirection,
       ...pagination,
     },
   })
 
-  useEffect(() => {
-    if (data?.content?.posts?.nodes?.length && !featuredPost) {
-      setFeaturedPost(data.content.posts.nodes[0] ?? null)
-    }
-  }, [data, featuredPost])
-
-  const hasNextPage = data?.content?.posts?.pageInfo?.hasNextPage
-  const hasPreviousPage = data?.content?.posts?.pageInfo?.hasPreviousPage
+  const hasNextPage = data?.content?.tag?.posts?.pageInfo?.hasNextPage
+  const hasPreviousPage = data?.content?.tag?.posts?.pageInfo?.hasPreviousPage
 
   const hasPagination = hasNextPage || hasPreviousPage
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
-      <Typography variant="h1" color="primary" textAlign="center" padding={6}>
-        {t('pages.membership.blog.title')}
-      </Typography>
-
-      <Box mb={8}>
-        {featuredPost ? (
-          <SplitPost
-            id={featuredPost.id}
-            title={featuredPost.title ?? ''}
-            imageUrl={featuredPost.featuredImage?.node?.mediaItemUrl}
-            publishedDate={featuredPost.date ?? ''}
-            label={t('pages.membership.blog.featured-label')}
-            description={sanitize(featuredPost.excerpt ?? '', {
-              allowedTags: [],
-            })}
-            orientation="left"
-            linkTo={`./${featuredPost.id}`}
-            data-testid="featured-post-item"
-            tags={featuredPost.tags?.nodes?.map(tag => ({
-              id: tag?.id ?? '',
-              name: tag?.name ?? '',
-            }))}
-          />
-        ) : fetching ? (
-          <SplitPostSkeleton data-testid="featured-post-skeleton" />
-        ) : null}
-      </Box>
-
+    <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 5 }}>
       <Typography mb={3} variant="h3" color="primary">
-        {t('pages.membership.blog.list-title')}
+        {fetching && !data?.content?.tag?.name ? (
+          <Skeleton width={200} />
+        ) : (
+          `${t('pages.membership.blog.results-for')} '${
+            data?.content?.tag?.name
+          }'`
+        )}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
         <FilterSearch
@@ -119,7 +93,7 @@ export const Blog: React.FC = () => {
         />
       </Box>
 
-      {data?.content?.posts?.nodes?.length && !fetching ? (
+      {data?.content?.tag?.posts?.nodes?.length && !fetching ? (
         <>
           <Grid
             container
@@ -127,7 +101,7 @@ export const Blog: React.FC = () => {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             data-testid="posts-grid"
           >
-            {data.content.posts.nodes.map((item, index) => {
+            {data.content.tag.posts.nodes.map((item, index) => {
               if (!item) {
                 return null
               }
@@ -142,7 +116,7 @@ export const Blog: React.FC = () => {
                     description={sanitize(item.excerpt ?? '', {
                       allowedTags: [],
                     })}
-                    linkTo={`./${item.id}`}
+                    linkTo={`../${item.id}`}
                     data-testid={`post-grid-item-${item.id}`}
                     tags={item.tags?.nodes?.map(tag => ({
                       id: tag?.id ?? '',
@@ -176,7 +150,7 @@ export const Blog: React.FC = () => {
                     ...pagination,
                     first: null,
                     after: null,
-                    before: data?.content?.posts?.pageInfo?.startCursor,
+                    before: data?.content?.tag?.posts?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
                 }
@@ -191,7 +165,7 @@ export const Blog: React.FC = () => {
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
-                    after: data?.content?.posts?.pageInfo?.endCursor,
+                    after: data?.content?.tag?.posts?.pageInfo?.endCursor,
                     before: null,
                     last: null,
                   })

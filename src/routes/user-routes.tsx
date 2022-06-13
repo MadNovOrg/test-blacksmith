@@ -9,6 +9,7 @@ import { Category } from '@app/pages/MembershipArea/pages/Category'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { Post } from '@app/pages/MembershipArea/pages/Post'
+import { Tag } from '@app/pages/MembershipArea/pages/Tag'
 import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
@@ -65,6 +66,7 @@ const UserRoutes = () => {
         <Route path="blog">
           <Route index element={<Blog />} />
           <Route path=":id" element={<Post />} />
+          <Route path="tag/:id" element={<Tag />} />
           <Route path="category/:id" element={<Category />} />
         </Route>
         <Route path="podcasts">
