@@ -544,6 +544,15 @@
         },
         "arrow-pagination": {
           "pagination-count": "{{start}}-{{end}} of {{total}}"
+        },
+        "browse-by-media": {
+          "title": "Browse by media",
+          "podcasts": "Podcasts",
+          "blogs": "Blogs",
+          "video-series": "Video series",
+          "webinars": "Webinars",
+          "ebooks": "Ebooks",
+          "research-summaries": "Research summaries"
         }
       },
       "details": {
