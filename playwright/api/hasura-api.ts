@@ -20,6 +20,10 @@ import {
   TagQueryVariables,
   CategoryQuery,
   CategoryQueryVariables,
+  WebinarsQuery,
+  WebinarsQueryVariables,
+  WebinarQuery,
+  WebinarQueryVariables,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
@@ -29,6 +33,8 @@ import POST_QUERY from '@app/queries/membership/post'
 import TAG_QUERY from '@app/queries/membership/tag'
 import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
+import WEBINAR_QUERY from '@app/queries/membership/webinar'
+import WEBINARS_QUERY from '@app/queries/membership/webinars'
 import {
   CourseLevel,
   CourseModule,
@@ -502,4 +508,30 @@ export async function getCategoryById(id: string) {
   }
 
   return null
+}
+
+export async function getWebinars(first = 1000) {
+  const client = getClient()
+
+  const response = await client.request<WebinarsQuery, WebinarsQueryVariables>(
+    WEBINARS_QUERY,
+    { first }
+  )
+
+  if (response.content?.webinars?.nodes) {
+    return response.content.webinars.nodes
+  }
+
+  return []
+}
+
+export async function getWebinarById(id: string) {
+  const client = getClient()
+
+  const response = await client.request<WebinarQuery, WebinarQueryVariables>(
+    WEBINAR_QUERY,
+    { id }
+  )
+
+  return response.content?.webinar || null
 }

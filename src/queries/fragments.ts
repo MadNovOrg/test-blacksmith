@@ -230,3 +230,21 @@ export const PostSummary = gql`
     }
   }
 `
+
+export const WebinarSummary = gql`
+  fragment WebinarSummary on Webinar {
+    id
+    title
+    excerpt
+    featuredImage {
+      node {
+        mediaItemUrl
+      }
+    }
+    youtube {
+      url
+      duration
+    }
+    date
+  }
+`

@@ -589,6 +589,15 @@
         "search-placeholder": "Search videos",
         "recent": "Recent videos in the series",
         "not-found": "Video series item not found"
+      },
+      "webinars": {
+        "featured-label": "New webinar",
+        "title": "Webinars",
+        "list-title": "All webinars",
+        "empty": "There are no webinars yet.",
+        "search-placeholder": "Search webinars",
+        "recent": "Recent webinars",
+        "not-found": "Webinar not found"
       }
     },
     "trainer-base": {

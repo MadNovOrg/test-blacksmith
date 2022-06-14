@@ -16,6 +16,8 @@ import { Post } from '@app/pages/MembershipArea/pages/Post'
 import { Tag } from '@app/pages/MembershipArea/pages/Tag'
 import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
+import { Webinar } from '@app/pages/MembershipArea/pages/Webinar'
+import { Webinars } from '@app/pages/MembershipArea/pages/Webinars'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
@@ -87,6 +89,10 @@ const TrainerBaseRoutes = () => {
         <Route path="video-series">
           <Route index element={<VideoSeries />} />
           <Route path=":id" element={<VideoItem />} />
+        </Route>
+        <Route path="webinars">
+          <Route index element={<Webinars />} />
+          <Route path=":id" element={<Webinar />} />
         </Route>
       </Route>
 
