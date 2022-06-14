@@ -10,6 +10,7 @@ import {
   CategorySummaryFragment,
   Podcast,
   PostSummaryFragment,
+  ResearchSummaryDetailsFragment,
   TagSummaryFragment,
   VideoItemSummaryFragment,
   WebinarSummaryFragment,
@@ -373,6 +374,25 @@ export const buildPost = build<PostSummaryFragment>({
       },
     },
     tags: [buildTag(), buildTag()],
+    date: fake(f => f.date.past().toISOString()),
+  },
+})
+
+export const buildResearchSummary = build<ResearchSummaryDetailsFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    title: fake(f => f.random.words()),
+    excerpt: fake(f => f.lorem.sentences()),
+    featuredImage: {
+      node: {
+        mediaItemUrl: fake(f => f.random.image()),
+      },
+    },
+    downloads: {
+      researchSummaryFile: {
+        mediaItemUrl: fake(f => f.internet.url()),
+      },
+    },
     date: fake(f => f.date.past().toISOString()),
   },
 })

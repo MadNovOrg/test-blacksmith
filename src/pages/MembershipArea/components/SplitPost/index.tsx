@@ -1,6 +1,7 @@
 import { Box, BoxProps, Chip, Link, Skeleton, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { noop } from 'ts-essentials'
 
 import theme from '@app/theme'
 
@@ -22,6 +23,7 @@ export type Props = {
   linkTo?: string
   isVideo?: boolean
   duration?: number
+  afterDescription?: React.ReactElement
 } & BoxProps
 
 export const SplitPost: React.FC<Props> = ({
@@ -37,9 +39,23 @@ export const SplitPost: React.FC<Props> = ({
   linkTo,
   isVideo = false,
   duration,
+  afterDescription = noop,
+  children: _children,
   ...rest
 }) => {
   const { t } = useTranslation()
+
+  const thumbnail =
+    isVideo && duration ? (
+      <VideoThumbnail
+        duration={duration}
+        imageUrl={imageUrl ?? ''}
+        alt={title}
+        durationPosition="center"
+      />
+    ) : (
+      <PostImage src={imageUrl ?? ''} alt={title} />
+    )
 
   return (
     <Box
@@ -54,18 +70,11 @@ export const SplitPost: React.FC<Props> = ({
         flex={1}
       >
         {imageUrl ? (
-          <Link href={linkTo ?? getPostLink(id)}>
-            {isVideo && duration ? (
-              <VideoThumbnail
-                duration={duration}
-                imageUrl={imageUrl}
-                alt={title}
-                durationPosition="center"
-              />
-            ) : (
-              <PostImage src={imageUrl} alt={title} />
-            )}
-          </Link>
+          linkTo ? (
+            <Link href={linkTo ?? getPostLink(id)}>{thumbnail}</Link>
+          ) : (
+            thumbnail
+          )
         ) : null}
       </Box>
       <Box flex={1}>
@@ -87,7 +96,11 @@ export const SplitPost: React.FC<Props> = ({
           sx={{ color: theme.palette.primary.main, fontWeight: 600 }}
           mb={2}
         >
-          <Link href={linkTo ?? getPostLink(id)}>{title}</Link>
+          {linkTo ? (
+            <Link href={linkTo ?? getPostLink(id)}>{title}</Link>
+          ) : (
+            title
+          )}
         </Typography>
         <Typography mb={2} variant="body2">
           {description}
@@ -105,6 +118,7 @@ export const SplitPost: React.FC<Props> = ({
             {t('dates.default', { date: new Date(publishedDate) })}
           </Typography>
         </Box>
+        {afterDescription}
       </Box>
     </Box>
   )

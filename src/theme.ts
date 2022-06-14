@@ -333,9 +333,6 @@ export default createTheme({
           textTransform: 'none',
         },
       },
-      defaultProps: {
-        LinkComponent: LinkBehavior,
-      },
     },
     MuiTabs: {
       styleOverrides: {

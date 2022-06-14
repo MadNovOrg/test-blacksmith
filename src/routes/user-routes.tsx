@@ -9,6 +9,7 @@ import { Category } from '@app/pages/MembershipArea/pages/Category'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { Post } from '@app/pages/MembershipArea/pages/Post'
+import { ResearchSummaries } from '@app/pages/MembershipArea/pages/ResearchSummaries'
 import { Tag } from '@app/pages/MembershipArea/pages/Tag'
 import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
 import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
@@ -79,12 +80,15 @@ const UserRoutes = () => {
           <Route index element={<VideoSeries />} />
           <Route path=":id" element={<VideoItem />} />
         </Route>
+        <Route path="research-summaries">
+          <Route index element={<ResearchSummaries />} />
+        </Route>
+
         <Route path="webinars">
           <Route index element={<Webinars />} />
           <Route path=":id" element={<Webinar />} />
         </Route>
       </Route>
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

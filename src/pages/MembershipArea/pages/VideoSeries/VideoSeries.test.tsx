@@ -211,7 +211,7 @@ describe('page: VideoSeries', () => {
     })
   })
 
-  it('paginates blog posts', async () => {
+  it('paginates video items', async () => {
     const firstBatch = buildEntities(13, buildVideoItem)
     const secondBatch = buildEntities(12, buildVideoItem)
 

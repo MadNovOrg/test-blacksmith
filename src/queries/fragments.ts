@@ -231,6 +231,25 @@ export const PostSummary = gql`
   }
 `
 
+export const ResearchSummaryDetails = gql`
+  fragment ResearchSummaryDetails on ResearchSummary {
+    id
+    title
+    excerpt
+    date
+    featuredImage {
+      node {
+        mediaItemUrl
+      }
+    }
+    downloads {
+      researchSummaryFile {
+        mediaItemUrl
+      }
+    }
+  }
+`
+
 export const WebinarSummary = gql`
   fragment WebinarSummary on Webinar {
     id

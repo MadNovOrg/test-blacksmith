@@ -1021,6 +1021,8 @@ export enum ContentTypeEnum {
   /** The Type of Content object */
   Attachment = 'ATTACHMENT',
   /** The Type of Content object */
+  Ebooks = 'EBOOKS',
+  /** The Type of Content object */
   Page = 'PAGE',
   /** The Type of Content object */
   Post = 'POST',
@@ -1243,6 +1245,35 @@ export type CreateCommentPayload = {
   comment?: Maybe<Comment>;
   /** Whether the mutation succeeded. If the comment is not approved, the server will not return the comment to a non authenticated user, but a success message can be returned if the create succeeded, and the client can optimistically add the comment to the client cache */
   success?: Maybe<Scalars['Boolean']>;
+};
+
+/** Input for the createEbook mutation */
+export type CreateEbookInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: InputMaybe<Scalars['String']>;
+  /** The excerpt of the object */
+  excerpt?: InputMaybe<Scalars['String']>;
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: InputMaybe<Scalars['Int']>;
+  /** The password used to protect the content of the object */
+  password?: InputMaybe<Scalars['String']>;
+  /** The slug of the object */
+  slug?: InputMaybe<Scalars['String']>;
+  /** The status of the object */
+  status?: InputMaybe<PostStatusEnum>;
+  /** The title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createEbook mutation */
+export type CreateEbookPayload = {
+  __typename?: 'CreateEbookPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The Post object mutation type. */
+  ebook?: Maybe<Ebook>;
 };
 
 /** Input for the createMediaItem mutation */
@@ -1661,6 +1692,27 @@ export type DeleteCommentPayload = {
   deletedId?: Maybe<Scalars['ID']>;
 };
 
+/** Input for the deleteEbook mutation */
+export type DeleteEbookInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** Whether the object should be force deleted instead of being moved to the trash */
+  forceDelete?: InputMaybe<Scalars['Boolean']>;
+  /** The ID of the Ebook to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteEbook mutation */
+export type DeleteEbookPayload = {
+  __typename?: 'DeleteEbookPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The object before it was deleted */
+  ebook?: Maybe<Ebook>;
+};
+
 /** Input for the deleteMediaItem mutation */
 export type DeleteMediaItemInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1853,6 +1905,136 @@ export type DiscussionSettings = {
   defaultCommentStatus?: Maybe<Scalars['String']>;
   /** Allow link notifications from other blogs (pingbacks and trackbacks) on new articles. */
   defaultPingStatus?: Maybe<Scalars['String']>;
+};
+
+/** The Ebook type */
+export type Ebook = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
+  __typename?: 'Ebook';
+  /** Connection between the ContentNode type and the ContentType type */
+  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
+  /** The name of the Content Type the node belongs to */
+  contentTypeName: Scalars['String'];
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** Post publishing date. */
+  date?: Maybe<Scalars['String']>;
+  /** The publishing date set in GMT. */
+  dateGmt?: Maybe<Scalars['String']>;
+  /** The desired slug of the post */
+  desiredSlug?: Maybe<Scalars['String']>;
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Downloads&quot; was set to Show in GraphQL. */
+  downloads?: Maybe<Ebook_Downloads>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  ebookId: Scalars['Int'];
+  /** If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds */
+  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
+  /** The RSS enclosure for the object */
+  enclosure?: Maybe<Scalars['String']>;
+  /** Connection between the ContentNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
+  /** Connection between the ContentNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
+  /** The excerpt of the post. */
+  excerpt?: Maybe<Scalars['String']>;
+  /** Connection between the NodeWithFeaturedImage type and the MediaItem type */
+  featuredImage?: Maybe<NodeWithFeaturedImageToMediaItemConnectionEdge>;
+  /** The database identifier for the featured image node assigned to the content node */
+  featuredImageDatabaseId?: Maybe<Scalars['Int']>;
+  /** Globally unique ID of the featured image assigned to the node */
+  featuredImageId?: Maybe<Scalars['ID']>;
+  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
+  guid?: Maybe<Scalars['String']>;
+  /** The globally unique identifier of the ebooks object. */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is a node in the preview state */
+  isPreview?: Maybe<Scalars['Boolean']>;
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The user that most recently edited the node */
+  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
+  /** The permalink of the post */
+  link?: Maybe<Scalars['String']>;
+  /** The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time. */
+  modified?: Maybe<Scalars['String']>;
+  /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
+  modifiedGmt?: Maybe<Scalars['String']>;
+  /** Connection between the Ebook type and the Ebook type */
+  preview?: Maybe<EbookToPreviewConnectionEdge>;
+  /** The database id of the preview node */
+  previewRevisionDatabaseId?: Maybe<Scalars['Int']>;
+  /** Whether the object is a node in the preview state */
+  previewRevisionId?: Maybe<Scalars['ID']>;
+  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  slug?: Maybe<Scalars['String']>;
+  /** The current status of the object */
+  status?: Maybe<Scalars['String']>;
+  /** The template assigned to a node of content */
+  template?: Maybe<ContentTemplate>;
+  /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
+  title?: Maybe<Scalars['String']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+};
+
+
+/** The Ebook type */
+export type EbookEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The Ebook type */
+export type EbookEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The Ebook type */
+export type EbookExcerptArgs = {
+  format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The Ebook type */
+export type EbookTitleArgs = {
+  format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum EbookIdType {
+  /** Identify a resource by the Database ID. */
+  DatabaseId = 'DATABASE_ID',
+  /** Identify a resource by the (hashed) Global ID. */
+  Id = 'ID',
+  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
+  Slug = 'SLUG',
+  /** Identify a resource by the URI. */
+  Uri = 'URI'
+}
+
+/** Connection between the Ebook type and the Ebook type */
+export type EbookToPreviewConnectionEdge = {
+  __typename?: 'EbookToPreviewConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Ebook>;
+};
+
+/** Field Group */
+export type Ebook_Downloads = AcfFieldGroup & {
+  __typename?: 'Ebook_Downloads';
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  researchSummaryFile?: Maybe<MediaItem>;
 };
 
 /** Asset enqueued by the CMS */
@@ -2680,7 +2862,7 @@ export enum MenuItemNodeIdTypeEnum {
 }
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
-export type MenuItemObjectUnion = Category | Page | Post | PostFormat | ResearchSummary | Tag | VideoSeriesItem | Webinar;
+export type MenuItemObjectUnion = Category | Ebook | Page | Post | PostFormat | ResearchSummary | Tag | VideoSeriesItem | Webinar;
 
 /** Connection between the MenuItem type and the Menu type */
 export type MenuItemToMenuConnectionEdge = {
@@ -4948,6 +5130,8 @@ export type RootMutation = {
   createCategory?: Maybe<CreateCategoryPayload>;
   /** The payload for the createComment mutation */
   createComment?: Maybe<CreateCommentPayload>;
+  /** The payload for the createEbook mutation */
+  createEbook?: Maybe<CreateEbookPayload>;
   /** The payload for the createMediaItem mutation */
   createMediaItem?: Maybe<CreateMediaItemPayload>;
   /** The payload for the createPage mutation */
@@ -4970,6 +5154,8 @@ export type RootMutation = {
   deleteCategory?: Maybe<DeleteCategoryPayload>;
   /** The payload for the deleteComment mutation */
   deleteComment?: Maybe<DeleteCommentPayload>;
+  /** The payload for the deleteEbook mutation */
+  deleteEbook?: Maybe<DeleteEbookPayload>;
   /** The payload for the deleteMediaItem mutation */
   deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
   /** The payload for the deletePage mutation */
@@ -5002,6 +5188,8 @@ export type RootMutation = {
   updateCategory?: Maybe<UpdateCategoryPayload>;
   /** The payload for the updateComment mutation */
   updateComment?: Maybe<UpdateCommentPayload>;
+  /** The payload for the updateEbook mutation */
+  updateEbook?: Maybe<UpdateEbookPayload>;
   /** The payload for the updateMediaItem mutation */
   updateMediaItem?: Maybe<UpdateMediaItemPayload>;
   /** The payload for the updatePage mutation */
@@ -5032,6 +5220,11 @@ export type RootMutationCreateCategoryArgs = {
 
 export type RootMutationCreateCommentArgs = {
   input: CreateCommentInput;
+};
+
+
+export type RootMutationCreateEbookArgs = {
+  input: CreateEbookInput;
 };
 
 
@@ -5087,6 +5280,11 @@ export type RootMutationDeleteCategoryArgs = {
 
 export type RootMutationDeleteCommentArgs = {
   input: DeleteCommentInput;
+};
+
+
+export type RootMutationDeleteEbookArgs = {
+  input: DeleteEbookInput;
 };
 
 
@@ -5170,6 +5368,11 @@ export type RootMutationUpdateCommentArgs = {
 };
 
 
+export type RootMutationUpdateEbookArgs = {
+  input: UpdateEbookInput;
+};
+
+
 export type RootMutationUpdateMediaItemArgs = {
   input: UpdateMediaItemInput;
 };
@@ -5241,6 +5444,12 @@ export type RootQuery = {
   contentTypes?: Maybe<RootQueryToContentTypeConnection>;
   /** Fields of the &#039;DiscussionSettings&#039; settings group */
   discussionSettings?: Maybe<DiscussionSettings>;
+  /** An object of the Ebook Type.  */
+  ebook?: Maybe<Ebook>;
+  /** A Ebook object */
+  ebookBy?: Maybe<Ebook>;
+  /** Connection between the RootQuery type and the Ebook type */
+  ebooks?: Maybe<RootQueryToEbookConnection>;
   /** Fields of the &#039;GeneralSettings&#039; settings group */
   generalSettings?: Maybe<GeneralSettings>;
   /** An object of the mediaItem Type.  */
@@ -5395,6 +5604,30 @@ export type RootQueryContentTypesArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type RootQueryEbookArgs = {
+  asPreview?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  idType?: InputMaybe<EbookIdType>;
+};
+
+
+export type RootQueryEbookByArgs = {
+  ebookId?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['ID']>;
+  slug?: InputMaybe<Scalars['String']>;
+  uri?: InputMaybe<Scalars['String']>;
+};
+
+
+export type RootQueryEbooksArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToEbookConnectionWhereArgs>;
 };
 
 
@@ -6004,6 +6237,64 @@ export type RootQueryToContentTypeConnectionEdge = {
   cursor?: Maybe<Scalars['String']>;
   /** The item at the end of the edge */
   node?: Maybe<ContentType>;
+};
+
+/** Connection between the RootQuery type and the Ebook type */
+export type RootQueryToEbookConnection = {
+  __typename?: 'RootQueryToEbookConnection';
+  /** Edges for the RootQueryToEbookConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToEbookConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<Ebook>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToEbookConnectionEdge = {
+  __typename?: 'RootQueryToEbookConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<Ebook>;
+};
+
+/** Arguments for filtering the RootQueryToEbookConnection connection */
+export type RootQueryToEbookConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
 };
 
 /** Connection between the RootQuery type and the EnqueuedScript type */
@@ -7562,6 +7853,37 @@ export type UpdateCommentPayload = {
   comment?: Maybe<Comment>;
   /** Whether the mutation succeeded. If the comment is not approved, the server will not return the comment to a non authenticated user, but a success message can be returned if the create succeeded, and the client can optimistically add the comment to the client cache */
   success?: Maybe<Scalars['Boolean']>;
+};
+
+/** Input for the updateEbook mutation */
+export type UpdateEbookInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
+  date?: InputMaybe<Scalars['String']>;
+  /** The excerpt of the object */
+  excerpt?: InputMaybe<Scalars['String']>;
+  /** The ID of the Ebook object */
+  id: Scalars['ID'];
+  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
+  menuOrder?: InputMaybe<Scalars['Int']>;
+  /** The password used to protect the content of the object */
+  password?: InputMaybe<Scalars['String']>;
+  /** The slug of the object */
+  slug?: InputMaybe<Scalars['String']>;
+  /** The status of the object */
+  status?: InputMaybe<PostStatusEnum>;
+  /** The title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the updateEbook mutation */
+export type UpdateEbookPayload = {
+  __typename?: 'UpdateEbookPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The Post object mutation type. */
+  ebook?: Maybe<Ebook>;
 };
 
 /** Input for the updateMediaItem mutation */
@@ -18183,6 +18505,7 @@ export type Organization = {
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   /** An array relationship */
   members: Array<Organization_Member>;
   /** An aggregate relationship */
@@ -18190,6 +18513,8 @@ export type Organization = {
   name: Scalars['String'];
   original_record?: Maybe<Scalars['jsonb']>;
   preferences: Scalars['jsonb'];
+  region?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   updatedAt: Scalars['timestamptz'];
   xeroContactId?: Maybe<Scalars['String']>;
@@ -18293,10 +18618,13 @@ export type Organization_Bool_Exp = {
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   members?: InputMaybe<Organization_Member_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
+  region?: InputMaybe<String_Comparison_Exp>;
+  sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   xeroContactId?: InputMaybe<String_Comparison_Exp>;
@@ -18345,10 +18673,13 @@ export type Organization_Insert_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  lastActivity?: InputMaybe<Scalars['timestamptz']>;
   members?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
@@ -18359,7 +18690,10 @@ export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   name?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
@@ -18594,7 +18928,10 @@ export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   name?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
@@ -18629,10 +18966,13 @@ export type Organization_Order_By = {
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  lastActivity?: InputMaybe<Order_By>;
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
   original_record?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
+  region?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
@@ -18666,11 +19006,17 @@ export enum Organization_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  LastActivity = 'lastActivity',
+  /** column name */
   Name = 'name',
   /** column name */
   OriginalRecord = 'original_record',
   /** column name */
   Preferences = 'preferences',
+  /** column name */
+  Region = 'region',
+  /** column name */
+  Sector = 'sector',
   /** column name */
   Tags = 'tags',
   /** column name */
@@ -18686,9 +19032,12 @@ export type Organization_Set_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
+  lastActivity?: InputMaybe<Scalars['timestamptz']>;
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
+  region?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
@@ -18707,11 +19056,17 @@ export enum Organization_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  LastActivity = 'lastActivity',
+  /** column name */
   Name = 'name',
   /** column name */
   OriginalRecord = 'original_record',
   /** column name */
   Preferences = 'preferences',
+  /** column name */
+  Region = 'region',
+  /** column name */
+  Sector = 'sector',
   /** column name */
   Tags = 'tags',
   /** column name */
@@ -23522,6 +23877,8 @@ export type CategorySummaryFragment = { __typename?: 'Category', id: string, nam
 
 export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null };
 
+export type ResearchSummaryDetailsFragment = { __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+
 export type WebinarSummaryFragment = { __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null };
 
 export type SaveCourseGradingMutationVariables = Exact<{
@@ -23659,6 +24016,18 @@ export type PostQueryVariables = Exact<{
 
 export type PostQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', post?: { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null, recentPosts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null };
 
+export type ResearchSummariesQueryVariables = Exact<{
+  term?: InputMaybe<Scalars['String']>;
+  orderDirection?: InputMaybe<OrderEnum>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type ResearchSummariesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
+
 export type TagQueryVariables = Exact<{
   id: Scalars['ID'];
   orderDirection?: InputMaybe<OrderEnum>;
@@ -23750,7 +24119,8 @@ export type Unnamed_3_QueryVariables = Exact<{
 export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
 
 export type GetOrganizationsQueryVariables = Exact<{
-  name?: InputMaybe<Scalars['String']>;
+  orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
+  where?: InputMaybe<Organization_Bool_Exp>;
 }>;
 
 
@@ -23765,6 +24135,13 @@ export type InsertOrgMutationVariables = Exact<{
 
 
 export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } | null };
+
+export type UpdateOrgActivityMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type UpdateOrgActivityMutation = { __typename?: 'mutation_root', update_organization?: { __typename?: 'organization_mutation_response', returning: Array<{ __typename?: 'organization', id: any }> } | null };
 
 export type CourseParticipantQueryVariables = Exact<{
   id: Scalars['uuid'];

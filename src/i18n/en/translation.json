@@ -310,7 +310,7 @@
     "all-fields-are-mandatory": "All fields are mandatory.",
     "org-sectors": {
       "education": "Education",
-      "adults-health-and-social-care":  "Adults Health and Social Care",
+      "adults-health-and-social-care": "Adults Health and Social Care",
       "childrens-health-and-social-care": "Childrens Health and Social Care"
     }
   },
@@ -562,7 +562,7 @@
         "title": "Blog",
         "featured-label": "New post",
         "list-title": "All blog posts",
-        "search-placeholder": "Search posts", 
+        "search-placeholder": "Search posts",
         "no-post-id-error": "No post ID has been provided",
         "recent": "Recent posts",
         "not-found": "Post not found",
@@ -576,7 +576,7 @@
         "empty": "There are no podcasts yet.",
         "search-placeholder": "Search podcasts",
         "error-loading-podcast": "There was an error loading the podcast",
-        
+
         "recent": "Recent podcast episodes",
         "not-found": "Podcast not found",
         "episode-number": "Episode #{{number}}"
@@ -589,6 +589,15 @@
         "search-placeholder": "Search videos",
         "recent": "Recent videos in the series",
         "not-found": "Video series item not found"
+      },
+      "research-summaries": {
+        "featured-label": "New summary",
+        "title": "Research Summaries",
+        "list-title": "All research summaries",
+        "empty": "There are no research summaries yet.",
+        "search-placeholder": "Search summaries",
+        "recent": "Recent research summaries",
+        "download-button": "Download resource"
       },
       "webinars": {
         "featured-label": "New webinar",

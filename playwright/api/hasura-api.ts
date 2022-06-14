@@ -20,6 +20,8 @@ import {
   TagQueryVariables,
   CategoryQuery,
   CategoryQueryVariables,
+  ResearchSummariesQuery,
+  ResearchSummariesQueryVariables,
   WebinarsQuery,
   WebinarsQueryVariables,
   WebinarQuery,
@@ -30,6 +32,7 @@ import CATEGORY_QUERY from '@app/queries/membership/category'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import POST_QUERY from '@app/queries/membership/post'
+import researchSummaries from '@app/queries/membership/research-summaries'
 import TAG_QUERY from '@app/queries/membership/tag'
 import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
@@ -508,6 +511,21 @@ export async function getCategoryById(id: string) {
   }
 
   return null
+}
+
+export async function getResearchSummaries(first = 1000) {
+  const client = getClient()
+
+  const response = await client.request<
+    ResearchSummariesQuery,
+    ResearchSummariesQueryVariables
+  >(researchSummaries, { first })
+
+  if (response.content?.researchSummaries?.nodes?.length) {
+    return response.content.researchSummaries.nodes
+  }
+
+  return []
 }
 
 export async function getWebinars(first = 1000) {

@@ -21,6 +21,7 @@ export type Props = {
   isVideo?: boolean
   duration?: number
   linkTo?: string
+  afterDescription?: React.ReactElement
 } & BoxProps
 
 export const BlogPostItem: React.FC<Props> = ({
@@ -34,27 +35,34 @@ export const BlogPostItem: React.FC<Props> = ({
   publishedDate,
   duration,
   linkTo,
+  afterDescription,
   ...rest
 }) => {
   const { t } = useTranslation()
+  const thumbnail =
+    isVideo && duration ? (
+      <VideoThumbnail
+        duration={duration}
+        imageUrl={imageUrl ?? ''}
+        alt={title}
+      />
+    ) : (
+      <PostImage src={imageUrl ?? ''} alt={title} />
+    )
 
   return (
     <Box {...rest}>
       {imageUrl ? (
-        <Link
-          href={linkTo ?? getPostLink(id)}
-          sx={{ marginBottom: 1, display: 'block' }}
-        >
-          {isVideo && duration ? (
-            <VideoThumbnail
-              duration={duration}
-              imageUrl={imageUrl}
-              alt={title}
-            />
-          ) : (
-            <PostImage src={imageUrl} alt={title} />
-          )}
-        </Link>
+        linkTo ? (
+          <Link
+            href={linkTo ?? getPostLink(id)}
+            sx={{ marginBottom: 1, display: 'block' }}
+          >
+            {thumbnail}
+          </Link>
+        ) : (
+          thumbnail
+        )
       ) : null}
 
       {category && <PostCategory category={category} />}
@@ -64,7 +72,7 @@ export const BlogPostItem: React.FC<Props> = ({
         sx={{ color: theme.palette.primary.main, fontWeight: 600 }}
         mb={2}
       >
-        <Link href={linkTo ?? getPostLink(id)}>{title}</Link>
+        {linkTo ? <Link href={linkTo ?? getPostLink(id)}>{title}</Link> : title}
       </Typography>
 
       <Typography mb={2} variant="body2">
@@ -83,6 +91,7 @@ export const BlogPostItem: React.FC<Props> = ({
           {t('dates.default', { date: new Date(publishedDate) })}
         </Typography>
       </Box>
+      {afterDescription}
     </Box>
   )
 }
