@@ -67,6 +67,9 @@ export const buildOrganization = build<Organization>({
     attributes: [{ attribute: 'value' }],
     address: buildAddress(),
     preferences: [],
+    region: fake(f => f.random.word()),
+    sector: fake(f => f.random.word()),
+    lastActivity: fake(f => f.date.past()),
   },
 })
 

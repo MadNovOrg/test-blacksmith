@@ -1,32 +1,21 @@
-import { Tab, Tabs } from '@mui/material'
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
+import Toolbar from '@mui/material/Toolbar'
 import { styled } from '@mui/system'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link as RRLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { useRouteMatch } from '@app/hooks/use-route-match'
 
 type AdminPageProps = unknown
 
-const StyledTabs = styled(Tabs)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[100],
-  minHeight: 40,
+const StyledSubNavLink = styled(NavLink)(({ theme }) => ({
+  padding: theme.spacing(0.5, 3),
 
-  '& .MuiTabs-indicator': {
-    backgroundColor: theme.palette.primary.main,
-    top: 0,
-    height: '1px',
-  },
-
-  '& .MuiButtonBase-root': {
-    textTransform: 'none',
-
-    '&.Mui-selected': {
-      color: theme.palette.common.black,
-      backgroundColor: theme.palette.common.white,
-    },
+  '&.active': {
+    fontWeight: '600',
+    backgroundColor: theme.palette.grey[100],
   },
 }))
 
@@ -36,36 +25,45 @@ export const AdminPage: React.FC<AdminPageProps> = () => {
 
   const tabs = [
     {
-      id: '/admin/organizations',
-      title: t('common.organizations'),
-    },
-    {
       id: '/admin/contacts',
       title: 'Contacts',
+    },
+    {
+      id: '/admin/organizations',
+      title: t('common.organizations'),
     },
     ...(acl.canViewXeroConnect()
       ? [{ id: '/admin/xero/connect', title: 'Xero Connect' }]
       : []),
   ]
 
-  const routeMatch = useRouteMatch(tabs)
-  const currentTab = routeMatch?.pattern?.path ?? tabs[0].id
-
   return (
     <>
-      <Box sx={{ justifyContent: 'space-between' }} marginTop="-1px">
-        <StyledTabs value={currentTab}>
+      <Toolbar
+        sx={{
+          justifyContent: 'space-between',
+          borderBottom: '1px solid',
+          borderColor: 'grey.300',
+          mb: 2,
+        }}
+      >
+        <Box
+          flex={1}
+          height={44}
+          lineHeight={2}
+          display="flex"
+          justifyContent="left"
+          px={3}
+          color="secondary.dark"
+        >
           {tabs.map(t => (
-            <Tab
-              key={t.id}
-              label={t.title}
-              value={t.id}
-              component={RRLink}
-              to={t.id}
-            />
+            <Link key={t.id} component={StyledSubNavLink} to={t.id}>
+              {t.title}
+            </Link>
           ))}
-        </StyledTabs>
-      </Box>
+        </Box>
+      </Toolbar>
+
       <Outlet />
     </>
   )

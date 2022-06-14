@@ -2,38 +2,32 @@ import {
   Button,
   CircularProgress,
   Container,
-  Grid,
+  Stack,
   Table,
   TableBody,
   TableCell,
-  TablePagination,
   TableRow,
 } from '@mui/material'
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import useSWR from 'swr'
 
+import { FilterOrgSector } from '@app/components/FilterOrgSector'
+import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
-import {
-  ParamsType as GetOrganizationsParamsType,
-  QUERY as GetOrganizations,
-  ResponseType as GetOrganizationsResponseType,
-} from '@app/queries/admin/get-organizations'
-import { SortOrder } from '@app/types'
+import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { useOrganizations } from '@app/hooks/useOrganizations'
+import { useTableSort } from '@app/hooks/useTableSort'
 
 type OrganizationsProps = unknown
-
-const sorts: Record<string, object> = {
-  'name-asc': { name: 'asc' },
-  'name-desc': { name: 'desc' },
-}
-const PER_PAGE = 12
-const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const Organizations: React.FC<OrganizationsProps> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
     () => [
       {
@@ -42,94 +36,143 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
         sorting: true,
       },
       {
-        id: 'members_count',
-        label: t('pages.admin.organizations.columns.members-count'),
+        id: 'country',
+        label: t('pages.admin.organizations.columns.country'),
+      },
+      {
+        id: 'region',
+        label: t('pages.admin.organizations.columns.region'),
+        sorting: true,
+      },
+      {
+        id: 'sector',
+        label: t('pages.admin.organizations.columns.sector'),
+        sorting: true,
+      },
+      {
+        id: 'lastActivity',
+        label: t('pages.admin.organizations.columns.last-activity'),
+        sorting: true,
+      },
+      {
+        id: 'createdAt',
+        label: t('pages.admin.organizations.columns.created-on'),
+        sorting: true,
       },
     ],
     [t]
   )
-  const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
-  const [order, setOrder] = useState<SortOrder>('asc')
-  const [orderBy, setOrderBy] = useState(cols[0].id)
-  const { data, error } = useSWR<
-    GetOrganizationsResponseType,
-    Error,
-    [string, GetOrganizationsParamsType]
-  >([
-    GetOrganizations,
-    {
-      orderBy: sorts[`${orderBy}-${order}`],
-      limit: perPage,
-      offset: perPage * currentPage,
-    },
-  ])
+  const [query, setQuery] = useState('')
+  const [filterSector, setFilterSector] = useState<string[]>([])
 
-  const loading = !data && !error
-  const organizationsTotalCount =
-    data?.organizationsAggregation?.aggregate?.count
+  const [where, filtered] = useMemo(() => {
+    let isFiltered = false
 
-  const handleRequestSort = (col: string) => {
-    const isAsc = orderBy === col && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(col)
-  }
+    const obj: Record<string, object> = {}
 
-  const handleRowsPerPageChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setCurrentPage(0)
-    },
-    []
-  )
+    if (filterSector.length) {
+      obj.sector = { _in: filterSector }
+      isFiltered = true
+    }
+
+    if (query.trim().length) {
+      obj.name = { _ilike: `%${query}%` }
+      isFiltered = true
+    }
+
+    return [obj, isFiltered]
+  }, [filterSector, query])
+
+  const { orgs, loading } = useOrganizations({ sorting, where })
+
+  const count = orgs?.length
 
   return (
     <>
-      <Container>
-        <Grid
-          container
-          justify-content="space-between"
-          align-items="center"
-          sx={{ mb: 2 }}
-        >
-          <Button variant="contained" onClick={() => navigate('new')}>
-            Create Org
-          </Button>
-          <Table>
-            <TableHead
-              cols={cols}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {data?.organizations.map(org => (
-                <TableRow key={org.id}>
-                  <TableCell>{org.name}</TableCell>
-                  <TableCell>{org.members_aggregate.aggregate.count}</TableCell>
-                </TableRow>
-              )) ??
-                (loading && (
+      <Container maxWidth="lg" sx={{ py: 5 }}>
+        <Box display="flex" gap={4}>
+          <Box width={250}>
+            <Typography variant="h1">
+              {t('pages.admin.organizations.title')}
+            </Typography>
+            <Typography variant="body2" color="grey.500" mt={1}>
+              {loading ? <>&nbsp;</> : t('x-items', { count })}
+            </Typography>
+
+            <Stack gap={4} mt={4}>
+              <FilterSearch value={query} onChange={setQuery} />
+
+              <Box>
+                <Typography variant="body2" fontWeight="bold">
+                  {t('filter-by')}
+                </Typography>
+
+                <Stack gap={1}>
+                  <FilterOrgSector onChange={setFilterSector} />
+                </Stack>
+              </Box>
+            </Stack>
+          </Box>
+
+          <Box flex={1}>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+              mb={2}
+            >
+              <Button variant="contained" onClick={() => navigate('new')}>
+                {t('pages.admin.organizations.add-new-organization')}
+              </Button>
+            </Box>
+
+            <Table data-testid="orgs-table">
+              <TableHead
+                cols={cols}
+                order={sorting.dir}
+                orderBy={sorting.by}
+                onRequestSort={sorting.onSort}
+              />
+              <TableBody>
+                {loading && (
                   <TableRow>
                     <TableCell colSpan={cols.length} align="center">
                       <CircularProgress />
                     </TableCell>
                   </TableRow>
+                )}
+
+                <TableNoRows
+                  noRecords={!loading && !count}
+                  filtered={filtered}
+                  colSpan={cols.length}
+                  itemsName={t('organizations').toLowerCase()}
+                />
+
+                {orgs.map(org => (
+                  <TableRow key={org.id} data-testid={`org-row-${org.id}`}>
+                    <TableCell>{org?.name}</TableCell>
+                    <TableCell>{org?.address.country}</TableCell>
+                    <TableCell>{org?.region}</TableCell>
+                    <TableCell>{org?.sector}</TableCell>
+                    <TableCell>
+                      {org?.lastActivity
+                        ? t('dates.withTime', {
+                            date: org?.lastActivity,
+                          })
+                        : ''}
+                    </TableCell>
+                    <TableCell>
+                      {t('dates.withTime', {
+                        date: org?.createdAt,
+                      })}
+                    </TableCell>
+                  </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-          {organizationsTotalCount ? (
-            <TablePagination
-              component="div"
-              count={organizationsTotalCount}
-              page={currentPage}
-              onPageChange={(_, page) => setCurrentPage(page)}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPage={perPage}
-              rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-            />
-          ) : null}
-        </Grid>
+              </TableBody>
+            </Table>
+          </Box>
+        </Box>
       </Container>
     </>
   )

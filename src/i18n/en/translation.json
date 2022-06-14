@@ -307,7 +307,12 @@
     },
     "submit-form": "Submit form",
     "full-name": "Full name",
-    "all-fields-are-mandatory": "All fields are mandatory."
+    "all-fields-are-mandatory": "All fields are mandatory.",
+    "org-sectors": {
+      "education": "Education",
+      "adults-health-and-social-care":  "Adults Health and Social Care",
+      "childrens-health-and-social-care": "Childrens Health and Social Care"
+    }
   },
   "components": {
     "not-found": {
@@ -946,11 +951,18 @@
     },
     "admin": {
       "organizations": {
+        "title": "Organizations",
         "columns": {
           "name": "Name",
           "status": "Status",
-          "members-count": "Members Count"
-        }
+          "members-count": "Members Count",
+          "country": "Country",
+          "region": "Region",
+          "sector": "Sector",
+          "last-activity": "Last activity",
+          "created-on": "Created on"
+        },
+        "add-new-organization": "Add new organization"
       }
     },
     "my-profile": {

@@ -12,11 +12,14 @@ configuration:
       custom_name: xeroContactId
     contact_details:
       custom_name: contactDetails
+    last_activity:
+      custom_name: lastActivity
   custom_column_names:
     updated_at: updatedAt
     created_at: createdAt
     xero_contact_id: xeroContactId
     contact_details: contactDetails
+    last_activity: lastActivity
 array_relationships:
   - name: members
     using:
@@ -56,6 +59,9 @@ select_permissions:
         - tags
         - updated_at
         - xero_contact_id
+        - sector
+        - region
+        - last_activity
       filter: {}
   - role: user
     permission:
@@ -71,5 +77,37 @@ select_permissions:
         - tags
         - updated_at
         - xero_contact_id
+        - sector
+        - region
+        - last_activity
       filter: {}
       allow_aggregations: true
+update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - name
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - region
+        - sector
+        - xero_contact_id
+        - created_at
+        - last_activity
+        - updated_at
+        - id
+      filter: {}
+      check: null
+  - role: user
+    permission:
+      columns:
+        - last_activity
+      filter:
+        members:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      check: null

@@ -80,6 +80,9 @@ export type Organization = {
   attributes: { [name: string]: string }
   address: Address
   preferences: { [name: string]: string }
+  region: string
+  sector: string
+  lastActivity: Date
 } & Base
 
 export type Profile = {

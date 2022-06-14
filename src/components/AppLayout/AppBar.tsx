@@ -43,11 +43,13 @@ export const AppBar = () => {
               <Link component={StyledNavLink} to="/courses">
                 {t('courses')}
               </Link>
-              {acl.canViewContacts() && (
-                <Link component={StyledNavLink} to="/contacts">
+
+              {acl.isTTAdmin() ? (
+                <Link component={StyledNavLink} to="/admin">
                   {t('contacts')}
                 </Link>
-              )}
+              ) : null}
+
               <Link component={StyledNavLink} to="/community">
                 {t('community')}
               </Link>

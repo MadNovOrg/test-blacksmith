@@ -1,6 +1,8 @@
 import { Auth } from 'aws-amplify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
+import { gqlRequest } from '@app/lib/gql-request'
+import { MUTATION as UPDATE_ORGS_ACTIVITY_QUERY } from '@app/queries/organization/update-org-activity'
 import { RoleName } from '@app/types'
 
 import { fetchUserProfile, lsActiveRoleClient } from './helpers'
@@ -18,6 +20,18 @@ export const AuthProvider: React.FC = ({ children }) => {
     const data = await fetchUserProfile(user)
     setState({ ...data })
     setLoading(false)
+
+    if (data?.profile) {
+      const token = (await Auth.currentSession()).getIdToken().getJwtToken()
+      await gqlRequest(
+        UPDATE_ORGS_ACTIVITY_QUERY,
+        { profileId: data.profile.id },
+        {
+          token,
+          role: RoleName.USER,
+        }
+      )
+    }
   }, [])
 
   // On initial load, check if user is logged in and load the profile

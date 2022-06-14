@@ -56,7 +56,16 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
     error: searchError,
     mutate,
   } = useSWR<ResponseType, Error, [string, ParamsType] | null>(
-    shouldSearch ? [QUERY, { name: q?.length >= 2 ? `%${q}%` : q }] : null
+    shouldSearch
+      ? [
+          QUERY,
+          {
+            where: {
+              name: { _ilike: q?.length >= 2 ? `%${q}%` : q },
+            },
+          },
+        ]
+      : null
   )
   const loading = !data && !searchError && shouldSearch
 

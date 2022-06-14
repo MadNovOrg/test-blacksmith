@@ -58,14 +58,14 @@ const TTAdminRoutes = () => {
 
       {acl.isTTAdmin() ? (
         <Route path="admin" element={<AdminPage />}>
-          <Route index element={<Navigate replace to="organizations" />} />
+          <Route index element={<Navigate replace to="contacts" />} />
+
+          <Route path="contacts" element={<Contacts />} />
 
           <Route path="organizations">
             <Route index element={<Organizations />} />
             <Route path="new" element={<CreateOrganization />} />
           </Route>
-
-          <Route path="contacts" element={<Contacts />} />
 
           {acl.canViewXeroConnect() ? (
             <Route path="xero">

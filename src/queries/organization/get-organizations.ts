@@ -8,13 +8,17 @@ export type ResponseType = {
 }
 
 export type ParamsType = {
-  name?: string
+  orderBy?: object
+  where?: object
 }
 
 export const QUERY = gql`
   ${ORGANIZATION}
-  query GetOrganizations($name: String) {
-    orgs: organization(where: { name: { _ilike: $name } }) {
+  query GetOrganizations(
+    $orderBy: [organization_order_by!] = { name: asc }
+    $where: organization_bool_exp = {}
+  ) {
+    orgs: organization(where: $where, order_by: $orderBy) {
       ...Organization
     }
   }
