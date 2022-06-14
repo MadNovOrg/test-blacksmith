@@ -23877,6 +23877,8 @@ export type CategorySummaryFragment = { __typename?: 'Category', id: string, nam
 
 export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null };
 
+export type EbookSummaryFragment = { __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+
 export type ResearchSummaryDetailsFragment = { __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
 
 export type WebinarSummaryFragment = { __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null };
@@ -23992,6 +23994,18 @@ export type CategoryQueryVariables = Exact<{
 
 
 export type CategoryQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', category?: { __typename?: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
+
+export type EbooksQueryVariables = Exact<{
+  term?: InputMaybe<Scalars['String']>;
+  orderDirection?: InputMaybe<OrderEnum>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type EbooksQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', ebooks?: { __typename?: 'RootQueryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, description?: string | null, mediaUrl: string, author: string, publishedDate: string, thumbnail: string, episodeNumber: number };
 

@@ -10,6 +10,7 @@ import { MembershipAreaPage } from '@app/pages/MembershipArea'
 import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { Blog } from '@app/pages/MembershipArea/pages/Blog'
 import { Category } from '@app/pages/MembershipArea/pages/Category'
+import { Ebooks } from '@app/pages/MembershipArea/pages/Ebooks'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { Post } from '@app/pages/MembershipArea/pages/Post'
@@ -91,7 +92,9 @@ const TrainerBaseRoutes = () => {
           <Route index element={<VideoSeries />} />
           <Route path=":id" element={<VideoItem />} />
         </Route>
-
+        <Route path="ebooks">
+          <Route index element={<Ebooks />} />
+        </Route>
         <Route path="research-summaries">
           <Route index element={<ResearchSummaries />} />
         </Route>
@@ -100,6 +103,7 @@ const TrainerBaseRoutes = () => {
           <Route path=":id" element={<Webinar />} />
         </Route>
       </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

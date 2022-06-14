@@ -590,6 +590,14 @@
         "recent": "Recent videos in the series",
         "not-found": "Video series item not found"
       },
+      "ebooks": {
+        "featured-label": "New ebook",
+        "title": "Ebooks",
+        "list-title": "All ebooks",
+        "empty": "There are ebooks yet.",
+        "search-placeholder": "Search ebooks",
+        "download-button": "Download resource"
+      },
       "research-summaries": {
         "featured-label": "New summary",
         "title": "Research Summaries",

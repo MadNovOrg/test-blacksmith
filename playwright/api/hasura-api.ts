@@ -20,6 +20,8 @@ import {
   TagQueryVariables,
   CategoryQuery,
   CategoryQueryVariables,
+  EbooksQuery,
+  EbooksQueryVariables,
   ResearchSummariesQuery,
   ResearchSummariesQueryVariables,
   WebinarsQuery,
@@ -29,6 +31,7 @@ import {
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
+import EBOOKS_QUERY from '@app/queries/membership/ebooks'
 import PODCAST_QUERY from '@app/queries/membership/podcast'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 import POST_QUERY from '@app/queries/membership/post'
@@ -511,6 +514,21 @@ export async function getCategoryById(id: string) {
   }
 
   return null
+}
+
+export async function getEbooks(first = 1000) {
+  const client = getClient()
+
+  const response = await client.request<EbooksQuery, EbooksQueryVariables>(
+    EBOOKS_QUERY,
+    { first }
+  )
+
+  if (response.content?.ebooks?.nodes?.length) {
+    return response.content.ebooks.nodes
+  }
+
+  return []
 }
 
 export async function getResearchSummaries(first = 1000) {

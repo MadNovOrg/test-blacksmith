@@ -8,6 +8,7 @@ import { add, sub } from 'date-fns'
 
 import {
   CategorySummaryFragment,
+  EbookSummaryFragment,
   Podcast,
   PostSummaryFragment,
   ResearchSummaryDetailsFragment,
@@ -374,6 +375,25 @@ export const buildPost = build<PostSummaryFragment>({
       },
     },
     tags: [buildTag(), buildTag()],
+    date: fake(f => f.date.past().toISOString()),
+  },
+})
+
+export const buildEbook = build<EbookSummaryFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    title: fake(f => f.random.words()),
+    excerpt: fake(f => f.lorem.sentences()),
+    featuredImage: {
+      node: {
+        mediaItemUrl: fake(f => f.random.image()),
+      },
+    },
+    downloads: {
+      researchSummaryFile: {
+        mediaItemUrl: fake(f => f.internet.url()),
+      },
+    },
     date: fake(f => f.date.past().toISOString()),
   },
 })
