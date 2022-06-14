@@ -12,7 +12,7 @@ import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 import { Podcast } from '.'
 
 describe('page: Podcast', () => {
-  it('displays a spinner while loading the podcast', () => {
+  it('displays skeleton while loading the podcast', () => {
     const PODCAST_ID = 'podcast-id'
 
     const client = {
@@ -29,7 +29,10 @@ describe('page: Podcast', () => {
       </Provider>
     )
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('title-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('description-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('recent-podcasts-skeleton')).toBeInTheDocument()
   })
 
   it('displays a message when podcast is not found', () => {

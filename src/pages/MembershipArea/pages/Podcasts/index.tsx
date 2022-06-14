@@ -1,11 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
@@ -21,8 +14,9 @@ import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 
 import { ArrowPagination } from '../../components/ArrowPagination'
 import { BlogPostItem } from '../../components/BlogPostItem'
+import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
-import { SplitPost } from '../../components/SplitPost'
+import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
@@ -94,14 +88,8 @@ export const Podcasts: React.FC = () => {
         <Typography>{t('pages.membership.podcasts.empty')}</Typography>
       ) : null}
 
-      {fetching && !featuredPodcast ? (
-        <Stack alignItems="center" justifyContent="center">
-          <CircularProgress />
-        </Stack>
-      ) : null}
-
-      {featuredPodcast && (
-        <Box mb={8}>
+      <Box mb={8}>
+        {featuredPodcast ? (
           <SplitPost
             id={featuredPodcast.id}
             title={featuredPodcast.name}
@@ -115,23 +103,26 @@ export const Podcasts: React.FC = () => {
             linkTo={`./${featuredPodcast.id}`}
             data-testid="featured-podcast"
           />
-        </Box>
-      )}
+        ) : fetching ? (
+          <SplitPostSkeleton data-testid="featured-podcast-skeleton" />
+        ) : null}
+      </Box>
 
-      {allPodcasts && data?.podcasts?.total && (
+      <Typography mb={3} variant="h3" color="primary">
+        {t('pages.membership.podcasts.list-title')}
+      </Typography>
+      <Box display="flex" justifyContent="space-between" mb={5}>
+        <FilterSearch
+          onChange={value => setSearchTerm(value)}
+          placeholder={t('pages.membership.podcasts.search-placeholder')}
+          value={searchTerm}
+          InputProps={{ disableUnderline: true }}
+        />
+        <OrderMenu onChange={handleDirectionChange} />
+      </Box>
+
+      {allPodcasts && data?.podcasts?.total && !fetching ? (
         <>
-          <Typography mb={3} variant="h3" color="primary">
-            {t('pages.membership.podcasts.list-title')}
-          </Typography>
-          <Box display="flex" justifyContent="space-between" mb={5}>
-            <FilterSearch
-              onChange={value => setSearchTerm(value)}
-              placeholder={t('pages.membership.podcasts.search-placeholder')}
-              value={searchTerm}
-              InputProps={{ disableUnderline: true }}
-            />
-            <OrderMenu onChange={handleDirectionChange} />
-          </Box>
           <Grid
             container
             rowSpacing={5}
@@ -161,6 +152,10 @@ export const Podcasts: React.FC = () => {
             />
           ) : null}
         </>
+      ) : (
+        <Box data-testid="podcasts-grid-skeleton">
+          <ItemsGridSkeleton />
+        </Box>
       )}
     </Container>
   )

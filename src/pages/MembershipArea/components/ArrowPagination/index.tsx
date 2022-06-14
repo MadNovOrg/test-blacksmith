@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
-import { Box, BoxProps, Typography } from '@mui/material'
+import { Box, BoxProps, IconButton, Typography } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
@@ -39,7 +39,7 @@ export const ArrowPagination: React.FC<Props> = ({
         })}
       </Typography>
       <Box>
-        <ChevronLeft
+        <IconButton
           onClick={() => {
             if (hasPreviousPage) {
               setCurrentPage(currentPage - 1)
@@ -51,8 +51,11 @@ export const ArrowPagination: React.FC<Props> = ({
             cursor: hasPreviousPage ? 'pointer' : 'default',
             color: hasPreviousPage ? 'inherit' : theme.palette.text.disabled,
           }}
-        />
-        <ChevronRight
+        >
+          <ChevronLeft />
+        </IconButton>
+
+        <IconButton
           onClick={() => {
             if (hasNextPage) {
               setCurrentPage(currentPage + 1)
@@ -63,7 +66,9 @@ export const ArrowPagination: React.FC<Props> = ({
             cursor: hasNextPage ? 'pointer' : 'default',
             color: hasNextPage ? 'inherit' : theme.palette.text.disabled,
           }}
-        />
+        >
+          <ChevronRight />
+        </IconButton>
       </Box>
     </Box>
   )

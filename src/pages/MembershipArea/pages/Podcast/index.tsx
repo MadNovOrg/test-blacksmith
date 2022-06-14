@@ -1,11 +1,10 @@
 import {
   Alert,
   Box,
-  CircularProgress,
   Container,
   Grid,
   Link,
-  Stack,
+  Skeleton,
   Typography,
 } from '@mui/material'
 import React, { useEffect } from 'react'
@@ -18,6 +17,7 @@ import QUERY from '@app/queries/membership/podcast'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
+import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { PodcastPlayer } from '../../components/PodcastPlayer'
 
 export const Podcast: React.FC = () => {
@@ -40,12 +40,6 @@ export const Podcast: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 8 }}>
-      {fetching ? (
-        <Stack alignItems="center" justifyContent="center">
-          <CircularProgress />
-        </Stack>
-      ) : null}
-
       {error ? (
         <Alert severity="error">
           {t('pages.membership.podcasts.error-loading-podcast')}
@@ -58,39 +52,78 @@ export const Podcast: React.FC = () => {
         </Alert>
       ) : null}
 
-      {data?.podcast?.podcast && !fetching ? (
-        <Box mb={6}>
-          <Box width="50%" mb={2}>
-            <Typography variant="body2" fontWeight={600} mb={3}>
+      <Box mb={6}>
+        <Box width="50%" mb={2}>
+          <Typography variant="body2" fontWeight={600} mb={3}>
+            {fetching ? (
+              <Skeleton
+                width={100}
+                data-testid="back-nav-skeleton"
+                component="span"
+              />
+            ) : (
               <Link href="../">{t('pages.membership.podcasts.title')}</Link>
-            </Typography>
-            <Typography
-              variant="h1"
-              color="primary"
-              mb={3}
-              data-testid="podcast-title"
-            >
-              {data.podcast.podcast.name}
-            </Typography>
-            <Typography
-              mb={2}
-              lineHeight={2}
-              color={theme.palette.text.secondary}
-            >
-              {data.podcast.podcast.description}
-            </Typography>
-            <Typography variant="body2" mb={2}>
-              {t('pages.membership.common.author', {
+            )}
+          </Typography>
+          <Typography
+            variant="h1"
+            color="primary"
+            mb={3}
+            data-testid="podcast-title"
+          >
+            {fetching ? (
+              <Box data-testid="title-skeleton" component="span">
+                <Skeleton component="span" />
+                <Skeleton component="span" />
+              </Box>
+            ) : data?.podcast?.podcast?.name ? (
+              data?.podcast?.podcast?.name
+            ) : null}
+          </Typography>
+          <Typography
+            mb={2}
+            lineHeight={2}
+            color={theme.palette.text.secondary}
+          >
+            {fetching ? (
+              <Box data-testid="description-skeleton" component="span">
+                <Skeleton component="span" />
+                <Skeleton component="span" />
+                <Skeleton component="span" />
+              </Box>
+            ) : data?.podcast?.podcast?.description ? (
+              data.podcast.podcast.description
+            ) : null}
+          </Typography>
+          <Typography variant="body2" mb={2}>
+            {fetching ? (
+              <Skeleton component="span" width={100} />
+            ) : data?.podcast?.podcast?.author ? (
+              t('pages.membership.common.author', {
                 author: data.podcast.podcast.author,
-              })}
-            </Typography>
-            <Typography variant="body2">
-              {t('dates.default', {
+              })
+            ) : null}
+          </Typography>
+          <Typography variant="body2">
+            {fetching ? (
+              <Skeleton component="span" width={100} />
+            ) : data?.podcast?.podcast?.publishedDate ? (
+              t('dates.default', {
                 date: new Date(data.podcast.podcast.publishedDate),
-              })}
-            </Typography>
-          </Box>
+              })
+            ) : null}
+          </Typography>
+        </Box>
 
+        {fetching ? (
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            data-testid="podcast-player-skeleton"
+          >
+            <div style={{ paddingTop: 120 }} />
+          </Skeleton>
+        ) : data?.podcast?.podcast ? (
           <PodcastPlayer
             author={data.podcast.podcast.author}
             mediaUrl={data.podcast.podcast.mediaUrl}
@@ -99,8 +132,8 @@ export const Podcast: React.FC = () => {
               number: data.podcast.podcast.episodeNumber,
             })}
           />
-        </Box>
-      ) : null}
+        ) : null}
+      </Box>
 
       {data?.podcast?.podcast &&
       data?.recentPodcasts?.records.length &&
@@ -131,7 +164,15 @@ export const Podcast: React.FC = () => {
             ))}
           </Grid>
         </Box>
-      ) : null}
+      ) : (
+        <>
+          <Typography variant="h3" mb={3}>
+            <Skeleton width={200} component="span" />
+          </Typography>
+
+          <ItemsGridSkeleton data-testid="recent-podcasts-skeleton" />
+        </>
+      )}
     </Container>
   )
 }

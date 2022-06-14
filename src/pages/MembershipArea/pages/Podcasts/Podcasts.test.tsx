@@ -16,7 +16,7 @@ import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 import { PER_PAGE, Podcasts } from '.'
 
 describe('page: Podcasts', () => {
-  it('displays a spinner while loading podcasts', () => {
+  it('displays skeleton while loading podcasts', () => {
     const client = {
       executeQuery: () => never,
     }
@@ -29,7 +29,8 @@ describe('page: Podcasts', () => {
       </Provider>
     )
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument()
+    expect(screen.getByTestId('featured-podcast-skeleton')).toBeInTheDocument()
+    expect(screen.getByTestId('podcasts-grid-skeleton')).toBeInTheDocument()
   })
 
   it('displays a message if there are no podcasts', () => {
