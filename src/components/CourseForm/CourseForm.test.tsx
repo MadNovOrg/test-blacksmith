@@ -30,13 +30,34 @@ jest.mock('@app/hooks/useZoomMeetingLink')
 const VenueSelectorMocked = jest.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingUrl)
 
+const ZOOM_MOCKED_URL =
+  'https://us99web.zoom.us/j/999999999999?pwd=mockedP4ssw0rD'
+const zoomGenerateLink = jest.mocked(() => {
+  useZoomMeetingUrlMocked.mockReturnValue({
+    meetingUrl: ZOOM_MOCKED_URL,
+    status: LoadingStatus.SUCCESS,
+    generateLink: zoomGenerateLink,
+  })
+})
+
+// Test cases
+// Format: [<Course type>, <Whether or not zoom link should be generated>]
+const zoomMeetingUrlCases: [CourseType, boolean][] = [
+  [CourseType.OPEN, true],
+  [CourseType.CLOSED, true],
+  [CourseType.INDIRECT, false],
+]
+
 describe('component: CourseForm', () => {
   beforeAll(() => {
     VenueSelectorMocked.mockImplementation(() => <p>venue selector mock</p>)
+  })
+
+  beforeEach(() => {
     useZoomMeetingUrlMocked.mockReturnValue({
       meetingUrl: '',
-      status: LoadingStatus.SUCCESS,
-      generateLink: jest.fn(),
+      status: LoadingStatus.IDLE,
+      generateLink: zoomGenerateLink,
     })
   })
 
@@ -140,6 +161,38 @@ describe('component: CourseForm', () => {
     expect(screen.queryByText('Venue selector')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
   })
+
+  it.each(zoomMeetingUrlCases)(
+    'ONLY auto fills zoom meeting url field for OPEN and CLOSED course types',
+    async (type, result) => {
+      VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
+
+      await waitFor(() => {
+        render(<CourseForm type={type} />)
+      })
+
+      await waitFor(() => {
+        userEvent.click(screen.getByLabelText('Virtual'))
+      })
+
+      let input
+      try {
+        input = await screen.findByDisplayValue<HTMLInputElement>(
+          ZOOM_MOCKED_URL,
+          {},
+          { timeout: 3000 }
+        )
+      } catch (_) {
+        input = null
+      }
+
+      if (result) {
+        expect(input).toBeInTheDocument()
+      } else {
+        expect(input).toBe(null)
+      }
+    }
+  )
 
   it('validates that end date must be after start date', async () => {
     // renders MUI datepicker in desktop mode

@@ -299,10 +299,14 @@ const CourseForm: React.FC<Props> = ({
   }, [deliveryType, trigger])
 
   useEffect(() => {
-    if (hasZoomMeetingUrl && !courseInput?.zoomMeetingUrl) {
+    if (
+      hasZoomMeetingUrl &&
+      !courseInput?.zoomMeetingUrl &&
+      type !== CourseType.INDIRECT
+    ) {
       generateZoomLink()
     }
-  }, [hasZoomMeetingUrl, generateZoomLink, courseInput])
+  }, [hasZoomMeetingUrl, generateZoomLink, courseInput, type])
 
   const errors = formState.errors
 
