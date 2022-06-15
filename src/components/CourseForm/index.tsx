@@ -26,12 +26,7 @@ import { FormPanel } from '@app/components/FormPanel'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
-import {
-  CourseDeliveryType,
-  CourseLevel,
-  CourseType,
-  CourseInput,
-} from '@app/types'
+import { CourseDeliveryType, CourseType, CourseInput } from '@app/types'
 import {
   INPUT_DATE_FORMAT,
   DATE_MASK,
@@ -45,6 +40,13 @@ import { ProfileSelector } from '../ProfileSelector'
 import { VenueSelector } from '../VenueSelector'
 
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
+import {
+  canBeBlended,
+  canBeReacc,
+  canBeF2F,
+  canBeVirtual,
+  canBeMixed,
+} from './helpers'
 
 interface Props {
   type?: CourseType
@@ -54,7 +56,7 @@ interface Props {
 
 const CourseForm: React.FC<Props> = ({
   onChange = noop,
-  type = CourseType.OPEN,
+  type: courseType = CourseType.OPEN,
   courseInput,
 }) => {
   const { t } = useTranslation()
@@ -66,26 +68,15 @@ const CourseForm: React.FC<Props> = ({
     courseInput?.endDateTime ? new Date(courseInput.endDateTime) : null
   )
 
-  const hasOrganizationField = [
-    CourseType.CLOSED,
-    CourseType.INDIRECT,
-  ].includes(type)
-  const hasContactProfileField = type === CourseType.CLOSED
-  const hasMinParticipantField = type === CourseType.OPEN
+  const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
+  const hasContact = courseType === CourseType.CLOSED
+  const hasMinParticipants = courseType === CourseType.OPEN
 
   const schema = useMemo(
     () =>
       yup.object({
-        ...(hasOrganizationField
-          ? {
-              organization: yup.object().required(),
-            }
-          : null),
-        ...(hasContactProfileField
-          ? {
-              contactProfile: yup.object().required(),
-            }
-          : null),
+        ...(hasOrg ? { organization: yup.object().required() } : null),
+        ...(hasContact ? { contactProfile: yup.object().required() } : null),
         courseLevel: yup
           .string()
           .required(t('components.course-form.course-level-required')),
@@ -132,7 +123,7 @@ const CourseForm: React.FC<Props> = ({
             yup.ref('startDateTime'),
             t('components.course-form.end-date-before-start-date')
           ),
-        ...(hasMinParticipantField
+        ...(hasMinParticipants
           ? {
               minParticipants: yup
                 .number()
@@ -163,7 +154,7 @@ const CourseForm: React.FC<Props> = ({
           }),
       }),
 
-    [t, hasOrganizationField, hasContactProfileField, hasMinParticipantField]
+    [t, hasOrg, hasContact, hasMinParticipants]
   )
 
   const {
@@ -200,36 +191,47 @@ const CourseForm: React.FC<Props> = ({
     },
   })
 
-  const formValues = watch()
-
-  const {
-    meetingUrl: zoomMeetingUrl,
-    generateLink: generateZoomLink,
-    status: zoomLinkStatus,
-  } = useZoomMeetingLink(formValues.startDateTime ?? undefined)
-
-  const deliveryType = formValues.deliveryType
-  const courseLevel = formValues.courseLevel
-  const usesAOL = type === CourseType.INDIRECT ? formValues.usesAOL : false
-
-  const hasZoomMeetingUrl = [
-    CourseDeliveryType.VIRTUAL,
-    CourseDeliveryType.MIXED,
-  ].includes(deliveryType)
-
-  useEffect(() => {
-    onChange(
-      formValues,
-      formState.isValid && Boolean(startTime) && Boolean(endTime)
-    )
-  }, [formState, getValues, onChange, formValues, startTime, endTime])
+  const errors = formState.errors
+  const values = watch()
+  const deliveryType = values.deliveryType
+  const courseLevel = values.courseLevel
+  const isBlended = values.blendedLearning
+  const canBlended = canBeBlended(courseType, courseLevel, deliveryType)
+  const canReacc = canBeReacc(courseType, courseLevel, deliveryType, isBlended)
+  const canF2F = canBeF2F(courseType, courseLevel)
+  const canVirtual = canBeVirtual(courseType, courseLevel)
+  const canMixed = canBeMixed(courseType, courseLevel)
+  const hasVenue = [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
+    deliveryType
+  )
+  const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
+  const isValid = formState.isValid && Boolean(startTime) && Boolean(endTime)
 
   useEffect(() => {
-    if (!courseInput?.zoomMeetingUrl) {
-      setValue('zoomMeetingUrl', zoomMeetingUrl)
-      trigger('zoomMeetingUrl')
-    }
-  }, [zoomMeetingUrl, setValue, trigger, courseInput])
+    onChange(values, isValid)
+  }, [onChange, values, isValid])
+
+  useEffect(() => {
+    const mustChange = !canBlended && values.blendedLearning
+    mustChange && setValue('blendedLearning', false)
+  }, [canBlended, setValue, values.blendedLearning])
+
+  useEffect(() => {
+    const mustChange = !canReacc && values.reaccreditation
+    mustChange && setValue('reaccreditation', false)
+  }, [canReacc, setValue, values.reaccreditation])
+
+  useEffect(() => {
+    const isVirtual = values.deliveryType === CourseDeliveryType.VIRTUAL
+    const mustChange = !canVirtual && isVirtual
+    mustChange && setValue('deliveryType', CourseDeliveryType.F2F)
+  }, [canVirtual, setValue, values.deliveryType])
+
+  useEffect(() => {
+    const isMixed = values.deliveryType === CourseDeliveryType.MIXED
+    const mustChange = !canMixed && isMixed
+    mustChange && setValue('deliveryType', CourseDeliveryType.F2F)
+  }, [canMixed, setValue, values.deliveryType])
 
   useEffect(() => {
     const startDate = getValues('startDateTime')
@@ -292,6 +294,24 @@ const CourseForm: React.FC<Props> = ({
     setValue('endDateTime', dateToSet, { shouldValidate: true })
   }
 
+  const hasZoomMeetingUrl = [
+    CourseDeliveryType.VIRTUAL,
+    CourseDeliveryType.MIXED,
+  ].includes(deliveryType)
+
+  const {
+    meetingUrl: zoomMeetingUrl,
+    generateLink: generateZoomLink,
+    status: zoomLinkStatus,
+  } = useZoomMeetingLink(values.startDateTime ?? undefined)
+
+  useEffect(() => {
+    if (!courseInput?.zoomMeetingUrl) {
+      setValue('zoomMeetingUrl', zoomMeetingUrl)
+      trigger('zoomMeetingUrl')
+    }
+  }, [zoomMeetingUrl, setValue, trigger, courseInput])
+
   useEffect(() => {
     if (deliveryType === CourseDeliveryType.VIRTUAL) {
       trigger('zoomMeetingUrl')
@@ -302,13 +322,11 @@ const CourseForm: React.FC<Props> = ({
     if (
       hasZoomMeetingUrl &&
       !courseInput?.zoomMeetingUrl &&
-      type !== CourseType.INDIRECT
+      courseType !== CourseType.INDIRECT
     ) {
       generateZoomLink()
     }
-  }, [hasZoomMeetingUrl, generateZoomLink, courseInput, type])
-
-  const errors = formState.errors
+  }, [hasZoomMeetingUrl, generateZoomLink, courseInput, courseType])
 
   return (
     <form>
@@ -316,13 +334,13 @@ const CourseForm: React.FC<Props> = ({
         {t('components.course-form.general-details-title')}
       </Typography>
       <FormPanel mb={2}>
-        {hasOrganizationField ? (
+        {hasOrg ? (
           <>
             <Typography mb={2} fontWeight={600}>
               {t('components.course-form.organization-label')}
             </Typography>
             <OrgSelector
-              value={formValues.organization ?? undefined}
+              value={values.organization ?? undefined}
               onChange={org => {
                 setValue('organization', org, { shouldValidate: true })
               }}
@@ -331,14 +349,15 @@ const CourseForm: React.FC<Props> = ({
             />
           </>
         ) : null}
-        {hasContactProfileField ? (
+
+        {hasContact ? (
           <>
             <Typography mb={2} fontWeight={600}>
               {t('components.course-form.contact-person-label')}
             </Typography>
 
             <ProfileSelector
-              value={formValues.contactProfile ?? undefined}
+              value={values.contactProfile ?? undefined}
               orgId={getValues('organization')?.id ?? undefined}
               onChange={profile => {
                 setValue('contactProfile', profile ?? null, {
@@ -346,9 +365,7 @@ const CourseForm: React.FC<Props> = ({
                 })
               }}
               sx={{ marginBottom: 2 }}
-              textFieldProps={{
-                variant: 'filled',
-              }}
+              textFieldProps={{ variant: 'filled' }}
               disabled={!getValues('organization')}
               placeholder={t(
                 'components.course-form.contact-person-placeholder'
@@ -360,13 +377,7 @@ const CourseForm: React.FC<Props> = ({
         <Typography mb={2} fontWeight={600}>
           {t('components.course-form.course-level-section-title')}
         </Typography>
-        <FormControl
-          variant="filled"
-          sx={{
-            marginBottom: theme.spacing(2),
-          }}
-          fullWidth
-        >
+        <FormControl variant="filled" sx={{ mb: theme.spacing(2) }} fullWidth>
           <InputLabel>
             {t('components.course-form.course-level-placeholder')}
           </InputLabel>
@@ -377,8 +388,7 @@ const CourseForm: React.FC<Props> = ({
               <CourseLevelDropdown
                 value={field.value}
                 onChange={field.onChange}
-                deliveryType={deliveryType}
-                courseType={CourseType.CLOSED}
+                courseType={courseType}
               />
             )}
           />
@@ -386,22 +396,16 @@ const CourseForm: React.FC<Props> = ({
             <FormHelperText error>{errors.courseLevel.message}</FormHelperText>
           ) : null}
         </FormControl>
+
         <Controller
           name="blendedLearning"
           control={control}
           render={({ field }) => (
             <FormControlLabel
-              sx={{ marginRight: theme.spacing(5) }}
-              control={
-                <Switch
-                  {...field}
-                  checked={formValues.blendedLearning}
-                  disabled={courseLevel === CourseLevel.ADVANCED}
-                />
-              }
-              label={
-                t('components.course-form.blended-learning-label') as string
-              }
+              sx={{ mr: theme.spacing(5) }}
+              disabled={!canBlended}
+              control={<Switch {...field} checked={values.blendedLearning} />}
+              label={t('components.course-form.blended-learning-label')}
             />
           )}
         />
@@ -411,12 +415,9 @@ const CourseForm: React.FC<Props> = ({
           control={control}
           render={({ field }) => (
             <FormControlLabel
-              control={
-                <Switch {...field} checked={formValues.reaccreditation} />
-              }
-              label={
-                t('components.course-form.reaccreditation-label') as string
-              }
+              disabled={!canReacc}
+              control={<Switch {...field} checked={values.reaccreditation} />}
+              label={t('components.course-form.reaccreditation-label')}
             />
           )}
         />
@@ -432,49 +433,36 @@ const CourseForm: React.FC<Props> = ({
             value={deliveryType}
             onChange={e => {
               setValue('deliveryType', e.target.value as CourseDeliveryType)
-
               resetField('venue')
             }}
           >
             <FormControlLabel
               value={CourseDeliveryType.F2F}
-              control={<Radio />}
-              label={t('components.course-form.f2f-option-label') as string}
+              control={<Radio disabled={!canF2F} />}
+              label={t('components.course-form.f2f-option-label')}
+              data-testid={`delivery-${CourseDeliveryType.F2F}`}
             />
             <FormControlLabel
               value={CourseDeliveryType.VIRTUAL}
-              control={
-                <Radio
-                  disabled={
-                    courseLevel === CourseLevel.ADVANCED ||
-                    courseLevel === CourseLevel.LEVEL_2
-                  }
-                />
-              }
-              label={t('components.course-form.virtual-option-label') as string}
+              control={<Radio disabled={!canVirtual} />}
+              label={t('components.course-form.virtual-option-label')}
+              data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
             />
             <FormControlLabel
               value={CourseDeliveryType.MIXED}
-              control={
-                <Radio disabled={courseLevel === CourseLevel.ADVANCED} />
-              }
-              label={t('components.course-form.mixed-option-label') as string}
+              control={<Radio disabled={!canMixed} />}
+              label={t('components.course-form.mixed-option-label')}
+              data-testid={`delivery-${CourseDeliveryType.MIXED}`}
             />
           </RadioGroup>
         </FormControl>
 
-        {[CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
-          deliveryType
-        ) ? (
-          <>
-            <VenueSelector
-              onChange={venue => {
-                setValue('venue', venue ?? null)
-              }}
-              value={formValues.venue ?? undefined}
-              textFieldProps={{ variant: 'filled' }}
-            />
-          </>
+        {hasVenue ? (
+          <VenueSelector
+            onChange={venue => setValue('venue', venue ?? null)}
+            value={values.venue ?? undefined}
+            textFieldProps={{ variant: 'filled' }}
+          />
         ) : null}
 
         {hasZoomMeetingUrl ? (
@@ -482,7 +470,7 @@ const CourseForm: React.FC<Props> = ({
             fullWidth
             variant="filled"
             {...register('zoomMeetingUrl')}
-            InputLabelProps={{ shrink: formValues.zoomMeetingUrl !== '' }}
+            InputLabelProps={{ shrink: values.zoomMeetingUrl !== '' }}
             helperText={
               zoomLinkStatus === LoadingStatus.ERROR
                 ? errors.zoomMeetingUrl?.message
@@ -493,7 +481,7 @@ const CourseForm: React.FC<Props> = ({
                 zoomLinkStatus === LoadingStatus.ERROR
             )}
             sx={{ marginTop: 2 }}
-            label={t('components.course-form.zoom-meeting-url-label') as string}
+            label={t('components.course-form.zoom-meeting-url-label')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="start">
@@ -612,7 +600,7 @@ const CourseForm: React.FC<Props> = ({
           </Grid>
         </LocalizationProvider>
 
-        {type === CourseType.INDIRECT ? (
+        {courseType === CourseType.INDIRECT ? (
           <>
             <Typography mt={2} fontWeight={600}>
               {t('components.course-form.aol-title')}
@@ -631,7 +619,7 @@ const CourseForm: React.FC<Props> = ({
                   checked={usesAOL}
                 />
               }
-              label={t('components.course-form.aol-label') as string}
+              label={t('components.course-form.aol-label')}
             />
 
             {usesAOL ? (
@@ -664,7 +652,7 @@ const CourseForm: React.FC<Props> = ({
         </Typography>
 
         <Grid container spacing={2}>
-          {hasMinParticipantField ? (
+          {hasMinParticipants ? (
             <Grid item xs={6}>
               <TextField
                 label={t('components.course-form.min-attendees-placeholder')}
@@ -684,16 +672,14 @@ const CourseForm: React.FC<Props> = ({
             <TextField
               id="filled-basic"
               label={t(
-                type === CourseType.OPEN
+                courseType === CourseType.OPEN
                   ? 'components.course-form.max-attendees-placeholder'
                   : 'components.course-form.num-attendees-placeholder'
               )}
               variant="filled"
               fullWidth
               type="number"
-              {...register('maxParticipants', {
-                deps: ['minParticipants'],
-              })}
+              {...register('maxParticipants', { deps: ['minParticipants'] })}
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}

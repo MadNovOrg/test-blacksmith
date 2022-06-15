@@ -2,171 +2,60 @@ import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 
-import useZoomMeetingUrl from '@app/hooks/useZoomMeetingLink'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
-import {
-  courseToCourseInput,
-  INPUT_DATE_FORMAT,
-  LoadingStatus,
-} from '@app/util'
+import { CourseDeliveryType, CourseType } from '@app/types'
+import { courseToCourseInput, INPUT_DATE_FORMAT } from '@app/util'
 
-import { render, screen, userEvent, within, waitFor } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
-import { VenueSelector } from '../VenueSelector'
+import { ZOOM_MOCKED_URL } from './test-helpers'
 
 import CourseForm from '.'
 
-jest.mock('@app/components/OrgSelector', () => ({
-  OrgSelector: jest.fn().mockReturnValue(<div>Org Selector</div>),
-}))
-
-jest.mock('../VenueSelector', () => ({
-  VenueSelector: jest.fn(),
-}))
-
-jest.mock('@app/hooks/useZoomMeetingLink')
-
-const VenueSelectorMocked = jest.mocked(VenueSelector)
-const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingUrl)
-
-const ZOOM_MOCKED_URL =
-  'https://us99web.zoom.us/j/999999999999?pwd=mockedP4ssw0rD'
-const zoomGenerateLink = jest.mocked(() => {
-  useZoomMeetingUrlMocked.mockReturnValue({
-    meetingUrl: ZOOM_MOCKED_URL,
-    status: LoadingStatus.SUCCESS,
-    generateLink: zoomGenerateLink,
-  })
-})
-
-// Test cases
-// Format: [<Course type>, <Whether or not zoom link should be generated>]
-const zoomMeetingUrlCases: [CourseType, boolean][] = [
-  [CourseType.OPEN, true],
-  [CourseType.CLOSED, true],
-  [CourseType.INDIRECT, false],
-]
-
 describe('component: CourseForm', () => {
-  beforeAll(() => {
-    VenueSelectorMocked.mockImplementation(() => <p>venue selector mock</p>)
-  })
-
-  beforeEach(() => {
-    useZoomMeetingUrlMocked.mockReturnValue({
-      meetingUrl: '',
-      status: LoadingStatus.IDLE,
-      generateLink: zoomGenerateLink,
-    })
-  })
-
-  it('allows LEVEL 1 course to be of any delivery type', async () => {
-    await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
-    })
-
-    const select = screen.getByTestId('course-level-select')
-
-    userEvent.click(within(select).getByRole('button'))
-
-    await waitFor(() => {
-      userEvent.click(
-        screen.getByTestId(`course-level-option-${CourseLevel.LEVEL_1}`)
-      )
-    })
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeEnabled()
-    expect(screen.getByLabelText('Both')).toBeEnabled()
-  })
-
-  it('limits LEVEL 2 course to be either F2F or MIXED type', async () => {
-    await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
-    })
-
-    const select = screen.getByTestId('course-level-select')
-
-    userEvent.click(within(select).getByRole('button'))
-
-    await waitFor(() => {
-      userEvent.click(
-        screen.getByTestId(`course-level-option-${CourseLevel.LEVEL_2}`)
-      )
-    })
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeEnabled()
-  })
-
-  it('limits ADVANCED course to only be F2F type', async () => {
-    await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
-    })
-
-    const select = screen.getByTestId('course-level-select')
-
-    userEvent.click(within(select).getByRole('button'))
-
-    await waitFor(() => {
-      userEvent.click(
-        screen.getByTestId(`course-level-option-${CourseLevel.ADVANCED}`)
-      )
-    })
-
-    expect(screen.getByLabelText('Face to face')).toBeEnabled()
-    expect(screen.getByLabelText('Virtual')).toBeDisabled()
-    expect(screen.getByLabelText('Both')).toBeDisabled()
-  })
-
   it('displays venue selector if F2F delivery type', async () => {
-    VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
-
     await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
+      render(<CourseForm type={CourseType.CLOSED} />)
     })
 
     userEvent.click(screen.getByLabelText('Face to face'))
 
-    expect(screen.getByText('Venue selector')).toBeInTheDocument()
+    expect(screen.getByText('Venue Selector')).toBeInTheDocument()
     expect(screen.queryByLabelText('Zoom meeting url')).not.toBeInTheDocument()
   })
 
-  it('displays venue selector and zoom meeting field if MIXED delivery type', async () => {
-    VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
-
-    await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
-    })
-
-    userEvent.click(screen.getByLabelText('Both'))
-
-    expect(screen.getByText('Venue selector')).toBeInTheDocument()
-    expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
-  })
-
   it('displays zoom meeting url field if VIRTUAL delivery type', async () => {
-    VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
-
     await waitFor(() => {
-      render(<CourseForm type={CourseType.OPEN} />)
+      render(<CourseForm type={CourseType.CLOSED} />)
     })
 
     await waitFor(() => {
       userEvent.click(screen.getByLabelText('Virtual'))
     })
 
-    expect(screen.queryByText('Venue selector')).not.toBeInTheDocument()
+    expect(screen.queryByText('Venue Selector')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
   })
 
-  it.each(zoomMeetingUrlCases)(
+  it('displays venue selector and zoom meeting field if MIXED delivery type', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />)
+    })
+
+    userEvent.click(screen.getByLabelText('Both'))
+
+    expect(screen.getByText('Venue Selector')).toBeInTheDocument()
+    expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
+  })
+
+  it.each([
+    // Format: [<CourseType>, <ShouldGenerateLink?>]
+    [CourseType.OPEN, true],
+    [CourseType.CLOSED, true],
+    [CourseType.INDIRECT, false],
+  ])(
     'ONLY auto fills zoom meeting url field for OPEN and CLOSED course types',
     async (type, result) => {
-      VenueSelectorMocked.mockImplementation(() => <p>Venue selector</p>)
-
       await waitFor(() => {
         render(<CourseForm type={type} />)
       })
@@ -195,10 +84,7 @@ describe('component: CourseForm', () => {
   )
 
   it('validates that end date must be after start date', async () => {
-    // renders MUI datepicker in desktop mode
-    setMedia({
-      pointer: 'fine',
-    })
+    setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
 
     await waitFor(() => {
       render(<CourseForm type={CourseType.OPEN} />)
@@ -268,48 +154,34 @@ describe('component: CourseForm', () => {
   })
 
   it('displays course values if passed as prop', async () => {
-    const course = {
-      ...buildCourse(),
-      go1Integration: true,
-      reaccreditation: true,
-      deliveryType: CourseDeliveryType.MIXED,
-      aolCostOfCourse: 2000,
-      schedule: [
-        buildCourseSchedule({ overrides: { virtualLink: 'zoom-meeting' } }),
-      ],
-    }
+    const type = CourseType.OPEN
+    const course = buildCourse({ overrides: { type } })
+    const [schedule] = course.schedule
 
     await waitFor(() => {
       render(
-        <CourseForm
-          courseInput={courseToCourseInput(course)}
-          type={CourseType.INDIRECT}
-        />
+        <CourseForm courseInput={courseToCourseInput(course)} type={type} />
       )
     })
 
-    expect(screen.getByDisplayValue(course.level)).toBeInTheDocument()
-    expect(screen.getByLabelText('Go1: Blended learning')).toBeChecked()
-    expect(screen.getByLabelText('Reaccreditation')).toBeChecked()
-    expect(screen.getByLabelText('Both')).toBeChecked()
-    expect(screen.getByLabelText('Zoom meeting url')).toHaveValue(
-      'zoom-meeting'
-    )
-    expect(screen.getByLabelText('Start date')).toHaveValue(
-      format(new Date(course.schedule[0].start), INPUT_DATE_FORMAT)
-    )
-    expect(screen.getByLabelText('Start time')).toHaveValue(
-      format(new Date(course.schedule[0].start), 'hh:mm aa')
-    )
-    expect(
-      screen.getByLabelText('I will be using an AOL for this course')
-    ).toBeChecked()
-    expect(screen.getByPlaceholderText('Cost of course')).toHaveValue(
-      String(course.aolCostOfCourse)
-    )
-    expect(screen.getByLabelText('Number of attendees')).toHaveValue(
-      course.max_participants
-    )
+    const level = screen.getByTestId('course-level-select')
+    expect(level.querySelector('input')).toHaveValue(course.level)
+
+    expect(screen.getByLabelText('Go1: Blended learning')).not.toBeChecked()
+    expect(screen.getByLabelText('Reaccreditation')).not.toBeChecked()
+    expect(screen.getByLabelText('Face to face')).toBeChecked()
+
+    const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
+    expect(screen.getByLabelText('Start date')).toHaveValue(startDate)
+
+    const startTime = format(new Date(schedule.start), 'hh:mm aa')
+    expect(screen.getByLabelText('Start time')).toHaveValue(startTime)
+
+    const min = screen.getByTestId('min-attendees').querySelector('input')
+    expect(min).toHaveValue(course.min_participants)
+
+    const max = screen.getByTestId('max-attendees').querySelector('input')
+    expect(max).toHaveValue(course.max_participants)
   })
 
   it('makes start time and end time mandatory fields', async () => {
