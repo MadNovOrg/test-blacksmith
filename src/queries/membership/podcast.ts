@@ -1,17 +1,9 @@
 import { gql } from 'graphql-request'
 
-export default gql`
-  fragment PodcastSummary on Podcast {
-    id
-    name
-    description
-    mediaUrl
-    author
-    publishedDate
-    thumbnail
-    episodeNumber
-  }
+import { PodcastSummary } from '../fragments'
 
+export default gql`
+  ${PodcastSummary}
   query Podcast($id: ID!) {
     podcast(id: $id) {
       podcast {

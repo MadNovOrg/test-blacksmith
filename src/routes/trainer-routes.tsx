@@ -7,10 +7,10 @@ import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainer
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { EditCourse } from '@app/pages/EditCourse'
 import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { MembershipDetailsPage } from '@app/pages/MembershipArea/MemberShipDetails'
 import { Blog } from '@app/pages/MembershipArea/pages/Blog'
 import { Category } from '@app/pages/MembershipArea/pages/Category'
 import { Ebooks } from '@app/pages/MembershipArea/pages/Ebooks'
+import { Home } from '@app/pages/MembershipArea/pages/Home'
 import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
 import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
 import { Post } from '@app/pages/MembershipArea/pages/Post'
@@ -76,8 +76,7 @@ const TrainerBaseRoutes = () => {
       </Route>
 
       <Route path="membership" element={<MembershipAreaPage />}>
-        <Route index element={<Navigate replace to="details" />} />
-        <Route path="details" element={<MembershipDetailsPage />} />
+        <Route index element={<Home />} />
         <Route path="blog">
           <Route index element={<Blog />} />
           <Route path=":id" element={<Post />} />

@@ -555,8 +555,10 @@
           "research-summaries": "Research summaries"
         }
       },
-      "details": {
-        "title": "Membership Details"
+      "home": {
+        "title": "Your membership",
+        "error": "There was an error fetching membership content",
+        "recommended-label": "Team Teach recommends"
       },
       "blog": {
         "title": "Blog",

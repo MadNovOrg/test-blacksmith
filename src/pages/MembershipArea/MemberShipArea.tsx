@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import { MembershipHeaderGradient } from '@app/assets'
@@ -10,7 +10,7 @@ import { BrowseByMedia } from './components/BrowseByMedia'
 export function MembershipAreaPage() {
   const location = useLocation()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [location])
 

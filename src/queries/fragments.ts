@@ -233,6 +233,19 @@ export const PostSummary = gql`
   }
 `
 
+export const PodcastSummary = gql`
+  fragment PodcastSummary on Podcast {
+    id
+    name
+    thumbnail
+    publishedDate
+    mediaUrl
+    author
+    description
+    episodeNumber
+  }
+`
+
 export const EbookSummary = gql`
   fragment EbookSummary on Ebook {
     id

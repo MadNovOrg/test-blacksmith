@@ -1,17 +1,13 @@
 import { gql } from 'graphql-request'
 
+import { PodcastSummary } from '../fragments'
+
 export default gql`
+  ${PodcastSummary}
   query Podcasts($input: PodcastsInput!) {
     podcasts(input: $input) {
       records {
-        id
-        name
-        thumbnail
-        publishedDate
-        mediaUrl
-        author
-        description
-        episodeNumber
+        ...PodcastSummary
       }
       total
     }
