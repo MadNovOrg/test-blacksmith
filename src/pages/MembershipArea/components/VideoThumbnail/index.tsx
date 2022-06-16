@@ -10,6 +10,7 @@ import { PostImage } from '../PostImage'
 type Props = {
   duration: number
   imageUrl: string
+  imageSrcSet?: string
   alt: string
   durationPosition?: 'center' | 'bottom-left'
 }
@@ -17,12 +18,13 @@ type Props = {
 export const VideoThumbnail: React.FC<Props> = ({
   duration,
   imageUrl,
+  imageSrcSet,
   alt,
   durationPosition = 'bottom-left',
 }) => {
   return (
     <Box sx={{ position: 'relative' }}>
-      <PostImage src={imageUrl} alt={alt} />
+      <PostImage src={imageUrl} alt={alt} srcSet={imageSrcSet} />
       <Box
         sx={{
           position: 'absolute',

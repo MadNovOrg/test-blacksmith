@@ -70,6 +70,7 @@ export const Ebooks: React.FC = () => {
             id={featuredItem.id}
             title={featuredItem.title ?? ''}
             imageUrl={featuredItem.featuredImage?.node?.mediaItemUrl}
+            imageSrcSet={featuredItem.featuredImage?.node?.srcSet}
             publishedDate={featuredItem.date ?? ''}
             label={t('pages.membership.ebooks.featured-label')}
             description={sanitize(featuredItem.excerpt ?? '', {

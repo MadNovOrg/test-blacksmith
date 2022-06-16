@@ -15,6 +15,7 @@ export type Props = {
   title: string
   description: string
   imageUrl?: string | null
+  imageSrcSet?: string | null
   tags?: Array<{ id: string; name: string }>
   category?: { id: string; name: string }
   publishedDate: string
@@ -26,6 +27,7 @@ export type Props = {
 
 export const BlogPostItem: React.FC<Props> = ({
   imageUrl,
+  imageSrcSet,
   title,
   id,
   description,
@@ -44,10 +46,15 @@ export const BlogPostItem: React.FC<Props> = ({
       <VideoThumbnail
         duration={duration}
         imageUrl={imageUrl ?? ''}
+        imageSrcSet={imageSrcSet ?? undefined}
         alt={title}
       />
     ) : (
-      <PostImage src={imageUrl ?? ''} alt={title} />
+      <PostImage
+        src={imageUrl ?? ''}
+        srcSet={imageSrcSet ?? undefined}
+        alt={title}
+      />
     )
 
   return (

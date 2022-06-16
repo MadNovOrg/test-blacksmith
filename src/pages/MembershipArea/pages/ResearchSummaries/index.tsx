@@ -73,6 +73,7 @@ export const ResearchSummaries: React.FC = () => {
             id={featuredItem.id}
             title={featuredItem.title ?? ''}
             imageUrl={featuredItem.featuredImage?.node?.mediaItemUrl}
+            imageSrcSet={featuredItem.featuredImage?.node?.srcSet}
             publishedDate={featuredItem.date ?? ''}
             label={t('pages.membership.research-summaries.featured-label')}
             description={sanitize(featuredItem.excerpt ?? '', {
@@ -150,6 +151,7 @@ export const ResearchSummaries: React.FC = () => {
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}
+                    imageSrcSet={item.featuredImage?.node?.srcSet}
                     title={item.title ?? ''}
                     publishedDate={item.date ?? ''}
                     description={sanitize(item.excerpt ?? '', {

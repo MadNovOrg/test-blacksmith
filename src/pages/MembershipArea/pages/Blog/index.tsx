@@ -69,6 +69,7 @@ export const Blog: React.FC = () => {
             id={featuredPost.id}
             title={featuredPost.title ?? ''}
             imageUrl={featuredPost.featuredImage?.node?.mediaItemUrl}
+            imageSrcSet={featuredPost.featuredImage?.node?.srcSet}
             publishedDate={featuredPost.date ?? ''}
             label={t('pages.membership.blog.featured-label')}
             description={sanitize(featuredPost.excerpt ?? '', {
@@ -137,6 +138,7 @@ export const Blog: React.FC = () => {
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}
+                    imageSrcSet={item.featuredImage?.node?.srcSet}
                     title={item.title ?? ''}
                     publishedDate={item.date ?? ''}
                     description={sanitize(item.excerpt ?? '', {

@@ -173,6 +173,7 @@ export const VideoItemSummary = gql`
     featuredImage {
       node {
         mediaItemUrl
+        srcSet
       }
     }
     youtube {
@@ -209,6 +210,7 @@ export const PostSummary = gql`
     featuredImage {
       node {
         mediaItemUrl
+        srcSet
       }
     }
     tags {
@@ -240,6 +242,7 @@ export const EbookSummary = gql`
     featuredImage {
       node {
         mediaItemUrl
+        srcSet
       }
     }
     downloads {
@@ -259,6 +262,7 @@ export const ResearchSummaryDetails = gql`
     featuredImage {
       node {
         mediaItemUrl
+        srcSet
       }
     }
     downloads {
@@ -277,6 +281,7 @@ export const WebinarSummary = gql`
     featuredImage {
       node {
         mediaItemUrl
+        srcSet
       }
     }
     youtube {

@@ -72,6 +72,7 @@ export const VideoSeries = () => {
             id={featuredItem.id}
             title={featuredItem.title ?? ''}
             imageUrl={featuredItem.featuredImage?.node?.mediaItemUrl}
+            imageSrcSet={featuredItem.featuredImage?.node?.srcSet}
             publishedDate={featuredItem.date ?? ''}
             label={t('pages.membership.video-series.featured-label')}
             description={sanitize(featuredItem.excerpt ?? '', {
@@ -138,6 +139,7 @@ export const VideoSeries = () => {
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}
+                    imageSrcSet={item.featuredImage?.node?.srcSet}
                     title={item.title ?? ''}
                     publishedDate={item.date ?? ''}
                     description={sanitize(item.excerpt ?? '', {

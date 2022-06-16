@@ -16,6 +16,7 @@ export type Props = {
   description: string
   label: string
   imageUrl?: string | null
+  imageSrcSet?: string | null
   tags?: Array<{ id: string; name: string }>
   category?: { id: string; name: string }
   publishedDate: string
@@ -31,6 +32,7 @@ export const SplitPost: React.FC<Props> = ({
   title,
   label,
   imageUrl,
+  imageSrcSet,
   description,
   tags,
   category,
@@ -52,9 +54,14 @@ export const SplitPost: React.FC<Props> = ({
         imageUrl={imageUrl ?? ''}
         alt={title}
         durationPosition="center"
+        imageSrcSet={imageSrcSet ?? undefined}
       />
     ) : (
-      <PostImage src={imageUrl ?? ''} alt={title} />
+      <PostImage
+        src={imageUrl ?? ''}
+        alt={title}
+        srcSet={imageSrcSet ?? undefined}
+      />
     )
 
   return (

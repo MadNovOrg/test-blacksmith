@@ -168,6 +168,7 @@ export const VideoItem: React.FC = () => {
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}
+                    imageSrcSet={item.featuredImage?.node?.srcSet}
                     title={item.title ?? ''}
                     publishedDate={item.date ?? ''}
                     description={sanitize(item.excerpt ?? '', {
