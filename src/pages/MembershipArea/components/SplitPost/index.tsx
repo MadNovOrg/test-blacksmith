@@ -29,13 +29,14 @@ const SplitPostBox = styled(Box)(({ theme }) => ({
 
 const ThumbnailBox = styled(Box, { shouldForwardProp: () => true })<{
   orientation?: ImageOrientation
-}>(({ theme, orientation }) => ({
+  fluidImageWidth?: boolean
+}>(({ theme, orientation, fluidImageWidth }) => ({
   marginRight: orientation === 'left' ? theme.spacing(3) : 0,
   marginLeft: orientation === 'right' ? theme.spacing(3) : 0,
-  flex: 1,
   [theme.breakpoints.down('md')]: {
     marginBottom: theme.spacing(3),
   },
+  ...(!fluidImageWidth ? { flex: 1 } : null),
 }))
 
 export type Props = {
@@ -53,6 +54,7 @@ export type Props = {
   isVideo?: boolean
   duration?: number
   afterDescription?: React.ReactElement
+  fluidImageWidth?: boolean
 } & BoxProps
 
 export const SplitPost: React.FC<Props> = ({
@@ -70,6 +72,7 @@ export const SplitPost: React.FC<Props> = ({
   isVideo = false,
   duration,
   afterDescription,
+  fluidImageWidth = false,
   ...rest
 }) => {
   const { t } = useTranslation()
@@ -93,7 +96,7 @@ export const SplitPost: React.FC<Props> = ({
 
   return (
     <SplitPostBox {...rest}>
-      <ThumbnailBox orientation={orientation}>
+      <ThumbnailBox orientation={orientation} fluidImageWidth={fluidImageWidth}>
         {imageUrl ? (
           linkTo ? (
             <Link href={linkTo ?? getPostLink(id)}>{thumbnail}</Link>

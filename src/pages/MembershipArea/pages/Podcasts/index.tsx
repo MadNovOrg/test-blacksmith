@@ -99,6 +99,7 @@ export const Podcasts: React.FC = () => {
               `${featuredPodcast.description?.substring(0, 150)}...` ?? ''
             }
             orientation="left"
+            fluidImageWidth={true}
             linkTo={`./${featuredPodcast.id}`}
             data-testid="featured-podcast"
           />
