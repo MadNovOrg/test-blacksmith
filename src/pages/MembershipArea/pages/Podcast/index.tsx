@@ -17,6 +17,7 @@ import QUERY from '@app/queries/membership/podcast'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
+import { ContentDetailsBox } from '../../components/ContentDetailsBox'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { PodcastPlayer } from '../../components/PodcastPlayer'
 
@@ -53,7 +54,7 @@ export const Podcast: React.FC = () => {
       ) : null}
 
       <Box mb={6}>
-        <Box width="50%" mb={2}>
+        <ContentDetailsBox mb={2}>
           <Typography variant="body2" fontWeight={600} mb={3}>
             {fetching ? (
               <Skeleton
@@ -113,7 +114,7 @@ export const Podcast: React.FC = () => {
               })
             ) : null}
           </Typography>
-        </Box>
+        </ContentDetailsBox>
 
         {fetching ? (
           <Skeleton
@@ -148,7 +149,14 @@ export const Podcast: React.FC = () => {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
             {data.recentPodcasts.records.map((podcast, index) => (
-              <Grid item key={podcast.id} xs={3} data-grid-item={index}>
+              <Grid
+                item
+                key={podcast.id}
+                lg={3}
+                md={6}
+                sm={12}
+                data-grid-item={index}
+              >
                 <BlogPostItem
                   id={podcast.id}
                   imageUrl={podcast.thumbnail}

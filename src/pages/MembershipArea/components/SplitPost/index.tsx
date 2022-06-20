@@ -1,7 +1,14 @@
-import { Box, BoxProps, Chip, Link, Skeleton, Typography } from '@mui/material'
+import {
+  Box,
+  BoxProps,
+  Chip,
+  Link,
+  Skeleton,
+  styled,
+  Typography,
+} from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { noop } from 'ts-essentials'
 
 import theme from '@app/theme'
 
@@ -9,6 +16,27 @@ import { getPostLink, getTagLink } from '../../utils'
 import { PostCategory } from '../PostCategory'
 import { PostImage } from '../PostImage'
 import { VideoThumbnail } from '../VideoThumbnail'
+
+type ImageOrientation = 'left' | 'right'
+
+const SplitPostBox = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  [theme.breakpoints.down('md')]: {
+    display: 'block',
+  },
+}))
+
+const ThumbnailBox = styled(Box, { shouldForwardProp: () => true })<{
+  orientation?: ImageOrientation
+}>(({ theme, orientation }) => ({
+  marginRight: orientation === 'left' ? theme.spacing(3) : 0,
+  marginLeft: orientation === 'right' ? theme.spacing(3) : 0,
+  flex: 1,
+  [theme.breakpoints.down('md')]: {
+    marginBottom: theme.spacing(3),
+  },
+}))
 
 export type Props = {
   id: string
@@ -20,7 +48,7 @@ export type Props = {
   tags?: Array<{ id: string; name: string }>
   category?: { id: string; name: string }
   publishedDate: string
-  orientation?: 'left' | 'right'
+  orientation?: ImageOrientation
   linkTo?: string
   isVideo?: boolean
   duration?: number
@@ -41,8 +69,7 @@ export const SplitPost: React.FC<Props> = ({
   linkTo,
   isVideo = false,
   duration,
-  afterDescription = noop,
-  children: _children,
+  afterDescription,
   ...rest
 }) => {
   const { t } = useTranslation()
@@ -65,17 +92,8 @@ export const SplitPost: React.FC<Props> = ({
     )
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexDirection={orientation === 'left' ? 'row' : 'row-reverse'}
-      {...rest}
-    >
-      <Box
-        mr={orientation === 'left' ? 3 : 0}
-        ml={orientation === 'right' ? 3 : 0}
-        flex={1}
-      >
+    <SplitPostBox {...rest}>
+      <ThumbnailBox orientation={orientation}>
         {imageUrl ? (
           linkTo ? (
             <Link href={linkTo ?? getPostLink(id)}>{thumbnail}</Link>
@@ -83,7 +101,7 @@ export const SplitPost: React.FC<Props> = ({
             thumbnail
           )
         ) : null}
-      </Box>
+      </ThumbnailBox>
       <Box flex={1}>
         {label && (
           <Chip
@@ -127,15 +145,17 @@ export const SplitPost: React.FC<Props> = ({
         </Box>
         {afterDescription}
       </Box>
-    </Box>
+    </SplitPostBox>
   )
 }
 
-export const SplitPostSkeleton: React.FC<BoxProps> = ({ ...props }) => (
-  <Box {...props} display="flex" alignItems="center">
-    <Box flex={1} mr={3}>
+export const SplitPostSkeleton: React.FC<
+  BoxProps & { orientation?: ImageOrientation }
+> = ({ orientation = 'left', ...props }) => (
+  <SplitPostBox {...props} display="flex" alignItems="center">
+    <ThumbnailBox flex={1} mr={3} orientation={orientation}>
       <Skeleton variant="rectangular" height={350} />
-    </Box>
+    </ThumbnailBox>
     <Box flex={1}>
       <Skeleton />
       <Skeleton sx={{ marginBottom: 2 }} />
@@ -143,5 +163,5 @@ export const SplitPostSkeleton: React.FC<BoxProps> = ({ ...props }) => (
       <Skeleton sx={{ marginBottom: 2 }} />
       <Skeleton width="50%" />
     </Box>
-  </Box>
+  </SplitPostBox>
 )

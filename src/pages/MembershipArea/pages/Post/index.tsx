@@ -19,9 +19,14 @@ import POST_QUERY from '@app/queries/membership/post'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
-import { PostImage } from '../../components/PostImage'
 import { TagChip, TagChipSkeleton } from '../../components/TagChip'
 
+import {
+  BleedPostImage,
+  BleedPostImageSkeleton,
+  PostImageBox,
+  RecentPostsBox,
+} from './components/layout'
 import { PostContent } from './components/PostContent'
 
 export const Post: React.FC = () => {
@@ -135,34 +140,27 @@ export const Post: React.FC = () => {
             </Alert>
           ) : null}
         </Box>
-        <Box
-          sx={{
-            transform: 'translateX(-8%)',
-            maxWidth: '120%',
-          }}
-        >
+        <PostImageBox>
           {fetching ? (
-            <Skeleton
-              variant="rectangular"
-              width="120%"
+            <BleedPostImageSkeleton
               data-testid="image-skeleton"
+              variant="rectangular"
             >
               <div style={{ paddingTop: '57%' }} />
-            </Skeleton>
+            </BleedPostImageSkeleton>
           ) : data?.content?.post?.featuredImage?.node?.mediaItemUrl ? (
-            <PostImage
+            <BleedPostImage
               src={data.content.post.featuredImage.node.mediaItemUrl}
               alt={data.content.post.title ?? ''}
-              sx={{ maxWidth: '120%' }}
             />
           ) : null}
-        </Box>
+        </PostImageBox>
 
         {data?.content?.post?.content && !fetching ? (
           <PostContent content={data.content.post.content} />
         ) : null}
       </Container>
-      <Box sx={{ paddingLeft: 8, paddingRight: 8 }}>
+      <RecentPostsBox>
         {data?.content?.recentPosts?.nodes?.length && !fetching && !hasError ? (
           <Box data-testid="recent-posts">
             <Typography mb={3} variant="h3" color="primary">
@@ -180,7 +178,14 @@ export const Post: React.FC = () => {
                 }
 
                 return (
-                  <Grid item key={item.id} xs={3} data-grid-item={index}>
+                  <Grid
+                    item
+                    key={item.id}
+                    lg={3}
+                    md={6}
+                    sm={12}
+                    data-grid-item={index}
+                  >
                     <BlogPostItem
                       id={item.id}
                       imageUrl={item.featuredImage?.node?.mediaItemUrl}
@@ -208,7 +213,7 @@ export const Post: React.FC = () => {
             <ItemsGridSkeleton data-testid="recent-posts-skeleton" />
           </>
         ) : null}
-      </Box>
+      </RecentPostsBox>
     </Box>
   )
 }

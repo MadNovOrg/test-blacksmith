@@ -19,6 +19,7 @@ import WEBINAR_QUERY from '@app/queries/membership/webinar'
 import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
+import { ContentDetailsBox } from '../../components/ContentDetailsBox'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { YTContainer } from '../../components/YTContainer'
 
@@ -55,7 +56,7 @@ export const Webinar: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 8 }}>
       <Box mb={6}>
-        <Box width="50%" mb={2}>
+        <ContentDetailsBox width="50%" mb={2}>
           <Typography variant="body2" fontWeight={600} mb={3}>
             {fetching ? (
               <Skeleton
@@ -110,7 +111,7 @@ export const Webinar: React.FC = () => {
               })
             ) : null}
           </Typography>
-        </Box>
+        </ContentDetailsBox>
 
         {hasError ? (
           <Alert severity="error">
@@ -149,7 +150,14 @@ export const Webinar: React.FC = () => {
               }
 
               return (
-                <Grid item key={item.id} xs={3} data-grid-item={index}>
+                <Grid
+                  item
+                  key={item.id}
+                  lg={3}
+                  md={6}
+                  sm={12}
+                  data-grid-item={index}
+                >
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}

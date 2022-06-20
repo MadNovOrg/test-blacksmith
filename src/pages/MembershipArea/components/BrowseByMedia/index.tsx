@@ -34,7 +34,7 @@ const MediaType: React.FC<{
 export const BrowseByMedia: React.FC = () => {
   const { t } = useTranslation()
   return (
-    <Box>
+    <Box pl={2} pr={2}>
       <Typography variant="h1" color="primary" textAlign="center" mb={3}>
         {t('pages.membership.components.browse-by-media.title')}
       </Typography>

@@ -17,6 +17,7 @@ import BLOG_QUERY from '@app/queries/membership/blog'
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
+import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
@@ -59,9 +60,7 @@ export const Blog: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
-      <Typography variant="h1" color="primary" textAlign="center" padding={6}>
-        {t('pages.membership.blog.title')}
-      </Typography>
+      <PageTitle>{t('pages.membership.blog.title')}</PageTitle>
 
       <Box mb={8}>
         {featuredPost ? (
@@ -134,7 +133,14 @@ export const Blog: React.FC = () => {
               }
 
               return (
-                <Grid item key={item.id} xs={3} data-grid-item={index}>
+                <Grid
+                  item
+                  key={item.id}
+                  lg={3}
+                  md={6}
+                  sm={12}
+                  data-grid-item={index}
+                >
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}

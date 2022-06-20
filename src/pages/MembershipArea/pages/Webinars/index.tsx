@@ -17,6 +17,7 @@ import WEBINARS_QUERY from '@app/queries/membership/webinars'
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
+import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
@@ -58,9 +59,7 @@ export const Webinars = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
-      <Typography variant="h1" color="primary" textAlign="center" padding={6}>
-        {t('pages.membership.webinars.title')}
-      </Typography>
+      <PageTitle>{t('pages.membership.webinars.title')}</PageTitle>
 
       <Box mb={8}>
         {featuredItem ? (
@@ -131,7 +130,14 @@ export const Webinars = () => {
               }
 
               return (
-                <Grid item key={item.id} xs={3} data-grid-item={index}>
+                <Grid
+                  item
+                  key={item.id}
+                  lg={3}
+                  md={6}
+                  sm={12}
+                  data-grid-item={index}
+                >
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}

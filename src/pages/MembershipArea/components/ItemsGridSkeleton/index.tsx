@@ -10,17 +10,12 @@ export const ItemsGridSkeleton: React.FC<GridProps> = ({ ...rest }) => (
     rowSpacing={5}
     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
   >
-    <Grid item xs={3}>
-      <BlogPostItemSkeleton />
-    </Grid>
-    <Grid item xs={3}>
-      <BlogPostItemSkeleton />
-    </Grid>
-    <Grid item xs={3}>
-      <BlogPostItemSkeleton />
-    </Grid>
-    <Grid item xs={3}>
-      <BlogPostItemSkeleton />
-    </Grid>
+    {Array(4)
+      .fill(0, 0)
+      .map((_, index) => (
+        <Grid key={index} item lg={3} md={6} sm={12}>
+          <BlogPostItemSkeleton />
+        </Grid>
+      ))}
   </Grid>
 )

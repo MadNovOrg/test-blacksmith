@@ -16,6 +16,7 @@ import { ArrowPagination } from '../../components/ArrowPagination'
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { OrderMenu } from '../../components/OrderMenu'
+import { PageTitle } from '../../components/PageTitle'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
@@ -80,9 +81,7 @@ export const Podcasts: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5 }}>
-      <Typography variant="h1" color="primary" textAlign="center" padding={6}>
-        {t('pages.membership.podcasts.title')}
-      </Typography>
+      <PageTitle>{t('pages.membership.podcasts.title')}</PageTitle>
 
       {!fetching && data?.podcasts?.records.length === 0 ? (
         <Typography>{t('pages.membership.podcasts.empty')}</Typography>
@@ -129,7 +128,15 @@ export const Podcasts: React.FC = () => {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
             {allPodcasts.map((podcast, index) => (
-              <Grid item key={podcast.id} xs={3} data-grid-item={index}>
+              <Grid
+                item
+                key={podcast.id}
+                xs={3}
+                lg={3}
+                md={6}
+                sm={12}
+                data-grid-item={index}
+              >
                 <BlogPostItem
                   id={podcast.id}
                   imageUrl={podcast.thumbnail}

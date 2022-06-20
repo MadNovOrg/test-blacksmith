@@ -112,7 +112,14 @@ export const Category: React.FC = () => {
               }
 
               return (
-                <Grid item key={item.id} xs={3} data-grid-item={index}>
+                <Grid
+                  item
+                  key={item.id}
+                  lg={3}
+                  md={6}
+                  sm={12}
+                  data-grid-item={index}
+                >
                   <BlogPostItem
                     id={item.id}
                     imageUrl={item.featuredImage?.node?.mediaItemUrl}
