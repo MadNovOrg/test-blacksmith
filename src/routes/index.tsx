@@ -10,6 +10,7 @@ import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
+import { CourseEnquiry } from '@app/pages/common/CourseEnquiry'
 import { CourseWaitlist } from '@app/pages/common/CourseWaitlist'
 import { ForgotPasswordPage } from '@app/pages/common/ForgotPassword'
 import { LoginPage } from '@app/pages/common/Login'
@@ -49,6 +50,10 @@ export const AppRoutes = () => {
 
   if (location.pathname === '/waitlist') {
     return <CourseWaitlist />
+  }
+
+  if (location.pathname === '/enquiry') {
+    return <CourseEnquiry />
   }
 
   if (auth.loading) {

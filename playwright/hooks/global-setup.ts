@@ -6,11 +6,20 @@ import { TEMP_DIR } from '../constants'
 import { users } from '../data/users'
 import { LoginPage } from '../pages/auth/LoginPage'
 
+const publicRoutes = ['/enquiry', '/waitlist']
+
 export const stateFilePath = (userKey: string) =>
   `${TEMP_DIR}/storage-${userKey}.json`
 
 const login = async (browser: Browser, userKey: string, role: string) => {
   const page = await browser.newPage()
+
+  publicRoutes.forEach(route => {
+    if (page.url().includes(route)) {
+      return
+    }
+  })
+
   const loginPage = new LoginPage(page)
   await loginPage.goto()
   const myCoursesPage = await loginPage.logIn(

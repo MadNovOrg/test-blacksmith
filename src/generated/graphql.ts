@@ -10362,6 +10362,297 @@ export enum Course_Delivery_Type_Update_Column {
   Name = 'name'
 }
 
+/** Enquiries about open courses */
+export type Course_Enquiry = {
+  __typename?: 'course_enquiry';
+  /** An object relationship */
+  course: Course;
+  courseId: Scalars['Int'];
+  created_at?: Maybe<Scalars['timestamptz']>;
+  email: Scalars['String'];
+  familyName: Scalars['String'];
+  givenName: Scalars['String'];
+  id: Scalars['uuid'];
+  interest: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
+  orgName: Scalars['String'];
+  phone: Scalars['String'];
+  sector: Scalars['String'];
+  source?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "course_enquiry" */
+export type Course_Enquiry_Aggregate = {
+  __typename?: 'course_enquiry_aggregate';
+  aggregate?: Maybe<Course_Enquiry_Aggregate_Fields>;
+  nodes: Array<Course_Enquiry>;
+};
+
+/** aggregate fields of "course_enquiry" */
+export type Course_Enquiry_Aggregate_Fields = {
+  __typename?: 'course_enquiry_aggregate_fields';
+  avg?: Maybe<Course_Enquiry_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Enquiry_Max_Fields>;
+  min?: Maybe<Course_Enquiry_Min_Fields>;
+  stddev?: Maybe<Course_Enquiry_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Enquiry_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Enquiry_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Enquiry_Sum_Fields>;
+  var_pop?: Maybe<Course_Enquiry_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Enquiry_Var_Samp_Fields>;
+  variance?: Maybe<Course_Enquiry_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_enquiry" */
+export type Course_Enquiry_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Course_Enquiry_Avg_Fields = {
+  __typename?: 'course_enquiry_avg_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "course_enquiry". All fields are combined with a logical 'AND'. */
+export type Course_Enquiry_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Enquiry_Bool_Exp>>;
+  _not?: InputMaybe<Course_Enquiry_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Enquiry_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  email?: InputMaybe<String_Comparison_Exp>;
+  familyName?: InputMaybe<String_Comparison_Exp>;
+  givenName?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  interest?: InputMaybe<String_Comparison_Exp>;
+  message?: InputMaybe<String_Comparison_Exp>;
+  orgName?: InputMaybe<String_Comparison_Exp>;
+  phone?: InputMaybe<String_Comparison_Exp>;
+  sector?: InputMaybe<String_Comparison_Exp>;
+  source?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_enquiry" */
+export enum Course_Enquiry_Constraint {
+  /** unique or primary key constraint */
+  CourseEnquiryEmailCourseIdKey = 'course_enquiry_email_course_id_key',
+  /** unique or primary key constraint */
+  CourseEnquiryPkey = 'course_enquiry_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_enquiry" */
+export type Course_Enquiry_Inc_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_enquiry" */
+export type Course_Enquiry_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  interest?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<Scalars['String']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Enquiry_Max_Fields = {
+  __typename?: 'course_enquiry_max_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  interest?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Enquiry_Min_Fields = {
+  __typename?: 'course_enquiry_min_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  interest?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_enquiry" */
+export type Course_Enquiry_Mutation_Response = {
+  __typename?: 'course_enquiry_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Enquiry>;
+};
+
+/** on_conflict condition type for table "course_enquiry" */
+export type Course_Enquiry_On_Conflict = {
+  constraint: Course_Enquiry_Constraint;
+  update_columns?: Array<Course_Enquiry_Update_Column>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_enquiry". */
+export type Course_Enquiry_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  email?: InputMaybe<Order_By>;
+  familyName?: InputMaybe<Order_By>;
+  givenName?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  interest?: InputMaybe<Order_By>;
+  message?: InputMaybe<Order_By>;
+  orgName?: InputMaybe<Order_By>;
+  phone?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_enquiry */
+export type Course_Enquiry_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_enquiry" */
+export enum Course_Enquiry_Select_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  FamilyName = 'familyName',
+  /** column name */
+  GivenName = 'givenName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Interest = 'interest',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  OrgName = 'orgName',
+  /** column name */
+  Phone = 'phone',
+  /** column name */
+  Sector = 'sector',
+  /** column name */
+  Source = 'source'
+}
+
+/** input type for updating data in table "course_enquiry" */
+export type Course_Enquiry_Set_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  interest?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<Scalars['String']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Enquiry_Stddev_Fields = {
+  __typename?: 'course_enquiry_stddev_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Enquiry_Stddev_Pop_Fields = {
+  __typename?: 'course_enquiry_stddev_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Enquiry_Stddev_Samp_Fields = {
+  __typename?: 'course_enquiry_stddev_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Enquiry_Sum_Fields = {
+  __typename?: 'course_enquiry_sum_fields';
+  courseId?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "course_enquiry" */
+export enum Course_Enquiry_Update_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  FamilyName = 'familyName',
+  /** column name */
+  GivenName = 'givenName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Interest = 'interest',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  OrgName = 'orgName',
+  /** column name */
+  Phone = 'phone',
+  /** column name */
+  Sector = 'sector',
+  /** column name */
+  Source = 'source'
+}
+
+/** aggregate var_pop on columns */
+export type Course_Enquiry_Var_Pop_Fields = {
+  __typename?: 'course_enquiry_var_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Enquiry_Var_Samp_Fields = {
+  __typename?: 'course_enquiry_var_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Course_Enquiry_Variance_Fields = {
+  __typename?: 'course_enquiry_variance_fields';
+  courseId?: Maybe<Scalars['Float']>;
+};
+
 /** columns and relationships of "course_evaluation_answers" */
 export type Course_Evaluation_Answers = {
   __typename?: 'course_evaluation_answers';
@@ -15815,6 +16106,10 @@ export type Mutation_Root = {
   delete_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** delete single row from the table: "course_delivery_type" */
   delete_course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** delete data from the table: "course_enquiry" */
+  delete_course_enquiry?: Maybe<Course_Enquiry_Mutation_Response>;
+  /** delete single row from the table: "course_enquiry" */
+  delete_course_enquiry_by_pk?: Maybe<Course_Enquiry>;
   /** delete data from the table: "course_evaluation_answers" */
   delete_course_evaluation_answers?: Maybe<Course_Evaluation_Answers_Mutation_Response>;
   /** delete single row from the table: "course_evaluation_answers" */
@@ -15977,6 +16272,10 @@ export type Mutation_Root = {
   insert_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** insert a single row into the table: "course_delivery_type" */
   insert_course_delivery_type_one?: Maybe<Course_Delivery_Type>;
+  /** insert data into the table: "course_enquiry" */
+  insert_course_enquiry?: Maybe<Course_Enquiry_Mutation_Response>;
+  /** insert a single row into the table: "course_enquiry" */
+  insert_course_enquiry_one?: Maybe<Course_Enquiry>;
   /** insert data into the table: "course_evaluation_answers" */
   insert_course_evaluation_answers?: Maybe<Course_Evaluation_Answers_Mutation_Response>;
   /** insert a single row into the table: "course_evaluation_answers" */
@@ -16146,6 +16445,10 @@ export type Mutation_Root = {
   update_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** update single row of the table: "course_delivery_type" */
   update_course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** update data of the table: "course_enquiry" */
+  update_course_enquiry?: Maybe<Course_Enquiry_Mutation_Response>;
+  /** update single row of the table: "course_enquiry" */
+  update_course_enquiry_by_pk?: Maybe<Course_Enquiry>;
   /** update data of the table: "course_evaluation_answers" */
   update_course_evaluation_answers?: Maybe<Course_Evaluation_Answers_Mutation_Response>;
   /** update single row of the table: "course_evaluation_answers" */
@@ -16381,6 +16684,18 @@ export type Mutation_RootDelete_Course_Delivery_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_EnquiryArgs = {
+  where: Course_Enquiry_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Enquiry_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -16878,6 +17193,20 @@ export type Mutation_RootInsert_Course_Delivery_TypeArgs = {
 export type Mutation_RootInsert_Course_Delivery_Type_OneArgs = {
   object: Course_Delivery_Type_Insert_Input;
   on_conflict?: InputMaybe<Course_Delivery_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_EnquiryArgs = {
+  objects: Array<Course_Enquiry_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Enquiry_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Enquiry_OneArgs = {
+  object: Course_Enquiry_Insert_Input;
+  on_conflict?: InputMaybe<Course_Enquiry_On_Conflict>;
 };
 
 
@@ -17475,6 +17804,22 @@ export type Mutation_RootUpdate_Course_Delivery_TypeArgs = {
 export type Mutation_RootUpdate_Course_Delivery_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Delivery_Type_Set_Input>;
   pk_columns: Course_Delivery_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_EnquiryArgs = {
+  _inc?: InputMaybe<Course_Enquiry_Inc_Input>;
+  _set?: InputMaybe<Course_Enquiry_Set_Input>;
+  where: Course_Enquiry_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Enquiry_By_PkArgs = {
+  _inc?: InputMaybe<Course_Enquiry_Inc_Input>;
+  _set?: InputMaybe<Course_Enquiry_Set_Input>;
+  pk_columns: Course_Enquiry_Pk_Columns_Input;
 };
 
 
@@ -20332,6 +20677,12 @@ export type Query_Root = {
   course_delivery_type_aggregate: Course_Delivery_Type_Aggregate;
   /** fetch data from the table: "course_delivery_type" using primary key columns */
   course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** fetch data from the table: "course_enquiry" */
+  course_enquiry: Array<Course_Enquiry>;
+  /** fetch aggregated fields from the table: "course_enquiry" */
+  course_enquiry_aggregate: Course_Enquiry_Aggregate;
+  /** fetch data from the table: "course_enquiry" using primary key columns */
+  course_enquiry_by_pk?: Maybe<Course_Enquiry>;
   /** fetch data from the table: "course_evaluation_answers" */
   course_evaluation_answers: Array<Course_Evaluation_Answers>;
   /** fetch aggregated fields from the table: "course_evaluation_answers" */
@@ -20696,6 +21047,29 @@ export type Query_RootCourse_Delivery_Type_AggregateArgs = {
 
 export type Query_RootCourse_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCourse_EnquiryArgs = {
+  distinct_on?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Enquiry_Order_By>>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Enquiry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Enquiry_Order_By>>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Enquiry_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -21837,6 +22211,12 @@ export type Subscription_Root = {
   course_delivery_type_aggregate: Course_Delivery_Type_Aggregate;
   /** fetch data from the table: "course_delivery_type" using primary key columns */
   course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** fetch data from the table: "course_enquiry" */
+  course_enquiry: Array<Course_Enquiry>;
+  /** fetch aggregated fields from the table: "course_enquiry" */
+  course_enquiry_aggregate: Course_Enquiry_Aggregate;
+  /** fetch data from the table: "course_enquiry" using primary key columns */
+  course_enquiry_by_pk?: Maybe<Course_Enquiry>;
   /** fetch data from the table: "course_evaluation_answers" */
   course_evaluation_answers: Array<Course_Evaluation_Answers>;
   /** fetch aggregated fields from the table: "course_evaluation_answers" */
@@ -22185,6 +22565,29 @@ export type Subscription_RootCourse_Delivery_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_EnquiryArgs = {
+  distinct_on?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Enquiry_Order_By>>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Enquiry_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Enquiry_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Enquiry_Order_By>>;
+  where?: InputMaybe<Course_Enquiry_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Enquiry_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -23673,6 +24076,13 @@ export type OrganizationsQueryVariables = Exact<{
 
 
 export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+
+export type InsertCourseEnquiryMutationVariables = Exact<{
+  enquiry: Course_Enquiry_Insert_Input;
+}>;
+
+
+export type InsertCourseEnquiryMutation = { __typename?: 'mutation_root', insert_course_enquiry?: { __typename?: 'course_enquiry_mutation_response', affected_rows: number } | null };
 
 export type InsertWaitlistMutationVariables = Exact<{
   input: Waitlist_Insert_Input;
