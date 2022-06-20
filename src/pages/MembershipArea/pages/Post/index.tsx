@@ -6,7 +6,6 @@ import {
   Link,
   Alert,
   Grid,
-  GlobalStyles,
 } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +44,6 @@ export const Post: React.FC = () => {
 
   return (
     <Box pb={5} pt={8}>
-      <GlobalStyles styles={{ img: { maxWidth: '100%', height: 'auto' } }} />
       <Container maxWidth="md" sx={{ marginBottom: 7 }}>
         <Box mb={6}>
           <Box mb={2}>
