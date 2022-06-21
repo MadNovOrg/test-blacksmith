@@ -19,13 +19,16 @@ import { VideoThumbnail } from '../VideoThumbnail'
 
 type ImageOrientation = 'left' | 'right'
 
-const SplitPostBox = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  [theme.breakpoints.down('md')]: {
-    display: 'block',
-  },
-}))
+const SplitPostBox = styled(Box)<{ orientation: ImageOrientation }>(
+  ({ theme, orientation }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: orientation === 'right' ? 'row-reverse' : 'row',
+    [theme.breakpoints.down('md')]: {
+      display: 'block',
+    },
+  })
+)
 
 const ThumbnailBox = styled(Box, { shouldForwardProp: () => true })<{
   orientation?: ImageOrientation
@@ -95,7 +98,7 @@ export const SplitPost: React.FC<Props> = ({
     )
 
   return (
-    <SplitPostBox {...rest}>
+    <SplitPostBox {...rest} orientation={orientation}>
       <ThumbnailBox orientation={orientation} fluidImageWidth={fluidImageWidth}>
         {imageUrl ? (
           linkTo ? (
@@ -155,7 +158,12 @@ export const SplitPost: React.FC<Props> = ({
 export const SplitPostSkeleton: React.FC<
   BoxProps & { orientation?: ImageOrientation }
 > = ({ orientation = 'left', ...props }) => (
-  <SplitPostBox {...props} display="flex" alignItems="center">
+  <SplitPostBox
+    {...props}
+    display="flex"
+    alignItems="center"
+    orientation={orientation}
+  >
     <ThumbnailBox flex={1} mr={3} orientation={orientation}>
       <Skeleton variant="rectangular" height={350} />
     </ThumbnailBox>

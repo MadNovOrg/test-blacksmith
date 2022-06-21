@@ -20,6 +20,7 @@ import { DownloadButton } from '../../components/DownloadButton'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
+import { FeaturedWebinar } from './components/FeaturedWebinar'
 import { GridTitle, ContentGrid, ContentGridItem } from './components/layout'
 
 export const Home: React.FC = () => {
@@ -76,6 +77,9 @@ export const Home: React.FC = () => {
                 }))}
               />
             </Box>
+          ) : null}
+          {data.content?.webinars?.nodes?.length ? (
+            <FeaturedWebinar webinar={data.content.webinars.nodes[0]} />
           ) : null}
           {data.podcasts?.records.length ? (
             <Box sx={{ marginBottom: 8 }}>
