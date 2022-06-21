@@ -8,7 +8,7 @@ import { PostQuery } from '@app/generated/graphql'
 import { render, screen, userEvent, waitForText, within } from '@test/index'
 import { buildEntities, buildPost } from '@test/mock-data-utils'
 
-import { Post } from '.'
+import Post from '.'
 
 describe('page: Post', () => {
   it('displays skeleton while fetching data', () => {

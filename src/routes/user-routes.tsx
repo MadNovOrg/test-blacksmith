@@ -2,20 +2,6 @@ import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { NotFound } from '@app/pages/common/NotFound'
-import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { Blog } from '@app/pages/MembershipArea/pages/Blog'
-import { Category } from '@app/pages/MembershipArea/pages/Category'
-import { Ebooks } from '@app/pages/MembershipArea/pages/Ebooks'
-import { Home } from '@app/pages/MembershipArea/pages/Home'
-import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
-import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
-import { Post } from '@app/pages/MembershipArea/pages/Post'
-import { ResearchSummaries } from '@app/pages/MembershipArea/pages/ResearchSummaries'
-import { Tag } from '@app/pages/MembershipArea/pages/Tag'
-import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
-import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
-import { Webinar } from '@app/pages/MembershipArea/pages/Webinar'
-import { Webinars } from '@app/pages/MembershipArea/pages/Webinars'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
 import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
 import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
@@ -27,6 +13,8 @@ import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
 import { MyCertifications } from '@app/pages/user-pages/MyCertifications'
 import { MyCourses } from '@app/pages/user-pages/MyCourses'
+
+import MembershipRoutes from './membership'
 
 const UserRoutes = () => {
   return (
@@ -64,33 +52,7 @@ const UserRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="membership" element={<MembershipAreaPage />}>
-        <Route index element={<Route index element={<Home />} />} />
-        <Route path="blog">
-          <Route index element={<Blog />} />
-          <Route path=":id" element={<Post />} />
-          <Route path="tag/:id" element={<Tag />} />
-          <Route path="category/:id" element={<Category />} />
-        </Route>
-        <Route path="podcasts">
-          <Route index element={<Podcasts />} />
-          <Route path=":id" element={<Podcast />} />
-        </Route>
-        <Route path="video-series">
-          <Route index element={<VideoSeries />} />
-          <Route path=":id" element={<VideoItem />} />
-        </Route>
-        <Route path="ebooks">
-          <Route index element={<Ebooks />} />
-        </Route>
-        <Route path="research-summaries">
-          <Route index element={<ResearchSummaries />} />
-        </Route>
-        <Route path="webinars">
-          <Route index element={<Webinars />} />
-          <Route path=":id" element={<Webinar />} />
-        </Route>
-      </Route>
+      <Route path="membership/*" element={<MembershipRoutes />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

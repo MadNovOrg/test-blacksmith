@@ -22,7 +22,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const VideoSeries = () => {
+const VideoSeries = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] =
     useState<VideoItemSummaryFragment | null>(null)
@@ -210,3 +210,5 @@ export const VideoSeries = () => {
     </Container>
   )
 }
+
+export default VideoSeries

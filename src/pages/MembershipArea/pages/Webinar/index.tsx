@@ -23,7 +23,7 @@ import { ContentDetailsBox } from '../../components/ContentDetailsBox'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { YTContainer } from '../../components/YTContainer'
 
-export const Webinar: React.FC = () => {
+const Webinar: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 
@@ -189,3 +189,5 @@ export const Webinar: React.FC = () => {
     </Container>
   )
 }
+
+export default Webinar

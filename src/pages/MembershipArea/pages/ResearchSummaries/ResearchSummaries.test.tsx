@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildResearchSummary } from '@test/mock-data-utils'
 
-import { ResearchSummaries } from '.'
+import ResearchSummaries from '.'
 
 describe('page: ResearchSummaries', () => {
   it('displays skeleton loading while fetching research summaries', () => {

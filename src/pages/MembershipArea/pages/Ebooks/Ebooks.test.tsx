@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildEbook } from '@test/mock-data-utils'
 
-import { Ebooks } from '.'
+import Ebooks from '.'
 
 describe('page: Ebooks', () => {
   it('displays skeleton loading while fetching ebooks', () => {

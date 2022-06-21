@@ -23,7 +23,7 @@ import { OrderMenu } from '../../components/OrderMenu'
 
 export const PER_PAGE = 12
 
-export const Tag: React.FC = () => {
+const Tag: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 
@@ -192,3 +192,5 @@ export const Tag: React.FC = () => {
     </Container>
   )
 }
+
+export default Tag

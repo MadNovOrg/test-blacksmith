@@ -22,7 +22,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const Webinars = () => {
+const Webinars = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] =
     useState<WebinarSummaryFragment | null>(null)
@@ -205,3 +205,5 @@ export const Webinars = () => {
     </Container>
   )
 }
+
+export default Webinars

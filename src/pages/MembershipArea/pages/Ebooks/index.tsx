@@ -23,7 +23,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const Ebooks: React.FC = () => {
+const Ebooks: React.FC = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] = useState<EbookSummaryFragment | null>(
     null
@@ -224,3 +224,5 @@ export const Ebooks: React.FC = () => {
     </Container>
   )
 }
+
+export default Ebooks

@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildWebinar } from '@test/mock-data-utils'
 
-import { Webinars } from '.'
+import Webinars from '.'
 
 describe('page: Webinars', () => {
   it('displays skeleton while fetching webinars', () => {

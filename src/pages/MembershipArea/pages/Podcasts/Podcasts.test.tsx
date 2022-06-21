@@ -13,7 +13,7 @@ import {
 import { render, screen, within, userEvent, waitFor } from '@test/index'
 import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 
-import { PER_PAGE, Podcasts } from '.'
+import Podcasts, { PER_PAGE } from '.'
 
 describe('page: Podcasts', () => {
   it('displays skeleton while loading podcasts', () => {

@@ -14,7 +14,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildCategory, buildEntities, buildPost } from '@test/mock-data-utils'
 
-import { PER_PAGE, Category } from '.'
+import Category, { PER_PAGE } from '.'
 
 describe('page: Category', () => {
   it('displays skeleton loading while fetching category', () => {

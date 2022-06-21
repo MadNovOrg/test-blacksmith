@@ -21,7 +21,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const Podcasts: React.FC = () => {
+const Podcasts: React.FC = () => {
   const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState(1)
@@ -168,3 +168,5 @@ export const Podcasts: React.FC = () => {
     </Container>
   )
 }
+
+export default Podcasts

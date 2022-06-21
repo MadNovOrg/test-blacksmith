@@ -44,6 +44,8 @@ jobs:
           node-version: '16.3.0'
           cache: 'npm'
 
+      - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm set-script prepare "" && npm ci
 

@@ -8,7 +8,7 @@ import { WebinarQuery } from '@app/generated/graphql'
 import { screen, render, within } from '@test/index'
 import { buildEntities, buildWebinar } from '@test/mock-data-utils'
 
-import { Webinar } from '.'
+import Webinar from '.'
 
 describe('page: Webinar', () => {
   it('displays skeleton while loading the content', () => {

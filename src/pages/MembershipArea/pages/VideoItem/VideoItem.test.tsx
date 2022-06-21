@@ -8,7 +8,7 @@ import { VideoItemQuery } from '@app/generated/graphql'
 import { screen, render, within } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
-import { VideoItem } from '.'
+import VideoItem from '.'
 
 describe('page: VideoItem', () => {
   it('displays skeleton while loading the content', () => {

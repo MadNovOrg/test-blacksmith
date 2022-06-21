@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
-import { VideoSeries } from '.'
+import VideoSeries from '.'
 
 describe('page: VideoSeries', () => {
   it('displays skeleton loading while fetching videos', () => {

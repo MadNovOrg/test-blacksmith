@@ -6,20 +6,6 @@ import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { EditCourse } from '@app/pages/EditCourse'
-import { MembershipAreaPage } from '@app/pages/MembershipArea'
-import { Blog } from '@app/pages/MembershipArea/pages/Blog'
-import { Category } from '@app/pages/MembershipArea/pages/Category'
-import { Ebooks } from '@app/pages/MembershipArea/pages/Ebooks'
-import { Home } from '@app/pages/MembershipArea/pages/Home'
-import { Podcast } from '@app/pages/MembershipArea/pages/Podcast'
-import { Podcasts } from '@app/pages/MembershipArea/pages/Podcasts'
-import { Post } from '@app/pages/MembershipArea/pages/Post'
-import { ResearchSummaries } from '@app/pages/MembershipArea/pages/ResearchSummaries'
-import { Tag } from '@app/pages/MembershipArea/pages/Tag'
-import { VideoItem } from '@app/pages/MembershipArea/pages/VideoItem'
-import { VideoSeries } from '@app/pages/MembershipArea/pages/VideoSeries'
-import { Webinar } from '@app/pages/MembershipArea/pages/Webinar'
-import { Webinars } from '@app/pages/MembershipArea/pages/Webinars'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
@@ -32,6 +18,8 @@ import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
+
+const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const TrainerBaseRoutes = () => {
   return (
@@ -75,33 +63,7 @@ const TrainerBaseRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="membership" element={<MembershipAreaPage />}>
-        <Route index element={<Home />} />
-        <Route path="blog">
-          <Route index element={<Blog />} />
-          <Route path=":id" element={<Post />} />
-          <Route path="tag/:id" element={<Tag />} />
-          <Route path="category/:id" element={<Category />} />
-        </Route>
-        <Route path="podcasts">
-          <Route index element={<Podcasts />} />
-          <Route path=":id" element={<Podcast />} />
-        </Route>
-        <Route path="video-series">
-          <Route index element={<VideoSeries />} />
-          <Route path=":id" element={<VideoItem />} />
-        </Route>
-        <Route path="ebooks">
-          <Route index element={<Ebooks />} />
-        </Route>
-        <Route path="research-summaries">
-          <Route index element={<ResearchSummaries />} />
-        </Route>
-        <Route path="webinars">
-          <Route index element={<Webinars />} />
-          <Route path=":id" element={<Webinar />} />
-        </Route>
-      </Route>
+      <Route path="membership/*" element={<MembershipRoutes />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

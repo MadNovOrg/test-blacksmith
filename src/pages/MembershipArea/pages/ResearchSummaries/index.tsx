@@ -23,7 +23,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const ResearchSummaries: React.FC = () => {
+const ResearchSummaries: React.FC = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] =
     useState<ResearchSummaryDetailsFragment | null>(null)
@@ -234,3 +234,5 @@ export const ResearchSummaries: React.FC = () => {
     </Container>
   )
 }
+
+export default ResearchSummaries

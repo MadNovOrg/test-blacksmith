@@ -38,7 +38,7 @@ const YTContainer = styled(Box)({
   },
 })
 
-export const VideoItem: React.FC = () => {
+const VideoItem: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 
@@ -204,3 +204,5 @@ export const VideoItem: React.FC = () => {
     </Container>
   )
 }
+
+export default VideoItem

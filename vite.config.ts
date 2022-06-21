@@ -23,6 +23,9 @@ export default defineConfig({
       './runtimeConfig': './runtimeConfig.browser',
     },
   },
+  build: {
+    sourcemap: true,
+  },
   plugins: [
     react(),
     svgrPlugin({

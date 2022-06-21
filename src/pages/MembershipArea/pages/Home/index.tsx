@@ -23,7 +23,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 import { FeaturedWebinar } from './components/FeaturedWebinar'
 import { GridTitle, ContentGrid, ContentGridItem } from './components/layout'
 
-export const Home: React.FC = () => {
+const Home: React.FC = () => {
   const { t } = useTranslation()
 
   const [{ data, fetching, error }] = useQuery<MembershipHomeQuery>({
@@ -361,3 +361,5 @@ export const Home: React.FC = () => {
     </Container>
   )
 }
+
+export default Home

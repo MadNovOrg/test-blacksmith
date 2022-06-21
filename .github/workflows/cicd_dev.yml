@@ -9,14 +9,14 @@ on:
       - main
 
 permissions:
-      id-token: write
-      contents: read  
-      
+  id-token: write
+  contents: read
+
 jobs:
   build:
     name: CI
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -27,8 +27,10 @@ jobs:
           node-version: '16.3.0'
           cache: 'npm'
 
+      - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
+
       - name: Install dependencies
-        run: npm set-script prepare "" && npm ci 
+        run: npm set-script prepare "" && npm ci
 
       - name: Lint
         run: npm run lint

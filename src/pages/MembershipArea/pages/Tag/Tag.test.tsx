@@ -14,7 +14,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities, buildPost, buildTag } from '@test/mock-data-utils'
 
-import { PER_PAGE, Tag } from '.'
+import Tag, { PER_PAGE } from '.'
 
 describe('page: Tag', () => {
   it('displays skeleton loading while fetching tag', () => {

@@ -22,7 +22,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-export const Blog: React.FC = () => {
+const Blog: React.FC = () => {
   const { t } = useTranslation()
   const [featuredPost, setFeaturedPost] = useState<PostSummaryFragment | null>(
     null
@@ -218,3 +218,5 @@ export const Blog: React.FC = () => {
     </Container>
   )
 }
+
+export default Blog

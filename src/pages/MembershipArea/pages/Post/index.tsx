@@ -28,7 +28,7 @@ import {
 } from './components/layout'
 import { PostContent } from './components/PostContent'
 
-export const Post: React.FC = () => {
+const Post: React.FC = () => {
   const { id } = useParams() as { id: string }
   const { t } = useTranslation()
   const [{ data, fetching, error }] = useQuery<PostQuery, PostQueryVariables>({
@@ -215,3 +215,5 @@ export const Post: React.FC = () => {
     </Box>
   )
 }
+
+export default Post

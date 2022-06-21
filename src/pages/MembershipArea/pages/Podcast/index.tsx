@@ -21,7 +21,7 @@ import { ContentDetailsBox } from '../../components/ContentDetailsBox'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { PodcastPlayer } from '../../components/PodcastPlayer'
 
-export const Podcast: React.FC = () => {
+const Podcast: React.FC = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 
@@ -184,3 +184,5 @@ export const Podcast: React.FC = () => {
     </Container>
   )
 }
+
+export default Podcast

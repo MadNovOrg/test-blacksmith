@@ -9,7 +9,7 @@ import { PodcastQuery } from '@app/generated/graphql'
 import { render, screen, userEvent, waitForText } from '@test/index'
 import { buildEntities, buildPodcast } from '@test/mock-data-utils'
 
-import { Podcast } from '.'
+import Podcast from '.'
 
 describe('page: Podcast', () => {
   it('displays skeleton while loading the podcast', () => {
