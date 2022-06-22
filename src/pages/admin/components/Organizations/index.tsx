@@ -9,7 +9,9 @@ import {
   TableRow,
 } from '@mui/material'
 import Box from '@mui/material/Box'
+import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
+import { maxBy } from 'lodash-es'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -87,6 +89,17 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
 
   const count = orgs?.length
 
+  const lastActivityData = useMemo(() => {
+    const data: { [key: string]: Date | undefined } = {}
+    orgs.forEach(org => {
+      data[org.id] = maxBy(
+        org.members,
+        'profile.lastActivity'
+      )?.profile.lastActivity
+    })
+    return data
+  }, [orgs])
+
   return (
     <>
       <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -151,14 +164,18 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
 
                 {orgs.map(org => (
                   <TableRow key={org.id} data-testid={`org-row-${org.id}`}>
-                    <TableCell>{org?.name}</TableCell>
+                    <TableCell>
+                      <Link href={`${org?.id}/details`} variant="body2">
+                        {org?.name}
+                      </Link>
+                    </TableCell>
                     <TableCell>{org?.address.country}</TableCell>
                     <TableCell>{org?.region}</TableCell>
                     <TableCell>{org?.sector}</TableCell>
                     <TableCell>
-                      {org?.lastActivity
+                      {lastActivityData[org?.id]
                         ? t('dates.withTime', {
-                            date: org?.lastActivity,
+                            date: lastActivityData[org?.id],
                           })
                         : ''}
                     </TableCell>

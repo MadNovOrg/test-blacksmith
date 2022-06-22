@@ -37,6 +37,7 @@
 - "!include public_profile_role.yaml"
 - "!include public_profile_temp.yaml"
 - "!include public_role.yaml"
+- "!include public_trust_type.yaml"
 - "!include public_venue.yaml"
 - "!include public_waitlist.yaml"
 - "!include public_xero_credential.yaml"

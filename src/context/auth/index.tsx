@@ -2,7 +2,7 @@ import { Auth } from 'aws-amplify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
-import { MUTATION as UPDATE_ORGS_ACTIVITY_QUERY } from '@app/queries/organization/update-org-activity'
+import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/update-profile-activity'
 import { RoleName } from '@app/types'
 
 import { fetchUserProfile, lsActiveRoleClient } from './helpers'
@@ -24,7 +24,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     if (data?.profile) {
       const token = (await Auth.currentSession()).getIdToken().getJwtToken()
       await gqlRequest(
-        UPDATE_ORGS_ACTIVITY_QUERY,
+        UPDATE_PROFILE_ACTIVITY_QUERY,
         { profileId: data.profile.id },
         {
           token,

@@ -12,6 +12,9 @@ export const ORGANIZATION = gql`
     createdAt
     updatedAt
     xeroContactId
+    sector
+    trustName
+    trustType
   }
 `
 
@@ -46,6 +49,7 @@ export const PROFILE = gql`
     phone
     dob
     jobTitle
+    lastActivity
   }
 `
 

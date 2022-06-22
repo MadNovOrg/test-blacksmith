@@ -927,6 +927,7 @@ Object {
         "givenName": "John",
         "id": "cacb559d-b85d-5e64-b623-37252520ebda",
         "jobTitle": "Developer",
+        "lastActivity": 2020-01-01T00:00:00.000Z,
         "organizations": Array [],
         "phone": "+44 1234555",
         "preferences": Array [],

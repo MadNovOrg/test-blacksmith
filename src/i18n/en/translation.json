@@ -312,7 +312,14 @@
       "education": "Education",
       "adults-health-and-social-care": "Adults Health and Social Care",
       "childrens-health-and-social-care": "Childrens Health and Social Care"
-    }
+    },
+    "org-name": "Organization name",
+    "trust-type": "Trust type",
+    "trust-name": "Trust name",
+    "org-email": "Organization email",
+    "org-phone": "Organization phone",
+    "ofsted-rating": "Ofsted rating",
+    "local-authority": "Local authority"
   },
   "components": {
     "not-found": {
@@ -1082,6 +1089,65 @@
       "organization-admin-details-subtitle": "Please assign an administrator to this organisation. An Organisation Admin can invite additional users to their organisation.",
       "email-alert": "Please make sure the email is entered correctly.",
       "save-organization": "Save organisation"
+    },
+    "org-details": {
+      "org-not-found": "Organization not found.",
+      "back-to-organizations": "Back to organizations",
+      "tabs": {
+        "details": {
+          "title": "Details",
+          "org-details-section": {
+            "title": "Organization details",
+            "name": "Name",
+            "address": "Address",
+            "org-email": "Organization email",
+            "sector": "Sector",
+            "trust-type": "Trust type",
+            "trust": "Trust",
+            "local-authority": "Local authority",
+            "ofsted-rating": "Ofsted rating",
+            "ofsted-last-inspection": "Ofsted last inspection"
+          },
+          "additional-details": {
+            "title": "Additional details",
+            "head-first-name": "Head first name",
+            "head-last-name": "Head last name",
+            "head-title": "Head title",
+            "head-preffered-job-title": "Head preffered job title",
+            "website": "Website",
+            "head-preferred-job-title": "Head preferred job title"
+          },
+          "user-details": {
+            "title": "User details",
+            "total-number-of-users": "Total number of users",
+            "active-certifications": "Active certifications",
+            "expired-certifications": "Expired certifications"
+          }
+        },
+        "users": {
+          "title": "Users"
+        }
+      },
+      "edit-organization": "Edit organization"
+    },
+    "edit-org-details": {
+      "title": "Please complete your organization profile",
+      "organization-details": "Organization Details",
+      "org-name": "Organization name",
+      "trust-name": "Trust name",
+      "org-email": "Organization email",
+      "trust-type": "Trust type",
+      "org-phone": "Organization phone",
+      "sector": "Sector",
+      "local-authority": "Local authority",
+      "ofsted-rating": "Ofsted rating",
+      "ofsted-last-inspection": "Ofsted last inspection",
+      "additional-details": "Additional details (optional)",
+      "head-first-name": "Head first name (optional)",
+      "head-last-name": "Head last name (optional)",
+      "head-title": "Head title (optional)",
+      "head-preferred-job-title": "Head preferred job title (optional)",
+      "website": "Organization website (optional)"
     }
   },
   "course-evaluation": {
@@ -1144,5 +1210,20 @@
     "long": "{{date, date_long}}",
     "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
     "fullDateTime": "{{date, date_full}}"
+  },
+  "trust-type": {
+    "single_academy_trust": "Single Academy Trust",
+    "supported_by_a_trust": "Supported by a trust",
+    "not_applicable": "Not applicable",
+    "multi_academy_trust": "Multi-academy Trust"
+  },
+  "ofsted-rating": {
+    "good": "Good",
+    "inadequate": "Inadequate",
+    "insufficient_evidence": "Insufficient evidence",
+    "outstanding": "Outstanding",
+    "requires_improvement": "Requires improvement",
+    "serious_weaknesses": "Serious weaknesses",
+    "special_measures": "Special measures"
   }
 }

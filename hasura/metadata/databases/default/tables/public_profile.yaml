@@ -18,6 +18,8 @@ configuration:
       custom_name: createdAt
     contact_details:
       custom_name: contactDetails
+    last_activity:
+      custom_name: lastActivity
     go1_id:
       custom_name: go1Id
   custom_column_names:
@@ -28,8 +30,18 @@ configuration:
     updated_at: updatedAt
     created_at: createdAt
     contact_details: contactDetails
+    last_activity: lastActivity
     go1_id: go1Id
 array_relationships:
+  - name: certificates
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: course_certificate
+        insertion_order: null
+        column_mapping:
+          id: profile_id
   - name: identities
     using:
       foreign_key_constraint_on:
@@ -59,6 +71,35 @@ computed_fields:
         name: profile_full_name
     comment: ""
 select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - addresses
+        - attributes
+        - contact_details
+        - created_at
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - email
+        - family_name
+        - given_name
+        - go1_id
+        - go1_profile
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - phone
+        - preferences
+        - stripe_customer_id
+        - tags
+        - title
+        - updated_at
+      computed_fields:
+        - fullName
+      filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:
@@ -76,6 +117,7 @@ select_permissions:
         - go1_profile
         - id
         - job_title
+        - last_activity
         - original_record
         - phone
         - preferences
@@ -103,6 +145,7 @@ select_permissions:
         - given_name
         - id
         - job_title
+        - last_activity
         - original_record
         - phone
         - preferences
@@ -126,6 +169,7 @@ update_permissions:
         - family_name
         - given_name
         - job_title
+        - last_activity
         - phone
         - preferences
         - tags
@@ -143,6 +187,7 @@ update_permissions:
         - family_name
         - given_name
         - job_title
+        - last_activity
         - phone
       filter:
         id:

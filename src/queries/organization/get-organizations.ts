@@ -4,7 +4,13 @@ import { ORGANIZATION } from '@app/queries/fragments'
 import { Organization } from '@app/types'
 
 export type ResponseType = {
-  orgs: Organization[]
+  orgs: (Organization & {
+    members?: {
+      profile: {
+        lastActivity: Date
+      }
+    }[]
+  })[]
 }
 
 export type ParamsType = {
@@ -20,6 +26,11 @@ export const QUERY = gql`
   ) {
     orgs: organization(where: $where, order_by: $orderBy) {
       ...Organization
+      members {
+        profile {
+          lastActivity
+        }
+      }
     }
   }
 `

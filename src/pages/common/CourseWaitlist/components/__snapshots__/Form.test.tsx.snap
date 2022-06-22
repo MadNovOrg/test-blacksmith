@@ -251,7 +251,7 @@ Object {
               for="orgName"
               id="orgName-label"
             >
-              Organisation Name
+              Organization name
               <span
                 aria-hidden="true"
                 class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -543,7 +543,7 @@ Object {
             for="orgName"
             id="orgName-label"
           >
-            Organisation Name
+            Organization name
             <span
               aria-hidden="true"
               class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -615,6 +615,7 @@ Object {
         "givenName": "John",
         "id": "cacb559d-b85d-5e64-b623-37252520ebda",
         "jobTitle": "Developer",
+        "lastActivity": 2020-01-01T00:00:00.000Z,
         "organizations": Array [],
         "phone": "+44 1234555",
         "preferences": Array [],

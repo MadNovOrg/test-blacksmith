@@ -72,7 +72,8 @@ export const buildOrganization = build<Organization>({
     preferences: [],
     region: fake(f => f.random.word()),
     sector: fake(f => f.random.word()),
-    lastActivity: fake(f => f.date.past()),
+    trustName: fake(f => f.random.word()),
+    trustType: fake(f => f.random.word()),
   },
 })
 
@@ -98,6 +99,7 @@ export const buildProfile = build<Profile>({
     organizations: [{ organization: buildOrganization() }],
     dietaryRestrictions: null,
     disabilities: null,
+    lastActivity: new Date().toISOString(),
   },
   postBuild: profile => ({
     ...profile,

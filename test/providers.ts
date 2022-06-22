@@ -25,6 +25,7 @@ export const profile = {
   roles: [{ role: { name: RoleName.USER } }],
   dietaryRestrictions: null,
   disabilities: null,
+  lastActivity: new Date('2020-01-01 00:00:00'),
 } as AuthContextType['profile']
 
 export interface Providers {

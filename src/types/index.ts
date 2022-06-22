@@ -82,7 +82,8 @@ export type Organization = {
   preferences: { [name: string]: string }
   region: string
   sector: string
-  lastActivity: Date
+  trustName: string
+  trustType: TrustType
 } & Base
 
 export type Profile = {
@@ -105,6 +106,7 @@ export type Profile = {
   preferences: { [key: string]: string }[]
   organizations: Array<{ organization: Organization }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
+  lastActivity: Date
 } & Base
 
 export type Role = {
@@ -173,6 +175,23 @@ export enum Color {
   YELLOW = 'yellow',
   PURPLE = 'purple',
   FUSCHIA = 'fuschia',
+}
+
+export enum TrustType {
+  SINGLE_ACADEMY_TRUST = 'SINGLE_ACADEMY_TRUST',
+  SUPPORTED_BY_A_TRUST = 'SUPPORTED_BY_A_TRUST',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+  MULTI_ACADEMY_TRUST = 'MULTI_ACADEMY_TRUST',
+}
+
+export enum OfstedRating {
+  GOOD = 'GOOD',
+  INADEQUATE = 'INADEQUATE',
+  INSUFFICIENT_EVIDENCE = 'INSUFFICIENT_EVIDENCE',
+  OUTSTANDING = 'OUTSTANDING',
+  REQUIRES_IMPROVEMENT = 'REQUIRES_IMPROVEMENT',
+  SERIOUS_WEAKNESSES = 'SERIOUS_WEAKNESSES',
+  SPECIAL_MEASURES = 'SPECIAL_MEASURES',
 }
 
 export type Module = {

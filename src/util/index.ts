@@ -13,6 +13,7 @@ import {
   SearchTrainer,
   CourseInput,
   Address,
+  Organization,
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
@@ -235,4 +236,18 @@ export function userExistsInCognito(email: string) {
   return Auth.signIn(email, '123')
     .then(() => true)
     .catch(err => err.code === 'NotAuthorizedException')
+}
+
+export function renderOrgAddress(org?: Organization) {
+  if (!org?.address) return ''
+  return [
+    org.address.line1,
+    org.address.line2,
+    org.address.city,
+    org.address.state,
+    org.address.postCode,
+    org.address.country,
+  ]
+    .filter(Boolean)
+    .join(', ')
 }

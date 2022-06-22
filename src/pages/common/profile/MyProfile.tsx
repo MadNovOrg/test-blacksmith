@@ -21,27 +21,13 @@ import { useNavigate } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
+import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import useProfileCertifications from '@app/hooks/useProfileCertifications'
 import { CourseCertificate } from '@app/types'
 
 type MyProfilePageProps = unknown
-
-const DetailsRow = ({
-  label,
-  value,
-}: {
-  label: string
-  value: string | null
-}) => (
-  <Box display="flex" alignItems="center" mb={2}>
-    <Typography flex={1} color="grey.700">
-      {label}
-    </Typography>
-    <Typography flex={2}>{value}</Typography>
-  </Box>
-)
 
 export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
   const { t } = useTranslation()

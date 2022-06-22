@@ -1,0 +1,4 @@
+table:
+  schema: public
+  name: trust_type
+is_enum: true

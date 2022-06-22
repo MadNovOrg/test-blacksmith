@@ -37,7 +37,7 @@ function fillForm() {
   userEvent.type(screen.getByLabelText('First Name *'), data.firstName)
   userEvent.type(screen.getByLabelText('Last Name *'), data.lastName)
   userEvent.type(screen.getByLabelText('Work email *'), data.email)
-  userEvent.type(screen.getByLabelText('Organisation Name *'), data.orgName)
+  userEvent.type(screen.getByLabelText('Organization name *'), data.orgName)
   userEvent.type(screen.getByLabelText('Phone *'), data.phone)
 
   userEvent.click(screen.getByLabelText('Sector'))

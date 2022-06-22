@@ -108,7 +108,7 @@ export const CreateOrganization = () => {
         } as Address,
         xeroId,
       })
-      navigate(`organizations/${response.org.id}`)
+      navigate(`../${response.org.id}/details`)
     } catch (e: unknown) {
       setError((e as Error).message)
     } finally {

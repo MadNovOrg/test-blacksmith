@@ -4,6 +4,10 @@ table:
 configuration:
   custom_root_fields: {}
   column_config:
+    trust_name:
+      custom_name: trustName
+    trust_type:
+      custom_name: trustType
     updated_at:
       custom_name: updatedAt
     created_at:
@@ -12,14 +16,13 @@ configuration:
       custom_name: xeroContactId
     contact_details:
       custom_name: contactDetails
-    last_activity:
-      custom_name: lastActivity
   custom_column_names:
+    trust_name: trustName
+    trust_type: trustType
     updated_at: updatedAt
     created_at: createdAt
     xero_contact_id: xeroContactId
     contact_details: contactDetails
-    last_activity: lastActivity
 array_relationships:
   - name: members
     using:
@@ -35,7 +38,15 @@ insert_permissions:
       columns:
         - address
         - attributes
+        - contact_details
         - name
+        - original_record
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
         - xero_contact_id
       backend_only: false
   - role: unverified
@@ -46,43 +57,6 @@ insert_permissions:
         - name
       backend_only: false
 select_permissions:
-  - role: unverified
-    permission:
-      columns:
-        - address
-        - attributes
-        - contact_details
-        - created_at
-        - id
-        - name
-        - preferences
-        - tags
-        - updated_at
-        - xero_contact_id
-        - sector
-        - region
-        - last_activity
-      filter: {}
-  - role: user
-    permission:
-      columns:
-        - address
-        - attributes
-        - contact_details
-        - created_at
-        - id
-        - name
-        - original_record
-        - preferences
-        - tags
-        - updated_at
-        - xero_contact_id
-        - sector
-        - region
-        - last_activity
-      filter: {}
-      allow_aggregations: true
-update_permissions:
   - role: tt-admin
     permission:
       columns:
@@ -95,19 +69,64 @@ update_permissions:
         - tags
         - region
         - sector
+        - trust_name
+        - trust_type
         - xero_contact_id
         - created_at
-        - last_activity
         - updated_at
         - id
       filter: {}
-      check: null
+  - role: unverified
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - created_at
+        - id
+        - name
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - updated_at
+        - xero_contact_id
+      filter: {}
   - role: user
     permission:
       columns:
-        - last_activity
-      filter:
-        members:
-          profile_id:
-            _eq: X-Hasura-User-Id
+        - address
+        - attributes
+        - contact_details
+        - created_at
+        - id
+        - name
+        - original_record
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - updated_at
+        - xero_contact_id
+      filter: {}
+update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - name
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      filter: {}
       check: null

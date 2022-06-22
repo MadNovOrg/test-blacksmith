@@ -104,6 +104,21 @@ select_permissions:
           trainers:
             profile_id:
               _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      columns:
+        - certification_date
+        - expiry_date
+        - course_id
+        - course_level
+        - course_name
+        - number
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:

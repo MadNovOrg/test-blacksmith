@@ -6,6 +6,8 @@ import { AdminPage } from '@app/pages/admin'
 import Contacts from '@app/pages/admin/components/Contacts'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
+import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
+import { OrgDetails } from '@app/pages/admin/components/Organizations/OrgDetails'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -65,6 +67,10 @@ const TTAdminRoutes = () => {
           <Route path="organizations">
             <Route index element={<Organizations />} />
             <Route path="new" element={<CreateOrganization />} />
+            <Route path=":id">
+              <Route path="details" element={<OrgDetails />} />
+              <Route path="edit" element={<EditOrgDetails />} />
+            </Route>
           </Route>
 
           {acl.canViewXeroConnect() ? (
