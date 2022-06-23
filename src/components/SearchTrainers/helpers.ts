@@ -28,7 +28,7 @@ export type SearchTrainersResp = {
 }
 
 export const SEARCH_TRAINERS = gql`
-  query ($input: SearchTrainersInput!) {
+  query SearchTrainers($input: SearchTrainersInput!) {
     trainers: searchTrainers(input: $input) {
       id
       fullName

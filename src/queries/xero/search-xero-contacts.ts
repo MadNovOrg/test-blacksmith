@@ -12,7 +12,7 @@ export type ResponseType = {
 export type ParamsType = { input: { searchTerm: string } }
 
 export const QUERY = gql`
-  query ($input: XeroContactSearchInput!) {
+  query SearchXeroContacts($input: XeroContactSearchInput!) {
     xero: xeroContactSearch(input: $input) {
       contacts {
         name
