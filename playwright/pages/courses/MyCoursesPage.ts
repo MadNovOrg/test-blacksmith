@@ -13,15 +13,6 @@ import { BasePage } from '../BasePage'
 import { CourseBuilderPage } from './CourseBuilderPage'
 import { CourseDetailsPage } from './CourseDetailsPage'
 
-const cellLinkContainsCourseId: (
-  id: number
-) => (cell: Locator) => Promise<boolean> = (id: number) => {
-  return async cell => {
-    const link = (await cell.locator('a').getAttribute('href')) as string
-    return link.includes(`/${id}/`)
-  }
-}
-
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator
   readonly filterBy: (text: string) => Locator
@@ -81,22 +72,19 @@ export class MyCoursesPage extends BasePage {
   }
 
   async clickCourseBuildButton(courseId: number): Promise<CourseBuilderPage> {
-    const cell = await this.coursesTable.getCell(
-      'Name',
-      cellLinkContainsCourseId(courseId),
-      ''
-    )
-    await cell.locator('button').click()
+    await this.tableRoot
+      .locator(`data-testid=course-row-${courseId} >> button:has-text("Build")`)
+      .click()
+
     return new CourseBuilderPage(this.page)
   }
 
   async clickCourseManageButton(courseId: number): Promise<CourseDetailsPage> {
-    const cell = await this.coursesTable.getCell(
-      'Name',
-      cellLinkContainsCourseId(courseId),
-      ''
-    )
-    await cell.locator('button').click()
+    await this.tableRoot
+      .locator(
+        `data-testid=course-row-${courseId} >> button:has-text("Manage")`
+      )
+      .click()
     return new CourseDetailsPage(this.page)
   }
 
