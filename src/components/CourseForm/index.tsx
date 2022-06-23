@@ -106,7 +106,7 @@ const CourseForm: React.FC<Props> = ({
               val === CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(
-                t('components.course-form.zoom-meeting-url-required')
+                t('components.course-form.online-meeting-link-required')
               ),
           }),
         startDateTime: yup
@@ -481,7 +481,7 @@ const CourseForm: React.FC<Props> = ({
                 zoomLinkStatus === LoadingStatus.ERROR
             )}
             sx={{ marginTop: 2 }}
-            label={t('components.course-form.zoom-meeting-url-label')}
+            label={t('components.course-form.online-meeting-link-label')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="start">

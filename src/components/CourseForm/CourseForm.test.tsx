@@ -21,10 +21,12 @@ describe('component: CourseForm', () => {
     userEvent.click(screen.getByLabelText('Face to face'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
-    expect(screen.queryByLabelText('Zoom meeting url')).not.toBeInTheDocument()
+    expect(
+      screen.queryByLabelText('Online meeting link')
+    ).not.toBeInTheDocument()
   })
 
-  it('displays zoom meeting url field if VIRTUAL delivery type', async () => {
+  it('displays online meeting link field if VIRTUAL delivery type', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
@@ -34,10 +36,10 @@ describe('component: CourseForm', () => {
     })
 
     expect(screen.queryByText('Venue Selector')).not.toBeInTheDocument()
-    expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
+    expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
   })
 
-  it('displays venue selector and zoom meeting field if MIXED delivery type', async () => {
+  it('displays venue selector and online meeting link field if MIXED delivery type', async () => {
     await waitFor(() => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
@@ -45,7 +47,7 @@ describe('component: CourseForm', () => {
     userEvent.click(screen.getByLabelText('Both'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
-    expect(screen.getByLabelText('Zoom meeting url')).toBeInTheDocument()
+    expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
   })
 
   it.each([
@@ -54,7 +56,7 @@ describe('component: CourseForm', () => {
     [CourseType.CLOSED, true],
     [CourseType.INDIRECT, false],
   ])(
-    'ONLY auto fills zoom meeting url field for OPEN and CLOSED course types',
+    'ONLY auto fills online meeting link field for OPEN and CLOSED course types',
     async (type, result) => {
       await waitFor(() => {
         render(<CourseForm type={type} />)
