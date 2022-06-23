@@ -8,9 +8,10 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
+import { CourseType } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 
-import { sectors } from '../../CourseBooking/components/org-data'
+import { sectors } from '../../pages/common/CourseBooking/components/org-data'
 
 const sourceOptions = [
   'source-word-of-mouth',
@@ -31,35 +32,65 @@ export type FormInputs = {
   firstName: string
   lastName: string
   email: string
-  interest: string
+  interest?: string
   phone: string
   orgName: string
   sector: string
   source?: string
   message?: string
+  numParticipants?: number
 }
 
 type Props = {
   onSubmit?: (data: FormInputs) => void
   saving?: boolean
+  courseType?: CourseType.Closed | CourseType.Open
 }
 
-export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
+export const CourseEnquiryForm: React.FC<Props> = ({
+  onSubmit = noop,
+  saving,
+  courseType = CourseType.Open,
+}) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => {
     return yup.object({
-      firstName: yup.string().required(t('pages.enquiry.required-first-name')),
-      lastName: yup.string().required(t('pages.enquiry.required-last-name')),
-      email: schemas.email(t).required(t('pages.enquiry.required-email')),
+      firstName: yup
+        .string()
+        .required(t('components.course-enquiry-form.required-first-name')),
+      lastName: yup
+        .string()
+        .required(t('components.course-enquiry-form.required-last-name')),
+      email: schemas
+        .email(t)
+        .required(t('components.course-enquiry-form.required-email')),
       source: yup.string(),
-      interest: yup.string().required(t('pages.enquiry.required-interest')),
+      ...(courseType === CourseType.Open
+        ? {
+            interest: yup
+              .string()
+              .required(t('components.course-enquiry-form.required-interest')),
+          }
+        : {
+            numParticipants: yup
+              .number()
+              .positive(
+                t('components.course-enquiry-form.participants-negative')
+              ),
+          }),
       message: yup.string(),
-      orgName: yup.string().required(t('pages.enquiry.required-organization')),
-      sector: yup.string().required(t('pages.enquiry.required-sector')),
-      phone: yup.string().required(t('pages.enquiry.required-phone')),
+      orgName: yup
+        .string()
+        .required(t('components.course-enquiry-form.required-organization')),
+      sector: yup
+        .string()
+        .required(t('components.course-enquiry-form.required-sector')),
+      phone: yup
+        .string()
+        .required(t('components.course-enquiry-form.required-phone')),
     })
-  }, [t])
+  }, [t, courseType])
 
   const {
     register,
@@ -95,18 +126,21 @@ export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <TextField
-        id="interest"
-        label={t('pages.enquiry.interest-label')}
-        variant="standard"
-        error={!!errors.interest}
-        helperText={errors.interest?.message}
-        {...register('interest')}
-        inputProps={{ 'data-testid': 'input-interest' }}
-        sx={{ bgcolor: 'grey.100', marginBottom: 3 }}
-        fullWidth
-        required
-      />
+      {courseType === CourseType.Open ? (
+        <TextField
+          id="interest"
+          label={t('components.course-enquiry-form.interest-label')}
+          variant="standard"
+          error={!!errors.interest}
+          helperText={errors.interest?.message}
+          {...register('interest')}
+          inputProps={{ 'data-testid': 'input-interest' }}
+          sx={{ bgcolor: 'grey.100', marginBottom: 3 }}
+          fullWidth
+          required
+        />
+      ) : null}
+
       <Grid container spacing={3} mb={3}>
         <Grid item md={6}>
           <TextField
@@ -142,7 +176,7 @@ export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
       </Grid>
       <TextField
         id="email"
-        label={t('pages.enquiry.email-label')}
+        label={t('components.course-enquiry-form.email-label')}
         variant="standard"
         error={!!errors.email}
         helperText={errors.email?.message}
@@ -214,10 +248,25 @@ export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
           <FormHelperText error>{errors.sector?.message}</FormHelperText>
         ) : null}
       </Box>
+      {courseType === CourseType.Closed ? (
+        <TextField
+          id="numParticipants"
+          label={t('components.course-enquiry-form.participants-label')}
+          variant="standard"
+          type="number"
+          min="0"
+          error={!!errors.numParticipants}
+          helperText={errors.numParticipants?.message}
+          {...register('numParticipants')}
+          inputProps={{ 'data-testid': 'input-num-participants' }}
+          sx={{ bgcolor: 'grey.100', marginBottom: 3 }}
+          fullWidth
+        />
+      ) : null}
       <TextField
         id="source"
         select
-        label={t('pages.enquiry.source-label')}
+        label={t('components.course-enquiry-form.source-label')}
         variant="standard"
         error={!!errors.source}
         helperText={errors.source?.message}
@@ -229,18 +278,18 @@ export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
         data-testid="source-select"
       >
         <MenuItem value="" disabled>
-          {t('pages.enquiry.source-label')}
+          {t('components.course-enquiry-form.source-label')}
         </MenuItem>
         {sourceOptions.map(option => (
           <MenuItem key={option} value={option} data-testid={`${option}`}>
-            {t(`pages.enquiry.${option}`)}
+            {t(`components.course-enquiry-form.${option}`)}
           </MenuItem>
         ))}
       </TextField>
 
       <TextField
         id="message"
-        label={t('pages.enquiry.message-label')}
+        label={t('components.course-enquiry-form.message-label')}
         variant="standard"
         error={!!errors.message}
         helperText={errors.message?.message}
@@ -259,7 +308,7 @@ export const Form: React.FC<Props> = ({ onSubmit = noop, saving }) => {
           size="large"
           loading={saving}
         >
-          {t('pages.enquiry.submit-button-label')}
+          {t('components.course-enquiry-form.submit-button-label')}
         </LoadingButton>
       </Box>
     </form>

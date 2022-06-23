@@ -2,7 +2,7 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { gqlRequest } from '@app/lib/gql-request'
-import insertEnquiry from '@app/queries/booking/insert-enquiry'
+import insertBookPrivateCourse from '@app/queries/booking/insert-book-private-course'
 import { CourseType } from '@app/types'
 
 import { screen, render, userEvent, waitFor, waitForCalls } from '@test/index'
@@ -10,7 +10,7 @@ import { buildCourse } from '@test/mock-data-utils'
 
 import { sectors } from '../CourseBooking/components/org-data'
 
-import { CourseEnquiry } from '.'
+import { BookPrivateCourse } from '.'
 
 jest.mock('@app/hooks/use-fetcher')
 jest.mock('@app/lib/gql-request')
@@ -19,7 +19,7 @@ const gqlRequestMocked = jest.mocked(gqlRequest)
 
 function fillForm() {
   const data = {
-    interest: 'Course',
+    numParticipants: 5,
     firstName: 'John',
     lastName: 'Doe',
     email: 'example@example.com',
@@ -31,8 +31,8 @@ function fillForm() {
   }
 
   userEvent.type(
-    screen.getByLabelText('What is your interest? *'),
-    data.interest
+    screen.getByLabelText('Number of course participants'),
+    String(data.numParticipants)
   )
   userEvent.type(screen.getByLabelText('First Name *'), data.firstName)
   userEvent.type(screen.getByLabelText('Last Name *'), data.lastName)
@@ -53,24 +53,26 @@ function fillForm() {
   return data
 }
 
-describe('page: CourseEnquiry', () => {
-  it('saves the course enquiry', async () => {
+describe('page: BookPrivateCourse', () => {
+  it('saves the booking', async () => {
     gqlRequestMocked.mockResolvedValue({
-      insert_course_enquiry: {
+      insert_private_course_booking: {
         affected_rows: 1,
       },
     })
 
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: CourseType.CLOSED,
       },
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
+      <MemoryRouter
+        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
+      >
         <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
+          <Route path="/book-private-course" element={<BookPrivateCourse />} />
         </Routes>
       </MemoryRouter>
     )
@@ -81,8 +83,8 @@ describe('page: CourseEnquiry', () => {
 
     await waitForCalls(gqlRequestMocked, 1)
 
-    expect(gqlRequestMocked).toHaveBeenCalledWith(insertEnquiry, {
-      enquiry: expect.objectContaining({ courseId: Number(openCourse.id) }),
+    expect(gqlRequestMocked).toHaveBeenCalledWith(insertBookPrivateCourse, {
+      booking: expect.objectContaining({ courseId: Number(openCourse.id) }),
     })
 
     expect(screen.getByText('Thank you for your enquiry')).toBeInTheDocument()
@@ -90,9 +92,9 @@ describe('page: CourseEnquiry', () => {
 
   it('displays not found page if there is no query param for course id', () => {
     render(
-      <MemoryRouter initialEntries={['/enquiry']}>
+      <MemoryRouter initialEntries={['/book-private-course']}>
         <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
+          <Route path="/book-private-course" element={<BookPrivateCourse />} />
         </Routes>
       </MemoryRouter>
     )
@@ -103,14 +105,16 @@ describe('page: CourseEnquiry', () => {
   it('validates the form', async () => {
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: CourseType.CLOSED,
       },
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
+      <MemoryRouter
+        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
+      >
         <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
+          <Route path="/book-private-course" element={<BookPrivateCourse />} />
         </Routes>
       </MemoryRouter>
     )
@@ -132,19 +136,21 @@ describe('page: CourseEnquiry', () => {
     })
   })
 
-  it("displays an error message if course enquiry wasn't saved", async () => {
+  it("displays an error message if course booking wasn't saved", async () => {
     gqlRequestMocked.mockRejectedValue(new Error())
 
     const openCourse = buildCourse({
       overrides: {
-        type: CourseType.OPEN,
+        type: CourseType.CLOSED,
       },
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
+      <MemoryRouter
+        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
+      >
         <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
+          <Route path="/book-private-course" element={<BookPrivateCourse />} />
         </Routes>
       </MemoryRouter>
     )

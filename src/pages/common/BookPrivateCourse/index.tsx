@@ -17,17 +17,17 @@ import {
 } from '@app/components/CourseEnquiryForm'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import {
+  BookPrivateCourseMutation,
+  BookPrivateCourseMutationVariables,
   CourseType,
-  InsertCourseEnquiryMutation,
-  InsertCourseEnquiryMutationVariables,
 } from '@app/generated/graphql'
 import { gqlRequest } from '@app/lib/gql-request'
-import insertEnquiry from '@app/queries/booking/insert-enquiry'
+import insertBookPrivateCourse from '@app/queries/booking/insert-book-private-course'
 import { LoadingStatus } from '@app/util'
 
 import { NotFound } from '../NotFound'
 
-export const CourseEnquiry = () => {
+export const BookPrivateCourse = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const [saving, setSaving] = useState(false)
@@ -43,24 +43,24 @@ export const CourseEnquiry = () => {
       setSaving(true)
 
       const result = await gqlRequest<
-        InsertCourseEnquiryMutation,
-        InsertCourseEnquiryMutationVariables
-      >(insertEnquiry, {
-        enquiry: {
+        BookPrivateCourseMutation,
+        BookPrivateCourseMutationVariables
+      >(insertBookPrivateCourse, {
+        booking: {
           courseId: Number(courseId) ?? 0,
           givenName: data.firstName,
           familyName: data.lastName,
           email: data.email,
-          interest: data.interest,
           phone: data.phone,
           orgName: data.orgName,
           sector: data.sector,
           source: data.source,
           message: data.message,
+          numParticipants: data.numParticipants,
         },
       })
 
-      if (result.insert_course_enquiry?.affected_rows) {
+      if (result.insert_private_course_booking?.affected_rows) {
         setSuccess(true)
       }
     } catch (err) {
@@ -76,9 +76,11 @@ export const CourseEnquiry = () => {
       <AppLayoutMinimal>
         <Box textAlign="center">
           <Typography variant="h3" mb={2}>
-            {t('pages.enquiry.success-title')}
+            {t('pages.book-private-course.success-title')}
           </Typography>
-          <Typography mb={3}>{t('pages.enquiry.success-message')}</Typography>
+          <Typography mb={3}>
+            {t('pages.book-private-course.success-message')}
+          </Typography>
           <Button
             variant="contained"
             color="primary"
@@ -95,15 +97,15 @@ export const CourseEnquiry = () => {
   return (
     <AppLayoutMinimal width={628}>
       <Typography variant="h3" mb={2} textAlign="center">
-        {t('pages.enquiry.title')}
+        {t('pages.book-private-course.title')}
       </Typography>
       <Typography mb={5} textAlign="center">
-        {t('pages.enquiry.subtitle')}
+        {t('pages.book-private-course.subtitle')}
       </Typography>
 
       {hasError ? (
         <Alert severity="error" sx={{ marginBottom: 3 }}>
-          {t('pages.enquiry.error-message')}
+          {t('pages.book-private-course.error-message')}
         </Alert>
       ) : null}
 
@@ -118,7 +120,7 @@ export const CourseEnquiry = () => {
         <CourseEnquiryForm
           onSubmit={handleSubmit}
           saving={saving}
-          courseType={CourseType.Open}
+          courseType={CourseType.Closed}
         />
       )}
     </AppLayoutMinimal>

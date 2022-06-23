@@ -34,6 +34,7 @@
 - "!include public_organization.yaml"
 - "!include public_organization_member.yaml"
 - "!include public_payment_methods.yaml"
+- "!include public_private_course_booking.yaml"
 - "!include public_profile.yaml"
 - "!include public_profile_role.yaml"
 - "!include public_profile_temp.yaml"

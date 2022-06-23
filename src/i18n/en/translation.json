@@ -313,11 +313,10 @@
       "adults-health-and-social-care": "Adults Health and Social Care",
       "childrens-health-and-social-care": "Childrens Health and Social Care"
     },
-    "org-name": "Organization name",
     "trust-type": "Trust type",
     "trust-name": "Trust name",
-    "org-email": "Organization email",
-    "org-phone": "Organization phone",
+    "org-email": "Organisation email",
+    "org-phone": "Organisation phone",
     "ofsted-rating": "Ofsted rating",
     "local-authority": "Local authority",
     "edit": "Edit"
@@ -479,18 +478,8 @@
       "noRecords-first": "No {{itemsName}} at this time",
       "noMatches-first": "No matching {{itemsName}} found",
       "noMatches-second": "Please adjust your filter or search criteria"
-    }
-  },
-  "pages": {
-    "waitlist": {
-      "course-full": "Course fully booked",
-      "form-errors": {
-        "constraint-violation": "You've already added to the waiting list."
-      }
     },
-    "enquiry": {
-      "title": "Enquire now",
-      "subtitle": "Tell us a little more about yourself so we can help you better.",
+    "course-enquiry-form": {
       "required-first-name": "First name is required",
       "required-last-name": "Last name is required",
       "required-email": "Email is required",
@@ -502,6 +491,8 @@
       "email-label": "Work email",
       "source-label": "How did you hear about us? (optional)",
       "message-label": "Message (optional)",
+      "participants-label": "Number of course participants",
+      "participants-negative": "Number of participants must be positive number",
       "submit-button-label": "Enquire now",
       "source-word-of-mouth": "Word of mouth",
       "source-facebook": "Facebook",
@@ -514,7 +505,27 @@
       "source-bing": "Bing",
       "source-other-search": "Other search engine",
       "source-telemarketing": "Tele-marketing",
-      "source-leaflet": "Leaflet/Brochure",
+      "source-leaflet": "Leaflet/Brochure"
+    }
+  },
+  "pages": {
+    "waitlist": {
+      "course-full": "Course fully booked",
+      "form-errors": {
+        "constraint-violation": "You've already added to the waiting list."
+      }
+    },
+    "enquiry": {
+      "title": "Enquire now",
+      "subtitle": "Tell us a little more about yourself so we can help you better.",
+      "success-title": "Thank you for your enquiry",
+      "success-message": "We’ll get back to you as soon as possible.",
+      "error-message": "There was an error saving the enquiry"
+    },
+    "book-private-course": {
+      "title": "Book a private course",
+      "subtitle": "Tell us a little more about yourself so we can help you better.",
+      "number-participants": "Number of course participants",
       "success-title": "Thank you for your enquiry",
       "success-message": "We’ll get back to you as soon as possible.",
       "error-message": "There was an error saving the enquiry"
@@ -1027,7 +1038,7 @@
     },
     "admin": {
       "organizations": {
-        "title": "Organizations",
+        "title": "Organisations",
         "columns": {
           "name": "Name",
           "status": "Status",
@@ -1038,7 +1049,7 @@
           "last-activity": "Last activity",
           "created-on": "Created on"
         },
-        "add-new-organization": "Add new organization"
+        "add-new-organization": "Add new organisation"
       }
     },
     "my-profile": {
@@ -1081,7 +1092,7 @@
     "create-organization": {
       "title": "Create Organisation",
       "fields": {
-        "organization-name": "Organization name",
+        "organization-name": "Organisation name",
         "work-email": "Work email"
       },
       "add-new-organization": "Add new organisation",
@@ -1092,16 +1103,16 @@
       "save-organization": "Save organisation"
     },
     "org-details": {
-      "org-not-found": "Organization not found.",
-      "back-to-organizations": "Back to organizations",
+      "org-not-found": "Organisation not found.",
+      "back-to-organizations": "Back to organisations",
       "tabs": {
         "details": {
           "title": "Details",
           "org-details-section": {
-            "title": "Organization details",
+            "title": "Organisation details",
             "name": "Name",
             "address": "Address",
-            "org-email": "Organization email",
+            "org-email": "Organisation email",
             "sector": "Sector",
             "trust-type": "Trust type",
             "trust": "Trust",
@@ -1136,20 +1147,20 @@
           "cols-last-activity": "Last activity",
           "cols-created-on": "Created on",
           "cols-permissions": "Permissions",
-          "organization-admin": "Organization admin",
+          "organization-admin": "Organisation admin",
           "no-permissions": "No permissions"
         }
       },
-      "edit-organization": "Edit organization"
+      "edit-organization": "Edit organisation"
     },
     "edit-org-details": {
-      "title": "Please complete your organization profile",
-      "organization-details": "Organization Details",
-      "org-name": "Organization name",
+      "title": "Please complete your organisation profile",
+      "organization-details": "Organisation Details",
+      "org-name": "Organisation name",
       "trust-name": "Trust name",
-      "org-email": "Organization email",
+      "org-email": "Organisation email",
       "trust-type": "Trust type",
-      "org-phone": "Organization phone",
+      "org-phone": "Organisation phone",
       "sector": "Sector",
       "local-authority": "Local authority",
       "ofsted-rating": "Ofsted rating",
@@ -1159,7 +1170,7 @@
       "head-last-name": "Head last name (optional)",
       "head-title": "Head title (optional)",
       "head-preferred-job-title": "Head preferred job title (optional)",
-      "website": "Organization website (optional)"
+      "website": "Organisation website (optional)"
     }
   },
   "course-evaluation": {

@@ -20,7 +20,7 @@ Object {
               <h2
                 class="MuiTypography-root MuiTypography-h2 css-57hbtw-MuiTypography-root"
               >
-                Please complete your organization profile
+                Please complete your organisation profile
               </h2>
             </div>
             <form
@@ -32,7 +32,7 @@ Object {
               <h6
                 class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
               >
-                Organization Details
+                Organisation Details
               </h6>
               <div
                 class="MuiBox-root css-12dktrg"
@@ -49,7 +49,7 @@ Object {
                       for="orgName"
                       id="orgName-label"
                     >
-                      Organization name
+                      Organisation name
                       <span
                         aria-hidden="true"
                         class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -181,7 +181,7 @@ Object {
                       for="orgEmail"
                       id="orgEmail-label"
                     >
-                      Organization email
+                      Organisation email
                       <span
                         aria-hidden="true"
                         class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -218,7 +218,7 @@ Object {
                       for="orgPhone"
                       id="orgPhone-label"
                     >
-                      Organization phone
+                      Organisation phone
                       <span
                         aria-hidden="true"
                         class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -562,7 +562,7 @@ Object {
                       for="website"
                       id="website-label"
                     >
-                      Organization website (optional)
+                      Organisation website (optional)
                     </label>
                     <div
                       class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
@@ -627,7 +627,7 @@ Object {
             <h2
               class="MuiTypography-root MuiTypography-h2 css-57hbtw-MuiTypography-root"
             >
-              Please complete your organization profile
+              Please complete your organisation profile
             </h2>
           </div>
           <form
@@ -639,7 +639,7 @@ Object {
             <h6
               class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
             >
-              Organization Details
+              Organisation Details
             </h6>
             <div
               class="MuiBox-root css-12dktrg"
@@ -656,7 +656,7 @@ Object {
                     for="orgName"
                     id="orgName-label"
                   >
-                    Organization name
+                    Organisation name
                     <span
                       aria-hidden="true"
                       class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -788,7 +788,7 @@ Object {
                     for="orgEmail"
                     id="orgEmail-label"
                   >
-                    Organization email
+                    Organisation email
                     <span
                       aria-hidden="true"
                       class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -825,7 +825,7 @@ Object {
                     for="orgPhone"
                     id="orgPhone-label"
                   >
-                    Organization phone
+                    Organisation phone
                     <span
                       aria-hidden="true"
                       class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -1169,7 +1169,7 @@ Object {
                     for="website"
                     id="website-label"
                   >
-                    Organization website (optional)
+                    Organisation website (optional)
                   </label>
                   <div
                     class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"

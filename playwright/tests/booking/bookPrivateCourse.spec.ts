@@ -12,7 +12,7 @@ import { users } from '../../data/users'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.type = CourseType.OPEN
+    course.type = CourseType.CLOSED
 
     course.id = await insertCourse(
       course,
@@ -25,11 +25,11 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-test('saves course enquiry', async ({ page, course }) => {
-  await page.goto(`${BASE_URL}/enquiry?course_id=${course.id}`)
+test('saves closed course booking', async ({ page, course }) => {
+  await page.goto(`${BASE_URL}/book-private-course?course_id=${course.id}`)
   await page.waitForLoadState('networkidle')
 
-  await page.locator('text=What is your interest? *').type('Course')
+  await page.locator('text=Number of course participants').type('5')
   await page.locator('text=First Name *').type('John')
   await page.locator('text=Last Name *').type('Doe')
   await page.locator('text=Work email *').type('example@example.com')

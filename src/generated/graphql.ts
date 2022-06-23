@@ -16222,6 +16222,10 @@ export type Mutation_Root = {
   delete_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** delete single row from the table: "payment_methods" */
   delete_payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** delete data from the table: "private_course_booking" */
+  delete_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
+  /** delete single row from the table: "private_course_booking" */
+  delete_private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
   /** delete data from the table: "profile" */
   delete_profile?: Maybe<Profile_Mutation_Response>;
   /** delete single row from the table: "profile" */
@@ -16390,6 +16394,10 @@ export type Mutation_Root = {
   insert_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** insert a single row into the table: "payment_methods" */
   insert_payment_methods_one?: Maybe<Payment_Methods>;
+  /** insert data into the table: "private_course_booking" */
+  insert_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
+  /** insert a single row into the table: "private_course_booking" */
+  insert_private_course_booking_one?: Maybe<Private_Course_Booking>;
   /** insert data into the table: "profile" */
   insert_profile?: Maybe<Profile_Mutation_Response>;
   /** insert a single row into the table: "profile" */
@@ -16561,6 +16569,10 @@ export type Mutation_Root = {
   update_payment_methods?: Maybe<Payment_Methods_Mutation_Response>;
   /** update single row of the table: "payment_methods" */
   update_payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** update data of the table: "private_course_booking" */
+  update_private_course_booking?: Maybe<Private_Course_Booking_Mutation_Response>;
+  /** update single row of the table: "private_course_booking" */
+  update_private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
   /** update data of the table: "profile" */
   update_profile?: Maybe<Profile_Mutation_Response>;
   /** update single row of the table: "profile" */
@@ -17032,6 +17044,18 @@ export type Mutation_RootDelete_Payment_MethodsArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Payment_Methods_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Private_Course_BookingArgs = {
+  where: Private_Course_Booking_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Private_Course_Booking_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -17606,6 +17630,20 @@ export type Mutation_RootInsert_Payment_MethodsArgs = {
 export type Mutation_RootInsert_Payment_Methods_OneArgs = {
   object: Payment_Methods_Insert_Input;
   on_conflict?: InputMaybe<Payment_Methods_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Private_Course_BookingArgs = {
+  objects: Array<Private_Course_Booking_Insert_Input>;
+  on_conflict?: InputMaybe<Private_Course_Booking_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Private_Course_Booking_OneArgs = {
+  object: Private_Course_Booking_Insert_Input;
+  on_conflict?: InputMaybe<Private_Course_Booking_On_Conflict>;
 };
 
 
@@ -18254,6 +18292,22 @@ export type Mutation_RootUpdate_Payment_MethodsArgs = {
 export type Mutation_RootUpdate_Payment_Methods_By_PkArgs = {
   _set?: InputMaybe<Payment_Methods_Set_Input>;
   pk_columns: Payment_Methods_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Private_Course_BookingArgs = {
+  _inc?: InputMaybe<Private_Course_Booking_Inc_Input>;
+  _set?: InputMaybe<Private_Course_Booking_Set_Input>;
+  where: Private_Course_Booking_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Private_Course_Booking_By_PkArgs = {
+  _inc?: InputMaybe<Private_Course_Booking_Inc_Input>;
+  _set?: InputMaybe<Private_Course_Booking_Set_Input>;
+  pk_columns: Private_Course_Booking_Pk_Columns_Input;
 };
 
 
@@ -19547,6 +19601,301 @@ export type Point_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['point']>;
   _neq?: InputMaybe<Scalars['point']>;
   _nin?: InputMaybe<Array<Scalars['point']>>;
+};
+
+/** Private course booking enquiry */
+export type Private_Course_Booking = {
+  __typename?: 'private_course_booking';
+  courseId: Scalars['Int'];
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  email: Scalars['String'];
+  familyName: Scalars['String'];
+  givenName: Scalars['String'];
+  id: Scalars['uuid'];
+  message?: Maybe<Scalars['String']>;
+  numParticipants: Scalars['Int'];
+  orgName: Scalars['String'];
+  phone: Scalars['String'];
+  sector: Scalars['String'];
+  source?: Maybe<Scalars['String']>;
+};
+
+/** aggregated selection of "private_course_booking" */
+export type Private_Course_Booking_Aggregate = {
+  __typename?: 'private_course_booking_aggregate';
+  aggregate?: Maybe<Private_Course_Booking_Aggregate_Fields>;
+  nodes: Array<Private_Course_Booking>;
+};
+
+/** aggregate fields of "private_course_booking" */
+export type Private_Course_Booking_Aggregate_Fields = {
+  __typename?: 'private_course_booking_aggregate_fields';
+  avg?: Maybe<Private_Course_Booking_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Private_Course_Booking_Max_Fields>;
+  min?: Maybe<Private_Course_Booking_Min_Fields>;
+  stddev?: Maybe<Private_Course_Booking_Stddev_Fields>;
+  stddev_pop?: Maybe<Private_Course_Booking_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Private_Course_Booking_Stddev_Samp_Fields>;
+  sum?: Maybe<Private_Course_Booking_Sum_Fields>;
+  var_pop?: Maybe<Private_Course_Booking_Var_Pop_Fields>;
+  var_samp?: Maybe<Private_Course_Booking_Var_Samp_Fields>;
+  variance?: Maybe<Private_Course_Booking_Variance_Fields>;
+};
+
+
+/** aggregate fields of "private_course_booking" */
+export type Private_Course_Booking_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Private_Course_Booking_Avg_Fields = {
+  __typename?: 'private_course_booking_avg_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "private_course_booking". All fields are combined with a logical 'AND'. */
+export type Private_Course_Booking_Bool_Exp = {
+  _and?: InputMaybe<Array<Private_Course_Booking_Bool_Exp>>;
+  _not?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+  _or?: InputMaybe<Array<Private_Course_Booking_Bool_Exp>>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  email?: InputMaybe<String_Comparison_Exp>;
+  familyName?: InputMaybe<String_Comparison_Exp>;
+  givenName?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  message?: InputMaybe<String_Comparison_Exp>;
+  numParticipants?: InputMaybe<Int_Comparison_Exp>;
+  orgName?: InputMaybe<String_Comparison_Exp>;
+  phone?: InputMaybe<String_Comparison_Exp>;
+  sector?: InputMaybe<String_Comparison_Exp>;
+  source?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "private_course_booking" */
+export enum Private_Course_Booking_Constraint {
+  /** unique or primary key constraint */
+  PrivateCourseBookingCourseIdEmailKey = 'private_course_booking_course_id_email_key',
+  /** unique or primary key constraint */
+  PrivateCourseBookingPkey = 'private_course_booking_pkey'
+}
+
+/** input type for incrementing numeric columns in table "private_course_booking" */
+export type Private_Course_Booking_Inc_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  numParticipants?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "private_course_booking" */
+export type Private_Course_Booking_Insert_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  message?: InputMaybe<Scalars['String']>;
+  numParticipants?: InputMaybe<Scalars['Int']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Private_Course_Booking_Max_Fields = {
+  __typename?: 'private_course_booking_max_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  numParticipants?: Maybe<Scalars['Int']>;
+  orgName?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Private_Course_Booking_Min_Fields = {
+  __typename?: 'private_course_booking_min_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  message?: Maybe<Scalars['String']>;
+  numParticipants?: Maybe<Scalars['Int']>;
+  orgName?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  sector?: Maybe<Scalars['String']>;
+  source?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "private_course_booking" */
+export type Private_Course_Booking_Mutation_Response = {
+  __typename?: 'private_course_booking_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Private_Course_Booking>;
+};
+
+/** on_conflict condition type for table "private_course_booking" */
+export type Private_Course_Booking_On_Conflict = {
+  constraint: Private_Course_Booking_Constraint;
+  update_columns?: Array<Private_Course_Booking_Update_Column>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "private_course_booking". */
+export type Private_Course_Booking_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  email?: InputMaybe<Order_By>;
+  familyName?: InputMaybe<Order_By>;
+  givenName?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  message?: InputMaybe<Order_By>;
+  numParticipants?: InputMaybe<Order_By>;
+  orgName?: InputMaybe<Order_By>;
+  phone?: InputMaybe<Order_By>;
+  sector?: InputMaybe<Order_By>;
+  source?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: private_course_booking */
+export type Private_Course_Booking_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "private_course_booking" */
+export enum Private_Course_Booking_Select_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  FamilyName = 'familyName',
+  /** column name */
+  GivenName = 'givenName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  NumParticipants = 'numParticipants',
+  /** column name */
+  OrgName = 'orgName',
+  /** column name */
+  Phone = 'phone',
+  /** column name */
+  Sector = 'sector',
+  /** column name */
+  Source = 'source'
+}
+
+/** input type for updating data in table "private_course_booking" */
+export type Private_Course_Booking_Set_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  message?: InputMaybe<Scalars['String']>;
+  numParticipants?: InputMaybe<Scalars['Int']>;
+  orgName?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  sector?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Private_Course_Booking_Stddev_Fields = {
+  __typename?: 'private_course_booking_stddev_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Private_Course_Booking_Stddev_Pop_Fields = {
+  __typename?: 'private_course_booking_stddev_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Private_Course_Booking_Stddev_Samp_Fields = {
+  __typename?: 'private_course_booking_stddev_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Private_Course_Booking_Sum_Fields = {
+  __typename?: 'private_course_booking_sum_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  numParticipants?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "private_course_booking" */
+export enum Private_Course_Booking_Update_Column {
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  FamilyName = 'familyName',
+  /** column name */
+  GivenName = 'givenName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Message = 'message',
+  /** column name */
+  NumParticipants = 'numParticipants',
+  /** column name */
+  OrgName = 'orgName',
+  /** column name */
+  Phone = 'phone',
+  /** column name */
+  Sector = 'sector',
+  /** column name */
+  Source = 'source'
+}
+
+/** aggregate var_pop on columns */
+export type Private_Course_Booking_Var_Pop_Fields = {
+  __typename?: 'private_course_booking_var_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Private_Course_Booking_Var_Samp_Fields = {
+  __typename?: 'private_course_booking_var_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Private_Course_Booking_Variance_Fields = {
+  __typename?: 'private_course_booking_variance_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  numParticipants?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "profile" */
@@ -20864,6 +21213,12 @@ export type Query_Root = {
   podcast?: Maybe<PodcastPayload>;
   /** Podcasts list */
   podcasts?: Maybe<PodcastsPayload>;
+  /** fetch data from the table: "private_course_booking" */
+  private_course_booking: Array<Private_Course_Booking>;
+  /** fetch aggregated fields from the table: "private_course_booking" */
+  private_course_booking_aggregate: Private_Course_Booking_Aggregate;
+  /** fetch data from the table: "private_course_booking" using primary key columns */
+  private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
   /** fetch data from the table: "profile" */
   profile: Array<Profile>;
   /** fetch aggregated fields from the table: "profile" */
@@ -21742,6 +22097,29 @@ export type Query_RootPodcastsArgs = {
 };
 
 
+export type Query_RootPrivate_Course_BookingArgs = {
+  distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Private_Course_Booking_Order_By>>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+};
+
+
+export type Query_RootPrivate_Course_Booking_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Private_Course_Booking_Order_By>>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+};
+
+
+export type Query_RootPrivate_Course_Booking_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootProfileArgs = {
   distinct_on?: InputMaybe<Array<Profile_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -22385,6 +22763,12 @@ export type Subscription_Root = {
   payment_methods_aggregate: Payment_Methods_Aggregate;
   /** fetch data from the table: "payment_methods" using primary key columns */
   payment_methods_by_pk?: Maybe<Payment_Methods>;
+  /** fetch data from the table: "private_course_booking" */
+  private_course_booking: Array<Private_Course_Booking>;
+  /** fetch aggregated fields from the table: "private_course_booking" */
+  private_course_booking_aggregate: Private_Course_Booking_Aggregate;
+  /** fetch data from the table: "private_course_booking" using primary key columns */
+  private_course_booking_by_pk?: Maybe<Private_Course_Booking>;
   /** fetch data from the table: "profile" */
   profile: Array<Profile>;
   /** fetch aggregated fields from the table: "profile" */
@@ -23235,6 +23619,29 @@ export type Subscription_RootPayment_Methods_By_PkArgs = {
 };
 
 
+export type Subscription_RootPrivate_Course_BookingArgs = {
+  distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Private_Course_Booking_Order_By>>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+};
+
+
+export type Subscription_RootPrivate_Course_Booking_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Private_Course_Booking_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Private_Course_Booking_Order_By>>;
+  where?: InputMaybe<Private_Course_Booking_Bool_Exp>;
+};
+
+
+export type Subscription_RootPrivate_Course_Booking_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootProfileArgs = {
   distinct_on?: InputMaybe<Array<Profile_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -24076,6 +24483,13 @@ export type OrganizationsQueryVariables = Exact<{
 
 
 export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+
+export type BookPrivateCourseMutationVariables = Exact<{
+  booking: Private_Course_Booking_Insert_Input;
+}>;
+
+
+export type BookPrivateCourseMutation = { __typename?: 'mutation_root', insert_private_course_booking?: { __typename?: 'private_course_booking_mutation_response', affected_rows: number } | null };
 
 export type InsertCourseEnquiryMutationVariables = Exact<{
   enquiry: Course_Enquiry_Insert_Input;

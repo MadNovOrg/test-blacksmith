@@ -2,7 +2,7 @@ import { styled, Typography } from '@mui/material'
 
 import theme from '@app/theme'
 
-export const PageTitle = styled(Typography)()
+export const PageTitle = styled(Typography)(() => ({}))
 
 PageTitle.defaultProps = {
   variant: 'h1',

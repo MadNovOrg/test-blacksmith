@@ -8,6 +8,7 @@ import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
+import { BookPrivateCourse } from '@app/pages/common/BookPrivateCourse'
 import { CourseBookingPage } from '@app/pages/common/CourseBooking'
 import { CourseBookingDone } from '@app/pages/common/CourseBooking/components/CourseBookingDone'
 import { CourseEnquiry } from '@app/pages/common/CourseEnquiry'
@@ -54,6 +55,10 @@ export const AppRoutes = () => {
 
   if (location.pathname === '/enquiry') {
     return <CourseEnquiry />
+  }
+
+  if (location.pathname === '/book-private-course') {
+    return <BookPrivateCourse />
   }
 
   if (auth.loading) {

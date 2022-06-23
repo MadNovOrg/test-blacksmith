@@ -251,7 +251,7 @@ Object {
               for="orgName"
               id="orgName-label"
             >
-              Organization name
+              Organisation Name
               <span
                 aria-hidden="true"
                 class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -543,7 +543,7 @@ Object {
             for="orgName"
             id="orgName-label"
           >
-            Organization name
+            Organisation Name
             <span
               aria-hidden="true"
               class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
