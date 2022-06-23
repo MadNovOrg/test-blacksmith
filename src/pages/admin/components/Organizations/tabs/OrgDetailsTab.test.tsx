@@ -53,6 +53,11 @@ describe('OrgDetailsTab', () => {
           count: 20,
         },
       },
+      invitesCount: {
+        aggregate: {
+          count: 0,
+        },
+      },
     },
   })
 

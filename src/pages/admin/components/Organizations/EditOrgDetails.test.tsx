@@ -53,6 +53,11 @@ describe('EditOrgDetails', () => {
           count: 20,
         },
       },
+      invitesCount: {
+        aggregate: {
+          count: 0,
+        },
+      },
     },
   })
 

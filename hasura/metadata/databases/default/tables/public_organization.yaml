@@ -24,6 +24,13 @@ configuration:
     xero_contact_id: xeroContactId
     contact_details: contactDetails
 array_relationships:
+  - name: invites
+    using:
+      foreign_key_constraint_on:
+        column: org_id
+        table:
+          schema: public
+          name: organization_invites
   - name: members
     using:
       foreign_key_constraint_on:
@@ -76,6 +83,7 @@ select_permissions:
         - updated_at
         - id
       filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:

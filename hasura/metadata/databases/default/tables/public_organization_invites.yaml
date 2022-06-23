@@ -1,0 +1,36 @@
+table:
+  schema: public
+  name: organization_invites
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      backend_only: false
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true

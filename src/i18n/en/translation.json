@@ -319,7 +319,8 @@
     "org-email": "Organization email",
     "org-phone": "Organization phone",
     "ofsted-rating": "Ofsted rating",
-    "local-authority": "Local authority"
+    "local-authority": "Local authority",
+    "edit": "Edit"
   },
   "components": {
     "not-found": {
@@ -1125,7 +1126,18 @@
           }
         },
         "users": {
-          "title": "Users"
+          "title": "Users",
+          "tabs": {
+            "users": "Users ({{number}})",
+            "pending": "Pending ({{number}})"
+          },
+          "cols-name": "Name",
+          "cols-certification": "Certification",
+          "cols-last-activity": "Last activity",
+          "cols-created-on": "Created on",
+          "cols-permissions": "Permissions",
+          "organization-admin": "Organization admin",
+          "no-permissions": "No permissions"
         }
       },
       "edit-organization": "Edit organization"
@@ -1225,5 +1237,6 @@
     "requires_improvement": "Requires improvement",
     "serious_weaknesses": "Serious weaknesses",
     "special_measures": "Special measures"
-  }
+  },
+  "users": "users"
 }

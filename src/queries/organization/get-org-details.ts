@@ -10,6 +10,11 @@ export type ResponseType = {
         count: number
       }
     }
+    invitesCount: {
+      aggregate: {
+        count: number
+      }
+    }
   }
   activeCertificates: { aggregate: { count: number } }
   expiredCertificates: { aggregate: { count: number } }
@@ -25,6 +30,11 @@ export const QUERY = gql`
     org: organization_by_pk(id: $orgId) {
       ...Organization
       usersCount: members_aggregate {
+        aggregate {
+          count
+        }
+      }
+      invitesCount: invites_aggregate(where: { status: { _eq: "PENDING" } }) {
         aggregate {
           count
         }

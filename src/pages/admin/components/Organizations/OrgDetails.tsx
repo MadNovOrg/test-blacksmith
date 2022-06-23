@@ -19,6 +19,7 @@ import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { Sticky } from '@app/components/Sticky'
 import useOrg from '@app/hooks/useOrg'
 import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
+import { OrgUsersTab } from '@app/pages/admin/components/Organizations/tabs/OrgUsersTab'
 import theme from '@app/theme'
 import { LoadingStatus, renderOrgAddress } from '@app/util'
 
@@ -111,7 +112,7 @@ export const OrgDetails: React.FC = () => {
               </TabPanel>
 
               <TabPanel sx={{ px: 0 }} value="users">
-                TODO
+                <OrgUsersTab orgId={id ?? ''} />
               </TabPanel>
             </Container>
           </TabContext>
