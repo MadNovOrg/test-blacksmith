@@ -3,7 +3,6 @@ import React, { useLayoutEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 
 import { MembershipHeaderGradient } from '@app/assets'
-import { Footer } from '@app/components/Footer'
 
 import { BrowseByMedia } from './components/BrowseByMedia'
 
@@ -23,8 +22,6 @@ export function MembershipAreaPage() {
       <Box mb={5}>
         <BrowseByMedia />
       </Box>
-
-      <Footer />
     </Box>
   )
 }

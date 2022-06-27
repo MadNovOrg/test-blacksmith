@@ -33,6 +33,7 @@ export const Footer = () => {
             href="https://www.facebook.com/Team-Teach-Ltd-109897753752813/"
             mr={1}
             target="_blank"
+            component={'a'}
           >
             <FacebookIcon htmlColor={theme.palette.common.white} />
           </Link>
@@ -40,15 +41,22 @@ export const Footer = () => {
             href="https://www.instagram.com/teamteachuk/"
             mr={1}
             target="_blank"
+            component={'a'}
           >
             <InstagramIcon htmlColor={theme.palette.common.white} />
           </Link>
-          <Link href="https://twitter.com/TeamTeachLtd" target="_blank" mr={1}>
+          <Link
+            href="https://twitter.com/TeamTeachLtd"
+            target="_blank"
+            mr={1}
+            component={'a'}
+          >
             <TwitterIcon htmlColor={theme.palette.common.white} />
           </Link>
           <Link
             href="https://www.youtube.com/channel/UCpMhNpsL3ICI_K9H8OnfI6Q"
             target="_blank"
+            component={'a'}
           >
             <YouTubeIcon htmlColor={theme.palette.common.white} />
           </Link>
