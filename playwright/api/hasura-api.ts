@@ -84,6 +84,21 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
       schedule {
         start
         end
+        venue {
+          name
+          city
+        }
+      }
+      trainers {
+        id
+        profile {
+          fullName
+        }
+      }
+      participants_aggregate {
+        aggregate {
+          count
+        }
       }
       status
       type
@@ -152,8 +167,9 @@ export const insertCourse = async (
   const contactProfile = course.contactProfile
     ? `, contactProfileId: "${await getProfileId(course.contactProfile.email)}"`
     : ''
+
   const venue = course.schedule[0].venue
-    ? `, venue_id: "${await getVenueId(course.schedule[0].venue)}"`
+    ? `, venue_id: "${await getVenueId(course.schedule[0].venue.name)}"`
     : ''
 
   const trainerId = await getProfileId(email)

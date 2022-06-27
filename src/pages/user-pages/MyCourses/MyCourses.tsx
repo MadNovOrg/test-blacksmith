@@ -15,6 +15,7 @@ import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import { useCourses } from '@app/hooks/useCourses'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -30,9 +31,15 @@ export const MyCourses: React.FC = () => {
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
+      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: true },
       { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
+      {
+        id: 'trainers',
+        label: t('pages.my-courses.col-trainers'),
+        sorting: false,
+      },
       { id: 'empty', label: '' },
     ],
     [t]
@@ -108,7 +115,7 @@ export const MyCourses: React.FC = () => {
               {loading && (
                 <TableRow>
                   <TableCell colSpan={cols.length} align="center">
-                    <CircularProgress />
+                    <CircularProgress data-testid="fetching-courses" />
                   </TableCell>
                 </TableRow>
               )}
@@ -131,6 +138,14 @@ export const MyCourses: React.FC = () => {
                       <Typography>{t(`course-levels.${c.level}`)}</Typography>
                       <Typography variant="body2">{c.name}</Typography>
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    <Typography mb={1}>{c.schedule[0].venue?.name}</Typography>
+                    <Typography variant="body2">
+                      {c.schedule[0].virtualLink
+                        ? 'Online'
+                        : c.schedule[0].venue?.city}
+                    </Typography>
                   </TableCell>
                   <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                   <TableCell>
@@ -164,6 +179,10 @@ export const MyCourses: React.FC = () => {
                         </Typography>
                       </Box>
                     )}
+                  </TableCell>
+
+                  <TableCell>
+                    <TrainerAvatarGroup trainers={c.trainers} />
                   </TableCell>
 
                   <TableCell>

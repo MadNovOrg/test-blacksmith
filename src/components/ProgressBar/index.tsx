@@ -21,7 +21,6 @@ const ProgressBar: React.FC<ProgressBarProps> = function ({
     <Box sx={{ position: 'relative' }}>
       <LinearProgress
         sx={{
-          borderRadius: '3px',
           height: '24px',
           width: '100%',
           [`&.${linearProgressClasses.determinate}`]: {

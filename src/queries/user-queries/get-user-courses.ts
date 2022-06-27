@@ -19,6 +19,24 @@ export const QUERY = gql`
       name
       type
       level
+      trainers {
+        id
+        type
+        status
+        profile {
+          id
+          fullName
+        }
+      }
+      schedule {
+        id
+        venue {
+          id
+          name
+          city
+        }
+        virtualLink
+      }
       dates: schedule_aggregate {
         aggregate {
           start: min {

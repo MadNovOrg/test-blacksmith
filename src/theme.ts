@@ -271,6 +271,14 @@ export default createTheme({
         },
       },
     },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          borderRadius: '3px',
+          backgroundColor: theme.palette.grey[400],
+        },
+      },
+    },
     MuiTableHead: {
       styleOverrides: {
         root: {

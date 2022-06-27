@@ -7,6 +7,8 @@ import {
   CourseType,
 } from '@app/types'
 
+import { buildVenue } from '@test/mock-data-utils'
+
 import { setNextMonth } from '../util'
 
 import { Course } from './types'
@@ -45,7 +47,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
         end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -66,7 +70,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
         end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -87,7 +93,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -108,7 +116,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -130,7 +140,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -151,7 +163,9 @@ export const COURSES_TO_VIEW: Course[] = [
       {
         start: setNextMonth(new Date('2022-07-18T09:00:00Z')),
         end: setNextMonth(new Date('2022-07-19T16:00:00Z')),
-        venue: 'Queen Elizabeth II Centre',
+        venue: buildVenue({
+          overrides: { name: 'Queen Elizabeth II Centre' },
+        }),
       },
     ],
     min_participants: 6,
@@ -174,7 +188,9 @@ export const UNIQUE_COURSE: () => Course = () => ({
     {
       start: setNextMonth(new Date('2022-07-10T09:00:00Z')),
       end: setNextMonth(new Date('2022-07-10T17:00:00Z')),
-      venue: 'Queen Elizabeth II Centre',
+      venue: buildVenue({
+        overrides: { name: 'Queen Elizabeth II Centre' },
+      }),
     },
   ],
   min_participants: 6,

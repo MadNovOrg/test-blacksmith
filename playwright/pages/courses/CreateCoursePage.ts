@@ -166,7 +166,7 @@ export class CreateCoursePage extends BasePage {
     if (course.reaccreditation) await this.selectReaccreditation()
     await this.selectDeliveryType(course.deliveryType)
     if (course.deliveryType !== CourseDeliveryType.VIRTUAL) {
-      await this.selectVenue(course.schedule[0].venue as string)
+      await this.selectVenue(course.schedule[0].venue?.name as string)
     }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)

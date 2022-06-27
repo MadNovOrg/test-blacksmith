@@ -479,6 +479,10 @@
       "noMatches-first": "No matching {{itemsName}} found",
       "noMatches-second": "Please adjust your filter or search criteria"
     },
+    "trainer-avatar-group": {
+      "lead-trainer": "Lead",
+      "assist-trainer": "Assist"
+    },
     "course-enquiry-form": {
       "required-first-name": "First name is required",
       "required-last-name": "Last name is required",
@@ -693,8 +697,11 @@
       "col-name": "Name",
       "col-type": "Type",
       "col-org": "Organisation",
+      "col-venue": "Venue",
       "col-start": "Start",
       "col-end": "End",
+      "col-trainers": "Trainer(s)",
+      "col-registrants": "Regist.",
       "col-status": "Status"
     },
     "create-course": {

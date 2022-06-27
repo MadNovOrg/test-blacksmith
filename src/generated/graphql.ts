@@ -9783,10 +9783,37 @@ export type Course_Certificate_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "course_certificate" */
+export type Course_Certificate_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Certificate_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Certificate_Max_Order_By>;
+  min?: InputMaybe<Course_Certificate_Min_Order_By>;
+  stddev?: InputMaybe<Course_Certificate_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Certificate_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Certificate_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Certificate_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Certificate_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Certificate_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Certificate_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_certificate" */
+export type Course_Certificate_Arr_Rel_Insert_Input = {
+  data: Array<Course_Certificate_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Certificate_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Course_Certificate_Avg_Fields = {
   __typename?: 'course_certificate_avg_fields';
   courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_certificate" */
+export type Course_Certificate_Avg_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course_certificate". All fields are combined with a logical 'AND'. */
@@ -10073,6 +10100,20 @@ export type Course_Certificate_Max_Fields = {
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
+/** order by max() on columns of table "course_certificate" */
+export type Course_Certificate_Max_Order_By = {
+  certificationDate?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  courseLevel?: InputMaybe<Order_By>;
+  courseName?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiryDate?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  number?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Course_Certificate_Min_Fields = {
   __typename?: 'course_certificate_min_fields';
@@ -10086,6 +10127,20 @@ export type Course_Certificate_Min_Fields = {
   number?: Maybe<Scalars['String']>;
   profileId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "course_certificate" */
+export type Course_Certificate_Min_Order_By = {
+  certificationDate?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  courseLevel?: InputMaybe<Order_By>;
+  courseName?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  expiryDate?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  number?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_certificate" */
@@ -10177,10 +10232,20 @@ export type Course_Certificate_Stddev_Fields = {
   courseId?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "course_certificate" */
+export type Course_Certificate_Stddev_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Course_Certificate_Stddev_Pop_Fields = {
   __typename?: 'course_certificate_stddev_pop_fields';
   courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_certificate" */
+export type Course_Certificate_Stddev_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -10189,10 +10254,20 @@ export type Course_Certificate_Stddev_Samp_Fields = {
   courseId?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "course_certificate" */
+export type Course_Certificate_Stddev_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Course_Certificate_Sum_Fields = {
   __typename?: 'course_certificate_sum_fields';
   courseId?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_certificate" */
+export type Course_Certificate_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "course_certificate" */
@@ -10225,16 +10300,31 @@ export type Course_Certificate_Var_Pop_Fields = {
   courseId?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "course_certificate" */
+export type Course_Certificate_Var_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Course_Certificate_Var_Samp_Fields = {
   __typename?: 'course_certificate_var_samp_fields';
   courseId?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "course_certificate" */
+export type Course_Certificate_Var_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Course_Certificate_Variance_Fields = {
   __typename?: 'course_certificate_variance_fields';
   courseId?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_certificate" */
+export type Course_Certificate_Variance_Order_By = {
+  courseId?: InputMaybe<Order_By>;
 };
 
 /** unique or primary key constraints on table "course" */
@@ -16214,6 +16304,10 @@ export type Mutation_Root = {
   delete_organization?: Maybe<Organization_Mutation_Response>;
   /** delete single row from the table: "organization" */
   delete_organization_by_pk?: Maybe<Organization>;
+  /** delete data from the table: "organization_invites" */
+  delete_organization_invites?: Maybe<Organization_Invites_Mutation_Response>;
+  /** delete single row from the table: "organization_invites" */
+  delete_organization_invites_by_pk?: Maybe<Organization_Invites>;
   /** delete data from the table: "organization_member" */
   delete_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** delete single row from the table: "organization_member" */
@@ -16242,6 +16336,10 @@ export type Mutation_Root = {
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
   delete_role_by_pk?: Maybe<Role>;
+  /** delete data from the table: "trust_type" */
+  delete_trust_type?: Maybe<Trust_Type_Mutation_Response>;
+  /** delete single row from the table: "trust_type" */
+  delete_trust_type_by_pk?: Maybe<Trust_Type>;
   /** delete data from the table: "venue" */
   delete_venue?: Maybe<Venue_Mutation_Response>;
   /** delete single row from the table: "venue" */
@@ -16384,6 +16482,10 @@ export type Mutation_Root = {
   insert_order_one?: Maybe<Order>;
   /** insert data into the table: "organization" */
   insert_organization?: Maybe<Organization_Mutation_Response>;
+  /** insert data into the table: "organization_invites" */
+  insert_organization_invites?: Maybe<Organization_Invites_Mutation_Response>;
+  /** insert a single row into the table: "organization_invites" */
+  insert_organization_invites_one?: Maybe<Organization_Invites>;
   /** insert data into the table: "organization_member" */
   insert_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** insert a single row into the table: "organization_member" */
@@ -16414,6 +16516,10 @@ export type Mutation_Root = {
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
   insert_role_one?: Maybe<Role>;
+  /** insert data into the table: "trust_type" */
+  insert_trust_type?: Maybe<Trust_Type_Mutation_Response>;
+  /** insert a single row into the table: "trust_type" */
+  insert_trust_type_one?: Maybe<Trust_Type>;
   /** insert data into the table: "venue" */
   insert_venue?: Maybe<Venue_Mutation_Response>;
   /** insert a single row into the table: "venue" */
@@ -16561,6 +16667,10 @@ export type Mutation_Root = {
   update_organization?: Maybe<Organization_Mutation_Response>;
   /** update single row of the table: "organization" */
   update_organization_by_pk?: Maybe<Organization>;
+  /** update data of the table: "organization_invites" */
+  update_organization_invites?: Maybe<Organization_Invites_Mutation_Response>;
+  /** update single row of the table: "organization_invites" */
+  update_organization_invites_by_pk?: Maybe<Organization_Invites>;
   /** update data of the table: "organization_member" */
   update_organization_member?: Maybe<Organization_Member_Mutation_Response>;
   /** update single row of the table: "organization_member" */
@@ -16589,6 +16699,10 @@ export type Mutation_Root = {
   update_role?: Maybe<Role_Mutation_Response>;
   /** update single row of the table: "role" */
   update_role_by_pk?: Maybe<Role>;
+  /** update data of the table: "trust_type" */
+  update_trust_type?: Maybe<Trust_Type_Mutation_Response>;
+  /** update single row of the table: "trust_type" */
+  update_trust_type_by_pk?: Maybe<Trust_Type>;
   /** update data of the table: "venue" */
   update_venue?: Maybe<Venue_Mutation_Response>;
   /** update single row of the table: "venue" */
@@ -17024,6 +17138,18 @@ export type Mutation_RootDelete_Organization_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Organization_InvitesArgs = {
+  where: Organization_Invites_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Organization_Invites_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Organization_MemberArgs = {
   where: Organization_Member_Bool_Exp;
 };
@@ -17104,6 +17230,18 @@ export type Mutation_RootDelete_RoleArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Role_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Trust_TypeArgs = {
+  where: Trust_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Trust_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -17599,6 +17737,20 @@ export type Mutation_RootInsert_OrganizationArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Organization_InvitesArgs = {
+  objects: Array<Organization_Invites_Insert_Input>;
+  on_conflict?: InputMaybe<Organization_Invites_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Organization_Invites_OneArgs = {
+  object: Organization_Invites_Insert_Input;
+  on_conflict?: InputMaybe<Organization_Invites_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Organization_MemberArgs = {
   objects: Array<Organization_Member_Insert_Input>;
   on_conflict?: InputMaybe<Organization_Member_On_Conflict>;
@@ -17700,6 +17852,20 @@ export type Mutation_RootInsert_RoleArgs = {
 export type Mutation_RootInsert_Role_OneArgs = {
   object: Role_Insert_Input;
   on_conflict?: InputMaybe<Role_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Trust_TypeArgs = {
+  objects: Array<Trust_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Trust_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Trust_Type_OneArgs = {
+  object: Trust_Type_Insert_Input;
+  on_conflict?: InputMaybe<Trust_Type_On_Conflict>;
 };
 
 
@@ -18268,6 +18434,20 @@ export type Mutation_RootUpdate_Organization_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Organization_InvitesArgs = {
+  _set?: InputMaybe<Organization_Invites_Set_Input>;
+  where: Organization_Invites_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Organization_Invites_By_PkArgs = {
+  _set?: InputMaybe<Organization_Invites_Set_Input>;
+  pk_columns: Organization_Invites_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Organization_MemberArgs = {
   _set?: InputMaybe<Organization_Member_Set_Input>;
   where: Organization_Member_Bool_Exp;
@@ -18390,6 +18570,20 @@ export type Mutation_RootUpdate_Role_By_PkArgs = {
   _prepend?: InputMaybe<Role_Prepend_Input>;
   _set?: InputMaybe<Role_Set_Input>;
   pk_columns: Role_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Trust_TypeArgs = {
+  _set?: InputMaybe<Trust_Type_Set_Input>;
+  where: Trust_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Trust_Type_By_PkArgs = {
+  _set?: InputMaybe<Trust_Type_Set_Input>;
+  pk_columns: Trust_Type_Pk_Columns_Input;
 };
 
 
@@ -18904,7 +19098,10 @@ export type Organization = {
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  lastActivity?: Maybe<Scalars['timestamptz']>;
+  /** An array relationship */
+  invites: Array<Organization_Invites>;
+  /** An aggregate relationship */
+  invites_aggregate: Organization_Invites_Aggregate;
   /** An array relationship */
   members: Array<Organization_Member>;
   /** An aggregate relationship */
@@ -18915,6 +19112,8 @@ export type Organization = {
   region?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
+  trustName?: Maybe<Scalars['String']>;
+  trustType?: Maybe<Trust_Type_Enum>;
   updatedAt: Scalars['timestamptz'];
   xeroContactId?: Maybe<Scalars['String']>;
 };
@@ -18935,6 +19134,26 @@ export type OrganizationAttributesArgs = {
 /** columns and relationships of "organization" */
 export type OrganizationContactDetailsArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationInvitesArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationInvites_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
 };
 
 
@@ -19017,7 +19236,7 @@ export type Organization_Bool_Exp = {
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
+  invites?: InputMaybe<Organization_Invites_Bool_Exp>;
   members?: InputMaybe<Organization_Member_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
@@ -19025,6 +19244,8 @@ export type Organization_Bool_Exp = {
   region?: InputMaybe<String_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
+  trustName?: InputMaybe<String_Comparison_Exp>;
+  trustType?: InputMaybe<Trust_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   xeroContactId?: InputMaybe<String_Comparison_Exp>;
 };
@@ -19072,7 +19293,7 @@ export type Organization_Insert_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  lastActivity?: InputMaybe<Scalars['timestamptz']>;
+  invites?: InputMaybe<Organization_Invites_Arr_Rel_Insert_Input>;
   members?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -19080,19 +19301,239 @@ export type Organization_Insert_Input = {
   region?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Trust_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
+
+/** columns and relationships of "organization_invites" */
+export type Organization_Invites = {
+  __typename?: 'organization_invites';
+  created_at: Scalars['timestamptz'];
+  email: Scalars['String'];
+  id: Scalars['uuid'];
+  org_id: Scalars['uuid'];
+  /** An object relationship */
+  organization: Organization;
+  /** An object relationship */
+  profile?: Maybe<Profile>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  status: Scalars['String'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "organization_invites" */
+export type Organization_Invites_Aggregate = {
+  __typename?: 'organization_invites_aggregate';
+  aggregate?: Maybe<Organization_Invites_Aggregate_Fields>;
+  nodes: Array<Organization_Invites>;
+};
+
+/** aggregate fields of "organization_invites" */
+export type Organization_Invites_Aggregate_Fields = {
+  __typename?: 'organization_invites_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Organization_Invites_Max_Fields>;
+  min?: Maybe<Organization_Invites_Min_Fields>;
+};
+
+
+/** aggregate fields of "organization_invites" */
+export type Organization_Invites_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "organization_invites" */
+export type Organization_Invites_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Organization_Invites_Max_Order_By>;
+  min?: InputMaybe<Organization_Invites_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "organization_invites" */
+export type Organization_Invites_Arr_Rel_Insert_Input = {
+  data: Array<Organization_Invites_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Organization_Invites_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "organization_invites". All fields are combined with a logical 'AND'. */
+export type Organization_Invites_Bool_Exp = {
+  _and?: InputMaybe<Array<Organization_Invites_Bool_Exp>>;
+  _not?: InputMaybe<Organization_Invites_Bool_Exp>;
+  _or?: InputMaybe<Array<Organization_Invites_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  email?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "organization_invites" */
+export enum Organization_Invites_Constraint {
+  /** unique or primary key constraint */
+  OrganizationInvitesOrgIdEmailKey = 'organization_invites_org_id_email_key',
+  /** unique or primary key constraint */
+  OrganizationInvitesOrgIdProfileIdKey = 'organization_invites_org_id_profile_id_key',
+  /** unique or primary key constraint */
+  OrganizationInvitesPkey = 'organization_invites_pkey'
+}
+
+/** input type for inserting data into table "organization_invites" */
+export type Organization_Invites_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Organization_Invites_Max_Fields = {
+  __typename?: 'organization_invites_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "organization_invites" */
+export type Organization_Invites_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  email?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Organization_Invites_Min_Fields = {
+  __typename?: 'organization_invites_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  status?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "organization_invites" */
+export type Organization_Invites_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  email?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "organization_invites" */
+export type Organization_Invites_Mutation_Response = {
+  __typename?: 'organization_invites_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Organization_Invites>;
+};
+
+/** on_conflict condition type for table "organization_invites" */
+export type Organization_Invites_On_Conflict = {
+  constraint: Organization_Invites_Constraint;
+  update_columns?: Array<Organization_Invites_Update_Column>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "organization_invites". */
+export type Organization_Invites_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  email?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: organization_invites */
+export type Organization_Invites_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "organization_invites" */
+export enum Organization_Invites_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "organization_invites" */
+export type Organization_Invites_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  email?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  status?: InputMaybe<Scalars['String']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "organization_invites" */
+export enum Organization_Invites_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Email = 'email',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
 
 /** aggregate max on columns */
 export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  lastActivity?: Maybe<Scalars['timestamptz']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
+  trustName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
@@ -19327,10 +19768,10 @@ export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  lastActivity?: Maybe<Scalars['timestamptz']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
   sector?: Maybe<Scalars['String']>;
+  trustName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
   xeroContactId?: Maybe<Scalars['String']>;
 };
@@ -19365,7 +19806,7 @@ export type Organization_Order_By = {
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  lastActivity?: InputMaybe<Order_By>;
+  invites_aggregate?: InputMaybe<Organization_Invites_Aggregate_Order_By>;
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
   original_record?: InputMaybe<Order_By>;
@@ -19373,6 +19814,8 @@ export type Organization_Order_By = {
   region?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
+  trustName?: InputMaybe<Order_By>;
+  trustType?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   xeroContactId?: InputMaybe<Order_By>;
 };
@@ -19405,8 +19848,6 @@ export enum Organization_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  LastActivity = 'lastActivity',
-  /** column name */
   Name = 'name',
   /** column name */
   OriginalRecord = 'original_record',
@@ -19418,6 +19859,10 @@ export enum Organization_Select_Column {
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
+  /** column name */
+  TrustName = 'trustName',
+  /** column name */
+  TrustType = 'trustType',
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
@@ -19431,13 +19876,14 @@ export type Organization_Set_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  lastActivity?: InputMaybe<Scalars['timestamptz']>;
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Trust_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
@@ -19455,8 +19901,6 @@ export enum Organization_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  LastActivity = 'lastActivity',
-  /** column name */
   Name = 'name',
   /** column name */
   OriginalRecord = 'original_record',
@@ -19468,6 +19912,10 @@ export enum Organization_Update_Column {
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
+  /** column name */
+  TrustName = 'trustName',
+  /** column name */
+  TrustType = 'trustType',
   /** column name */
   UpdatedAt = 'updatedAt',
   /** column name */
@@ -19903,6 +20351,10 @@ export type Profile = {
   __typename?: 'profile';
   addresses: Scalars['jsonb'];
   attributes: Scalars['jsonb'];
+  /** An array relationship */
+  certificates: Array<Course_Certificate>;
+  /** An aggregate relationship */
+  certificates_aggregate: Course_Certificate_Aggregate;
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   dietaryRestrictions?: Maybe<Scalars['String']>;
@@ -19920,6 +20372,7 @@ export type Profile = {
   /** An aggregate relationship */
   identities_aggregate: Identity_Aggregate;
   jobTitle?: Maybe<Scalars['String']>;
+  lastActivity: Scalars['timestamptz'];
   /** An array relationship */
   organizations: Array<Organization_Member>;
   /** An aggregate relationship */
@@ -19947,6 +20400,26 @@ export type ProfileAddressesArgs = {
 /** columns and relationships of "profile" */
 export type ProfileAttributesArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCertificatesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCertificates_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Bool_Exp>;
 };
 
 
@@ -20093,6 +20566,7 @@ export type Profile_Bool_Exp = {
   _or?: InputMaybe<Array<Profile_Bool_Exp>>;
   addresses?: InputMaybe<Jsonb_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
+  certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dietaryRestrictions?: InputMaybe<String_Comparison_Exp>;
@@ -20107,6 +20581,7 @@ export type Profile_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
   jobTitle?: InputMaybe<String_Comparison_Exp>;
+  lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   phone?: InputMaybe<String_Comparison_Exp>;
@@ -20170,6 +20645,7 @@ export type Profile_Inc_Input = {
 export type Profile_Insert_Input = {
   addresses?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
@@ -20183,6 +20659,7 @@ export type Profile_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   identities?: InputMaybe<Identity_Arr_Rel_Insert_Input>;
   jobTitle?: InputMaybe<Scalars['String']>;
+  lastActivity?: InputMaybe<Scalars['timestamptz']>;
   organizations?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   phone?: InputMaybe<Scalars['String']>;
@@ -20207,6 +20684,7 @@ export type Profile_Max_Fields = {
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   jobTitle?: Maybe<Scalars['String']>;
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   phone?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -20226,6 +20704,7 @@ export type Profile_Min_Fields = {
   go1Id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   jobTitle?: Maybe<Scalars['String']>;
+  lastActivity?: Maybe<Scalars['timestamptz']>;
   phone?: Maybe<Scalars['String']>;
   stripe_customer_id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -20259,6 +20738,7 @@ export type Profile_On_Conflict = {
 export type Profile_Order_By = {
   addresses?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
+  certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dietaryRestrictions?: InputMaybe<Order_By>;
@@ -20273,6 +20753,7 @@ export type Profile_Order_By = {
   id?: InputMaybe<Order_By>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Order_By>;
   jobTitle?: InputMaybe<Order_By>;
+  lastActivity?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   original_record?: InputMaybe<Order_By>;
   phone?: InputMaybe<Order_By>;
@@ -20534,6 +21015,8 @@ export enum Profile_Select_Column {
   /** column name */
   JobTitle = 'jobTitle',
   /** column name */
+  LastActivity = 'lastActivity',
+  /** column name */
   OriginalRecord = 'original_record',
   /** column name */
   Phone = 'phone',
@@ -20565,6 +21048,7 @@ export type Profile_Set_Input = {
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   jobTitle?: InputMaybe<Scalars['String']>;
+  lastActivity?: InputMaybe<Scalars['timestamptz']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
   phone?: InputMaybe<Scalars['String']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
@@ -20954,6 +21438,8 @@ export enum Profile_Update_Column {
   /** column name */
   JobTitle = 'jobTitle',
   /** column name */
+  LastActivity = 'lastActivity',
+  /** column name */
   OriginalRecord = 'original_record',
   /** column name */
   Phone = 'phone',
@@ -21197,6 +21683,12 @@ export type Query_Root = {
   organization_aggregate: Organization_Aggregate;
   /** fetch data from the table: "organization" using primary key columns */
   organization_by_pk?: Maybe<Organization>;
+  /** fetch data from the table: "organization_invites" */
+  organization_invites: Array<Organization_Invites>;
+  /** fetch aggregated fields from the table: "organization_invites" */
+  organization_invites_aggregate: Organization_Invites_Aggregate;
+  /** fetch data from the table: "organization_invites" using primary key columns */
+  organization_invites_by_pk?: Maybe<Organization_Invites>;
   /** fetch data from the table: "organization_member" */
   organization_member: Array<Organization_Member>;
   /** fetch aggregated fields from the table: "organization_member" */
@@ -21244,6 +21736,12 @@ export type Query_Root = {
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
+  /** fetch data from the table: "trust_type" */
+  trust_type: Array<Trust_Type>;
+  /** fetch aggregated fields from the table: "trust_type" */
+  trust_type_aggregate: Trust_Type_Aggregate;
+  /** fetch data from the table: "trust_type" using primary key columns */
+  trust_type_by_pk?: Maybe<Trust_Type>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
@@ -22041,6 +22539,29 @@ export type Query_RootOrganization_By_PkArgs = {
 };
 
 
+export type Query_RootOrganization_InvitesArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
+export type Query_RootOrganization_Invites_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
+export type Query_RootOrganization_Invites_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootOrganization_MemberArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -22214,6 +22735,29 @@ export type Query_RootRole_By_PkArgs = {
 
 export type Query_RootSearchTrainersArgs = {
   input: SearchTrainersInput;
+};
+
+
+export type Query_RootTrust_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Trust_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trust_Type_Order_By>>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+
+export type Query_RootTrust_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Trust_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trust_Type_Order_By>>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+
+export type Query_RootTrust_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -22751,6 +23295,12 @@ export type Subscription_Root = {
   organization_aggregate: Organization_Aggregate;
   /** fetch data from the table: "organization" using primary key columns */
   organization_by_pk?: Maybe<Organization>;
+  /** fetch data from the table: "organization_invites" */
+  organization_invites: Array<Organization_Invites>;
+  /** fetch aggregated fields from the table: "organization_invites" */
+  organization_invites_aggregate: Organization_Invites_Aggregate;
+  /** fetch data from the table: "organization_invites" using primary key columns */
+  organization_invites_by_pk?: Maybe<Organization_Invites>;
   /** fetch data from the table: "organization_member" */
   organization_member: Array<Organization_Member>;
   /** fetch aggregated fields from the table: "organization_member" */
@@ -22793,6 +23343,12 @@ export type Subscription_Root = {
   role_aggregate: Role_Aggregate;
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
+  /** fetch data from the table: "trust_type" */
+  trust_type: Array<Trust_Type>;
+  /** fetch aggregated fields from the table: "trust_type" */
+  trust_type_aggregate: Trust_Type_Aggregate;
+  /** fetch data from the table: "trust_type" using primary key columns */
+  trust_type_by_pk?: Maybe<Trust_Type>;
   /** fetch data from the table: "venue" */
   venue: Array<Venue>;
   /** fetch aggregated fields from the table: "venue" */
@@ -23573,6 +24129,29 @@ export type Subscription_RootOrganization_By_PkArgs = {
 };
 
 
+export type Subscription_RootOrganization_InvitesArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_Invites_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Organization_Invites_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Organization_Invites_Order_By>>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrganization_Invites_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootOrganization_MemberArgs = {
   distinct_on?: InputMaybe<Array<Organization_Member_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -23734,6 +24313,29 @@ export type Subscription_RootRole_By_PkArgs = {
 };
 
 
+export type Subscription_RootTrust_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Trust_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trust_Type_Order_By>>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootTrust_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Trust_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trust_Type_Order_By>>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootTrust_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
 export type Subscription_RootVenueArgs = {
   distinct_on?: InputMaybe<Array<Venue_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -23814,6 +24416,124 @@ export type Timestamptz_Comparison_Exp = {
   _neq?: InputMaybe<Scalars['timestamptz']>;
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>;
 };
+
+/** columns and relationships of "trust_type" */
+export type Trust_Type = {
+  __typename?: 'trust_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "trust_type" */
+export type Trust_Type_Aggregate = {
+  __typename?: 'trust_type_aggregate';
+  aggregate?: Maybe<Trust_Type_Aggregate_Fields>;
+  nodes: Array<Trust_Type>;
+};
+
+/** aggregate fields of "trust_type" */
+export type Trust_Type_Aggregate_Fields = {
+  __typename?: 'trust_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Trust_Type_Max_Fields>;
+  min?: Maybe<Trust_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "trust_type" */
+export type Trust_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Trust_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "trust_type". All fields are combined with a logical 'AND'. */
+export type Trust_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Trust_Type_Bool_Exp>>;
+  _not?: InputMaybe<Trust_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Trust_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "trust_type" */
+export enum Trust_Type_Constraint {
+  /** unique or primary key constraint */
+  TrustTypePkey = 'trust_type_pkey'
+}
+
+export enum Trust_Type_Enum {
+  MultiAcademyTrust = 'MULTI_ACADEMY_TRUST',
+  NotApplicable = 'NOT_APPLICABLE',
+  SingleAcademyTrust = 'SINGLE_ACADEMY_TRUST',
+  SupportedByATrust = 'SUPPORTED_BY_A_TRUST'
+}
+
+/** Boolean expression to compare columns of type "trust_type_enum". All fields are combined with logical 'AND'. */
+export type Trust_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Trust_Type_Enum>;
+  _in?: InputMaybe<Array<Trust_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Trust_Type_Enum>;
+  _nin?: InputMaybe<Array<Trust_Type_Enum>>;
+};
+
+/** input type for inserting data into table "trust_type" */
+export type Trust_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Trust_Type_Max_Fields = {
+  __typename?: 'trust_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Trust_Type_Min_Fields = {
+  __typename?: 'trust_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "trust_type" */
+export type Trust_Type_Mutation_Response = {
+  __typename?: 'trust_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Trust_Type>;
+};
+
+/** on_conflict condition type for table "trust_type" */
+export type Trust_Type_On_Conflict = {
+  constraint: Trust_Type_Constraint;
+  update_columns?: Array<Trust_Type_Update_Column>;
+  where?: InputMaybe<Trust_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "trust_type". */
+export type Trust_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: trust_type */
+export type Trust_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "trust_type" */
+export enum Trust_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "trust_type" */
+export type Trust_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "trust_type" */
+export enum Trust_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
 
 /** Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'. */
 export type Uuid_Comparison_Exp = {
@@ -24473,7 +25193,7 @@ export type ProfilesQueryVariables = Exact<{
 }>;
 
 
-export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type OrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -24482,7 +25202,7 @@ export type OrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
+export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
 export type BookPrivateCourseMutationVariables = Exact<{
   booking: Private_Course_Booking_Insert_Input;
@@ -24580,7 +25300,7 @@ export type GetCourseByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type CourseModulesQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -24602,7 +25322,7 @@ export type TrainerCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TrainerCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any } }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
+export type TrainerCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
 
 export type InsertCourseMutationVariables = Exact<{
   course: Course_Insert_Input;
@@ -24671,9 +25391,9 @@ export type UpdateCourseMutationVariables = Exact<{
 
 export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null };
 
-export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null };
+export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null };
 
-export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
+export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
 
@@ -24959,7 +25679,24 @@ export type Unnamed_3_QueryVariables = Exact<{
 }>;
 
 
-export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
+export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
+
+export type GetOrgDetailsQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+}>;
+
+
+export type GetOrgDetailsQuery = { __typename?: 'query_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, usersCount: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, invitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } } | null, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, expiredCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null } };
+
+export type GetOrgUsersQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+  orderBy?: InputMaybe<Array<Organization_Member_Order_By> | Organization_Member_Order_By>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'organization_member', isAdmin?: boolean | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }>, total: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type GetOrganizationsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
@@ -24967,7 +25704,7 @@ export type GetOrganizationsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null }> };
+export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity: any } }> }> };
 
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
@@ -24977,14 +25714,15 @@ export type InsertOrgMutationVariables = Exact<{
 }>;
 
 
-export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } | null };
+export type InsertOrgMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } | null };
 
-export type UpdateOrgActivityMutationVariables = Exact<{
-  profileId: Scalars['uuid'];
+export type UpdateOrgMutationVariables = Exact<{
+  org?: InputMaybe<Organization_Set_Input>;
+  id: Scalars['uuid'];
 }>;
 
 
-export type UpdateOrgActivityMutation = { __typename?: 'mutation_root', update_organization?: { __typename?: 'organization_mutation_response', returning: Array<{ __typename?: 'organization', id: any }> } | null };
+export type UpdateOrgMutation = { __typename?: 'mutation_root', updated?: { __typename?: 'organization', id: any } | null };
 
 export type CourseParticipantQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -25023,7 +25761,7 @@ export type FindProfilesQueryVariables = Exact<{
 }>;
 
 
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileCertificationsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -25043,6 +25781,13 @@ export type InsertProfileTempMutationVariables = Exact<{
 
 
 export type InsertProfileTempMutation = { __typename?: 'mutation_root', profile?: { __typename?: 'profile_temp_mutation_response', affectedRows: number } | null };
+
+export type UpdateProfileActivityMutationVariables = Exact<{
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type UpdateProfileActivityMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
 
 export type UpdateProfileMutationVariables = Exact<{
   input?: InputMaybe<Profile_Set_Input>;
@@ -25070,7 +25815,7 @@ export type UserCoursesQueryVariables = Exact<{
 }>;
 
 
-export type UserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
+export type UserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
 
 export type SaveHealthSafetyConsentMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -25083,14 +25828,14 @@ export type SaveHealthSafetyConsentMutation = { __typename?: 'mutation_root', up
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
+export type GetProfileQuery = { __typename?: 'query_root', profile: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }> };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null };
 
 export type GetProfileWithCriteriaQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -25099,7 +25844,7 @@ export type GetProfileWithCriteriaQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfileWithCriteriaQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];

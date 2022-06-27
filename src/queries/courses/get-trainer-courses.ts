@@ -29,6 +29,13 @@ export const QUERY = gql`
         status
         profile {
           id
+          fullName
+        }
+      }
+      max_participants
+      participantsAgg: participants_aggregate {
+        aggregate {
+          count
         }
       }
       dates: schedule_aggregate {
@@ -45,6 +52,15 @@ export const QUERY = gql`
         aggregate {
           count
         }
+      }
+      schedule {
+        id
+        venue {
+          id
+          name
+          city
+        }
+        virtualLink
       }
     }
   }

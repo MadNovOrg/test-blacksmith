@@ -195,6 +195,11 @@ export const buildCourse = build<Course>({
         end: { date: sub(new Date(), { days: 1 }).toISOString() },
       },
     },
+    participantsAgg: {
+      aggregate: {
+        count: 0,
+      },
+    },
     modulesAgg: {},
     moduleGroupIds: [],
     contactProfileId: null,
@@ -225,6 +230,11 @@ export const buildEndedCourse = build<Course>({
         end: { date: sub(new Date(), { days: 1 }).toISOString() },
       },
     },
+    participantsAgg: {
+      aggregate: {
+        count: 0,
+      },
+    },
     modulesAgg: {},
     moduleGroupIds: [],
   },
@@ -251,6 +261,11 @@ export const buildNotStartedCourse = build<Course>({
       aggregate: {
         start: { date: add(new Date(), { days: 1 }).toISOString() },
         end: { date: add(new Date(), { days: 2 }).toISOString() },
+      },
+    },
+    participantsAgg: {
+      aggregate: {
+        count: 0,
       },
     },
     modulesAgg: {},

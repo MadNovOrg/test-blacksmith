@@ -1,4 +1,10 @@
-import { Button, CircularProgress, Container, Stack } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  Container,
+  LinearProgress,
+  Stack,
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -18,6 +24,7 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import { useCourses } from '@app/hooks/useCourses'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -59,10 +66,20 @@ export const MyCourses: React.FC = () => {
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
-      { id: 'org', label: t('pages.my-courses.col-org'), sorting: true },
+      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: true },
       { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
+      {
+        id: 'trainers',
+        label: t('pages.my-courses.col-trainers'),
+        sorting: false,
+      },
+      {
+        id: 'registrants',
+        label: t('pages.my-courses.col-registrants'),
+        sorting: false,
+      },
       { id: 'status', label: t('pages.my-courses.col-status') },
       { id: 'empty', label: '' },
     ],
@@ -184,7 +201,7 @@ export const MyCourses: React.FC = () => {
               {loading && (
                 <TableRow>
                   <TableCell colSpan={cols.length} align="center">
-                    <CircularProgress />
+                    <CircularProgress data-testid="fetching-courses" />
                   </TableCell>
                 </TableRow>
               )}
@@ -217,7 +234,16 @@ export const MyCourses: React.FC = () => {
                         </Link>
                       )}
                     </TableCell>
-                    <TableCell>{c.organization?.name}</TableCell>
+                    <TableCell>
+                      <Typography mb={1}>
+                        {c.schedule[0].venue?.name}
+                      </Typography>
+                      <Typography variant="body2">
+                        {c.schedule[0].virtualLink
+                          ? 'Online'
+                          : c.schedule[0].venue?.city}
+                      </Typography>
+                    </TableCell>
                     <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                     <TableCell>
                       {c.dates.aggregate.start.date && (
@@ -258,6 +284,27 @@ export const MyCourses: React.FC = () => {
                           </Typography>
                         </Box>
                       )}
+                    </TableCell>
+                    <TableCell>
+                      <TrainerAvatarGroup trainers={c.trainers} />
+                    </TableCell>
+                    <TableCell>
+                      <Typography mb={1}>
+                        <Typography component="span">
+                          {c.participantsAgg.aggregate.count}
+                        </Typography>
+                        <Typography component="span" variant="body2">
+                          /{c.max_participants}
+                        </Typography>
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={
+                          (c.participantsAgg.aggregate.count /
+                            c.max_participants) *
+                          100
+                        }
+                      />
                     </TableCell>
                     <TableCell>
                       <StatusChip

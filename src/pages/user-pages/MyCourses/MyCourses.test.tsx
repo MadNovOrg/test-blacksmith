@@ -53,7 +53,7 @@ describe('user-pages/MyCourses', () => {
 
     const tbl = screen.getByTestId('courses-table')
 
-    expect(within(tbl).getByRole('progressbar')).toBeInTheDocument()
+    expect(within(tbl).getByTestId('fetching-courses')).toBeInTheDocument()
     expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
     expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
   })
@@ -74,7 +74,9 @@ describe('user-pages/MyCourses', () => {
     const tbl = screen.getByTestId('courses-table')
 
     expect(within(tbl).getByTestId('TableNoRows')).toBeInTheDocument()
-    expect(within(tbl).queryByRole('progressbar')).not.toBeInTheDocument()
+    expect(
+      within(tbl).queryByTestId('fetching-courses')
+    ).not.toBeInTheDocument()
     expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
   })
 
@@ -96,7 +98,9 @@ describe('user-pages/MyCourses', () => {
     const tbl = screen.getByTestId('courses-table')
 
     expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(courses.length)
-    expect(within(tbl).queryByRole('progressbar')).not.toBeInTheDocument()
+    expect(
+      within(tbl).queryByTestId('fetching-courses')
+    ).not.toBeInTheDocument()
     expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
   })
 

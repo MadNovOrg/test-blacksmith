@@ -51,10 +51,11 @@ select_permissions:
   - role: user
     permission:
       columns:
-        - type
         - course_id
         - id
         - profile_id
+        - status
+        - type
       filter: {}
 update_permissions:
   - role: trainer

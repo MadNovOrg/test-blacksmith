@@ -8,6 +8,8 @@ export type Base = {
 
 export type Course = {
   id: number
+  createdAt: string
+  updatedAt?: string
   name: string
   level: CourseLevel
   deliveryType: CourseDeliveryType
@@ -35,8 +37,14 @@ export type Course = {
       count: number
     }
   }
+  participantsAgg: {
+    aggregate: {
+      count: number
+    }
+  }
   moduleGroupIds: { module: { moduleGroup: { id: string } } }[]
   certificateCount?: { aggregate: { count: number } }
+  description?: string
 } & Base
 
 export type CourseModule = {

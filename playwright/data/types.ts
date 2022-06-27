@@ -2,7 +2,9 @@ import {
   CourseDeliveryType,
   CourseLevel,
   CourseStatus,
+  CourseTrainer,
   CourseType,
+  Venue,
 } from '@app/types'
 
 export type User = {
@@ -35,12 +37,18 @@ export type Course = {
   max_participants: number
   contactProfile?: User
   gradingConfirmed: boolean
+  trainers?: CourseTrainer[]
+  participants_aggregate?: {
+    aggregate?: {
+      count: number
+    }
+  }
 }
 
 export type CourseSchedule = {
   start: Date
   end: Date
-  venue?: string
+  venue?: Venue
   virtualLink?: string
 }
 
@@ -51,11 +59,13 @@ export type Organization = {
 
 export type CourseTableRow = {
   Name: string
-  Organisation: string
   Type: string
   Start: string
   End: string
   Status: string
+  Venue: string
+  'Trainer(s)': string
+  'Regist.'?: string
 }
 
 export type ModuleGroup = {
