@@ -36,8 +36,11 @@ const ThumbnailBox = styled(Box, { shouldForwardProp: () => true })<{
 }>(({ theme, orientation, fluidImageWidth }) => ({
   marginRight: orientation === 'left' ? theme.spacing(3) : 0,
   marginLeft: orientation === 'right' ? theme.spacing(3) : 0,
+  maxWidth: '50%',
   [theme.breakpoints.down('md')]: {
     marginBottom: theme.spacing(3),
+    marginRight: 0,
+    maxWidth: '100%',
   },
   ...(!fluidImageWidth ? { flex: 1 } : null),
 }))
