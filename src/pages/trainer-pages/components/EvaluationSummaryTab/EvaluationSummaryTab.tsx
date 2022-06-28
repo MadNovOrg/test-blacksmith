@@ -29,6 +29,8 @@ import {
 import { SortOrder } from '@app/types'
 import { noop } from '@app/util'
 
+import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
+
 export const EvaluationSummaryTab: React.FC<unknown> = () => {
   const navigate = useNavigate()
   const params = useParams()
@@ -45,6 +47,20 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
       { id: 'evaluation', label: t('evaluation') },
     ],
     [t]
+  )
+
+  const [isPDFExporting, setIsPDFExporting] = useState<boolean>(false)
+  const PDFExportButtonContent = useMemo(
+    () =>
+      isPDFExporting ? (
+        <EvaluationSummaryPDFDownloadLink
+          courseId={courseId}
+          profileId={profileId}
+        />
+      ) : (
+        t('pages.course-details.tabs.evaluation.export-idle')
+      ),
+    [courseId, profileId, isPDFExporting]
   )
 
   const [order] = useState<SortOrder>('asc')
@@ -121,13 +137,23 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
           </Box>
           <Box>
             <Button
+              variant="outlined"
+              color="primary"
+              disabled={!didTrainerSubmitFeedback}
+              data-testid="export-summary"
+              onClick={() => setIsPDFExporting(true)}
+            >
+              {PDFExportButtonContent}
+            </Button>
+
+            <Button
               component={LinkBehavior}
               variant="contained"
               color="primary"
-              size="small"
               href="../evaluation/summary"
               disabled={!didTrainerSubmitFeedback}
               data-testid="view-summary-evaluation"
+              sx={{ ml: 1 }}
             >
               {t('pages.course-details.tabs.evaluation.button')}
             </Button>

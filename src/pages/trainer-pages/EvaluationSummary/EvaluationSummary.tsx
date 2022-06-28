@@ -28,8 +28,9 @@ import {
   ParamsType as GetEvaluationsSummaryParamsType,
 } from '@app/queries/course-evaluation/get-evaluations-summary'
 import {
-  CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationGroupedQuestion,
 } from '@app/types'
 
 const groups = [
@@ -113,10 +114,7 @@ export const EvaluationSummary = () => {
       a => a.question.group || 'UNGROUPED'
     )
 
-    const grouped = {} as Record<
-      CourseEvaluationQuestionGroup,
-      Record<string, GetEvaluationsSummaryResponseType['answers']>
-    >
+    const grouped = {} as CourseEvaluationGroupedQuestion
 
     groups.forEach(g => {
       grouped[g] = groupBy(groupedAnswers[g], a => a.question.questionKey)

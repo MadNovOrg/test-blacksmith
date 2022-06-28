@@ -1,0 +1,1 @@
+export { SummaryDocument } from './Summary'

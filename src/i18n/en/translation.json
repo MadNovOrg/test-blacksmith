@@ -765,12 +765,16 @@
         },
         "evaluation": {
           "title": "Summary Evaluation",
-          "button": "View Summary Evaluation",
+          "button": "View Evaluation Summary",
           "full-summary": "Full Summary Evaluation",
           "desc": "View an attendee's course evaluation and a summary of all evaluations.",
           "view-evaluation": "View Evaluation",
           "attendee-feedback": "Attendee Feedback",
-          "trainer-feedback": "Trainer Feedback"
+          "trainer-feedback": "Trainer Feedback",
+          "export-error": "Error generating document",
+          "export-loading": "Generating summary...",
+          "export-idle": "Export Summary",
+          "export-done": "Download Summary"
         },
         "certifications": {
           "title": "Certifications"
@@ -1220,7 +1224,19 @@
       "SUGGESTIONS": "What follow up or changes can you suggest to further develop our practice?",
       "ANY_INJURIES": "Were there any injuries?"
     },
-    "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our Privacy Policy for more."
+    "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our Privacy Policy for more.",
+    "pdf-export": {
+      "started-at": "Started at",
+      "ended-at": "Ended at",
+      "trainers_one": "Trainer",
+      "trainers_other": "Trainers",
+      "lead-trainer": "Lead Trainer",
+      "schedule-and-venue": "Schedule and Venue",
+      "venue": "Venue",
+      "course-modules": "Course Modules",
+      "course-participants": "Course Participants (Total: {{count}})",
+      "no-answer": "N/A"
+    }
   },
   "invitation": {
     "continue-registration": "Continue to registration",

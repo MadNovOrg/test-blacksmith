@@ -45,6 +45,7 @@ const fillEvaluationForm = async (page: Page, questions: Questions) => {
 class TrainerEvaluationPage extends BasePage {
   readonly courseId: string
   readonly signatureField: Locator
+  readonly PDFExportButton: Locator
   readonly pageLoadedIndicator: Locator
   readonly startEvaluationButton: Locator
   readonly submitEvaluationButton: Locator
@@ -73,6 +74,7 @@ class TrainerEvaluationPage extends BasePage {
     this.viewSummaryEvaluationButton = this.page.locator(
       'data-testid=view-summary-evaluation'
     )
+    this.PDFExportButton = this.page.locator('data-testid=export-summary')
   }
 
   async goto() {
@@ -108,6 +110,27 @@ class TrainerEvaluationPage extends BasePage {
 
   async checkSubmissionIsAvailable() {
     await expect(await this.startEvaluationButton.count()).toBe(1)
+  }
+
+  async checkPDFExportIsNotAvailable() {
+    await expect(this.PDFExportButton).toBeDisabled()
+  }
+
+  async checkPDFExportIsAvailable() {
+    await expect(this.PDFExportButton).toBeEnabled()
+  }
+
+  async checkPDFExport() {
+    await this.PDFExportButton.click()
+
+    await expect(this.page.locator('text=Generating summary...')).toBeEnabled()
+    await expect(this.page.locator('text=Download Summary')).toBeEnabled()
+
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.PDFExportButton.click(),
+    ])
+    await expect(await download.path()).toMatch(/var\/folders/)
   }
 }
 
@@ -224,6 +247,24 @@ export class CourseEvaluationPage {
   checkSubmissionIsAvailable() {
     if (this.userType === 'trainer') {
       return (this.page as TrainerEvaluationPage).checkSubmissionIsAvailable()
+    }
+  }
+
+  checkPDFExportIsNotAvailable() {
+    if (this.userType === 'trainer') {
+      return (this.page as TrainerEvaluationPage).checkPDFExportIsNotAvailable()
+    }
+  }
+
+  checkPDFExportIsAvailable() {
+    if (this.userType === 'trainer') {
+      return (this.page as TrainerEvaluationPage).checkPDFExportIsAvailable()
+    }
+  }
+
+  checkPDFExport() {
+    if (this.userType === 'trainer') {
+      return (this.page as TrainerEvaluationPage).checkPDFExport()
     }
   }
 }

@@ -59,6 +59,7 @@ test('course evaluation', async ({ browser, course }) => {
   )
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsNotAvailable()
+  await trainerEvaluationPage.checkPDFExportIsNotAvailable()
 
   // Users evaluation
   const userEvaluationPage = new CourseEvaluationPage(
@@ -78,9 +79,15 @@ test('course evaluation', async ({ browser, course }) => {
   // Trainer evaluation -- should be available now
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsAvailable()
+  await trainerEvaluationPage.checkPDFExportIsNotAvailable()
   await trainerEvaluationPage.randomlyEvaluate(
     `${users.trainer.givenName} ${users.trainer.familyName}`
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()
+
+  // Trainer should be able to export PDF now
+  await trainerEvaluationPage.goto()
+  await trainerEvaluationPage.checkPDFExportIsAvailable()
+  await trainerEvaluationPage.checkPDFExport()
 })

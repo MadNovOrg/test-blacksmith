@@ -1,5 +1,7 @@
 import { DeepNonNullable } from 'ts-essentials'
 
+import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
+
 export type Base = {
   id: string
   createdAt: string
@@ -482,3 +484,28 @@ export type LegacyCertificate = {
   expiryDate: Date
   certificationDate: Date
 } & Base
+
+export type CourseEvaluationGroupedQuestion = Record<
+  CourseEvaluationQuestionGroup,
+  Record<string, GetEvaluationsSummaryResponseType['answers']>
+>
+
+export type CourseEvaluationUngroupedQuestion = Record<
+  string,
+  GetEvaluationsSummaryResponseType['answers']
+>
+
+export type CourseEvaluationInjuryQuestion = {
+  yes: number
+  no: number
+}
+
+export type CourseEvaluationTrainerAnswers = {
+  id: string
+  question: {
+    questionKey: string
+    type: CourseEvaluationQuestionType
+    group: CourseEvaluationQuestionGroup
+  }
+  answer: string
+}[]
