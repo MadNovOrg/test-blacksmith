@@ -14,7 +14,9 @@ export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
     <Box display="flex" flexDirection="column" flex={1}>
       <AppBar />
 
-      {children}
+      <Box component="main" flex={1}>
+        {children}
+      </Box>
 
       <Footer />
     </Box>
