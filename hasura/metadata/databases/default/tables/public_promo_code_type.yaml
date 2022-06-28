@@ -1,0 +1,4 @@
+table:
+  schema: public
+  name: promo_code_type
+is_enum: true

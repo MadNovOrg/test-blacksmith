@@ -1,5 +1,11 @@
 import { Auth } from 'aws-amplify'
-import { differenceInDays, formatDistanceToNow, isPast } from 'date-fns'
+import {
+  differenceInDays,
+  format,
+  formatDistanceToNow,
+  isPast,
+  parse,
+} from 'date-fns'
 import { TFunction } from 'i18next'
 
 import {
@@ -23,6 +29,14 @@ export const TIME_MASK = '__:__ _M'
 
 export const noop = () => {
   // empty
+}
+
+export const dateInputValueParse = (value: string): Date => {
+  return parse(value, INPUT_DATE_FORMAT, new Date())
+}
+
+export const dateInputValueFormat = (date: Date): string => {
+  return format(date, INPUT_DATE_FORMAT)
 }
 
 export const formatDateForDraft = (

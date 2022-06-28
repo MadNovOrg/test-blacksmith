@@ -16332,6 +16332,14 @@ export type Mutation_Root = {
   delete_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** delete single row from the table: "profile_temp" */
   delete_profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** delete data from the table: "promo_code" */
+  delete_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** delete single row from the table: "promo_code" */
+  delete_promo_code_by_pk?: Maybe<Promo_Code>;
+  /** delete data from the table: "promo_code_type" */
+  delete_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
+  /** delete single row from the table: "promo_code_type" */
+  delete_promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** delete data from the table: "role" */
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
@@ -16512,6 +16520,14 @@ export type Mutation_Root = {
   insert_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** insert a single row into the table: "profile_temp" */
   insert_profile_temp_one?: Maybe<Profile_Temp>;
+  /** insert data into the table: "promo_code" */
+  insert_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** insert a single row into the table: "promo_code" */
+  insert_promo_code_one?: Maybe<Promo_Code>;
+  /** insert data into the table: "promo_code_type" */
+  insert_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
+  /** insert a single row into the table: "promo_code_type" */
+  insert_promo_code_type_one?: Maybe<Promo_Code_Type>;
   /** insert data into the table: "role" */
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
@@ -16695,6 +16711,14 @@ export type Mutation_Root = {
   update_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** update single row of the table: "profile_temp" */
   update_profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** update data of the table: "promo_code" */
+  update_promo_code?: Maybe<Promo_Code_Mutation_Response>;
+  /** update single row of the table: "promo_code" */
+  update_promo_code_by_pk?: Maybe<Promo_Code>;
+  /** update data of the table: "promo_code_type" */
+  update_promo_code_type?: Maybe<Promo_Code_Type_Mutation_Response>;
+  /** update single row of the table: "promo_code_type" */
+  update_promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** update data of the table: "role" */
   update_role?: Maybe<Role_Mutation_Response>;
   /** update single row of the table: "role" */
@@ -17218,6 +17242,30 @@ export type Mutation_RootDelete_Profile_TempArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Profile_Temp_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_CodeArgs = {
+  where: Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_Code_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_Code_TypeArgs = {
+  where: Promo_Code_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Promo_Code_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -17842,6 +17890,34 @@ export type Mutation_RootInsert_Profile_Temp_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Promo_CodeArgs = {
+  objects: Array<Promo_Code_Insert_Input>;
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Promo_Code_OneArgs = {
+  object: Promo_Code_Insert_Input;
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Promo_Code_TypeArgs = {
+  objects: Array<Promo_Code_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Promo_Code_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Promo_Code_Type_OneArgs = {
+  object: Promo_Code_Type_Insert_Input;
+  on_conflict?: InputMaybe<Promo_Code_Type_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_RoleArgs = {
   objects: Array<Role_Insert_Input>;
   on_conflict?: InputMaybe<Role_On_Conflict>;
@@ -18395,7 +18471,12 @@ export type Mutation_RootUpdate_Module_Group_Duration_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_OrderArgs = {
+  _append?: InputMaybe<Order_Append_Input>;
+  _delete_at_path?: InputMaybe<Order_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Order_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Order_Delete_Key_Input>;
   _inc?: InputMaybe<Order_Inc_Input>;
+  _prepend?: InputMaybe<Order_Prepend_Input>;
   _set?: InputMaybe<Order_Set_Input>;
   where: Order_Bool_Exp;
 };
@@ -18403,7 +18484,12 @@ export type Mutation_RootUpdate_OrderArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Order_By_PkArgs = {
+  _append?: InputMaybe<Order_Append_Input>;
+  _delete_at_path?: InputMaybe<Order_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Order_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Order_Delete_Key_Input>;
   _inc?: InputMaybe<Order_Inc_Input>;
+  _prepend?: InputMaybe<Order_Prepend_Input>;
   _set?: InputMaybe<Order_Set_Input>;
   pk_columns: Order_Pk_Columns_Input;
 };
@@ -18548,6 +18634,46 @@ export type Mutation_RootUpdate_Profile_Temp_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Promo_CodeArgs = {
+  _append?: InputMaybe<Promo_Code_Append_Input>;
+  _delete_at_path?: InputMaybe<Promo_Code_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Promo_Code_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Promo_Code_Delete_Key_Input>;
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  _prepend?: InputMaybe<Promo_Code_Prepend_Input>;
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  where: Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_By_PkArgs = {
+  _append?: InputMaybe<Promo_Code_Append_Input>;
+  _delete_at_path?: InputMaybe<Promo_Code_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Promo_Code_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Promo_Code_Delete_Key_Input>;
+  _inc?: InputMaybe<Promo_Code_Inc_Input>;
+  _prepend?: InputMaybe<Promo_Code_Prepend_Input>;
+  _set?: InputMaybe<Promo_Code_Set_Input>;
+  pk_columns: Promo_Code_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_TypeArgs = {
+  _set?: InputMaybe<Promo_Code_Type_Set_Input>;
+  where: Promo_Code_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Promo_Code_Type_By_PkArgs = {
+  _set?: InputMaybe<Promo_Code_Type_Set_Input>;
+  pk_columns: Promo_Code_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_RoleArgs = {
   _append?: InputMaybe<Role_Append_Input>;
   _delete_at_path?: InputMaybe<Role_Delete_At_Path_Input>;
@@ -18682,7 +18808,7 @@ export type Order = {
   paymentMethod: Payment_Methods_Enum;
   price?: Maybe<Scalars['float8']>;
   profileId: Scalars['uuid'];
-  promoCodes?: Maybe<Scalars['json']>;
+  promoCodes?: Maybe<Scalars['jsonb']>;
   quantity: Scalars['Int'];
   registrants: Scalars['json'];
   stripePaymentId?: Maybe<Scalars['String']>;
@@ -18731,6 +18857,11 @@ export type Order_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Order_Append_Input = {
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** aggregate avg on columns */
 export type Order_Avg_Fields = {
   __typename?: 'order_avg_fields';
@@ -18762,7 +18893,7 @@ export type Order_Bool_Exp = {
   paymentMethod?: InputMaybe<Payment_Methods_Enum_Comparison_Exp>;
   price?: InputMaybe<Float8_Comparison_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
-  promoCodes?: InputMaybe<Json_Comparison_Exp>;
+  promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   quantity?: InputMaybe<Int_Comparison_Exp>;
   registrants?: InputMaybe<Json_Comparison_Exp>;
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
@@ -18791,6 +18922,21 @@ export enum Order_Constraint {
   OrderPkey = 'order_pkey'
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Order_Delete_At_Path_Input = {
+  promoCodes?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Order_Delete_Elem_Input = {
+  promoCodes?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Order_Delete_Key_Input = {
+  promoCodes?: InputMaybe<Scalars['String']>;
+};
+
 /** input type for incrementing numeric columns in table "order" */
 export type Order_Inc_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
@@ -18818,7 +18964,7 @@ export type Order_Insert_Input = {
   paymentMethod?: InputMaybe<Payment_Methods_Enum>;
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
-  promoCodes?: InputMaybe<Scalars['json']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -18913,6 +19059,11 @@ export type Order_Pk_Columns_Input = {
   id: Scalars['uuid'];
 };
 
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Order_Prepend_Input = {
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** select columns of table "order" */
 export enum Order_Select_Column {
   /** column name */
@@ -18971,7 +19122,7 @@ export type Order_Set_Input = {
   paymentMethod?: InputMaybe<Payment_Methods_Enum>;
   price?: InputMaybe<Scalars['float8']>;
   profileId?: InputMaybe<Scalars['uuid']>;
-  promoCodes?: InputMaybe<Scalars['json']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
@@ -21473,6 +21624,493 @@ export type Profile_Variance_Fields = {
   go1Id?: Maybe<Scalars['Float']>;
 };
 
+/** columns and relationships of "promo_code" */
+export type Promo_Code = {
+  __typename?: 'promo_code';
+  amount: Scalars['numeric'];
+  approvedBy: Scalars['uuid'];
+  bookerSingleUse: Scalars['Boolean'];
+  code: Scalars['String'];
+  courses: Scalars['jsonb'];
+  createdAt: Scalars['timestamptz'];
+  createdBy: Scalars['uuid'];
+  description?: Maybe<Scalars['String']>;
+  enabled: Scalars['Boolean'];
+  id: Scalars['uuid'];
+  levels: Scalars['jsonb'];
+  type: Promo_Code_Type_Enum;
+  updatedAt: Scalars['timestamptz'];
+  usesMax?: Maybe<Scalars['numeric']>;
+  validFrom: Scalars['timestamptz'];
+  validTo?: Maybe<Scalars['timestamptz']>;
+};
+
+
+/** columns and relationships of "promo_code" */
+export type Promo_CodeCoursesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "promo_code" */
+export type Promo_CodeLevelsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "promo_code" */
+export type Promo_Code_Aggregate = {
+  __typename?: 'promo_code_aggregate';
+  aggregate?: Maybe<Promo_Code_Aggregate_Fields>;
+  nodes: Array<Promo_Code>;
+};
+
+/** aggregate fields of "promo_code" */
+export type Promo_Code_Aggregate_Fields = {
+  __typename?: 'promo_code_aggregate_fields';
+  avg?: Maybe<Promo_Code_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Promo_Code_Max_Fields>;
+  min?: Maybe<Promo_Code_Min_Fields>;
+  stddev?: Maybe<Promo_Code_Stddev_Fields>;
+  stddev_pop?: Maybe<Promo_Code_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Promo_Code_Stddev_Samp_Fields>;
+  sum?: Maybe<Promo_Code_Sum_Fields>;
+  var_pop?: Maybe<Promo_Code_Var_Pop_Fields>;
+  var_samp?: Maybe<Promo_Code_Var_Samp_Fields>;
+  variance?: Maybe<Promo_Code_Variance_Fields>;
+};
+
+
+/** aggregate fields of "promo_code" */
+export type Promo_Code_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Promo_Code_Append_Input = {
+  courses?: InputMaybe<Scalars['jsonb']>;
+  levels?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate avg on columns */
+export type Promo_Code_Avg_Fields = {
+  __typename?: 'promo_code_avg_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "promo_code". All fields are combined with a logical 'AND'. */
+export type Promo_Code_Bool_Exp = {
+  _and?: InputMaybe<Array<Promo_Code_Bool_Exp>>;
+  _not?: InputMaybe<Promo_Code_Bool_Exp>;
+  _or?: InputMaybe<Array<Promo_Code_Bool_Exp>>;
+  amount?: InputMaybe<Numeric_Comparison_Exp>;
+  approvedBy?: InputMaybe<Uuid_Comparison_Exp>;
+  bookerSingleUse?: InputMaybe<Boolean_Comparison_Exp>;
+  code?: InputMaybe<String_Comparison_Exp>;
+  courses?: InputMaybe<Jsonb_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  createdBy?: InputMaybe<Uuid_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
+  enabled?: InputMaybe<Boolean_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  levels?: InputMaybe<Jsonb_Comparison_Exp>;
+  type?: InputMaybe<Promo_Code_Type_Enum_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  usesMax?: InputMaybe<Numeric_Comparison_Exp>;
+  validFrom?: InputMaybe<Timestamptz_Comparison_Exp>;
+  validTo?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "promo_code" */
+export enum Promo_Code_Constraint {
+  /** unique or primary key constraint */
+  PromoCodeCodeKey = 'promo_code_code_key',
+  /** unique or primary key constraint */
+  PromoCodePkey = 'promo_code_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Promo_Code_Delete_At_Path_Input = {
+  courses?: InputMaybe<Array<Scalars['String']>>;
+  levels?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Promo_Code_Delete_Elem_Input = {
+  courses?: InputMaybe<Scalars['Int']>;
+  levels?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Promo_Code_Delete_Key_Input = {
+  courses?: InputMaybe<Scalars['String']>;
+  levels?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "promo_code" */
+export type Promo_Code_Inc_Input = {
+  amount?: InputMaybe<Scalars['numeric']>;
+  usesMax?: InputMaybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "promo_code" */
+export type Promo_Code_Insert_Input = {
+  amount?: InputMaybe<Scalars['numeric']>;
+  approvedBy?: InputMaybe<Scalars['uuid']>;
+  bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
+  code?: InputMaybe<Scalars['String']>;
+  courses?: InputMaybe<Scalars['jsonb']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  description?: InputMaybe<Scalars['String']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  levels?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Promo_Code_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  usesMax?: InputMaybe<Scalars['numeric']>;
+  validFrom?: InputMaybe<Scalars['timestamptz']>;
+  validTo?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Promo_Code_Max_Fields = {
+  __typename?: 'promo_code_max_fields';
+  amount?: Maybe<Scalars['numeric']>;
+  approvedBy?: Maybe<Scalars['uuid']>;
+  code?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  createdBy?: Maybe<Scalars['uuid']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
+  usesMax?: Maybe<Scalars['numeric']>;
+  validFrom?: Maybe<Scalars['timestamptz']>;
+  validTo?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Promo_Code_Min_Fields = {
+  __typename?: 'promo_code_min_fields';
+  amount?: Maybe<Scalars['numeric']>;
+  approvedBy?: Maybe<Scalars['uuid']>;
+  code?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  createdBy?: Maybe<Scalars['uuid']>;
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
+  usesMax?: Maybe<Scalars['numeric']>;
+  validFrom?: Maybe<Scalars['timestamptz']>;
+  validTo?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "promo_code" */
+export type Promo_Code_Mutation_Response = {
+  __typename?: 'promo_code_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Promo_Code>;
+};
+
+/** on_conflict condition type for table "promo_code" */
+export type Promo_Code_On_Conflict = {
+  constraint: Promo_Code_Constraint;
+  update_columns?: Array<Promo_Code_Update_Column>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "promo_code". */
+export type Promo_Code_Order_By = {
+  amount?: InputMaybe<Order_By>;
+  approvedBy?: InputMaybe<Order_By>;
+  bookerSingleUse?: InputMaybe<Order_By>;
+  code?: InputMaybe<Order_By>;
+  courses?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  createdBy?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  enabled?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  levels?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+  usesMax?: InputMaybe<Order_By>;
+  validFrom?: InputMaybe<Order_By>;
+  validTo?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: promo_code */
+export type Promo_Code_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Promo_Code_Prepend_Input = {
+  courses?: InputMaybe<Scalars['jsonb']>;
+  levels?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "promo_code" */
+export enum Promo_Code_Select_Column {
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  ApprovedBy = 'approvedBy',
+  /** column name */
+  BookerSingleUse = 'bookerSingleUse',
+  /** column name */
+  Code = 'code',
+  /** column name */
+  Courses = 'courses',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  CreatedBy = 'createdBy',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Enabled = 'enabled',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Levels = 'levels',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updatedAt',
+  /** column name */
+  UsesMax = 'usesMax',
+  /** column name */
+  ValidFrom = 'validFrom',
+  /** column name */
+  ValidTo = 'validTo'
+}
+
+/** input type for updating data in table "promo_code" */
+export type Promo_Code_Set_Input = {
+  amount?: InputMaybe<Scalars['numeric']>;
+  approvedBy?: InputMaybe<Scalars['uuid']>;
+  bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
+  code?: InputMaybe<Scalars['String']>;
+  courses?: InputMaybe<Scalars['jsonb']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Scalars['uuid']>;
+  description?: InputMaybe<Scalars['String']>;
+  enabled?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  levels?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Promo_Code_Type_Enum>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
+  usesMax?: InputMaybe<Scalars['numeric']>;
+  validFrom?: InputMaybe<Scalars['timestamptz']>;
+  validTo?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Promo_Code_Stddev_Fields = {
+  __typename?: 'promo_code_stddev_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Promo_Code_Stddev_Pop_Fields = {
+  __typename?: 'promo_code_stddev_pop_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Promo_Code_Stddev_Samp_Fields = {
+  __typename?: 'promo_code_stddev_samp_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Promo_Code_Sum_Fields = {
+  __typename?: 'promo_code_sum_fields';
+  amount?: Maybe<Scalars['numeric']>;
+  usesMax?: Maybe<Scalars['numeric']>;
+};
+
+/** columns and relationships of "promo_code_type" */
+export type Promo_Code_Type = {
+  __typename?: 'promo_code_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "promo_code_type" */
+export type Promo_Code_Type_Aggregate = {
+  __typename?: 'promo_code_type_aggregate';
+  aggregate?: Maybe<Promo_Code_Type_Aggregate_Fields>;
+  nodes: Array<Promo_Code_Type>;
+};
+
+/** aggregate fields of "promo_code_type" */
+export type Promo_Code_Type_Aggregate_Fields = {
+  __typename?: 'promo_code_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Promo_Code_Type_Max_Fields>;
+  min?: Maybe<Promo_Code_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "promo_code_type" */
+export type Promo_Code_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Promo_Code_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "promo_code_type". All fields are combined with a logical 'AND'. */
+export type Promo_Code_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Promo_Code_Type_Bool_Exp>>;
+  _not?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Promo_Code_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "promo_code_type" */
+export enum Promo_Code_Type_Constraint {
+  /** unique or primary key constraint */
+  PromoCodeTypePkey = 'promo_code_type_pkey'
+}
+
+export enum Promo_Code_Type_Enum {
+  FreePlaces = 'FREE_PLACES',
+  Percent = 'PERCENT'
+}
+
+/** Boolean expression to compare columns of type "promo_code_type_enum". All fields are combined with logical 'AND'. */
+export type Promo_Code_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Promo_Code_Type_Enum>;
+  _in?: InputMaybe<Array<Promo_Code_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Promo_Code_Type_Enum>;
+  _nin?: InputMaybe<Array<Promo_Code_Type_Enum>>;
+};
+
+/** input type for inserting data into table "promo_code_type" */
+export type Promo_Code_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Promo_Code_Type_Max_Fields = {
+  __typename?: 'promo_code_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Promo_Code_Type_Min_Fields = {
+  __typename?: 'promo_code_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "promo_code_type" */
+export type Promo_Code_Type_Mutation_Response = {
+  __typename?: 'promo_code_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Promo_Code_Type>;
+};
+
+/** on_conflict condition type for table "promo_code_type" */
+export type Promo_Code_Type_On_Conflict = {
+  constraint: Promo_Code_Type_Constraint;
+  update_columns?: Array<Promo_Code_Type_Update_Column>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "promo_code_type". */
+export type Promo_Code_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: promo_code_type */
+export type Promo_Code_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "promo_code_type" */
+export enum Promo_Code_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "promo_code_type" */
+export type Promo_Code_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "promo_code_type" */
+export enum Promo_Code_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** update columns of table "promo_code" */
+export enum Promo_Code_Update_Column {
+  /** column name */
+  Amount = 'amount',
+  /** column name */
+  ApprovedBy = 'approvedBy',
+  /** column name */
+  BookerSingleUse = 'bookerSingleUse',
+  /** column name */
+  Code = 'code',
+  /** column name */
+  Courses = 'courses',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  CreatedBy = 'createdBy',
+  /** column name */
+  Description = 'description',
+  /** column name */
+  Enabled = 'enabled',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Levels = 'levels',
+  /** column name */
+  Type = 'type',
+  /** column name */
+  UpdatedAt = 'updatedAt',
+  /** column name */
+  UsesMax = 'usesMax',
+  /** column name */
+  ValidFrom = 'validFrom',
+  /** column name */
+  ValidTo = 'validTo'
+}
+
+/** aggregate var_pop on columns */
+export type Promo_Code_Var_Pop_Fields = {
+  __typename?: 'promo_code_var_pop_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Promo_Code_Var_Samp_Fields = {
+  __typename?: 'promo_code_var_samp_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Promo_Code_Variance_Fields = {
+  __typename?: 'promo_code_variance_fields';
+  amount?: Maybe<Scalars['Float']>;
+  usesMax?: Maybe<Scalars['Float']>;
+};
+
 export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "blended_learning_status" */
@@ -21729,6 +22367,18 @@ export type Query_Root = {
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** fetch data from the table: "promo_code" */
+  promo_code: Array<Promo_Code>;
+  /** fetch aggregated fields from the table: "promo_code" */
+  promo_code_aggregate: Promo_Code_Aggregate;
+  /** fetch data from the table: "promo_code" using primary key columns */
+  promo_code_by_pk?: Maybe<Promo_Code>;
+  /** fetch data from the table: "promo_code_type" */
+  promo_code_type: Array<Promo_Code_Type>;
+  /** fetch aggregated fields from the table: "promo_code_type" */
+  promo_code_type_aggregate: Promo_Code_Type_Aggregate;
+  /** fetch data from the table: "promo_code_type" using primary key columns */
+  promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
@@ -22710,6 +23360,52 @@ export type Query_RootProfile_Temp_By_PkArgs = {
 };
 
 
+export type Query_RootPromo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootPromo_Code_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Type_Order_By>>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Type_Order_By>>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
+export type Query_RootPromo_Code_Type_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
 export type Query_RootRoleArgs = {
   distinct_on?: InputMaybe<Array<Role_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -23337,6 +24033,18 @@ export type Subscription_Root = {
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** fetch data from the table: "promo_code" */
+  promo_code: Array<Promo_Code>;
+  /** fetch aggregated fields from the table: "promo_code" */
+  promo_code_aggregate: Promo_Code_Aggregate;
+  /** fetch data from the table: "promo_code" using primary key columns */
+  promo_code_by_pk?: Maybe<Promo_Code>;
+  /** fetch data from the table: "promo_code_type" */
+  promo_code_type: Array<Promo_Code_Type>;
+  /** fetch aggregated fields from the table: "promo_code_type" */
+  promo_code_type_aggregate: Promo_Code_Type_Aggregate;
+  /** fetch data from the table: "promo_code_type" using primary key columns */
+  promo_code_type_by_pk?: Maybe<Promo_Code_Type>;
   /** fetch data from the table: "role" */
   role: Array<Role>;
   /** fetch aggregated fields from the table: "role" */
@@ -24287,6 +24995,52 @@ export type Subscription_RootProfile_Temp_AggregateArgs = {
 
 export type Subscription_RootProfile_Temp_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootPromo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Order_By>>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootPromo_Code_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Type_Order_By>>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Promo_Code_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Promo_Code_Type_Order_By>>;
+  where?: InputMaybe<Promo_Code_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootPromo_Code_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -25796,6 +26550,14 @@ export type UpdateProfileMutationVariables = Exact<{
 
 
 export type UpdateProfileMutation = { __typename?: 'mutation_root', updated?: { __typename?: 'profile', id: any } | null };
+
+export type GetPromoCodesQueryVariables = Exact<{
+  orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
+  where?: InputMaybe<Promo_Code_Bool_Exp>;
+}>;
+
+
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, type: Promo_Code_Type_Enum, validFrom: any, validTo?: any | null, usesMax?: any | null, courses: any, createdAt: any, updatedAt: any }> };
 
 export type TrainerScheduleQueryVariables = Exact<{ [key: string]: never; }>;
 

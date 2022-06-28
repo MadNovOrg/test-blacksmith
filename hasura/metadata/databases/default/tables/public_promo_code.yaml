@@ -1,0 +1,92 @@
+table:
+  schema: public
+  name: promo_code
+configuration:
+  custom_root_fields: {}
+  column_config:
+    valid_from:
+      custom_name: validFrom
+    uses_max:
+      custom_name: usesMax
+    created_by:
+      custom_name: createdBy
+    approved_by:
+      custom_name: approvedBy
+    updated_at:
+      custom_name: updatedAt
+    booker_single_use:
+      custom_name: bookerSingleUse
+    valid_to:
+      custom_name: validTo
+    created_at:
+      custom_name: createdAt
+  custom_column_names:
+    valid_from: validFrom
+    uses_max: usesMax
+    created_by: createdBy
+    approved_by: approvedBy
+    updated_at: updatedAt
+    booker_single_use: bookerSingleUse
+    valid_to: validTo
+    created_at: createdAt
+insert_permissions:
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - courses
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      backend_only: false
+select_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - booker_single_use
+        - enabled
+        - courses
+        - levels
+        - amount
+        - uses_max
+        - code
+        - description
+        - type
+        - created_at
+        - updated_at
+        - valid_from
+        - valid_to
+        - approved_by
+        - created_by
+        - id
+      filter: {}
+update_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - courses
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}

@@ -1,14 +1,19 @@
+import SearchIcon from '@mui/icons-material/Search'
 import {
   Autocomplete,
+  AutocompleteRenderOptionState,
+  Box,
   CircularProgress,
   SxProps,
   TextField,
   TextFieldProps,
+  Typography,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
-import React, { useMemo, useState } from 'react'
+import React, { HTMLAttributes, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Avatar } from '@app/components/Avatar'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   ParamsType,
@@ -39,7 +44,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
 }) {
   const { t } = useTranslation()
   const [selected, setSelected] = useState(value)
-  const [options, setOptions] = useState<Profile[]>([])
+  const [options, setOptions] = useState<Profile[]>(value ? [value] : [])
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -82,6 +87,31 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
       ? t('components.profile-selector.min-chars')
       : t('components.profile-selector.no-results')
 
+  const renderOption = (
+    props: HTMLAttributes<HTMLLIElement>,
+    option: Profile,
+    _state: AutocompleteRenderOptionState
+  ) => {
+    return (
+      <Box {...props} component="li" sx={{ display: 'flex', gap: 2 }}>
+        <Avatar size={32} src={option.avatar} name={option.fullName} />
+        <Typography variant="body1" sx={{ flex: 1 }}>
+          {option.fullName}
+        </Typography>
+      </Box>
+    )
+  }
+
+  const renderStartAdornment = () => {
+    if (open) {
+      return <SearchIcon sx={{ color: 'grey.500' }} />
+    }
+
+    if (selected) {
+      return <Avatar size={32} src={selected.avatar} name={selected.fullName} />
+    }
+  }
+
   return (
     <Autocomplete
       open={open}
@@ -120,6 +150,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
           }
           InputProps={{
             ...params.InputProps,
+            startAdornment: renderStartAdornment(),
             endAdornment: (
               <React.Fragment>
                 {loading ? (
@@ -131,6 +162,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
           }}
         />
       )}
+      renderOption={renderOption}
       {...props}
     />
   )

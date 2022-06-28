@@ -34,6 +34,7 @@
     "waitlist-added": "You’ve been added to the course waitlist.",
     "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
     "courses": "Courses",
+    "promoCodes": "Promo Codes",
     "contacts": "Contacts",
     "community": "Community",
     "orders": "Orders",
@@ -217,6 +218,8 @@
     "validation-errors": {
       "invalid-date": "Please enter a valid date",
       "invalid-date-optional": "Please enter a valid date or keep it empty",
+      "date-gte": "Must be {{date}} or after",
+      "date-gte-field": "Must be greater or equal to '{{field}}'",
       "max-registrants": "Please enter emails of registrants for the quantity you selected",
       "this-field-is-required": "This field is required",
       "required-field": "{{name}} is required",
@@ -510,6 +513,16 @@
       "source-other-search": "Other search engine",
       "source-telemarketing": "Tele-marketing",
       "source-leaflet": "Leaflet/Brochure"
+    },
+    "selectLevels": {
+      "placeholder": "Search course level(s)"
+    },
+    "selectCourses": {
+      "btn-browse": "Browse courses",
+      "loading": "Loading...",
+      "no-results": "No courses found. Try another search.",
+      "modal-title": "Select course(s)",
+      "modal-hint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending)."
     }
   },
   "pages": {
@@ -1182,6 +1195,46 @@
       "head-title": "Head title (optional)",
       "head-preferred-job-title": "Head preferred job title (optional)",
       "website": "Organisation website (optional)"
+    },
+    "promoCodes": {
+      "cols-createdAt": "Created at",
+      "cols-code": "Code",
+      "cols-type": "Type",
+      "cols-amount": "Amount",
+      "type-PERCENT": "Percentage",
+      "type-FREE_PLACES": "Free Places",
+      "new-btn": "Create Discount",
+      "new-title": "Create Discount",
+      "new-section-general": "General details",
+      "new-section-usage": "Usage criteria",
+      "fld-createdBy-label": "Created by",
+      "fld-code-label": "Discount code",
+      "fld-code-hint": "This will be the code entered at course booking.",
+      "fld-code-dup": "This code has already been used",
+      "fld-code-dup-failed": "Failed to check if code is duplicate!",
+      "fld-description-label": "Description (optional)",
+      "fld-description-hint": "",
+      "fld-type-label": "Type",
+      "fld-type-hint": "Which type of this discount will this code apply",
+      "fld-amount-label": "Amount",
+      "fld-amount-percent-hint": "This applies to the entire booking.",
+      "fld-amount-typeError": "Discount Amount is required and must be a number between 0 and 100",
+      "courses-title": "Applies to",
+      "appliesTo-ALL": "All courses",
+      "appliesTo-LEVELS": "Specific course level(s)",
+      "appliesTo-LEVELS-required": "Please select at least one level",
+      "appliesTo-COURSES": "Specific course(s)",
+      "appliesTo-COURSES-required": "Please select at least one course",
+      "selectCourses-titleHint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending).",
+      "dates-title": "Active date",
+      "fld-validFrom-label": "Start date",
+      "fld-validFrom-hint": "Limit usage to after this date",
+      "fld-validTo-label": "End date (optional)",
+      "fld-validTo-hint": "Limit usage up to this date",
+      "fld-bookerSingleUse-label": "Limit to one time use per booker email",
+      "fld-limitBookings-label": "Limit number of bookings this discount can be used",
+      "fld-usesMax-label": "Maximum usages",
+      "new-submit": "Created discount"
     }
   },
   "course-evaluation": {

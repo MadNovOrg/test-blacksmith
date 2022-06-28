@@ -44,7 +44,6 @@ export const AdminPage: React.FC<AdminPageProps> = () => {
           justifyContent: 'space-between',
           borderBottom: '1px solid',
           borderColor: 'grey.300',
-          mb: 2,
         }}
       >
         <Box
