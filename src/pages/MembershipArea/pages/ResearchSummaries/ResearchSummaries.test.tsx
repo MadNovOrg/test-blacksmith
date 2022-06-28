@@ -99,7 +99,7 @@ describe('page: ResearchSummaries', () => {
       within(featuredResearchSummary).getByText('Download resource')
     ).toHaveAttribute(
       'href',
-      researchSummaries[0].downloads?.researchSummaryFile?.mediaItemUrl
+      researchSummaries[0].downloads?.file?.mediaItemUrl
     )
   })
 
@@ -149,10 +149,7 @@ describe('page: ResearchSummaries', () => {
 
       expect(
         within(itemElement).getByText('Download resource')
-      ).toHaveAttribute(
-        'href',
-        item.downloads?.researchSummaryFile?.mediaItemUrl ?? ''
-      )
+      ).toHaveAttribute('href', item.downloads?.file?.mediaItemUrl ?? '')
     })
   })
 

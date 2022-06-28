@@ -286,8 +286,7 @@ const Home: React.FC = () => {
                           <DownloadButton
                             sx={{ marginTop: 3 }}
                             downloadLink={
-                              ebook.downloads?.researchSummaryFile
-                                ?.mediaItemUrl ?? ''
+                              ebook.downloads?.file?.mediaItemUrl ?? ''
                             }
                           >
                             {t('pages.membership.ebooks.download-button')}
@@ -341,8 +340,8 @@ const Home: React.FC = () => {
                             <DownloadButton
                               sx={{ marginTop: 3 }}
                               downloadLink={
-                                researchSummary.downloads?.researchSummaryFile
-                                  ?.mediaItemUrl ?? ''
+                                researchSummary.downloads?.file?.mediaItemUrl ??
+                                ''
                               }
                             >
                               {t(

@@ -364,6 +364,7 @@ export const buildVideoItem = build<VideoItemSummaryFragment>({
       url: fake(f => f.internet.url()),
     },
     date: fake(f => f.date.past().toISOString()),
+    downloads: null,
   },
 })
 

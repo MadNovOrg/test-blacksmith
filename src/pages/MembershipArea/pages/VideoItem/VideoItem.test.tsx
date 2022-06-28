@@ -5,7 +5,7 @@ import { never, fromValue } from 'wonka'
 
 import { VideoItemQuery } from '@app/generated/graphql'
 
-import { screen, render, within } from '@test/index'
+import { screen, render, within, chance } from '@test/index'
 import { buildEntities, buildVideoItem } from '@test/mock-data-utils'
 
 import VideoItem from '.'
@@ -102,11 +102,11 @@ describe('page: VideoItem', () => {
     expect(videoItem.excerpt).toContain(description)
   })
 
-  it('displays related items', () => {
+  it('displays recent items', () => {
     const VIDEO_ITEM_ID = 'video-item-id'
     const videoItem = buildVideoItem({ overrides: { id: VIDEO_ITEM_ID } })
 
-    const relatedItems = buildEntities(4, buildVideoItem)
+    const recentItems = buildEntities(4, buildVideoItem)
 
     const client = {
       executeQuery: () =>
@@ -115,7 +115,7 @@ describe('page: VideoItem', () => {
             content: {
               videoSeriesItem: videoItem,
               recentVideoItems: {
-                nodes: relatedItems,
+                nodes: recentItems,
               },
             },
           },
@@ -132,7 +132,7 @@ describe('page: VideoItem', () => {
       </Provider>
     )
 
-    relatedItems.forEach(relatedItem => {
+    recentItems.forEach(relatedItem => {
       const relatedItemEl = screen.getByTestId(
         `video-series-grid-item-${relatedItem.id}`
       )
@@ -148,5 +148,43 @@ describe('page: VideoItem', () => {
         relatedItem.featuredImage?.node?.mediaItemUrl ?? ''
       )
     })
+  })
+
+  it('displays download button if video item has downloadable resource', () => {
+    const VIDEO_ITEM_ID = 'video-item-id'
+    const videoItem = buildVideoItem({
+      overrides: {
+        id: VIDEO_ITEM_ID,
+        downloads: { file: { mediaItemUrl: chance.url() } },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: VideoItemQuery }>({
+          data: {
+            content: {
+              videoSeriesItem: videoItem,
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
+          <Routes>
+            <Route path="/video-series/:id" element={<VideoItem />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    const button = screen.getByText('Download resource')
+
+    expect(button).toHaveAttribute(
+      'href',
+      videoItem.downloads?.file?.mediaItemUrl
+    )
   })
 })

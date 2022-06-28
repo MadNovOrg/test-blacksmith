@@ -1128,16 +1128,40 @@ export enum ContentTypesOfCategoryEnum {
   Post = 'POST'
 }
 
+/** Allowed Content Types of the EbooksCategory taxonomy. */
+export enum ContentTypesOfEbooksCategoryEnum {
+  /** The Type of Content object */
+  Ebooks = 'EBOOKS'
+}
+
 /** Allowed Content Types of the PostFormat taxonomy. */
 export enum ContentTypesOfPostFormatEnum {
   /** The Type of Content object */
   Post = 'POST'
 }
 
+/** Allowed Content Types of the ResearchSummariesCategory taxonomy. */
+export enum ContentTypesOfResearchSummariesCategoryEnum {
+  /** The Type of Content object */
+  ResearchSummary = 'RESEARCH_SUMMARY'
+}
+
 /** Allowed Content Types of the Tag taxonomy. */
 export enum ContentTypesOfTagEnum {
   /** The Type of Content object */
   Post = 'POST'
+}
+
+/** Allowed Content Types of the VideoSeriesCategory taxonomy. */
+export enum ContentTypesOfVideoSeriesCategoryEnum {
+  /** The Type of Content object */
+  VideoSeries = 'VIDEO_SERIES'
+}
+
+/** Allowed Content Types of the WebinarsCategory taxonomy. */
+export enum ContentTypesOfWebinarsCategoryEnum {
+  /** The Type of Content object */
+  Webinar = 'WEBINAR'
 }
 
 export type CourseInvite = {
@@ -1253,6 +1277,8 @@ export type CreateEbookInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Ebook and EbooksCategories */
+  ebooksCategories?: InputMaybe<EbookEbooksCategoriesInput>;
   /** The excerpt of the object */
   excerpt?: InputMaybe<Scalars['String']>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
@@ -1274,6 +1300,29 @@ export type CreateEbookPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The Post object mutation type. */
   ebook?: Maybe<Ebook>;
+};
+
+/** Input for the createEbooksCategory mutation */
+export type CreateEbooksCategoryInput = {
+  /** The slug that the ebooks_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the ebooks_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The name of the ebooks_category object to mutate */
+  name: Scalars['String'];
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createEbooksCategory mutation */
+export type CreateEbooksCategoryPayload = {
+  __typename?: 'CreateEbooksCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created ebooks_category */
+  ebooksCategory?: Maybe<EbooksCategory>;
 };
 
 /** Input for the createMediaItem mutation */
@@ -1424,6 +1473,29 @@ export type CreatePostPayload = {
   post?: Maybe<Post>;
 };
 
+/** Input for the createResearchSummariesCategory mutation */
+export type CreateResearchSummariesCategoryInput = {
+  /** The slug that the research_summaries_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the research_summaries_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The name of the research_summaries_category object to mutate */
+  name: Scalars['String'];
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createResearchSummariesCategory mutation */
+export type CreateResearchSummariesCategoryPayload = {
+  __typename?: 'CreateResearchSummariesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created research_summaries_category */
+  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
+};
+
 /** Input for the createResearchSummary mutation */
 export type CreateResearchSummaryInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1436,6 +1508,8 @@ export type CreateResearchSummaryInput = {
   menuOrder?: InputMaybe<Scalars['Int']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']>;
+  /** Set connections between the ResearchSummary and ResearchSummariesCategories */
+  researchSummariesCategories?: InputMaybe<ResearchSummaryResearchSummariesCategoriesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']>;
   /** The status of the object */
@@ -1532,6 +1606,29 @@ export type CreateUserPayload = {
   user?: Maybe<User>;
 };
 
+/** Input for the createVideoSeriesCategory mutation */
+export type CreateVideoSeriesCategoryInput = {
+  /** The slug that the video_series_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the video_series_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The name of the video_series_category object to mutate */
+  name: Scalars['String'];
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createVideoSeriesCategory mutation */
+export type CreateVideoSeriesCategoryPayload = {
+  __typename?: 'CreateVideoSeriesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created video_series_category */
+  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
+};
+
 /** Input for the createVideoSeriesItem mutation */
 export type CreateVideoSeriesItemInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1550,6 +1647,8 @@ export type CreateVideoSeriesItemInput = {
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']>;
+  /** Set connections between the VideoSeriesItem and VideoSeriesCategories */
+  videoSeriesCategories?: InputMaybe<VideoSeriesItemVideoSeriesCategoriesInput>;
 };
 
 /** The payload for the createVideoSeriesItem mutation */
@@ -1579,6 +1678,8 @@ export type CreateWebinarInput = {
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Webinar and WebinarsCategories */
+  webinarsCategories?: InputMaybe<WebinarWebinarsCategoriesInput>;
 };
 
 /** The payload for the createWebinar mutation */
@@ -1588,6 +1689,29 @@ export type CreateWebinarPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The Post object mutation type. */
   webinar?: Maybe<Webinar>;
+};
+
+/** Input for the createWebinarsCategory mutation */
+export type CreateWebinarsCategoryInput = {
+  /** The slug that the webinars_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the webinars_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The name of the webinars_category object to mutate */
+  name: Scalars['String'];
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the createWebinarsCategory mutation */
+export type CreateWebinarsCategoryPayload = {
+  __typename?: 'CreateWebinarsCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created webinars_category */
+  webinarsCategory?: Maybe<WebinarsCategory>;
 };
 
 export enum Currency {
@@ -1713,6 +1837,25 @@ export type DeleteEbookPayload = {
   ebook?: Maybe<Ebook>;
 };
 
+/** Input for the deleteEbooksCategory mutation */
+export type DeleteEbooksCategoryInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the EbooksCategory to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteEbooksCategory mutation */
+export type DeleteEbooksCategoryPayload = {
+  __typename?: 'DeleteEbooksCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The deteted term object */
+  ebooksCategory?: Maybe<EbooksCategory>;
+};
+
 /** Input for the deleteMediaItem mutation */
 export type DeleteMediaItemInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1795,6 +1938,25 @@ export type DeletePostPayload = {
   post?: Maybe<Post>;
 };
 
+/** Input for the deleteResearchSummariesCategory mutation */
+export type DeleteResearchSummariesCategoryInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the ResearchSummariesCategory to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteResearchSummariesCategory mutation */
+export type DeleteResearchSummariesCategoryPayload = {
+  __typename?: 'DeleteResearchSummariesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The deteted term object */
+  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
+};
+
 /** Input for the deleteResearchSummary mutation */
 export type DeleteResearchSummaryInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1856,6 +2018,25 @@ export type DeleteUserPayload = {
   user?: Maybe<User>;
 };
 
+/** Input for the deleteVideoSeriesCategory mutation */
+export type DeleteVideoSeriesCategoryInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the VideoSeriesCategory to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteVideoSeriesCategory mutation */
+export type DeleteVideoSeriesCategoryPayload = {
+  __typename?: 'DeleteVideoSeriesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The deteted term object */
+  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
+};
+
 /** Input for the deleteVideoSeriesItem mutation */
 export type DeleteVideoSeriesItemInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -1898,6 +2079,25 @@ export type DeleteWebinarPayload = {
   webinar?: Maybe<Webinar>;
 };
 
+/** Input for the deleteWebinarsCategory mutation */
+export type DeleteWebinarsCategoryInput = {
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The ID of the WebinarsCategory to delete */
+  id: Scalars['ID'];
+};
+
+/** The payload for the deleteWebinarsCategory mutation */
+export type DeleteWebinarsCategoryPayload = {
+  __typename?: 'DeleteWebinarsCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The ID of the deleted object */
+  deletedId?: Maybe<Scalars['ID']>;
+  /** The deteted term object */
+  webinarsCategory?: Maybe<WebinarsCategory>;
+};
+
 /** The discussion setting type */
 export type DiscussionSettings = {
   __typename?: 'DiscussionSettings';
@@ -1926,6 +2126,8 @@ export type Ebook = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node &
   downloads?: Maybe<Ebook_Downloads>;
   /** The id field matches the WP_Post-&gt;ID field. */
   ebookId: Scalars['Int'];
+  /** Connection between the Ebook type and the EbooksCategory type */
+  ebooksCategories?: Maybe<EbookToEbooksCategoryConnection>;
   /** If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds */
   editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
   /** The RSS enclosure for the object */
@@ -1974,10 +2176,22 @@ export type Ebook = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node &
   status?: Maybe<Scalars['String']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the Ebook type and the TermNode type */
+  terms?: Maybe<EbookToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
+};
+
+
+/** The Ebook type */
+export type EbookEbooksCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<EbookToEbooksCategoryConnectionWhereArgs>;
 };
 
 
@@ -2006,8 +2220,38 @@ export type EbookExcerptArgs = {
 
 
 /** The Ebook type */
+export type EbookTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<EbookToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The Ebook type */
 export type EbookTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+/** Set relationships between the Ebook to EbooksCategories */
+export type EbookEbooksCategoriesInput = {
+  /** If true, this will append the EbooksCategory to existing related EbooksCategories. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<EbookEbooksCategoriesNodeInput>>>;
+};
+
+/** List of EbooksCategories to connect the Ebook to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type EbookEbooksCategoriesNodeInput = {
+  /** The description of the EbooksCategory. This field is used to set a description of the EbooksCategory if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the EbooksCategory. If present, this will be used to connect to the Ebook. If no existing EbooksCategory exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']>;
+  /** The name of the EbooksCategory. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The slug of the EbooksCategory. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -2022,6 +2266,70 @@ export enum EbookIdType {
   Uri = 'URI'
 }
 
+/** Connection between the Ebook type and the EbooksCategory type */
+export type EbookToEbooksCategoryConnection = {
+  __typename?: 'EbookToEbooksCategoryConnection';
+  /** Edges for the EbookToEbooksCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<EbookToEbooksCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<EbooksCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type EbookToEbooksCategoryConnectionEdge = {
+  __typename?: 'EbookToEbooksCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<EbooksCategory>;
+};
+
+/** Arguments for filtering the EbookToEbooksCategoryConnection connection */
+export type EbookToEbooksCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Connection between the Ebook type and the Ebook type */
 export type EbookToPreviewConnectionEdge = {
   __typename?: 'EbookToPreviewConnectionEdge';
@@ -2029,12 +2337,300 @@ export type EbookToPreviewConnectionEdge = {
   node?: Maybe<Ebook>;
 };
 
+/** Connection between the Ebook type and the TermNode type */
+export type EbookToTermNodeConnection = {
+  __typename?: 'EbookToTermNodeConnection';
+  /** Edges for the EbookToTermNodeConnection connection */
+  edges?: Maybe<Array<Maybe<EbookToTermNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type EbookToTermNodeConnectionEdge = {
+  __typename?: 'EbookToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<TermNode>;
+};
+
+/** Arguments for filtering the EbookToTermNodeConnection connection */
+export type EbookToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Field Group */
 export type Ebook_Downloads = AcfFieldGroup & {
   __typename?: 'Ebook_Downloads';
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
-  researchSummaryFile?: Maybe<MediaItem>;
+  file?: Maybe<MediaItem>;
+};
+
+/** The EbooksCategory type */
+export type EbooksCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'EbooksCategory';
+  /** Connection between the EbooksCategory type and the ContentNode type */
+  contentNodes?: Maybe<EbooksCategoryToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']>;
+  /** Connection between the EbooksCategory type and the Ebook type */
+  ebooks?: Maybe<EbooksCategoryToEbookConnection>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  ebooksCategoryId?: Maybe<Scalars['Int']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The unique resource identifier path */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']>;
+  /** Connection between the EbooksCategory type and the Taxonomy type */
+  taxonomy?: Maybe<EbooksCategoryToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+};
+
+
+/** The EbooksCategory type */
+export type EbooksCategoryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<EbooksCategoryToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The EbooksCategory type */
+export type EbooksCategoryEbooksArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<EbooksCategoryToEbookConnectionWhereArgs>;
+};
+
+
+/** The EbooksCategory type */
+export type EbooksCategoryEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The EbooksCategory type */
+export type EbooksCategoryEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum EbooksCategoryIdType {
+  /** The Database ID for the node */
+  DatabaseId = 'DATABASE_ID',
+  /** The hashed Global ID */
+  Id = 'ID',
+  /** The name of the node */
+  Name = 'NAME',
+  /** Url friendly name of the node */
+  Slug = 'SLUG',
+  /** The URI for the node */
+  Uri = 'URI'
+}
+
+/** Connection between the EbooksCategory type and the ContentNode type */
+export type EbooksCategoryToContentNodeConnection = {
+  __typename?: 'EbooksCategoryToContentNodeConnection';
+  /** Edges for the EbooksCategoryToContentNodeConnection connection */
+  edges?: Maybe<Array<Maybe<EbooksCategoryToContentNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type EbooksCategoryToContentNodeConnectionEdge = {
+  __typename?: 'EbooksCategoryToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ContentNode>;
+};
+
+/** Arguments for filtering the EbooksCategoryToContentNodeConnection connection */
+export type EbooksCategoryToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfEbooksCategoryEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the EbooksCategory type and the Ebook type */
+export type EbooksCategoryToEbookConnection = {
+  __typename?: 'EbooksCategoryToEbookConnection';
+  /** Edges for the EbooksCategoryToEbookConnection connection */
+  edges?: Maybe<Array<Maybe<EbooksCategoryToEbookConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<Ebook>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type EbooksCategoryToEbookConnectionEdge = {
+  __typename?: 'EbooksCategoryToEbookConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<Ebook>;
+};
+
+/** Arguments for filtering the EbooksCategoryToEbookConnection connection */
+export type EbooksCategoryToEbookConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the EbooksCategory type and the Taxonomy type */
+export type EbooksCategoryToTaxonomyConnectionEdge = {
+  __typename?: 'EbooksCategoryToTaxonomyConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Taxonomy>;
 };
 
 /** Asset enqueued by the CMS */
@@ -2862,7 +3458,7 @@ export enum MenuItemNodeIdTypeEnum {
 }
 
 /** Deprecated in favor of MenuItemLinkeable Interface */
-export type MenuItemObjectUnion = Category | Ebook | Page | Post | PostFormat | ResearchSummary | Tag | VideoSeriesItem | Webinar;
+export type MenuItemObjectUnion = Category | Ebook | EbooksCategory | Page | Post | PostFormat | ResearchSummariesCategory | ResearchSummary | Tag | VideoSeriesCategory | VideoSeriesItem | Webinar | WebinarsCategory;
 
 /** Connection between the MenuItem type and the Menu type */
 export type MenuItemToMenuConnectionEdge = {
@@ -4954,6 +5550,228 @@ export enum RelationEnum {
   Or = 'OR'
 }
 
+/** The ResearchSummariesCategory type */
+export type ResearchSummariesCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'ResearchSummariesCategory';
+  /** Connection between the ResearchSummariesCategory type and the ContentNode type */
+  contentNodes?: Maybe<ResearchSummariesCategoryToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The unique resource identifier path */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']>;
+  /** Connection between the ResearchSummariesCategory type and the ResearchSummary type */
+  researchSummaries?: Maybe<ResearchSummariesCategoryToResearchSummaryConnection>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  researchSummariesCategoryId?: Maybe<Scalars['Int']>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']>;
+  /** Connection between the ResearchSummariesCategory type and the Taxonomy type */
+  taxonomy?: Maybe<ResearchSummariesCategoryToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+};
+
+
+/** The ResearchSummariesCategory type */
+export type ResearchSummariesCategoryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResearchSummariesCategoryToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The ResearchSummariesCategory type */
+export type ResearchSummariesCategoryEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The ResearchSummariesCategory type */
+export type ResearchSummariesCategoryEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The ResearchSummariesCategory type */
+export type ResearchSummariesCategoryResearchSummariesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResearchSummariesCategoryToResearchSummaryConnectionWhereArgs>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum ResearchSummariesCategoryIdType {
+  /** The Database ID for the node */
+  DatabaseId = 'DATABASE_ID',
+  /** The hashed Global ID */
+  Id = 'ID',
+  /** The name of the node */
+  Name = 'NAME',
+  /** Url friendly name of the node */
+  Slug = 'SLUG',
+  /** The URI for the node */
+  Uri = 'URI'
+}
+
+/** Connection between the ResearchSummariesCategory type and the ContentNode type */
+export type ResearchSummariesCategoryToContentNodeConnection = {
+  __typename?: 'ResearchSummariesCategoryToContentNodeConnection';
+  /** Edges for the ResearchSummariesCategoryToContentNodeConnection connection */
+  edges?: Maybe<Array<Maybe<ResearchSummariesCategoryToContentNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResearchSummariesCategoryToContentNodeConnectionEdge = {
+  __typename?: 'ResearchSummariesCategoryToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ContentNode>;
+};
+
+/** Arguments for filtering the ResearchSummariesCategoryToContentNodeConnection connection */
+export type ResearchSummariesCategoryToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfResearchSummariesCategoryEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the ResearchSummariesCategory type and the ResearchSummary type */
+export type ResearchSummariesCategoryToResearchSummaryConnection = {
+  __typename?: 'ResearchSummariesCategoryToResearchSummaryConnection';
+  /** Edges for the ResearchSummariesCategoryToResearchSummaryConnection connection */
+  edges?: Maybe<Array<Maybe<ResearchSummariesCategoryToResearchSummaryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResearchSummary>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResearchSummariesCategoryToResearchSummaryConnectionEdge = {
+  __typename?: 'ResearchSummariesCategoryToResearchSummaryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResearchSummary>;
+};
+
+/** Arguments for filtering the ResearchSummariesCategoryToResearchSummaryConnection connection */
+export type ResearchSummariesCategoryToResearchSummaryConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the ResearchSummariesCategory type and the Taxonomy type */
+export type ResearchSummariesCategoryToTaxonomyConnectionEdge = {
+  __typename?: 'ResearchSummariesCategoryToTaxonomyConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Taxonomy>;
+};
+
 /** The ResearchSummary type */
 export type ResearchSummary = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
   __typename?: 'ResearchSummary';
@@ -5013,6 +5831,8 @@ export type ResearchSummary = ContentNode & DatabaseIdentifier & MenuItemLinkabl
   previewRevisionDatabaseId?: Maybe<Scalars['Int']>;
   /** Whether the object is a node in the preview state */
   previewRevisionId?: Maybe<Scalars['ID']>;
+  /** Connection between the ResearchSummary type and the ResearchSummariesCategory type */
+  researchSummariesCategories?: Maybe<ResearchSummaryToResearchSummariesCategoryConnection>;
   /** The id field matches the WP_Post-&gt;ID field. */
   researchSummaryId: Scalars['Int'];
   /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
@@ -5021,6 +5841,8 @@ export type ResearchSummary = ContentNode & DatabaseIdentifier & MenuItemLinkabl
   status?: Maybe<Scalars['String']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the ResearchSummary type and the TermNode type */
+  terms?: Maybe<ResearchSummaryToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']>;
   /** The unique resource identifier path */
@@ -5053,6 +5875,26 @@ export type ResearchSummaryExcerptArgs = {
 
 
 /** The ResearchSummary type */
+export type ResearchSummaryResearchSummariesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResearchSummaryToResearchSummariesCategoryConnectionWhereArgs>;
+};
+
+
+/** The ResearchSummary type */
+export type ResearchSummaryTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResearchSummaryToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The ResearchSummary type */
 export type ResearchSummaryTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
 };
@@ -5069,6 +5911,26 @@ export enum ResearchSummaryIdType {
   Uri = 'URI'
 }
 
+/** Set relationships between the ResearchSummary to ResearchSummariesCategories */
+export type ResearchSummaryResearchSummariesCategoriesInput = {
+  /** If true, this will append the ResearchSummariesCategory to existing related ResearchSummariesCategories. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<ResearchSummaryResearchSummariesCategoriesNodeInput>>>;
+};
+
+/** List of ResearchSummariesCategories to connect the ResearchSummary to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type ResearchSummaryResearchSummariesCategoriesNodeInput = {
+  /** The description of the ResearchSummariesCategory. This field is used to set a description of the ResearchSummariesCategory if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the ResearchSummariesCategory. If present, this will be used to connect to the ResearchSummary. If no existing ResearchSummariesCategory exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']>;
+  /** The name of the ResearchSummariesCategory. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The slug of the ResearchSummariesCategory. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
 /** Connection between the ResearchSummary type and the ResearchSummary type */
 export type ResearchSummaryToPreviewConnectionEdge = {
   __typename?: 'ResearchSummaryToPreviewConnectionEdge';
@@ -5076,12 +5938,142 @@ export type ResearchSummaryToPreviewConnectionEdge = {
   node?: Maybe<ResearchSummary>;
 };
 
+/** Connection between the ResearchSummary type and the ResearchSummariesCategory type */
+export type ResearchSummaryToResearchSummariesCategoryConnection = {
+  __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection';
+  /** Edges for the ResearchSummaryToResearchSummariesCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<ResearchSummaryToResearchSummariesCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResearchSummariesCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResearchSummaryToResearchSummariesCategoryConnectionEdge = {
+  __typename?: 'ResearchSummaryToResearchSummariesCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResearchSummariesCategory>;
+};
+
+/** Arguments for filtering the ResearchSummaryToResearchSummariesCategoryConnection connection */
+export type ResearchSummaryToResearchSummariesCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Connection between the ResearchSummary type and the TermNode type */
+export type ResearchSummaryToTermNodeConnection = {
+  __typename?: 'ResearchSummaryToTermNodeConnection';
+  /** Edges for the ResearchSummaryToTermNodeConnection connection */
+  edges?: Maybe<Array<Maybe<ResearchSummaryToTermNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResearchSummaryToTermNodeConnectionEdge = {
+  __typename?: 'ResearchSummaryToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<TermNode>;
+};
+
+/** Arguments for filtering the ResearchSummaryToTermNodeConnection connection */
+export type ResearchSummaryToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Field Group */
 export type ResearchSummary_Downloads = AcfFieldGroup & {
   __typename?: 'ResearchSummary_Downloads';
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
-  researchSummaryFile?: Maybe<MediaItem>;
+  file?: Maybe<MediaItem>;
 };
 
 /** Input for the resetUserPassword mutation */
@@ -5132,6 +6124,8 @@ export type RootMutation = {
   createComment?: Maybe<CreateCommentPayload>;
   /** The payload for the createEbook mutation */
   createEbook?: Maybe<CreateEbookPayload>;
+  /** The payload for the createEbooksCategory mutation */
+  createEbooksCategory?: Maybe<CreateEbooksCategoryPayload>;
   /** The payload for the createMediaItem mutation */
   createMediaItem?: Maybe<CreateMediaItemPayload>;
   /** The payload for the createPage mutation */
@@ -5140,22 +6134,30 @@ export type RootMutation = {
   createPost?: Maybe<CreatePostPayload>;
   /** The payload for the createPostFormat mutation */
   createPostFormat?: Maybe<CreatePostFormatPayload>;
+  /** The payload for the createResearchSummariesCategory mutation */
+  createResearchSummariesCategory?: Maybe<CreateResearchSummariesCategoryPayload>;
   /** The payload for the createResearchSummary mutation */
   createResearchSummary?: Maybe<CreateResearchSummaryPayload>;
   /** The payload for the createTag mutation */
   createTag?: Maybe<CreateTagPayload>;
   /** The payload for the createUser mutation */
   createUser?: Maybe<CreateUserPayload>;
+  /** The payload for the createVideoSeriesCategory mutation */
+  createVideoSeriesCategory?: Maybe<CreateVideoSeriesCategoryPayload>;
   /** The payload for the createVideoSeriesItem mutation */
   createVideoSeriesItem?: Maybe<CreateVideoSeriesItemPayload>;
   /** The payload for the createWebinar mutation */
   createWebinar?: Maybe<CreateWebinarPayload>;
+  /** The payload for the createWebinarsCategory mutation */
+  createWebinarsCategory?: Maybe<CreateWebinarsCategoryPayload>;
   /** The payload for the deleteCategory mutation */
   deleteCategory?: Maybe<DeleteCategoryPayload>;
   /** The payload for the deleteComment mutation */
   deleteComment?: Maybe<DeleteCommentPayload>;
   /** The payload for the deleteEbook mutation */
   deleteEbook?: Maybe<DeleteEbookPayload>;
+  /** The payload for the deleteEbooksCategory mutation */
+  deleteEbooksCategory?: Maybe<DeleteEbooksCategoryPayload>;
   /** The payload for the deleteMediaItem mutation */
   deleteMediaItem?: Maybe<DeleteMediaItemPayload>;
   /** The payload for the deletePage mutation */
@@ -5164,16 +6166,22 @@ export type RootMutation = {
   deletePost?: Maybe<DeletePostPayload>;
   /** The payload for the deletePostFormat mutation */
   deletePostFormat?: Maybe<DeletePostFormatPayload>;
+  /** The payload for the deleteResearchSummariesCategory mutation */
+  deleteResearchSummariesCategory?: Maybe<DeleteResearchSummariesCategoryPayload>;
   /** The payload for the deleteResearchSummary mutation */
   deleteResearchSummary?: Maybe<DeleteResearchSummaryPayload>;
   /** The payload for the deleteTag mutation */
   deleteTag?: Maybe<DeleteTagPayload>;
   /** The payload for the deleteUser mutation */
   deleteUser?: Maybe<DeleteUserPayload>;
+  /** The payload for the deleteVideoSeriesCategory mutation */
+  deleteVideoSeriesCategory?: Maybe<DeleteVideoSeriesCategoryPayload>;
   /** The payload for the deleteVideoSeriesItem mutation */
   deleteVideoSeriesItem?: Maybe<DeleteVideoSeriesItemPayload>;
   /** The payload for the deleteWebinar mutation */
   deleteWebinar?: Maybe<DeleteWebinarPayload>;
+  /** The payload for the deleteWebinarsCategory mutation */
+  deleteWebinarsCategory?: Maybe<DeleteWebinarsCategoryPayload>;
   /** Increase the count. */
   increaseCount?: Maybe<Scalars['Int']>;
   /** The payload for the registerUser mutation */
@@ -5190,6 +6198,8 @@ export type RootMutation = {
   updateComment?: Maybe<UpdateCommentPayload>;
   /** The payload for the updateEbook mutation */
   updateEbook?: Maybe<UpdateEbookPayload>;
+  /** The payload for the UpdateEbooksCategory mutation */
+  updateEbooksCategory?: Maybe<UpdateEbooksCategoryPayload>;
   /** The payload for the updateMediaItem mutation */
   updateMediaItem?: Maybe<UpdateMediaItemPayload>;
   /** The payload for the updatePage mutation */
@@ -5198,6 +6208,8 @@ export type RootMutation = {
   updatePost?: Maybe<UpdatePostPayload>;
   /** The payload for the UpdatePostFormat mutation */
   updatePostFormat?: Maybe<UpdatePostFormatPayload>;
+  /** The payload for the UpdateResearchSummariesCategory mutation */
+  updateResearchSummariesCategory?: Maybe<UpdateResearchSummariesCategoryPayload>;
   /** The payload for the updateResearchSummary mutation */
   updateResearchSummary?: Maybe<UpdateResearchSummaryPayload>;
   /** The payload for the updateSettings mutation */
@@ -5206,10 +6218,14 @@ export type RootMutation = {
   updateTag?: Maybe<UpdateTagPayload>;
   /** The payload for the updateUser mutation */
   updateUser?: Maybe<UpdateUserPayload>;
+  /** The payload for the UpdateVideoSeriesCategory mutation */
+  updateVideoSeriesCategory?: Maybe<UpdateVideoSeriesCategoryPayload>;
   /** The payload for the updateVideoSeriesItem mutation */
   updateVideoSeriesItem?: Maybe<UpdateVideoSeriesItemPayload>;
   /** The payload for the updateWebinar mutation */
   updateWebinar?: Maybe<UpdateWebinarPayload>;
+  /** The payload for the UpdateWebinarsCategory mutation */
+  updateWebinarsCategory?: Maybe<UpdateWebinarsCategoryPayload>;
 };
 
 
@@ -5225,6 +6241,11 @@ export type RootMutationCreateCommentArgs = {
 
 export type RootMutationCreateEbookArgs = {
   input: CreateEbookInput;
+};
+
+
+export type RootMutationCreateEbooksCategoryArgs = {
+  input: CreateEbooksCategoryInput;
 };
 
 
@@ -5248,6 +6269,11 @@ export type RootMutationCreatePostFormatArgs = {
 };
 
 
+export type RootMutationCreateResearchSummariesCategoryArgs = {
+  input: CreateResearchSummariesCategoryInput;
+};
+
+
 export type RootMutationCreateResearchSummaryArgs = {
   input: CreateResearchSummaryInput;
 };
@@ -5263,6 +6289,11 @@ export type RootMutationCreateUserArgs = {
 };
 
 
+export type RootMutationCreateVideoSeriesCategoryArgs = {
+  input: CreateVideoSeriesCategoryInput;
+};
+
+
 export type RootMutationCreateVideoSeriesItemArgs = {
   input: CreateVideoSeriesItemInput;
 };
@@ -5270,6 +6301,11 @@ export type RootMutationCreateVideoSeriesItemArgs = {
 
 export type RootMutationCreateWebinarArgs = {
   input: CreateWebinarInput;
+};
+
+
+export type RootMutationCreateWebinarsCategoryArgs = {
+  input: CreateWebinarsCategoryInput;
 };
 
 
@@ -5285,6 +6321,11 @@ export type RootMutationDeleteCommentArgs = {
 
 export type RootMutationDeleteEbookArgs = {
   input: DeleteEbookInput;
+};
+
+
+export type RootMutationDeleteEbooksCategoryArgs = {
+  input: DeleteEbooksCategoryInput;
 };
 
 
@@ -5308,6 +6349,11 @@ export type RootMutationDeletePostFormatArgs = {
 };
 
 
+export type RootMutationDeleteResearchSummariesCategoryArgs = {
+  input: DeleteResearchSummariesCategoryInput;
+};
+
+
 export type RootMutationDeleteResearchSummaryArgs = {
   input: DeleteResearchSummaryInput;
 };
@@ -5323,6 +6369,11 @@ export type RootMutationDeleteUserArgs = {
 };
 
 
+export type RootMutationDeleteVideoSeriesCategoryArgs = {
+  input: DeleteVideoSeriesCategoryInput;
+};
+
+
 export type RootMutationDeleteVideoSeriesItemArgs = {
   input: DeleteVideoSeriesItemInput;
 };
@@ -5330,6 +6381,11 @@ export type RootMutationDeleteVideoSeriesItemArgs = {
 
 export type RootMutationDeleteWebinarArgs = {
   input: DeleteWebinarInput;
+};
+
+
+export type RootMutationDeleteWebinarsCategoryArgs = {
+  input: DeleteWebinarsCategoryInput;
 };
 
 
@@ -5373,6 +6429,11 @@ export type RootMutationUpdateEbookArgs = {
 };
 
 
+export type RootMutationUpdateEbooksCategoryArgs = {
+  input: UpdateEbooksCategoryInput;
+};
+
+
 export type RootMutationUpdateMediaItemArgs = {
   input: UpdateMediaItemInput;
 };
@@ -5390,6 +6451,11 @@ export type RootMutationUpdatePostArgs = {
 
 export type RootMutationUpdatePostFormatArgs = {
   input: UpdatePostFormatInput;
+};
+
+
+export type RootMutationUpdateResearchSummariesCategoryArgs = {
+  input: UpdateResearchSummariesCategoryInput;
 };
 
 
@@ -5413,6 +6479,11 @@ export type RootMutationUpdateUserArgs = {
 };
 
 
+export type RootMutationUpdateVideoSeriesCategoryArgs = {
+  input: UpdateVideoSeriesCategoryInput;
+};
+
+
 export type RootMutationUpdateVideoSeriesItemArgs = {
   input: UpdateVideoSeriesItemInput;
 };
@@ -5420,6 +6491,11 @@ export type RootMutationUpdateVideoSeriesItemArgs = {
 
 export type RootMutationUpdateWebinarArgs = {
   input: UpdateWebinarInput;
+};
+
+
+export type RootMutationUpdateWebinarsCategoryArgs = {
+  input: UpdateWebinarsCategoryInput;
 };
 
 export type RootQuery = {
@@ -5450,6 +6526,10 @@ export type RootQuery = {
   ebookBy?: Maybe<Ebook>;
   /** Connection between the RootQuery type and the Ebook type */
   ebooks?: Maybe<RootQueryToEbookConnection>;
+  /** Connection between the RootQuery type and the EbooksCategory type */
+  ebooksCategories?: Maybe<RootQueryToEbooksCategoryConnection>;
+  /** A 0bject */
+  ebooksCategory?: Maybe<EbooksCategory>;
   /** Fields of the &#039;GeneralSettings&#039; settings group */
   generalSettings?: Maybe<GeneralSettings>;
   /** An object of the mediaItem Type.  */
@@ -5498,6 +6578,10 @@ export type RootQuery = {
   registeredStylesheets?: Maybe<RootQueryToEnqueuedStylesheetConnection>;
   /** Connection between the RootQuery type and the ResearchSummary type */
   researchSummaries?: Maybe<RootQueryToResearchSummaryConnection>;
+  /** Connection between the RootQuery type and the ResearchSummariesCategory type */
+  researchSummariesCategories?: Maybe<RootQueryToResearchSummariesCategoryConnection>;
+  /** A 0bject */
+  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
   /** An object of the ResearchSummary Type.  */
   researchSummary?: Maybe<ResearchSummary>;
   /** A ResearchSummary object */
@@ -5528,6 +6612,10 @@ export type RootQuery = {
   userRoles?: Maybe<RootQueryToUserRoleConnection>;
   /** Connection between the RootQuery type and the User type */
   users?: Maybe<RootQueryToUserConnection>;
+  /** Connection between the RootQuery type and the VideoSeriesCategory type */
+  videoSeriesCategories?: Maybe<RootQueryToVideoSeriesCategoryConnection>;
+  /** A 0bject */
+  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
   /** An object of the VideoSeriesItem Type.  */
   videoSeriesItem?: Maybe<VideoSeriesItem>;
   /** A VideoSeriesItem object */
@@ -5542,6 +6630,10 @@ export type RootQuery = {
   webinarBy?: Maybe<Webinar>;
   /** Connection between the RootQuery type and the Webinar type */
   webinars?: Maybe<RootQueryToWebinarConnection>;
+  /** Connection between the RootQuery type and the WebinarsCategory type */
+  webinarsCategories?: Maybe<RootQueryToWebinarsCategoryConnection>;
+  /** A 0bject */
+  webinarsCategory?: Maybe<WebinarsCategory>;
   /** Fields of the &#039;WritingSettings&#039; settings group */
   writingSettings?: Maybe<WritingSettings>;
 };
@@ -5628,6 +6720,21 @@ export type RootQueryEbooksArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RootQueryToEbookConnectionWhereArgs>;
+};
+
+
+export type RootQueryEbooksCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToEbooksCategoryConnectionWhereArgs>;
+};
+
+
+export type RootQueryEbooksCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<EbooksCategoryIdType>;
 };
 
 
@@ -5796,6 +6903,21 @@ export type RootQueryResearchSummariesArgs = {
 };
 
 
+export type RootQueryResearchSummariesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToResearchSummariesCategoryConnectionWhereArgs>;
+};
+
+
+export type RootQueryResearchSummariesCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<ResearchSummariesCategoryIdType>;
+};
+
+
 export type RootQueryResearchSummaryArgs = {
   asPreview?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
@@ -5906,6 +7028,21 @@ export type RootQueryUsersArgs = {
 };
 
 
+export type RootQueryVideoSeriesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToVideoSeriesCategoryConnectionWhereArgs>;
+};
+
+
+export type RootQueryVideoSeriesCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<VideoSeriesCategoryIdType>;
+};
+
+
 export type RootQueryVideoSeriesItemArgs = {
   asPreview?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
@@ -5951,6 +7088,21 @@ export type RootQueryWebinarsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<RootQueryToWebinarConnectionWhereArgs>;
+};
+
+
+export type RootQueryWebinarsCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<RootQueryToWebinarsCategoryConnectionWhereArgs>;
+};
+
+
+export type RootQueryWebinarsCategoryArgs = {
+  id: Scalars['ID'];
+  idType?: InputMaybe<WebinarsCategoryIdType>;
 };
 
 /** Connection between the RootQuery type and the category type */
@@ -6295,6 +7447,70 @@ export type RootQueryToEbookConnectionWhereArgs = {
   status?: InputMaybe<PostStatusEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the RootQuery type and the EbooksCategory type */
+export type RootQueryToEbooksCategoryConnection = {
+  __typename?: 'RootQueryToEbooksCategoryConnection';
+  /** Edges for the RootQueryToEbooksCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToEbooksCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<EbooksCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToEbooksCategoryConnectionEdge = {
+  __typename?: 'RootQueryToEbooksCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<EbooksCategory>;
+};
+
+/** Arguments for filtering the RootQueryToEbooksCategoryConnection connection */
+export type RootQueryToEbooksCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Connection between the RootQuery type and the EnqueuedScript type */
@@ -6711,6 +7927,70 @@ export type RootQueryToPostFormatConnectionWhereArgs = {
   updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** Connection between the RootQuery type and the ResearchSummariesCategory type */
+export type RootQueryToResearchSummariesCategoryConnection = {
+  __typename?: 'RootQueryToResearchSummariesCategoryConnection';
+  /** Edges for the RootQueryToResearchSummariesCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToResearchSummariesCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResearchSummariesCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToResearchSummariesCategoryConnectionEdge = {
+  __typename?: 'RootQueryToResearchSummariesCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResearchSummariesCategory>;
+};
+
+/** Arguments for filtering the RootQueryToResearchSummariesCategoryConnection connection */
+export type RootQueryToResearchSummariesCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Connection between the RootQuery type and the ResearchSummary type */
 export type RootQueryToResearchSummaryConnection = {
   __typename?: 'RootQueryToResearchSummaryConnection';
@@ -7013,6 +8293,70 @@ export type RootQueryToUserRoleConnectionEdge = {
   node?: Maybe<UserRole>;
 };
 
+/** Connection between the RootQuery type and the VideoSeriesCategory type */
+export type RootQueryToVideoSeriesCategoryConnection = {
+  __typename?: 'RootQueryToVideoSeriesCategoryConnection';
+  /** Edges for the RootQueryToVideoSeriesCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToVideoSeriesCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<VideoSeriesCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToVideoSeriesCategoryConnectionEdge = {
+  __typename?: 'RootQueryToVideoSeriesCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<VideoSeriesCategory>;
+};
+
+/** Arguments for filtering the RootQueryToVideoSeriesCategoryConnection connection */
+export type RootQueryToVideoSeriesCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Connection between the RootQuery type and the VideoSeriesItem type */
 export type RootQueryToVideoSeriesItemConnection = {
   __typename?: 'RootQueryToVideoSeriesItemConnection';
@@ -7127,6 +8471,70 @@ export type RootQueryToWebinarConnectionWhereArgs = {
   status?: InputMaybe<PostStatusEnum>;
   /** Title of the object */
   title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the RootQuery type and the WebinarsCategory type */
+export type RootQueryToWebinarsCategoryConnection = {
+  __typename?: 'RootQueryToWebinarsCategoryConnection';
+  /** Edges for the RootQueryToWebinarsCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<RootQueryToWebinarsCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<WebinarsCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type RootQueryToWebinarsCategoryConnectionEdge = {
+  __typename?: 'RootQueryToWebinarsCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<WebinarsCategory>;
+};
+
+/** Arguments for filtering the RootQueryToWebinarsCategoryConnection connection */
+export type RootQueryToWebinarsCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type SearchTrainer = {
@@ -7557,10 +8965,18 @@ export type TaxonomyConnectedContentTypesArgs = {
 export enum TaxonomyEnum {
   /** Taxonomy enum category */
   Category = 'CATEGORY',
+  /** Taxonomy enum ebooks_category */
+  Ebookscategory = 'EBOOKSCATEGORY',
   /** Taxonomy enum post_format */
   Postformat = 'POSTFORMAT',
+  /** Taxonomy enum research_summaries_category */
+  Researchsummariescategory = 'RESEARCHSUMMARIESCATEGORY',
   /** Taxonomy enum post_tag */
-  Tag = 'TAG'
+  Tag = 'TAG',
+  /** Taxonomy enum video_series_category */
+  Videoseriescategory = 'VIDEOSERIESCATEGORY',
+  /** Taxonomy enum webinars_category */
+  Webinarscategory = 'WEBINARSCATEGORY'
 }
 
 /** The Type of Identifier used to fetch a single Taxonomy node. To be used along with the "id" field. Default is "ID". */
@@ -7861,6 +9277,8 @@ export type UpdateEbookInput = {
   clientMutationId?: InputMaybe<Scalars['String']>;
   /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
   date?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Ebook and EbooksCategories */
+  ebooksCategories?: InputMaybe<EbookEbooksCategoriesInput>;
   /** The excerpt of the object */
   excerpt?: InputMaybe<Scalars['String']>;
   /** The ID of the Ebook object */
@@ -7884,6 +9302,31 @@ export type UpdateEbookPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The Post object mutation type. */
   ebook?: Maybe<Ebook>;
+};
+
+/** Input for the UpdateEbooksCategory mutation */
+export type UpdateEbooksCategoryInput = {
+  /** The slug that the ebooks_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the ebooks_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the EbooksCategory object to update */
+  id: Scalars['ID'];
+  /** The name of the ebooks_category object to mutate */
+  name?: InputMaybe<Scalars['String']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the UpdateEbooksCategory mutation */
+export type UpdateEbooksCategoryPayload = {
+  __typename?: 'UpdateEbooksCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created ebooks_category */
+  ebooksCategory?: Maybe<EbooksCategory>;
 };
 
 /** Input for the updateMediaItem mutation */
@@ -8042,6 +9485,31 @@ export type UpdatePostPayload = {
   post?: Maybe<Post>;
 };
 
+/** Input for the UpdateResearchSummariesCategory mutation */
+export type UpdateResearchSummariesCategoryInput = {
+  /** The slug that the research_summaries_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the research_summaries_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the ResearchSummariesCategory object to update */
+  id: Scalars['ID'];
+  /** The name of the research_summaries_category object to mutate */
+  name?: InputMaybe<Scalars['String']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the UpdateResearchSummariesCategory mutation */
+export type UpdateResearchSummariesCategoryPayload = {
+  __typename?: 'UpdateResearchSummariesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created research_summaries_category */
+  researchSummariesCategory?: Maybe<ResearchSummariesCategory>;
+};
+
 /** Input for the updateResearchSummary mutation */
 export type UpdateResearchSummaryInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -8056,6 +9524,8 @@ export type UpdateResearchSummaryInput = {
   menuOrder?: InputMaybe<Scalars['Int']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']>;
+  /** Set connections between the ResearchSummary and ResearchSummariesCategories */
+  researchSummariesCategories?: InputMaybe<ResearchSummaryResearchSummariesCategoriesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']>;
   /** The status of the object */
@@ -8200,6 +9670,31 @@ export type UpdateUserPayload = {
   user?: Maybe<User>;
 };
 
+/** Input for the UpdateVideoSeriesCategory mutation */
+export type UpdateVideoSeriesCategoryInput = {
+  /** The slug that the video_series_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the video_series_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the VideoSeriesCategory object to update */
+  id: Scalars['ID'];
+  /** The name of the video_series_category object to mutate */
+  name?: InputMaybe<Scalars['String']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the UpdateVideoSeriesCategory mutation */
+export type UpdateVideoSeriesCategoryPayload = {
+  __typename?: 'UpdateVideoSeriesCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created video_series_category */
+  videoSeriesCategory?: Maybe<VideoSeriesCategory>;
+};
+
 /** Input for the updateVideoSeriesItem mutation */
 export type UpdateVideoSeriesItemInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -8220,6 +9715,8 @@ export type UpdateVideoSeriesItemInput = {
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']>;
+  /** Set connections between the VideoSeriesItem and VideoSeriesCategories */
+  videoSeriesCategories?: InputMaybe<VideoSeriesItemVideoSeriesCategoriesInput>;
 };
 
 /** The payload for the updateVideoSeriesItem mutation */
@@ -8251,6 +9748,8 @@ export type UpdateWebinarInput = {
   status?: InputMaybe<PostStatusEnum>;
   /** The title of the object */
   title?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Webinar and WebinarsCategories */
+  webinarsCategories?: InputMaybe<WebinarWebinarsCategoriesInput>;
 };
 
 /** The payload for the updateWebinar mutation */
@@ -8260,6 +9759,31 @@ export type UpdateWebinarPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The Post object mutation type. */
   webinar?: Maybe<Webinar>;
+};
+
+/** Input for the UpdateWebinarsCategory mutation */
+export type UpdateWebinarsCategoryInput = {
+  /** The slug that the webinars_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
+  /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  /** The description of the webinars_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the WebinarsCategory object to update */
+  id: Scalars['ID'];
+  /** The name of the webinars_category object to mutate */
+  name?: InputMaybe<Scalars['String']>;
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** The payload for the UpdateWebinarsCategory mutation */
+export type UpdateWebinarsCategoryPayload = {
+  __typename?: 'UpdateWebinarsCategoryPayload';
+  /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** The created webinars_category */
+  webinarsCategory?: Maybe<WebinarsCategory>;
 };
 
 export type UpsertZoomMeetingInput = {
@@ -8936,6 +10460,228 @@ export enum UsersConnectionSearchColumnEnum {
   Url = 'URL'
 }
 
+/** The VideoSeriesCategory type */
+export type VideoSeriesCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'VideoSeriesCategory';
+  /** Connection between the VideoSeriesCategory type and the ContentNode type */
+  contentNodes?: Maybe<VideoSeriesCategoryToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The unique resource identifier path */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']>;
+  /** Connection between the VideoSeriesCategory type and the Taxonomy type */
+  taxonomy?: Maybe<VideoSeriesCategoryToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  videoSeriesCategoryId?: Maybe<Scalars['Int']>;
+  /** Connection between the VideoSeriesCategory type and the VideoSeriesItem type */
+  videoSeriesItems?: Maybe<VideoSeriesCategoryToVideoSeriesItemConnection>;
+};
+
+
+/** The VideoSeriesCategory type */
+export type VideoSeriesCategoryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VideoSeriesCategoryToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The VideoSeriesCategory type */
+export type VideoSeriesCategoryEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The VideoSeriesCategory type */
+export type VideoSeriesCategoryEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The VideoSeriesCategory type */
+export type VideoSeriesCategoryVideoSeriesItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VideoSeriesCategoryToVideoSeriesItemConnectionWhereArgs>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum VideoSeriesCategoryIdType {
+  /** The Database ID for the node */
+  DatabaseId = 'DATABASE_ID',
+  /** The hashed Global ID */
+  Id = 'ID',
+  /** The name of the node */
+  Name = 'NAME',
+  /** Url friendly name of the node */
+  Slug = 'SLUG',
+  /** The URI for the node */
+  Uri = 'URI'
+}
+
+/** Connection between the VideoSeriesCategory type and the ContentNode type */
+export type VideoSeriesCategoryToContentNodeConnection = {
+  __typename?: 'VideoSeriesCategoryToContentNodeConnection';
+  /** Edges for the VideoSeriesCategoryToContentNodeConnection connection */
+  edges?: Maybe<Array<Maybe<VideoSeriesCategoryToContentNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type VideoSeriesCategoryToContentNodeConnectionEdge = {
+  __typename?: 'VideoSeriesCategoryToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ContentNode>;
+};
+
+/** Arguments for filtering the VideoSeriesCategoryToContentNodeConnection connection */
+export type VideoSeriesCategoryToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfVideoSeriesCategoryEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the VideoSeriesCategory type and the Taxonomy type */
+export type VideoSeriesCategoryToTaxonomyConnectionEdge = {
+  __typename?: 'VideoSeriesCategoryToTaxonomyConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Taxonomy>;
+};
+
+/** Connection between the VideoSeriesCategory type and the VideoSeriesItem type */
+export type VideoSeriesCategoryToVideoSeriesItemConnection = {
+  __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnection';
+  /** Edges for the VideoSeriesCategoryToVideoSeriesItemConnection connection */
+  edges?: Maybe<Array<Maybe<VideoSeriesCategoryToVideoSeriesItemConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<VideoSeriesItem>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type VideoSeriesCategoryToVideoSeriesItemConnectionEdge = {
+  __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<VideoSeriesItem>;
+};
+
+/** Arguments for filtering the VideoSeriesCategoryToVideoSeriesItemConnection connection */
+export type VideoSeriesCategoryToVideoSeriesItemConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
 /** The VideoSeriesItem type */
 export type VideoSeriesItem = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithExcerpt & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
   __typename?: 'VideoSeriesItem';
@@ -8951,6 +10697,8 @@ export type VideoSeriesItem = ContentNode & DatabaseIdentifier & MenuItemLinkabl
   dateGmt?: Maybe<Scalars['String']>;
   /** The desired slug of the post */
   desiredSlug?: Maybe<Scalars['String']>;
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Downloads&quot; was set to Show in GraphQL. */
+  downloads?: Maybe<VideoSeriesItem_Downloads>;
   /** If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds */
   editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
   /** The RSS enclosure for the object */
@@ -8999,10 +10747,14 @@ export type VideoSeriesItem = ContentNode & DatabaseIdentifier & MenuItemLinkabl
   status?: Maybe<Scalars['String']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the VideoSeriesItem type and the TermNode type */
+  terms?: Maybe<VideoSeriesItemToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
+  /** Connection between the VideoSeriesItem type and the VideoSeriesCategory type */
+  videoSeriesCategories?: Maybe<VideoSeriesItemToVideoSeriesCategoryConnection>;
   /** The id field matches the WP_Post-&gt;ID field. */
   videoSeriesItemId: Scalars['Int'];
   /** Added to the GraphQL Schema because the ACF Field Group &quot;YouTube&quot; was set to Show in GraphQL. */
@@ -9035,8 +10787,28 @@ export type VideoSeriesItemExcerptArgs = {
 
 
 /** The VideoSeriesItem type */
+export type VideoSeriesItemTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VideoSeriesItemToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The VideoSeriesItem type */
 export type VideoSeriesItemTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The VideoSeriesItem type */
+export type VideoSeriesItemVideoSeriesCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VideoSeriesItemToVideoSeriesCategoryConnectionWhereArgs>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -9056,6 +10828,164 @@ export type VideoSeriesItemToPreviewConnectionEdge = {
   __typename?: 'VideoSeriesItemToPreviewConnectionEdge';
   /** The node of the connection, without the edges */
   node?: Maybe<VideoSeriesItem>;
+};
+
+/** Connection between the VideoSeriesItem type and the TermNode type */
+export type VideoSeriesItemToTermNodeConnection = {
+  __typename?: 'VideoSeriesItemToTermNodeConnection';
+  /** Edges for the VideoSeriesItemToTermNodeConnection connection */
+  edges?: Maybe<Array<Maybe<VideoSeriesItemToTermNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type VideoSeriesItemToTermNodeConnectionEdge = {
+  __typename?: 'VideoSeriesItemToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<TermNode>;
+};
+
+/** Arguments for filtering the VideoSeriesItemToTermNodeConnection connection */
+export type VideoSeriesItemToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Connection between the VideoSeriesItem type and the VideoSeriesCategory type */
+export type VideoSeriesItemToVideoSeriesCategoryConnection = {
+  __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection';
+  /** Edges for the VideoSeriesItemToVideoSeriesCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<VideoSeriesItemToVideoSeriesCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<VideoSeriesCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type VideoSeriesItemToVideoSeriesCategoryConnectionEdge = {
+  __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<VideoSeriesCategory>;
+};
+
+/** Arguments for filtering the VideoSeriesItemToVideoSeriesCategoryConnection connection */
+export type VideoSeriesItemToVideoSeriesCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Set relationships between the VideoSeriesItem to VideoSeriesCategories */
+export type VideoSeriesItemVideoSeriesCategoriesInput = {
+  /** If true, this will append the VideoSeriesCategory to existing related VideoSeriesCategories. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<VideoSeriesItemVideoSeriesCategoriesNodeInput>>>;
+};
+
+/** List of VideoSeriesCategories to connect the VideoSeriesItem to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type VideoSeriesItemVideoSeriesCategoriesNodeInput = {
+  /** The description of the VideoSeriesCategory. This field is used to set a description of the VideoSeriesCategory if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the VideoSeriesCategory. If present, this will be used to connect to the VideoSeriesItem. If no existing VideoSeriesCategory exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']>;
+  /** The name of the VideoSeriesCategory. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The slug of the VideoSeriesCategory. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
+/** Field Group */
+export type VideoSeriesItem_Downloads = AcfFieldGroup & {
+  __typename?: 'VideoSeriesItem_Downloads';
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  file?: Maybe<MediaItem>;
 };
 
 /** Field Group */
@@ -9146,12 +11076,16 @@ export type Webinar = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node
   status?: Maybe<Scalars['String']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the Webinar type and the TermNode type */
+  terms?: Maybe<WebinarToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
   /** The id field matches the WP_Post-&gt;ID field. */
   webinarId: Scalars['Int'];
+  /** Connection between the Webinar type and the WebinarsCategory type */
+  webinarsCategories?: Maybe<WebinarToWebinarsCategoryConnection>;
   /** Added to the GraphQL Schema because the ACF Field Group &quot;YouTube&quot; was set to Show in GraphQL. */
   youtube?: Maybe<Webinar_Youtube>;
 };
@@ -9182,8 +11116,28 @@ export type WebinarExcerptArgs = {
 
 
 /** The Webinar type */
+export type WebinarTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WebinarToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The Webinar type */
 export type WebinarTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
+};
+
+
+/** The Webinar type */
+export type WebinarWebinarsCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WebinarToWebinarsCategoryConnectionWhereArgs>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -9205,6 +11159,156 @@ export type WebinarToPreviewConnectionEdge = {
   node?: Maybe<Webinar>;
 };
 
+/** Connection between the Webinar type and the TermNode type */
+export type WebinarToTermNodeConnection = {
+  __typename?: 'WebinarToTermNodeConnection';
+  /** Edges for the WebinarToTermNodeConnection connection */
+  edges?: Maybe<Array<Maybe<WebinarToTermNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type WebinarToTermNodeConnectionEdge = {
+  __typename?: 'WebinarToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<TermNode>;
+};
+
+/** Arguments for filtering the WebinarToTermNodeConnection connection */
+export type WebinarToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Connection between the Webinar type and the WebinarsCategory type */
+export type WebinarToWebinarsCategoryConnection = {
+  __typename?: 'WebinarToWebinarsCategoryConnection';
+  /** Edges for the WebinarToWebinarsCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<WebinarToWebinarsCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<WebinarsCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type WebinarToWebinarsCategoryConnectionEdge = {
+  __typename?: 'WebinarToWebinarsCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<WebinarsCategory>;
+};
+
+/** Arguments for filtering the WebinarToWebinarsCategoryConnection connection */
+export type WebinarToWebinarsCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Set relationships between the Webinar to WebinarsCategories */
+export type WebinarWebinarsCategoriesInput = {
+  /** If true, this will append the WebinarsCategory to existing related WebinarsCategories. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<WebinarWebinarsCategoriesNodeInput>>>;
+};
+
+/** List of WebinarsCategories to connect the Webinar to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type WebinarWebinarsCategoriesNodeInput = {
+  /** The description of the WebinarsCategory. This field is used to set a description of the WebinarsCategory if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the WebinarsCategory. If present, this will be used to connect to the Webinar. If no existing WebinarsCategory exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']>;
+  /** The name of the WebinarsCategory. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The slug of the WebinarsCategory. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']>;
+};
+
 /** Field Group */
 export type Webinar_Youtube = AcfFieldGroup & {
   __typename?: 'Webinar_Youtube';
@@ -9215,6 +11319,228 @@ export type Webinar_Youtube = AcfFieldGroup & {
   test?: Maybe<MediaItem>;
   /** A link to the YouTube video */
   url?: Maybe<Scalars['String']>;
+};
+
+/** The WebinarsCategory type */
+export type WebinarsCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
+  __typename?: 'WebinarsCategory';
+  /** Connection between the WebinarsCategory type and the ContentNode type */
+  contentNodes?: Maybe<WebinarsCategoryToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  databaseId: Scalars['Int'];
+  /** The description of the object */
+  description?: Maybe<Scalars['String']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The unique resource identifier path */
+  id: Scalars['ID'];
+  /** Whether the node is a Content Node */
+  isContentNode: Scalars['Boolean'];
+  /** Whether the object is restricted from the current viewer */
+  isRestricted?: Maybe<Scalars['Boolean']>;
+  /** Whether the node is a Term */
+  isTermNode: Scalars['Boolean'];
+  /** The link to the term */
+  link?: Maybe<Scalars['String']>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']>;
+  /** An alphanumeric identifier for the object unique to its type. */
+  slug?: Maybe<Scalars['String']>;
+  /** Connection between the WebinarsCategory type and the Taxonomy type */
+  taxonomy?: Maybe<WebinarsCategoryToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']>;
+  /** The unique resource identifier path */
+  uri?: Maybe<Scalars['String']>;
+  /** Connection between the WebinarsCategory type and the Webinar type */
+  webinars?: Maybe<WebinarsCategoryToWebinarConnection>;
+  /** The id field matches the WP_Post-&gt;ID field. */
+  webinarsCategoryId?: Maybe<Scalars['Int']>;
+};
+
+
+/** The WebinarsCategory type */
+export type WebinarsCategoryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WebinarsCategoryToContentNodeConnectionWhereArgs>;
+};
+
+
+/** The WebinarsCategory type */
+export type WebinarsCategoryEnqueuedScriptsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The WebinarsCategory type */
+export type WebinarsCategoryEnqueuedStylesheetsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** The WebinarsCategory type */
+export type WebinarsCategoryWebinarsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<WebinarsCategoryToWebinarConnectionWhereArgs>;
+};
+
+/** The Type of Identifier used to fetch a single resource. Default is ID. */
+export enum WebinarsCategoryIdType {
+  /** The Database ID for the node */
+  DatabaseId = 'DATABASE_ID',
+  /** The hashed Global ID */
+  Id = 'ID',
+  /** The name of the node */
+  Name = 'NAME',
+  /** Url friendly name of the node */
+  Slug = 'SLUG',
+  /** The URI for the node */
+  Uri = 'URI'
+}
+
+/** Connection between the WebinarsCategory type and the ContentNode type */
+export type WebinarsCategoryToContentNodeConnection = {
+  __typename?: 'WebinarsCategoryToContentNodeConnection';
+  /** Edges for the WebinarsCategoryToContentNodeConnection connection */
+  edges?: Maybe<Array<Maybe<WebinarsCategoryToContentNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type WebinarsCategoryToContentNodeConnectionEdge = {
+  __typename?: 'WebinarsCategoryToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ContentNode>;
+};
+
+/** Arguments for filtering the WebinarsCategoryToContentNodeConnection connection */
+export type WebinarsCategoryToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfWebinarsCategoryEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the WebinarsCategory type and the Taxonomy type */
+export type WebinarsCategoryToTaxonomyConnectionEdge = {
+  __typename?: 'WebinarsCategoryToTaxonomyConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Taxonomy>;
+};
+
+/** Connection between the WebinarsCategory type and the Webinar type */
+export type WebinarsCategoryToWebinarConnection = {
+  __typename?: 'WebinarsCategoryToWebinarConnection';
+  /** Edges for the WebinarsCategoryToWebinarConnection connection */
+  edges?: Maybe<Array<Maybe<WebinarsCategoryToWebinarConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<Webinar>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type WebinarsCategoryToWebinarConnectionEdge = {
+  __typename?: 'WebinarsCategoryToWebinarConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<Webinar>;
+};
+
+/** Arguments for filtering the WebinarsCategoryToWebinarConnection connection */
+export type WebinarsCategoryToWebinarConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
 };
 
 /** The writing setting type */
@@ -21628,7 +23954,7 @@ export type Profile_Variance_Fields = {
 export type Promo_Code = {
   __typename?: 'promo_code';
   amount: Scalars['numeric'];
-  approvedBy: Scalars['uuid'];
+  approvedBy?: Maybe<Scalars['uuid']>;
   bookerSingleUse: Scalars['Boolean'];
   code: Scalars['String'];
   courses: Scalars['jsonb'];
@@ -25899,12 +28225,28 @@ export enum Xero_Credential_Update_Column {
   Token = 'token'
 }
 
-export type Unnamed_1_QueryVariables = Exact<{
+export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;
 }>;
 
 
-export type Unnamed_1_Query = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, levels: Array<CourseLevel>, availability?: SearchTrainerAvailability | null } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, levels: Array<CourseLevel>, availability?: SearchTrainerAvailability | null } | null> | null };
+
+export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
+
+export type SearchCoursesQueryVariables = Exact<{
+  where?: InputMaybe<Course_Bool_Exp>;
+}>;
+
+
+export type SearchCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }> };
+
+export type GetSelectedCoursesQueryVariables = Exact<{
+  ids: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type GetSelectedCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> }> };
 
 export type UpsertZoomMeetingMutationVariables = Exact<{
   input?: InputMaybe<UpsertZoomMeetingInput>;
@@ -26076,7 +28418,7 @@ export type TrainerCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TrainerCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
+export type TrainerCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> }> };
 
 export type InsertCourseMutationVariables = Exact<{
   course: Course_Insert_Input;
@@ -26118,13 +28460,13 @@ export type SetCourseStatusMutationVariables = Exact<{
 
 export type SetCourseStatusMutation = { __typename?: 'mutation_root', update_course_by_pk?: { __typename?: 'course', id: number } | null };
 
-export type Unnamed_2_MutationVariables = Exact<{
+export type SetCourseTrainerStatusMutationVariables = Exact<{
   id: Scalars['uuid'];
   status: Course_Invite_Status_Enum;
 }>;
 
 
-export type Unnamed_2_Mutation = { __typename?: 'mutation_root', update_course_trainer_by_pk?: { __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null } | null };
+export type SetCourseTrainerStatusMutation = { __typename?: 'mutation_root', update_course_trainer_by_pk?: { __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null } | null };
 
 export type SetCourseTrainersMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -26167,7 +28509,7 @@ export type CertificateChangelogFragment = { __typename?: 'course_certificate_ch
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
-export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null };
+export type VideoItemSummaryFragment = { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
 
 export type TagSummaryFragment = { __typename?: 'Tag', id: string, name?: string | null };
 
@@ -26177,9 +28519,9 @@ export type PostSummaryFragment = { __typename?: 'Post', id: string, title?: str
 
 export type PodcastSummaryFragment = { __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number };
 
-export type EbookSummaryFragment = { __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+export type EbookSummaryFragment = { __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
 
-export type ResearchSummaryDetailsFragment = { __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+export type ResearchSummaryDetailsFragment = { __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
 
 export type WebinarSummaryFragment = { __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null };
 
@@ -26305,12 +28647,12 @@ export type EbooksQueryVariables = Exact<{
 }>;
 
 
-export type EbooksQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', ebooks?: { __typename?: 'RootQueryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
+export type EbooksQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', ebooks?: { __typename?: 'RootQueryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type MembershipHomeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MembershipHomeQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null, content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null, researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null, webinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null, ebooks?: { __typename?: 'RootQueryToEbookConnection', nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
+export type MembershipHomeQuery = { __typename?: 'query_root', podcasts?: { __typename?: 'PodcastsPayload', records: Array<{ __typename?: 'Podcast', id: string, name: string, thumbnail: string, publishedDate: string, mediaUrl: string, author: string, description?: string | null, episodeNumber: number }> } | null, content?: { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null, videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null, researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null, webinars?: { __typename?: 'RootQueryToWebinarConnection', nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null, ebooks?: { __typename?: 'RootQueryToEbookConnection', nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type PodcastQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -26343,7 +28685,7 @@ export type ResearchSummariesQueryVariables = Exact<{
 }>;
 
 
-export type ResearchSummariesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', researchSummaryFile?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
+export type ResearchSummariesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', researchSummaries?: { __typename?: 'RootQueryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type TagQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -26363,7 +28705,7 @@ export type VideoItemQueryVariables = Exact<{
 }>;
 
 
-export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null } | null };
+export type VideoItemQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItem?: { __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null, recentVideoItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type VideoSeriesQueryVariables = Exact<{
   term?: InputMaybe<Scalars['String']>;
@@ -26375,7 +28717,7 @@ export type VideoSeriesQueryVariables = Exact<{
 }>;
 
 
-export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null } | null> | null } | null } | null };
+export type VideoSeriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', videoSeriesItems?: { __typename?: 'RootQueryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null, startCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type WebinarQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -26428,12 +28770,12 @@ export type InsertOrderMutationVariables = Exact<{
 
 export type InsertOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'order', id: any } | null };
 
-export type Unnamed_3_QueryVariables = Exact<{
+export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
 
 
-export type Unnamed_3_Query = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
+export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } }> } | null };
 
 export type GetOrgDetailsQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -26557,7 +28899,14 @@ export type GetPromoCodesQueryVariables = Exact<{
 }>;
 
 
-export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, type: Promo_Code_Type_Enum, validFrom: any, validTo?: any | null, usesMax?: any | null, courses: any, createdAt: any, updatedAt: any }> };
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any }> };
+
+export type InsertPromoCodeMutationVariables = Exact<{
+  promoCode: Promo_Code_Insert_Input;
+}>;
+
+
+export type InsertPromoCodeMutation = { __typename?: 'mutation_root', insert_promo_code_one?: { __typename?: 'promo_code', id: any } | null };
 
 export type TrainerScheduleQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -26577,7 +28926,7 @@ export type UserCoursesQueryVariables = Exact<{
 }>;
 
 
-export type UserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
+export type UserCoursesQuery = { __typename?: 'query_root', course: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }> };
 
 export type SaveHealthSafetyConsentMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -26622,9 +28971,9 @@ export type InsertVenueMutationVariables = Exact<{
 
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
 
-export type Unnamed_4_QueryVariables = Exact<{
+export type SearchXeroContactsQueryVariables = Exact<{
   input: XeroContactSearchInput;
 }>;
 
 
-export type Unnamed_4_Query = { __typename?: 'query_root', xero?: { __typename?: 'XeroContactSearchOutput', contacts: Array<{ __typename?: 'XeroContact', name: string, contactID: string }> } | null };
+export type SearchXeroContactsQuery = { __typename?: 'query_root', xero?: { __typename?: 'XeroContactSearchOutput', contacts: Array<{ __typename?: 'XeroContact', name: string, contactID: string }> } | null };

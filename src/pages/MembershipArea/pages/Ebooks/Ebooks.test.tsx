@@ -80,10 +80,7 @@ describe('page: Ebooks', () => {
 
     expect(
       within(featuredEbook).getByText('Download resource')
-    ).toHaveAttribute(
-      'href',
-      ebooks[0].downloads?.researchSummaryFile?.mediaItemUrl
-    )
+    ).toHaveAttribute('href', ebooks[0].downloads?.file?.mediaItemUrl)
   })
 
   it('displays items in a grid', () => {
@@ -130,10 +127,7 @@ describe('page: Ebooks', () => {
 
       expect(
         within(itemElement).getByText('Download resource')
-      ).toHaveAttribute(
-        'href',
-        item.downloads?.researchSummaryFile?.mediaItemUrl ?? ''
-      )
+      ).toHaveAttribute('href', item.downloads?.file?.mediaItemUrl ?? '')
     })
   })
 

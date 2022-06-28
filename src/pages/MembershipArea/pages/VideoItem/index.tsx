@@ -21,6 +21,7 @@ import theme from '@app/theme'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { ContentDetailsBox } from '../../components/ContentDetailsBox'
+import { DownloadButton } from '../../components/DownloadButton'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 
 const YTContainer = styled(Box)({
@@ -143,6 +144,18 @@ const VideoItem: React.FC = () => {
               opts={{ playerVars: { rel: 0 } }}
             />
           </YTContainer>
+        ) : null}
+
+        {data?.content?.videoSeriesItem?.downloads?.file?.mediaItemUrl ? (
+          <Box mt={4}>
+            <DownloadButton
+              downloadLink={
+                data.content.videoSeriesItem.downloads.file.mediaItemUrl
+              }
+            >
+              {t('pages.membership.video-series.download-button-label')}
+            </DownloadButton>
+          </Box>
         ) : null}
       </Box>
 

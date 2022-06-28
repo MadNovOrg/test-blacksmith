@@ -184,6 +184,11 @@ export const VideoItemSummary = gql`
       url
       duration
     }
+    downloads {
+      file {
+        mediaItemUrl
+      }
+    }
     date
   }
 `
@@ -263,7 +268,7 @@ export const EbookSummary = gql`
       }
     }
     downloads {
-      researchSummaryFile {
+      file {
         mediaItemUrl
       }
     }
@@ -283,7 +288,7 @@ export const ResearchSummaryDetails = gql`
       }
     }
     downloads {
-      researchSummaryFile {
+      file {
         mediaItemUrl
       }
     }

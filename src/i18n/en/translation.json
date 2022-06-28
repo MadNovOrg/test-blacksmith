@@ -657,7 +657,8 @@
         "empty": "There are no videos yet.",
         "search-placeholder": "Search videos",
         "recent": "Recent videos in the series",
-        "not-found": "Video series item not found"
+        "not-found": "Video series item not found",
+        "download-button-label": "Download resource"
       },
       "ebooks": {
         "featured-label": "New ebook",

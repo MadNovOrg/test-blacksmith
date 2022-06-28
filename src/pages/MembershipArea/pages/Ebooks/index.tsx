@@ -81,10 +81,7 @@ const Ebooks: React.FC = () => {
             afterDescription={
               <DownloadButton
                 sx={{ marginTop: 3 }}
-                downloadLink={
-                  featuredItem.downloads?.researchSummaryFile?.mediaItemUrl ??
-                  ''
-                }
+                downloadLink={featuredItem.downloads?.file?.mediaItemUrl ?? ''}
               >
                 {t('pages.membership.ebooks.download-button')}
               </DownloadButton>
@@ -162,10 +159,7 @@ const Ebooks: React.FC = () => {
                     afterDescription={
                       <DownloadButton
                         sx={{ marginTop: 3 }}
-                        downloadLink={
-                          item.downloads?.researchSummaryFile?.mediaItemUrl ??
-                          ''
-                        }
+                        downloadLink={item.downloads?.file?.mediaItemUrl ?? ''}
                       >
                         {t('pages.membership.ebooks.download-button')}
                       </DownloadButton>
