@@ -17,7 +17,6 @@ export type FormInputs = {
   bookerSingleUse: boolean
   usesMax: number | null
   createdBy: string
-  approvedBy?: string
 }
 
 export enum AMOUNT_PRESETS {
@@ -95,11 +94,11 @@ export const schema = ({ t, minDate }: { t: TFunction; minDate: Date }) => {
   })
 }
 
-export const canSelfApprove = (data: FormInputs) => {
+export const requiresApproval = (data: FormInputs) => {
   if (data.type === Promo_Code_Type_Enum.Percent) {
-    return data.amount < 15
+    return data.amount > 15
   }
   if (data.type === Promo_Code_Type_Enum.FreePlaces) {
-    return data.amount < 3
+    return data.amount > 3
   }
 }

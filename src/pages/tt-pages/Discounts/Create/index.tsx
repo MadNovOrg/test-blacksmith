@@ -13,6 +13,7 @@ import {
   Checkbox,
   MenuItem,
   InputAdornment,
+  Alert,
 } from '@mui/material'
 import { startOfDay, endOfDay } from 'date-fns'
 import { omit } from 'lodash-es'
@@ -22,6 +23,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { Dialog } from '@app/components/Dialog'
 import { ProfileSelector } from '@app/components/ProfileSelector'
 import { SelectCourses } from '@app/components/SelectCourses'
 import { SelectLevels } from '@app/components/SelectLevels'
@@ -36,7 +38,7 @@ import {
   DEFAULT_AMOUNT_PER_TYPE,
   FormInputs,
   schema,
-  canSelfApprove,
+  requiresApproval,
   APPLIES_TO,
   AMOUNT_PRESETS,
   AMOUNT_PRESET_VALUE,
@@ -57,6 +59,8 @@ export const NewDiscount: React.FC = () => {
   const [amountPreset, setAmountPreset] = useState(AMOUNT_PRESETS.FIVE)
 
   const [limitBookings, setLimitBookings] = useState(false)
+
+  const [showApprovalNotice, setShowApprovalNotice] = useState(false)
 
   const minDate = startOfDay(new Date())
 
@@ -192,15 +196,11 @@ export const NewDiscount: React.FC = () => {
     setValue('usesMax', checked ? 1 : null)
   }
 
-  const onSubmitValid = async (data: FormInputs) => {
+  const insertPromoCode = async () => {
     setSaving(true)
 
-    const promoCode = omit(data, 'appliesTo')
-
-    // TODO: Move to backend
-    promoCode.approvedBy = canSelfApprove(data) ? profile?.id : undefined
-
     try {
+      const promoCode = omit(values, 'appliesTo')
       await fetcher(INSERT_PROMO_CODE, { promoCode })
       return navigate('..')
     } catch (err) {
@@ -208,6 +208,14 @@ export const NewDiscount: React.FC = () => {
     }
 
     setSaving(false)
+  }
+
+  const onSubmitValid = async () => {
+    if (requiresApproval(values)) {
+      setShowApprovalNotice(true)
+    } else {
+      return insertPromoCode()
+    }
   }
 
   return (
@@ -276,11 +284,32 @@ export const NewDiscount: React.FC = () => {
                   value={amountPreset}
                   onChange={amountRadioChange}
                   sx={{ minWidth: 130 }}
+                  data-testid="percent-shortcuts"
                 >
-                  <MenuItem value={AMOUNT_PRESETS.FIVE}>5%</MenuItem>
-                  <MenuItem value={AMOUNT_PRESETS.TEN}>10%</MenuItem>
-                  <MenuItem value={AMOUNT_PRESETS.FIFTEEN}>15%</MenuItem>
-                  <MenuItem value={AMOUNT_PRESETS.OTHER}>{t('other')}</MenuItem>
+                  <MenuItem
+                    value={AMOUNT_PRESETS.FIVE}
+                    data-testid={`percent-shortcut-${AMOUNT_PRESETS.FIVE}`}
+                  >
+                    5%
+                  </MenuItem>
+                  <MenuItem
+                    value={AMOUNT_PRESETS.TEN}
+                    data-testid={`percent-shortcut-${AMOUNT_PRESETS.TEN}`}
+                  >
+                    10%
+                  </MenuItem>
+                  <MenuItem
+                    value={AMOUNT_PRESETS.FIFTEEN}
+                    data-testid={`percent-shortcut-${AMOUNT_PRESETS.FIFTEEN}`}
+                  >
+                    15%
+                  </MenuItem>
+                  <MenuItem
+                    value={AMOUNT_PRESETS.OTHER}
+                    data-testid={`percent-shortcut-${AMOUNT_PRESETS.OTHER}`}
+                  >
+                    {t('other')}
+                  </MenuItem>
                 </TextField>
 
                 <TextField
@@ -489,6 +518,40 @@ export const NewDiscount: React.FC = () => {
           {t('pages.promoCodes.new-submit')}
         </LoadingButton>
       </Box>
+
+      {/* APPROVAL NEEDED */}
+      <Dialog
+        title={t('pages.promoCodes.approvalNeeded-title')}
+        open={showApprovalNotice}
+        onClose={() => setShowApprovalNotice(false)}
+        showClose={false}
+      >
+        <Alert variant="outlined" severity="warning">
+          {t('pages.promoCodes.approvalNeeded-intro')}
+          <Box component="ul" pl={2}>
+            <li data-testid={`approvalNeeded-reason-${values.type}`}>
+              {t(`pages.promoCodes.approvalNeeded-reason-${values.type}`)}
+            </li>
+          </Box>
+        </Alert>
+        <Box
+          sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => setShowApprovalNotice(false)}
+          >
+            {t('cancel')}
+          </Button>
+          <LoadingButton
+            variant="contained"
+            loading={saving}
+            onClick={insertPromoCode}
+          >
+            {t('pages.promoCodes.approvalNeeded-submit')}
+          </LoadingButton>
+        </Box>
+      </Dialog>
     </Wrapper>
   )
 }

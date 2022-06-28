@@ -1234,7 +1234,12 @@
       "fld-bookerSingleUse-label": "Limit to one time use per booker email",
       "fld-limitBookings-label": "Limit number of bookings this discount can be used",
       "fld-usesMax-label": "Maximum usages",
-      "new-submit": "Created discount"
+      "new-submit": "Created discount",
+      "approvalNeeded-title": "Discount approval required",
+      "approvalNeeded-intro": "This discount requires approval from a Team Teach Administrator due to the following reason:",
+      "approvalNeeded-reason-PERCENT": "Percentage exceeds 15%",
+      "approvalNeeded-reason-FREE_PLACES": "Number of free spaces exceeds 3",
+      "approvalNeeded-submit": "Send for approval"
     }
   },
   "course-evaluation": {

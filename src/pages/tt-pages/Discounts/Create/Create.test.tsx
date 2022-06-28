@@ -10,7 +10,7 @@ import { dateInputValueFormat, dateInputValueParse } from '@app/util'
 import { screen, render, within, userEvent, waitFor, chance } from '@test/index'
 import { profile } from '@test/providers'
 
-import { APPLIES_TO } from './helpers'
+import { AMOUNT_PRESETS, APPLIES_TO } from './helpers'
 
 import { NewDiscount } from '.'
 
@@ -280,7 +280,6 @@ describe('page: CreateDiscount', () => {
       {
         promoCode: {
           amount: 5,
-          approvedBy: profile?.id,
           bookerSingleUse: true,
           code,
           courses: [],
@@ -295,6 +294,59 @@ describe('page: CreateDiscount', () => {
       }
     )
     expect(mockNavigate).toBeCalledWith('..')
+  })
+
+  it('shows Approval Needed if PERCENT exceeds 15', async () => {
+    const code = chance.word({ length: 10 }).toUpperCase()
+
+    _render(<NewDiscount />)
+
+    const fldCode = screen.getByTestId('fld-code')
+    userEvent.type(fldCode, code)
+
+    const percentShortcuts = screen.getByTestId('percent-shortcuts')
+    userEvent.click(within(percentShortcuts).getByRole('button'))
+
+    const otherTestId = `percent-shortcut-${AMOUNT_PRESETS.OTHER}`
+    const optionOther = screen.getByTestId(otherTestId)
+    userEvent.click(optionOther)
+
+    userEvent.type(
+      screen.getByTestId('fld-amount-percent'),
+      `{selectall}${chance.integer({ min: 16, max: 100 })}`
+    )
+
+    const btnSubmit = screen.getByTestId('btn-submit')
+    await waitFor(() => userEvent.click(btnSubmit))
+
+    const reasonTestId = `approvalNeeded-reason-${Promo_Code_Type_Enum.Percent}`
+    expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
+    expect(mockFetcher).not.toBeCalled()
+  })
+
+  it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
+    const code = chance.word({ length: 10 }).toUpperCase()
+
+    _render(<NewDiscount />)
+
+    const fldCode = screen.getByTestId('fld-code')
+    userEvent.type(fldCode, code)
+
+    const { FreePlaces } = Promo_Code_Type_Enum
+    const typeFreePlaces = screen.getByTestId(`discount-type-${FreePlaces}`)
+    userEvent.click(typeFreePlaces)
+
+    userEvent.type(
+      screen.getByTestId('fld-amount-freeplaces'),
+      `{selectall}${chance.integer({ min: 4, max: 80 })}`
+    )
+
+    const btnSubmit = screen.getByTestId('btn-submit')
+    await waitFor(() => userEvent.click(btnSubmit))
+
+    const reasonTestId = `approvalNeeded-reason-${FreePlaces}`
+    expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
+    expect(mockFetcher).not.toBeCalled()
   })
 })
 

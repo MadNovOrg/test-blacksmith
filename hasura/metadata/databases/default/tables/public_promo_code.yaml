@@ -35,7 +35,6 @@ insert_permissions:
       check: {}
       columns:
         - amount
-        - approved_by
         - booker_single_use
         - code
         - courses
@@ -90,3 +89,14 @@ update_permissions:
         - valid_to
       filter: {}
       check: {}
+event_triggers:
+  - name: promo_code_created
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/promocode/created'
