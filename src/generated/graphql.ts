@@ -21798,17 +21798,18 @@ export type Organization_Insert_Input = {
 /** columns and relationships of "organization_invites" */
 export type Organization_Invites = {
   __typename?: 'organization_invites';
-  created_at: Scalars['timestamptz'];
+  createdAt: Scalars['timestamptz'];
   email: Scalars['String'];
   id: Scalars['uuid'];
-  org_id: Scalars['uuid'];
+  isAdmin: Scalars['Boolean'];
+  orgId: Scalars['uuid'];
   /** An object relationship */
   organization: Organization;
   /** An object relationship */
   profile?: Maybe<Profile>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
   status: Scalars['String'];
-  updated_at: Scalars['timestamptz'];
+  updatedAt: Scalars['timestamptz'];
 };
 
 /** aggregated selection of "organization_invites" */
@@ -21852,15 +21853,16 @@ export type Organization_Invites_Bool_Exp = {
   _and?: InputMaybe<Array<Organization_Invites_Bool_Exp>>;
   _not?: InputMaybe<Organization_Invites_Bool_Exp>;
   _or?: InputMaybe<Array<Organization_Invites_Bool_Exp>>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  isAdmin?: InputMaybe<Boolean_Comparison_Exp>;
+  orgId?: InputMaybe<Uuid_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
-  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  profileId?: InputMaybe<Uuid_Comparison_Exp>;
   status?: InputMaybe<String_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "organization_invites" */
@@ -21875,61 +21877,62 @@ export enum Organization_Invites_Constraint {
 
 /** input type for inserting data into table "organization_invites" */
 export type Organization_Invites_Insert_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
-  org_id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
-  profile_id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
   status?: InputMaybe<Scalars['String']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** aggregate max on columns */
 export type Organization_Invites_Max_Fields = {
   __typename?: 'organization_invites_max_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
-  org_id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  orgId?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
   status?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by max() on columns of table "organization_invites" */
 export type Organization_Invites_Max_Order_By = {
-  created_at?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Organization_Invites_Min_Fields = {
   __typename?: 'organization_invites_min_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
-  org_id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  orgId?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
   status?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
+  updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
 /** order by min() on columns of table "organization_invites" */
 export type Organization_Invites_Min_Order_By = {
-  created_at?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "organization_invites" */
@@ -21950,15 +21953,16 @@ export type Organization_Invites_On_Conflict = {
 
 /** Ordering options when selecting data from "organization_invites". */
 export type Organization_Invites_Order_By = {
-  created_at?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
+  isAdmin?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: organization_invites */
@@ -21969,48 +21973,53 @@ export type Organization_Invites_Pk_Columns_Input = {
 /** select columns of table "organization_invites" */
 export enum Organization_Invites_Select_Column {
   /** column name */
-  CreatedAt = 'created_at',
+  CreatedAt = 'createdAt',
   /** column name */
   Email = 'email',
   /** column name */
   Id = 'id',
   /** column name */
-  OrgId = 'org_id',
+  IsAdmin = 'isAdmin',
   /** column name */
-  ProfileId = 'profile_id',
+  OrgId = 'orgId',
+  /** column name */
+  ProfileId = 'profileId',
   /** column name */
   Status = 'status',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "organization_invites" */
 export type Organization_Invites_Set_Input = {
-  created_at?: InputMaybe<Scalars['timestamptz']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
-  org_id?: InputMaybe<Scalars['uuid']>;
-  profile_id?: InputMaybe<Scalars['uuid']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
   status?: InputMaybe<Scalars['String']>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
 /** update columns of table "organization_invites" */
 export enum Organization_Invites_Update_Column {
   /** column name */
-  CreatedAt = 'created_at',
+  CreatedAt = 'createdAt',
   /** column name */
   Email = 'email',
   /** column name */
   Id = 'id',
   /** column name */
-  OrgId = 'org_id',
+  IsAdmin = 'isAdmin',
   /** column name */
-  ProfileId = 'profile_id',
+  OrgId = 'orgId',
+  /** column name */
+  ProfileId = 'profileId',
   /** column name */
   Status = 'status',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updatedAt'
 }
 
 /** aggregate max on columns */
@@ -28579,6 +28588,13 @@ export type DeclineInviteMutationVariables = Exact<{
 
 export type DeclineInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineInviteOutput', status: boolean } | null };
 
+export type DeleteOrgInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
+
+
+export type DeleteOrgInviteMutation = { __typename?: 'mutation_root', delete_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
+
 export type GetCourseInvitesQueryVariables = Exact<{
   courseId: Scalars['Int'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -28595,6 +28611,16 @@ export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'CourseInvite', id: string, status: InviteStatus, courseId: string, courseName: string, description?: string | null, trainerName: string, startDate: string, endDate: string, venueName: string, venueCoordinates?: string | null, venueAddress?: { __typename?: 'Address', addressLineOne?: string | null, addressLineTwo?: string | null, city?: string | null, postCode?: string | null } | null } | null };
 
+export type GetOrgInvitesQueryVariables = Exact<{
+  orgId: Scalars['uuid'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Organization_Invites_Bool_Exp>;
+}>;
+
+
+export type GetOrgInvitesQuery = { __typename?: 'query_root', orgInvites: Array<{ __typename?: 'organization_invites', id: any, createdAt: any, updatedAt: any, email: string, status: string, isAdmin: boolean, profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string } }> } | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, total: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+
 export type InitAuthQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -28609,12 +28635,29 @@ export type RecreateCourseInviteMutationVariables = Exact<{
 
 export type RecreateCourseInviteMutation = { __typename?: 'mutation_root', delete_course_invites_by_pk?: { __typename?: 'course_invites', id: any } | null, insert_course_invites_one?: { __typename?: 'course_invites', id: any } | null };
 
+export type RecreateOrgInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+  orgId: Scalars['uuid'];
+  email: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
+}>;
+
+
+export type RecreateOrgInviteMutation = { __typename?: 'mutation_root', delete_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null, insert_organization_invites_one?: { __typename?: 'organization_invites', id: any } | null };
+
 export type SaveCourseInvitesMutationVariables = Exact<{
   invites: Array<Course_Invites_Insert_Input> | Course_Invites_Insert_Input;
 }>;
 
 
 export type SaveCourseInvitesMutation = { __typename?: 'mutation_root', insert_course_invites?: { __typename?: 'course_invites_mutation_response', returning: Array<{ __typename?: 'course_invites', id: any }> } | null };
+
+export type SaveOrgInvitesMutationVariables = Exact<{
+  invites: Array<Organization_Invites_Insert_Input> | Organization_Invites_Insert_Input;
+}>;
+
+
+export type SaveOrgInvitesMutation = { __typename?: 'mutation_root', insert_organization_invites?: { __typename?: 'organization_invites_mutation_response', returning: Array<{ __typename?: 'organization_invites', id: any }> } | null };
 
 export type VerifyUserMutationVariables = Exact<{
   inviteId: Scalars['uuid'];

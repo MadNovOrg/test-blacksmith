@@ -1,6 +1,25 @@
 table:
   schema: public
   name: organization_invites
+configuration:
+  custom_root_fields: {}
+  column_config:
+    org_id:
+      custom_name: orgId
+    updated_at:
+      custom_name: updatedAt
+    is_admin:
+      custom_name: isAdmin
+    created_at:
+      custom_name: createdAt
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    org_id: orgId
+    updated_at: updatedAt
+    is_admin: isAdmin
+    created_at: createdAt
+    profile_id: profileId
 object_relationships:
   - name: organization
     using:
@@ -13,18 +32,34 @@ insert_permissions:
     permission:
       check: {}
       columns:
-        - email
-        - status
         - created_at
-        - updated_at
+        - email
         - id
+        - is_admin
         - org_id
         - profile_id
+        - status
+        - updated_at
       backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
       columns:
+        - created_at
+        - email
+        - id
+        - is_admin
+        - org_id
+        - profile_id
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - is_admin
         - email
         - status
         - created_at
@@ -32,6 +67,11 @@ select_permissions:
         - id
         - org_id
         - profile_id
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: tt-admin
+    permission:
       filter: {}
       allow_aggregations: true
 event_triggers:

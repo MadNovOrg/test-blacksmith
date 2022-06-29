@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
@@ -7,6 +7,7 @@ import Contacts from '@app/pages/admin/components/Contacts'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
+import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDetails } from '@app/pages/admin/components/Organizations/OrgDetails'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
@@ -71,6 +72,7 @@ const TTAdminRoutes = () => {
             <Route path=":id">
               <Route path="details" element={<OrgDetails />} />
               <Route path="edit" element={<EditOrgDetails />} />
+              <Route path="invite" element={<InviteUserToOrganization />} />
             </Route>
           </Route>
 

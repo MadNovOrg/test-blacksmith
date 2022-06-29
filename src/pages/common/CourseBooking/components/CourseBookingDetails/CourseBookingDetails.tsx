@@ -23,14 +23,14 @@ import {
 import { map } from 'lodash-es'
 import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useEffect, useMemo } from 'react'
-import { Controller, FieldError, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { OrgSelector } from '@app/components/OrgSelector'
 import { yup } from '@app/schemas'
 import { PaymentMethod } from '@app/types'
-import { requiredMsg, normalizeAddr } from '@app/util'
+import { getFieldError, normalizeAddr, requiredMsg } from '@app/util'
 
 import { InvoiceDetails, Sector, useBooking } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
@@ -48,24 +48,6 @@ type FormInputs = {
 }
 
 const onlyCountries = ['au', 'gb']
-
-/**
- * This is done as a workaround to the issue where RHF doesn't set types correctly for
- * fields with array of primitive types.
- * https://github.com/react-hook-form/react-hook-form/issues/725
- * https://github.com/react-hook-form/react-hook-form/issues/987
- * Although both these issues are marked as closed, there is no good solution to this
- * Hence the forced type `as FieldError & FieldError[]` is used
- */
-function getEmailError(err: FieldError[]) {
-  const error = err as FieldError & FieldError[]
-
-  if (error.length) {
-    return error.filter(Boolean)[0].message
-  }
-
-  return error.message
-}
 
 export const CourseBookingDetails: React.FC = () => {
   const { t } = useTranslation()
@@ -414,7 +396,7 @@ export const CourseBookingDetails: React.FC = () => {
                     </Typography>
 
                     <Typography variant="caption">
-                      {getEmailError(errors.emails)}
+                      {getFieldError(errors.emails)}
                     </Typography>
                   </Box>
                 ) : (

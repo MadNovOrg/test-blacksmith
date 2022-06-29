@@ -322,7 +322,10 @@
     "org-phone": "Organisation phone",
     "ofsted-rating": "Ofsted rating",
     "local-authority": "Local authority",
-    "edit": "Edit"
+    "edit": "Edit",
+    "resend": "Resend",
+    "cancel-invite": "Cancel invite",
+    "invites": "Invites"
   },
   "components": {
     "not-found": {
@@ -1165,7 +1168,7 @@
           "title": "Users",
           "tabs": {
             "users": "Users ({{number}})",
-            "pending": "Pending ({{number}})"
+            "invites": "Invites ({{number}})"
           },
           "cols-name": "Name",
           "cols-certification": "Certification",
@@ -1173,7 +1176,15 @@
           "cols-created-on": "Created on",
           "cols-permissions": "Permissions",
           "organization-admin": "Organisation admin",
-          "no-permissions": "No permissions"
+          "no-permissions": "No permissions",
+          "invite-user-to-organization": "Invite user to organisation",
+          "invited-on": "Invited on",
+          "permissions": "Permissions",
+          "invite-status": {
+            "pending": "Pending",
+            "accepted": "Accepted",
+            "declined": "Declined"
+          }
         }
       },
       "edit-organization": "Edit organisation"
@@ -1196,6 +1207,17 @@
       "head-title": "Head title (optional)",
       "head-preferred-job-title": "Head preferred job title (optional)",
       "website": "Organisation website (optional)"
+    },
+    "invite-to-org": {
+      "title": "Invite user to organization",
+      "user-details": "User details",
+      "work-email": "Work email",
+      "work-email-hint": "Press ENTER to add multiple emails.",
+      "notice": "Please make sure the emails are entered correctly. Recipients will receive an invite to the organisation.",
+      "invite-users": "Invite user(s)",
+      "permissions": "Permissions",
+      "organization-admin": "Organisation admin",
+      "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user. "
     },
     "promoCodes": {
       "cols-createdAt": "Created at",

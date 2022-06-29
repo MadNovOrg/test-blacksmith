@@ -22,9 +22,9 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
+  ParamsType as GetEvaluationParamsType,
   QUERY as GET_EVALUATION_QUERY,
   ResponseType as GetEvaluationResponseType,
-  ParamsType as GetEvaluationParamsType,
 } from '@app/queries/course-evaluation/get-evaluations'
 import { SortOrder } from '@app/types'
 import { noop } from '@app/util'
@@ -60,7 +60,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
       ) : (
         t('pages.course-details.tabs.evaluation.export-idle')
       ),
-    [courseId, profileId, isPDFExporting]
+    [isPDFExporting, courseId, profileId, t]
   )
 
   const [order] = useState<SortOrder>('asc')

@@ -16,6 +16,7 @@ describe('OrgDetailsTab', () => {
   useOrgMock.mockReturnValue({
     mutate: () => Promise.resolve(undefined),
     status: LoadingStatus.SUCCESS,
+    loading: false,
     data: {
       id: '1',
       createdAt: new Date('2020-01-01 00:00:00').toISOString(),
@@ -53,7 +54,7 @@ describe('OrgDetailsTab', () => {
           count: 20,
         },
       },
-      invitesCount: {
+      pendingInvitesCount: {
         aggregate: {
           count: 0,
         },

@@ -10,13 +10,11 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
-type Props = {
-  sorting: Sorting
-  where: Record<string, unknown>
-}
-
-export const useOrganizations = ({ sorting, where }: Props) => {
-  const orderBy = { [sorting.by]: sorting.dir }
+export const useOrganizations = (
+  sorting?: Sorting,
+  where?: Record<string, unknown>
+) => {
+  const orderBy = sorting ? { [sorting.by]: sorting.dir } : undefined
 
   const { data, error, mutate } = useSWR<
     ResponseType,

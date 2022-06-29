@@ -9,9 +9,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
@@ -23,18 +23,27 @@ import { OrgUsersTab } from '@app/pages/admin/components/Organizations/tabs/OrgU
 import theme from '@app/theme'
 import { LoadingStatus, renderOrgAddress } from '@app/util'
 
+export enum OrgDetailsTabs {
+  DETAILS = 'DETAILS',
+  USERS = 'USERS',
+}
+
 export const OrgDetails: React.FC = () => {
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
   const { data: org, status } = useOrg(id ?? '')
 
-  const [activeTab, setActiveTab] = React.useState('details')
+  const initialTab = searchParams.get('tab') as OrgDetailsTabs | null
+  const [selectedTab, setSelectedTab] = useState(
+    initialTab || OrgDetailsTabs.DETAILS
+  )
 
-  const handleActiveTabChange = (_: unknown, newValue: string) => {
-    setActiveTab(newValue)
-  }
+  useEffect(() => {
+    if (initialTab) setSelectedTab(initialTab)
+  }, [initialTab])
 
   const orgAddress = useMemo(() => renderOrgAddress(org), [org])
 
@@ -87,17 +96,17 @@ export const OrgDetails: React.FC = () => {
             </Box>
           </Container>
 
-          <TabContext value={activeTab}>
+          <TabContext value={selectedTab}>
             <Container maxWidth="lg" sx={{ pt: 2 }}>
               <Container>
-                <PillTabList onChange={handleActiveTabChange}>
+                <PillTabList onChange={(_, value) => setSelectedTab(value)}>
                   <PillTab
                     label={t('pages.org-details.tabs.details.title')}
-                    value="details"
+                    value={OrgDetailsTabs.DETAILS}
                   />
                   <PillTab
                     label={t('pages.org-details.tabs.users.title')}
-                    value="users"
+                    value={OrgDetailsTabs.USERS}
                   />
                 </PillTabList>
               </Container>
@@ -107,11 +116,11 @@ export const OrgDetails: React.FC = () => {
               maxWidth="lg"
               sx={{ pt: 2, bgcolor: theme.palette.grey[100] }}
             >
-              <TabPanel sx={{ px: 0 }} value="details">
+              <TabPanel sx={{ px: 0 }} value={OrgDetailsTabs.DETAILS}>
                 <OrgDetailsTab orgId={id ?? ''} />
               </TabPanel>
 
-              <TabPanel sx={{ px: 0 }} value="users">
+              <TabPanel sx={{ px: 0 }} value={OrgDetailsTabs.USERS}>
                 <OrgUsersTab orgId={id ?? ''} />
               </TabPanel>
             </Container>

@@ -7,19 +7,20 @@ import {
   parse,
 } from 'date-fns'
 import { TFunction } from 'i18next'
+import { FieldError } from 'react-hook-form'
 
 import {
+  Address,
   Course,
+  CourseInput,
   CourseLevel,
   CourseParticipantModule,
-  CourseType,
-  CourseTrainerType,
   CourseTrainer,
-  SetCourseTrainerInput,
-  SearchTrainer,
-  CourseInput,
-  Address,
+  CourseTrainerType,
+  CourseType,
   Organization,
+  SearchTrainer,
+  SetCourseTrainerInput,
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
@@ -292,4 +293,22 @@ export function getInitialsFromName(name: string) {
   const [secondLetter = ''] = names.length > 1 ? names.slice(-1)[0] : []
 
   return firstLetter + secondLetter
+}
+
+/**
+ * This is done as a workaround to the issue where RHF doesn't set types correctly for
+ * fields with array of primitive types.
+ * https://github.com/react-hook-form/react-hook-form/issues/725
+ * https://github.com/react-hook-form/react-hook-form/issues/987
+ * Although both these issues are marked as closed, there is no good solution to this
+ * Hence the forced type `as FieldError & FieldError[]` is used
+ */
+export function getFieldError(err: FieldError[]) {
+  const error = err as FieldError & FieldError[]
+
+  if (error.length) {
+    return error.filter(Boolean)[0].message
+  }
+
+  return error.message
 }

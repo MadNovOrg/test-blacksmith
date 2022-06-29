@@ -1,6 +1,8 @@
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
   Box,
+  Button,
   CircularProgress,
   Container,
   Grid,
@@ -8,12 +10,19 @@ import {
   Tab,
 } from '@mui/material'
 import Typography from '@mui/material/Typography'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
 import useOrg from '@app/hooks/useOrg'
 import { LoadingStatus } from '@app/util'
+
+export enum OrgUsersSubtabs {
+  USERS = 'USERS',
+  INVITES = 'INVITES',
+}
 
 type OrgUsersTabParams = {
   orgId: string
@@ -21,8 +30,17 @@ type OrgUsersTabParams = {
 
 export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
-  const [selectedTab, setSelectedTab] = useState('users')
+  const initialTab = searchParams.get('subtab') as OrgUsersSubtabs | null
+  const [selectedTab, setSelectedTab] = useState(
+    initialTab || OrgUsersSubtabs.USERS
+  )
+
+  useEffect(() => {
+    if (initialTab) setSelectedTab(initialTab)
+  }, [initialTab])
 
   const {
     data: org,
@@ -82,34 +100,43 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
 
           <Box mt={2}>
             <TabContext value={selectedTab}>
-              <TabList
-                onChange={(_, selectedTab: React.SetStateAction<string>) =>
-                  setSelectedTab(selectedTab)
-                }
-              >
-                <Tab
-                  label={t('pages.org-details.tabs.users.tabs.users', {
-                    number: org?.usersCount.aggregate.count,
-                  })}
-                  value="users"
-                  data-testid="tabUsers"
-                />
-                <Tab
-                  label={t('pages.org-details.tabs.users.tabs.pending', {
-                    number: org?.invitesCount.aggregate.count,
-                  })}
-                  value="pending"
-                  data-testid="tabPending"
-                />
-              </TabList>
+              <Box display="flex" justifyContent="space-between" my={2}>
+                <TabList onChange={(_, value) => setSelectedTab(value)}>
+                  <Tab
+                    label={t('pages.org-details.tabs.users.tabs.users', {
+                      number: org?.usersCount.aggregate.count,
+                    })}
+                    value={OrgUsersSubtabs.USERS}
+                    data-testid="tabUsers"
+                  />
+                  <Tab
+                    label={t('pages.org-details.tabs.users.tabs.invites', {
+                      number: org?.pendingInvitesCount.aggregate.count,
+                    })}
+                    value={OrgUsersSubtabs.INVITES}
+                    data-testid="tabInvites"
+                  />
+                </TabList>
+                <Button
+                  variant="contained"
+                  startIcon={<PersonAddIcon />}
+                  onClick={() => navigate('../invite')}
+                >
+                  {t(
+                    'pages.org-details.tabs.users.invite-user-to-organization'
+                  )}
+                </Button>
+              </Box>
 
               <TabPanel
-                value="users"
+                value={OrgUsersSubtabs.USERS}
                 sx={{ px: 0, pt: 0, bgcolor: 'common.white' }}
               >
                 <OrgUsersTable orgId={orgId ?? ''} />
               </TabPanel>
-              <TabPanel value="pending" sx={{ px: 0 }}></TabPanel>
+              <TabPanel value={OrgUsersSubtabs.INVITES} sx={{ px: 0 }}>
+                <OrgInvitesTable orgId={orgId ?? ''} />
+              </TabPanel>
             </TabContext>
           </Box>
         </>

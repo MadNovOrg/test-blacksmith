@@ -85,7 +85,7 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
     return [obj, isFiltered]
   }, [filterSector, query])
 
-  const { orgs, loading } = useOrganizations({ sorting, where })
+  const { orgs, loading } = useOrganizations(sorting, where)
 
   const count = orgs?.length
 

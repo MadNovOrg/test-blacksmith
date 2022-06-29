@@ -10,7 +10,7 @@ export type ResponseType = {
         count: number
       }
     }
-    invitesCount: {
+    pendingInvitesCount: {
       aggregate: {
         count: number
       }
@@ -24,6 +24,8 @@ export type ParamsType = {
   orgId: string
 }
 
+export const Matcher = /(query GetOrgDetails)/i
+
 export const QUERY = gql`
   ${ORGANIZATION}
   query GetOrgDetails($orgId: uuid!) {
@@ -34,7 +36,9 @@ export const QUERY = gql`
           count
         }
       }
-      invitesCount: invites_aggregate(where: { status: { _eq: "PENDING" } }) {
+      pendingInvitesCount: invites_aggregate(
+        where: { status: { _eq: "PENDING" } }
+      ) {
         aggregate {
           count
         }

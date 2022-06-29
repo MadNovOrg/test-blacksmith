@@ -14,6 +14,7 @@ export default function useOrg(orgId: string): {
   expiredCertificatesCount?: number
   error?: Error
   status: LoadingStatus
+  loading: boolean
   mutate: KeyedMutator<ResponseType>
 } {
   const { data, error, mutate } = useSWR<
@@ -22,12 +23,15 @@ export default function useOrg(orgId: string): {
     [string, ParamsType] | null
   >(orgId ? [QUERY, { orgId }] : null)
 
+  const status = getSWRLoadingStatus(data, error)
+
   return {
     data: data?.org,
     activeCertificatesCount: data?.activeCertificates.aggregate.count,
     expiredCertificatesCount: data?.expiredCertificates.aggregate.count,
     error,
-    status: getSWRLoadingStatus(data, error),
+    status,
+    loading: status === LoadingStatus.FETCHING,
     mutate,
   }
 }
