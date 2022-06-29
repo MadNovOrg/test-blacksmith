@@ -394,6 +394,10 @@ export const buildPost = build<PostSummaryFragment>({
     },
     tags: [buildTag(), buildTag()],
     date: fake(f => f.date.past().toISOString()),
+    customAuthor: {
+      displayAuthor: true,
+    },
+    author: null,
   },
 })
 

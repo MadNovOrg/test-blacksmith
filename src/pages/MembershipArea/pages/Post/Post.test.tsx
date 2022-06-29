@@ -176,4 +176,122 @@ describe('page: Post', () => {
       ).toHaveAttribute('src', post.featuredImage?.node?.mediaItemUrl ?? '')
     })
   })
+
+  it("doesn't display author if author flag is not checked", () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: false,
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
+          <Routes>
+            <Route path="blog/:id" element={<Post />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument()
+  })
+
+  it('displays original author if custom author text is not provided and flag is checked', () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: true,
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
+          <Routes>
+            <Route path="blog/:id" element={<Post />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    expect(screen.getByText('by John Doe')).toBeInTheDocument()
+  })
+
+  it('displays custom author name if post contains one', () => {
+    const post = buildPost({
+      overrides: {
+        author: {
+          node: {
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+        customAuthor: {
+          displayAuthor: true,
+          authorName: 'Kirk Douglas',
+        },
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: PostQuery }>({
+          data: {
+            content: {
+              post,
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
+          <Routes>
+            <Route path="blog/:id" element={<Post />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    expect(screen.getByText('by Kirk Douglas')).toBeInTheDocument()
+  })
 })

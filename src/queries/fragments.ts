@@ -233,6 +233,10 @@ export const PostSummary = gql`
         lastName
       }
     }
+    customAuthor {
+      displayAuthor
+      authorName
+    }
     categories {
       nodes {
         id

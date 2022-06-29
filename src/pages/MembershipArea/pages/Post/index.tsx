@@ -42,6 +42,14 @@ const Post: React.FC = () => {
     window.scrollTo(0, 0)
   }, [id])
 
+  const shouldDisplayAuthor = Boolean(
+    data?.content?.post?.customAuthor?.displayAuthor
+  )
+
+  const authorName =
+    data?.content?.post?.customAuthor?.authorName ??
+    `${data?.content?.post?.author?.node?.firstName} ${data?.content?.post?.author?.node?.lastName}`
+
   return (
     <Box pb={5} pt={8}>
       <Container maxWidth="md" sx={{ marginBottom: 7 }}>
@@ -92,15 +100,13 @@ const Post: React.FC = () => {
               ) : null}
             </Typography>
 
-            <Typography variant="body2">
-              {fetching ? (
-                <Skeleton width={100} />
-              ) : data?.content?.post?.author?.node ? (
-                t('pages.membership.common.author', {
-                  author: `${data.content.post.author.node.firstName} ${data.content.post.author.node.lastName}`,
-                })
-              ) : null}
-            </Typography>
+            {shouldDisplayAuthor ? (
+              <Typography variant="body2">
+                {t('pages.membership.common.author', {
+                  author: authorName,
+                })}
+              </Typography>
+            ) : null}
 
             <Box display="flex" justifyItems="center" mt={2}>
               {fetching ? (
