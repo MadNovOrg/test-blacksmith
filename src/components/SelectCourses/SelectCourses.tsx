@@ -8,12 +8,11 @@ import {
   Stack,
   IconButton,
 } from '@mui/material'
-import { startOfDay } from 'date-fns'
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
-import { CourseLevel, CourseType } from '@app/types'
+import { CourseLevel } from '@app/types'
 
 import { Dialog } from '../Dialog'
 import { SelectLevels } from '../SelectLevels'
@@ -29,12 +28,14 @@ type Props = {
   value: number[]
   onChange: (ev: { target: { value: number[] } }) => void
   titleHint: string
+  where: object
 }
 
 export const SelectCourses: React.FC<Props> = ({
   value,
   onChange,
   titleHint,
+  where,
 }) => {
   const { t } = useTranslation()
   const [showModal, setShowModal] = useState(false)
@@ -49,13 +50,7 @@ export const SelectCourses: React.FC<Props> = ({
 
   const [searchResult] = useQuery<QueryResult>({
     query: SEARCH_COURSES,
-    variables: {
-      where: {
-        type: { _eq: CourseType.OPEN },
-        schedule: { start: { _gte: startOfDay(new Date()) } },
-        level: levelFilter,
-      },
-    },
+    variables: { where: { ...where, level: levelFilter } },
     pause: !showModal,
   })
 

@@ -15,7 +15,7 @@ export const getPromoCodeStatus = (promoCode: Partial<Promo_Code>) => {
 
   if (promoCode.validTo) {
     const diff = differenceInDays(new Date(promoCode.validTo), new Date())
-    if (diff <= 0) return PromoCodeStatus.EXPIRED
+    if (diff < 0) return PromoCodeStatus.EXPIRED
   }
 
   return PromoCodeStatus.ACTIVE

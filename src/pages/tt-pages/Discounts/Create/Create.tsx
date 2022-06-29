@@ -32,6 +32,7 @@ import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as GET_PROMOCODES } from '@app/queries/promo-codes/get-promo-codes'
 import INSERT_PROMO_CODE from '@app/queries/promo-codes/insert-promo-code'
+import { CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
 import {
@@ -394,6 +395,12 @@ export const Create: React.FC = () => {
                 value={values.courses}
                 onChange={ev => setValue('courses', ev.target.value)}
                 titleHint={t('pages.promoCodes.selectCourses-titleHint')}
+                where={{
+                  type: { _eq: CourseType.OPEN },
+                  schedule: {
+                    start: { _gte: startOfDay(new Date()) },
+                  },
+                }}
               />
               <FormHelperText error>
                 {formState.errors.courses

@@ -14,6 +14,7 @@ import { Avatar } from '@app/components/Avatar'
 import { Ellipsize } from '@app/components/Ellipsize'
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { Promo_Code } from '@app/generated/graphql'
+import { CourseLevel } from '@app/types'
 
 import { getPromoCodeStatus, getPromoCodeStatusColor } from '../helpers'
 
@@ -44,7 +45,7 @@ export const Row: React.FC<Props> = ({ promo }) => {
         >
           <Ellipsize text={promo.code} len={20} />
           {promo.description ? (
-            <Tooltip title={promo.description} placement="top">
+            <Tooltip title={promo.description} placement="top" arrow={true}>
               <InfoIcon fontSize="small" sx={{ ml: 1, fill: '#0D2860CC' }} />
             </Tooltip>
           ) : null}
@@ -61,7 +62,12 @@ export const Row: React.FC<Props> = ({ promo }) => {
           : null}
         {promo.levels.length ? (
           <>
-            {promo.levels.join(', ')}
+            <Ellipsize
+              text={promo.levels
+                .map((l: CourseLevel) => t(`course-levels.${l}`))
+                .join(', ')}
+              len={25}
+            />
             <Typography variant="body2">
               {t('pages.promoCodes.appliesTo-LEVELS')}
             </Typography>
@@ -69,7 +75,7 @@ export const Row: React.FC<Props> = ({ promo }) => {
         ) : null}
         {promo.courses.length ? (
           <>
-            {promo.courses.join(', ')}
+            <Ellipsize text={promo.courses.join(', ')} len={25} />
             <Typography variant="body2">
               {t('pages.promoCodes.appliesTo-COURSES')}
             </Typography>
@@ -86,7 +92,11 @@ export const Row: React.FC<Props> = ({ promo }) => {
       </TableCell>
 
       <TableCell align="center">
-        <Tooltip placement="right" title={promo.creator?.fullName ?? ''}>
+        <Tooltip
+          title={promo.creator?.fullName ?? ''}
+          placement="right"
+          arrow={true}
+        >
           <Avatar
             name={promo.creator?.fullName ?? ''}
             size={32}

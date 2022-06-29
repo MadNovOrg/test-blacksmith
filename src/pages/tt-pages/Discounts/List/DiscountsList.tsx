@@ -10,7 +10,7 @@ import { useTableSort } from '@app/hooks/useTableSort'
 import { Filters } from './Filters'
 import { DiscountsTable } from './Table'
 
-type Filters = { from?: Date; to?: Date; type?: string[] }
+type Filters = { from?: Date; to?: Date; type?: string[]; code?: string }
 
 export const DiscountsList: React.FC = () => {
   const { t } = useTranslation()

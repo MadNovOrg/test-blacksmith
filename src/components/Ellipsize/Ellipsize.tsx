@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@mui/material'
+import { Box, BoxProps, Tooltip } from '@mui/material'
 import React from 'react'
 
 type Props = {
@@ -9,15 +9,19 @@ type Props = {
 
 export const Ellipsize: React.FC<Props> = ({
   text = '',
-  len = 150,
+  len = 50,
   component = 'span',
 }) => {
   const needsCrop = text.length > len
-  const cropped = needsCrop ? text.slice(0, len - 3) + '...' : text
-  const title = needsCrop ? text : undefined
-  return (
-    <Box component={component} title={title}>
-      {cropped}
-    </Box>
+  const cropped = needsCrop ? text.slice(0, len - 3).trim() + '...' : text
+
+  const textElement = <Box component={component}>{cropped}</Box>
+
+  return needsCrop ? (
+    <Tooltip title={text} placement="top" arrow={true}>
+      {textElement}
+    </Tooltip>
+  ) : (
+    textElement
   )
 }
