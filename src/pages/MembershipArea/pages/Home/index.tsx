@@ -15,6 +15,7 @@ import {
 import { MembershipHomeQuery } from '@app/generated/graphql'
 import HOME_QUERY from '@app/queries/membership/home'
 
+import { AppBanner } from '../../components/AppBanner'
 import { BlogPostItem } from '../../components/BlogPostItem'
 import { DownloadButton } from '../../components/DownloadButton'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
@@ -358,6 +359,12 @@ const Home: React.FC = () => {
             </Box>
           ) : null}
         </>
+      ) : null}
+
+      {!fetching ? (
+        <Box mb={4}>
+          <AppBanner />
+        </Box>
       ) : null}
     </Container>
   )

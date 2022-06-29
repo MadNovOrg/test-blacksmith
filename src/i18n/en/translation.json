@@ -628,6 +628,9 @@
           "webinars": "Webinars",
           "ebooks": "Ebooks",
           "research-summaries": "Research summaries"
+        },
+        "app-banner": {
+          "title": "Download the Team Teach Journal app"
         }
       },
       "home": {
