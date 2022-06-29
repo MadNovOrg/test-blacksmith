@@ -3,9 +3,9 @@ export function getPostLink(id: string) {
 }
 
 export function getCategoryLink(id: string) {
-  return `/membership/blog/category/${id}`
+  return `/membership/term/${id}`
 }
 
 export function getTagLink(id: string) {
-  return `/membership/blog/tag/${id}`
+  return `/membership/term/${id}`
 }

@@ -22,7 +22,7 @@ export const ContentGrid: React.FC<GridProps> = ({ children, ...rest }) => (
 export const ContentGridItem: React.FC<{
   [x: string | number | symbol]: unknown
 }> = ({ children, ...rest }) => (
-  <Grid item xs={3} {...rest}>
+  <Grid item lg={3} md={6} sm={12} {...rest}>
     {children}
   </Grid>
 )

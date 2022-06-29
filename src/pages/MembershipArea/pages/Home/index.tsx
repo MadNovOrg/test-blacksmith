@@ -177,6 +177,19 @@ const Home: React.FC = () => {
                 duration={
                   data.content.videoSeriesItems.nodes[0]?.youtube?.duration ?? 0
                 }
+                category={
+                  data.content.videoSeriesItems.nodes[0]?.videoSeriesCategories
+                    ?.nodes?.length
+                    ? {
+                        id:
+                          data.content.videoSeriesItems.nodes[0]
+                            ?.videoSeriesCategories.nodes[0]?.id ?? '',
+                        name:
+                          data.content.videoSeriesItems.nodes[0]
+                            ?.videoSeriesCategories.nodes[0]?.name ?? '',
+                      }
+                    : undefined
+                }
               />
             </Box>
           ) : null}
@@ -209,6 +222,17 @@ const Home: React.FC = () => {
                         })}
                         linkTo={`./webinars/${webinar.id}`}
                         data-testid={`webinar-grid-item-${webinar.id}`}
+                        category={
+                          webinar.webinarsCategories?.nodes?.length
+                            ? {
+                                id:
+                                  webinar.webinarsCategories.nodes[0]?.id ?? '',
+                                name:
+                                  webinar.webinarsCategories.nodes[0]?.name ??
+                                  '',
+                              }
+                            : undefined
+                        }
                       />
                     </ContentGridItem>
                   )
@@ -247,6 +271,18 @@ const Home: React.FC = () => {
                         data-testid={`video-series-grid-item-${videoItem.id}`}
                         isVideo
                         duration={videoItem.youtube?.duration ?? 0}
+                        category={
+                          videoItem.videoSeriesCategories?.nodes?.length
+                            ? {
+                                id:
+                                  videoItem.videoSeriesCategories.nodes[0]
+                                    ?.id ?? '',
+                                name:
+                                  videoItem.videoSeriesCategories.nodes[0]
+                                    ?.name ?? '',
+                              }
+                            : undefined
+                        }
                       />
                     </ContentGridItem>
                   )
@@ -283,6 +319,15 @@ const Home: React.FC = () => {
                         })}
                         linkTo={''}
                         data-testid={`ebook-grid-item-${ebook.id}`}
+                        category={
+                          ebook.ebooksCategories?.nodes?.length
+                            ? {
+                                id: ebook.ebooksCategories.nodes[0]?.id ?? '',
+                                name:
+                                  ebook.ebooksCategories.nodes[0]?.name ?? '',
+                              }
+                            : undefined
+                        }
                         afterDescription={
                           <DownloadButton
                             sx={{ marginTop: 3 }}
@@ -337,6 +382,19 @@ const Home: React.FC = () => {
                           })}
                           linkTo={''}
                           data-testid={`ebook-grid-item-${researchSummary.id}`}
+                          category={
+                            researchSummary.researchSummariesCategories?.nodes
+                              ?.length
+                              ? {
+                                  id:
+                                    researchSummary.researchSummariesCategories
+                                      .nodes[0]?.id ?? '',
+                                  name:
+                                    researchSummary.researchSummariesCategories
+                                      .nodes[0]?.name ?? '',
+                                }
+                              : undefined
+                          }
                           afterDescription={
                             <DownloadButton
                               sx={{ marginTop: 3 }}

@@ -27,7 +27,7 @@ test('displays category title and posts that belong to the category', async ({
   page,
   category,
 }) => {
-  await page.goto(`${BASE_URL}/membership/blog/category/${category?.id}`)
+  await page.goto(`${BASE_URL}/membership/term/${category?.id}`)
   await page.waitForLoadState('networkidle')
 
   category?.posts?.nodes?.map(post => {
@@ -40,6 +40,6 @@ test('displays category title and posts that belong to the category', async ({
     category?.posts?.nodes?.length &&
     category.posts.nodes.length > PER_PAGE
   ) {
-    test.expect(page.locator('data-testid=posts-pagination')).toBeVisible()
+    test.expect(page.locator('data-testid=term-items-pagination')).toBeVisible()
   }
 })

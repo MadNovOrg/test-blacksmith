@@ -81,6 +81,18 @@ const ResearchSummaries: React.FC = () => {
             orientation="left"
             linkTo=""
             data-testid="featured-research-summary"
+            category={
+              featuredItem.researchSummariesCategories?.nodes?.length
+                ? {
+                    id:
+                      featuredItem.researchSummariesCategories.nodes[0]?.id ??
+                      '',
+                    name:
+                      featuredItem.researchSummariesCategories.nodes[0]?.name ??
+                      '',
+                  }
+                : undefined
+            }
             afterDescription={
               <DownloadButton
                 sx={{ marginTop: 3 }}
@@ -162,6 +174,18 @@ const ResearchSummaries: React.FC = () => {
                     })}
                     linkTo=""
                     data-testid={`research-summary-grid-item-${item.id}`}
+                    category={
+                      item.researchSummariesCategories?.nodes?.length
+                        ? {
+                            id:
+                              item.researchSummariesCategories.nodes[0]?.id ??
+                              '',
+                            name:
+                              item.researchSummariesCategories.nodes[0]?.name ??
+                              '',
+                          }
+                        : undefined
+                    }
                     afterDescription={
                       <DownloadButton
                         sx={{ marginTop: 3 }}

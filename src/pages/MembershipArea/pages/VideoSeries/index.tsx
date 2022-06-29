@@ -82,6 +82,15 @@ const VideoSeries = () => {
             data-testid="featured-video-series-item"
             isVideo
             duration={featuredItem.youtube?.duration ?? undefined}
+            category={
+              featuredItem.videoSeriesCategories?.nodes?.length
+                ? {
+                    id: featuredItem.videoSeriesCategories.nodes[0]?.id ?? '',
+                    name:
+                      featuredItem.videoSeriesCategories.nodes[0]?.name ?? '',
+                  }
+                : undefined
+            }
           />
         ) : fetching ? (
           <SplitPostSkeleton data-testid="featured-video-skeleton" />
@@ -155,6 +164,15 @@ const VideoSeries = () => {
                     data-testid={`video-series-grid-item-${item.id}`}
                     isVideo
                     duration={item.youtube?.duration ?? undefined}
+                    category={
+                      item.videoSeriesCategories?.nodes?.length
+                        ? {
+                            id: item.videoSeriesCategories.nodes[0]?.id ?? '',
+                            name:
+                              item.videoSeriesCategories.nodes[0]?.name ?? '',
+                          }
+                        : undefined
+                    }
                   />
                 </Grid>
               )

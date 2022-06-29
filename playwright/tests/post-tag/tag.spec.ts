@@ -24,7 +24,7 @@ test('displays tag title and posts that belong to the tag', async ({
   page,
   tag,
 }) => {
-  await page.goto(`${BASE_URL}/membership/blog/tag/${tag?.id}`)
+  await page.goto(`${BASE_URL}/membership/term/${tag?.id}`)
   await page.waitForLoadState('networkidle')
 
   tag?.posts?.nodes?.map(post => {
@@ -34,6 +34,6 @@ test('displays tag title and posts that belong to the tag', async ({
   })
 
   if (tag?.posts?.nodes?.length && tag.posts.nodes.length > PER_PAGE) {
-    test.expect(page.locator('data-testid=posts-pagination')).toBeVisible()
+    test.expect(page.locator('data-testid=term-items-pagination')).toBeVisible()
   }
 })

@@ -78,6 +78,14 @@ const Webinars = () => {
             data-testid="featured-webinar"
             isVideo
             duration={featuredItem.youtube?.duration ?? undefined}
+            category={
+              featuredItem.webinarsCategories?.nodes?.length
+                ? {
+                    id: featuredItem.webinarsCategories.nodes[0]?.id ?? '',
+                    name: featuredItem.webinarsCategories.nodes[0]?.name ?? '',
+                  }
+                : undefined
+            }
           />
         ) : fetching ? (
           <SplitPostSkeleton data-testid="featured-webinar-skeleton" />
@@ -151,6 +159,14 @@ const Webinars = () => {
                     data-testid={`webinar-grid-item-${item.id}`}
                     isVideo
                     duration={item.youtube?.duration ?? undefined}
+                    category={
+                      item.webinarsCategories?.nodes?.length
+                        ? {
+                            id: item.webinarsCategories.nodes[0]?.id ?? '',
+                            name: item.webinarsCategories.nodes[0]?.name ?? '',
+                          }
+                        : undefined
+                    }
                   />
                 </Grid>
               )

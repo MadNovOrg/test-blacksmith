@@ -78,6 +78,14 @@ const Ebooks: React.FC = () => {
             orientation="left"
             linkTo=""
             data-testid="featured-ebook"
+            category={
+              featuredItem.ebooksCategories?.nodes?.length
+                ? {
+                    id: featuredItem.ebooksCategories.nodes[0]?.id ?? '',
+                    name: featuredItem.ebooksCategories.nodes[0]?.name ?? '',
+                  }
+                : undefined
+            }
             afterDescription={
               <DownloadButton
                 sx={{ marginTop: 3 }}
@@ -156,6 +164,14 @@ const Ebooks: React.FC = () => {
                     })}
                     linkTo=""
                     data-testid={`ebook-grid-item-${item.id}`}
+                    category={
+                      item.ebooksCategories?.nodes?.length
+                        ? {
+                            id: item.ebooksCategories.nodes[0]?.id ?? '',
+                            name: item.ebooksCategories.nodes[0]?.name ?? '',
+                          }
+                        : undefined
+                    }
                     afterDescription={
                       <DownloadButton
                         sx={{ marginTop: 3 }}

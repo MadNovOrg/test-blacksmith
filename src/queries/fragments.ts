@@ -190,6 +190,12 @@ export const VideoItemSummary = gql`
       }
     }
     date
+    videoSeriesCategories {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `
 
@@ -276,6 +282,12 @@ export const EbookSummary = gql`
         mediaItemUrl
       }
     }
+    ebooksCategories {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `
 
@@ -294,6 +306,12 @@ export const ResearchSummaryDetails = gql`
     downloads {
       file {
         mediaItemUrl
+      }
+    }
+    researchSummariesCategories {
+      nodes {
+        id
+        name
       }
     }
   }
@@ -315,5 +333,11 @@ export const WebinarSummary = gql`
       duration
     }
     date
+    webinarsCategories {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `

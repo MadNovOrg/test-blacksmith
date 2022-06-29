@@ -5,9 +5,6 @@ import { MembershipAreaPage } from '@app/pages/MembershipArea'
 
 const Blog = React.lazy(() => import('@app/pages/MembershipArea/pages/Blog'))
 const Post = React.lazy(() => import('@app/pages/MembershipArea/pages/Post'))
-const Category = React.lazy(
-  () => import('@app/pages/MembershipArea/pages/Category')
-)
 
 const Ebooks = React.lazy(
   () => import('@app/pages/MembershipArea/pages/Ebooks')
@@ -22,7 +19,6 @@ const Podcasts = React.lazy(
 const ResearchSummaries = React.lazy(
   () => import('@app/pages/MembershipArea/pages/ResearchSummaries')
 )
-const Tag = React.lazy(() => import('@app/pages/MembershipArea/pages/Tag'))
 const VideoItem = React.lazy(
   () => import('@app/pages/MembershipArea/pages/VideoItem')
 )
@@ -35,6 +31,7 @@ const Webinar = React.lazy(
 const Webinars = React.lazy(
   () => import('@app/pages/MembershipArea/pages/Webinars')
 )
+const Term = React.lazy(() => import('@app/pages/MembershipArea/pages/Term'))
 
 const MembershipRoutes: React.FC = () => (
   <Routes>
@@ -43,8 +40,6 @@ const MembershipRoutes: React.FC = () => (
       <Route path="blog">
         <Route index element={<Blog />} />
         <Route path=":id" element={<Post />} />
-        <Route path="tag/:id" element={<Tag />} />
-        <Route path="category/:id" element={<Category />} />
       </Route>
       <Route path="podcasts">
         <Route index element={<Podcasts />} />
@@ -64,6 +59,7 @@ const MembershipRoutes: React.FC = () => (
         <Route index element={<Webinars />} />
         <Route path=":id" element={<Webinar />} />
       </Route>
+      <Route path="term/:id" element={<Term />} />
     </Route>
   </Routes>
 )
