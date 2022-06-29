@@ -10,9 +10,8 @@ import { dateInputValueFormat, dateInputValueParse } from '@app/util'
 import { screen, render, within, userEvent, waitFor, chance } from '@test/index'
 import { profile } from '@test/providers'
 
+import { Create } from './Create'
 import { AMOUNT_PRESETS, APPLIES_TO } from './helpers'
-
-import { NewDiscount } from '.'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
@@ -36,7 +35,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults createdBy to current user', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const profileSelector = screen.getByTestId('profile-selector')
     const createdBy = within(profileSelector).getByRole('combobox')
@@ -44,7 +43,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults Type to Percent', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const { Percent, FreePlaces } = Promo_Code_Type_Enum
     const typePercent = screen.getByTestId(`discount-type-${Percent}`)
@@ -57,7 +56,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults Amount to 5%', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const amount = screen.getByTestId('fld-amount-percent')
     expect(amount).toHaveValue('5')
@@ -66,7 +65,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults free places to 1', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     expect(screen.queryByTestId('fld-amount-freeplaces')).toBeNull()
 
@@ -80,7 +79,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('defaults AppliesTo to ALL', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const appliesToAll = screen.getByTestId(`appliesTo-${APPLIES_TO.ALL}`)
     expect(within(appliesToAll).getByRole('radio')).toBeChecked()
@@ -89,7 +88,7 @@ describe('page: CreateDiscount', () => {
   it('shows SelectLevels when appliesTo is LEVELS', async () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     expect(screen.queryByTestId('SelectLevels')).toBeNull()
 
@@ -105,7 +104,7 @@ describe('page: CreateDiscount', () => {
       fromValue({ data: { courses: [] } })
     )
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     expect(screen.queryByTestId('SelectCourses')).toBeNull()
 
@@ -115,7 +114,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates code is filled', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
@@ -132,7 +131,7 @@ describe('page: CreateDiscount', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.LEVELS}`
     const levelsRequiredText = 'Please select at least one level'
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
@@ -152,7 +151,7 @@ describe('page: CreateDiscount', () => {
     const appliesTo = `appliesTo-${APPLIES_TO.COURSES}`
     const coursesRequiredText = 'Please select at least one course'
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
@@ -169,7 +168,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates validFrom is required', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
 
@@ -194,7 +193,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates validTo is >= to validFrom', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
 
@@ -220,7 +219,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('validates usesMax is greater than 0 if filled', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     expect(screen.queryByTestId('fld-usesMax')).toBeNull()
 
@@ -255,7 +254,7 @@ describe('page: CreateDiscount', () => {
   })
 
   it('navigates to Discounts list when cancel is clicked', async () => {
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const btnCancel = screen.getByTestId('btn-cancel')
     await waitFor(() => userEvent.click(btnCancel))
@@ -267,7 +266,7 @@ describe('page: CreateDiscount', () => {
   it('submits as expected when all data is valid', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const fldCode = screen.getByTestId('fld-code')
     userEvent.type(fldCode, code)
@@ -299,7 +298,7 @@ describe('page: CreateDiscount', () => {
   it('shows Approval Needed if PERCENT exceeds 15', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const fldCode = screen.getByTestId('fld-code')
     userEvent.type(fldCode, code)
@@ -327,7 +326,7 @@ describe('page: CreateDiscount', () => {
   it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
     const code = chance.word({ length: 10 }).toUpperCase()
 
-    _render(<NewDiscount />)
+    _render(<Create />)
 
     const fldCode = screen.getByTestId('fld-code')
     userEvent.type(fldCode, code)

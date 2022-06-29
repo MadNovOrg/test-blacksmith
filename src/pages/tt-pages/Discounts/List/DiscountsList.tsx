@@ -4,24 +4,27 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
+import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 
 import { Filters } from './Filters'
-import { List } from './List'
+import { DiscountsTable } from './Table'
 
-type Filters = { from?: Date; to?: Date }
+type Filters = { from?: Date; to?: Date; type?: string[] }
 
-export const Discounts: React.FC = () => {
+export const DiscountsList: React.FC = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
+  const { Pagination, limit, offset } = useTablePagination()
   const sorting = useTableSort('createdAt', 'asc')
-
   const [filters, setFilters] = useState<Filters>({})
 
-  const { promoCodes, isLoading } = usePromoCodes({
+  const { promoCodes, total, isLoading } = usePromoCodes({
     sort: { by: sorting.by, dir: sorting.dir },
     filters,
+    limit,
+    offset,
   })
 
   const onFilterChange = useCallback((next: Partial<Filters>) => {
@@ -36,7 +39,7 @@ export const Discounts: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" gap={4}>
         <Box width={250}>
-          <Typography variant="h1">{t('promoCodes')}</Typography>
+          <Typography variant="h1">{t('pages.promoCodes.title')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
@@ -58,12 +61,15 @@ export const Discounts: React.FC = () => {
               {t('pages.promoCodes.new-btn')}
             </Button>
           </Box>
-          <List
+
+          <DiscountsTable
             promoCodes={promoCodes}
             sorting={sorting}
             loading={isLoading}
             filtered={filtered}
           />
+
+          <Pagination total={total} />
         </Box>
       </Box>
     </Container>

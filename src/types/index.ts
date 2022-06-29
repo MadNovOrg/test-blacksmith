@@ -520,3 +520,10 @@ export type CourseEvaluationTrainerAnswers = {
   }
   answer: string
 }[]
+
+export enum PromoCodeStatus {
+  ACTIVE = 'ACTIVE',
+  APPROVAL_PENDING = 'APPROVAL_PENDING',
+  SCHEDULED = 'SCHEDULED',
+  EXPIRED = 'EXPIRED',
+}

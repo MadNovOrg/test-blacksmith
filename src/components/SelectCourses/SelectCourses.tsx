@@ -8,6 +8,7 @@ import {
   Stack,
   IconButton,
 } from '@mui/material'
+import { startOfDay } from 'date-fns'
 import React, { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
@@ -46,18 +47,12 @@ export const SelectCourses: React.FC<Props> = ({
     return { _in: levels }
   }, [levels])
 
-  const tomorrow = useMemo(() => {
-    const d = new Date('2022-05-14')
-    d.setHours(0, 0, 0)
-    return d.toISOString().slice(0, 10)
-  }, [])
-
   const [searchResult] = useQuery<QueryResult>({
     query: SEARCH_COURSES,
     variables: {
       where: {
         type: { _eq: CourseType.OPEN },
-        schedule: { start: { _gte: tomorrow } },
+        schedule: { start: { _gte: startOfDay(new Date()) } },
         level: levelFilter,
       },
     },

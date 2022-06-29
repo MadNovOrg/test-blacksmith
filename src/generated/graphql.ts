@@ -23975,11 +23975,15 @@ export type Promo_Code = {
   __typename?: 'promo_code';
   amount: Scalars['numeric'];
   approvedBy?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
+  approver?: Maybe<Profile>;
   bookerSingleUse: Scalars['Boolean'];
   code: Scalars['String'];
   courses: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
   createdBy: Scalars['uuid'];
+  /** An object relationship */
+  creator: Profile;
   description?: Maybe<Scalars['String']>;
   enabled: Scalars['Boolean'];
   id: Scalars['uuid'];
@@ -24053,11 +24057,13 @@ export type Promo_Code_Bool_Exp = {
   _or?: InputMaybe<Array<Promo_Code_Bool_Exp>>;
   amount?: InputMaybe<Numeric_Comparison_Exp>;
   approvedBy?: InputMaybe<Uuid_Comparison_Exp>;
+  approver?: InputMaybe<Profile_Bool_Exp>;
   bookerSingleUse?: InputMaybe<Boolean_Comparison_Exp>;
   code?: InputMaybe<String_Comparison_Exp>;
   courses?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Uuid_Comparison_Exp>;
+  creator?: InputMaybe<Profile_Bool_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -24105,11 +24111,13 @@ export type Promo_Code_Inc_Input = {
 export type Promo_Code_Insert_Input = {
   amount?: InputMaybe<Scalars['numeric']>;
   approvedBy?: InputMaybe<Scalars['uuid']>;
+  approver?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
   code?: InputMaybe<Scalars['String']>;
   courses?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Scalars['uuid']>;
+  creator?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   description?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -24173,11 +24181,13 @@ export type Promo_Code_On_Conflict = {
 export type Promo_Code_Order_By = {
   amount?: InputMaybe<Order_By>;
   approvedBy?: InputMaybe<Order_By>;
+  approver?: InputMaybe<Profile_Order_By>;
   bookerSingleUse?: InputMaybe<Order_By>;
   code?: InputMaybe<Order_By>;
   courses?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Order_By>;
+  creator?: InputMaybe<Profile_Order_By>;
   description?: InputMaybe<Order_By>;
   enabled?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;

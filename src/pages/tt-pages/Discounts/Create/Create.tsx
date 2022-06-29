@@ -45,7 +45,7 @@ import {
 } from './helpers'
 import { Wrapper } from './Wrapper'
 
-export const NewDiscount: React.FC = () => {
+export const Create: React.FC = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const fetcher = useFetcher()

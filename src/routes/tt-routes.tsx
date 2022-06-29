@@ -20,7 +20,7 @@ import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
-import { Discounts, NewDiscount } from '@app/pages/tt-pages/Discounts'
+import { DiscountsList, DiscountCreate } from '@app/pages/tt-pages/Discounts'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
 
@@ -77,8 +77,8 @@ const TTAdminRoutes = () => {
           </Route>
 
           <Route path="discounts">
-            <Route index element={<Discounts />} />
-            <Route path="new" element={<NewDiscount />} />
+            <Route index element={<DiscountsList />} />
+            <Route path="new" element={<DiscountCreate />} />
           </Route>
 
           {acl.canViewXeroConnect() ? (
