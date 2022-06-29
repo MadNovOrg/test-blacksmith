@@ -1,3 +1,4 @@
+import { Home } from '@mui/icons-material'
 import { Box, Link, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,19 +13,20 @@ import {
 } from '@app/assets'
 import theme from '@app/theme'
 
+const iconStyles = {
+  marginRight: theme.spacing(2),
+  verticalAlign: 'middle',
+} as const
+
 const MediaType: React.FC<{
-  icon: React.ElementType
+  icon: (styles: typeof iconStyles) => React.ReactNode
   label: string
   linkTo: string
 }> = ({ icon, label, linkTo }) => {
-  const Icon = icon
-
   return (
     <Typography mr={4} mb={3} sx={{ verticalAlign: 'middle' }}>
       <Link href={linkTo}>
-        <Icon
-          style={{ marginRight: theme.spacing(2), verticalAlign: 'middle' }}
-        />
+        {icon(iconStyles)}
         {label}
       </Link>
     </Typography>
@@ -41,40 +43,46 @@ export const BrowseByMedia: React.FC = () => {
 
       <Box display="flex" justifyContent="center" flexWrap="wrap">
         <MediaType
+          label={t('common.home')}
+          linkTo="/membership/"
+          icon={styles => <Home style={styles} color="primary" />}
+        />
+
+        <MediaType
           label={t('pages.membership.components.browse-by-media.podcasts')}
           linkTo="/membership/podcasts"
-          icon={PodcastsIcon}
+          icon={styles => <PodcastsIcon style={styles} />}
         />
 
         <MediaType
           label={t('pages.membership.components.browse-by-media.blogs')}
           linkTo="/membership/blog"
-          icon={BlogIcon}
+          icon={styles => <BlogIcon style={styles} />}
         />
 
         <MediaType
           label={t('pages.membership.components.browse-by-media.video-series')}
           linkTo="/membership/video-series"
-          icon={VideoSeriesIcon}
+          icon={styles => <VideoSeriesIcon style={styles} />}
         />
 
         <MediaType
           label={t('pages.membership.components.browse-by-media.webinars')}
           linkTo="/membership/webinars"
-          icon={WebinarIcon}
+          icon={styles => <WebinarIcon style={styles} />}
         />
 
         <MediaType
           label={t('pages.membership.components.browse-by-media.ebooks')}
           linkTo="/membership/ebooks"
-          icon={EbookIcon}
+          icon={styles => <EbookIcon style={styles} />}
         />
         <MediaType
           label={t(
             'pages.membership.components.browse-by-media.research-summaries'
           )}
           linkTo="/membership/research-summaries"
-          icon={ResearchSummaryIcon}
+          icon={styles => <ResearchSummaryIcon style={styles} />}
         />
       </Box>
     </Box>
