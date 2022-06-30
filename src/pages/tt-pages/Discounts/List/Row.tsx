@@ -18,11 +18,14 @@ import { CourseLevel } from '@app/types'
 
 import { getPromoCodeStatus, getPromoCodeStatusColor } from '../helpers'
 
+import { ApproveDeny } from './ApproveDeny'
+
 type Props = {
   promo: Partial<Promo_Code>
+  showApprove?: boolean
 }
 
-export const Row: React.FC<Props> = ({ promo }) => {
+export const Row: React.FC<Props> = ({ promo, showApprove = false }) => {
   const { t } = useTranslation()
 
   const typeSuffix = useMemo(() => {
@@ -106,14 +109,18 @@ export const Row: React.FC<Props> = ({ promo }) => {
       </TableCell>
 
       <TableCell>
-        <Chip
-          size="small"
-          label={t(`pages.promoCodes.status-${status}`)}
-          sx={{
-            fontSize: 11,
-            backgroundColor: getPromoCodeStatusColor(status),
-          }}
-        />
+        {showApprove ? (
+          <ApproveDeny promoCode={promo} />
+        ) : (
+          <Chip
+            size="small"
+            label={t(`pages.promoCodes.status-${status}`)}
+            sx={{
+              fontSize: 11,
+              backgroundColor: getPromoCodeStatusColor(status),
+            }}
+          />
+        )}
       </TableCell>
     </TableRow>
   )

@@ -5,7 +5,13 @@ import { PromoCodeStatus } from '@app/types'
 
 export const getPromoCodeStatus = (promoCode: Partial<Promo_Code>) => {
   if ('approvedBy' in promoCode) {
-    if (promoCode.approvedBy === null) return PromoCodeStatus.APPROVAL_PENDING
+    if (promoCode.approvedBy === null && promoCode.deniedBy === null) {
+      return PromoCodeStatus.APPROVAL_PENDING
+    }
+  }
+
+  if (promoCode.deniedBy) {
+    return PromoCodeStatus.DENIED
   }
 
   if (promoCode.validFrom) {
@@ -27,6 +33,7 @@ export const getPromoCodeStatusColor = (status: PromoCodeStatus) => {
     [PromoCodeStatus.ACTIVE]: '#F3F5E6',
     [PromoCodeStatus.SCHEDULED]: '#E1F2F4',
     [PromoCodeStatus.EXPIRED]: '#EEEEEE',
+    [PromoCodeStatus.DENIED]: '#EEEEEE',
   }
 
   return colors[status]

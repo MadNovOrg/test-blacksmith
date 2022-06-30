@@ -20,6 +20,11 @@ export type Scalars = {
   uuid: any;
 };
 
+export type AcceptOrgInviteOutput = {
+  __typename?: 'AcceptOrgInviteOutput';
+  id: Scalars['uuid'];
+};
+
 /** A Field Group registered by ACF */
 export type AcfFieldGroup = {
   /** The name of the ACF Field Group */
@@ -1767,6 +1772,11 @@ export type DateQueryInput = {
 export type DeclineInviteOutput = {
   __typename?: 'DeclineInviteOutput';
   status: Scalars['Boolean'];
+};
+
+export type DeclineOrgInviteOutput = {
+  __typename?: 'DeclineOrgInviteOutput';
+  id: Scalars['uuid'];
 };
 
 /** The template assigned to the node */
@@ -3952,6 +3962,12 @@ export enum OrderEnum {
 
 export type Ordering = {
   direction?: InputMaybe<OrderDirection>;
+};
+
+export type OrgInvite = {
+  __typename?: 'OrgInvite';
+  id: Scalars['String'];
+  orgName: Scalars['String'];
 };
 
 /** The page type */
@@ -11620,6 +11636,11 @@ export enum XeroContactStatus {
   Gdprrequest = 'GDPRREQUEST'
 }
 
+export type XeroDisconnectOutput = {
+  __typename?: 'XeroDisconnectOutput';
+  connected: Scalars['Boolean'];
+};
+
 export type XeroPhone = {
   __typename?: 'XeroPhone';
   phoneAreaCode?: Maybe<Scalars['String']>;
@@ -18504,11 +18525,13 @@ export enum Module_Update_Column {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   content?: Maybe<RootMutation>;
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
   createUser: CreateUserOutput;
   declineInvite?: Maybe<DeclineInviteOutput>;
+  declineOrgInvite?: Maybe<DeclineOrgInviteOutput>;
   /** delete data from the table: "blended_learning_status" */
   delete_blended_learning_status?: Maybe<Blended_Learning_Status_Mutation_Response>;
   /** delete single row from the table: "blended_learning_status" */
@@ -19080,6 +19103,13 @@ export type Mutation_Root = {
   upsertZoomMeeting?: Maybe<UpsertZoomMeetingPayload>;
   verifyUser: Scalars['Boolean'];
   xeroCallback?: Maybe<XeroCallbackOutput>;
+  xeroDisconnect?: Maybe<XeroDisconnectOutput>;
+};
+
+
+/** mutation root */
+export type Mutation_RootAcceptOrgInviteArgs = {
+  profileId: Scalars['String'];
 };
 
 
@@ -23984,6 +24014,7 @@ export type Promo_Code = {
   createdBy: Scalars['uuid'];
   /** An object relationship */
   creator: Profile;
+  deniedBy?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   enabled: Scalars['Boolean'];
   id: Scalars['uuid'];
@@ -24064,6 +24095,7 @@ export type Promo_Code_Bool_Exp = {
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Uuid_Comparison_Exp>;
   creator?: InputMaybe<Profile_Bool_Exp>;
+  deniedBy?: InputMaybe<Uuid_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   enabled?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -24118,6 +24150,7 @@ export type Promo_Code_Insert_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Scalars['uuid']>;
   creator?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  deniedBy?: InputMaybe<Scalars['uuid']>;
   description?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -24137,6 +24170,7 @@ export type Promo_Code_Max_Fields = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdBy?: Maybe<Scalars['uuid']>;
+  deniedBy?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -24153,6 +24187,7 @@ export type Promo_Code_Min_Fields = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   createdBy?: Maybe<Scalars['uuid']>;
+  deniedBy?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -24188,6 +24223,7 @@ export type Promo_Code_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Order_By>;
   creator?: InputMaybe<Profile_Order_By>;
+  deniedBy?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   enabled?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -24227,6 +24263,8 @@ export enum Promo_Code_Select_Column {
   /** column name */
   CreatedBy = 'createdBy',
   /** column name */
+  DeniedBy = 'deniedBy',
+  /** column name */
   Description = 'description',
   /** column name */
   Enabled = 'enabled',
@@ -24255,6 +24293,7 @@ export type Promo_Code_Set_Input = {
   courses?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Scalars['uuid']>;
+  deniedBy?: InputMaybe<Scalars['uuid']>;
   description?: InputMaybe<Scalars['String']>;
   enabled?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -24426,6 +24465,8 @@ export enum Promo_Code_Update_Column {
   CreatedAt = 'createdAt',
   /** column name */
   CreatedBy = 'createdBy',
+  /** column name */
+  DeniedBy = 'deniedBy',
   /** column name */
   Description = 'description',
   /** column name */
@@ -24613,6 +24654,7 @@ export type Query_Root = {
   /** getCoursePricing */
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
+  getOrgInvite?: Maybe<OrgInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   /** fetch data from the table: "grade" */
   grade: Array<Grade>;
@@ -28299,6 +28341,22 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }> } | null };
 
+export type ApproveCodeMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  approvedBy?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type ApproveCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
+export type DenyCodeMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  deniedBy?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type DenyCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -28584,6 +28642,13 @@ export type AcceptInviteMutationVariables = Exact<{
 
 export type AcceptInviteMutation = { __typename?: 'mutation_root', acceptInvite?: { __typename?: 'course_invites', status?: Course_Invite_Status_Enum | null } | null, addParticipant?: { __typename?: 'course_participant', id: any } | null };
 
+export type AcceptOrgInviteMutationVariables = Exact<{
+  profileId: Scalars['String'];
+}>;
+
+
+export type AcceptOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'AcceptOrgInviteOutput', id: any } | null };
+
 export type CreateUserMutationVariables = Exact<{
   input: CreateAppUserInput;
 }>;
@@ -28597,6 +28662,11 @@ export type DeclineInviteMutationVariables = Exact<{
 
 
 export type DeclineInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineInviteOutput', status: boolean } | null };
+
+export type DeclineOrgInviteMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeclineOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'DeclineOrgInviteOutput', id: any } | null };
 
 export type DeleteOrgInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
@@ -28620,6 +28690,11 @@ export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'CourseInvite', id: string, status: InviteStatus, courseId: string, courseName: string, description?: string | null, trainerName: string, startDate: string, endDate: string, venueName: string, venueCoordinates?: string | null, venueAddress?: { __typename?: 'Address', addressLineOne?: string | null, addressLineTwo?: string | null, city?: string | null, postCode?: string | null } | null } | null };
+
+export type GetOrgInviteQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOrgInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'OrgInvite', id: string, orgName: string } | null };
 
 export type GetOrgInvitesQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -28971,6 +29046,11 @@ export type UpdateProfileMutationVariables = Exact<{
 
 
 export type UpdateProfileMutation = { __typename?: 'mutation_root', updated?: { __typename?: 'profile', id: any } | null };
+
+export type GetPromoCodesPendingApprovalQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPromoCodesPendingApprovalQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null } }> };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;

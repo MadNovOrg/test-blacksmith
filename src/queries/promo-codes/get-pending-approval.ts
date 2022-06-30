@@ -2,28 +2,17 @@ import { gql } from 'graphql-request'
 
 import { GetPromoCodesQueryVariables, Query_Root } from '@app/generated/graphql'
 
-export type InputType = GetPromoCodesQueryVariables & {
-  limit?: number
-  offset?: number
-}
+export type InputType = GetPromoCodesQueryVariables
 
 export type ResponseType = {
   promoCodes: Query_Root['promo_code']
-  promo_code_aggregate: { aggregate: { count: number } }
 }
 
 export const QUERY = gql`
-  query GetPromoCodes(
-    $orderBy: [promo_code_order_by!]
-    $where: promo_code_bool_exp
-    $limit: Int = 20
-    $offset: Int = 0
-  ) {
+  query GetPromoCodesPendingApproval {
     promoCodes: promo_code(
-      order_by: $orderBy
-      where: $where
-      limit: $limit
-      offset: $offset
+      where: { approvedBy: { _is_null: true }, deniedBy: { _is_null: true } }
+      order_by: { createdBy: asc }
     ) {
       id
       code
@@ -38,7 +27,6 @@ export const QUERY = gql`
       courses
       enabled
       approvedBy
-      deniedBy
       createdBy
       creator {
         id
@@ -46,12 +34,6 @@ export const QUERY = gql`
       }
       createdAt
       updatedAt
-    }
-
-    promo_code_aggregate {
-      aggregate {
-        count
-      }
     }
   }
 `

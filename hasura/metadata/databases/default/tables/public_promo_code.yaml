@@ -12,6 +12,8 @@ configuration:
       custom_name: createdBy
     approved_by:
       custom_name: approvedBy
+    denied_by:
+      custom_name: deniedBy
     updated_at:
       custom_name: updatedAt
     booker_single_use:
@@ -25,6 +27,7 @@ configuration:
     uses_max: usesMax
     created_by: createdBy
     approved_by: approvedBy
+    denied_by: deniedBy
     updated_at: updatedAt
     booker_single_use: bookerSingleUse
     valid_to: validTo
@@ -59,22 +62,23 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
-        - booker_single_use
-        - enabled
-        - courses
-        - levels
         - amount
-        - uses_max
+        - approved_by
+        - booker_single_use
         - code
-        - description
-        - type
+        - courses
         - created_at
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
         - updated_at
+        - uses_max
         - valid_from
         - valid_to
-        - approved_by
-        - created_by
-        - id
       filter: {}
       allow_aggregations: true
 update_permissions:
@@ -87,9 +91,9 @@ update_permissions:
         - code
         - courses
         - created_by
+        - denied_by
         - description
         - enabled
-        - id
         - levels
         - type
         - uses_max

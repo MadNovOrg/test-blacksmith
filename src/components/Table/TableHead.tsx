@@ -8,6 +8,7 @@ import { visuallyHidden } from '@mui/utils'
 import React, { useCallback } from 'react'
 
 import { SortOrder } from '@app/types'
+import { noop } from '@app/util'
 
 export type Col = {
   id: string
@@ -19,17 +20,17 @@ export type Col = {
 
 export type TableHeadProps = {
   cols: Col[]
-  order: SortOrder
-  orderBy: string
-  onRequestSort: (_: string) => void
+  order?: SortOrder
+  orderBy?: string
+  onRequestSort?: (_: string) => void
   sx?: SxProps
 }
 
 export const TableHead: React.FC<TableHeadProps> = ({
   cols,
-  order,
-  orderBy,
-  onRequestSort,
+  order = 'asc',
+  orderBy = '',
+  onRequestSort = noop,
   sx,
 }) => {
   const createSortHandler = useCallback(

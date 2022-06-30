@@ -8,8 +8,8 @@ import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 
 import { Filters } from './Filters'
+import { PendingApproval } from './PendingApproval'
 import { DiscountsTable } from './Table'
-
 type Filters = { from?: Date; to?: Date; type?: string[]; code?: string }
 
 export const DiscountsList: React.FC = () => {
@@ -56,11 +56,17 @@ export const DiscountsList: React.FC = () => {
             justifyContent="space-between"
             mb={2}
           >
-            <Box></Box>
+            <Box sx={{ alignSelf: 'flex-end', position: 'relative', top: 10 }}>
+              <Typography fontWeight="bold">
+                {t('pages.promoCodes.list-title-pending')}
+              </Typography>
+            </Box>
             <Button variant="contained" onClick={() => navigate('./new')}>
               {t('pages.promoCodes.new-btn')}
             </Button>
           </Box>
+
+          <PendingApproval />
 
           <DiscountsTable
             promoCodes={promoCodes}

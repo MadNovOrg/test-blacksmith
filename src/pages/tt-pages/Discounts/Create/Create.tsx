@@ -135,7 +135,7 @@ export const Create: React.FC = () => {
   const renderTypeRadio = (value: Promo_Code_Type_Enum) => {
     return (
       <FormControlLabel
-        label={t(`pages.promoCodes.type-${value}`)}
+        label={t(`pages.promoCodes.fld-type-${value}`)}
         data-testid={`discount-type-${value}`}
         control={
           <Radio
