@@ -1,9 +1,10 @@
 import { Alert, CircularProgress, Container } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION as ACCEPT_ORG_INVITE_MUTATION,
   ParamsType as AcceptOrgInviteParamsType,
@@ -16,14 +17,17 @@ export const AcceptOrgInvite = () => {
   const params = useParams()
   const fetcher = useFetcher()
   const { profile } = useAuth()
+  const [searchParams] = useSearchParams()
 
+  const token = searchParams.get('token') || ''
   const inviteId = params.id as string
 
   useEffect(() => {
     if (profile) {
-      fetcher<AcceptOrgInviteResponseType, AcceptOrgInviteParamsType>(
+      gqlRequest<AcceptOrgInviteResponseType, AcceptOrgInviteParamsType>(
         ACCEPT_ORG_INVITE_MUTATION,
-        { profileId: profile.id }
+        { profileId: profile.id },
+        { headers: { 'x-auth': `Bearer ${token}` } }
       )
         .then(resp => {
           if (!resp?.invite?.id) {
@@ -33,7 +37,7 @@ export const AcceptOrgInvite = () => {
         })
         .catch(() => setError(true))
     }
-  }, [inviteId, fetcher, profile])
+  }, [inviteId, fetcher, profile, token])
 
   if (error) {
     return (

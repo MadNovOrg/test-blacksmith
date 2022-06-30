@@ -46,6 +46,10 @@ export const AppRoutes = () => {
     return <InvitationPage />
   }
 
+  if (location.pathname === '/org-invitation') {
+    return <OrgInvitationPage />
+  }
+
   if (location.pathname === '/auto-login') {
     return <AutoLogin />
   }
