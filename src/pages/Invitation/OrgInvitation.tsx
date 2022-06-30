@@ -70,7 +70,7 @@ export const OrgInvitationPage = () => {
       const isUserLoggedIn = profile?.email === email
       const exists = isUserLoggedIn ? true : await userExistsInCognito(email)
       const nextUrl = exists ? '/auto-login' : '/auto-register'
-      const continueUrl = `/accept-org-invite/${inviteId}`
+      const continueUrl = `/accept-org-invite/${inviteId}?token=${token}`
       const qs = new URLSearchParams({ token, continue: continueUrl })
 
       return navigate(`${isUserLoggedIn ? continueUrl : nextUrl}?${qs}`, {
