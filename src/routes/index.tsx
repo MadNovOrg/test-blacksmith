@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import React, { Suspense } from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
@@ -19,6 +19,7 @@ import { RegistrationPage } from '@app/pages/common/Registration'
 import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
+import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
@@ -81,6 +82,7 @@ function LoggedOutRoutes() {
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
       <Route path="invitation" element={<InvitationPage />} />
+      <Route path="org-invitation" element={<OrgInvitationPage />} />
       <Route path="registration" element={<RegistrationPage />} />
       <Route path="auto-register" element={<AutoRegisterPage />} />
       <Route

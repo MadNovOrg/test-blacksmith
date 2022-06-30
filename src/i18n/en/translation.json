@@ -1280,6 +1280,12 @@
       "approvalNeeded-reason-PERCENT": "Percentage exceeds 15%",
       "approvalNeeded-reason-FREE_PLACES": "Number of free spaces exceeds 3",
       "approvalNeeded-submit": "Send for approval"
+    },
+    "org-invite": {
+      "title": "You're invited to join {{orgName}}",
+      "accept": "Accept",
+      "decline": "Decline",
+      "continue-to-organization": "Continue to organisation"
     }
   },
   "course-evaluation": {

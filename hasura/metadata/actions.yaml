@@ -16,8 +16,20 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/invite/decline'
       forward_client_headers: true
+  - name: declineOrgInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/invite/decline'
+      forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: acceptOrgInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/invite/accept'
+      forward_client_headers: true
+    permissions:
+      - role: user
   - name: fetchPlans
     definition:
       kind: ""
@@ -35,6 +47,13 @@ actions:
     definition:
       kind: ""
       handler: '{{ACTIONS_HOST}}/invite/get'
+      forward_client_headers: true
+    permissions:
+      - role: anonymous
+  - name: getOrgInvite
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/organization/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
@@ -252,8 +271,11 @@ custom_types:
     - name: createSubscriptionOutput
     - name: isUserSubscribedToMembershipResponse
     - name: DeclineInviteOutput
+    - name: DeclineOrgInviteOutput
+    - name: AcceptOrgInviteOutput
     - name: Invite
     - name: CourseInvite
+    - name: OrgInvite
     - name: Address
     - name: UpsertZoomMeetingPayload
     - name: ZoomMeeting

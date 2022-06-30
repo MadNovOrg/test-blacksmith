@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { NotFound } from '@app/pages/common/NotFound'
 import { MyOrganizationPage } from '@app/pages/MyOrganization'
@@ -8,6 +8,7 @@ import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
 import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
+import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
@@ -40,6 +41,7 @@ const UserRoutes = () => {
       </Route>
 
       <Route path="accept-invite/:id" element={<AcceptInvite />} />
+      <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
 
       <Route path="certifications" element={<MyCertifications />} />
 

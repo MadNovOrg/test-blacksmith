@@ -17,6 +17,14 @@ type Mutation {
   ): DeclineInviteOutput
 }
 
+type Mutation {
+  declineOrgInvite: DeclineOrgInviteOutput
+}
+
+type Mutation {
+  acceptOrgInvite(profileId: String!): AcceptOrgInviteOutput
+}
+
 type Query {
   fetchPlans: [PlanObject]
 }
@@ -29,6 +37,10 @@ type Query {
 
 type Query {
   getInvite: CourseInvite
+}
+
+type Query {
+  getOrgInvite: OrgInvite
 }
 
 type Query {
@@ -266,6 +278,14 @@ type DeclineInviteOutput {
   status: Boolean!
 }
 
+type DeclineOrgInviteOutput {
+  id: uuid!
+}
+
+type AcceptOrgInviteOutput {
+  id: uuid!
+}
+
 type Invite {
   status: InviteStatus
 }
@@ -282,6 +302,11 @@ type CourseInvite {
   venueName: String!
   venueAddress: Address
   venueCoordinates: String
+}
+
+type OrgInvite {
+  id: String!
+  orgName: String!
 }
 
 type Address {

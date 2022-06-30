@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { UnverifiedLayout } from '@app/components/UnverifiedLayout'
@@ -17,6 +17,7 @@ const UnverifiedRoutes = () => {
         <Routes>
           <Route index element={<Navigate replace to="verify" />} />
           <Route path="accept-invite/:id" element={<AutoVerify />} />
+          <Route path="accept-org-invite/:id" element={<AutoVerify />} />
           <Route path="verify" element={<VerifyEmailPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
