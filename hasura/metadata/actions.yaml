@@ -141,6 +141,10 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: tt-ops
+  - name: xeroDisconnect
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/xero/disconnect'
 custom_types:
   enums:
     - name: BillingInterval
@@ -295,4 +299,5 @@ custom_types:
     - name: CreateUserOutput
     - name: InitAuthOutput
     - name: GetCoursePricingOutput
+    - name: XeroDisconnectOutput
   scalars: []

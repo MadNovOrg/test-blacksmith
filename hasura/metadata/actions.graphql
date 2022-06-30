@@ -119,6 +119,10 @@ type Query {
   ): XeroContactSearchOutput
 }
 
+type Mutation {
+  xeroDisconnect: XeroDisconnectOutput
+}
+
 enum BillingInterval {
   day
   week
@@ -435,5 +439,9 @@ type GetCoursePricingOutput {
   priceAmount: Float!
   priceCurrency: Currency!
   xeroCode: String!
+}
+
+type XeroDisconnectOutput {
+  connected: Boolean!
 }
 
