@@ -9,7 +9,7 @@ export type ParamsType = {
 }
 
 export const MUTATION = gql`
-  mutation AcceptOrgInvite($profileId: uuid!) {
+  mutation AcceptOrgInvite($profileId: String!) {
     invite: acceptOrgInvite(profileId: $profileId) {
       id
     }

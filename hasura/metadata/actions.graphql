@@ -1,4 +1,10 @@
 type Mutation {
+  acceptOrgInvite(
+    profileId: String!
+  ): AcceptOrgInviteOutput
+}
+
+type Mutation {
   createStripeSubscription(
     priceId: String!
     customerId: String!
@@ -19,10 +25,6 @@ type Mutation {
 
 type Mutation {
   declineOrgInvite: DeclineOrgInviteOutput
-}
-
-type Mutation {
-  acceptOrgInvite(profileId: String!): AcceptOrgInviteOutput
 }
 
 type Query {

@@ -1,4 +1,11 @@
 actions:
+  - name: acceptOrgInvite
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/organization/invite/accept'
+      forward_client_headers: true
+    permissions:
+      - role: user
   - name: createStripeSubscription
     definition:
       kind: synchronous
@@ -23,13 +30,6 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
-  - name: acceptOrgInvite
-    definition:
-      kind: synchronous
-      handler: '{{ACTIONS_HOST}}/organization/invite/accept'
-      forward_client_headers: true
-    permissions:
-      - role: user
   - name: fetchPlans
     definition:
       kind: ""

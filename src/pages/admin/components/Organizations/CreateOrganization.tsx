@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -118,7 +118,7 @@ export const CreateOrganization = () => {
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
-      <Container maxWidth="lg" sx={{ pt: 2 }}>
+      <Container maxWidth="lg" sx={{ py: 2 }}>
         <Box
           display="flex"
           component="form"
