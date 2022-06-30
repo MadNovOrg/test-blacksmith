@@ -17,6 +17,7 @@ module.exports = {
       resolve: {
         alias: {
           '@app': path.resolve(__dirname, '..', 'src'),
+          '@test': path.resolve(__dirname, '..', 'test'),
           '@storybook-decorators': path.resolve(__dirname, './decorators'),
         },
       },

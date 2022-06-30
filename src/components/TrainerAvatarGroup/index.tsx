@@ -1,5 +1,4 @@
 import {
-  Avatar,
   AvatarGroup,
   styled,
   Tooltip,
@@ -10,7 +9,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseTrainer, CourseTrainerType, InviteStatus } from '@app/types'
-import { getInitialsFromName, stringToColor } from '@app/util'
+
+import { Avatar } from '../Avatar'
 
 type Props = {
   trainers?: CourseTrainer[]
@@ -32,6 +32,14 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
+function sortTrainers(a: CourseTrainer, b: CourseTrainer): 1 | -1 | 0 {
+  return a.type === CourseTrainerType.LEADER
+    ? -1
+    : b.type === CourseTrainerType.LEADER
+    ? 1
+    : 0
+}
+
 export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
   const { t } = useTranslation()
 
@@ -39,9 +47,11 @@ export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
     return null
   }
 
+  const sortedTrainers = trainers.slice().sort(sortTrainers)
+
   return (
     <AvatarGroup sx={{ justifyContent: 'center' }}>
-      {trainers.map(trainer => (
+      {sortedTrainers.map((trainer, index) => (
         <LightTooltip
           key={trainer.id}
           title={`${t(
@@ -52,15 +62,14 @@ export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
           placement="top"
         >
           <Avatar
+            name={trainer.profile.fullName}
+            size={32}
             sx={{
-              width: 32,
-              height: 32,
               opacity: trainer.status !== InviteStatus.ACCEPTED ? '0.5' : '1',
-              bgcolor: stringToColor(trainer.profile.fullName),
             }}
-          >
-            {getInitialsFromName(trainer.profile.fullName)}
-          </Avatar>
+            data-testid={`trainer-avatar-${trainer.id}`}
+            data-index={index}
+          />
         </LightTooltip>
       ))}
     </AvatarGroup>
