@@ -430,6 +430,14 @@ const Term: React.FC = () => {
                         }
                       : undefined
                   }
+                  afterDescription={
+                    <DownloadButton
+                      sx={{ marginTop: 3 }}
+                      downloadLink={item.downloads?.file?.mediaItemUrl ?? ''}
+                    >
+                      {t('pages.membership.research-summaries.download-button')}
+                    </DownloadButton>
+                  }
                 />
               )
             }}

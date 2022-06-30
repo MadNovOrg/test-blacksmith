@@ -41,21 +41,24 @@ export const BlogPostItem: React.FC<Props> = ({
   ...rest
 }) => {
   const { t } = useTranslation()
-  const thumbnail =
-    isVideo && duration ? (
-      <VideoThumbnail
-        duration={duration}
-        imageUrl={imageUrl ?? ''}
-        imageSrcSet={imageSrcSet ?? undefined}
-        alt={title}
-      />
-    ) : (
-      <PostImage
-        src={imageUrl ?? ''}
-        srcSet={imageSrcSet ?? undefined}
-        alt={title}
-      />
-    )
+  const thumbnail = (
+    <Box textAlign="center">
+      {isVideo && duration ? (
+        <VideoThumbnail
+          duration={duration}
+          imageUrl={imageUrl ?? ''}
+          imageSrcSet={imageSrcSet ?? undefined}
+          alt={title}
+        />
+      ) : (
+        <PostImage
+          src={imageUrl ?? ''}
+          srcSet={imageSrcSet ?? undefined}
+          alt={title}
+        />
+      )}
+    </Box>
+  )
 
   return (
     <Box {...rest}>
