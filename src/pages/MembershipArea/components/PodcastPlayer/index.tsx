@@ -149,7 +149,11 @@ export const PodcastPlayer: React.FC<Props> = ({
               flexGrow: 2,
             }}
           />
-          <Duration duration={secondsLeft} variant="body2" />
+          <Duration
+            duration={secondsLeft}
+            variant="body2"
+            sx={{ width: 50, textAlign: 'center' }}
+          />
           <audio ref={audio} src={mediaUrl} preload="auto" autoPlay={false} />
         </Box>
       </Box>
