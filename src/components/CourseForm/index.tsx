@@ -299,6 +299,14 @@ const CourseForm: React.FC<Props> = ({
     CourseDeliveryType.MIXED,
   ].includes(deliveryType)
 
+  const autoLoadZoomMeetingUrl = useMemo(
+    () =>
+      hasZoomMeetingUrl &&
+      courseType !== CourseType.INDIRECT &&
+      !courseInput?.zoomMeetingUrl,
+    [hasZoomMeetingUrl, courseType, courseInput]
+  )
+
   const {
     meetingUrl: zoomMeetingUrl,
     generateLink: generateZoomLink,
@@ -319,14 +327,10 @@ const CourseForm: React.FC<Props> = ({
   }, [deliveryType, trigger])
 
   useEffect(() => {
-    if (
-      hasZoomMeetingUrl &&
-      !courseInput?.zoomMeetingUrl &&
-      courseType !== CourseType.INDIRECT
-    ) {
+    if (autoLoadZoomMeetingUrl) {
       generateZoomLink()
     }
-  }, [hasZoomMeetingUrl, generateZoomLink, courseInput, courseType])
+  }, [autoLoadZoomMeetingUrl, generateZoomLink])
 
   return (
     <form>
