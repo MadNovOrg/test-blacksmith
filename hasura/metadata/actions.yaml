@@ -5,7 +5,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/organization/invite/accept'
       forward_client_headers: true
     permissions:
-      - role: user
+      - role: anonymous
   - name: createStripeSubscription
     definition:
       kind: synchronous
