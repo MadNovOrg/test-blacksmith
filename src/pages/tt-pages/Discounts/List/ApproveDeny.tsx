@@ -2,37 +2,15 @@ import { LoadingButton } from '@mui/lab'
 import { Box } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { gql } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import { Promo_Code } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { APPROVE_CODE, DENY_CODE } from '@app/queries/promo-codes/approve-deny'
 
 type Props = {
   promoCode: Partial<Promo_Code>
 }
-
-const APPROVE_CODE = gql`
-  mutation ApproveCode($id: uuid!, $approvedBy: uuid) {
-    update_promo_code_by_pk(
-      pk_columns: { id: $id }
-      _set: { approvedBy: $approvedBy }
-    ) {
-      id
-    }
-  }
-`
-
-const DENY_CODE = gql`
-  mutation DenyCode($id: uuid!, $deniedBy: uuid) {
-    update_promo_code_by_pk(
-      pk_columns: { id: $id }
-      _set: { deniedBy: $deniedBy }
-    ) {
-      id
-    }
-  }
-`
 
 export const ApproveDeny: React.FC<Props> = ({ promoCode }) => {
   const { t } = useTranslation()
@@ -43,13 +21,21 @@ export const ApproveDeny: React.FC<Props> = ({ promoCode }) => {
 
   const onApprove = async () => {
     setLoading(true)
-    await fetcher(APPROVE_CODE, { id: promoCode.id, approvedBy: profile?.id })
+    try {
+      await fetcher(APPROVE_CODE, { id: promoCode.id, approvedBy: profile?.id })
+    } catch (err) {
+      console.error((err as Error).message)
+    }
     setLoading(false)
   }
 
   const onDeny = async () => {
     setLoading(true)
-    await fetcher(DENY_CODE, { id: promoCode.id, deniedBy: profile?.id })
+    try {
+      await fetcher(DENY_CODE, { id: promoCode.id, deniedBy: profile?.id })
+    } catch (err) {
+      console.error((err as Error).message)
+    }
     setLoading(false)
   }
 
