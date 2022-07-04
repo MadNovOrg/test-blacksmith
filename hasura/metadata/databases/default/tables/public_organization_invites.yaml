@@ -73,7 +73,6 @@ delete_permissions:
   - role: tt-admin
     permission:
       filter: {}
-      allow_aggregations: true
 event_triggers:
   - name: org_invite_email
     definition:

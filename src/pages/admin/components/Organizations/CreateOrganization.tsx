@@ -96,9 +96,6 @@ export const CreateOrganization = () => {
     try {
       const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
         name: data.orgName,
-        attributes: {
-          adminEmail: data.workEmail,
-        },
         address: {
           line1: data.addressLine1,
           line2: data.addressLine2,
@@ -107,6 +104,12 @@ export const CreateOrganization = () => {
           postCode: data.postCode,
         } as Address,
         xeroId,
+        invites: [
+          {
+            email: data.workEmail,
+            isAdmin: true,
+          },
+        ],
       })
       navigate(`../${response.org.id}/details`)
     } catch (e: unknown) {

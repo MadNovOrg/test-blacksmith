@@ -138,14 +138,3 @@ update_permissions:
         - xero_contact_id
       filter: {}
       check: null
-event_triggers:
-  - name: organization_insert
-    definition:
-      enable_manual: false
-      insert:
-        columns: '*'
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/organization'

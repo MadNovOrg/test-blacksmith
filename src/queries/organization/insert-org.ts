@@ -9,10 +9,8 @@ export type ResponseType = { org: Organization }
 export type ParamsType = {
   name: string
   address: Address
-  attributes?: {
-    adminEmail: string
-  }
   xeroId?: string
+  invites?: { email: string; isAdmin: boolean }[]
 }
 
 export const MUTATION = gql`
@@ -20,15 +18,15 @@ export const MUTATION = gql`
   mutation InsertOrg(
     $name: String!
     $address: jsonb!
-    $attributes: jsonb
     $xeroId: String
+    $invites: [organization_invites_insert_input!] = []
   ) {
     org: insert_organization_one(
       object: {
         name: $name
         address: $address
-        attributes: $attributes
         xeroContactId: $xeroId
+        invites: { data: $invites }
       }
     ) {
       ...Organization
