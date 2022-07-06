@@ -83,7 +83,8 @@ export default function useZoomMeetingLink(startTime?: Date): {
   }, [meetingUrl])
 
   useEffect(() => {
-    if (startTime) {
+    // Only update if there already is a meeting url
+    if (meetingUrl && startTime) {
       generateLink(true)
     }
   }, [startTime, generateLink])

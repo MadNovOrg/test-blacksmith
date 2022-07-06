@@ -83,7 +83,7 @@ describe('hook: useZoomMeetingLink', () => {
     expect(fetcherMock).toHaveBeenCalledTimes(1)
   })
 
-  it('generates link when start time changes', async () => {
+  it('re-generates link when start time changes if there was a previous one', async () => {
     const MOCK_MEETING_URL = 'meeting-url'
     const MOCK_MEETING_ID = 'meeting-id'
     const startTime = new Date()
@@ -134,6 +134,41 @@ describe('hook: useZoomMeetingLink', () => {
           },
         },
       ])
+    })
+  })
+
+  it('does not generate a link when start time changes if there was not a previous one', async () => {
+    const MOCK_MEETING_URL = 'meeting-url'
+    const MOCK_MEETING_ID = 'meeting-id'
+    const startTime = new Date()
+
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      upsertZoomMeeting: {
+        meeting: {
+          id: MOCK_MEETING_ID,
+          joinUrl: MOCK_MEETING_URL,
+        },
+      },
+    })
+
+    useFetcherMocked.mockReturnValue(fetcherMock)
+
+    const { rerender } = renderHook<
+      {
+        startTime: Date | undefined
+      },
+      ReturnType<typeof useZoomMeetingLink>
+    >(({ startTime }) => useZoomMeetingLink(startTime), {
+      initialProps: { startTime: undefined },
+    })
+
+    act(() => {
+      rerender({ startTime })
+    })
+
+    await waitFor(() => {
+      expect(fetcherMock).toHaveBeenCalledTimes(0)
     })
   })
 })
