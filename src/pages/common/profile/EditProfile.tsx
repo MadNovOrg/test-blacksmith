@@ -4,10 +4,12 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Container,
   Grid,
+  Switch,
   TextField as MuiTextField,
   Typography,
 } from '@mui/material'
@@ -17,26 +19,37 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
 import { formatDistanceToNow, isPast } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import { uniq } from 'lodash-es'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
+import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { Dialog } from '@app/components/Dialog'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useProfileCertifications from '@app/hooks/useProfileCertifications'
+import { positions } from '@app/pages/common/CourseBooking/components/org-data'
 import ImportCertificateModal from '@app/pages/common/profile/ImportCertificateModal'
 import {
+  MUTATION as RemoveOrgMemberQuery,
+  ParamsType as RemoveOrgMemberParamsType,
+} from '@app/queries/organization/remove-org-member'
+import {
+  MUTATION as UpdateOrgMemberQuery,
+  ParamsType as UpdateOrgMemberParamsType,
+} from '@app/queries/organization/update-org-member'
+import {
   MUTATION as UPDATE_PROFILE_MUTATION,
-  ResponseType as UpdateProfileResponseType,
   ParamsType as UpdateProfileParamsType,
+  ResponseType as UpdateProfileResponseType,
 } from '@app/queries/profile/update-profile'
 import theme from '@app/theme'
-import { CourseCertificate } from '@app/types'
+import { CourseCertificate, OrganizationMember } from '@app/types'
 
 type ProfileInput = {
   firstName: string
@@ -83,6 +96,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const [disabilitiesRadioValue, setDisabilitiesRadioValue] =
     useState<DisabilitiesRadioValues | null>(null)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [orgToLeave, setOrgToLeave] = useState<OrganizationMember>()
 
   const ratherNotSayText = t<string>('rather-not-say')
 
@@ -202,7 +216,42 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
     }
   }
 
+  const allPositions = useMemo(() => {
+    return uniq([
+      ...positions.edu,
+      ...positions.hsc_child,
+      ...positions.hsc_adult,
+      ...positions.other,
+    ])
+  }, [])
+
+  const updatePosition = useCallback(
+    async (orgMember: OrganizationMember, position: string) => {
+      await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
+        id: orgMember.id,
+        member: {
+          position: position,
+        },
+      })
+      await reloadCurrentProfile()
+    },
+    [fetcher, reloadCurrentProfile]
+  )
+
+  const deleteOrgMember = useCallback(
+    async (orgMember: OrganizationMember) => {
+      await fetcher<null, RemoveOrgMemberParamsType>(RemoveOrgMemberQuery, {
+        id: orgMember.id,
+      })
+      await reloadCurrentProfile()
+      setOrgToLeave(undefined)
+    },
+    [fetcher, reloadCurrentProfile]
+  )
+
   if (!profile) return null
+
+  const orgMembers = profile.organizations as OrganizationMember[]
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
@@ -259,6 +308,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
             </Typography>
+
             <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
               <Grid container spacing={3} mb={3}>
                 <Grid item md={6}>
@@ -466,6 +516,82 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               </Grid>
             </Box>
 
+            {orgMembers.length > 0 ? (
+              <>
+                <Typography variant="subtitle2" my={2}>
+                  {t('pages.my-profile.organization-details')}
+                </Typography>
+
+                <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                  {orgMembers.map(orgMember => (
+                    <Box key={orgMember.id}>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        align-items="stretch"
+                      >
+                        <Box>
+                          <Typography variant="body1" fontWeight="600">
+                            {orgMember.organization.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            {orgMember.organization.trustName}
+                          </Typography>
+                        </Box>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => setOrgToLeave(orgMember)}
+                        >
+                          {t('common.leave')}
+                        </Button>
+                      </Grid>
+
+                      <Autocomplete
+                        value={orgMember.position}
+                        options={allPositions}
+                        onChange={(_, value) =>
+                          updatePosition(orgMember, value ?? '')
+                        }
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            fullWidth
+                            variant="standard"
+                            label={t('common.position')}
+                            inputProps={{
+                              ...params.inputProps,
+                              sx: { height: 40 },
+                            }}
+                            sx={{ bgcolor: 'grey.100', my: 2 }}
+                          />
+                        )}
+                      />
+
+                      <FormControlLabel
+                        sx={{ py: 2 }}
+                        control={
+                          <Switch
+                            checked={orgMember.isAdmin}
+                            disabled
+                            sx={{ px: 2 }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body1">
+                            {t(
+                              'pages.org-details.tabs.users.edit-user-modal.organization-admin'
+                            )}
+                          </Typography>
+                        }
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </>
+            ) : null}
+
             <Grid
               mt={3}
               container
@@ -571,6 +697,17 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           }}
         />
       </Dialog>
+
+      {orgToLeave ? (
+        <ConfirmDialog
+          open={Boolean(orgToLeave)}
+          message={t('pages.my-profile.org-leave-confirm-message', {
+            name: orgToLeave.organization.name,
+          })}
+          onCancel={() => setOrgToLeave(undefined)}
+          onOk={() => deleteOrgMember(orgToLeave)}
+        />
+      ) : null}
     </Box>
   )
 }

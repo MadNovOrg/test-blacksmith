@@ -87,7 +87,7 @@ export default function useZoomMeetingLink(startTime?: Date): {
     if (meetingUrl && startTime) {
       generateLink(true)
     }
-  }, [startTime, generateLink])
+  }, [startTime, generateLink, meetingUrl])
 
   return { meetingUrl, generateLink, status }
 }

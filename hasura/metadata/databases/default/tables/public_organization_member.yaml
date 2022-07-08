@@ -74,7 +74,20 @@ update_permissions:
         - position
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+        - position
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
 delete_permissions:
   - role: tt-admin
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id

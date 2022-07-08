@@ -4,7 +4,7 @@ export type ParamsType = {
   id: string
   member: {
     position: string | null
-    isAdmin: boolean
+    isAdmin?: boolean
   }
 }
 

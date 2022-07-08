@@ -140,6 +140,7 @@
     "back": "Back",
     "submit": "Submit",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "apply": "Apply",
     "save-changes": "Save Changes",
     "goto-tt": "Go to TeamTeach.co.uk",
@@ -334,7 +335,8 @@
     "cancel-invite": "Cancel invite",
     "invites": "Invites",
     "trust": "Trust",
-    "permissions": "Permissions"
+    "permissions": "Permissions",
+    "leave": "Leave"
   },
   "components": {
     "not-found": {
@@ -1096,7 +1098,9 @@
       "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
       "missing-details-header": "Please complete your profile by providing the following details:",
       "add-certificate": "Add certificate",
-      "user-is-not-assigned-to-org": "User is not assigned to any organisation."
+      "user-is-not-assigned-to-org": "User is not assigned to any organisation.",
+      "organization-details": "Organisation details",
+      "org-leave-confirm-message": "Are you sure you want to leave {{ name }} organisation?"
     },
     "orders": {
       "cols-createdAt": "Date",
