@@ -486,12 +486,16 @@ Object {
                     <p
                       class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-1p6lqij-MuiTypography-root"
                     >
-                      Pay by credit card
+                      Pay by credit card (Corporate Card only)
                     </p>
                     <p
                       class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                     >
-                      Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.
+                      Payment by credit card allows you to secure your registration(s) immediately.
+
+After you confirm your order you will be taken to a secure page where you can pay online with an additional charge of 1.4% + 20p per transaction.
+
+*Team Teach Limited holds no liability if a consumer card is used.
                     </p>
                   </div>
                 </span>
@@ -1346,12 +1350,16 @@ Object {
                   <p
                     class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-1p6lqij-MuiTypography-root"
                   >
-                    Pay by credit card
+                    Pay by credit card (Corporate Card only)
                   </p>
                   <p
                     class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                   >
-                    Payment by credit card allows you to secure your registration(s) immediately. After you confirm your order you will be taken to a secure page where you can pay online.
+                    Payment by credit card allows you to secure your registration(s) immediately.
+
+After you confirm your order you will be taken to a secure page where you can pay online with an additional charge of 1.4% + 20p per transaction.
+
+*Team Teach Limited holds no liability if a consumer card is used.
                   </p>
                 </div>
               </span>
