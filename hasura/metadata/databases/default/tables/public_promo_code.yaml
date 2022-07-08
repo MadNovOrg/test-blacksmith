@@ -12,8 +12,6 @@ configuration:
       custom_name: createdBy
     approved_by:
       custom_name: approvedBy
-    denied_by:
-      custom_name: deniedBy
     updated_at:
       custom_name: updatedAt
     booker_single_use:
@@ -22,16 +20,18 @@ configuration:
       custom_name: validTo
     created_at:
       custom_name: createdAt
+    denied_by:
+      custom_name: deniedBy
   custom_column_names:
     valid_from: validFrom
     uses_max: usesMax
     created_by: createdBy
     approved_by: approvedBy
-    denied_by: deniedBy
     updated_at: updatedAt
     booker_single_use: bookerSingleUse
     valid_to: validTo
     created_at: createdAt
+    denied_by: deniedBy
 object_relationships:
   - name: approver
     using:

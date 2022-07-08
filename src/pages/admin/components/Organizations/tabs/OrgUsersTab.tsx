@@ -47,6 +47,7 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
     activeCertificatesCount,
     expiredCertificatesCount,
     status,
+    mutate,
   } = useOrg(orgId ?? '')
 
   return (
@@ -132,7 +133,12 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
                 value={OrgUsersSubtabs.USERS}
                 sx={{ px: 0, pt: 0, bgcolor: 'common.white' }}
               >
-                <OrgUsersTable orgId={orgId ?? ''} />
+                <OrgUsersTable
+                  orgId={orgId ?? ''}
+                  onChange={async () => {
+                    await mutate()
+                  }}
+                />
               </TabPanel>
               <TabPanel value={OrgUsersSubtabs.INVITES} sx={{ px: 0 }}>
                 <OrgInvitesTable orgId={orgId ?? ''} />

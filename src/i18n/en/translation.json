@@ -332,7 +332,9 @@
     "edit": "Edit",
     "resend": "Resend",
     "cancel-invite": "Cancel invite",
-    "invites": "Invites"
+    "invites": "Invites",
+    "trust": "Trust",
+    "permissions": "Permissions"
   },
   "components": {
     "not-found": {
@@ -1093,7 +1095,8 @@
     "my-profile": {
       "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
       "missing-details-header": "Please complete your profile by providing the following details:",
-      "add-certificate": "Add certificate"
+      "add-certificate": "Add certificate",
+      "user-is-not-assigned-to-org": "User is not assigned to any organisation."
     },
     "orders": {
       "cols-createdAt": "Date",
@@ -1194,6 +1197,13 @@
             "pending": "Pending",
             "accepted": "Accepted",
             "declined": "Declined"
+          },
+          "edit-user-modal": {
+            "title": "Modify permissions for {{name}}",
+            "modification-info": "Modifications will go into effect immediately.",
+            "remove-from-organization": "Remove from organisation",
+            "organization-admin": "Organisation admin",
+            "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user."
           }
         }
       },

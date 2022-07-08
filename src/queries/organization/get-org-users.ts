@@ -1,11 +1,11 @@
 import { gql } from 'graphql-request'
 
-import { Profile } from '@app/types'
+import { OrganizationMember, Profile } from '@app/types'
 
 import { PROFILE } from '../fragments'
 
 export type ResponseType = {
-  users: {
+  users: (OrganizationMember & {
     profile: Profile & {
       activeCertificates: {
         aggregate: {
@@ -13,8 +13,7 @@ export type ResponseType = {
         }
       }
     }
-    isAdmin: boolean
-  }[]
+  })[]
   total: {
     aggregate: {
       count: number
@@ -53,7 +52,9 @@ export const QUERY = gql`
           }
         }
       }
+      id
       isAdmin
+      position
     }
     total: organization_member_aggregate(
       where: { organization_id: { _eq: $orgId } }

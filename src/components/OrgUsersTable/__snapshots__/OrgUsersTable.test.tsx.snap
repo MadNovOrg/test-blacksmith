@@ -138,7 +138,14 @@ Object {
               <td
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
-                Given name 1 Family name 1
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+                >
+                  Given name 1 Family name 1
+                </p>
+                <span
+                  class="MuiTypography-root MuiTypography-caption css-1ok7n1e-MuiTypography-root"
+                />
               </td>
               <td
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeMedium css-1keuljv-MuiTableCell-root"
@@ -200,7 +207,14 @@ Object {
               <td
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
-                Given name 2 Family name 2
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+                >
+                  Given name 2 Family name 2
+                </p>
+                <span
+                  class="MuiTypography-root MuiTypography-caption css-1ok7n1e-MuiTypography-root"
+                />
               </td>
               <td
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeMedium css-1keuljv-MuiTableCell-root"
@@ -494,7 +508,14 @@ Object {
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
-              Given name 1 Family name 1
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+              >
+                Given name 1 Family name 1
+              </p>
+              <span
+                class="MuiTypography-root MuiTypography-caption css-1ok7n1e-MuiTypography-root"
+              />
             </td>
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeMedium css-1keuljv-MuiTableCell-root"
@@ -556,7 +577,14 @@ Object {
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
-              Given name 2 Family name 2
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-bvjatk-MuiTypography-root"
+              >
+                Given name 2 Family name 2
+              </p>
+              <span
+                class="MuiTypography-root MuiTypography-caption css-1ok7n1e-MuiTypography-root"
+              />
             </td>
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-alignCenter MuiTableCell-sizeMedium css-1keuljv-MuiTableCell-root"

@@ -33,6 +33,9 @@ export const PROFILE = gql`
     dietaryRestrictions
     disabilities
     organizations {
+      id
+      isAdmin
+      position
       organization {
         ...Organization
       }

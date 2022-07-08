@@ -1,9 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close'
 import {
-  IconButton,
   Dialog as MUIDialog,
-  DialogTitle,
   DialogContent,
+  DialogTitle,
+  IconButton,
 } from '@mui/material'
 import React from 'react'
 
@@ -11,6 +11,7 @@ type Props = {
   id?: string
   open: boolean
   title?: string | React.ReactNode
+  subtitle?: string | React.ReactNode
   showClose?: boolean
   onClose: () => void
   maxWidth?: number
@@ -20,6 +21,7 @@ export const Dialog: React.FC<Props> = ({
   id,
   open,
   title,
+  subtitle,
   showClose = true,
   onClose,
   children,
@@ -35,7 +37,11 @@ export const Dialog: React.FC<Props> = ({
           alignItems: 'center',
         }}
       >
-        <div>{title ?? null}</div>
+        <div>
+          <div>{title ?? null}</div>
+          {subtitle ? <div>{subtitle}</div> : null}
+        </div>
+
         {showClose ? (
           <IconButton
             data-testid={id ? `dialog-${id}-close` : 'dialog-close'}

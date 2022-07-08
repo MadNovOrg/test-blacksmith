@@ -96,6 +96,13 @@ export type Organization = {
   trustType: TrustType
 } & Base
 
+export type OrganizationMember = {
+  isAdmin: boolean
+  position?: string
+  profile: Profile
+  organization: Organization
+} & Base
+
 export type OrganizationInvite = {
   email: string
   status: InviteStatus

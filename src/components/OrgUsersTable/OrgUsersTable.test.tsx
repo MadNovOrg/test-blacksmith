@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { OrgUsersTable } from '@app/components/OrgUsersTable/index'
 import { useOrgUsers } from '@app/hooks/useOrgUsers'
+import { Organization } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render } from '@test/index'
@@ -20,6 +21,10 @@ describe('OrgUsersTable', () => {
     error: undefined,
     users: [
       {
+        id: '1',
+        isAdmin: false,
+        createdAt: new Date('2022-04-10T10:00:00').toISOString(),
+        updatedAt: new Date('2022-04-10T10:00:00').toISOString(),
         profile: {
           id: '1',
           createdAt: new Date('2022-04-10T10:00:00').toISOString(),
@@ -48,9 +53,13 @@ describe('OrgUsersTable', () => {
             },
           },
         },
-        isAdmin: false,
+        organization: {} as Organization,
       },
       {
+        id: '2',
+        isAdmin: true,
+        createdAt: new Date('2022-04-10T10:00:00').toISOString(),
+        updatedAt: new Date('2022-04-10T10:00:00').toISOString(),
         profile: {
           id: '2',
           createdAt: new Date('2022-04-10T10:00:00').toISOString(),
@@ -79,7 +88,7 @@ describe('OrgUsersTable', () => {
             },
           },
         },
-        isAdmin: true,
+        organization: {} as Organization,
       },
     ],
   })

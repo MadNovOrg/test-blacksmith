@@ -25,7 +25,7 @@ import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import useProfileCertifications from '@app/hooks/useProfileCertifications'
-import { CourseCertificate } from '@app/types'
+import { CourseCertificate, OrganizationMember } from '@app/types'
 
 type MyProfilePageProps = unknown
 
@@ -41,6 +41,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
 
   const certificateExpired = (expiryDate: string) =>
     isPast(new Date(expiryDate))
+
+  const orgMembers = profile.organizations as OrganizationMember[]
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
@@ -133,14 +135,71 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('org-details')}
             </Typography>
-            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-              <DetailsRow
-                label={t('org-name')}
-                value={profile.organizations
-                  .map(o => o.organization.name)
-                  .join(', ')}
-              />
-            </Box>
+            <Table sx={{ mt: 1 }}>
+              <TableHead>
+                <TableRow
+                  sx={{
+                    '&&.MuiTableRow-root': {
+                      backgroundColor: 'grey.300',
+                    },
+                    '&& .MuiTableCell-root': {
+                      px: 2,
+                      py: 1,
+                      color: 'grey.700',
+                      fontWeight: '600',
+                    },
+                  }}
+                >
+                  <TableCell>{t('organization')}</TableCell>
+                  <TableCell>{t('trust')}</TableCell>
+                  <TableCell>{t('position')}</TableCell>
+                  <TableCell>{t('permissions')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {orgMembers?.length ? (
+                  orgMembers.map(orgMember => (
+                    <TableRow
+                      key={orgMember.id}
+                      sx={{
+                        '&&.MuiTableRow-root': {
+                          backgroundColor: 'common.white',
+                        },
+                      }}
+                    >
+                      <TableCell>{orgMember.organization?.name}</TableCell>
+                      <TableCell>{orgMember.organization?.trustName}</TableCell>
+                      <TableCell>{orgMember.position}</TableCell>
+                      <TableCell>
+                        <Chip
+                          label={
+                            orgMember.isAdmin
+                              ? t(
+                                  'pages.org-details.tabs.users.organization-admin'
+                                )
+                              : t('pages.org-details.tabs.users.no-permissions')
+                          }
+                          color={orgMember.isAdmin ? 'success' : 'secondary'}
+                          size="small"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow
+                    sx={{
+                      '&&.MuiTableRow-root': {
+                        backgroundColor: 'common.white',
+                      },
+                    }}
+                  >
+                    <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
+                      {t('pages.my-profile.user-is-not-assigned-to-org')}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
 
             {verified && (
               <>
