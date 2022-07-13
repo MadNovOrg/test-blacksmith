@@ -314,7 +314,24 @@
     "this-course": "this course",
     "join-zoom": "Join via Zoom",
     "filters": {
-      "date-range": "Filter by Date"
+      "date-range": "Filter by Date",
+      "payment-method": "Payment Method",
+      "status": "Status",
+      "currency": "Currency",
+      "CC": "Credit card",
+      "INVOICE": "Invoice",
+      "UNKNOWN": "Unknown",
+      "DRAFT": "Awating Payment",
+      "SUBMITTED": "Awating Payment",
+      "DELETED": "Deleted",
+      "AUTHORISED": "Awating Payment",
+      "PAID": "Paid",
+      "VOIDED": "Void",
+      "OVERDUE": "Overdue",
+      "GBP": "GBP"
+    },
+    "pagination": {
+      "rows-per-page": "Rows per page"
     },
     "submit-form": "Submit form",
     "full-name": "Full name",
@@ -1103,14 +1120,18 @@
       "org-leave-confirm-message": "Are you sure you want to leave {{ name }} organisation?"
     },
     "orders": {
-      "cols-createdAt": "Date",
-      "cols-organization": "Organisation",
-      "cols-course": "Course",
-      "cols-orderTotal": "Total",
-      "cols-paymentMethod": "Pay by",
+      "cols-invoiceNumber": "Invoice no.",
+      "cols-billTo": "Organisation",
+      "cols-paymentMethod": "Payment Method",
+      "cols-amount": "Amount",
+      "cols-due": "Due",
+      "cols-dueDate": "Due Date",
+      "cols-status": "Status",
       "paymentMethod-INVOICE": "Invoice",
       "paymentMethod-CC": "Credit Card",
-      "qty": "Participants"
+      "qty": "Participants",
+      "export-selected": "Export selected",
+      "export-whole-page": "Export whole page"
     },
     "hs-form": {
       "back-to-checklist": "Back to checklist",

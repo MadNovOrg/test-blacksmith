@@ -481,10 +481,21 @@ export type Order = {
   registrants: string[]
   paymentMethod: PaymentMethod
   orderTotal: number
+  orderDue: number
   currency: Currency | null
   stripePaymentId: string | null
   course: Partial<Course>
   organization: Partial<Organization>
+  promoCodes?: string[]
+}
+
+export enum OrderStatus {
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED',
+  DELETED = 'DELETED',
+  AUTHORISED = 'AUTHORISED',
+  PAID = 'PAID',
+  VOIDED = 'VOIDED',
 }
 
 export enum Currency {

@@ -13,7 +13,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type UsePromoCodesProps = {
   sort: { by: string; dir: SortOrder }
-  filters: { from?: Date; to?: Date; type?: string[]; code?: string }
+  filters: { from?: Date; to?: Date; type?: string[]; code?: string | string[] }
   limit: number
   offset: number
 }
@@ -42,8 +42,16 @@ export const usePromoCodes = ({
   }, [filters.type])
 
   const codeWhere = useMemo(() => {
-    const query = (filters.code ?? '').trim()
-    return query.length ? { code: { _ilike: `%${query}%` } } : {}
+    if (filters.code && typeof filters.code === 'string') {
+      const query = (filters.code ?? '').trim()
+      return query.length ? { code: { _ilike: `%${query}%` } } : {}
+    } else if (
+      filters.code &&
+      typeof filters.code === 'object' &&
+      filters.code.length > 0
+    ) {
+      return { code: { _in: filters.code } }
+    }
   }, [filters.code])
 
   const { data, error } = useSWR<ResponseType, Error, [string, InputType]>([

@@ -123,6 +123,12 @@ type Mutation {
   xeroDisconnect: XeroDisconnectOutput
 }
 
+type Query {
+  xeroInvoicesStatus(
+    input: XeroInvoicesStatusInput!
+  ): XeroInvoicesStatusOutput
+}
+
 enum BillingInterval {
   day
   week
@@ -178,6 +184,15 @@ enum CourseType {
   OPEN
   CLOSED
   INDIRECT
+}
+
+enum XeroInvoiceStatus {
+  DRAFT
+  SUBMITTED
+  DELETED
+  AUTHORISED
+  PAID
+  VOIDED
 }
 
 input PlansCreateInput {
@@ -251,6 +266,12 @@ input CreateAppUserInput {
 
 input GetCoursePricingInput {
   courseId: Int!
+}
+
+input XeroInvoicesStatusInput {
+  orderIds: [String]!
+  idContains: String
+  statuses: [XeroInvoiceStatus]
 }
 
 type LinkProfileResult {
@@ -439,6 +460,15 @@ type GetCoursePricingOutput {
   priceAmount: Float!
   priceCurrency: Currency!
   xeroCode: String!
+}
+
+type XeroInvoicesStatusOutput {
+  invoices: [XeroInvoiceStatusKV]!
+}
+
+type XeroInvoiceStatusKV {
+  orderId: String!
+  status: XeroInvoiceStatus!
 }
 
 type XeroDisconnectOutput {

@@ -13,6 +13,7 @@ export const QUERY = gql`
       quantity
       registrants
       paymentMethod
+      orderDue
       orderTotal
       currency
       stripePaymentId

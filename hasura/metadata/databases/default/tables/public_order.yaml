@@ -12,6 +12,8 @@ configuration:
       custom_name: paymentMethod
     billing_address:
       custom_name: billingAddress
+    order_due:
+      custom_name: orderDue
     promo_codes:
       custom_name: promoCodes
     organization_id:
@@ -33,6 +35,7 @@ configuration:
     billing_family_name: billingFamilyName
     payment_method: paymentMethod
     billing_address: billingAddress
+    order_due: orderDue
     promo_codes: promoCodes
     organization_id: organizationId
     billing_given_name: billingGivenName
@@ -88,29 +91,56 @@ insert_permissions:
         - registrants
       backend_only: false
 select_permissions:
-  - role: tt-ops
+  - role: tt-admin
     permission:
       columns:
-        - order_total
-        - price
-        - vat
-        - course_id
-        - quantity
-        - promo_codes
-        - registrants
         - billing_address
         - billing_email
         - billing_family_name
         - billing_given_name
         - billing_phone
-        - currency
-        - payment_method
-        - stripePaymentId
+        - course_id
         - created_at
+        - currency
         - id
+        - order_due
+        - order_total
         - organization_id
+        - payment_method
+        - price
         - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - vat
       filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - order_due
+        - order_total
+        - organization_id
+        - payment_method
+        - price
+        - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - vat
+      filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:

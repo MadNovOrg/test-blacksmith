@@ -145,6 +145,12 @@ actions:
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/xero/disconnect'
+  - name: xeroInvoicesStatus
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices/status'
+    permissions:
+      - role: tt-admin
 custom_types:
   enums:
     - name: BillingInterval
@@ -255,6 +261,26 @@ custom_types:
         - value: INDIRECT
           is_deprecated: null
           description: null
+    - name: XeroInvoiceStatus
+      values:
+        - value: DRAFT
+          is_deprecated: null
+          description: null
+        - value: SUBMITTED
+          is_deprecated: null
+          description: null
+        - value: DELETED
+          is_deprecated: null
+          description: null
+        - value: AUTHORISED
+          is_deprecated: null
+          description: null
+        - value: PAID
+          is_deprecated: null
+          description: null
+        - value: VOIDED
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -268,6 +294,7 @@ custom_types:
     - name: XeroContactSearchInput
     - name: CreateAppUserInput
     - name: GetCoursePricingInput
+    - name: XeroInvoicesStatusInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -299,5 +326,7 @@ custom_types:
     - name: CreateUserOutput
     - name: InitAuthOutput
     - name: GetCoursePricingOutput
+    - name: XeroInvoicesStatusOutput
+    - name: XeroInvoiceStatusKV
     - name: XeroDisconnectOutput
   scalars: []

@@ -11022,7 +11022,6 @@ export type VideoSeriesItem_Youtube = AcfFieldGroup & {
   duration?: Maybe<Scalars['Float']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
-  test?: Maybe<MediaItem>;
   /** A link to the YouTube video */
   url?: Maybe<Scalars['String']>;
 };
@@ -11343,7 +11342,6 @@ export type Webinar_Youtube = AcfFieldGroup & {
   duration?: Maybe<Scalars['Float']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
-  test?: Maybe<MediaItem>;
   /** A link to the YouTube video */
   url?: Maybe<Scalars['String']>;
 };
@@ -11639,6 +11637,32 @@ export enum XeroContactStatus {
 export type XeroDisconnectOutput = {
   __typename?: 'XeroDisconnectOutput';
   connected: Scalars['Boolean'];
+};
+
+export enum XeroInvoiceStatus {
+  Authorised = 'AUTHORISED',
+  Deleted = 'DELETED',
+  Draft = 'DRAFT',
+  Paid = 'PAID',
+  Submitted = 'SUBMITTED',
+  Voided = 'VOIDED'
+}
+
+export type XeroInvoiceStatusKv = {
+  __typename?: 'XeroInvoiceStatusKV';
+  orderId: Scalars['String'];
+  status: XeroInvoiceStatus;
+};
+
+export type XeroInvoicesStatusInput = {
+  idContains?: InputMaybe<Scalars['String']>;
+  orderIds: Array<InputMaybe<Scalars['String']>>;
+  statuses?: InputMaybe<Array<InputMaybe<XeroInvoiceStatus>>>;
+};
+
+export type XeroInvoicesStatusOutput = {
+  __typename?: 'XeroInvoicesStatusOutput';
+  invoices: Array<Maybe<XeroInvoiceStatusKv>>;
 };
 
 export type XeroPhone = {
@@ -21168,6 +21192,7 @@ export type Order = {
   createdAt: Scalars['timestamptz'];
   currency?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
+  orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   /** An object relationship */
   organization: Organization;
@@ -21233,6 +21258,7 @@ export type Order_Append_Input = {
 export type Order_Avg_Fields = {
   __typename?: 'order_avg_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21254,6 +21280,7 @@ export type Order_Bool_Exp = {
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   currency?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  orderDue?: InputMaybe<Float8_Comparison_Exp>;
   orderTotal?: InputMaybe<Float8_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   organizationId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -21307,6 +21334,7 @@ export type Order_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "order" */
 export type Order_Inc_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   price?: InputMaybe<Scalars['float8']>;
   quantity?: InputMaybe<Scalars['Int']>;
@@ -21325,6 +21353,7 @@ export type Order_Insert_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organizationId?: InputMaybe<Scalars['uuid']>;
@@ -21350,6 +21379,7 @@ export type Order_Max_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
+  orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
@@ -21371,6 +21401,7 @@ export type Order_Min_Fields = {
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
+  orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   organizationId?: Maybe<Scalars['uuid']>;
   price?: Maybe<Scalars['float8']>;
@@ -21408,6 +21439,7 @@ export type Order_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   currency?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
   organizationId?: InputMaybe<Order_By>;
@@ -21452,6 +21484,8 @@ export enum Order_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
   OrderTotal = 'orderTotal',
   /** column name */
   OrganizationId = 'organizationId',
@@ -21484,6 +21518,7 @@ export type Order_Set_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   organizationId?: InputMaybe<Scalars['uuid']>;
   paymentMethod?: InputMaybe<Payment_Methods_Enum>;
@@ -21500,6 +21535,7 @@ export type Order_Set_Input = {
 export type Order_Stddev_Fields = {
   __typename?: 'order_stddev_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21510,6 +21546,7 @@ export type Order_Stddev_Fields = {
 export type Order_Stddev_Pop_Fields = {
   __typename?: 'order_stddev_pop_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21520,6 +21557,7 @@ export type Order_Stddev_Pop_Fields = {
 export type Order_Stddev_Samp_Fields = {
   __typename?: 'order_stddev_samp_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21530,6 +21568,7 @@ export type Order_Stddev_Samp_Fields = {
 export type Order_Sum_Fields = {
   __typename?: 'order_sum_fields';
   courseId?: Maybe<Scalars['Int']>;
+  orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   price?: Maybe<Scalars['float8']>;
   quantity?: Maybe<Scalars['Int']>;
@@ -21557,6 +21596,8 @@ export enum Order_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
   OrderTotal = 'orderTotal',
   /** column name */
   OrganizationId = 'organizationId',
@@ -21582,6 +21623,7 @@ export enum Order_Update_Column {
 export type Order_Var_Pop_Fields = {
   __typename?: 'order_var_pop_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21592,6 +21634,7 @@ export type Order_Var_Pop_Fields = {
 export type Order_Var_Samp_Fields = {
   __typename?: 'order_var_samp_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -21602,6 +21645,7 @@ export type Order_Var_Samp_Fields = {
 export type Order_Variance_Fields = {
   __typename?: 'order_variance_fields';
   courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
@@ -24804,6 +24848,7 @@ export type Query_Root = {
   waitlist_by_pk?: Maybe<Waitlist>;
   xeroConnect?: Maybe<XeroConnectOutput>;
   xeroContactSearch?: Maybe<XeroContactSearchOutput>;
+  xeroInvoicesStatus?: Maybe<XeroInvoicesStatusOutput>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
@@ -25903,6 +25948,11 @@ export type Query_RootWaitlist_By_PkArgs = {
 
 export type Query_RootXeroContactSearchArgs = {
   input: XeroContactSearchInput;
+};
+
+
+export type Query_RootXeroInvoicesStatusArgs = {
+  input: XeroInvoicesStatusInput;
 };
 
 
@@ -28341,22 +28391,6 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }> } | null };
 
-export type ApproveCodeMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  approvedBy?: InputMaybe<Scalars['uuid']>;
-}>;
-
-
-export type ApproveCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
-
-export type DenyCodeMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  deniedBy?: InputMaybe<Scalars['uuid']>;
-}>;
-
-
-export type DenyCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
-
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -28907,15 +28941,17 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null } | null };
 
 export type GetOrdersQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
   where?: InputMaybe<Order_Bool_Exp>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, course: { __typename?: 'course', name: string }, organization: { __typename?: 'organization', name: string } }> };
+export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type InsertOrderMutationVariables = Exact<{
   input: Order_Insert_Input;
@@ -28959,8 +28995,8 @@ export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ _
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
   address: Scalars['jsonb'];
-  attributes?: InputMaybe<Scalars['jsonb']>;
   xeroId?: InputMaybe<Scalars['String']>;
+  invites?: InputMaybe<Array<Organization_Invites_Insert_Input> | Organization_Invites_Insert_Input>;
 }>;
 
 
@@ -29047,6 +29083,22 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'mutation_root', updated?: { __typename?: 'profile', id: any } | null };
 
+export type ApproveCodeMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  approvedBy?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type ApproveCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
+export type DenyCodeMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  deniedBy?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type DenyCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
 export type GetPromoCodesPendingApprovalQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -29060,7 +29112,7 @@ export type GetPromoCodesQueryVariables = Exact<{
 }>;
 
 
-export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
 
 export type InsertPromoCodeMutationVariables = Exact<{
   promoCode: Promo_Code_Insert_Input;
@@ -29131,6 +29183,13 @@ export type InsertVenueMutationVariables = Exact<{
 
 
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
+
+export type GetXeroInvoicesStatusQueryVariables = Exact<{
+  input: XeroInvoicesStatusInput;
+}>;
+
+
+export type GetXeroInvoicesStatusQuery = { __typename?: 'query_root', xeroInvoicesStatus?: { __typename?: 'XeroInvoicesStatusOutput', invoices: Array<{ __typename?: 'XeroInvoiceStatusKV', orderId: string, status: XeroInvoiceStatus } | null> } | null };
 
 export type SearchXeroContactsQueryVariables = Exact<{
   input: XeroContactSearchInput;

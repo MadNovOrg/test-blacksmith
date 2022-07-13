@@ -1,24 +1,45 @@
 import { gql } from 'graphql-request'
 
-import { Order, SortOrder } from '@app/types'
+import { Order, Course, Currency, SortOrder, PaymentMethod } from '@app/types'
 
 export const QUERY = gql`
-  query GetOrders($orderBy: [order_order_by!], $where: order_bool_exp) {
-    orders: order(order_by: $orderBy, where: $where) {
+  query GetOrders(
+    $orderBy: [order_order_by!]
+    $where: order_bool_exp
+    $limit: Int = 20
+    $offset: Int = 0
+  ) {
+    orders: order(
+      order_by: $orderBy
+      where: $where
+      limit: $limit
+      offset: $offset
+    ) {
       id
       createdAt
       profileId
       quantity
       registrants
       paymentMethod
+      orderDue
       orderTotal
       currency
       stripePaymentId
       course {
         name
+        schedule {
+          start
+        }
       }
       organization {
         name
+      }
+      promoCodes
+    }
+
+    order_aggregate {
+      aggregate {
+        count
       }
     }
   }
@@ -30,8 +51,12 @@ export type InputType = {
     orderTotal?: SortOrder
   }
   where?: {
-    createdAt?: { _gte?: Date; _lte?: Date }
+    currency?: Currency[]
+    paymentMethod?: PaymentMethod[]
+    course?: { name_contains: string }
   }
+  limit?: number
+  offset?: number
 }
 
 export type ResponseType = {
@@ -44,12 +69,21 @@ export type ResponseType = {
       | 'quantity'
       | 'registrants'
       | 'paymentMethod'
+      | 'orderDue'
       | 'orderTotal'
       | 'currency'
       | 'stripePaymentId'
+      | 'promoCodes'
     > & {
-      course: Pick<Order['course'], 'name'>
-      organizations: Pick<Order['organization'], 'name'>
+      course: Pick<Order['course'], 'name'> & {
+        schedule: Pick<Course['schedule'][number], 'start'>
+      }
+      organization: Pick<Order['organization'], 'name'>
     }
   >
+  order_aggregate: {
+    aggregate: {
+      count: number
+    }
+  }
 }
