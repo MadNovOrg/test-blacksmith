@@ -344,3 +344,17 @@ export const WebinarSummary = gql`
     }
   }
 `
+
+export const Waitlist = gql`
+  fragment WaitlistSummary on waitlist {
+    id
+    email
+    phone
+    orgName
+    courseId
+    confirmed
+    createdAt
+    givenName
+    familyName
+  }
+`

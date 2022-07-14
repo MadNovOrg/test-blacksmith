@@ -828,6 +828,12 @@
         },
         "certifications": {
           "title": "Certifications"
+        },
+        "waitlist": {
+          "waitlist": "Waitlist",
+          "name": "Name",
+          "contact": "Contact",
+          "joined": "Joined"
         }
       }
     },
@@ -881,7 +887,8 @@
       "tabs": {
         "attending": "Attending ({{number}})",
         "pending": "Pending ({{number}})",
-        "declined": "Declined ({{number}})"
+        "declined": "Declined ({{number}})",
+        "waitlist": "Waitlist ({{number}})"
       },
       "resend-invite": "Resend invite",
       "invite-sent": "Invite sent."

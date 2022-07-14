@@ -15,6 +15,7 @@ import {
   TagSummaryFragment,
   VideoItemSummaryFragment,
   WebinarSummaryFragment,
+  WaitlistSummaryFragment,
 } from '@app/generated/graphql'
 import {
   Address,
@@ -174,7 +175,7 @@ export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
 
 export const buildCourse = build<Course>({
   fields: {
-    id: fake(f => f.datatype.uuid()),
+    id: fake(f => f.datatype.number({ min: 10000, max: 10999 })),
     name: fake(f => f.random.words(3)),
     status: '',
     createdAt: new Date().toISOString(),
@@ -453,6 +454,20 @@ export const buildWebinar = build<WebinarSummaryFragment>({
       url: fake(f => f.internet.url()),
     },
     date: fake(f => f.date.past().toISOString()),
+  },
+})
+
+export const buildWaitlistEntry = build<WaitlistSummaryFragment>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    email: fake(f => f.internet.email()),
+    phone: fake(f => f.phone.phoneNumber()),
+    orgName: fake(f => f.lorem.words(2)),
+    courseId: fake(f => f.datatype.number({ min: 10000, max: 10999 })),
+    confirmed: fake(() => true),
+    createdAt: fake(f => f.date.past().toISOString()),
+    givenName: fake(f => f.random.word()),
+    familyName: fake(f => f.random.word()),
   },
 })
 

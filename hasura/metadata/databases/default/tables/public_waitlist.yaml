@@ -34,6 +34,49 @@ insert_permissions:
         - org_name
         - phone
       backend_only: false
+select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - confirmed
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - created_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - confirmed
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - created_at
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - confirmed
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - created_at
+        - id
+      filter: {}
+      allow_aggregations: true
 event_triggers:
   - name: waitlist_joined
     definition:

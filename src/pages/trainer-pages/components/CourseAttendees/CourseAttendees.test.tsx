@@ -3,21 +3,35 @@ import React from 'react'
 
 import useCourse from '@app/hooks/useCourse'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { useWaitlist } from '@app/hooks/useWaitlist'
 import { Course, CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
-import { buildCourse, buildParticipant } from '@test/mock-data-utils'
+import {
+  buildCourse,
+  buildParticipant,
+  buildWaitlistEntry,
+} from '@test/mock-data-utils'
 
 import { CourseAttendees } from '.'
 
 jest.mock('@app/hooks/useCourse')
+jest.mock('@app/hooks/useWaitlist')
 jest.mock('@app/hooks/useCourseParticipants')
 
 const useCourseMock = useCourse as jest.MockedFunction<typeof useCourse>
+const useWaitlistMock = useWaitlist as jest.MockedFunction<typeof useWaitlist>
 const useCourseParticipantsMock = useCourseParticipants as jest.MockedFunction<
   typeof useCourseParticipants
 >
+
+const emptyWaitlistResponse = {
+  data: [],
+  isLoading: false,
+  total: 0,
+  error: undefined,
+}
 
 describe('component: CourseAttendees', () => {
   let course: Course
@@ -33,6 +47,8 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: course,
     })
+
+    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.FETCHING,
@@ -57,6 +73,8 @@ describe('component: CourseAttendees', () => {
       data: participants,
       total: participants.length,
     })
+
+    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -96,6 +114,8 @@ describe('component: CourseAttendees', () => {
       total: participants.length,
     })
 
+    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
@@ -123,6 +143,8 @@ describe('component: CourseAttendees', () => {
       data: participants,
       total: 15,
     })
+
+    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -161,6 +183,8 @@ describe('component: CourseAttendees', () => {
       total: 15,
     })
 
+    useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
@@ -185,5 +209,81 @@ describe('component: CourseAttendees', () => {
         sortBy: 'name',
       },
     ])
+  })
+
+  it('displays course waitlist', () => {
+    const waitlist = [
+      buildWaitlistEntry(),
+      buildWaitlistEntry(),
+      buildWaitlistEntry(),
+    ]
+
+    const participants = [
+      buildParticipant(),
+      buildParticipant(),
+      buildParticipant(),
+    ]
+
+    useCourseParticipantsMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      total: 3,
+    })
+
+    useWaitlistMock.mockReturnValue({
+      data: waitlist,
+      isLoading: false,
+      total: waitlist.length,
+      error: undefined,
+    })
+
+    useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
+      status: LoadingStatus.SUCCESS,
+      data: course,
+    })
+
+    render(<CourseAttendees course={course} />)
+
+    useCourseParticipantsMock.mockClear()
+    useWaitlistMock.mockClear()
+
+    userEvent.click(screen.getByText('Waitlist (3)'))
+
+    expect(useWaitlistMock).toHaveBeenCalledTimes(2)
+    expect(useWaitlistMock.mock.calls[0]).toMatchObject([
+      {
+        courseId: 0,
+        sort: { by: 'createdAt', dir: 'asc' },
+      },
+    ])
+    expect(useWaitlistMock.mock.calls[1]).toMatchObject([
+      {
+        courseId: course.id,
+        sort: { by: 'createdAt', dir: 'asc' },
+        limit: 12,
+        offset: 0,
+      },
+    ])
+
+    expect(screen.getByTestId('waitlist-table')).toBeInTheDocument()
+
+    for (const entry of waitlist) {
+      const row = screen.getByTestId(`waitlist-entry-${entry.id}`)
+
+      expect(row).toBeInTheDocument()
+      expect(
+        within(row).getByText(entry.givenName, { exact: false })
+      ).toBeInTheDocument()
+      expect(
+        within(row).getByText(entry.familyName, { exact: false })
+      ).toBeInTheDocument()
+      expect(
+        within(row).getByText(entry.email, { exact: false })
+      ).toBeInTheDocument()
+      expect(
+        within(row).getByText(entry.phone, { exact: false })
+      ).toBeInTheDocument()
+    }
   })
 })

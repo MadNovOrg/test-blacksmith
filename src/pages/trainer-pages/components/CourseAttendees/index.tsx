@@ -14,8 +14,10 @@ import { useParams } from 'react-router-dom'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { useWaitlist } from '@app/hooks/useWaitlist'
 import { AttendingTab } from '@app/pages/trainer-pages/components/CourseAttendees/AttendingTab'
 import { InvitesTab } from '@app/pages/trainer-pages/components/CourseAttendees/InvitesTab'
+import { WaitlistTab } from '@app/pages/trainer-pages/components/CourseAttendees/WaitlistTab'
 import { Course, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
@@ -44,6 +46,10 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
     courseId ?? '',
     InviteStatus.DECLINED
   )
+  const { total: waitlistTotal } = useWaitlist({
+    courseId: Number(courseId ?? 0),
+    sort: { by: 'createdAt', dir: 'asc' },
+  })
 
   return (
     <Container disableGutters>
@@ -108,6 +114,13 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
                 value="2"
                 data-testid="tabDeclined"
               />
+              <Tab
+                label={t('pages.course-participants.tabs.waitlist', {
+                  number: waitlistTotal,
+                })}
+                value="3"
+                data-testid="tabWaitlist"
+              />
             </TabList>
 
             <TabPanel value="0" sx={{ px: 0 }}>
@@ -121,6 +134,9 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
                 course={course}
                 inviteStatus={InviteStatus.DECLINED}
               />
+            </TabPanel>
+            <TabPanel value="3" sx={{ px: 0 }}>
+              <WaitlistTab course={course} />
             </TabPanel>
           </TabContext>
         </>
