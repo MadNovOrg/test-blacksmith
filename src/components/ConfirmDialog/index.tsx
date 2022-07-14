@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,6 +12,7 @@ export type ConfirmDialogProps = {
   cancelLabel?: string
   onOk: () => void
   onCancel: () => void
+  'data-testid'?: string
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = function ({
@@ -22,42 +23,35 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = function ({
   cancelLabel,
   onOk,
   onCancel,
+  'data-testid': testId = 'ConfirmDialog',
 }) {
   const { t } = useTranslation()
 
   return (
-    <Dialog open={open} onClose={onCancel} title={title}>
-      <Container>
-        {message}
+    <Dialog open={open} onClose={onCancel} title={title} data-testid={testId}>
+      {message}
 
-        <Grid
-          container
-          display="flex"
-          justifyContent="space-between"
-          gap={2}
-          mt={2}
+      <Grid container display="flex" justifyContent="flex-end" gap={2} mt={2}>
+        <Button
+          type="button"
+          variant="text"
+          color="secondary"
+          size="large"
+          onClick={onCancel}
+          sx={{ mr: 2 }}
         >
-          <Button
-            type="button"
-            variant="text"
-            color="secondary"
-            size="large"
-            onClick={onCancel}
-            sx={{ mr: 2 }}
-          >
-            {cancelLabel ?? t('common.cancel')}
-          </Button>
-          <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={onOk}
-          >
-            {okLabel ?? t('common.confirm')}
-          </Button>
-        </Grid>
-      </Container>
+          {cancelLabel ?? t('common.cancel')}
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={onOk}
+        >
+          {okLabel ?? t('common.confirm')}
+        </Button>
+      </Grid>
     </Dialog>
   )
 }

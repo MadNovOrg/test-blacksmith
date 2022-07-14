@@ -15,6 +15,7 @@ type Props = {
   showClose?: boolean
   onClose: () => void
   maxWidth?: number
+  'data-testid'?: string
 }
 
 export const Dialog: React.FC<Props> = ({
@@ -26,9 +27,15 @@ export const Dialog: React.FC<Props> = ({
   onClose,
   children,
   maxWidth = 500,
+  'data-testid': testId,
 }) => {
   return (
-    <MUIDialog open={open} maxWidth={false} onClose={onClose}>
+    <MUIDialog
+      open={open}
+      maxWidth={false}
+      onClose={onClose}
+      data-testid={testId}
+    >
       <DialogTitle
         sx={{
           maxWidth,

@@ -18,6 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
+import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import ProgressBar from '@app/components/ProgressBar'
 import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -71,12 +72,16 @@ const MAX_COURSE_DURATION_MAP = {
   },
 }
 
+const MIN_DURATION_FOR_TIME_COMMITMENT = 6
+
 export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const theme = useTheme()
+
+  const [displayTimeModal, setDisplayTimeModal] = useState(false)
 
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
@@ -127,6 +132,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       0
     )
   }, [courseModuleSlots, mandatoryModules])
+
+  const estimatedDurationInHours = Math.ceil(estimatedCourseDuration / 60)
 
   const maxDuration = useMemo(() => {
     const course = courseData?.course
@@ -290,7 +297,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     ]
   )
 
-  const onCourseSubmit = async () => {
+  const submitCourse = async () => {
     if (courseData?.course) {
       setSubmitError(undefined)
       try {
@@ -302,6 +309,14 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       } catch (e: unknown) {
         setSubmitError((e as Error).message)
       }
+    }
+  }
+
+  const onCourseSubmit = () => {
+    if (estimatedDurationInHours >= MIN_DURATION_FOR_TIME_COMMITMENT) {
+      setDisplayTimeModal(true)
+    } else {
+      submitCourse()
     }
   }
 
@@ -357,264 +372,286 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   }
 
   return (
-    <DragDropContext onDragEnd={handleDrop}>
-      {(courseLoadingStatus === LoadingStatus.ERROR ||
-        modulesLoadingStatus === LoadingStatus.ERROR) && (
-        <Alert severity="error" variant="filled">
-          {t('internal-error')}
-        </Alert>
-      )}
-      {courseLoadingStatus === LoadingStatus.FETCHING ||
-        (modulesLoadingStatus === LoadingStatus.FETCHING && (
-          <Box display="flex" margin="auto">
-            <CircularProgress sx={{ m: 'auto' }} size={64} />
-          </Box>
-        ))}
+    <>
+      <DragDropContext onDragEnd={handleDrop}>
+        {(courseLoadingStatus === LoadingStatus.ERROR ||
+          modulesLoadingStatus === LoadingStatus.ERROR) && (
+          <Alert severity="error" variant="filled">
+            {t('internal-error')}
+          </Alert>
+        )}
+        {courseLoadingStatus === LoadingStatus.FETCHING ||
+          (modulesLoadingStatus === LoadingStatus.FETCHING && (
+            <Box display="flex" margin="auto">
+              <CircularProgress sx={{ m: 'auto' }} size={64} />
+            </Box>
+          ))}
 
-      {modulesData && courseData?.course && (
-        <Box
-          pt={{ xs: 6, md: 10 }}
-          pb={6}
-          margin="auto"
-          maxWidth={{
-            xs: '340px',
-            md: '1040px',
-          }}
-        >
-          <BackButton
-            label={t('pages.course-participants.back-button')}
-            to="../.."
-          />
-          <Typography variant="h2">{courseData.course.name}</Typography>
-
-          {submitError && (
-            <Alert severity="error" variant="filled">
-              {submitError}
-            </Alert>
-          )}
-
+        {modulesData && courseData?.course && (
           <Box
-            mt={{ xs: 2, md: 3 }}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: 'repeat(3, 1fr)',
-                md: 'repeat(8, 1fr)',
-              },
-              columnGap: { xs: 2, md: 4 },
-              rowGap: { xs: 3, md: 4 },
+            pt={{ xs: 6, md: 10 }}
+            pb={6}
+            margin="auto"
+            maxWidth={{
+              xs: '340px',
+              md: '1040px',
             }}
           >
-            <Box gridColumn="1 / 4">
-              {courseData?.course?.status === CourseStatus.DRAFT && (
-                <Box
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                  mb={{ xs: 2, md: 3 }}
-                >
-                  <StatusChip
-                    status={courseData.course.status}
-                    type={StatusChipType.COURSE}
-                    sx={{ marginRight: 2 }}
-                  />
-                  <Typography variant="body2" data-testid="draft-text">
-                    {t('common.last-modified', {
-                      date: formatDateForDraft(
-                        courseData.course.updatedAt || new Date(),
-                        t('common.ago'),
-                        t
-                      ),
-                    })}
-                  </Typography>
-                </Box>
-              )}
-              <Typography variant="body2">
-                {t('pages.trainer-base.create-course.new-course.description', {
-                  duration: maxDuration ? maxDuration / 60 : 0,
-                })}
-              </Typography>
-            </Box>
-            <Box
-              gridColumn={{ xs: 'span 3', md: '5 / 9' }}
-              data-testid="course-info"
-            >
-              <CourseHero data={courseData.course} />
-            </Box>
+            <BackButton
+              label={t('pages.course-participants.back-button')}
+              to="../.."
+            />
+            <Typography variant="h2">{courseData.course.name}</Typography>
 
-            {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
-              <Box gridColumn={{ xs: 'span 3', md: 'span 8' }}>
-                <Alert severity="error" variant="filled">
-                  {t(
-                    'pages.trainer-base.create-course.new-course.duration-exceeded'
-                  )}
-                </Alert>
-              </Box>
+            {submitError && (
+              <Alert severity="error" variant="filled">
+                {submitError}
+              </Alert>
             )}
 
-            <Box gridColumn={{ xs: 'span 1', md: '1 / 4' }}>
-              <Typography variant="h3">
-                {t(
-                  'pages.trainer-base.create-course.new-course.modules-available'
-                )}
-              </Typography>
-
-              <Droppable droppableId="all-modules" direction="horizontal">
-                {(provided, snapshot) => (
+            <Box
+              mt={{ xs: 2, md: 3 }}
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: 'repeat(3, 1fr)',
+                  md: 'repeat(8, 1fr)',
+                },
+                columnGap: { xs: 2, md: 4 },
+                rowGap: { xs: 3, md: 4 },
+              }}
+            >
+              <Box gridColumn="1 / 4">
+                {courseData?.course?.status === CourseStatus.DRAFT && (
                   <Box
-                    data-testid="all-modules"
-                    display="flex"
-                    flexWrap="wrap"
-                    mt={{
-                      xs: 2,
-                      md: 4,
-                    }}
-                    mx={-1}
-                    bgcolor={
-                      snapshot.isDraggingOver ? theme.colors.lime[100] : ''
-                    }
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                    mb={{ xs: 2, md: 3 }}
                   >
-                    {availableModules.map((m, index) => (
-                      <Draggable
-                        key={m.id}
-                        draggableId={m.draggableId}
-                        index={index}
-                        isDragDisabled={m.used}
-                      >
-                        {(provided, snapshot) => (
-                          <div ref={provided.innerRef}>
-                            <ModuleCard
-                              key={m.id}
-                              data={m}
-                              bgColor={
-                                getModuleCardColor(m, snapshot.isDragging) ?? ''
-                              }
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              data-testid="module-card"
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
+                    <StatusChip
+                      status={courseData.course.status}
+                      type={StatusChipType.COURSE}
+                      sx={{ marginRight: 2 }}
+                    />
+                    <Typography variant="body2" data-testid="draft-text">
+                      {t('common.last-modified', {
+                        date: formatDateForDraft(
+                          courseData.course.updatedAt || new Date(),
+                          t('common.ago'),
+                          t
+                        ),
+                      })}
+                    </Typography>
                   </Box>
                 )}
-              </Droppable>
-            </Box>
-            <Box gridColumn={{ xs: '2 / 4', md: '5 / 9' }}>
-              <Typography variant="h3" px={1}>
-                {t('pages.trainer-base.create-course.new-course.my-course')}
-              </Typography>
-
+                <Typography variant="body2">
+                  {t(
+                    'pages.trainer-base.create-course.new-course.description',
+                    {
+                      duration: maxDuration ? maxDuration / 60 : 0,
+                    }
+                  )}
+                </Typography>
+              </Box>
               <Box
-                display="flex"
-                flexDirection="row-reverse"
-                flexWrap="wrap"
-                my={{ xs: 4, md: 2 }}
-                mx={-1}
-                data-testid="course-modules"
+                gridColumn={{ xs: 'span 3', md: '5 / 9' }}
+                data-testid="course-info"
               >
-                {mandatoryModules.length ? (
-                  <Box>
-                    <Typography fontSize="10px" mx={1}>
-                      {t(
-                        'pages.trainer-base.create-course.new-course.mandatory-modules'
-                      )}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        flexDirection: 'row-reverse',
-                        border: 1,
-                        borderStyle: 'dashed',
-                        borderRadius: '0.5rem',
-                        borderColor: theme.colors.navy[500],
-                      }}
-                    >
-                      {mandatoryModules.map(m => (
-                        <ModuleCard
-                          key={m.id}
-                          data={m}
-                          bgColor={getModuleCardColor(m, false) ?? ''}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                ) : null}
-                {courseModuleSlots.map(slot => (
-                  <ModuleSlot
-                    key={slot.droppableId}
-                    module={slot.module}
-                    droppableId={slot.droppableId}
-                    draggableId={slot.draggableId}
-                  />
-                ))}
+                <CourseHero data={courseData.course} />
               </Box>
 
-              <Box
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: {
-                    xs: 'repeat(1, 1fr)',
-                    md: 'repeat(2, 1fr)',
-                  },
-                  columnGap: 4,
-                  rowGap: 1,
-                  mb: 1,
-                  alignItems: 'center',
-                  justifyContent: 'end',
-                }}
-              >
-                <div>
-                  {t(
-                    'pages.trainer-base.create-course.new-course.estimated-duration'
-                  )}
-                  :{' '}
-                  <ProgressBar
-                    percentage={getPercentage(
-                      estimatedCourseDuration,
-                      maxDuration
+              {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
+                <Box gridColumn={{ xs: 'span 3', md: 'span 8' }}>
+                  <Alert severity="error" variant="filled">
+                    {t(
+                      'pages.trainer-base.create-course.new-course.duration-exceeded'
                     )}
-                    label={formatDurationShort(estimatedCourseDuration)}
-                  />
-                </div>
-                <Button
-                  variant="outlined"
-                  onClick={onCourseSubmit}
-                  disabled={
-                    getPercentage(estimatedCourseDuration, maxDuration) > 100 ||
-                    (!courseModuleSlots?.filter(slot => !!slot.module).length &&
-                      !mandatoryModules?.length)
-                  }
-                  data-testid="submit-button"
-                >
+                  </Alert>
+                </Box>
+              )}
+
+              <Box gridColumn={{ xs: 'span 1', md: '1 / 4' }}>
+                <Typography variant="h3">
                   {t(
-                    'pages.trainer-base.create-course.new-course.submit-course'
+                    'pages.trainer-base.create-course.new-course.modules-available'
                   )}
-                </Button>
-                {courseModuleSlots.find(slot => !!slot.module) && (
+                </Typography>
+
+                <Droppable droppableId="all-modules" direction="horizontal">
+                  {(provided, snapshot) => (
+                    <Box
+                      data-testid="all-modules"
+                      display="flex"
+                      flexWrap="wrap"
+                      mt={{
+                        xs: 2,
+                        md: 4,
+                      }}
+                      mx={-1}
+                      bgcolor={
+                        snapshot.isDraggingOver ? theme.colors.lime[100] : ''
+                      }
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {availableModules.map((m, index) => (
+                        <Draggable
+                          key={m.id}
+                          draggableId={m.draggableId}
+                          index={index}
+                          isDragDisabled={m.used}
+                        >
+                          {(provided, snapshot) => (
+                            <div ref={provided.innerRef}>
+                              <ModuleCard
+                                key={m.id}
+                                data={m}
+                                bgColor={
+                                  getModuleCardColor(m, snapshot.isDragging) ??
+                                  ''
+                                }
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                data-testid="module-card"
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </Box>
+                  )}
+                </Droppable>
+              </Box>
+              <Box gridColumn={{ xs: '2 / 4', md: '5 / 9' }}>
+                <Typography variant="h3" px={1}>
+                  {t('pages.trainer-base.create-course.new-course.my-course')}
+                </Typography>
+
+                <Box
+                  display="flex"
+                  flexDirection="row-reverse"
+                  flexWrap="wrap"
+                  my={{ xs: 4, md: 2 }}
+                  mx={-1}
+                  data-testid="course-modules"
+                >
+                  {mandatoryModules.length ? (
+                    <Box>
+                      <Typography fontSize="10px" mx={1}>
+                        {t(
+                          'pages.trainer-base.create-course.new-course.mandatory-modules'
+                        )}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          flexDirection: 'row-reverse',
+                          border: 1,
+                          borderStyle: 'dashed',
+                          borderRadius: '0.5rem',
+                          borderColor: theme.colors.navy[500],
+                        }}
+                      >
+                        {mandatoryModules.map(m => (
+                          <ModuleCard
+                            key={m.id}
+                            data={m}
+                            bgColor={getModuleCardColor(m, false) ?? ''}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  ) : null}
+                  {courseModuleSlots.map(slot => (
+                    <ModuleSlot
+                      key={slot.droppableId}
+                      module={slot.module}
+                      droppableId={slot.droppableId}
+                      draggableId={slot.draggableId}
+                    />
+                  ))}
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: 'repeat(1, 1fr)',
+                      md: 'repeat(2, 1fr)',
+                    },
+                    columnGap: 4,
+                    rowGap: 1,
+                    mb: 1,
+                    alignItems: 'center',
+                    justifyContent: 'end',
+                  }}
+                >
+                  <div>
+                    {t(
+                      'pages.trainer-base.create-course.new-course.estimated-duration'
+                    )}
+                    :{' '}
+                    <ProgressBar
+                      percentage={getPercentage(
+                        estimatedCourseDuration,
+                        maxDuration
+                      )}
+                      label={formatDurationShort(estimatedCourseDuration)}
+                    />
+                  </div>
                   <Button
-                    sx={{
-                      gridColumn: {
-                        xs: '1 / 2',
-                        md: '2 / 3',
-                      },
-                    }}
                     variant="outlined"
-                    color="warning"
-                    onClick={onClearCourse}
-                    data-testid="clear-button"
+                    onClick={onCourseSubmit}
+                    disabled={
+                      getPercentage(estimatedCourseDuration, maxDuration) >
+                        100 ||
+                      (!courseModuleSlots?.filter(slot => !!slot.module)
+                        .length &&
+                        !mandatoryModules?.length)
+                    }
+                    data-testid="submit-button"
                   >
-                    {t('clear')}
+                    {t(
+                      'pages.trainer-base.create-course.new-course.submit-course'
+                    )}
                   </Button>
-                )}
+                  {courseModuleSlots.find(slot => !!slot.module) && (
+                    <Button
+                      sx={{
+                        gridColumn: {
+                          xs: '1 / 2',
+                          md: '2 / 3',
+                        },
+                      }}
+                      variant="outlined"
+                      color="warning"
+                      onClick={onClearCourse}
+                      data-testid="clear-button"
+                    >
+                      {t('clear')}
+                    </Button>
+                  )}
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
-      )}
-    </DragDropContext>
+        )}
+      </DragDropContext>
+      <ConfirmDialog
+        open={displayTimeModal}
+        onOk={submitCourse}
+        onCancel={() => setDisplayTimeModal(false)}
+        message={t(
+          'pages.trainer-base.create-course.new-course.time-commitment-message',
+          { hours: estimatedDurationInHours }
+        )}
+        title={t(
+          'pages.trainer-base.create-course.new-course.time-commitment-title'
+        )}
+        okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
+        data-testid="time-commitment-dialog"
+      />
+    </>
   )
 }
