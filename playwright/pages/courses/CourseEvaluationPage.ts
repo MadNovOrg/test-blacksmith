@@ -130,7 +130,8 @@ class TrainerEvaluationPage extends BasePage {
       this.page.waitForEvent('download'),
       this.PDFExportButton.click(),
     ])
-    await expect(await download.path()).toMatch(/var\/folders/)
+
+    expect(await download.path()).toBeTruthy()
   }
 }
 

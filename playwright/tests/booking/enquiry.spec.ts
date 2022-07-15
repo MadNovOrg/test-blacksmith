@@ -45,5 +45,7 @@ test('saves course enquiry', async ({ page, course }) => {
 
   await page.locator('button:has-text("Enquire now")').click()
 
-  test.expect(page.locator('text=Thank you for your enquiry')).toBeVisible()
+  await test
+    .expect(page.locator('text=Thank you for your enquiry'))
+    .toBeVisible()
 })
