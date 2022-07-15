@@ -12,38 +12,38 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { StatusChip, StatusChipType } from '@app/components/StatusChip'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
-import { useCourses } from '@app/hooks/useCourses'
-import { useTableSort } from '@app/hooks/useTableSort'
 import {
-  Course,
-  CourseLevel,
-  CourseStatus,
-  InviteStatus,
-  CourseTrainerType,
-  RoleName,
-} from '@app/types'
+  Course_Invite_Status_Enum,
+  Course_Level_Enum,
+  Course_Status_Enum,
+  Course_Trainer_Type_Enum,
+} from '@app/generated/graphql'
+import { useCourses } from '@app/hooks/useCourses'
+import { useTablePagination } from '@app/hooks/useTablePagination'
+import { useTableSort } from '@app/hooks/useTableSort'
+import { RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
-import { AcceptDeclineCourse, AcceptDeclineProps } from './AcceptDeclineCourse'
+import { AcceptDeclineCourse } from './AcceptDeclineCourse'
 
-const CourseTitle: React.FC<{ name: string; level: CourseLevel }> = ({
-  name,
-  level,
-}) => {
+const CourseTitle: React.FC<{
+  name: string
+  level: Course_Level_Enum | undefined | null
+}> = ({ name, level }) => {
   const { t } = useTranslation()
 
   return (
@@ -66,7 +66,7 @@ export const MyCourses: React.FC = () => {
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
-      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: true },
+      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
       { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
@@ -125,26 +125,40 @@ export const MyCourses: React.FC = () => {
     return [obj, isFiltered]
   }, [filterLevel, filterType, filterStatus, keyword])
 
-  const { courses, loading, mutate } = useCourses(RoleName.TRAINER, {
+  const { Pagination, perPage, currentPage } = useTablePagination()
+
+  const { courses, loading, mutate, total } = useCourses(RoleName.TRAINER, {
     sorting,
     where,
+    pagination: {
+      perPage,
+      currentPage,
+    },
   })
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [currentPage])
+
   const count = courses.length
 
-  const handleNavigation = (course: Course) => {
+  const handleNavigation = (course: {
+    id: number
+    status?: Course_Status_Enum | null
+  }) => {
     if (
-      course.status === CourseStatus.DRAFT ||
-      course.status === CourseStatus.PENDING
+      course.status === Course_Status_Enum.Draft ||
+      course.status === Course_Status_Enum.ConfirmModules
     ) {
       return `${course.id}/modules`
     }
     return `${course.id}/details`
   }
 
-  const onAcceptedOrDeclined = useCallback<AcceptDeclineProps['onUpdate']>(
+  const onAcceptedOrDeclined = useCallback(
     (course, trainer, status) => {
-      const isLead = trainer.type === CourseTrainerType.LEADER
-      const isAccepted = status === InviteStatus.ACCEPTED
+      const isLead = trainer.type === Course_Trainer_Type_Enum.Leader
+      const isAccepted = status === Course_Invite_Status_Enum.Accepted
       setKeyword('')
       isLead && isAccepted ? navigate(handleNavigation(course)) : mutate()
     },
@@ -213,7 +227,7 @@ export const MyCourses: React.FC = () => {
                 itemsName={t('courses').toLowerCase()}
               />
 
-              {courses.map(c => {
+              {courses.map((c, index) => {
                 const courseTrainer = profile
                   ? findCourseTrainer(c?.trainers, profile.id)
                   : undefined
@@ -223,10 +237,12 @@ export const MyCourses: React.FC = () => {
                     key={c.id}
                     className="MyCoursesRow"
                     data-testid={`course-row-${c.id}`}
+                    data-index={index}
                   >
                     <TableCell>
                       {courseTrainer &&
-                      courseTrainer.status !== InviteStatus.ACCEPTED ? (
+                      courseTrainer.status !==
+                        Course_Invite_Status_Enum.Pending ? (
                         <CourseTitle level={c.level} name={c.name} />
                       ) : (
                         <Link href={handleNavigation(c)}>
@@ -246,7 +262,7 @@ export const MyCourses: React.FC = () => {
                     </TableCell>
                     <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                     <TableCell>
-                      {c.dates.aggregate.start.date && (
+                      {c.dates?.aggregate?.start?.date && (
                         <Box>
                           <Typography variant="body2" gutterBottom>
                             {t('dates.short', {
@@ -266,7 +282,7 @@ export const MyCourses: React.FC = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      {c.dates.aggregate.end.date && (
+                      {c.dates?.aggregate?.end?.date && (
                         <Box>
                           <Typography variant="body2" gutterBottom>
                             {t('dates.short', {
@@ -291,32 +307,36 @@ export const MyCourses: React.FC = () => {
                     <TableCell>
                       <Typography mb={1}>
                         <Typography component="span">
-                          {c.participantsAgg.aggregate.count}
+                          {c.participantsAgg?.aggregate?.count}
                         </Typography>
                         <Typography component="span" variant="body2">
                           /{c.max_participants}
                         </Typography>
                       </Typography>
-                      <LinearProgress
-                        variant="determinate"
-                        value={
-                          (c.participantsAgg.aggregate.count /
-                            c.max_participants) *
-                          100
-                        }
-                      />
+                      {c.participantsAgg?.aggregate ? (
+                        <LinearProgress
+                          variant="determinate"
+                          value={
+                            (c.participantsAgg?.aggregate?.count /
+                              c.max_participants) *
+                            100
+                          }
+                        />
+                      ) : null}
                     </TableCell>
                     <TableCell>
-                      <StatusChip
-                        status={c.status}
-                        type={StatusChipType.COURSE}
-                        data-testid="course-status-chip"
-                      />
+                      {c.status ? <CourseStatusChip status={c.status} /> : null}
                     </TableCell>
                     <TableCell>
                       <AcceptDeclineCourse
-                        course={c}
-                        onUpdate={onAcceptedOrDeclined}
+                        trainer={
+                          profile
+                            ? findCourseTrainer(c.trainers, profile.id)
+                            : undefined
+                        }
+                        onUpdate={(trainer, status) =>
+                          onAcceptedOrDeclined(c, trainer, status)
+                        }
                       >
                         <Button
                           variant="outlined"
@@ -324,8 +344,8 @@ export const MyCourses: React.FC = () => {
                           size="small"
                           onClick={() => navigate(handleNavigation(c))}
                         >
-                          {c.status === CourseStatus.PENDING ||
-                          c.status === CourseStatus.DRAFT
+                          {c.status === Course_Status_Enum.ConfirmModules ||
+                          c.status === Course_Status_Enum.Draft
                             ? t('build')
                             : t('manage')}
                         </Button>
@@ -336,6 +356,8 @@ export const MyCourses: React.FC = () => {
               }) ?? null}
             </TableBody>
           </Table>
+
+          {total ? <Pagination total={total} /> : null}
         </Box>
       </Box>
     </Container>

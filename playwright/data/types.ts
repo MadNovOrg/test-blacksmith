@@ -1,7 +1,7 @@
+import { Course_Status_Enum } from '@app/generated/graphql'
 import {
   CourseDeliveryType,
   CourseLevel,
-  CourseStatus,
   CourseTrainer,
   CourseType,
   Venue,
@@ -29,7 +29,7 @@ export type Course = {
   level: CourseLevel
   deliveryType: CourseDeliveryType
   type: CourseType
-  status: CourseStatus
+  status: Course_Status_Enum
   reaccreditation: boolean
   schedule: CourseSchedule[]
   go1Integration?: boolean

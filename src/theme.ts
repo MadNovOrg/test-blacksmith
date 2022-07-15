@@ -417,6 +417,32 @@ export default createTheme({
       styleOverrides: {
         filled: {
           fontWeight: 500,
+
+          '&.MuiChip-colorWarning': {
+            color: '#7A4E00',
+            backgroundColor: '#FEF4E4',
+            fontWeight: 600,
+          },
+          '&.MuiChip-colorInfo': {
+            color: '#055A64',
+            backgroundColor: '#E1F2F4',
+            fontWeight: 600,
+          },
+          '&.MuiChip-colorSuccess': {
+            color: '#394700',
+            backgroundColor: '#F3F5E6',
+            fontWeight: 600,
+          },
+          '&.MuiChip-colorError': {
+            color: '#990650',
+            backgroundColor: '#F8EDF3',
+            fontWeight: 600,
+          },
+          '&.MuiChip-colorDefault': {
+            color: '#3B3A3C',
+            backgroundColor: '#EEEEEE',
+            fontWeight: 600,
+          },
         },
         avatar: {
           color: '#fff',

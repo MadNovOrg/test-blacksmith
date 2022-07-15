@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container, Stack } from '@mui/material'
+import { CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -6,32 +6,38 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import React, { useMemo, useState } from 'react'
+import { isPast } from 'date-fns'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
+import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
-import { useAuth } from '@app/context/auth'
-import { useCourses } from '@app/hooks/useCourses'
+import {
+  Course_Level_Enum,
+  Course_Status_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { RoleName } from '@app/types'
+import { AttendeeOnlyCourseStatus } from '@app/types'
+import { LoadingStatus } from '@app/util'
+
+import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
 
 export const MyCourses: React.FC = () => {
-  const navigate = useNavigate()
   const { t } = useTranslation()
-
-  const { profile } = useAuth()
 
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
-      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: true },
+      { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
       { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
@@ -40,43 +46,80 @@ export const MyCourses: React.FC = () => {
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
       },
-      { id: 'empty', label: '' },
+      { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
     [t]
   )
 
   const [keyword, setKeyword] = useState('')
-  const [filterLevel, setFilterLevel] = useState<string[]>([])
-  const [filterType, setFilterType] = useState<string[]>([])
+  const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
+  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
 
-  const [where, filtered] = useMemo(() => {
-    let isFiltered = false
+  const [statusOptions, setStatusOptions] = useState<
+    FilterOption<UserCourseStatus>[]
+  >(() => {
+    return [
+      {
+        id: AttendeeOnlyCourseStatus.InfoRequired,
+        title: t(`course-statuses.${AttendeeOnlyCourseStatus.InfoRequired}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.EvaluationMissing,
+        title: t(`course-statuses.${Course_Status_Enum.EvaluationMissing}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.Completed,
+        title: t(`course-statuses.${Course_Status_Enum.Completed}`),
+        selected: false,
+      },
+      {
+        id: AttendeeOnlyCourseStatus.NotAttended,
+        title: t(`course-statuses.${AttendeeOnlyCourseStatus.NotAttended}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.GradeMissing,
+        title: t(`course-statuses.${Course_Status_Enum.GradeMissing}`),
+        selected: false,
+      },
+      {
+        id: Course_Status_Enum.Scheduled,
+        title: t(`course-statuses.${Course_Status_Enum.Scheduled}`),
+        selected: false,
+      },
+    ]
+  })
 
-    const obj: Record<string, object> = {
-      participants: { profile_id: { _eq: profile?.id } },
-    }
+  const filterStatus = statusOptions.flatMap(o =>
+    o.selected ? o.id : []
+  ) as UserCourseStatus[]
 
-    if (filterLevel.length) {
-      obj.level = { _in: filterLevel }
-      isFiltered = true
-    }
+  const { Pagination, perPage, currentPage } = useTablePagination()
 
-    if (filterType.length) {
-      obj.type = { _in: filterType }
-      isFiltered = true
-    }
+  const { courses, status, total } = useUserCourses(
+    {
+      statuses: filterStatus,
+      types: filterType,
+      levels: filterLevel,
+      keyword,
+    },
+    sorting,
+    { perPage, currentPage }
+  )
 
-    const query = keyword.trim()
-    if (query.length) {
-      obj.name = { _ilike: `%${query}%` }
-      isFiltered = true
-    }
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [currentPage])
 
-    return [obj, isFiltered]
-  }, [filterLevel, filterType, keyword, profile?.id])
+  const count = courses?.length
 
-  const { courses, loading } = useCourses(RoleName.USER, { sorting, where })
-  const count = courses.length
+  const loading = status === LoadingStatus.FETCHING
+
+  const filtered = Boolean(
+    keyword || filterStatus.length || filterType.length || filterLevel.length
+  )
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -98,6 +141,14 @@ export const MyCourses: React.FC = () => {
               <Stack gap={1}>
                 <FilterCourseLevel onChange={setFilterLevel} />
                 <FilterCourseType onChange={setFilterType} />
+                <FilterAccordion
+                  options={statusOptions}
+                  onChange={opts => {
+                    setStatusOptions(opts)
+                  }}
+                  title={t('course-status')}
+                  data-testid="FilterCourseStatus"
+                />
               </Stack>
             </Box>
           </Stack>
@@ -127,11 +178,12 @@ export const MyCourses: React.FC = () => {
                 itemsName={t('courses').toLowerCase()}
               />
 
-              {courses.map(c => (
+              {courses?.map((c, index) => (
                 <TableRow
                   key={c.id}
                   className="MyCoursesRow"
                   data-testid={`course-row-${c.id}`}
+                  data-index={index}
                 >
                   <TableCell>
                     <Link href={`${c.id}/details`}>
@@ -149,7 +201,7 @@ export const MyCourses: React.FC = () => {
                   </TableCell>
                   <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                   <TableCell>
-                    {c.dates.aggregate.start.date && (
+                    {c.dates?.aggregate?.start?.date && (
                       <Box>
                         <Typography variant="body2" gutterBottom>
                           {t('dates.short', {
@@ -165,7 +217,7 @@ export const MyCourses: React.FC = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    {c.dates.aggregate.end.date && (
+                    {c.dates?.aggregate?.end?.date && (
                       <Box>
                         <Typography variant="body2" gutterBottom>
                           {t('dates.short', {
@@ -182,23 +234,45 @@ export const MyCourses: React.FC = () => {
                   </TableCell>
 
                   <TableCell>
-                    <TrainerAvatarGroup trainers={c.trainers} />
+                    <TrainerAvatarGroup trainers={c.trainers ?? []} />
                   </TableCell>
 
                   <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      onClick={() => navigate(`${c.id}/details`)}
-                    >
-                      {t('view')}
-                    </Button>
+                    {!c.participants[0].attended &&
+                    isPast(new Date(c.schedule[0].end)) ? (
+                      <CourseStatusChip
+                        status={AttendeeOnlyCourseStatus.NotAttended}
+                      />
+                    ) : !c.participants[0].healthSafetyConsent ? (
+                      <CourseStatusChip
+                        status={AttendeeOnlyCourseStatus.InfoRequired}
+                      />
+                    ) : c.evaluation_answers_aggregate.aggregate?.count === 0 &&
+                      isPast(new Date(c.schedule[0].end)) ? (
+                      <CourseStatusChip
+                        status={Course_Status_Enum.EvaluationMissing}
+                      />
+                    ) : !c.participants[0].grade &&
+                      isPast(new Date(c.schedule[0].end)) ? (
+                      <CourseStatusChip
+                        status={Course_Status_Enum.GradeMissing}
+                      />
+                    ) : (
+                      <CourseStatusChip
+                        status={
+                          isPast(new Date(c.schedule[0].end))
+                            ? Course_Status_Enum.Completed
+                            : Course_Status_Enum.Scheduled
+                        }
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               )) ?? null}
             </TableBody>
           </Table>
+
+          {total ? <Pagination total={total} /> : null}
         </Box>
       </Box>
     </Container>

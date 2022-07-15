@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import { CourseStatus, CourseType, InviteStatus } from '@app/types'
+import { Course_Status_Enum } from '@app/generated/graphql'
+import { CourseType, InviteStatus } from '@app/types'
 
 import { getLatestEmail } from '../../../api/email-api'
 import {
@@ -24,7 +25,7 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
-    course.status = CourseStatus.PUBLISHED
+    course.status = Course_Status_Enum.Scheduled
     const moduleIds = await getModuleIds(
       getModulesByLevel(course.level),
       course.level

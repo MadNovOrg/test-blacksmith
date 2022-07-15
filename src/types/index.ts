@@ -1,5 +1,6 @@
 import { DeepNonNullable } from 'ts-essentials'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
 
 export type Base = {
@@ -18,7 +19,7 @@ export type Course = {
   type: CourseType
   min_participants: number
   max_participants: number
-  status: CourseStatus
+  status: Course_Status_Enum
   reaccreditation: boolean
   organization?: Organization
   contactProfile?: Profile
@@ -159,12 +160,6 @@ export enum CourseType {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
   INDIRECT = 'INDIRECT',
-}
-
-export enum CourseStatus {
-  PENDING = 'PENDING',
-  DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
 }
 
 export enum CourseLevel {
@@ -545,4 +540,9 @@ export enum PromoCodeStatus {
   SCHEDULED = 'SCHEDULED',
   EXPIRED = 'EXPIRED',
   DENIED = 'DENIED',
+}
+
+export enum AttendeeOnlyCourseStatus {
+  InfoRequired = 'INFO_REQUIRED',
+  NotAttended = 'NOT_ATTENDED',
 }

@@ -68,7 +68,7 @@ select_permissions:
               - course_type:
                   _eq: OPEN
               - course_status:
-                  _eq: PUBLISHED
+                  _eq: SCHEDULED
   - role: trainer
     permission:
       columns:

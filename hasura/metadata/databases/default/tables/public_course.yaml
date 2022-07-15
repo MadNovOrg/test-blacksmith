@@ -43,6 +43,13 @@ object_relationships:
     using:
       foreign_key_constraint_on: organization_id
 array_relationships:
+  - name: evaluation_answers
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_evaluation_answers
   - name: modules
     using:
       foreign_key_constraint_on:
@@ -137,7 +144,7 @@ select_permissions:
           - course_type:
               _eq: OPEN
           - course_status:
-              _eq: PUBLISHED
+              _eq: SCHEDULED
   - role: trainer
     permission:
       columns:

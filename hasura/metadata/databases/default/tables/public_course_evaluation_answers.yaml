@@ -100,3 +100,15 @@ select_permissions:
         participant:
           profile_id:
             _eq: X-Hasura-User-Id
+      allow_aggregations: true
+event_triggers:
+  - name: course_evaluation_added
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status'

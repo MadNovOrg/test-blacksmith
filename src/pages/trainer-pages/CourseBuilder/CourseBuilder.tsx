@@ -19,8 +19,9 @@ import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import ProgressBar from '@app/components/ProgressBar'
-import { StatusChip, StatusChipType } from '@app/components/StatusChip'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
 import {
@@ -35,7 +36,7 @@ import {
   QUERY as GetModuleGroups,
   ResponseType as GetModuleGroupsResponseType,
 } from '@app/queries/modules/get-module-groups'
-import { CourseLevel, CourseStatus, ModuleGroup } from '@app/types'
+import { CourseLevel, ModuleGroup } from '@app/types'
 import {
   formatDateForDraft,
   formatDurationShort,
@@ -213,7 +214,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           })
           await fetcher(SetCourseStatus, {
             id: courseData.course.id,
-            status: CourseStatus.DRAFT,
+            status: Course_Status_Enum.Draft,
           })
           await mutateCourse()
         }
@@ -303,7 +304,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       try {
         await fetcher(SetCourseStatus, {
           id: courseData.course.id,
-          status: CourseStatus.PUBLISHED,
+          status: Course_Status_Enum.Scheduled,
         })
         navigate('../details?success=course_submitted')
       } catch (e: unknown) {
@@ -356,7 +357,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       })
       await fetcher(SetCourseStatus, {
         id: courseData.course.id,
-        status: CourseStatus.DRAFT,
+        status: Course_Status_Enum.Draft,
       })
       await mutateCourse()
     }
@@ -422,16 +423,13 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
               }}
             >
               <Box gridColumn="1 / 4">
-                {courseData?.course?.status === CourseStatus.DRAFT && (
+                {courseData?.course?.status === Course_Status_Enum.Draft && (
                   <Box
                     sx={{ display: 'flex', alignItems: 'center' }}
                     mb={{ xs: 2, md: 3 }}
                   >
-                    <StatusChip
-                      status={courseData.course.status}
-                      type={StatusChipType.COURSE}
-                      sx={{ marginRight: 2 }}
-                    />
+                    <CourseStatusChip status={courseData.course.status} />
+
                     <Typography variant="body2" data-testid="draft-text">
                       {t('common.last-modified', {
                         date: formatDateForDraft(

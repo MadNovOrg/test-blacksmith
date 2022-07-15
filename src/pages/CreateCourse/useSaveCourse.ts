@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   ResponseType,
@@ -10,6 +11,7 @@ import {
 import {
   CourseDeliveryType,
   CourseTrainerType,
+  CourseType,
   InviteStatus,
   ValidCourseInput,
 } from '@app/types'
@@ -38,6 +40,11 @@ export function useSaveCourse(): {
         if (courseData) {
           setSavingStatus(LoadingStatus.FETCHING)
 
+          const status =
+            courseData.type === CourseType.INDIRECT
+              ? Course_Status_Enum.ApprovalPending
+              : Course_Status_Enum.TrainerPending
+
           const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
             course: {
               name: generateCourseName(
@@ -51,6 +58,7 @@ export function useSaveCourse(): {
               level: courseData.courseLevel,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
+              status,
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }
                 : null),

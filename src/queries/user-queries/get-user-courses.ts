@@ -2,55 +2,87 @@ import { gql } from 'graphql-request'
 
 import { Course } from '@app/types'
 
-export type ResponseType = { course: Course[] }
+import { CourseTrainerInfo } from '../fragments'
+
+export type ResponseType = { courses: Course[] }
 
 export type ParamsType = {
   orderBy?: object
   where?: object
+  profileId: string
 }
 
 export const QUERY = gql`
+  ${CourseTrainerInfo}
+
+  fragment UserCourse on course {
+    id
+    name
+    type
+    level
+    status
+    trainers {
+      ...CourseTrainerInfo
+    }
+    schedule {
+      id
+      start
+      end
+      venue {
+        id
+        name
+        city
+      }
+      virtualLink
+    }
+    participants(where: { profile_id: { _eq: $profileId } }) {
+      healthSafetyConsent
+      grade
+      attended
+    }
+    evaluation_answers_aggregate(
+      distinct_on: profileId
+      where: { profileId: { _eq: $profileId } }
+    ) {
+      aggregate {
+        count
+      }
+    }
+    dates: schedule_aggregate {
+      aggregate {
+        start: min {
+          date: start
+        }
+        end: max {
+          date: end
+        }
+      }
+    }
+    modulesAgg: modules_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+
   query UserCourses(
     $orderBy: [course_order_by!] = { name: asc }
     $where: course_bool_exp = {}
+    $profileId: uuid!
+    $offset: Int
+    $limit: Int
   ) {
-    course(where: $where, order_by: $orderBy) {
-      id
-      name
-      type
-      level
-      trainers {
-        id
-        type
-        status
-        profile {
-          id
-          fullName
-        }
-      }
-      schedule {
-        id
-        venue {
-          id
-          name
-          city
-        }
-        virtualLink
-      }
-      dates: schedule_aggregate {
-        aggregate {
-          start: min {
-            date: start
-          }
-          end: max {
-            date: end
-          }
-        }
-      }
-      modulesAgg: modules_aggregate {
-        aggregate {
-          count
-        }
+    courses: course(
+      where: $where
+      order_by: $orderBy
+      offset: $offset
+      limit: $limit
+    ) {
+      ...UserCourse
+    }
+    course_aggregate(where: $where) {
+      aggregate {
+        count
       }
     }
   }

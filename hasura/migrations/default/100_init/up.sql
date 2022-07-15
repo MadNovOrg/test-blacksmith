@@ -761,7 +761,7 @@ INSERT INTO "course_level" ("name") VALUES
 INSERT INTO "course_status" ("name") VALUES
 ('PENDING'),
 ('DRAFT'),
-('PUBLISHED');
+('SCHEDULED');
 
 INSERT INTO "course_trainer_type" ("name") VALUES
 ('LEADER'),

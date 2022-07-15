@@ -1,35 +1,47 @@
+import { build, fake } from '@jackfranklin/test-data-bot'
 import React from 'react'
 
-import { CourseTrainer } from '@app/types'
+import {
+  Course_Invite_Status_Enum,
+  Course_Trainer_Type_Enum,
+} from '@app/generated/graphql'
 
 import { render, screen } from '@test/index'
-import {
-  buildCourseAssistant,
-  buildCourseLeader,
-  buildProfile,
-} from '@test/mock-data-utils'
 
-import { TrainerAvatarGroup } from '.'
+import { TrainerAvatar, TrainerAvatarGroup } from '.'
+
+const buildTrainerAvatar = build<TrainerAvatar>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    type: Course_Trainer_Type_Enum.Assistant,
+    status: Course_Invite_Status_Enum.Accepted,
+    profile: {
+      fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
+    },
+  },
+})
 
 describe('component: TrainerAvatarGroup', () => {
   it('displays lead trainers first', () => {
-    const leadTrainer = {
-      ...buildCourseLeader(),
-      profile: {
-        ...buildProfile(),
-        fullName: 'John Doe',
+    const leadTrainer = buildTrainerAvatar({
+      overrides: {
+        type: Course_Trainer_Type_Enum.Leader,
+        profile: {
+          fullName: 'John Doe',
+        },
       },
-    }
+    })
 
-    const assistTrainer = {
-      ...buildCourseAssistant(),
-      profile: {
-        ...buildProfile(),
-        fullName: 'Kevin Spacey',
+    const assistTrainer = buildTrainerAvatar({
+      overrides: {
+        type: Course_Trainer_Type_Enum.Assistant,
+        profile: {
+          fullName: 'Kevin Spacey',
+        },
       },
-    }
+    })
 
-    const trainers: CourseTrainer[] = [assistTrainer, leadTrainer]
+    const trainers: TrainerAvatar[] = [assistTrainer, leadTrainer]
 
     render(<TrainerAvatarGroup trainers={trainers} />)
 

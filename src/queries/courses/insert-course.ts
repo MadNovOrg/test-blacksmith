@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { Course_Status_Enum } from '@app/generated/graphql'
 import {
   CourseDeliveryType,
   CourseLevel,
@@ -21,6 +22,9 @@ export type ParamsType = {
     description?: string
     min_participants?: number
     max_participants?: number
+    status:
+      | Course_Status_Enum.ApprovalPending
+      | Course_Status_Enum.TrainerPending
     trainers?: {
       data: Array<{
         profile_id: string

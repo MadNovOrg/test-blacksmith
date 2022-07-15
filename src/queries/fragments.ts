@@ -345,6 +345,18 @@ export const WebinarSummary = gql`
   }
 `
 
+export const CourseTrainerInfo = gql`
+  fragment CourseTrainerInfo on course_trainer {
+    id
+    status
+    type
+    profile {
+      id
+      fullName
+    }
+  }
+`
+
 export const Waitlist = gql`
   fragment WaitlistSummary on waitlist {
     id

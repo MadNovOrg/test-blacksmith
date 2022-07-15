@@ -4,9 +4,9 @@ import React, { useState, useCallback } from 'react'
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
-export const useTablePagination = () => {
+export const useTablePagination = (initialPerPage = PER_PAGE) => {
   const [currentPage, setCurrentPage] = useState(0)
-  const [perPage, setPerPage] = useState(PER_PAGE)
+  const [perPage, setPerPage] = useState(initialPerPage)
 
   const handlePerPageChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

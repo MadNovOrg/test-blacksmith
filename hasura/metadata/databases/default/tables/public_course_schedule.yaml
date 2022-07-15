@@ -66,7 +66,7 @@ select_permissions:
             - course_type:
                 _eq: OPEN
             - course_status:
-                _eq: PUBLISHED
+                _eq: SCHEDULED
       allow_aggregations: true
   - role: trainer
     permission:
@@ -150,3 +150,17 @@ update_permissions:
         - venue_id
       filter: {}
       check: null
+event_triggers:
+  - name: course_end_date_changed
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - end
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/schedule-end'

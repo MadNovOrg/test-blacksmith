@@ -1,16 +1,13 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
-  QUERY as GetTrainerCourses,
-  ResponseType as GetTrainerCoursesResp,
-  ParamsType as GetTrainerCoursesParams,
-} from '@app/queries/courses/get-trainer-courses'
-import {
-  QUERY as GetUserCourses,
-  ResponseType as GetUserCoursesResp,
-  ParamsType as GetUserCoursesParams,
-} from '@app/queries/user-queries/get-user-courses'
+  Course_Order_By,
+  Order_By,
+  TrainerCoursesQuery,
+  TrainerCoursesQueryVariables,
+} from '@app/generated/graphql'
+import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
 import { RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
@@ -19,46 +16,58 @@ import { Sorting } from './useTableSort'
 type Props = {
   sorting: Sorting
   where: Record<string, unknown>
+  pagination?: { perPage: number; currentPage: number }
 }
 
-type Resp = GetTrainerCoursesResp | GetUserCoursesResp
-type Params = GetTrainerCoursesParams | GetUserCoursesParams
-
-export const useCourses = (role: RoleName, { sorting, where }: Props) => {
+export const useCourses = (
+  _role: RoleName,
+  { sorting, where, pagination }: Props
+) => {
   const orderBy = getOrderBy(sorting)
-  const isUser = role === RoleName.USER
-  const QUERY = isUser ? GetUserCourses : GetTrainerCourses
 
-  const { data, error, mutate } = useSWR<Resp, Error, [string, Params] | null>(
-    [QUERY, { orderBy, where }],
-    { focusThrottleInterval: 2000 }
-  )
+  const [{ data, error }, refetch] = useQuery<
+    TrainerCoursesQuery,
+    TrainerCoursesQueryVariables
+  >({
+    query: GetTrainerCourses,
+    variables: {
+      where,
+      orderBy,
+      ...(pagination
+        ? {
+            limit: pagination.perPage,
+            offset: pagination.perPage * (pagination?.currentPage - 1),
+          }
+        : null),
+    },
+  })
 
   const status = getSWRLoadingStatus(data, error)
 
   return useMemo(
     () => ({
-      courses: data?.course ?? [],
+      courses: data?.courses ?? [],
       status,
       error,
       loading: status === LoadingStatus.FETCHING,
-      mutate,
+      mutate: () => refetch({ requestPolicy: 'network-only' }),
+      total: data?.course_aggregate.aggregate?.count,
     }),
-    [data, error, status, mutate]
+    [data, error, status, refetch]
   )
 }
 
-function getOrderBy({ by, dir }: Pick<Sorting, 'by' | 'dir'>) {
+function getOrderBy({ by, dir }: Pick<Sorting, 'by' | 'dir'>): Course_Order_By {
   switch (by) {
     case 'name':
     case 'type':
       return { [by]: dir }
 
-    case 'org':
-      return { organization: { name: dir } }
-
     case 'start':
     case 'end':
       return { schedule_aggregate: { min: { [by]: dir } } }
+    default: {
+      return { name: Order_By.Asc }
+    }
   }
 }

@@ -82,7 +82,7 @@ select_permissions:
             - course_type:
                 _eq: OPEN
             - course_status:
-                _eq: PUBLISHED
+                _eq: SCHEDULED
       allow_aggregations: true
   - role: tt-ops
     permission:
@@ -164,6 +164,19 @@ update_permissions:
           _eq: X-Hasura-User-Id
       check: {}
 event_triggers:
+  - name: course_participant_graded
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - grade
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status'
   - name: create_certificate
     definition:
       enable_manual: true

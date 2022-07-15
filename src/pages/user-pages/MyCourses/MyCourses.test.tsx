@@ -1,189 +1,243 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import useSWR from 'swr'
-
-import { QUERY } from '@app/queries/user-queries/get-user-courses'
-import { Course } from '@app/types'
+import { Client, Provider } from 'urql'
+import { never, fromValue } from 'wonka'
 
 import {
-  render,
-  screen,
-  within,
-  chance,
-  userEvent,
-  waitForCalls,
-} from '@test/index'
-import { buildCourse } from '@test/mock-data-utils'
+  Course_Type_Enum,
+  Order_By,
+  UserCoursesQuery,
+  UserCoursesQueryVariables,
+} from '@app/generated/graphql'
+
+import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { buildEntities } from '@test/mock-data-utils'
 
 import { MyCourses } from './MyCourses'
-
-const mockNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}))
-
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
-const useSWRMockDefaults = (data?: { course?: Partial<Course>[] }) => {
-  return {
-    data,
-    mutate: jest.fn(),
-    isValidating: false,
-  }
-}
-
-const _render = (ui: React.ReactElement) => {
-  return render(<MemoryRouter>{ui}</MemoryRouter>)
-}
+import { buildUserCourse } from './test-utils'
 
 describe('user-pages/MyCourses', () => {
-  it('renders loading', async () => {
-    const orderBy = { name: 'asc' }
-    const where = { participants: { profile_id: { _eq: expect.any(String) } } }
-    useSWRMock.mockReturnValue(useSWRMockDefaults())
+  it('renders loading while fetching for courses', () => {
+    const fetchingClient = {
+      executeQuery: () => never,
+    }
 
-    _render(<MyCourses />)
-
-    expect(useSWRMock).toBeCalledTimes(1)
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
+    render(
+      <Provider value={fetchingClient as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
     )
 
-    const tbl = screen.getByTestId('courses-table')
-
-    expect(within(tbl).getByTestId('fetching-courses')).toBeInTheDocument()
-    expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
-    expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
+    expect(screen.getByTestId('fetching-courses')).toBeInTheDocument()
   })
 
-  it('renders no results', async () => {
-    const orderBy = { name: 'asc' }
-    const where = { participants: { profile_id: { _eq: expect.any(String) } } }
-    useSWRMock.mockReturnValue(useSWRMockDefaults({ course: [] }))
+  it('displays a message when there are no courses', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses: [],
+            course_aggregate: {
+              aggregate: {
+                count: 0,
+              },
+            },
+          },
+        }),
+    }
 
-    _render(<MyCourses />)
-
-    expect(useSWRMock).toBeCalledTimes(1)
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
     )
 
-    const tbl = screen.getByTestId('courses-table')
+    expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
+    expect(screen.getByText('No courses at this time')).toBeInTheDocument()
+  })
 
-    expect(within(tbl).getByTestId('TableNoRows')).toBeInTheDocument()
+  it('displays a message when there are no filtered courses', async () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses: [],
+            course_aggregate: {
+              aggregate: {
+                count: 0,
+              },
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
+    )
+
+    userEvent.type(screen.getByPlaceholderText('Search'), 'search')
+
+    expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(screen.getByText('No matching courses found')).toBeInTheDocument()
+    })
+  })
+
+  it('renders courses', () => {
+    const course = buildUserCourse({
+      overrides: {
+        type: Course_Type_Enum.Open,
+      },
+    })
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses: [course],
+            course_aggregate: {
+              aggregate: {
+                count: 1,
+              },
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
+    )
+
+    userEvent.type(screen.getByPlaceholderText('Search'), 'search')
+
+    expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
+
+    const courseRowElem = screen.getByTestId(`course-row-${course.id}`)
+
+    expect(within(courseRowElem).getByText(course.name)).toBeInTheDocument()
     expect(
-      within(tbl).queryByTestId('fetching-courses')
-    ).not.toBeInTheDocument()
-    expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
+      within(courseRowElem).getByText(course.schedule[0].venue?.name ?? '')
+    ).toBeInTheDocument()
+    expect(within(courseRowElem).getByText('Open')).toBeInTheDocument()
   })
 
-  it('renders courses', async () => {
-    const orderBy = { name: 'asc' }
-    const where = { participants: { profile_id: { _eq: expect.any(String) } } }
+  it('sorts courses by name', async () => {
+    const courses = [buildUserCourse(), buildUserCourse()]
+    const reversedCourses = courses.slice().reverse()
 
-    const courses = [buildCourse(), buildCourse(), buildCourse()]
-    useSWRMock.mockReturnValue(useSWRMockDefaults({ course: courses }))
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: UserCoursesQueryVariables
+      }) => {
+        const orderBy = Array.isArray(variables.orderBy)
+          ? variables.orderBy[0]
+          : variables.orderBy ?? {}
 
-    _render(<MyCourses />)
+        return fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses: orderBy.name === Order_By.Asc ? courses : reversedCourses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
 
-    expect(useSWRMock).toBeCalledTimes(1)
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
     )
 
-    const tbl = screen.getByTestId('courses-table')
+    expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
+      'data-index',
+      '0'
+    )
 
-    expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(courses.length)
+    userEvent.click(screen.getByText('Name'))
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`course-row-${reversedCourses[0].id}`)
+      ).toHaveAttribute('data-index', '0')
+    })
+  })
+
+  it('paginates courses', async () => {
+    const firstBatch = buildEntities(12, buildUserCourse)
+    const secondBatch = buildEntities(12, buildUserCourse)
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: UserCoursesQueryVariables
+      }) => {
+        const offset = variables.offset
+        const limit = variables.limit
+
+        return fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses: offset === 0 && limit === 12 ? firstBatch : secondBatch,
+            course_aggregate: {
+              aggregate: {
+                count: firstBatch.length + secondBatch.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses />
+        </MemoryRouter>
+      </Provider>
+    )
+
     expect(
-      within(tbl).queryByTestId('fetching-courses')
+      screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`)
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByTestId(`course-row-${secondBatch[0].id}`)
     ).not.toBeInTheDocument()
-    expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
-  })
 
-  it('filters by search', async () => {
-    const orderBy = { name: 'asc' }
+    userEvent.click(screen.getByLabelText('Go to next page'))
 
-    const keyword = chance.word()
-    const where = {
-      participants: { profile_id: { _eq: expect.any(String) } },
-      name: { _ilike: `%${keyword}%` },
-    }
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(
+          `course-row-${secondBatch[firstBatch.length - 1].id}`
+        )
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByTestId(`course-row-${firstBatch[0].id}`)
+      ).not.toBeInTheDocument()
 
-    const courses = [buildCourse(), buildCourse(), buildCourse()]
-    useSWRMock.mockReturnValue(useSWRMockDefaults({ course: courses }))
-
-    _render(<MyCourses />)
-
-    expect(useSWRMock).toBeCalledTimes(1)
-
-    const search = screen.getByTestId('FilterSearch-Input')
-    userEvent.type(search, keyword)
-
-    await waitForCalls(useSWRMock, 2) // wait for update
-
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
-    )
-  })
-
-  it('filters by level', async () => {
-    const orderBy = { name: 'asc' }
-
-    const where = {
-      participants: { profile_id: { _eq: expect.any(String) } },
-      level: { _in: ['LEVEL_1'] },
-    }
-
-    const courses = [buildCourse(), buildCourse(), buildCourse()]
-    useSWRMock.mockReturnValue(useSWRMockDefaults({ course: courses }))
-
-    _render(<MyCourses />)
-
-    expect(useSWRMock).toBeCalledTimes(1)
-
-    const levels = screen.getByTestId('FilterCourseLevel')
-    const [level] = within(levels).getAllByTestId('FilterCourseLevel-option')
-
-    userEvent.click(level)
-
-    await waitForCalls(useSWRMock, 2) // wait for update
-
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
-    )
-  })
-
-  it('filters by type', async () => {
-    const orderBy = { name: 'asc' }
-
-    const where = {
-      participants: { profile_id: { _eq: expect.any(String) } },
-      type: { _in: ['OPEN'] },
-    }
-
-    const courses = [buildCourse(), buildCourse(), buildCourse()]
-    useSWRMock.mockReturnValue(useSWRMockDefaults({ course: courses }))
-
-    _render(<MyCourses />)
-
-    expect(useSWRMock).toBeCalledTimes(1)
-
-    const types = screen.getByTestId('FilterCourseType')
-    const [type] = within(types).getAllByTestId('FilterCourseType-option')
-
-    userEvent.click(type)
-
-    await waitForCalls(useSWRMock, 2) // wait for update
-
-    expect(useSWRMock).toBeCalledWith(
-      [expect.stringContaining(QUERY), { orderBy, where }],
-      expect.anything()
-    )
+      expect(screen.getByLabelText('Go to next page')).toBeDisabled()
+      expect(screen.getByLabelText('Go to previous page')).toBeEnabled()
+    })
   })
 })

@@ -321,7 +321,8 @@ export const insertCourseModules = async (
 export const insertCourseParticipants = async (
   courseId: number,
   users: User[],
-  bookingDate: Date
+  bookingDate: Date,
+  graded = false
 ): Promise<CourseParticipant[]> => {
   const participants = []
   for (const user of users) {
@@ -338,6 +339,7 @@ export const insertCourseParticipants = async (
         },
       },
       profile_id: profileId,
+      ...(graded ? { grade: 'PASS' } : null),
     })
   }
   const query = gql`

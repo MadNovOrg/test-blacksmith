@@ -49,7 +49,7 @@ select_permissions:
             - course_type:
                 _eq: OPEN
             - course_status:
-                _eq: PUBLISHED
+                _eq: SCHEDULED
       allow_aggregations: true
   - role: trainer
     permission:

@@ -1,11 +1,7 @@
 import { subDays } from 'date-fns'
 
-import {
-  CourseDeliveryType,
-  CourseLevel,
-  CourseStatus,
-  CourseType,
-} from '@app/types'
+import { Course_Status_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { buildVenue } from '@test/mock-data-utils'
 
@@ -19,7 +15,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level One',
     description: 'Some description 1 V',
     level: CourseLevel.LEVEL_1,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.VIRTUAL,
     type: CourseType.OPEN,
     reaccreditation: false,
@@ -39,7 +35,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level One',
     description: 'Some description 1 F2F',
     level: CourseLevel.LEVEL_1,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.OPEN,
     reaccreditation: false,
@@ -61,7 +57,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level One Reaccreditation',
     description: 'Some description 1 F2F reaccr',
     level: CourseLevel.LEVEL_1,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.CLOSED,
     reaccreditation: true,
@@ -84,7 +80,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level Two',
     description: 'Some description 2 F2F',
     level: CourseLevel.LEVEL_2,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.CLOSED,
     reaccreditation: false,
@@ -107,7 +103,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level Two Reaccreditation',
     description: 'Some description 2 F2F reaccr',
     level: CourseLevel.LEVEL_2,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.CLOSED,
     reaccreditation: true,
@@ -130,7 +126,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Level Two',
     description: 'Some description 2 BL',
     level: CourseLevel.LEVEL_2,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     go1Integration: true,
     type: CourseType.INDIRECT,
@@ -154,7 +150,7 @@ export const COURSES_TO_VIEW: Course[] = [
     name: 'Positive Behaviour Training: Advanced Modules',
     description: 'Some description 3 F2F',
     level: CourseLevel.ADVANCED,
-    status: CourseStatus.PENDING,
+    status: Course_Status_Enum.ConfirmModules,
     deliveryType: CourseDeliveryType.F2F,
     type: CourseType.CLOSED,
     reaccreditation: false,
@@ -179,7 +175,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
   name: 'Positive Behaviour Training: Level One',
   description: `Some description ${Date.now()}`,
   level: CourseLevel.LEVEL_1,
-  status: CourseStatus.PENDING,
+  status: Course_Status_Enum.ConfirmModules,
   deliveryType: CourseDeliveryType.F2F,
   type: CourseType.OPEN,
   reaccreditation: false,
@@ -200,6 +196,6 @@ export const UNIQUE_COURSE: () => Course = () => ({
 
 export const FINISHED_COURSE: () => Course = () => ({
   ...UNIQUE_COURSE(),
-  status: CourseStatus.PUBLISHED,
+  status: Course_Status_Enum.Completed,
   schedule: [{ start: subDays(new Date(), 2), end: subDays(new Date(), 1) }],
 })

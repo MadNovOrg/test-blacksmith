@@ -3,7 +3,7 @@ import React from 'react'
 import { Footer } from '.'
 
 export default {
-  title: 'Footer',
+  title: 'components/Footer',
 }
 
 export const Default = () => <Footer />

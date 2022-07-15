@@ -1,12 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
-import {
-  CourseModule,
-  CourseParticipant,
-  CourseStatus,
-  InviteStatus,
-} from '@app/types'
+import { Course_Status_Enum } from '@app/generated/graphql'
+import { CourseModule, CourseParticipant, InviteStatus } from '@app/types'
 
 import {
   deleteCourse,
@@ -30,7 +26,7 @@ const test = base.extend<{
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
     course.gradingConfirmed = true
-    course.status = CourseStatus.PUBLISHED
+    course.status = Course_Status_Enum.GradeMissing
 
     course.id = await insertCourse(
       course,

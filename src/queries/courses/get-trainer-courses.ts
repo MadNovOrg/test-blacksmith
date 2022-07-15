@@ -10,57 +10,73 @@ export type ParamsType = {
 }
 
 export const QUERY = gql`
+  fragment TrainerCourse on course {
+    id
+    name
+    type
+    level
+    status
+    organization {
+      name
+    }
+    trainers {
+      id
+      type
+      status
+      profile {
+        id
+        fullName
+      }
+    }
+    max_participants
+    participantsAgg: participants_aggregate {
+      aggregate {
+        count
+      }
+    }
+    dates: schedule_aggregate {
+      aggregate {
+        start: min {
+          date: start
+        }
+        end: max {
+          date: end
+        }
+      }
+    }
+    modulesAgg: modules_aggregate {
+      aggregate {
+        count
+      }
+    }
+    schedule {
+      id
+      venue {
+        id
+        name
+        city
+      }
+      virtualLink
+    }
+  }
+
   query TrainerCourses(
     $orderBy: [course_order_by!] = { name: asc }
     $where: course_bool_exp = {}
+    $offset: Int
+    $limit: Int
   ) {
-    course(where: $where, order_by: $orderBy) {
-      id
-      name
-      type
-      level
-      status
-      organization {
-        name
-      }
-      trainers {
-        id
-        type
-        status
-        profile {
-          id
-          fullName
-        }
-      }
-      max_participants
-      participantsAgg: participants_aggregate {
-        aggregate {
-          count
-        }
-      }
-      dates: schedule_aggregate {
-        aggregate {
-          start: min {
-            date: start
-          }
-          end: max {
-            date: end
-          }
-        }
-      }
-      modulesAgg: modules_aggregate {
-        aggregate {
-          count
-        }
-      }
-      schedule {
-        id
-        venue {
-          id
-          name
-          city
-        }
-        virtualLink
+    courses: course(
+      where: $where
+      order_by: $orderBy
+      limit: $limit
+      offset: $offset
+    ) {
+      ...TrainerCourse
+    }
+    course_aggregate(where: $where) {
+      aggregate {
+        count
       }
     }
   }

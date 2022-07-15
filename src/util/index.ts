@@ -9,6 +9,7 @@ import {
 import { TFunction } from 'i18next'
 import { FieldError } from 'react-hook-form'
 
+import { Profile } from '@app/generated/graphql'
 import {
   Address,
   Course,
@@ -240,10 +241,10 @@ export const normalizeAddr = (addr: Address | undefined) => {
   return [addr.line1, addr.line2, addr.city, addr.country, addr.postCode]
 }
 
-export const findCourseTrainer = (
-  trainers: CourseTrainer[] | undefined,
+export const findCourseTrainer = <T extends { profile: Profile['id'] }>(
+  trainers: T[] | undefined,
   profileId: string
-): CourseTrainer | undefined => {
+): T | undefined => {
   return (trainers ?? []).find(t => t.profile.id === profileId)
 }
 

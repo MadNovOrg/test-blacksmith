@@ -67,7 +67,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-447n4u-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -80,7 +80,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-447n4u-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -137,7 +137,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-10gd6cu-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-164ptnp-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -150,7 +150,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-o7yv1p-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-18em1z5-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -330,7 +330,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-447n4u-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -343,7 +343,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-447n4u-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -400,7 +400,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-10gd6cu-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-164ptnp-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -413,7 +413,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-o7yv1p-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-18em1z5-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"

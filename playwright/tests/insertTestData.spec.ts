@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
 import { test } from '@playwright/test'
 
-import { CourseStatus, CourseType, InviteStatus } from '@app/types'
+import { Course_Status_Enum } from '@app/generated/graphql'
+import { CourseType, InviteStatus } from '@app/types'
 
 import {
   getTrainerCourses,
@@ -35,7 +36,7 @@ test('insert test @data', async () => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
     course.organization = { name: 'London First School' }
-    course.status = CourseStatus.PUBLISHED
+    course.status = Course_Status_Enum.Scheduled
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2022-03-15T16:00:00Z')
     course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)

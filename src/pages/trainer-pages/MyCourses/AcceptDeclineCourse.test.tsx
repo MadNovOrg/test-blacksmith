@@ -1,15 +1,19 @@
 import React from 'react'
 
-import { InviteStatus } from '@app/types'
+import {
+  Course_Invite_Status_Enum,
+  Course_Trainer_Type_Enum,
+} from '@app/generated/graphql'
 
 import {
+  chance,
   render,
   screen,
   userEvent,
   waitForCalls,
   waitForElementToBeRemoved,
 } from '@test/index'
-import { buildCourse, buildCourseTrainer } from '@test/mock-data-utils'
+import { buildProfile } from '@test/mock-data-utils'
 
 import { AcceptDeclineCourse } from './AcceptDeclineCourse'
 
@@ -29,7 +33,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('renders children if current user has accepted', async () => {
-    _render(InviteStatus.ACCEPTED)
+    _render(Course_Invite_Status_Enum.Accepted)
 
     expect(screen.getByText('FALLBACK_CONTENT')).toBeInTheDocument()
     expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
@@ -38,7 +42,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('renders declined status chip if user has declined', async () => {
-    _render(InviteStatus.DECLINED)
+    _render(Course_Invite_Status_Enum.Declined)
 
     expect(screen.getByTestId(tid('declinedChip'))).toBeInTheDocument()
     expect(screen.queryByText('FALLBACK_CONTENT')).not.toBeInTheDocument()
@@ -47,7 +51,7 @@ describe('AcceptDeclineCourse', () => {
   })
 
   it('renders accept and decline buttons if user has not accepted/declined', async () => {
-    _render(InviteStatus.PENDING)
+    _render(Course_Invite_Status_Enum.Pending)
 
     expect(screen.getByTestId(tid('acceptBtn'))).toBeInTheDocument()
     expect(screen.getByTestId(tid('declineBtn'))).toBeInTheDocument()
@@ -57,39 +61,39 @@ describe('AcceptDeclineCourse', () => {
 
   it('calls onUpdate as expected when user ACCEPTS', async () => {
     const onUpdate = jest.fn()
-    const { course, trainer } = _render(InviteStatus.PENDING, onUpdate)
+    const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
     userEvent.click(screen.getByTestId(tid('acceptBtn')))
     userEvent.click(screen.getByTestId(tid('modalSubmit')))
 
     await waitForCalls(onUpdate)
 
-    expect(onUpdate).toBeCalledWith(course, trainer, InviteStatus.ACCEPTED)
+    expect(onUpdate).toBeCalledWith(trainer, Course_Invite_Status_Enum.Accepted)
     expect(mockFetcher).toBeCalledWith(expect.stringContaining('mutation'), {
       id: trainer.id,
-      status: InviteStatus.ACCEPTED,
+      status: Course_Invite_Status_Enum.Accepted,
     })
   })
 
   it('calls onUpdate as expected when user DECLINES', async () => {
     const onUpdate = jest.fn()
-    const { course, trainer } = _render(InviteStatus.PENDING, onUpdate)
+    const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
     userEvent.click(screen.getByTestId(tid('declineBtn')))
     userEvent.click(screen.getByTestId(tid('modalSubmit')))
 
     await waitForCalls(onUpdate)
 
-    expect(onUpdate).toBeCalledWith(course, trainer, InviteStatus.DECLINED)
+    expect(onUpdate).toBeCalledWith(trainer, Course_Invite_Status_Enum.Declined)
     expect(mockFetcher).toBeCalledWith(expect.stringContaining('mutation'), {
       id: trainer.id,
-      status: InviteStatus.DECLINED,
+      status: Course_Invite_Status_Enum.Declined,
     })
   })
 
   it('does not call onUpdate when user CANCELs', async () => {
     const onUpdate = jest.fn()
-    _render(InviteStatus.PENDING, onUpdate)
+    _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
     userEvent.click(screen.getByTestId(tid('acceptBtn')))
     userEvent.click(screen.getByTestId(tid('modalCancel')))
@@ -107,7 +111,7 @@ describe('AcceptDeclineCourse', () => {
     const logSpy = jest.spyOn(console, 'error').mockImplementation()
 
     const onUpdate = jest.fn()
-    _render(InviteStatus.PENDING, onUpdate)
+    _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
     userEvent.click(screen.getByTestId(tid('acceptBtn')))
     userEvent.click(screen.getByTestId(tid('modalSubmit')))
@@ -124,19 +128,23 @@ describe('AcceptDeclineCourse', () => {
  * Helpers
  */
 
-function _render(status = InviteStatus.ACCEPTED, onUpdate = jest.fn()) {
-  const trainer = buildCourseTrainer({ overrides: { status } })
-  const course = buildCourse({ overrides: { trainers: [trainer] } })
-
-  const courseTrainer = course.trainers?.[0] ?? { id: undefined }
-  expect(courseTrainer.id).toBe(trainer.id)
+function _render(
+  status = Course_Invite_Status_Enum.Accepted,
+  onUpdate = jest.fn()
+) {
+  const trainer = {
+    id: chance.guid(),
+    type: Course_Trainer_Type_Enum.Leader,
+    status,
+  }
+  const profile = buildProfile()
 
   render(
-    <AcceptDeclineCourse course={course} onUpdate={onUpdate}>
+    <AcceptDeclineCourse trainer={trainer} onUpdate={onUpdate}>
       <div>FALLBACK_CONTENT</div>
     </AcceptDeclineCourse>,
-    { auth: { profile: trainer.profile } }
+    { auth: { profile } }
   )
 
-  return { trainer, course }
+  return { trainer }
 }

@@ -186,9 +186,19 @@
       "FREE_PLACES": "Free Places"
     },
     "course-statuses": {
-      "PENDING": "Pending",
+      "APPROVAL_PENDING": "Approval pending",
+      "CONFIRM_MODULES": "Confirm modules",
+      "CANCELLED": "Cancelled",
+      "COMPLETED": "Completed",
+      "DECLINED": "Declined",
       "DRAFT": "Draft",
-      "PUBLISHED": "Published"
+      "EVALUATION_MISSING": "Missing evaluation",
+      "GRADE_MISSING": "Missing grade",
+      "SCHEDULED": "Scheduled",
+      "TRAINER_PENDING": "Trainer pending",
+      "TRAINER_UNAVAILABLE": "Trainer unavailable",
+      "INFO_REQUIRED": "Info required",
+      "NOT_ATTENDED": "Unattended"
     },
     "course-invite-status": {
       "PENDING": "Pending",

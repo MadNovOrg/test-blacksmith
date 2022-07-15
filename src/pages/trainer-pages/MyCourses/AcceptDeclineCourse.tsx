@@ -1,49 +1,43 @@
 import { LoadingButton } from '@mui/lab'
 import { Button, Chip, Stack, Typography } from '@mui/material'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
-import { useAuth } from '@app/context/auth'
+import {
+  CourseTrainerInfoFragment,
+  Course_Invite_Status_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { SetCourseTrainerStatus } from '@app/queries/courses/set-course-trainer-status'
-import { Course, CourseTrainer, InviteStatus } from '@app/types'
-import { findCourseTrainer } from '@app/util'
 
 enum Action {
   ACCEPT = 'ACCEPT',
   DECLINE = 'DECLINE',
 }
 
+type Trainer = Pick<CourseTrainerInfoFragment, 'id' | 'type' | 'status'>
+
 const actionToStatus = {
-  [Action.ACCEPT]: InviteStatus.ACCEPTED,
-  [Action.DECLINE]: InviteStatus.DECLINED,
+  [Action.ACCEPT]: Course_Invite_Status_Enum.Accepted,
+  [Action.DECLINE]: Course_Invite_Status_Enum.Declined,
 }
 
 export type AcceptDeclineProps = {
-  course: Course
-  onUpdate: (
-    course: Course,
-    trainer: CourseTrainer,
-    status: InviteStatus
-  ) => void
+  trainer?: Trainer
+  onUpdate: (trainer: Trainer, status: Course_Invite_Status_Enum) => void
 }
 
 export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
-  course,
+  trainer,
   onUpdate,
   children,
 }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
   const fetcher = useFetcher()
 
   const [action, setAction] = useState<Action>()
   const [saving, setSaving] = useState(false)
-
-  const courseTrainer = useMemo(() => {
-    return profile ? findCourseTrainer(course.trainers, profile.id) : undefined
-  }, [course, profile])
 
   const openModal = useCallback((_action: Action) => {
     return () => setAction(_action)
@@ -55,20 +49,20 @@ export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
   )
 
   const onSubmit = useCallback(async () => {
-    if (!courseTrainer || !action) return
+    if (!trainer || !action) return
 
     setSaving(true)
     const status = actionToStatus[action]
     try {
-      await fetcher(SetCourseTrainerStatus, { id: courseTrainer.id, status })
+      await fetcher(SetCourseTrainerStatus, { id: trainer.id, status })
       setSaving(false)
       closeModal()
-      onUpdate(course, courseTrainer, status)
+      onUpdate(trainer, status)
     } catch (err) {
       console.error(err)
       setSaving(false)
     }
-  }, [closeModal, courseTrainer, action, fetcher, onUpdate, course])
+  }, [closeModal, trainer, action, fetcher, onUpdate])
 
   const modalText = useCallback(
     (path: string) => {
@@ -77,11 +71,11 @@ export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
     [t, action]
   )
 
-  if (!courseTrainer || courseTrainer?.status === InviteStatus.ACCEPTED) {
+  if (!trainer || trainer?.status === Course_Invite_Status_Enum.Accepted) {
     return <>{children}</>
   }
 
-  if (courseTrainer?.status === InviteStatus.DECLINED) {
+  if (trainer?.status === Course_Invite_Status_Enum.Declined) {
     return (
       <Chip
         label={t('components.accept-decline-course.declined')}

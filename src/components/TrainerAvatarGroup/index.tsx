@@ -8,18 +8,27 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseTrainer, CourseTrainerType, InviteStatus } from '@app/types'
+import {
+  Course_Invite_Status_Enum,
+  Course_Trainer,
+  Course_Trainer_Type_Enum,
+  Profile,
+} from '@app/generated/graphql'
+import { CourseTrainerType } from '@app/types'
 
 import { Avatar } from '../Avatar'
 
+export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
+  profile: Pick<Profile, 'fullName'>
+}
 type Props = {
-  trainers?: CourseTrainer[]
+  trainers?: TrainerAvatar[]
 }
 
 const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
-  [CourseTrainerType.ASSISTANT]: 'assist-trainer',
-  [CourseTrainerType.LEADER]: 'lead-trainer',
-  [CourseTrainerType.MODERATOR]: '',
+  [Course_Trainer_Type_Enum.Assistant]: 'assist-trainer',
+  [Course_Trainer_Type_Enum.Leader]: 'lead-trainer',
+  [Course_Trainer_Type_Enum.Moderator]: '',
 }
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -32,10 +41,10 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
-function sortTrainers(a: CourseTrainer, b: CourseTrainer): 1 | -1 | 0 {
-  return a.type === CourseTrainerType.LEADER
+function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
+  return a.type === Course_Trainer_Type_Enum.Leader
     ? -1
-    : b.type === CourseTrainerType.LEADER
+    : b.type === Course_Trainer_Type_Enum.Leader
     ? 1
     : 0
 }
@@ -62,10 +71,13 @@ export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
           placement="top"
         >
           <Avatar
-            name={trainer.profile.fullName}
+            name={trainer.profile.fullName ?? ''}
             size={32}
             sx={{
-              opacity: trainer.status !== InviteStatus.ACCEPTED ? '0.5' : '1',
+              opacity:
+                trainer.status !== Course_Invite_Status_Enum.Accepted
+                  ? '0.5'
+                  : '1',
             }}
             data-testid={`trainer-avatar-${trainer.id}`}
             data-index={index}
