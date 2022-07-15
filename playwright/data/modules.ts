@@ -20,11 +20,11 @@ export const MODULES_SETUP: ModuleSetup[] = [
     mandatoryModules: [
       {
         name: 'Theory',
-        duration: '2hrs',
+        duration: '3hrs',
       },
       {
         name: 'Personal Space & Body Language',
-        duration: '2hrs',
+        duration: '1hr',
       },
       {
         name: 'Elevated Risks',
@@ -65,8 +65,8 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '20mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '1hr 20mins',
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations'],
@@ -86,7 +86,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     mandatoryModules: [
       {
         name: 'Theory',
-        duration: '1hr',
+        duration: '1hr 30mins',
       },
       {
         name: 'Personal Space & Body Language',
@@ -94,7 +94,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       },
       {
         name: 'Elevated Risks',
-        duration: '45mins',
+        duration: '15mins',
       },
       {
         name: 'Physical Warm Up',
@@ -131,8 +131,8 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '15mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '45mins',
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations'],
@@ -140,7 +140,141 @@ export const MODULES_SETUP: ModuleSetup[] = [
     durationAfter: '3hrs 35mins',
   },
   {
-    name: 'level 1 blended',
+    name: 'level 1 mixed reaccred',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.deliveryType = CourseDeliveryType.MIXED
+      course.level = CourseLevel.LEVEL_1
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = true
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '1hr 30mins',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '15mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '15mins',
+      },
+    ],
+    optionalModules: [
+      {
+        name: 'Personal Safety',
+        duration: '20mins',
+      },
+      {
+        name: 'Neck Disengagement',
+        duration: '20mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '15mins',
+      },
+      {
+        name: 'Separations',
+        duration: '15mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
+      },
+    ],
+    modulesToMove: ['Personal Safety', 'Separations'],
+    durationBefore: '3hrs',
+    durationAfter: '3hrs 35mins',
+  },
+  {
+    name: 'level 1 virtual reaccred',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.deliveryType = CourseDeliveryType.VIRTUAL
+      course.level = CourseLevel.LEVEL_1
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = true
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '1hr 30mins',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '15mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '15mins',
+      },
+    ],
+    optionalModules: [
+      {
+        name: 'Personal Safety',
+        duration: '20mins',
+      },
+      {
+        name: 'Neck Disengagement',
+        duration: '20mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '15mins',
+      },
+      {
+        name: 'Separations',
+        duration: '15mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
+      },
+    ],
+    modulesToMove: ['Personal Safety', 'Separations'],
+    durationBefore: '3hrs',
+    durationAfter: '3hrs 35mins',
+  },
+  {
+    name: 'level 1 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_1
@@ -198,31 +332,34 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '20mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '1hr 20mins',
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations'],
-    durationBefore: '1hrs 45mins',
-    durationAfter: '5hrs 35mins',
+    durationBefore: '1hr 45mins',
+    durationAfter: '2hrs 35mins',
   },
   {
-    name: 'level 2 f2f',
+    name: 'level 1 virtual blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.deliveryType = CourseDeliveryType.MIXED
+      course.level = CourseLevel.LEVEL_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
+      course.deliveryType = CourseDeliveryType.F2F
+      course.go1Integration = true
       return course
     })(),
     mandatoryModules: [
       {
         name: 'Theory',
-        duration: '2hrs',
+        duration: '30mins',
       },
       {
         name: 'Personal Space & Body Language',
-        duration: '2hrs',
+        duration: '30mins',
       },
       {
         name: 'Elevated Risks',
@@ -263,21 +400,162 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '20mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '1hr 20mins',
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
+      },
+    ],
+    modulesToMove: ['Personal Safety', 'Separations'],
+    durationBefore: '1hr 45mins',
+    durationAfter: '2hrs 35mins',
+  },
+  {
+    name: 'level 2 f2f',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = CourseLevel.LEVEL_2
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = false
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '3hrs',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '30mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '30mins',
+      },
+    ],
+    optionalModules: [
+      {
+        name: 'Personal Safety',
+        duration: '30mins',
+      },
+      {
+        name: 'Neck Disengagement',
+        duration: '30mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '20mins',
+      },
+      {
+        name: 'Separations',
+        duration: '20mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
       },
       {
         name: 'Two Person Escorts',
         duration: '1hr 30mins',
       },
       {
-        name: 'Seated Holds & Two Person Escorts',
-        duration: '3hrs',
+        name: 'Seated Holds',
+        duration: '1hr 30mins',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
-    durationBefore: '4hrs 45mins',
-    durationAfter: '7hrs 5mins',
+    durationBefore: '5hrs',
+    durationAfter: '7hrs 20mins',
+  },
+  {
+    name: 'level 2 mixed',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.deliveryType = CourseDeliveryType.MIXED
+      course.level = CourseLevel.LEVEL_2
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = false
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '3hrs',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '30mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '30mins',
+      },
+    ],
+    optionalModules: [
+      {
+        name: 'Personal Safety',
+        duration: '30mins',
+      },
+      {
+        name: 'Neck Disengagement',
+        duration: '30mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '20mins',
+      },
+      {
+        name: 'Separations',
+        duration: '20mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '20mins',
+      },
+      {
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
+      },
+      {
+        name: 'Two Person Escorts',
+        duration: '1hr 30mins',
+      },
+      {
+        name: 'Seated Holds',
+        duration: '1hr 30mins',
+      },
+    ],
+    modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
+    durationBefore: '5hrs',
+    durationAfter: '7hrs 20mins',
   },
   {
     name: 'level 2 f2f reaccred',
@@ -292,7 +570,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     mandatoryModules: [
       {
         name: 'Theory',
-        duration: '1hr',
+        duration: '1hr 30mins',
       },
       {
         name: 'Personal Space & Body Language',
@@ -300,7 +578,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       },
       {
         name: 'Elevated Risks',
-        duration: '45mins',
+        duration: '15mins',
       },
       {
         name: 'Physical Warm Up',
@@ -337,24 +615,98 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '15mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '45mins',
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
       },
       {
         name: 'Two Person Escorts',
         duration: '45mins',
       },
       {
-        name: 'Seated Holds & Two Person Escorts',
-        duration: '1hr 30mins',
+        name: 'Seated Holds',
+        duration: '45mins',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
     durationBefore: '3hrs',
-    durationAfter: '5hrs 20mins',
+    durationAfter: '4hrs 20mins',
   },
   {
-    name: 'level 2 blended',
+    name: 'level 2 mixed reaccred',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = CourseLevel.LEVEL_2
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = true
+      return course
+    })(),
+    mandatoryModules: [
+      {
+        name: 'Theory',
+        duration: '1hr 30mins',
+      },
+      {
+        name: 'Personal Space & Body Language',
+        duration: '1hr',
+      },
+      {
+        name: 'Elevated Risks',
+        duration: '15mins',
+      },
+      {
+        name: 'Physical Warm Up',
+        duration: '15mins',
+      },
+    ],
+    optionalModules: [
+      {
+        name: 'Personal Safety',
+        duration: '20mins',
+      },
+      {
+        name: 'Neck Disengagement',
+        duration: '20mins',
+      },
+      {
+        name: 'Prompts and Guides',
+        duration: '15mins',
+      },
+      {
+        name: 'Separations',
+        duration: '15mins',
+      },
+      {
+        name: 'Clothing Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Hair Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Bite Responses',
+        duration: '15mins',
+      },
+      {
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
+      },
+      {
+        name: 'Two Person Escorts',
+        duration: '45mins',
+      },
+      {
+        name: 'Seated Holds',
+        duration: '45mins',
+      },
+    ],
+    modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
+    durationBefore: '3hrs',
+    durationAfter: '4hrs 20mins',
+  },
+  {
+    name: 'level 2 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
@@ -412,24 +764,24 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '20mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '1hr 20mins',
+        name: 'Small Child and One Person Holds',
+        duration: '1hr',
       },
       {
         name: 'Two Person Escorts',
         duration: '1hr 30mins',
       },
       {
-        name: 'Seated Holds & Two Person Escorts',
-        duration: '3hrs',
+        name: 'Seated Holds',
+        duration: '1hr 30mins',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
-    durationBefore: '1hrs 45mins',
+    durationBefore: '1hr 45mins',
     durationAfter: '4hrs 5mins',
   },
   {
-    name: 'level 2 blended reaccred',
+    name: 'level 2 f2f blended reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.LEVEL_2
@@ -488,16 +840,16 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '15mins',
       },
       {
-        name: 'Small Child and One Person Holds & Prompts and Guides',
-        duration: '45mins',
+        name: 'Small Child and One Person Holds',
+        duration: '30mins',
       },
       {
         name: 'Two Person Escorts',
         duration: '45mins',
       },
       {
-        name: 'Seated Holds & Two Person Escorts',
-        duration: '1hr 30mins',
+        name: 'Seated Holds',
+        duration: '45mins',
       },
     ],
     modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],

@@ -25,10 +25,6 @@ for (const data of MODULES_SETUP) {
   test.use({ storageState: stateFilePath('trainer') })
 
   test(`build course: ${data.name}`, async ({ page, course }) => {
-    test.skip(
-      !data.name.includes('advanced'),
-      'Level 1 & 2 are skipped until TTHP-82 is done'
-    )
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto()
     const courseBuilderPage = await myCoursesPage.clickCourseBuildButton(

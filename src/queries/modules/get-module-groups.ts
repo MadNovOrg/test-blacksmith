@@ -22,7 +22,10 @@ export const QUERY = gql`
     $reaccreditation: Boolean!
     $go1Integration: Boolean!
   ) {
-    groups: module_group(where: { level: { _eq: $level } }) {
+    groups: module_group(
+      where: { level: { _eq: $level } }
+      order_by: { color: asc }
+    ) {
       ...ModuleGroup
       modules {
         ...Module

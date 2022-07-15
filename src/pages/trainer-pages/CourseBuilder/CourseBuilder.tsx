@@ -105,7 +105,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
 
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
 
-  const { data: modulesData, error: moduleDataError } = useSWR<
+  const { data: modulesDataResponse, error: moduleDataError } = useSWR<
     GetModuleGroupsResponseType,
     Error,
     [string, GetModuleGroupsParamsType] | null
@@ -121,6 +121,14 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           },
         ]
       : null
+  )
+
+  const modulesData = useMemo(
+    () =>
+      modulesDataResponse?.groups.filter(
+        group => group.duration.aggregate.sum.duration > 0
+      ),
+    [modulesDataResponse]
   )
 
   const modulesLoadingStatus = getSWRLoadingStatus(modulesData, moduleDataError)
@@ -156,7 +164,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         mandatory: [] as ModuleGroup[],
         nonMandatory: [] as ModuleGroup[],
       }
-      modulesData.groups.forEach(group =>
+      modulesData.forEach(group =>
         modules[group.mandatory ? 'mandatory' : 'nonMandatory'].push(group)
       )
       setMandatoryModules(modules.mandatory)
