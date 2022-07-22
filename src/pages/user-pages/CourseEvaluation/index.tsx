@@ -12,7 +12,12 @@ import { groupBy, map, uniqBy } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 import useSWR from 'swr'
 import * as yup from 'yup'
 
@@ -43,11 +48,14 @@ import {
   MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
   ResponseType as SaveCourseEvaluationResponseType,
 } from '@app/queries/course-evaluation/save-evaluation'
+import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
+  CourseParticipant,
   CourseEvaluationQuestion,
   CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
 } from '@app/types'
+import { courseStarted, LoadingStatus } from '@app/util'
 
 const groups = [
   CourseEvaluationQuestionGroup.TRAINING_RATING,
@@ -78,20 +86,23 @@ export const CourseEvaluation = () => {
   const profileId = searchParams.get('profile_id') as string
   const readOnly = !!profileId
 
-  const { data: course } = useCourse(courseId ?? '')
+  const { data: course, status: courseStatus } = useCourse(courseId ?? '')
   const [loading, setLoading] = useState(false)
+  const { data: participantData, isValidating: participantDataLoading } =
+    useSWR([GetParticipant, { profileId: profile?.id, courseId }])
 
-  const { data: questions } = useSWR<GetCourseEvaluationQuestionsResponseType>(
-    GET_COURSE_EVALUATION_QUESTIONS_QUERY
-  )
+  const { data: questions, isValidating: questionsLoading } =
+    useSWR<GetCourseEvaluationQuestionsResponseType>(
+      GET_COURSE_EVALUATION_QUESTIONS_QUERY
+    )
 
-  const { data: evaluation } = useSWR<
+  const { data: evaluation, isValidating: evaluationLoading } = useSWR<
     GetAnswersResponseType,
     Error,
     [string, GetAnswersParamsType] | null
   >(profileId ? [GET_ANSWERS_QUERY, { courseId, profileId }] : null)
 
-  const { data: usersData } = useSWR<
+  const { data: usersData, isValidating: usersDataLoading } = useSWR<
     GetFeedbackUsersResponseType,
     Error,
     [string, GetFeedbackUsersParamsType] | null
@@ -171,6 +182,38 @@ export const CourseEvaluation = () => {
     })
   }, [setValue, evaluation])
 
+  const isLoadingData = useMemo(
+    () =>
+      courseStatus === LoadingStatus.FETCHING ||
+      usersDataLoading ||
+      evaluationLoading ||
+      questionsLoading ||
+      participantDataLoading,
+    [
+      usersDataLoading,
+      evaluationLoading,
+      questionsLoading,
+      courseStatus,
+      participantDataLoading,
+    ]
+  )
+
+  const courseHasStarted = course && courseStarted(course)
+
+  const didAttendeeSubmitFeedback = useMemo(() => {
+    return !!usersData?.users.find(u => u.profile.id === profileId)
+  }, [usersData, profileId])
+
+  const courseParticipant: CourseParticipant | null =
+    participantData?.course_participant?.length > 0
+      ? participantData?.course_participant[0]
+      : null
+
+  const canSubmitFeedback =
+    courseHasStarted &&
+    !didAttendeeSubmitFeedback &&
+    courseParticipant?.attended
+
   const values = watch()
 
   const onSubmit = async (data: Record<string, string>) => {
@@ -203,6 +246,14 @@ export const CourseEvaluation = () => {
       setError(t('course-evaluation.error-submitting'))
       setLoading(false)
     }
+  }
+
+  if (isLoadingData) {
+    return null
+  }
+
+  if (!canSubmitFeedback) {
+    return <Navigate to="../details" />
   }
 
   return (

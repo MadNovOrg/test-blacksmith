@@ -10,6 +10,7 @@ import {
   buildEndedCourse,
   buildNotStartedCourse,
   buildParticipant,
+  buildStartedCourse,
 } from '@test/mock-data-utils'
 
 import { CourseDetails } from '.'
@@ -111,8 +112,8 @@ describe('page: CourseDetails', () => {
     expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
   })
 
-  it('has course evaluation button enabled if course has ended', () => {
-    const course = buildEndedCourse()
+  it('has course evaluation button enabled if course has started', () => {
+    const course = buildStartedCourse()
 
     useSWRMock.mockReturnValueOnce({
       data: { course },

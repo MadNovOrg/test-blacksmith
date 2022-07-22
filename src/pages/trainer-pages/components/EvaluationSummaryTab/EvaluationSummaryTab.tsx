@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
@@ -22,21 +22,23 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
-  ParamsType as GetEvaluationParamsType,
-  QUERY as GET_EVALUATION_QUERY,
-  ResponseType as GetEvaluationResponseType,
-} from '@app/queries/course-evaluation/get-evaluations'
+  GetEvaluationsQuery,
+  GetEvaluationsQueryVariables,
+} from '@app/generated/graphql'
+import { QUERY as GET_EVALUATION_QUERY } from '@app/queries/course-evaluation/get-evaluations'
 import { SortOrder } from '@app/types'
 import { noop } from '@app/util'
 
 import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownloadLink'
+
+type Evaluation = GetEvaluationsQuery['evaluations'][number]
 
 export const EvaluationSummaryTab: React.FC<unknown> = () => {
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()
   const { t } = useTranslation()
-  const courseId = params.id as string
+  const courseId = Number.parseInt(params.id as string, 10)
   const profileId = profile?.id as string
 
   const cols = useMemo(
@@ -54,7 +56,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
     () =>
       isPDFExporting ? (
         <EvaluationSummaryPDFDownloadLink
-          courseId={courseId}
+          courseId={String(courseId)}
           profileId={profileId}
         />
       ) : (
@@ -67,56 +69,92 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
   const [orderBy] = useState(cols[0].id)
 
   const { data, error } = useSWR<
-    GetEvaluationResponseType,
+    GetEvaluationsQuery,
     Error,
-    [string, GetEvaluationParamsType]
+    [string, GetEvaluationsQueryVariables]
   >([GET_EVALUATION_QUERY, { courseId }])
   const loading = !data && !error
 
-  const didTrainerSubmitFeedback = useMemo(() => {
-    return !!data?.evaluations.find(e => e.profile.id === profileId)
-  }, [data, profileId])
+  const findEvaluationForProfileId = useCallback(
+    (id: string) =>
+      data?.evaluations.find((e: Evaluation) => e.profile.id === id),
+    [data]
+  )
 
-  const didAllParticipantsSubmittedEvaluation = useMemo(() => {
-    if (data?.evaluations) {
-      return (
-        data?.evaluations.length - (didTrainerSubmitFeedback ? 1 : 0) ===
-        data.courseParticipantsAggregation.aggregate.count
-      )
+  const didAllParticipantsSubmitEvaluation = useMemo(() => {
+    if (!data?.evaluations) {
+      return false
     }
 
-    return false
-  }, [data, didTrainerSubmitFeedback])
+    return data?.attendees.reduce(
+      (res, a) => res && !!findEvaluationForProfileId(a.profile.id),
+      true
+    )
+  }, [findEvaluationForProfileId, data])
+
+  const didAllAssistTrainersSubmitEvaluation = useMemo(() => {
+    if (!data?.evaluations) {
+      return false
+    }
+
+    return data?.trainers
+      .filter(t => t.type === 'ASSISTANT')
+      .reduce(
+        (res, t) => res && !!findEvaluationForProfileId(t.profile.id),
+        true
+      )
+  }, [findEvaluationForProfileId, data])
+
+  const didTrainerSubmitEvaluation = useMemo(
+    () => !!findEvaluationForProfileId(profileId),
+    [findEvaluationForProfileId, profileId]
+  )
+
+  const leadTrainer = useMemo(
+    () => data?.trainers.find(t => t.type === 'LEADER'),
+    [data]
+  )
+
+  const isCourseTrainer = useMemo(
+    () => !!data?.trainers.find(t => t.profile.id === profileId),
+    [data, profileId]
+  )
+
+  const canTrainerSubmitEvaluation =
+    !didTrainerSubmitEvaluation &&
+    isCourseTrainer &&
+    (leadTrainer?.profile.id === profileId
+      ? didAllParticipantsSubmitEvaluation &&
+        didAllAssistTrainersSubmitEvaluation
+      : didAllParticipantsSubmitEvaluation)
 
   return (
     <Container disableGutters>
-      {!loading &&
-        !didTrainerSubmitFeedback &&
-        didAllParticipantsSubmittedEvaluation && (
-          <Alert
-            variant="outlined"
-            color="warning"
-            severity="warning"
-            action={
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => navigate('../evaluation/submit')}
-                data-testid="trainer-evaluation-button"
-              >
-                {t('course-evaluation.complete-my-evaluation')}
-              </Button>
-            }
-            sx={{
-              py: 1,
-              mb: 2,
-              '.MuiAlert-action': { alignItems: 'center', p: 0 },
-            }}
-          >
-            {t('course-evaluation.trainer-evaluate')}
-          </Alert>
-        )}
+      {!loading && canTrainerSubmitEvaluation && (
+        <Alert
+          variant="outlined"
+          color="warning"
+          severity="warning"
+          action={
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => navigate('../evaluation/submit')}
+              data-testid="trainer-evaluation-button"
+            >
+              {t('course-evaluation.complete-my-evaluation')}
+            </Button>
+          }
+          sx={{
+            py: 1,
+            mb: 2,
+            '.MuiAlert-action': { alignItems: 'center', p: 0 },
+          }}
+        >
+          {t('course-evaluation.trainer-evaluate')}
+        </Alert>
+      )}
 
       <Box>
         <Box
@@ -139,7 +177,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
             <Button
               variant="outlined"
               color="primary"
-              disabled={!didTrainerSubmitFeedback}
+              disabled={!didTrainerSubmitEvaluation}
               data-testid="export-summary"
               onClick={() => setIsPDFExporting(true)}
             >
@@ -151,7 +189,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
               variant="contained"
               color="primary"
               href="../evaluation/summary"
-              disabled={!didTrainerSubmitFeedback}
+              disabled={!didTrainerSubmitEvaluation}
               data-testid="view-summary-evaluation"
               sx={{ ml: 1 }}
             >

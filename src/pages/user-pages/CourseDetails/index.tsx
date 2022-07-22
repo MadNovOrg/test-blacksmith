@@ -37,7 +37,12 @@ import {
   ParamsType as GetCourseParamsType,
 } from '@app/queries/user-queries/get-course-by-id'
 import { CourseParticipant } from '@app/types'
-import { LoadingStatus, courseEnded, getSWRLoadingStatus } from '@app/util'
+import {
+  LoadingStatus,
+  courseEnded,
+  courseStarted,
+  getSWRLoadingStatus,
+} from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -103,10 +108,11 @@ export const CourseDetails = () => {
   }
 
   const attendingLabel = t('pages.participant-course.attending-course-label')
+  const courseHasStarted = course && courseStarted(course)
   const courseHasEnded = course && courseEnded(course)
   const canSubmitFeedback =
     !loading &&
-    courseHasEnded &&
+    courseHasStarted &&
     !didAttendeeSubmitFeedback &&
     courseParticipant?.attended
 

@@ -29800,7 +29800,7 @@ export type GetEvaluationsQueryVariables = Exact<{
 }>;
 
 
-export type GetEvaluationsQuery = { __typename?: 'query_root', evaluations: Array<{ __typename?: 'course_evaluation_answers', id: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type GetEvaluationsQuery = { __typename?: 'query_root', evaluations: Array<{ __typename?: 'course_evaluation_answers', id: any, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', name: string } }> } }>, attendees: Array<{ __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', id: any } }>, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any } }> };
 
 export type GetFeedbackUsersQueryVariables = Exact<{
   courseId: Scalars['Int'];

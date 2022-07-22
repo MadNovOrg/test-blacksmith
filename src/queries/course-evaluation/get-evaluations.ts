@@ -1,28 +1,5 @@
 import { gql } from 'graphql-request'
 
-export type ResponseType = {
-  evaluations: {
-    id: string
-    profile: {
-      id: string
-      fullName: string
-      email: string
-      organizations: {
-        organization: {
-          name: string
-        }
-      }[]
-    }
-  }[]
-  courseParticipantsAggregation: {
-    aggregate: {
-      count: number
-    }
-  }
-}
-
-export type ParamsType = { courseId: string }
-
 export const QUERY = gql`
   query GetEvaluations($courseId: Int!) {
     evaluations: course_evaluation_answers(
@@ -42,11 +19,22 @@ export const QUERY = gql`
       }
     }
 
-    courseParticipantsAggregation: course_participant_aggregate(
+    attendees: course_participant(
       where: { course_id: { _eq: $courseId }, attended: { _eq: true } }
     ) {
-      aggregate {
-        count
+      id
+      profile {
+        id
+      }
+    }
+
+    trainers: course_trainer(
+      where: { course_id: { _eq: $courseId }, status: { _eq: ACCEPTED } }
+    ) {
+      id
+      type
+      profile {
+        id
       }
     }
   }

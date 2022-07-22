@@ -208,6 +208,41 @@ export const buildCourse = build<Course>({
   },
 })
 
+export const buildStartedCourse = build<Course>({
+  fields: {
+    id: fake(f => f.datatype.number({ min: 10000, max: 10999 })),
+    name: fake(f => f.random.words(3)),
+    status: '',
+    createdAt: new Date().toISOString(),
+    type: CourseType.CLOSED,
+    min_participants: 6,
+    max_participants: 12,
+    deliveryType: CourseDeliveryType.F2F,
+    gradingConfirmed: null,
+    reaccreditation: perBuild(() => false),
+    go1Integration: perBuild(() => false),
+    organization: buildOrganization(),
+    schedule: [buildCourseSchedule()],
+    level: CourseLevel.LEVEL_1,
+    trainers: [buildCourseTrainer()],
+    dates: {
+      aggregate: {
+        start: { date: sub(new Date(), { days: 1 }).toISOString() },
+        end: { date: add(new Date(), { days: 1 }).toISOString() },
+      },
+    },
+    participantsAgg: {
+      aggregate: {
+        count: 0,
+      },
+    },
+    modulesAgg: {},
+    moduleGroupIds: [],
+    contactProfileId: null,
+    aolCostOfCourse: null,
+  },
+})
+
 export const buildEndedCourse = build<Course>({
   fields: {
     id: fake(f => f.datatype.uuid()),
