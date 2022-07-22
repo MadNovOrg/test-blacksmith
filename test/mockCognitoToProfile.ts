@@ -1,7 +1,9 @@
 import { DeepPartial } from 'ts-essentials'
 
-import cognitoToProfile from '@app/context/auth/cognitoToProfile'
-import { RoleName, Profile } from '@app/types'
+import cognitoToProfile, {
+  CognitoProfileDetails,
+} from '@app/context/auth/cognitoToProfile'
+import { RoleName } from '@app/types'
 
 import { profile } from '@test/providers'
 
@@ -10,7 +12,14 @@ jest.mock('@app/context/auth/cognitoToProfile')
 const mock = jest.mocked(cognitoToProfile)
 
 export const defaultCognitoProfile = {
-  profile,
+  profile: {
+    ...profile,
+    adminRights: {
+      aggregate: {
+        count: 0,
+      },
+    },
+  },
   claims: {
     'x-hasura-user-id': profile?.id ?? '',
     'x-hasura-user-email': profile?.email ?? '',
@@ -19,7 +28,8 @@ export const defaultCognitoProfile = {
     'x-hasura-tt-organizations': '{}',
   },
   emailVerified: true,
-}
+  isOrgAdmin: false,
+} as CognitoProfileDetails
 
 mock.mockResolvedValue(defaultCognitoProfile)
 
@@ -28,8 +38,15 @@ export const mockCognitoToProfile = ({
   claims,
 }: DeepPartial<typeof defaultCognitoProfile>) => {
   return mock.mockResolvedValueOnce({
-    profile: { ...defaultCognitoProfile.profile, ...profile } as Profile,
-    claims: { ...defaultCognitoProfile.claims, ...claims },
+    profile: {
+      ...defaultCognitoProfile.profile,
+      ...profile,
+    } as CognitoProfileDetails['profile'],
+    claims: {
+      ...defaultCognitoProfile.claims,
+      ...claims,
+    } as CognitoProfileDetails['claims'],
     emailVerified: true,
+    isOrgAdmin: false,
   })
 }

@@ -13,12 +13,13 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useOrg from '@app/hooks/useOrg'
 import {
@@ -52,12 +53,14 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
 
 export const EditOrgDetails: React.FC = () => {
   const { t } = useTranslation()
+  const { profile } = useAuth()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const { data: org, mutate } = useOrg(id ?? '')
+  const { data, mutate } = useOrg(id ?? '', profile?.id)
+  const org = data?.length ? data[0] : null
 
   const schema = useMemo(() => {
     return yup
@@ -196,7 +199,7 @@ export const EditOrgDetails: React.FC = () => {
 
       setLoading(false)
       await mutate()
-      navigate('../details')
+      navigate('..')
     } catch (err) {
       setLoading(false)
     }
@@ -496,7 +499,7 @@ export const EditOrgDetails: React.FC = () => {
                 variant="outlined"
                 color="primary"
                 component={LinkBehavior}
-                href="../details"
+                href=".."
               >
                 {t('cancel')}
               </Button>

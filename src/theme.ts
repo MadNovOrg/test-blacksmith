@@ -191,6 +191,10 @@ export default createTheme({
       fontSize: '1.5rem',
       fontWeight: '700',
     },
+    h4: {
+      fontSize: '1.25rem',
+      fontWeight: '500',
+    },
 
     subtitle1: {
       fontSize: '1.25rem',

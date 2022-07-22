@@ -1,0 +1,55 @@
+table:
+  schema: public
+  name: upcoming_enrollments
+configuration:
+  custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    schedule_start:
+      custom_name: scheduleStart
+    org_name:
+      custom_name: orgName
+    org_id:
+      custom_name: orgId
+    course_level:
+      custom_name: courseLevel
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    course_id: courseId
+    schedule_start: scheduleStart
+    org_name: orgName
+    org_id: orgId
+    course_level: courseLevel
+    profile_id: profileId
+object_relationships:
+  - name: profile
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: profile
+        insertion_order: null
+        column_mapping:
+          profile_id: id
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - course_level
+        - org_id
+        - org_name
+        - profile_id
+      filter:
+        profile:
+          organizations:
+            organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+      allow_aggregations: true

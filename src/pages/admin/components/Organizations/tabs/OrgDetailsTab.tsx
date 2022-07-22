@@ -1,9 +1,18 @@
-import { Box, CircularProgress, Container, Grid, Stack } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Stack,
+} from '@mui/material'
 import Typography from '@mui/material/Typography'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { DetailsRow } from '@app/components/DetailsRow'
+import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
 import { LoadingStatus, renderOrgAddress } from '@app/util'
 
@@ -13,15 +22,13 @@ type OrgDetailsTabParams = {
 
 export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
   const { t } = useTranslation()
+  const { profile } = useAuth()
+  const navigate = useNavigate()
 
-  const {
-    data: org,
-    activeCertificatesCount,
-    expiredCertificatesCount,
-    status,
-  } = useOrg(orgId ?? '')
+  const { data, status } = useOrg(orgId, profile?.id)
 
-  const orgAddress = useMemo(() => renderOrgAddress(org), [org])
+  const org = data?.length ? data[0] : null
+  const orgAddress = useMemo(() => (org ? renderOrgAddress(org) : ''), [org])
 
   return (
     <Container maxWidth="lg" sx={{ pt: 2, pb: 4 }}>
@@ -36,161 +43,138 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
       ) : null}
 
       {org && status === LoadingStatus.SUCCESS ? (
-        <Grid container direction="row">
-          <Grid item xs={12} md={8} pr={4}>
-            <Typography variant="subtitle1" mb={2}>
-              {t('pages.org-details.tabs.details.org-details-section.title')}
-            </Typography>
+        <Container>
+          <Typography variant="subtitle1" mb={2}>
+            {t('pages.org-details.tabs.details.org-details-section.title')}
+          </Typography>
 
-            <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.name'
-                )}
-                value={org.name}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.address'
-                )}
-                value={orgAddress}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.org-email'
-                )}
-                value={org.attributes.email}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.sector'
-                )}
-                value={org.sector}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.trust-type'
-                )}
-                value={
-                  org.trustType
-                    ? t(`trust-type.${org.trustType.toLowerCase()}`)
-                    : ''
-                }
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.trust'
-                )}
-                value={org.trustName}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.local-authority'
-                )}
-                value={org.attributes.localAuthority}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.ofsted-rating'
-                )}
-                value={
-                  org.attributes.ofstedRating
-                    ? t(
-                        `ofsted-rating.${org.attributes.ofstedRating.toLowerCase()}`
-                      )
-                    : ''
-                }
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.org-details-section.ofsted-last-inspection'
-                )}
-                value={
-                  org.attributes.ofstedLastInspection
-                    ? t('dates.default', {
-                        date: new Date(org.attributes.ofstedLastInspection),
-                      })
-                    : ''
-                }
-              />
-            </Box>
+          <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
+            <Grid container>
+              <Grid item xs={8}>
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.name'
+                  )}
+                  value={org.name}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.address'
+                  )}
+                  value={orgAddress}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.org-email'
+                  )}
+                  value={org.attributes.email}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.sector'
+                  )}
+                  value={org.sector}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.trust-type'
+                  )}
+                  value={
+                    org.trustType
+                      ? t(`trust-type.${org.trustType.toLowerCase()}`)
+                      : ''
+                  }
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.trust'
+                  )}
+                  value={org.trustName}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.local-authority'
+                  )}
+                  value={org.attributes.localAuthority}
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.ofsted-rating'
+                  )}
+                  value={
+                    org.attributes.ofstedRating
+                      ? t(
+                          `ofsted-rating.${org.attributes.ofstedRating.toLowerCase()}`
+                        )
+                      : ''
+                  }
+                />
+                <DetailsRow
+                  label={t(
+                    'pages.org-details.tabs.details.org-details-section.ofsted-last-inspection'
+                  )}
+                  value={
+                    org.attributes.ofstedLastInspection
+                      ? t('dates.default', {
+                          date: new Date(org.attributes.ofstedLastInspection),
+                        })
+                      : ''
+                  }
+                />
+              </Grid>
 
-            <Typography variant="subtitle1" mb={2}>
-              {t('pages.org-details.tabs.details.additional-details.title')}
-            </Typography>
+              <Grid item xs={4}>
+                <Box display="flex" justifyContent="flex-end">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    onClick={() => navigate('./edit')}
+                  >
+                    {t('pages.org-details.edit-organization')}
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
 
-            <Box bgcolor="common.white" p={3} pb={4} borderRadius={1}>
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.additional-details.head-first-name'
-                )}
-                value={org.attributes.headFirstName}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.additional-details.head-last-name'
-                )}
-                value={org.attributes.headLastName}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.additional-details.head-title'
-                )}
-                value={org.attributes.headTitle}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.additional-details.head-preferred-job-title'
-                )}
-                value={org.attributes.headPreferredJobTitle}
-              />
-              <DetailsRow
-                label={t(
-                  'pages.org-details.tabs.details.additional-details.website'
-                )}
-                value={org.attributes.website}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="subtitle1" mb={1}>
-              {t('pages.org-details.tabs.details.user-details.title')}
-            </Typography>
+          <Typography variant="subtitle1" mb={2}>
+            {t('pages.org-details.tabs.details.additional-details.title')}
+          </Typography>
 
-            <Box bgcolor="common.white" p={3} mb={1} borderRadius={1}>
-              <Typography variant="h2" mb={1}>
-                {org.usersCount.aggregate.count}
-              </Typography>
-              <Typography variant="body2" mb={1}>
-                {t(
-                  'pages.org-details.tabs.details.user-details.total-number-of-users'
-                )}
-              </Typography>
-            </Box>
-
-            <Box bgcolor="common.white" p={3} mb={1} borderRadius={1}>
-              <Typography variant="h2" mb={1}>
-                {activeCertificatesCount}
-              </Typography>
-              <Typography variant="body2" mb={1}>
-                {t(
-                  'pages.org-details.tabs.details.user-details.active-certifications'
-                )}
-              </Typography>
-            </Box>
-
-            <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
-              <Typography variant="h2" mb={1}>
-                {expiredCertificatesCount}
-              </Typography>
-              <Typography variant="body2" mb={1}>
-                {t(
-                  'pages.org-details.tabs.details.user-details.expired-certifications'
-                )}
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
+          <Box bgcolor="common.white" p={3} pb={4} borderRadius={1}>
+            <DetailsRow
+              label={t(
+                'pages.org-details.tabs.details.additional-details.head-first-name'
+              )}
+              value={org.attributes.headFirstName}
+            />
+            <DetailsRow
+              label={t(
+                'pages.org-details.tabs.details.additional-details.head-last-name'
+              )}
+              value={org.attributes.headLastName}
+            />
+            <DetailsRow
+              label={t(
+                'pages.org-details.tabs.details.additional-details.head-title'
+              )}
+              value={org.attributes.headTitle}
+            />
+            <DetailsRow
+              label={t(
+                'pages.org-details.tabs.details.additional-details.head-preferred-job-title'
+              )}
+              value={org.attributes.headPreferredJobTitle}
+            />
+            <DetailsRow
+              label={t(
+                'pages.org-details.tabs.details.additional-details.website'
+              )}
+              value={org.attributes.website}
+            />
+          </Box>
+        </Container>
       ) : null}
     </Container>
   )

@@ -1,67 +1,40 @@
 import { gql } from 'graphql-request'
 
 import { ORGANIZATION } from '@app/queries/fragments'
-import { Organization } from '@app/types'
-
-export type ResponseType = {
-  org: Organization & {
-    usersCount: {
-      aggregate: {
-        count: number
-      }
-    }
-    pendingInvitesCount: {
-      aggregate: {
-        count: number
-      }
-    }
-  }
-  activeCertificates: { aggregate: { count: number } }
-  expiredCertificates: { aggregate: { count: number } }
-}
-
-export type ParamsType = {
-  orgId: string
-}
 
 export const Matcher = /(query GetOrgDetails)/i
 
 export const QUERY = gql`
   ${ORGANIZATION}
-  query GetOrgDetails($orgId: uuid!) {
-    org: organization_by_pk(id: $orgId) {
+  query GetOrgDetails($where: organization_bool_exp = {}) {
+    orgs: organization(where: $where) {
       ...Organization
-      usersCount: members_aggregate {
-        aggregate {
-          count
-        }
+    }
+    profiles: profile(where: { organizations: { organization: $where } }) {
+      id
+      fullName
+      certificates(where: { status: { _neq: "EXPIRED" } }) {
+        courseLevel
+        expiryDate
+        status
       }
-      pendingInvitesCount: invites_aggregate(
-        where: { status: { _eq: "PENDING" } }
-      ) {
-        aggregate {
-          count
+      upcomingEnrollments {
+        orgId
+        orgName
+        courseLevel
+        courseId
+      }
+      organizations {
+        id
+        position
+        organization {
+          name
         }
       }
     }
-    activeCertificates: course_certificate_aggregate(
+    pendingInvitesCount: organization_invites_aggregate(
       where: {
-        _and: [
-          { profile: { organizations: { organization_id: { _eq: $orgId } } } }
-          { expiryDate: { _gt: "now()" } }
-        ]
-      }
-    ) {
-      aggregate {
-        count
-      }
-    }
-    expiredCertificates: course_certificate_aggregate(
-      where: {
-        _and: [
-          { profile: { organizations: { organization_id: { _eq: $orgId } } } }
-          { expiryDate: { _lt: "now()" } }
-        ]
+        _and: [{ status: { _eq: "PENDING" } }, { organization: $where }]
       }
     ) {
       aggregate {

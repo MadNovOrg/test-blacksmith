@@ -51,6 +51,12 @@ object_relationships:
         insertion_order: null
         column_mapping:
           profile_id: id
+computed_fields:
+  - name: status
+    definition:
+      function:
+        schema: public
+        name: course_certificate_status
 insert_permissions:
   - role: trainer
     permission:
@@ -99,11 +105,24 @@ select_permissions:
         - number
         - profile_id
         - updated_at
+      computed_fields:
+        - status
       filter:
-        course:
-          trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
+        _or:
+          - course:
+              trainers:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                      - is_admin:
+                          _eq: true
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
@@ -117,6 +136,8 @@ select_permissions:
         - updated_at
         - id
         - profile_id
+      computed_fields:
+        - status
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -132,6 +153,8 @@ select_permissions:
         - updated_at
         - id
         - profile_id
+      computed_fields:
+        - status
       filter: {}
   - role: user
     permission:
@@ -146,6 +169,19 @@ select_permissions:
         - number
         - profile_id
         - updated_at
+      computed_fields:
+        - status
       filter:
-        profile_id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                      - is_admin:
+                          _eq: true
+      allow_aggregations: true

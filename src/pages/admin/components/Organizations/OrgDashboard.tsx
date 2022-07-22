@@ -1,0 +1,134 @@
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import {
+  Alert,
+  Box,
+  CircularProgress,
+  Container,
+  Stack,
+  Tab,
+  Typography,
+} from '@mui/material'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams, useSearchParams } from 'react-router-dom'
+
+import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
+import useOrg from '@app/hooks/useOrg'
+import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
+import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
+import { OrgIndividualsTab } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
+import { OrgOverviewTab } from '@app/pages/admin/components/Organizations/tabs/OrgOverviewTab'
+import theme from '@app/theme'
+import { LoadingStatus } from '@app/util'
+
+export enum OrgDashboardTabs {
+  OVERVIEW = 'OVERVIEW',
+  DETAILS = 'DETAILS',
+  INDIVIDUALS = 'INDIVIDUALS',
+}
+
+export enum CertificationStatus {
+  ACTIVE,
+  EXPIRING_SOON,
+  EXPIRED,
+}
+
+export const OrgDashboard: React.FC = () => {
+  const { id } = useParams()
+  const { profile } = useAuth()
+  const [searchParams] = useSearchParams()
+  const { t } = useTranslation()
+
+  const { data, status } = useOrg(id, profile?.id)
+
+  const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
+  const [selectedTab, setSelectedTab] = useState(
+    initialTab || OrgDashboardTabs.OVERVIEW
+  )
+
+  return (
+    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+      {status === LoadingStatus.FETCHING ? (
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          data-testid="org-details-fetching"
+        >
+          <CircularProgress />
+        </Stack>
+      ) : (
+        <>
+          <OrgSelectionToolbar />
+
+          <Container maxWidth="lg" sx={{ pt: 2 }}>
+            {status === LoadingStatus.ERROR ? (
+              <Alert severity="error">
+                {t('pages.org-details.org-not-found')}
+              </Alert>
+            ) : null}
+
+            {data && status === LoadingStatus.SUCCESS ? (
+              <>
+                <Box display="flex" paddingBottom={5}>
+                  <Box width="100%" pr={4}>
+                    <Sticky top={20}>
+                      <Typography variant="h2" my={2}>
+                        {id
+                          ? data[0].name
+                          : t('pages.org-details.all-organizations')}
+                      </Typography>
+                    </Sticky>
+                  </Box>
+                </Box>
+
+                {id && id !== 'all' ? (
+                  <TabContext value={selectedTab}>
+                    <Container maxWidth="lg">
+                      <Container>
+                        <TabList onChange={(_, value) => setSelectedTab(value)}>
+                          <Tab
+                            label={t('pages.org-details.tabs.overview.title')}
+                            value={OrgDashboardTabs.OVERVIEW}
+                          />
+                          <Tab
+                            label={t('pages.org-details.tabs.details.title')}
+                            value={OrgDashboardTabs.DETAILS}
+                          />
+                          <Tab
+                            label={t('pages.org-details.tabs.users.title')}
+                            value={OrgDashboardTabs.INDIVIDUALS}
+                          />
+                        </TabList>
+                      </Container>
+                    </Container>
+
+                    <Container maxWidth="lg">
+                      <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.OVERVIEW}>
+                        {id ? <OrgOverviewTab orgId={id} /> : null}
+                      </TabPanel>
+
+                      <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
+                        <OrgDetailsTab orgId={id} />
+                      </TabPanel>
+
+                      <TabPanel
+                        sx={{ px: 0 }}
+                        value={OrgDashboardTabs.INDIVIDUALS}
+                      >
+                        <OrgIndividualsTab orgId={id} />
+                      </TabPanel>
+                    </Container>
+                  </TabContext>
+                ) : (
+                  <OrgOverviewTab />
+                )}
+              </>
+            ) : null}
+          </Container>
+        </>
+      )}
+    </FullHeightPage>
+  )
+}

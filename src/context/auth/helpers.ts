@@ -1,13 +1,12 @@
 import { RoleName } from '@app/types'
 
 import cognitoToProfile from './cognitoToProfile'
-import type { CognitoUser, AuthState } from './types'
+import type { AuthState, CognitoUser } from './types'
 
 // Roles allowed in switcher
 export const ActiveRoles = new Set([
   RoleName.USER,
   RoleName.TRAINER,
-  RoleName.ORG_ADMIN,
   RoleName.TT_OPS,
   RoleName.TT_ADMIN,
 ])
@@ -23,7 +22,8 @@ export async function fetchUserProfile(
   user: CognitoUser
 ): Promise<Required<AuthState> | void> {
   try {
-    const { profile, claims, emailVerified } = await cognitoToProfile(user)
+    const { profile, isOrgAdmin, claims, emailVerified } =
+      await cognitoToProfile(user)
 
     if (!profile) {
       throw Error(`No profile for ${claims?.['x-hasura-user-id'] ?? 'unknown'}`)
@@ -41,11 +41,12 @@ export async function fetchUserProfile(
 
     return {
       profile,
+      isOrgAdmin: isOrgAdmin ?? false,
       organizationIds: JSON.parse(`[${orgIdsPgLiteral.slice(1, -1)}]`),
       defaultRole,
       allowedRoles,
       activeRole,
-      verified: emailVerified,
+      verified: emailVerified ?? false,
     }
   } catch (err) {
     console.error(err)

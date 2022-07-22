@@ -165,7 +165,7 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
                 {orgs.map(org => (
                   <TableRow key={org.id} data-testid={`org-row-${org.id}`}>
                     <TableCell>
-                      <Link href={`${org?.id}/details`} variant="body2">
+                      <Link href={`${org?.id}`} variant="body2">
                         {org?.name}
                       </Link>
                     </TableCell>

@@ -1,6 +1,10 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
+import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
+import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
+import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -22,6 +26,8 @@ import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 const MembershipRoutes = React.lazy(() => import('./membership'))
 
 const TrainerBaseRoutes = () => {
+  const { acl } = useAuth()
+
   return (
     <Routes>
       <Route index element={<Navigate replace to="courses" />} />
@@ -62,6 +68,17 @@ const TrainerBaseRoutes = () => {
           </Route>
         </Route>
       </Route>
+
+      {acl.canViewOrganizations() ? (
+        <Route path="organizations">
+          <Route index element={<Navigate replace to="all" />} />
+          <Route path=":id">
+            <Route index element={<OrgDashboard />} />
+            <Route path="edit" element={<EditOrgDetails />} />
+            <Route path="invite" element={<InviteUserToOrganization />} />
+          </Route>
+        </Route>
+      ) : null}
 
       <Route path="membership/*" element={<MembershipRoutes />} />
 

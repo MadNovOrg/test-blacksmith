@@ -6,7 +6,7 @@ export const DetailsRow = ({
   value,
 }: {
   label: string
-  value: string | null
+  value?: string | null
 }) => (
   <Box display="flex" alignItems="center" mb={2}>
     <Typography flex={1} color="grey.700">

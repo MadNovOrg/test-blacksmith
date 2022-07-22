@@ -13,7 +13,8 @@
       "bild_act": "BILD ACT Certified",
       "intermediate_trainer": "Intermediate Trainer",
       "bild_act_trainer": "BILD ACT Trainer",
-      "advanced_trainer": "Advanced Trainer"
+      "advanced_trainer": "Advanced Trainer",
+      "no-certification": "No certification"
     },
     "errors": {
       "loading-participants": "There was an error loading course participants",
@@ -363,7 +364,16 @@
     "invites": "Invites",
     "trust": "Trust",
     "permissions": "Permissions",
-    "leave": "Leave"
+    "leave": "Leave",
+    "enrolled": "Enrolled",
+    "certification-status": {
+      "expired": "Expired",
+      "expired_recently": "Expired",
+      "expiring_soon": "Expiring soon",
+      "active": "Active"
+    },
+    "expired-ago": "Expired {{ time }} ago",
+    "expiring-in": "Expiring in {{ time }}"
   },
   "components": {
     "not-found": {
@@ -1222,10 +1232,10 @@
           }
         },
         "users": {
-          "title": "Users",
+          "title": "Individuals",
           "tabs": {
-            "users": "Users ({{number}})",
-            "invites": "Invites ({{number}})"
+            "individuals": "Individuals ({{number}})",
+            "pending": "Pending ({{number}})"
           },
           "cols-name": "Name",
           "cols-certification": "Certification",
@@ -1249,9 +1259,19 @@
             "organization-admin": "Organisation admin",
             "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user."
           }
+        },
+        "overview": {
+          "title": "Overview",
+          "total-individuals": "Total individuals",
+          "currently-enrolled": "{{count}} currently enrolled",
+          "active": "Active",
+          "expiring-soon": "Expiring soon",
+          "expired": "Expired",
+          "individuals-by-training-level": "Individuals by training level"
         }
       },
-      "edit-organization": "Edit organisation"
+      "edit-organization": "Edit organisation",
+      "all-organizations": "All organisations"
     },
     "edit-org-details": {
       "title": "Please complete your organisation profile",

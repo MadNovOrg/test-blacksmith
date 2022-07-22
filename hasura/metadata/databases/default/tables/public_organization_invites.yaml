@@ -55,6 +55,26 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter:
+        organization:
+          members:
+            _and:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - is_admin:
+                  _eq: true
+      allow_aggregations: true
 update_permissions:
   - role: tt-admin
     permission:

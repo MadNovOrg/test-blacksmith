@@ -16,39 +16,39 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable'
 import { OrgUsersTable } from '@app/components/OrgUsersTable'
+import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
 import { LoadingStatus } from '@app/util'
 
-export enum OrgUsersSubtabs {
+export enum OrgIndividualsSubtabs {
   USERS = 'USERS',
   INVITES = 'INVITES',
 }
 
-type OrgUsersTabParams = {
+type OrgIndividualsTabParams = {
   orgId: string
 }
 
-export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
+export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
+  orgId,
+}) => {
   const { t } = useTranslation()
+  const { profile } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
-  const initialTab = searchParams.get('subtab') as OrgUsersSubtabs | null
+  const initialTab = searchParams.get('subtab') as OrgIndividualsSubtabs | null
   const [selectedTab, setSelectedTab] = useState(
-    initialTab || OrgUsersSubtabs.USERS
+    initialTab || OrgIndividualsSubtabs.USERS
   )
 
   useEffect(() => {
     if (initialTab) setSelectedTab(initialTab)
   }, [initialTab])
 
-  const {
-    data: org,
-    activeCertificatesCount,
-    expiredCertificatesCount,
-    status,
-    mutate,
-  } = useOrg(orgId ?? '')
+  const { data, stats, status, mutate } = useOrg(orgId, profile?.id)
+
+  const org = data?.length ? data[0] : null
 
   return (
     <Container maxWidth="lg" sx={{ pt: 2, pb: 4 }}>
@@ -67,7 +67,7 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
           <Grid container>
             <Grid item xs={4} bgcolor="common.white" p={3} borderRadius={1}>
               <Typography variant="h2" mb={1}>
-                {org.usersCount.aggregate.count}
+                {stats.profiles.count}
               </Typography>
               <Typography variant="body2" mb={1}>
                 {t(
@@ -78,7 +78,7 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
 
             <Grid item xs={4} bgcolor="common.white" p={3} borderRadius={1}>
               <Typography variant="h2" mb={1}>
-                {activeCertificatesCount}
+                {stats.certificates.active.count}
               </Typography>
               <Typography variant="body2" mb={1}>
                 {t(
@@ -89,7 +89,7 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
 
             <Grid item xs={4} bgcolor="common.white" p={3} borderRadius={1}>
               <Typography variant="h2" mb={1}>
-                {expiredCertificatesCount}
+                {stats.certificates.expired.count}
               </Typography>
               <Typography variant="body2" mb={1}>
                 {t(
@@ -104,17 +104,17 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
               <Box display="flex" justifyContent="space-between" my={2}>
                 <TabList onChange={(_, value) => setSelectedTab(value)}>
                   <Tab
-                    label={t('pages.org-details.tabs.users.tabs.users', {
-                      number: org?.usersCount.aggregate.count,
+                    label={t('pages.org-details.tabs.users.tabs.individuals', {
+                      number: stats.profiles.count,
                     })}
-                    value={OrgUsersSubtabs.USERS}
+                    value={OrgIndividualsSubtabs.USERS}
                     data-testid="tabUsers"
                   />
                   <Tab
-                    label={t('pages.org-details.tabs.users.tabs.invites', {
-                      number: org?.pendingInvitesCount.aggregate.count,
+                    label={t('pages.org-details.tabs.users.tabs.pending', {
+                      number: stats.pendingInvites.count,
                     })}
-                    value={OrgUsersSubtabs.INVITES}
+                    value={OrgIndividualsSubtabs.INVITES}
                     data-testid="tabInvites"
                   />
                 </TabList>
@@ -130,18 +130,18 @@ export const OrgUsersTab: React.FC<OrgUsersTabParams> = ({ orgId }) => {
               </Box>
 
               <TabPanel
-                value={OrgUsersSubtabs.USERS}
+                value={OrgIndividualsSubtabs.USERS}
                 sx={{ px: 0, pt: 0, bgcolor: 'common.white' }}
               >
                 <OrgUsersTable
-                  orgId={orgId ?? ''}
+                  orgId={orgId}
                   onChange={async () => {
                     await mutate()
                   }}
                 />
               </TabPanel>
-              <TabPanel value={OrgUsersSubtabs.INVITES} sx={{ px: 0 }}>
-                <OrgInvitesTable orgId={orgId ?? ''} />
+              <TabPanel value={OrgIndividualsSubtabs.INVITES} sx={{ px: 0 }}>
+                <OrgInvitesTable orgId={orgId} />
               </TabPanel>
             </TabContext>
           </Box>

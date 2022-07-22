@@ -47,6 +47,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
   const [showEditUserModal, setShowEditUserModal] = useState(false)
   const [editedUser, setEditedUser] = useState<OrganizationMember>()
 
+  // TODO use useOrg instead for certificate, enrolled etc
   const { users, loading, totalCount, mutate } = useOrgUsers(orgId, {
     sorting,
     limit: perPage,

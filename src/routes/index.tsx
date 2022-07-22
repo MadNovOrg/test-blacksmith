@@ -25,14 +25,12 @@ import { RoleName } from '@app/types'
 const ProfileRoutes = React.lazy(() => import('./profile'))
 const TrainerRoutes = React.lazy(() => import('./trainer-routes'))
 const UserRoutes = React.lazy(() => import('./user-routes'))
-const OrgAdminRoutes = React.lazy(() => import('./org-admin-routes'))
 const TTRoutes = React.lazy(() => import('./tt-routes'))
 const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
 
 const roleRoutesMap = {
   [RoleName.TRAINER]: TrainerRoutes,
   [RoleName.USER]: UserRoutes,
-  [RoleName.ORG_ADMIN]: OrgAdminRoutes,
   [RoleName.TT_OPS]: TTRoutes,
   [RoleName.TT_ADMIN]: TTRoutes,
   [RoleName.UNVERIFIED]: UnverifiedRoutes,

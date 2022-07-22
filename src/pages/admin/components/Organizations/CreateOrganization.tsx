@@ -111,7 +111,7 @@ export const CreateOrganization = () => {
           },
         ],
       })
-      navigate(`../${response.org.id}/details`)
+      navigate(`../${response.org.id}`)
     } catch (e: unknown) {
       setError((e as Error).message)
     } finally {

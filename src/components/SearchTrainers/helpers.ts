@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { SearchTrainer, CourseTrainerType, CourseLevel } from '@app/types'
+import { CourseLevel, CourseTrainerType, SearchTrainer } from '@app/types'
 
 export type SearchTrainersSchedule = {
   start?: Date | string

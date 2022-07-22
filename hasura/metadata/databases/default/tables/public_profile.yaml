@@ -42,6 +42,13 @@ array_relationships:
         insertion_order: null
         column_mapping:
           id: profile_id
+  - name: courses
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          schema: public
+          name: course_participant
   - name: identities
     using:
       foreign_key_constraint_on:
@@ -63,6 +70,15 @@ array_relationships:
         table:
           schema: public
           name: profile_role
+  - name: upcomingEnrollments
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: upcoming_enrollments
+        insertion_order: null
+        column_mapping:
+          id: profile_id
 computed_fields:
   - name: fullName
     definition:

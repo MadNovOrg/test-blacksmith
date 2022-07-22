@@ -1,17 +1,17 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { act, renderHook } from '@testing-library/react-hooks'
 import { Auth } from 'aws-amplify'
 
 import { RoleName } from '@app/types'
 
 import {
-  mockCognitoToProfile,
-  defaultCognitoProfile,
   chance,
+  defaultCognitoProfile,
+  mockCognitoToProfile,
 } from '@test/index'
 
 import { ActiveRoles, lsActiveRoleClient } from './helpers'
 
-import { useAuth, AuthProvider } from './index'
+import { AuthProvider, useAuth } from './index'
 
 const render = () => {
   return renderHook(() => useAuth(), { wrapper: AuthProvider })
@@ -42,6 +42,7 @@ describe('context: Auth', () => {
     // After auto-signin we should have the user data
     expect(Object.keys(result.current)).toStrictEqual([
       'profile',
+      'isOrgAdmin',
       'organizationIds',
       'defaultRole',
       'allowedRoles',
@@ -66,7 +67,7 @@ describe('context: Auth', () => {
 
   it('sets user and profile data as expected', async () => {
     const { profile, claims } = defaultCognitoProfile
-    const roles = claims['x-hasura-allowed-roles']
+    const roles = claims ? claims['x-hasura-allowed-roles'] : []
 
     const { result, waitForNextUpdate } = render()
 

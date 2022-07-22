@@ -11,6 +11,7 @@ export type LoginResult = { error?: E }
 
 export type AuthState = {
   profile?: Profile
+  isOrgAdmin?: boolean
   organizationIds?: string[]
   defaultRole?: RoleName
   allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
@@ -48,6 +49,7 @@ export type ACL = {
   canCreateCourse: (type: CourseType) => boolean
   canAssignLeadTrainer: () => boolean
   canViewContacts: () => boolean
+  canViewOrganizations: () => boolean
   canViewCertifications: () => boolean
   canViewOrders: () => boolean
   canOverrideGrades: () => boolean

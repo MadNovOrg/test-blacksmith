@@ -12,6 +12,7 @@ import { FieldError } from 'react-hook-form'
 import { Profile } from '@app/generated/graphql'
 import {
   Address,
+  CertificateStatus,
   Course,
   CourseInput,
   CourseLevel,
@@ -19,7 +20,6 @@ import {
   CourseTrainer,
   CourseTrainerType,
   CourseType,
-  Organization,
   SearchTrainer,
   SetCourseTrainerInput,
 } from '@app/types'
@@ -254,7 +254,16 @@ export function userExistsInCognito(email: string) {
     .catch(err => err.code === 'NotAuthorizedException')
 }
 
-export function renderOrgAddress(org?: Organization) {
+export function renderOrgAddress(org?: {
+  address: {
+    line1: string
+    line2: string
+    city: string
+    state: string
+    postCode: string
+    country: string
+  }
+}) {
   if (!org?.address) return ''
   return [
     org.address.line1,
@@ -312,4 +321,42 @@ export function getFieldError(err: FieldError[]) {
   }
 
   return error.message
+}
+
+// more on this logic [here](https://github.com/TeamTeach/application/wiki/Organisations)
+export function getProfileCertificationLevels(
+  certificates: { courseLevel: string; status: CertificateStatus }[]
+): (CourseLevel | null)[] {
+  const levels = []
+
+  const advancedTrainer = certificates.find(
+    c => c.courseLevel === CourseLevel.ADVANCED_TRAINER
+  )
+  if (advancedTrainer) {
+    levels.push(CourseLevel.ADVANCED_TRAINER)
+    if (advancedTrainer.status !== CertificateStatus.EXPIRED_RECENTLY) {
+      return levels
+    }
+  }
+
+  if (certificates.find(c => c.courseLevel === CourseLevel.ADVANCED)) {
+    levels.push(CourseLevel.ADVANCED)
+  }
+
+  const hierarchy = [
+    CourseLevel.INTERMEDIATE_TRAINER,
+    CourseLevel.LEVEL_2,
+    CourseLevel.LEVEL_1,
+  ]
+  for (const level of hierarchy) {
+    const certificate = certificates.find(c => c.courseLevel === level)
+    if (certificate) {
+      levels.push(level)
+      if (certificate.status !== CertificateStatus.EXPIRED_RECENTLY) {
+        return levels
+      }
+    }
+  }
+
+  return levels.length > 0 ? levels : [null]
 }

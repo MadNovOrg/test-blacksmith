@@ -28,8 +28,8 @@ import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useOrganizations } from '@app/hooks/useOrganizations'
-import { OrgDetailsTabs } from '@app/pages/admin/components/Organizations/OrgDetails'
-import { OrgUsersSubtabs } from '@app/pages/admin/components/Organizations/tabs/OrgUsersTab'
+import { OrgDashboardTabs } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { OrgIndividualsSubtabs } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
 import { MUTATION as SaveOrgInvitesQuery } from '@app/queries/invites/save-org-invites'
 import { yup } from '@app/schemas'
 import { Organization } from '@app/types'
@@ -95,7 +95,7 @@ export const InviteUserToOrganization = () => {
         })),
       })
       navigate(
-        `../details?tab=${OrgDetailsTabs.USERS}&subtab=${OrgUsersSubtabs.INVITES}`
+        `../?tab=${OrgDashboardTabs.INDIVIDUALS}&subtab=${OrgIndividualsSubtabs.INVITES}`
       )
     } catch (e: unknown) {
       setError((e as Error).message)

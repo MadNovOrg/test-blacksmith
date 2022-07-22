@@ -56,6 +56,13 @@ export type CourseModule = {
   module: Module
 } & Base
 
+export enum CertificateStatus {
+  EXPIRED = 'EXPIRED',
+  EXPIRED_RECENTLY = 'EXPIRED_RECENTLY',
+  EXPIRING_SOON = 'EXPIRING_SOON',
+  ACTIVE = 'ACTIVE',
+}
+
 export type CourseCertificate = {
   number: string
   courseId: string
@@ -66,6 +73,7 @@ export type CourseCertificate = {
   participant?: CourseParticipant
   profileId: string
   profile: Profile
+  status: CertificateStatus
 } & Base
 
 export type Address = {
@@ -151,7 +159,6 @@ export enum RoleName {
   UNVERIFIED = 'unverified',
   USER = 'user',
   TRAINER = 'trainer',
-  ORG_ADMIN = 'org-admin',
   TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
 }

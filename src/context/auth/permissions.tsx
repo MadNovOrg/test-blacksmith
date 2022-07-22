@@ -16,8 +16,10 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isTrainer: () => allowedRoles.has(RoleName.TRAINER),
 
+    isOrgAdmin: () => auth.isOrgAdmin,
+
     canViewMyOrganization: () => {
-      const roles = [RoleName.USER, RoleName.ORG_ADMIN]
+      const roles = [RoleName.USER]
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -44,6 +46,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canViewOrders: () => {
       const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
+    },
+
+    canViewOrganizations: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
 
     canCreateCourse: (type: CourseType) => {

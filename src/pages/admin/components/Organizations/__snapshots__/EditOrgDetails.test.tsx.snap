@@ -81,8 +81,8 @@ Object {
                     class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-5j85sx-MuiFormControl-root-MuiTextField-root"
                   >
                     <label
-                      class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
-                      data-shrink="true"
+                      class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                      data-shrink="false"
                       for="trustType"
                       id="trustType-label"
                     >
@@ -108,7 +108,11 @@ Object {
                         role="button"
                         tabindex="0"
                       >
-                        Single Academy Trust
+                        <span
+                          class="notranslate"
+                        >
+                          ​
+                        </span>
                       </div>
                       <input
                         aria-hidden="true"
@@ -116,7 +120,7 @@ Object {
                         data-testid="trust-type"
                         required=""
                         tabindex="-1"
-                        value="SINGLE_ACADEMY_TRUST"
+                        value=""
                       />
                       <svg
                         aria-hidden="true"
@@ -585,7 +589,7 @@ Object {
               >
                 <a
                   class="MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButtonBase-root  css-tf3g5z-MuiButtonBase-root-MuiButton-root"
-                  href="/details"
+                  href="/"
                   tabindex="0"
                 >
                   Cancel
@@ -688,8 +692,8 @@ Object {
                   class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-5j85sx-MuiFormControl-root-MuiTextField-root"
                 >
                   <label
-                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled Mui-required css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
-                    data-shrink="true"
+                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                    data-shrink="false"
                     for="trustType"
                     id="trustType-label"
                   >
@@ -715,7 +719,11 @@ Object {
                       role="button"
                       tabindex="0"
                     >
-                      Single Academy Trust
+                      <span
+                        class="notranslate"
+                      >
+                        ​
+                      </span>
                     </div>
                     <input
                       aria-hidden="true"
@@ -723,7 +731,7 @@ Object {
                       data-testid="trust-type"
                       required=""
                       tabindex="-1"
-                      value="SINGLE_ACADEMY_TRUST"
+                      value=""
                     />
                     <svg
                       aria-hidden="true"
@@ -1192,7 +1200,7 @@ Object {
             >
               <a
                 class="MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButtonBase-root  css-tf3g5z-MuiButtonBase-root-MuiButton-root"
-                href="/details"
+                href="/"
                 tabindex="0"
               >
                 Cancel
