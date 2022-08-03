@@ -15,13 +15,11 @@ import useSWR from 'swr'
 
 import { AttendeeMenu } from '@app/components/AttendeeMenu'
 import { BackButton } from '@app/components/BackButton'
-import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { LinkBehavior } from '@app/components/LinkBehavior'
-import { QuestionGroup } from '@app/components/QuestionGroup'
 import { RatingProgress } from '@app/components/RatingProgress'
 import { RatingSummary } from '@app/components/RatingSummary'
 import { Sticky } from '@app/components/Sticky'
-import { useAuth } from '@app/context/auth'
+import useCourse from '@app/hooks/useCourse'
 import {
   QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
   ResponseType as GetEvaluationsSummaryResponseType,
@@ -53,12 +51,49 @@ const QuestionText = styled(Typography)(({ theme }) => ({
   display: 'inline',
 }))
 
+const normalizeAnswers = (
+  answers: GetEvaluationsSummaryResponseType['answers']
+) => {
+  const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
+    answers,
+    a => a.question.group || 'UNGROUPED'
+  )
+
+  const grouped = {} as CourseEvaluationGroupedQuestion
+
+  groups.forEach(g => {
+    grouped[g] = groupBy(groupedAnswers[g], a => a.question.questionKey)
+  })
+
+  const { ANY_INJURIES: injuryQuestion = [], ...ungrouped } = groupBy(
+    ungroupedAnswers,
+    a => a.question.questionKey
+  )
+
+  const injuryResponse = groupBy(injuryQuestion, a =>
+    a.answer.startsWith('YES') ? 'YES' : 'NO'
+  )
+
+  return {
+    grouped,
+    ungrouped,
+    injuryQuestion: {
+      yes:
+        injuryQuestion.length > 0
+          ? ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) * 100
+          : 0,
+      no:
+        injuryQuestion.length > 0
+          ? ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) * 100
+          : 0,
+    },
+  }
+}
+
 export const EvaluationSummary = () => {
   const params = useParams()
-  const { profile } = useAuth()
   const { t } = useTranslation()
   const courseId = params.id as string
-  const profileId = profile?.id as string
 
   const { pathname, hash, key } = useLocation()
 
@@ -76,6 +111,8 @@ export const EvaluationSummary = () => {
     }
   }, [pathname, hash, key])
 
+  const { data: course } = useCourse(courseId)
+
   const { data, error } = useSWR<
     GetEvaluationsSummaryResponseType,
     Error,
@@ -85,7 +122,9 @@ export const EvaluationSummary = () => {
 
   const { trainerAnswers, attendeeAnswers } = useMemo(() => {
     const { trainer, attendee } = groupBy(data?.answers, a =>
-      a.profile.id === profileId ? 'trainer' : 'attendee'
+      course?.trainers?.find(t => t.profile.id === a.profile.id)
+        ? 'trainer'
+        : 'attendee'
     )
 
     return {
@@ -94,7 +133,7 @@ export const EvaluationSummary = () => {
       ),
       attendeeAnswers: attendee,
     }
-  }, [data, profileId])
+  }, [data, course])
 
   const attendees = useMemo(() => {
     return uniqBy(
@@ -108,36 +147,12 @@ export const EvaluationSummary = () => {
     )
   }, [attendeeAnswers])
 
-  const { grouped, ungrouped, injuryQuestion } = useMemo(() => {
-    const { UNGROUPED: ungroupedAnswers, ...groupedAnswers } = groupBy(
-      attendeeAnswers,
-      a => a.question.group || 'UNGROUPED'
-    )
-
-    const grouped = {} as CourseEvaluationGroupedQuestion
-
-    groups.forEach(g => {
-      grouped[g] = groupBy(groupedAnswers[g], a => a.question.questionKey)
-    })
-
-    const { ANY_INJURIES: injuryQuestion = [], ...ungrouped } = groupBy(
-      ungroupedAnswers,
-      a => a.question.questionKey
-    )
-
-    const injuryResponse = groupBy(injuryQuestion, a =>
-      a.answer.startsWith('YES') ? 'YES' : 'NO'
-    )
-
-    return {
-      grouped,
-      ungrouped,
-      injuryQuestion: {
-        yes: ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) * 100,
-        no: ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) * 100,
-      },
-    }
-  }, [attendeeAnswers])
+  const { grouped, ungrouped, injuryQuestion } = useMemo(
+    () => normalizeAnswers(attendeeAnswers),
+    [attendeeAnswers]
+  )
+  const { ungrouped: trainerUngrouped, injuryQuestion: trainerInjuryQuestion } =
+    useMemo(() => normalizeAnswers(trainerAnswers), [trainerAnswers])
 
   if (loading) {
     return <CircularProgress />
@@ -314,46 +329,83 @@ export const EvaluationSummary = () => {
             </Typography>
             <Typography variant="subtitle2"></Typography>
 
-            {trainerAnswers?.map(a => {
-              if (booleanQuestionTypes.includes(a.question.type)) {
-                const value = a.answer.split('-')
-
-                return (
-                  <QuestionGroup
-                    key={a.id}
-                    title={t(
-                      `course-evaluation.questions.${a.question.questionKey}`
-                    )}
-                  >
-                    <BooleanQuestion
-                      value={value[0]}
-                      reason={value[1] || ''}
-                      type={a.question.type}
-                      infoText={t('course-evaluation.provide-details')}
-                    />
-                  </QuestionGroup>
-                )
-              }
-
-              if (a.question.type === CourseEvaluationQuestionType.TEXT) {
-                return (
-                  <QuestionGroup
-                    key={a.id}
-                    title={t(
-                      `course-evaluation.questions.${a.question.questionKey}`
-                    )}
-                  >
-                    <Box bgcolor="common.white" px={1} py={2}>
-                      <QuestionText key={a.id}>
-                        {a.answer || 'N/A'}
-                      </QuestionText>
+            <Box>
+              <Box mb={2}>
+                <Typography variant="subtitle2" mb={1}>
+                  {t(`course-evaluation.questions.ANY_INJURIES`)}
+                </Typography>
+                <Box bgcolor="common.white" p={2} pb={1}>
+                  <Box display="flex" alignItems="center">
+                    <Box flex={3}>
+                      <RatingProgress
+                        variant="determinate"
+                        value={trainerInjuryQuestion.yes}
+                        color="navy.100"
+                      />
                     </Box>
-                  </QuestionGroup>
-                )
-              }
+                    <Box flex={1} display="flex">
+                      <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
+                        {t('yes')}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight="600"
+                        sx={{ width: 30 }}
+                      >
+                        {trainerInjuryQuestion.yes}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box display="flex" alignItems="center">
+                    <Box flex={3}>
+                      <RatingProgress
+                        variant="determinate"
+                        value={trainerInjuryQuestion.no}
+                        color="navy.100"
+                      />
+                    </Box>
+                    <Box flex={1} display="flex" alignItems="center">
+                      <Typography sx={{ textAlign: 'right', mr: 2, flex: 1 }}>
+                        {t('no')}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        fontWeight="600"
+                        sx={{ width: 30 }}
+                      >
+                        {trainerInjuryQuestion.no}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
 
-              return null
-            })}
+              {map(trainerUngrouped, (answers, questionKey) => {
+                if (questionKey === 'SIGNATURE') return null
+
+                return (
+                  <Box key={questionKey} mb={2}>
+                    <Typography variant="subtitle2" mb={1}>
+                      {t(`course-evaluation.questions.${questionKey}`)}
+                    </Typography>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="flex-start"
+                      bgcolor="common.white"
+                      p={1}
+                      pb={0}
+                    >
+                      {answers.map(a => (
+                        <QuestionText key={a.id}>
+                          {a.answer || 'N/A'}
+                        </QuestionText>
+                      ))}
+                    </Box>
+                  </Box>
+                )
+              })}
+            </Box>
           </Grid>
         </Grid>
       </Container>
