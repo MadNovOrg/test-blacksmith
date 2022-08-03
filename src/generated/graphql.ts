@@ -11683,8 +11683,10 @@ export enum XeroInvoiceStatus {
   Authorised = 'AUTHORISED',
   Deleted = 'DELETED',
   Draft = 'DRAFT',
+  Overdue = 'OVERDUE',
   Paid = 'PAID',
   Submitted = 'SUBMITTED',
+  Unknown = 'UNKNOWN',
   Voided = 'VOIDED'
 }
 

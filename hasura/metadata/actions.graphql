@@ -199,6 +199,8 @@ enum XeroInvoiceStatus {
   AUTHORISED
   PAID
   VOIDED
+  UNKNOWN
+  OVERDUE
 }
 
 input PlansCreateInput {

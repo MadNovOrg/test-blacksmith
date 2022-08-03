@@ -10,7 +10,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { differenceInDays, sub as subtractPeriod } from 'date-fns'
+import { add as addPeriod } from 'date-fns'
 import { saveAs } from 'file-saver'
 import React, { useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -61,13 +61,8 @@ export const List: React.FC<Props> = ({
     const { start } = order?.course?.schedule
       ? order.course.schedule[0]
       : { start: null }
-    const { orderDue, status: orderStatus } = order
-    const dueDate = subtractPeriod(new Date(start), { weeks: 8 })
-
-    const status =
-      differenceInDays(dueDate, new Date()) > 0
-        ? ((orderStatus ?? 'UNKNOWN') as string)
-        : 'OVERDUE'
+    const { orderDue, status } = order
+    const dueDate = addPeriod(new Date(start), { weeks: 8 })
 
     const [font, background] = xeroInvoiceStatusColors[status as string]
 

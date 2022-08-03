@@ -288,6 +288,12 @@ custom_types:
         - value: VOIDED
           is_deprecated: null
           description: null
+        - value: UNKNOWN
+          is_deprecated: null
+          description: null
+        - value: OVERDUE
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput

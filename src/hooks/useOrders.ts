@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { differenceInDays, add as addPeriod } from 'date-fns'
+import { useCallback, useMemo, useState } from 'react'
 import useSWR from 'swr'
 
 import {
@@ -44,6 +45,8 @@ const isFilterValid = (filter?: FiltersType[keyof FiltersType] | string) =>
   filter && filter.length && filter.length > 0
 
 export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
+  const [baseLimit, setBaseLimit] = useState(0)
+
   const getOrdersWhere = useMemo(() => {
     const where: GetOrdersQueryVariables['where'] = {}
 
@@ -57,6 +60,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
 
     if (isFilterValid(filters.searchParam)) {
       where._or = [
+        { id: { _eq: filters.searchParam } },
         { course: { name: { _ilike: `%${filters.searchParam}%` } } },
         { organization: { name: { _ilike: `%${filters.searchParam}%` } } },
       ]
@@ -113,7 +117,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     {
       orderBy: getOrdersOrderBy,
       where: getOrdersWhere,
-      limit,
+      limit: (limit ?? 0) + baseLimit,
       offset,
     },
   ])
@@ -150,17 +154,44 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     getXeroInvoicesStatusError
   )
 
-  const _orders = useMemo(
-    () =>
-      orders.map(o => ({
-        ...o,
-        status:
-          getXeroInvoicesStatusData?.xeroInvoicesStatus?.invoices.find(
-            i => i?.orderId === o.id
-          )?.status ?? XeroInvoiceStatus.Draft,
-      })),
-    [orders, getXeroInvoicesStatusData]
+  const setOrderStatus = useCallback(
+    (order: GetOrdersQuery['orders'][number]) => {
+      const status =
+        getXeroInvoicesStatusData?.xeroInvoicesStatus?.invoices.find(
+          i => i?.orderId === order.id
+        )?.status ?? XeroInvoiceStatus.Unknown
+
+      const { start } = order?.course?.schedule
+        ? order.course.schedule[0]
+        : { start: null }
+      const dueDate = addPeriod(new Date(start), { weeks: 8 })
+
+      return differenceInDays(dueDate, new Date()) > 0
+        ? status
+        : XeroInvoiceStatus.Overdue
+    },
+    [getXeroInvoicesStatusData]
   )
+
+  const _orders = useMemo(() => {
+    const result = orders
+      .map(o => ({
+        ...o,
+        status: setOrderStatus(o),
+      }))
+      .filter(o =>
+        filters.statuses && filters.statuses.length > 0
+          ? filters.statuses.includes(o.status)
+          : true
+      )
+
+    if (result.length < orders.length) {
+      setBaseLimit(orders.length - result.length)
+    } else if (result.length > (limit ?? 0)) {
+      setBaseLimit(0)
+    }
+    return result
+  }, [orders, filters, setBaseLimit, setOrderStatus])
 
   return {
     orders: _orders,
