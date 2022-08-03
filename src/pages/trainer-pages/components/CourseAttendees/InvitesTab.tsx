@@ -32,8 +32,9 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [order, setOrder] = useState<SortOrder>('asc')
   const [messageSnackbarOpen, setMessageSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
 
-  const { data, status, total, resend } = useCourseInvites(
+  const { data, status, total, resend, cancel } = useCourseInvites(
     course?.id,
     inviteStatus,
     order,
@@ -62,6 +63,11 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
         sorting: true,
       },
       {
+        id: 'createdAt',
+        label: t('pages.course-participants.invite-date'),
+        sorting: true,
+      },
+      {
         id: 'actions',
         label: '',
         sorting: false,
@@ -72,6 +78,13 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
 
   const handleResendInvite = async (invite: CourseInvite) => {
     await resend(invite)
+    setSnackbarMessage(t('pages.course-participants.invite-sent'))
+    setMessageSnackbarOpen(true)
+  }
+
+  const handleCancelInvite = async (invite: CourseInvite) => {
+    await cancel(invite)
+    setSnackbarMessage(t('pages.course-participants.invite-canceled'))
     setMessageSnackbarOpen(true)
   }
 
@@ -93,17 +106,32 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                   data-testid={`course-invite-row-${invite.id}`}
                 >
                   <TableCell>{invite.email}</TableCell>
+                  <TableCell>
+                    {t('dates.default', { date: invite.createdAt })}
+                  </TableCell>
                   <TableCell sx={{ textAlign: 'right' }}>
                     {invite.status === InviteStatus.PENDING && (
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        sx={{ ml: 2 }}
-                        onClick={() => handleResendInvite(invite)}
-                        data-testid="course-resend-invite-btn"
-                      >
-                        {t('pages.course-participants.resend-invite')}
-                      </Button>
+                      <>
+                        <Button
+                          variant="text"
+                          color="primary"
+                          sx={{ ml: 2 }}
+                          onClick={() => handleResendInvite(invite)}
+                          data-testid={`course-resend-invite-btn-${invite.id}`}
+                        >
+                          {t('pages.course-participants.resend-invite')}
+                        </Button>
+
+                        <Button
+                          variant="text"
+                          color="primary"
+                          sx={{ ml: 2 }}
+                          onClick={() => handleCancelInvite(invite)}
+                          data-testid={`course-cancel-invite-btn-${invite.id}`}
+                        >
+                          {t('pages.course-participants.cancel-invite')}
+                        </Button>
+                      </>
                     )}
                   </TableCell>
                 </TableRow>
@@ -146,7 +174,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
         onClose={() => setMessageSnackbarOpen(false)}
       >
         <Alert onClose={() => setMessageSnackbarOpen(false)} severity="info">
-          {t('pages.course-participants.invite-sent')}
+          {snackbarMessage}
         </Alert>
       </Snackbar>
     </>

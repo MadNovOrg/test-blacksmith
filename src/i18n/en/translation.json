@@ -887,6 +887,7 @@
       "back-button": "All courses",
       "name": "Name",
       "contact": "Contact",
+      "invite-date": "Invite Date",
       "organisation": "Organisation",
       "prerequisites": "Prerequisites",
       "attending": "{{attending}} of {{max}} attending",
@@ -911,7 +912,9 @@
         "waitlist": "Waitlist ({{number}})"
       },
       "resend-invite": "Resend invite",
-      "invite-sent": "Invite sent."
+      "cancel-invite": "Cancel invite",
+      "invite-sent": "Invite sent.",
+      "invite-canceled": "Invite canceled."
     },
     "course-grading-details": {
       "title": "Grading details",

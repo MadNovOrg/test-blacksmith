@@ -337,6 +337,7 @@ export type CourseInvite = {
   id: string
   email: string
   status: InviteStatus
+  createdAt: Date
 }
 
 export type SortOrder = 'asc' | 'desc'

@@ -4,6 +4,7 @@ import * as yup from 'yup'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
+import { MUTATION as CancelInvite } from '@app/queries/invites/cancel-course-invite'
 import {
   QUERY,
   Matcher,
@@ -82,6 +83,14 @@ export default function useCourseInvites(
     [fetcher, courseId, invalidateCache]
   )
 
+  const cancel = useCallback(
+    async (invite: CourseInvite) => {
+      await fetcher(CancelInvite, { inviteId: invite.id })
+      await invalidateCache()
+    },
+    [fetcher, invalidateCache]
+  )
+
   return useMemo(
     () => ({
       data: data?.courseInvites ?? [],
@@ -90,8 +99,9 @@ export default function useCourseInvites(
       error,
       send,
       resend,
+      cancel,
       invalidateCache,
     }),
-    [data, error, send, resend, invalidateCache]
+    [data, error, send, resend, cancel, invalidateCache]
   )
 }

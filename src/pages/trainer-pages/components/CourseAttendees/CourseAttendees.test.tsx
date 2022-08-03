@@ -1,15 +1,19 @@
+import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 
 import useCourse from '@app/hooks/useCourse'
+import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
-import { Course, CourseParticipant } from '@app/types'
+import { Course, CourseInvite, CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
 import {
   buildCourse,
+  buildInvite,
   buildParticipant,
   buildWaitlistEntry,
 } from '@test/mock-data-utils'
@@ -18,19 +22,34 @@ import { CourseAttendees } from '.'
 
 jest.mock('@app/hooks/useCourse')
 jest.mock('@app/hooks/useWaitlist')
+jest.mock('@app/hooks/useCourseInvites')
 jest.mock('@app/hooks/useCourseParticipants')
 
 const useCourseMock = useCourse as jest.MockedFunction<typeof useCourse>
 const useWaitlistMock = useWaitlist as jest.MockedFunction<typeof useWaitlist>
+const useCourseInvitesMock = useCourseInvites as jest.MockedFunction<
+  typeof useCourseInvites
+>
 const useCourseParticipantsMock = useCourseParticipants as jest.MockedFunction<
   typeof useCourseParticipants
 >
 
 const emptyWaitlistResponse = {
   data: [],
-  isLoading: false,
   total: 0,
   error: undefined,
+  isLoading: false,
+}
+
+const emptyPendingInvitesResponse = {
+  data: [],
+  total: 0,
+  send: jest.fn(),
+  error: undefined,
+  resend: jest.fn(),
+  cancel: jest.fn(),
+  status: LoadingStatus.SUCCESS,
+  invalidateCache: jest.fn(),
 }
 
 describe('component: CourseAttendees', () => {
@@ -49,6 +68,7 @@ describe('component: CourseAttendees', () => {
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.FETCHING,
@@ -75,6 +95,7 @@ describe('component: CourseAttendees', () => {
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -115,6 +136,7 @@ describe('component: CourseAttendees', () => {
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -145,6 +167,7 @@ describe('component: CourseAttendees', () => {
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -184,6 +207,7 @@ describe('component: CourseAttendees', () => {
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
@@ -223,6 +247,8 @@ describe('component: CourseAttendees', () => {
       buildParticipant(),
       buildParticipant(),
     ]
+
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
@@ -285,5 +311,100 @@ describe('component: CourseAttendees', () => {
         within(row).getByText(entry.phone, { exact: false })
       ).toBeInTheDocument()
     }
+  })
+
+  describe('pending invites', () => {
+    beforeEach(() => {
+      useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
+      useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
+      useCourseParticipantsMock.mockReturnValue({
+        status: LoadingStatus.SUCCESS,
+        data: [],
+        total: 0,
+      })
+      useCourseMock.mockReturnValue({
+        mutate: jest.fn(),
+        status: LoadingStatus.SUCCESS,
+        data: course,
+      })
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
+    it('shows no invites pending message if list is empty', async () => {
+      render(<CourseAttendees course={course} />)
+
+      userEvent.click(screen.getByText('Pending (0)', { exact: false }))
+
+      expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
+      expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
+        course.id,
+        'PENDING',
+        'asc',
+        12,
+        0,
+      ])
+      expect(screen.getByText('No invites pending')).toBeVisible()
+    })
+
+    it('shows table with entries, if any', async () => {
+      const invites: CourseInvite[] = [
+        buildInvite(),
+        buildInvite(),
+        buildInvite(),
+      ]
+
+      useCourseInvitesMock.mockReturnValue({
+        ...emptyPendingInvitesResponse,
+        data: invites,
+        total: 3,
+      })
+
+      render(<CourseAttendees course={course} />)
+
+      userEvent.click(screen.getByText('Pending (3)', { exact: false }))
+
+      expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
+      expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
+        course.id,
+        'PENDING',
+        'asc',
+        12,
+        0,
+      ])
+
+      const table = screen.getByTestId('invites-table')
+      expect(table).toBeVisible()
+
+      const invite = invites[0]
+
+      const resendButton = getByTestId(
+        table,
+        `course-resend-invite-btn-${invite.id}`
+      )
+      expect(resendButton).toBeVisible()
+      await act(async () => {
+        await userEvent.click(resendButton)
+      })
+      expect(emptyPendingInvitesResponse.resend).toHaveBeenCalledTimes(1)
+      expect(emptyPendingInvitesResponse.resend.mock.calls[0]).toMatchObject([
+        invite,
+      ])
+
+      const deleteButton = getByTestId(
+        table,
+        `course-cancel-invite-btn-${invite.id}`
+      )
+      expect(deleteButton).toBeVisible()
+      await act(async () => {
+        await userEvent.click(deleteButton)
+      })
+      expect(emptyPendingInvitesResponse.cancel).toHaveBeenCalledTimes(1)
+      expect(emptyPendingInvitesResponse.cancel.mock.calls[0]).toMatchObject([
+        invite,
+      ])
+    })
   })
 })

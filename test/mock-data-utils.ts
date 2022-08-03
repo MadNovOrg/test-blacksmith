@@ -370,6 +370,7 @@ export const buildInvite = build<CourseInvite>({
     id: fake(f => f.datatype.uuid()),
     email: fake(f => f.internet.email()),
     status: 'PENDING',
+    createdAt: new Date(),
   },
 })
 

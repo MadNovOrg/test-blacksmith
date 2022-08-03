@@ -30062,6 +30062,13 @@ export type AcceptOrgInviteMutationVariables = Exact<{
 
 export type AcceptOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'AcceptOrgInviteOutput', id: any } | null };
 
+export type CancelCourseInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
+
+
+export type CancelCourseInviteMutation = { __typename?: 'mutation_root', delete_course_invites_by_pk?: { __typename?: 'course_invites', id: any } | null };
+
 export type CreateUserMutationVariables = Exact<{
   input: CreateAppUserInput;
 }>;
@@ -30097,7 +30104,7 @@ export type GetCourseInvitesQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
+export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: Array<{ __typename?: 'course_invites', id: any, email?: string | null, status?: Course_Invite_Status_Enum | null, createdAt: any }>, courseInvitesAggregate: { __typename?: 'course_invites_aggregate', aggregate?: { __typename?: 'course_invites_aggregate_fields', count: number } | null } };
 
 export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 

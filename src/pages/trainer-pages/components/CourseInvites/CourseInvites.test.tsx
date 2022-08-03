@@ -23,6 +23,7 @@ const useCourseInvitesDefaults = {
   error: undefined,
   send: jest.fn(),
   resend: jest.fn(),
+  cancel: jest.fn(),
   invalidateCache: jest.fn(),
 }
 
