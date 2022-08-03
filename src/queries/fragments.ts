@@ -370,3 +370,106 @@ export const Waitlist = gql`
     familyName
   }
 `
+
+export const XeroPhone = gql`
+  fragment XeroPhoneSummary on XeroPhone {
+    phoneType
+    phoneCountryCode
+    phoneAreaCode
+    phoneNumber
+  }
+`
+
+export const XeroAddress = gql`
+  fragment XeroAddressSummary on XeroAddress {
+    addressType
+    addressLine1
+    addressLine2
+    city
+    region
+    postalCode
+    country
+  }
+`
+
+export const XeroContact = gql`
+  ${XeroAddress}
+  ${XeroPhone}
+
+  fragment XeroContactSummary on XeroContact {
+    contactID
+    contactNumber
+    contactStatus
+    updatedDateUTC
+    isCustomer
+    name
+    firstName
+    lastName
+    emailAddress
+    phones {
+      ...XeroPhoneSummary
+    }
+    addresses {
+      ...XeroAddressSummary
+    }
+  }
+`
+
+export const XeroItem = gql`
+  fragment XeroItemSummary on XeroItem {
+    id
+    code
+    name
+  }
+`
+
+export const XeroLineItem = gql`
+  ${XeroItem}
+
+  fragment XeroLineItemSummary on XeroLineItem {
+    description
+    quantity
+    unitAmount
+    itemCode
+    accountCode
+    item {
+      ...XeroItemSummary
+    }
+    lineItemId
+    taxType
+    taxAmount
+    lineAmount
+    discountRate
+    discountAmount
+  }
+`
+
+export const XeroInvoice = gql`
+  ${XeroLineItem}
+  ${XeroContact}
+
+  fragment XeroInvoiceSummary on XeroInvoice {
+    url
+    type
+    date
+    total
+    status
+    contact {
+      ...XeroContactSummary
+    }
+    dueDate
+    subtotal
+    totalTax
+    invoiceID
+    amountDue
+    lineItems {
+      ...XeroLineItemSummary
+    }
+    reference
+    amountPaid
+    currencyCode
+    invoiceNumber
+    totalDiscount
+    fullyPaidOnDate
+  }
+`

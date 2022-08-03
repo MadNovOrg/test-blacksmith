@@ -21,23 +21,13 @@ import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { OrderType } from '@app/hooks/useOrders'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
+import { xeroInvoiceStatusColors } from '@app/util'
 
 type Props = {
   orders: OrderType[]
   sorting: Sorting
   loading: boolean
   filtered: boolean
-}
-
-const orderStatusColors: { [key: string]: string[] } = {
-  VOIDED: ['#3B3A3C', '#EEEEEE'],
-  DELETED: ['#3B3A3C', '#EEEEEE'],
-  UNKNOWN: ['#3B3A3C', '#EEEEEE'],
-  PAID: ['#394700', '#F3F5E6'],
-  DRAFT: ['#7A4E00', '#FEF4E4'],
-  SUBMITTED: ['#7A4E00', '#FEF4E4'],
-  AUTHORISED: ['#7A4E00', '#FEF4E4'],
-  OVERDUE: ['#990F0F', '#FAE6E6'],
 }
 
 export const List: React.FC<Props> = ({
@@ -79,7 +69,7 @@ export const List: React.FC<Props> = ({
         ? ((orderStatus ?? 'UNKNOWN') as string)
         : 'OVERDUE'
 
-    const [font, background] = orderStatusColors[status as string]
+    const [font, background] = xeroInvoiceStatusColors[status as string]
 
     return {
       due: orderDue,

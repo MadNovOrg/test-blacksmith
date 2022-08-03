@@ -20,6 +20,7 @@ import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/compo
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
+import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
 
@@ -69,7 +70,11 @@ const TTAdminRoutes = () => {
 
       <Route path="certifications" element={<Certifications />} />
 
-      <Route path="orders" element={<Orders />} />
+      <Route path="orders">
+        <Route index element={<Orders />} />
+
+        <Route path=":id" element={<OrderDetails />} />
+      </Route>
 
       {acl.isTTAdmin() ? (
         <Route path="admin" element={<AdminPage />}>

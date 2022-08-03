@@ -17,6 +17,7 @@ export const QUERY = gql`
       orderTotal
       currency
       stripePaymentId
+      promoCodes
     }
   }
 `

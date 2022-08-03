@@ -63,6 +63,13 @@ actions:
       handler: '{{ACTIONS_HOST}}/trainers/levels'
     permissions:
       - role: trainer
+  - name: getXeroInvoicesForOrders
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/xero/invoices'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
   - name: initAuth
     definition:
       kind: ""
@@ -329,4 +336,7 @@ custom_types:
     - name: XeroInvoicesStatusOutput
     - name: XeroInvoiceStatusKV
     - name: XeroDisconnectOutput
+    - name: XeroInvoice
+    - name: XeroItem
+    - name: XeroLineItem
   scalars: []

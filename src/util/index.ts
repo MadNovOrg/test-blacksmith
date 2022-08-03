@@ -323,6 +323,17 @@ export function getFieldError(err: FieldError[]) {
   return error.message
 }
 
+export const xeroInvoiceStatusColors: { [key: string]: string[] } = {
+  VOIDED: ['#3B3A3C', '#EEEEEE'],
+  DELETED: ['#3B3A3C', '#EEEEEE'],
+  UNKNOWN: ['#3B3A3C', '#EEEEEE'],
+  PAID: ['#394700', '#F3F5E6'],
+  DRAFT: ['#7A4E00', '#FEF4E4'],
+  SUBMITTED: ['#7A4E00', '#FEF4E4'],
+  AUTHORISED: ['#7A4E00', '#FEF4E4'],
+  OVERDUE: ['#990F0F', '#FAE6E6'],
+}
+
 // more on this logic [here](https://github.com/TeamTeach/application/wiki/Organisations)
 export function getProfileCertificationLevels(
   certificates: { courseLevel: string; status: CertificateStatus }[]

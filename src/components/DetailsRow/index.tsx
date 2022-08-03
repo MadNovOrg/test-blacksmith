@@ -1,17 +1,32 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 
+type ElementProps<T> = {
+  [prop in keyof T]?: T[prop]
+}
+
+type TypographyProps = ElementProps<typeof Typography>
+type BoxProps = ElementProps<typeof Box>
+
 export const DetailsRow = ({
   label,
   value,
+  labelProps,
+  valueProps,
+  containerProps,
 }: {
   label: string
   value?: string | null
+  labelProps?: TypographyProps
+  valueProps?: TypographyProps
+  containerProps?: BoxProps
 }) => (
-  <Box display="flex" alignItems="center" mb={2}>
-    <Typography flex={1} color="grey.700">
+  <Box display="flex" alignItems="center" mb={2} {...(containerProps ?? {})}>
+    <Typography flex={1} color="grey.700" {...(labelProps ?? {})}>
       {label}
     </Typography>
-    <Typography flex={2}>{value}</Typography>
+    <Typography flex={2} {...(valueProps ?? {})}>
+      {value}
+    </Typography>
   </Box>
 )

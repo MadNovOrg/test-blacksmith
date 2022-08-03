@@ -52,6 +52,12 @@ type Query {
 }
 
 type Query {
+  getXeroInvoicesForOrders(
+    orderIds: [uuid!]!
+  ): [XeroInvoice]!
+}
+
+type Query {
   initAuth: InitAuthOutput!
 }
 
@@ -473,5 +479,47 @@ type XeroInvoiceStatusKV {
 
 type XeroDisconnectOutput {
   connected: Boolean!
+}
+
+type XeroInvoice {
+  invoiceID: ID!
+  url: String
+  type: String!
+  date: String!
+  total: Float!
+  status: XeroInvoiceStatus!
+  contact: XeroContact!
+  dueDate: String
+  subtotal: Float
+  totalTax: Float
+  lineItems: [XeroLineItem]!
+  reference: String
+  currencyCode: Currency!
+  invoiceNumber: String
+  totalDiscount: Float
+  fullyPaidOnDate: String
+  amountPaid: String
+  amountDue: String
+}
+
+type XeroItem {
+  id: String
+  name: String!
+  code: String!
+}
+
+type XeroLineItem {
+  description: String
+  quantity: Int!
+  unitAmount: Float!
+  itemCode: String!
+  accountCode: String
+  item: XeroItem
+  lineItemId: String
+  taxType: String!
+  taxAmount: Float!
+  lineAmount: Float!
+  discountRate: Float!
+  discountAmount: Float!
 }
 
