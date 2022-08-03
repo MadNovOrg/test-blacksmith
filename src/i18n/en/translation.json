@@ -844,7 +844,8 @@
           "export-error": "Error generating document",
           "export-loading": "Generating summary...",
           "export-idle": "Export Summary",
-          "export-done": "Download Summary"
+          "export-done": "Download Summary",
+          "no-evaluations": "No evaluations to export"
         },
         "certifications": {
           "title": "Certifications"

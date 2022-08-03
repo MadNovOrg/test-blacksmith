@@ -318,10 +318,11 @@ export const SummaryDocument: React.FC<SummaryDocumentProps> = props => {
     )
   }
 
-  const leadTrainer = course?.trainers
-    ? course.trainers[0]
-    : { profile: { fullName: '' } }
-  const trainers = course?.trainers?.slice(1) ?? []
+  const leadTrainer = course?.trainers?.find(t => t.type === 'LEADER') ?? {
+    id: null,
+    profile: { fullName: '' },
+  }
+  const trainers = course?.trainers?.filter(t => t.id !== leadTrainer.id) ?? []
 
   return (
     <Document>

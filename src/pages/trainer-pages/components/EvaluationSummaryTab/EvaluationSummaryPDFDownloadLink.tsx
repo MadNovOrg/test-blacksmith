@@ -144,8 +144,14 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
       ungrouped,
       trainerAnswers,
       injuryQuestion: {
-        yes: ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) * 100,
-        no: ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) * 100,
+        yes:
+          injuryQuestion.length > 0
+            ? ((injuryResponse.YES?.length ?? 0) / injuryQuestion.length) * 100
+            : 0,
+        no:
+          injuryQuestion.length > 0
+            ? ((injuryResponse.NO?.length ?? 0) / injuryQuestion.length) * 100
+            : 0,
       },
     }
   }, [summaryResponseData, profileId])
@@ -165,8 +171,12 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     [courseModulesData]
   )
 
-  const pdfDocument = useMemo(
-    () => (
+  const pdfDocument = useMemo(() => {
+    if (summaryResponseData?.answers.length === 0) {
+      return null
+    }
+
+    return (
       <SummaryDocument
         course={course}
         courseModules={courseModules}
@@ -176,20 +186,24 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
         trainerAnswers={trainerAnswers}
         participants={participants}
       />
-    ),
-    [
-      course,
-      participants,
-      courseModules,
-      trainerAnswers,
-      grouped,
-      ungrouped,
-      injuryQuestion,
-    ]
-  )
+    )
+  }, [
+    course,
+    participants,
+    courseModules,
+    trainerAnswers,
+    grouped,
+    ungrouped,
+    injuryQuestion,
+    summaryResponseData,
+  ])
 
-  if (dataLoading || !pdfDocument) {
+  if (dataLoading) {
     return loadingComponent
+  }
+
+  if (!pdfDocument) {
+    return t('pages.course-details.tabs.evaluation.no-evaluations')
   }
 
   return (
