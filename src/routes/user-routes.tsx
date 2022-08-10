@@ -2,6 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import Organizations from '@app/pages/admin/components/Organizations'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
@@ -54,6 +55,7 @@ const UserRoutes = () => {
       {acl.canViewOrganizations() ? (
         <Route path="organizations">
           <Route index element={<Navigate replace to="all" />} />
+          <Route path="list" element={<Organizations />} />
           <Route path=":id">
             <Route index element={<OrgDashboard />} />
             <Route path="edit" element={<EditOrgDetails />} />

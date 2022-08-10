@@ -1174,7 +1174,8 @@
           "region": "Region",
           "sector": "Sector",
           "last-activity": "Last activity",
-          "created-on": "Created on"
+          "created-on": "Created on",
+          "group": "Group"
         },
         "add-new-organization": "Add new organisation"
       }

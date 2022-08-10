@@ -7,6 +7,7 @@ import {
   Container,
   FormHelperText,
   Grid,
+  MenuItem,
   TextField,
   Typography,
   useTheme,
@@ -28,11 +29,13 @@ import {
   ResponseType,
 } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
-import { Address } from '@app/types'
+import { Address, TrustType } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 type FormInputs = {
   orgName: string
+  trustName: string
+  trustType: string
   addressLine1: string
   addressLine2: string
   city: string
@@ -56,6 +59,16 @@ export const CreateOrganization = () => {
         .string()
         .required(
           requiredMsg(t, 'pages.create-organization.fields.organization-name')
+        ),
+      trustType: yup
+        .string()
+        .required(
+          t('validation-errors.required-field', { name: t('trust-type') })
+        ),
+      trustName: yup
+        .string()
+        .required(
+          t('validation-errors.required-field', { name: t('trust-name') })
         ),
       workEmail: yup
         .string()
@@ -81,6 +94,8 @@ export const CreateOrganization = () => {
     mode: 'all',
     defaultValues: {
       orgName: '',
+      trustName: '',
+      trustType: '',
       workEmail: '',
       addressLine1: '',
       addressLine2: '',
@@ -96,6 +111,8 @@ export const CreateOrganization = () => {
     try {
       const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
         name: data.orgName,
+        trustName: data.trustName,
+        trustType: data.trustType,
         address: {
           line1: data.addressLine1,
           line2: data.addressLine2,
@@ -154,21 +171,69 @@ export const CreateOrganization = () => {
               </Typography>
 
               <FormPanel>
-                <Controller
-                  name="orgName"
-                  control={control}
-                  render={({ field }) => (
-                    <OrgNameXeroAutocomplete
-                      value={field.value}
-                      onChange={value => {
-                        const isXeroContact = typeof value === 'object'
-                        setXeroId(isXeroContact ? value.contactID : undefined)
-                        field.onChange(isXeroContact ? value.name : value)
-                      }}
-                      error={errors.orgName?.message}
-                    />
-                  )}
-                />
+                <Box mb={3}>
+                  <Controller
+                    name="orgName"
+                    control={control}
+                    render={({ field }) => (
+                      <OrgNameXeroAutocomplete
+                        value={field.value}
+                        onChange={value => {
+                          const isXeroContact = typeof value === 'object'
+                          setXeroId(isXeroContact ? value.contactID : undefined)
+                          field.onChange(isXeroContact ? value.name : value)
+                        }}
+                        error={errors.orgName?.message}
+                      />
+                    )}
+                  />
+                </Box>
+
+                <Box mb={3}>
+                  <Controller
+                    name="trustType"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        id="trustType"
+                        select
+                        required
+                        label={t('pages.edit-org-details.trust-type')}
+                        variant="standard"
+                        error={!!errors.trustType}
+                        helperText={errors.trustType?.message}
+                        value={field.value}
+                        onChange={field.onChange}
+                        inputProps={{ 'data-testid': 'trust-type' }}
+                        fullWidth
+                      >
+                        {Object.values(TrustType).map(option => (
+                          <MenuItem
+                            key={option}
+                            value={option}
+                            data-testid={`trust-type-option-${option}`}
+                          >
+                            {t(`trust-type.${option.toLowerCase()}`)}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
+                  />
+                </Box>
+
+                <Box mb={3}>
+                  <TextField
+                    id="trustName"
+                    required
+                    label={t('pages.edit-org-details.trust-name')}
+                    variant="standard"
+                    error={!!errors.trustName}
+                    helperText={errors.trustName?.message}
+                    {...register('trustName')}
+                    inputProps={{ 'data-testid': 'trust-name' }}
+                    fullWidth
+                  />
+                </Box>
               </FormPanel>
 
               <Typography variant="subtitle1">

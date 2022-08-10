@@ -16,7 +16,7 @@ export const AcceptOrgInvite = () => {
   const [error, setError] = useState(false)
   const params = useParams()
   const fetcher = useFetcher()
-  const { profile } = useAuth()
+  const { profile, reloadCurrentProfile } = useAuth()
   const [searchParams] = useSearchParams()
 
   const token = searchParams.get('token') || ''
@@ -34,10 +34,11 @@ export const AcceptOrgInvite = () => {
             return Promise.reject()
           }
           setSuccess(true)
+          return reloadCurrentProfile()
         })
         .catch(() => setError(true))
     }
-  }, [inviteId, fetcher, profile, token])
+  }, [inviteId, fetcher, profile, token, reloadCurrentProfile])
 
   if (error) {
     return (

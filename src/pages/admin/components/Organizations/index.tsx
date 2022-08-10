@@ -20,6 +20,7 @@ import { FilterOrgSector } from '@app/components/FilterOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { useAuth } from '@app/context/auth'
 import { useOrganizations } from '@app/hooks/useOrganizations'
 import { useTableSort } from '@app/hooks/useTableSort'
 
@@ -28,6 +29,7 @@ type OrganizationsProps = unknown
 export const Organizations: React.FC<OrganizationsProps> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { acl } = useAuth()
 
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
@@ -35,6 +37,11 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
       {
         id: 'name',
         label: t('pages.admin.organizations.columns.name'),
+        sorting: true,
+      },
+      {
+        id: 'trustName',
+        label: t('pages.admin.organizations.columns.group'),
         sorting: true,
       },
       {
@@ -134,12 +141,14 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
               justifyContent="flex-end"
               mb={2}
             >
-              <Button
-                variant="contained"
-                onClick={() => navigate('/organizations/new')}
-              >
-                {t('pages.admin.organizations.add-new-organization')}
-              </Button>
+              {acl.canCreateOrgs() ? (
+                <Button
+                  variant="contained"
+                  onClick={() => navigate('/organizations/new')}
+                >
+                  {t('pages.admin.organizations.add-new-organization')}
+                </Button>
+              ) : null}
             </Box>
 
             <Table data-testid="orgs-table">
@@ -172,6 +181,7 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
                         {org?.name}
                       </Link>
                     </TableCell>
+                    <TableCell>{org?.trustName}</TableCell>
                     <TableCell>{org?.address.country}</TableCell>
                     <TableCell>{org?.region}</TableCell>
                     <TableCell>{org?.sector}</TableCell>

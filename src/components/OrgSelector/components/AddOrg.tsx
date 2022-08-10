@@ -1,19 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, TextField } from '@mui/material'
+import { Box, Button, MenuItem, TextField } from '@mui/material'
 import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   MUTATION,
-  ResponseType,
   ParamsType,
+  ResponseType,
 } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
-import { Address, Organization } from '@app/types'
+import { Address, Organization, TrustType } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 type Props = {
@@ -24,6 +24,8 @@ type Props = {
 
 type FormInput = {
   name: string
+  trustName: string
+  trustType: string
   addressLine1: string
   addressLine2: string
   city: string
@@ -39,6 +41,16 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'org-name')),
+      trustType: yup
+        .string()
+        .required(
+          t('validation-errors.required-field', { name: t('trust-type') })
+        ),
+      trustName: yup
+        .string()
+        .required(
+          t('validation-errors.required-field', { name: t('trust-name') })
+        ),
       addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
       addressLine2: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
@@ -50,11 +62,14 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
     defaultValues: {
       name,
+      trustType: '',
+      trustName: '',
       addressLine1: '',
       addressLine2: '',
       city: '',
@@ -69,6 +84,8 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     try {
       const vars = {
         name: data.name,
+        trustName: data.trustName,
+        trustType: data.trustType,
         address: {
           line1: data.addressLine1,
           line2: data.addressLine2,
@@ -115,6 +132,52 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
             {...register('name')}
             inputProps={{ 'data-testid': 'org-name' }}
             autoFocus
+            fullWidth
+          />
+        </Box>
+
+        <Box mb={3}>
+          <Controller
+            name="trustType"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                id="trustType"
+                select
+                required
+                label={t('pages.edit-org-details.trust-type')}
+                variant="standard"
+                error={!!errors.trustType}
+                helperText={errors.trustType?.message}
+                value={field.value}
+                onChange={field.onChange}
+                inputProps={{ 'data-testid': 'trust-type' }}
+                fullWidth
+              >
+                {Object.values(TrustType).map(option => (
+                  <MenuItem
+                    key={option}
+                    value={option}
+                    data-testid={`trust-type-option-${option}`}
+                  >
+                    {t(`trust-type.${option.toLowerCase()}`)}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+        </Box>
+
+        <Box mb={3}>
+          <TextField
+            id="trustName"
+            required
+            label={t('pages.edit-org-details.trust-name')}
+            variant="standard"
+            error={!!errors.trustName}
+            helperText={errors.trustName?.message}
+            {...register('trustName')}
+            inputProps={{ 'data-testid': 'trust-name' }}
             fullWidth
           />
         </Box>

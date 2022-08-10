@@ -84,6 +84,10 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
+    canCreateOrgs: () => {
+      const roles = [RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return { ...auth, acl }

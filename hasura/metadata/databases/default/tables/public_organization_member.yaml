@@ -45,6 +45,7 @@ select_permissions:
         - _source
         - created_at
         - id
+        - is_admin
         - member_type
         - organization_id
         - position
