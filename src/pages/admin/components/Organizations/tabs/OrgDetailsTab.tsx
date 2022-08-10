@@ -22,10 +22,14 @@ type OrgDetailsTabParams = {
 
 export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const navigate = useNavigate()
 
-  const { data, status } = useOrg(orgId, profile?.id)
+  const { data, status } = useOrg(
+    orgId,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
 
   const org = data?.length ? data[0] : null
   const orgAddress = useMemo(() => (org ? renderOrgAddress(org) : ''), [org])

@@ -134,7 +134,10 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
               justifyContent="flex-end"
               mb={2}
             >
-              <Button variant="contained" onClick={() => navigate('new')}>
+              <Button
+                variant="contained"
+                onClick={() => navigate('/organizations/new')}
+              >
                 {t('pages.admin.organizations.add-new-organization')}
               </Button>
             </Box>

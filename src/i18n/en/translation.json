@@ -373,7 +373,14 @@
       "active": "Active"
     },
     "expired-ago": "Expired {{ time }} ago",
-    "expiring-in": "Expiring in {{ time }}"
+    "expiring-in": "Expiring in {{ time }}",
+    "city": "City",
+    "individuals": "Individuals",
+    "day": "day",
+    "days": "days",
+    "online": "Online",
+    "spaces-left": "{{ number }} spaces left",
+    "book-now": "Book now"
   },
   "components": {
     "not-found": {
@@ -1260,6 +1267,7 @@
             "title": "User details",
             "total-number-of-users": "Total number of users",
             "active-certifications": "Active certifications",
+            "expiring-soon-certifications": "Expiring soon",
             "expired-certifications": "Expired certifications"
           }
         },
@@ -1276,7 +1284,6 @@
           "cols-permissions": "Permissions",
           "organization-admin": "Organisation admin",
           "no-permissions": "No permissions",
-          "invite-user-to-organization": "Invite user to organisation",
           "invited-on": "Invited on",
           "permissions": "Permissions",
           "invite-status": {
@@ -1290,7 +1297,9 @@
             "remove-from-organization": "Remove from organisation",
             "organization-admin": "Organisation admin",
             "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user."
-          }
+          },
+          "total-number-of-individuals": "Total number of individuals",
+          "invite-individual-to-organization": "Invite individual to organisation"
         },
         "overview": {
           "title": "Overview",
@@ -1299,7 +1308,13 @@
           "active": "Active",
           "expiring-soon": "Expiring soon",
           "expired": "Expired",
-          "individuals-by-training-level": "Individuals by training level"
+          "individuals-by-training-level": "Individuals by training level",
+          "no-org-users": "Organisation does not have any members yet.",
+          "click-here-to-invite": "Click here to invite new users.",
+          "organization-summary": "Organisation summary",
+          "see-all-organizations": "See all organisations",
+          "available-courses-for-booking": "Available courses for booking",
+          "see-all-courses": "See all courses"
         }
       },
       "edit-organization": "Edit organisation",

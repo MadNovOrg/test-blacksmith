@@ -13,7 +13,11 @@ export const QUERY = gql`
     profiles: profile(where: { organizations: { organization: $where } }) {
       id
       fullName
+      avatar
+      lastActivity
+      createdAt
       certificates(where: { status: { _neq: "EXPIRED" } }) {
+        id
         courseLevel
         expiryDate
         status
@@ -27,7 +31,12 @@ export const QUERY = gql`
       organizations {
         id
         position
+        isAdmin
+        profile {
+          fullName
+        }
         organization {
+          id
           name
         }
       }

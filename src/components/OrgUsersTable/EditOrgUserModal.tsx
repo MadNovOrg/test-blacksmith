@@ -15,6 +15,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { ProfileType } from '@app/hooks/useOrg'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
 import {
   MUTATION as RemoveOrgMemberQuery,
@@ -25,10 +26,9 @@ import {
   ParamsType as UpdateOrgMemberParamsType,
 } from '@app/queries/organization/update-org-member'
 import theme from '@app/theme'
-import { OrganizationMember } from '@app/types'
 
 export type EditOrgUserModalProps = {
-  orgMember: OrganizationMember
+  orgMember: ProfileType['organizations'][0]
   onClose: () => void
   onChange?: () => void
 }
@@ -62,7 +62,7 @@ export const EditOrgUserModal: React.FC<EditOrgUserModalProps> = function ({
     try {
       await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
         id: orgMember.id,
-        member: { isAdmin, position },
+        member: { isAdmin: !!isAdmin, position },
       })
       if (onChange) onChange()
       onClose()
@@ -102,7 +102,7 @@ export const EditOrgUserModal: React.FC<EditOrgUserModalProps> = function ({
         sx={{ py: 2 }}
         control={
           <Switch
-            checked={isAdmin}
+            checked={isAdmin ?? false}
             onChange={e => {
               setIsAdmin(e.target.checked)
             }}

@@ -23750,6 +23750,7 @@ export type Profile = {
   __typename?: 'profile';
   addresses: Scalars['jsonb'];
   attributes: Scalars['jsonb'];
+  avatar?: Maybe<Scalars['String']>;
   /** An array relationship */
   certificates: Array<Course_Certificate>;
   /** An aggregate relationship */
@@ -24013,6 +24014,7 @@ export type Profile_Bool_Exp = {
   _or?: InputMaybe<Array<Profile_Bool_Exp>>;
   addresses?: InputMaybe<Jsonb_Comparison_Exp>;
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
+  avatar?: InputMaybe<String_Comparison_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
@@ -24094,6 +24096,7 @@ export type Profile_Inc_Input = {
 export type Profile_Insert_Input = {
   addresses?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  avatar?: InputMaybe<Scalars['String']>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   courses?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
@@ -24125,6 +24128,7 @@ export type Profile_Insert_Input = {
 /** aggregate max on columns */
 export type Profile_Max_Fields = {
   __typename?: 'profile_max_fields';
+  avatar?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
@@ -24145,6 +24149,7 @@ export type Profile_Max_Fields = {
 /** aggregate min on columns */
 export type Profile_Min_Fields = {
   __typename?: 'profile_min_fields';
+  avatar?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
@@ -24189,6 +24194,7 @@ export type Profile_On_Conflict = {
 export type Profile_Order_By = {
   addresses?: InputMaybe<Order_By>;
   attributes?: InputMaybe<Order_By>;
+  avatar?: InputMaybe<Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
@@ -24444,6 +24450,8 @@ export enum Profile_Select_Column {
   /** column name */
   Attributes = 'attributes',
   /** column name */
+  Avatar = 'avatar',
+  /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
   CreatedAt = 'createdAt',
@@ -24489,6 +24497,7 @@ export enum Profile_Select_Column {
 export type Profile_Set_Input = {
   addresses?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
+  avatar?: InputMaybe<Scalars['String']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
@@ -24866,6 +24875,8 @@ export enum Profile_Update_Column {
   Addresses = 'addresses',
   /** column name */
   Attributes = 'attributes',
+  /** column name */
+  Avatar = 'avatar',
   /** column name */
   ContactDetails = 'contactDetails',
   /** column name */
@@ -29895,6 +29906,13 @@ export type GetCoursePricingQueryVariables = Exact<{
 
 export type GetCoursePricingQuery = { __typename?: 'query_root', pricing?: { __typename?: 'GetCoursePricingOutput', priceAmount: number, priceCurrency: Currency, xeroCode: string } | null };
 
+export type GetOrgCoursesQueryVariables = Exact<{
+  where?: InputMaybe<Organization_Bool_Exp>;
+}>;
+
+
+export type GetOrgCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level?: Course_Level_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, schedules: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string } | null }>, participantsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } }> };
+
 export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> };
 
 export type TrainerCoursesQueryVariables = Exact<{
@@ -30360,7 +30378,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, certificates: Array<{ __typename?: 'course_certificate', courseLevel: string, expiryDate: any, status?: string | null }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, organization: { __typename?: 'organization', name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgUsersQueryVariables = Exact<{
   orgId: Scalars['uuid'];

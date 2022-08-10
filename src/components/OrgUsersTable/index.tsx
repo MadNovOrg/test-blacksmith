@@ -1,5 +1,3 @@
-import CancelIcon from '@mui/icons-material/Cancel'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import {
   Button,
   Chip,
@@ -14,17 +12,22 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { Box } from '@mui/system'
+import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Avatar } from '@app/components/Avatar'
 import { Dialog } from '@app/components/Dialog'
 import { EditOrgUserModal } from '@app/components/OrgUsersTable/EditOrgUserModal'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { useOrgUsers } from '@app/hooks/useOrgUsers'
+import { useAuth } from '@app/context/auth'
+import useOrg, { ProfileType } from '@app/hooks/useOrg'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
-import { OrganizationMember } from '@app/types'
+import { CertificateStatus, CourseLevel } from '@app/types'
+import { getProfileCertificationLevels } from '@app/util'
 
 type OrgUsersTableParams = {
   orgId: string
@@ -34,25 +37,33 @@ type OrgUsersTableParams = {
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
+const certificationStatusColor = {
+  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
+  [CertificateStatus.EXPIRED]: 'error',
+  [CertificateStatus.EXPIRING_SOON]: 'warning',
+  [CertificateStatus.ACTIVE]: 'success',
+} as const
+
 export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
   orgId,
   onChange,
 }) => {
   const { t } = useTranslation()
+  const { profile, acl } = useAuth()
 
   const sorting = useTableSort('fullName', 'asc')
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
 
   const [showEditUserModal, setShowEditUserModal] = useState(false)
-  const [editedUser, setEditedUser] = useState<OrganizationMember>()
+  const [editedUser, setEditedUser] =
+    useState<ProfileType['organizations'][0]>()
 
-  // TODO use useOrg instead for certificate, enrolled etc
-  const { users, loading, totalCount, mutate } = useOrgUsers(orgId, {
-    sorting,
-    limit: perPage,
-    offset: perPage * currentPage,
-  })
+  const { profiles: orgProfiles, loading } = useOrg(
+    orgId,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
 
   const cols = useMemo(() => {
     const _t = (col: string) => t(`pages.org-details.tabs.users.cols-${col}`)
@@ -79,7 +90,6 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
       {
         id: 'permissions',
         label: _t('permissions'),
-        sorting: true,
       },
       {
         id: 'actions',
@@ -87,6 +97,20 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
       },
     ] as Col[]
   }, [t])
+
+  const currentPageProfiles = useMemo(() => {
+    const profiles = orgProfiles || []
+    let sorted
+    if (sorting.by === 'fullName') {
+      sorted = sortBy(profiles, p => p.fullName)
+    } else if (sorting.by === 'lastActivity') {
+      sorted = sortBy(profiles, p => p.lastActivity)
+    } else {
+      sorted = sortBy(profiles, p => p.createdAt)
+    }
+    if (sorting.dir === 'desc') sorted = sorted.reverse()
+    return sorted.slice(currentPage * perPage, currentPage * perPage + perPage)
+  }, [currentPage, orgProfiles, perPage, sorting])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -130,44 +154,84 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
             ) : null}
 
             <TableNoRows
-              noRecords={!loading && !users?.length}
+              noRecords={!loading && !currentPageProfiles?.length}
               itemsName={t('users').toLowerCase()}
               colSpan={cols.length}
             />
 
-            {users?.map(user => {
+            {currentPageProfiles?.map(profile => {
+              const orgMember = profile.organizations.find(
+                org => org.organization.id === orgId
+              )
+              const certificateLevelsToDisplay = getProfileCertificationLevels(
+                profile.certificates as {
+                  courseLevel: string
+                  status: CertificateStatus
+                }[]
+              )
+              const filteredCerts = profile.certificates.filter(
+                cert =>
+                  certificateLevelsToDisplay.indexOf(
+                    cert.courseLevel as CourseLevel
+                  ) >= 0
+              )
               return (
-                <TableRow key={user.profile.id}>
+                <TableRow key={profile.id}>
                   <TableCell>
-                    <Typography>{user.profile.fullName}</Typography>
-                    <Typography
-                      variant="caption"
-                      color={theme.palette.grey[600]}
-                    >
-                      {user.position}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    {user.profile.activeCertificates.aggregate.count > 0 ? (
-                      <CheckCircleIcon color="success" sx={{ mr: 1 }} />
-                    ) : (
-                      <CancelIcon color="error" sx={{ mr: 1 }} />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {t('dates.default', { date: user.profile.lastActivity })}
+                    <Box display="flex" alignItems="center">
+                      <Avatar
+                        size={32}
+                        src={profile.avatar ?? undefined}
+                        name={profile.fullName ?? undefined}
+                      />
+                      <Box display="flex" flexDirection="column" ml={1}>
+                        <Typography>{profile.fullName}</Typography>
+                        {orgMember?.position ? (
+                          <Typography variant="body2" color="grey.600">
+                            {orgMember?.position}
+                          </Typography>
+                        ) : null}
+                      </Box>
+                    </Box>
                   </TableCell>
                   <TableCell>
-                    {t('dates.default', { date: user.profile.createdAt })}
+                    {filteredCerts.map(cert => {
+                      const certificationStatus =
+                        cert?.status as CertificateStatus
+                      return (
+                        <Box key={cert.id} display="flex" alignItems="center">
+                          <Chip
+                            label={t(
+                              `common.certification-status.${certificationStatus.toLowerCase()}`
+                            )}
+                            size="small"
+                            color={
+                              certificationStatusColor[certificationStatus]
+                            }
+                          />
+                          <Typography variant="body2" ml={1}>
+                            {t(
+                              `common.certificates.${cert.courseLevel.toLowerCase()}`
+                            )}
+                          </Typography>
+                        </Box>
+                      )
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {t('dates.default', { date: profile.lastActivity })}
+                  </TableCell>
+                  <TableCell>
+                    {t('dates.default', { date: profile.createdAt })}
                   </TableCell>
                   <TableCell>
                     <Chip
                       label={
-                        user.isAdmin
+                        orgMember?.isAdmin
                           ? t('pages.org-details.tabs.users.organization-admin')
                           : t('pages.org-details.tabs.users.no-permissions')
                       }
-                      color={user.isAdmin ? 'success' : 'secondary'}
+                      color={orgMember?.isAdmin ? 'success' : 'secondary'}
                       size="small"
                     />
                   </TableCell>
@@ -178,7 +242,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                       variant="text"
                       color="primary"
                       onClick={() => {
-                        setEditedUser(user)
+                        setEditedUser(orgMember)
                         setShowEditUserModal(true)
                       }}
                     >
@@ -190,10 +254,10 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
             })}
           </TableBody>
         </Table>
-        {totalCount ? (
+        {orgProfiles ? (
           <TablePagination
             component="div"
-            count={totalCount}
+            count={orgProfiles.length}
             page={currentPage}
             onPageChange={(_, page) => setCurrentPage(page)}
             onRowsPerPageChange={handleRowsPerPageChange}
@@ -222,7 +286,6 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
             orgMember={editedUser}
             onClose={() => setShowEditUserModal(false)}
             onChange={async () => {
-              await mutate()
               if (onChange) onChange()
             }}
           />

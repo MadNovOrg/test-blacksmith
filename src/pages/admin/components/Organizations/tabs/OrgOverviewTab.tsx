@@ -1,23 +1,31 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import {
+  Alert,
+  Button,
   CircularProgress,
   Container,
   Grid,
+  Link,
   Stack,
   Tab,
   Typography,
 } from '@mui/material'
+import { Box } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import { CountPanel } from '@app/components/CountPanel'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
+import useOrgCourses from '@app/hooks/useOrgCourses'
+import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
+import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
+import { OrgSummaryList } from '@app/pages/admin/components/Organizations/tabs/components/OrgSummaryList'
 import { CourseLevel } from '@app/types'
 
 type OrgOverviewTabParams = {
-  orgId?: string
+  orgId: string
 }
 
 const LEVELS_IN_ORDER = [
@@ -31,21 +39,41 @@ const LEVELS_IN_ORDER = [
 
 export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const navigate = useNavigate()
+  const { profile, acl } = useAuth()
   const [userByLevelSelectedTab, setUserByLevelSelectedTab] = useState<string>()
 
-  const { stats, profilesByLevel, loading } = useOrg(orgId, profile?.id)
+  const {
+    stats,
+    profilesByLevel,
+    loading: orgLoading,
+  } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
+  const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
+    orgId,
+    profile?.id
+  )
+
+  const defaultTab =
+    LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level))[0] ?? 'none'
 
   useEffect(() => {
-    if (userByLevelSelectedTab === undefined && profilesByLevel?.size > 0) {
-      const defaultTab = LEVELS_IN_ORDER.filter(level =>
-        profilesByLevel.get(level)
-      )[0]
-      setUserByLevelSelectedTab(defaultTab ?? 'none')
+    if (userByLevelSelectedTab === undefined) {
+      setUserByLevelSelectedTab(defaultTab)
     }
-  }, [userByLevelSelectedTab, profilesByLevel])
+  }, [userByLevelSelectedTab, defaultTab, orgId, profilesByLevel])
 
-  if (loading) {
+  let selectedTab = defaultTab
+  if (userByLevelSelectedTab) {
+    const value =
+      userByLevelSelectedTab === 'none'
+        ? null
+        : (userByLevelSelectedTab as CourseLevel)
+    selectedTab = profilesByLevel.get(value)
+      ? userByLevelSelectedTab
+      : defaultTab
+  }
+
+  if (orgLoading || coursesLoading) {
     return (
       <Stack
         alignItems="center"
@@ -60,50 +88,8 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
   return (
     <Container maxWidth="lg" sx={{ pb: 4 }}>
       <Grid container>
-        <Grid item xs={6} md={3} p={1} borderRadius={1}>
-          <CountPanel
-            count={stats.profiles.count}
-            label={t('pages.org-details.tabs.overview.total-individuals')}
-          />
-        </Grid>
-
-        <Grid item xs={6} md={3} p={1} borderRadius={1}>
-          <CountPanel
-            count={stats.certificates.active.count}
-            chip={{
-              label: t('pages.org-details.tabs.overview.active'),
-              color: 'success',
-            }}
-            label={t('pages.org-details.tabs.overview.currently-enrolled', {
-              count: stats.certificates.active.enrolled,
-            })}
-          />
-        </Grid>
-
-        <Grid item xs={6} md={3} p={1} borderRadius={1}>
-          <CountPanel
-            count={stats.certificates.expiringSoon.count}
-            chip={{
-              label: t('pages.org-details.tabs.overview.expiring-soon'),
-              color: 'warning',
-            }}
-            label={t('pages.org-details.tabs.overview.currently-enrolled', {
-              count: stats.certificates.expiringSoon.enrolled,
-            })}
-          />
-        </Grid>
-
-        <Grid item xs={6} md={3} p={1} borderRadius={1}>
-          <CountPanel
-            count={stats.certificates.expired.count}
-            chip={{
-              label: t('pages.org-details.tabs.overview.expired'),
-              color: 'error',
-            }}
-            label={t('pages.org-details.tabs.overview.currently-enrolled', {
-              count: stats.certificates.expired.enrolled,
-            })}
-          />
+        <Grid item xs={12}>
+          <OrgStatsTiles orgId={orgId} />
         </Grid>
 
         <Grid item xs={12} md={8} p={1} mt={2}>
@@ -111,19 +97,22 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
             {t('pages.org-details.tabs.overview.individuals-by-training-level')}
           </Typography>
 
-          <TabContext
-            value={
-              userByLevelSelectedTab === undefined
-                ? 'none'
-                : userByLevelSelectedTab
-            }
-          >
-            <TabList
-              onChange={(_, value) => setUserByLevelSelectedTab(value)}
-              sx={{ mt: 2 }}
-            >
-              {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-                courseLevel => (
+          {!stats[orgId]?.profiles.count ? (
+            <Alert sx={{ mt: 2 }} severity="info">
+              {t('pages.org-details.tabs.overview.no-org-users') + ' '}
+              <Link href={'/invite'}>
+                {t('pages.org-details.tabs.overview.click-here-to-invite')}
+              </Link>
+            </Alert>
+          ) : (
+            <TabContext value={selectedTab}>
+              <TabList
+                onChange={(_, value) => setUserByLevelSelectedTab(value)}
+                sx={{ mt: 2 }}
+              >
+                {LEVELS_IN_ORDER.filter(level =>
+                  profilesByLevel.get(level)
+                ).map(courseLevel => (
                   <Tab
                     key={courseLevel}
                     label={
@@ -133,25 +122,57 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
                     }
                     value={courseLevel ?? 'none'}
                   />
+                ))}
+              </TabList>
+
+              {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
+                courseLevel => (
+                  <TabPanel
+                    value={courseLevel ?? 'none'}
+                    key={courseLevel}
+                    sx={{ p: 0 }}
+                  >
+                    <IndividualsByLevelList
+                      orgId={orgId}
+                      courseLevel={courseLevel}
+                    />
+                  </TabPanel>
                 )
               )}
-            </TabList>
+            </TabContext>
+          )}
 
-            {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-              courseLevel => (
-                <TabPanel
-                  value={courseLevel ?? 'none'}
-                  key={courseLevel}
-                  sx={{ p: 0 }}
-                >
-                  <IndividualsByLevelList
-                    orgId={orgId}
-                    courseLevel={courseLevel}
-                  />
-                </TabPanel>
-              )
-            )}
-          </TabContext>
+          <Box display="flex" justifyContent="space-between" my={2}>
+            <Typography variant="h4">
+              {t('pages.org-details.tabs.overview.organization-summary')}
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/organizations/list')}
+            >
+              {t('pages.org-details.tabs.overview.see-all-organizations')}
+            </Button>
+          </Box>
+
+          <OrgSummaryList orgId={orgId} />
+        </Grid>
+
+        <Grid item xs={12} md={4} p={1} mt={2}>
+          <Typography variant="h4">
+            {t('pages.org-details.tabs.overview.available-courses-for-booking')}
+          </Typography>
+
+          {coursesForBooking?.map(course => (
+            <CourseForBookingTile course={course} key={course.id} />
+          ))}
+
+          <Button
+            variant="outlined"
+            onClick={() => navigate('/courses')}
+            sx={{ mt: 2 }}
+          >
+            {t('pages.org-details.tabs.overview.see-all-courses')}
+          </Button>
         </Grid>
       </Grid>
     </Container>

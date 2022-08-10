@@ -92,6 +92,7 @@ select_permissions:
       columns:
         - addresses
         - attributes
+        - avatar
         - contact_details
         - created_at
         - dietary_restrictions
@@ -121,6 +122,7 @@ select_permissions:
       columns:
         - addresses
         - attributes
+        - avatar
         - contact_details
         - created_at
         - dietary_restrictions
@@ -151,6 +153,7 @@ select_permissions:
       columns:
         - addresses
         - attributes
+        - avatar
         - contact_details
         - created_at
         - dietary_restrictions
@@ -178,6 +181,7 @@ update_permissions:
       columns:
         - addresses
         - attributes
+        - avatar
         - contact_details
         - dietary_restrictions
         - disabilities
@@ -197,6 +201,7 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - avatar
         - dietary_restrictions
         - disabilities
         - dob

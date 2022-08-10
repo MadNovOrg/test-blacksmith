@@ -15,7 +15,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
 import { OrgIndividualsTab } from '@app/pages/admin/components/Organizations/tabs/OrgIndividualsTab'
@@ -37,11 +37,15 @@ export enum CertificationStatus {
 
 export const OrgDashboard: React.FC = () => {
   const { id } = useParams()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
 
-  const { data, status } = useOrg(id, profile?.id)
+  const { data, status } = useOrg(
+    id ?? ALL_ORGS,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
 
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState(
@@ -75,7 +79,7 @@ export const OrgDashboard: React.FC = () => {
                   <Box width="100%" pr={4}>
                     <Sticky top={20}>
                       <Typography variant="h2" my={2}>
-                        {id
+                        {id !== ALL_ORGS
                           ? data[0].name
                           : t('pages.org-details.all-organizations')}
                       </Typography>
@@ -83,7 +87,7 @@ export const OrgDashboard: React.FC = () => {
                   </Box>
                 </Box>
 
-                {id && id !== 'all' ? (
+                {id && id !== ALL_ORGS ? (
                   <TabContext value={selectedTab}>
                     <Container maxWidth="lg">
                       <Container>
@@ -114,7 +118,7 @@ export const OrgDashboard: React.FC = () => {
                       </TabPanel>
 
                       <TabPanel
-                        sx={{ px: 0 }}
+                        sx={{ p: 0 }}
                         value={OrgDashboardTabs.INDIVIDUALS}
                       >
                         <OrgIndividualsTab orgId={id} />
@@ -122,7 +126,7 @@ export const OrgDashboard: React.FC = () => {
                     </Container>
                   </TabContext>
                 ) : (
-                  <OrgOverviewTab />
+                  <OrgOverviewTab orgId={ALL_ORGS} />
                 )}
               </>
             ) : null}

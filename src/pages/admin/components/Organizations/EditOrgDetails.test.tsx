@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
-import useOrg from '@app/hooks/useOrg'
+import useOrg, { ProfileType } from '@app/hooks/useOrg'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { Address, CourseLevel, OfstedRating } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -52,19 +52,22 @@ describe('EditOrgDetails', () => {
       },
     ],
     stats: {
-      profiles: {
-        count: 0,
-      },
-      certificates: {
-        active: { count: 0, enrolled: 0 },
-        expiringSoon: { count: 0, enrolled: 0 },
-        expired: { count: 0, enrolled: 0 },
-      },
-      pendingInvites: {
-        count: 0,
+      '1': {
+        profiles: {
+          count: 0,
+        },
+        certificates: {
+          active: { count: 0, enrolled: 0 },
+          expiringSoon: { count: 0, enrolled: 0 },
+          expired: { count: 0, enrolled: 0 },
+        },
+        pendingInvites: {
+          count: 0,
+        },
       },
     },
     profiles: [],
+    profilesByOrg: new Map<string, ProfileType[]>(),
   })
 
   it('matches snapshot', async () => {

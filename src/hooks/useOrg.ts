@@ -13,7 +13,42 @@ import {
   LoadingStatus,
 } from '@app/util'
 
-type ProfileType = GetOrgDetailsQuery['profiles'][0]
+export type ProfileType = GetOrgDetailsQuery['profiles'][0]
+
+export const ALL_ORGS = 'all'
+
+type OrgStats = {
+  profiles: {
+    count: number
+  }
+  certificates: {
+    active: { count: number; enrolled: number }
+    expiringSoon: { count: number; enrolled: number }
+    expired: { count: number; enrolled: number }
+  }
+  pendingInvites?: {
+    count: number
+  }
+}
+
+function crunchStats(profiles: ProfileType[] | undefined) {
+  return {
+    profiles: {
+      count: profiles?.length ?? 0,
+    },
+    certificates: {
+      active: getCountByStatus(CertificateStatus.ACTIVE, profiles ?? []),
+      expiringSoon: getCountByStatus(
+        CertificateStatus.EXPIRING_SOON,
+        profiles ?? []
+      ),
+      expired: getCountByStatus(
+        CertificateStatus.EXPIRED_RECENTLY,
+        profiles ?? []
+      ),
+    },
+  }
+}
 
 function getCountByStatus(
   status: CertificateStatus,
@@ -51,36 +86,36 @@ function getCountByStatus(
   )
 }
 
-export default function useOrg(orgId?: string, profileId?: string) {
+export default function useOrg(
+  orgId: string,
+  profileId?: string,
+  showAll?: boolean
+) {
+  let conditions
+  if (orgId !== ALL_ORGS) {
+    conditions = { id: { _eq: orgId } }
+  } else {
+    conditions = showAll
+      ? {}
+      : {
+          members: {
+            _and: [
+              {
+                profile_id: {
+                  _eq: profileId,
+                },
+              },
+              { isAdmin: { _eq: true } },
+            ],
+          },
+        }
+  }
+
   const { data, error, mutate } = useSWR<
     GetOrgDetailsQuery,
     Error,
     [string, GetOrgDetailsQueryVariables] | null
-  >(
-    profileId
-      ? [
-          QUERY,
-          orgId !== 'all'
-            ? {
-                where: { id: { _eq: orgId } },
-              }
-            : {
-                where: {
-                  members: {
-                    _and: [
-                      {
-                        profile_id: {
-                          _eq: profileId,
-                        },
-                      },
-                      { isAdmin: { _eq: true } },
-                    ],
-                  },
-                },
-              },
-        ]
-      : null
-  )
+  >(profileId ? [QUERY, { where: conditions }] : null)
 
   const status = getSWRLoadingStatus(data, error)
 
@@ -105,32 +140,38 @@ export default function useOrg(orgId?: string, profileId?: string) {
       return map
     }, [data])
 
+  const profilesByOrg = useMemo(() => {
+    const profilesByOrg = new Map<string, ProfileType[]>()
+    data?.profiles.forEach(profile => {
+      profile.organizations.forEach(orgMember => {
+        const array = profilesByOrg.get(orgMember.organization.id) ?? []
+        array.push(profile)
+        profilesByOrg.set(orgMember.organization.id, array)
+      })
+    })
+    return profilesByOrg
+  }, [data])
+
   const stats = useMemo(() => {
-    return {
-      profiles: {
-        count: data?.profiles.length ?? 0,
-      },
-      certificates: {
-        active: getCountByStatus(CertificateStatus.ACTIVE, data?.profiles),
-        expiringSoon: getCountByStatus(
-          CertificateStatus.EXPIRING_SOON,
-          data?.profiles
-        ),
-        expired: getCountByStatus(
-          CertificateStatus.EXPIRED_RECENTLY,
-          data?.profiles
-        ),
-      },
-      pendingInvites: {
-        count: data?.pendingInvitesCount?.aggregate?.count ?? 0,
+    const perOrg: { [orgId: string]: OrgStats } = {
+      all: {
+        ...crunchStats(data?.profiles),
+        pendingInvites: {
+          count: data?.pendingInvitesCount.aggregate?.count ?? 0,
+        },
       },
     }
-  }, [data])
+    data?.orgs.forEach(org => {
+      perOrg[org.id] = crunchStats(profilesByOrg.get(org.id) ?? [])
+    })
+    return perOrg
+  }, [data, profilesByOrg])
 
   return {
     data: data?.orgs,
     profiles: data?.profiles,
     profilesByLevel,
+    profilesByOrg,
     stats,
     error,
     status,

@@ -41,6 +41,26 @@ insert_permissions:
         - status
         - updated_at
       backend_only: false
+  - role: user
+    permission:
+      check:
+        organization:
+          members:
+            _and:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - is_admin:
+                  _eq: true
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
@@ -89,10 +109,32 @@ update_permissions:
         - profile_id
       filter: {}
       check: {}
+  - role: user
+    permission:
+      columns: []
+      filter:
+        organization:
+          members:
+            _and:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - is_admin:
+                  _eq: true
+      check: null
 delete_permissions:
   - role: tt-admin
     permission:
       filter: {}
+  - role: user
+    permission:
+      filter:
+        organization:
+          members:
+            _and:
+              - profile_id:
+                  _eq: X-Hasura-User-Id
+              - is_admin:
+                  _eq: true
 event_triggers:
   - name: org_invite_email
     definition:

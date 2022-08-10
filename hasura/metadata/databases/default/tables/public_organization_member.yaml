@@ -87,10 +87,19 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - is_admin
         - position
       filter:
-        profile_id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
       check: null
 delete_permissions:
   - role: tt-admin
@@ -99,5 +108,13 @@ delete_permissions:
   - role: user
     permission:
       filter:
-        profile_id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true

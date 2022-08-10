@@ -166,9 +166,17 @@ select_permissions:
         - contact_profile_id
         - organization_id
       filter:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
       allow_aggregations: true
   - role: tt-ops
     permission:
@@ -263,9 +271,17 @@ update_permissions:
         - reaccreditation
         - updated_at
       filter:
-        trainers:
-          profile_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
       check: null
   - role: tt-ops
     permission:

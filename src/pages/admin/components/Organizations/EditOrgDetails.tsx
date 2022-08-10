@@ -53,13 +53,17 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
 
 export const EditOrgDetails: React.FC = () => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const { data, mutate } = useOrg(id ?? '', profile?.id)
+  const { data, mutate } = useOrg(
+    id ?? '',
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
   const org = data?.length ? data[0] : null
 
   const schema = useMemo(() => {
@@ -513,6 +517,8 @@ export const EditOrgDetails: React.FC = () => {
               >
                 {t('save-changes')}
               </LoadingButton>
+
+              {JSON.stringify(errors)}
             </Box>
           </Grid>
         </Grid>

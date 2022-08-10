@@ -25,7 +25,7 @@ import theme from '@app/theme'
 import { CertificateStatus, CourseLevel } from '@app/types'
 
 type IndividualsByLevelListParams = {
-  orgId?: string
+  orgId: string
   courseLevel: CourseLevel | null
 }
 
@@ -44,13 +44,17 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
   courseLevel,
 }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
 
   const sorting = useTableSort('fullName', 'asc')
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
 
-  const { profilesByLevel, loading } = useOrg(orgId, profile?.id)
+  const { profilesByLevel, loading } = useOrg(
+    orgId,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
 
   const currentPageUsers = useMemo(() => {
     const profiles = profilesByLevel.get(courseLevel) || []

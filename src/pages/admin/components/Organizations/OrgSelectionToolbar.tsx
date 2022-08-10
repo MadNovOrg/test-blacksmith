@@ -6,12 +6,12 @@ import { useTranslation } from 'react-i18next'
 
 import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 
 export const OrgSelectionToolbar: React.FC = () => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
-  const { data } = useOrg(undefined, profile?.id)
+  const { profile, acl } = useAuth()
+  const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
 
   return (
     <Toolbar
