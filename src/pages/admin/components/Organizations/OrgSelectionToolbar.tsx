@@ -1,7 +1,8 @@
-import { Box } from '@mui/material'
+import { Box, Button, Menu, MenuItem } from '@mui/material'
 import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
-import React from 'react'
+import { sortBy } from 'lodash-es'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
@@ -13,6 +14,10 @@ export const OrgSelectionToolbar: React.FC = () => {
   const { profile, acl } = useAuth()
   const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  const sorted = sortBy(data || [], org => org.name.toLowerCase())
+
   return (
     <Toolbar
       sx={{
@@ -22,27 +27,58 @@ export const OrgSelectionToolbar: React.FC = () => {
         bgcolor: 'white',
       }}
     >
-      <Box
-        flex={1}
-        height={44}
-        lineHeight={2}
-        display="flex"
-        justifyContent="left"
-        px={3}
-        color="secondary.dark"
-      >
-        <Link component={StyledSubNavLink} to="/organizations/all">
-          {t('pages.org-details.all-organizations')}
-        </Link>
-        {(data || []).map(org => (
+      <Box display="flex" justifyContent="space-between" width="100%">
+        <Box
+          height={44}
+          lineHeight={2}
+          display="flex"
+          justifyContent="left"
+          px={3}
+          color="secondary.dark"
+          overflow="hidden"
+        >
           <Link
-            key={org.id}
+            flex={1}
             component={StyledSubNavLink}
-            to={`/organizations/${org.id}`}
+            to="/organizations/all"
+            whiteSpace="nowrap"
           >
-            {org.name}
+            {t('pages.org-details.all-organizations')}
           </Link>
-        ))}
+          {sorted.map(org => (
+            <Link
+              key={org.id}
+              flex={1}
+              component={StyledSubNavLink}
+              to={`/organizations/${org.id}`}
+              whiteSpace="nowrap"
+            >
+              {org.name}
+            </Link>
+          ))}
+        </Box>
+        <Box>
+          <Button onClick={event => setAnchorEl(event.currentTarget)}>
+            More
+          </Button>
+          <Menu
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            onClose={() => setAnchorEl(null)}
+          >
+            {sorted.map(org => (
+              <MenuItem key={org.id} onClick={() => setAnchorEl(null)}>
+                <Link
+                  key={org.id}
+                  component={StyledSubNavLink}
+                  to={`/organizations/${org.id}`}
+                >
+                  {org.name}
+                </Link>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
       </Box>
     </Toolbar>
   )
