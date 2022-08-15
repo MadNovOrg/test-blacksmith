@@ -41,6 +41,7 @@ export const CourseStatusChip: React.FC<Props> = ({ status, ...rest }) => {
         color={chipColor}
         label={t(`course-statuses.${status}`)}
         sx={{ marginRight: chipColor === 'warning' ? 1 : 0 }}
+        data-testid="course-status-chip"
       />
       {chipColor === 'warning' ? <Warning color="warning" /> : null}
     </Box>

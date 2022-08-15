@@ -29,6 +29,7 @@ export const useCourses = (
     TrainerCoursesQuery,
     TrainerCoursesQueryVariables
   >({
+    requestPolicy: 'cache-and-network',
     query: GetTrainerCourses,
     variables: {
       where,
