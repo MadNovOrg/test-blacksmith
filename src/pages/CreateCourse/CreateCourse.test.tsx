@@ -114,7 +114,7 @@ describe('page: CreateCourse', () => {
       }
     )
 
-    expect(screen.getByText('Indirect course creation')).toBeInTheDocument()
+    expect(screen.getByText('Course creation')).toBeInTheDocument()
   })
 
   it('displays correct steps for the indirect course', () => {

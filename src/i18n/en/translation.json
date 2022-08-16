@@ -784,7 +784,7 @@
     "create-course": {
       "OPEN-course-title": "Open course creation",
       "CLOSED-course-title": "Closed course creation",
-      "INDIRECT-course-title": "Indirect course creation",
+      "INDIRECT-course-title": "Course creation",
       "back-button-text": "All courses",
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",
