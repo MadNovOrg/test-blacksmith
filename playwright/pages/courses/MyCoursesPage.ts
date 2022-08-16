@@ -73,7 +73,7 @@ export class MyCoursesPage extends BasePage {
 
   async clickCourseBuildButton(courseId: number): Promise<CourseBuilderPage> {
     await this.tableRoot
-      .locator(`data-testid=course-row-${courseId} >> button:has-text("Build")`)
+      .locator(`data-testid=course-row-${courseId} >> a:has-text("Build")`)
       .click()
 
     return new CourseBuilderPage(this.page)
