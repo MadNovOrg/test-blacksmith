@@ -3,6 +3,7 @@ import {
   Button,
   Grid,
   CircularProgress,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -185,7 +186,9 @@ export const List: React.FC<Props> = ({
               >
                 {checkbox.rowCell(order.id)}
 
-                <TableCell>{order.id}</TableCell>
+                <TableCell>
+                  <Link href={order.id}>{order.id}</Link>
+                </TableCell>
 
                 <TableCell>{order.organization?.name ?? '-NA-'}</TableCell>
 
