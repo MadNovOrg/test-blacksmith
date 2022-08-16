@@ -1,21 +1,19 @@
+import { formatInTimeZone } from 'date-fns-tz'
+
+import { dateFormats } from '@app/i18n/config'
 import translation from '@app/i18n/en/translation.json'
 import { getInitialsFromName } from '@app/util'
 
 import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 
 const toUiTime = (date: Date) => {
-  return date
-    .toLocaleString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-      timeZone: 'UTC',
-    })
-    .replace(', ', '')
-    .replace('am', 'AM')
-    .replace('pm', 'PM')
+  const tz = 'Etc/UTC'
+
+  return `${formatInTimeZone(
+    date,
+    tz,
+    dateFormats.date_short
+  )}${formatInTimeZone(date, tz, dateFormats.date_onlyTime)}`
 }
 
 export const toCourseTableRow: (course: Course) => CourseTableRow = course => {

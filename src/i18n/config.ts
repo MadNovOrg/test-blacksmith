@@ -26,7 +26,7 @@ i18n.use(initReactI18next).init({
   parseMissingKeyHandler: () => '',
 })
 
-const dateFormats = {
+export const dateFormats = {
   date_default: 'd MMMM yyyy',
   date_short: 'dd MMM',
   date_withTime: 'd MMMM yyyy, hh:mm aa',
