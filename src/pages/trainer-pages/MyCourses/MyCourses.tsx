@@ -22,6 +22,7 @@ import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { LinkBehavior } from '@app/components/LinkBehavior'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
@@ -160,7 +161,7 @@ export const MyCourses: React.FC = () => {
       const isLead = trainer.type === Course_Trainer_Type_Enum.Leader
       const isAccepted = status === Course_Invite_Status_Enum.Accepted
       setKeyword('')
-      isLead && isAccepted ? navigate(handleNavigation(course)) : mutate()
+      isLead && isAccepted ? navigate(`./${course.id}/modules`) : mutate()
     },
     [mutate, navigate]
   )
@@ -241,7 +242,7 @@ export const MyCourses: React.FC = () => {
                   >
                     <TableCell>
                       {courseTrainer &&
-                      courseTrainer.status !==
+                      courseTrainer.status ===
                         Course_Invite_Status_Enum.Pending ? (
                         <CourseTitle level={c.level} name={c.name} />
                       ) : (
@@ -342,7 +343,8 @@ export const MyCourses: React.FC = () => {
                           variant="outlined"
                           color="primary"
                           size="small"
-                          onClick={() => navigate(handleNavigation(c))}
+                          href={`./${handleNavigation(c)}`}
+                          component={LinkBehavior}
                         >
                           {c.status === Course_Status_Enum.ConfirmModules ||
                           c.status === Course_Status_Enum.Draft
