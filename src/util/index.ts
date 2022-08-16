@@ -232,6 +232,8 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     endDateTime: course.schedule[0].end,
     courseCost: course.aolCostOfCourse ?? null,
     usesAOL: Boolean(course.aolCostOfCourse),
+    aolCountry: course.aolCountry ?? null,
+    aolRegion: course.aolRegion ?? null,
   }
 }
 

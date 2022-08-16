@@ -39,6 +39,8 @@ import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
 import { VenueSelector } from '../VenueSelector'
 
+import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
+import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import {
   canBeBlended,
@@ -144,6 +146,20 @@ const CourseForm: React.FC<Props> = ({
           .positive()
           .required(t('components.course-form.min-participants-required')),
         usesAOL: yup.boolean(),
+        aolCountry: yup
+          .string()
+          .nullable()
+          .when('usesAOL', {
+            is: true,
+            then: schema => schema.required('Provide AOL Country'),
+          }),
+        aolRegion: yup
+          .string()
+          .nullable()
+          .when('usesAOL', {
+            is: true,
+            then: schema => schema.required('Provide AOL Region'),
+          }),
         courseCost: yup
           .number()
           .nullable()
@@ -187,6 +203,8 @@ const CourseForm: React.FC<Props> = ({
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
       usesAOL: Boolean(courseInput?.courseCost) ?? false,
+      aolCountry: courseInput?.aolCountry ?? null,
+      aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
     },
   })
@@ -205,6 +223,7 @@ const CourseForm: React.FC<Props> = ({
     deliveryType
   )
   const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
+  const aolCountry = values.aolCountry
   const isValid = formState.isValid && Boolean(startTime) && Boolean(endTime)
 
   useEffect(() => {
@@ -627,19 +646,70 @@ const CourseForm: React.FC<Props> = ({
             />
 
             {usesAOL ? (
-              <TextField
-                variant="filled"
-                placeholder={t(
-                  'components.course-form.course-cost-placeholder'
-                )}
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">£</InputAdornment>
-                  ),
-                }}
-                {...register('courseCost')}
-              />
+              <>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <FormControl
+                      variant="filled"
+                      sx={{ mb: theme.spacing(2) }}
+                      fullWidth
+                    >
+                      <Controller
+                        name="aolCountry"
+                        control={control}
+                        render={({ field }) => (
+                          <CourseAOLCountryDropdown
+                            value={field.value}
+                            onChange={field.onChange}
+                            usesAOL={usesAOL}
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={6}>
+                    <FormControl
+                      variant="filled"
+                      sx={{ mb: theme.spacing(2) }}
+                      fullWidth
+                    >
+                      <Controller
+                        name="aolRegion"
+                        control={control}
+                        render={({ field }) => (
+                          <CourseAOLRegionDropdown
+                            value={field.value}
+                            onChange={field.onChange}
+                            usesAOL={usesAOL}
+                            aolCountry={aolCountry}
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+
+                <Typography mt={5} fontWeight={600}>
+                  {t('components.course-form.course-cost')}
+                </Typography>
+                <Typography mb={1} variant="body2">
+                  {t('components.course-form.course-cost-disclaimer')}
+                </Typography>
+                <TextField
+                  variant="filled"
+                  placeholder={t(
+                    'components.course-form.course-cost-placeholder'
+                  )}
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">£</InputAdornment>
+                    ),
+                  }}
+                  {...register('courseCost')}
+                />
+              </>
             ) : null}
           </>
         ) : null}

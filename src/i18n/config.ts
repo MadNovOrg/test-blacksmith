@@ -3,6 +3,7 @@ import {} from 'date-fns/locale'
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
+import aol from './en/aol.json'
 import translation from './en/translation.json'
 
 type Locales = Record<string, { name: string; display: string }>
@@ -14,13 +15,14 @@ export const supportedLocales: Locales = {
     name: 'English',
     display: '**English**',
     ...translation,
+    ...aol,
   },
 } as const
 
 i18n.use(initReactI18next).init({
   lng: 'en',
   resources: supportedLocales,
-  ns: Object.keys(translation),
+  ns: [...Object.keys(translation), 'aol'],
   defaultNS: 'common',
   nsSeparator: '.',
   parseMissingKeyHandler: () => '',

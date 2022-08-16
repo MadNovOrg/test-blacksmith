@@ -1,5 +1,7 @@
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
+import aolRegionsByCountry from './aolRegions'
+
 export function getLevels(courseType: CourseType) {
   const types = {
     [CourseType.OPEN]: () => {
@@ -284,4 +286,18 @@ export function canBeVirtual(
   }
 
   return types[courseType]()
+}
+
+export function getAOLCountries() {
+  return Object.keys(aolRegionsByCountry)
+}
+
+export function getAOLRegions(country: string | null): string[] {
+  const validCountries = getAOLCountries()
+
+  if (!country || !validCountries.includes(country)) {
+    return []
+  }
+
+  return aolRegionsByCountry[country as keyof typeof aolRegionsByCountry]
 }

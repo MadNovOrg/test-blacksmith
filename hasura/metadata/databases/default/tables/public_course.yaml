@@ -8,6 +8,10 @@ configuration:
       custom_name: aolCostOfCourse
     course_type:
       custom_name: type
+    aol_region:
+      custom_name: aolRegion
+    aol_country:
+      custom_name: aolCountry
     course_status:
       custom_name: status
     grading_confirmed:
@@ -27,6 +31,8 @@ configuration:
   custom_column_names:
     aol_cost_of_course: aolCostOfCourse
     course_type: type
+    aol_region: aolRegion
+    aol_country: aolCountry
     course_status: status
     grading_confirmed: gradingConfirmed
     course_level: level

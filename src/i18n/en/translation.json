@@ -474,7 +474,11 @@
       "contact-person-placeholder": "Contact name",
       "aol-title": "Area Operating License (AOL)",
       "aol-label": "I will be using an AOL for this course",
-      "course-cost-placeholder": "Cost of course"
+      "course-cost-placeholder": "Cost of course",
+      "course-cost": "How much are you charging for this course?",
+      "course-cost-disclaimer": "TeamTeach is not responsible for collecting fees for this course",
+      "country": "Country",
+      "aol-region": "AOL Region"
     },
     "searchTrainers": {
       "loading": "Loading...",

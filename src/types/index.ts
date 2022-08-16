@@ -28,6 +28,8 @@ export type Course = {
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
   aolCostOfCourse?: number
+  aolCountry?: string
+  aolRegion?: string
   go1Integration: boolean
   dates: {
     aggregate: {
@@ -468,6 +470,8 @@ export type CourseInput = {
   venue: Venue | null
   zoomMeetingUrl: string | null
   usesAOL: boolean
+  aolCountry: string | null
+  aolRegion: string | null
   courseCost: number | null
 }
 

@@ -19,6 +19,8 @@ export type ParamsType = {
     reaccreditation?: boolean
     go1Integration?: boolean
     aolCostOfCourse?: number
+    aolCountry?: string
+    aolRegion?: string
     description?: string
     min_participants?: number
     max_participants?: number

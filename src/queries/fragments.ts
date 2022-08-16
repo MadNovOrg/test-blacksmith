@@ -96,6 +96,8 @@ export const COURSE = gql`
     gradingConfirmed
     go1Integration
     aolCostOfCourse
+    aolCountry
+    aolRegion
   }
 `
 
