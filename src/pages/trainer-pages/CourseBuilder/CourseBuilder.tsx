@@ -465,16 +465,6 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                 <CourseHero data={courseData.course} />
               </Box>
 
-              {getPercentage(estimatedCourseDuration, maxDuration) > 100 && (
-                <Box gridColumn={{ xs: 'span 3', md: 'span 8' }}>
-                  <Alert severity="error" variant="filled">
-                    {t(
-                      'pages.trainer-base.create-course.new-course.duration-exceeded'
-                    )}
-                  </Alert>
-                </Box>
-              )}
-
               <Box gridColumn={{ xs: 'span 1', md: '1 / 4' }}>
                 <Typography variant="h3">
                   {t(
@@ -610,11 +600,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     variant="outlined"
                     onClick={onCourseSubmit}
                     disabled={
-                      getPercentage(estimatedCourseDuration, maxDuration) >
-                        100 ||
-                      (!courseModuleSlots?.filter(slot => !!slot.module)
-                        .length &&
-                        !mandatoryModules?.length)
+                      !courseModuleSlots?.filter(slot => !!slot.module)
+                        .length && !mandatoryModules?.length
                     }
                     data-testid="submit-button"
                   >

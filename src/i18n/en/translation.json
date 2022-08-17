@@ -766,7 +766,6 @@
           "estimated-duration": "Estimated duration",
           "submit-course": "Submit Course",
           "submitted-course": "You have successfully created your {{name}} Course",
-          "duration-exceeded": "You have exceeded the minimum duration for this course, you must remove a module in order to add more.",
           "organization": "Organisation",
           "time-commitment-title": "Time commitment",
           "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training."
