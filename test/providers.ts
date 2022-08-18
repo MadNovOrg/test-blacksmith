@@ -22,7 +22,7 @@ export const profile = {
   createdAt: '',
   updatedAt: '',
   organizations: [],
-  roles: [{ role: { name: RoleName.USER } }],
+  roles: [{ role: { id: '1', name: RoleName.USER } }],
   dietaryRestrictions: null,
   disabilities: null,
   lastActivity: new Date('2020-01-01 00:00:00'),

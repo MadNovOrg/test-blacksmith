@@ -380,7 +380,8 @@
     "days": "days",
     "online": "Online",
     "spaces-left": "{{ number }} spaces left",
-    "book-now": "Book now"
+    "book-now": "Book now",
+    "group": "Group"
   },
   "components": {
     "not-found": {
@@ -1418,6 +1419,20 @@
       "accept": "Accept",
       "decline": "Decline",
       "continue-to-organization": "Continue to organisation"
+    },
+    "view-profile": {
+      "hub-access": "Hub access",
+      "user-roles": "User roles",
+      "roles": {
+        "unverified": "Unverified user",
+        "user": "Individual",
+        "trainer": "Trainer",
+        "org-admin": "Organisation admin",
+        "mta-admin": "MTA admin",
+        "tt-ops": "TeamTeach operations",
+        "tt-admin": "TeamTeach administrator",
+        "admin": "Global administrator"
+      }
     }
   },
   "course-evaluation": {

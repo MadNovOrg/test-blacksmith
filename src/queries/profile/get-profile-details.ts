@@ -1,20 +1,14 @@
 import { gql } from 'graphql-request'
 
-import { CERTIFICATE } from '@app/queries/fragments'
-import { Course, CourseCertificate } from '@app/types'
-
-export type ResponseType = {
-  certificates: CourseCertificate[]
-  upcomingCourses: Course[]
-}
-
-export type ParamsType = {
-  profileId: string
-}
+import { CERTIFICATE, PROFILE } from '@app/queries/fragments'
 
 export const QUERY = gql`
+  ${PROFILE}
   ${CERTIFICATE}
-  query GetProfileCertifications($profileId: uuid!) {
+  query GetProfileDetails($profileId: uuid!) {
+    profile: profile_by_pk(id: $profileId) {
+      ...Profile
+    }
     certificates: course_certificate(
       where: { profileId: { _eq: $profileId } }
       order_by: { expiryDate: desc }

@@ -143,12 +143,17 @@ export type Profile = {
   attributes: string[]
   contactDetails: { [key: string]: string }[]
   preferences: { [key: string]: string }[]
-  organizations: Array<{ organization: Organization }>
+  organizations: Array<{
+    isAdmin: boolean
+    position?: string
+    organization: Organization
+  }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
   lastActivity: Date
 } & Base
 
 export type Role = {
+  id: string
   name: RoleName
 }
 

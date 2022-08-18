@@ -14,19 +14,24 @@ export const DetailsRow = ({
   labelProps,
   valueProps,
   containerProps,
+  children,
 }: {
   label: string
   value?: string | null
   labelProps?: TypographyProps
   valueProps?: TypographyProps
   containerProps?: BoxProps
+  children?: React.ReactNode
 }) => (
   <Box display="flex" alignItems="center" mb={2} {...(containerProps ?? {})}>
     <Typography flex={1} color="grey.700" {...(labelProps ?? {})}>
       {label}
     </Typography>
-    <Typography flex={2} {...(valueProps ?? {})}>
-      {value}
-    </Typography>
+    {value ? (
+      <Typography flex={2} {...(valueProps ?? {})}>
+        {value}
+      </Typography>
+    ) : null}
+    {children}
   </Box>
 )

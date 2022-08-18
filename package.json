@@ -11,6 +11,7 @@
     "build-storybook": "build-storybook",
     "typecheck": "tsc --noEmit",
     "test": "jest --collectCoverage",
+    "test:update-snapshot": "jest --updateSnapshot",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test --config=playwright/playwright.config.ts --project=chromium",
     "test:e2e:firefox": "playwright test --config=playwright/playwright.config.ts --project=firefox",

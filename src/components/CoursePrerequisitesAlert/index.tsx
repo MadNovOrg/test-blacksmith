@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import useProfileCertifications from '@app/hooks/useProfileCertifications'
+import useProfile from '@app/hooks/useProfile'
 
 type CoursePrerequisitesAlertProps = {
   courseId?: string
@@ -18,10 +18,7 @@ export const CoursePrerequisitesAlert: React.FC<
   const { t } = useTranslation()
   const { profile } = useAuth()
   const navigate = useNavigate()
-  const { missingCertifications } = useProfileCertifications(
-    profile?.id,
-    courseId
-  )
+  const { missingCertifications } = useProfile(profile?.id, courseId)
 
   const missingPrefs = useMemo(() => {
     if (!profile) return []

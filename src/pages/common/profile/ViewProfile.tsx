@@ -17,37 +17,56 @@ import {
 import { formatDistanceToNow, isPast } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
+import { BackButton } from '@app/components/BackButton'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import useProfileCertifications from '@app/hooks/useProfileCertifications'
-import { CourseCertificate, OrganizationMember } from '@app/types'
+import useProfile from '@app/hooks/useProfile'
 
-type MyProfilePageProps = unknown
+import { getRoleColor } from './utils'
 
-export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
+type ViewProfilePageProps = unknown
+
+export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
   const { t } = useTranslation()
-  const { profile, verified } = useAuth()
+  const { profile: currentUserProfile, verified, acl } = useAuth()
   const navigate = useNavigate()
-  const { data } = useProfileCertifications(verified ? profile?.id : undefined)
+  const { id } = useParams()
+
+  const { profile, certifications } = useProfile(id ?? currentUserProfile?.id)
+
+  const isMyProfile = !id
 
   if (!profile) {
     return <CircularProgress />
   }
 
+  const editAllowed =
+    !id ||
+    acl.isTTAdmin() ||
+    currentUserProfile?.organizations.some(orgMember =>
+      profile.organizations.some(
+        profileOrgMember =>
+          profileOrgMember.organization.id === orgMember.organization.id &&
+          orgMember.isAdmin
+      )
+    )
+
   const certificateExpired = (expiryDate: string) =>
     isPast(new Date(expiryDate))
-
-  const orgMembers = profile.organizations as OrganizationMember[]
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
         <Grid container>
+          <Grid item sm={12}>
+            <BackButton label={t('common.back')} />
+          </Grid>
+
           <Grid
             item
             md={4}
@@ -56,8 +75,8 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             alignItems="center"
           >
             <Avatar
-              src={profile.avatar}
-              name={profile.fullName}
+              src={profile.avatar ?? ''}
+              name={profile.fullName ?? ''}
               size={220}
               sx={{ mb: 4 }}
             />
@@ -68,43 +87,49 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
               {profile.email}
             </Typography>
 
-            <Button
-              variant="contained"
-              color="primary"
-              component={LinkBehavior}
-              href="edit"
-              startIcon={<EditIcon />}
-              sx={{ mt: 5 }}
-            >
-              {t('edit-profile')}
-            </Button>
+            {editAllowed ? (
+              <Button
+                variant="contained"
+                color="primary"
+                component={LinkBehavior}
+                href="edit"
+                startIcon={<EditIcon />}
+                sx={{ mt: 5 }}
+              >
+                {t('edit-profile')}
+              </Button>
+            ) : null}
           </Grid>
           <Grid item md={8}>
-            {verified ? <CoursePrerequisitesAlert sx={{ mb: 4 }} /> : null}
+            {isMyProfile ? (
+              <>
+                {verified ? <CoursePrerequisitesAlert sx={{ mb: 4 }} /> : null}
 
-            {!verified && (
-              <Alert
-                variant="standard"
-                color="error"
-                severity="error"
-                sx={{ py: 0, mb: 4 }}
-                action={
-                  <Button
-                    size="small"
-                    variant="text"
-                    color="primary"
-                    component={LinkBehavior}
-                    href="/verify"
+                {!verified && (
+                  <Alert
+                    variant="standard"
+                    color="error"
+                    severity="error"
+                    sx={{ py: 0, mb: 4 }}
+                    action={
+                      <Button
+                        size="small"
+                        variant="text"
+                        color="primary"
+                        component={LinkBehavior}
+                        href="/verify"
+                      >
+                        {t('verify')}
+                      </Button>
+                    }
                   >
-                    {t('verify')}
-                  </Button>
-                }
-              >
-                <Typography variant="body2">
-                  {t('pages.my-profile.verify-email-notice')}
-                </Typography>
-              </Alert>
-            )}
+                    <Typography variant="body2">
+                      {t('pages.my-profile.verify-email-notice')}
+                    </Typography>
+                  </Alert>
+                )}
+              </>
+            ) : null}
 
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
@@ -133,6 +158,24 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
             </Box>
 
             <Typography variant="subtitle2" mb={1} mt={3}>
+              {t('pages.view-profile.hub-access')}
+            </Typography>
+
+            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+              <DetailsRow label={t('pages.view-profile.user-roles')}>
+                <Box flex={1}>
+                  {profile.roles.map(({ role }) => (
+                    <Chip
+                      key={role.name}
+                      label={t(`pages.view-profile.roles.${role?.name}`)}
+                      color={getRoleColor(role.name)}
+                    />
+                  ))}
+                </Box>
+              </DetailsRow>
+            </Box>
+
+            <Typography variant="subtitle2" mb={1} mt={3}>
               {t('org-details')}
             </Typography>
             <Table sx={{ mt: 1 }}>
@@ -151,14 +194,14 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
                   }}
                 >
                   <TableCell>{t('organization')}</TableCell>
-                  <TableCell>{t('trust')}</TableCell>
+                  <TableCell>{t('group')}</TableCell>
                   <TableCell>{t('position')}</TableCell>
                   <TableCell>{t('permissions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {orgMembers?.length ? (
-                  orgMembers.map(orgMember => (
+                {profile.organizations.length ? (
+                  profile.organizations.map(orgMember => (
                     <TableRow
                       key={orgMember.id}
                       sx={{
@@ -229,7 +272,7 @@ export const MyProfilePage: React.FC<MyProfilePageProps> = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {(data ?? []).map((certificate: CourseCertificate) => (
+                    {(certifications ?? []).map(certificate => (
                       <TableRow
                         key={certificate.id}
                         sx={{

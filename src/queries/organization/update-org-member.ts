@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 export type ParamsType = {
   id: string
   member: {
-    position: string | null
+    position?: string | null
     isAdmin?: boolean
   }
 }

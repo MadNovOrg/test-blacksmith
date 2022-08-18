@@ -2,6 +2,15 @@ import { gql } from 'graphql-request'
 
 import { PROFILE } from './fragments'
 
+export const getRoles = gql`
+  query GetRoles {
+    role {
+      id
+      name
+    }
+  }
+`
+
 export const getProfiles = gql`
   ${PROFILE}
   query GetProfile {

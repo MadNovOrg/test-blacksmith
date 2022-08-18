@@ -12,6 +12,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import Link from '@mui/material/Link'
 import { Box } from '@mui/system'
 import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
@@ -185,7 +186,14 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                         name={profile.fullName ?? undefined}
                       />
                       <Box display="flex" flexDirection="column" ml={1}>
-                        <Typography>{profile.fullName}</Typography>
+                        <Link
+                          variant="body2"
+                          color={theme.palette.grey[900]}
+                          ml={1}
+                          href={`/profile/${profile.id}`}
+                        >
+                          {profile.fullName}
+                        </Link>
                         {orgMember?.position ? (
                           <Typography variant="body2" color="grey.600">
                             {orgMember?.position}

@@ -25,6 +25,7 @@ export const PROFILE = gql`
     givenName
     familyName
     fullName
+    avatar
     title
     tags
     addresses
@@ -42,6 +43,7 @@ export const PROFILE = gql`
     }
     roles {
       role {
+        id
         name
       }
     }

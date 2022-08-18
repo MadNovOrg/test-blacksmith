@@ -89,9 +89,6 @@ Object {
                   >
                     Trust type
                   </p>
-                  <p
-                    class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
-                  />
                 </div>
                 <div
                   class="MuiBox-root css-1coeexk"
@@ -338,9 +335,6 @@ Object {
                 >
                   Trust type
                 </p>
-                <p
-                  class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
-                />
               </div>
               <div
                 class="MuiBox-root css-1coeexk"
@@ -536,6 +530,7 @@ Object {
         "roles": Array [
           Object {
             "role": Object {
+              "id": "1",
               "name": "user",
             },
           },

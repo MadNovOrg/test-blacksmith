@@ -1,1 +1,0 @@
-export { MyOrganizationPage } from './MyOrganization'

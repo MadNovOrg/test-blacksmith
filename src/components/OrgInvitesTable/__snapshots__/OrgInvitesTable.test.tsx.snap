@@ -564,6 +564,7 @@ Object {
         "roles": Array [
           Object {
             "role": Object {
+              "id": "1",
               "name": "user",
             },
           },

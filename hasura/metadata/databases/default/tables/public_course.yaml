@@ -90,6 +90,8 @@ insert_permissions:
       check: {}
       columns:
         - aol_cost_of_course
+        - aol_country
+        - aol_region
         - contact_profile_id
         - course_delivery_type
         - course_level
@@ -154,23 +156,25 @@ select_permissions:
   - role: trainer
     permission:
       columns:
-        - go1_integration
-        - grading_confirmed
-        - reaccreditation
-        - id
-        - max_participants
-        - min_participants
         - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
         - course_type
-        - description
-        - name
         - created_at
-        - updated_at
-        - contact_profile_id
+        - description
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
         - organization_id
+        - reaccreditation
+        - updated_at
       filter:
         _or:
           - trainers:
@@ -187,45 +191,49 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
-        - go1_integration
-        - grading_confirmed
-        - reaccreditation
-        - id
-        - max_participants
-        - min_participants
         - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
         - course_type
-        - description
-        - name
         - created_at
-        - updated_at
-        - contact_profile_id
+        - description
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
         - organization_id
+        - reaccreditation
+        - updated_at
       filter: {}
       allow_aggregations: true
   - role: unverified
     permission:
       columns:
-        - go1_integration
-        - grading_confirmed
-        - reaccreditation
-        - id
-        - max_participants
-        - min_participants
         - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
         - course_type
-        - description
-        - name
         - created_at
-        - updated_at
-        - contact_profile_id
+        - description
+        - go1_integration
+        - grading_confirmed
+        - id
+        - max_participants
+        - min_participants
+        - name
         - organization_id
+        - reaccreditation
+        - updated_at
       filter:
         course_type:
           _eq: OPEN
@@ -233,12 +241,15 @@ select_permissions:
     permission:
       columns:
         - aol_cost_of_course
+        - aol_country
+        - aol_region
         - contact_profile_id
         - course_delivery_type
         - course_level
         - course_status
         - course_type
         - created_at
+        - description
         - go1_integration
         - grading_confirmed
         - id
@@ -261,6 +272,8 @@ update_permissions:
     permission:
       columns:
         - aol_cost_of_course
+        - aol_country
+        - aol_region
         - contact_profile_id
         - course_delivery_type
         - course_level

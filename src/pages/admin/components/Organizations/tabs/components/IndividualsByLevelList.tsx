@@ -142,13 +142,14 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
                 <TableCell>
                   <Box display="flex" flexDirection="row" alignItems="center">
                     <Avatar size={32} name={profile.fullName ?? ''} />
-                    <Typography
+                    <Link
                       variant="body2"
                       color={theme.palette.grey[900]}
                       ml={1}
+                      href={`/profile/${profile.id}`}
                     >
                       {profile.fullName}
-                    </Typography>
+                    </Link>
                   </Box>
                 </TableCell>
                 <TableCell>

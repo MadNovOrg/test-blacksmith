@@ -7,10 +7,6 @@ import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOr
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
-import { MyOrganizationPage } from '@app/pages/MyOrganization'
-import { OrganizationOverviewPage } from '@app/pages/MyOrganization/OrganizationOverviewPage'
-import { ProfileListPage } from '@app/pages/MyOrganization/ProfileListPage'
-import { ProfilePage } from '@app/pages/MyOrganization/ProfilePage'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
@@ -63,15 +59,6 @@ const UserRoutes = () => {
           </Route>
         </Route>
       ) : null}
-
-      <Route path="my-organization" element={<MyOrganizationPage />}>
-        <Route index element={<Navigate replace to="overview" />} />
-        <Route path="overview" element={<OrganizationOverviewPage />} />
-        <Route path="profiles">
-          <Route index element={<ProfileListPage />} />
-          <Route path=":id" element={<ProfilePage />} />
-        </Route>
-      </Route>
 
       <Route path="membership/*" element={<MembershipRoutes />} />
       <Route path="*" element={<NotFound />} />

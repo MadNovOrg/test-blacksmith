@@ -7,6 +7,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Chip,
   Container,
   Grid,
   Switch,
@@ -23,16 +24,22 @@ import { uniq } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
+import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog } from '@app/components/Dialog'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
+import {
+  UpdateProfileRolesMutation,
+  UpdateProfileRolesMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import useProfileCertifications from '@app/hooks/useProfileCertifications'
+import useProfile from '@app/hooks/useProfile'
+import useRoles from '@app/hooks/useRoles'
 import { positions } from '@app/pages/common/CourseBooking/components/org-data'
 import ImportCertificateModal from '@app/pages/common/profile/ImportCertificateModal'
 import {
@@ -48,8 +55,11 @@ import {
   ParamsType as UpdateProfileParamsType,
   ResponseType as UpdateProfileResponseType,
 } from '@app/queries/profile/update-profile'
+import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import theme from '@app/theme'
-import { CourseCertificate, OrganizationMember } from '@app/types'
+import { Role } from '@app/types'
+
+import { getRoleColor } from './utils'
 
 type ProfileInput = {
   firstName: string
@@ -83,22 +93,42 @@ enum DisabilitiesRadioValues {
   RATHER_NOT_SAY = 'RATHER_NOT_SAY',
 }
 
+type OrgMemberType = {
+  id: string
+  organization: { name: string }
+}
+
 export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
-  const { profile, reloadCurrentProfile } = useAuth()
+  const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
-  const { data, mutate } = useProfileCertifications(profile?.id)
+  const { id } = useParams()
+
+  const { profile, certifications, mutate } = useProfile(
+    id ?? currentUserProfile?.id
+  )
+  const { roles: systemRoles } = useRoles()
+  const isMyProfile = !id
 
   const [dietaryRestrictionsRadioValue, setDietaryRestrictionsRadioValue] =
     useState<DietaryRestrictionRadioValues | null>(null)
   const [disabilitiesRadioValue, setDisabilitiesRadioValue] =
     useState<DisabilitiesRadioValues | null>(null)
   const [showImportModal, setShowImportModal] = useState(false)
-  const [orgToLeave, setOrgToLeave] = useState<OrganizationMember>()
+  const [orgToLeave, setOrgToLeave] = useState<OrgMemberType>()
+  const [roles, setRoles] = useState<Role[] | null>(null)
 
   const ratherNotSayText = t<string>('rather-not-say')
+
+  const canEditRoles = acl.isTTAdmin()
+
+  useEffect(() => {
+    if (profile && !roles) {
+      setRoles(profile.roles.map(profileRole => profileRole.role as Role))
+    }
+  }, [profile, roles])
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
@@ -174,20 +204,41 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   } = useForm<ProfileInput>({
     resolver: yupResolver(schema),
     defaultValues: {
-      firstName: profile?.givenName || '',
-      surname: profile?.familyName || '',
+      firstName: '',
+      surname: '',
       countryCode: '+44',
-      phone: profile?.phone || '',
-      dob: profile?.dob ? new Date(profile.dob) : null,
-      jobTitle: profile?.jobTitle || '',
-      disabilities: profile?.disabilities || null,
-      dietaryRestrictions: profile?.dietaryRestrictions || null,
+      phone: '',
+      dob: null,
+      jobTitle: '',
+      disabilities: null,
+      dietaryRestrictions: null,
     },
   })
   const values = watch()
 
+  const refreshData = async () => {
+    if (isMyProfile) {
+      await reloadCurrentProfile()
+    } else {
+      await mutate()
+    }
+  }
+
+  useEffect(() => {
+    if (profile) {
+      setValue('firstName', profile.givenName)
+      setValue('surname', profile.familyName)
+      setValue('phone', profile.phone ?? '')
+      setValue('dob', profile.dob ? new Date(profile.dob) : null)
+      setValue('jobTitle', profile.jobTitle ?? '')
+      setValue('disabilities', profile.disabilities ?? '')
+      setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
+    }
+  }, [profile, setValue])
+
   const onSubmit = async (data: ProfileInput) => {
     setLoading(true)
+    if (!profile) return
 
     try {
       await fetcher<UpdateProfileResponseType, UpdateProfileParamsType>(
@@ -195,7 +246,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
         {
           // have to supply a required field `where` hence passing profileId, we still
           // have perm check on the backend that does not allow updaing someone else's profile
-          profileId: profile?.id || '',
+          profileId: profile.id,
           input: {
             givenName: data.firstName,
             familyName: data.surname,
@@ -207,9 +258,20 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           },
         }
       )
+      if (canEditRoles) {
+        await fetcher<
+          UpdateProfileRolesMutation,
+          UpdateProfileRolesMutationVariables
+        >(UPDATE_PROFILE_ROLES_MUTATION, {
+          id: profile?.id,
+          roles: roles
+            ? roles.map(role => ({ role_id: role.id, profile_id: profile.id }))
+            : [],
+        })
+      }
 
       setLoading(false)
-      await reloadCurrentProfile()
+      await refreshData()
       navigate('..')
     } catch (err) {
       setLoading(false)
@@ -226,37 +288,55 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   }, [])
 
   const updatePosition = useCallback(
-    async (orgMember: OrganizationMember, position: string) => {
+    async (orgMember: OrgMemberType, position: string) => {
       await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
         id: orgMember.id,
         member: {
           position: position,
         },
       })
-      await reloadCurrentProfile()
+      await refreshData()
     },
-    [fetcher, reloadCurrentProfile]
+    [fetcher, refreshData]
+  )
+
+  const updateIsAdmin = useCallback(
+    async (orgMember: OrgMemberType, isAdmin: boolean) => {
+      await fetcher<null, UpdateOrgMemberParamsType>(UpdateOrgMemberQuery, {
+        id: orgMember.id,
+        member: {
+          isAdmin: isAdmin,
+        },
+      })
+      await refreshData()
+    },
+    [fetcher, refreshData]
   )
 
   const deleteOrgMember = useCallback(
-    async (orgMember: OrganizationMember) => {
+    async (orgMember: OrgMemberType) => {
       await fetcher<null, RemoveOrgMemberParamsType>(RemoveOrgMemberQuery, {
         id: orgMember.id,
       })
-      await reloadCurrentProfile()
+      await refreshData()
       setOrgToLeave(undefined)
     },
-    [fetcher, reloadCurrentProfile]
+    [fetcher, refreshData]
   )
 
-  if (!profile) return null
-
-  const orgMembers = profile.organizations as OrganizationMember[]
+  if (!profile || !systemRoles) return null
 
   return (
     <Box bgcolor="grey.100" pb={6} pt={3}>
       <Container>
-        <Grid container>
+        <Grid
+          container
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          data-testid="EditProfileForm"
+          noValidate
+          autoComplete="off"
+        >
           <Grid
             item
             md={4}
@@ -265,8 +345,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             alignItems="center"
           >
             <Avatar
-              src={profile.avatar}
-              name={profile.fullName}
+              src={profile.avatar ?? ''}
+              name={profile.fullName ?? ''}
               size={220}
               sx={{ mb: 4 }}
             />
@@ -281,30 +361,25 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               <Button
                 variant="outlined"
                 color="primary"
-                onClick={() => console.log('TBD')}
-                sx={{ mr: 1 }}
+                component={LinkBehavior}
+                href=".."
               >
-                {t('remove')}
+                {t('cancel')}
               </Button>
-              <Button
+
+              <LoadingButton
                 variant="contained"
                 color="primary"
-                onClick={() => console.log('TBD')}
+                sx={{ ml: 1 }}
+                type="submit"
+                loading={loading}
               >
-                {t('change')}
-              </Button>
+                {t('save-changes')}
+              </LoadingButton>
             </Box>
           </Grid>
 
-          <Grid
-            item
-            md={8}
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            data-testid="EditProfileForm"
-            noValidate
-            autoComplete="off"
-          >
+          <Grid item md={8}>
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
             </Typography>
@@ -516,78 +591,152 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               </Grid>
             </Box>
 
-            {orgMembers.length > 0 ? (
+            <Typography variant="subtitle2" mb={1} mt={3}>
+              {t('pages.view-profile.hub-access')}
+            </Typography>
+
+            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+              {canEditRoles ? (
+                <Autocomplete
+                  multiple={true}
+                  value={roles || []}
+                  options={systemRoles as Role[]}
+                  isOptionEqualToValue={(o, v) => o.id === v.id}
+                  getOptionLabel={role =>
+                    t(`pages.view-profile.roles.${role.name}`)
+                  }
+                  renderOption={(props, role) => {
+                    return (
+                      <Box {...props} component="li" key={role.id}>
+                        {t(`pages.view-profile.roles.${role.name}`)}
+                      </Box>
+                    )
+                  }}
+                  onChange={(event, value) => setRoles(value)}
+                  disableClearable={true}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      label={t(
+                        'pages.create-organization.fields.organization-name'
+                      )}
+                      variant="standard"
+                      sx={{ bgcolor: 'grey.100' }}
+                      fullWidth
+                    />
+                  )}
+                  data-testid="SelectLevels"
+                />
+              ) : (
+                <DetailsRow label={t('pages.view-profile.user-roles')}>
+                  <Box flex={1}>
+                    {profile.roles.length > 0 ? (
+                      profile.roles.map(({ role }) => (
+                        <Chip
+                          key={role.name}
+                          label={t(`pages.view-profile.roles.${role?.name}`)}
+                          color={getRoleColor(role.name)}
+                        />
+                      ))
+                    ) : (
+                      <Chip
+                        label={t(`pages.view-profile.roles.user`)}
+                        color="success"
+                      />
+                    )}
+                  </Box>
+                </DetailsRow>
+              )}
+            </Box>
+
+            {profile.organizations.length > 0 ? (
               <>
                 <Typography variant="subtitle2" my={2}>
                   {t('pages.my-profile.organization-details')}
                 </Typography>
 
                 <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-                  {orgMembers.map(orgMember => (
-                    <Box key={orgMember.id}>
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-between"
-                        align-items="stretch"
-                      >
-                        <Box>
-                          <Typography variant="body1" fontWeight="600">
-                            {orgMember.organization.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            {orgMember.organization.trustName}
-                          </Typography>
-                        </Box>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => setOrgToLeave(orgMember)}
+                  {profile.organizations.map(orgMember => {
+                    const isAdminEditable =
+                      acl.isTTAdmin() ||
+                      profile.organizations.some(userOrgMember => {
+                        return (
+                          userOrgMember.isAdmin &&
+                          userOrgMember.organization.id === orgMember.id
+                        )
+                      })
+                    const editable = !id || isAdminEditable
+                    return (
+                      <Box key={orgMember.id}>
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="space-between"
+                          align-items="stretch"
                         >
-                          {t('common.leave')}
-                        </Button>
-                      </Grid>
+                          <Box>
+                            <Typography variant="body1" fontWeight="600">
+                              {orgMember.organization.name}
+                            </Typography>
+                            <Typography variant="body2">
+                              {orgMember.organization.trustName}
+                            </Typography>
+                          </Box>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            disabled={!editable}
+                            onClick={() => setOrgToLeave(orgMember)}
+                          >
+                            {t('common.leave')}
+                          </Button>
+                        </Grid>
 
-                      <Autocomplete
-                        value={orgMember.position}
-                        options={allPositions}
-                        onChange={(_, value) =>
-                          updatePosition(orgMember, value ?? '')
-                        }
-                        renderInput={params => (
-                          <TextField
-                            {...params}
-                            fullWidth
-                            variant="standard"
-                            label={t('common.position')}
-                            inputProps={{
-                              ...params.inputProps,
-                              sx: { height: 40 },
-                            }}
-                            sx={{ bgcolor: 'grey.100', my: 2 }}
-                          />
-                        )}
-                      />
+                        <Autocomplete
+                          value={orgMember.position}
+                          disabled={!editable}
+                          options={allPositions}
+                          onChange={(_, value) =>
+                            updatePosition(orgMember, value ?? '')
+                          }
+                          renderInput={params => (
+                            <TextField
+                              {...params}
+                              fullWidth
+                              variant="standard"
+                              label={t('common.position')}
+                              inputProps={{
+                                ...params.inputProps,
+                                sx: { height: 40 },
+                              }}
+                              sx={{ bgcolor: 'grey.100', my: 2 }}
+                            />
+                          )}
+                        />
 
-                      <FormControlLabel
-                        sx={{ py: 2 }}
-                        control={
-                          <Switch
-                            checked={orgMember.isAdmin}
-                            disabled
-                            sx={{ px: 2 }}
-                          />
-                        }
-                        label={
-                          <Typography variant="body1">
-                            {t(
-                              'pages.org-details.tabs.users.edit-user-modal.organization-admin'
-                            )}
-                          </Typography>
-                        }
-                      />
-                    </Box>
-                  ))}
+                        <FormControlLabel
+                          sx={{ py: 2 }}
+                          control={
+                            <Switch
+                              checked={Boolean(orgMember.isAdmin)}
+                              onChange={(_, checked) =>
+                                updateIsAdmin(orgMember, checked)
+                              }
+                              disabled={!isAdminEditable}
+                              sx={{ px: 2 }}
+                            />
+                          }
+                          label={
+                            <Typography variant="body1">
+                              {t(
+                                'pages.org-details.tabs.users.edit-user-modal.organization-admin'
+                              )}
+                            </Typography>
+                          }
+                        />
+                      </Box>
+                    )
+                  })}
                 </Box>
               </>
             ) : null}
@@ -613,7 +762,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               {t('certification-warning')}
             </Typography>
 
-            {(data ?? []).map((certificate: CourseCertificate, index) => (
+            {(certifications ?? []).map((certificate, index) => (
               <Box
                 mt={2}
                 bgcolor="common.white"
@@ -647,7 +796,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                         date: certificate.expiryDate,
                       })}
                       ({t('course-certificate.expires-in')}{' '}
-                      {formatDistanceToNow(new Date(certificate.expiryDate))}).
+                      {formatDistanceToNow(new Date(certificate.expiryDate))}
+                      ).
                     </Alert>
                   )
                 ) : null}

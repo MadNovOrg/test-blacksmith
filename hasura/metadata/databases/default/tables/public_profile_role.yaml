@@ -8,6 +8,18 @@ object_relationships:
   - name: role
     using:
       foreign_key_constraint_on: role_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - _source
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - role_id
+      backend_only: false
 select_permissions:
   - role: unverified
     permission:
@@ -30,4 +42,20 @@ select_permissions:
         - _source
         - created_at
         - updated_at
+      filter: {}
+update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - _source
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - role_id
+      filter: {}
+      check: null
+delete_permissions:
+  - role: tt-admin
+    permission:
       filter: {}
