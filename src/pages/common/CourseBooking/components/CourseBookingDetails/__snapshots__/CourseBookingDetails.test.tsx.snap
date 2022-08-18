@@ -557,7 +557,7 @@ After you confirm your order you will be taken to a secure page where you can pa
                     <p
                       class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                     >
-                      An invoice will be sent to you requiring payment within 30 days.
+                      Please note that payment is due at least 8 weeks before the course begins. If the course begins less than 8 weeks, then payment is due immediately.
                     </p>
                   </div>
                 </span>
@@ -1421,7 +1421,7 @@ After you confirm your order you will be taken to a secure page where you can pa
                   <p
                     class="MuiTypography-root MuiTypography-body2 css-15cbg0v-MuiTypography-root"
                   >
-                    An invoice will be sent to you requiring payment within 30 days.
+                    Please note that payment is due at least 8 weeks before the course begins. If the course begins less than 8 weeks, then payment is due immediately.
                   </p>
                 </div>
               </span>

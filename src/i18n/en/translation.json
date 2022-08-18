@@ -630,7 +630,7 @@
       "pay-by-inv": "Pay by invoice",
       "billing-address": "Billing address",
       "pay-by-cc-info": "Payment by credit card allows you to secure your registration(s) immediately.\n\nAfter you confirm your order you will be taken to a secure page where you can pay online with an additional charge of 1.4% + 20p per transaction.\n\n*Team Teach Limited holds no liability if a consumer card is used.",
-      "pay-by-inv-info": "An invoice will be sent to you requiring payment within 30 days.",
+      "pay-by-inv-info": "Please note that payment is due at least 8 weeks before the course begins. If the course begins less than 8 weeks, then payment is due immediately.",
       "back-to-booking": "Back to booking details",
       "order-success-info": "Your order has been successfully submitted.",
       "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.",
