@@ -6,9 +6,6 @@ import {
   Stack,
   Alert,
   Button,
-  FormControlLabel,
-  FormGroup,
-  Switch,
   Box,
   Typography,
   Chip,
@@ -107,7 +104,6 @@ export const CourseDetails = () => {
     )
   }
 
-  const attendingLabel = t('pages.participant-course.attending-course-label')
   const courseHasStarted = course && courseStarted(course)
   const courseHasEnded = course && courseEnded(course)
   const canSubmitFeedback =
@@ -124,17 +120,7 @@ export const CourseDetails = () => {
 
       {course && courseParticipant ? (
         <>
-          <CourseHeroSummary
-            course={course}
-            renderButton={() => (
-              <FormGroup>
-                <FormControlLabel
-                  control={<Switch size="small" checked={true} />}
-                  label={attendingLabel}
-                />
-              </FormGroup>
-            )}
-          >
+          <CourseHeroSummary course={course}>
             <BackButton
               to="/courses"
               label={t('pages.course-participants.back-button')}

@@ -55,9 +55,6 @@ describe('page: CourseDetails', () => {
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
-    expect(
-      screen.getByLabelText('You are attending this course')
-    ).toBeInTheDocument()
     expect(screen.queryByTestId('success-alert')).not.toBeInTheDocument()
   })
 
