@@ -90,7 +90,7 @@ describe('component: AssignTrainers', () => {
 
     const assistHint = within(assist).getByTestId('AssignTrainers-assist-hint')
     expect(assistHint).toHaveTextContent(
-      'At least one assistant trainer needed'
+      'Assist trainer(s) may be required based on the number of attendees.'
     )
 
     const picked = within(assist).queryAllByTestId(selectedTestId)

@@ -191,7 +191,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       setBaseLimit(0)
     }
     return result
-  }, [orders, filters, setBaseLimit, setOrderStatus])
+  }, [orders, filters, setBaseLimit, setOrderStatus, limit])
 
   return {
     orders: _orders,

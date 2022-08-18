@@ -460,7 +460,7 @@
       "end-time-placeholder": "End time",
       "attendees-section-title": "Attendees",
       "attendees-number-title": "How many attendees?",
-      "attendees-description": "Exceeding 12 attendees requires an assist trainer.",
+      "attendees-description": "Assist trainer(s) may be required based on the number of attendees.",
       "min-attendees-placeholder": "Minimum",
       "max-attendees-placeholder": "Maximum",
       "num-attendees-placeholder": "Number of attendees",
@@ -805,8 +805,7 @@
         "lead-error-max": "There can be only one Lead trainer",
         "assist-title_one": "Assistant Trainer",
         "assist-title_other": "Assistant Trainers",
-        "assist-hint_one": "At least one assistant trainer needed",
-        "assist-hint_other": "Minimum {{count}} assistant trainers needed",
+        "assist-hint": "Assist trainer(s) may be required based on the number of attendees.",
         "back-btn": "Course details",
         "submit-btn": "Create course"
       },

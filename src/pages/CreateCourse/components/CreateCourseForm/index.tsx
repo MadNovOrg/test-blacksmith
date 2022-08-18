@@ -14,7 +14,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
-import theme from '@app/theme'
 import {
   CourseLevel,
   CourseTrainerType,
@@ -76,10 +75,9 @@ export const CreateCourseForm = () => {
 
     const hasCheckedAllFlags =
       Object.values(consentFlags).filter(flag => flag === false).length === 0
-    const hasSelectedEnoughAssistants = minAssistants <= assistants.length
 
-    return hasCheckedAllFlags && courseDataValid && hasSelectedEnoughAssistants
-  }, [consentFlags, courseDataValid, courseType, minAssistants, assistants])
+    return hasCheckedAllFlags && courseDataValid
+  }, [consentFlags, courseDataValid, courseType])
 
   useEffect(() => {
     if (minAssistants === 0) {
@@ -144,14 +142,10 @@ export const CreateCourseForm = () => {
         <>
           {minAssistants > 0 ? (
             <>
-              <Typography marginTop={2} variant="h5" fontWeight={500}>
+              <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
                 {t('pages.create-course.assign-trainers-title')}
               </Typography>
-              <Typography color={theme.palette.grey[700]} marginBottom={2}>
-                {t('pages.create-course.assists-needed', {
-                  count: minAssistants,
-                })}
-              </Typography>
+
               <SearchTrainers
                 trainerType={CourseTrainerType.ASSISTANT}
                 courseLevel={courseData?.courseLevel || CourseLevel.LEVEL_1}

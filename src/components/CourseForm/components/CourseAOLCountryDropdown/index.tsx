@@ -30,7 +30,7 @@ export const CourseAOLCountryDropdown: React.FC<Props> = ({
       const ev = { target: { value: newValue } }
       onChange(ev as SelectChangeEvent<SelectValue>)
     }
-  }, [countries, onChange, value, selected, usesAOL])
+  }, [onChange, value, selected, usesAOL])
 
   return (
     <Select

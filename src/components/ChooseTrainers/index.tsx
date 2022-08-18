@@ -66,14 +66,9 @@ const ChooseTrainers: React.FC<Props> = ({
         .array()
         .min(1, t('pages.create-course.assign-trainers.lead-error-min'))
         .max(1, t('pages.create-course.assign-trainers.lead-error-max')),
-      assist: yup.array().min(
-        assistMin,
-        t('pages.create-course.assign-trainers.assist-hint', {
-          count: assistMin,
-        })
-      ),
+      assist: yup.array(),
     })
-  }, [t, assistMin])
+  }, [t])
 
   const form = useForm<NestedFormValues>({
     mode: 'all',
@@ -185,9 +180,7 @@ const ChooseTrainers: React.FC<Props> = ({
             </FormHelperText>
           ) : (
             <FormHelperText data-testid="AssignTrainers-assist-hint">
-              {t('pages.create-course.assign-trainers.assist-hint', {
-                count: assistMin,
-              })}
+              {t('pages.create-course.assign-trainers.assist-hint')}
             </FormHelperText>
           )}
         </Box>

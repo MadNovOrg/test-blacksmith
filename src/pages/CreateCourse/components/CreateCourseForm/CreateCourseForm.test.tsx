@@ -53,6 +53,5 @@ describe('component: CreateCourseForm', () => {
     })
 
     expect(screen.getByTestId('SearchTrainers-input')).toBeInTheDocument()
-    expect(screen.getByText('2 assist trainers needed.'))
   })
 })
