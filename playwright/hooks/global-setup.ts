@@ -41,6 +41,7 @@ async function globalSetup() {
     const browser = await chromium.launch()
     await login(browser, 'admin', 'TT Admin')
     await login(browser, 'ops', 'TT Ops')
+    await login(browser, 'orgAdmin', 'Trainer')
     await login(browser, 'trainer', 'Trainer')
     await login(browser, 'trainerWithOrg', 'Trainer')
     await login(browser, 'user1', 'User')
