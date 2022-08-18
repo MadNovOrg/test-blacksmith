@@ -846,7 +846,7 @@
         },
         "evaluation": {
           "title": "Summary Evaluation",
-          "button": "View Evaluation Summary",
+          "button": "View Summary Evaluation",
           "full-summary": "Full Summary Evaluation",
           "desc": "View an attendee's course evaluation and a summary of all evaluations.",
           "view-evaluation": "View Evaluation",
