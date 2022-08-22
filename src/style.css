@@ -14,3 +14,12 @@ body,
   flex-direction: column;
   white-space: pre-line;
 }
+
+/*
+  This fixes a known, unresolved issue with the library that handles
+  the MUI phone number input
+  https://github.com/alexplumb/material-ui-phone-number/issues/110
+*/
+.MuiPhoneNumber-flagButton.MuiPhoneNumber-flagButton {
+  width: 30px;
+}
