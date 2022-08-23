@@ -10,6 +10,7 @@ import { FilterSearch } from '@app/components/FilterSearch'
 import useCourseParticipants, {
   CourseParticipantCriteria,
 } from '@app/hooks/useCourseParticipants'
+import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { LoadingStatus } from '@app/util'
 
@@ -56,10 +57,20 @@ export const Certifications: React.FC<CertificationsProps> = () => {
     return { _and: conditions }
   }, [keyword, dateFrom, dateTo])
 
-  const { data: participants, status } = useCourseParticipants(undefined, {
+  const { Pagination, limit, offset } = useTablePagination()
+
+  const {
+    data: participants,
+    status,
+    total,
+  } = useCourseParticipants(undefined, {
     sortBy: sorting.by,
     order: sorting.dir,
     where,
+    pagination: {
+      limit,
+      offset,
+    },
   })
 
   const loading = status === LoadingStatus.FETCHING
@@ -91,13 +102,17 @@ export const Certifications: React.FC<CertificationsProps> = () => {
               <CircularProgress />
             </Stack>
           ) : (
-            <CertificationList
-              columns={['name', 'certificate', 'status']}
-              hideTitle={true}
-              participants={participants ?? []}
-              sorting={sorting}
-              filtered={filtered}
-            />
+            <>
+              <CertificationList
+                columns={['name', 'certificate', 'status']}
+                hideTitle={true}
+                participants={participants ?? []}
+                sorting={sorting}
+                filtered={filtered}
+              />
+
+              {total ? <Pagination total={total} /> : null}
+            </>
           )}
         </Box>
       </Box>
