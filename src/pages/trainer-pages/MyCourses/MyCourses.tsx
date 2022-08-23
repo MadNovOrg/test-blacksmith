@@ -63,7 +63,7 @@ export const MyCourses: React.FC = () => {
   const { profile, activeRole } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
-  const sorting = useTableSort('name', 'asc')
+  const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },

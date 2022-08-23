@@ -60,7 +60,7 @@ export type Organization = {
 export type CourseTableRow = {
   Name: string
   Type: string
-  Start: string
+  'Startsorted descending': string
   End: string
   Status: string
   Venue: string

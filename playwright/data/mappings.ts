@@ -25,7 +25,7 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
       ? `${course.schedule[0].venue.name}${course.schedule[0].venue.city}`
       : '',
     Type: translation.common['course-types'][course.type],
-    Start: startUiTime,
+    'Startsorted descending': startUiTime,
     End: endUiTime,
     Status: translation.common['course-statuses'][course.status],
     'Trainer(s)':

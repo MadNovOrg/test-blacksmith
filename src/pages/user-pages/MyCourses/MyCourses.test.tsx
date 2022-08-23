@@ -169,17 +169,13 @@ describe('user-pages/MyCourses', () => {
       </Provider>
     )
 
-    expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
-      'data-index',
-      '0'
-    )
-
     userEvent.click(screen.getByText('Name'))
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId(`course-row-${reversedCourses[0].id}`)
-      ).toHaveAttribute('data-index', '0')
+      expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
+        'data-index',
+        '0'
+      )
     })
   })
 

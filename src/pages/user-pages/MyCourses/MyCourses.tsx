@@ -33,7 +33,7 @@ import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
 export const MyCourses: React.FC = () => {
   const { t } = useTranslation()
 
-  const sorting = useTableSort('name', 'asc')
+  const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
