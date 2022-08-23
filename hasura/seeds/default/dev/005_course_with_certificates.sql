@@ -4,11 +4,11 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
   ('d1d9a569-6f96-42ee-ac85-1ecb3f849999', 'user1.with.org@teamteach.testinator.com', 'ACCEPTED', 10011),
   ('d1d9a569-6f96-42ee-ac86-1ecb3f849999', 'user2.with.org@teamteach.testinator.com', 'ACCEPTED', 10011);
 
-INSERT INTO public.course_participant (registration_id, course_id, profile_id, invoice_id, invite_id, attended, grading_feedback, grade, date_graded) VALUES
-  ('edb0661b-bede-4a09-9066-339b7a0fe001', 10011,  '6b72504a-6447-4b30-9909-e8e6fc1d300f', '26e05f96-b687-4348-b6d8-1c863a849000', 'd1d9a569-6f96-42ee-ac83-1ecb3f849999', true, '', 'PASS', NOW()),
-  ('edb0661b-bede-4a09-9066-339b7a0fe002', 10011,  'd394a9ff-7517-4e35-91aa-466f9d4c1b77', '26e05f96-b687-4348-b6d8-1c863a849001', 'd1d9a569-6f96-42ee-ac84-1ecb3f849999', true, '', 'PASS', NOW()),
-  ('edb0661b-bede-4a09-9066-339b7a0fe003', 10011,  'fb523ef0-7fd1-42b2-b078-dce29a1713fe', '26e05f96-b687-4348-b6d8-1c863a849002', 'd1d9a569-6f96-42ee-ac85-1ecb3f849999', true, '', 'OBSERVE_ONLY', NOW()),
-  ('edb0661b-bede-4a09-9066-339b7a0fe004', 10011,  'a39bb4b3-a07a-4610-8da1-b0ce885cc263', '26e05f96-b687-4348-b6d8-1c863a849003', 'd1d9a569-6f96-42ee-ac86-1ecb3f849999', true, 'Failed.', 'FAIL', NOW());
+INSERT INTO public.course_participant (registration_id, course_id, profile_id, invoice_id, invite_id, attended, grading_feedback, grade, date_graded, hs_consent) VALUES
+  ('edb0661b-bede-4a09-9066-339b7a0fe001', 10011,  '6b72504a-6447-4b30-9909-e8e6fc1d300f', '26e05f96-b687-4348-b6d8-1c863a849000', 'd1d9a569-6f96-42ee-ac83-1ecb3f849999', true, '', 'PASS', NOW(), true),
+  ('edb0661b-bede-4a09-9066-339b7a0fe002', 10011,  'd394a9ff-7517-4e35-91aa-466f9d4c1b77', '26e05f96-b687-4348-b6d8-1c863a849001', 'd1d9a569-6f96-42ee-ac84-1ecb3f849999', true, '', 'PASS', NOW(), true),
+  ('edb0661b-bede-4a09-9066-339b7a0fe003', 10011,  'fb523ef0-7fd1-42b2-b078-dce29a1713fe', '26e05f96-b687-4348-b6d8-1c863a849002', 'd1d9a569-6f96-42ee-ac85-1ecb3f849999', true, '', 'OBSERVE_ONLY', NOW(), true),
+  ('edb0661b-bede-4a09-9066-339b7a0fe004', 10011,  'a39bb4b3-a07a-4610-8da1-b0ce885cc263', '26e05f96-b687-4348-b6d8-1c863a849003', 'd1d9a569-6f96-42ee-ac86-1ecb3f849999', true, 'Failed.', 'FAIL', NOW(), true);
 
 INSERT INTO public.course_module (module_id, course_id)
 SELECT module.id as module_id, 10011 as course_id
