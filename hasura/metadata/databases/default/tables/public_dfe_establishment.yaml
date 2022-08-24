@@ -1,0 +1,66 @@
+table:
+  schema: public
+  name: dfe_establishment
+configuration:
+  custom_root_fields: {}
+  column_config:
+    trust_name:
+      custom_name: trustName
+    head_job_title:
+      custom_name: headJobTitle
+    ofsted_rating:
+      custom_name: ofstedRating
+    address_line_2:
+      custom_name: addressLineTwo
+    address_line_3:
+      custom_name: addressLineThree
+    trust_type:
+      custom_name: trustType
+    head_title:
+      custom_name: headTitle
+    head_first_name:
+      custom_name: headFirstName
+    head_last_name:
+      custom_name: headLastName
+    local_authority:
+      custom_name: localAuthority
+    ofsted_last_inspection:
+      custom_name: ofstedLastInspection
+    address_line_1:
+      custom_name: addressLineOne
+  custom_column_names:
+    trust_name: trustName
+    head_job_title: headJobTitle
+    ofsted_rating: ofstedRating
+    address_line_2: addressLineTwo
+    address_line_3: addressLineThree
+    trust_type: trustType
+    head_title: headTitle
+    head_first_name: headFirstName
+    head_last_name: headLastName
+    local_authority: localAuthority
+    ofsted_last_inspection: ofstedLastInspection
+    address_line_1: addressLineOne
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - urn
+        - name
+        - local_authority
+        - trust_type
+        - trust_name
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - town
+        - county
+        - postcode
+        - head_title
+        - head_first_name
+        - head_last_name
+        - head_job_title
+        - ofsted_rating
+        - ofsted_last_inspection
+      filter: {}
