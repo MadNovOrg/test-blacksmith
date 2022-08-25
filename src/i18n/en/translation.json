@@ -686,6 +686,9 @@
         },
         "app-banner": {
           "title": "Download the Team Teach Journal app"
+        },
+        "grid-show-all-button": {
+          "see-all": "See all"
         }
       },
       "home": {

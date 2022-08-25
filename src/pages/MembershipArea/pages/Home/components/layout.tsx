@@ -1,12 +1,15 @@
 import {
-  GridProps,
-  Grid,
-  TypographyProps,
-  Typography,
   Box,
+  Grid,
+  GridProps,
   Link,
+  Typography,
+  TypographyProps,
 } from '@mui/material'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import theme from '@app/theme'
 
 export const ContentGrid: React.FC<GridProps> = ({ children, ...rest }) => (
   <Grid
@@ -27,6 +30,17 @@ export const ContentGridItem: React.FC<{
   </Grid>
 )
 
+export const GridHeader: React.FC<GridProps> = ({ children }) => {
+  return (
+    <Box
+      justifyContent="space-between"
+      sx={{ display: 'flex', mb: theme.spacing(2) }}
+    >
+      {children}
+    </Box>
+  )
+}
+
 export const GridTitle: React.FC<
   { icon: React.ReactElement; linkTo: string } & TypographyProps
 > = ({ children, icon, linkTo, ...rest }) => {
@@ -36,18 +50,40 @@ export const GridTitle: React.FC<
       variant="h5"
       fontWeight={600}
       sx={{
-        marginBottom: 3,
-        verticalAlign: 'middle',
-        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
         zIndex: 1, // mui's grid item has top padding and covers the title, we have to make it on top
       }}
     >
-      <Link href={linkTo} underline="none">
-        <Box component="span" mr={1}>
-          {icon}
-        </Box>{' '}
-        <Box component="span">{children}</Box>
+      <Link
+        href={linkTo}
+        underline="none"
+        alignItems="center"
+        sx={{ display: 'flex' }}
+      >
+        {icon}
+        <Box component="span" ml={1}>
+          {children}
+        </Box>
       </Link>
     </Typography>
+  )
+}
+
+export const GridShowAll: React.FC<{ linkTo: string }> = ({ linkTo }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Link
+      alignItems="center"
+      href={linkTo}
+      sx={{
+        display: 'flex',
+        zIndex: 1, // mui's grid item has top padding and covers the title, we have to make it on top
+      }}
+      underline="none"
+    >
+      {t('pages.membership.components.grid-show-all-button.see-all')}
+    </Link>
   )
 }

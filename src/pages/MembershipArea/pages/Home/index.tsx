@@ -22,7 +22,13 @@ import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 import { FeaturedVideoItem } from './components/FeaturedVideoItem'
-import { GridTitle, ContentGrid, ContentGridItem } from './components/layout'
+import {
+  GridShowAll,
+  GridHeader,
+  GridTitle,
+  ContentGrid,
+  ContentGridItem,
+} from './components/layout'
 
 const Home: React.FC = () => {
   const { t } = useTranslation()
@@ -86,13 +92,16 @@ const Home: React.FC = () => {
           ) : null}
           {data.podcasts?.records.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<PodcastsIcon />}
-                linkTo="./podcasts"
-                data-testid="podcasts-grid-title"
-              >
-                {t('pages.membership.podcasts.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<PodcastsIcon />}
+                  linkTo="./podcasts"
+                  data-testid="podcasts-grid-title"
+                >
+                  {t('pages.membership.podcasts.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./podcasts" />
+              </GridHeader>
               <ContentGrid data-testid="podcasts-grid">
                 {data.podcasts.records.map((podcast, index) => (
                   <ContentGridItem key={podcast.id} data-grid-item={index}>
@@ -114,13 +123,16 @@ const Home: React.FC = () => {
           ) : null}
           {data.content?.posts?.nodes?.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<BlogIcon />}
-                linkTo="./blog"
-                data-testid="blog-grid-title"
-              >
-                {t('pages.membership.blog.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<BlogIcon />}
+                  linkTo="./blog"
+                  data-testid="blog-grid-title"
+                >
+                  {t('pages.membership.blog.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./blog" />
+              </GridHeader>
               <ContentGrid data-testid="blog-grid">
                 {data.content.posts.nodes.map((post, index) => {
                   if (!post) {
@@ -196,13 +208,16 @@ const Home: React.FC = () => {
 
           {data.content?.webinars?.nodes?.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<WebinarIcon />}
-                linkTo="./webinars"
-                data-testid="webinars-grid-title"
-              >
-                {t('pages.membership.webinars.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<WebinarIcon />}
+                  linkTo="./webinars"
+                  data-testid="webinars-grid-title"
+                >
+                  {t('pages.membership.webinars.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./webinars" />
+              </GridHeader>
               <ContentGrid data-testid="webinars-grid">
                 {data.content.webinars.nodes.map((webinar, index) => {
                   if (!webinar) {
@@ -243,13 +258,16 @@ const Home: React.FC = () => {
 
           {data.content?.videoSeriesItems?.nodes?.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<VideoSeriesIcon />}
-                linkTo="./video-series"
-                data-testid="video-series-grid-title"
-              >
-                {t('pages.membership.video-series.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<VideoSeriesIcon />}
+                  linkTo="./video-series"
+                  data-testid="video-series-grid-title"
+                >
+                  {t('pages.membership.video-series.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./video-series" />
+              </GridHeader>
               <ContentGrid data-testid="video-series-grid">
                 {data.content.videoSeriesItems.nodes.map((videoItem, index) => {
                   if (!videoItem) {
@@ -293,13 +311,16 @@ const Home: React.FC = () => {
 
           {data.content?.ebooks?.nodes?.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<EbookIcon />}
-                linkTo="./ebooks"
-                data-testid="ebooks-grid-title"
-              >
-                {t('pages.membership.ebooks.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<EbookIcon />}
+                  linkTo="./ebooks"
+                  data-testid="ebooks-grid-title"
+                >
+                  {t('pages.membership.ebooks.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./ebooks" />
+              </GridHeader>
               <ContentGrid data-testid="ebooks-grid">
                 {data.content.ebooks.nodes.map((ebook, index) => {
                   if (!ebook) {
@@ -348,13 +369,16 @@ const Home: React.FC = () => {
 
           {data.content?.researchSummaries?.nodes?.length ? (
             <Box sx={{ marginBottom: 8 }}>
-              <GridTitle
-                icon={<ResearchSummaryIcon />}
-                linkTo="./research-summaries"
-                data-testid="research-summaries-grid-title"
-              >
-                {t('pages.membership.research-summaries.title')}
-              </GridTitle>
+              <GridHeader>
+                <GridTitle
+                  icon={<ResearchSummaryIcon />}
+                  linkTo="./research-summaries"
+                  data-testid="research-summaries-grid-title"
+                >
+                  {t('pages.membership.research-summaries.title')}
+                </GridTitle>
+                <GridShowAll linkTo="./research-summaries" />
+              </GridHeader>
               <ContentGrid data-testid="research-summaries-grid">
                 {data.content.researchSummaries.nodes.map(
                   (researchSummary, index) => {
