@@ -44,6 +44,7 @@ export const FeaturedContentItem: React.FC<Props> = ({
       <ContentBox width="50%" mb={3}>
         {chipLabel ? (
           <Chip
+            color="teal"
             sx={{
               background: theme.colors.teal[500],
               color: theme.palette.common.white,

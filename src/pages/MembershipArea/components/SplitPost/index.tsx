@@ -114,8 +114,8 @@ export const SplitPost: React.FC<Props> = ({
       <Box flex={1}>
         {label && (
           <Chip
+            color="teal"
             sx={{
-              background: theme.colors.teal[500],
               color: theme.palette.common.white,
               marginBottom: 3,
               fontWeight: 600,

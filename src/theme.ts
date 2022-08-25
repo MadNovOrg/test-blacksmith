@@ -50,6 +50,13 @@ declare module '@mui/material/styles' {
       main: string
     }
     green: PaletteOptions['primary']
+    teal: PaletteOptions['primary']
+  }
+}
+
+declare module '@mui/material/Chip' {
+  interface ChipPropsColorOverrides {
+    teal: true
   }
 }
 
@@ -160,6 +167,10 @@ const theme = createTheme({
     },
     green: {
       main: '#59C13D',
+    },
+    teal: {
+      contrastText: '#fff',
+      main: '#0290A1',
     },
   },
 })
