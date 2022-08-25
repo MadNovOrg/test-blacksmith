@@ -1,4 +1,4 @@
-import { ArrowDownward } from '@mui/icons-material'
+import { Download } from '@mui/icons-material'
 import { Button, ButtonProps } from '@mui/material'
 import React from 'react'
 
@@ -16,7 +16,7 @@ export const DownloadButton: React.FC<Props> = ({
       variant="contained"
       color="primary"
       size="medium"
-      startIcon={<ArrowDownward />}
+      startIcon={<Download />}
       href={downloadLink}
     >
       {children}
