@@ -229,14 +229,21 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
               mb: 9,
             }}
           >
-            <MUIImage src={icmImage} width={imageSize} height={imageSize} />
             <MUIImage
+              duration={0}
+              src={icmImage}
+              width={imageSize}
+              height={imageSize}
+            />
+            <MUIImage
+              duration={0}
               src={cpdImage}
               width={imageSize}
               height={imageSize}
               sx={{ mt: 2 }}
             />
             <MUIImage
+              duration={0}
               src={ntaImage}
               width={imageSize}
               height={imageSize}
