@@ -1,0 +1,12 @@
+table:
+  schema: public
+  name: go1_licenses
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - expire_date
+        - id
+        - org_id
+        - profile_id
+      filter: {}

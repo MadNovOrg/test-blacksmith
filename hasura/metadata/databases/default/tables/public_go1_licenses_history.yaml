@@ -1,0 +1,15 @@
+table:
+  schema: public
+  name: go1_licenses_history
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - balance
+        - change
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
+      filter: {}

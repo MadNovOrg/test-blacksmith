@@ -1,0 +1,2 @@
+CREATE TABLE "public"."go1_licenses" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "profile_id" uuid NOT NULL, "org_id" uuid NOT NULL, "expire_date" timestamptz NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("profile_id") REFERENCES "public"."profile"("id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("org_id") REFERENCES "public"."organization"("id") ON UPDATE restrict ON DELETE restrict);COMMENT ON TABLE "public"."go1_licenses" IS E'Organization\'s users Go1 licenses';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

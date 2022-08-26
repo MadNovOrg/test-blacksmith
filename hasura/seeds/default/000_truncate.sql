@@ -28,3 +28,5 @@ TRUNCATE TABLE public.promo_code CASCADE;
 TRUNCATE TABLE public.venue CASCADE;
 TRUNCATE TABLE public.waitlist CASCADE;
 TRUNCATE TABLE public.xero_credential CASCADE;
+TRUNCATE TABLE public.go1_licenses CASCADE;
+TRUNCATE TABLE public.go1_licenses_history CASCADE;

@@ -1,0 +1,4 @@
+table:
+  schema: public
+  name: go1_history_events
+is_enum: true
