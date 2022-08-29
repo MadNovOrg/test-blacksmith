@@ -1,19 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Address, Organization } from '@app/types'
-
 import { ORGANIZATION } from '../fragments'
-
-export type ResponseType = { org: Organization }
-
-export type ParamsType = {
-  name: string
-  trustName: string
-  trustType: string
-  address: Address
-  xeroId?: string
-  invites?: { email: string; isAdmin: boolean }[]
-}
 
 export const MUTATION = gql`
   ${ORGANIZATION}
@@ -22,6 +9,7 @@ export const MUTATION = gql`
     $trustName: String!
     $trustType: trust_type_enum!
     $address: jsonb!
+    $attributes: jsonb
     $xeroId: String
     $invites: [organization_invites_insert_input!] = []
   ) {
@@ -31,6 +19,7 @@ export const MUTATION = gql`
         trustName: $trustName
         trustType: $trustType
         address: $address
+        attributes: $attributes
         xeroContactId: $xeroId
         invites: { data: $invites }
       }

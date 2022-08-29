@@ -3,23 +3,28 @@ import {
   Box,
   Button,
   CircularProgress,
+  Grid,
+  List,
   SxProps,
   TextField,
   TextFieldProps,
   Typography,
 } from '@mui/material'
-import React, { useMemo, useState } from 'react'
+import { debounce } from 'lodash-es'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import useSWR from 'swr'
-import { useDebounce } from 'use-debounce'
 
 import {
-  ParamsType,
-  QUERY,
-  ResponseType,
-} from '@app/queries/organization/get-organizations'
-import { Organization } from '@app/types'
-import { normalizeAddr } from '@app/util'
+  FindEstablishmentQuery,
+  FindEstablishmentQueryVariables,
+  GetOrganizationsQuery,
+  GetOrganizationsQueryVariables,
+  InsertOrgMutation,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { QUERY as FindEstablishment } from '@app/queries/dfe/find-establishment'
+import { QUERY as GetOrganizations } from '@app/queries/organization/get-organizations'
+import { Establishment, Organization } from '@app/types'
 
 import { AddOrg } from './components/AddOrg'
 
@@ -33,7 +38,10 @@ export type OrgSelectorProps = {
   value?: Organization
 }
 
-const getOptionLabel = (option: Organization) => option.name || ''
+type OptionToAdd = Establishment | { name: string }
+type Option = Organization | OptionToAdd
+
+const getOptionLabel = (option: Option) => option.name ?? ''
 
 export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   onChange,
@@ -45,56 +53,78 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   ...props
 }) {
   const { t } = useTranslation()
+  const fetcher = useFetcher()
   const [open, setOpen] = useState(false)
-  const [query, setQuery] = useState('')
-  const [adding, setAdding] = useState<string | null>(null)
-  const [q] = useDebounce(query, 300)
-  const shouldSearch = q.trim().length > 0
+  const [adding, setAdding] = useState<OptionToAdd | null>(null)
+  const [options, setOptions] = useState<Option[]>([])
+  const [loading, setLoading] = useState(false)
+  const [q, setQ] = useState('')
 
-  const {
-    data,
-    error: searchError,
-    mutate,
-  } = useSWR<ResponseType, Error, [string, ParamsType] | null>(
-    shouldSearch
-      ? [
-          QUERY,
-          {
-            where: {
-              name: { _ilike: q?.length >= 2 ? `%${q}%` : q },
-            },
-          },
-        ]
-      : null
+  const refreshOptions = useCallback(
+    async query => {
+      const dfeData = await fetcher<
+        FindEstablishmentQuery,
+        FindEstablishmentQueryVariables
+      >(FindEstablishment, { where: { name: { _ilike: `%${query}%` } } })
+      const hubData = await fetcher<
+        GetOrganizationsQuery,
+        GetOrganizationsQueryVariables
+      >(GetOrganizations, { where: { name: { _ilike: `%${query}%` } } })
+      setLoading(false)
+      const orgs = hubData.orgs ?? []
+      const establishments = dfeData.establishments ?? []
+      const suggestions = establishments.filter(
+        e => !orgs.some(org => 'name' in org && org.name === e.name)
+      )
+      setOptions([
+        ...orgs,
+        ...(allowAdding ? [{ name: query }] : []),
+        ...suggestions,
+      ])
+    },
+    [allowAdding, fetcher]
   )
-  const loading = !data && !searchError && shouldSearch
+
+  const debouncedQuery = useMemo(() => {
+    return debounce(async query => refreshOptions(query), 1000)
+  }, [refreshOptions])
+
+  const onInputChange = useCallback(
+    async (event: React.SyntheticEvent, value: string, reason: string) => {
+      setQ(value)
+      setOptions([])
+      if (reason === 'input' && value && value.length > 2) {
+        setLoading(true)
+        debouncedQuery(value)
+      }
+    },
+    [debouncedQuery]
+  )
 
   const handleClose = () => setAdding(null)
 
-  const handleSuccess = (org: Organization) => {
+  const handleSuccess = async (org: InsertOrgMutation['org']) => {
+    if (!org) return
+
     setAdding(null)
-    setQuery(org.name)
-    mutate()
+    await refreshOptions(org.name)
 
     // TODO: Not auto selecting the newly added org, needs fixing
-    onChange(org)
+    onChange(org as unknown as Organization)
   }
 
-  const handleChange = (
-    event: React.SyntheticEvent,
-    org: Organization | null
-  ) => {
+  const handleChange = (event: React.SyntheticEvent, option: Option | null) => {
     event.preventDefault()
 
-    if (org && org.id === 'NEW_ORG') {
-      return setTimeout(() => setAdding(org.name))
+    if (option && (!('id' in option) || 'urn' in option)) {
+      return setTimeout(() => setAdding(option))
     }
 
-    onChange(org)
+    onChange(option)
   }
 
   const noOptionsText =
-    query.length < 2 ? (
+    q.length < 3 ? (
       t('components.org-selector.min-chars')
     ) : (
       <Typography variant="body2">
@@ -102,17 +132,21 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
       </Typography>
     )
 
-  const options = useMemo<Organization[]>(() => {
-    const orgs = data?.orgs || []
-    const searchedOrg = query.trim().toLowerCase()
-    const hasExactMatch = orgs.find(o => o.name.toLowerCase() === searchedOrg)
-
-    return orgs.concat(
-      allowAdding && searchedOrg.length && !hasExactMatch && !loading
-        ? ({ id: 'NEW_ORG', name: query } as Organization)
-        : []
-    )
-  }, [data, query, allowAdding, loading])
+  function renderAddress(option: Option) {
+    if (!('id' in option) || !('name' in option)) return ''
+    const address =
+      'urn' in option
+        ? {
+            line1: option.addressLineOne,
+            line2: option.addressLineTwo,
+            city: option.town,
+            postCode: option.postcode,
+          }
+        : option.address
+    return [address.line1, address.line2, address.city, address.postCode]
+      .filter(Boolean)
+      .join(', ')
+  }
 
   return (
     <>
@@ -124,13 +158,36 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         sx={sx}
         openOnFocus
         clearOnBlur={false}
-        onInputChange={(_, v) => setQuery(v)}
+        onInputChange={onInputChange}
         onChange={handleChange}
-        options={options || []}
+        options={options}
         getOptionLabel={getOptionLabel}
         noOptionsText={noOptionsText}
-        isOptionEqualToValue={(o, v) => o.id === v.id}
+        isOptionEqualToValue={(o, v) => {
+          if (!('id' in v) || !('id' in o)) return false
+          return o.id === v.id
+        }}
         loading={loading}
+        groupBy={(value: Option) => {
+          if ('urn' in value) {
+            return t('components.org-selector.dfe-suggestions')
+          }
+          if ('id' in value) {
+            return t('components.org-selector.existing-organizations')
+          } else {
+            return t('components.org-selector.add-manually')
+          }
+        }}
+        renderGroup={params => (
+          <li key={params.key}>
+            <Grid container justifyContent="space-between" px={2} py={1}>
+              <Typography display="inline" variant="body2">
+                {params.group}
+              </Typography>
+            </Grid>
+            <List sx={{ px: 2 }}>{params.children}</List>
+          </li>
+        )}
         renderInput={params => (
           <TextField
             {...textFieldProps}
@@ -154,8 +211,8 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
           />
         )}
         renderOption={(props, option) => {
-          const isNew = option.id === 'NEW_ORG'
-          const addr = normalizeAddr(option.address)
+          const isNew = !('id' in option) || 'urn' in option
+          const address = renderAddress(option)
 
           return (
             <Box
@@ -170,31 +227,29 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
                     onTouchStart: undefined,
                   }
                 : {})}
-              key={option.id}
+              key={'id' in option ? option.id : 'NEW_ORG'}
             >
               <Typography
                 flex={1}
                 pr={2}
-                fontStyle={isNew ? 'italic' : undefined}
+                fontStyle={isNew && !('urn' in option) ? 'italic' : undefined}
                 component="span"
                 display="flex"
                 alignItems="center"
               >
                 {getOptionLabel(option)}
-                {addr && (
-                  <Typography variant="body2" color="grey.700" ml={1}>
-                    ({addr.join(', ')})
-                  </Typography>
-                )}
+                <Typography variant="body2" color="grey.700" ml={1}>
+                  {address}
+                </Typography>
               </Typography>
               {isNew ? (
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={() => setAdding(q)}
+                  onClick={() => setAdding(option)}
                   size="small"
                 >
-                  {t('add')}
+                  {t('urn' in option ? 'add' : 'create')}
                 </Button>
               ) : null}
             </Box>
@@ -203,7 +258,11 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
         {...props}
       />
       {adding ? (
-        <AddOrg name={adding} onClose={handleClose} onSuccess={handleSuccess} />
+        <AddOrg
+          option={adding}
+          onClose={handleClose}
+          onSuccess={handleSuccess}
+        />
       ) : null}
     </>
   )

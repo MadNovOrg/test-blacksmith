@@ -21,13 +21,14 @@ import { BackButton } from '@app/components/BackButton'
 import { FormPanel } from '@app/components/FormPanel'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
+import {
+  InsertOrgMutation,
+  InsertOrgMutationVariables,
+  Trust_Type_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { OrgNameXeroAutocomplete } from '@app/pages/admin/components/Organizations/OrgNameXeroAutocomplete'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/organization/insert-org'
+import { MUTATION } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
 import { Address, TrustType } from '@app/types'
 import { requiredMsg } from '@app/util'
@@ -109,10 +110,13 @@ export const CreateOrganization = () => {
     setLoading(true)
     setError('')
     try {
-      const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
+      const response = await fetcher<
+        InsertOrgMutation,
+        InsertOrgMutationVariables
+      >(MUTATION, {
         name: data.orgName,
         trustName: data.trustName,
-        trustType: data.trustType,
+        trustType: data.trustType as Trust_Type_Enum,
         address: {
           line1: data.addressLine1,
           line2: data.addressLine2,
@@ -128,7 +132,9 @@ export const CreateOrganization = () => {
           },
         ],
       })
-      navigate(`../${response.org.id}`)
+      if (response.org) {
+        navigate(`../${response.org.id}`)
+      }
     } catch (e: unknown) {
       setError((e as Error).message)
     } finally {

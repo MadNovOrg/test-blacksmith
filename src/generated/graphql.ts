@@ -17518,6 +17518,295 @@ export type Date_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['date']>>;
 };
 
+/** columns and relationships of "dfe_establishment" */
+export type Dfe_Establishment = {
+  __typename?: 'dfe_establishment';
+  addressLineOne?: Maybe<Scalars['String']>;
+  addressLineThree?: Maybe<Scalars['String']>;
+  addressLineTwo?: Maybe<Scalars['String']>;
+  county?: Maybe<Scalars['String']>;
+  headFirstName?: Maybe<Scalars['String']>;
+  headJobTitle?: Maybe<Scalars['String']>;
+  headLastName?: Maybe<Scalars['String']>;
+  headTitle?: Maybe<Scalars['String']>;
+  id: Scalars['uuid'];
+  localAuthority: Scalars['String'];
+  name: Scalars['String'];
+  ofstedLastInspection?: Maybe<Scalars['String']>;
+  ofstedRating?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  town?: Maybe<Scalars['String']>;
+  trustName?: Maybe<Scalars['String']>;
+  trustType?: Maybe<Scalars['String']>;
+  urn: Scalars['String'];
+};
+
+/** aggregated selection of "dfe_establishment" */
+export type Dfe_Establishment_Aggregate = {
+  __typename?: 'dfe_establishment_aggregate';
+  aggregate?: Maybe<Dfe_Establishment_Aggregate_Fields>;
+  nodes: Array<Dfe_Establishment>;
+};
+
+/** aggregate fields of "dfe_establishment" */
+export type Dfe_Establishment_Aggregate_Fields = {
+  __typename?: 'dfe_establishment_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Dfe_Establishment_Max_Fields>;
+  min?: Maybe<Dfe_Establishment_Min_Fields>;
+};
+
+
+/** aggregate fields of "dfe_establishment" */
+export type Dfe_Establishment_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "dfe_establishment". All fields are combined with a logical 'AND'. */
+export type Dfe_Establishment_Bool_Exp = {
+  _and?: InputMaybe<Array<Dfe_Establishment_Bool_Exp>>;
+  _not?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+  _or?: InputMaybe<Array<Dfe_Establishment_Bool_Exp>>;
+  addressLineOne?: InputMaybe<String_Comparison_Exp>;
+  addressLineThree?: InputMaybe<String_Comparison_Exp>;
+  addressLineTwo?: InputMaybe<String_Comparison_Exp>;
+  county?: InputMaybe<String_Comparison_Exp>;
+  headFirstName?: InputMaybe<String_Comparison_Exp>;
+  headJobTitle?: InputMaybe<String_Comparison_Exp>;
+  headLastName?: InputMaybe<String_Comparison_Exp>;
+  headTitle?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  localAuthority?: InputMaybe<String_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  ofstedLastInspection?: InputMaybe<String_Comparison_Exp>;
+  ofstedRating?: InputMaybe<String_Comparison_Exp>;
+  postcode?: InputMaybe<String_Comparison_Exp>;
+  town?: InputMaybe<String_Comparison_Exp>;
+  trustName?: InputMaybe<String_Comparison_Exp>;
+  trustType?: InputMaybe<String_Comparison_Exp>;
+  urn?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "dfe_establishment" */
+export enum Dfe_Establishment_Constraint {
+  /** unique or primary key constraint */
+  DfeEstablishmentPkey = 'dfe_establishment_pkey'
+}
+
+/** input type for inserting data into table "dfe_establishment" */
+export type Dfe_Establishment_Insert_Input = {
+  addressLineOne?: InputMaybe<Scalars['String']>;
+  addressLineThree?: InputMaybe<Scalars['String']>;
+  addressLineTwo?: InputMaybe<Scalars['String']>;
+  county?: InputMaybe<Scalars['String']>;
+  headFirstName?: InputMaybe<Scalars['String']>;
+  headJobTitle?: InputMaybe<Scalars['String']>;
+  headLastName?: InputMaybe<Scalars['String']>;
+  headTitle?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  localAuthority?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  ofstedLastInspection?: InputMaybe<Scalars['String']>;
+  ofstedRating?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  town?: InputMaybe<Scalars['String']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Scalars['String']>;
+  urn?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Dfe_Establishment_Max_Fields = {
+  __typename?: 'dfe_establishment_max_fields';
+  addressLineOne?: Maybe<Scalars['String']>;
+  addressLineThree?: Maybe<Scalars['String']>;
+  addressLineTwo?: Maybe<Scalars['String']>;
+  county?: Maybe<Scalars['String']>;
+  headFirstName?: Maybe<Scalars['String']>;
+  headJobTitle?: Maybe<Scalars['String']>;
+  headLastName?: Maybe<Scalars['String']>;
+  headTitle?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  localAuthority?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  ofstedLastInspection?: Maybe<Scalars['String']>;
+  ofstedRating?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  town?: Maybe<Scalars['String']>;
+  trustName?: Maybe<Scalars['String']>;
+  trustType?: Maybe<Scalars['String']>;
+  urn?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Dfe_Establishment_Min_Fields = {
+  __typename?: 'dfe_establishment_min_fields';
+  addressLineOne?: Maybe<Scalars['String']>;
+  addressLineThree?: Maybe<Scalars['String']>;
+  addressLineTwo?: Maybe<Scalars['String']>;
+  county?: Maybe<Scalars['String']>;
+  headFirstName?: Maybe<Scalars['String']>;
+  headJobTitle?: Maybe<Scalars['String']>;
+  headLastName?: Maybe<Scalars['String']>;
+  headTitle?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  localAuthority?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  ofstedLastInspection?: Maybe<Scalars['String']>;
+  ofstedRating?: Maybe<Scalars['String']>;
+  postcode?: Maybe<Scalars['String']>;
+  town?: Maybe<Scalars['String']>;
+  trustName?: Maybe<Scalars['String']>;
+  trustType?: Maybe<Scalars['String']>;
+  urn?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "dfe_establishment" */
+export type Dfe_Establishment_Mutation_Response = {
+  __typename?: 'dfe_establishment_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Dfe_Establishment>;
+};
+
+/** on_conflict condition type for table "dfe_establishment" */
+export type Dfe_Establishment_On_Conflict = {
+  constraint: Dfe_Establishment_Constraint;
+  update_columns?: Array<Dfe_Establishment_Update_Column>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "dfe_establishment". */
+export type Dfe_Establishment_Order_By = {
+  addressLineOne?: InputMaybe<Order_By>;
+  addressLineThree?: InputMaybe<Order_By>;
+  addressLineTwo?: InputMaybe<Order_By>;
+  county?: InputMaybe<Order_By>;
+  headFirstName?: InputMaybe<Order_By>;
+  headJobTitle?: InputMaybe<Order_By>;
+  headLastName?: InputMaybe<Order_By>;
+  headTitle?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  localAuthority?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  ofstedLastInspection?: InputMaybe<Order_By>;
+  ofstedRating?: InputMaybe<Order_By>;
+  postcode?: InputMaybe<Order_By>;
+  town?: InputMaybe<Order_By>;
+  trustName?: InputMaybe<Order_By>;
+  trustType?: InputMaybe<Order_By>;
+  urn?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: dfe_establishment */
+export type Dfe_Establishment_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "dfe_establishment" */
+export enum Dfe_Establishment_Select_Column {
+  /** column name */
+  AddressLineOne = 'addressLineOne',
+  /** column name */
+  AddressLineThree = 'addressLineThree',
+  /** column name */
+  AddressLineTwo = 'addressLineTwo',
+  /** column name */
+  County = 'county',
+  /** column name */
+  HeadFirstName = 'headFirstName',
+  /** column name */
+  HeadJobTitle = 'headJobTitle',
+  /** column name */
+  HeadLastName = 'headLastName',
+  /** column name */
+  HeadTitle = 'headTitle',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LocalAuthority = 'localAuthority',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  OfstedLastInspection = 'ofstedLastInspection',
+  /** column name */
+  OfstedRating = 'ofstedRating',
+  /** column name */
+  Postcode = 'postcode',
+  /** column name */
+  Town = 'town',
+  /** column name */
+  TrustName = 'trustName',
+  /** column name */
+  TrustType = 'trustType',
+  /** column name */
+  Urn = 'urn'
+}
+
+/** input type for updating data in table "dfe_establishment" */
+export type Dfe_Establishment_Set_Input = {
+  addressLineOne?: InputMaybe<Scalars['String']>;
+  addressLineThree?: InputMaybe<Scalars['String']>;
+  addressLineTwo?: InputMaybe<Scalars['String']>;
+  county?: InputMaybe<Scalars['String']>;
+  headFirstName?: InputMaybe<Scalars['String']>;
+  headJobTitle?: InputMaybe<Scalars['String']>;
+  headLastName?: InputMaybe<Scalars['String']>;
+  headTitle?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  localAuthority?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  ofstedLastInspection?: InputMaybe<Scalars['String']>;
+  ofstedRating?: InputMaybe<Scalars['String']>;
+  postcode?: InputMaybe<Scalars['String']>;
+  town?: InputMaybe<Scalars['String']>;
+  trustName?: InputMaybe<Scalars['String']>;
+  trustType?: InputMaybe<Scalars['String']>;
+  urn?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "dfe_establishment" */
+export enum Dfe_Establishment_Update_Column {
+  /** column name */
+  AddressLineOne = 'addressLineOne',
+  /** column name */
+  AddressLineThree = 'addressLineThree',
+  /** column name */
+  AddressLineTwo = 'addressLineTwo',
+  /** column name */
+  County = 'county',
+  /** column name */
+  HeadFirstName = 'headFirstName',
+  /** column name */
+  HeadJobTitle = 'headJobTitle',
+  /** column name */
+  HeadLastName = 'headLastName',
+  /** column name */
+  HeadTitle = 'headTitle',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LocalAuthority = 'localAuthority',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  OfstedLastInspection = 'ofstedLastInspection',
+  /** column name */
+  OfstedRating = 'ofstedRating',
+  /** column name */
+  Postcode = 'postcode',
+  /** column name */
+  Town = 'town',
+  /** column name */
+  TrustName = 'trustName',
+  /** column name */
+  TrustType = 'trustType',
+  /** column name */
+  Urn = 'urn'
+}
+
 /** Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['float8']>;
@@ -19343,6 +19632,10 @@ export type Mutation_Root = {
   delete_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** delete single row from the table: "course_type" */
   delete_course_type_by_pk?: Maybe<Course_Type>;
+  /** delete data from the table: "dfe_establishment" */
+  delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
+  /** delete single row from the table: "dfe_establishment" */
+  delete_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** delete data from the table: "grade" */
   delete_grade?: Maybe<Grade_Mutation_Response>;
   /** delete single row from the table: "grade" */
@@ -19543,6 +19836,10 @@ export type Mutation_Root = {
   insert_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** insert a single row into the table: "course_type" */
   insert_course_type_one?: Maybe<Course_Type>;
+  /** insert data into the table: "dfe_establishment" */
+  insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
+  /** insert a single row into the table: "dfe_establishment" */
+  insert_dfe_establishment_one?: Maybe<Dfe_Establishment>;
   /** insert data into the table: "grade" */
   insert_grade?: Maybe<Grade_Mutation_Response>;
   /** insert a single row into the table: "grade" */
@@ -19746,6 +20043,10 @@ export type Mutation_Root = {
   update_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** update single row of the table: "course_type" */
   update_course_type_by_pk?: Maybe<Course_Type>;
+  /** update data of the table: "dfe_establishment" */
+  update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
+  /** update single row of the table: "dfe_establishment" */
+  update_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** update data of the table: "grade" */
   update_grade?: Maybe<Grade_Mutation_Response>;
   /** update single row of the table: "grade" */
@@ -20184,6 +20485,18 @@ export type Mutation_RootDelete_Course_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Dfe_EstablishmentArgs = {
+  where: Dfe_Establishment_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Dfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -20836,6 +21149,20 @@ export type Mutation_RootInsert_Course_TypeArgs = {
 export type Mutation_RootInsert_Course_Type_OneArgs = {
   object: Course_Type_Insert_Input;
   on_conflict?: InputMaybe<Course_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Dfe_EstablishmentArgs = {
+  objects: Array<Dfe_Establishment_Insert_Input>;
+  on_conflict?: InputMaybe<Dfe_Establishment_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Dfe_Establishment_OneArgs = {
+  object: Dfe_Establishment_Insert_Input;
+  on_conflict?: InputMaybe<Dfe_Establishment_On_Conflict>;
 };
 
 
@@ -21572,6 +21899,20 @@ export type Mutation_RootUpdate_Course_TypeArgs = {
 export type Mutation_RootUpdate_Course_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Type_Set_Input>;
   pk_columns: Course_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Dfe_EstablishmentArgs = {
+  _set?: InputMaybe<Dfe_Establishment_Set_Input>;
+  where: Dfe_Establishment_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Dfe_Establishment_By_PkArgs = {
+  _set?: InputMaybe<Dfe_Establishment_Set_Input>;
+  pk_columns: Dfe_Establishment_Pk_Columns_Input;
 };
 
 
@@ -25630,6 +25971,12 @@ export type Query_Root = {
   course_type_aggregate: Course_Type_Aggregate;
   /** fetch data from the table: "course_type" using primary key columns */
   course_type_by_pk?: Maybe<Course_Type>;
+  /** fetch data from the table: "dfe_establishment" */
+  dfe_establishment: Array<Dfe_Establishment>;
+  /** fetch aggregated fields from the table: "dfe_establishment" */
+  dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
+  /** fetch data from the table: "dfe_establishment" using primary key columns */
+  dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** Fetches membership plans */
   fetchPlans?: Maybe<Array<Maybe<PlanObject>>>;
   /** getCoursePricing */
@@ -26395,6 +26742,29 @@ export type Query_RootCourse_Type_AggregateArgs = {
 
 export type Query_RootCourse_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootDfe_EstablishmentArgs = {
+  distinct_on?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Dfe_Establishment_Order_By>>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+
+export type Query_RootDfe_Establishment_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Dfe_Establishment_Order_By>>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+
+export type Query_RootDfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -27431,6 +27801,12 @@ export type Subscription_Root = {
   course_type_aggregate: Course_Type_Aggregate;
   /** fetch data from the table: "course_type" using primary key columns */
   course_type_by_pk?: Maybe<Course_Type>;
+  /** fetch data from the table: "dfe_establishment" */
+  dfe_establishment: Array<Dfe_Establishment>;
+  /** fetch aggregated fields from the table: "dfe_establishment" */
+  dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
+  /** fetch data from the table: "dfe_establishment" using primary key columns */
+  dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
   /** fetch data from the table: "grade" */
   grade: Array<Grade>;
   /** fetch aggregated fields from the table: "grade" */
@@ -28177,6 +28553,29 @@ export type Subscription_RootCourse_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootDfe_EstablishmentArgs = {
+  distinct_on?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Dfe_Establishment_Order_By>>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+
+export type Subscription_RootDfe_Establishment_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Dfe_Establishment_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Dfe_Establishment_Order_By>>;
+  where?: InputMaybe<Dfe_Establishment_Bool_Exp>;
+};
+
+
+export type Subscription_RootDfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -30018,6 +30417,13 @@ export type UpdateCourseMutationVariables = Exact<{
 
 export type UpdateCourseMutation = { __typename?: 'mutation_root', updateCourse?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null } | null, updateSchedule?: { __typename?: 'course_schedule', id: any } | null, deleteCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null, insertCourseTrainers?: { __typename?: 'course_trainer_mutation_response', returning: Array<{ __typename?: 'course_trainer', id: any }> } | null };
 
+export type FindEstablishmentQueryVariables = Exact<{
+  where: Dfe_Establishment_Bool_Exp;
+}>;
+
+
+export type FindEstablishmentQuery = { __typename?: 'query_root', establishments: Array<{ __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null }>, total: { __typename?: 'dfe_establishment_aggregate', aggregate?: { __typename?: 'dfe_establishment_aggregate_fields', count: number } | null } };
+
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null };
 
 export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> };
@@ -30071,6 +30477,8 @@ export type XeroItemSummaryFragment = { __typename?: 'XeroItem', id?: string | n
 export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null };
 
 export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subtotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> };
+
+export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
 
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;

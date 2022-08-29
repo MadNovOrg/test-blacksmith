@@ -216,13 +216,13 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   })
   const values = watch()
 
-  const refreshData = async () => {
+  const refreshData = useCallback(async () => {
     if (isMyProfile) {
       await reloadCurrentProfile()
     } else {
       await mutate()
     }
-  }
+  }, [isMyProfile, mutate, reloadCurrentProfile])
 
   useEffect(() => {
     if (profile) {

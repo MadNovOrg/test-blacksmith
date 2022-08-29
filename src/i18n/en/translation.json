@@ -29,6 +29,7 @@
     },
     "home": "Home",
     "add": "Add",
+    "create": "Create",
     "approve": "Approve",
     "deny": "Deny",
     "join-waitlist": "Join Waiting List",
@@ -381,7 +382,8 @@
     "online": "Online",
     "spaces-left": "{{ number }} spaces left",
     "book-now": "Book now",
-    "group": "Group"
+    "group": "Group",
+    "UK": "United Kingdom"
   },
   "components": {
     "not-found": {
@@ -498,7 +500,10 @@
       "no-results": "No organisations found",
       "modal": {
         "title": "Add Organisation"
-      }
+      },
+      "dfe-suggestions": "Suggestions from Department for Education",
+      "existing-organizations": "Found in Team Teach Hub",
+      "add-manually": "Create new organisation"
     },
     "certification-list": {
       "title": "Certifications",

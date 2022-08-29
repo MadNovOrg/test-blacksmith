@@ -6,20 +6,21 @@ import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/organization/insert-org'
+  InsertOrgMutation,
+  InsertOrgMutationVariables,
+  Trust_Type_Enum,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { MUTATION } from '@app/queries/organization/insert-org'
 import { yup } from '@app/schemas'
-import { Address, Organization, TrustType } from '@app/types'
+import { Address, Establishment, TrustType } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 type Props = {
-  onSuccess: (org: Organization) => void
+  onSuccess: (org: InsertOrgMutation['org']) => void
   onClose: VoidFunction
-  name: string
+  option: Establishment | { name: string }
 }
 
 type FormInput = {
@@ -33,7 +34,23 @@ type FormInput = {
   postCode: string
 }
 
-export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
+function getTrustType(dfeValue?: string) {
+  if (dfeValue === 'Supported by a multi-academy trust') {
+    return TrustType.MULTI_ACADEMY_TRUST
+  } else if (dfeValue === 'Supported by a single-academy trust') {
+    return TrustType.SINGLE_ACADEMY_TRUST
+  } else if (dfeValue === 'Supported by a trust') {
+    return TrustType.SUPPORTED_BY_A_TRUST
+  } else {
+    return TrustType.NOT_APPLICABLE
+  }
+}
+
+export const AddOrg: React.FC<Props> = function ({
+  option,
+  onSuccess,
+  onClose,
+}) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
@@ -46,11 +63,7 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
         .required(
           t('validation-errors.required-field', { name: t('trust-type') })
         ),
-      trustName: yup
-        .string()
-        .required(
-          t('validation-errors.required-field', { name: t('trust-name') })
-        ),
+      trustName: yup.string(),
       addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
       addressLine2: yup.string(),
       city: yup.string().required(requiredMsg(t, 'addr.city')),
@@ -59,6 +72,29 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     })
   }, [t])
 
+  const defaultValues =
+    'urn' in option
+      ? {
+          name: option.name,
+          trustType: getTrustType(option.trustType),
+          trustName: option.trustName || '',
+          addressLine1: option.addressLineOne || '',
+          addressLine2: option.addressLineTwo || '',
+          city: option.town || '',
+          country: t('common.UK'),
+          postCode: option.postcode || '',
+        }
+      : {
+          name: option.name,
+          trustType: '',
+          trustName: '',
+          addressLine1: '',
+          addressLine2: '',
+          city: '',
+          country: '',
+          postCode: '',
+        }
+
   const {
     register,
     handleSubmit,
@@ -66,16 +102,7 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
     formState: { errors },
   } = useForm<FormInput>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      name,
-      trustType: '',
-      trustName: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      country: '',
-      postCode: '',
-    },
+    defaultValues,
   })
 
   const onSubmit = async (data: FormInput) => {
@@ -85,7 +112,7 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
       const vars = {
         name: data.name,
         trustName: data.trustName,
-        trustType: data.trustType,
+        trustType: data.trustType as Trust_Type_Enum,
         address: {
           line1: data.addressLine1,
           line2: data.addressLine2,
@@ -93,11 +120,28 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
           country: data.country,
           postCode: data.postCode,
         } as Address,
+        attributes:
+          'urn' in option
+            ? {
+                localAuthority: option.localAuthority,
+                headFirstName: option.headFirstName,
+                headLastName: option.headLastName,
+                headTitle: option.headTitle,
+                headPreferredJobTitle: option.headJobTitle,
+                ofstedRating: option.ofstedRating
+                  ?.toUpperCase()
+                  .replace(' ', '_'),
+                ofstedLastInspection: option.ofstedLastInspection,
+              }
+            : {},
       }
-      const { org } = await fetcher<ResponseType, ParamsType>(MUTATION, vars)
+      const { org } = await fetcher<
+        InsertOrgMutation,
+        InsertOrgMutationVariables
+      >(MUTATION, vars)
       setLoading(false)
 
-      if (org.id) {
+      if (org?.id) {
         onSuccess(org)
       }
     } catch (err) {
@@ -171,7 +215,6 @@ export const AddOrg: React.FC<Props> = function ({ name, onSuccess, onClose }) {
         <Box mb={3}>
           <TextField
             id="trustName"
-            required
             label={t('pages.edit-org-details.trust-name')}
             variant="standard"
             error={!!errors.trustName}

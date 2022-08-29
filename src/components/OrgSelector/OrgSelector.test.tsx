@@ -1,25 +1,19 @@
 import React from 'react'
-import useSWR from 'swr'
 import { noop } from 'ts-essentials'
 
-import { render, screen, userEvent, within, waitFor } from '@test/index'
+import { useFetcher } from '@app/hooks/use-fetcher'
+
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildOrganization } from '@test/mock-data-utils'
 
 import { OrgSelector } from '.'
 
-jest.mock('swr')
-const useSWRMock = jest.mocked(useSWR)
-const useSWRMockDefaults = {
-  data: undefined,
-  mutate: jest.fn(),
-  isValidating: false,
-}
+jest.mock('@app/hooks/use-fetcher')
+const useFetcherMock = jest.mocked(useFetcher)
+
+jest.useFakeTimers()
 
 describe('component: OrgSelector', () => {
-  beforeEach(() => {
-    useSWRMock.mockReturnValue({ ...useSWRMockDefaults })
-  })
-
   it("doesn't display options initially", () => {
     render(<OrgSelector onChange={noop} />)
 
@@ -31,18 +25,17 @@ describe('component: OrgSelector', () => {
   it('loads organizations when the user types organization name', async () => {
     const ORG_SEARCH_NAME = 'My Org'
 
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: {
-        orgs: [
-          buildOrganization({
-            overrides: {
-              name: ORG_SEARCH_NAME,
-            },
-          }),
-        ],
-      },
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      orgs: [
+        buildOrganization({
+          overrides: {
+            name: ORG_SEARCH_NAME,
+          },
+        }),
+      ],
     })
+    useFetcherMock.mockReturnValue(fetcherMock)
 
     render(<OrgSelector onChange={noop} />)
 
@@ -51,6 +44,7 @@ describe('component: OrgSelector', () => {
       ORG_SEARCH_NAME
     )
 
+    jest.runAllTimers()
     await waitFor(() =>
       expect(
         within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
@@ -67,10 +61,11 @@ describe('component: OrgSelector', () => {
       },
     })
 
-    useSWRMock.mockReturnValue({
-      ...useSWRMockDefaults,
-      data: { orgs: [organization] },
+    const fetcherMock = jest.fn()
+    fetcherMock.mockResolvedValue({
+      orgs: [organization],
     })
+    useFetcherMock.mockReturnValue(fetcherMock)
 
     render(<OrgSelector onChange={onChangeMock} />)
 
@@ -79,6 +74,7 @@ describe('component: OrgSelector', () => {
       ORG_SEARCH_NAME
     )
 
+    jest.runAllTimers()
     await waitFor(() => {
       expect(within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME))
     })

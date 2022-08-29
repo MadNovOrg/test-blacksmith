@@ -477,3 +477,26 @@ export const XeroInvoice = gql`
     fullyPaidOnDate
   }
 `
+
+export const ESTABLISHMENT = gql`
+  fragment Establishment on dfe_establishment {
+    id
+    urn
+    name
+    localAuthority
+    trustType
+    trustName
+    addressLineOne
+    addressLineTwo
+    addressLineThree
+    town
+    county
+    postcode
+    headTitle
+    headFirstName
+    headLastName
+    headJobTitle
+    ofstedRating
+    ofstedLastInspection
+  }
+`

@@ -482,11 +482,13 @@ export const CourseBookingDetails: React.FC = () => {
                     setValue('invoiceDetails.orgId', org?.id ?? '', {
                       shouldValidate: true,
                     })
-                    setValue(
-                      'invoiceDetails.billingAddress',
-                      normalizeAddr(org?.address)?.join(',') || '',
-                      { shouldValidate: true }
-                    )
+                    const address =
+                      org && 'address' in org
+                        ? (normalizeAddr(org.address) ?? []).join(',')
+                        : ''
+                    setValue('invoiceDetails.billingAddress', address, {
+                      shouldValidate: true,
+                    })
                   }}
                   textFieldProps={{ variant: 'standard' }}
                   sx={{ marginBottom: 2 }}

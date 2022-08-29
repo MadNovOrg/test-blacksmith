@@ -563,3 +563,24 @@ export enum AttendeeOnlyCourseStatus {
   InfoRequired = 'INFO_REQUIRED',
   NotAttended = 'NOT_ATTENDED',
 }
+
+export type Establishment = {
+  id: string
+  urn: string
+  name: string
+  localAuthority?: string
+  trustType?: string
+  trustName?: string
+  addressLineOne?: string
+  addressLineTwo?: string
+  addressLineThree?: string
+  town?: string
+  county?: string
+  postcode?: string
+  headTitle?: string
+  headFirstName?: string
+  headLastName?: string
+  headJobTitle?: string
+  ofstedRating?: string
+  ofstedLastInspection?: string
+}
