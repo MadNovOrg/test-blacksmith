@@ -243,37 +243,73 @@ Object {
           class="MuiBox-root css-i3pbo"
         >
           <div
-            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
+            class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-11riny3-MuiAutocomplete-root"
+            data-testid="org-selector"
           >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="false"
-              for="orgName"
-              id="orgName-label"
-            >
-              Organisation Name
-              <span
-                aria-hidden="true"
-                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
-              >
-                 
-                *
-              </span>
-            </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
+              class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
             >
-              <input
-                aria-invalid="false"
-                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                data-testid="input-orgName"
-                id="orgName"
-                name="orgName"
-                placeholder=""
-                required=""
-                type="text"
-                value=""
-              />
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+                for="mui-3"
+                id="mui-3-label"
+              >
+                Organisation Name
+                <span
+                  aria-hidden="true"
+                  class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+                >
+                   
+                  *
+                </span>
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1nkheju-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-autocomplete="list"
+                  aria-expanded="false"
+                  aria-invalid="false"
+                  autocapitalize="none"
+                  autocomplete="off"
+                  class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-3"
+                  placeholder="Organisation name"
+                  required=""
+                  role="combobox"
+                  spellcheck="false"
+                  type="text"
+                  value=""
+                />
+                <div
+                  class="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment"
+                >
+                  <button
+                    aria-label="Open"
+                    class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-cbvi0e-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
+                    tabindex="-1"
+                    title="Open"
+                    type="button"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                      data-testid="ArrowDropDownIcon"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M7 10l5 5 5-5z"
+                      />
+                    </svg>
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </button>
+                </div>
+              </div>
+              
             </div>
           </div>
         </div>
@@ -283,7 +319,7 @@ Object {
           <button
             class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             data-testid="btn-submit"
-            id="mui-2"
+            id="mui-4"
             tabindex="0"
             type="submit"
           >
@@ -535,37 +571,73 @@ Object {
         class="MuiBox-root css-i3pbo"
       >
         <div
-          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-jgv580-MuiFormControl-root-MuiTextField-root"
+          class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon css-11riny3-MuiAutocomplete-root"
+          data-testid="org-selector"
         >
-          <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
-            data-shrink="false"
-            for="orgName"
-            id="orgName-label"
-          >
-            Organisation Name
-            <span
-              aria-hidden="true"
-              class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
-            >
-               
-              *
-            </span>
-          </label>
           <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
           >
-            <input
-              aria-invalid="false"
-              class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
-              data-testid="input-orgName"
-              id="orgName"
-              name="orgName"
-              placeholder=""
-              required=""
-              type="text"
-              value=""
-            />
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+              for="mui-3"
+              id="mui-3-label"
+            >
+              Organisation Name
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
+              >
+                 
+                *
+              </span>
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1nkheju-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-autocomplete="list"
+                aria-expanded="false"
+                aria-invalid="false"
+                autocapitalize="none"
+                autocomplete="off"
+                class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-3"
+                placeholder="Organisation name"
+                required=""
+                role="combobox"
+                spellcheck="false"
+                type="text"
+                value=""
+              />
+              <div
+                class="MuiAutocomplete-endAdornment css-1q60rmi-MuiAutocomplete-endAdornment"
+              >
+                <button
+                  aria-label="Open"
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-cbvi0e-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
+                  tabindex="-1"
+                  title="Open"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="ArrowDropDownIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M7 10l5 5 5-5z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -575,7 +647,7 @@ Object {
         <button
           class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
           data-testid="btn-submit"
-          id="mui-2"
+          id="mui-4"
           tabindex="0"
           type="submit"
         >

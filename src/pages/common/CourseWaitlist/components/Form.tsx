@@ -2,21 +2,22 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
-  TextField as MuiTextField,
   FormHelperText,
   Grid,
   styled,
+  TextField as MuiTextField,
 } from '@mui/material'
 import MuiPhoneNumber from 'material-ui-phone-number'
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { OrgSelector } from '@app/components/OrgSelector'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION,
-  ResponseType,
   ParamsType,
+  ResponseType,
 } from '@app/queries/booking/insert-waitlist'
 
 import { FormInputs, getFormSchema } from './types'
@@ -170,18 +171,24 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
         </Box>
 
         <Box mb={3}>
-          <TextField
-            id="orgName"
-            label={t('org-name')}
-            variant="standard"
-            placeholder={t('orgName-placeholder')}
-            error={!!errors.orgName}
-            helperText={errors.orgName?.message}
-            {...register('orgName')}
-            inputProps={{ 'data-testid': 'input-orgName' }}
-            sx={{ bgcolor: 'grey.100' }}
-            fullWidth
-            required
+          <OrgSelector
+            allowAdding
+            onChange={org => {
+              setValue('orgName', org?.name ?? '', { shouldValidate: true })
+            }}
+            textFieldProps={{
+              required: true,
+              variant: 'standard',
+              inputProps: {
+                'data-testid': 'input-orgName',
+                sx: { height: 40 },
+              },
+              label: t('common.org-name'),
+            }}
+            sx={{
+              bgcolor: 'grey.100',
+            }}
+            error={errors.orgName?.message}
           />
         </Box>
 
