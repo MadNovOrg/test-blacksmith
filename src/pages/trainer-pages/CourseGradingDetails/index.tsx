@@ -25,9 +25,11 @@ export const CourseGradingDetails = () => {
   const { t } = useTranslation()
   const location = useLocation()
 
-  const completedSteps = !location.pathname.includes('modules')
-    ? []
-    : ['attendance']
+  const onModulesStep = location.pathname.includes('modules')
+
+  const currentStepKey = onModulesStep ? 'modules' : 'attendance'
+
+  const completedSteps = onModulesStep ? ['attendance'] : ['']
 
   const { data: course, status } = useCourse(courseId ?? '')
 
@@ -66,7 +68,10 @@ export const CourseGradingDetails = () => {
                   <Typography variant="h3" mb={5}>
                     {course?.name}
                   </Typography>
-                  <CourseGradingSteps completedSteps={completedSteps} />
+                  <CourseGradingSteps
+                    completedSteps={completedSteps}
+                    currentStepKey={currentStepKey}
+                  />
                 </Sticky>
               </Box>
 

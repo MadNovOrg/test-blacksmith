@@ -80,6 +80,7 @@ export const CourseBookingDone: React.FC = () => {
 
               <StepsNavigation
                 completedSteps={completedSteps}
+                currentStepKey={null}
                 steps={steps}
                 data-testid="create-course-nav"
               />

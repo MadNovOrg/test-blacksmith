@@ -29,9 +29,9 @@ const Circle = styled('span', {
     content: props.line ? "''" : null,
     position: 'absolute',
     width: 1,
-    height: 30,
+    height: 44,
     backgroundColor: props.theme.palette.success.main,
-    top: 'calc(100% + 6px)',
+    top: '100%',
   },
 }))
 

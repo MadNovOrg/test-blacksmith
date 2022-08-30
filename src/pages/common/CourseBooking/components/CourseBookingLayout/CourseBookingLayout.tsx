@@ -55,6 +55,7 @@ export const CourseBookingLayout: React.FC = () => {
 
           <StepsNavigation
             completedSteps={completedMap[curPage]}
+            currentStepKey={curPage}
             steps={steps}
             data-testid="create-course-nav"
           />

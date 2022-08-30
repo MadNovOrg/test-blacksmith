@@ -6,11 +6,13 @@ import { CourseType } from '@app/types'
 
 interface Props {
   completedSteps: string[]
+  currentStepKey: string | null
   type: CourseType
 }
 
 export const CreateCourseSteps: React.FC<Props> = ({
   completedSteps,
+  currentStepKey,
   type,
 }) => {
   const { t } = useTranslation()
@@ -45,6 +47,7 @@ export const CreateCourseSteps: React.FC<Props> = ({
   return (
     <StepsNavigation
       completedSteps={completedSteps}
+      currentStepKey={currentStepKey}
       steps={steps}
       data-testid="create-course-nav"
     />

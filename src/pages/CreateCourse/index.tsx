@@ -22,9 +22,13 @@ export const CreateCourse = () => {
 
   const courseType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
 
-  const completedSteps = !location.pathname.includes('assign-trainer')
-    ? []
-    : ['course-details']
+  const onCourseDetailsStep = !location.pathname.includes('assign-trainer')
+
+  const completedSteps = onCourseDetailsStep ? [] : ['course-details']
+
+  const currentStepKey = onCourseDetailsStep
+    ? 'course-details'
+    : 'course-builder'
 
   if (!acl.canCreateCourse(courseType)) {
     return <NotFound />
@@ -54,6 +58,7 @@ export const CreateCourse = () => {
 
               <CreateCourseSteps
                 completedSteps={completedSteps}
+                currentStepKey={currentStepKey}
                 type={courseType}
               />
             </Sticky>

@@ -6,11 +6,13 @@ import { StepItem } from './StepItem'
 
 interface Props {
   completedSteps: string[]
+  currentStepKey: string | null
   steps: Array<{ key: string; label: string }>
 }
 
 export const StepsNavigation: React.FC<Props> = ({
   completedSteps,
+  currentStepKey,
   steps,
   ...props
 }) => {
@@ -20,18 +22,23 @@ export const StepsNavigation: React.FC<Props> = ({
 
   return (
     <Box {...props}>
-      {steps.map((step, index) => (
-        <StepItem
-          key={step.key}
-          completed={completedStepsSet.has(step.key)}
-          index={index + 1}
-          line={steps.length - 1 !== index}
-        >
-          <Typography fontWeight={completedStepsSet.has(step.key) ? 700 : 400}>
-            {step.label}
-          </Typography>
-        </StepItem>
-      ))}
+      {steps.map((step, index) => {
+        const stepLabelIsEmphasised =
+          completedStepsSet.has(step.key) || steps[index].key === currentStepKey
+
+        return (
+          <StepItem
+            key={step.key}
+            completed={completedStepsSet.has(step.key)}
+            index={index + 1}
+            line={steps.length - 1 !== index}
+          >
+            <Typography fontWeight={stepLabelIsEmphasised ? 700 : 400}>
+              {step.label}
+            </Typography>
+          </StepItem>
+        )
+      })}
     </Box>
   )
 }
