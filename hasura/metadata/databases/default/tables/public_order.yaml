@@ -153,6 +153,7 @@ select_permissions:
         - created_at
         - currency
         - id
+        - order_due
         - order_total
         - organization_id
         - payment_method
@@ -178,6 +179,7 @@ select_permissions:
         - created_at
         - currency
         - id
+        - order_due
         - order_total
         - organization_id
         - payment_method
