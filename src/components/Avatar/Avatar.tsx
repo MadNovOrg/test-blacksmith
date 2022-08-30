@@ -14,19 +14,26 @@ type AvatarProps = {
 export const Avatar: React.FC<AvatarProps> = React.forwardRef<
   HTMLDivElement,
   AvatarProps
->(function AvatarInner({ name, src, size, sx, className, ...rest }, ref) {
+>(function AvatarInner({ name, src, size = 32, sx, className, ...rest }, ref) {
   const props = {
     src,
     className,
     sx: {
       ...(name && { bgcolor: stringToColor(name) }),
-      ...(size && { width: size, height: size, fontSize: size / 2 }),
       ...sx,
+      height: size,
+      width: size,
     },
   }
 
   return (
-    <MuiAvatar role="img" {...props} {...rest} ref={ref}>
+    <MuiAvatar
+      role="img"
+      {...props}
+      {...rest}
+      ref={ref}
+      style={{ fontSize: size / 2 }}
+    >
       {name ? getInitialsFromName(name) : null}
     </MuiAvatar>
   )
