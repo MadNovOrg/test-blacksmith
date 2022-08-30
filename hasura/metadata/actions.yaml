@@ -70,6 +70,13 @@ actions:
     permissions:
       - role: tt-admin
       - role: tt-ops
+  - name: go1LicensesChange
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/go1-licensing/change'
+    permissions:
+      - role: tt-admin
+    comment: go1LicensesChange
   - name: initAuth
     definition:
       kind: ""
@@ -294,6 +301,26 @@ custom_types:
         - value: OVERDUE
           is_deprecated: null
           description: null
+    - name: Go1ChangeType
+      values:
+        - value: LICENSES_ADDED
+          is_deprecated: null
+          description: null
+        - value: LICENSES_REMOVED
+          is_deprecated: null
+          description: null
+        - value: LICENSE_REVOKED
+          is_deprecated: null
+          description: null
+        - value: LICENSES_RELEASED
+          is_deprecated: null
+          description: null
+        - value: LICENSE_ISSUED
+          is_deprecated: null
+          description: null
+        - value: LICENSES_PURCHASED
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -308,6 +335,7 @@ custom_types:
     - name: CreateAppUserInput
     - name: GetCoursePricingInput
     - name: XeroInvoicesStatusInput
+    - name: Go1LicensesChangeInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -345,4 +373,5 @@ custom_types:
     - name: XeroInvoice
     - name: XeroItem
     - name: XeroLineItem
+    - name: Go1LicensesChangeOutput
   scalars: []

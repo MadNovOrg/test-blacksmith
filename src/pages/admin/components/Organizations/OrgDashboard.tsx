@@ -23,10 +23,13 @@ import { OrgOverviewTab } from '@app/pages/admin/components/Organizations/tabs/O
 import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
+import { LicensesTab } from './tabs/Licenses/LicensesTab'
+
 export enum OrgDashboardTabs {
   OVERVIEW = 'OVERVIEW',
   DETAILS = 'DETAILS',
   INDIVIDUALS = 'INDIVIDUALS',
+  LICENSES = 'LICENSES',
 }
 
 export enum CertificationStatus {
@@ -53,7 +56,7 @@ export const OrgDashboard: React.FC = () => {
   )
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
+    <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
@@ -89,41 +92,42 @@ export const OrgDashboard: React.FC = () => {
 
                 {id && id !== ALL_ORGS ? (
                   <TabContext value={selectedTab}>
-                    <Container maxWidth="lg">
-                      <Container>
-                        <TabList onChange={(_, value) => setSelectedTab(value)}>
-                          <Tab
-                            label={t('pages.org-details.tabs.overview.title')}
-                            value={OrgDashboardTabs.OVERVIEW}
-                          />
-                          <Tab
-                            label={t('pages.org-details.tabs.details.title')}
-                            value={OrgDashboardTabs.DETAILS}
-                          />
-                          <Tab
-                            label={t('pages.org-details.tabs.users.title')}
-                            value={OrgDashboardTabs.INDIVIDUALS}
-                          />
-                        </TabList>
-                      </Container>
-                    </Container>
-
-                    <Container maxWidth="lg">
-                      <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.OVERVIEW}>
-                        {id ? <OrgOverviewTab orgId={id} /> : null}
-                      </TabPanel>
-
-                      <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
-                        <OrgDetailsTab orgId={id} />
-                      </TabPanel>
-
-                      <TabPanel
-                        sx={{ p: 0 }}
+                    <TabList onChange={(_, value) => setSelectedTab(value)}>
+                      <Tab
+                        label={t('pages.org-details.tabs.overview.title')}
+                        value={OrgDashboardTabs.OVERVIEW}
+                      />
+                      <Tab
+                        label={t('pages.org-details.tabs.details.title')}
+                        value={OrgDashboardTabs.DETAILS}
+                      />
+                      <Tab
+                        label={t('pages.org-details.tabs.users.title')}
                         value={OrgDashboardTabs.INDIVIDUALS}
-                      >
-                        <OrgIndividualsTab orgId={id} />
-                      </TabPanel>
-                    </Container>
+                      />
+                      <Tab
+                        label={t('pages.org-details.tabs.licenses.title')}
+                        value={OrgDashboardTabs.LICENSES}
+                      />
+                    </TabList>
+
+                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.OVERVIEW}>
+                      {id ? <OrgOverviewTab orgId={id} /> : null}
+                    </TabPanel>
+
+                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.DETAILS}>
+                      <OrgDetailsTab orgId={id} />
+                    </TabPanel>
+
+                    <TabPanel
+                      sx={{ p: 0 }}
+                      value={OrgDashboardTabs.INDIVIDUALS}
+                    >
+                      <OrgIndividualsTab orgId={id} />
+                    </TabPanel>
+                    <TabPanel sx={{ p: 0 }} value={OrgDashboardTabs.LICENSES}>
+                      <LicensesTab orgId={id} />
+                    </TabPanel>
                   </TabContext>
                 ) : (
                   <OrgOverviewTab orgId={ALL_ORGS} />

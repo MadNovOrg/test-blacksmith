@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Stack,
-} from '@mui/material'
+import { Box, Button, CircularProgress, Grid, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -35,7 +28,7 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
   const orgAddress = useMemo(() => (org ? renderOrgAddress(org) : ''), [org])
 
   return (
-    <Container maxWidth="lg" sx={{ pt: 2, pb: 4 }}>
+    <Box sx={{ pt: 2, pb: 4 }}>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
@@ -47,7 +40,7 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
       ) : null}
 
       {org && status === LoadingStatus.SUCCESS ? (
-        <Container>
+        <Box>
           <Typography variant="subtitle1" mb={2}>
             {t('pages.org-details.tabs.details.org-details-section.title')}
           </Typography>
@@ -178,8 +171,8 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
               value={org.attributes.website}
             />
           </Box>
-        </Container>
+        </Box>
       ) : null}
-    </Container>
+    </Box>
   )
 }

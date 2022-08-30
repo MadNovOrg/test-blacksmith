@@ -30,6 +30,7 @@ i18n.use(initReactI18next).init({
 
 export const dateFormats = {
   date_default: 'd MMMM yyyy',
+  date_defaultShort: 'd MMM yyyy',
   date_short: 'dd MMM',
   date_withTime: 'd MMMM yyyy, hh:mm aa',
   date_long: 'EEE, dd MMM yyyy',

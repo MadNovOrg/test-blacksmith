@@ -57,6 +57,12 @@ type Query {
   ): [XeroInvoice]!
 }
 
+type Mutation {
+  go1LicensesChange(
+    input: Go1LicensesChangeInput!
+  ): Go1LicensesChangeOutput
+}
+
 type Query {
   initAuth: InitAuthOutput!
 }
@@ -203,6 +209,15 @@ enum XeroInvoiceStatus {
   OVERDUE
 }
 
+enum Go1ChangeType {
+  LICENSES_ADDED
+  LICENSES_REMOVED
+  LICENSE_REVOKED
+  LICENSES_RELEASED
+  LICENSE_ISSUED
+  LICENSES_PURCHASED
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -280,6 +295,13 @@ input XeroInvoicesStatusInput {
   orderIds: [String]!
   idContains: String
   statuses: [XeroInvoiceStatus]
+}
+
+input Go1LicensesChangeInput {
+  amount: Int!
+  type: Go1ChangeType!
+  payload: jsonb
+  orgId: uuid!
 }
 
 type LinkProfileResult {
@@ -523,5 +545,9 @@ type XeroLineItem {
   lineAmount: Float!
   discountRate: Float!
   discountAmount: Float!
+}
+
+type Go1LicensesChangeOutput {
+  success: Boolean!
 }
 

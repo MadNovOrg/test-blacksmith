@@ -1,14 +1,6 @@
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Stack,
-  Tab,
-} from '@mui/material'
+import { Box, Button, CircularProgress, Grid, Stack, Tab } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -55,7 +47,7 @@ export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
   const org = data?.length ? data[0] : null
 
   return (
-    <Container maxWidth="lg" sx={{ pb: 4 }}>
+    <Box sx={{ pb: 4 }}>
       {status === LoadingStatus.FETCHING ? (
         <Stack
           alignItems="center"
@@ -120,6 +112,6 @@ export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
           </Grid>
         </Grid>
       ) : null}
-    </Container>
+    </Box>
   )
 }

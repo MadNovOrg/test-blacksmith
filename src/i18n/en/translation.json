@@ -1326,6 +1326,39 @@
           "see-all-organizations": "See all organisations",
           "available-courses-for-booking": "Available courses for booking",
           "see-all-courses": "See all courses"
+        },
+        "licenses": {
+          "title": "Blended learning licences",
+          "remaining-licenses": "Total remaining licences",
+          "unused-licenses": "Unused licences that are reserved for upcoming course(s).",
+          "manage-button-label": "Manage",
+          "manage-modal-title": "Manage licences",
+          "manage-modal-description": "Add or remove number of licences for this organisation. Any modifications will be applied immediately.",
+          "org-history-fetch-error": "There was an error loading organisation's licenses data",
+          "form": {
+            "add-radio-button-label": "Add",
+            "remove-radio-button-label": "Remove",
+            "amount-label": "Amount *",
+            "invoice-label": "Invoice number *",
+            "total-licenses": "Total remaining licenses",
+            "note-label": "Add a note (optional)",
+            "save-button-label": "Save details",
+            "cancel-button-label": "Cancel",
+            "error-amount-positive": "Amount must be a positive number",
+            "error-amount-required": "Amount is a required field",
+            "error-invoice-required": "Invoice number is a required field"
+          },
+          "table": {
+            "col-date": "Date",
+            "col-event": "Event",
+            "col-action": "Action",
+            "col-balance": "Balance",
+            "added-by": "Added by {{fullName}}",
+            "removed-by": "Removed by {{fullName}}",
+            "released-licenses": "Unused licenses during course",
+            "purchased": "Purchased at course creation",
+            "revoked-by": "Revoked by {{fullName}}"
+          }
         }
       },
       "edit-organization": "Edit organisation",
@@ -1509,6 +1542,7 @@
     "short": "{{date, date_short}}",
     "time": "{{date, date_onlyTime}}",
     "default": "{{date, date_default}}",
+    "defaultShort": "{{date, date_defaultShort}}",
     "withTime": "{{date, date_withTime}}",
     "long": "{{date, date_long}}",
     "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",

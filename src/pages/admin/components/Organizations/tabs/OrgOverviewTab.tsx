@@ -3,7 +3,6 @@ import {
   Alert,
   Button,
   CircularProgress,
-  Container,
   Grid,
   Link,
   Stack,
@@ -86,33 +85,31 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ pb: 4 }}>
-      <Grid container>
-        <Grid item xs={12}>
-          <OrgStatsTiles orgId={orgId} />
-        </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <OrgStatsTiles orgId={orgId} />
+      </Grid>
 
-        <Grid item xs={12} md={8} p={1} mt={2}>
-          <Typography variant="h4">
-            {t('pages.org-details.tabs.overview.individuals-by-training-level')}
-          </Typography>
+      <Grid item xs={12} md={8} p={1} mt={2}>
+        <Typography variant="h4">
+          {t('pages.org-details.tabs.overview.individuals-by-training-level')}
+        </Typography>
 
-          {!stats[orgId]?.profiles.count ? (
-            <Alert sx={{ mt: 2 }} severity="info">
-              {t('pages.org-details.tabs.overview.no-org-users') + ' '}
-              <Link href={'/invite'}>
-                {t('pages.org-details.tabs.overview.click-here-to-invite')}
-              </Link>
-            </Alert>
-          ) : (
-            <TabContext value={selectedTab}>
-              <TabList
-                onChange={(_, value) => setUserByLevelSelectedTab(value)}
-                sx={{ mt: 2 }}
-              >
-                {LEVELS_IN_ORDER.filter(level =>
-                  profilesByLevel.get(level)
-                ).map(courseLevel => (
+        {!stats[orgId]?.profiles.count ? (
+          <Alert sx={{ mt: 2 }} severity="info">
+            {t('pages.org-details.tabs.overview.no-org-users') + ' '}
+            <Link href={'/invite'}>
+              {t('pages.org-details.tabs.overview.click-here-to-invite')}
+            </Link>
+          </Alert>
+        ) : (
+          <TabContext value={selectedTab}>
+            <TabList
+              onChange={(_, value) => setUserByLevelSelectedTab(value)}
+              sx={{ mt: 2 }}
+            >
+              {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
+                courseLevel => (
                   <Tab
                     key={courseLevel}
                     label={
@@ -122,59 +119,59 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
                     }
                     value={courseLevel ?? 'none'}
                   />
-                ))}
-              </TabList>
-
-              {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
-                courseLevel => (
-                  <TabPanel
-                    value={courseLevel ?? 'none'}
-                    key={courseLevel}
-                    sx={{ p: 0 }}
-                  >
-                    <IndividualsByLevelList
-                      orgId={orgId}
-                      courseLevel={courseLevel}
-                    />
-                  </TabPanel>
                 )
               )}
-            </TabContext>
-          )}
+            </TabList>
 
-          <Box display="flex" justifyContent="space-between" my={2}>
-            <Typography variant="h4">
-              {t('pages.org-details.tabs.overview.organization-summary')}
-            </Typography>
-            <Button
-              variant="outlined"
-              onClick={() => navigate('/organizations/list')}
-            >
-              {t('pages.org-details.tabs.overview.see-all-organizations')}
-            </Button>
-          </Box>
+            {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
+              courseLevel => (
+                <TabPanel
+                  value={courseLevel ?? 'none'}
+                  key={courseLevel}
+                  sx={{ p: 0 }}
+                >
+                  <IndividualsByLevelList
+                    orgId={orgId}
+                    courseLevel={courseLevel}
+                  />
+                </TabPanel>
+              )
+            )}
+          </TabContext>
+        )}
 
-          <OrgSummaryList orgId={orgId} />
-        </Grid>
-
-        <Grid item xs={12} md={4} p={1} mt={2}>
+        <Box display="flex" justifyContent="space-between" my={2}>
           <Typography variant="h4">
-            {t('pages.org-details.tabs.overview.available-courses-for-booking')}
+            {t('pages.org-details.tabs.overview.organization-summary')}
           </Typography>
-
-          {coursesForBooking?.map(course => (
-            <CourseForBookingTile course={course} key={course.id} />
-          ))}
-
           <Button
             variant="outlined"
-            onClick={() => navigate('/courses')}
-            sx={{ mt: 2 }}
+            onClick={() => navigate('/organizations/list')}
           >
-            {t('pages.org-details.tabs.overview.see-all-courses')}
+            {t('pages.org-details.tabs.overview.see-all-organizations')}
           </Button>
-        </Grid>
+        </Box>
+
+        <OrgSummaryList orgId={orgId} />
       </Grid>
-    </Container>
+
+      <Grid item xs={12} md={4} p={1} mt={2}>
+        <Typography variant="h4">
+          {t('pages.org-details.tabs.overview.available-courses-for-booking')}
+        </Typography>
+
+        {coursesForBooking?.map(course => (
+          <CourseForBookingTile course={course} key={course.id} />
+        ))}
+
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/courses')}
+          sx={{ mt: 2 }}
+        >
+          {t('pages.org-details.tabs.overview.see-all-courses')}
+        </Button>
+      </Grid>
+    </Grid>
   )
 }

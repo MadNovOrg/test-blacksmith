@@ -2745,6 +2745,27 @@ export type GetTrainersLevelsInput = {
   trainerType: CourseTrainerType;
 };
 
+export enum Go1ChangeType {
+  LicensesAdded = 'LICENSES_ADDED',
+  LicensesPurchased = 'LICENSES_PURCHASED',
+  LicensesReleased = 'LICENSES_RELEASED',
+  LicensesRemoved = 'LICENSES_REMOVED',
+  LicenseIssued = 'LICENSE_ISSUED',
+  LicenseRevoked = 'LICENSE_REVOKED'
+}
+
+export type Go1LicensesChangeInput = {
+  amount: Scalars['Int'];
+  orgId: Scalars['uuid'];
+  payload?: InputMaybe<Scalars['jsonb']>;
+  type: Go1ChangeType;
+};
+
+export type Go1LicensesChangeOutput = {
+  __typename?: 'Go1LicensesChangeOutput';
+  success: Scalars['Boolean'];
+};
+
 /** Content node with hierarchical (parent/child) relationships */
 export type HierarchicalContentNode = {
   /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
@@ -12281,6 +12302,7 @@ export enum Color_Update_Column {
 /** columns and relationships of "course" */
 export type Course = {
   __typename?: 'course';
+  account_code?: Maybe<Scalars['String']>;
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
@@ -12294,6 +12316,7 @@ export type Course = {
   evaluation_answers: Array<Course_Evaluation_Answers>;
   /** An aggregate relationship */
   evaluation_answers_aggregate: Course_Evaluation_Answers_Aggregate;
+  free_spaces?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   gradingConfirmed: Scalars['Boolean'];
   id: Scalars['Int'];
@@ -12313,6 +12336,7 @@ export type Course = {
   /** An aggregate relationship */
   participants_aggregate: Course_Participant_Aggregate;
   reaccreditation?: Maybe<Scalars['Boolean']>;
+  sales_representative_id?: Maybe<Scalars['uuid']>;
   /** An array relationship */
   schedule: Array<Course_Schedule>;
   /** An aggregate relationship */
@@ -12460,6 +12484,7 @@ export type Course_Aggregate_FieldsCountArgs = {
 export type Course_Avg_Fields = {
   __typename?: 'course_avg_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -12470,6 +12495,7 @@ export type Course_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Bool_Exp>>;
   _not?: InputMaybe<Course_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Bool_Exp>>;
+  account_code?: InputMaybe<String_Comparison_Exp>;
   aolCostOfCourse?: InputMaybe<Numeric_Comparison_Exp>;
   aolCountry?: InputMaybe<String_Comparison_Exp>;
   aolRegion?: InputMaybe<String_Comparison_Exp>;
@@ -12479,6 +12505,7 @@ export type Course_Bool_Exp = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
+  free_spaces?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
@@ -12491,6 +12518,7 @@ export type Course_Bool_Exp = {
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
+  sales_representative_id?: InputMaybe<Uuid_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   trainers?: InputMaybe<Course_Trainer_Bool_Exp>;
@@ -14480,6 +14508,7 @@ export type Course_Evaluation_Questions_Variance_Fields = {
 /** input type for incrementing numeric columns in table "course" */
 export type Course_Inc_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
+  free_spaces?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
   min_participants?: InputMaybe<Scalars['Int']>;
@@ -14487,6 +14516,7 @@ export type Course_Inc_Input = {
 
 /** input type for inserting data into table "course" */
 export type Course_Insert_Input = {
+  account_code?: InputMaybe<Scalars['String']>;
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
@@ -14496,6 +14526,7 @@ export type Course_Insert_Input = {
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
+  free_spaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -14508,6 +14539,7 @@ export type Course_Insert_Input = {
   organization_id?: InputMaybe<Scalars['uuid']>;
   participants?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  sales_representative_id?: InputMaybe<Scalars['uuid']>;
   schedule?: InputMaybe<Course_Schedule_Arr_Rel_Insert_Input>;
   status?: InputMaybe<Course_Status_Enum>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
@@ -15000,34 +15032,40 @@ export enum Course_Level_Update_Column {
 /** aggregate max on columns */
 export type Course_Max_Fields = {
   __typename?: 'course_max_fields';
+  account_code?: Maybe<Scalars['String']>;
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
+  free_spaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   organization_id?: Maybe<Scalars['uuid']>;
+  sales_representative_id?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
 /** aggregate min on columns */
 export type Course_Min_Fields = {
   __typename?: 'course_min_fields';
+  account_code?: Maybe<Scalars['String']>;
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
+  free_spaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   organization_id?: Maybe<Scalars['uuid']>;
+  sales_representative_id?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -15362,6 +15400,7 @@ export type Course_On_Conflict = {
 
 /** Ordering options when selecting data from "course". */
 export type Course_Order_By = {
+  account_code?: InputMaybe<Order_By>;
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
@@ -15371,6 +15410,7 @@ export type Course_Order_By = {
   deliveryType?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Order_By>;
+  free_spaces?: InputMaybe<Order_By>;
   go1Integration?: InputMaybe<Order_By>;
   gradingConfirmed?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -15383,6 +15423,7 @@ export type Course_Order_By = {
   organization_id?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
+  sales_representative_id?: InputMaybe<Order_By>;
   schedule_aggregate?: InputMaybe<Course_Schedule_Aggregate_Order_By>;
   status?: InputMaybe<Order_By>;
   trainers_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
@@ -16680,6 +16721,8 @@ export type Course_Schedule_Variance_Order_By = {
 /** select columns of table "course" */
 export enum Course_Select_Column {
   /** column name */
+  AccountCode = 'account_code',
+  /** column name */
   AolCostOfCourse = 'aolCostOfCourse',
   /** column name */
   AolCountry = 'aolCountry',
@@ -16693,6 +16736,8 @@ export enum Course_Select_Column {
   DeliveryType = 'deliveryType',
   /** column name */
   Description = 'description',
+  /** column name */
+  FreeSpaces = 'free_spaces',
   /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
@@ -16712,6 +16757,8 @@ export enum Course_Select_Column {
   /** column name */
   Reaccreditation = 'reaccreditation',
   /** column name */
+  SalesRepresentativeId = 'sales_representative_id',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
@@ -16721,6 +16768,7 @@ export enum Course_Select_Column {
 
 /** input type for updating data in table "course" */
 export type Course_Set_Input = {
+  account_code?: InputMaybe<Scalars['String']>;
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
@@ -16728,6 +16776,7 @@ export type Course_Set_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
+  free_spaces?: InputMaybe<Scalars['Int']>;
   go1Integration?: InputMaybe<Scalars['Boolean']>;
   gradingConfirmed?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['Int']>;
@@ -16737,6 +16786,7 @@ export type Course_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
+  sales_representative_id?: InputMaybe<Scalars['uuid']>;
   status?: InputMaybe<Course_Status_Enum>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -16871,6 +16921,7 @@ export enum Course_Status_Update_Column {
 export type Course_Stddev_Fields = {
   __typename?: 'course_stddev_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -16880,6 +16931,7 @@ export type Course_Stddev_Fields = {
 export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -16889,6 +16941,7 @@ export type Course_Stddev_Pop_Fields = {
 export type Course_Stddev_Samp_Fields = {
   __typename?: 'course_stddev_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -16898,6 +16951,7 @@ export type Course_Stddev_Samp_Fields = {
 export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
+  free_spaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
@@ -17433,6 +17487,8 @@ export enum Course_Type_Update_Column {
 /** update columns of table "course" */
 export enum Course_Update_Column {
   /** column name */
+  AccountCode = 'account_code',
+  /** column name */
   AolCostOfCourse = 'aolCostOfCourse',
   /** column name */
   AolCountry = 'aolCountry',
@@ -17446,6 +17502,8 @@ export enum Course_Update_Column {
   DeliveryType = 'deliveryType',
   /** column name */
   Description = 'description',
+  /** column name */
+  FreeSpaces = 'free_spaces',
   /** column name */
   Go1Integration = 'go1Integration',
   /** column name */
@@ -17465,6 +17523,8 @@ export enum Course_Update_Column {
   /** column name */
   Reaccreditation = 'reaccreditation',
   /** column name */
+  SalesRepresentativeId = 'sales_representative_id',
+  /** column name */
   Status = 'status',
   /** column name */
   Type = 'type',
@@ -17476,6 +17536,7 @@ export enum Course_Update_Column {
 export type Course_Var_Pop_Fields = {
   __typename?: 'course_var_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -17485,6 +17546,7 @@ export type Course_Var_Pop_Fields = {
 export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -17494,6 +17556,7 @@ export type Course_Var_Samp_Fields = {
 export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  free_spaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
@@ -17819,6 +17882,614 @@ export type Float8_Comparison_Exp = {
   _neq?: InputMaybe<Scalars['float8']>;
   _nin?: InputMaybe<Array<Scalars['float8']>>;
 };
+
+/** Enum table for Go1 licensing changes events */
+export type Go1_History_Events = {
+  __typename?: 'go1_history_events';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "go1_history_events" */
+export type Go1_History_Events_Aggregate = {
+  __typename?: 'go1_history_events_aggregate';
+  aggregate?: Maybe<Go1_History_Events_Aggregate_Fields>;
+  nodes: Array<Go1_History_Events>;
+};
+
+/** aggregate fields of "go1_history_events" */
+export type Go1_History_Events_Aggregate_Fields = {
+  __typename?: 'go1_history_events_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Go1_History_Events_Max_Fields>;
+  min?: Maybe<Go1_History_Events_Min_Fields>;
+};
+
+
+/** aggregate fields of "go1_history_events" */
+export type Go1_History_Events_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "go1_history_events". All fields are combined with a logical 'AND'. */
+export type Go1_History_Events_Bool_Exp = {
+  _and?: InputMaybe<Array<Go1_History_Events_Bool_Exp>>;
+  _not?: InputMaybe<Go1_History_Events_Bool_Exp>;
+  _or?: InputMaybe<Array<Go1_History_Events_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "go1_history_events" */
+export enum Go1_History_Events_Constraint {
+  /** unique or primary key constraint */
+  Go1HistoryEventsPkey = 'go1_history_events_pkey'
+}
+
+export enum Go1_History_Events_Enum {
+  LicensesAdded = 'LICENSES_ADDED',
+  LicensesPurchased = 'LICENSES_PURCHASED',
+  LicensesReleased = 'LICENSES_RELEASED',
+  LicensesRemoved = 'LICENSES_REMOVED',
+  LicenseIssued = 'LICENSE_ISSUED',
+  LicenseRevoked = 'LICENSE_REVOKED'
+}
+
+/** Boolean expression to compare columns of type "go1_history_events_enum". All fields are combined with logical 'AND'. */
+export type Go1_History_Events_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Go1_History_Events_Enum>;
+  _in?: InputMaybe<Array<Go1_History_Events_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Go1_History_Events_Enum>;
+  _nin?: InputMaybe<Array<Go1_History_Events_Enum>>;
+};
+
+/** input type for inserting data into table "go1_history_events" */
+export type Go1_History_Events_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Go1_History_Events_Max_Fields = {
+  __typename?: 'go1_history_events_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Go1_History_Events_Min_Fields = {
+  __typename?: 'go1_history_events_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "go1_history_events" */
+export type Go1_History_Events_Mutation_Response = {
+  __typename?: 'go1_history_events_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Go1_History_Events>;
+};
+
+/** on_conflict condition type for table "go1_history_events" */
+export type Go1_History_Events_On_Conflict = {
+  constraint: Go1_History_Events_Constraint;
+  update_columns?: Array<Go1_History_Events_Update_Column>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "go1_history_events". */
+export type Go1_History_Events_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: go1_history_events */
+export type Go1_History_Events_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "go1_history_events" */
+export enum Go1_History_Events_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "go1_history_events" */
+export type Go1_History_Events_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "go1_history_events" */
+export enum Go1_History_Events_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** Organization's users Go1 licenses */
+export type Go1_Licenses = {
+  __typename?: 'go1_licenses';
+  expire_date: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  org_id: Scalars['uuid'];
+  profile_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "go1_licenses" */
+export type Go1_Licenses_Aggregate = {
+  __typename?: 'go1_licenses_aggregate';
+  aggregate?: Maybe<Go1_Licenses_Aggregate_Fields>;
+  nodes: Array<Go1_Licenses>;
+};
+
+/** aggregate fields of "go1_licenses" */
+export type Go1_Licenses_Aggregate_Fields = {
+  __typename?: 'go1_licenses_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Go1_Licenses_Max_Fields>;
+  min?: Maybe<Go1_Licenses_Min_Fields>;
+};
+
+
+/** aggregate fields of "go1_licenses" */
+export type Go1_Licenses_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "go1_licenses". All fields are combined with a logical 'AND'. */
+export type Go1_Licenses_Bool_Exp = {
+  _and?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
+  _not?: InputMaybe<Go1_Licenses_Bool_Exp>;
+  _or?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
+  expire_date?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "go1_licenses" */
+export enum Go1_Licenses_Constraint {
+  /** unique or primary key constraint */
+  Go1LicensesPkey = 'go1_licenses_pkey'
+}
+
+/** How organization's licenses number is changing in time */
+export type Go1_Licenses_History = {
+  __typename?: 'go1_licenses_history';
+  balance: Scalars['Int'];
+  captured_at: Scalars['timestamptz'];
+  change: Scalars['Int'];
+  event: Go1_History_Events_Enum;
+  id: Scalars['uuid'];
+  org_id: Scalars['uuid'];
+  payload?: Maybe<Scalars['jsonb']>;
+};
+
+
+/** How organization's licenses number is changing in time */
+export type Go1_Licenses_HistoryPayloadArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "go1_licenses_history" */
+export type Go1_Licenses_History_Aggregate = {
+  __typename?: 'go1_licenses_history_aggregate';
+  aggregate?: Maybe<Go1_Licenses_History_Aggregate_Fields>;
+  nodes: Array<Go1_Licenses_History>;
+};
+
+/** aggregate fields of "go1_licenses_history" */
+export type Go1_Licenses_History_Aggregate_Fields = {
+  __typename?: 'go1_licenses_history_aggregate_fields';
+  avg?: Maybe<Go1_Licenses_History_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Go1_Licenses_History_Max_Fields>;
+  min?: Maybe<Go1_Licenses_History_Min_Fields>;
+  stddev?: Maybe<Go1_Licenses_History_Stddev_Fields>;
+  stddev_pop?: Maybe<Go1_Licenses_History_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Go1_Licenses_History_Stddev_Samp_Fields>;
+  sum?: Maybe<Go1_Licenses_History_Sum_Fields>;
+  var_pop?: Maybe<Go1_Licenses_History_Var_Pop_Fields>;
+  var_samp?: Maybe<Go1_Licenses_History_Var_Samp_Fields>;
+  variance?: Maybe<Go1_Licenses_History_Variance_Fields>;
+};
+
+
+/** aggregate fields of "go1_licenses_history" */
+export type Go1_Licenses_History_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "go1_licenses_history" */
+export type Go1_Licenses_History_Aggregate_Order_By = {
+  avg?: InputMaybe<Go1_Licenses_History_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Go1_Licenses_History_Max_Order_By>;
+  min?: InputMaybe<Go1_Licenses_History_Min_Order_By>;
+  stddev?: InputMaybe<Go1_Licenses_History_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Go1_Licenses_History_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Go1_Licenses_History_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Go1_Licenses_History_Sum_Order_By>;
+  var_pop?: InputMaybe<Go1_Licenses_History_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Go1_Licenses_History_Var_Samp_Order_By>;
+  variance?: InputMaybe<Go1_Licenses_History_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Go1_Licenses_History_Append_Input = {
+  payload?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "go1_licenses_history" */
+export type Go1_Licenses_History_Arr_Rel_Insert_Input = {
+  data: Array<Go1_Licenses_History_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Go1_Licenses_History_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Go1_Licenses_History_Avg_Fields = {
+  __typename?: 'go1_licenses_history_avg_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Avg_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "go1_licenses_history". All fields are combined with a logical 'AND'. */
+export type Go1_Licenses_History_Bool_Exp = {
+  _and?: InputMaybe<Array<Go1_Licenses_History_Bool_Exp>>;
+  _not?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+  _or?: InputMaybe<Array<Go1_Licenses_History_Bool_Exp>>;
+  balance?: InputMaybe<Int_Comparison_Exp>;
+  captured_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  change?: InputMaybe<Int_Comparison_Exp>;
+  event?: InputMaybe<Go1_History_Events_Enum_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  payload?: InputMaybe<Jsonb_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "go1_licenses_history" */
+export enum Go1_Licenses_History_Constraint {
+  /** unique or primary key constraint */
+  Go1LicensesHistoryPkey = 'go1_licenses_history_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Go1_Licenses_History_Delete_At_Path_Input = {
+  payload?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Go1_Licenses_History_Delete_Elem_Input = {
+  payload?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Go1_Licenses_History_Delete_Key_Input = {
+  payload?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "go1_licenses_history" */
+export type Go1_Licenses_History_Inc_Input = {
+  balance?: InputMaybe<Scalars['Int']>;
+  change?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "go1_licenses_history" */
+export type Go1_Licenses_History_Insert_Input = {
+  balance?: InputMaybe<Scalars['Int']>;
+  captured_at?: InputMaybe<Scalars['timestamptz']>;
+  change?: InputMaybe<Scalars['Int']>;
+  event?: InputMaybe<Go1_History_Events_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate max on columns */
+export type Go1_Licenses_History_Max_Fields = {
+  __typename?: 'go1_licenses_history_max_fields';
+  balance?: Maybe<Scalars['Int']>;
+  captured_at?: Maybe<Scalars['timestamptz']>;
+  change?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Max_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  captured_at?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Go1_Licenses_History_Min_Fields = {
+  __typename?: 'go1_licenses_history_min_fields';
+  balance?: Maybe<Scalars['Int']>;
+  captured_at?: Maybe<Scalars['timestamptz']>;
+  change?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Min_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  captured_at?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "go1_licenses_history" */
+export type Go1_Licenses_History_Mutation_Response = {
+  __typename?: 'go1_licenses_history_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Go1_Licenses_History>;
+};
+
+/** on_conflict condition type for table "go1_licenses_history" */
+export type Go1_Licenses_History_On_Conflict = {
+  constraint: Go1_Licenses_History_Constraint;
+  update_columns?: Array<Go1_Licenses_History_Update_Column>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "go1_licenses_history". */
+export type Go1_Licenses_History_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  captured_at?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+  event?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  payload?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: go1_licenses_history */
+export type Go1_Licenses_History_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Go1_Licenses_History_Prepend_Input = {
+  payload?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "go1_licenses_history" */
+export enum Go1_Licenses_History_Select_Column {
+  /** column name */
+  Balance = 'balance',
+  /** column name */
+  CapturedAt = 'captured_at',
+  /** column name */
+  Change = 'change',
+  /** column name */
+  Event = 'event',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  Payload = 'payload'
+}
+
+/** input type for updating data in table "go1_licenses_history" */
+export type Go1_Licenses_History_Set_Input = {
+  balance?: InputMaybe<Scalars['Int']>;
+  captured_at?: InputMaybe<Scalars['timestamptz']>;
+  change?: InputMaybe<Scalars['Int']>;
+  event?: InputMaybe<Go1_History_Events_Enum>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate stddev on columns */
+export type Go1_Licenses_History_Stddev_Fields = {
+  __typename?: 'go1_licenses_history_stddev_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Stddev_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Go1_Licenses_History_Stddev_Pop_Fields = {
+  __typename?: 'go1_licenses_history_stddev_pop_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Stddev_Pop_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Go1_Licenses_History_Stddev_Samp_Fields = {
+  __typename?: 'go1_licenses_history_stddev_samp_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Stddev_Samp_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Go1_Licenses_History_Sum_Fields = {
+  __typename?: 'go1_licenses_history_sum_fields';
+  balance?: Maybe<Scalars['Int']>;
+  change?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Sum_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "go1_licenses_history" */
+export enum Go1_Licenses_History_Update_Column {
+  /** column name */
+  Balance = 'balance',
+  /** column name */
+  CapturedAt = 'captured_at',
+  /** column name */
+  Change = 'change',
+  /** column name */
+  Event = 'event',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  Payload = 'payload'
+}
+
+/** aggregate var_pop on columns */
+export type Go1_Licenses_History_Var_Pop_Fields = {
+  __typename?: 'go1_licenses_history_var_pop_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Var_Pop_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Go1_Licenses_History_Var_Samp_Fields = {
+  __typename?: 'go1_licenses_history_var_samp_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Var_Samp_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Go1_Licenses_History_Variance_Fields = {
+  __typename?: 'go1_licenses_history_variance_fields';
+  balance?: Maybe<Scalars['Float']>;
+  change?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "go1_licenses_history" */
+export type Go1_Licenses_History_Variance_Order_By = {
+  balance?: InputMaybe<Order_By>;
+  change?: InputMaybe<Order_By>;
+};
+
+/** input type for inserting data into table "go1_licenses" */
+export type Go1_Licenses_Insert_Input = {
+  expire_date?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Go1_Licenses_Max_Fields = {
+  __typename?: 'go1_licenses_max_fields';
+  expire_date?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Go1_Licenses_Min_Fields = {
+  __typename?: 'go1_licenses_min_fields';
+  expire_date?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  org_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "go1_licenses" */
+export type Go1_Licenses_Mutation_Response = {
+  __typename?: 'go1_licenses_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Go1_Licenses>;
+};
+
+/** on_conflict condition type for table "go1_licenses" */
+export type Go1_Licenses_On_Conflict = {
+  constraint: Go1_Licenses_Constraint;
+  update_columns?: Array<Go1_Licenses_Update_Column>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "go1_licenses". */
+export type Go1_Licenses_Order_By = {
+  expire_date?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: go1_licenses */
+export type Go1_Licenses_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "go1_licenses" */
+export enum Go1_Licenses_Select_Column {
+  /** column name */
+  ExpireDate = 'expire_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  ProfileId = 'profile_id'
+}
+
+/** input type for updating data in table "go1_licenses" */
+export type Go1_Licenses_Set_Input = {
+  expire_date?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  org_id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "go1_licenses" */
+export enum Go1_Licenses_Update_Column {
+  /** column name */
+  ExpireDate = 'expire_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrgId = 'org_id',
+  /** column name */
+  ProfileId = 'profile_id'
+}
 
 /** Enum table for possible course grades */
 export type Grade = {
@@ -19636,6 +20307,18 @@ export type Mutation_Root = {
   delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** delete single row from the table: "dfe_establishment" */
   delete_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** delete data from the table: "go1_history_events" */
+  delete_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
+  /** delete single row from the table: "go1_history_events" */
+  delete_go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** delete data from the table: "go1_licenses" */
+  delete_go1_licenses?: Maybe<Go1_Licenses_Mutation_Response>;
+  /** delete single row from the table: "go1_licenses" */
+  delete_go1_licenses_by_pk?: Maybe<Go1_Licenses>;
+  /** delete data from the table: "go1_licenses_history" */
+  delete_go1_licenses_history?: Maybe<Go1_Licenses_History_Mutation_Response>;
+  /** delete single row from the table: "go1_licenses_history" */
+  delete_go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
   /** delete data from the table: "grade" */
   delete_grade?: Maybe<Grade_Mutation_Response>;
   /** delete single row from the table: "grade" */
@@ -19732,6 +20415,8 @@ export type Mutation_Root = {
   delete_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** delete single row from the table: "xero_credential" */
   delete_xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** go1LicensesChange */
+  go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
   /** insert data into the table: "availability" */
   insert_availability?: Maybe<Availability_Mutation_Response>;
   /** insert a single row into the table: "availability" */
@@ -19840,6 +20525,18 @@ export type Mutation_Root = {
   insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** insert a single row into the table: "dfe_establishment" */
   insert_dfe_establishment_one?: Maybe<Dfe_Establishment>;
+  /** insert data into the table: "go1_history_events" */
+  insert_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
+  /** insert a single row into the table: "go1_history_events" */
+  insert_go1_history_events_one?: Maybe<Go1_History_Events>;
+  /** insert data into the table: "go1_licenses" */
+  insert_go1_licenses?: Maybe<Go1_Licenses_Mutation_Response>;
+  /** insert data into the table: "go1_licenses_history" */
+  insert_go1_licenses_history?: Maybe<Go1_Licenses_History_Mutation_Response>;
+  /** insert a single row into the table: "go1_licenses_history" */
+  insert_go1_licenses_history_one?: Maybe<Go1_Licenses_History>;
+  /** insert a single row into the table: "go1_licenses" */
+  insert_go1_licenses_one?: Maybe<Go1_Licenses>;
   /** insert data into the table: "grade" */
   insert_grade?: Maybe<Grade_Mutation_Response>;
   /** insert a single row into the table: "grade" */
@@ -20047,6 +20744,18 @@ export type Mutation_Root = {
   update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** update single row of the table: "dfe_establishment" */
   update_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** update data of the table: "go1_history_events" */
+  update_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
+  /** update single row of the table: "go1_history_events" */
+  update_go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** update data of the table: "go1_licenses" */
+  update_go1_licenses?: Maybe<Go1_Licenses_Mutation_Response>;
+  /** update single row of the table: "go1_licenses" */
+  update_go1_licenses_by_pk?: Maybe<Go1_Licenses>;
+  /** update data of the table: "go1_licenses_history" */
+  update_go1_licenses_history?: Maybe<Go1_Licenses_History_Mutation_Response>;
+  /** update single row of the table: "go1_licenses_history" */
+  update_go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
   /** update data of the table: "grade" */
   update_grade?: Maybe<Grade_Mutation_Response>;
   /** update single row of the table: "grade" */
@@ -20501,6 +21210,42 @@ export type Mutation_RootDelete_Dfe_Establishment_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Go1_History_EventsArgs = {
+  where: Go1_History_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Go1_History_Events_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Go1_LicensesArgs = {
+  where: Go1_Licenses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Go1_Licenses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Go1_Licenses_HistoryArgs = {
+  where: Go1_Licenses_History_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Go1_Licenses_History_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_GradeArgs = {
   where: Grade_Bool_Exp;
 };
@@ -20785,6 +21530,12 @@ export type Mutation_RootDelete_Xero_CredentialArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Xero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootGo1LicensesChangeArgs = {
+  input: Go1LicensesChangeInput;
 };
 
 
@@ -21163,6 +21914,48 @@ export type Mutation_RootInsert_Dfe_EstablishmentArgs = {
 export type Mutation_RootInsert_Dfe_Establishment_OneArgs = {
   object: Dfe_Establishment_Insert_Input;
   on_conflict?: InputMaybe<Dfe_Establishment_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_History_EventsArgs = {
+  objects: Array<Go1_History_Events_Insert_Input>;
+  on_conflict?: InputMaybe<Go1_History_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_History_Events_OneArgs = {
+  object: Go1_History_Events_Insert_Input;
+  on_conflict?: InputMaybe<Go1_History_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_LicensesArgs = {
+  objects: Array<Go1_Licenses_Insert_Input>;
+  on_conflict?: InputMaybe<Go1_Licenses_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_Licenses_HistoryArgs = {
+  objects: Array<Go1_Licenses_History_Insert_Input>;
+  on_conflict?: InputMaybe<Go1_Licenses_History_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_Licenses_History_OneArgs = {
+  object: Go1_Licenses_History_Insert_Input;
+  on_conflict?: InputMaybe<Go1_Licenses_History_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Go1_Licenses_OneArgs = {
+  object: Go1_Licenses_Insert_Input;
+  on_conflict?: InputMaybe<Go1_Licenses_On_Conflict>;
 };
 
 
@@ -21917,6 +22710,60 @@ export type Mutation_RootUpdate_Dfe_Establishment_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Go1_History_EventsArgs = {
+  _set?: InputMaybe<Go1_History_Events_Set_Input>;
+  where: Go1_History_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_History_Events_By_PkArgs = {
+  _set?: InputMaybe<Go1_History_Events_Set_Input>;
+  pk_columns: Go1_History_Events_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_LicensesArgs = {
+  _set?: InputMaybe<Go1_Licenses_Set_Input>;
+  where: Go1_Licenses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_Licenses_By_PkArgs = {
+  _set?: InputMaybe<Go1_Licenses_Set_Input>;
+  pk_columns: Go1_Licenses_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_Licenses_HistoryArgs = {
+  _append?: InputMaybe<Go1_Licenses_History_Append_Input>;
+  _delete_at_path?: InputMaybe<Go1_Licenses_History_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Go1_Licenses_History_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Go1_Licenses_History_Delete_Key_Input>;
+  _inc?: InputMaybe<Go1_Licenses_History_Inc_Input>;
+  _prepend?: InputMaybe<Go1_Licenses_History_Prepend_Input>;
+  _set?: InputMaybe<Go1_Licenses_History_Set_Input>;
+  where: Go1_Licenses_History_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Go1_Licenses_History_By_PkArgs = {
+  _append?: InputMaybe<Go1_Licenses_History_Append_Input>;
+  _delete_at_path?: InputMaybe<Go1_Licenses_History_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Go1_Licenses_History_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Go1_Licenses_History_Delete_Key_Input>;
+  _inc?: InputMaybe<Go1_Licenses_History_Inc_Input>;
+  _prepend?: InputMaybe<Go1_Licenses_History_Prepend_Input>;
+  _set?: InputMaybe<Go1_Licenses_History_Set_Input>;
+  pk_columns: Go1_Licenses_History_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_GradeArgs = {
   _set?: InputMaybe<Grade_Set_Input>;
   where: Grade_Bool_Exp;
@@ -22074,6 +22921,7 @@ export type Mutation_RootUpdate_OrganizationArgs = {
   _delete_at_path?: InputMaybe<Organization_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Organization_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Organization_Delete_Key_Input>;
+  _inc?: InputMaybe<Organization_Inc_Input>;
   _prepend?: InputMaybe<Organization_Prepend_Input>;
   _set?: InputMaybe<Organization_Set_Input>;
   where: Organization_Bool_Exp;
@@ -22086,6 +22934,7 @@ export type Mutation_RootUpdate_Organization_By_PkArgs = {
   _delete_at_path?: InputMaybe<Organization_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Organization_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Organization_Delete_Key_Input>;
+  _inc?: InputMaybe<Organization_Inc_Input>;
   _prepend?: InputMaybe<Organization_Prepend_Input>;
   _set?: InputMaybe<Organization_Set_Input>;
   pk_columns: Organization_Pk_Columns_Input;
@@ -22841,6 +23690,11 @@ export type Organization = {
   attributes: Scalars['jsonb'];
   contactDetails: Scalars['jsonb'];
   createdAt: Scalars['timestamptz'];
+  go1Licenses?: Maybe<Scalars['Int']>;
+  /** An array relationship */
+  go1LicensesHistory: Array<Go1_Licenses_History>;
+  /** An aggregate relationship */
+  go1LicensesHistory_aggregate: Go1_Licenses_History_Aggregate;
   id: Scalars['uuid'];
   /** An array relationship */
   invites: Array<Organization_Invites>;
@@ -22878,6 +23732,26 @@ export type OrganizationAttributesArgs = {
 /** columns and relationships of "organization" */
 export type OrganizationContactDetailsArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationGo1LicensesHistoryArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+/** columns and relationships of "organization" */
+export type OrganizationGo1LicensesHistory_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
 };
 
 
@@ -22948,9 +23822,17 @@ export type Organization_Aggregate = {
 /** aggregate fields of "organization" */
 export type Organization_Aggregate_Fields = {
   __typename?: 'organization_aggregate_fields';
+  avg?: Maybe<Organization_Avg_Fields>;
   count: Scalars['Int'];
   max?: Maybe<Organization_Max_Fields>;
   min?: Maybe<Organization_Min_Fields>;
+  stddev?: Maybe<Organization_Stddev_Fields>;
+  stddev_pop?: Maybe<Organization_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Organization_Stddev_Samp_Fields>;
+  sum?: Maybe<Organization_Sum_Fields>;
+  var_pop?: Maybe<Organization_Var_Pop_Fields>;
+  var_samp?: Maybe<Organization_Var_Samp_Fields>;
+  variance?: Maybe<Organization_Variance_Fields>;
 };
 
 
@@ -22970,6 +23852,12 @@ export type Organization_Append_Input = {
   tags?: InputMaybe<Scalars['jsonb']>;
 };
 
+/** aggregate avg on columns */
+export type Organization_Avg_Fields = {
+  __typename?: 'organization_avg_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
 /** Boolean expression to filter rows from the table "organization". All fields are combined with a logical 'AND'. */
 export type Organization_Bool_Exp = {
   _and?: InputMaybe<Array<Organization_Bool_Exp>>;
@@ -22979,6 +23867,8 @@ export type Organization_Bool_Exp = {
   attributes?: InputMaybe<Jsonb_Comparison_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  go1Licenses?: InputMaybe<Int_Comparison_Exp>;
+  go1LicensesHistory?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   invites?: InputMaybe<Organization_Invites_Bool_Exp>;
   members?: InputMaybe<Organization_Member_Bool_Exp>;
@@ -23030,12 +23920,19 @@ export type Organization_Delete_Key_Input = {
   tags?: InputMaybe<Scalars['String']>;
 };
 
+/** input type for incrementing numeric columns in table "organization" */
+export type Organization_Inc_Input = {
+  go1Licenses?: InputMaybe<Scalars['Int']>;
+};
+
 /** input type for inserting data into table "organization" */
 export type Organization_Insert_Input = {
   address?: InputMaybe<Scalars['jsonb']>;
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  go1Licenses?: InputMaybe<Scalars['Int']>;
+  go1LicensesHistory?: InputMaybe<Go1_Licenses_History_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['uuid']>;
   invites?: InputMaybe<Organization_Invites_Arr_Rel_Insert_Input>;
   members?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
@@ -23282,6 +24179,7 @@ export enum Organization_Invites_Update_Column {
 export type Organization_Max_Fields = {
   __typename?: 'organization_max_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
+  go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
@@ -23533,6 +24431,7 @@ export enum Organization_Member_Update_Column {
 export type Organization_Min_Fields = {
   __typename?: 'organization_min_fields';
   createdAt?: Maybe<Scalars['timestamptz']>;
+  go1Licenses?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
@@ -23571,6 +24470,8 @@ export type Organization_Order_By = {
   attributes?: InputMaybe<Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
+  go1Licenses?: InputMaybe<Order_By>;
+  go1LicensesHistory_aggregate?: InputMaybe<Go1_Licenses_History_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   invites_aggregate?: InputMaybe<Organization_Invites_Aggregate_Order_By>;
   members_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
@@ -23612,6 +24513,8 @@ export enum Organization_Select_Column {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
+  Go1Licenses = 'go1Licenses',
+  /** column name */
   Id = 'id',
   /** column name */
   Name = 'name',
@@ -23641,6 +24544,7 @@ export type Organization_Set_Input = {
   attributes?: InputMaybe<Scalars['jsonb']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  go1Licenses?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
   name?: InputMaybe<Scalars['String']>;
   original_record?: InputMaybe<Scalars['jsonb']>;
@@ -23654,6 +24558,30 @@ export type Organization_Set_Input = {
   xeroContactId?: InputMaybe<Scalars['String']>;
 };
 
+/** aggregate stddev on columns */
+export type Organization_Stddev_Fields = {
+  __typename?: 'organization_stddev_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Organization_Stddev_Pop_Fields = {
+  __typename?: 'organization_stddev_pop_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Organization_Stddev_Samp_Fields = {
+  __typename?: 'organization_stddev_samp_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Organization_Sum_Fields = {
+  __typename?: 'organization_sum_fields';
+  go1Licenses?: Maybe<Scalars['Int']>;
+};
+
 /** update columns of table "organization" */
 export enum Organization_Update_Column {
   /** column name */
@@ -23664,6 +24592,8 @@ export enum Organization_Update_Column {
   ContactDetails = 'contactDetails',
   /** column name */
   CreatedAt = 'createdAt',
+  /** column name */
+  Go1Licenses = 'go1Licenses',
   /** column name */
   Id = 'id',
   /** column name */
@@ -23687,6 +24617,24 @@ export enum Organization_Update_Column {
   /** column name */
   XeroContactId = 'xeroContactId'
 }
+
+/** aggregate var_pop on columns */
+export type Organization_Var_Pop_Fields = {
+  __typename?: 'organization_var_pop_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Organization_Var_Samp_Fields = {
+  __typename?: 'organization_var_samp_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Organization_Variance_Fields = {
+  __typename?: 'organization_variance_fields';
+  go1Licenses?: Maybe<Scalars['Float']>;
+};
 
 /** columns and relationships of "payment_methods" */
 export type Payment_Methods = {
@@ -25985,6 +26933,24 @@ export type Query_Root = {
   getOrgInvite?: Maybe<OrgInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
+  /** fetch data from the table: "go1_history_events" */
+  go1_history_events: Array<Go1_History_Events>;
+  /** fetch aggregated fields from the table: "go1_history_events" */
+  go1_history_events_aggregate: Go1_History_Events_Aggregate;
+  /** fetch data from the table: "go1_history_events" using primary key columns */
+  go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** fetch data from the table: "go1_licenses" */
+  go1_licenses: Array<Go1_Licenses>;
+  /** fetch aggregated fields from the table: "go1_licenses" */
+  go1_licenses_aggregate: Go1_Licenses_Aggregate;
+  /** fetch data from the table: "go1_licenses" using primary key columns */
+  go1_licenses_by_pk?: Maybe<Go1_Licenses>;
+  /** fetch data from the table: "go1_licenses_history" */
+  go1_licenses_history: Array<Go1_Licenses_History>;
+  /** fetch aggregated fields from the table: "go1_licenses_history" */
+  go1_licenses_history_aggregate: Go1_Licenses_History_Aggregate;
+  /** fetch data from the table: "go1_licenses_history" using primary key columns */
+  go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
   /** fetch data from the table: "grade" */
   grade: Array<Grade>;
   /** fetch aggregated fields from the table: "grade" */
@@ -26780,6 +27746,75 @@ export type Query_RootGetTrainersLevelsArgs = {
 
 export type Query_RootGetXeroInvoicesForOrdersArgs = {
   orderIds: Array<Scalars['uuid']>;
+};
+
+
+export type Query_RootGo1_History_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_History_Events_Order_By>>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_History_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_History_Events_Order_By>>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_History_Events_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Query_RootGo1_LicensesArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_Licenses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_Licenses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootGo1_Licenses_HistoryArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_Licenses_History_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+export type Query_RootGo1_Licenses_History_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -27807,6 +28842,24 @@ export type Subscription_Root = {
   dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
   /** fetch data from the table: "dfe_establishment" using primary key columns */
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** fetch data from the table: "go1_history_events" */
+  go1_history_events: Array<Go1_History_Events>;
+  /** fetch aggregated fields from the table: "go1_history_events" */
+  go1_history_events_aggregate: Go1_History_Events_Aggregate;
+  /** fetch data from the table: "go1_history_events" using primary key columns */
+  go1_history_events_by_pk?: Maybe<Go1_History_Events>;
+  /** fetch data from the table: "go1_licenses" */
+  go1_licenses: Array<Go1_Licenses>;
+  /** fetch aggregated fields from the table: "go1_licenses" */
+  go1_licenses_aggregate: Go1_Licenses_Aggregate;
+  /** fetch data from the table: "go1_licenses" using primary key columns */
+  go1_licenses_by_pk?: Maybe<Go1_Licenses>;
+  /** fetch data from the table: "go1_licenses_history" */
+  go1_licenses_history: Array<Go1_Licenses_History>;
+  /** fetch aggregated fields from the table: "go1_licenses_history" */
+  go1_licenses_history_aggregate: Go1_Licenses_History_Aggregate;
+  /** fetch data from the table: "go1_licenses_history" using primary key columns */
+  go1_licenses_history_by_pk?: Maybe<Go1_Licenses_History>;
   /** fetch data from the table: "grade" */
   grade: Array<Grade>;
   /** fetch aggregated fields from the table: "grade" */
@@ -28575,6 +29628,75 @@ export type Subscription_RootDfe_Establishment_AggregateArgs = {
 
 
 export type Subscription_RootDfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootGo1_History_EventsArgs = {
+  distinct_on?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_History_Events_Order_By>>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_History_Events_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_History_Events_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_History_Events_Order_By>>;
+  where?: InputMaybe<Go1_History_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_History_Events_By_PkArgs = {
+  name: Scalars['String'];
+};
+
+
+export type Subscription_RootGo1_LicensesArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_Licenses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_Licenses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootGo1_Licenses_HistoryArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_Licenses_History_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_History_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_History_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_History_Bool_Exp>;
+};
+
+
+export type Subscription_RootGo1_Licenses_History_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -30480,6 +31602,22 @@ export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: str
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
 
+export type Go1LicensesChangeMutationVariables = Exact<{
+  input: Go1LicensesChangeInput;
+}>;
+
+
+export type Go1LicensesChangeMutation = { __typename?: 'mutation_root', go1LicensesChange?: { __typename?: 'Go1LicensesChangeOutput', success: boolean } | null };
+
+export type OrgLicensesWithHistoryQueryVariables = Exact<{
+  id: Scalars['uuid'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, go1LicensesHistory: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, change: number }>, go1LicensesHistory_aggregate: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null };
+
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;
   participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
@@ -30837,6 +31975,7 @@ export type InsertOrgMutationVariables = Exact<{
   trustName: Scalars['String'];
   trustType: Trust_Type_Enum;
   address: Scalars['jsonb'];
+  attributes?: InputMaybe<Scalars['jsonb']>;
   xeroId?: InputMaybe<Scalars['String']>;
   invites?: InputMaybe<Array<Organization_Invites_Insert_Input> | Organization_Invites_Insert_Input>;
 }>;

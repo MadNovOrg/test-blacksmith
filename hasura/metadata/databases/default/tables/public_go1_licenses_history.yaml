@@ -13,3 +13,4 @@ select_permissions:
         - id
         - org_id
       filter: {}
+      allow_aggregations: true

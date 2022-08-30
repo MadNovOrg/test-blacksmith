@@ -28,6 +28,7 @@ import {
   WebinarsQueryVariables,
   WebinarQuery,
   WebinarQueryVariables,
+  Organization_Insert_Input,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
@@ -589,4 +590,36 @@ export async function getWebinarById(id: string) {
   )
 
   return response.content?.webinar || null
+}
+
+export async function insertOrganization(
+  input: Organization_Insert_Input
+): Promise<string> {
+  const client = getClient()
+  const mutation = gql`
+    mutation InsertOrganization($object: organization_insert_input!) {
+      insert_organization_one(object: $object) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { object: input })
+
+  return response?.insert_organization_one?.id
+}
+
+export async function deleteOrganization(id: string): Promise<boolean> {
+  const client = getClient()
+  const mutation = gql`
+    mutation DeleteOrganization($id: uuid!) {
+      delete_organization_by_pk(id: $id) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { id })
+
+  return response?.insert_organization_one?.id
 }

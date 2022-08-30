@@ -3,6 +3,8 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React from 'react'
 
+import { Tile } from '../Tile'
+
 export type CountPanelParams = {
   count: number
   label: string
@@ -25,15 +27,7 @@ export const CountPanel: React.FC<CountPanelParams> = ({
   chip,
 }) => {
   return (
-    <Box
-      bgcolor="common.white"
-      display="flex"
-      flexDirection="row"
-      p={2}
-      gap={2}
-      alignItems="center"
-      height={80}
-    >
+    <Tile flexDirection="row" gap={2}>
       <Typography variant="h2" mx={2}>
         {count}
       </Typography>
@@ -50,6 +44,6 @@ export const CountPanel: React.FC<CountPanelParams> = ({
           {label}
         </Typography>
       )}
-    </Box>
+    </Tile>
   )
 }
