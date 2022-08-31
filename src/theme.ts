@@ -370,12 +370,13 @@ export default createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
+          fontWeight: 400,
           padding: '10px',
           textTransform: 'none',
 
           '&.Mui-selected': {
             color: theme.palette.text.primary,
-            fontWeight: 400,
+            fontWeight: 600,
           },
         },
       },
