@@ -16,8 +16,10 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { BackButton } from '@app/components/BackButton'
 import { FilterOrgSector } from '@app/components/FilterOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { Sticky } from '@app/components/Sticky'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
@@ -110,6 +112,11 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
   return (
     <>
       <Container maxWidth="lg" sx={{ py: 5 }}>
+        <Sticky top={20}>
+          <Box mb={1}>
+            <BackButton />
+          </Box>
+        </Sticky>
         <Box display="flex" gap={4}>
           <Box width={250}>
             <Typography variant="h1">
