@@ -74,46 +74,14 @@ export const EditOrgDetails: React.FC = () => {
           .required(
             t('validation-errors.required-field', { name: t('org-name') })
           ),
-        trustType: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('trust-type') })
-          ),
-        trustName: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('trust-name') })
-          ),
-        orgEmail: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('org-email') })
-          ),
-        orgPhone: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('org-phone') })
-          ),
-        sector: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('sector') })
-          ),
-        localAuthority: yup.string().required(
-          t('validation-errors.required-field', {
-            name: t('local-authority'),
-          })
-        ),
-        ofstedRating: yup
-          .string()
-          .required(
-            t('validation-errors.required-field', { name: t('ofsted-rating') })
-          ),
-        ofstedLastInspection: yup.date().required(
-          t('validation-errors.required-field', {
-            name: t('ofsted-last-inspection'),
-          })
-        ),
+        trustType: yup.string(),
+        trustName: yup.string(),
+        orgEmail: yup.string(),
+        orgPhone: yup.string(),
+        sector: yup.string(),
+        localAuthority: yup.string(),
+        ofstedRating: yup.string(),
+        ofstedLastInspection: yup.date().nullable(),
       })
       .required()
   }, [t])
@@ -147,7 +115,7 @@ export const EditOrgDetails: React.FC = () => {
   useEffect(() => {
     if (org) {
       setValue('orgName', org.name)
-      setValue('trustType', org.trustType || '')
+      setValue('trustType', org.trustType || TrustType.NOT_APPLICABLE)
       setValue('trustName', org.trustName || '')
       setValue('orgEmail', org.attributes.email)
       setValue('orgPhone', org.attributes.phone)
@@ -263,7 +231,6 @@ export const EditOrgDetails: React.FC = () => {
                     <TextField
                       id="trustType"
                       select
-                      required
                       label={t('pages.edit-org-details.trust-type')}
                       variant="standard"
                       error={!!errors.trustType}
@@ -290,7 +257,6 @@ export const EditOrgDetails: React.FC = () => {
               <Box mb={3}>
                 <TextField
                   id="trustName"
-                  required
                   label={t('pages.edit-org-details.trust-name')}
                   variant="standard"
                   error={!!errors.trustName}
@@ -304,7 +270,6 @@ export const EditOrgDetails: React.FC = () => {
               <Box mb={3}>
                 <TextField
                   id="orgEmail"
-                  required
                   label={t('pages.edit-org-details.org-email')}
                   variant="standard"
                   error={!!errors.orgEmail}
@@ -318,7 +283,6 @@ export const EditOrgDetails: React.FC = () => {
               <Box mb={3}>
                 <TextField
                   id="orgPhone"
-                  required
                   label={t('pages.edit-org-details.org-phone')}
                   variant="standard"
                   error={!!errors.orgPhone}
@@ -333,7 +297,6 @@ export const EditOrgDetails: React.FC = () => {
                 <Grid item md={6}>
                   <TextField
                     id="sector"
-                    required
                     label={t('pages.edit-org-details.sector')}
                     variant="standard"
                     error={!!errors.sector}
@@ -346,7 +309,6 @@ export const EditOrgDetails: React.FC = () => {
                 <Grid item md={6}>
                   <TextField
                     id="localAuthority"
-                    required
                     label={t('pages.edit-org-details.local-authority')}
                     variant="standard"
                     error={!!errors.localAuthority}
@@ -367,7 +329,6 @@ export const EditOrgDetails: React.FC = () => {
                       <TextField
                         id="ofstedRating"
                         select
-                        required
                         label={t('pages.edit-org-details.ofsted-rating')}
                         variant="standard"
                         error={!!errors.ofstedRating}
@@ -402,7 +363,6 @@ export const EditOrgDetails: React.FC = () => {
                           onChange={field.onChange}
                           renderInput={params => (
                             <TextField
-                              required
                               {...params}
                               error={!!errors.ofstedRating}
                               helperText={errors.ofstedRating?.message}
@@ -517,8 +477,6 @@ export const EditOrgDetails: React.FC = () => {
               >
                 {t('save-changes')}
               </LoadingButton>
-
-              {JSON.stringify(errors)}
             </Box>
           </Grid>
         </Grid>
