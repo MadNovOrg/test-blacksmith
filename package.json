@@ -19,7 +19,7 @@
     "test:e2e:smoke": "npm run test:e2e -- --grep @smoke",
     "test:e2e:data": "npm run test:e2e -- --grep @data",
     "test:e2e:report": "playwright show-report",
-    "hasura": "env-cmd -f ./hasura/.env hasura --project hasura --skip-update-check",
+    "hasura": "env-cmd -f ./hasura/.env -- hasura --project hasura --skip-update-check",
     "hasura:console": "npm run hasura -- console",
     "hasura:squash": "npm run hasura -- migrate squash",
     "hasura:migrate:all:up": "npm run hasura -- migrate apply --database-name default",

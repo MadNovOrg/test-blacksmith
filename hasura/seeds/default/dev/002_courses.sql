@@ -9,7 +9,7 @@ INSERT INTO public.course (id, description, name, course_type, course_delivery_t
 (10007, 'Very long description of the course.', 'Positive Behaviour Training: Level Two', 'CLOSED', 'F2F', 'LEVEL_2', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, true, 'GRADE_MISSING', false),
 (10008, 'Very long description of the course.', 'Positive Behaviour Training: Advanced Modules', 'CLOSED', 'F2F', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, true, 'CONFIRM_MODULES', false),
 (10009, 'Some description.', 'Positive Behaviour Training: Level One', 'INDIRECT', 'VIRTUAL', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'APPROVAL_PENDING', false),
-(10010, 'Empty course for trainer certificates', 'Positive Behaviour Trainer: Advanced', 'CLOSED', 'F2F', 'ADVANCED', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', false),
+(10010, 'Empty course for trainer certificates', 'Positive Behaviour Trainer: Advanced', 'CLOSED', 'F2F', 'ADVANCED_TRAINER', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', false),
 (10011, 'Course completed in the past', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'COMPLETED', true);
 
 SELECT setval('course_id_seq', 10012);

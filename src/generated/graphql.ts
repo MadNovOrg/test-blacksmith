@@ -31654,13 +31654,6 @@ export type AcceptOrgInviteMutationVariables = Exact<{
 
 export type AcceptOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'AcceptOrgInviteOutput', id: any } | null };
 
-export type CancelCourseInviteMutationVariables = Exact<{
-  inviteId: Scalars['uuid'];
-}>;
-
-
-export type CancelCourseInviteMutation = { __typename?: 'mutation_root', delete_course_invites_by_pk?: { __typename?: 'course_invites', id: any } | null };
-
 export type CreateUserMutationVariables = Exact<{
   input: CreateAppUserInput;
 }>;

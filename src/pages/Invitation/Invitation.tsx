@@ -133,15 +133,23 @@ export const InvitationPage = () => {
 
   if (error) {
     // TODO: Need designs
-    if (error.code === 'EXPIRED') {
-      return (
-        <Box>
-          <Typography>Invitation expired</Typography>
-        </Box>
-      )
-    }
+    switch (error.code) {
+      case 'NOT_FOUND':
+        return (
+          <Box>
+            <Typography>Invitation not found</Typography>
+          </Box>
+        )
+      case 'EXPIRED':
+        return (
+          <Box>
+            <Typography>Invitation expired</Typography>
+          </Box>
+        )
 
-    return null
+      default:
+        return null
+    }
   }
 
   return (
