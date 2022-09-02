@@ -5,9 +5,21 @@ import { CERTIFICATE, PROFILE } from '@app/queries/fragments'
 export const QUERY = gql`
   ${PROFILE}
   ${CERTIFICATE}
-  query GetProfileDetails($profileId: uuid!) {
+  query GetProfileDetails(
+    $profileId: uuid!
+    $withGo1Licenses: Boolean = false
+    $orgId: uuid
+  ) {
     profile: profile_by_pk(id: $profileId) {
       ...Profile
+
+      go1Licenses(where: { orgId: { _eq: $orgId } })
+        @include(if: $withGo1Licenses) {
+        id
+        orgId
+        expireDate
+        enrolledOn
+      }
     }
     certificates: course_certificate(
       where: { profileId: { _eq: $profileId } }

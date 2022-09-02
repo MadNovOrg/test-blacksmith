@@ -195,7 +195,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                           variant="body2"
                           color={theme.palette.grey[900]}
                           ml={1}
-                          href={`/profile/${profile.id}`}
+                          href={`/profile/${profile.id}?orgId=${orgId}`}
                         >
                           {profile.fullName}
                         </Link>

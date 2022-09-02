@@ -18006,12 +18006,13 @@ export enum Go1_History_Events_Update_Column {
 /** Organization's users Go1 licenses */
 export type Go1_Licenses = {
   __typename?: 'go1_licenses';
-  expire_date: Scalars['timestamptz'];
+  enrolledOn: Scalars['timestamptz'];
+  expireDate: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  org_id: Scalars['uuid'];
+  orgId: Scalars['uuid'];
   /** An object relationship */
   organization: Organization;
-  profile_id: Scalars['uuid'];
+  profileId: Scalars['uuid'];
 };
 
 /** aggregated selection of "go1_licenses" */
@@ -18055,11 +18056,12 @@ export type Go1_Licenses_Bool_Exp = {
   _and?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
   _not?: InputMaybe<Go1_Licenses_Bool_Exp>;
   _or?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
-  expire_date?: InputMaybe<Timestamptz_Comparison_Exp>;
+  enrolledOn?: InputMaybe<Timestamptz_Comparison_Exp>;
+  expireDate?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  orgId?: InputMaybe<Uuid_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
-  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  profileId?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "go1_licenses" */
@@ -18425,45 +18427,50 @@ export type Go1_Licenses_History_Variance_Order_By = {
 
 /** input type for inserting data into table "go1_licenses" */
 export type Go1_Licenses_Insert_Input = {
-  expire_date?: InputMaybe<Scalars['timestamptz']>;
+  enrolledOn?: InputMaybe<Scalars['timestamptz']>;
+  expireDate?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  org_id?: InputMaybe<Scalars['uuid']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
-  profile_id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
 };
 
 /** aggregate max on columns */
 export type Go1_Licenses_Max_Fields = {
   __typename?: 'go1_licenses_max_fields';
-  expire_date?: Maybe<Scalars['timestamptz']>;
+  enrolledOn?: Maybe<Scalars['timestamptz']>;
+  expireDate?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  org_id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  orgId?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
 };
 
 /** order by max() on columns of table "go1_licenses" */
 export type Go1_Licenses_Max_Order_By = {
-  expire_date?: InputMaybe<Order_By>;
+  enrolledOn?: InputMaybe<Order_By>;
+  expireDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
 export type Go1_Licenses_Min_Fields = {
   __typename?: 'go1_licenses_min_fields';
-  expire_date?: Maybe<Scalars['timestamptz']>;
+  enrolledOn?: Maybe<Scalars['timestamptz']>;
+  expireDate?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  org_id?: Maybe<Scalars['uuid']>;
-  profile_id?: Maybe<Scalars['uuid']>;
+  orgId?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
 };
 
 /** order by min() on columns of table "go1_licenses" */
 export type Go1_Licenses_Min_Order_By = {
-  expire_date?: InputMaybe<Order_By>;
+  enrolledOn?: InputMaybe<Order_By>;
+  expireDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "go1_licenses" */
@@ -18484,11 +18491,12 @@ export type Go1_Licenses_On_Conflict = {
 
 /** Ordering options when selecting data from "go1_licenses". */
 export type Go1_Licenses_Order_By = {
-  expire_date?: InputMaybe<Order_By>;
+  enrolledOn?: InputMaybe<Order_By>;
+  expireDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  org_id?: InputMaybe<Order_By>;
+  orgId?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
-  profile_id?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: go1_licenses */
@@ -18499,33 +18507,38 @@ export type Go1_Licenses_Pk_Columns_Input = {
 /** select columns of table "go1_licenses" */
 export enum Go1_Licenses_Select_Column {
   /** column name */
-  ExpireDate = 'expire_date',
+  EnrolledOn = 'enrolledOn',
+  /** column name */
+  ExpireDate = 'expireDate',
   /** column name */
   Id = 'id',
   /** column name */
-  OrgId = 'org_id',
+  OrgId = 'orgId',
   /** column name */
-  ProfileId = 'profile_id'
+  ProfileId = 'profileId'
 }
 
 /** input type for updating data in table "go1_licenses" */
 export type Go1_Licenses_Set_Input = {
-  expire_date?: InputMaybe<Scalars['timestamptz']>;
+  enrolledOn?: InputMaybe<Scalars['timestamptz']>;
+  expireDate?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  org_id?: InputMaybe<Scalars['uuid']>;
-  profile_id?: InputMaybe<Scalars['uuid']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
 };
 
 /** update columns of table "go1_licenses" */
 export enum Go1_Licenses_Update_Column {
   /** column name */
-  ExpireDate = 'expire_date',
+  EnrolledOn = 'enrolledOn',
+  /** column name */
+  ExpireDate = 'expireDate',
   /** column name */
   Id = 'id',
   /** column name */
-  OrgId = 'org_id',
+  OrgId = 'orgId',
   /** column name */
-  ProfileId = 'profile_id'
+  ProfileId = 'profileId'
 }
 
 /** Enum table for possible course grades */
@@ -31666,6 +31679,13 @@ export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: str
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
 
+export type DeleteGo1LicenseMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteGo1LicenseMutation = { __typename?: 'mutation_root', delete_go1_licenses_by_pk?: { __typename?: 'go1_licenses', id: any } | null };
+
 export type Go1LicensesChangeMutationVariables = Exact<{
   input: Go1LicensesChangeInput;
 }>;
@@ -31717,6 +31737,13 @@ export type AcceptOrgInviteMutationVariables = Exact<{
 
 
 export type AcceptOrgInviteMutation = { __typename?: 'mutation_root', invite?: { __typename?: 'AcceptOrgInviteOutput', id: any } | null };
+
+export type CancelCourseInviteMutationVariables = Exact<{
+  inviteId: Scalars['uuid'];
+}>;
+
+
+export type CancelCourseInviteMutation = { __typename?: 'mutation_root', delete_course_invites_by_pk?: { __typename?: 'course_invites', id: any } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateAppUserInput;
@@ -32007,7 +32034,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expire_date: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expireDate: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgUsersQueryVariables = Exact<{
   orgId: Scalars['uuid'];
@@ -32104,10 +32131,12 @@ export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ _
 
 export type GetProfileDetailsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
+  withGo1Licenses?: InputMaybe<Scalars['Boolean']>;
+  orgId?: InputMaybe<Scalars['uuid']>;
 }>;
 
 
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null }> };
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null }> };
 
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 

@@ -31,12 +31,20 @@ export type MissingCertificateInfo = {
   requiredCertificate: CourseLevel[] // ie. Level 1 or Level 2 required
 }
 
-export default function useProfile(profileId?: string, courseId?: string) {
+export default function useProfile(
+  profileId?: string,
+  courseId?: string,
+  orgId?: string
+) {
   const { data, error, mutate } = useSWR<
     GetProfileDetailsQuery,
     Error,
     [string, GetProfileDetailsQueryVariables] | null
-  >(profileId ? [QUERY, { profileId }] : null)
+  >(
+    profileId
+      ? [QUERY, { profileId, withGo1Licenses: Boolean(orgId), orgId }]
+      : null
+  )
 
   const missingCertifications = useMemo(() => {
     if (data) {
@@ -72,6 +80,7 @@ export default function useProfile(profileId?: string, courseId?: string) {
     profile: data?.profile,
     certifications: data?.certificates,
     missingCertifications: missingCertifications as MissingCertificateInfo[],
+    go1Licenses: data?.profile?.go1Licenses,
     mutate,
     error,
     status: getSWRLoadingStatus(data, error),

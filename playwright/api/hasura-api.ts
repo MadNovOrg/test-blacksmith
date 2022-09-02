@@ -29,6 +29,8 @@ import {
   WebinarQuery,
   WebinarQueryVariables,
   Organization_Insert_Input,
+  Organization_Member_Insert_Input,
+  Go1_Licenses_Insert_Input,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
@@ -621,5 +623,69 @@ export async function deleteOrganization(id: string): Promise<boolean> {
 
   const response = await client.request(mutation, { id })
 
-  return response?.insert_organization_one?.id
+  return response?.delete_organization_by_pk?.id
+}
+
+export async function insertOrganizationMember(
+  input: Organization_Member_Insert_Input
+) {
+  const client = getClient()
+  const mutation = gql`
+    mutation InsertOrganizationMember(
+      $input: organization_member_insert_input!
+    ) {
+      insert_organization_member_one(object: $input) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { input })
+
+  return response?.insert_organization_member_one?.id
+}
+
+export async function deleteOrganizationMember(id: string): Promise<boolean> {
+  const client = getClient()
+  const mutation = gql`
+    mutation DeleteOrganizationMember($id: uuid!) {
+      delete_organization_member_by_pk(id: $id) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { id })
+
+  return response?.delete_organization_member_by_pk?.id
+}
+
+export async function insertGo1License(input: Go1_Licenses_Insert_Input) {
+  const client = getClient()
+  const mutation = gql`
+    mutation InsertGo1License($input: go1_licenses_insert_input!) {
+      insert_go1_licenses_one(object: $input) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { input })
+
+  return response?.insert_go1_licenses_one?.id
+}
+
+export async function deleteGo1License(id: string): Promise<boolean> {
+  const client = getClient()
+  const mutation = gql`
+    mutation DeleteGo1License($id: uuid!) {
+      delete_go1_licenses_by_pk(id: $id) {
+        id
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { id })
+
+  return response?.delete_go1_licenses_by_pk?.id
 }

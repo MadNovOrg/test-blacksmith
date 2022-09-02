@@ -1,6 +1,22 @@
 table:
   schema: public
   name: go1_licenses
+configuration:
+  custom_root_fields: {}
+  column_config:
+    org_id:
+      custom_name: orgId
+    expire_date:
+      custom_name: expireDate
+    profile_id:
+      custom_name: profileId
+    enrolled_on:
+      custom_name: enrolledOn
+  custom_column_names:
+    org_id: orgId
+    expire_date: expireDate
+    profile_id: profileId
+    enrolled_on: enrolledOn
 object_relationships:
   - name: organization
     using:
@@ -9,8 +25,35 @@ select_permissions:
   - role: tt-admin
     permission:
       columns:
+        - enrolled_on
         - expire_date
         - id
         - org_id
         - profile_id
       filter: {}
+  - role: user
+    permission:
+      columns:
+        - enrolled_on
+        - expire_date
+        - id
+        - org_id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
+event_triggers:
+  - name: block_go1_access
+    definition:
+      enable_manual: true
+      delete:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/block'

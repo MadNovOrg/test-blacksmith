@@ -17,7 +17,7 @@ import {
 import { formatDistanceToNow, isPast } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
@@ -27,6 +27,7 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import useProfile from '@app/hooks/useProfile'
 
+import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
 type ViewProfilePageProps = unknown
@@ -36,8 +37,15 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
   const { profile: currentUserProfile, verified, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
 
-  const { profile, certifications } = useProfile(id ?? currentUserProfile?.id)
+  const orgId = searchParams.get('orgId')
+
+  const { profile, go1Licenses, certifications } = useProfile(
+    id ?? currentUserProfile?.id,
+    undefined,
+    orgId ?? undefined
+  )
 
   const isMyProfile = !id
 
@@ -66,7 +74,6 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
           <Grid item sm={12}>
             <BackButton label={t('common.back')} />
           </Grid>
-
           <Grid
             item
             md={4}
@@ -92,7 +99,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 variant="contained"
                 color="primary"
                 component={LinkBehavior}
-                href="edit"
+                href={orgId ? `edit?orgId=${orgId}` : 'edit'}
                 startIcon={<EditIcon />}
                 sx={{ mt: 5 }}
               >
@@ -130,7 +137,6 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 )}
               </>
             ) : null}
-
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
             </Typography>
@@ -156,11 +162,9 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 }
               />
             </Box>
-
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('pages.view-profile.hub-access')}
             </Typography>
-
             <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
               <DetailsRow label={t('pages.view-profile.user-roles')}>
                 <Box flex={1}>
@@ -174,7 +178,6 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 </Box>
               </DetailsRow>
             </Box>
-
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('org-details')}
             </Typography>
@@ -243,7 +246,6 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 )}
               </TableBody>
             </Table>
-
             {verified && (
               <>
                 <Typography variant="subtitle2" mt={3}>
@@ -336,6 +338,12 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 </Table>
               </>
             )}
+
+            {go1Licenses?.length ? (
+              <Box mt={3}>
+                <UserGo1License license={go1Licenses[0]} editable={false} />
+              </Box>
+            ) : null}
           </Grid>
         </Grid>
       </Container>

@@ -39,7 +39,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        run: npm t
+        run: npm t -- --maxWorkers=2
 
       - name: Build web
         run: npm run build

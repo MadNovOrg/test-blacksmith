@@ -24,7 +24,7 @@ import { uniq } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { Avatar } from '@app/components/Avatar'
@@ -59,6 +59,7 @@ import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/
 import theme from '@app/theme'
 import { Role } from '@app/types'
 
+import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
 type ProfileInput = {
@@ -105,9 +106,14 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
+  const [searchParams] = useSearchParams()
 
-  const { profile, certifications, mutate } = useProfile(
-    id ?? currentUserProfile?.id
+  const orgId = searchParams.get('orgId')
+
+  const { profile, certifications, go1Licenses, mutate } = useProfile(
+    id ?? currentUserProfile?.id,
+    undefined,
+    orgId ?? undefined
   )
   const { roles: systemRoles } = useRoles()
   const isMyProfile = !id
@@ -236,6 +242,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
     }
   }, [profile, setValue])
 
+  const navigateBackPath = orgId ? `../?orgId=${orgId}` : '..'
+
   const onSubmit = async (data: ProfileInput) => {
     setLoading(true)
     if (!profile) return
@@ -272,7 +280,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
 
       setLoading(false)
       await refreshData()
-      navigate('..')
+      navigate(navigateBackPath)
     } catch (err) {
       setLoading(false)
     }
@@ -362,7 +370,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                 variant="outlined"
                 color="primary"
                 component={LinkBehavior}
-                href=".."
+                href={navigateBackPath}
               >
                 {t('cancel')}
               </Button>
@@ -804,6 +812,16 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               </Box>
             ))}
 
+            {go1Licenses?.length ? (
+              <Box mt={3}>
+                <UserGo1License
+                  license={go1Licenses[0]}
+                  editable={true}
+                  onDeleted={mutate}
+                />
+              </Box>
+            ) : null}
+
             <Box
               mt={2}
               display="flex"
@@ -814,7 +832,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                 variant="outlined"
                 color="primary"
                 component={LinkBehavior}
-                href=".."
+                href={navigateBackPath}
               >
                 {t('cancel')}
               </Button>
