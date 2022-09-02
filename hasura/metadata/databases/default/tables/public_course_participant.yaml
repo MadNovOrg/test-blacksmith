@@ -198,3 +198,13 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 10
     webhook: '{{EVENTS_HOST}}/go1/link'
+  - name: issue_go1_license
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/issue-license'
