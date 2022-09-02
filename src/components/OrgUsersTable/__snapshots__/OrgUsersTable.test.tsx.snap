@@ -56,6 +56,12 @@ Object {
                 class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
                 scope="col"
               >
+                Blended learning license
+              </th>
+              <th
+                class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
+                scope="col"
+              >
                 <span
                   class="MuiButtonBase-root MuiTableSortLabel-root css-tf2fk6-MuiButtonBase-root-MuiTableSortLabel-root"
                   role="button"
@@ -120,7 +126,7 @@ Object {
             >
               <td
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
-                colspan="6"
+                colspan="7"
               >
                 <div
                   class="css-1d9cypr-MuiStack-root"
@@ -204,6 +210,12 @@ Object {
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
               scope="col"
             >
+              Blended learning license
+            </th>
+            <th
+              class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
+              scope="col"
+            >
               <span
                 class="MuiButtonBase-root MuiTableSortLabel-root css-tf2fk6-MuiButtonBase-root-MuiTableSortLabel-root"
                 role="button"
@@ -268,7 +280,7 @@ Object {
           >
             <td
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
-              colspan="6"
+              colspan="7"
             >
               <div
                 class="css-1d9cypr-MuiStack-root"

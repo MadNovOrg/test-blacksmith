@@ -22,6 +22,10 @@ export const QUERY = gql`
         expiryDate
         status
       }
+      go1Licenses(where: { organization: $where }) {
+        id
+        expire_date
+      }
       upcomingEnrollments {
         orgId
         orgName

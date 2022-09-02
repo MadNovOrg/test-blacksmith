@@ -1,3 +1,4 @@
+import { CheckCircle } from '@mui/icons-material'
 import {
   Button,
   Chip,
@@ -77,6 +78,10 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
       {
         id: 'certification',
         label: _t('certification'),
+      },
+      {
+        id: 'go1',
+        label: _t('blended-learning'),
       },
       {
         id: 'lastActivity',
@@ -225,6 +230,11 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                         </Box>
                       )
                     })}
+                  </TableCell>
+                  <TableCell>
+                    {profile.go1Licenses.length === 1 ? (
+                      <CheckCircle color="success" />
+                    ) : null}
                   </TableCell>
                   <TableCell>
                     {t('dates.default', { date: profile.lastActivity })}

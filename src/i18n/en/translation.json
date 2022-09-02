@@ -1290,6 +1290,7 @@
           },
           "cols-name": "Name",
           "cols-certification": "Certification",
+          "cols-blended-learning": "Blended learning license",
           "cols-last-activity": "Last activity",
           "cols-created-on": "Created on",
           "cols-permissions": "Permissions",

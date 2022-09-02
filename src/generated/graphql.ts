@@ -18009,6 +18009,8 @@ export type Go1_Licenses = {
   expire_date: Scalars['timestamptz'];
   id: Scalars['uuid'];
   org_id: Scalars['uuid'];
+  /** An object relationship */
+  organization: Organization;
   profile_id: Scalars['uuid'];
 };
 
@@ -18034,6 +18036,20 @@ export type Go1_Licenses_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "go1_licenses" */
+export type Go1_Licenses_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Go1_Licenses_Max_Order_By>;
+  min?: InputMaybe<Go1_Licenses_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "go1_licenses" */
+export type Go1_Licenses_Arr_Rel_Insert_Input = {
+  data: Array<Go1_Licenses_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Go1_Licenses_On_Conflict>;
+};
+
 /** Boolean expression to filter rows from the table "go1_licenses". All fields are combined with a logical 'AND'. */
 export type Go1_Licenses_Bool_Exp = {
   _and?: InputMaybe<Array<Go1_Licenses_Bool_Exp>>;
@@ -18042,13 +18058,16 @@ export type Go1_Licenses_Bool_Exp = {
   expire_date?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "go1_licenses" */
 export enum Go1_Licenses_Constraint {
   /** unique or primary key constraint */
-  Go1LicensesPkey = 'go1_licenses_pkey'
+  Go1LicensesPkey = 'go1_licenses_pkey',
+  /** unique or primary key constraint */
+  Go1LicensesProfileIdOrgIdKey = 'go1_licenses_profile_id_org_id_key'
 }
 
 /** How organization's licenses number is changing in time */
@@ -18409,6 +18428,7 @@ export type Go1_Licenses_Insert_Input = {
   expire_date?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   profile_id?: InputMaybe<Scalars['uuid']>;
 };
 
@@ -18421,6 +18441,14 @@ export type Go1_Licenses_Max_Fields = {
   profile_id?: Maybe<Scalars['uuid']>;
 };
 
+/** order by max() on columns of table "go1_licenses" */
+export type Go1_Licenses_Max_Order_By = {
+  expire_date?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Go1_Licenses_Min_Fields = {
   __typename?: 'go1_licenses_min_fields';
@@ -18428,6 +18456,14 @@ export type Go1_Licenses_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   org_id?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "go1_licenses" */
+export type Go1_Licenses_Min_Order_By = {
+  expire_date?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  org_id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "go1_licenses" */
@@ -18451,6 +18487,7 @@ export type Go1_Licenses_Order_By = {
   expire_date?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   profile_id?: InputMaybe<Order_By>;
 };
 
@@ -25084,6 +25121,10 @@ export type Profile = {
   fullName?: Maybe<Scalars['String']>;
   givenName: Scalars['String'];
   go1Id?: Maybe<Scalars['Int']>;
+  /** An array relationship */
+  go1Licenses: Array<Go1_Licenses>;
+  /** An aggregate relationship */
+  go1Licenses_aggregate: Go1_Licenses_Aggregate;
   go1_profile?: Maybe<Scalars['jsonb']>;
   id: Scalars['uuid'];
   /** An array relationship */
@@ -25169,6 +25210,26 @@ export type ProfileCourses_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Participant_Order_By>>;
   where?: InputMaybe<Course_Participant_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileGo1LicensesArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileGo1Licenses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Go1_Licenses_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Go1_Licenses_Order_By>>;
+  where?: InputMaybe<Go1_Licenses_Bool_Exp>;
 };
 
 
@@ -25342,6 +25403,7 @@ export type Profile_Bool_Exp = {
   fullName?: InputMaybe<String_Comparison_Exp>;
   givenName?: InputMaybe<String_Comparison_Exp>;
   go1Id?: InputMaybe<Int_Comparison_Exp>;
+  go1Licenses?: InputMaybe<Go1_Licenses_Bool_Exp>;
   go1_profile?: InputMaybe<Jsonb_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   identities?: InputMaybe<Identity_Bool_Exp>;
@@ -25423,6 +25485,7 @@ export type Profile_Insert_Input = {
   familyName?: InputMaybe<Scalars['String']>;
   givenName?: InputMaybe<Scalars['String']>;
   go1Id?: InputMaybe<Scalars['Int']>;
+  go1Licenses?: InputMaybe<Go1_Licenses_Arr_Rel_Insert_Input>;
   go1_profile?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   identities?: InputMaybe<Identity_Arr_Rel_Insert_Input>;
@@ -25522,6 +25585,7 @@ export type Profile_Order_By = {
   fullName?: InputMaybe<Order_By>;
   givenName?: InputMaybe<Order_By>;
   go1Id?: InputMaybe<Order_By>;
+  go1Licenses_aggregate?: InputMaybe<Go1_Licenses_Aggregate_Order_By>;
   go1_profile?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   identities_aggregate?: InputMaybe<Identity_Aggregate_Order_By>;
@@ -31943,7 +32007,7 @@ export type GetOrgDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgDetailsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null }>, profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, lastActivity: any, createdAt: any, certificates: Array<{ __typename?: 'course_certificate', id: any, courseLevel: string, expiryDate: any, status?: string | null }>, go1Licenses: Array<{ __typename?: 'go1_licenses', id: any, expire_date: any }>, upcomingEnrollments: Array<{ __typename?: 'upcoming_enrollments', orgId?: any | null, orgName?: string | null, courseLevel?: string | null, courseId?: number | null }>, organizations: Array<{ __typename?: 'organization_member', id: any, position?: string | null, isAdmin?: boolean | null, profile: { __typename?: 'profile', fullName?: string | null }, organization: { __typename?: 'organization', id: any, name: string } }> }>, pendingInvitesCount: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type GetOrgUsersQueryVariables = Exact<{
   orgId: Scalars['uuid'];
