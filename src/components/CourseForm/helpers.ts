@@ -1,6 +1,17 @@
+import { format } from 'date-fns'
+
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import aolRegionsByCountry from './aolRegions'
+
+export function makeDate(date: Date | string, time: Date | string) {
+  const _date = new Date(date)
+  return new Date(`${format(_date, 'yyyy-MM-dd')} ${time}`)
+}
+
+export function extractTime(date: Date | string) {
+  return format(new Date(date), 'HH:mm')
+}
 
 export function getLevels(courseType: CourseType) {
   const types = {

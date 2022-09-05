@@ -176,7 +176,7 @@ describe('component: CourseForm', () => {
     const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
     expect(screen.getByLabelText('Start date')).toHaveValue(startDate)
 
-    const startTime = format(new Date(schedule.start), 'hh:mm aa')
+    const startTime = format(new Date(schedule.start), 'hh:mm')
     expect(screen.getByLabelText('Start time')).toHaveValue(startTime)
 
     const min = screen.getByTestId('min-attendees').querySelector('input')

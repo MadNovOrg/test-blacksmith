@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { LocalizationProvider, DatePicker, TimePicker } from '@mui/lab'
+import { LocalizationProvider, DatePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {
   Checkbox,
@@ -16,7 +16,6 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@mui/material'
-import { setHours, setMinutes } from 'date-fns'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -27,13 +26,7 @@ import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { CourseDeliveryType, CourseType, CourseInput } from '@app/types'
-import {
-  INPUT_DATE_FORMAT,
-  DATE_MASK,
-  LoadingStatus,
-  TIME_MASK,
-  INPUT_TIME_FORMAT,
-} from '@app/util'
+import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -42,12 +35,15 @@ import { VenueSelector } from '../VenueSelector'
 import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
 import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
+import { CourseTimePicker } from './components/CourseTimePicker'
 import {
   canBeBlended,
   canBeReacc,
   canBeF2F,
   canBeVirtual,
   canBeMixed,
+  extractTime,
+  makeDate,
 } from './helpers'
 
 interface Props {
@@ -63,11 +59,11 @@ const CourseForm: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
 
-  const [startTime, setStartTime] = useState<Date | null>(
-    courseInput?.startDateTime ? new Date(courseInput.startDateTime) : null
+  const [startTime, setStartTime] = useState<Date | string>(
+    courseInput?.startDateTime ? extractTime(courseInput.startDateTime) : ''
   )
-  const [endTime, setEndTime] = useState<Date | null>(
-    courseInput?.endDateTime ? new Date(courseInput.endDateTime) : null
+  const [endTime, setEndTime] = useState<Date | string>(
+    courseInput?.endDateTime ? extractTime(courseInput.endDateTime) : ''
   )
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
@@ -256,10 +252,7 @@ const CourseForm: React.FC<Props> = ({
     const startDate = getValues('startDateTime')
     const endDate = getValues('endDateTime')
     if (startTime && startDate) {
-      const startDateWithTime = setMinutes(
-        setHours(startDate, startTime.getHours()),
-        startTime.getMinutes()
-      )
+      const startDateWithTime = makeDate(startDate, startTime)
 
       setValue('startDateTime', startDateWithTime)
 
@@ -272,10 +265,7 @@ const CourseForm: React.FC<Props> = ({
   useEffect(() => {
     const endDate = getValues('endDateTime')
     if (endTime && endDate) {
-      const endDateWithTime = setMinutes(
-        setHours(endDate, endTime.getHours()),
-        endTime.getMinutes()
-      )
+      const endDateWithTime = makeDate(endDate, endTime)
 
       setValue('endDateTime', endDateWithTime)
       trigger('endDateTime')
@@ -287,10 +277,7 @@ const CourseForm: React.FC<Props> = ({
     const endDate = getValues('endDateTime')
 
     if (startTime && date) {
-      dateToSet = setMinutes(
-        setHours(date, startTime.getHours()),
-        startTime.getMinutes()
-      )
+      dateToSet = makeDate(date, startTime)
     }
 
     setValue('startDateTime', dateToSet, { shouldValidate: true })
@@ -304,10 +291,7 @@ const CourseForm: React.FC<Props> = ({
     let dateToSet = date
 
     if (endTime && date) {
-      dateToSet = setMinutes(
-        setHours(date, endTime.getHours()),
-        endTime.getMinutes()
-      )
+      dateToSet = makeDate(date, endTime)
     }
 
     setValue('endDateTime', dateToSet, { shouldValidate: true })
@@ -550,22 +534,12 @@ const CourseForm: React.FC<Props> = ({
             </Grid>
 
             <Grid item xs={6}>
-              <TimePicker
+              <CourseTimePicker
+                error={Boolean(errors.startDateTime)}
+                id="start"
                 label={t('components.course-form.start-time-placeholder')}
+                onChange={setStartTime}
                 value={startTime}
-                onChange={value => setStartTime(value)}
-                mask={TIME_MASK}
-                inputFormat={INPUT_TIME_FORMAT}
-                disableMaskedInput={false}
-                renderInput={params => (
-                  <TextField
-                    variant="filled"
-                    {...params}
-                    fullWidth
-                    error={Boolean(errors.startDateTime)}
-                    data-testid="start-time"
-                  />
-                )}
               />
             </Grid>
           </Grid>
@@ -602,22 +576,12 @@ const CourseForm: React.FC<Props> = ({
             </Grid>
 
             <Grid item xs={6}>
-              <TimePicker
+              <CourseTimePicker
+                error={Boolean(errors.endDateTime)}
+                id="end"
                 label={t('components.course-form.end-time-placeholder')}
+                onChange={setEndTime}
                 value={endTime}
-                onChange={value => setEndTime(value)}
-                mask={TIME_MASK}
-                inputFormat={INPUT_TIME_FORMAT}
-                disableMaskedInput={false}
-                renderInput={params => (
-                  <TextField
-                    variant="filled"
-                    {...params}
-                    fullWidth
-                    error={Boolean(errors.endDateTime)}
-                    data-testid="end-time"
-                  />
-                )}
               />
             </Grid>
           </Grid>
