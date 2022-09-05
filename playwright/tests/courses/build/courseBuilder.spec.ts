@@ -37,7 +37,7 @@ for (const data of MODULES_SETUP) {
     await courseBuilderPage.checkEstimatedDuration(data.durationAfter)
     const courseDetailsPage = await courseBuilderPage.clickSubmitButton()
     await courseDetailsPage.checkSuccessMessage(
-      `You have successfully created your ${course.name} Course`
+      `You have successfully created your ${course.id} Course`
     )
   })
 }

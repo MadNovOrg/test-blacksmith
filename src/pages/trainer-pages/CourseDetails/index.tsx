@@ -150,7 +150,7 @@ export const CourseDetails = () => {
                           color="success"
                           data-testid="success-message"
                         >
-                          {t(alertMessage, { name: course?.name })}
+                          {t(alertMessage, { id: course?.id })}
                         </Alert>
                       </Box>
                     </Expire>
