@@ -12,6 +12,7 @@ body,
 #app {
   display: flex;
   flex-direction: column;
+  letter-spacing: normal;
   white-space: pre-line;
 }
 

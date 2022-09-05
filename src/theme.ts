@@ -196,7 +196,7 @@ export default createTheme({
     },
     h2: {
       fontSize: '1.75rem',
-      fontWeight: '700',
+      fontWeight: '600',
     },
     h3: {
       fontSize: '1.5rem',
@@ -302,7 +302,7 @@ export default createTheme({
           },
           '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
             fontSize: 13,
-            fontWeight: 'bold',
+            fontWeight: '500',
             color: dimGrey,
             padding: '.6em .5rem',
             lineHeight: '1.3rem',
