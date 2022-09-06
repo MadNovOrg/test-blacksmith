@@ -3,7 +3,11 @@ import { setMedia } from 'mock-match-media'
 import React from 'react'
 
 import { CourseDeliveryType, CourseType } from '@app/types'
-import { courseToCourseInput, INPUT_DATE_FORMAT } from '@app/util'
+import {
+  courseToCourseInput,
+  INPUT_DATE_FORMAT,
+  INPUT_TIME_FORMAT,
+} from '@app/util'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
@@ -176,7 +180,7 @@ describe('component: CourseForm', () => {
     const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
     expect(screen.getByLabelText('Start date')).toHaveValue(startDate)
 
-    const startTime = format(new Date(schedule.start), 'hh:mm')
+    const startTime = format(new Date(schedule.start), INPUT_TIME_FORMAT)
     expect(screen.getByLabelText('Start time')).toHaveValue(startTime)
 
     const min = screen.getByTestId('min-attendees').querySelector('input')

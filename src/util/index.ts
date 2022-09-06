@@ -25,7 +25,7 @@ import {
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
-export const INPUT_TIME_FORMAT = 'hh:mm aa'
+export const INPUT_TIME_FORMAT = 'HH:mm'
 export const DATE_MASK = '__/__/____'
 export const TIME_MASK = '__:__ _M'
 
