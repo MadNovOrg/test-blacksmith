@@ -933,7 +933,8 @@
       "resend-invite": "Resend invite",
       "cancel-invite": "Cancel invite",
       "invite-sent": "Invite sent.",
-      "invite-canceled": "Invite canceled."
+      "invite-canceled": "Invite canceled.",
+      "no-attendees": "No attendees"
     },
     "course-grading-details": {
       "title": "Grading details",

@@ -18,7 +18,7 @@ import { useWaitlist } from '@app/hooks/useWaitlist'
 import { AttendingTab } from '@app/pages/trainer-pages/components/CourseAttendees/AttendingTab'
 import { InvitesTab } from '@app/pages/trainer-pages/components/CourseAttendees/InvitesTab'
 import { WaitlistTab } from '@app/pages/trainer-pages/components/CourseAttendees/WaitlistTab'
-import { Course, InviteStatus } from '@app/types'
+import { Course, CourseType, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseInvites } from '../CourseInvites'
@@ -50,6 +50,8 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
     courseId: Number(courseId ?? 0),
     sort: { by: 'createdAt', dir: 'asc' },
   })
+
+  const isOpenCourse = course?.type === CourseType.OPEN
 
   return (
     <Container disableGutters>
@@ -87,58 +89,65 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
             <CourseInvites course={course} />
           </Grid>
 
-          <TabContext value={selectedTab}>
-            <TabList
-              onChange={(_, selectedTab: React.SetStateAction<string>) =>
-                setSelectedTab(selectedTab)
-              }
-            >
-              <Tab
-                label={t('pages.course-participants.tabs.attending', {
-                  number: courseParticipantsTotal,
-                })}
-                value="0"
-                data-testid="tabParticipants"
-              />
-              <Tab
-                label={t('pages.course-participants.tabs.pending', {
-                  number: pendingTotal,
-                })}
-                value="1"
-                data-testid="tabPending"
-              />
-              <Tab
-                label={t('pages.course-participants.tabs.declined', {
-                  number: declinedTotal,
-                })}
-                value="2"
-                data-testid="tabDeclined"
-              />
-              <Tab
-                label={t('pages.course-participants.tabs.waitlist', {
-                  number: waitlistTotal,
-                })}
-                value="3"
-                data-testid="tabWaitlist"
-              />
-            </TabList>
+          {isOpenCourse ? (
+            <AttendingTab course={course} />
+          ) : (
+            <TabContext value={selectedTab}>
+              <TabList
+                onChange={(_, selectedTab: React.SetStateAction<string>) =>
+                  setSelectedTab(selectedTab)
+                }
+              >
+                <Tab
+                  label={t('pages.course-participants.tabs.attending', {
+                    number: courseParticipantsTotal,
+                  })}
+                  value="0"
+                  data-testid="tabParticipants"
+                />
+                <Tab
+                  label={t('pages.course-participants.tabs.pending', {
+                    number: pendingTotal,
+                  })}
+                  value="1"
+                  data-testid="tabPending"
+                />
+                <Tab
+                  label={t('pages.course-participants.tabs.declined', {
+                    number: declinedTotal,
+                  })}
+                  value="2"
+                  data-testid="tabDeclined"
+                />
+                <Tab
+                  label={t('pages.course-participants.tabs.waitlist', {
+                    number: waitlistTotal,
+                  })}
+                  value="3"
+                  data-testid="tabWaitlist"
+                />
+              </TabList>
 
-            <TabPanel value="0" sx={{ px: 0 }}>
-              <AttendingTab course={course} />
-            </TabPanel>
-            <TabPanel value="1" sx={{ px: 0 }}>
-              <InvitesTab course={course} inviteStatus={InviteStatus.PENDING} />
-            </TabPanel>
-            <TabPanel value="2" sx={{ px: 0 }}>
-              <InvitesTab
-                course={course}
-                inviteStatus={InviteStatus.DECLINED}
-              />
-            </TabPanel>
-            <TabPanel value="3" sx={{ px: 0 }}>
-              <WaitlistTab course={course} />
-            </TabPanel>
-          </TabContext>
+              <TabPanel value="0" sx={{ px: 0 }}>
+                <AttendingTab course={course} />
+              </TabPanel>
+              <TabPanel value="1" sx={{ px: 0 }}>
+                <InvitesTab
+                  course={course}
+                  inviteStatus={InviteStatus.PENDING}
+                />
+              </TabPanel>
+              <TabPanel value="2" sx={{ px: 0 }}>
+                <InvitesTab
+                  course={course}
+                  inviteStatus={InviteStatus.DECLINED}
+                />
+              </TabPanel>
+              <TabPanel value="3" sx={{ px: 0 }}>
+                <WaitlistTab course={course} />
+              </TabPanel>
+            </TabContext>
+          )}
         </>
       )}
     </Container>

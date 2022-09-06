@@ -13,7 +13,12 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { BlendedLearningStatus, Course, SortOrder } from '@app/types'
+import {
+  BlendedLearningStatus,
+  Course,
+  CourseType,
+  SortOrder,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 type TabProperties = {
@@ -175,7 +180,9 @@ export const AttendingTab = ({ course }: TabProperties) => {
           data-testid="course-participants-zero-message"
         >
           <Typography variant="body1" color="grey.500">
-            {t('pages.course-participants.none-registered-message')}
+            {course?.type === CourseType.OPEN
+              ? t('pages.course-participants.no-attendees')
+              : t('pages.course-participants.none-registered-message')}
           </Typography>
         </Box>
       )}
