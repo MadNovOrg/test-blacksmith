@@ -45,20 +45,6 @@ Object {
                   <p
                     class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
                   >
-                    Address
-                  </p>
-                  <p
-                    class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
-                  >
-                    line 1, line 2, test city, test state, some postcode, test country
-                  </p>
-                </div>
-                <div
-                  class="MuiBox-root css-1coeexk"
-                >
-                  <p
-                    class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
-                  >
                     Organisation email
                   </p>
                   <p
@@ -170,10 +156,89 @@ Object {
           <h6
             class="MuiTypography-root MuiTypography-subtitle1 css-16q2fz6-MuiTypography-root"
           >
+            Organisation address
+          </h6>
+          <div
+            class="MuiBox-root css-acjjjk"
+          >
+            <div
+              class="MuiBox-root css-1coeexk"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+              >
+                Line 1
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+              >
+                line 1
+              </p>
+            </div>
+            <div
+              class="MuiBox-root css-1coeexk"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+              >
+                Line 2
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+              >
+                line 2
+              </p>
+            </div>
+            <div
+              class="MuiBox-root css-1coeexk"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+              >
+                City
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+              >
+                test city
+              </p>
+            </div>
+            <div
+              class="MuiBox-root css-1coeexk"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+              >
+                Country
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+              >
+                test country
+              </p>
+            </div>
+            <div
+              class="MuiBox-root css-1coeexk"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+              >
+                Post code
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+              >
+                some postcode
+              </p>
+            </div>
+          </div>
+          <h6
+            class="MuiTypography-root MuiTypography-subtitle1 css-16q2fz6-MuiTypography-root"
+          >
             Additional details
           </h6>
           <div
-            class="MuiBox-root css-i0p4cs"
+            class="MuiBox-root css-acjjjk"
           >
             <div
               class="MuiBox-root css-1coeexk"
@@ -283,20 +348,6 @@ Object {
                   class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
                 >
                   test org
-                </p>
-              </div>
-              <div
-                class="MuiBox-root css-1coeexk"
-              >
-                <p
-                  class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
-                >
-                  Address
-                </p>
-                <p
-                  class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
-                >
-                  line 1, line 2, test city, test state, some postcode, test country
                 </p>
               </div>
               <div
@@ -416,10 +467,89 @@ Object {
         <h6
           class="MuiTypography-root MuiTypography-subtitle1 css-16q2fz6-MuiTypography-root"
         >
+          Organisation address
+        </h6>
+        <div
+          class="MuiBox-root css-acjjjk"
+        >
+          <div
+            class="MuiBox-root css-1coeexk"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+            >
+              Line 1
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+            >
+              line 1
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1coeexk"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+            >
+              Line 2
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+            >
+              line 2
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1coeexk"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+            >
+              City
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+            >
+              test city
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1coeexk"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+            >
+              Country
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+            >
+              test country
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1coeexk"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-13eiip-MuiTypography-root"
+            >
+              Post code
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-2a4jea-MuiTypography-root"
+            >
+              some postcode
+            </p>
+          </div>
+        </div>
+        <h6
+          class="MuiTypography-root MuiTypography-subtitle1 css-16q2fz6-MuiTypography-root"
+        >
           Additional details
         </h6>
         <div
-          class="MuiBox-root css-i0p4cs"
+          class="MuiBox-root css-acjjjk"
         >
           <div
             class="MuiBox-root css-1coeexk"

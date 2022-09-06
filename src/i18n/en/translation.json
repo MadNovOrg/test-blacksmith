@@ -1286,6 +1286,9 @@
             "active-certifications": "Active certifications",
             "expiring-soon-certifications": "Expiring soon",
             "expired-certifications": "Expired certifications"
+          },
+          "organization-address": {
+            "title": "Organisation address"
           }
         },
         "users": {
@@ -1388,7 +1391,8 @@
       "head-last-name": "Head last name (optional)",
       "head-title": "Head title (optional)",
       "head-preferred-job-title": "Head preferred job title (optional)",
-      "website": "Organisation website (optional)"
+      "website": "Organisation website (optional)",
+      "address": "Organisation address"
     },
     "invite-to-org": {
       "title": "Invite user to organization",

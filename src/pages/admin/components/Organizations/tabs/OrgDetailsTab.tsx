@@ -1,13 +1,13 @@
 import { Box, Button, CircularProgress, Grid, Stack } from '@mui/material'
 import Typography from '@mui/material/Typography'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { DetailsRow } from '@app/components/DetailsRow'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
-import { LoadingStatus, renderOrgAddress } from '@app/util'
+import { LoadingStatus } from '@app/util'
 
 type OrgDetailsTabParams = {
   orgId: string
@@ -25,7 +25,6 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
   )
 
   const org = data?.length ? data[0] : null
-  const orgAddress = useMemo(() => (org ? renderOrgAddress(org) : ''), [org])
 
   return (
     <Box sx={{ pt: 2, pb: 4 }}>
@@ -53,12 +52,6 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
                     'pages.org-details.tabs.details.org-details-section.name'
                   )}
                   value={org.name}
-                />
-                <DetailsRow
-                  label={t(
-                    'pages.org-details.tabs.details.org-details-section.address'
-                  )}
-                  value={orgAddress}
                 />
                 <DetailsRow
                   label={t(
@@ -136,10 +129,37 @@ export const OrgDetailsTab: React.FC<OrgDetailsTabParams> = ({ orgId }) => {
           </Box>
 
           <Typography variant="subtitle1" mb={2}>
+            {t('pages.org-details.tabs.details.organization-address.title')}
+          </Typography>
+
+          <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
+            <DetailsRow
+              label={t('common.addr.line1')}
+              value={org.address.line1}
+            />
+            <DetailsRow
+              label={t('common.addr.line2')}
+              value={org.address.line2}
+            />
+            <DetailsRow
+              label={t('common.addr.city')}
+              value={org.address.city}
+            />
+            <DetailsRow
+              label={t('common.addr.country')}
+              value={org.address.country}
+            />
+            <DetailsRow
+              label={t('common.addr.postCode')}
+              value={org.address.postCode}
+            />
+          </Box>
+
+          <Typography variant="subtitle1" mb={2}>
             {t('pages.org-details.tabs.details.additional-details.title')}
           </Typography>
 
-          <Box bgcolor="common.white" p={3} pb={4} borderRadius={1}>
+          <Box bgcolor="common.white" p={3} mb={4} borderRadius={1}>
             <DetailsRow
               label={t(
                 'pages.org-details.tabs.details.additional-details.head-first-name'

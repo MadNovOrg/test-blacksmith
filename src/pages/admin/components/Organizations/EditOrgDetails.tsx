@@ -20,13 +20,14 @@ import * as yup from 'yup'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
+import {
+  Trust_Type_Enum,
+  UpdateOrgMutation,
+  UpdateOrgMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useOrg from '@app/hooks/useOrg'
-import {
-  MUTATION as UPDATE_ORG_MUTATION,
-  ParamsType as UpdateOrgParamsType,
-  ResponseType as UpdateOrgResponseType,
-} from '@app/queries/organization/update-org'
+import { MUTATION as UPDATE_ORG_MUTATION } from '@app/queries/organization/update-org'
 import { OfstedRating, TrustType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
@@ -45,6 +46,11 @@ type OrgDetailsInput = {
   headTitle: string
   headPreferredJobTitle: string
   website: string
+  line1: string
+  line2: string
+  city: string
+  country: string
+  postCode: string
 }
 
 const TextField = styled(MuiTextField)(({ theme }) => ({
@@ -82,6 +88,11 @@ export const EditOrgDetails: React.FC = () => {
         localAuthority: yup.string(),
         ofstedRating: yup.string(),
         ofstedLastInspection: yup.date().nullable(),
+        line1: yup.string(),
+        line2: yup.string(),
+        city: yup.string(),
+        country: yup.string(),
+        postCode: yup.string(),
       })
       .required()
   }, [t])
@@ -109,6 +120,11 @@ export const EditOrgDetails: React.FC = () => {
       headTitle: '',
       headPreferredJobTitle: '',
       website: '',
+      line1: '',
+      line2: '',
+      city: '',
+      country: '',
+      postCode: '',
     },
   })
 
@@ -133,6 +149,11 @@ export const EditOrgDetails: React.FC = () => {
       setValue('headTitle', org.attributes.headTitle)
       setValue('headPreferredJobTitle', org.attributes.headPreferredJobTitle)
       setValue('website', org.attributes.website)
+      setValue('line1', org.address.line1 || '')
+      setValue('line2', org.address.line2 || '')
+      setValue('city', org.address.city || '')
+      setValue('country', org.address.country || '')
+      setValue('postCode', org.address.postCode || '')
     }
   }, [org, setValue])
 
@@ -142,13 +163,13 @@ export const EditOrgDetails: React.FC = () => {
     setLoading(true)
 
     try {
-      await fetcher<UpdateOrgResponseType, UpdateOrgParamsType>(
+      await fetcher<UpdateOrgMutation, UpdateOrgMutationVariables>(
         UPDATE_ORG_MUTATION,
         {
           id,
           org: {
             name: data.orgName,
-            trustType: data.trustType as TrustType,
+            trustType: data.trustType as Trust_Type_Enum,
             trustName: data.trustName,
             sector: data.sector,
             attributes: {
@@ -165,13 +186,20 @@ export const EditOrgDetails: React.FC = () => {
               headPreferredJobTitle: data.headPreferredJobTitle,
               website: data.website,
             },
+            address: {
+              line1: data.line1,
+              line2: data.line2,
+              city: data.city,
+              country: data.country,
+              postCode: data.postCode,
+            },
           },
         }
       )
 
       setLoading(false)
       await mutate()
-      navigate('..')
+      navigate('..?tab=DETAILS')
     } catch (err) {
       setLoading(false)
     }
@@ -382,6 +410,73 @@ export const EditOrgDetails: React.FC = () => {
             </Box>
 
             <Typography variant="subtitle2" mb={1}>
+              {t('pages.edit-org-details.address')}
+            </Typography>
+
+            <Box bgcolor="common.white" p={3} pb={1} mb={4} borderRadius={1}>
+              <Box mb={3}>
+                <TextField
+                  id="line1"
+                  label={t('common.addr.line1')}
+                  variant="standard"
+                  error={!!errors.line1}
+                  helperText={errors.line1?.message}
+                  {...register('line1')}
+                  inputProps={{ 'data-testid': 'line1' }}
+                  fullWidth
+                />
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="line2"
+                  label={t('common.addr.line2')}
+                  variant="standard"
+                  error={!!errors.line2}
+                  helperText={errors.line2?.message}
+                  {...register('line2')}
+                  inputProps={{ 'data-testid': 'line2' }}
+                  fullWidth
+                />
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="city"
+                  label={t('common.addr.city')}
+                  variant="standard"
+                  error={!!errors.city}
+                  helperText={errors.city?.message}
+                  {...register('city')}
+                  inputProps={{ 'data-testid': 'city' }}
+                  fullWidth
+                />
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="country"
+                  label={t('common.addr.country')}
+                  variant="standard"
+                  error={!!errors.country}
+                  helperText={errors.country?.message}
+                  {...register('country')}
+                  inputProps={{ 'data-testid': 'country' }}
+                  fullWidth
+                />
+              </Box>
+              <Box mb={3}>
+                <TextField
+                  id="postCode"
+                  label={t('common.addr.postCode')}
+                  variant="standard"
+                  error={!!errors.postCode}
+                  helperText={errors.postCode?.message}
+                  {...register('postCode')}
+                  inputProps={{ 'data-testid': 'postCode' }}
+                  fullWidth
+                />
+              </Box>
+            </Box>
+
+            <Typography variant="subtitle2" mb={1}>
               {t('pages.edit-org-details.additional-details')}
             </Typography>
 
@@ -463,7 +558,7 @@ export const EditOrgDetails: React.FC = () => {
                 variant="outlined"
                 color="primary"
                 component={LinkBehavior}
-                href=".."
+                href="..?tab=DETAILS"
               >
                 {t('cancel')}
               </Button>
