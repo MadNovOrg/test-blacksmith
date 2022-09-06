@@ -1356,7 +1356,8 @@
             "cancel-button-label": "Cancel",
             "error-amount-positive": "Amount must be a positive number",
             "error-amount-required": "Amount is a required field",
-            "error-invoice-required": "Invoice number is a required field"
+            "error-invoice-required": "Invoice number is a required field",
+            "issue-refund-label": "Issue a refund. This will add a credit note to the invoice."
           },
           "table": {
             "col-date": "Date",

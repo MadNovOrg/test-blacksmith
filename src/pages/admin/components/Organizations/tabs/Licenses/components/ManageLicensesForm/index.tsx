@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Box,
   Button,
+  Checkbox,
   FormControlLabel,
   Grid,
   Radio,
@@ -9,13 +10,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 
-enum FormType {
+export enum Type {
   ADD = 'ADD',
   REMOVE = 'REMOVE',
 }
@@ -24,7 +25,7 @@ export type FormData = {
   amount: string
   invoiceId?: string
   note?: string
-  type: FormType
+  type: Type
 }
 
 type Props = {
@@ -50,7 +51,12 @@ export const ManageLicensesForm: React.FC<Props> = ({
           .positive(t('error-amount-positive'))
           .required(t('erorr-amount-required')),
         note: yup.string(),
-        invoiceId: yup.string().required(t('error-invoice-required')),
+        issueRefund: yup.bool(),
+        invoiceId: yup.string().when(['type', 'issueRefund'], {
+          is: (type: string, issueRefund: boolean) =>
+            type === Type.ADD || issueRefund === true,
+          then: schema => schema.required(t('error-invoice-required')),
+        }),
       }),
     [t]
   )
@@ -61,14 +67,16 @@ export const ManageLicensesForm: React.FC<Props> = ({
     control,
     watch,
     formState: { errors, isValid },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
-      type: FormType.ADD,
+      type: Type.ADD,
       amount: '',
       invoiceId: '',
       note: '',
+      issueRefund: false,
     },
   })
 
@@ -79,6 +87,12 @@ export const ManageLicensesForm: React.FC<Props> = ({
       onSave(data)
     }
   }
+
+  useEffect(() => {
+    if (!values.issueRefund) {
+      setValue('invoiceId', '')
+    }
+  }, [values.issueRefund, setValue])
 
   return (
     <form onSubmit={handleSubmit(submit)}>
@@ -112,16 +126,18 @@ export const ManageLicensesForm: React.FC<Props> = ({
             error={Boolean(errors.amount?.message)}
           />
         </Grid>
-        <Grid item xs={6}>
-          <TextField
-            {...register('invoiceId')}
-            label={t('invoice-label')}
-            fullWidth
-            variant="filled"
-            helperText={errors.invoiceId?.message}
-            error={Boolean(errors.invoiceId?.message)}
-          />
-        </Grid>
+        {values.type === Type.ADD ? (
+          <Grid item xs={6}>
+            <TextField
+              {...register('invoiceId')}
+              label={t('invoice-label')}
+              fullWidth
+              variant="filled"
+              helperText={errors.invoiceId?.message}
+              error={Boolean(errors.invoiceId?.message)}
+            />
+          </Grid>
+        ) : null}
       </Grid>
 
       <Typography variant="body2" mt={1} mb={2}>
@@ -135,6 +151,34 @@ export const ManageLicensesForm: React.FC<Props> = ({
         fullWidth
         label={t('note-label')}
       />
+
+      {values.type === Type.REMOVE ? (
+        <>
+          <Controller
+            name="issueRefund"
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} />}
+                label={t('issue-refund-label')}
+                sx={{ mb: 1, mt: 1 }}
+                data-testid="issue-refund-checkbox"
+              />
+            )}
+          />
+
+          {values.issueRefund ? (
+            <TextField
+              {...register('invoiceId')}
+              label={t('invoice-label')}
+              fullWidth
+              variant="filled"
+              helperText={errors.invoiceId?.message}
+              error={Boolean(errors.invoiceId?.message)}
+            />
+          ) : null}
+        </>
+      ) : null}
 
       <Box display="flex" justifyContent="flex-end" mt={2}>
         <Button onClick={onCancel} sx={{ marginRight: 2 }}>

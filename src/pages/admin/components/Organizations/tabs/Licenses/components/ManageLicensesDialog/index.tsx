@@ -13,13 +13,18 @@ import { useFetcher } from '@app/hooks/use-fetcher'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import go1LicensesHistoryChange from '@app/queries/go1-licensing/go1-licenses-history-change'
 
-import { FormData, ManageLicensesForm } from '../ManageLicensesForm'
+import { FormData, Type, ManageLicensesForm } from '../ManageLicensesForm'
 
 type Props = {
   opened: boolean
   onClose: () => void
   onSave: () => void
   orgId: string
+}
+
+const formTypeEventMap = {
+  [Type.ADD]: Go1ChangeType.LicensesAdded,
+  [Type.REMOVE]: Go1ChangeType.LicensesRemoved,
 }
 
 export const ManageLicensesDialog: React.FC<Props> = ({
@@ -35,10 +40,10 @@ export const ManageLicensesDialog: React.FC<Props> = ({
 
   const handleSave = async (data: FormData) => {
     const mutationInput: Go1LicensesChangeInput = {
-      type: Go1ChangeType.LicensesAdded,
+      type: formTypeEventMap[data.type],
       amount: Number(data.amount),
       payload: {
-        invoiceId: data.invoiceId,
+        ...(data.invoiceId ? { invoiceId: data.invoiceId } : null),
         note: data.note,
         invokedBy: profile?.fullName,
       },
