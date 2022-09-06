@@ -1,0 +1,2 @@
+CREATE TABLE "public"."expire_go1_license_jobs" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "job_id" uuid NOT NULL, "license_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("license_id") REFERENCES "public"."go1_licenses"("id") ON UPDATE cascade ON DELETE cascade, UNIQUE ("job_id", "license_id"));COMMENT ON TABLE "public"."expire_go1_license_jobs" IS E'Stores scheduled jobs ids for expiring Go1 licenses';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
