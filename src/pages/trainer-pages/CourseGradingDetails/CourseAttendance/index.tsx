@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography, CircularProgress, Stack } from '@mui/material'
+import { Alert, Box, Typography, CircularProgress, Stack } from '@mui/material'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -133,7 +133,11 @@ export const CourseAttendance = () => {
             </LoadingButton>
           </Box>
         </>
-      ) : null}
+      ) : (
+        <Alert severity="warning">
+          {t('pages.course-attendance.no-participants-warning')}
+        </Alert>
+      )}
     </Box>
   )
 }
