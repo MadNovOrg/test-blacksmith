@@ -187,6 +187,11 @@ select_permissions:
                       _eq: X-Hasura-User-Id
                   - is_admin:
                       _eq: true
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _eq: SCHEDULED
       allow_aggregations: true
   - role: tt-ops
     permission:

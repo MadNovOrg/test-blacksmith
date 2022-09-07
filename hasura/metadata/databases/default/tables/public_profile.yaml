@@ -236,7 +236,10 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - addresses
+        - attributes
         - avatar
+        - contact_details
         - dietary_restrictions
         - disabilities
         - dob
@@ -245,7 +248,19 @@ update_permissions:
         - job_title
         - last_activity
         - phone
+        - preferences
+        - tags
+        - title
       filter:
-        id:
-          _eq: X-Hasura-User-Id
+        _or:
+          - id:
+              _eq: X-Hasura-User-Id
+          - organizations:
+              organization:
+                members:
+                  _and:
+                    - is_admin:
+                        _eq: true
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
       check: null
