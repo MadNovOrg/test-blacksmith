@@ -412,6 +412,10 @@ export const CourseBookingDetails: React.FC = () => {
         <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
           <b>{t('important')}:</b> {t('pages.book-course.notice')}
         </Alert>
+
+        <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
+          <b>{t('important')}:</b> {t('pages.book-course.repeat-own-email')}
+        </Alert>
       </Box>
 
       <Typography variant="subtitle1" fontWeight="500">
@@ -548,6 +552,7 @@ export const CourseBookingDetails: React.FC = () => {
               <Box mb={3}>
                 <MuiPhoneNumber
                   label={t('phone')}
+                  enableLongNumbers={true}
                   onlyCountries={onlyCountries}
                   defaultCountry="gb"
                   variant="standard"

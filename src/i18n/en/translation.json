@@ -619,6 +619,7 @@
       "title": "Book a course",
       "your-info": "Your information",
       "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",
+      "repeat-own-email": "If you are making a booking for yourself, please reconfirm your email address",
       "order-details": "Order details",
       "payment-details": "Payment details",
       "apply-promo": "Apply promo or voucher code",
