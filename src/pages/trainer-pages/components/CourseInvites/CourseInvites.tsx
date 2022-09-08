@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
@@ -106,6 +106,19 @@ export const CourseInvites = ({ course }: Props) => {
       setError((err as Error).message)
     }
   }, [invites, emails, closeModal, newEmail, invitesLeft])
+
+  const errorMessage = useMemo(() => {
+    if (!error) {
+      return null
+    }
+
+    const msg = t(`pages.course-participants.invite-error-${error}`)
+    if (msg !== '') {
+      return msg
+    }
+
+    return t('pages.course-participants.invite-error-UNKNOWN')
+  }, [error, t])
 
   const courseHasStarted = course && courseStarted(course)
   const isOpenCourse = course && course.type === CourseType.OPEN
@@ -214,10 +227,8 @@ export const CourseInvites = ({ course }: Props) => {
             </LoadingButton>
           </Grid>
         </Grid>
-        {error ? (
-          <FormHelperText error>
-            {t(`pages.course-participants.invite-error-${error}`)}
-          </FormHelperText>
+        {errorMessage ? (
+          <FormHelperText error>{errorMessage}</FormHelperText>
         ) : (
           <FormHelperText>
             {t('pages.course-participants.invite-input-hint')}

@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material'
 import { addWeeks, parseISO } from 'date-fns'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -160,13 +160,25 @@ ${invoice?.contact?.name}`
     return result
   }, [invoice])
 
+  const xeroInvoiceUrl = useMemo(() => {
+    if (invoice?.invoiceID) {
+      return `${
+        import.meta.env.VITE_XERO_UI_ENDPOINT
+      }/AccountsReceivable/Edit.aspx?InvoiceID=${invoice.invoiceID}`
+    }
+
+    return null
+  }, [invoice])
+
+  const handleOpenInXeroClick = useCallback(() => {
+    if (xeroInvoiceUrl) {
+      window.open(xeroInvoiceUrl, '_blank')?.focus()
+    }
+  }, [xeroInvoiceUrl])
+
   if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
     return <NotFound />
   }
-
-  const xeroInvoiceUrl = `${
-    import.meta.env.VITE_XERO_UI_ENDPOINT
-  }/AccountsReceivable/Edit.aspx?InvoiceID=${invoice?.invoiceID}`
 
   const localizedDateString = new Date(invoice?.date as string).toLocaleString(
     _t('locale'),
@@ -186,6 +198,8 @@ ${invoice?.contact?.name}`
   const statusColors = xeroInvoiceStatusColors[status]
 
   const dueDate = invoice?.dueDate ?? add8Weeks(invoice?.date as string)
+
+  const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -220,9 +234,12 @@ ${invoice?.contact?.name}`
                   color="primary"
                   size="small"
                   data-testid="order-details-view-in-xero-button"
-                  onClick={() => window.open(xeroInvoiceUrl, '_blank')?.focus()}
+                  onClick={handleOpenInXeroClick}
+                  disabled={!isInvoiceInXero}
                 >
-                  {_t('view-in-xero')}
+                  {isInvoiceInXero
+                    ? _t('view-in-xero')
+                    : _t('invoice-not-in-xero')}
                 </Button>
               </Sticky>
             </Box>
