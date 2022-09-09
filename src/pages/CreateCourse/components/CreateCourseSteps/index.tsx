@@ -28,6 +28,16 @@ export const CreateCourseSteps: React.FC<Props> = ({
       label: t('pages.create-course.step-navigation-assign-trainer'),
     }
 
+    const trainerExpensesStep = {
+      key: 'trainer-expenses',
+      label: t('pages.create-course.step-navigation-trainer-expenses'),
+    }
+
+    const reviewAndConfirmStep = {
+      key: 'review-and-confirm',
+      label: t('pages.create-course.step-navigation-review-and-confirm'),
+    }
+
     const courseBuilderStep = {
       key: 'course-builder',
       label: t('pages.create-course.step-navigation-course-builder'),
@@ -39,7 +49,12 @@ export const CreateCourseSteps: React.FC<Props> = ({
       steps.push(assignTrainerStep)
     }
 
-    steps.push(courseBuilderStep)
+    if (type === CourseType.CLOSED) {
+      steps.push(trainerExpensesStep)
+      steps.push(reviewAndConfirmStep)
+    } else {
+      steps.push(courseBuilderStep)
+    }
 
     return steps
   }, [type, t])

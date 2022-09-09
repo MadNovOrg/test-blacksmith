@@ -20,7 +20,7 @@ import {
   QUERY,
   ResponseType,
 } from '@app/queries/profile/find-profiles'
-import { Profile } from '@app/types'
+import { Profile, RoleName } from '@app/types'
 
 export type ProfileSelectorProps = {
   value?: Profile
@@ -30,6 +30,7 @@ export type ProfileSelectorProps = {
   textFieldProps?: TextFieldProps
   placeholder?: string
   disabled?: boolean
+  roleName?: RoleName
 }
 
 export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
@@ -40,6 +41,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
   textFieldProps,
   placeholder,
   disabled,
+  roleName,
   ...props
 }) {
   const { t } = useTranslation()
@@ -59,6 +61,9 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
               ? { organizations: { organization_id: { _eq: orgId } } }
               : null),
             fullName: { _ilike: `${query}` },
+            ...(roleName
+              ? { roles: { role: { name: { _eq: roleName } } } }
+              : null),
           },
         })
 
@@ -68,7 +73,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
           setOptions(results.profiles)
         }
       }),
-    [fetcher, orgId]
+    [fetcher, orgId, roleName]
   )
 
   const handleInputChange = (_: unknown, value: string, reason: string) => {
@@ -112,6 +117,11 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
     }
   }
 
+  const testId = useMemo(
+    () => `profile-selector${roleName ? `-${roleName}` : ''}`,
+    [roleName]
+  )
+
   return (
     <Autocomplete
       open={open}
@@ -121,7 +131,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
         setLoading(false)
         debouncedQuery.cancel()
       }}
-      data-testid="profile-selector"
+      data-testid={testId}
       disabled={disabled}
       sx={sx}
       value={selected}

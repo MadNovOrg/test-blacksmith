@@ -32,11 +32,42 @@ describe('page: CreateCourse', () => {
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
   })
 
-  it('marks course details page as done if on assign trainers page', () => {
+  it("doesn't mark course details page as done if on assign trainers page but course details page wasn't marked as complete", () => {
     render(
       <MemoryRouter initialEntries={[`/courses/new/assign-trainers`]}>
         <Routes>
           <Route path="/courses/new" element={<CreateCourse />}>
+            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
+
+    const subnav = screen.getByTestId('create-course-nav')
+    const attendanceNavItem = within(subnav).getByTestId('step-item-1')
+    const modulesNavItem = within(subnav).getByTestId('step-item-2')
+
+    expect(within(attendanceNavItem).queryByTestId('CheckIcon')).toBe(null)
+    expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
+  })
+
+  it('marks course details page as done if on assign trainers page and details page was marked as complete', () => {
+    render(
+      <MemoryRouter initialEntries={[`/courses/new/assign-trainers`]}>
+        <Routes>
+          <Route
+            path="/courses/new"
+            element={
+              <CreateCourse
+                initialContextValue={{ completedSteps: ['course-details'] }}
+              />
+            }
+          >
             <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
           </Route>
         </Routes>

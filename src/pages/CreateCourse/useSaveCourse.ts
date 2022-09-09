@@ -91,6 +91,9 @@ export function useSaveCourse(): {
                   },
                 ],
               },
+              accountCode: courseData.accountCode,
+              freeSpaces: courseData.freeSpaces,
+              salesRepresentativeId: courseData.salesRepresentative?.id,
             },
           })
 

@@ -47,7 +47,9 @@ describe('component: AssignTrainers', () => {
 
     render(
       <CreateCourseProvider
-        initialValue={courseToCourseInput(course) as ValidCourseInput}
+        initialValue={{
+          courseData: courseToCourseInput(course) as ValidCourseInput,
+        }}
       >
         <AssignTrainers />
       </CreateCourseProvider>,
@@ -68,7 +70,9 @@ describe('component: AssignTrainers', () => {
 
     render(
       <CreateCourseProvider
-        initialValue={courseToCourseInput(course) as ValidCourseInput}
+        initialValue={{
+          courseData: courseToCourseInput(course) as ValidCourseInput,
+        }}
       >
         <AssignTrainers />
       </CreateCourseProvider>,

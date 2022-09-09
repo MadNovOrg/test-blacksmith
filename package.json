@@ -122,7 +122,7 @@
     "babel-loader": "^8.2.5",
     "babel-preset-vite": "1.0.4",
     "env-cmd": "^10.1.0",
-    "esbuild": "^0.13.8",
+    "esbuild": "^0.13.15",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",

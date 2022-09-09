@@ -16,6 +16,7 @@ export type ParamsType = {
     level?: CourseLevel
     organization_id?: string
     contactProfileId?: string
+    salesRepresentativeId?: string
     reaccreditation?: boolean
     go1Integration?: boolean
     aolCostOfCourse?: number
@@ -24,6 +25,8 @@ export type ParamsType = {
     description?: string
     min_participants?: number
     max_participants?: number
+    freeSpaces?: number
+    accountCode?: string
     status:
       | Course_Status_Enum.ApprovalPending
       | Course_Status_Enum.TrainerPending

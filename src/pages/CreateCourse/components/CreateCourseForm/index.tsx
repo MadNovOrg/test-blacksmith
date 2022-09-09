@@ -38,7 +38,11 @@ function assertCourseDataValid(
 }
 
 export const CreateCourseForm = () => {
-  const { courseData: storedCourseData, storeCourseData } = useCreateCourse()
+  const {
+    completeStep,
+    courseData: storedCourseData,
+    storeCourseData,
+  } = useCreateCourse()
   const { savingStatus, saveCourse } = useSaveCourse()
 
   const [courseData, setCourseData] = useState<CourseInput | undefined>(
@@ -89,6 +93,8 @@ export const CreateCourseForm = () => {
     if (!courseData || !profile) return
 
     assertCourseDataValid(courseData, courseDataValid)
+
+    completeStep('course-details')
 
     if (courseType === CourseType.INDIRECT) {
       const trainers = [

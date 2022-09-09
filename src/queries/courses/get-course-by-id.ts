@@ -16,6 +16,8 @@ export const QUERY = gql`
   query GetCourseById($id: Int!) {
     course: course_by_pk(id: $id) {
       ...Course
+      freeSpaces
+      accountCode
       level
       trainers {
         id
@@ -37,6 +39,10 @@ export const QUERY = gql`
         ...Organization
       }
       contactProfile {
+        id
+        fullName
+      }
+      salesRepresentative {
         id
         fullName
       }

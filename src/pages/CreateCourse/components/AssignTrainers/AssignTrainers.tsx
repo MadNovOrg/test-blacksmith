@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
-import { CourseTrainerType } from '@app/types'
+import { CourseTrainerType, CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { useSaveCourse } from '../../useSaveCourse'
@@ -15,7 +15,7 @@ import { useCreateCourse } from '../CreateCourseProvider'
 
 export const AssignTrainers = () => {
   const { t } = useTranslation()
-  const { courseData } = useCreateCourse()
+  const { completeStep, courseData, storeTrainers } = useCreateCourse()
   const navigate = useNavigate()
   const [trainers, setTrainers] = useState<FormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
@@ -29,20 +29,50 @@ export const AssignTrainers = () => {
     []
   )
 
-  const handleSaveButtonClick = async () => {
-    if (courseData && trainers) {
-      await saveCourse(courseData, [
-        ...trainers.assist.map(assistant => ({
-          profile_id: assistant.id,
-          type: CourseTrainerType.ASSISTANT,
-        })),
-        ...trainers.lead.map(trainer => ({
-          profile_id: trainer.id,
-          type: CourseTrainerType.LEADER,
-        })),
-      ])
+  const handleSubmitButtonClick = async () => {
+    completeStep('assign-trainers')
 
-      navigate('/courses')
+    if (courseData && trainers) {
+      if (courseData.type === CourseType.CLOSED) {
+        const trainersData = [
+          ...trainers.assist.map(assistant => ({
+            profile_id: assistant.id,
+            type: CourseTrainerType.ASSISTANT,
+            fullName: assistant.fullName,
+          })),
+          ...trainers.moderator.map(moderator => ({
+            profile_id: moderator.id,
+            type: CourseTrainerType.MODERATOR,
+            fullName: moderator.fullName,
+          })),
+          ...trainers.lead.map(trainer => ({
+            profile_id: trainer.id,
+            type: CourseTrainerType.LEADER,
+            fullName: trainer.fullName,
+          })),
+        ]
+
+        await storeTrainers(trainersData)
+        navigate('../trainer-expenses')
+      } else {
+        const trainersData = [
+          ...trainers.assist.map(assistant => ({
+            profile_id: assistant.id,
+            type: CourseTrainerType.ASSISTANT,
+          })),
+          ...trainers.moderator.map(moderator => ({
+            profile_id: moderator.id,
+            type: CourseTrainerType.MODERATOR,
+          })),
+          ...trainers.lead.map(trainer => ({
+            profile_id: trainer.id,
+            type: CourseTrainerType.LEADER,
+          })),
+        ]
+
+        await saveCourse(courseData, trainersData)
+        navigate('/courses')
+      }
     }
   }
 
@@ -86,9 +116,11 @@ export const AssignTrainers = () => {
           sx={{ marginTop: 4 }}
           endIcon={<ArrowForwardIcon />}
           data-testid="AssignTrainers-submit"
-          onClick={handleSaveButtonClick}
+          onClick={handleSubmitButtonClick}
         >
-          {t('pages.create-course.assign-trainers.submit-btn')}
+          {courseData.type === CourseType.CLOSED
+            ? t('pages.create-course.step-navigation-trainer-expenses')
+            : t('pages.create-course.assign-trainers.submit-btn')}
         </LoadingButton>
       </Box>
     </Stack>

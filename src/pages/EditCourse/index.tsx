@@ -99,6 +99,9 @@ export const EditCourse: React.FC<unknown> = () => {
           ...trainersData.assist.map(
             profileToInput(course, CourseTrainerType.ASSISTANT)
           ),
+          ...trainersData.moderator.map(
+            profileToInput(course, CourseTrainerType.MODERATOR)
+          ),
         ]
 
         if (!acl.canAssignLeadTrainer() && profile) {
@@ -131,6 +134,7 @@ export const EditCourse: React.FC<unknown> = () => {
               level: courseData.courseLevel,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
+              freeSpaces: courseData.freeSpaces,
               ...(courseData.minParticipants
                 ? { min_participants: courseData.minParticipants }
                 : null),
@@ -140,6 +144,9 @@ export const EditCourse: React.FC<unknown> = () => {
                 : null),
               ...(courseData.contactProfile
                 ? { contactProfileId: courseData.contactProfile.id }
+                : null),
+              ...(courseData.salesRepresentative
+                ? { salesRepresentativeId: courseData.salesRepresentative.id }
                 : null),
               ...(courseData.usesAOL
                 ? { aolCostOfCourse: courseData.courseCost }

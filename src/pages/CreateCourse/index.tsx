@@ -1,78 +1,34 @@
-import { Box, Typography, Container } from '@mui/material'
-import { t } from 'i18next'
 import React from 'react'
-import { Outlet, useLocation, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
-import { BackButton } from '@app/components/BackButton'
-import { FullHeightPage } from '@app/components/FullHeightPage'
-import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import theme from '@app/theme'
 import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
 
-import { CreateCourseProvider } from './components/CreateCourseProvider'
-import { CreateCourseSteps } from './components/CreateCourseSteps'
+import {
+  CreateCourseProvider,
+  CreateCourseProviderProps,
+} from './components/CreateCourseProvider'
+import { CreateCoursePage } from './CreateCoursePage'
 
-export const CreateCourse = () => {
-  const location = useLocation()
+type Props = {
+  initialContextValue?: CreateCourseProviderProps['initialValue']
+}
+
+export const CreateCourse = ({ initialContextValue }: Props) => {
   const [searchParams] = useSearchParams()
   const { acl } = useAuth()
 
   const courseType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
-
-  const onCourseDetailsStep = !location.pathname.includes('assign-trainer')
-
-  const completedSteps = onCourseDetailsStep ? [] : ['course-details']
-
-  const currentStepKey = onCourseDetailsStep
-    ? 'course-details'
-    : 'course-builder'
 
   if (!acl.canCreateCourse(courseType)) {
     return <NotFound />
   }
 
   return (
-    <FullHeightPage bgcolor={theme.palette.grey[100]}>
-      <Container maxWidth="lg" sx={{ pt: 2 }}>
-        <Box display="flex">
-          <Box width={400} display="flex" flexDirection="column" pr={4}>
-            <Sticky top={20}>
-              <Box mb={2}>
-                <BackButton
-                  label={t('pages.create-course.back-button-text')}
-                  to="/courses"
-                />
-              </Box>
-              <Box mb={7}>
-                <Typography variant="h2" mb={2}>
-                  {t(`pages.create-course.${courseType}-course-title`)}
-                </Typography>
-
-                <Typography color={theme.palette.grey[700]}>
-                  {t('common.all-fields-are-mandatory')}
-                </Typography>
-              </Box>
-
-              <CreateCourseSteps
-                completedSteps={completedSteps}
-                currentStepKey={currentStepKey}
-                type={courseType}
-              />
-            </Sticky>
-          </Box>
-
-          <Box flex={1}>
-            <Box mt={8}>
-              <CreateCourseProvider>
-                <Outlet />
-              </CreateCourseProvider>
-            </Box>
-          </Box>
-        </Box>
-      </Container>
-    </FullHeightPage>
+    <CreateCourseProvider initialValue={initialContextValue}>
+      <CreateCoursePage />
+    </CreateCourseProvider>
   )
 }

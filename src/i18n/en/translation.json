@@ -481,7 +481,15 @@
       "course-cost": "How much are you charging for this course?",
       "course-cost-disclaimer": "TeamTeach is not responsible for collecting fees for this course",
       "country": "Country",
-      "aol-region": "AOL Region"
+      "aol-region": "AOL Region",
+      "free-spaces-title": "Free Spaces",
+      "free-spaces-description": "Tortor porta quisque libero proin egestas. Sit accumsan lectus tristique sagittis ornare egestas lectus sed pretium. Malesuada gravida felis amet eleifend nunc, nec volutpat",
+      "free-spaces-placeholder": "Number of free spaces",
+      "free-spaces-required": "Free spaces is a required field",
+      "finance-section-title": "Finance",
+      "sales-rep-title": "Sales",
+      "sales-rep-placeholder": "Sales representative",
+      "account-code-title": "Account Code"
     },
     "searchTrainers": {
       "loading": "Loading...",
@@ -801,6 +809,8 @@
       "back-button-text": "All courses",
       "step-navigation-course-details": "Course details",
       "step-navigation-assign-trainer": "Assign trainer(s)",
+      "step-navigation-trainer-expenses": "Trainer expenses",
+      "step-navigation-review-and-confirm": "Review & confirm",
       "step-navigation-course-builder": "Course builder",
       "next-page-button-text": "Select trainer(s)",
       "indirect-course-button-text": "Course builder",
@@ -816,7 +826,41 @@
         "assist-title_other": "Assistant Trainers",
         "assist-hint": "Assist trainer(s) may be required based on the number of attendees.",
         "back-btn": "Course details",
-        "submit-btn": "Create course"
+        "submit-btn": "Create course",
+        "moderator-title": "Moderator",
+        "moderator-error-min": "Moderator is required",
+        "moderator-error-max": "There can be only one Moderator"
+      },
+      "trainer-expenses": {
+        "title": "Trainer Expenses",
+        "back-btn": "Assign trainers",
+        "submit-btn": "Review & confirm",
+        "method-error": "Method is required",
+        "name-error": "Name is required",
+        "value-error": "Value is required",
+        "days-error": "Flight days is required",
+        "nights-error": "Accommodation nights is required",
+        "num-error": "Please enter a number greater than or equal to {{min}}",
+        "method-of-transport": "Method of transport",
+        "CAR": "Car",
+        "PUBLIC": "Public (eg. bus/train)",
+        "PRIVATE": "Private (eg. car hire/taxi)",
+        "FLIGHTS": "Flights (international)",
+        "NONE": "None",
+        "accommodation": "Accomodation",
+        "accommodation-nights": "Number of nights",
+        "accommodation-caption": "In addition, £30 per night of subsistence included",
+        "another-trip": "Another trip",
+        "miscellaneous-costs": "Miscellaneous costs",
+        "misc-item-name": "Item name",
+        "misc-item-cost": "Cost of item",
+        "value-label": {
+          "CAR": "Total mileage",
+          "PUBLIC": "Cost of travel",
+          "PRIVATE": "Cost of travel",
+          "FLIGHTS": "Total flight cost",
+          "FLIGHTS-days": "Days of travel"
+        }
       },
       "form": {
         "health-leaflet-copy": "I acknowledge I must send the health and safety leaflet at least 2 weeks before the course begins. (If the course is starting in less than 2 weeks, send as soon as possible before the course begins.)",

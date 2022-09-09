@@ -25,7 +25,12 @@ import { FormPanel } from '@app/components/FormPanel'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseType, CourseInput } from '@app/types'
+import {
+  CourseDeliveryType,
+  CourseType,
+  CourseInput,
+  RoleName,
+} from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
@@ -42,6 +47,7 @@ import {
   canBeF2F,
   canBeVirtual,
   canBeMixed,
+  getAccountCode,
   extractTime,
   makeDate,
 } from './helpers'
@@ -51,6 +57,8 @@ interface Props {
   courseInput?: CourseInput
   onChange?: (values: CourseInput, isValid: boolean) => void
 }
+
+const accountCodeValue = getAccountCode()
 
 const CourseForm: React.FC<Props> = ({
   onChange = noop,
@@ -67,14 +75,25 @@ const CourseForm: React.FC<Props> = ({
   )
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
-  const hasContact = courseType === CourseType.CLOSED
+  const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
 
   const schema = useMemo(
     () =>
       yup.object({
         ...(hasOrg ? { organization: yup.object().required() } : null),
-        ...(hasContact ? { contactProfile: yup.object().required() } : null),
+        ...(isClosedCourse
+          ? {
+              contactProfile: yup.object().required(),
+              freeSpaces: yup
+                .number()
+                .typeError(t('components.course-form.free-spaces-required'))
+                .min(0, t('components.course-form.free-spaces-required'))
+                .required(t('components.course-form.free-spaces-required')),
+              salesRepresentative: yup.object().required(),
+              accountCode: yup.string().required(),
+            }
+          : null),
         courseLevel: yup
           .string()
           .required(t('components.course-form.course-level-required')),
@@ -166,7 +185,7 @@ const CourseForm: React.FC<Props> = ({
           }),
       }),
 
-    [t, hasOrg, hasContact, hasMinParticipants]
+    [t, hasOrg, isClosedCourse, hasMinParticipants]
   )
 
   const {
@@ -183,6 +202,7 @@ const CourseForm: React.FC<Props> = ({
     mode: 'all',
     defaultValues: {
       organization: courseInput?.organization ?? null,
+      salesRepresentative: courseInput?.salesRepresentative ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
       courseLevel: courseInput?.courseLevel ?? '',
       blendedLearning: courseInput?.blendedLearning ?? false,
@@ -198,10 +218,12 @@ const CourseForm: React.FC<Props> = ({
         : null,
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
+      freeSpaces: courseInput?.freeSpaces ?? null,
       usesAOL: Boolean(courseInput?.courseCost) ?? false,
       aolCountry: courseInput?.aolCountry ?? null,
       aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
+      accountCode: courseInput?.accountCode ?? null,
     },
   })
 
@@ -221,10 +243,16 @@ const CourseForm: React.FC<Props> = ({
   const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
   const aolCountry = values.aolCountry
   const isValid = formState.isValid && Boolean(startTime) && Boolean(endTime)
+  const accountCode = values.accountCode
 
   useEffect(() => {
     onChange(values, isValid)
   }, [onChange, values, isValid])
+
+  useEffect(() => {
+    const mustChange = !accountCode
+    mustChange && setValue('accountCode', accountCodeValue)
+  }, [setValue, accountCode, accountCodeValue])
 
   useEffect(() => {
     const mustChange = !canBlended && values.blendedLearning
@@ -357,7 +385,7 @@ const CourseForm: React.FC<Props> = ({
           </>
         ) : null}
 
-        {hasContact ? (
+        {isClosedCourse ? (
           <>
             <Typography mb={2} fontWeight={600}>
               {t('components.course-form.contact-person-label')}
@@ -726,6 +754,78 @@ const CourseForm: React.FC<Props> = ({
           </Grid>
         </Grid>
       </FormPanel>
+
+      {isClosedCourse ? (
+        <>
+          <FormPanel>
+            <Typography fontWeight={600}>
+              {t('components.course-form.free-spaces-title')}
+            </Typography>
+            <Typography variant="body2" mb={2}>
+              {t('components.course-form.free-spaces-description')}
+            </Typography>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label={t('components.course-form.free-spaces-placeholder')}
+                  variant="filled"
+                  fullWidth
+                  type="number"
+                  {...register('freeSpaces')}
+                  error={Boolean(errors.freeSpaces)}
+                  helperText={errors.freeSpaces?.message}
+                  inputProps={{ min: 0 }}
+                  data-testid="free-spaces"
+                />
+              </Grid>
+            </Grid>
+          </FormPanel>
+
+          <Typography variant="h5" fontWeight={500} gutterBottom>
+            {t('components.course-form.finance-section-title')}
+          </Typography>
+          <FormPanel>
+            <Typography fontWeight={600}>
+              {t('components.course-form.sales-rep-title')}
+            </Typography>
+
+            <ProfileSelector
+              value={values.salesRepresentative ?? undefined}
+              roleName={RoleName.SALES_REPRESENTATIVE}
+              onChange={profile => {
+                setValue('salesRepresentative', profile ?? null, {
+                  shouldValidate: true,
+                })
+              }}
+              sx={{ marginBottom: 2 }}
+              textFieldProps={{ variant: 'filled' }}
+              placeholder={t('components.course-form.sales-rep-placeholder')}
+            />
+          </FormPanel>
+
+          <FormPanel>
+            <Typography fontWeight={600}>
+              {t('components.course-form.account-code-title')}
+            </Typography>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  variant="filled"
+                  fullWidth
+                  type="text"
+                  {...register('accountCode')}
+                  error={Boolean(errors.accountCode)}
+                  helperText={errors.accountCode?.message}
+                  data-testid="account-code"
+                  disabled={true}
+                />
+              </Grid>
+            </Grid>
+          </FormPanel>
+        </>
+      ) : null}
     </form>
   )
 }

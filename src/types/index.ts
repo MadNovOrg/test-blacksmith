@@ -23,7 +23,9 @@ export type Course = {
   reaccreditation: boolean
   organization?: Organization
   contactProfile?: Profile
+  salesRepresentative?: Profile
   contactProfileId?: string
+  salesRepresentativeId?: string
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
@@ -50,6 +52,8 @@ export type Course = {
   moduleGroupIds: { module: { moduleGroup: { id: string } } }[]
   certificateCount?: { aggregate: { count: number } }
   description?: string
+  freeSpaces?: number
+  accountCode?: string
 } & Base
 
 export type CourseModule = {
@@ -165,6 +169,7 @@ export enum PaymentMethod {
 export enum RoleName {
   UNVERIFIED = 'unverified',
   USER = 'user',
+  SALES_REPRESENTATIVE = 'sales-representative',
   TRAINER = 'trainer',
   TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
@@ -464,6 +469,7 @@ export type CourseInput = {
   type: CourseType | null
   organization: Organization | null
   contactProfile: Profile | null
+  salesRepresentative: Profile | null
   courseLevel: CourseLevel | ''
   blendedLearning: boolean
   reaccreditation: boolean
@@ -474,6 +480,8 @@ export type CourseInput = {
   maxParticipants: number | null
   venue: Venue | null
   zoomMeetingUrl: string | null
+  freeSpaces: number | null
+  accountCode: string | null
   usesAOL: boolean
   aolCountry: string | null
   aolRegion: string | null
@@ -562,6 +570,37 @@ export enum PromoCodeStatus {
 export enum AttendeeOnlyCourseStatus {
   InfoRequired = 'INFO_REQUIRED',
   NotAttended = 'NOT_ATTENDED',
+}
+
+export type TrainerInput = {
+  profile_id: string
+  type: CourseTrainerType
+  fullName?: string
+}
+
+export enum TransportMethod {
+  CAR = 'CAR',
+  PUBLIC = 'PUBLIC',
+  PRIVATE = 'PRIVATE',
+  FLIGHTS = 'FLIGHTS',
+  NONE = 'NONE',
+}
+
+export type ExpensesInput = {
+  transport: Array<{
+    method: TransportMethod
+    value?: number
+    flightDays?: number
+    accommodationNights?: number
+  }>
+  miscellaneous?: Array<{
+    name: string
+    value: number
+  }>
+}
+
+export type ElementProps<T> = {
+  [prop in keyof T]?: T[prop]
 }
 
 export type Establishment = {

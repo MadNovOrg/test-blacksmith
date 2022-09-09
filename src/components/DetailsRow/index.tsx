@@ -1,9 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
 
-type ElementProps<T> = {
-  [prop in keyof T]?: T[prop]
-}
+import { ElementProps } from '@app/types'
 
 type TypographyProps = ElementProps<typeof Typography>
 type BoxProps = ElementProps<typeof Box>

@@ -123,6 +123,10 @@ export const getCourseAssistants = (trainers: CourseTrainer[]) => {
   return trainers.filter(t => t.type === CourseTrainerType.ASSISTANT)
 }
 
+export const getCourseModerator = (trainers: CourseTrainer[]) => {
+  return trainers.find(t => t.type === CourseTrainerType.MODERATOR)
+}
+
 export const transformModulesToGroups = (
   courseModules: CourseParticipantModule[]
 ): Array<{
@@ -234,6 +238,9 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     usesAOL: Boolean(course.aolCostOfCourse),
     aolCountry: course.aolCountry ?? null,
     aolRegion: course.aolRegion ?? null,
+    freeSpaces: course.freeSpaces ?? null,
+    salesRepresentative: course.salesRepresentative ?? null,
+    accountCode: course.accountCode ?? null,
   }
 }
 
