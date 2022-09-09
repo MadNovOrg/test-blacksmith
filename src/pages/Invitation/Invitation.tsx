@@ -35,13 +35,12 @@ import {
   QUERY as GET_INVITE_QUERY,
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
-import { GqlError, InviteStatus } from '@app/types'
-import { now, userExistsInCognito } from '@app/util'
-
+import { GqlError, InviteStatus, TimeDifferenceAndContext } from '@app/types'
 import {
   getTimeDifferenceAndContext,
-  TimeDifferenceAndContext,
-} from './helpers'
+  now,
+  userExistsInCognito,
+} from '@app/util'
 
 export const InvitationPage = () => {
   const { t } = useTranslation()

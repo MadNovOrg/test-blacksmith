@@ -14,3 +14,28 @@ configuration:
     xero_code: xeroCode
     price_currency: priceCurrency
     price_amount: priceAmount
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - id
+        - price_amount
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - id
+        - price_amount
+      filter: {}

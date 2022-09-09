@@ -1,6 +1,7 @@
 import { gql } from 'graphql-request'
 
-import { Course } from '@app/types'
+import { Course_Expense_Type_Enum } from '@app/generated/graphql'
+import { Course, CourseType } from '@app/types'
 
 import { COURSE_DATES } from '../fragments'
 
@@ -16,6 +17,18 @@ export type ResponseType = {
           count: number
         }
       }
+      type: CourseType
+      freeSpaces?: number
+      expenses?: Array<{
+        id: string
+        type: Course_Expense_Type_Enum
+        description: string
+        value: number
+        trainer: {
+          id: string
+          fullName: string
+        }
+      }>
     }
     quantity: number
   }[]
@@ -35,6 +48,18 @@ export const QUERY = gql`
         participants: participants_aggregate {
           aggregate {
             count
+          }
+        }
+        type
+        freeSpaces
+        expenses {
+          id
+          type
+          description
+          value
+          trainer {
+            id
+            fullName
           }
         }
       }

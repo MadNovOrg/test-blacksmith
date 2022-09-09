@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
+import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, userEvent, screen, waitFor } from '@test/index'
@@ -37,7 +38,7 @@ describe('component: CreateCourseForm', () => {
           <Route
             path="/"
             element={
-              <CreateCourseProvider>
+              <CreateCourseProvider courseType={CourseType.INDIRECT}>
                 <CreateCourseForm />
               </CreateCourseProvider>
             }

@@ -31,7 +31,11 @@ export const DropdownMenu = <T extends string>({
   return (
     <Select value={selected.key} onChange={onChange} fullWidth>
       {items.map(i => (
-        <MenuItem key={i.key as string} value={i.key}>
+        <MenuItem
+          key={i.key as string}
+          value={i.key}
+          data-testid={`dropdown-menu-option-${i.key}`}
+        >
           {t(i.i18nKey)}
         </MenuItem>
       ))}

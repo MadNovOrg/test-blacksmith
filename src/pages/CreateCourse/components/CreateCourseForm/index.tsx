@@ -2,6 +2,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
+  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -9,7 +10,7 @@ import {
 } from '@mui/material'
 import React, { useState, useMemo, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
@@ -40,19 +41,19 @@ function assertCourseDataValid(
 export const CreateCourseForm = () => {
   const {
     completeStep,
-    courseData: storedCourseData,
-    storeCourseData,
+    courseData,
+    courseType,
+    saveDraft,
+    setCourseData,
+    setCurrentStepKey,
+    setTrainers,
   } = useCreateCourse()
-  const { savingStatus, saveCourse } = useSaveCourse()
 
-  const [courseData, setCourseData] = useState<CourseInput | undefined>(
-    storedCourseData
-  )
+  const { savingStatus, saveCourse } = useSaveCourse()
   const [assistants, setAssistants] = useState<SearchTrainer[]>([])
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
   const { profile } = useAuth()
 
   const [consentFlags, setConsentFlags] = useState({
@@ -61,8 +62,9 @@ export const CreateCourseForm = () => {
     validID: false,
   })
 
-  const courseType =
-    CourseType[searchParams.get('type') as CourseType] ?? CourseType.OPEN
+  useEffect(() => {
+    setCurrentStepKey('course-details')
+  }, [setCurrentStepKey])
 
   const minAssistants = useMemo(() => {
     if (courseData?.maxParticipants) {
@@ -110,10 +112,10 @@ export const CreateCourseForm = () => {
         })),
       ]
 
-      const id = await saveCourse({ ...courseData, type: courseType }, trainers)
+      setTrainers(trainers)
+      const id = await saveCourse()
       navigate(`/courses/${id}/modules`)
     } else {
-      storeCourseData({ ...courseData, type: courseType })
       navigate('./assign-trainers')
     }
   }
@@ -130,10 +132,12 @@ export const CreateCourseForm = () => {
 
   const handleCourseFormChange = useCallback(
     (data: CourseInput, isValid: boolean) => {
-      setCourseData(data)
+      // Type casting to save the data in context
+      // Validation still happens before moving to the next step
+      setCourseData(data as unknown as ValidCourseInput)
       setCourseDataValid(isValid)
     },
-    []
+    [setCourseData]
   )
 
   return (
@@ -141,7 +145,7 @@ export const CreateCourseForm = () => {
       <CourseForm
         onChange={handleCourseFormChange}
         type={courseType}
-        courseInput={storedCourseData}
+        courseInput={courseData}
       />
 
       {courseType === CourseType.INDIRECT ? (
@@ -217,11 +221,14 @@ export const CreateCourseForm = () => {
         </>
       ) : null}
 
-      <Box display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="flex-end" sx={{ marginTop: 4 }}>
+        <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
+          {t('pages.create-course.save-as-draft')}
+        </Button>
+
         <LoadingButton
           variant="contained"
           disabled={!nextStepEnabled}
-          sx={{ marginTop: 4 }}
           onClick={handleNextStepButtonClick}
           loading={savingStatus === LoadingStatus.FETCHING}
           endIcon={<ArrowForwardIcon />}

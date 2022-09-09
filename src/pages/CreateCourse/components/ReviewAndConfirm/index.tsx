@@ -6,13 +6,14 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import TrainerExpensesForm, {
-  FormValues,
-} from '@app/components/TrainerExpensesForm'
+import { LoadingStatus } from '@app/util'
 
+import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
-export const TrainerExpenses = () => {
+import { PageContent } from './PageContent'
+
+export const ReviewAndConfirm = () => {
   const { t } = useTranslation()
   const {
     completeStep,
@@ -20,52 +21,62 @@ export const TrainerExpenses = () => {
     expenses,
     saveDraft,
     setCurrentStepKey,
-    setExpenses,
     trainers,
   } = useCreateCourse()
+  const { saveCourse, savingStatus } = useSaveCourse()
   const navigate = useNavigate()
-  const [expensesValid, setExpensesValid] = useState<boolean>()
+
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    setCurrentStepKey('trainer-expenses')
+    setCurrentStepKey('review-and-confirm')
   }, [setCurrentStepKey])
 
-  const handleSubmit = useCallback(() => {
-    completeStep('trainer-expenses')
-    navigate('../review-and-confirm')
-  }, [completeStep, navigate])
+  const handleSubmit = useCallback(async () => {
+    if (!courseData || !trainers || !expenses) {
+      return
+    }
 
-  const onChange = useCallback(
-    (data: FormValues, isValid: boolean) => {
-      setExpenses(data)
-      setExpensesValid(isValid)
-    },
-    [setExpenses]
-  )
+    try {
+      const courseId = await saveCourse()
+      completeStep('review-and-confirm')
+      navigate(
+        `/registration?course_id=${courseId}&quantity=${courseData.maxParticipants}`
+      )
+    } catch (err) {
+      console.error(err)
+      setError(t('pages.create-course.review-and-confirm.unknown-error'))
+    }
+  }, [
+    completeStep,
+    courseData,
+    expenses,
+    navigate,
+    saveCourse,
+    setError,
+    t,
+    trainers,
+  ])
 
-  if (!courseData) {
+  if (error || !courseData || !trainers || !expenses) {
     return (
       <Alert
         severity="error"
         variant="filled"
-        data-testid="TrainerExpenses-alert"
+        data-testid="ReviewAndConfirm-alert"
       >
-        {t('pages.create-course.assign-trainers.course-not-found')}
+        {error || t('pages.create-course.assign-trainers.course-not-found')}
       </Alert>
     )
   }
 
   return courseData ? (
     <Stack spacing={5}>
-      <TrainerExpensesForm
-        initialValues={expenses}
-        trainers={trainers}
-        onChange={onChange}
-      />
+      <PageContent />
 
       <Box display="flex" justifyContent="space-between" sx={{ marginTop: 4 }}>
         <Button onClick={() => navigate(-1)} startIcon={<ArrowBackIcon />}>
-          {t('pages.create-course.trainer-expenses.back-btn')}
+          {t('pages.create-course.review-and-confirm.back-btn')}
         </Button>
 
         <Box>
@@ -76,12 +87,12 @@ export const TrainerExpenses = () => {
           <LoadingButton
             type="submit"
             variant="contained"
-            disabled={!expensesValid}
             endIcon={<ArrowForwardIcon />}
-            data-testid="TrainerExpenses-submit"
+            data-testid="ReviewAndConfirm-submit"
             onClick={handleSubmit}
+            loading={savingStatus === LoadingStatus.FETCHING}
           >
-            {t('pages.create-course.trainer-expenses.submit-btn')}
+            {t('pages.create-course.review-and-confirm.submit-btn')}
           </LoadingButton>
         </Box>
       </Box>

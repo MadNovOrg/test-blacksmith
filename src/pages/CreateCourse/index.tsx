@@ -1,14 +1,16 @@
-import React from 'react'
-import { useSearchParams } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { useLocation, useSearchParams } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
-import { CourseType } from '@app/types'
 
 import { NotFound } from '../common/NotFound'
 
 import {
   CreateCourseProvider,
   CreateCourseProviderProps,
+  getCourseType,
+  getItem,
+  getItemId,
 } from './components/CreateCourseProvider'
 import { CreateCoursePage } from './CreateCoursePage'
 
@@ -18,16 +20,33 @@ type Props = {
 
 export const CreateCourse = ({ initialContextValue }: Props) => {
   const [searchParams] = useSearchParams()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
+  const { pathname } = useLocation()
 
-  const courseType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
+  const courseType = useMemo(
+    () =>
+      getCourseType(
+        profile?.id ?? 'unknown',
+        searchParams.get('type'),
+        pathname === '/courses/new'
+      ),
+    [pathname, profile, searchParams]
+  )
+
+  const draft = useMemo(() => {
+    const id = getItemId(profile?.id ?? 'unknown', courseType)
+    return getItem(id)
+  }, [courseType, profile])
 
   if (!acl.canCreateCourse(courseType)) {
     return <NotFound />
   }
 
   return (
-    <CreateCourseProvider initialValue={initialContextValue}>
+    <CreateCourseProvider
+      initialValue={initialContextValue ?? draft}
+      courseType={courseType}
+    >
       <CreateCoursePage />
     </CreateCourseProvider>
   )

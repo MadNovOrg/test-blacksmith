@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { RoleName, ValidCourseInput } from '@app/types'
+import { CourseType, RoleName, ValidCourseInput } from '@app/types'
 import { courseToCourseInput } from '@app/util'
 
 import { render, screen, within, waitFor } from '@test/index'
@@ -27,7 +27,7 @@ const selectedTestId = 'SearchTrainers-selected'
 describe('component: AssignTrainers', () => {
   it('renders alert if course is not found', async () => {
     render(
-      <CreateCourseProvider>
+      <CreateCourseProvider courseType={CourseType.OPEN}>
         <AssignTrainers />
       </CreateCourseProvider>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
@@ -50,6 +50,7 @@ describe('component: AssignTrainers', () => {
         initialValue={{
           courseData: courseToCourseInput(course) as ValidCourseInput,
         }}
+        courseType={CourseType.OPEN}
       >
         <AssignTrainers />
       </CreateCourseProvider>,
@@ -73,6 +74,7 @@ describe('component: AssignTrainers', () => {
         initialValue={{
           courseData: courseToCourseInput(course) as ValidCourseInput,
         }}
+        courseType={CourseType.OPEN}
       >
         <AssignTrainers />
       </CreateCourseProvider>,

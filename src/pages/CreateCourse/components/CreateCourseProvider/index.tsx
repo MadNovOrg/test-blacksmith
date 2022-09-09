@@ -1,16 +1,41 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
-import { ExpensesInput, TrainerInput, ValidCourseInput } from '@app/types'
+import { useAuth } from '@app/context/auth'
+import {
+  CourseType,
+  ExpensesInput,
+  TrainerInput,
+  ValidCourseInput,
+} from '@app/types'
+
+type Draft = {
+  courseData?: ValidCourseInput
+  trainers?: TrainerInput[]
+  expenses?: Record<string, ExpensesInput>
+  completedSteps?: string[]
+  currentStepKey?: string | null
+  savedAt?: Date
+}
 
 type ContextValue = {
   completeStep: (step: string) => void
-  completedSteps?: string[]
+  completedSteps: string[]
   courseData?: ValidCourseInput
-  expenses?: Record<string, ExpensesInput>
-  storeCourseData: (courseData: ValidCourseInput) => void
-  storeTrainers: (trainers: TrainerInput[]) => void
-  storeExpenses: (expenses: Record<string, ExpensesInput>) => void
-  trainers?: TrainerInput[]
+  courseType: CourseType
+  currentStepKey: string | null
+  expenses: Record<string, ExpensesInput>
+  saveDraft: () => void
+  setCourseData: (courseData: ValidCourseInput) => void
+  setCurrentStepKey: (step: string) => void
+  setExpenses: (expenses: Record<string, ExpensesInput>) => void
+  setTrainers: (trainers: TrainerInput[]) => void
+  trainers: TrainerInput[]
 }
 
 const CreateCourseContext = React.createContext<ContextValue | undefined>(
@@ -18,76 +43,136 @@ const CreateCourseContext = React.createContext<ContextValue | undefined>(
 )
 
 export type CreateCourseProviderProps = {
-  initialValue?: {
-    courseData?: ValidCourseInput
-    trainers?: TrainerInput[]
-    expenses?: Record<string, ExpensesInput>
-    completedSteps?: string[]
+  initialValue?: Draft
+  courseType: CourseType
+}
+
+export const getCourseType = (
+  profileId: string,
+  queryType: string | null,
+  isFirstPage = true
+): CourseType => {
+  if (queryType) {
+    return queryType as CourseType
+  }
+
+  const lastCourseType = localStorage.getItem(
+    `${profileId}-last-draft-course-type`
+  )
+  if (lastCourseType && !isFirstPage) {
+    return lastCourseType as CourseType
+  }
+
+  return CourseType.OPEN
+}
+
+export const getItemId = (profileId: string, courseType: CourseType) =>
+  `${profileId}-${courseType}`
+
+export const getItem = (itemId: string): Draft => {
+  try {
+    return JSON.parse(localStorage.getItem(itemId) ?? '{}')
+  } catch (_) {
+    return {}
   }
 }
+
+export const removeItem = (itemId: string) => localStorage.removeItem(itemId)
+
+export const setItem = (itemId: string, data: Draft) =>
+  localStorage.setItem(itemId, JSON.stringify({ ...data, savedAt: new Date() }))
 
 export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   children,
   initialValue,
+  courseType,
 }) => {
+  const { profile } = useAuth()
+
+  const itemId = useMemo(
+    () => getItemId(profile?.id ?? 'unknown', courseType),
+    [courseType, profile]
+  )
+
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
   )
-  const [trainers, setTrainers] = useState<TrainerInput[] | undefined>(
-    initialValue?.trainers
+  const [trainers, setTrainers] = useState<TrainerInput[]>(
+    initialValue?.trainers ?? []
   )
-  const [expenses, setExpenses] = useState<
-    Record<string, ExpensesInput> | undefined
-  >(initialValue?.expenses)
-  const [completedSteps, setCompletedSteps] = useState<string[] | undefined>(
-    initialValue?.completedSteps
+  const [expenses, setExpenses] = useState<Record<string, ExpensesInput>>(
+    initialValue?.expenses ?? {}
   )
-
-  const storeCourseData = useCallback(
-    (courseInput: ValidCourseInput) => {
-      setCourseData(courseInput)
-    },
-    [setCourseData]
+  const [completedSteps, setCompletedSteps] = useState<string[]>(
+    initialValue?.completedSteps ?? []
+  )
+  const [currentStepKey, setCurrentStepKey] = useState<string | null>(
+    initialValue?.currentStepKey ?? null
   )
 
-  const storeTrainers = useCallback(
-    (trainersInput: TrainerInput[]) => {
-      setTrainers(trainersInput)
-    },
-    [setTrainers]
-  )
-
-  const storeExpenses = useCallback(
-    (expensesInput: Record<string, ExpensesInput>) => {
-      setExpenses(expensesInput)
-    },
-    [setExpenses]
-  )
+  useEffect(() => removeItem(itemId), [itemId])
 
   const completeStep = useCallback(
-    (step: string) => setCompletedSteps([...(completedSteps ?? []), step]),
+    (step: string) => {
+      if (!completedSteps.includes(step)) {
+        setCompletedSteps([...(completedSteps ?? []), step])
+      }
+    },
     [completedSteps, setCompletedSteps]
   )
+
+  const saveDraft = useCallback(() => {
+    const draft: Draft = {
+      courseData,
+      trainers,
+      expenses,
+      currentStepKey,
+      completedSteps,
+    }
+
+    setItem(itemId, draft)
+    localStorage.setItem(
+      `${profile?.id ?? 'unknown'}-last-draft-course-type`,
+      courseType
+    )
+  }, [
+    completedSteps,
+    courseData,
+    courseType,
+    currentStepKey,
+    expenses,
+    itemId,
+    profile,
+    trainers,
+  ])
 
   const value = useMemo(() => {
     return {
       completeStep,
       completedSteps,
       courseData,
+      courseType,
+      currentStepKey,
       expenses,
-      storeCourseData,
-      storeExpenses,
-      storeTrainers,
+      saveDraft,
+      setCourseData,
+      setCurrentStepKey,
+      setExpenses,
+      setTrainers,
       trainers,
     }
   }, [
     completeStep,
     completedSteps,
     courseData,
+    courseType,
+    currentStepKey,
     expenses,
-    storeCourseData,
-    storeExpenses,
-    storeTrainers,
+    saveDraft,
+    setCourseData,
+    setCurrentStepKey,
+    setExpenses,
+    setTrainers,
     trainers,
   ])
 

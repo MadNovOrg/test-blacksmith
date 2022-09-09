@@ -1,6 +1,9 @@
 import { gql } from 'graphql-request'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Expenses_Insert_Input,
+  Course_Status_Enum,
+} from '@app/generated/graphql'
 import {
   CourseDeliveryType,
   CourseLevel,
@@ -46,13 +49,19 @@ export type ParamsType = {
         }
       ]
     }
+    expenses: {
+      data: Array<Course_Expenses_Insert_Input>
+    }
   }
 }
 
 export type ResponseType = {
   insertCourse: {
     affectedRows: number
-    inserted: Array<{ id: string }>
+    inserted: Array<{
+      id: string
+      expenses: Array<{ id: string }>
+    }>
   }
 }
 
@@ -62,6 +71,9 @@ export const MUTATION = gql`
       affectedRows: affected_rows
       inserted: returning {
         id
+        expenses {
+          id
+        }
       }
     }
   }

@@ -3,6 +3,7 @@ import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
+import { Course_Expense_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
@@ -18,7 +19,11 @@ import {
   QUERY as GET_TEMP_PROFILE,
   ResponseType as GetTempProfileResponseType,
 } from '@app/queries/profile/get-temp-profile'
-import { Currency, Order, PaymentMethod } from '@app/types'
+import { CourseType, Currency, Order, PaymentMethod } from '@app/types'
+import {
+  getTrainerAccommodationCost,
+  getTrainerCarCostPerMile,
+} from '@app/util'
 
 import { positions, sectors } from './org-data'
 
@@ -48,11 +53,14 @@ type State = {
   position: string
   otherPosition: string
   paymentMethod: PaymentMethod
+  freeSpaces: number
+  trainerExpenses: number
+  courseType: CourseType
 
   invoiceDetails?: InvoiceDetails
 }
 
-type ContextType = {
+export type ContextType = {
   error: string | null
   orderId: string | null
   course: CourseDetails
@@ -60,11 +68,13 @@ type ContextType = {
   ready: boolean
   availableSeats: number
   amounts: {
+    freeSpacesDiscount: number
     subtotal: number
     discount: number
     subtotalDiscounted: number
     vat: number
     total: number
+    trainerExpenses: number
   }
   positions: typeof positions
   sectors: typeof sectors
@@ -113,6 +123,24 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       return
     }
 
+    const trainerExpenses =
+      profile.course.expenses?.reduce((acc, { type, description, value }) => {
+        switch (type) {
+          case Course_Expense_Type_Enum.Accommodation:
+            return acc + getTrainerAccommodationCost(value)
+
+          case Course_Expense_Type_Enum.Transport:
+            if (description.startsWith('Car')) {
+              return acc + getTrainerCarCostPerMile(value)
+            }
+
+            return acc + value
+
+          default:
+            return acc + value
+        }
+      }, 0) ?? 0
+
     setAvailableSeats(
       profile.course.maxParticipants -
         profile.course.participants.aggregate.count
@@ -130,6 +158,9 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       position: '',
       otherPosition: '',
       paymentMethod: PaymentMethod.INVOICE,
+      freeSpaces: profile.course.freeSpaces ?? 0,
+      trainerExpenses,
+      courseType: profile.course.type,
     })
 
     setReady(true)
@@ -152,11 +183,21 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
   const amounts: ContextType['amounts'] = useMemo(() => {
     const subtotal = !ready ? 0 : booking.price * booking.quantity
+    const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready ? 0 : booking.promoCodes.reduce(acc => acc + 2, 0)
-    const subtotalDiscounted = subtotal - discount
+    const subtotalDiscounted = subtotal - discount - freeSpacesDiscount
+    const trainerExpenses = !ready ? 0 : booking.trainerExpenses
     const vat = subtotalDiscounted * (booking.vat / 100)
-    const total = subtotalDiscounted + vat
-    return { subtotal, discount, subtotalDiscounted, vat, total }
+    const total = subtotalDiscounted + vat + trainerExpenses
+    return {
+      subtotal,
+      discount,
+      freeSpacesDiscount,
+      subtotalDiscounted,
+      vat,
+      total,
+      trainerExpenses,
+    }
   }, [booking, ready])
 
   const waitForOrderEnriched = useCallback(
@@ -173,6 +214,9 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   )
 
   const placeOrder = useCallback(async () => {
+    const promoCodes =
+      booking.courseType !== CourseType.CLOSED ? booking.promoCodes : []
+
     const response = await fetcher<
       InsertOrderResponseType,
       InsertOrderParamsType
@@ -188,7 +232,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         billingPhone: booking.invoiceDetails?.phone ?? '',
         registrants: booking.emails,
         organizationId: booking.orgId,
-        promoCodes: booking.promoCodes,
+        promoCodes,
       },
     })
 

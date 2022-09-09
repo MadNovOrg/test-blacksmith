@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Expense_Type_Enum,
+  Course_Expenses_Insert_Input,
+  Course_Status_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   ResponseType,
@@ -10,109 +14,177 @@ import {
 } from '@app/queries/courses/insert-course'
 import {
   CourseDeliveryType,
-  CourseTrainerType,
   CourseType,
-  InviteStatus,
-  ValidCourseInput,
+  ExpensesInput,
+  TrainerInput,
+  TransportMethod,
 } from '@app/types'
 import { generateCourseName, LoadingStatus } from '@app/util'
 
-type TrainerInput = {
-  profile_id: string
-  type: CourseTrainerType
-  status?: InviteStatus
+import { useCreateCourse } from './components/CreateCourseProvider'
+
+const prepareExpensesData = (
+  expenses: Record<string, ExpensesInput>
+): Array<Course_Expenses_Insert_Input> => {
+  const courseExpenses: Array<Course_Expenses_Insert_Input> = []
+
+  for (const trainerId of Object.keys(expenses)) {
+    const { transport, miscellaneous } = expenses[trainerId]
+
+    let accommodationNightsTotal = 0
+
+    transport
+      .filter(t => t.method !== TransportMethod.NONE)
+      .forEach(({ method, value, accommodationNights, flightDays }) => {
+        if (accommodationNights && accommodationNights > 0) {
+          accommodationNightsTotal += accommodationNights
+        }
+
+        let description = ''
+        switch (method) {
+          case TransportMethod.CAR:
+            description = `Car trip (${value} miles)`
+            break
+
+          case TransportMethod.FLIGHTS:
+            description = `Flight (${flightDays} days)`
+            break
+
+          case TransportMethod.PUBLIC:
+            description = 'Public transport'
+            break
+
+          case TransportMethod.PRIVATE:
+            description = 'Private transport'
+            break
+
+          default:
+            break
+        }
+
+        courseExpenses.push({
+          description,
+          trainerId,
+          type: Course_Expense_Type_Enum.Transport,
+          value,
+        })
+      })
+
+    if (accommodationNightsTotal > 0) {
+      courseExpenses.push({
+        description: `Accommodation (${accommodationNightsTotal} nights)`,
+        trainerId,
+        type: Course_Expense_Type_Enum.Accommodation,
+        value: accommodationNightsTotal,
+      })
+    }
+
+    miscellaneous?.forEach(({ name, value }) => {
+      courseExpenses.push({
+        description: name as string,
+        trainerId,
+        type: Course_Expense_Type_Enum.Miscellaneous,
+        value: value as number,
+      })
+    })
+  }
+
+  return courseExpenses
 }
+
+export type SaveCourse = () => Promise<string | undefined>
 
 export function useSaveCourse(): {
   savingStatus: LoadingStatus
-  saveCourse: (
-    courseData: ValidCourseInput,
-    trainers: Array<TrainerInput>
-  ) => Promise<string | undefined>
+  saveCourse: SaveCourse
 } {
+  const { courseData, expenses, trainers } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
 
-  const saveCourse = useCallback(
-    async (courseData: ValidCourseInput, trainers: Array<TrainerInput>) => {
-      try {
-        if (courseData) {
-          setSavingStatus(LoadingStatus.FETCHING)
+  const saveCourse = useCallback(async () => {
+    try {
+      if (courseData) {
+        setSavingStatus(LoadingStatus.FETCHING)
 
-          const status =
-            courseData.type === CourseType.INDIRECT
-              ? Course_Status_Enum.ApprovalPending
-              : Course_Status_Enum.TrainerPending
+        const status =
+          courseData.type === CourseType.INDIRECT
+            ? Course_Status_Enum.ApprovalPending
+            : Course_Status_Enum.TrainerPending
 
-          const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
-            course: {
-              name: generateCourseName(
-                {
-                  level: courseData.courseLevel,
-                  reaccreditation: courseData.reaccreditation,
-                },
-                t
-              ),
-              deliveryType: courseData.deliveryType,
-              level: courseData.courseLevel,
-              reaccreditation: courseData.reaccreditation,
-              go1Integration: courseData.blendedLearning,
-              status,
-              ...(courseData.minParticipants
-                ? { min_participants: courseData.minParticipants }
-                : null),
-              max_participants: courseData.maxParticipants,
-              type: courseData.type,
-              ...(courseData.organization
-                ? { organization_id: courseData.organization.id }
-                : null),
-              ...(courseData.contactProfile
-                ? { contactProfileId: courseData.contactProfile.id }
-                : null),
-              ...(courseData.usesAOL
-                ? { aolCostOfCourse: courseData.courseCost }
-                : null),
-              trainers: {
-                data: trainers,
+        const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
+          course: {
+            name: generateCourseName(
+              {
+                level: courseData.courseLevel,
+                reaccreditation: courseData.reaccreditation,
               },
-              schedule: {
-                data: [
-                  {
-                    start: courseData.startDateTime,
-                    end: courseData.endDateTime,
-                    virtualLink: [
-                      CourseDeliveryType.VIRTUAL,
-                      CourseDeliveryType.MIXED,
-                    ].includes(courseData.deliveryType)
-                      ? courseData.zoomMeetingUrl
-                      : undefined,
-                    venue_id: courseData.venue?.id,
-                  },
-                ],
-              },
-              accountCode: courseData.accountCode,
-              freeSpaces: courseData.freeSpaces,
-              salesRepresentativeId: courseData.salesRepresentative?.id,
+              t
+            ),
+            deliveryType: courseData.deliveryType,
+            level: courseData.courseLevel,
+            reaccreditation: courseData.reaccreditation,
+            go1Integration: courseData.blendedLearning,
+            status,
+            ...(courseData.minParticipants
+              ? { min_participants: courseData.minParticipants }
+              : null),
+            max_participants: courseData.maxParticipants,
+            type: courseData.type,
+            ...(courseData.organization
+              ? { organization_id: courseData.organization.id }
+              : null),
+            ...(courseData.contactProfile
+              ? { contactProfileId: courseData.contactProfile.id }
+              : null),
+            ...(courseData.usesAOL
+              ? { aolCostOfCourse: courseData.courseCost }
+              : null),
+            trainers: {
+              data: trainers.map((t: TrainerInput) => ({
+                profile_id: t.profile_id,
+                type: t.type,
+              })),
             },
-          })
+            schedule: {
+              data: [
+                {
+                  start: courseData.startDateTime,
+                  end: courseData.endDateTime,
+                  virtualLink: [
+                    CourseDeliveryType.VIRTUAL,
+                    CourseDeliveryType.MIXED,
+                  ].includes(courseData.deliveryType)
+                    ? courseData.zoomMeetingUrl
+                    : undefined,
+                  venue_id: courseData.venue?.id,
+                },
+              ],
+            },
+            accountCode: courseData.accountCode,
+            freeSpaces: courseData.freeSpaces,
+            salesRepresentativeId: courseData.salesRepresentative?.id,
+            expenses: {
+              data: prepareExpensesData(expenses),
+            },
+          },
+        })
 
-          if (response.insertCourse.inserted.length === 1) {
-            setSavingStatus(LoadingStatus.SUCCESS)
+        if (response.insertCourse.inserted.length === 1) {
+          setSavingStatus(LoadingStatus.SUCCESS)
 
-            const insertedId = response.insertCourse.inserted[0].id
+          const insertedId = response.insertCourse.inserted[0].id
 
-            return insertedId
-          }
-        } else {
-          setSavingStatus(LoadingStatus.ERROR)
+          return insertedId
         }
-      } catch (err) {
+      } else {
         setSavingStatus(LoadingStatus.ERROR)
       }
-    },
-    [fetcher, t]
-  )
+    } catch (err) {
+      setSavingStatus(LoadingStatus.ERROR)
+    }
+  }, [courseData, expenses, fetcher, t, trainers])
 
   return {
     savingStatus,

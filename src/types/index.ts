@@ -158,7 +158,7 @@ export type Profile = {
 
 export type Role = {
   id: string
-  name: RoleName
+  name: RoleName | ExtraRoleName
 }
 
 export enum PaymentMethod {
@@ -173,6 +173,10 @@ export enum RoleName {
   TRAINER = 'trainer',
   TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
+}
+
+export enum ExtraRoleName {
+  SALES_REPRESENTATIVE = 'sales-representative',
 }
 
 export enum CourseType {
@@ -576,6 +580,7 @@ export type TrainerInput = {
   profile_id: string
   type: CourseTrainerType
   fullName?: string
+  status?: InviteStatus
 }
 
 export enum TransportMethod {
@@ -593,10 +598,16 @@ export type ExpensesInput = {
     flightDays?: number
     accommodationNights?: number
   }>
-  miscellaneous?: Array<{
-    name: string
-    value: number
-  }>
+  miscellaneous?: Array<
+    | {
+        name: null
+        value: null
+      }
+    | {
+        name: string
+        value: number
+      }
+  >
 }
 
 export type ElementProps<T> = {
@@ -622,4 +633,9 @@ export type Establishment = {
   headJobTitle?: string
   ofstedRating?: string
   ofstedLastInspection?: string
+}
+
+export type TimeDifferenceAndContext = {
+  count: number
+  context: 'days' | 'hours' | 'minutes' | 'none'
 }

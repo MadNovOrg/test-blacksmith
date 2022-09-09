@@ -151,6 +151,16 @@ export const CourseBookingReview: React.FC = () => {
             {formatCurrency(amounts.subtotal)}
           </Typography>
         </Box>
+        {booking.freeSpaces > 0 ? (
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('pages.book-course.free-spaces')}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(-amounts.freeSpacesDiscount)}
+            </Typography>
+          </Box>
+        ) : null}
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">
             {t('vat')} ({booking.vat}%)
@@ -159,6 +169,16 @@ export const CourseBookingReview: React.FC = () => {
             {formatCurrency(amounts.vat)}
           </Typography>
         </Box>
+        {booking.trainerExpenses > 0 ? (
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('pages.book-course.trainer-expenses')}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(amounts.trainerExpenses)}
+            </Typography>
+          </Box>
+        ) : null}
         <Divider sx={{ my: 2 }} />
         {booking.promoCodes.map(code => (
           <Box key={code} display="flex" justifyContent="space-between" mb={1}>

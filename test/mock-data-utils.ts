@@ -6,6 +6,7 @@ import {
 } from '@jackfranklin/test-data-bot'
 import { add, sub } from 'date-fns'
 
+import { getAccountCode } from '@app/components/CourseForm/helpers'
 import {
   CategorySummaryFragment,
   EbookSummaryFragment,
@@ -25,8 +26,11 @@ import {
   CourseParticipant,
   CourseSchedule,
   CourseType,
+  ExpensesInput,
   Organization,
   Profile,
+  TrainerInput,
+  TransportMethod,
   Venue,
   CourseInvite,
   ModuleGroup,
@@ -203,8 +207,11 @@ export const buildCourse = build<Course>({
     },
     modulesAgg: {},
     moduleGroupIds: [],
-    contactProfileId: null,
+    contactProfile: perBuild(() => buildProfile()),
     aolCostOfCourse: null,
+    salesRepresentative: perBuild(() => buildProfile()),
+    accountCode: getAccountCode(),
+    freeSpaces: 0,
   },
 })
 
@@ -518,4 +525,63 @@ export function buildEntities<T>(
   }
 
   return entities
+}
+
+export const buildExpensesInput = build<ExpensesInput>({
+  fields: {
+    transport: fake(f =>
+      new Array(f.datatype.number({ min: 0, max: 3 })).fill(null).map(() => {
+        const method = f.random.objectElement(
+          TransportMethod
+        ) as TransportMethod
+        const tripData: ExpensesInput['transport'][number] = { method }
+
+        if (method !== TransportMethod.NONE) {
+          tripData.value = f.datatype.number({
+            min: 0.01,
+            max: 50,
+            precision: 0.01,
+          })
+          tripData.accommodationNights = f.datatype.number({ min: 0, max: 2 })
+
+          if (method === TransportMethod.FLIGHTS) {
+            tripData.flightDays = f.datatype.number({ min: 1, max: 2 })
+          }
+        }
+
+        return tripData
+      })
+    ),
+    miscellaneous: fake(f =>
+      new Array(f.datatype.number({ min: 0, max: 2 })).fill(null).map(() => ({
+        name: f.lorem.words(2),
+        value: f.datatype.number({ min: 0.01, max: 50, precision: 0.01 }),
+      }))
+    ),
+  },
+})
+
+export const buildTrainerInput = build<TrainerInput>({
+  fields: {
+    profile_id: fake(f => f.datatype.uuid()),
+    type: CourseTrainerType.LEADER,
+    fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
+    status: InviteStatus.ACCEPTED,
+  },
+})
+
+export const buildTrainerInputAssistant = (
+  overrides?: Partial<TrainerInput>
+) => {
+  return buildTrainerInput({
+    overrides: { ...overrides, type: CourseTrainerType.ASSISTANT },
+  })
+}
+
+export const buildTrainerInputModerator = (
+  overrides?: Partial<TrainerInput>
+) => {
+  return buildTrainerInput({
+    overrides: { ...overrides, type: CourseTrainerType.MODERATOR },
+  })
 }

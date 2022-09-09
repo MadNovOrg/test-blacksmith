@@ -2,77 +2,121 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, Alert, Stack } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
-import { CourseTrainerType, CourseType } from '@app/types'
+import {
+  CourseTrainer,
+  CourseTrainerType,
+  CourseType,
+  InviteStatus,
+  TrainerInput,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
+const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
+  if (!trainers) {
+    return []
+  }
+
+  return [
+    ...trainers.assist.map(assistant => ({
+      profile_id: assistant.id,
+      type: CourseTrainerType.ASSISTANT,
+      fullName: assistant.fullName,
+    })),
+    ...trainers.moderator.map(moderator => ({
+      profile_id: moderator.id,
+      type: CourseTrainerType.MODERATOR,
+      fullName: moderator.fullName,
+    })),
+    ...trainers.lead.map(trainer => ({
+      profile_id: trainer.id,
+      type: CourseTrainerType.LEADER,
+      fullName: trainer.fullName,
+    })),
+  ]
+}
+
+const now = new Date()
+
+const trainerInputToCourseTrainer = (
+  trainers: TrainerInput[] = []
+): CourseTrainer[] =>
+  trainers.map(t => ({
+    profile: {
+      id: t.profile_id,
+      fullName: t.fullName ?? '',
+      givenName: t.fullName?.split(' ')[0] ?? '',
+      familyName: t.fullName?.split(' ').slice(-1)[0] ?? '',
+      email: '',
+      phone: '',
+      dob: '',
+      jobTitle: '',
+      avatar: '',
+      title: '',
+      tags: null,
+      dietaryRestrictions: null,
+      disabilities: null,
+      addresses: [],
+      attributes: [],
+      contactDetails: [],
+      preferences: [],
+      organizations: [],
+      roles: [],
+      lastActivity: now,
+      createdAt: now.toISOString(),
+    },
+    type: t.type,
+    status: InviteStatus.PENDING,
+    id: t.profile_id,
+  }))
+
 export const AssignTrainers = () => {
   const { t } = useTranslation()
-  const { completeStep, courseData, storeTrainers } = useCreateCourse()
+  const {
+    completeStep,
+    courseData,
+    saveDraft,
+    setCurrentStepKey,
+    setTrainers,
+    trainers,
+  } = useCreateCourse()
   const navigate = useNavigate()
-  const [trainers, setTrainers] = useState<FormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const { savingStatus, saveCourse } = useSaveCourse()
 
+  useEffect(() => {
+    setCurrentStepKey('assign-trainer')
+  }, [setCurrentStepKey])
+
   const handleTrainersDataChange = useCallback(
     (data: FormValues, isValid: boolean) => {
-      setTrainers(data)
+      setTrainers(formValuesToTrainerInput(data))
       setTrainersDataValid(isValid)
     },
-    []
+    [setTrainers]
   )
 
   const handleSubmitButtonClick = async () => {
-    completeStep('assign-trainers')
-
     if (courseData && trainers) {
-      if (courseData.type === CourseType.CLOSED) {
-        const trainersData = [
-          ...trainers.assist.map(assistant => ({
-            profile_id: assistant.id,
-            type: CourseTrainerType.ASSISTANT,
-            fullName: assistant.fullName,
-          })),
-          ...trainers.moderator.map(moderator => ({
-            profile_id: moderator.id,
-            type: CourseTrainerType.MODERATOR,
-            fullName: moderator.fullName,
-          })),
-          ...trainers.lead.map(trainer => ({
-            profile_id: trainer.id,
-            type: CourseTrainerType.LEADER,
-            fullName: trainer.fullName,
-          })),
-        ]
+      const isClosedCourse = courseData.type === CourseType.CLOSED
 
-        await storeTrainers(trainersData)
-        navigate('../trainer-expenses')
+      let nextPage: string
+      if (isClosedCourse) {
+        nextPage = '../trainer-expenses'
       } else {
-        const trainersData = [
-          ...trainers.assist.map(assistant => ({
-            profile_id: assistant.id,
-            type: CourseTrainerType.ASSISTANT,
-          })),
-          ...trainers.moderator.map(moderator => ({
-            profile_id: moderator.id,
-            type: CourseTrainerType.MODERATOR,
-          })),
-          ...trainers.lead.map(trainer => ({
-            profile_id: trainer.id,
-            type: CourseTrainerType.LEADER,
-          })),
-        ]
-
-        await saveCourse(courseData, trainersData)
-        navigate('/courses')
+        await saveCourse()
+        nextPage = '/courses'
       }
+
+      completeStep('assign-trainer')
+      navigate(nextPage)
     }
   }
 
@@ -98,30 +142,35 @@ export const AssignTrainers = () => {
           end: courseData.endDateTime,
         }}
         onChange={handleTrainersDataChange}
+        trainers={trainerInputToCourseTrainer(trainers)}
       />
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" justifyContent="space-between" sx={{ marginTop: 4 }}>
         <Button
-          sx={{ marginTop: 4 }}
           onClick={() => navigate(`../../new?type=${courseData.type}`)}
           startIcon={<ArrowBackIcon />}
         >
           {t('pages.create-course.assign-trainers.back-btn')}
         </Button>
 
-        <LoadingButton
-          type="submit"
-          variant="contained"
-          disabled={!trainersDataValid}
-          loading={savingStatus === LoadingStatus.FETCHING}
-          sx={{ marginTop: 4 }}
-          endIcon={<ArrowForwardIcon />}
-          data-testid="AssignTrainers-submit"
-          onClick={handleSubmitButtonClick}
-        >
-          {courseData.type === CourseType.CLOSED
-            ? t('pages.create-course.step-navigation-trainer-expenses')
-            : t('pages.create-course.assign-trainers.submit-btn')}
-        </LoadingButton>
+        <Box>
+          <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
+            {t('pages.create-course.save-as-draft')}
+          </Button>
+
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            disabled={!trainersDataValid}
+            loading={savingStatus === LoadingStatus.FETCHING}
+            endIcon={<ArrowForwardIcon />}
+            data-testid="AssignTrainers-submit"
+            onClick={handleSubmitButtonClick}
+          >
+            {courseData.type === CourseType.CLOSED
+              ? t('pages.create-course.step-navigation-trainer-expenses')
+              : t('pages.create-course.assign-trainers.submit-btn')}
+          </LoadingButton>
+        </Box>
       </Box>
     </Stack>
   ) : null

@@ -16,18 +16,13 @@ import { noop } from 'ts-essentials'
 import { useAuth } from '@app/context/auth'
 import { yup } from '@app/schemas'
 import {
-  CourseTrainer,
-  CourseSchedule,
-  SearchTrainer,
-  CourseTrainerType,
   CourseLevel,
+  CourseSchedule,
+  CourseTrainer,
+  CourseTrainerType,
+  SearchTrainer,
 } from '@app/types'
-import {
-  getCourseAssistants,
-  getCourseModerator,
-  getCourseTrainer,
-  getNumberOfAssistants,
-} from '@app/util'
+import { getNumberOfAssistants } from '@app/util'
 
 import { SearchTrainers } from '../SearchTrainers'
 
@@ -46,6 +41,25 @@ type Props = {
   courseSchedule: Pick<CourseSchedule, 'start' | 'end'>
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
+}
+
+const courseTrainerToFormValues = (
+  trainers: CourseTrainer[] = []
+): FormValues => {
+  const mappedTrainers = trainers.map(t => ({
+    id: t.profile.id,
+    fullName: t.profile.fullName ?? '',
+    avatar: t.profile.avatar,
+    type: t.type,
+  }))
+
+  return {
+    lead: mappedTrainers.filter(t => t.type === CourseTrainerType.LEADER),
+    assist: mappedTrainers.filter(t => t.type === CourseTrainerType.ASSISTANT),
+    moderator: mappedTrainers.filter(
+      t => t.type === CourseTrainerType.MODERATOR
+    ),
+  }
 }
 
 const ChooseTrainers: React.FC<Props> = ({
@@ -109,9 +123,14 @@ const ChooseTrainers: React.FC<Props> = ({
     })
   }, [t, adminBypassAssistMin, needsModerator])
 
+  const formTrainers = useMemo(
+    () => courseTrainerToFormValues(trainers),
+    [trainers]
+  )
+
   const form = useForm<NestedFormValues>({
     mode: 'all',
-    defaultValues: { lead: [], assist: [], moderator: [] },
+    defaultValues: formTrainers,
     resolver: yupResolver(schema) as unknown as Resolver<NestedFormValues>, // fixed in v8. See https://github.com/react-hook-form/react-hook-form/issues/7888
   })
 
@@ -121,34 +140,17 @@ const ChooseTrainers: React.FC<Props> = ({
 
   useEffect(() => {
     onChange(formValues as FormValues, form.formState.isValid)
-  }, [formValues, form.formState, onChange])
-
-  useEffect(() => {
-    const lead = getCourseTrainer(trainers)
-    if (lead?.profile) {
-      form.setValue('lead', [lead.profile], { shouldValidate: true })
-    }
-
-    const assistants = getCourseAssistants(trainers).map(t => t.profile)
-    if (assistants.length) {
-      form.setValue('assist', assistants, { shouldValidate: true })
-    }
-
-    const moderator = getCourseModerator(trainers)
-    if (moderator?.profile) {
-      form.setValue('moderator', [moderator.profile], { shouldValidate: true })
-    }
-  }, [form, trainers])
+  }, [formValues, form.formState.isValid, onChange])
 
   const notUsedElsewhere = useCallback(
     (value: string) => (matches: SearchTrainer[]) => {
       const possibleValues = ['lead', 'assist', 'moderator'].filter(
         v => v !== value
       )
-      const trainers = possibleValues.flatMap(v =>
+      const _trainers = possibleValues.flatMap(v =>
         form.getValues(v as keyof NestedFormValues)
       )
-      const ids = new Set(trainers.map(t => (t as SearchTrainer).id))
+      const ids = new Set(_trainers.map(t => (t as SearchTrainer).id))
       return matches.filter(m => !ids.has(m.id))
     },
     [form]

@@ -1,11 +1,11 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { PaymentMethod, Currency } from '@app/types'
+import { CourseType, Currency, PaymentMethod } from '@app/types'
 
 import { render } from '@test/index'
 
-import { useBooking } from '../BookingContext'
+import { useBooking, ContextType } from '../BookingContext'
 import { positions, sectors } from '../org-data'
 
 import { CourseBookingReview } from './CourseBookingReview'
@@ -17,6 +17,74 @@ jest.mock('../BookingContext', () => ({
 const useBookingMock = jest.mocked(useBooking)
 
 const currency = Currency.GBP
+const price = 20
+const vat = 10
+
+const getMockData = (
+  type: CourseType,
+  quantity: number,
+  freeSpaces = 0,
+  trainerExpenses = 0
+) => {
+  const subtotal = price * quantity
+  const discount = 0
+  const freeSpacesDiscount = price * freeSpaces
+  const subtotalDiscounted = subtotal - discount - freeSpacesDiscount
+  const vatAmount = (vat / 100) * subtotalDiscounted
+  const total = subtotalDiscounted + vatAmount + trainerExpenses
+
+  return {
+    course: {
+      id: 11,
+      name: 'My Course 1',
+      dates: {
+        aggregate: {
+          start: { date: new Date('2022-04-10T10:00:00').toISOString() },
+          end: { date: new Date('2022-04-10T12:00:00').toISOString() },
+        },
+      },
+      maxParticipants: 12,
+      participants: { aggregate: { count: 12 - quantity } },
+      type,
+      freeSpaces,
+    },
+    addPromo: jest.fn(),
+    removePromo: jest.fn(),
+    booking: {
+      emails: [],
+      price,
+      currency,
+      promoCodes: [],
+      quantity,
+      vat,
+      orgId: '',
+      sector: '',
+      position: '',
+      otherPosition: '',
+      paymentMethod: PaymentMethod.INVOICE,
+      courseType: type,
+      freeSpaces,
+      trainerExpenses,
+    },
+    positions,
+    sectors,
+    availableSeats: quantity,
+    ready: true,
+    setBooking: jest.fn(),
+    amounts: {
+      freeSpacesDiscount,
+      subtotal,
+      discount,
+      subtotalDiscounted,
+      vat: vatAmount,
+      total,
+      trainerExpenses,
+    },
+    placeOrder: jest.fn(),
+    orderId: null,
+    error: null,
+  } as ContextType
+}
 
 describe('CourseBookingReview', () => {
   beforeAll(() => {
@@ -27,60 +95,24 @@ describe('CourseBookingReview', () => {
     jest.useRealTimers()
   })
 
-  const price = 20
-  const quantity = 3
-  const vat = 10
-  const subtotal = price * quantity
-  const vatAmount = subtotal * (vat / 100)
+  it('matches snapshot for OPEN course', async () => {
+    useBookingMock.mockReturnValueOnce(getMockData(CourseType.OPEN, 3))
 
-  useBookingMock.mockReturnValue({
-    course: {
-      id: 11,
-      name: 'My Course 1',
-      dates: {
-        aggregate: {
-          start: { date: new Date('2022-04-10T10:00:00').toISOString() },
-          end: { date: new Date('2022-04-10T12:00:00').toISOString() },
-        },
-      },
+    const view = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<CourseBookingReview />} />
+        </Routes>
+      </MemoryRouter>
+    )
 
-      maxParticipants: 12,
-      participants: { aggregate: { count: 3 } },
-    },
-    addPromo: jest.fn(),
-    removePromo: jest.fn(),
-    booking: {
-      emails: [],
-      price: 20,
-      currency,
-      promoCodes: [],
-      quantity: 3,
-      vat: 10,
-      orgId: '',
-      sector: '',
-      position: '',
-      otherPosition: '',
-      paymentMethod: PaymentMethod.INVOICE,
-    },
-    positions,
-    sectors,
-    availableSeats: 5,
-    ready: true,
-    setBooking: jest.fn(),
-    amounts: {
-      subtotal,
-      discount: 0,
-      subtotalDiscounted: subtotal,
-      vat: vatAmount,
-      total: subtotal + vatAmount,
-    },
-    placeOrder: jest.fn(),
-    orderId: null,
-    error: null,
+    expect(view).toMatchSnapshot()
   })
 
-  it('matches snapshot', async () => {
-    jest.setSystemTime(new Date(2022, 4, 24))
+  it('matches snapshot for CLOSED course', async () => {
+    useBookingMock.mockReturnValueOnce(
+      getMockData(CourseType.CLOSED, 12, 2, 721.5)
+    )
 
     const view = render(
       <MemoryRouter initialEntries={['/']}>

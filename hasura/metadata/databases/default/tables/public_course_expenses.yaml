@@ -1,0 +1,80 @@
+table:
+  schema: public
+  name: course_expenses
+configuration:
+  custom_root_fields: {}
+  column_config:
+    course_id:
+      custom_name: courseId
+    updated_at:
+      custom_name: updatedAt
+    created_at:
+      custom_name: createdAt
+    trainer_id:
+      custom_name: trainerId
+  custom_column_names:
+    course_id: courseId
+    updated_at: updatedAt
+    created_at: createdAt
+    trainer_id: trainerId
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: trainer
+    using:
+      foreign_key_constraint_on: trainer_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - value
+        - description
+        - type
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - type
+        - description
+        - value
+        - trainer_id
+      backend_only: false
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - value
+        - description
+        - type
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - value
+        - description
+        - type
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter: {}
+      allow_aggregations: true

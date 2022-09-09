@@ -9,11 +9,16 @@ import { noop } from 'ts-essentials'
 import { yup } from '@app/schemas'
 import { TrainerInput, TransportMethod } from '@app/types'
 
-import { FormValues as Entry, TrainerExpenses } from './TrainerExpenses'
+import {
+  FormValues as Entry,
+  makeSchema,
+  TrainerExpenses,
+} from './TrainerExpenses'
 
 export type FormValues = Record<string, Entry>
 
 type Props = {
+  initialValues?: FormValues
   trainers?: TrainerInput[]
   onChange?: (data: FormValues, isValid: boolean) => void
 }
@@ -21,144 +26,31 @@ type Props = {
 const TrainerExpensesForm: React.FC<Props> = ({
   trainers = [],
   onChange = noop,
+  initialValues = undefined,
 }) => {
   const { t } = useTranslation()
 
   const schema = useMemo(
-    () =>
-      yup.lazy(obj =>
-        yup.object(
-          mapValues(obj, () =>
-            yup.object({
-              transport: yup
-                .array()
-                .of(
-                  yup.object({
-                    method: yup
-                      .mixed()
-                      .oneOf(Object.values(TransportMethod))
-                      .required(
-                        t('pages.create-course.trainer-expenses.method-error')
-                      ),
-                    value: yup
-                      .number()
-                      .min(
-                        0,
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 0,
-                        })
-                      )
-                      .typeError(
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 0,
-                        })
-                      )
-                      .when('method', {
-                        is: TransportMethod.NONE,
-                        then: s => s.optional(),
-                        otherwise: s =>
-                          s.required(
-                            t(
-                              'pages.create-course.trainer-expenses.value-error'
-                            )
-                          ),
-                      }),
-                    flightDays: yup
-                      .number()
-                      .integer()
-                      .positive(
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 1,
-                        })
-                      )
-                      .typeError(
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 1,
-                        })
-                      )
-                      .when('method', {
-                        is: TransportMethod.FLIGHTS,
-                        then: s =>
-                          s.required(
-                            t('pages.create-course.trainer-expenses.days-error')
-                          ),
-                        otherwise: s => s.optional(),
-                      }),
-                    accommodationNights: yup
-                      .number()
-                      .integer()
-                      .min(
-                        0,
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 0,
-                        })
-                      )
-                      .typeError(
-                        t('pages.create-course.trainer-expenses.num-error', {
-                          min: 0,
-                        })
-                      )
-                      .when('method', {
-                        is: TransportMethod.NONE,
-                        then: s => s.optional(),
-                        otherwise: s =>
-                          s.required(
-                            t(
-                              'pages.create-course.trainer-expenses.nights-error'
-                            )
-                          ),
-                      }),
-                  })
-                )
-                .required(),
-              miscellaneous: yup.array().of(
-                yup.object({
-                  name: yup
-                    .string()
-                    .required(
-                      t('pages.create-course.trainer-expenses.name-error')
-                    ),
-                  value: yup
-                    .number()
-                    .min(
-                      0,
-                      t('pages.create-course.trainer-expenses.num-error', {
-                        min: 0,
-                      })
-                    )
-                    .typeError(
-                      t('pages.create-course.trainer-expenses.num-error', {
-                        min: 0,
-                      })
-                    )
-                    .required(
-                      t('pages.create-course.trainer-expenses.value-error')
-                    ),
-                })
-              ),
-            })
-          )
-        )
-      ),
+    () => yup.lazy(obj => yup.object(mapValues(obj, () => makeSchema(t)))),
     [t]
   )
 
   const form = useForm<FormValues>({
     mode: 'all',
-    defaultValues: zipObject(
-      trainers.map(t => t.profile_id),
-      trainers.map(_ => ({
-        transport: [
-          {
-            method: TransportMethod.NONE,
-            value: 0,
-            days: 0,
-            accommodationNights: 0,
-          },
-        ],
-        miscellaneous: [],
-      }))
-    ),
+    defaultValues:
+      initialValues ??
+      zipObject(
+        trainers.map(t => t.profile_id),
+        trainers.map(_ => ({
+          transport: [
+            {
+              accommodationNights: 0,
+              method: TransportMethod.NONE,
+            },
+          ],
+          miscellaneous: [],
+        }))
+      ),
     resolver: yupResolver(schema) as Resolver<FormValues>,
   })
 
@@ -178,7 +70,10 @@ const TrainerExpensesForm: React.FC<Props> = ({
         </Typography>
 
         {trainers.map(trainer => (
-          <React.Fragment key={trainer.profile_id}>
+          <Box
+            data-testid={`trainer-${trainer.profile_id}`}
+            key={trainer.profile_id}
+          >
             <Controller
               name={trainer.profile_id}
               control={form.control}
@@ -190,7 +85,7 @@ const TrainerExpensesForm: React.FC<Props> = ({
                 />
               )}
             />
-          </React.Fragment>
+          </Box>
         ))}
       </Box>
     </Stack>

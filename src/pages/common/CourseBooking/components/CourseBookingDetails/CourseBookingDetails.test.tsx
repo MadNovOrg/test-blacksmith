@@ -1,11 +1,11 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { PaymentMethod, Currency } from '@app/types'
+import { CourseType, Currency, PaymentMethod } from '@app/types'
 
 import { render } from '@test/index'
 
-import { useBooking } from '../BookingContext'
+import { useBooking, ContextType } from '../BookingContext'
 import { positions, sectors } from '../org-data'
 
 import { CourseBookingDetails } from './CourseBookingDetails'
@@ -21,15 +21,23 @@ jest.mock('@app/components/OrgSelector', () => ({
 const useBookingMock = jest.mocked(useBooking)
 
 const currency = Currency.GBP
+const price = 20
+const vat = 10
 
-describe('CourseBookingDetails', () => {
-  const price = 20
-  const quantity = 3
-  const vat = 10
+const getMockData = (
+  type: CourseType,
+  quantity: number,
+  freeSpaces = 0,
+  trainerExpenses = 0
+) => {
   const subtotal = price * quantity
-  const vatAmount = subtotal * (vat / 100)
+  const discount = 0
+  const freeSpacesDiscount = price * freeSpaces
+  const subtotalDiscounted = subtotal - discount - freeSpacesDiscount
+  const vatAmount = (vat / 100) * subtotalDiscounted
+  const total = subtotalDiscounted + vatAmount + trainerExpenses
 
-  useBookingMock.mockReturnValue({
+  return {
     course: {
       id: 11,
       name: 'My Course 1',
@@ -40,7 +48,9 @@ describe('CourseBookingDetails', () => {
         },
       },
       maxParticipants: 12,
-      participants: { aggregate: { count: 3 } },
+      participants: { aggregate: { count: 12 - quantity } },
+      type,
+      freeSpaces,
     },
     addPromo: jest.fn(),
     removePromo: jest.fn(),
@@ -56,25 +66,51 @@ describe('CourseBookingDetails', () => {
       position: '',
       otherPosition: '',
       paymentMethod: PaymentMethod.INVOICE,
+      courseType: type,
+      freeSpaces,
+      trainerExpenses,
     },
     positions,
     sectors,
-    availableSeats: 5,
+    availableSeats: quantity,
     ready: true,
     setBooking: jest.fn(),
     amounts: {
+      freeSpacesDiscount,
       subtotal,
-      discount: 0,
-      subtotalDiscounted: subtotal,
+      discount,
+      subtotalDiscounted,
       vat: vatAmount,
-      total: subtotal + vatAmount,
+      total,
+      trainerExpenses,
     },
     placeOrder: jest.fn(),
     orderId: null,
     error: null,
+  } as ContextType
+}
+
+describe('CourseBookingDetails', () => {
+  it('matches snapshot for OPEN course', async () => {
+    useBookingMock.mockReturnValueOnce(getMockData(CourseType.OPEN, 3))
+
+    const view = render(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<CourseBookingDetails />} />
+          <Route path="/review" element={<div>Review Page</div>} />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    expect(view).toMatchSnapshot()
   })
 
-  it('matches snapshot', async () => {
+  it('matches snapshot for CLOSED course', async () => {
+    useBookingMock.mockReturnValueOnce(
+      getMockData(CourseType.CLOSED, 12, 2, 721.5)
+    )
+
     const view = render(
       <MemoryRouter initialEntries={['/']}>
         <Routes>

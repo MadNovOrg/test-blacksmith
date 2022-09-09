@@ -655,7 +655,9 @@
       "payment-cc-error-ORDER_NOT_FOUND": "Order not found",
       "payment-cc-error-ORDER_NOT_ENRICHED": "Invalid Order",
       "payment-cc-error-ORDER_INVALID": "Invalid Order",
-      "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment"
+      "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment",
+      "free-spaces": "Free spaces",
+      "trainer-expenses": "Trainer expenses"
     },
     "home": {
       "title": "Home"
@@ -847,7 +849,7 @@
         "PRIVATE": "Private (eg. car hire/taxi)",
         "FLIGHTS": "Flights (international)",
         "NONE": "None",
-        "accommodation": "Accomodation",
+        "accommodation": "Accommodation",
         "accommodation-nights": "Number of nights",
         "accommodation-caption": "In addition, £30 per night of subsistence included",
         "another-trip": "Another trip",
@@ -862,11 +864,38 @@
           "FLIGHTS-days": "Days of travel"
         }
       },
+      "review-and-confirm": {
+        "unknown-error": "Something went wrong. Please try again later",
+        "pricing-fetching-error": "Error fetching course pricing information",
+        "back-btn": "Trainer details",
+        "submit-btn": "Create course",
+        "title": "Confirm to complete creation",
+        "sales-representative": "Sales representative",
+        "account-code": "Account code",
+        "no-travels": "No travel",
+        "trainer-expenses-total": "Trainer expenses total",
+        "base-price_one": "Attendee x {{count}}",
+        "base-price_other": "Attendees x {{count}}",
+        "subtotal": "Sub total",
+        "free-spaces_one": "Free space x {{count}}",
+        "free-spaces_other": "Free spaces x {{count}}",
+        "vat": "VAT (20%)",
+        "amount-due": "Amount due (GBP)",
+        "caption": {
+          "FLIGHTS_one": "{{count}} day of travel",
+          "FLIGHTS_other": "{{count}} days of travel",
+          "CAR_one": "{{count}} mile",
+          "CAR_other": "{{count}} miles",
+          "accommodation_one": "{{count}} night",
+          "accommodation_other": "{{count}} nights"
+        }
+      },
       "form": {
         "health-leaflet-copy": "I acknowledge I must send the health and safety leaflet at least 2 weeks before the course begins. (If the course is starting in less than 2 weeks, send as soon as possible before the course begins.)",
         "practice-protocol-copy": "I acknowledge I will confirm practice protocols and a first aider.",
         "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
-      }
+      },
+      "save-as-draft": "Save as draft"
     },
     "edit-course": {
       "title": "Edit course",

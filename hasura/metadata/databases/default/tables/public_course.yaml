@@ -68,6 +68,13 @@ array_relationships:
         table:
           schema: public
           name: course_evaluation_answers
+  - name: expenses
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_expenses
   - name: modules
     using:
       foreign_key_constraint_on:

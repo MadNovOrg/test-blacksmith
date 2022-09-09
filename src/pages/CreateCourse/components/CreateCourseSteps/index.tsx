@@ -4,18 +4,19 @@ import { useTranslation } from 'react-i18next'
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { CourseType } from '@app/types'
 
+import { useCreateCourse } from '../CreateCourseProvider'
+
 interface Props {
   completedSteps: string[]
-  currentStepKey: string | null
   type: CourseType
 }
 
 export const CreateCourseSteps: React.FC<Props> = ({
   completedSteps,
-  currentStepKey,
   type,
 }) => {
   const { t } = useTranslation()
+  const { currentStepKey } = useCreateCourse()
 
   const steps = useMemo(() => {
     const courseDetailsStep = {

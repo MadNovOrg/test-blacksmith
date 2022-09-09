@@ -29,7 +29,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { OrgSelector } from '@app/components/OrgSelector'
 import { yup } from '@app/schemas'
-import { PaymentMethod } from '@app/types'
+import { CourseType, PaymentMethod } from '@app/types'
 import { getFieldError, normalizeAddr, requiredMsg } from '@app/util'
 
 import { InvoiceDetails, Sector, useBooking } from '../BookingContext'
@@ -216,6 +216,7 @@ export const CourseBookingDetails: React.FC = () => {
               </InputLabel>
               <NativeSelect
                 inputProps={{ id: 'qty-select' }}
+                disabled={booking.courseType === CourseType.CLOSED}
                 {...register('quantity')}
               >
                 {qtyOptions.map(o => (
@@ -238,6 +239,17 @@ export const CourseBookingDetails: React.FC = () => {
           </Typography>
         </Box>
 
+        {booking.freeSpaces > 0 ? (
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('pages.book-course.free-spaces')}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(-amounts.freeSpacesDiscount)}
+            </Typography>
+          </Box>
+        ) : null}
+
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">
             {t('vat')} ({booking.vat}%)
@@ -247,15 +259,28 @@ export const CourseBookingDetails: React.FC = () => {
           </Typography>
         </Box>
 
-        <Box my={2}>
-          <PromoCode
-            codes={booking.promoCodes}
-            onAdd={addPromo}
-            onRemove={removePromo}
-          />
-        </Box>
+        {booking.trainerExpenses > 0 ? (
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('pages.book-course.trainer-expenses')}
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(amounts.trainerExpenses)}
+            </Typography>
+          </Box>
+        ) : null}
 
-        <Box display="flex" justifyContent="space-between">
+        {booking.courseType !== CourseType.CLOSED ? (
+          <Box>
+            <PromoCode
+              codes={booking.promoCodes}
+              onAdd={addPromo}
+              onRemove={removePromo}
+            />
+          </Box>
+        ) : null}
+
+        <Box mt={2} display="flex" justifyContent="space-between">
           <Typography fontWeight="500" color="primary">
             {t('amount-due')} ({booking.currency})
           </Typography>

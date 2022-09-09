@@ -29,7 +29,7 @@ import {
   CourseDeliveryType,
   CourseType,
   CourseInput,
-  RoleName,
+  ValidCourseInput,
 } from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
@@ -188,19 +188,8 @@ const CourseForm: React.FC<Props> = ({
     [t, hasOrg, isClosedCourse, hasMinParticipants]
   )
 
-  const {
-    register,
-    setValue,
-    watch,
-    getValues,
-    formState,
-    control,
-    trigger,
-    resetField,
-  } = useForm<CourseInput>({
-    resolver: yupResolver(schema),
-    mode: 'all',
-    defaultValues: {
+  const defaultValues = useMemo<CourseInput>(
+    () => ({
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
@@ -224,7 +213,24 @@ const CourseForm: React.FC<Props> = ({
       aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? null,
-    },
+      type: courseType,
+    }),
+    [courseInput, courseType]
+  )
+
+  const {
+    register,
+    setValue,
+    watch,
+    getValues,
+    formState,
+    control,
+    trigger,
+    resetField,
+  } = useForm<CourseInput>({
+    resolver: yupResolver(schema),
+    mode: 'all',
+    defaultValues,
   })
 
   const errors = formState.errors
@@ -246,8 +252,11 @@ const CourseForm: React.FC<Props> = ({
   const accountCode = values.accountCode
 
   useEffect(() => {
-    onChange(values, isValid)
-  }, [onChange, values, isValid])
+    const s = watch(data => {
+      onChange(data as ValidCourseInput, isValid)
+    })
+    return () => s.unsubscribe()
+  }, [isValid, onChange, watch])
 
   useEffect(() => {
     const mustChange = !accountCode
@@ -345,11 +354,11 @@ const CourseForm: React.FC<Props> = ({
   } = useZoomMeetingLink(values.startDateTime ?? undefined)
 
   useEffect(() => {
-    if (!courseInput?.zoomMeetingUrl) {
+    if (zoomMeetingUrl && hasZoomMeetingUrl && !courseInput?.zoomMeetingUrl) {
       setValue('zoomMeetingUrl', zoomMeetingUrl)
       trigger('zoomMeetingUrl')
     }
-  }, [zoomMeetingUrl, setValue, trigger, courseInput])
+  }, [hasZoomMeetingUrl, zoomMeetingUrl, setValue, trigger, courseInput])
 
   useEffect(() => {
     if (deliveryType === CourseDeliveryType.VIRTUAL) {
@@ -725,7 +734,7 @@ const CourseForm: React.FC<Props> = ({
                 variant="filled"
                 fullWidth
                 type="number"
-                {...register('minParticipants')}
+                {...register('minParticipants', { valueAsNumber: true })}
                 error={Boolean(errors.minParticipants)}
                 helperText={errors.minParticipants?.message}
                 inputProps={{ min: 1 }}
@@ -745,7 +754,10 @@ const CourseForm: React.FC<Props> = ({
               variant="filled"
               fullWidth
               type="number"
-              {...register('maxParticipants', { deps: ['minParticipants'] })}
+              {...register('maxParticipants', {
+                deps: ['minParticipants'],
+                valueAsNumber: true,
+              })}
               error={Boolean(errors.maxParticipants)}
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
@@ -757,7 +769,7 @@ const CourseForm: React.FC<Props> = ({
 
       {isClosedCourse ? (
         <>
-          <FormPanel>
+          <FormPanel mb={2}>
             <Typography fontWeight={600}>
               {t('components.course-form.free-spaces-title')}
             </Typography>
@@ -772,7 +784,7 @@ const CourseForm: React.FC<Props> = ({
                   variant="filled"
                   fullWidth
                   type="number"
-                  {...register('freeSpaces')}
+                  {...register('freeSpaces', { valueAsNumber: true })}
                   error={Boolean(errors.freeSpaces)}
                   helperText={errors.freeSpaces?.message}
                   inputProps={{ min: 0 }}
@@ -792,7 +804,6 @@ const CourseForm: React.FC<Props> = ({
 
             <ProfileSelector
               value={values.salesRepresentative ?? undefined}
-              roleName={RoleName.SALES_REPRESENTATIVE}
               onChange={profile => {
                 setValue('salesRepresentative', profile ?? null, {
                   shouldValidate: true,
@@ -801,6 +812,7 @@ const CourseForm: React.FC<Props> = ({
               sx={{ marginBottom: 2 }}
               textFieldProps={{ variant: 'filled' }}
               placeholder={t('components.course-form.sales-rep-placeholder')}
+              testId="profile-selector-sales-representative"
             />
           </FormPanel>
 

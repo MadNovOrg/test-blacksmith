@@ -12,6 +12,8 @@
 - "!include public_course_evaluation_question_group.yaml"
 - "!include public_course_evaluation_question_type.yaml"
 - "!include public_course_evaluation_questions.yaml"
+- "!include public_course_expense_type.yaml"
+- "!include public_course_expenses.yaml"
 - "!include public_course_invite_status.yaml"
 - "!include public_course_invites.yaml"
 - "!include public_course_level.yaml"

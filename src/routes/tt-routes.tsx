@@ -13,6 +13,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
+import { ReviewAndConfirm } from '@app/pages/CreateCourse/components/ReviewAndConfirm'
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -45,6 +46,7 @@ const TTAdminRoutes = () => {
           <Route index element={<CreateCourseForm />} />
           <Route path="assign-trainers" element={<AssignTrainers />} />
           <Route path="trainer-expenses" element={<TrainerExpenses />} />
+          <Route path="review-and-confirm" element={<ReviewAndConfirm />} />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

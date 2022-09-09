@@ -53,7 +53,6 @@ export const CreateCoursePage = () => {
 
               <CreateCourseSteps
                 completedSteps={completedSteps ?? []}
-                currentStepKey={null}
                 type={courseType}
               />
             </Sticky>

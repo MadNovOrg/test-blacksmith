@@ -1,6 +1,8 @@
 import { Auth } from 'aws-amplify'
 import {
   differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
   format,
   formatDistanceToNow,
   isPast,
@@ -22,6 +24,7 @@ import {
   CourseType,
   SearchTrainer,
   SetCourseTrainerInput,
+  TimeDifferenceAndContext,
 } from '@app/types'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
@@ -380,3 +383,37 @@ export function getProfileCertificationLevels(
 
   return levels.length > 0 ? levels : [null]
 }
+
+export const getTimeDifferenceAndContext = (
+  end: Date,
+  start: Date
+): TimeDifferenceAndContext => {
+  const result: TimeDifferenceAndContext = {
+    count: differenceInDays(end, start),
+    context: 'days',
+  }
+
+  if (result.count === 0) {
+    result.count = differenceInHours(end, start)
+    result.context = 'hours'
+  }
+
+  if (result.count === 0) {
+    result.count = differenceInMinutes(end, start)
+    result.context = 'minutes'
+  }
+
+  if (result.count === 0) {
+    result.context = 'none'
+  }
+
+  return result
+}
+
+export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
+
+export const getTrainerAccommodationCost = (nights = 0) => nights * 30
+
+export const getVatAmount = (amount = 0) => amount * 0.2
+
+export const roundToTwoDecimals = (value = 0) => Math.round(value * 100) / 100
