@@ -20,6 +20,7 @@ type Props = {
   onClose: () => void
   onSave: () => void
   orgId: string
+  currentBalance: number
 }
 
 const formTypeEventMap = {
@@ -32,13 +33,17 @@ export const ManageLicensesDialog: React.FC<Props> = ({
   onClose,
   onSave,
   orgId,
+  currentBalance,
 }) => {
   const { profile } = useAuth()
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses')
   const fetcher = useFetcher()
-  const [savingError, setSavingError] = useState(false)
+  const [errorMessageLabel, setErrorMessageLabel] = useState('')
+  const [saving, setSaving] = useState(false)
 
   const handleSave = async (data: FormData) => {
+    setSaving(true)
+
     const mutationInput: Go1LicensesChangeInput = {
       type: formTypeEventMap[data.type],
       amount: Number(data.amount),
@@ -55,10 +60,12 @@ export const ManageLicensesDialog: React.FC<Props> = ({
       Go1LicensesChangeMutationVariables
     >(go1LicensesHistoryChange, { input: mutationInput })
 
+    setSaving(false)
+
     if (response.go1LicensesChange?.success) {
       onSave()
     } else {
-      setSavingError(true)
+      setErrorMessageLabel(`error-${mutationInput.type}-message`)
     }
   }
 
@@ -72,13 +79,16 @@ export const ManageLicensesDialog: React.FC<Props> = ({
       <Typography variant="body2" mb={2}>
         {t('manage-modal-description')}
       </Typography>
-      {savingError ? (
-        <Alert severity="error">{t('error-adding-licenses')}</Alert>
+      {errorMessageLabel ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {t(errorMessageLabel)}
+        </Alert>
       ) : null}
       <ManageLicensesForm
         onSave={handleSave}
         onCancel={onClose}
-        currentBalance={100}
+        currentBalance={currentBalance}
+        saving={saving}
       />
     </Dialog>
   )

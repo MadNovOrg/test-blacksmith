@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Button,
@@ -32,12 +33,14 @@ type Props = {
   onSave?: (data: FormData) => void
   onCancel?: () => void
   currentBalance: number
+  saving?: boolean
 }
 
 export const ManageLicensesForm: React.FC<Props> = ({
   onSave,
   onCancel,
   currentBalance,
+  saving,
 }) => {
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses.form')
 
@@ -184,9 +187,14 @@ export const ManageLicensesForm: React.FC<Props> = ({
         <Button onClick={onCancel} sx={{ marginRight: 2 }}>
           {t('cancel-button-label')}
         </Button>
-        <Button variant="contained" type="submit" disabled={!isValid}>
+        <LoadingButton
+          loading={saving}
+          variant="contained"
+          type="submit"
+          disabled={!isValid}
+        >
           {t('save-button-label')}
-        </Button>
+        </LoadingButton>
       </Box>
     </form>
   )

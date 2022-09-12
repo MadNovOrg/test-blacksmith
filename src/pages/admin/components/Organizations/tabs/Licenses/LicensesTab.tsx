@@ -123,6 +123,7 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
             onClose={closeModal}
             onSave={handleSave}
             orgId={orgId}
+            currentBalance={data?.organization_by_pk?.go1Licenses ?? 0}
           />
         </>
       ) : null}
