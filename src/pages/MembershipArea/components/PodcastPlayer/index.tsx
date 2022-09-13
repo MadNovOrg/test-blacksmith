@@ -61,7 +61,7 @@ export const PodcastPlayer: React.FC<Props> = ({
     }
 
     const onTimeUpdate = () => {
-      if (audioNode) {
+      if (audioNode && audioNode.duration) {
         setSecondsLeft(audioNode.duration - audioNode.currentTime)
         setProgress((audioNode.currentTime / audioNode.duration) * 100)
       }
