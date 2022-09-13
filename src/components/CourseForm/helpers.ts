@@ -4,8 +4,8 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import aolRegionsByCountry from './aolRegions'
 
-export function makeDate(date: Date | string, time: Date | string) {
-  const _date = new Date(date)
+export function makeDate(date: Date | string | null, time: Date | string) {
+  const _date = new Date(date || Date.now())
   return new Date(`${format(_date, 'yyyy-MM-dd')} ${time}`)
 }
 

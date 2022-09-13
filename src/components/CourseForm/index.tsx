@@ -68,10 +68,14 @@ const CourseForm: React.FC<Props> = ({
   const { t } = useTranslation()
 
   const [startTime, setStartTime] = useState<Date | string>(
-    courseInput?.startDateTime ? extractTime(courseInput.startDateTime) : ''
+    courseInput?.startDateTime
+      ? extractTime(courseInput.startDateTime)
+      : extractTime(makeDate(null, '08:00'))
   )
   const [endTime, setEndTime] = useState<Date | string>(
-    courseInput?.endDateTime ? extractTime(courseInput.endDateTime) : ''
+    courseInput?.endDateTime
+      ? extractTime(courseInput.endDateTime)
+      : extractTime(makeDate(null, '08:00'))
   )
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
