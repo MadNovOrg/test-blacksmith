@@ -61,7 +61,16 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
               <TableCell>{org.name}</TableCell>
               <TableCell>{org.address?.city}</TableCell>
               <TableCell>
-                <AvatarGroup max={4}>
+                <AvatarGroup
+                  max={4}
+                  sx={{
+                    '& .MuiAvatar-root': {
+                      width: 32,
+                      height: 32,
+                      fontSize: 15,
+                    },
+                  }}
+                >
                   {profilesByOrg.get(org.id)?.map(profile => (
                     <Avatar
                       key={profile.id}

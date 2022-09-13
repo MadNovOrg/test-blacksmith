@@ -213,11 +213,9 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
                         variant="body2"
                         href={`/courses/${enrollment.courseId}/details`}
                       >
-                        {t(
+                        {`${t(
                           `common.certificates.${enrollment?.courseLevel?.toLowerCase()}`
-                        ) +
-                          ' ' +
-                          enrollment.courseId}
+                        )} ${enrollment.courseId}`}
                       </Link>
                     ))}
                   </Box>
