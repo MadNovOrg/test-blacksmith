@@ -200,7 +200,7 @@ export const CourseBookingReview: React.FC = () => {
           </Typography>
         </Box>
         <Typography color="grey.700">
-          {t('pages.book-course.due-on', { date: new Date() })}
+          {t('pages.book-course.due-on', { date: new Date('1980-01-01') })}
         </Typography>
       </Box>
 
