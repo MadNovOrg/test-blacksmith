@@ -30,51 +30,43 @@ insert_permissions:
       check: {}
       columns:
         - course_id
-        - value
-        - description
-        - type
         - created_at
-        - updated_at
+        - data
         - id
         - trainer_id
+        - updated_at
       backend_only: false
   - role: tt-ops
     permission:
       check: {}
       columns:
-        - id
-        - created_at
-        - updated_at
         - course_id
-        - type
-        - description
-        - value
+        - created_at
+        - data
+        - id
         - trainer_id
+        - updated_at
       backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
       columns:
         - course_id
-        - value
-        - description
-        - type
         - created_at
-        - updated_at
+        - data
         - id
         - trainer_id
+        - updated_at
       filter: {}
       allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
         - course_id
-        - value
-        - description
-        - type
         - created_at
-        - updated_at
+        - data
         - id
         - trainer_id
+        - updated_at
       filter: {}
       allow_aggregations: true

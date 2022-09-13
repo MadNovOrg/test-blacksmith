@@ -1,7 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Course_Expense_Type_Enum } from '@app/generated/graphql'
-import { Course, CourseType } from '@app/types'
+import { Course, CourseExpenseData, CourseType } from '@app/types'
 
 import { COURSE_DATES } from '../fragments'
 
@@ -21,9 +20,7 @@ export type ResponseType = {
       freeSpaces?: number
       expenses?: Array<{
         id: string
-        type: Course_Expense_Type_Enum
-        description: string
-        value: number
+        data: CourseExpenseData
         trainer: {
           id: string
           fullName: string
@@ -54,9 +51,7 @@ export const QUERY = gql`
         freeSpaces
         expenses {
           id
-          type
-          description
-          value
+          data
           trainer {
             id
             fullName

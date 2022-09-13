@@ -14533,123 +14533,6 @@ export type Course_Evaluation_Questions_Variance_Fields = {
   displayOrder?: Maybe<Scalars['Float']>;
 };
 
-/** columns and relationships of "course_expense_type" */
-export type Course_Expense_Type = {
-  __typename?: 'course_expense_type';
-  name: Scalars['String'];
-};
-
-/** aggregated selection of "course_expense_type" */
-export type Course_Expense_Type_Aggregate = {
-  __typename?: 'course_expense_type_aggregate';
-  aggregate?: Maybe<Course_Expense_Type_Aggregate_Fields>;
-  nodes: Array<Course_Expense_Type>;
-};
-
-/** aggregate fields of "course_expense_type" */
-export type Course_Expense_Type_Aggregate_Fields = {
-  __typename?: 'course_expense_type_aggregate_fields';
-  count: Scalars['Int'];
-  max?: Maybe<Course_Expense_Type_Max_Fields>;
-  min?: Maybe<Course_Expense_Type_Min_Fields>;
-};
-
-
-/** aggregate fields of "course_expense_type" */
-export type Course_Expense_Type_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Course_Expense_Type_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** Boolean expression to filter rows from the table "course_expense_type". All fields are combined with a logical 'AND'. */
-export type Course_Expense_Type_Bool_Exp = {
-  _and?: InputMaybe<Array<Course_Expense_Type_Bool_Exp>>;
-  _not?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-  _or?: InputMaybe<Array<Course_Expense_Type_Bool_Exp>>;
-  name?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "course_expense_type" */
-export enum Course_Expense_Type_Constraint {
-  /** unique or primary key constraint */
-  CourseExpenseTypePkey = 'course_expense_type_pkey'
-}
-
-export enum Course_Expense_Type_Enum {
-  Accommodation = 'ACCOMMODATION',
-  Miscellaneous = 'MISCELLANEOUS',
-  Transport = 'TRANSPORT'
-}
-
-/** Boolean expression to compare columns of type "course_expense_type_enum". All fields are combined with logical 'AND'. */
-export type Course_Expense_Type_Enum_Comparison_Exp = {
-  _eq?: InputMaybe<Course_Expense_Type_Enum>;
-  _in?: InputMaybe<Array<Course_Expense_Type_Enum>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _neq?: InputMaybe<Course_Expense_Type_Enum>;
-  _nin?: InputMaybe<Array<Course_Expense_Type_Enum>>;
-};
-
-/** input type for inserting data into table "course_expense_type" */
-export type Course_Expense_Type_Insert_Input = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Course_Expense_Type_Max_Fields = {
-  __typename?: 'course_expense_type_max_fields';
-  name?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Course_Expense_Type_Min_Fields = {
-  __typename?: 'course_expense_type_min_fields';
-  name?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "course_expense_type" */
-export type Course_Expense_Type_Mutation_Response = {
-  __typename?: 'course_expense_type_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Course_Expense_Type>;
-};
-
-/** on_conflict condition type for table "course_expense_type" */
-export type Course_Expense_Type_On_Conflict = {
-  constraint: Course_Expense_Type_Constraint;
-  update_columns?: Array<Course_Expense_Type_Update_Column>;
-  where?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "course_expense_type". */
-export type Course_Expense_Type_Order_By = {
-  name?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: course_expense_type */
-export type Course_Expense_Type_Pk_Columns_Input = {
-  name: Scalars['String'];
-};
-
-/** select columns of table "course_expense_type" */
-export enum Course_Expense_Type_Select_Column {
-  /** column name */
-  Name = 'name'
-}
-
-/** input type for updating data in table "course_expense_type" */
-export type Course_Expense_Type_Set_Input = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
-/** update columns of table "course_expense_type" */
-export enum Course_Expense_Type_Update_Column {
-  /** column name */
-  Name = 'name'
-}
-
 /** columns and relationships of "course_expenses" */
 export type Course_Expenses = {
   __typename?: 'course_expenses';
@@ -14657,14 +14540,18 @@ export type Course_Expenses = {
   course: Course;
   courseId: Scalars['Int'];
   createdAt: Scalars['timestamptz'];
-  description: Scalars['String'];
+  data: Scalars['jsonb'];
   id: Scalars['uuid'];
   /** An object relationship */
   trainer: Profile;
   trainerId: Scalars['uuid'];
-  type: Course_Expense_Type_Enum;
   updatedAt: Scalars['timestamptz'];
-  value: Scalars['numeric'];
+};
+
+
+/** columns and relationships of "course_expenses" */
+export type Course_ExpensesDataArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregated selection of "course_expenses" */
@@ -14712,6 +14599,11 @@ export type Course_Expenses_Aggregate_Order_By = {
   variance?: InputMaybe<Course_Expenses_Variance_Order_By>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Course_Expenses_Append_Input = {
+  data?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** input type for inserting array relation for remote table "course_expenses" */
 export type Course_Expenses_Arr_Rel_Insert_Input = {
   data: Array<Course_Expenses_Insert_Input>;
@@ -14723,13 +14615,11 @@ export type Course_Expenses_Arr_Rel_Insert_Input = {
 export type Course_Expenses_Avg_Fields = {
   __typename?: 'course_expenses_avg_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "course_expenses" */
 export type Course_Expenses_Avg_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course_expenses". All fields are combined with a logical 'AND'. */
@@ -14740,13 +14630,11 @@ export type Course_Expenses_Bool_Exp = {
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  description?: InputMaybe<String_Comparison_Exp>;
+  data?: InputMaybe<Jsonb_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   trainer?: InputMaybe<Profile_Bool_Exp>;
   trainerId?: InputMaybe<Uuid_Comparison_Exp>;
-  type?: InputMaybe<Course_Expense_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
-  value?: InputMaybe<Numeric_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_expenses" */
@@ -14755,10 +14643,24 @@ export enum Course_Expenses_Constraint {
   CourseExpensesPkey = 'course_expenses_pkey'
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Course_Expenses_Delete_At_Path_Input = {
+  data?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Course_Expenses_Delete_Elem_Input = {
+  data?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Course_Expenses_Delete_Key_Input = {
+  data?: InputMaybe<Scalars['String']>;
+};
+
 /** input type for incrementing numeric columns in table "course_expenses" */
 export type Course_Expenses_Inc_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
-  value?: InputMaybe<Scalars['numeric']>;
 };
 
 /** input type for inserting data into table "course_expenses" */
@@ -14766,13 +14668,11 @@ export type Course_Expenses_Insert_Input = {
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  description?: InputMaybe<Scalars['String']>;
+  data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   trainer?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   trainerId?: InputMaybe<Scalars['uuid']>;
-  type?: InputMaybe<Course_Expense_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
-  value?: InputMaybe<Scalars['numeric']>;
 };
 
 /** aggregate max on columns */
@@ -14780,22 +14680,18 @@ export type Course_Expenses_Max_Fields = {
   __typename?: 'course_expenses_max_fields';
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   trainerId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
-  value?: Maybe<Scalars['numeric']>;
 };
 
 /** order by max() on columns of table "course_expenses" */
 export type Course_Expenses_Max_Order_By = {
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
-  description?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   trainerId?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -14803,22 +14699,18 @@ export type Course_Expenses_Min_Fields = {
   __typename?: 'course_expenses_min_fields';
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['uuid']>;
   trainerId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
-  value?: Maybe<Scalars['numeric']>;
 };
 
 /** order by min() on columns of table "course_expenses" */
 export type Course_Expenses_Min_Order_By = {
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
-  description?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   trainerId?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_expenses" */
@@ -14842,18 +14734,21 @@ export type Course_Expenses_Order_By = {
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
-  description?: InputMaybe<Order_By>;
+  data?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   trainer?: InputMaybe<Profile_Order_By>;
   trainerId?: InputMaybe<Order_By>;
-  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_expenses */
 export type Course_Expenses_Pk_Columns_Input = {
   id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Course_Expenses_Prepend_Input = {
+  data?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "course_expenses" */
@@ -14863,81 +14758,67 @@ export enum Course_Expenses_Select_Column {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
-  Description = 'description',
+  Data = 'data',
   /** column name */
   Id = 'id',
   /** column name */
   TrainerId = 'trainerId',
   /** column name */
-  Type = 'type',
-  /** column name */
-  UpdatedAt = 'updatedAt',
-  /** column name */
-  Value = 'value'
+  UpdatedAt = 'updatedAt'
 }
 
 /** input type for updating data in table "course_expenses" */
 export type Course_Expenses_Set_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
-  description?: InputMaybe<Scalars['String']>;
+  data?: InputMaybe<Scalars['jsonb']>;
   id?: InputMaybe<Scalars['uuid']>;
   trainerId?: InputMaybe<Scalars['uuid']>;
-  type?: InputMaybe<Course_Expense_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
-  value?: InputMaybe<Scalars['numeric']>;
 };
 
 /** aggregate stddev on columns */
 export type Course_Expenses_Stddev_Fields = {
   __typename?: 'course_expenses_stddev_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "course_expenses" */
 export type Course_Expenses_Stddev_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Course_Expenses_Stddev_Pop_Fields = {
   __typename?: 'course_expenses_stddev_pop_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "course_expenses" */
 export type Course_Expenses_Stddev_Pop_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Course_Expenses_Stddev_Samp_Fields = {
   __typename?: 'course_expenses_stddev_samp_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "course_expenses" */
 export type Course_Expenses_Stddev_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate sum on columns */
 export type Course_Expenses_Sum_Fields = {
   __typename?: 'course_expenses_sum_fields';
   courseId?: Maybe<Scalars['Int']>;
-  value?: Maybe<Scalars['numeric']>;
 };
 
 /** order by sum() on columns of table "course_expenses" */
 export type Course_Expenses_Sum_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "course_expenses" */
@@ -14947,56 +14828,46 @@ export enum Course_Expenses_Update_Column {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
-  Description = 'description',
+  Data = 'data',
   /** column name */
   Id = 'id',
   /** column name */
   TrainerId = 'trainerId',
   /** column name */
-  Type = 'type',
-  /** column name */
-  UpdatedAt = 'updatedAt',
-  /** column name */
-  Value = 'value'
+  UpdatedAt = 'updatedAt'
 }
 
 /** aggregate var_pop on columns */
 export type Course_Expenses_Var_Pop_Fields = {
   __typename?: 'course_expenses_var_pop_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "course_expenses" */
 export type Course_Expenses_Var_Pop_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
 export type Course_Expenses_Var_Samp_Fields = {
   __typename?: 'course_expenses_var_samp_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "course_expenses" */
 export type Course_Expenses_Var_Samp_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
 export type Course_Expenses_Variance_Fields = {
   __typename?: 'course_expenses_variance_fields';
   courseId?: Maybe<Scalars['Float']>;
-  value?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "course_expenses" */
 export type Course_Expenses_Variance_Order_By = {
   courseId?: InputMaybe<Order_By>;
-  value?: InputMaybe<Order_By>;
 };
 
 /** input type for incrementing numeric columns in table "course" */
@@ -18368,6 +18239,132 @@ export enum Dfe_Establishment_Update_Column {
   Urn = 'urn'
 }
 
+/** Stores scheduled jobs ids for expiring Go1 licenses */
+export type Expire_Go1_License_Jobs = {
+  __typename?: 'expire_go1_license_jobs';
+  id: Scalars['uuid'];
+  jobId: Scalars['uuid'];
+  licenseId: Scalars['uuid'];
+};
+
+/** aggregated selection of "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Aggregate = {
+  __typename?: 'expire_go1_license_jobs_aggregate';
+  aggregate?: Maybe<Expire_Go1_License_Jobs_Aggregate_Fields>;
+  nodes: Array<Expire_Go1_License_Jobs>;
+};
+
+/** aggregate fields of "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Aggregate_Fields = {
+  __typename?: 'expire_go1_license_jobs_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Expire_Go1_License_Jobs_Max_Fields>;
+  min?: Maybe<Expire_Go1_License_Jobs_Min_Fields>;
+};
+
+
+/** aggregate fields of "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "expire_go1_license_jobs". All fields are combined with a logical 'AND'. */
+export type Expire_Go1_License_Jobs_Bool_Exp = {
+  _and?: InputMaybe<Array<Expire_Go1_License_Jobs_Bool_Exp>>;
+  _not?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+  _or?: InputMaybe<Array<Expire_Go1_License_Jobs_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  jobId?: InputMaybe<Uuid_Comparison_Exp>;
+  licenseId?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "expire_go1_license_jobs" */
+export enum Expire_Go1_License_Jobs_Constraint {
+  /** unique or primary key constraint */
+  ExpireGo1LicenseJobsJobIdLicenseIdKey = 'expire_go1_license_jobs_job_id_license_id_key',
+  /** unique or primary key constraint */
+  ExpireGo1LicenseJobsPkey = 'expire_go1_license_jobs_pkey'
+}
+
+/** input type for inserting data into table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  jobId?: InputMaybe<Scalars['uuid']>;
+  licenseId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Expire_Go1_License_Jobs_Max_Fields = {
+  __typename?: 'expire_go1_license_jobs_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  jobId?: Maybe<Scalars['uuid']>;
+  licenseId?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Expire_Go1_License_Jobs_Min_Fields = {
+  __typename?: 'expire_go1_license_jobs_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  jobId?: Maybe<Scalars['uuid']>;
+  licenseId?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Mutation_Response = {
+  __typename?: 'expire_go1_license_jobs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Expire_Go1_License_Jobs>;
+};
+
+/** on_conflict condition type for table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_On_Conflict = {
+  constraint: Expire_Go1_License_Jobs_Constraint;
+  update_columns?: Array<Expire_Go1_License_Jobs_Update_Column>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "expire_go1_license_jobs". */
+export type Expire_Go1_License_Jobs_Order_By = {
+  id?: InputMaybe<Order_By>;
+  jobId?: InputMaybe<Order_By>;
+  licenseId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: expire_go1_license_jobs */
+export type Expire_Go1_License_Jobs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "expire_go1_license_jobs" */
+export enum Expire_Go1_License_Jobs_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'jobId',
+  /** column name */
+  LicenseId = 'licenseId'
+}
+
+/** input type for updating data in table "expire_go1_license_jobs" */
+export type Expire_Go1_License_Jobs_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  jobId?: InputMaybe<Scalars['uuid']>;
+  licenseId?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "expire_go1_license_jobs" */
+export enum Expire_Go1_License_Jobs_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'jobId',
+  /** column name */
+  LicenseId = 'licenseId'
+}
+
 /** Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
   _eq?: InputMaybe<Scalars['float8']>;
@@ -20803,10 +20800,6 @@ export type Mutation_Root = {
   delete_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** delete single row from the table: "course_evaluation_questions" */
   delete_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
-  /** delete data from the table: "course_expense_type" */
-  delete_course_expense_type?: Maybe<Course_Expense_Type_Mutation_Response>;
-  /** delete single row from the table: "course_expense_type" */
-  delete_course_expense_type_by_pk?: Maybe<Course_Expense_Type>;
   /** delete data from the table: "course_expenses" */
   delete_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** delete single row from the table: "course_expenses" */
@@ -20863,6 +20856,10 @@ export type Mutation_Root = {
   delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** delete single row from the table: "dfe_establishment" */
   delete_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** delete data from the table: "expire_go1_license_jobs" */
+  delete_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
+  /** delete single row from the table: "expire_go1_license_jobs" */
+  delete_expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
   /** delete data from the table: "go1_history_events" */
   delete_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
   /** delete single row from the table: "go1_history_events" */
@@ -21027,10 +21024,6 @@ export type Mutation_Root = {
   insert_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** insert a single row into the table: "course_evaluation_questions" */
   insert_course_evaluation_questions_one?: Maybe<Course_Evaluation_Questions>;
-  /** insert data into the table: "course_expense_type" */
-  insert_course_expense_type?: Maybe<Course_Expense_Type_Mutation_Response>;
-  /** insert a single row into the table: "course_expense_type" */
-  insert_course_expense_type_one?: Maybe<Course_Expense_Type>;
   /** insert data into the table: "course_expenses" */
   insert_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** insert a single row into the table: "course_expenses" */
@@ -21089,6 +21082,10 @@ export type Mutation_Root = {
   insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** insert a single row into the table: "dfe_establishment" */
   insert_dfe_establishment_one?: Maybe<Dfe_Establishment>;
+  /** insert data into the table: "expire_go1_license_jobs" */
+  insert_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
+  /** insert a single row into the table: "expire_go1_license_jobs" */
+  insert_expire_go1_license_jobs_one?: Maybe<Expire_Go1_License_Jobs>;
   /** insert data into the table: "go1_history_events" */
   insert_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
   /** insert a single row into the table: "go1_history_events" */
@@ -21256,10 +21253,6 @@ export type Mutation_Root = {
   update_course_evaluation_questions?: Maybe<Course_Evaluation_Questions_Mutation_Response>;
   /** update single row of the table: "course_evaluation_questions" */
   update_course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
-  /** update data of the table: "course_expense_type" */
-  update_course_expense_type?: Maybe<Course_Expense_Type_Mutation_Response>;
-  /** update single row of the table: "course_expense_type" */
-  update_course_expense_type_by_pk?: Maybe<Course_Expense_Type>;
   /** update data of the table: "course_expenses" */
   update_course_expenses?: Maybe<Course_Expenses_Mutation_Response>;
   /** update single row of the table: "course_expenses" */
@@ -21316,6 +21309,10 @@ export type Mutation_Root = {
   update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** update single row of the table: "dfe_establishment" */
   update_dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** update data of the table: "expire_go1_license_jobs" */
+  update_expire_go1_license_jobs?: Maybe<Expire_Go1_License_Jobs_Mutation_Response>;
+  /** update single row of the table: "expire_go1_license_jobs" */
+  update_expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
   /** update data of the table: "go1_history_events" */
   update_go1_history_events?: Maybe<Go1_History_Events_Mutation_Response>;
   /** update single row of the table: "go1_history_events" */
@@ -21626,18 +21623,6 @@ export type Mutation_RootDelete_Course_Evaluation_Questions_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Course_Expense_TypeArgs = {
-  where: Course_Expense_Type_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootDelete_Course_Expense_Type_By_PkArgs = {
-  name: Scalars['String'];
-};
-
-
-/** mutation root */
 export type Mutation_RootDelete_Course_ExpensesArgs = {
   where: Course_Expenses_Bool_Exp;
 };
@@ -21801,6 +21786,18 @@ export type Mutation_RootDelete_Dfe_EstablishmentArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Dfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Expire_Go1_License_JobsArgs = {
+  where: Expire_Go1_License_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Expire_Go1_License_Jobs_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -22325,20 +22322,6 @@ export type Mutation_RootInsert_Course_Evaluation_Questions_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Course_Expense_TypeArgs = {
-  objects: Array<Course_Expense_Type_Insert_Input>;
-  on_conflict?: InputMaybe<Course_Expense_Type_On_Conflict>;
-};
-
-
-/** mutation root */
-export type Mutation_RootInsert_Course_Expense_Type_OneArgs = {
-  object: Course_Expense_Type_Insert_Input;
-  on_conflict?: InputMaybe<Course_Expense_Type_On_Conflict>;
-};
-
-
-/** mutation root */
 export type Mutation_RootInsert_Course_ExpensesArgs = {
   objects: Array<Course_Expenses_Insert_Input>;
   on_conflict?: InputMaybe<Course_Expenses_On_Conflict>;
@@ -22538,6 +22521,20 @@ export type Mutation_RootInsert_Dfe_EstablishmentArgs = {
 export type Mutation_RootInsert_Dfe_Establishment_OneArgs = {
   object: Dfe_Establishment_Insert_Input;
   on_conflict?: InputMaybe<Dfe_Establishment_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Expire_Go1_License_JobsArgs = {
+  objects: Array<Expire_Go1_License_Jobs_Insert_Input>;
+  on_conflict?: InputMaybe<Expire_Go1_License_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Expire_Go1_License_Jobs_OneArgs = {
+  object: Expire_Go1_License_Jobs_Insert_Input;
+  on_conflict?: InputMaybe<Expire_Go1_License_Jobs_On_Conflict>;
 };
 
 
@@ -23140,22 +23137,13 @@ export type Mutation_RootUpdate_Course_Evaluation_Questions_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Course_Expense_TypeArgs = {
-  _set?: InputMaybe<Course_Expense_Type_Set_Input>;
-  where: Course_Expense_Type_Bool_Exp;
-};
-
-
-/** mutation root */
-export type Mutation_RootUpdate_Course_Expense_Type_By_PkArgs = {
-  _set?: InputMaybe<Course_Expense_Type_Set_Input>;
-  pk_columns: Course_Expense_Type_Pk_Columns_Input;
-};
-
-
-/** mutation root */
 export type Mutation_RootUpdate_Course_ExpensesArgs = {
+  _append?: InputMaybe<Course_Expenses_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Expenses_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Expenses_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Expenses_Delete_Key_Input>;
   _inc?: InputMaybe<Course_Expenses_Inc_Input>;
+  _prepend?: InputMaybe<Course_Expenses_Prepend_Input>;
   _set?: InputMaybe<Course_Expenses_Set_Input>;
   where: Course_Expenses_Bool_Exp;
 };
@@ -23163,7 +23151,12 @@ export type Mutation_RootUpdate_Course_ExpensesArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Course_Expenses_By_PkArgs = {
+  _append?: InputMaybe<Course_Expenses_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Expenses_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Expenses_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Expenses_Delete_Key_Input>;
   _inc?: InputMaybe<Course_Expenses_Inc_Input>;
+  _prepend?: InputMaybe<Course_Expenses_Prepend_Input>;
   _set?: InputMaybe<Course_Expenses_Set_Input>;
   pk_columns: Course_Expenses_Pk_Columns_Input;
 };
@@ -23360,6 +23353,20 @@ export type Mutation_RootUpdate_Dfe_EstablishmentArgs = {
 export type Mutation_RootUpdate_Dfe_Establishment_By_PkArgs = {
   _set?: InputMaybe<Dfe_Establishment_Set_Input>;
   pk_columns: Dfe_Establishment_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Expire_Go1_License_JobsArgs = {
+  _set?: InputMaybe<Expire_Go1_License_Jobs_Set_Input>;
+  where: Expire_Go1_License_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Expire_Go1_License_Jobs_By_PkArgs = {
+  _set?: InputMaybe<Expire_Go1_License_Jobs_Set_Input>;
+  pk_columns: Expire_Go1_License_Jobs_Pk_Columns_Input;
 };
 
 
@@ -27528,12 +27535,6 @@ export type Query_Root = {
   course_evaluation_questions_aggregate: Course_Evaluation_Questions_Aggregate;
   /** fetch data from the table: "course_evaluation_questions" using primary key columns */
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
-  /** fetch data from the table: "course_expense_type" */
-  course_expense_type: Array<Course_Expense_Type>;
-  /** fetch aggregated fields from the table: "course_expense_type" */
-  course_expense_type_aggregate: Course_Expense_Type_Aggregate;
-  /** fetch data from the table: "course_expense_type" using primary key columns */
-  course_expense_type_by_pk?: Maybe<Course_Expense_Type>;
   /** fetch data from the table: "course_expenses" */
   course_expenses: Array<Course_Expenses>;
   /** fetch aggregated fields from the table: "course_expenses" */
@@ -27618,6 +27619,12 @@ export type Query_Root = {
   dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
   /** fetch data from the table: "dfe_establishment" using primary key columns */
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** fetch data from the table: "expire_go1_license_jobs" */
+  expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
+  /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
+  expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
+  /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
+  expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
   /** Fetches membership plans */
   fetchPlans?: Maybe<Array<Maybe<PlanObject>>>;
   /** getCoursePricing */
@@ -28128,29 +28135,6 @@ export type Query_RootCourse_Evaluation_Questions_By_PkArgs = {
 };
 
 
-export type Query_RootCourse_Expense_TypeArgs = {
-  distinct_on?: InputMaybe<Array<Course_Expense_Type_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Expense_Type_Order_By>>;
-  where?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-};
-
-
-export type Query_RootCourse_Expense_Type_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Expense_Type_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Expense_Type_Order_By>>;
-  where?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-};
-
-
-export type Query_RootCourse_Expense_Type_By_PkArgs = {
-  name: Scalars['String'];
-};
-
-
 export type Query_RootCourse_ExpensesArgs = {
   distinct_on?: InputMaybe<Array<Course_Expenses_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -28469,6 +28453,29 @@ export type Query_RootDfe_Establishment_AggregateArgs = {
 
 
 export type Query_RootDfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootExpire_Go1_License_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootExpire_Go1_License_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootExpire_Go1_License_Jobs_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -29503,12 +29510,6 @@ export type Subscription_Root = {
   course_evaluation_questions_aggregate: Course_Evaluation_Questions_Aggregate;
   /** fetch data from the table: "course_evaluation_questions" using primary key columns */
   course_evaluation_questions_by_pk?: Maybe<Course_Evaluation_Questions>;
-  /** fetch data from the table: "course_expense_type" */
-  course_expense_type: Array<Course_Expense_Type>;
-  /** fetch aggregated fields from the table: "course_expense_type" */
-  course_expense_type_aggregate: Course_Expense_Type_Aggregate;
-  /** fetch data from the table: "course_expense_type" using primary key columns */
-  course_expense_type_by_pk?: Maybe<Course_Expense_Type>;
   /** fetch data from the table: "course_expenses" */
   course_expenses: Array<Course_Expenses>;
   /** fetch aggregated fields from the table: "course_expenses" */
@@ -29593,6 +29594,12 @@ export type Subscription_Root = {
   dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
   /** fetch data from the table: "dfe_establishment" using primary key columns */
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** fetch data from the table: "expire_go1_license_jobs" */
+  expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
+  /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
+  expire_go1_license_jobs_aggregate: Expire_Go1_License_Jobs_Aggregate;
+  /** fetch data from the table: "expire_go1_license_jobs" using primary key columns */
+  expire_go1_license_jobs_by_pk?: Maybe<Expire_Go1_License_Jobs>;
   /** fetch data from the table: "go1_history_events" */
   go1_history_events: Array<Go1_History_Events>;
   /** fetch aggregated fields from the table: "go1_history_events" */
@@ -30084,29 +30091,6 @@ export type Subscription_RootCourse_Evaluation_Questions_By_PkArgs = {
 };
 
 
-export type Subscription_RootCourse_Expense_TypeArgs = {
-  distinct_on?: InputMaybe<Array<Course_Expense_Type_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Expense_Type_Order_By>>;
-  where?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-};
-
-
-export type Subscription_RootCourse_Expense_Type_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Expense_Type_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Expense_Type_Order_By>>;
-  where?: InputMaybe<Course_Expense_Type_Bool_Exp>;
-};
-
-
-export type Subscription_RootCourse_Expense_Type_By_PkArgs = {
-  name: Scalars['String'];
-};
-
-
 export type Subscription_RootCourse_ExpensesArgs = {
   distinct_on?: InputMaybe<Array<Course_Expenses_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -30425,6 +30409,29 @@ export type Subscription_RootDfe_Establishment_AggregateArgs = {
 
 
 export type Subscription_RootDfe_Establishment_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootExpire_Go1_License_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootExpire_Go1_License_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Expire_Go1_License_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Expire_Go1_License_Jobs_Order_By>>;
+  where?: InputMaybe<Expire_Go1_License_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootExpire_Go1_License_Jobs_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -32871,7 +32878,7 @@ export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null } }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;

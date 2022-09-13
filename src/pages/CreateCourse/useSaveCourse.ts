@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
-  Course_Expense_Type_Enum,
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
 } from '@app/generated/graphql'
@@ -14,6 +13,7 @@ import {
 } from '@app/queries/courses/insert-course'
 import {
   CourseDeliveryType,
+  CourseExpenseType,
   CourseType,
   ExpensesInput,
   TrainerInput,
@@ -40,51 +40,45 @@ const prepareExpensesData = (
           accommodationNightsTotal += accommodationNights
         }
 
-        let description = ''
-        switch (method) {
-          case TransportMethod.CAR:
-            description = `Car trip (${value} miles)`
-            break
-
-          case TransportMethod.FLIGHTS:
-            description = `Flight (${flightDays} days)`
-            break
-
-          case TransportMethod.PUBLIC:
-            description = 'Public transport'
-            break
-
-          case TransportMethod.PRIVATE:
-            description = 'Private transport'
-            break
-
-          default:
-            break
+        const expense: Course_Expenses_Insert_Input = {
+          trainerId,
+          data: {
+            type: CourseExpenseType.Transport,
+            method,
+          },
         }
 
-        courseExpenses.push({
-          description,
-          trainerId,
-          type: Course_Expense_Type_Enum.Transport,
-          value,
-        })
+        if (method === TransportMethod.CAR) {
+          expense.data.mileage = value
+        } else {
+          expense.data.cost = value
+
+          if (method === TransportMethod.FLIGHTS) {
+            expense.data.flightDays = flightDays
+          }
+        }
+
+        courseExpenses.push(expense)
       })
 
     if (accommodationNightsTotal > 0) {
       courseExpenses.push({
-        description: `Accommodation (${accommodationNightsTotal} nights)`,
         trainerId,
-        type: Course_Expense_Type_Enum.Accommodation,
-        value: accommodationNightsTotal,
+        data: {
+          type: CourseExpenseType.Accommodation,
+          accommodationNights: accommodationNightsTotal,
+        },
       })
     }
 
     miscellaneous?.forEach(({ name, value }) => {
       courseExpenses.push({
-        description: name as string,
         trainerId,
-        type: Course_Expense_Type_Enum.Miscellaneous,
-        value: value as number,
+        data: {
+          type: CourseExpenseType.Miscellaneous,
+          description: name as string,
+          cost: value as number,
+        },
       })
     })
   }

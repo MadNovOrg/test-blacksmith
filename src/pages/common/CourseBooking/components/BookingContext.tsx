@@ -3,7 +3,6 @@ import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
-import { Course_Expense_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
@@ -19,7 +18,14 @@ import {
   QUERY as GET_TEMP_PROFILE,
   ResponseType as GetTempProfileResponseType,
 } from '@app/queries/profile/get-temp-profile'
-import { CourseType, Currency, Order, PaymentMethod } from '@app/types'
+import {
+  CourseExpenseType,
+  CourseType,
+  Currency,
+  Order,
+  PaymentMethod,
+  TransportMethod,
+} from '@app/types'
 import {
   getTrainerAccommodationCost,
   getTrainerCarCostPerMile,
@@ -124,20 +130,27 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     }
 
     const trainerExpenses =
-      profile.course.expenses?.reduce((acc, { type, description, value }) => {
-        switch (type) {
-          case Course_Expense_Type_Enum.Accommodation:
-            return acc + getTrainerAccommodationCost(value)
+      profile.course.expenses?.reduce((acc, { data: e }) => {
+        switch (e.type) {
+          case CourseExpenseType.Accommodation:
+            return acc + getTrainerAccommodationCost(e.accommodationNights)
 
-          case Course_Expense_Type_Enum.Transport:
-            if (description.startsWith('Car')) {
-              return acc + getTrainerCarCostPerMile(value)
+          case CourseExpenseType.Miscellaneous:
+            return acc + e.cost
+
+          case CourseExpenseType.Transport:
+            if (e.method === TransportMethod.CAR) {
+              return acc + getTrainerCarCostPerMile(e.mileage)
             }
 
-            return acc + value
+            if (e.method === TransportMethod.NONE) {
+              return acc
+            }
+
+            return acc + e.cost
 
           default:
-            return acc + value
+            return acc
         }
       }, 0) ?? 0
 
@@ -187,7 +200,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     const discount = !ready ? 0 : booking.promoCodes.reduce(acc => acc + 2, 0)
     const subtotalDiscounted = subtotal - discount - freeSpacesDiscount
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
-    const vat = subtotalDiscounted * (booking.vat / 100)
+    const vat = (subtotalDiscounted + trainerExpenses) * (booking.vat / 100)
     const total = subtotalDiscounted + vat + trainerExpenses
     return {
       subtotal,

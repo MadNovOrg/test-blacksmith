@@ -639,3 +639,40 @@ export type TimeDifferenceAndContext = {
   count: number
   context: 'days' | 'hours' | 'minutes' | 'none'
 }
+
+export enum CourseExpenseType {
+  Transport = 'TRANSPORT',
+  Miscellaneous = 'MISCELLANEOUS',
+  Accommodation = 'ACCOMMODATION',
+}
+
+export type CourseExpenseData =
+  | {
+      type: CourseExpenseType.Transport
+      method: TransportMethod.NONE
+    }
+  | {
+      type: CourseExpenseType.Transport
+      method: TransportMethod.CAR
+      mileage: number
+    }
+  | {
+      type: CourseExpenseType.Transport
+      method: TransportMethod.PUBLIC | TransportMethod.PRIVATE
+      cost: number
+    }
+  | {
+      type: CourseExpenseType.Transport
+      method: TransportMethod.FLIGHTS
+      cost: number
+      flightDays: number
+    }
+  | {
+      type: CourseExpenseType.Miscellaneous
+      description: string
+      cost: number
+    }
+  | {
+      type: CourseExpenseType.Accommodation
+      accommodationNights: number
+    }
