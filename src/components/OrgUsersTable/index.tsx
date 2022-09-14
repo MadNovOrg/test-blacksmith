@@ -200,7 +200,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                           {profile.fullName}
                         </Link>
                         {orgMember?.position ? (
-                          <Typography variant="body2" color="grey.600">
+                          <Typography variant="body2" color="grey.600" ml={1}>
                             {orgMember?.position}
                           </Typography>
                         ) : null}

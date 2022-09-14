@@ -149,3 +149,24 @@ update_permissions:
         - xero_contact_id
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - name
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+      filter:
+        members:
+          _and:
+            - is_admin:
+                _eq: true
+            - profile_id:
+                _eq: X-Hasura-User-Id
+      check: null

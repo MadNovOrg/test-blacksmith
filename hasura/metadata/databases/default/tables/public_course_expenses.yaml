@@ -70,3 +70,23 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - value
+        - description
+        - type
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter:
+        course:
+          organization:
+            members:
+              _and:
+                - is_admin:
+                    _eq: true
+                - profile_id:
+                    _eq: X-Hasura-User-Id
