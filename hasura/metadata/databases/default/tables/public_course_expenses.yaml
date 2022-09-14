@@ -74,13 +74,11 @@ select_permissions:
     permission:
       columns:
         - course_id
-        - value
-        - description
-        - type
         - created_at
-        - updated_at
+        - data
         - id
         - trainer_id
+        - updated_at
       filter:
         course:
           organization:
