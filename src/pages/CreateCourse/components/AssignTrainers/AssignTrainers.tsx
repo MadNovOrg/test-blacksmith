@@ -16,6 +16,7 @@ import {
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
+import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
@@ -92,7 +93,7 @@ export const AssignTrainers = () => {
   const { savingStatus, saveCourse } = useSaveCourse()
 
   useEffect(() => {
-    setCurrentStepKey('assign-trainer')
+    setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)
   }, [setCurrentStepKey])
 
   const handleTrainersDataChange = useCallback(
@@ -115,7 +116,7 @@ export const AssignTrainers = () => {
         nextPage = '/courses'
       }
 
-      completeStep('assign-trainer')
+      completeStep(StepsEnum.ASSIGN_TRAINER)
       navigate(nextPage)
     }
   }

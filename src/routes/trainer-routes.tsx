@@ -10,6 +10,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
+import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -44,6 +45,10 @@ const TrainerBaseRoutes = () => {
         <Route path="new" element={<CreateCourse />}>
           <Route index element={<CreateCourseForm />} />
           <Route path="assign-trainers" element={<AssignTrainers />} />
+          <Route
+            path="license-order-details"
+            element={<LicenseOrderDetails />}
+          />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

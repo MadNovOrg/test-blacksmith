@@ -14,25 +14,27 @@ import {
   ValidCourseInput,
 } from '@app/types'
 
+import { StepsEnum } from '../../types'
+
 type Draft = {
   courseData?: ValidCourseInput
   trainers?: TrainerInput[]
   expenses?: Record<string, ExpensesInput>
-  completedSteps?: string[]
-  currentStepKey?: string | null
+  completedSteps?: StepsEnum[]
+  currentStepKey?: StepsEnum | null
   savedAt?: Date
 }
 
 type ContextValue = {
-  completeStep: (step: string) => void
-  completedSteps: string[]
+  completeStep: (step: StepsEnum) => void
+  completedSteps: StepsEnum[]
   courseData?: ValidCourseInput
   courseType: CourseType
-  currentStepKey: string | null
+  currentStepKey: StepsEnum | null
   expenses: Record<string, ExpensesInput>
   saveDraft: () => void
   setCourseData: (courseData: ValidCourseInput) => void
-  setCurrentStepKey: (step: string) => void
+  setCurrentStepKey: (step: StepsEnum) => void
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
   setTrainers: (trainers: TrainerInput[]) => void
   trainers: TrainerInput[]
@@ -103,17 +105,17 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   const [expenses, setExpenses] = useState<Record<string, ExpensesInput>>(
     initialValue?.expenses ?? {}
   )
-  const [completedSteps, setCompletedSteps] = useState<string[]>(
+  const [completedSteps, setCompletedSteps] = useState<StepsEnum[]>(
     initialValue?.completedSteps ?? []
   )
-  const [currentStepKey, setCurrentStepKey] = useState<string | null>(
+  const [currentStepKey, setCurrentStepKey] = useState<StepsEnum | null>(
     initialValue?.currentStepKey ?? null
   )
 
   useEffect(() => removeItem(itemId), [itemId])
 
   const completeStep = useCallback(
-    (step: string) => {
+    (step: StepsEnum) => {
       if (!completedSteps.includes(step)) {
         setCompletedSteps([...(completedSteps ?? []), step])
       }

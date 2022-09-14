@@ -392,7 +392,7 @@ export default createTheme({
             color: theme.palette.success.main,
           },
           '& .MuiAlert-message': {
-            fontWeight: 600,
+            fontWeight: 500,
             color: theme.palette.secondary.main,
           },
         },
@@ -405,7 +405,7 @@ export default createTheme({
             color: theme.palette.warning.main,
           },
           '& .MuiAlert-message': {
-            fontWeight: 600,
+            fontWeight: 500,
             color: theme.palette.secondary.main,
           },
         },

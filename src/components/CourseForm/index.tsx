@@ -15,6 +15,7 @@ import {
   Typography,
   InputAdornment,
   CircularProgress,
+  Alert,
 } from '@mui/material'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -469,6 +470,12 @@ const CourseForm: React.FC<Props> = ({
             />
           )}
         />
+
+        {isBlended ? (
+          <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+            {t('components.course-form.blended-learning-price-label')}
+          </Alert>
+        ) : null}
 
         <Typography mb={2} mt={2} fontWeight={600}>
           {t('components.course-form.location-section-title')}

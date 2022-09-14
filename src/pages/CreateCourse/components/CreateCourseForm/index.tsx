@@ -26,6 +26,7 @@ import {
 } from '@app/types'
 import { getNumberOfAssistants, LoadingStatus } from '@app/util'
 
+import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
@@ -63,7 +64,7 @@ export const CreateCourseForm = () => {
   })
 
   useEffect(() => {
-    setCurrentStepKey('course-details')
+    setCurrentStepKey(StepsEnum.COURSE_DETAILS)
   }, [setCurrentStepKey])
 
   const minAssistants = useMemo(() => {
@@ -96,9 +97,11 @@ export const CreateCourseForm = () => {
 
     assertCourseDataValid(courseData, courseDataValid)
 
-    completeStep('course-details')
+    completeStep(StepsEnum.COURSE_DETAILS)
 
-    if (courseType === CourseType.INDIRECT) {
+    if (courseData.blendedLearning) {
+      navigate('./license-order-details')
+    } else if (courseType === CourseType.INDIRECT) {
       const trainers = [
         {
           profile_id: profile.id,
@@ -139,6 +142,12 @@ export const CreateCourseForm = () => {
     },
     [setCourseData]
   )
+
+  const nextStepButtonLabel = courseData?.blendedLearning
+    ? 'order-details-button-text'
+    : courseType === CourseType.INDIRECT
+    ? 'course-builder-button-text'
+    : 'select-trainers-button-text'
 
   return (
     <Box paddingBottom={5}>
@@ -234,9 +243,7 @@ export const CreateCourseForm = () => {
           endIcon={<ArrowForwardIcon />}
           data-testid="next-page-btn"
         >
-          {courseType === CourseType.INDIRECT
-            ? t('pages.create-course.indirect-course-button-text')
-            : t('pages.create-course.next-page-button-text')}
+          {t(`pages.create-course.${nextStepButtonLabel}`)}
         </LoadingButton>
       </Box>
     </Box>

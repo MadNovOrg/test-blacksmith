@@ -1,53 +1,65 @@
 import React, { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { CourseType } from '@app/types'
 
-import { useCreateCourse } from '../CreateCourseProvider'
+import { StepsEnum } from '../../types'
 
 interface Props {
   completedSteps: string[]
   type: CourseType
+  currentStepKey?: string
+  blendedLearning?: boolean
 }
 
 export const CreateCourseSteps: React.FC<Props> = ({
   completedSteps,
   type,
+  currentStepKey,
+  blendedLearning = false,
 }) => {
-  const { t } = useTranslation()
-  const { currentStepKey } = useCreateCourse()
+  const { t } = useScopedTranslation('pages.create-course')
 
   const steps = useMemo(() => {
     const courseDetailsStep = {
-      key: 'course-details',
-      label: t('pages.create-course.step-navigation-course-details'),
+      key: StepsEnum.COURSE_DETAILS,
+      label: t('step-navigation-course-details'),
     }
 
     const assignTrainerStep = {
-      key: 'assign-trainer',
-      label: t('pages.create-course.step-navigation-assign-trainer'),
+      key: StepsEnum.ASSIGN_TRAINER,
+      label: t('step-navigation-assign-trainer'),
     }
 
     const trainerExpensesStep = {
-      key: 'trainer-expenses',
-      label: t('pages.create-course.step-navigation-trainer-expenses'),
+      key: StepsEnum.TRAINER_EXPENSES,
+      label: t('step-navigation-trainer-expenses'),
+    }
+
+    const licenseOrderDetailsStep = {
+      key: StepsEnum.LICENSE_ORDER_DETAILS,
+      label: t('step-navigation-license-order-details'),
     }
 
     const reviewAndConfirmStep = {
-      key: 'review-and-confirm',
-      label: t('pages.create-course.step-navigation-review-and-confirm'),
+      key: StepsEnum.REVIEW_AND_CONFIRM,
+      label: t('step-navigation-review-and-confirm'),
     }
 
     const courseBuilderStep = {
-      key: 'course-builder',
-      label: t('pages.create-course.step-navigation-course-builder'),
+      key: StepsEnum.COURSE_BUILDER,
+      label: t('step-navigation-course-builder'),
     }
 
     const steps = [courseDetailsStep]
 
     if (type !== CourseType.INDIRECT) {
       steps.push(assignTrainerStep)
+    }
+
+    if (blendedLearning) {
+      steps.push(licenseOrderDetailsStep)
     }
 
     if (type === CourseType.CLOSED) {
@@ -58,12 +70,12 @@ export const CreateCourseSteps: React.FC<Props> = ({
     }
 
     return steps
-  }, [type, t])
+  }, [type, t, blendedLearning])
 
   return (
     <StepsNavigation
       completedSteps={completedSteps}
-      currentStepKey={currentStepKey}
+      currentStepKey={currentStepKey ?? null}
       steps={steps}
       data-testid="create-course-nav"
     />

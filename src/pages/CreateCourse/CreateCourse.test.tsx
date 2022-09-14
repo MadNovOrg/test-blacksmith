@@ -5,6 +5,8 @@ import { CourseType, RoleName } from '@app/types'
 
 import { render, within, screen } from '@test/index'
 
+import { StepsEnum } from './types'
+
 import { CreateCourse } from '.'
 
 describe('page: CreateCourse', () => {
@@ -64,7 +66,9 @@ describe('page: CreateCourse', () => {
             path="/courses/new"
             element={
               <CreateCourse
-                initialContextValue={{ completedSteps: ['course-details'] }}
+                initialContextValue={{
+                  completedSteps: [StepsEnum.COURSE_DETAILS],
+                }}
               />
             }
           >

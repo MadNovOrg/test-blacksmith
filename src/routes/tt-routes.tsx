@@ -13,6 +13,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
+import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewAndConfirm } from '@app/pages/CreateCourse/components/ReviewAndConfirm'
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
@@ -47,6 +48,10 @@ const TTAdminRoutes = () => {
           <Route path="assign-trainers" element={<AssignTrainers />} />
           <Route path="trainer-expenses" element={<TrainerExpenses />} />
           <Route path="review-and-confirm" element={<ReviewAndConfirm />} />
+          <Route
+            path="license-order-details"
+            element={<LicenseOrderDetails />}
+          />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

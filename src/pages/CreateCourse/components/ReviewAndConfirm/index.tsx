@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { LoadingStatus } from '@app/util'
 
+import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
@@ -29,7 +30,7 @@ export const ReviewAndConfirm = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    setCurrentStepKey('review-and-confirm')
+    setCurrentStepKey(StepsEnum.REVIEW_AND_CONFIRM)
   }, [setCurrentStepKey])
 
   const handleSubmit = useCallback(async () => {
@@ -39,7 +40,7 @@ export const ReviewAndConfirm = () => {
 
     try {
       const courseId = await saveCourse()
-      completeStep('review-and-confirm')
+      completeStep(StepsEnum.REVIEW_AND_CONFIRM)
       navigate(
         `/registration?course_id=${courseId}&quantity=${courseData.maxParticipants}`
       )

@@ -10,6 +10,7 @@ import TrainerExpensesForm, {
   FormValues,
 } from '@app/components/TrainerExpensesForm'
 
+import { StepsEnum } from '../../types'
 import { useCreateCourse } from '../CreateCourseProvider'
 
 export const TrainerExpenses = () => {
@@ -27,11 +28,11 @@ export const TrainerExpenses = () => {
   const [expensesValid, setExpensesValid] = useState<boolean>()
 
   useEffect(() => {
-    setCurrentStepKey('trainer-expenses')
+    setCurrentStepKey(StepsEnum.TRAINER_EXPENSES)
   }, [setCurrentStepKey])
 
   const handleSubmit = useCallback(() => {
-    completeStep('trainer-expenses')
+    completeStep(StepsEnum.TRAINER_EXPENSES)
     navigate('../review-and-confirm')
   }, [completeStep, navigate])
 

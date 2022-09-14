@@ -18,7 +18,7 @@ import { CreateCourseSteps } from './components/CreateCourseSteps'
 export const CreateCoursePage = () => {
   const [searchParams] = useSearchParams()
   const { acl } = useAuth()
-  const { completedSteps, courseData } = useCreateCourse()
+  const { completedSteps, courseData, currentStepKey } = useCreateCourse()
 
   const courseType = useMemo(() => {
     const qsType = (searchParams.get('type') as CourseType) ?? CourseType.OPEN
@@ -54,6 +54,8 @@ export const CreateCoursePage = () => {
               <CreateCourseSteps
                 completedSteps={completedSteps ?? []}
                 type={courseType}
+                currentStepKey={currentStepKey ?? undefined}
+                blendedLearning={courseData?.blendedLearning ?? false}
               />
             </Sticky>
           </Box>
