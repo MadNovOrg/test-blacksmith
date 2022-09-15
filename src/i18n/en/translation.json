@@ -836,6 +836,16 @@
         "moderator-error-min": "Moderator is required",
         "moderator-error-max": "There can be only one Moderator"
       },
+      "license-order-details": {
+        "title": "Order details",
+        "order-title": "Go1: Blended learning license",
+        "quantity": "Quantity",
+        "price-per-attendee": "{{price}} per attendee",
+        "license-allowance": "License allowance ({{balance}} left)",
+        "subtotal": "Sub total",
+        "amound-due": "Amount due ({{currency}})",
+        "vat": "VAT (20%)"
+      },
       "trainer-expenses": {
         "title": "Trainer Expenses",
         "back-btn": "Assign trainers",

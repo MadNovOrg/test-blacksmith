@@ -206,6 +206,15 @@ export default createTheme({
       fontSize: '1.25rem',
       fontWeight: '500',
     },
+    h5: {
+      fontSize: '1.15rem',
+      fontWeight: '600',
+    },
+    h6: {
+      fontSize: '1rem',
+      fontWeight: '600',
+      color: theme.palette.grey[800],
+    },
 
     subtitle1: {
       fontSize: '1.25rem',
