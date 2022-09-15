@@ -18,6 +18,8 @@ configuration:
       custom_name: xeroContactId
     contact_details:
       custom_name: contactDetails
+    geo_coordinates:
+      custom_name: geoCoordinates
   custom_column_names:
     trust_name: trustName
     trust_type: trustType
@@ -26,6 +28,7 @@ configuration:
     created_at: createdAt
     xero_contact_id: xeroContactId
     contact_details: contactDetails
+    geo_coordinates: geoCoordinates
 array_relationships:
   - name: go1LicensesHistory
     using:
@@ -56,6 +59,7 @@ insert_permissions:
         - address
         - attributes
         - contact_details
+        - geo_coordinates
         - name
         - original_record
         - preferences
@@ -81,6 +85,7 @@ select_permissions:
         - attributes
         - contact_details
         - created_at
+        - geo_coordinates
         - go1_licenses
         - id
         - name
@@ -102,6 +107,7 @@ select_permissions:
         - attributes
         - contact_details
         - created_at
+        - geo_coordinates
         - id
         - name
         - preferences
@@ -120,6 +126,7 @@ select_permissions:
         - attributes
         - contact_details
         - created_at
+        - geo_coordinates
         - id
         - name
         - original_record
@@ -139,6 +146,7 @@ update_permissions:
         - address
         - attributes
         - contact_details
+        - geo_coordinates
         - name
         - preferences
         - region
@@ -155,6 +163,7 @@ update_permissions:
         - address
         - attributes
         - contact_details
+        - geo_coordinates
         - name
         - preferences
         - region

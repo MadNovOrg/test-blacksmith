@@ -97,3 +97,16 @@ select_permissions:
         - post_code
         - updated_at
       filter: {}
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - geo_coordinates
+        - google_places_id
+        - name
+        - post_code
+      filter: {}
+      check: null
