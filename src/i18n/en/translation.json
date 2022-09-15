@@ -1443,13 +1443,16 @@
             "remove-radio-button-label": "Remove",
             "amount-label": "Amount *",
             "invoice-label": "Invoice number *",
+            "license-price-label": "License price *",
             "total-licenses": "Total remaining licenses",
             "note-label": "Add a note (optional)",
             "save-button-label": "Save details",
             "cancel-button-label": "Cancel",
             "error-amount-positive": "Amount must be a positive number",
+            "error-license-price-positive": "Number of licenses must be a positive number",
             "error-amount-required": "Amount is a required field",
             "error-invoice-required": "Invoice number is a required field",
+            "error-license-price-required": "Licenses number is a required field",
             "issue-refund-label": "Issue a refund. This will add a credit note to the invoice."
           },
           "table": {

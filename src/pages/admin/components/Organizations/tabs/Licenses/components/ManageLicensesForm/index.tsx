@@ -25,6 +25,8 @@ export enum Type {
 export type FormData = {
   amount: string
   invoiceId?: string
+  issueRefund?: boolean
+  licensePrice?: number
   note?: string
   type: Type
 }
@@ -60,6 +62,14 @@ export const ManageLicensesForm: React.FC<Props> = ({
             type === Type.ADD || issueRefund === true,
           then: schema => schema.required(t('error-invoice-required')),
         }),
+        licensePrice: yup
+          .number()
+          .typeError(t('error-license-price-positive'))
+          .positive(t('error-license-price-positive'))
+          .when('issueRefund', {
+            is: true,
+            then: schema => schema.required(t('error-license-price-required')),
+          }),
       }),
     [t]
   )
@@ -71,14 +81,11 @@ export const ManageLicensesForm: React.FC<Props> = ({
     watch,
     formState: { errors, isValid },
     setValue,
-  } = useForm({
+  } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
       type: Type.ADD,
-      amount: '',
-      invoiceId: '',
-      note: '',
       issueRefund: false,
     },
   })
@@ -171,14 +178,28 @@ export const ManageLicensesForm: React.FC<Props> = ({
           />
 
           {values.issueRefund ? (
-            <TextField
-              {...register('invoiceId')}
-              label={t('invoice-label')}
-              fullWidth
-              variant="filled"
-              helperText={errors.invoiceId?.message}
-              error={Boolean(errors.invoiceId?.message)}
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  {...register('invoiceId')}
+                  label={t('invoice-label')}
+                  fullWidth
+                  variant="filled"
+                  helperText={errors.invoiceId?.message}
+                  error={Boolean(errors.invoiceId?.message)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  {...register('licensePrice')}
+                  label={t('license-price-label')}
+                  fullWidth
+                  variant="filled"
+                  helperText={errors.licensePrice?.message}
+                  error={Boolean(errors.licensePrice?.message)}
+                />
+              </Grid>
+            </Grid>
           ) : null}
         </>
       ) : null}

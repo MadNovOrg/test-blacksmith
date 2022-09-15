@@ -48,7 +48,9 @@ export const ManageLicensesDialog: React.FC<Props> = ({
       type: formTypeEventMap[data.type],
       amount: Number(data.amount),
       payload: {
-        ...(data.invoiceId ? { invoiceId: data.invoiceId } : null),
+        ...(data.invoiceId && data.licensePrice
+          ? { invoiceId: data.invoiceId, licensePrice: data.licensePrice }
+          : null),
         note: data.note,
         invokedBy: profile?.fullName,
       },
@@ -65,7 +67,7 @@ export const ManageLicensesDialog: React.FC<Props> = ({
     if (response.go1LicensesChange?.success) {
       onSave()
     } else {
-      setErrorMessageLabel(`error-${mutationInput.type}-message`)
+      setErrorMessageLabel(`error-${mutationInput.type}-licenses`)
     }
   }
 
