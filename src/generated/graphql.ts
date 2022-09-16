@@ -16,6 +16,7 @@ export type Scalars = {
   jsonb: any;
   numeric: any;
   point: any;
+  timestamp: any;
   timestamptz: any;
   uuid: any;
 };
@@ -336,7 +337,7 @@ export type CategoryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -417,7 +418,7 @@ export type CategoryToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -557,6 +558,14 @@ export type CommentAuthorAvatarArgs = {
   rating?: InputMaybe<AvatarRatingEnum>;
   size?: InputMaybe<Scalars['Int']>;
 };
+
+/** The Type of Identifier used to fetch a single comment node. Default is "ID". To be used along with the "id" field. */
+export enum CommentNodeIdTypeEnum {
+  /** Identify a resource by the Database ID. */
+  DatabaseId = 'DATABASE_ID',
+  /** Identify a resource by the (hashed) Global ID. */
+  Id = 'ID'
+}
 
 /** Connection between the Comment type and the Comment type */
 export type CommentToCommentConnection = {
@@ -1075,7 +1084,7 @@ export type ContentTypeToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -2546,7 +2555,7 @@ export type EbooksCategoryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -2604,7 +2613,7 @@ export type EbooksCategoryToEbookConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -2828,7 +2837,7 @@ export type HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -2888,7 +2897,7 @@ export type HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -2973,6 +2982,13 @@ export type MediaDetails = {
   sizes?: Maybe<Array<Maybe<MediaSize>>>;
   /** The width of the mediaItem */
   width?: Maybe<Scalars['Int']>;
+};
+
+
+/** File details for a Media Item */
+export type MediaDetailsSizesArgs = {
+  exclude?: InputMaybe<Array<InputMaybe<MediaItemSizeEnum>>>;
+  include?: InputMaybe<Array<InputMaybe<MediaItemSizeEnum>>>;
 };
 
 /** The mediaItem type */
@@ -3520,7 +3536,7 @@ export type MenuItemToMenuItemConnectionEdge = {
 
 /** Arguments for filtering the MenuItemToMenuItemConnection connection */
 export type MenuItemToMenuItemConnectionWhereArgs = {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -3587,7 +3603,7 @@ export type MenuToMenuItemConnectionEdge = {
 
 /** Arguments for filtering the MenuToMenuItemConnection connection */
 export type MenuToMenuItemConnectionWhereArgs = {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -4305,7 +4321,7 @@ export type PageToRevisionConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -4788,7 +4804,7 @@ export type PostFormatToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -4862,7 +4878,7 @@ export type PostFormatToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -5302,7 +5318,7 @@ export type PostToRevisionConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -5733,7 +5749,7 @@ export type ResearchSummariesCategoryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -5791,7 +5807,7 @@ export type ResearchSummariesCategoryToResearchSummaryConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -6714,6 +6730,7 @@ export type RootQueryCategoryArgs = {
 
 export type RootQueryCommentArgs = {
   id: Scalars['ID'];
+  idType?: InputMaybe<CommentNodeIdTypeEnum>;
 };
 
 
@@ -7337,7 +7354,7 @@ export type RootQueryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -7397,7 +7414,7 @@ export type RootQueryToContentRevisionUnionConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -7475,7 +7492,7 @@ export type RootQueryToEbookConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -7645,7 +7662,7 @@ export type RootQueryToMediaItemConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -7699,7 +7716,7 @@ export type RootQueryToMenuConnectionEdge = {
 
 /** Arguments for filtering the RootQueryToMenuConnection connection */
 export type RootQueryToMenuConnectionWhereArgs = {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -7729,7 +7746,7 @@ export type RootQueryToMenuItemConnectionEdge = {
 
 /** Arguments for filtering the RootQueryToMenuItemConnection connection */
 export type RootQueryToMenuItemConnectionWhereArgs = {
-  /** The ID of the object */
+  /** The database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** The menu location for the menu being queried */
   location?: InputMaybe<MenuLocationEnum>;
@@ -7773,7 +7790,7 @@ export type RootQueryToPageConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -7877,7 +7894,7 @@ export type RootQueryToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -8075,7 +8092,7 @@ export type RootQueryToResearchSummaryConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -8441,7 +8458,7 @@ export type RootQueryToVideoSeriesItemConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -8499,7 +8516,7 @@ export type RootQueryToWebinarConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -8846,7 +8863,7 @@ export type TagToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -8920,7 +8937,7 @@ export type TagToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10178,7 +10195,7 @@ export type UserToContentRevisionUnionConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10284,7 +10301,7 @@ export type UserToMediaItemConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10350,7 +10367,7 @@ export type UserToPageConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10424,7 +10441,7 @@ export type UserToPostConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10655,7 +10672,7 @@ export type VideoSeriesCategoryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -10720,7 +10737,7 @@ export type VideoSeriesCategoryToVideoSeriesItemConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -11514,7 +11531,7 @@ export type WebinarsCategoryToContentNodeConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -11579,7 +11596,7 @@ export type WebinarsCategoryToWebinarConnectionWhereArgs = {
   dateQuery?: InputMaybe<DateQueryInput>;
   /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
   hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific ID of the object */
+  /** Specific database ID of the object */
   id?: InputMaybe<Scalars['Int']>;
   /** Array of IDs for the objects to retrieve */
   in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
@@ -13276,6 +13293,194 @@ export type Course_Delivery_Type_Set_Input = {
 export enum Course_Delivery_Type_Update_Column {
   /** column name */
   Name = 'name'
+}
+
+/** Stores course drafts */
+export type Course_Draft = {
+  __typename?: 'course_draft';
+  courseType: Scalars['String'];
+  created_at: Scalars['timestamp'];
+  data?: Maybe<Scalars['jsonb']>;
+  id: Scalars['uuid'];
+  profileId: Scalars['uuid'];
+  updated_at: Scalars['timestamp'];
+};
+
+
+/** Stores course drafts */
+export type Course_DraftDataArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "course_draft" */
+export type Course_Draft_Aggregate = {
+  __typename?: 'course_draft_aggregate';
+  aggregate?: Maybe<Course_Draft_Aggregate_Fields>;
+  nodes: Array<Course_Draft>;
+};
+
+/** aggregate fields of "course_draft" */
+export type Course_Draft_Aggregate_Fields = {
+  __typename?: 'course_draft_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Draft_Max_Fields>;
+  min?: Maybe<Course_Draft_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_draft" */
+export type Course_Draft_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Draft_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Course_Draft_Append_Input = {
+  data?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** Boolean expression to filter rows from the table "course_draft". All fields are combined with a logical 'AND'. */
+export type Course_Draft_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Draft_Bool_Exp>>;
+  _not?: InputMaybe<Course_Draft_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Draft_Bool_Exp>>;
+  courseType?: InputMaybe<String_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamp_Comparison_Exp>;
+  data?: InputMaybe<Jsonb_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  profileId?: InputMaybe<Uuid_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamp_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_draft" */
+export enum Course_Draft_Constraint {
+  /** unique or primary key constraint */
+  CourseDraftPkey = 'course_draft_pkey',
+  /** unique or primary key constraint */
+  CourseDraftProfileIdCourseTypeKey = 'course_draft_profile_id_course_type_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Course_Draft_Delete_At_Path_Input = {
+  data?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Course_Draft_Delete_Elem_Input = {
+  data?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Course_Draft_Delete_Key_Input = {
+  data?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "course_draft" */
+export type Course_Draft_Insert_Input = {
+  courseType?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamp']>;
+  data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamp']>;
+};
+
+/** aggregate max on columns */
+export type Course_Draft_Max_Fields = {
+  __typename?: 'course_draft_max_fields';
+  courseType?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamp']>;
+  id?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamp']>;
+};
+
+/** aggregate min on columns */
+export type Course_Draft_Min_Fields = {
+  __typename?: 'course_draft_min_fields';
+  courseType?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['timestamp']>;
+  id?: Maybe<Scalars['uuid']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamp']>;
+};
+
+/** response of any mutation on the table "course_draft" */
+export type Course_Draft_Mutation_Response = {
+  __typename?: 'course_draft_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Draft>;
+};
+
+/** on_conflict condition type for table "course_draft" */
+export type Course_Draft_On_Conflict = {
+  constraint: Course_Draft_Constraint;
+  update_columns?: Array<Course_Draft_Update_Column>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_draft". */
+export type Course_Draft_Order_By = {
+  courseType?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  data?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_draft */
+export type Course_Draft_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Course_Draft_Prepend_Input = {
+  data?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "course_draft" */
+export enum Course_Draft_Select_Column {
+  /** column name */
+  CourseType = 'courseType',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profileId',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "course_draft" */
+export type Course_Draft_Set_Input = {
+  courseType?: InputMaybe<Scalars['String']>;
+  created_at?: InputMaybe<Scalars['timestamp']>;
+  data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamp']>;
+};
+
+/** update columns of table "course_draft" */
+export enum Course_Draft_Update_Column {
+  /** column name */
+  CourseType = 'courseType',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Data = 'data',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profileId',
+  /** column name */
+  UpdatedAt = 'updated_at'
 }
 
 /** Stores scheduled jobs ids for courses */
@@ -20776,6 +20981,10 @@ export type Mutation_Root = {
   delete_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** delete single row from the table: "course_delivery_type" */
   delete_course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** delete data from the table: "course_draft" */
+  delete_course_draft?: Maybe<Course_Draft_Mutation_Response>;
+  /** delete single row from the table: "course_draft" */
+  delete_course_draft_by_pk?: Maybe<Course_Draft>;
   /** delete data from the table: "course_end_jobs" */
   delete_course_end_jobs?: Maybe<Course_End_Jobs_Mutation_Response>;
   /** delete single row from the table: "course_end_jobs" */
@@ -21000,6 +21209,10 @@ export type Mutation_Root = {
   insert_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** insert a single row into the table: "course_delivery_type" */
   insert_course_delivery_type_one?: Maybe<Course_Delivery_Type>;
+  /** insert data into the table: "course_draft" */
+  insert_course_draft?: Maybe<Course_Draft_Mutation_Response>;
+  /** insert a single row into the table: "course_draft" */
+  insert_course_draft_one?: Maybe<Course_Draft>;
   /** insert data into the table: "course_end_jobs" */
   insert_course_end_jobs?: Maybe<Course_End_Jobs_Mutation_Response>;
   /** insert a single row into the table: "course_end_jobs" */
@@ -21229,6 +21442,10 @@ export type Mutation_Root = {
   update_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** update single row of the table: "course_delivery_type" */
   update_course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** update data of the table: "course_draft" */
+  update_course_draft?: Maybe<Course_Draft_Mutation_Response>;
+  /** update single row of the table: "course_draft" */
+  update_course_draft_by_pk?: Maybe<Course_Draft>;
   /** update data of the table: "course_end_jobs" */
   update_course_end_jobs?: Maybe<Course_End_Jobs_Mutation_Response>;
   /** update single row of the table: "course_end_jobs" */
@@ -21547,6 +21764,18 @@ export type Mutation_RootDelete_Course_Delivery_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_DraftArgs = {
+  where: Course_Draft_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Draft_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -22234,6 +22463,20 @@ export type Mutation_RootInsert_Course_Delivery_TypeArgs = {
 export type Mutation_RootInsert_Course_Delivery_Type_OneArgs = {
   object: Course_Delivery_Type_Insert_Input;
   on_conflict?: InputMaybe<Course_Delivery_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_DraftArgs = {
+  objects: Array<Course_Draft_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Draft_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Draft_OneArgs = {
+  object: Course_Draft_Insert_Input;
+  on_conflict?: InputMaybe<Course_Draft_On_Conflict>;
 };
 
 
@@ -23041,6 +23284,30 @@ export type Mutation_RootUpdate_Course_Delivery_TypeArgs = {
 export type Mutation_RootUpdate_Course_Delivery_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Delivery_Type_Set_Input>;
   pk_columns: Course_Delivery_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_DraftArgs = {
+  _append?: InputMaybe<Course_Draft_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Draft_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Draft_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Draft_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Draft_Prepend_Input>;
+  _set?: InputMaybe<Course_Draft_Set_Input>;
+  where: Course_Draft_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Draft_By_PkArgs = {
+  _append?: InputMaybe<Course_Draft_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Draft_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Draft_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Draft_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Draft_Prepend_Input>;
+  _set?: InputMaybe<Course_Draft_Set_Input>;
+  pk_columns: Course_Draft_Pk_Columns_Input;
 };
 
 
@@ -27499,6 +27766,12 @@ export type Query_Root = {
   course_delivery_type_aggregate: Course_Delivery_Type_Aggregate;
   /** fetch data from the table: "course_delivery_type" using primary key columns */
   course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** fetch data from the table: "course_draft" */
+  course_draft: Array<Course_Draft>;
+  /** fetch aggregated fields from the table: "course_draft" */
+  course_draft_aggregate: Course_Draft_Aggregate;
+  /** fetch data from the table: "course_draft" using primary key columns */
+  course_draft_by_pk?: Maybe<Course_Draft>;
   /** fetch data from the table: "course_end_jobs" */
   course_end_jobs: Array<Course_End_Jobs>;
   /** fetch aggregated fields from the table: "course_end_jobs" */
@@ -27994,6 +28267,29 @@ export type Query_RootCourse_Delivery_Type_AggregateArgs = {
 
 export type Query_RootCourse_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCourse_DraftArgs = {
+  distinct_on?: InputMaybe<Array<Course_Draft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Draft_Order_By>>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Draft_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Draft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Draft_Order_By>>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Draft_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -29474,6 +29770,12 @@ export type Subscription_Root = {
   course_delivery_type_aggregate: Course_Delivery_Type_Aggregate;
   /** fetch data from the table: "course_delivery_type" using primary key columns */
   course_delivery_type_by_pk?: Maybe<Course_Delivery_Type>;
+  /** fetch data from the table: "course_draft" */
+  course_draft: Array<Course_Draft>;
+  /** fetch aggregated fields from the table: "course_draft" */
+  course_draft_aggregate: Course_Draft_Aggregate;
+  /** fetch data from the table: "course_draft" using primary key columns */
+  course_draft_by_pk?: Maybe<Course_Draft>;
   /** fetch data from the table: "course_end_jobs" */
   course_end_jobs: Array<Course_End_Jobs>;
   /** fetch aggregated fields from the table: "course_end_jobs" */
@@ -29950,6 +30252,29 @@ export type Subscription_RootCourse_Delivery_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Delivery_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_DraftArgs = {
+  distinct_on?: InputMaybe<Array<Course_Draft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Draft_Order_By>>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Draft_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Draft_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Draft_Order_By>>;
+  where?: InputMaybe<Course_Draft_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Draft_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -31072,6 +31397,19 @@ export type Subscription_RootXero_Credential_AggregateArgs = {
 
 export type Subscription_RootXero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+/** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
+export type Timestamp_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['timestamp']>;
+  _gt?: InputMaybe<Scalars['timestamp']>;
+  _gte?: InputMaybe<Scalars['timestamp']>;
+  _in?: InputMaybe<Array<Scalars['timestamp']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _lt?: InputMaybe<Scalars['timestamp']>;
+  _lte?: InputMaybe<Scalars['timestamp']>;
+  _neq?: InputMaybe<Scalars['timestamp']>;
+  _nin?: InputMaybe<Array<Scalars['timestamp']>>;
 };
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -32243,6 +32581,14 @@ export type GetCourseByIdQueryVariables = Exact<{
 
 export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', freeSpaces?: number | null, accountCode?: string | null, level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
+export type GetCourseDraftQueryVariables = Exact<{
+  profileId: Scalars['uuid'];
+  courseType: Scalars['String'];
+}>;
+
+
+export type GetCourseDraftQuery = { __typename?: 'query_root', course_draft: Array<{ __typename?: 'course_draft', data?: any | null }> };
+
 export type CourseModulesQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -32293,6 +32639,14 @@ export type InsertCourseMutationVariables = Exact<{
 
 export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course_mutation_response', affectedRows: number, inserted: Array<{ __typename?: 'course', id: number, expenses: Array<{ __typename?: 'course_expenses', id: any }> }> } | null };
 
+export type RemoveCourseDraftMutationVariables = Exact<{
+  courseType: Scalars['String'];
+  profileId: Scalars['uuid'];
+}>;
+
+
+export type RemoveCourseDraftMutation = { __typename?: 'mutation_root', delete_course_draft?: { __typename?: 'course_draft_mutation_response', returning: Array<{ __typename?: 'course_draft', id: any }> } | null };
+
 export type SaveCourseAttendanceMutationVariables = Exact<{
   attended: Array<Scalars['uuid']> | Scalars['uuid'];
   notAttended: Array<Scalars['uuid']> | Scalars['uuid'];
@@ -32317,6 +32671,15 @@ export type SaveCourseModulesMutationVariables = Exact<{
 
 
 export type SaveCourseModulesMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'course_module_mutation_response', count: number } | null, inserted?: { __typename?: 'course_module_mutation_response', count: number } | null };
+
+export type SetCourseDraftMutationVariables = Exact<{
+  courseType: Scalars['String'];
+  profileId: Scalars['uuid'];
+  data: Scalars['jsonb'];
+}>;
+
+
+export type SetCourseDraftMutation = { __typename?: 'mutation_root', insert_course_draft_one?: { __typename?: 'course_draft', id: any } | null };
 
 export type SetCourseStatusMutationVariables = Exact<{
   id: Scalars['Int'];

@@ -35,6 +35,12 @@ jest.mock('react-router-dom', () => ({
 jest.mock('swr')
 const mockSWR = jest.mocked(useSWR)
 
+const mockFetcher = jest.fn()
+jest.mock('@app/hooks/use-fetcher', () => ({
+  useFetcher: () => mockFetcher,
+}))
+mockFetcher.mockReturnValue({})
+
 const formatCurrency = (v: number): string => {
   const [integer, decimal] = roundToTwoDecimals(v).toFixed(2).split('.')
 
@@ -76,6 +82,13 @@ for (const trainer of trainers) {
 
 describe('component: ReviewAndConfirm', () => {
   it('renders alert if course is not found', async () => {
+    mockSWR.mockReturnValue({
+      data: null,
+      error: new Error(),
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+
     render(
       <CreateCourseProvider courseType={CourseType.CLOSED}>
         <ReviewAndConfirm />
@@ -94,6 +107,7 @@ describe('component: ReviewAndConfirm', () => {
 
   it('renders alert if pricing info could not be fetched', async () => {
     mockSWR.mockReturnValue({
+      data: null,
       error: new Error(),
       mutate: jest.fn(),
       isValidating: false,

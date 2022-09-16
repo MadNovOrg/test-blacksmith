@@ -7,8 +7,10 @@ import React, {
 } from 'react'
 
 import { useAuth } from '@app/context/auth'
+import useCourseDraft from '@app/hooks/useCourseDraft'
 import {
   CourseType,
+  Draft,
   ExpensesInput,
   TrainerInput,
   ValidCourseInput,
@@ -16,14 +18,9 @@ import {
 
 import { StepsEnum } from '../../types'
 
-type Draft = {
-  courseData?: ValidCourseInput
-  trainers?: TrainerInput[]
-  expenses?: Record<string, ExpensesInput>
-  completedSteps?: StepsEnum[]
-  currentStepKey?: StepsEnum | null
-  savedAt?: Date
-}
+import { getCourseType } from './helpers'
+
+export { getCourseType }
 
 type ContextValue = {
   completeStep: (step: StepsEnum) => void
@@ -32,7 +29,7 @@ type ContextValue = {
   courseType: CourseType
   currentStepKey: StepsEnum | null
   expenses: Record<string, ExpensesInput>
-  saveDraft: () => void
+  saveDraft: () => Promise<void>
   setCourseData: (courseData: ValidCourseInput) => void
   setCurrentStepKey: (step: StepsEnum) => void
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
@@ -49,51 +46,15 @@ export type CreateCourseProviderProps = {
   courseType: CourseType
 }
 
-export const getCourseType = (
-  profileId: string,
-  queryType: string | null,
-  isFirstPage = true
-): CourseType => {
-  if (queryType) {
-    return queryType as CourseType
-  }
-
-  const lastCourseType = localStorage.getItem(
-    `${profileId}-last-draft-course-type`
-  )
-  if (lastCourseType && !isFirstPage) {
-    return lastCourseType as CourseType
-  }
-
-  return CourseType.OPEN
-}
-
-export const getItemId = (profileId: string, courseType: CourseType) =>
-  `${profileId}-${courseType}`
-
-export const getItem = (itemId: string): Draft => {
-  try {
-    return JSON.parse(localStorage.getItem(itemId) ?? '{}')
-  } catch (_) {
-    return {}
-  }
-}
-
-export const removeItem = (itemId: string) => localStorage.removeItem(itemId)
-
-export const setItem = (itemId: string, data: Draft) =>
-  localStorage.setItem(itemId, JSON.stringify({ ...data, savedAt: new Date() }))
-
 export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   children,
   initialValue,
   courseType,
 }) => {
   const { profile } = useAuth()
-
-  const itemId = useMemo(
-    () => getItemId(profile?.id ?? 'unknown', courseType),
-    [courseType, profile]
+  const { removeDraft, setDraft } = useCourseDraft(
+    profile?.id ?? '',
+    courseType
   )
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
@@ -112,7 +73,13 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
     initialValue?.currentStepKey ?? null
   )
 
-  useEffect(() => removeItem(itemId), [itemId])
+  useEffect(() => {
+    if (!profile?.id) {
+      return
+    }
+
+    removeDraft()
+  }, [courseType, profile, removeDraft])
 
   const completeStep = useCallback(
     (step: StepsEnum) => {
@@ -123,7 +90,11 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
     [completedSteps, setCompletedSteps]
   )
 
-  const saveDraft = useCallback(() => {
+  const saveDraft = useCallback(async () => {
+    if (!profile?.id) {
+      return
+    }
+
     const draft: Draft = {
       courseData,
       trainers,
@@ -132,19 +103,14 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
       completedSteps,
     }
 
-    setItem(itemId, draft)
-    localStorage.setItem(
-      `${profile?.id ?? 'unknown'}-last-draft-course-type`,
-      courseType
-    )
+    await setDraft(draft)
   }, [
     completedSteps,
     courseData,
-    courseType,
     currentStepKey,
     expenses,
-    itemId,
     profile,
+    setDraft,
     trainers,
   ])
 

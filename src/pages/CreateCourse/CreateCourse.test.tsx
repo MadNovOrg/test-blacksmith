@@ -1,7 +1,9 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
+import useCourseDraft from '@app/hooks/useCourseDraft'
 import { CourseType, RoleName } from '@app/types'
+import { LoadingStatus } from '@app/util'
 
 import { render, within, screen } from '@test/index'
 
@@ -9,7 +11,18 @@ import { StepsEnum } from './types'
 
 import { CreateCourse } from '.'
 
+jest.mock('@app/hooks/useCourseDraft')
+const useCourseDraftMocked = jest.mocked(useCourseDraft)
+
 describe('page: CreateCourse', () => {
+  beforeAll(() => {
+    useCourseDraftMocked.mockReturnValue({
+      fetchDraft: jest.fn(() => ({ data: {}, status: LoadingStatus.SUCCESS })),
+      removeDraft: jest.fn(),
+      setDraft: jest.fn(),
+    })
+  })
+
   it("doesn't mark any step as done if on course details page", () => {
     render(
       <MemoryRouter initialEntries={[`/courses/new`]}>

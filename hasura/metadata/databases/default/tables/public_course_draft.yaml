@@ -1,0 +1,140 @@
+table:
+  schema: public
+  name: course_draft
+configuration:
+  custom_root_fields: {}
+  column_config:
+    course_type:
+      custom_name: courseType
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    course_type: courseType
+    profile_id: profileId
+insert_permissions:
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_type
+        - created_at
+        - data
+        - id
+        - profile_id
+        - updated_at
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      backend_only: false
+select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - course_type
+        - created_at
+        - data
+        - id
+        - profile_id
+        - updated_at
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - created_at
+        - data
+        - updated_at
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - data
+        - course_type
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: trainer
+    permission:
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+  - role: tt-ops
+    permission:
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id

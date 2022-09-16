@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
+import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
+import useCourseDraft from '@app/hooks/useCourseDraft'
+import { LoadingStatus } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
 
@@ -9,8 +12,6 @@ import {
   CreateCourseProvider,
   CreateCourseProviderProps,
   getCourseType,
-  getItem,
-  getItemId,
 } from './components/CreateCourseProvider'
 import { CreateCoursePage } from './CreateCoursePage'
 
@@ -33,10 +34,13 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
     [pathname, profile, searchParams]
   )
 
-  const draft = useMemo(() => {
-    const id = getItemId(profile?.id ?? 'unknown', courseType)
-    return getItem(id)
-  }, [courseType, profile])
+  const { fetchDraft } = useCourseDraft(profile?.id ?? '', courseType)
+
+  const { data: draft, status: fetchDraftStatus } = fetchDraft()
+
+  if (fetchDraftStatus === LoadingStatus.FETCHING) {
+    return <SuspenseLoading />
+  }
 
   if (!acl.canCreateCourse(courseType)) {
     return <NotFound />

@@ -2,6 +2,7 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
+import useCourseDraft from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -18,8 +19,11 @@ jest.mock('@app/components/VenueSelector', () => ({
 
 jest.mock('@app/hooks/useZoomMeetingLink')
 
+jest.mock('@app/hooks/useCourseDraft')
+
 const VenueSelectorMocked = jest.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingLink)
+const useCourseDraftMocked = jest.mocked(useCourseDraft)
 
 describe('component: CreateCourseForm', () => {
   beforeAll(() => {
@@ -28,6 +32,11 @@ describe('component: CreateCourseForm', () => {
       meetingUrl: '',
       generateLink: jest.fn(),
       status: LoadingStatus.SUCCESS,
+    })
+    useCourseDraftMocked.mockReturnValue({
+      fetchDraft: jest.fn(),
+      removeDraft: jest.fn(),
+      setDraft: jest.fn(),
     })
   })
 

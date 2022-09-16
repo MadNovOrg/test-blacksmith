@@ -1,6 +1,7 @@
 import { DeepNonNullable } from 'ts-essentials'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
+import { StepsEnum } from '@app/pages/CreateCourse/types'
 import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
 
 export type Base = {
@@ -676,3 +677,12 @@ export type CourseExpenseData =
       type: CourseExpenseType.Accommodation
       accommodationNights: number
     }
+
+export type Draft = {
+  courseData?: ValidCourseInput
+  trainers?: TrainerInput[]
+  expenses?: Record<string, ExpensesInput>
+  completedSteps?: StepsEnum[]
+  currentStepKey?: StepsEnum | null
+  savedAt?: Date
+}
