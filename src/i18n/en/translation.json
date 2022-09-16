@@ -1441,9 +1441,9 @@
           "form": {
             "add-radio-button-label": "Add",
             "remove-radio-button-label": "Remove",
-            "amount-label": "Amount *",
+            "amount-label": "Number of licenses *",
             "invoice-label": "Invoice number *",
-            "license-price-label": "License price *",
+            "license-price-label": "Price per license *",
             "total-licenses": "Total remaining licenses",
             "note-label": "Add a note (optional)",
             "save-button-label": "Save details",

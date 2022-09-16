@@ -6,7 +6,7 @@ import { ManageLicensesForm, FormData, Type } from '.'
 
 function fillForm(data: Partial<FormData>) {
   if (data.amount) {
-    userEvent.type(screen.getByLabelText('Amount *'), data.amount)
+    userEvent.type(screen.getByLabelText('Number of licenses *'), data.amount)
   }
 
   if (data.invoiceId) {
@@ -27,7 +27,7 @@ function fillForm(data: Partial<FormData>) {
 
   if (data.licensePrice) {
     userEvent.type(
-      screen.getByLabelText('License price *'),
+      screen.getByLabelText('Price per license *'),
       String(data.licensePrice)
     )
   }
@@ -132,7 +132,7 @@ describe('component: ManageLicensesForm', () => {
     })
 
     await waitFor(() => {
-      userEvent.clear(screen.getByLabelText('License price *'))
+      userEvent.clear(screen.getByLabelText('Price per license *'))
 
       expect(screen.getByText('Save details')).toBeDisabled()
     })
