@@ -229,18 +229,17 @@ ${invoice?.contact?.name}`
                 <Typography variant="h2" mb={4}>
                   {order?.id}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  data-testid="order-details-view-in-xero-button"
-                  onClick={handleOpenInXeroClick}
-                  disabled={!isInvoiceInXero}
-                >
-                  {isInvoiceInXero
-                    ? _t('view-in-xero')
-                    : _t('invoice-not-in-xero')}
-                </Button>
+                {isInvoiceInXero ? (
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    data-testid="order-details-view-in-xero-button"
+                    onClick={handleOpenInXeroClick}
+                  >
+                    {_t('view-in-xero')}
+                  </Button>
+                ) : null}
               </Sticky>
             </Box>
 
