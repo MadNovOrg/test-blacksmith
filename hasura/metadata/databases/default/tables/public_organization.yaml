@@ -179,3 +179,18 @@ update_permissions:
             - profile_id:
                 _eq: X-Hasura-User-Id
       check: null
+event_triggers:
+  - name: organization_address_update
+    definition:
+      enable_manual: false
+      insert:
+        columns:
+          - address
+      update:
+        columns:
+          - address
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/organization/address/update'

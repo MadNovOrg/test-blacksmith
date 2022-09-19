@@ -383,7 +383,11 @@
     "spaces-left": "{{ number }} spaces left",
     "book-now": "Book now",
     "group": "Group",
-    "UK": "United Kingdom"
+    "UK": "United Kingdom",
+    "today": "Today",
+    "in-n-days": "In {{ num }}",
+    "all-organizations": "All organisations",
+    "km-distance": "{{ number }} kilometers"
   },
   "components": {
     "not-found": {
@@ -1579,6 +1583,16 @@
         "tt-admin": "TeamTeach administrator",
         "admin": "Global administrator"
       }
+    },
+    "available-courses": {
+      "title": "Available courses for booking",
+      "sorting": {
+        "distance-to-org": "Distance to organisation",
+        "date-ascending": "Date ascending",
+        "date-descending": "Date descending"
+      },
+      "please-select-organization": "Please select organisation to sort by distance.",
+      "select-organization": "Please select organization"
     }
   },
   "course-evaluation": {

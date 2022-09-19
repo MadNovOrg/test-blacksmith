@@ -90,7 +90,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
         <OrgStatsTiles orgId={orgId} />
       </Grid>
 
-      <Grid item xs={12} md={8} p={1} mt={2}>
+      <Grid item xs={12} md={9} p={1} mt={2}>
         <Typography variant="h4">
           {t('pages.org-details.tabs.overview.individuals-by-training-level')}
         </Typography>
@@ -155,7 +155,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
         <OrgSummaryList orgId={orgId} />
       </Grid>
 
-      <Grid item xs={12} md={4} p={1} mt={2}>
+      <Grid item xs={12} md={3} p={1} mt={2}>
         <Typography variant="h4">
           {t('pages.org-details.tabs.overview.available-courses-for-booking')}
         </Typography>
@@ -166,7 +166,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
 
         <Button
           variant="outlined"
-          onClick={() => navigate('/courses')}
+          onClick={() => navigate('courses')}
           sx={{ mt: 2 }}
         >
           {t('pages.org-details.tabs.overview.see-all-courses')}

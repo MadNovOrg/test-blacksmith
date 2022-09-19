@@ -2,6 +2,7 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
@@ -83,6 +84,7 @@ const TrainerBaseRoutes = () => {
             <Route index element={<OrgDashboard />} />
             <Route path="edit" element={<EditOrgDetails />} />
             <Route path="invite" element={<InviteUserToOrganization />} />
+            <Route path="courses" element={<AvailableCourses />} />
           </Route>
         </Route>
       ) : null}

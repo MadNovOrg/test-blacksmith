@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import { SxProps } from '@mui/material'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
@@ -8,11 +9,12 @@ import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
   onChange: (selected: Course_Type_Enum[]) => void
+  sx?: SxProps
 }
 
 const types = Object.values(Course_Type_Enum)
 
-export const FilterCourseType: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterCourseType: React.FC<Props> = ({ onChange = noop, sx }) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption<Course_Type_Enum>[]>(
@@ -35,6 +37,7 @@ export const FilterCourseType: React.FC<Props> = ({ onChange = noop }) => {
 
   return (
     <FilterAccordion
+      sx={sx}
       options={options}
       title={t('course-type')}
       onChange={_onChange}

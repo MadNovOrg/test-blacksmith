@@ -110,3 +110,24 @@ update_permissions:
         - post_code
       filter: {}
       check: null
+event_triggers:
+  - name: venue_address_update
+    definition:
+      enable_manual: false
+      insert:
+        columns:
+          - address_line_one
+          - address_line_two
+          - city
+          - post_code
+      update:
+        columns:
+          - address_line_one
+          - address_line_two
+          - city
+          - post_code
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/venue/address/update'

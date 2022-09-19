@@ -1,5 +1,6 @@
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
+import { SxProps } from '@mui/material'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -21,6 +22,7 @@ type FilterAccordionProps<T = string> = {
   onChange: (options: FilterOption<T>[], selectedItem: FilterOption<T>) => void
   defaultExpanded?: boolean
   'data-testid'?: string
+  sx?: SxProps
 }
 
 export const FilterAccordion = <T,>({
@@ -29,6 +31,7 @@ export const FilterAccordion = <T,>({
   onChange,
   defaultExpanded,
   'data-testid': testId = 'FilterAccordion',
+  sx,
 }: FilterAccordionProps<T>) => {
   const handleChange = (item: FilterOption<T>) =>
     onChange(
@@ -39,7 +42,11 @@ export const FilterAccordion = <T,>({
     )
 
   return (
-    <StyledAccordion defaultExpanded={defaultExpanded} data-testid={testId}>
+    <StyledAccordion
+      defaultExpanded={defaultExpanded}
+      data-testid={testId}
+      sx={sx}
+    >
       <AccordionSummary expandIcon={<ArrowDropDown />}>
         {title}
       </AccordionSummary>

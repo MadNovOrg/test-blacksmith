@@ -25,6 +25,8 @@ export const QUERY = gql`
           addressLineOne
           addressLineTwo
           city
+          postCode
+          geoCoordinates
         }
       }
       participantsCount: participants_aggregate {

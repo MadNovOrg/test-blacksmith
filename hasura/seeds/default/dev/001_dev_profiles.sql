@@ -120,9 +120,9 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', (SELECT id from role WHERE name = 'trainer')), -- trainer09@teamteach.testinator.com
 ('b414536d-29dd-4902-81f9-e808503428ee', (SELECT id from role WHERE name = 'trainer')); -- trainer10@teamteach.testinator.com
 
-INSERT INTO organization (id, name, original_record) VALUES
-('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}'),
-('c43b2ba0-8630-43e5-9558-f59ee9a224f0', 'London First School', '{}');
+INSERT INTO organization (id, name, original_record, address) VALUES
+('55320dc6-cfb0-41fb-9000-ca7eb9d2894d', 'NearForm', '{}', '{"line1": "Tankfield, Convent Hill", "line2": "Tramore", "city": "Waterford", "postCode": "X91 PV08"}'),
+('c43b2ba0-8630-43e5-9558-f59ee9a224f0', 'London First School', '{}', '{"line1": "107 Queen Victoria Street", "city": "London", "postCode": "EC4V 3AL"}');
 
 INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('434de6da-cdc5-431b-b109-022854319d69', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- jonpaul.little@teamteach.co.uk

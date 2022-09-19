@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
 import Contacts from '@app/pages/admin/components/Contacts'
+import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
@@ -75,6 +76,7 @@ const TTAdminRoutes = () => {
             <Route index element={<OrgDashboard />} />
             <Route path="edit" element={<EditOrgDetails />} />
             <Route path="invite" element={<InviteUserToOrganization />} />
+            <Route path="courses" element={<AvailableCourses />} />
           </Route>
         </Route>
       ) : null}

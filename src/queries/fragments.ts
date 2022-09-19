@@ -15,6 +15,7 @@ export const ORGANIZATION = gql`
     sector
     trustName
     trustType
+    geoCoordinates
   }
 `
 
