@@ -3,7 +3,7 @@ import { useLocation, useSearchParams } from 'react-router-dom'
 
 import { SuspenseLoading } from '@app/components/SuspenseLoading'
 import { useAuth } from '@app/context/auth'
-import useCourseDraft from '@app/hooks/useCourseDraft'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { LoadingStatus } from '@app/util'
 
 import { NotFound } from '../common/NotFound'

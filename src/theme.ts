@@ -193,27 +193,32 @@ export default createTheme({
     h1: {
       fontSize: '2rem',
       fontWeight: '700',
+      color: theme.palette.grey[900],
     },
     h2: {
       fontSize: '1.75rem',
       fontWeight: '600',
+      color: theme.palette.grey[900],
     },
     h3: {
       fontSize: '1.5rem',
       fontWeight: '700',
+      color: theme.palette.grey[900],
     },
     h4: {
       fontSize: '1.25rem',
       fontWeight: '500',
+      color: theme.palette.grey[900],
     },
     h5: {
       fontSize: '1.15rem',
-      fontWeight: '600',
+      fontWeight: '500',
+      color: theme.palette.grey[900],
     },
     h6: {
       fontSize: '1rem',
-      fontWeight: '600',
-      color: theme.palette.grey[800],
+      fontWeight: '500',
+      color: theme.palette.grey[900],
     },
 
     subtitle1: {
@@ -419,6 +424,19 @@ export default createTheme({
           paddingBottom: 0,
           '& .MuiAlert-icon': {
             color: theme.palette.warning.main,
+          },
+          '& .MuiAlert-message': {
+            fontWeight: 500,
+            color: theme.palette.secondary.main,
+          },
+        },
+        outlinedError: {
+          backgroundColor: theme.palette.error.light,
+          borderColor: theme.palette.error.main,
+          paddingTop: 0,
+          paddingBottom: 0,
+          '& .MuiAlert-icon': {
+            color: theme.palette.error.main,
           },
           '& .MuiAlert-message': {
             fontWeight: 500,

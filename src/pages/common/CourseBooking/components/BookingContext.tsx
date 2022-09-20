@@ -25,6 +25,7 @@ import {
   Order,
   PaymentMethod,
   TransportMethod,
+  InvoiceDetails,
 } from '@app/types'
 import {
   getTrainerAccommodationCost,
@@ -36,16 +37,6 @@ import { positions, sectors } from './org-data'
 export type Sector = keyof typeof sectors | ''
 
 type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
-
-export type InvoiceDetails = {
-  orgId: string | null
-  billingAddress: string
-  firstName: string
-  surname: string
-  email: string
-  phone: string
-  purchaseOrder: string
-}
 
 type State = {
   emails: string[]

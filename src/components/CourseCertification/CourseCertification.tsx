@@ -324,7 +324,7 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
   ) {
     return (
       <Container sx={{ py: 2 }}>
-        <Alert severity="error" variant="filled">
+        <Alert severity="error" variant="outlined">
           {t('internal-error')}
         </Alert>
       </Container>

@@ -2,7 +2,7 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
-import useCourseDraft from '@app/hooks/useCourseDraft'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { CourseType } from '@app/types'
 import { LoadingStatus } from '@app/util'

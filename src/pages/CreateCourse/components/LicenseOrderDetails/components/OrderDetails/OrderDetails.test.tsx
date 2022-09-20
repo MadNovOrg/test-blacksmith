@@ -2,11 +2,15 @@ import React from 'react'
 
 import { render, screen } from '@test/index'
 
+import { calculateGo1LicenseCost } from '../../../../utils'
+
 import { OrderDetails } from '.'
 
 describe('component: OrderDetails', () => {
   it('calculates correctly if there is a full license allowance', () => {
-    render(<OrderDetails licenseBalance={6} numberOfLicenses={2} />)
+    const costs = calculateGo1LicenseCost(2, 6)
+
+    render(<OrderDetails licensesBalance={6} numberOfLicenses={2} {...costs} />)
 
     expect(screen.getByText('License allowance (4 left)')).toBeInTheDocument()
     expect(screen.getByTestId('amount-allowance')).toHaveTextContent('-£50.00')
@@ -16,7 +20,9 @@ describe('component: OrderDetails', () => {
   })
 
   it('calculates correctly if there is a partial license allowance', () => {
-    render(<OrderDetails licenseBalance={1} numberOfLicenses={2} />)
+    const costs = calculateGo1LicenseCost(2, 1)
+
+    render(<OrderDetails licensesBalance={1} numberOfLicenses={2} {...costs} />)
 
     expect(screen.getByTestId('amount-allowance')).toHaveTextContent('-£25.00')
     expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£50.00')
@@ -25,7 +31,8 @@ describe('component: OrderDetails', () => {
   })
 
   it('calculates correctly if there is no license allowance', () => {
-    render(<OrderDetails licenseBalance={0} numberOfLicenses={2} />)
+    const costs = calculateGo1LicenseCost(2, 0)
+    render(<OrderDetails licensesBalance={0} numberOfLicenses={2} {...costs} />)
 
     expect(screen.queryByTestId('amount-allowance')).not.toBeInTheDocument()
     expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£50.00')

@@ -29,7 +29,7 @@ type UseCourseDraft = {
   setDraft: (draft: Draft) => void
 }
 
-export default function useCourseDraft(
+export function useCourseDraft(
   profileId: string,
   courseType: CourseType
 ): UseCourseDraft {

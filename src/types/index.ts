@@ -678,6 +678,23 @@ export type CourseExpenseData =
       accommodationNights: number
     }
 
+export type Go1LicensingPrices = {
+  subtotal: number
+  vat: number
+  amountDue: number
+  allowancePrice: number
+}
+
+export type InvoiceDetails = {
+  orgId: string | null
+  billingAddress: string
+  firstName: string
+  surname: string
+  email: string
+  phone: string
+  purchaseOrder: string
+}
+
 export type Draft = {
   courseData?: ValidCourseInput
   trainers?: TrainerInput[]
@@ -685,4 +702,8 @@ export type Draft = {
   completedSteps?: StepsEnum[]
   currentStepKey?: StepsEnum | null
   savedAt?: Date
+  go1Licensing?: {
+    prices: Go1LicensingPrices
+    invoiceDetails: InvoiceDetails
+  }
 }

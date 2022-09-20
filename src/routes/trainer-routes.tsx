@@ -12,6 +12,7 @@ import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
+import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseBuilder } from '@app/pages/trainer-pages/CourseBuilder'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -50,6 +51,7 @@ const TrainerBaseRoutes = () => {
             path="license-order-details"
             element={<LicenseOrderDetails />}
           />
+          <Route path="review-license-order" element={<ReviewLicenseOrder />} />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

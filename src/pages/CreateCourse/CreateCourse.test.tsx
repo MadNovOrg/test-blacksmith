@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import useCourseDraft from '@app/hooks/useCourseDraft'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { CourseType, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 

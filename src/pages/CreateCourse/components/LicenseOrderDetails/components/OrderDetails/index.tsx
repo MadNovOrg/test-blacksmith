@@ -8,7 +8,11 @@ const PRICE_PER_LICENSE = 25
 
 type Props = {
   numberOfLicenses: number
-  licenseBalance: number
+  licensesBalance: number
+  vat: number
+  subtotal: number
+  amountDue: number
+  allowancePrice: number
 }
 
 const DetailsItemBox = styled(Box)(({ theme }) => ({
@@ -24,25 +28,20 @@ const ItemRow = styled(Box)(() => ({
 
 export const OrderDetails: React.FC<Props> = ({
   numberOfLicenses,
-  licenseBalance,
+  licensesBalance,
+  vat,
+  subtotal,
+  amountDue,
+  allowancePrice,
 }) => {
   const { t, _t } = useScopedTranslation(
     'pages.create-course.license-order-details'
   )
 
-  const fullPrice = numberOfLicenses * PRICE_PER_LICENSE
   const licensesLeft =
-    licenseBalance - numberOfLicenses > 0
-      ? licenseBalance - numberOfLicenses
+    licensesBalance - numberOfLicenses >= 0
+      ? licensesBalance - numberOfLicenses
       : 0
-
-  const licenseAllowancePrice =
-    numberOfLicenses > licenseBalance
-      ? licenseBalance * PRICE_PER_LICENSE
-      : numberOfLicenses * PRICE_PER_LICENSE
-
-  const vat = (fullPrice - licenseAllowancePrice) * 0.2
-  const amountDue = fullPrice - licenseAllowancePrice + vat
 
   return (
     <Stack spacing="2px">
@@ -76,10 +75,10 @@ export const OrderDetails: React.FC<Props> = ({
             data-testid="amount-subtotal"
             mb={1}
           >
-            {_t('common.currency', { amount: fullPrice })}
+            {_t('common.currency', { amount: subtotal })}
           </Typography>
         </ItemRow>
-        {licenseBalance ? (
+        {licensesBalance ? (
           <ItemRow>
             <Typography color={theme.palette.grey[600]}>
               {t('license-allowance', { balance: licensesLeft })}
@@ -91,7 +90,7 @@ export const OrderDetails: React.FC<Props> = ({
             >
               -
               {_t('common.currency', {
-                amount: licenseAllowancePrice,
+                amount: allowancePrice,
               })}
             </Typography>
           </ItemRow>

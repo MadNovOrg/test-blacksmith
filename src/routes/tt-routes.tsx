@@ -16,6 +16,7 @@ import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainer
 import { CreateCourseForm } from '@app/pages/CreateCourse/components/CreateCourseForm'
 import { LicenseOrderDetails } from '@app/pages/CreateCourse/components/LicenseOrderDetails'
 import { ReviewAndConfirm } from '@app/pages/CreateCourse/components/ReviewAndConfirm'
+import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLicenseOrder'
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
@@ -53,6 +54,7 @@ const TTAdminRoutes = () => {
             path="license-order-details"
             element={<LicenseOrderDetails />}
           />
+          <Route path="review-license-order" element={<ReviewLicenseOrder />} />
         </Route>
 
         <Route path="edit/:id" element={<EditCourse />} />

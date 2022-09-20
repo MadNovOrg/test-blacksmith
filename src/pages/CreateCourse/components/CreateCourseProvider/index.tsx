@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 
 import { useAuth } from '@app/context/auth'
-import useCourseDraft from '@app/hooks/useCourseDraft'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import {
   CourseType,
   Draft,
@@ -35,6 +35,8 @@ type ContextValue = {
   setExpenses: (expenses: Record<string, ExpensesInput>) => void
   setTrainers: (trainers: TrainerInput[]) => void
   trainers: TrainerInput[]
+  setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
+  go1Licensing: Draft['go1Licensing']
 }
 
 const CreateCourseContext = React.createContext<ContextValue | undefined>(
@@ -72,6 +74,7 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   const [currentStepKey, setCurrentStepKey] = useState<StepsEnum | null>(
     initialValue?.currentStepKey ?? null
   )
+  const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>()
 
   useEffect(() => {
     if (!profile?.id) {
@@ -101,9 +104,10 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
       expenses,
       currentStepKey,
       completedSteps,
+      go1Licensing,
     }
 
-    await setDraft(draft)
+    setDraft(draft)
   }, [
     completedSteps,
     courseData,
@@ -112,6 +116,7 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
     profile,
     setDraft,
     trainers,
+    go1Licensing,
   ])
 
   const value = useMemo(() => {
@@ -128,6 +133,8 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
       setExpenses,
       setTrainers,
       trainers,
+      go1Licensing,
+      setGo1Licensing,
     }
   }, [
     completeStep,
@@ -142,6 +149,8 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
     setExpenses,
     setTrainers,
     trainers,
+    go1Licensing,
+    setGo1Licensing,
   ])
 
   return (

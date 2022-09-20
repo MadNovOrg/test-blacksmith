@@ -822,12 +822,12 @@
       "step-navigation-course-builder": "Course builder",
       "select-trainers-button-text": "Select trainer(s)",
       "course-builder-button-text": "Course builder",
-      "order-details-button-text": "Next: Order details",
+      "order-details-button-text": "Order details",
       "assign-trainers-title": "Assign an assist trainer",
       "assists-needed_one": "{{count}} assist trainer needed.",
       "assists-needed_other": "{{count}} assist trainers needed.",
+      "course-not-found": "Course not found",
       "assign-trainers": {
-        "course-not-found": "Course not found",
         "lead-title": "Lead Trainer",
         "lead-error-min": "Lead trainer is required",
         "lead-error-max": "There can be only one Lead trainer",
@@ -848,7 +848,9 @@
         "license-allowance": "License allowance ({{balance}} left)",
         "subtotal": "Sub total",
         "amound-due": "Amount due ({{currency}})",
-        "vat": "VAT (20%)"
+        "vat": "VAT (20%)",
+        "invoice-title": "Invoice contact details",
+        "invoice-contact": "Invoice to:"
       },
       "trainer-expenses": {
         "title": "Trainer Expenses",

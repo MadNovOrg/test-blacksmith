@@ -128,7 +128,7 @@ export const AssignTrainers = () => {
         variant="filled"
         data-testid="AssignTrainers-alert"
       >
-        {t('pages.create-course.assign-trainers.course-not-found')}
+        {t('pages.create-course.course-not-found')}
       </Alert>
     )
   }
