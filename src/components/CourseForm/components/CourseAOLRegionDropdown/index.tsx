@@ -1,14 +1,12 @@
-import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
+import { Autocomplete, Box, TextField } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getAOLRegions } from '../../helpers'
 
-type SelectValue = string | null
-
 interface Props {
-  value: SelectValue
-  onChange: (event: SelectChangeEvent<SelectValue>) => void
+  value: string | null
+  onChange: (value: string | null) => void
   usesAOL: boolean
   aolCountry: string | null
 }
@@ -22,7 +20,7 @@ export const CourseAOLRegionDropdown: React.FC<Props> = ({
   const { t } = useTranslation()
 
   const regions = useMemo(
-    () => ['placeholder', ...getAOLRegions(aolCountry)],
+    () => ['Region', ...getAOLRegions(aolCountry)],
     [aolCountry]
   )
   const selected = value || regions[0]
@@ -32,26 +30,40 @@ export const CourseAOLRegionDropdown: React.FC<Props> = ({
       const newValue = usesAOL ? selected : null
 
       const ev = { target: { value: newValue } }
-      onChange(ev as SelectChangeEvent<SelectValue>)
+      onChange(ev.target.value)
     }
   }, [regions, onChange, value, selected, usesAOL])
 
   return (
-    <Select
+    <Autocomplete
+      multiple={false}
       value={selected}
-      onChange={onChange}
-      data-testid="course-aol-region-select"
-      id="course-aol-region"
-    >
-      {regions.map((region: string) => (
-        <MenuItem
-          key={region}
-          value={region}
-          data-testid={`course-aol-region-option-${region}`}
-        >
-          {t(`aol.regions.${region}`)}
-        </MenuItem>
-      ))}
-    </Select>
+      options={regions}
+      isOptionEqualToValue={(r, v) => r === v}
+      getOptionLabel={region => region}
+      renderOption={(props, region) => {
+        return (
+          <Box
+            {...props}
+            component="li"
+            key={region}
+            data-testid={`course-aol-region-option-${region}`}
+          >
+            {t(`aol.regions.${region}`)}
+          </Box>
+        )
+      }}
+      onChange={(event, value) => onChange(value)}
+      disableClearable={true}
+      renderInput={params => (
+        <TextField
+          {...params}
+          data-testid={`course-aol-region-select-${aolCountry}`}
+          fullWidth
+          sx={{ bgcolor: 'grey.100' }}
+          variant="filled"
+        />
+      )}
+    />
   )
 }

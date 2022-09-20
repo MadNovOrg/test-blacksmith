@@ -1,7 +1,7 @@
 import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { render, screen, userEvent } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 
 import { getAOLCountries, getAOLRegions } from '../../helpers'
 
@@ -14,10 +14,8 @@ const getOption = (region: string) => {
 const countries = getAOLCountries()
 
 describe('component: CourseAOLRegionDropdown', () => {
-  it('renders correctly for each country', () => {
-    countries.forEach((country: string) => {
-      const regions = getAOLRegions(country)
-
+  beforeAll(() => {
+    countries.forEach(async (country: string) => {
       render(
         <CourseAOLRegionDropdown
           value=""
@@ -26,10 +24,20 @@ describe('component: CourseAOLRegionDropdown', () => {
           aolCountry={country}
         />
       )
+    })
+  })
 
-      userEvent.click(screen.getByRole('button'))
+  it('renders correctly for each country', async () => {
+    await countries.forEach(async (country: string) => {
+      const regions = getAOLRegions(country)
 
-      expect(screen.queryAllByRole('option').length).toBe(regions.length + 1)
+      userEvent.click(screen.getByTestId(`course-aol-region-select-${country}`))
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('course-aol-region-option').length).toBe(
+          regions.length + 1
+        )
+      })
 
       regions.forEach((region: string) =>
         expect(getOption(region)).toBeInTheDocument()

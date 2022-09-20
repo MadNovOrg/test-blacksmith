@@ -16,6 +16,8 @@ export type ParamsType = {
     go1Integration?: boolean
     aolCostOfCourse?: number
     description?: string
+    aolCountry?: string
+    aolRegion?: string
     min_participants?: number
     max_participants?: number
     freeSpaces?: number

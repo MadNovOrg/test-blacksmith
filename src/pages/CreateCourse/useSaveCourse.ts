@@ -133,7 +133,11 @@ export function useSaveCourse(): {
               ? { contactProfileId: courseData.contactProfile.id }
               : null),
             ...(courseData.usesAOL
-              ? { aolCostOfCourse: courseData.courseCost }
+              ? {
+                  aolCostOfCourse: courseData.courseCost,
+                  aolCountry: courseData.aolCountry,
+                  aolRegion: courseData.aolRegion,
+                }
               : null),
             trainers: {
               data: trainers.map((t: TrainerInput) => ({

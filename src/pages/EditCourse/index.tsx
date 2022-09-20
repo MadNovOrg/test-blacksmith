@@ -149,7 +149,11 @@ export const EditCourse: React.FC<unknown> = () => {
                 ? { salesRepresentativeId: courseData.salesRepresentative.id }
                 : null),
               ...(courseData.usesAOL
-                ? { aolCostOfCourse: courseData.courseCost }
+                ? {
+                    aolCostOfCourse: courseData.courseCost,
+                    aolCountry: courseData.aolCountry,
+                    aolRegion: courseData.aolRegion,
+                  }
                 : null),
             },
             trainers,
