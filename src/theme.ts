@@ -300,6 +300,13 @@ export default createTheme({
         root: {
           borderRadius: '3px',
           backgroundColor: theme.palette.grey[400],
+          '&.dotted': {
+            backgroundColor: 'transparent',
+            '& > .MuiLinearProgress-bar': {
+              backgroundColor: 'transparent',
+              borderBottom: '4px dotted' + theme.colors.fuschia['500'],
+            },
+          },
         },
       },
     },

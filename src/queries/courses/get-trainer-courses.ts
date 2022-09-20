@@ -34,6 +34,11 @@ export const QUERY = gql`
         count
       }
     }
+    waitlistAgg: waitlists_aggregate {
+      aggregate {
+        count
+      }
+    }
     dates: schedule_aggregate {
       aggregate {
         start: min {

@@ -37,6 +37,11 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
         count: 12,
       },
     },
+    waitlistAgg: {
+      aggregate: {
+        count: 2,
+      },
+    },
     schedule: [
       {
         id: fake(f => f.datatype.uuid()),

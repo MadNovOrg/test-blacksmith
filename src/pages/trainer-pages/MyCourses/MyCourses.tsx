@@ -62,6 +62,8 @@ export const MyCourses: React.FC = () => {
 
   const { profile, activeRole } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
+  const canSeeWaitingLists =
+    activeRole === RoleName.TT_ADMIN || activeRole === RoleName.TT_OPS
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
@@ -233,6 +235,9 @@ export const MyCourses: React.FC = () => {
                   ? findCourseTrainer(c?.trainers, profile.id)
                   : undefined
 
+                const waitingListCount = c.waitlistAgg?.aggregate?.count
+                const showWaitingListCount =
+                  canSeeWaitingLists && waitingListCount
                 return (
                   <TableRow
                     key={c.id}
@@ -305,13 +310,14 @@ export const MyCourses: React.FC = () => {
                     <TableCell>
                       <TrainerAvatarGroup trainers={c.trainers} />
                     </TableCell>
-                    <TableCell>
+                    <TableCell data-testid="participants-cell">
                       <Typography mb={1}>
                         <Typography component="span">
                           {c.participantsAgg?.aggregate?.count}
                         </Typography>
                         <Typography component="span" variant="body2">
-                          /{c.max_participants}
+                          {showWaitingListCount ? `+${waitingListCount}` : ''}/
+                          {c.max_participants}
                         </Typography>
                       </Typography>
                       {c.participantsAgg?.aggregate ? (
@@ -322,6 +328,7 @@ export const MyCourses: React.FC = () => {
                               c.max_participants) *
                             100
                           }
+                          className={showWaitingListCount ? 'dotted' : ''}
                         />
                       ) : null}
                     </TableCell>

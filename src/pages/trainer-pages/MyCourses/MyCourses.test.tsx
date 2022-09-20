@@ -1,5 +1,6 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
+import { DeepPartial } from 'ts-essentials'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -11,15 +12,20 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { RoleName } from '@app/types'
 
 import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
+import { Providers } from '@test/providers'
 
 import { MyCourses } from './MyCourses'
 import { buildTrainerCourse } from './test-utils'
 
-const _render = (ui: React.ReactElement) => {
-  return render(<MemoryRouter>{ui}</MemoryRouter>)
+const _render = (
+  ui: React.ReactElement,
+  providers: DeepPartial<Providers> = {}
+) => {
+  return render(<MemoryRouter>{ui}</MemoryRouter>, providers)
 }
 
 describe('trainers-pages/MyCourses', () => {
@@ -409,5 +415,104 @@ describe('trainers-pages/MyCourses', () => {
       expect(screen.getByLabelText('Go to next page')).toBeDisabled()
       expect(screen.getByLabelText('Go to previous page')).toBeEnabled()
     })
+  })
+
+  it('shows course waitlist count if user is TT admin', async () => {
+    const courses = buildEntities(1, buildTrainerCourse)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <MyCourses />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_ADMIN,
+        },
+      }
+    )
+
+    const participantsCell = screen.getByTestId('participants-cell')
+    expect(participantsCell).toBeInTheDocument()
+    expect(participantsCell).toHaveTextContent(/^12\+2\/12$/)
+  })
+
+  it('shows course waitlist count if user is TT ops', async () => {
+    const courses = buildEntities(1, buildTrainerCourse)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <MyCourses />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TT_OPS,
+        },
+      }
+    )
+
+    const participantsCell = screen.getByTestId('participants-cell')
+    expect(participantsCell).toBeInTheDocument()
+    expect(participantsCell).toHaveTextContent(/^12\+2\/12$/)
+  })
+
+  it('does not show course waitlist count if user is trainer', async () => {
+    const courses = buildEntities(1, buildTrainerCourse)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <MyCourses />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+        },
+      }
+    )
+
+    const participantsCell = screen.getByTestId('participants-cell')
+    expect(participantsCell).toBeInTheDocument()
+    expect(participantsCell).toHaveTextContent(/^12\/12$/)
   })
 })
