@@ -13,14 +13,20 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { differenceInDays } from 'date-fns'
+import { differenceInCalendarDays } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 import { Course } from '@app/types'
-import { courseEnded, courseStarted, getCourseTrainer, now } from '@app/util'
+import {
+  courseEnded,
+  courseStarted,
+  getCourseTrainer,
+  getTimeDifferenceAndContext,
+  now,
+} from '@app/util'
 
 interface Props {
   course: Course
@@ -39,10 +45,11 @@ export const CourseHeroSummary: React.FC<Props> = ({
     () => getCourseTrainer(course.trainers ?? []),
     [course]
   )
-
+  const courseStartDate = new Date(course.schedule[0].start)
+  const courseEndDate = new Date(course.schedule[0].end)
   const courseBeginsFor = courseStarted(course)
     ? 0
-    : differenceInDays(new Date(), new Date(course.schedule[0].start))
+    : differenceInCalendarDays(new Date(), new Date(courseStartDate))
 
   let courseBeginsForMessage
 
@@ -52,13 +59,55 @@ export const CourseHeroSummary: React.FC<Props> = ({
     courseBeginsForMessage = t('pages.course-participants.course-began')
   } else if (courseBeginsFor === 0) {
     courseBeginsForMessage = t('pages.course-participants.course-begins-today')
+  } else if (courseBeginsFor === -1) {
+    courseBeginsForMessage = t(
+      'pages.course-participants.until-course-begins_days_one'
+    )
   } else {
     courseBeginsForMessage = t(
-      'pages.course-participants.until-course-begins',
+      'pages.course-participants.until-course-begins_days_other',
       {
-        count: differenceInDays(new Date(course.schedule[0].start), now()),
+        count: differenceInCalendarDays(
+          new Date(course.schedule[0].start),
+          now()
+        ),
       }
     )
+  }
+
+  const courseDuration = getTimeDifferenceAndContext(
+    courseEndDate,
+    courseStartDate
+  )
+  const { context: durationContext, count: durationCount } = courseDuration
+
+  let courseDurationMessage
+  if (durationContext == 'days' && durationCount === 1) {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_days_one'
+    )
+  } else if (durationContext == 'days') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_days_other',
+      { count: durationCount }
+    )
+  } else if (durationContext == 'hours' && durationCount === 1) {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_hours_one',
+      { count: durationCount }
+    )
+  } else if (durationContext == 'hours') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_hours_other',
+      { count: durationCount }
+    )
+  } else if (durationContext == 'minutes') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_minutes_other',
+      { count: durationCount }
+    )
+  } else {
+    courseDurationMessage = t('pages.course-participants.course-duration_none')
   }
 
   return (
@@ -122,13 +171,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
               <ListItem disableGutters disablePadding>
                 <ListItemText inset>
                   <Typography variant="body2">
-                    {t('pages.course-participants.course-duration', {
-                      count:
-                        differenceInDays(
-                          new Date(course.schedule[0].end),
-                          new Date(course.schedule[0].start)
-                        ) + 1,
-                    })}
+                    {courseDurationMessage}
                   </Typography>
                 </ListItemText>
               </ListItem>

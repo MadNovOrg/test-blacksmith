@@ -33,7 +33,7 @@ describe('component: CourseHeroSummary', () => {
 
     render(<CourseHeroSummary course={course} />)
 
-    expect(screen.getByText('Course has began.'))
+    expect(screen.getByText('Course has begun.'))
   })
 
   it('displays a correct message if a course begins today', () => {
@@ -50,6 +50,38 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Course begins today.')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if a course begins in 1 day', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { days: 1 }).toISOString(),
+        end: add(new Date(), { days: 1 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('1 day until course begins')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if a course begins in 2 days', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { days: 2 }).toISOString(),
+        end: add(new Date(), { days: 2 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('2 days until course begins')).toBeInTheDocument()
   })
 
   it('displays a correct message if a course has ended', () => {
@@ -86,6 +118,86 @@ describe('component: CourseHeroSummary', () => {
 
     expect(screen.getByText('12 May 2022, 06:30 AM')).toBeInTheDocument()
     expect(screen.getByText('15 May 2022, 07:30 AM')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if course lasts 30 minutes', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { minutes: 0 }).toISOString(),
+        end: add(new Date(), { minutes: 30 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Duration 30 minutes')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if course lasts 1 hour', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { minutes: 0 }).toISOString(),
+        end: add(new Date(), { hours: 1 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Duration 1 hour')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if course lasts 2 hours', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { minutes: 0 }).toISOString(),
+        end: add(new Date(), { hours: 2 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Duration 2 hours')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if course lasts 1 day', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { minutes: 0 }).toISOString(),
+        end: add(new Date(), { days: 1 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Duration 1 day')).toBeInTheDocument()
+  })
+
+  it('displays a correct message if course lasts 2 days', () => {
+    const courseSchedule = buildCourseSchedule({
+      overrides: {
+        start: add(new Date(), { minutes: 0 }).toISOString(),
+        end: add(new Date(), { days: 2 }).toISOString(),
+      },
+    })
+    const course = buildCourse({
+      overrides: { schedule: [courseSchedule] },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Duration 2 days')).toBeInTheDocument()
   })
 
   it('displays correct trainer info if a logged in user is not a trainer', () => {
