@@ -1,16 +1,9 @@
-import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
+import { Avatar } from '@app/components/Avatar'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -95,7 +88,10 @@ const ModifyGradeModal: React.FC<ModifyGradeModalProps> = function ({
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
-              <Avatar />
+              <Avatar
+                src={participant.profile.avatar}
+                name={participant.profile.fullName}
+              />
               <Typography variant="body1">
                 {participant.profile.fullName}
               </Typography>

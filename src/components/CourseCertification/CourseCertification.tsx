@@ -2,7 +2,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Accordion,
   Alert,
-  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -28,6 +27,7 @@ import {
   icmImage,
   ntaImage,
 } from '@app/assets'
+import { Avatar } from '@app/components/Avatar'
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
 import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
@@ -369,7 +369,10 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                     alignItems="center"
                     gap={1}
                   >
-                    <Avatar />
+                    <Avatar
+                      src={certificate.profile?.avatar}
+                      name={certificate.profile?.fullName}
+                    />
                     <Typography variant="body1">
                       {certificate.profile?.fullName}
                     </Typography>

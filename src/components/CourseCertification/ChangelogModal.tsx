@@ -60,7 +60,10 @@ const ChangelogModal: React.FC<ChangelogModalProps> = function ({
           <TableRow key={changelog.id}>
             <TableCell sx={{ verticalAlign: 'top' }}>
               <Box display="flex" alignItems="center" gap={1}>
-                <Avatar />
+                <Avatar
+                  src={changelog.author.avatar}
+                  name={changelog.author.fullName}
+                />
                 <Typography variant="body2">
                   {changelog.author.fullName}
                 </Typography>

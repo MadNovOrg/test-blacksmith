@@ -17,6 +17,7 @@ export const QUERY = gql`
       ...Certificate
       profile {
         fullName
+        avatar
       }
       participant {
         id
@@ -42,7 +43,12 @@ export const QUERY = gql`
           ...CertificateChangelog
           author {
             fullName
+            avatar
           }
+        }
+        profile {
+          fullName
+          avatar
         }
       }
     }
