@@ -22,6 +22,7 @@ export const QUERY = gql`
       trainers {
         id
         type
+        status
         profile {
           id
           givenName

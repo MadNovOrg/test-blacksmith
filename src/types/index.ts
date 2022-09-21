@@ -443,6 +443,7 @@ export type SetCourseTrainerInput = {
   course_id: number
   profile_id: string
   type: CourseTrainerType
+  status?: InviteStatus
 }
 
 export type SetCourseTrainerVars = {

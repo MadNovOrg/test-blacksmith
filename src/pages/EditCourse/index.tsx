@@ -32,6 +32,7 @@ import {
   CourseInput,
   CourseLevel,
   CourseTrainerType,
+  InviteStatus,
   ValidCourseInput,
 } from '@app/types'
 import {
@@ -91,17 +92,21 @@ export const EditCourse: React.FC<unknown> = () => {
   }, [course])
 
   const saveChanges = async () => {
+    const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
+
     try {
       if (courseData && course && trainersData) {
         assertCourseDataValid(courseData, courseDataValid)
 
         const trainers = [
-          ...trainersData.assist.map(
-            profileToInput(course, CourseTrainerType.ASSISTANT)
-          ),
-          ...trainersData.moderator.map(
-            profileToInput(course, CourseTrainerType.MODERATOR)
-          ),
+          ...trainersData.assist.map(t => ({
+            ...profileToInput(course, CourseTrainerType.ASSISTANT)(t),
+            status: trainersMap.get(t.id)?.status,
+          })),
+          ...trainersData.moderator.map(t => ({
+            ...profileToInput(course, CourseTrainerType.MODERATOR)(t),
+            status: trainersMap.get(t.id)?.status,
+          })),
         ]
 
         if (!acl.canAssignLeadTrainer() && profile) {
@@ -109,12 +114,14 @@ export const EditCourse: React.FC<unknown> = () => {
             course_id: course.id,
             profile_id: profile.id,
             type: CourseTrainerType.LEADER,
+            status: InviteStatus.ACCEPTED,
           })
         } else {
           trainers.push(
-            ...trainersData.lead.map(
-              profileToInput(course, CourseTrainerType.LEADER)
-            )
+            ...trainersData.lead.map(t => ({
+              ...profileToInput(course, CourseTrainerType.LEADER)(t),
+              status: trainersMap.get(t.id)?.status,
+            }))
           )
         }
 
