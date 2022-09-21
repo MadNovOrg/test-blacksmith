@@ -23,7 +23,7 @@ export enum Type {
 }
 
 export type FormData = {
-  amount: string
+  amount: number
   invoiceId?: string
   issueRefund?: boolean
   licensePrice?: number
@@ -54,6 +54,13 @@ export const ManageLicensesForm: React.FC<Props> = ({
           .number()
           .typeError(t('error-amount-positive'))
           .positive(t('error-amount-positive'))
+          .when('type', {
+            is: (type: string) => type === 'REMOVE',
+            then: schema =>
+              schema.max(currentBalance, value =>
+                t('error-amount-max', { max: value.max })
+              ),
+          })
           .required(t('erorr-amount-required')),
         note: yup.string(),
         issueRefund: yup.bool(),
@@ -71,7 +78,7 @@ export const ManageLicensesForm: React.FC<Props> = ({
             then: schema => schema.required(t('error-license-price-required')),
           }),
       }),
-    [t]
+    [t, currentBalance]
   )
 
   const {
@@ -81,10 +88,15 @@ export const ManageLicensesForm: React.FC<Props> = ({
     watch,
     formState: { errors, isValid },
     setValue,
+    resetField,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
+      amount: undefined,
+      invoiceId: '',
+      note: '',
+      licensePrice: undefined,
       type: Type.ADD,
       issueRefund: false,
     },
@@ -103,6 +115,22 @@ export const ManageLicensesForm: React.FC<Props> = ({
       setValue('invoiceId', '')
     }
   }, [values.issueRefund, setValue])
+
+  useEffect(() => {
+    resetField('amount')
+    resetField('invoiceId')
+    resetField('note')
+    resetField('issueRefund')
+    resetField('licensePrice')
+  }, [values.type, resetField])
+
+  const newBalance =
+    currentBalance +
+    (!errors.amount?.message && Number(values.amount)
+      ? values.type === Type.ADD
+        ? Number(values.amount)
+        : -Number(values.amount)
+      : 0)
 
   return (
     <form onSubmit={handleSubmit(submit)}>
@@ -151,8 +179,7 @@ export const ManageLicensesForm: React.FC<Props> = ({
       </Grid>
 
       <Typography variant="body2" mt={1} mb={2}>
-        {t('total-licenses')}{' '}
-        {currentBalance + (!errors.amount?.message ? Number(values.amount) : 0)}
+        {t('total-licenses')} {newBalance}
       </Typography>
 
       <TextField

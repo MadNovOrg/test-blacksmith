@@ -5,8 +5,19 @@ import { render, screen, userEvent, waitFor } from '@test/index'
 import { ManageLicensesForm, FormData, Type } from '.'
 
 function fillForm(data: Partial<FormData>) {
+  if (data.type === Type.REMOVE) {
+    userEvent.click(screen.getByLabelText('Remove'))
+  }
+
+  if (data.issueRefund) {
+    userEvent.click(screen.getByTestId('issue-refund-checkbox'))
+  }
+
   if (data.amount) {
-    userEvent.type(screen.getByLabelText('Number of licenses *'), data.amount)
+    userEvent.type(
+      screen.getByLabelText('Number of licenses *'),
+      String(data.amount)
+    )
   }
 
   if (data.invoiceId) {
@@ -15,14 +26,6 @@ function fillForm(data: Partial<FormData>) {
 
   if (data.note) {
     userEvent.type(screen.getByLabelText('Add a note (optional)'), data.note)
-  }
-
-  if (data.type === Type.REMOVE) {
-    userEvent.click(screen.getByLabelText('Remove'))
-  }
-
-  if (data.issueRefund) {
-    userEvent.click(screen.getByTestId('issue-refund-checkbox'))
   }
 
   if (data.licensePrice) {
@@ -37,7 +40,7 @@ describe('component: ManageLicensesForm', () => {
   it('validates amount field to be a positive number', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    fillForm({ amount: '-1' })
+    fillForm({ amount: -1 })
 
     await waitFor(() => {
       expect(
@@ -49,7 +52,7 @@ describe('component: ManageLicensesForm', () => {
   it('displays number of remaining licenses', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    fillForm({ amount: '50', type: Type.ADD })
+    fillForm({ amount: 50, type: Type.ADD })
 
     await waitFor(() => {
       expect(
@@ -80,7 +83,7 @@ describe('component: ManageLicensesForm', () => {
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
-    fillForm({ amount: '50', invoiceId, note, type: Type.ADD })
+    fillForm({ amount: 50, invoiceId, note, type: Type.ADD })
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeEnabled()
@@ -108,7 +111,7 @@ describe('component: ManageLicensesForm', () => {
     fillForm({
       type: Type.REMOVE,
       issueRefund: true,
-      amount: '20',
+      amount: 20,
       invoiceId: 'INV',
     })
 
@@ -126,7 +129,7 @@ describe('component: ManageLicensesForm', () => {
     fillForm({
       type: Type.REMOVE,
       issueRefund: true,
-      amount: '20',
+      amount: 20,
       invoiceId: 'INV',
       licensePrice: 125.5,
     })
@@ -144,7 +147,7 @@ describe('component: ManageLicensesForm', () => {
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
-    fillForm({ type: Type.REMOVE, amount: '50', note })
+    fillForm({ type: Type.REMOVE, amount: 50, note })
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeEnabled()
@@ -173,7 +176,7 @@ describe('component: ManageLicensesForm', () => {
 
     fillForm({
       type: Type.REMOVE,
-      amount: '5',
+      amount: 5,
       issueRefund: true,
       note,
       invoiceId,
@@ -196,6 +199,18 @@ describe('component: ManageLicensesForm', () => {
         note,
         licensePrice: 125.5,
       })
+    })
+  })
+
+  it('constrains number of licenses field to the number of organization licenses when removing', async () => {
+    render(<ManageLicensesForm currentBalance={1} />)
+
+    fillForm({ amount: 2, type: Type.REMOVE })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/maximum number of licenses to remove is 1/i)
+      ).toBeInTheDocument()
     })
   })
 })
