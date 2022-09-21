@@ -120,6 +120,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
         autoComplete="off"
         aria-autocomplete="none"
         mt={3}
+        data-testid="signup-form"
       >
         <Typography variant="body1" mb={1} fontWeight="600">
           {t('personal-details')}
@@ -197,7 +198,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             {...register('password')}
             fullWidth
             required
-            inputProps={{ 'data-testid': 'input-pass' }}
+            inputProps={{ 'data-testid': 'input-password' }}
             sx={{ bgcolor: 'grey.100' }}
             InputProps={{
               endAdornment: (

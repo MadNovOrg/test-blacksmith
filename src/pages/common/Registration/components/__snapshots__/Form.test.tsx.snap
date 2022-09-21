@@ -9,6 +9,7 @@ Object {
         aria-autocomplete="none"
         autocomplete="off"
         class="MuiBox-root css-178yklu"
+        data-testid="signup-form"
         novalidate=""
       >
         <p
@@ -198,7 +199,7 @@ Object {
               <input
                 aria-invalid="false"
                 class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
-                data-testid="input-pass"
+                data-testid="input-password"
                 id="signup-pass"
                 name="password"
                 placeholder="Please enter your password"
@@ -457,6 +458,7 @@ Object {
       aria-autocomplete="none"
       autocomplete="off"
       class="MuiBox-root css-178yklu"
+      data-testid="signup-form"
       novalidate=""
     >
       <p
@@ -646,7 +648,7 @@ Object {
             <input
               aria-invalid="false"
               class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
-              data-testid="input-pass"
+              data-testid="input-password"
               id="signup-pass"
               name="password"
               placeholder="Please enter your password"

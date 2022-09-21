@@ -1261,7 +1261,8 @@
       "success-hint": "Thank you for signing up. \n You can now login to your Team Teach account.",
       "success-btn": "Go to Login",
       "form-errors": {
-        "UnknownError": "An error occurred. Please try again."
+        "UnknownError": "An error occurred. Please try again.",
+        "UsernameExistsException": "An account with the given email already exists."
       },
       "verify-errors": {
         "CodeMismatchException": "Verification code is incorrect.",
