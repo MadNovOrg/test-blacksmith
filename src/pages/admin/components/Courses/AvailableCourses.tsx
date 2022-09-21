@@ -12,7 +12,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
-import { chain } from 'lodash-es'
+import { isNumber } from 'lodash-es'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -59,15 +59,17 @@ export const AvailableCourses: React.FC = () => {
   )
 
   const distances = useMemo(() => {
-    return chain(coursesForBooking)
-      .keyBy('id')
-      .mapValues(c =>
+    const result = new Map<number, number | null>()
+    coursesForBooking.forEach(course => {
+      result.set(
+        course.id,
         geoDistance(
           orgs?.find(org => org.id === id)?.geoCoordinates,
-          c.schedules[0].venue?.geoCoordinates
+          course.schedules[0].venue?.geoCoordinates
         )
       )
-      .value()
+    })
+    return result
   }, [coursesForBooking, id, orgs])
 
   const sortFunctions = useMemo(() => {
@@ -84,10 +86,10 @@ export const AvailableCourses: React.FC = () => {
       },
       'distance-to-org': (a: CourseType, b: CourseType) => {
         if (!distances) return 0
-        const aDistance = distances[a.id]
-        const bDistance = distances[b.id]
-        if (aDistance === null) return 1
-        if (bDistance === null) return -1
+        const aDistance = distances.get(a.id)
+        const bDistance = distances.get(b.id)
+        if (!isNumber(aDistance) && !aDistance) return 1
+        if (!isNumber(bDistance) && !bDistance) return -1
         if (aDistance < bDistance) return -1
         if (aDistance > bDistance) return 1
         return 0
@@ -105,10 +107,10 @@ export const AvailableCourses: React.FC = () => {
       return filterType.length > 0 ? filterType.some(t => t === c.type) : true
     })
     if (sortByDistance) {
-      const knownDistances = values.filter(c => !!distances[c.id])
+      const knownDistances = values.filter(c => !!distances.get(c.id))
       const online = values.filter(c => !c.schedules[0].venue)
       const unknown = values.filter(
-        c => c.schedules[0].venue && !distances[c.id]
+        c => c.schedules[0].venue && !distances.get(c.id)
       )
       return [
         ...knownDistances.sort(sortFunctions[sortBy]),
@@ -254,7 +256,7 @@ export const AvailableCourses: React.FC = () => {
                   course={course}
                   key={course.id}
                   showDistance={sortByDistance}
-                  distance={distances[course.id]}
+                  distance={distances.get(course.id)}
                   variant="row"
                 />
               ))}
