@@ -48,9 +48,8 @@ export const ManageLicensesDialog: React.FC<Props> = ({
       type: formTypeEventMap[data.type],
       amount: Number(data.amount),
       payload: {
-        ...(data.invoiceId && data.licensePrice
-          ? { invoiceId: data.invoiceId, licensePrice: data.licensePrice }
-          : null),
+        ...(data.invoiceId ? { invoiceId: data.invoiceId } : null),
+        ...(data.licensePrice ? { licensePrice: data.licensePrice } : null),
         note: data.note,
         invokedBy: profile?.fullName,
       },
