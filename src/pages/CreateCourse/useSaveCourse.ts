@@ -143,6 +143,7 @@ export function useSaveCourse(): {
               data: trainers.map((t: TrainerInput) => ({
                 profile_id: t.profile_id,
                 type: t.type,
+                status: t.status,
               })),
             },
             schedule: {
@@ -160,12 +161,20 @@ export function useSaveCourse(): {
                 },
               ],
             },
-            accountCode: courseData.accountCode,
-            freeSpaces: courseData.freeSpaces,
-            salesRepresentativeId: courseData.salesRepresentative?.id,
-            expenses: {
-              data: prepareExpensesData(expenses),
-            },
+            ...(courseData.type !== CourseType.INDIRECT
+              ? {
+                  accountCode: courseData.accountCode,
+                  freeSpaces: courseData.freeSpaces,
+                  salesRepresentativeId: courseData.salesRepresentative?.id,
+                }
+              : null),
+            ...(courseData.type === CourseType.CLOSED
+              ? {
+                  expenses: {
+                    data: prepareExpensesData(expenses),
+                  },
+                }
+              : null),
           },
         })
 

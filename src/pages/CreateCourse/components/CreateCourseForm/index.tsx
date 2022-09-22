@@ -64,6 +64,23 @@ export const CreateCourseForm = () => {
   })
 
   useEffect(() => {
+    if (courseType === CourseType.INDIRECT && profile) {
+      setTrainers([
+        {
+          profile_id: profile.id,
+          type: CourseTrainerType.LEADER,
+          status: InviteStatus.ACCEPTED,
+        },
+        ...assistants.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.ASSISTANT,
+          status: InviteStatus.PENDING,
+        })),
+      ])
+    }
+  }, [assistants, courseType, setTrainers, profile])
+
+  useEffect(() => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
   }, [setCurrentStepKey])
 
@@ -102,20 +119,6 @@ export const CreateCourseForm = () => {
     if (courseData.blendedLearning) {
       navigate('./license-order-details')
     } else if (courseType === CourseType.INDIRECT) {
-      const trainers = [
-        {
-          profile_id: profile.id,
-          type: CourseTrainerType.LEADER,
-          status: InviteStatus.ACCEPTED,
-        },
-        ...assistants.map(assistant => ({
-          profile_id: assistant.id,
-          type: CourseTrainerType.ASSISTANT,
-          status: InviteStatus.PENDING,
-        })),
-      ]
-
-      setTrainers(trainers)
       const id = await saveCourse()
       navigate(`/courses/${id}/modules`)
     } else {

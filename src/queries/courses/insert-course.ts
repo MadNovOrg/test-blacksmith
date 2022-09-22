@@ -49,7 +49,7 @@ export type ParamsType = {
         }
       ]
     }
-    expenses: {
+    expenses?: {
       data: Array<Course_Expenses_Insert_Input>
     }
   }
