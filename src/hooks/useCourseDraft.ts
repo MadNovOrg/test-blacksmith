@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import useSWR from 'swr'
 
 import {
@@ -63,10 +63,13 @@ export function useCourseDraft(
         SET_COURSE_DRAFT,
         { courseType, data: draft, profileId }
       )
-      localStorage.setItem(`${profileId}-last-draft-course-type`, courseType)
     },
     [fetcher, courseType, profileId]
   )
+
+  useEffect(() => {
+    localStorage.setItem(`${profileId}-last-draft-course-type`, courseType)
+  }, [profileId, courseType])
 
   return {
     fetchDraft,
