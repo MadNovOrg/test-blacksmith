@@ -63,7 +63,8 @@ export const LicenseOrderDetails = () => {
     OrgLicensesWithHistoryQueryVariables
   >({
     query: orgLicensesWithHistory,
-    variables: { id: courseData?.organization.id },
+    variables: { id: courseData?.organization.id, withHistory: false },
+    requestPolicy: 'cache-and-network',
   })
 
   const methods = useForm<Inputs>({

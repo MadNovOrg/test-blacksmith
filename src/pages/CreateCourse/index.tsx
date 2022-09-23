@@ -6,8 +6,6 @@ import { useAuth } from '@app/context/auth'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { LoadingStatus } from '@app/util'
 
-import { NotFound } from '../common/NotFound'
-
 import {
   CreateCourseProvider,
   CreateCourseProviderProps,
@@ -21,7 +19,7 @@ type Props = {
 
 export const CreateCourse = ({ initialContextValue }: Props) => {
   const [searchParams] = useSearchParams()
-  const { acl, profile } = useAuth()
+  const { profile } = useAuth()
   const { pathname } = useLocation()
 
   const courseType = useMemo(
@@ -40,10 +38,6 @@ export const CreateCourse = ({ initialContextValue }: Props) => {
 
   if (fetchDraftStatus === LoadingStatus.FETCHING) {
     return <SuspenseLoading />
-  }
-
-  if (!acl.canCreateCourse(courseType)) {
-    return <NotFound />
   }
 
   return (

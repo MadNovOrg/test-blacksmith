@@ -32640,7 +32640,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', fullName?: string | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } }>, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -32919,10 +32919,11 @@ export type OrgLicensesWithHistoryQueryVariables = Exact<{
   id: Scalars['uuid'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  withHistory?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, go1LicensesHistory: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, change: number }>, go1LicensesHistory_aggregate: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null };
+export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null };
 
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;

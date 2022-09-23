@@ -78,6 +78,28 @@ insert_permissions:
         - name
       backend_only: false
 select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - name
+        - go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - region
+        - sector
+        - trust_name
+        - trust_type
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:

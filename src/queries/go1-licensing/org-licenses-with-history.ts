@@ -1,7 +1,12 @@
 import { gql } from 'graphql-request'
 
 export default gql`
-  query OrgLicensesWithHistory($id: uuid!, $limit: Int, $offset: Int) {
+  query OrgLicensesWithHistory(
+    $id: uuid!
+    $limit: Int
+    $offset: Int
+    $withHistory: Boolean = true
+  ) {
     organization_by_pk(id: $id) {
       id
       go1Licenses
@@ -9,7 +14,7 @@ export default gql`
         order_by: { captured_at: desc }
         limit: $limit
         offset: $offset
-      ) {
+      ) @include(if: $withHistory) {
         id
         captured_at
         event
@@ -17,7 +22,7 @@ export default gql`
         balance
         change
       }
-      go1LicensesHistory_aggregate {
+      go1LicensesHistory_aggregate @include(if: $withHistory) {
         aggregate {
           count
         }

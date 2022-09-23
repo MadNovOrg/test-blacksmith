@@ -56,7 +56,7 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
 
   const licensesHistory = data?.organization_by_pk?.go1LicensesHistory
   const totalHistory =
-    data?.organization_by_pk?.go1LicensesHistory_aggregate.aggregate?.count
+    data?.organization_by_pk?.go1LicensesHistory_aggregate?.aggregate?.count
 
   return (
     <>
