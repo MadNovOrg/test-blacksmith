@@ -110,6 +110,12 @@ array_relationships:
         table:
           schema: public
           name: waitlist
+computed_fields:
+  - name: course_code
+    definition:
+      function:
+        schema: public
+        name: course_code
 insert_permissions:
   - role: trainer
     permission:
@@ -179,6 +185,8 @@ select_permissions:
         - name
         - reaccreditation
         - updated_at
+      computed_fields:
+        - course_code
       filter:
         _and:
           - course_type:
@@ -211,6 +219,8 @@ select_permissions:
         - organization_id
         - reaccreditation
         - sales_representative_id
+      computed_fields:
+        - course_code
       filter:
         _or:
           - trainers:
@@ -255,6 +265,8 @@ select_permissions:
         - organization_id
         - reaccreditation
         - sales_representative_id
+      computed_fields:
+        - course_code
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -279,6 +291,8 @@ select_permissions:
         - organization_id
         - reaccreditation
         - updated_at
+      computed_fields:
+        - course_code
       filter:
         course_type:
           _eq: OPEN
@@ -309,6 +323,8 @@ select_permissions:
         - organization_id
         - reaccreditation
         - sales_representative_id
+      computed_fields:
+        - course_code
       filter:
         _or:
           - participants:
