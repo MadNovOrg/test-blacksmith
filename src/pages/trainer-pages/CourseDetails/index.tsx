@@ -87,6 +87,7 @@ export const CourseDetails = () => {
                       variant="contained"
                       color="secondary"
                       size="large"
+                      sx={{ mt: 3 }}
                       onClick={() => navigate(`/courses/edit/${courseId}`)}
                     >
                       {t('pages.course-participants.edit-course-button')}

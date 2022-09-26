@@ -193,6 +193,7 @@ export const buildCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
     level: CourseLevel.LEVEL_1,
+    course_code: 'CL-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
@@ -231,6 +232,7 @@ export const buildStartedCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
     level: CourseLevel.LEVEL_1,
+    course_code: 'CL-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
@@ -266,6 +268,7 @@ export const buildEndedCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseScheduleEndedCourse()],
     level: CourseLevel.LEVEL_1,
+    course_code: 'OP-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {
@@ -299,6 +302,7 @@ export const buildNotStartedCourse = build<Course>({
     organization: buildOrganization(),
     schedule: [buildCourseScheduleNotStartedCourse()],
     level: CourseLevel.LEVEL_1,
+    course_code: 'OP-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
       aggregate: {

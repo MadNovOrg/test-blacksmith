@@ -21,6 +21,7 @@ export const QUERY = gql`
     type
     level
     status
+    course_code
     trainers {
       ...CourseTrainerInfo
     }

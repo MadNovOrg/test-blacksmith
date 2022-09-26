@@ -93,6 +93,7 @@ export const COURSE = gql`
     deliveryType
     status
     level
+    course_code
     reaccreditation
     min_participants
     max_participants

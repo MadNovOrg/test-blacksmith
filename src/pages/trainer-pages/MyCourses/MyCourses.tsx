@@ -29,7 +29,6 @@ import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
-  Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
@@ -43,14 +42,16 @@ import { AcceptDeclineCourse } from './AcceptDeclineCourse'
 
 const CourseTitle: React.FC<{
   name: string
-  level: Course_Level_Enum | undefined | null
-}> = ({ name, level }) => {
-  const { t } = useTranslation()
-
+  code: string | null | undefined
+}> = ({ name, code }) => {
   return (
     <>
-      <Typography>{t(`course-levels.${level}`)}</Typography>
-      <Typography variant="body2">{name}</Typography>
+      <Typography mb={1} data-testid="course-title">
+        {name}
+      </Typography>
+      <Typography variant="body2" data-testid="course-code">
+        {code}
+      </Typography>
     </>
   )
 }
@@ -245,14 +246,14 @@ export const MyCourses: React.FC = () => {
                     data-testid={`course-row-${c.id}`}
                     data-index={index}
                   >
-                    <TableCell>
+                    <TableCell data-testid="course-name-cell">
                       {courseTrainer &&
                       courseTrainer.status ===
                         Course_Invite_Status_Enum.Pending ? (
-                        <CourseTitle level={c.level} name={c.name} />
+                        <CourseTitle code={c.course_code} name={c.name} />
                       ) : (
                         <Link href={handleNavigation(c)}>
-                          <CourseTitle level={c.level} name={c.name} />
+                          <CourseTitle code={c.course_code} name={c.name} />
                         </Link>
                       )}
                     </TableCell>

@@ -130,6 +130,9 @@ export const CourseHeroSummary: React.FC<Props> = ({
             >
               {course.name}
             </Typography>
+            <Typography variant="body2" color="secondary">
+              {course.course_code}
+            </Typography>
             {typeof renderButton === 'function' && renderButton()}
           </Grid>
           <Grid item xs={6} md={4}>

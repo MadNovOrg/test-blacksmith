@@ -17,6 +17,7 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
     type: Course_Type_Enum.Open,
     level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.Scheduled,
+    course_code: 'OP-L1-10000',
     organization: {
       name: fake(f => f.random.words()),
     },

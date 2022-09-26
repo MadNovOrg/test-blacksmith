@@ -247,7 +247,9 @@ ${invoice?.contact?.name}`
               <Box mt={2} display="flex" flexDirection="column">
                 <Box p={2} bgcolor="common.white">
                   <Row
-                    label={course?.name}
+                    label={`${course?.name} ${
+                      course?.course_code && `(${course?.course_code})`
+                    }}`}
                     value={_t('quantity')}
                     labelProps={{
                       variant: 'body1',

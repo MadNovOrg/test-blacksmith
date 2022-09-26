@@ -187,8 +187,10 @@ export const MyCourses: React.FC = () => {
                 >
                   <TableCell>
                     <Link href={`${c.id}/details`}>
-                      <Typography>{t(`course-levels.${c.level}`)}</Typography>
-                      <Typography variant="body2">{c.name}</Typography>
+                      <Typography mb={1}>{c.name}</Typography>
+                      <Typography variant="body2" data-testid="course-code">
+                        {c.course_code}
+                      </Typography>
                     </Link>
                   </TableCell>
                   <TableCell>

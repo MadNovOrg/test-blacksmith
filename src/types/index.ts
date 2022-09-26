@@ -18,6 +18,7 @@ export type Course = {
   level: CourseLevel
   deliveryType: CourseDeliveryType
   type: CourseType
+  course_code: string
   min_participants: number
   max_participants: number
   status: Course_Status_Enum

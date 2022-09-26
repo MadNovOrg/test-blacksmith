@@ -20,6 +20,7 @@ export const QUERY = gql`
       type
       deliveryType
       level
+      course_code
       reaccreditation
       min_participants
       max_participants

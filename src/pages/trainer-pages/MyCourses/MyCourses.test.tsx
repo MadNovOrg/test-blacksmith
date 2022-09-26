@@ -109,6 +109,37 @@ describe('trainers-pages/MyCourses', () => {
     expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
   })
 
+  it('shows course title and code', async () => {
+    const courses = buildEntities(1, buildTrainerCourse)
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <MyCourses />
+      </Provider>
+    )
+
+    const courseTitle = screen.getByTestId('course-title')
+    expect(courseTitle).toBeInTheDocument()
+    expect(courseTitle).toHaveTextContent(`${courses[0].name}`)
+    const courseCode = screen.getByTestId('course-code')
+    expect(courseCode).toBeInTheDocument
+    expect(courseCode).toHaveTextContent('OP-L1-10000')
+  })
+
   it('filters by search', async () => {
     const keyword = chance.word()
 
