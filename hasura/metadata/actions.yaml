@@ -121,6 +121,16 @@ actions:
     permissions:
       - role: user
       - role: unverified
+  - name: updateAvatar
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/update-avatar'
+      forward_client_headers: true
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: user
   - name: upsertZoomMeeting
     definition:
       kind: synchronous
@@ -374,4 +384,5 @@ custom_types:
     - name: XeroItem
     - name: XeroLineItem
     - name: Go1LicensesChangeOutput
+    - name: UpdateAvatarResponse
   scalars: []

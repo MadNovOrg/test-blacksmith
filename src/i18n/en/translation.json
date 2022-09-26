@@ -387,7 +387,9 @@
     "today": "Today",
     "in-n-days": "In {{ num }}",
     "all-organizations": "All organisations",
-    "km-distance": "{{ number }} kilometers"
+    "km-distance": "{{ number }} kilometers",
+    "avatar-too-large": "The avatar submitted is too large. Maximum size is {{maxSize}} MB.",
+    "unknown-error": "Unknown error"
   },
   "components": {
     "not-found": {

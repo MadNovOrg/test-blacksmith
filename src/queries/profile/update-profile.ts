@@ -5,6 +5,7 @@ export type ResponseType = { updated: { id: string } }
 export type ParamsType = {
   profileId: string
   input: {
+    avatar: string
     givenName: string
     familyName: string
     phone: string

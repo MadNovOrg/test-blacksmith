@@ -10,6 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  bytea: any;
   date: any;
   float8: any;
   json: any;
@@ -9286,6 +9287,11 @@ export type UniformResourceIdentifiable = {
   isTermNode: Scalars['Boolean'];
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
+};
+
+export type UpdateAvatarResponse = {
+  __typename?: 'UpdateAvatarResponse';
+  avatar: Scalars['String'];
 };
 
 /** Input for the UpdateCategory mutation */
@@ -21843,6 +21849,7 @@ export type Mutation_Root = {
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
+  updateAvatar?: Maybe<UpdateAvatarResponse>;
   /** update data of the table: "availability" */
   update_availability?: Maybe<Availability_Mutation_Response>;
   /** update single row of the table: "availability" */
@@ -23661,6 +23668,12 @@ export type Mutation_RootPlansCreateArgs = {
 /** mutation root */
 export type Mutation_RootStripeCreatePaymentIntentArgs = {
   input: StripeCreatePaymentIntentInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateAvatarArgs = {
+  avatar: Scalars['bytea'];
 };
 
 
@@ -33993,6 +34006,13 @@ export type UpdateProfileActivityMutationVariables = Exact<{
 
 
 export type UpdateProfileActivityMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
+
+export type UpdateAvatarMutationVariables = Exact<{
+  avatar: Scalars['bytea'];
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'mutation_root', updateAvatar?: { __typename?: 'UpdateAvatarResponse', avatar: string } | null };
 
 export type UpdateProfileRolesMutationVariables = Exact<{
   id: Scalars['uuid'];

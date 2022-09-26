@@ -104,6 +104,12 @@ type Mutation {
 }
 
 type Mutation {
+  updateAvatar(
+    avatar: bytea!
+  ): UpdateAvatarResponse
+}
+
+type Mutation {
   upsertZoomMeeting(
     input: UpsertZoomMeetingInput
   ): UpsertZoomMeetingPayload
@@ -549,5 +555,9 @@ type XeroLineItem {
 
 type Go1LicensesChangeOutput {
   success: Boolean!
+}
+
+type UpdateAvatarResponse {
+  avatar: String!
 }
 

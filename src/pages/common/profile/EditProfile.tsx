@@ -21,7 +21,13 @@ import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
 import { formatDistanceToNow, isPast } from 'date-fns'
 import { uniq } from 'lodash-es'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -63,6 +69,7 @@ import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
 type ProfileInput = {
+  avatar: string
   firstName: string
   surname: string
   countryCode: string
@@ -99,10 +106,16 @@ type OrgMemberType = {
   organization: { name: string }
 }
 
+const avatarSize = 220
+const maxAvatarFileSizeBytes = Number.parseInt(
+  import.meta.env.VITE_PROFILE_AVATAR_MAX_SIZE_BYTES ?? 0
+)
+
 export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)
+  const [avatarError, setAvatarError] = useState('')
   const { profile: currentUserProfile, reloadCurrentProfile, acl } = useAuth()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -110,11 +123,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
 
   const orgId = searchParams.get('orgId')
 
-  const { profile, certifications, go1Licenses, mutate } = useProfile(
-    id ?? currentUserProfile?.id,
-    undefined,
-    orgId ?? undefined
-  )
+  const { profile, certifications, go1Licenses, mutate, updateAvatar } =
+    useProfile(id ?? currentUserProfile?.id, undefined, orgId ?? undefined)
   const { roles: systemRoles } = useRoles()
   const isMyProfile = !id
 
@@ -181,6 +191,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
         : yup.string().nullable()
     return yup
       .object({
+        avatar: yup.string(),
         firstName: yup
           .string()
           .required(
@@ -210,6 +221,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   } = useForm<ProfileInput>({
     resolver: yupResolver(schema),
     defaultValues: {
+      avatar: '',
       firstName: '',
       surname: '',
       countryCode: '+44',
@@ -232,6 +244,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
 
   useEffect(() => {
     if (profile) {
+      setValue('avatar', profile.avatar as string)
       setValue('firstName', profile.givenName)
       setValue('surname', profile.familyName)
       setValue('phone', profile.phone ?? '')
@@ -256,6 +269,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           // have perm check on the backend that does not allow updaing someone else's profile
           profileId: profile.id,
           input: {
+            avatar: data.avatar,
             givenName: data.firstName,
             familyName: data.surname,
             phone: data.phone,
@@ -332,6 +346,39 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
     [fetcher, refreshData]
   )
 
+  const handleAvatarUpload = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files || !e.target.files[0]) {
+        return
+      }
+
+      const file = e.target.files[0]
+      if (file.size > maxAvatarFileSizeBytes) {
+        setAvatarError(
+          t('avatar-too-large', {
+            maxSize: maxAvatarFileSizeBytes / (1024 * 1024),
+          })
+        )
+        return
+      }
+
+      try {
+        setAvatarError('')
+        const buffer = await file.arrayBuffer()
+        const data = Array.from(new Uint8Array(buffer))
+
+        setLoading(true)
+        const response = await updateAvatar(data)
+        setValue('avatar', response?.avatar as string)
+      } catch (err) {
+        console.error(err)
+        setAvatarError(t('unknown-error'))
+        setLoading(false)
+      }
+    },
+    [setAvatarError, setLoading, setValue, t, updateAvatar]
+  )
+
   if (!profile || !systemRoles) return null
 
   return (
@@ -352,12 +399,44 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             flexDirection="column"
             alignItems="center"
           >
-            <Avatar
-              src={profile.avatar ?? ''}
-              name={profile.fullName ?? ''}
-              size={220}
-              sx={{ mb: 4 }}
-            />
+            <Button
+              component="label"
+              sx={{
+                alignItems: 'normal',
+                '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0)' },
+                borderRadius: '50%',
+                width: `${avatarSize}px`,
+                height: `${avatarSize}px`,
+                marginBottom: 4,
+                padding: 0,
+              }}
+            >
+              <Avatar
+                src={values.avatar}
+                name={`${values.firstName} ${values.surname}`}
+                size={avatarSize}
+                imgProps={{
+                  onLoad: () => {
+                    setLoading(false)
+                  },
+                }}
+                sx={{
+                  mb: 4,
+                  opacity: loading ? 0.3 : 1,
+                }}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={handleAvatarUpload}
+              />
+            </Button>
+            {avatarError ? (
+              <Typography variant="caption" color="error">
+                {avatarError}
+              </Typography>
+            ) : null}
             <Typography variant="h1" whiteSpace="nowrap">
               {profile.fullName}
             </Typography>

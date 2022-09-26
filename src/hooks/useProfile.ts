@@ -1,12 +1,16 @@
 import { isPast } from 'date-fns'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
   GetProfileDetailsQuery,
   GetProfileDetailsQueryVariables,
+  UpdateAvatarMutation,
+  UpdateAvatarMutationVariables,
 } from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY } from '@app/queries/profile/get-profile-details'
+import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/queries/profile/update-profile-avatar'
 import { CourseLevel } from '@app/types'
 import { getSWRLoadingStatus } from '@app/util'
 
@@ -36,6 +40,8 @@ export default function useProfile(
   courseId?: string,
   orgId?: string
 ) {
+  const fetcher = useFetcher()
+
   const { data, error, mutate } = useSWR<
     GetProfileDetailsQuery,
     Error,
@@ -76,6 +82,21 @@ export default function useProfile(
     return false
   }, [data, courseId])
 
+  const updateAvatar = useCallback(
+    async (avatar: Array<number>) => {
+      if (!profileId) {
+        return
+      }
+
+      const response = await fetcher<
+        UpdateAvatarMutation,
+        UpdateAvatarMutationVariables
+      >(UPDATE_AVATAR_MUTATION, { avatar: JSON.stringify(avatar) })
+      return response.updateAvatar
+    },
+    [fetcher, profileId]
+  )
+
   return {
     profile: data?.profile,
     certifications: data?.certificates,
@@ -84,5 +105,6 @@ export default function useProfile(
     mutate,
     error,
     status: getSWRLoadingStatus(data, error),
+    updateAvatar,
   }
 }

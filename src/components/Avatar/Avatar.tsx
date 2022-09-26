@@ -1,4 +1,4 @@
-import { Avatar as MuiAvatar, SxProps } from '@mui/material'
+import { Avatar as MuiAvatar, AvatarTypeMap, SxProps } from '@mui/material'
 import React from 'react'
 
 import { getInitialsFromName, stringToColor } from '@app/util'
@@ -9,15 +9,20 @@ type AvatarProps = {
   size?: number
   sx?: SxProps
   className?: string
+  imgProps?: AvatarTypeMap['props']['imgProps']
 }
 
 export const Avatar: React.FC<AvatarProps> = React.forwardRef<
   HTMLDivElement,
   AvatarProps
->(function AvatarInner({ name, src, size = 32, sx, className, ...rest }, ref) {
+>(function AvatarInner(
+  { name, src, size = 32, sx, className, imgProps, ...rest },
+  ref
+) {
   const props = {
     src,
     className,
+    imgProps,
     sx: {
       ...(name && { bgcolor: stringToColor(name) }),
       ...sx,
