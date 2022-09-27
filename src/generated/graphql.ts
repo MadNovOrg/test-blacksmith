@@ -12350,8 +12350,6 @@ export type Course = {
   gradingConfirmed: Scalars['Boolean'];
   id: Scalars['Int'];
   level?: Maybe<Course_Level_Enum>;
-  /** A computed field, executes function "course_level_prefix" */
-  level_prefix?: Maybe<Scalars['String']>;
   max_participants: Scalars['Int'];
   min_participants: Scalars['Int'];
   /** An array relationship */
@@ -12380,8 +12378,6 @@ export type Course = {
   /** An aggregate relationship */
   trainers_aggregate: Course_Trainer_Aggregate;
   type: Course_Type_Enum;
-  /** A computed field, executes function "course_type_prefix" */
-  type_prefix?: Maybe<Scalars['String']>;
   updatedAt: Scalars['timestamptz'];
   /** An array relationship */
   waitlists: Array<Waitlist>;
@@ -12591,7 +12587,6 @@ export type Course_Bool_Exp = {
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
-  level_prefix?: InputMaybe<String_Comparison_Exp>;
   max_participants?: InputMaybe<Int_Comparison_Exp>;
   min_participants?: InputMaybe<Int_Comparison_Exp>;
   modules?: InputMaybe<Course_Module_Bool_Exp>;
@@ -12606,7 +12601,6 @@ export type Course_Bool_Exp = {
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
   trainers?: InputMaybe<Course_Trainer_Bool_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
-  type_prefix?: InputMaybe<String_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   waitlists?: InputMaybe<Waitlist_Bool_Exp>;
 };
@@ -15625,6 +15619,134 @@ export type Course_Level_Pk_Columns_Input = {
   name: Scalars['String'];
 };
 
+/** Course levels with their prefixes (used to generate course codes) */
+export type Course_Level_Prefix = {
+  __typename?: 'course_level_prefix';
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  prefix: Scalars['String'];
+};
+
+/** aggregated selection of "course_level_prefix" */
+export type Course_Level_Prefix_Aggregate = {
+  __typename?: 'course_level_prefix_aggregate';
+  aggregate?: Maybe<Course_Level_Prefix_Aggregate_Fields>;
+  nodes: Array<Course_Level_Prefix>;
+};
+
+/** aggregate fields of "course_level_prefix" */
+export type Course_Level_Prefix_Aggregate_Fields = {
+  __typename?: 'course_level_prefix_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Level_Prefix_Max_Fields>;
+  min?: Maybe<Course_Level_Prefix_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_level_prefix" */
+export type Course_Level_Prefix_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Level_Prefix_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_level_prefix". All fields are combined with a logical 'AND'. */
+export type Course_Level_Prefix_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Level_Prefix_Bool_Exp>>;
+  _not?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Level_Prefix_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  prefix?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_level_prefix" */
+export enum Course_Level_Prefix_Constraint {
+  /** unique or primary key constraint */
+  CourseLevelPrefixNameKey = 'course_level_prefix_name_key',
+  /** unique or primary key constraint */
+  CourseLevelPrefixPkey = 'course_level_prefix_pkey',
+  /** unique or primary key constraint */
+  CourseLevelPrefixPrefixKey = 'course_level_prefix_prefix_key'
+}
+
+/** input type for inserting data into table "course_level_prefix" */
+export type Course_Level_Prefix_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Level_Prefix_Max_Fields = {
+  __typename?: 'course_level_prefix_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Level_Prefix_Min_Fields = {
+  __typename?: 'course_level_prefix_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_level_prefix" */
+export type Course_Level_Prefix_Mutation_Response = {
+  __typename?: 'course_level_prefix_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Level_Prefix>;
+};
+
+/** on_conflict condition type for table "course_level_prefix" */
+export type Course_Level_Prefix_On_Conflict = {
+  constraint: Course_Level_Prefix_Constraint;
+  update_columns?: Array<Course_Level_Prefix_Update_Column>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_level_prefix". */
+export type Course_Level_Prefix_Order_By = {
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  prefix?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_level_prefix */
+export type Course_Level_Prefix_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_level_prefix" */
+export enum Course_Level_Prefix_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Prefix = 'prefix'
+}
+
+/** input type for updating data in table "course_level_prefix" */
+export type Course_Level_Prefix_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "course_level_prefix" */
+export enum Course_Level_Prefix_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Prefix = 'prefix'
+}
+
 /** select columns of table "course_level" */
 export enum Course_Level_Select_Column {
   /** column name */
@@ -15641,195 +15763,6 @@ export enum Course_Level_Update_Column {
   /** column name */
   Name = 'name'
 }
-
-/** columns and relationships of "course_levels" */
-export type Course_Levels = {
-  __typename?: 'course_levels';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  prefix: Scalars['String'];
-};
-
-/** aggregated selection of "course_levels" */
-export type Course_Levels_Aggregate = {
-  __typename?: 'course_levels_aggregate';
-  aggregate?: Maybe<Course_Levels_Aggregate_Fields>;
-  nodes: Array<Course_Levels>;
-};
-
-/** aggregate fields of "course_levels" */
-export type Course_Levels_Aggregate_Fields = {
-  __typename?: 'course_levels_aggregate_fields';
-  avg?: Maybe<Course_Levels_Avg_Fields>;
-  count: Scalars['Int'];
-  max?: Maybe<Course_Levels_Max_Fields>;
-  min?: Maybe<Course_Levels_Min_Fields>;
-  stddev?: Maybe<Course_Levels_Stddev_Fields>;
-  stddev_pop?: Maybe<Course_Levels_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Course_Levels_Stddev_Samp_Fields>;
-  sum?: Maybe<Course_Levels_Sum_Fields>;
-  var_pop?: Maybe<Course_Levels_Var_Pop_Fields>;
-  var_samp?: Maybe<Course_Levels_Var_Samp_Fields>;
-  variance?: Maybe<Course_Levels_Variance_Fields>;
-};
-
-
-/** aggregate fields of "course_levels" */
-export type Course_Levels_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Course_Levels_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** aggregate avg on columns */
-export type Course_Levels_Avg_Fields = {
-  __typename?: 'course_levels_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** Boolean expression to filter rows from the table "course_levels". All fields are combined with a logical 'AND'. */
-export type Course_Levels_Bool_Exp = {
-  _and?: InputMaybe<Array<Course_Levels_Bool_Exp>>;
-  _not?: InputMaybe<Course_Levels_Bool_Exp>;
-  _or?: InputMaybe<Array<Course_Levels_Bool_Exp>>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
-  prefix?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "course_levels" */
-export enum Course_Levels_Constraint {
-  /** unique or primary key constraint */
-  CourseLevelsNameKey = 'course_levels_name_key',
-  /** unique or primary key constraint */
-  CourseLevelsPkey = 'course_levels_pkey',
-  /** unique or primary key constraint */
-  CourseLevelsPrefixKey = 'course_levels_prefix_key'
-}
-
-/** input type for incrementing numeric columns in table "course_levels" */
-export type Course_Levels_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "course_levels" */
-export type Course_Levels_Insert_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  prefix?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Course_Levels_Max_Fields = {
-  __typename?: 'course_levels_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  prefix?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Course_Levels_Min_Fields = {
-  __typename?: 'course_levels_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  prefix?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "course_levels" */
-export type Course_Levels_Mutation_Response = {
-  __typename?: 'course_levels_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Course_Levels>;
-};
-
-/** on_conflict condition type for table "course_levels" */
-export type Course_Levels_On_Conflict = {
-  constraint: Course_Levels_Constraint;
-  update_columns?: Array<Course_Levels_Update_Column>;
-  where?: InputMaybe<Course_Levels_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "course_levels". */
-export type Course_Levels_Order_By = {
-  id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  prefix?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: course_levels */
-export type Course_Levels_Pk_Columns_Input = {
-  id: Scalars['Int'];
-};
-
-/** select columns of table "course_levels" */
-export enum Course_Levels_Select_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Name = 'name',
-  /** column name */
-  Prefix = 'prefix'
-}
-
-/** input type for updating data in table "course_levels" */
-export type Course_Levels_Set_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  prefix?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate stddev on columns */
-export type Course_Levels_Stddev_Fields = {
-  __typename?: 'course_levels_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Course_Levels_Stddev_Pop_Fields = {
-  __typename?: 'course_levels_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Course_Levels_Stddev_Samp_Fields = {
-  __typename?: 'course_levels_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate sum on columns */
-export type Course_Levels_Sum_Fields = {
-  __typename?: 'course_levels_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-};
-
-/** update columns of table "course_levels" */
-export enum Course_Levels_Update_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Name = 'name',
-  /** column name */
-  Prefix = 'prefix'
-}
-
-/** aggregate var_pop on columns */
-export type Course_Levels_Var_Pop_Fields = {
-  __typename?: 'course_levels_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate var_samp on columns */
-export type Course_Levels_Var_Samp_Fields = {
-  __typename?: 'course_levels_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate variance on columns */
-export type Course_Levels_Variance_Fields = {
-  __typename?: 'course_levels_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-};
 
 /** aggregate max on columns */
 export type Course_Max_Fields = {
@@ -16219,7 +16152,6 @@ export type Course_Order_By = {
   gradingConfirmed?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
-  level_prefix?: InputMaybe<Order_By>;
   max_participants?: InputMaybe<Order_By>;
   min_participants?: InputMaybe<Order_By>;
   modules_aggregate?: InputMaybe<Course_Module_Aggregate_Order_By>;
@@ -16234,7 +16166,6 @@ export type Course_Order_By = {
   status?: InputMaybe<Order_By>;
   trainers_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
   type?: InputMaybe<Order_By>;
-  type_prefix?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
   waitlists_aggregate?: InputMaybe<Waitlist_Aggregate_Order_By>;
 };
@@ -18275,6 +18206,134 @@ export type Course_Type_Pk_Columns_Input = {
   name: Scalars['String'];
 };
 
+/** Course types with their prefixes (used to generate course codes) */
+export type Course_Type_Prefix = {
+  __typename?: 'course_type_prefix';
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  prefix: Scalars['String'];
+};
+
+/** aggregated selection of "course_type_prefix" */
+export type Course_Type_Prefix_Aggregate = {
+  __typename?: 'course_type_prefix_aggregate';
+  aggregate?: Maybe<Course_Type_Prefix_Aggregate_Fields>;
+  nodes: Array<Course_Type_Prefix>;
+};
+
+/** aggregate fields of "course_type_prefix" */
+export type Course_Type_Prefix_Aggregate_Fields = {
+  __typename?: 'course_type_prefix_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Type_Prefix_Max_Fields>;
+  min?: Maybe<Course_Type_Prefix_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_type_prefix" */
+export type Course_Type_Prefix_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Type_Prefix_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_type_prefix". All fields are combined with a logical 'AND'. */
+export type Course_Type_Prefix_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Type_Prefix_Bool_Exp>>;
+  _not?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Type_Prefix_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  prefix?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_type_prefix" */
+export enum Course_Type_Prefix_Constraint {
+  /** unique or primary key constraint */
+  CourseTypePrefixNameKey = 'course_type_prefix_name_key',
+  /** unique or primary key constraint */
+  CourseTypePrefixPkey = 'course_type_prefix_pkey',
+  /** unique or primary key constraint */
+  CourseTypePrefixPrefixKey = 'course_type_prefix_prefix_key'
+}
+
+/** input type for inserting data into table "course_type_prefix" */
+export type Course_Type_Prefix_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Type_Prefix_Max_Fields = {
+  __typename?: 'course_type_prefix_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Type_Prefix_Min_Fields = {
+  __typename?: 'course_type_prefix_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+  prefix?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_type_prefix" */
+export type Course_Type_Prefix_Mutation_Response = {
+  __typename?: 'course_type_prefix_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Type_Prefix>;
+};
+
+/** on_conflict condition type for table "course_type_prefix" */
+export type Course_Type_Prefix_On_Conflict = {
+  constraint: Course_Type_Prefix_Constraint;
+  update_columns?: Array<Course_Type_Prefix_Update_Column>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_type_prefix". */
+export type Course_Type_Prefix_Order_By = {
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  prefix?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_type_prefix */
+export type Course_Type_Prefix_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_type_prefix" */
+export enum Course_Type_Prefix_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Prefix = 'prefix'
+}
+
+/** input type for updating data in table "course_type_prefix" */
+export type Course_Type_Prefix_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  prefix?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "course_type_prefix" */
+export enum Course_Type_Prefix_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Prefix = 'prefix'
+}
+
 /** select columns of table "course_type" */
 export enum Course_Type_Select_Column {
   /** column name */
@@ -18291,195 +18350,6 @@ export enum Course_Type_Update_Column {
   /** column name */
   Name = 'name'
 }
-
-/** columns and relationships of "course_types" */
-export type Course_Types = {
-  __typename?: 'course_types';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  prefix: Scalars['String'];
-};
-
-/** aggregated selection of "course_types" */
-export type Course_Types_Aggregate = {
-  __typename?: 'course_types_aggregate';
-  aggregate?: Maybe<Course_Types_Aggregate_Fields>;
-  nodes: Array<Course_Types>;
-};
-
-/** aggregate fields of "course_types" */
-export type Course_Types_Aggregate_Fields = {
-  __typename?: 'course_types_aggregate_fields';
-  avg?: Maybe<Course_Types_Avg_Fields>;
-  count: Scalars['Int'];
-  max?: Maybe<Course_Types_Max_Fields>;
-  min?: Maybe<Course_Types_Min_Fields>;
-  stddev?: Maybe<Course_Types_Stddev_Fields>;
-  stddev_pop?: Maybe<Course_Types_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Course_Types_Stddev_Samp_Fields>;
-  sum?: Maybe<Course_Types_Sum_Fields>;
-  var_pop?: Maybe<Course_Types_Var_Pop_Fields>;
-  var_samp?: Maybe<Course_Types_Var_Samp_Fields>;
-  variance?: Maybe<Course_Types_Variance_Fields>;
-};
-
-
-/** aggregate fields of "course_types" */
-export type Course_Types_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Course_Types_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
-};
-
-/** aggregate avg on columns */
-export type Course_Types_Avg_Fields = {
-  __typename?: 'course_types_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** Boolean expression to filter rows from the table "course_types". All fields are combined with a logical 'AND'. */
-export type Course_Types_Bool_Exp = {
-  _and?: InputMaybe<Array<Course_Types_Bool_Exp>>;
-  _not?: InputMaybe<Course_Types_Bool_Exp>;
-  _or?: InputMaybe<Array<Course_Types_Bool_Exp>>;
-  id?: InputMaybe<Int_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
-  prefix?: InputMaybe<String_Comparison_Exp>;
-};
-
-/** unique or primary key constraints on table "course_types" */
-export enum Course_Types_Constraint {
-  /** unique or primary key constraint */
-  CourseTypesNameKey = 'course_types_name_key',
-  /** unique or primary key constraint */
-  CourseTypesPkey = 'course_types_pkey',
-  /** unique or primary key constraint */
-  CourseTypesPrefixKey = 'course_types_prefix_key'
-}
-
-/** input type for incrementing numeric columns in table "course_types" */
-export type Course_Types_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-};
-
-/** input type for inserting data into table "course_types" */
-export type Course_Types_Insert_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  prefix?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate max on columns */
-export type Course_Types_Max_Fields = {
-  __typename?: 'course_types_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  prefix?: Maybe<Scalars['String']>;
-};
-
-/** aggregate min on columns */
-export type Course_Types_Min_Fields = {
-  __typename?: 'course_types_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  prefix?: Maybe<Scalars['String']>;
-};
-
-/** response of any mutation on the table "course_types" */
-export type Course_Types_Mutation_Response = {
-  __typename?: 'course_types_mutation_response';
-  /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
-  returning: Array<Course_Types>;
-};
-
-/** on_conflict condition type for table "course_types" */
-export type Course_Types_On_Conflict = {
-  constraint: Course_Types_Constraint;
-  update_columns?: Array<Course_Types_Update_Column>;
-  where?: InputMaybe<Course_Types_Bool_Exp>;
-};
-
-/** Ordering options when selecting data from "course_types". */
-export type Course_Types_Order_By = {
-  id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
-  prefix?: InputMaybe<Order_By>;
-};
-
-/** primary key columns input for table: course_types */
-export type Course_Types_Pk_Columns_Input = {
-  id: Scalars['Int'];
-};
-
-/** select columns of table "course_types" */
-export enum Course_Types_Select_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Name = 'name',
-  /** column name */
-  Prefix = 'prefix'
-}
-
-/** input type for updating data in table "course_types" */
-export type Course_Types_Set_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  prefix?: InputMaybe<Scalars['String']>;
-};
-
-/** aggregate stddev on columns */
-export type Course_Types_Stddev_Fields = {
-  __typename?: 'course_types_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Course_Types_Stddev_Pop_Fields = {
-  __typename?: 'course_types_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Course_Types_Stddev_Samp_Fields = {
-  __typename?: 'course_types_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate sum on columns */
-export type Course_Types_Sum_Fields = {
-  __typename?: 'course_types_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-};
-
-/** update columns of table "course_types" */
-export enum Course_Types_Update_Column {
-  /** column name */
-  Id = 'id',
-  /** column name */
-  Name = 'name',
-  /** column name */
-  Prefix = 'prefix'
-}
-
-/** aggregate var_pop on columns */
-export type Course_Types_Var_Pop_Fields = {
-  __typename?: 'course_types_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate var_samp on columns */
-export type Course_Types_Var_Samp_Fields = {
-  __typename?: 'course_types_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-};
-
-/** aggregate variance on columns */
-export type Course_Types_Variance_Fields = {
-  __typename?: 'course_types_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-};
 
 /** update columns of table "course" */
 export enum Course_Update_Column {
@@ -21448,10 +21318,10 @@ export type Mutation_Root = {
   delete_course_level?: Maybe<Course_Level_Mutation_Response>;
   /** delete single row from the table: "course_level" */
   delete_course_level_by_pk?: Maybe<Course_Level>;
-  /** delete data from the table: "course_levels" */
-  delete_course_levels?: Maybe<Course_Levels_Mutation_Response>;
-  /** delete single row from the table: "course_levels" */
-  delete_course_levels_by_pk?: Maybe<Course_Levels>;
+  /** delete data from the table: "course_level_prefix" */
+  delete_course_level_prefix?: Maybe<Course_Level_Prefix_Mutation_Response>;
+  /** delete single row from the table: "course_level_prefix" */
+  delete_course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
   /** delete data from the table: "course_module" */
   delete_course_module?: Maybe<Course_Module_Mutation_Response>;
   /** delete single row from the table: "course_module" */
@@ -21488,10 +21358,10 @@ export type Mutation_Root = {
   delete_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** delete single row from the table: "course_type" */
   delete_course_type_by_pk?: Maybe<Course_Type>;
-  /** delete data from the table: "course_types" */
-  delete_course_types?: Maybe<Course_Types_Mutation_Response>;
-  /** delete single row from the table: "course_types" */
-  delete_course_types_by_pk?: Maybe<Course_Types>;
+  /** delete data from the table: "course_type_prefix" */
+  delete_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
+  /** delete single row from the table: "course_type_prefix" */
+  delete_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** delete data from the table: "dfe_establishment" */
   delete_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** delete single row from the table: "dfe_establishment" */
@@ -21684,10 +21554,10 @@ export type Mutation_Root = {
   insert_course_level?: Maybe<Course_Level_Mutation_Response>;
   /** insert a single row into the table: "course_level" */
   insert_course_level_one?: Maybe<Course_Level>;
-  /** insert data into the table: "course_levels" */
-  insert_course_levels?: Maybe<Course_Levels_Mutation_Response>;
-  /** insert a single row into the table: "course_levels" */
-  insert_course_levels_one?: Maybe<Course_Levels>;
+  /** insert data into the table: "course_level_prefix" */
+  insert_course_level_prefix?: Maybe<Course_Level_Prefix_Mutation_Response>;
+  /** insert a single row into the table: "course_level_prefix" */
+  insert_course_level_prefix_one?: Maybe<Course_Level_Prefix>;
   /** insert data into the table: "course_module" */
   insert_course_module?: Maybe<Course_Module_Mutation_Response>;
   /** insert a single row into the table: "course_module" */
@@ -21726,10 +21596,10 @@ export type Mutation_Root = {
   insert_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** insert a single row into the table: "course_type" */
   insert_course_type_one?: Maybe<Course_Type>;
-  /** insert data into the table: "course_types" */
-  insert_course_types?: Maybe<Course_Types_Mutation_Response>;
-  /** insert a single row into the table: "course_types" */
-  insert_course_types_one?: Maybe<Course_Types>;
+  /** insert data into the table: "course_type_prefix" */
+  insert_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
+  /** insert a single row into the table: "course_type_prefix" */
+  insert_course_type_prefix_one?: Maybe<Course_Type_Prefix>;
   /** insert data into the table: "dfe_establishment" */
   insert_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** insert a single row into the table: "dfe_establishment" */
@@ -21926,10 +21796,10 @@ export type Mutation_Root = {
   update_course_level?: Maybe<Course_Level_Mutation_Response>;
   /** update single row of the table: "course_level" */
   update_course_level_by_pk?: Maybe<Course_Level>;
-  /** update data of the table: "course_levels" */
-  update_course_levels?: Maybe<Course_Levels_Mutation_Response>;
-  /** update single row of the table: "course_levels" */
-  update_course_levels_by_pk?: Maybe<Course_Levels>;
+  /** update data of the table: "course_level_prefix" */
+  update_course_level_prefix?: Maybe<Course_Level_Prefix_Mutation_Response>;
+  /** update single row of the table: "course_level_prefix" */
+  update_course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
   /** update data of the table: "course_module" */
   update_course_module?: Maybe<Course_Module_Mutation_Response>;
   /** update single row of the table: "course_module" */
@@ -21966,10 +21836,10 @@ export type Mutation_Root = {
   update_course_type?: Maybe<Course_Type_Mutation_Response>;
   /** update single row of the table: "course_type" */
   update_course_type_by_pk?: Maybe<Course_Type>;
-  /** update data of the table: "course_types" */
-  update_course_types?: Maybe<Course_Types_Mutation_Response>;
-  /** update single row of the table: "course_types" */
-  update_course_types_by_pk?: Maybe<Course_Types>;
+  /** update data of the table: "course_type_prefix" */
+  update_course_type_prefix?: Maybe<Course_Type_Prefix_Mutation_Response>;
+  /** update single row of the table: "course_type_prefix" */
+  update_course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** update data of the table: "dfe_establishment" */
   update_dfe_establishment?: Maybe<Dfe_Establishment_Mutation_Response>;
   /** update single row of the table: "dfe_establishment" */
@@ -22348,14 +22218,14 @@ export type Mutation_RootDelete_Course_Level_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Course_LevelsArgs = {
-  where: Course_Levels_Bool_Exp;
+export type Mutation_RootDelete_Course_Level_PrefixArgs = {
+  where: Course_Level_Prefix_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Course_Levels_By_PkArgs = {
-  id: Scalars['Int'];
+export type Mutation_RootDelete_Course_Level_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -22468,14 +22338,14 @@ export type Mutation_RootDelete_Course_Type_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootDelete_Course_TypesArgs = {
-  where: Course_Types_Bool_Exp;
+export type Mutation_RootDelete_Course_Type_PrefixArgs = {
+  where: Course_Type_Prefix_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Course_Types_By_PkArgs = {
-  id: Scalars['Int'];
+export type Mutation_RootDelete_Course_Type_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -23093,16 +22963,16 @@ export type Mutation_RootInsert_Course_Level_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Course_LevelsArgs = {
-  objects: Array<Course_Levels_Insert_Input>;
-  on_conflict?: InputMaybe<Course_Levels_On_Conflict>;
+export type Mutation_RootInsert_Course_Level_PrefixArgs = {
+  objects: Array<Course_Level_Prefix_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Level_Prefix_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Course_Levels_OneArgs = {
-  object: Course_Levels_Insert_Input;
-  on_conflict?: InputMaybe<Course_Levels_On_Conflict>;
+export type Mutation_RootInsert_Course_Level_Prefix_OneArgs = {
+  object: Course_Level_Prefix_Insert_Input;
+  on_conflict?: InputMaybe<Course_Level_Prefix_On_Conflict>;
 };
 
 
@@ -23240,16 +23110,16 @@ export type Mutation_RootInsert_Course_Type_OneArgs = {
 
 
 /** mutation root */
-export type Mutation_RootInsert_Course_TypesArgs = {
-  objects: Array<Course_Types_Insert_Input>;
-  on_conflict?: InputMaybe<Course_Types_On_Conflict>;
+export type Mutation_RootInsert_Course_Type_PrefixArgs = {
+  objects: Array<Course_Type_Prefix_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Type_Prefix_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Course_Types_OneArgs = {
-  object: Course_Types_Insert_Input;
-  on_conflict?: InputMaybe<Course_Types_On_Conflict>;
+export type Mutation_RootInsert_Course_Type_Prefix_OneArgs = {
+  object: Course_Type_Prefix_Insert_Input;
+  on_conflict?: InputMaybe<Course_Type_Prefix_On_Conflict>;
 };
 
 
@@ -23980,18 +23850,16 @@ export type Mutation_RootUpdate_Course_Level_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Course_LevelsArgs = {
-  _inc?: InputMaybe<Course_Levels_Inc_Input>;
-  _set?: InputMaybe<Course_Levels_Set_Input>;
-  where: Course_Levels_Bool_Exp;
+export type Mutation_RootUpdate_Course_Level_PrefixArgs = {
+  _set?: InputMaybe<Course_Level_Prefix_Set_Input>;
+  where: Course_Level_Prefix_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Course_Levels_By_PkArgs = {
-  _inc?: InputMaybe<Course_Levels_Inc_Input>;
-  _set?: InputMaybe<Course_Levels_Set_Input>;
-  pk_columns: Course_Levels_Pk_Columns_Input;
+export type Mutation_RootUpdate_Course_Level_Prefix_By_PkArgs = {
+  _set?: InputMaybe<Course_Level_Prefix_Set_Input>;
+  pk_columns: Course_Level_Prefix_Pk_Columns_Input;
 };
 
 
@@ -24132,18 +24000,16 @@ export type Mutation_RootUpdate_Course_Type_By_PkArgs = {
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Course_TypesArgs = {
-  _inc?: InputMaybe<Course_Types_Inc_Input>;
-  _set?: InputMaybe<Course_Types_Set_Input>;
-  where: Course_Types_Bool_Exp;
+export type Mutation_RootUpdate_Course_Type_PrefixArgs = {
+  _set?: InputMaybe<Course_Type_Prefix_Set_Input>;
+  where: Course_Type_Prefix_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Course_Types_By_PkArgs = {
-  _inc?: InputMaybe<Course_Types_Inc_Input>;
-  _set?: InputMaybe<Course_Types_Set_Input>;
-  pk_columns: Course_Types_Pk_Columns_Input;
+export type Mutation_RootUpdate_Course_Type_Prefix_By_PkArgs = {
+  _set?: InputMaybe<Course_Type_Prefix_Set_Input>;
+  pk_columns: Course_Type_Prefix_Pk_Columns_Input;
 };
 
 
@@ -28379,12 +28245,12 @@ export type Query_Root = {
   course_level_aggregate: Course_Level_Aggregate;
   /** fetch data from the table: "course_level" using primary key columns */
   course_level_by_pk?: Maybe<Course_Level>;
-  /** fetch data from the table: "course_levels" */
-  course_levels: Array<Course_Levels>;
-  /** fetch aggregated fields from the table: "course_levels" */
-  course_levels_aggregate: Course_Levels_Aggregate;
-  /** fetch data from the table: "course_levels" using primary key columns */
-  course_levels_by_pk?: Maybe<Course_Levels>;
+  /** fetch data from the table: "course_level_prefix" */
+  course_level_prefix: Array<Course_Level_Prefix>;
+  /** fetch aggregated fields from the table: "course_level_prefix" */
+  course_level_prefix_aggregate: Course_Level_Prefix_Aggregate;
+  /** fetch data from the table: "course_level_prefix" using primary key columns */
+  course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
   /** fetch data from the table: "course_module" */
   course_module: Array<Course_Module>;
   /** fetch aggregated fields from the table: "course_module" */
@@ -28439,12 +28305,12 @@ export type Query_Root = {
   course_type_aggregate: Course_Type_Aggregate;
   /** fetch data from the table: "course_type" using primary key columns */
   course_type_by_pk?: Maybe<Course_Type>;
-  /** fetch data from the table: "course_types" */
-  course_types: Array<Course_Types>;
-  /** fetch aggregated fields from the table: "course_types" */
-  course_types_aggregate: Course_Types_Aggregate;
-  /** fetch data from the table: "course_types" using primary key columns */
-  course_types_by_pk?: Maybe<Course_Types>;
+  /** fetch data from the table: "course_type_prefix" */
+  course_type_prefix: Array<Course_Type_Prefix>;
+  /** fetch aggregated fields from the table: "course_type_prefix" */
+  course_type_prefix_aggregate: Course_Type_Prefix_Aggregate;
+  /** fetch data from the table: "course_type_prefix" using primary key columns */
+  course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** fetch data from the table: "dfe_establishment" */
   dfe_establishment: Array<Dfe_Establishment>;
   /** fetch aggregated fields from the table: "dfe_establishment" */
@@ -29082,26 +28948,26 @@ export type Query_RootCourse_Level_By_PkArgs = {
 };
 
 
-export type Query_RootCourse_LevelsArgs = {
-  distinct_on?: InputMaybe<Array<Course_Levels_Select_Column>>;
+export type Query_RootCourse_Level_PrefixArgs = {
+  distinct_on?: InputMaybe<Array<Course_Level_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Levels_Order_By>>;
-  where?: InputMaybe<Course_Levels_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Level_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
 };
 
 
-export type Query_RootCourse_Levels_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Levels_Select_Column>>;
+export type Query_RootCourse_Level_Prefix_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Level_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Levels_Order_By>>;
-  where?: InputMaybe<Course_Levels_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Level_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
 };
 
 
-export type Query_RootCourse_Levels_By_PkArgs = {
-  id: Scalars['Int'];
+export type Query_RootCourse_Level_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -29312,26 +29178,26 @@ export type Query_RootCourse_Type_By_PkArgs = {
 };
 
 
-export type Query_RootCourse_TypesArgs = {
-  distinct_on?: InputMaybe<Array<Course_Types_Select_Column>>;
+export type Query_RootCourse_Type_PrefixArgs = {
+  distinct_on?: InputMaybe<Array<Course_Type_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Types_Order_By>>;
-  where?: InputMaybe<Course_Types_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Type_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
 };
 
 
-export type Query_RootCourse_Types_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Types_Select_Column>>;
+export type Query_RootCourse_Type_Prefix_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Type_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Types_Order_By>>;
-  where?: InputMaybe<Course_Types_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Type_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
 };
 
 
-export type Query_RootCourse_Types_By_PkArgs = {
-  id: Scalars['Int'];
+export type Query_RootCourse_Type_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -30441,12 +30307,12 @@ export type Subscription_Root = {
   course_level_aggregate: Course_Level_Aggregate;
   /** fetch data from the table: "course_level" using primary key columns */
   course_level_by_pk?: Maybe<Course_Level>;
-  /** fetch data from the table: "course_levels" */
-  course_levels: Array<Course_Levels>;
-  /** fetch aggregated fields from the table: "course_levels" */
-  course_levels_aggregate: Course_Levels_Aggregate;
-  /** fetch data from the table: "course_levels" using primary key columns */
-  course_levels_by_pk?: Maybe<Course_Levels>;
+  /** fetch data from the table: "course_level_prefix" */
+  course_level_prefix: Array<Course_Level_Prefix>;
+  /** fetch aggregated fields from the table: "course_level_prefix" */
+  course_level_prefix_aggregate: Course_Level_Prefix_Aggregate;
+  /** fetch data from the table: "course_level_prefix" using primary key columns */
+  course_level_prefix_by_pk?: Maybe<Course_Level_Prefix>;
   /** fetch data from the table: "course_module" */
   course_module: Array<Course_Module>;
   /** fetch aggregated fields from the table: "course_module" */
@@ -30501,12 +30367,12 @@ export type Subscription_Root = {
   course_type_aggregate: Course_Type_Aggregate;
   /** fetch data from the table: "course_type" using primary key columns */
   course_type_by_pk?: Maybe<Course_Type>;
-  /** fetch data from the table: "course_types" */
-  course_types: Array<Course_Types>;
-  /** fetch aggregated fields from the table: "course_types" */
-  course_types_aggregate: Course_Types_Aggregate;
-  /** fetch data from the table: "course_types" using primary key columns */
-  course_types_by_pk?: Maybe<Course_Types>;
+  /** fetch data from the table: "course_type_prefix" */
+  course_type_prefix: Array<Course_Type_Prefix>;
+  /** fetch aggregated fields from the table: "course_type_prefix" */
+  course_type_prefix_aggregate: Course_Type_Prefix_Aggregate;
+  /** fetch data from the table: "course_type_prefix" using primary key columns */
+  course_type_prefix_by_pk?: Maybe<Course_Type_Prefix>;
   /** fetch data from the table: "dfe_establishment" */
   dfe_establishment: Array<Dfe_Establishment>;
   /** fetch aggregated fields from the table: "dfe_establishment" */
@@ -31125,26 +30991,26 @@ export type Subscription_RootCourse_Level_By_PkArgs = {
 };
 
 
-export type Subscription_RootCourse_LevelsArgs = {
-  distinct_on?: InputMaybe<Array<Course_Levels_Select_Column>>;
+export type Subscription_RootCourse_Level_PrefixArgs = {
+  distinct_on?: InputMaybe<Array<Course_Level_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Levels_Order_By>>;
-  where?: InputMaybe<Course_Levels_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Level_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
 };
 
 
-export type Subscription_RootCourse_Levels_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Levels_Select_Column>>;
+export type Subscription_RootCourse_Level_Prefix_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Level_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Levels_Order_By>>;
-  where?: InputMaybe<Course_Levels_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Level_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Level_Prefix_Bool_Exp>;
 };
 
 
-export type Subscription_RootCourse_Levels_By_PkArgs = {
-  id: Scalars['Int'];
+export type Subscription_RootCourse_Level_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -31355,26 +31221,26 @@ export type Subscription_RootCourse_Type_By_PkArgs = {
 };
 
 
-export type Subscription_RootCourse_TypesArgs = {
-  distinct_on?: InputMaybe<Array<Course_Types_Select_Column>>;
+export type Subscription_RootCourse_Type_PrefixArgs = {
+  distinct_on?: InputMaybe<Array<Course_Type_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Types_Order_By>>;
-  where?: InputMaybe<Course_Types_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Type_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
 };
 
 
-export type Subscription_RootCourse_Types_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Course_Types_Select_Column>>;
+export type Subscription_RootCourse_Type_Prefix_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Type_Prefix_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  order_by?: InputMaybe<Array<Course_Types_Order_By>>;
-  where?: InputMaybe<Course_Types_Bool_Exp>;
+  order_by?: InputMaybe<Array<Course_Type_Prefix_Order_By>>;
+  where?: InputMaybe<Course_Type_Prefix_Bool_Exp>;
 };
 
 
-export type Subscription_RootCourse_Types_By_PkArgs = {
-  id: Scalars['Int'];
+export type Subscription_RootCourse_Type_Prefix_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -34045,11 +33911,6 @@ export type DenyCodeMutationVariables = Exact<{
 
 
 export type DenyCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
-
-export type GetPromoCodesPendingApprovalQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetPromoCodesPendingApprovalQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null } }> };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;

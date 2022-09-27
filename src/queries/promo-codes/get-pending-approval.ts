@@ -1,6 +1,10 @@
 import { gql } from 'graphql-request'
 
-import { GetPromoCodesQueryVariables, Query_Root } from '@app/generated/graphql'
+import {
+  GetPromoCodesQueryVariables,
+  Promo_Code_Type_Enum,
+  Query_Root,
+} from '@app/generated/graphql'
 
 export type InputType = GetPromoCodesQueryVariables
 
@@ -11,7 +15,20 @@ export type ResponseType = {
 export const QUERY = gql`
   query GetPromoCodesPendingApproval {
     promoCodes: promo_code(
-      where: { approvedBy: { _is_null: true }, deniedBy: { _is_null: true } }
+      where: {
+        approvedBy: { _is_null: true }
+        deniedBy: { _is_null: true }
+        _or: [
+          {
+            amount: { _gt: 15 }
+            type: { _eq: ${Promo_Code_Type_Enum.Percent} }
+          }
+          {
+            amount: { _gt: 3 }
+            type: { _eq: ${Promo_Code_Type_Enum.FreePlaces} }
+          }
+        ]
+      }
       order_by: { createdBy: asc }
     ) {
       id

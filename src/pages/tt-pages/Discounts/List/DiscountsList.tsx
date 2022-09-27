@@ -10,7 +10,13 @@ import { useTableSort } from '@app/hooks/useTableSort'
 import { Filters } from './Filters'
 import { PendingApproval } from './PendingApproval'
 import { DiscountsTable } from './Table'
-type Filters = { from?: Date; to?: Date; type?: string[]; code?: string }
+type Filters = {
+  from?: Date
+  to?: Date
+  type?: string[]
+  code?: string
+  status?: string[]
+}
 
 export const DiscountsList: React.FC = () => {
   const { t } = useTranslation()
@@ -32,7 +38,12 @@ export const DiscountsList: React.FC = () => {
   }, [])
 
   const loading = isLoading
-  const filtered = !!filters.from || !!filters.to
+  const filtered =
+    !!filters.from ||
+    !!filters.to ||
+    !!filters.type?.length ||
+    !!filters.code ||
+    !!filters.status?.length
   const count = promoCodes.length ?? 0
 
   return (

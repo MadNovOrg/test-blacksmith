@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 
 import { FilterDates } from '@app/components/FilterDates'
+import { FilterPromoCodeStatus } from '@app/components/FilterPromoCodeStatus'
 import { FilterPromoCodeType } from '@app/components/FilterPromoCodeType'
 import { FilterSearch } from '@app/components/FilterSearch'
 
@@ -27,11 +28,17 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
     [onChange]
   )
 
+  const onStatusChange = useCallback(
+    (selected: string[]) => onChange({ status: selected }),
+    [onChange]
+  )
+
   return (
     <>
       <FilterSearch value={search} onChange={onSearchChange} />
       <FilterPromoCodeType onChange={onTypeChange} />
       <FilterDates onChange={onDatesChange} />
+      <FilterPromoCodeStatus onChange={onStatusChange} />
     </>
   )
 }

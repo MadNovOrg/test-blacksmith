@@ -1,10 +1,16 @@
 import { differenceInDays } from 'date-fns'
 
-import { Promo_Code } from '@app/generated/graphql'
+import { Promo_Code, Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { PromoCodeStatus } from '@app/types'
 
+export const promoCodeNeedsApproval = (
+  promoCode: Partial<Promo_Code>
+): boolean =>
+  (promoCode.amount > 15 && promoCode.type === Promo_Code_Type_Enum.Percent) ||
+  (promoCode.amount > 3 && promoCode.type === Promo_Code_Type_Enum.FreePlaces)
+
 export const getPromoCodeStatus = (promoCode: Partial<Promo_Code>) => {
-  if ('approvedBy' in promoCode) {
+  if ('approvedBy' in promoCode && promoCodeNeedsApproval(promoCode)) {
     if (promoCode.approvedBy === null && promoCode.deniedBy === null) {
       return PromoCodeStatus.APPROVAL_PENDING
     }
