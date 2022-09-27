@@ -37,7 +37,6 @@ import { Avatar } from '@app/components/Avatar'
 import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog } from '@app/components/Dialog'
-import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import {
   UpdateProfileRolesMutation,
@@ -294,7 +293,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
 
       setLoading(false)
       await refreshData()
-      navigate(navigateBackPath)
+      navigate(navigateBackPath, { replace: true })
     } catch (err) {
       setLoading(false)
     }
@@ -448,8 +447,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               <Button
                 variant="outlined"
                 color="primary"
-                component={LinkBehavior}
-                href={navigateBackPath}
+                onClick={() => navigate(navigateBackPath, { replace: true })}
               >
                 {t('cancel')}
               </Button>
@@ -910,8 +908,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               <Button
                 variant="outlined"
                 color="primary"
-                component={LinkBehavior}
-                href={navigateBackPath}
+                onClick={() => navigate(navigateBackPath, { replace: true })}
               >
                 {t('cancel')}
               </Button>

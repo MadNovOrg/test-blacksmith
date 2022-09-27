@@ -67,6 +67,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
   const certificateExpired = (expiryDate: string) =>
     isPast(new Date(expiryDate))
 
+  const editProFilePath = orgId ? `./edit?orgId=${orgId}` : './edit'
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
@@ -98,8 +99,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
               <Button
                 variant="contained"
                 color="primary"
-                component={LinkBehavior}
-                href={orgId ? `edit?orgId=${orgId}` : 'edit'}
+                onClick={() => navigate(editProFilePath, { replace: true })}
                 startIcon={<EditIcon />}
                 sx={{ mt: 5 }}
               >
