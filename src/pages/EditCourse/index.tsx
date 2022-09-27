@@ -72,9 +72,14 @@ export const EditCourse: React.FC<unknown> = () => {
   } = useCourse(id ?? '')
 
   const handleCourseFormChange = useCallback(
-    (data: CourseInput, isValid: boolean) => {
-      setCourseData(data)
-      setCourseDataValid(isValid)
+    ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
+      if (data) {
+        setCourseData(data)
+      }
+
+      if (isValid) {
+        setCourseDataValid(isValid)
+      }
     },
     []
   )

@@ -26,12 +26,7 @@ import { FormPanel } from '@app/components/FormPanel'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
-import {
-  CourseDeliveryType,
-  CourseType,
-  CourseInput,
-  ValidCourseInput,
-} from '@app/types'
+import { CourseDeliveryType, CourseType, CourseInput } from '@app/types'
 import { INPUT_DATE_FORMAT, DATE_MASK, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
@@ -56,7 +51,7 @@ import {
 interface Props {
   type?: CourseType
   courseInput?: CourseInput
-  onChange?: (values: CourseInput, isValid: boolean) => void
+  onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
 }
 
 const accountCodeValue = getAccountCode()
@@ -258,15 +253,19 @@ const CourseForm: React.FC<Props> = ({
 
   useEffect(() => {
     const s = watch(data => {
-      onChange(data as ValidCourseInput, isValid)
+      onChange({ data: data as CourseInput })
     })
     return () => s.unsubscribe()
-  }, [isValid, onChange, watch])
+  }, [onChange, watch])
+
+  useEffect(() => {
+    onChange({ isValid })
+  }, [onChange, isValid])
 
   useEffect(() => {
     const mustChange = !accountCode
     mustChange && setValue('accountCode', accountCodeValue)
-  }, [setValue, accountCode, accountCodeValue])
+  }, [setValue, accountCode])
 
   useEffect(() => {
     const mustChange = !canBlended && values.blendedLearning

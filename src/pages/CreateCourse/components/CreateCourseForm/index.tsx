@@ -137,11 +137,16 @@ export const CreateCourseForm = () => {
   }
 
   const handleCourseFormChange = useCallback(
-    (data: CourseInput, isValid: boolean) => {
+    ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
       // Type casting to save the data in context
       // Validation still happens before moving to the next step
-      setCourseData(data as unknown as ValidCourseInput)
-      setCourseDataValid(isValid)
+      if (data) {
+        setCourseData(data as unknown as ValidCourseInput)
+      }
+
+      if (isValid) {
+        setCourseDataValid(isValid)
+      }
     },
     [setCourseData]
   )

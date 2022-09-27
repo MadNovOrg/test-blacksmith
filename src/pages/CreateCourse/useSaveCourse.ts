@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import {
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import {
   ResponseType,
   ParamsType,
@@ -96,6 +98,11 @@ export function useSaveCourse(): {
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
+  const { profile } = useAuth()
+  const { removeDraft } = useCourseDraft(
+    profile?.id ?? '',
+    courseData?.type ?? CourseType.OPEN
+  )
 
   const saveCourse = useCallback(async () => {
     try {
@@ -181,6 +188,15 @@ export function useSaveCourse(): {
         if (response.insertCourse.inserted.length === 1) {
           setSavingStatus(LoadingStatus.SUCCESS)
 
+          try {
+            await removeDraft()
+          } catch (error) {
+            console.log({
+              message: 'Error removing course draft',
+              error,
+            })
+          }
+
           const insertedId = response.insertCourse.inserted[0].id
 
           return insertedId
@@ -191,7 +207,7 @@ export function useSaveCourse(): {
     } catch (err) {
       setSavingStatus(LoadingStatus.ERROR)
     }
-  }, [courseData, expenses, fetcher, t, trainers])
+  }, [courseData, expenses, fetcher, removeDraft, t, trainers])
 
   return {
     savingStatus,

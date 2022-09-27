@@ -218,7 +218,7 @@ describe('component: CourseForm', () => {
     userEvent.clear(screen.getByLabelText('End time'))
 
     expect(onChangeMock.mock.calls[onChangeMock.mock.calls.length - 1]).toEqual(
-      [expect.any(Object), false]
+      [{ isValid: false }]
     )
   })
 })

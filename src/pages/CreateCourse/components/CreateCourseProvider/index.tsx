@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 
 import { useAuth } from '@app/context/auth'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
@@ -54,10 +48,7 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   courseType,
 }) => {
   const { profile } = useAuth()
-  const { removeDraft, setDraft } = useCourseDraft(
-    profile?.id ?? '',
-    courseType
-  )
+  const { setDraft } = useCourseDraft(profile?.id ?? '', courseType)
 
   const [courseData, setCourseData] = useState<ValidCourseInput | undefined>(
     initialValue?.courseData
@@ -75,14 +66,6 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
     initialValue?.currentStepKey ?? null
   )
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>()
-
-  useEffect(() => {
-    if (!profile?.id) {
-      return
-    }
-
-    removeDraft()
-  }, [courseType, profile, removeDraft])
 
   const completeStep = useCallback(
     (step: StepsEnum) => {
