@@ -3,6 +3,7 @@ import { gql } from 'graphql-request'
 import {
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
+  Order_Insert_Input,
 } from '@app/generated/graphql'
 import {
   CourseDeliveryType,
@@ -52,6 +53,9 @@ export type ParamsType = {
     expenses?: {
       data: Array<Course_Expenses_Insert_Input>
     }
+    orders?: {
+      data: Array<Order_Insert_Input>
+    }
   }
 }
 
@@ -60,7 +64,8 @@ export type ResponseType = {
     affectedRows: number
     inserted: Array<{
       id: string
-      expenses: Array<{ id: string }>
+      expenses?: Array<{ id: string }>
+      orders?: Array<{ id: string }>
     }>
   }
 }

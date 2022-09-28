@@ -69,7 +69,7 @@ export const InvoiceForm: React.FC = () => {
             })
             const address =
               org && 'address' in org
-                ? (normalizeAddr(org.address) ?? []).join(',')
+                ? (normalizeAddr(org.address) ?? []).filter(Boolean).join(',')
                 : ''
             setValue('invoiceDetails.billingAddress', address, {
               shouldValidate: true,

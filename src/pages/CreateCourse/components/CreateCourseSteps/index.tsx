@@ -58,8 +58,9 @@ export const CreateCourseSteps: React.FC<Props> = ({
       steps.push(assignTrainerStep)
     }
 
-    if (blendedLearning) {
+    if (blendedLearning && type === CourseType.INDIRECT) {
       steps.push(licenseOrderDetailsStep)
+      steps.push(reviewAndConfirmStep)
     }
 
     if (type === CourseType.CLOSED) {

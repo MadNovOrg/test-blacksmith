@@ -25,8 +25,8 @@ type FetchDraft = {
 
 type UseCourseDraft = {
   fetchDraft: () => FetchDraft
-  removeDraft: () => void
-  setDraft: (draft: Draft) => void
+  removeDraft: () => Promise<void>
+  setDraft: (draft: Draft) => Promise<void>
 }
 
 export function useCourseDraft(

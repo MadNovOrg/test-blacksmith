@@ -470,7 +470,7 @@ const CourseForm: React.FC<Props> = ({
           )}
         />
 
-        {isBlended ? (
+        {isBlended && courseType === CourseType.INDIRECT ? (
           <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
             {t('components.course-form.blended-learning-price-label')}
           </Alert>

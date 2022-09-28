@@ -255,7 +255,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              VAT
+              VAT (20%)
                (
               10
               %)
@@ -629,7 +629,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            VAT
+            VAT (20%)
              (
             10
             %)
@@ -1093,7 +1093,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              VAT
+              VAT (20%)
                (
               10
               %)
@@ -1439,7 +1439,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            VAT
+            VAT (20%)
              (
             10
             %)

@@ -5,6 +5,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
+  Payment_Methods_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
@@ -17,6 +18,7 @@ import {
   CourseDeliveryType,
   CourseExpenseType,
   CourseType,
+  Currency,
   ExpensesInput,
   TrainerInput,
   TransportMethod,
@@ -94,7 +96,7 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const { courseData, expenses, trainers } = useCreateCourse()
+  const { courseData, expenses, trainers, go1Licensing } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -182,6 +184,28 @@ export function useSaveCourse(): {
                   },
                 }
               : null),
+            ...(courseData.type === CourseType.INDIRECT &&
+            go1Licensing?.prices.amountDue
+              ? {
+                  orders: {
+                    data: [
+                      {
+                        registrants: [], // we are buying Go1 licenses, not registering participants
+                        billingEmail: go1Licensing.invoiceDetails.email,
+                        billingGivenName: go1Licensing.invoiceDetails.firstName,
+                        billingFamilyName: go1Licensing.invoiceDetails.surname,
+                        billingPhone: go1Licensing.invoiceDetails.phone,
+                        organizationId: go1Licensing.invoiceDetails.orgId,
+                        billingAddress:
+                          go1Licensing.invoiceDetails.billingAddress,
+                        paymentMethod: Payment_Methods_Enum.Invoice,
+                        quantity: courseData.maxParticipants,
+                        currency: Currency.GBP,
+                      },
+                    ],
+                  },
+                }
+              : null),
           },
         })
 
@@ -207,7 +231,7 @@ export function useSaveCourse(): {
     } catch (err) {
       setSavingStatus(LoadingStatus.ERROR)
     }
-  }, [courseData, expenses, fetcher, removeDraft, t, trainers])
+  }, [courseData, expenses, fetcher, go1Licensing, removeDraft, t, trainers])
 
   return {
     savingStatus,

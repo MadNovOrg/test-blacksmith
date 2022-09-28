@@ -92,7 +92,7 @@
     "enter-emails": "Enter registrant email(s)",
     "important": "Important",
     "subtotal": "Subtotal",
-    "vat": "VAT",
+    "vat": "VAT (20%)",
     "enter-promo-code": "Enter promo code",
     "promo-code": "Promo code",
     "promo-codes": "Promo codes",
@@ -388,6 +388,8 @@
     "in-n-days": "In {{ num }}",
     "all-organizations": "All organisations",
     "km-distance": "{{ number }} kilometers",
+    "payment-method": "Payment Method",
+    "pay-by-inv": "Pay by invoice",
     "avatar-too-large": "The avatar submitted is too large. Maximum size is {{maxSize}} MB.",
     "unknown-error": "Unknown error"
   },
@@ -606,6 +608,10 @@
       "no-results": "No courses found. Try another search.",
       "modal-title": "Select course(s)",
       "modal-hint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending)."
+    },
+    "invoice-details": {
+      "title": "Invoice contact details",
+      "billing-address": "Billing address"
     }
   },
   "pages": {
@@ -853,6 +859,11 @@
         "vat": "VAT (20%)",
         "invoice-title": "Invoice contact details",
         "invoice-contact": "Invoice to:"
+      },
+      "license-order-review": {
+        "title": "Confirm to complete creation",
+        "back-btn-text": "Order details",
+        "saving-error-message": "There was an error creating a course. Please try again later."
       },
       "trainer-expenses": {
         "title": "Trainer Expenses",

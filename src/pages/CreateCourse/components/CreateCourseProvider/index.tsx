@@ -65,7 +65,9 @@ export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
   const [currentStepKey, setCurrentStepKey] = useState<StepsEnum | null>(
     initialValue?.currentStepKey ?? null
   )
-  const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>()
+  const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
+    initialValue?.go1Licensing ?? undefined
+  )
 
   const completeStep = useCallback(
     (step: StepsEnum) => {

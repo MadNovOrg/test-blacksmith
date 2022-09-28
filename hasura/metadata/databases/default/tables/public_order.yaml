@@ -52,6 +52,69 @@ object_relationships:
     using:
       foreign_key_constraint_on: organization_id
 insert_permissions:
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - course_id
+        - created_at
+        - currency
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+      backend_only: false
   - role: unverified
     permission:
       check: {}
@@ -196,7 +259,7 @@ select_permissions:
 event_triggers:
   - name: new_order
     definition:
-      enable_manual: false
+      enable_manual: true
       insert:
         columns: '*'
     retry_conf:

@@ -116,7 +116,7 @@ export const CreateCourseForm = () => {
 
     completeStep(StepsEnum.COURSE_DETAILS)
 
-    if (courseData.blendedLearning) {
+    if (courseData.blendedLearning && courseData.type === CourseType.INDIRECT) {
       navigate('./license-order-details')
     } else if (courseType === CourseType.INDIRECT) {
       const id = await saveCourse()
@@ -151,11 +151,12 @@ export const CreateCourseForm = () => {
     [setCourseData]
   )
 
-  const nextStepButtonLabel = courseData?.blendedLearning
-    ? 'order-details-button-text'
-    : courseType === CourseType.INDIRECT
-    ? 'course-builder-button-text'
-    : 'select-trainers-button-text'
+  const nextStepButtonLabel =
+    courseData?.blendedLearning && courseData.type === CourseType.INDIRECT
+      ? 'order-details-button-text'
+      : courseType === CourseType.INDIRECT
+      ? 'course-builder-button-text'
+      : 'select-trainers-button-text'
 
   return (
     <Box paddingBottom={5}>

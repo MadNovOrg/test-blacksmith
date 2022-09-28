@@ -29,6 +29,11 @@ export const GQLProvider: React.FC = ({ children }) => {
         cacheExchange,
         authExchange({
           getAuth: getJWT,
+          didAuthError: ({ error }) => {
+            return error.graphQLErrors.some(
+              e => e.extensions?.code === 'invalid-jwt'
+            )
+          },
           addAuthToOperation({ operation, authState }) {
             if (!authState) {
               return operation

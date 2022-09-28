@@ -53,5 +53,6 @@ describe('component: CreateCourseSteps', () => {
     )
 
     expect(screen.getByText('Order details')).toBeInTheDocument()
+    expect(screen.getByText('Review & confirm')).toBeInTheDocument()
   })
 })
