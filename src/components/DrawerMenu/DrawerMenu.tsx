@@ -1,60 +1,49 @@
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import CloseIcon from '@mui/icons-material/Close'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Link, Box, Button, Drawer, IconButton } from '@mui/material'
-import { styled } from '@mui/system'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Box, Drawer, IconButton } from '@mui/material'
+import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useToggle } from 'react-use'
 
 import { useAuth } from '@app/context/auth'
 
-import { Avatar } from '../Avatar'
+import { NavLinks } from '../NavLinks'
 
-const StyledLink = styled(Link)(({ theme }) => ({
-  marginBottom: theme.spacing(1),
-}))
+import { ProfileMenu } from './ProfileMenu'
 
 export const DrawerMenu: React.FC = () => {
-  const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { verified, profile } = useAuth()
   const [open, toggle] = useToggle(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    toggle(false)
+  }, [location, toggle])
 
   return (
     <>
-      <IconButton onClick={toggle}>
+      <IconButton onClick={toggle} aria-label="Open menu">
         <MenuIcon />
       </IconButton>
 
-      <Drawer anchor="right" open={open} onClose={toggle}>
-        <Box mb={2} width="90vw">
-          <IconButton onClick={toggle}>
+      <Drawer
+        anchor="right"
+        open={open}
+        onClose={toggle}
+        data-testid="drawer-menu"
+      >
+        <Box my={2} mx={1} width="80vw">
+          <IconButton onClick={toggle} aria-label="Close menu">
             <CloseIcon />
           </IconButton>
         </Box>
 
-        <Box
-          mx={5}
-          pb={1}
-          display="flex"
-          sx={{ borderBottom: 1, borderBottomColor: 'lime.500' }}
-        >
-          <Avatar src={profile?.avatar} name={profile?.fullName} />
-          <Button
-            onClick={() => console.log('open')}
-            sx={{ ml: 1 }}
-            endIcon={<ArrowDropDownIcon />}
-            color="info"
-          >
-            {profile?.fullName}
-          </Button>
-        </Box>
-
-        <Box px={5} py={3} display="flex" flexDirection="column">
-          <StyledLink href="/courses" variant="body2" onClick={toggle}>
-            {t('courses')}
-          </StyledLink>
-        </Box>
+        {profile && <ProfileMenu profile={profile} />}
+        {verified && (
+          <Box px={5} py={3} display="flex" flexDirection="column">
+            <NavLinks />
+          </Box>
+        )}
       </Drawer>
     </>
   )

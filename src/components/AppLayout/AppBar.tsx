@@ -3,19 +3,17 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { RoleSwitcher } from '@app/components/RoleSwitcher'
 import { useAuth } from '@app/context/auth'
 
 import { DrawerMenu } from '../DrawerMenu'
 import { Logo } from '../Logo'
-import { StyledNavLink } from '../StyledNavLink'
+import { NavLinks } from '../NavLinks'
 import { UserMenu } from '../UserMenu'
 
 export const AppBar = () => {
-  const { t } = useTranslation()
-  const { acl, verified } = useAuth()
+  const { verified } = useAuth()
 
   return (
     <>
@@ -39,53 +37,21 @@ export const AppBar = () => {
               justifyContent="center"
               px={3}
               color="secondary.dark"
+              sx={{ display: { xs: 'none', lg: 'flex' } }}
             >
-              <Link component={StyledNavLink} to="/courses">
-                {t('courses')}
-              </Link>
-
-              {acl.canViewOrganizations() ? (
-                <Link component={StyledNavLink} to="/organizations">
-                  {t('organizations')}
-                </Link>
-              ) : null}
-
-              {acl.isTTAdmin() ? (
-                <Link component={StyledNavLink} to="/admin">
-                  {t('contacts')}
-                </Link>
-              ) : null}
-
-              <Link component={StyledNavLink} to="/community">
-                {t('community')}
-              </Link>
-              {acl.canViewCertifications() && (
-                <Link component={StyledNavLink} to="/certifications">
-                  {t('common.certifications')}
-                </Link>
-              )}
-              {acl.canViewOrders() && (
-                <Link component={StyledNavLink} to="/orders">
-                  {t('common.orders')}
-                </Link>
-              )}
-              {acl.canViewMembership() && (
-                <Link component={StyledNavLink} to="/membership">
-                  {t('common.membership')}
-                </Link>
-              )}
+              <NavLinks />
             </Box>
           )}{' '}
           <Box
             sx={{
               flexGrow: 0,
-              display: { xs: 'none', md: 'flex' },
+              display: { xs: 'none', lg: 'flex' },
               alignItems: 'center',
             }}
           >
             <UserMenu />
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex', lg: 'none' } }}>
             <DrawerMenu />
           </Box>
         </Toolbar>

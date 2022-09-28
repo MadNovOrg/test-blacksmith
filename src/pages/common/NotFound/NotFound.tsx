@@ -24,7 +24,7 @@ export const NotFound: React.FC<Props> = ({
           {title ? title : t('components.not-found.title')}
         </Typography>
       ) : null}
-      <Typography variant="body1" mt={4}>
+      <Typography variant="body1" mt={4} textAlign={'center'}>
         {description ?? t('components.not-found.info')}
       </Typography>
 

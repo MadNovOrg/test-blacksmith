@@ -1,0 +1,28 @@
+import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
+
+import { render, screen, userEvent, waitFor, fireEvent } from '@test/index'
+
+import { DrawerMenu } from './DrawerMenu'
+
+describe('component: DrawerMenu', () => {
+  it('toggles menu', async () => {
+    render(
+      <MemoryRouter>
+        <DrawerMenu />
+      </MemoryRouter>
+    )
+
+    const openButton = screen.getByLabelText('Open menu')
+    expect(openButton).toBeInTheDocument()
+    expect(screen.queryByTestId('drawer-menu')).not.toBeInTheDocument()
+    await waitFor(() => userEvent.click(openButton))
+    expect(screen.queryByTestId('drawer-menu')).toBeInTheDocument()
+    const closeButton = screen.getByLabelText('Close menu')
+    expect(closeButton).toBeInTheDocument()
+    await waitFor(() => fireEvent.click(closeButton))
+    await waitFor(() =>
+      expect(screen.queryByTestId('drawer-menu')).not.toBeInTheDocument()
+    )
+  })
+})
