@@ -1,7 +1,9 @@
+import Cancel from '@mui/icons-material/Cancel'
 import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Box,
+  Button,
   CircularProgress,
   Container,
   Stack,
@@ -16,11 +18,15 @@ import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
 import CourseForm from '@app/components/CourseForm'
+import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { Course_Status_Enum, GetCourseByIdQuery } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
+import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
 import {
   ParamsType,
   ResponseType,
@@ -32,6 +38,7 @@ import {
   CourseInput,
   CourseLevel,
   CourseTrainerType,
+  CourseType,
   InviteStatus,
   ValidCourseInput,
 } from '@app/types'
@@ -63,6 +70,11 @@ export const EditCourse: React.FC<unknown> = () => {
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
+  const [showCancellationModal, setShowCancellationModal] = useState(false)
+  const [
+    showRegistrantsCancellationModal,
+    setShowRegistrantsCancellationModal,
+  ] = useState(false)
   const fetcher = useFetcher()
 
   const {
@@ -70,6 +82,10 @@ export const EditCourse: React.FC<unknown> = () => {
     status: courseStatus,
     mutate: mutateCourse,
   } = useCourse(id ?? '')
+
+  const participantsCount =
+    (course as GetCourseByIdQuery['course'])?.attendeesCount?.aggregate
+      ?.count ?? 0
 
   const handleCourseFormChange = useCallback(
     ({ data, isValid }: { data?: CourseInput; isValid?: boolean }) => {
@@ -264,7 +280,28 @@ export const EditCourse: React.FC<unknown> = () => {
                   />
                 ) : null}
 
-                <Box display="flex" justifyContent="flex-end" mt={4}>
+                <Box display="flex" justifyContent="space-between" mt={4}>
+                  {course.status === Course_Status_Enum.Scheduled &&
+                  acl.canCancelCourses() ? (
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        if (
+                          course.type === CourseType.OPEN &&
+                          participantsCount
+                        ) {
+                          setShowRegistrantsCancellationModal(true)
+                        } else {
+                          setShowCancellationModal(true)
+                        }
+                      }}
+                      startIcon={<Cancel color="error" />}
+                    >
+                      {t('pages.edit-course.cancel-this-course')}
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                   <LoadingButton
                     disabled={!editCourseValid}
                     variant="contained"
@@ -279,6 +316,49 @@ export const EditCourse: React.FC<unknown> = () => {
           </Box>
         ) : null}
       </Container>
+
+      {course ? (
+        <>
+          <Dialog
+            open={showRegistrantsCancellationModal}
+            onClose={() => setShowRegistrantsCancellationModal(false)}
+            title={
+              <Typography variant="h3" fontWeight={600}>
+                {t('pages.edit-course.cancellation-modal.title')}
+              </Typography>
+            }
+            maxWidth={700}
+          >
+            <RegistrantsCancellationModal
+              onTransfer={() => navigate(`/courses/${course.id}/details`)}
+              onProceed={async () => {
+                setShowRegistrantsCancellationModal(false)
+                setShowCancellationModal(true)
+              }}
+            />
+          </Dialog>
+
+          <Dialog
+            open={showCancellationModal}
+            onClose={() => setShowCancellationModal(false)}
+            title={
+              <Typography variant="h3" fontWeight={600}>
+                {t('pages.edit-course.cancellation-modal.title')}
+              </Typography>
+            }
+            maxWidth={600}
+          >
+            <CourseCancellationModal
+              course={course}
+              onClose={() => setShowCancellationModal(false)}
+              onSubmit={async () => {
+                await mutateCourse()
+                navigate(`/courses/${course.id}/details?cancelled=true`)
+              }}
+            />
+          </Dialog>
+        </>
+      ) : null}
     </FullHeightPage>
   )
 }

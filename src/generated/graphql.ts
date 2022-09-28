@@ -12329,6 +12329,8 @@ export type Course = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
+  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationReason?: Maybe<Scalars['String']>;
   /** An object relationship */
   contactProfile?: Maybe<Profile>;
   contactProfileId?: Maybe<Scalars['uuid']>;
@@ -12559,6 +12561,7 @@ export type Course_Aggregate_FieldsCountArgs = {
 export type Course_Avg_Fields = {
   __typename?: 'course_avg_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -12574,6 +12577,8 @@ export type Course_Bool_Exp = {
   aolCostOfCourse?: InputMaybe<Numeric_Comparison_Exp>;
   aolCountry?: InputMaybe<String_Comparison_Exp>;
   aolRegion?: InputMaybe<String_Comparison_Exp>;
+  cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
+  cancellationReason?: InputMaybe<String_Comparison_Exp>;
   contactProfile?: InputMaybe<Profile_Bool_Exp>;
   contactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
@@ -15112,6 +15117,7 @@ export type Course_Expenses_Variance_Order_By = {
 /** input type for incrementing numeric columns in table "course" */
 export type Course_Inc_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
+  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['Int']>;
   max_participants?: InputMaybe<Scalars['Int']>;
@@ -15124,6 +15130,8 @@ export type Course_Insert_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
+  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationReason?: InputMaybe<Scalars['String']>;
   contactProfile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -15771,6 +15779,8 @@ export type Course_Max_Fields = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
+  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationReason?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
@@ -15791,6 +15801,8 @@ export type Course_Min_Fields = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
+  cancellationFeePercent?: Maybe<Scalars['Int']>;
+  cancellationReason?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   description?: Maybe<Scalars['String']>;
@@ -16139,6 +16151,8 @@ export type Course_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationReason?: InputMaybe<Order_By>;
   contactProfile?: InputMaybe<Profile_Order_By>;
   contactProfileId?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
@@ -17468,6 +17482,10 @@ export enum Course_Select_Column {
   /** column name */
   AolRegion = 'aolRegion',
   /** column name */
+  CancellationFeePercent = 'cancellationFeePercent',
+  /** column name */
+  CancellationReason = 'cancellationReason',
+  /** column name */
   ContactProfileId = 'contactProfileId',
   /** column name */
   CreatedAt = 'createdAt',
@@ -17511,6 +17529,8 @@ export type Course_Set_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
+  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationReason?: InputMaybe<Scalars['String']>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
@@ -17660,6 +17680,7 @@ export enum Course_Status_Update_Column {
 export type Course_Stddev_Fields = {
   __typename?: 'course_stddev_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -17670,6 +17691,7 @@ export type Course_Stddev_Fields = {
 export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -17680,6 +17702,7 @@ export type Course_Stddev_Pop_Fields = {
 export type Course_Stddev_Samp_Fields = {
   __typename?: 'course_stddev_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -17690,6 +17713,7 @@ export type Course_Stddev_Samp_Fields = {
 export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
+  cancellationFeePercent?: Maybe<Scalars['Int']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
@@ -18362,6 +18386,10 @@ export enum Course_Update_Column {
   /** column name */
   AolRegion = 'aolRegion',
   /** column name */
+  CancellationFeePercent = 'cancellationFeePercent',
+  /** column name */
+  CancellationReason = 'cancellationReason',
+  /** column name */
   ContactProfileId = 'contactProfileId',
   /** column name */
   CreatedAt = 'createdAt',
@@ -18403,6 +18431,7 @@ export enum Course_Update_Column {
 export type Course_Var_Pop_Fields = {
   __typename?: 'course_var_pop_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -18413,6 +18442,7 @@ export type Course_Var_Pop_Fields = {
 export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -18423,6 +18453,7 @@ export type Course_Var_Samp_Fields = {
 export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
   aolCostOfCourse?: Maybe<Scalars['Float']>;
+  cancellationFeePercent?: Maybe<Scalars['Float']>;
   freeSpaces?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
@@ -33189,12 +33220,21 @@ export type SaveCourseEvaluationMutationVariables = Exact<{
 
 export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
+export type CancelCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  cancellationFeePercent?: InputMaybe<Scalars['Int']>;
+  cancellationReason: Scalars['String'];
+}>;
+
+
+export type CancelCourseMutation = { __typename?: 'mutation_root', cancelledCourse?: { __typename?: 'course', id: number } | null };
+
 export type GetCourseByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', freeSpaces?: number | null, accountCode?: string | null, level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', freeSpaces?: number | null, accountCode?: string | null, level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   profileId: Scalars['uuid'];

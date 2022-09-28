@@ -16,6 +16,7 @@ import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
@@ -42,6 +43,7 @@ export const CourseDetails = () => {
   const { id: courseId } = useParams()
   const { acl } = useAuth()
   const [searchParams] = useSearchParams()
+  const showCancelledAlert = searchParams.get('cancelled')
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
 
@@ -61,6 +63,8 @@ export const CourseDetails = () => {
   } = useCourse(courseId ?? '')
 
   const courseHasEnded = course && courseEnded(course)
+  const courseCancelled =
+    course && course.status === Course_Status_Enum.Cancelled
 
   return (
     <>
@@ -82,7 +86,9 @@ export const CourseDetails = () => {
               <CourseHeroSummary
                 course={course}
                 renderButton={() =>
-                  acl.canCreateCourse(course.type) && !courseEnded(course) ? (
+                  acl.canCreateCourse(course.type) &&
+                  !courseEnded(course) &&
+                  !courseCancelled ? (
                     <Button
                       variant="contained"
                       color="secondary"
@@ -152,6 +158,27 @@ export const CourseDetails = () => {
                           data-testid="success-message"
                         >
                           {t(alertMessage, { id: course?.id })}
+                        </Alert>
+                      </Box>
+                    </Expire>
+                  ) : null}
+
+                  {showCancelledAlert ? (
+                    <Expire delay={3000}>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        mt={2}
+                      >
+                        <Alert
+                          variant="filled"
+                          color="info"
+                          data-testid="cancelled-message"
+                        >
+                          {t('pages.course-details.course-has-been-cancelled', {
+                            code: course.course_code,
+                          })}
                         </Alert>
                       </Box>
                     </Expire>

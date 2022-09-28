@@ -17,7 +17,9 @@ import { differenceInCalendarDays } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { useAuth } from '@app/context/auth'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
 import { Course } from '@app/types'
 import {
@@ -133,6 +135,11 @@ export const CourseHeroSummary: React.FC<Props> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
+            {course.status === Course_Status_Enum.Cancelled ? (
+              <Box mt={1}>
+                <CourseStatusChip status={course.status} />
+              </Box>
+            ) : null}
             {typeof renderButton === 'function' && renderButton()}
           </Grid>
           <Grid item xs={6} md={4}>

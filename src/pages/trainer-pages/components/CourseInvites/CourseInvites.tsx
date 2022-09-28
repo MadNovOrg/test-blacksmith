@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseType, InviteStatus } from '@app/types'
 import { courseStarted } from '@app/util'
@@ -38,6 +39,8 @@ export const CourseInvites = ({ course }: Props) => {
   const invitesLeft = course
     ? course.max_participants - invitesNotDeclined.length
     : 0
+
+  const courseCancelled = course?.status === Course_Status_Enum.Cancelled
 
   const closeModal = useCallback(() => {
     setNewEmail('')
@@ -149,7 +152,7 @@ export const CourseInvites = ({ course }: Props) => {
   return (
     <>
       <Grid container item xs="auto" alignItems="center">
-        {!courseHasStarted && !isOpenCourse && (
+        {!courseHasStarted && !isOpenCourse && !courseCancelled && (
           <>
             <Typography variant="subtitle2" data-testid="invites-left">
               {t('pages.course-participants.invites-left', {

@@ -56,4 +56,5 @@ export type ACL = {
   canOverrideGrades: () => boolean
   canViewXeroConnect: () => boolean
   canCreateOrgs: () => boolean
+  canCancelCourses: () => boolean
 }

@@ -391,7 +391,8 @@
     "payment-method": "Payment Method",
     "pay-by-inv": "Pay by invoice",
     "avatar-too-large": "The avatar submitted is too large. Maximum size is {{maxSize}} MB.",
-    "unknown-error": "Unknown error"
+    "unknown-error": "Unknown error",
+    "cancelled": "Cancelled"
   },
   "components": {
     "not-found": {
@@ -932,7 +933,46 @@
     "edit-course": {
       "title": "Edit course",
       "course-not-found": "There was an error loading the course",
-      "save-button-text": "Save changes"
+      "save-button-text": "Save changes",
+      "cancel-this-course": "Cancel this course",
+      "cancel-this-entire-course": "Cancel this entire course",
+      "cancellation-modal": {
+        "title": "Cancel this entire course",
+        "description-p-1": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",
+        "description-p-2": "Finance will make changes on the invoice(s), where necessary. ",
+        "description-p-3": "Registered attendees will not incur cancellation charges. ",
+        "will-any-fees-apply": "Will any fees apply?",
+        "apply-cancellation-terms": "Apply cancellation terms",
+        "custom-fee": "Custom fee",
+        "no-fees": "No fees",
+        "reason-for-cancellation": "Reason for cancellation",
+        "reasons": {
+          "booking-amendments-made-by-venue": "Booking amendments made by venue",
+          "booking-amendments-made-by-team-teach": "Booking amendments made by Team Teach",
+          "booking-amendments-made-by-organization": "Booking amendments made by Organisation",
+          "trainer-availability": "Trainer availability",
+          "other": "Other"
+        },
+        "specify-reason": "Specify reason",
+        "never-mind": "Never mind",
+        "cancel-entire-course": "Cancel entire course",
+        "fee": "Fee",
+        "before-course-start-date": "Before course start date",
+        "cancellation-fee": "Cancellation fee",
+        "terms": {
+          "percent-of-payment-due": "{{ percent }}% of payment due",
+          "four-weeks-plus": "4+ weeks",
+          "two-to-four-weeks": "2 - 4 weeks",
+          "one-to-two-weeks": "1 - 2 weeks",
+          "less-than-week": "Less than 1 week"
+        },
+        "cannot-be-undone-confirmation": "I understand this cannot be undone."
+      },
+      "registrants-cancellation-modal": {
+        "description": "Proceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
+        "proceed-with-cancellation": "Proceed with cancellation",
+        "transfer-attendees-first": "Transfer attendees first"
+      }
     },
     "course-details": {
       "tabs": {
@@ -980,7 +1020,8 @@
           "contact": "Contact",
           "joined": "Joined"
         }
-      }
+      },
+      "course-has-been-cancelled": "{{ code }} has been cancelled."
     },
     "course-participants": {
       "none-registered-message": "No invites accepted",

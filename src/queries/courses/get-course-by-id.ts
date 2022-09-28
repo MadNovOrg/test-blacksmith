@@ -2,7 +2,7 @@ import { gql } from 'graphql-request'
 
 import { Course } from '@app/types'
 
-import { COURSE, COURSE_SCHEDULE, VENUE, ORGANIZATION } from '../fragments'
+import { COURSE, COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
 export type ResponseType = { course: Course }
 
@@ -67,6 +67,11 @@ export const QUERY = gql`
       certificateCount: participants_aggregate(
         where: { grade: { _in: [PASS, OBSERVE_ONLY, ASSIST_ONLY] } }
       ) {
+        aggregate {
+          count
+        }
+      }
+      attendeesCount: participants_aggregate {
         aggregate {
           count
         }
