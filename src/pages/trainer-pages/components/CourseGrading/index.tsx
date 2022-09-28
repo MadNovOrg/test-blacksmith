@@ -37,6 +37,11 @@ const StyledLink = styled(Link, {
   color: disabled ? theme.palette.grey[500] : theme.palette.primary.main,
 }))
 
+const StyledList = styled('ol')(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
+  color: theme.palette.secondary.main,
+}))
+
 export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
   const { t } = useTranslation()
   const theme = useTheme()
@@ -165,7 +170,11 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                     ml={{ xs: 2, md: 3 }}
                   >
                     <Edit fontSize="small" sx={{ marginRight: '0.3em' }} />
-                    <Typography variant="body2" fontWeight={600}>
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      color="secondary"
+                    >
                       {t(
                         'pages.course-details.tabs.grading.modify-grading-details'
                       )}
@@ -311,54 +320,116 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                 padding: 3,
               }}
             >
-              <Typography display="inline" variant="body2" fontWeight="600">
+              <Typography
+                display="inline"
+                variant="body2"
+                fontWeight="600"
+                color="secondary"
+              >
                 {t(
                   'pages.course-details.tabs.grading.grading-details-confirmation.line1'
                 ) + ' '}
               </Typography>
-              <Typography display="inline" variant="body2">
+              <Typography display="inline" variant="body2" color="secondary">
                 {t(
                   'pages.course-details.tabs.grading.grading-details-confirmation.line2'
                 )}
               </Typography>
-              <ol>
+              <StyledList>
+                <Box sx={{ my: 2 }}>
+                  <li>
+                    <Typography
+                      display="inline"
+                      variant="body2"
+                      fontWeight="600"
+                      color="secondary"
+                    >
+                      {t(
+                        'pages.course-details.tabs.grading.grading-details-confirmation.line3'
+                      ) + ' '}
+                    </Typography>
+                    <Typography
+                      display="inline"
+                      variant="body2"
+                      color="secondary"
+                    >
+                      {t(
+                        'pages.course-details.tabs.grading.grading-details-confirmation.line4'
+                      ) + ' '}
+                    </Typography>
+                    <StyledList type="a">
+                      <li>
+                        <Typography
+                          display="inline"
+                          variant="body2"
+                          color="secondary"
+                        >
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line5'
+                          )}
+                        </Typography>
+                      </li>
+                      <li>
+                        <Typography
+                          display="inline"
+                          variant="body2"
+                          color="secondary"
+                        >
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line6'
+                          )}
+                        </Typography>
+                      </li>
+                      <li>
+                        <Typography
+                          display="inline"
+                          variant="body2"
+                          color="secondary"
+                        >
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line7'
+                          )}
+                        </Typography>
+                      </li>
+                    </StyledList>
+                  </li>
+                </Box>
                 <li>
-                  <Typography display="inline" variant="body2" fontWeight="600">
+                  <Typography
+                    display="inline"
+                    variant="body2"
+                    fontWeight="600"
+                    color="secondary"
+                  >
                     {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line3'
+                      'pages.course-details.tabs.grading.grading-details-confirmation.line8'
                     ) + ' '}
                   </Typography>
-                  <Typography display="inline" variant="body2">
+                  <Typography
+                    display="inline"
+                    variant="body2"
+                    color="secondary"
+                  >
                     {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line4'
+                      'pages.course-details.tabs.grading.grading-details-confirmation.line9'
                     ) + ' '}
                   </Typography>
                 </li>
-                <li>
-                  <Typography display="inline" variant="body2" fontWeight="600">
-                    {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line5'
-                    ) + ' '}
-                  </Typography>
-                  <Typography display="inline" variant="body2">
-                    {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line6'
-                    ) + ' '}
-                  </Typography>
-                </li>
-              </ol>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() =>
-                  navigate(`/courses/${course.id}/grading-details`)
-                }
-              >
-                {t(
-                  'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
-                )}
-              </Button>
+              </StyledList>
+              <Box display="flex" justifyContent={'flex-end'}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={() =>
+                    navigate(`/courses/${course.id}/grading-details`)
+                  }
+                >
+                  {t(
+                    'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
+                  )}
+                </Button>
+              </Box>
             </Box>
           </Box>
         )}

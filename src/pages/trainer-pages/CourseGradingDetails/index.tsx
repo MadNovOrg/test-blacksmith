@@ -27,9 +27,9 @@ export const CourseGradingDetails = () => {
 
   const onModulesStep = location.pathname.includes('modules')
 
-  const currentStepKey = onModulesStep ? 'modules' : 'attendance'
+  const currentStepKey = onModulesStep ? 'modules' : 'grading-clearance'
 
-  const completedSteps = onModulesStep ? ['attendance'] : ['']
+  const completedSteps = onModulesStep ? ['grading-clearance'] : ['']
 
   const { data: course, status } = useCourse(courseId ?? '')
 
@@ -76,7 +76,7 @@ export const CourseGradingDetails = () => {
               </Box>
 
               <Box flex={1}>
-                <Box mt={8}>
+                <Box mt={'6px'}>
                   <Outlet />
                 </Box>
               </Box>

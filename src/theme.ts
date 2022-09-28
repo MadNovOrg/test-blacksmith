@@ -3,8 +3,6 @@ import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
 
-const dimGrey = '#6C6A6F'
-
 declare module '@mui/system' {
   interface Theme {
     colors: {
@@ -43,6 +41,7 @@ declare module '@mui/material/styles' {
 
   interface Palette {
     green: Palette['primary']
+    dimGrey: Palette['primary']
   }
 
   interface PaletteOptions {
@@ -51,6 +50,7 @@ declare module '@mui/material/styles' {
     }
     green: PaletteOptions['primary']
     teal: PaletteOptions['primary']
+    dimGrey: PaletteOptions['primary']
   }
 }
 
@@ -172,6 +172,9 @@ const theme = createTheme({
       contrastText: '#fff',
       main: '#0290A1',
     },
+    dimGrey: {
+      main: '#6C6A6F',
+    },
   },
 })
 
@@ -238,7 +241,7 @@ export default createTheme({
     body2: {
       fontSize: '0.875rem',
       fontWeight: '400',
-      color: dimGrey,
+      color: theme.palette.dimGrey.main,
     },
     button: {
       fontSize: '1rem',
@@ -324,7 +327,7 @@ export default createTheme({
           '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
             fontSize: 13,
             fontWeight: '500',
-            color: dimGrey,
+            color: theme.palette.dimGrey.main,
             padding: '.6em .5rem',
             lineHeight: '1.3rem',
           },

@@ -16,8 +16,8 @@ export const CourseGradingSteps: React.FC<Props> = ({
 
   const items = [
     {
-      key: 'attendance',
-      label: t('pages.course-grading-details.attendance-step'),
+      key: 'grading-clearance',
+      label: t('pages.course-grading-details.grading-clearance-step'),
     },
     { key: 'modules', label: t('pages.course-grading-details.modules-step') },
   ]

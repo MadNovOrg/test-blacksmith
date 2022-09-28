@@ -108,19 +108,19 @@ describe('component: CourseAttendance', () => {
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText('Did not attend')
+      ).getByText('Automatic fail')
     ).toBeInTheDocument()
 
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[1].id}`)
-      ).getByText('Attended + ID checked')
+      ).getByText('Clear for grading')
     ).toBeInTheDocument()
 
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[2].id}`)
-      ).getByText('Attended + ID checked')
+      ).getByText('Clear for grading')
     ).toBeInTheDocument()
   })
 

@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Typography, CircularProgress, Stack } from '@mui/material'
+import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -14,6 +15,11 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { CourseAttendanceList } from '../CourseAttendanceList'
+
+const StyledList = styled('ol')(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
+  color: theme.palette.dimGrey.main,
+}))
 
 export const CourseAttendance = () => {
   const { id: courseId } = useParams()
@@ -108,14 +114,37 @@ export const CourseAttendance = () => {
       {participants.length ? (
         <>
           <Box mb={2}>
-            <Typography variant="h5" fontWeight="500" mb={1}>
+            <Typography variant="h5" fontWeight="500" mb={2}>
               {t('pages.course-attendance.title')}
             </Typography>
-            <Typography>
-              {t('pages.course-attendance.page-description-line1')}
+            <Typography variant="body2" display="inline">
+              {t('pages.course-attendance.page-description-line1') + ' '}
             </Typography>
-            <Typography fontWeight="500">
-              {t('pages.course-attendance.page-description-line2')}
+            <Typography variant="body2" fontWeight="600" display="inline">
+              {t('pages.course-attendance.page-description-line2') + ' '}
+            </Typography>
+            <Typography variant="body2" display="inline">
+              {t('pages.course-attendance.page-description-line3')}
+            </Typography>
+            <StyledList>
+              <li>
+                <Typography variant="body2">
+                  {t('pages.course-attendance.page-description-line4')}
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  {t('pages.course-attendance.page-description-line5')}
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
+                  {t('pages.course-attendance.page-description-line6')}
+                </Typography>
+              </li>
+            </StyledList>
+            <Typography variant="body2" fontWeight="600" display="inline">
+              {t('pages.course-attendance.page-description-line7')}
             </Typography>
           </Box>
 

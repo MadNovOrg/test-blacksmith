@@ -137,7 +137,7 @@ describe('page: CourseGradingDetails', () => {
 
     const subnav = screen.getByTestId('course-grading-details-nav')
 
-    expect(within(subnav).getByText('Attendance')).toBeInTheDocument()
+    expect(within(subnav).getByText('Grading clearance')).toBeInTheDocument()
     expect(
       within(subnav).getByText('Modules and Techniques')
     ).toBeInTheDocument()

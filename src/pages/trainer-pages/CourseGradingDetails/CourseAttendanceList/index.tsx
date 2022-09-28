@@ -146,6 +146,7 @@ export const CourseAttendanceList: React.FC<Props> = ({
               label={t(
                 'pages.course-attendance.participant-not-attended-chip-label'
               )}
+              color="error"
             />
           )}
         </ListItemButton>

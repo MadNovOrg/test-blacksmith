@@ -30,7 +30,7 @@ describe('component: CourseAttendanceList', () => {
     expect(
       within(
         screen.getByTestId(`participant-attendance-${participants[0].id}`)
-      ).getByText('Attended + ID checked')
+      ).getByText('Clear for grading')
     ).toBeInTheDocument()
   })
 
@@ -55,6 +55,11 @@ describe('component: CourseAttendanceList', () => {
     expect(onChangeMock).toHaveBeenCalledTimes(1)
     expect(onChangeMock).toHaveBeenCalledWith({ [participants[0].id]: false })
     expect(screen.getByText('0 selected')).toBeInTheDocument()
+    expect(
+      within(
+        screen.getByTestId(`participant-attendance-${participants[0].id}`)
+      ).getByText('Automatic fail')
+    ).toBeInTheDocument()
   })
 
   it('selects all participants when master checkbox is checked', () => {
