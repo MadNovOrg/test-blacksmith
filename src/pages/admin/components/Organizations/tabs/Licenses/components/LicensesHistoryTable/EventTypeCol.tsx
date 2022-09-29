@@ -93,6 +93,17 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
       )
     }
 
+    case Go1_History_Events_Enum.LicensesReserved: {
+      return (
+        <>
+          <Typography sx={{ mb: 1 }}>{item.payload?.courseId}</Typography>
+          <Typography variant="body2">
+            {t('reserved-by', { fullName: item.payload.invokedBy })}
+          </Typography>
+        </>
+      )
+    }
+
     default: {
       return null
     }

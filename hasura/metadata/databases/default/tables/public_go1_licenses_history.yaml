@@ -1,16 +1,24 @@
 table:
   schema: public
   name: go1_licenses_history
+configuration:
+  custom_root_fields: {}
+  column_config:
+    reserved_balance:
+      custom_name: reservedBalance
+  custom_column_names:
+    reserved_balance: reservedBalance
 select_permissions:
   - role: tt-admin
     permission:
       columns:
         - balance
-        - change
-        - payload
-        - event
         - captured_at
+        - change
+        - event
         - id
         - org_id
+        - payload
+        - reserved_balance
       filter: {}
       allow_aggregations: true

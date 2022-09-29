@@ -10,6 +10,7 @@ export default gql`
     organization_by_pk(id: $id) {
       id
       go1Licenses
+      reservedGo1Licenses
       go1LicensesHistory(
         order_by: { captured_at: desc }
         limit: $limit
@@ -20,6 +21,7 @@ export default gql`
         event
         payload
         balance
+        reservedBalance
         change
       }
       go1LicensesHistory_aggregate @include(if: $withHistory) {

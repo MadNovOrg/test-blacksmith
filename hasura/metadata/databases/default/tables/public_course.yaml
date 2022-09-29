@@ -8,6 +8,8 @@ configuration:
       custom_name: freeSpaces
     cancellation_reason:
       custom_name: cancellationReason
+    cancellation_fee_percent:
+      custom_name: cancellationFeePercent
     aol_cost_of_course:
       custom_name: aolCostOfCourse
     course_type:
@@ -34,13 +36,12 @@ configuration:
       custom_name: accountCode
     contact_profile_id:
       custom_name: contactProfileId
-    cancellation_fee_percent:
-      custom_name: cancellationFeePercent
     course_delivery_type:
       custom_name: deliveryType
   custom_column_names:
     free_spaces: freeSpaces
     cancellation_reason: cancellationReason
+    cancellation_fee_percent: cancellationFeePercent
     aol_cost_of_course: aolCostOfCourse
     course_type: type
     aol_region: aolRegion
@@ -54,7 +55,6 @@ configuration:
     go1_integration: go1Integration
     account_code: accountCode
     contact_profile_id: contactProfileId
-    cancellation_fee_percent: cancellationFeePercent
     course_delivery_type: deliveryType
 object_relationships:
   - name: contactProfile

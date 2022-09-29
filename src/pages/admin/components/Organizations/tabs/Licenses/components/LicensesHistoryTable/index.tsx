@@ -30,6 +30,11 @@ export const LicensesHistoryTable: React.FC<Props> = ({ items, children }) => {
       { id: 'event', label: t('col-event'), sorting: false },
       { id: 'change', label: t('col-action'), sorting: false },
       { id: 'balance', label: t('col-balance'), sorting: false },
+      {
+        id: 'reserved-balance',
+        label: t('col-reserved-balance'),
+        sorting: false,
+      },
     ],
     [t]
   )
@@ -72,6 +77,7 @@ export const LicensesHistoryTable: React.FC<Props> = ({ items, children }) => {
                 </Typography>
               </TableCell>
               <TableCell>{historyItem.balance}</TableCell>
+              <TableCell>{historyItem.reservedBalance}</TableCell>
             </TableRow>
           ))}
         </TableBody>

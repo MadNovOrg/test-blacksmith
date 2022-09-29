@@ -102,7 +102,7 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
               <Tile>
                 <Box>
                   <Typography variant="h2" mb={2}>
-                    N/A
+                    {data.organization_by_pk?.reservedGo1Licenses ?? 0}
                   </Typography>
                   <Typography variant="body2">
                     {t('unused-licenses')}

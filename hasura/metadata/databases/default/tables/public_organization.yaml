@@ -16,6 +16,8 @@ configuration:
       custom_name: createdAt
     xero_contact_id:
       custom_name: xeroContactId
+    reserved_go1_licenses:
+      custom_name: reservedGo1Licenses
     contact_details:
       custom_name: contactDetails
     geo_coordinates:
@@ -27,6 +29,7 @@ configuration:
     updated_at: updatedAt
     created_at: createdAt
     xero_contact_id: xeroContactId
+    reserved_go1_licenses: reservedGo1Licenses
     contact_details: contactDetails
     geo_coordinates: geoCoordinates
 array_relationships:
@@ -81,23 +84,23 @@ select_permissions:
   - role: trainer
     permission:
       columns:
-        - name
-        - go1_licenses
         - address
         - attributes
         - contact_details
+        - created_at
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
         - sector
+        - tags
         - trust_name
         - trust_type
-        - xero_contact_id
-        - created_at
         - updated_at
-        - id
+        - xero_contact_id
       filter: {}
       allow_aggregations: true
   - role: tt-admin
@@ -114,6 +117,7 @@ select_permissions:
         - original_record
         - preferences
         - region
+        - reserved_go1_licenses
         - sector
         - tags
         - trust_name

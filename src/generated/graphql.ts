@@ -19134,6 +19134,7 @@ export type Go1_Licenses_History = {
   id: Scalars['uuid'];
   org_id: Scalars['uuid'];
   payload?: Maybe<Scalars['jsonb']>;
+  reservedBalance: Scalars['Int'];
 };
 
 
@@ -19204,12 +19205,14 @@ export type Go1_Licenses_History_Avg_Fields = {
   __typename?: 'go1_licenses_history_avg_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by avg() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Avg_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "go1_licenses_history". All fields are combined with a logical 'AND'. */
@@ -19224,6 +19227,7 @@ export type Go1_Licenses_History_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   org_id?: InputMaybe<Uuid_Comparison_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
+  reservedBalance?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "go1_licenses_history" */
@@ -19251,6 +19255,7 @@ export type Go1_Licenses_History_Delete_Key_Input = {
 export type Go1_Licenses_History_Inc_Input = {
   balance?: InputMaybe<Scalars['Int']>;
   change?: InputMaybe<Scalars['Int']>;
+  reservedBalance?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "go1_licenses_history" */
@@ -19262,6 +19267,7 @@ export type Go1_Licenses_History_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
   payload?: InputMaybe<Scalars['jsonb']>;
+  reservedBalance?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -19272,6 +19278,7 @@ export type Go1_Licenses_History_Max_Fields = {
   change?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   org_id?: Maybe<Scalars['uuid']>;
+  reservedBalance?: Maybe<Scalars['Int']>;
 };
 
 /** order by max() on columns of table "go1_licenses_history" */
@@ -19281,6 +19288,7 @@ export type Go1_Licenses_History_Max_Order_By = {
   change?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -19291,6 +19299,7 @@ export type Go1_Licenses_History_Min_Fields = {
   change?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   org_id?: Maybe<Scalars['uuid']>;
+  reservedBalance?: Maybe<Scalars['Int']>;
 };
 
 /** order by min() on columns of table "go1_licenses_history" */
@@ -19300,6 +19309,7 @@ export type Go1_Licenses_History_Min_Order_By = {
   change?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "go1_licenses_history" */
@@ -19327,6 +19337,7 @@ export type Go1_Licenses_History_Order_By = {
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
   payload?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: go1_licenses_history */
@@ -19354,7 +19365,9 @@ export enum Go1_Licenses_History_Select_Column {
   /** column name */
   OrgId = 'org_id',
   /** column name */
-  Payload = 'payload'
+  Payload = 'payload',
+  /** column name */
+  ReservedBalance = 'reservedBalance'
 }
 
 /** input type for updating data in table "go1_licenses_history" */
@@ -19366,6 +19379,7 @@ export type Go1_Licenses_History_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
   payload?: InputMaybe<Scalars['jsonb']>;
+  reservedBalance?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate stddev on columns */
@@ -19373,12 +19387,14 @@ export type Go1_Licenses_History_Stddev_Fields = {
   __typename?: 'go1_licenses_history_stddev_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Stddev_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_pop on columns */
@@ -19386,12 +19402,14 @@ export type Go1_Licenses_History_Stddev_Pop_Fields = {
   __typename?: 'go1_licenses_history_stddev_pop_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_pop() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Stddev_Pop_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -19399,12 +19417,14 @@ export type Go1_Licenses_History_Stddev_Samp_Fields = {
   __typename?: 'go1_licenses_history_stddev_samp_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by stddev_samp() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Stddev_Samp_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate sum on columns */
@@ -19412,12 +19432,14 @@ export type Go1_Licenses_History_Sum_Fields = {
   __typename?: 'go1_licenses_history_sum_fields';
   balance?: Maybe<Scalars['Int']>;
   change?: Maybe<Scalars['Int']>;
+  reservedBalance?: Maybe<Scalars['Int']>;
 };
 
 /** order by sum() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Sum_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "go1_licenses_history" */
@@ -19435,7 +19457,9 @@ export enum Go1_Licenses_History_Update_Column {
   /** column name */
   OrgId = 'org_id',
   /** column name */
-  Payload = 'payload'
+  Payload = 'payload',
+  /** column name */
+  ReservedBalance = 'reservedBalance'
 }
 
 /** aggregate var_pop on columns */
@@ -19443,12 +19467,14 @@ export type Go1_Licenses_History_Var_Pop_Fields = {
   __typename?: 'go1_licenses_history_var_pop_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_pop() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Var_Pop_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate var_samp on columns */
@@ -19456,12 +19482,14 @@ export type Go1_Licenses_History_Var_Samp_Fields = {
   __typename?: 'go1_licenses_history_var_samp_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by var_samp() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Var_Samp_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -19469,12 +19497,14 @@ export type Go1_Licenses_History_Variance_Fields = {
   __typename?: 'go1_licenses_history_variance_fields';
   balance?: Maybe<Scalars['Float']>;
   change?: Maybe<Scalars['Float']>;
+  reservedBalance?: Maybe<Scalars['Float']>;
 };
 
 /** order by variance() on columns of table "go1_licenses_history" */
 export type Go1_Licenses_History_Variance_Order_By = {
   balance?: InputMaybe<Order_By>;
   change?: InputMaybe<Order_By>;
+  reservedBalance?: InputMaybe<Order_By>;
 };
 
 /** input type for inserting data into table "go1_licenses" */
@@ -25244,6 +25274,7 @@ export type Organization = {
   original_record?: Maybe<Scalars['jsonb']>;
   preferences: Scalars['jsonb'];
   region?: Maybe<Scalars['String']>;
+  reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   trustName?: Maybe<Scalars['String']>;
@@ -25392,6 +25423,7 @@ export type Organization_Append_Input = {
 export type Organization_Avg_Fields = {
   __typename?: 'organization_avg_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "organization". All fields are combined with a logical 'AND'. */
@@ -25413,6 +25445,7 @@ export type Organization_Bool_Exp = {
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   region?: InputMaybe<String_Comparison_Exp>;
+  reservedGo1Licenses?: InputMaybe<Int_Comparison_Exp>;
   sector?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   trustName?: InputMaybe<String_Comparison_Exp>;
@@ -25460,6 +25493,7 @@ export type Organization_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "organization" */
 export type Organization_Inc_Input = {
   go1Licenses?: InputMaybe<Scalars['Int']>;
+  reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "organization" */
@@ -25478,6 +25512,7 @@ export type Organization_Insert_Input = {
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
+  reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   trustName?: InputMaybe<Scalars['String']>;
@@ -25721,6 +25756,7 @@ export type Organization_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
+  reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -25973,6 +26009,7 @@ export type Organization_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
+  reservedGo1Licenses?: Maybe<Scalars['Int']>;
   sector?: Maybe<Scalars['String']>;
   trustName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
@@ -26018,6 +26055,7 @@ export type Organization_Order_By = {
   original_record?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
   region?: InputMaybe<Order_By>;
+  reservedGo1Licenses?: InputMaybe<Order_By>;
   sector?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   trustName?: InputMaybe<Order_By>;
@@ -26066,6 +26104,8 @@ export enum Organization_Select_Column {
   /** column name */
   Region = 'region',
   /** column name */
+  ReservedGo1Licenses = 'reservedGo1Licenses',
+  /** column name */
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
@@ -26092,6 +26132,7 @@ export type Organization_Set_Input = {
   original_record?: InputMaybe<Scalars['jsonb']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   region?: InputMaybe<Scalars['String']>;
+  reservedGo1Licenses?: InputMaybe<Scalars['Int']>;
   sector?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   trustName?: InputMaybe<Scalars['String']>;
@@ -26104,24 +26145,28 @@ export type Organization_Set_Input = {
 export type Organization_Stddev_Fields = {
   __typename?: 'organization_stddev_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Organization_Stddev_Pop_Fields = {
   __typename?: 'organization_stddev_pop_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Organization_Stddev_Samp_Fields = {
   __typename?: 'organization_stddev_samp_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate sum on columns */
 export type Organization_Sum_Fields = {
   __typename?: 'organization_sum_fields';
   go1Licenses?: Maybe<Scalars['Int']>;
+  reservedGo1Licenses?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "organization" */
@@ -26149,6 +26194,8 @@ export enum Organization_Update_Column {
   /** column name */
   Region = 'region',
   /** column name */
+  ReservedGo1Licenses = 'reservedGo1Licenses',
+  /** column name */
   Sector = 'sector',
   /** column name */
   Tags = 'tags',
@@ -26166,18 +26213,21 @@ export enum Organization_Update_Column {
 export type Organization_Var_Pop_Fields = {
   __typename?: 'organization_var_pop_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Organization_Var_Samp_Fields = {
   __typename?: 'organization_var_samp_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Organization_Variance_Fields = {
   __typename?: 'organization_variance_fields';
   go1Licenses?: Maybe<Scalars['Float']>;
+  reservedGo1Licenses?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "payment_methods" */
@@ -33628,7 +33678,7 @@ export type OrgLicensesWithHistoryQueryVariables = Exact<{
 }>;
 
 
-export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null };
+export type OrgLicensesWithHistoryQuery = { __typename?: 'query_root', organization_by_pk?: { __typename?: 'organization', id: any, go1Licenses?: number | null, reservedGo1Licenses?: number | null, go1LicensesHistory?: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number }>, go1LicensesHistory_aggregate?: { __typename?: 'go1_licenses_history_aggregate', aggregate?: { __typename?: 'go1_licenses_history_aggregate_fields', count: number } | null } } | null };
 
 export type SaveCourseGradingMutationVariables = Exact<{
   modules: Array<Course_Participant_Module_Insert_Input> | Course_Participant_Module_Insert_Input;
