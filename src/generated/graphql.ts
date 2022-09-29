@@ -18954,6 +18954,7 @@ export enum Go1_History_Events_Enum {
   LicensesPurchased = 'LICENSES_PURCHASED',
   LicensesReleased = 'LICENSES_RELEASED',
   LicensesRemoved = 'LICENSES_REMOVED',
+  LicensesReserved = 'LICENSES_RESERVED',
   LicenseIssued = 'LICENSE_ISSUED',
   LicenseRevoked = 'LICENSE_REVOKED'
 }
