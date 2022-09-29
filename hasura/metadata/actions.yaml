@@ -6,6 +6,17 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: canApplyPromoCode
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/promocode/can-apply'
+    permissions:
+      - role: unverified
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: user
+    comment: Checks whether a promo code can be applied to a given course by the current user
   - name: createStripeSubscription
     definition:
       kind: synchronous
@@ -346,6 +357,7 @@ custom_types:
     - name: GetCoursePricingInput
     - name: XeroInvoicesStatusInput
     - name: Go1LicensesChangeInput
+    - name: CanApplyPromoCodeInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -385,4 +397,5 @@ custom_types:
     - name: XeroLineItem
     - name: Go1LicensesChangeOutput
     - name: UpdateAvatarResponse
+    - name: CanApplyPromoCodeOutput
   scalars: []

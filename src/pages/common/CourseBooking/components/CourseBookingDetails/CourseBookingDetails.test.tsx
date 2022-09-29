@@ -59,6 +59,7 @@ const getMockData = (
       price,
       currency,
       promoCodes: [],
+      discounts: {},
       quantity,
       vat,
       orgId: '',

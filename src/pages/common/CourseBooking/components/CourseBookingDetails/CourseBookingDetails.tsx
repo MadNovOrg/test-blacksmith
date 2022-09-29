@@ -260,6 +260,8 @@ export const CourseBookingDetails: React.FC = () => {
             <Box>
               <PromoCode
                 codes={booking.promoCodes}
+                discounts={booking.discounts}
+                courseId={course.id}
                 onAdd={addPromo}
                 onRemove={removePromo}
               />

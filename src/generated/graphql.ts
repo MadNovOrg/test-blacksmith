@@ -100,6 +100,16 @@ export type Boolean_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['Boolean']>>;
 };
 
+export type CanApplyPromoCodeInput = {
+  code: Scalars['String'];
+  courseId: Scalars['Int'];
+};
+
+export type CanApplyPromoCodeOutput = {
+  __typename?: 'CanApplyPromoCodeOutput';
+  result: Scalars['Boolean'];
+};
+
 /** The category type */
 export type Category = DatabaseIdentifier & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'Category';
@@ -28395,6 +28405,8 @@ export type Query_Root = {
   blended_learning_status_aggregate: Blended_Learning_Status_Aggregate;
   /** fetch data from the table: "blended_learning_status" using primary key columns */
   blended_learning_status_by_pk?: Maybe<Blended_Learning_Status>;
+  /** Checks whether a promo code can be applied to a given course by the current user */
+  canApplyPromoCode: CanApplyPromoCodeOutput;
   /** fetch data from the table: "certificate_status" */
   certificate_status: Array<Certificate_Status>;
   /** fetch aggregated fields from the table: "certificate_status" */
@@ -28807,6 +28819,11 @@ export type Query_RootBlended_Learning_Status_AggregateArgs = {
 
 export type Query_RootBlended_Learning_Status_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCanApplyPromoCodeArgs = {
+  input: CanApplyPromoCodeInput;
 };
 
 
@@ -34173,6 +34190,13 @@ export type DenyCodeMutationVariables = Exact<{
 
 
 export type DenyCodeMutation = { __typename?: 'mutation_root', update_promo_code_by_pk?: { __typename?: 'promo_code', id: any } | null };
+
+export type CanApplyPromoCodeQueryVariables = Exact<{
+  input: CanApplyPromoCodeInput;
+}>;
+
+
+export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result: boolean } };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;

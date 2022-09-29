@@ -1,9 +1,17 @@
 import { CircularProgress, Stack } from '@mui/material'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
+import { Promo_Code, Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
   QUERY as GET_ORDER,
@@ -30,11 +38,17 @@ import {
 import {
   getTrainerAccommodationCost,
   getTrainerCarCostPerMile,
+  max,
 } from '@app/util'
 
 import { positions, sectors } from './org-data'
 
 export type Sector = keyof typeof sectors | ''
+
+export type Discounts = Record<
+  string,
+  Pick<Promo_Code, 'amount' | 'type'> & { amountCurrency: number }
+>
 
 type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
 
@@ -45,6 +59,7 @@ type State = {
   currency: Currency
   vat: number
   promoCodes: string[]
+  discounts: Discounts
   orgId: string
   sector: Sector
   position: string
@@ -87,6 +102,7 @@ const initialContext = {}
 // like this removes the need for unnecessary checks everywhere
 const initialState = {
   promoCodes: [],
+  discounts: {},
 } as unknown as State
 
 const Context = React.createContext<ContextType>(initialContext as ContextType)
@@ -157,6 +173,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       currency: pricing.priceCurrency,
       vat: 20,
       promoCodes: [],
+      discounts: {},
       orgId: '',
       sector: '',
       position: '',
@@ -169,6 +186,39 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
     setReady(true)
   })
+
+  const { promoCodes, isLoading: arePromoCodesLoading } = usePromoCodes({
+    sort: { by: 'code', dir: 'asc' },
+    filters: { code: booking.promoCodes },
+    limit: booking.promoCodes.length,
+    offset: 0,
+  })
+
+  useEffect(() => {
+    if (arePromoCodesLoading) {
+      return
+    }
+
+    const discounts: Discounts = {}
+    for (const code of booking.promoCodes) {
+      const promoCode = promoCodes.find(pc => pc.code === code)
+      if (!promoCode) {
+        console.warn(`Promo code ${code} not found`)
+        continue
+      }
+
+      discounts[code] = {
+        amount: promoCode.amount,
+        type: promoCode.type,
+        amountCurrency:
+          promoCode.type === Promo_Code_Type_Enum.FreePlaces
+            ? booking.price * promoCode.amount
+            : promoCode.amount,
+      }
+    }
+
+    setBooking({ ...booking, discounts })
+  }, [booking.price, booking.promoCodes, promoCodes, arePromoCodesLoading])
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>
@@ -188,11 +238,20 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   const amounts: ContextType['amounts'] = useMemo(() => {
     const subtotal = !ready ? 0 : booking.price * booking.quantity
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
-    const discount = !ready ? 0 : booking.promoCodes.reduce(acc => acc + 2, 0)
-    const subtotalDiscounted = subtotal - discount - freeSpacesDiscount
+    const discount = !ready
+      ? 0
+      : booking.promoCodes.reduce(
+          (acc, c) => acc + booking.discounts[c]?.amountCurrency ?? 0,
+          0
+        )
+    const subtotalDiscounted = max(subtotal - discount - freeSpacesDiscount, 0)
     const trainerExpenses = !ready ? 0 : booking.trainerExpenses
-    const vat = (subtotalDiscounted + trainerExpenses) * (booking.vat / 100)
-    const total = subtotalDiscounted + vat + trainerExpenses
+    const vat = max(
+      (subtotalDiscounted + trainerExpenses) * (booking.vat / 100),
+      0
+    )
+    const total = max(subtotalDiscounted + vat + trainerExpenses, 0)
+
     return {
       subtotal,
       discount,

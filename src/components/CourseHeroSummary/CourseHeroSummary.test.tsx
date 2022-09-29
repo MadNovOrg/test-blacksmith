@@ -40,7 +40,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays a correct message if a course begins today', () => {
     const courseSchedule = buildCourseSchedule({
       overrides: {
-        start: add(new Date(), { hours: 2 }).toISOString(),
+        start: add(new Date(), { minutes: 5 }).toISOString(),
         end: add(new Date(), { days: 2 }).toISOString(),
       },
     })

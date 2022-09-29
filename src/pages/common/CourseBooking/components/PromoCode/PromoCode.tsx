@@ -1,28 +1,81 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import {
+  Box,
+  Button,
+  FormHelperText,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import {
+  CanApplyPromoCodeQuery,
+  CanApplyPromoCodeQueryVariables,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { QUERY as CAN_APPLY_PROMO_CODE } from '@app/queries/promo-codes/can-apply-promo-code'
+
+import type { Discounts } from '../BookingContext'
 
 type Props = {
   codes: string[]
+  discounts: Discounts
+  courseId: number
   onAdd: (_: string) => void
   onRemove: (_: string) => void
 }
 
-export const PromoCode: React.FC<Props> = ({ codes, onAdd, onRemove }) => {
+export const PromoCode: React.FC<Props> = ({
+  codes,
+  discounts,
+  courseId,
+  onAdd,
+  onRemove,
+}) => {
   const { t } = useTranslation()
   const [adding, setAdding] = useState(false)
   const [value, setValue] = useState('')
+  const [applyError, setApplyError] = useState('')
+  const fetcher = useFetcher()
+
+  const onChange = useCallback(
+    e => {
+      setValue(e.target.value)
+
+      if (applyError !== '') {
+        setApplyError('')
+      }
+    },
+    [applyError]
+  )
 
   const handleCancel = () => {
     setAdding(false)
   }
 
-  const handleApply = () => {
-    onAdd(value)
-    setValue('')
-    setAdding(false)
-  }
+  const handleApply = useCallback(async () => {
+    try {
+      const {
+        canApplyPromoCode: { result },
+      } = await fetcher<
+        CanApplyPromoCodeQuery,
+        CanApplyPromoCodeQueryVariables
+      >(CAN_APPLY_PROMO_CODE, { input: { code: value.trim(), courseId } })
+
+      if (!result) {
+        throw new Error('Code cannot be applied')
+      }
+
+      onAdd(value)
+      setValue('')
+      setAdding(false)
+    } catch (err) {
+      console.error(err)
+      setApplyError(t('invalid-promo-code'))
+    }
+  }, [courseId, fetcher, onAdd, t, value])
 
   return (
     <Stack>
@@ -54,7 +107,7 @@ export const PromoCode: React.FC<Props> = ({ codes, onAdd, onRemove }) => {
               </LoadingButton>
             </Box>
             <Typography variant="body1" color="grey.700">
-              - {t('currency', { amount: 2 })}
+              - {t('currency', { amount: discounts[c]?.amountCurrency ?? 0 })}
             </Typography>
           </Box>
         ))}
@@ -75,9 +128,13 @@ export const PromoCode: React.FC<Props> = ({ codes, onAdd, onRemove }) => {
               placeholder={t('promo-code')}
               fullWidth
               sx={{ bgcolor: 'grey.100' }}
-              onChange={e => setValue(e.target.value)}
+              onChange={onChange}
               value={value}
+              error={applyError !== ''}
             />
+            {applyError !== '' ? (
+              <FormHelperText>{applyError}</FormHelperText>
+            ) : null}
           </Box>
           {value.trim().length ? (
             <Button

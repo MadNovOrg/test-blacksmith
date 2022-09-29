@@ -4,6 +4,12 @@ type Mutation {
   ): AcceptOrgInviteOutput
 }
 
+type Query {
+  canApplyPromoCode(
+    input: CanApplyPromoCodeInput!
+  ): CanApplyPromoCodeOutput!
+}
+
 type Mutation {
   createStripeSubscription(
     priceId: String!
@@ -310,6 +316,11 @@ input Go1LicensesChangeInput {
   orgId: uuid!
 }
 
+input CanApplyPromoCodeInput {
+  courseId: Int!
+  code: String!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -559,5 +570,9 @@ type Go1LicensesChangeOutput {
 
 type UpdateAvatarResponse {
   avatar: String!
+}
+
+type CanApplyPromoCodeOutput {
+  result: Boolean!
 }
 
