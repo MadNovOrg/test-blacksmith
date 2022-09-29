@@ -464,7 +464,7 @@ export const XeroInvoice = gql`
       ...XeroContactSummary
     }
     dueDate
-    subtotal
+    subTotal
     totalTax
     invoiceID
     amountDue

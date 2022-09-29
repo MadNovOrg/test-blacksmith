@@ -11719,7 +11719,7 @@ export type XeroInvoice = {
   lineItems: Array<Maybe<XeroLineItem>>;
   reference?: Maybe<Scalars['String']>;
   status: XeroInvoiceStatus;
-  subtotal?: Maybe<Scalars['Float']>;
+  subTotal?: Maybe<Scalars['Float']>;
   total: Scalars['Float'];
   totalDiscount?: Maybe<Scalars['Float']>;
   totalTax?: Maybe<Scalars['Float']>;
@@ -12359,6 +12359,10 @@ export type Course = {
   /** An aggregate relationship */
   modules_aggregate: Course_Module_Aggregate;
   name: Scalars['String'];
+  /** An array relationship */
+  orders: Array<Order>;
+  /** An aggregate relationship */
+  orders_aggregate: Order_Aggregate;
   /** An object relationship */
   organization?: Maybe<Organization>;
   organization_id?: Maybe<Scalars['uuid']>;
@@ -12445,6 +12449,26 @@ export type CourseModules_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Module_Order_By>>;
   where?: InputMaybe<Course_Module_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseOrdersArgs = {
+  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Order_By>>;
+  where?: InputMaybe<Order_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseOrders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Order_By>>;
+  where?: InputMaybe<Order_Bool_Exp>;
 };
 
 
@@ -12596,6 +12620,7 @@ export type Course_Bool_Exp = {
   min_participants?: InputMaybe<Int_Comparison_Exp>;
   modules?: InputMaybe<Course_Module_Bool_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  orders?: InputMaybe<Order_Bool_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
@@ -15148,6 +15173,7 @@ export type Course_Insert_Input = {
   min_participants?: InputMaybe<Scalars['Int']>;
   modules?: InputMaybe<Course_Module_Arr_Rel_Insert_Input>;
   name?: InputMaybe<Scalars['String']>;
+  orders?: InputMaybe<Order_Arr_Rel_Insert_Input>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   participants?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
@@ -16170,6 +16196,7 @@ export type Course_Order_By = {
   min_participants?: InputMaybe<Order_By>;
   modules_aggregate?: InputMaybe<Course_Module_Aggregate_Order_By>;
   name?: InputMaybe<Order_By>;
+  orders_aggregate?: InputMaybe<Order_Aggregate_Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
   organization_id?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
@@ -24644,9 +24671,31 @@ export type Order_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "order" */
+export type Order_Aggregate_Order_By = {
+  avg?: InputMaybe<Order_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Order_Max_Order_By>;
+  min?: InputMaybe<Order_Min_Order_By>;
+  stddev?: InputMaybe<Order_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Order_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Order_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Order_Sum_Order_By>;
+  var_pop?: InputMaybe<Order_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Order_Var_Samp_Order_By>;
+  variance?: InputMaybe<Order_Variance_Order_By>;
+};
+
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Order_Append_Input = {
   promoCodes?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "order" */
+export type Order_Arr_Rel_Insert_Input = {
+  data: Array<Order_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Order_On_Conflict>;
 };
 
 /** aggregate avg on columns */
@@ -24658,6 +24707,16 @@ export type Order_Avg_Fields = {
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "order" */
+export type Order_Avg_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "order". All fields are combined with a logical 'AND'. */
@@ -24784,6 +24843,27 @@ export type Order_Max_Fields = {
   vat?: Maybe<Scalars['float8']>;
 };
 
+/** order by max() on columns of table "order" */
+export type Order_Max_Order_By = {
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Order_Min_Fields = {
   __typename?: 'order_min_fields';
@@ -24804,6 +24884,27 @@ export type Order_Min_Fields = {
   quantity?: Maybe<Scalars['Int']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
+};
+
+/** order by min() on columns of table "order" */
+export type Order_Min_Order_By = {
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "order" */
@@ -24937,6 +25038,16 @@ export type Order_Stddev_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "order" */
+export type Order_Stddev_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Order_Stddev_Pop_Fields = {
   __typename?: 'order_stddev_pop_fields';
@@ -24946,6 +25057,16 @@ export type Order_Stddev_Pop_Fields = {
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "order" */
+export type Order_Stddev_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -24959,6 +25080,16 @@ export type Order_Stddev_Samp_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "order" */
+export type Order_Stddev_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Order_Sum_Fields = {
   __typename?: 'order_sum_fields';
@@ -24968,6 +25099,16 @@ export type Order_Sum_Fields = {
   price?: Maybe<Scalars['float8']>;
   quantity?: Maybe<Scalars['Int']>;
   vat?: Maybe<Scalars['float8']>;
+};
+
+/** order by sum() on columns of table "order" */
+export type Order_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "order" */
@@ -25025,6 +25166,16 @@ export type Order_Var_Pop_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "order" */
+export type Order_Var_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Order_Var_Samp_Fields = {
   __typename?: 'order_var_samp_fields';
@@ -25036,6 +25187,16 @@ export type Order_Var_Samp_Fields = {
   vat?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "order" */
+export type Order_Var_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Order_Variance_Fields = {
   __typename?: 'order_variance_fields';
@@ -25045,6 +25206,16 @@ export type Order_Variance_Fields = {
   price?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
   vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "order" */
+export type Order_Variance_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "organization" */
@@ -33431,7 +33602,7 @@ export type XeroItemSummaryFragment = { __typename?: 'XeroItem', id?: string | n
 
 export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null };
 
-export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subtotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> };
+export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> };
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
 
@@ -34048,7 +34219,7 @@ export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetXeroInvoicesForOrdersQuery = { __typename?: 'query_root', invoices: Array<{ __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subtotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> } | null> };
+export type GetXeroInvoicesForOrdersQuery = { __typename?: 'query_root', invoices: Array<{ __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> } | null> };
 
 export type GetXeroInvoicesStatusQueryVariables = Exact<{
   input: XeroInvoicesStatusInput;

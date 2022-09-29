@@ -19,7 +19,6 @@ import { Sticky } from '@app/components/Sticky'
 import {
   XeroPhone,
   XeroAddress,
-  XeroLineItem,
   XeroInvoiceStatus,
   Promo_Code_Type_Enum,
   Payment_Methods_Enum,
@@ -28,7 +27,7 @@ import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
-import { getPercentage, xeroInvoiceStatusColors } from '@app/util'
+import { xeroInvoiceStatusColors } from '@app/util'
 
 interface Stringifiable {
   toString(): string
@@ -64,9 +63,6 @@ const Row: React.FC<RowProps> = ({ label, value, labelProps, valueProps }) => (
 )
 
 const add8Weeks = (dateStr: string) => addWeeks(parseISO(dateStr), 8)
-
-const getLineItemTaxRate = (item: XeroLineItem | null) =>
-  getPercentage(item?.taxAmount ?? 0, item?.lineAmount ?? 0)
 
 export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
@@ -201,6 +197,8 @@ ${invoice?.contact?.name}`
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
+  const loadingData = isLoading || isUsePromoCodesLoading
+
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -216,7 +214,7 @@ ${invoice?.contact?.name}`
 
         {error ? <Alert severity="error">{_t('error')}</Alert> : null}
 
-        {order ? (
+        {order && !loadingData ? (
           <Box display="flex" paddingBottom={5}>
             <Box display="flex" flexDirection="column" pr={4}>
               <Sticky top={20}>
@@ -261,38 +259,55 @@ ${invoice?.contact?.name}`
                   <Row label={localizedDateString} value={order?.quantity} />
                 </Box>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  {order?.registrants?.map((email: string) => (
-                    <Row
-                      key={email}
-                      label={email}
-                      value={t('common.currency', {
-                        amount: getLineItemForEmail(email)?.unitAmount,
-                      })}
-                    />
-                  ))}
-                </Box>
+                {order?.registrants?.length ? (
+                  <Box p={2} bgcolor="common.white" mt={0.3}>
+                    {order?.registrants?.map((email: string) => (
+                      <Row
+                        key={email}
+                        label={email}
+                        value={t('common.currency', {
+                          amount: getLineItemForEmail(email)?.unitAmount,
+                        })}
+                      />
+                    ))}
+                  </Box>
+                ) : null}
+
+                {!order?.registrants?.length ? (
+                  <Box p={2} bgcolor="common.white" mt={0.3}>
+                    {invoice?.lineItems?.map(lineItem => {
+                      const unitAmount = t('common.currency', {
+                        amount: lineItem?.unitAmount,
+                      })
+
+                      const lineAmount = t('common.currency', {
+                        amount: lineItem?.lineAmount,
+                      })
+
+                      const lineItemTotal = `${unitAmount} x ${lineItem?.quantity} = ${lineAmount}`
+
+                      return (
+                        <Row
+                          key={lineItem?.item?.id}
+                          label={lineItem?.description ?? ''}
+                          value={lineItemTotal}
+                        />
+                      )
+                    })}
+                  </Box>
+                ) : null}
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
                     label={_t('subtotal')}
                     value={t('common.currency', {
-                      amount: invoice?.lineItems?.reduce(
-                        (res, li) => res + (li?.unitAmount ?? 0),
-                        0
-                      ),
+                      amount: invoice?.subTotal,
                     })}
                   />
                   <Row
                     label={_t('vat')}
                     value={t('common.currency', {
-                      amount: invoice?.lineItems?.reduce(
-                        (res, li) =>
-                          res +
-                          (getLineItemTaxRate(li) * (li?.unitAmount ?? 0)) /
-                            100,
-                        0
-                      ),
+                      amount: invoice?.totalTax,
                     })}
                   />
                 </Box>

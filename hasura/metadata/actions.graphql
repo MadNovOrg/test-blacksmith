@@ -520,7 +520,7 @@ type XeroInvoice {
   status: XeroInvoiceStatus!
   contact: XeroContact!
   dueDate: String
-  subtotal: Float
+  subTotal: Float
   totalTax: Float
   lineItems: [XeroLineItem]!
   reference: String
