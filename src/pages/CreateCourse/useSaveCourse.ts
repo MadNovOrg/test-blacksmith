@@ -199,7 +199,7 @@ export function useSaveCourse(): {
                         billingAddress:
                           go1Licensing.invoiceDetails.billingAddress,
                         paymentMethod: Payment_Methods_Enum.Invoice,
-                        quantity: courseData.maxParticipants,
+                        quantity: 0, // it will be updated on the backend with the correct number of licenses depending on the org's allowance
                         currency: Currency.GBP,
                       },
                     ],

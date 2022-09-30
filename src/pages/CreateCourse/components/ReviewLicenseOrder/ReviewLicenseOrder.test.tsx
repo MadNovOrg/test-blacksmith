@@ -227,7 +227,7 @@ describe('component: ReviewLicenseOrder', () => {
                 organizationId: go1Licensing.invoiceDetails.orgId,
                 billingAddress: go1Licensing.invoiceDetails.billingAddress,
                 paymentMethod: Payment_Methods_Enum.Invoice,
-                quantity: courseData.maxParticipants,
+                quantity: 0,
                 currency: Currency.Gbp,
               },
             ],
