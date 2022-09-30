@@ -448,6 +448,17 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-status-changed'
+  - name: release_licenses
+    definition:
+      enable_manual: true
+      update:
+        columns:
+          - course_status
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/release-licenses'
   - name: reserve_go1_licenses
     definition:
       enable_manual: true
