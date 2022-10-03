@@ -535,6 +535,7 @@
       "contact": "Contact",
       "name": "Name",
       "status": "Status",
+      "course-code": "Course code",
       "status-expired": "Expired",
       "status-active": "Active"
     },

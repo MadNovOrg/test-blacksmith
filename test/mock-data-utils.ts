@@ -42,6 +42,8 @@ import {
   CourseTrainerType,
   CourseTrainer,
   InviteStatus,
+  CourseCertificate,
+  CertificateStatus,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -373,6 +375,23 @@ export const buildParticipant = build<CourseParticipant>({
     grade: perBuild(() => null),
     gradingFeedback: fake(f => f.random.word()),
     dateGraded: new Date().toISOString(),
+  },
+})
+
+export const buildCertificate = build<CourseCertificate>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    profileId: fake(f => f.datatype.uuid()),
+    profile: perBuild(() => buildProfile()),
+    number: fake(f => f.lorem.slug()),
+    courseId: fake(f => f.datatype.uuid()),
+    courseName: fake(f => f.random.words(3)),
+    expiryDate: add(new Date(), { days: 1 }).toISOString(),
+    certificationDate: new Date().toISOString(),
+    courseLevel: CourseLevel.LEVEL_1,
+    status: CertificateStatus.ACTIVE,
   },
 })
 

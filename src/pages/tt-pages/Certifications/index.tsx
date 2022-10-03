@@ -104,7 +104,7 @@ export const Certifications: React.FC<CertificationsProps> = () => {
           ) : (
             <>
               <CertificationList
-                columns={['name', 'certificate', 'status']}
+                columns={['name', 'certificate', 'course-code', 'status']}
                 hideTitle={true}
                 participants={participants ?? []}
                 sorting={sorting}

@@ -39,7 +39,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
   )
 
   return (
-    <MuiTableHead sx={sx}>
+    <MuiTableHead sx={sx} data-testid={'table-head'}>
       <TableRow>
         {cols.map(col => {
           const isCheckbox = col.id === 'selection'
