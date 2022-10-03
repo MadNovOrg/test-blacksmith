@@ -36,6 +36,33 @@ describe('page: Blog', () => {
     expect(screen.getByTestId('posts-items-grid-skeleton')).toBeInTheDocument()
   })
 
+  it('displays no results found text if there are no search results', () => {
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: BlogQuery }>({
+          data: {
+            content: {
+              posts: {
+                nodes: [],
+              },
+            },
+          },
+        }),
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/blog']}>
+          <Routes>
+            <Route path="/blog" element={<Blog />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>
+    )
+
+    expect(screen.getByText('No results found.')).toBeInTheDocument()
+  })
+
   it('displays first post as a featured one', () => {
     const posts = buildEntities(2, buildPost)
 

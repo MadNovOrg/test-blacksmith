@@ -736,7 +736,8 @@
         "no-post-id-error": "No post ID has been provided",
         "recent": "Recent posts",
         "not-found": "Post not found",
-        "results-for": "Results for"
+        "results-for": "Results for",
+        "no-results": "No results found."
       },
       "error": "Error loading",
       "podcasts": {

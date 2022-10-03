@@ -210,10 +210,14 @@ const Blog: React.FC = () => {
             </Box>
           ) : null}
         </>
-      ) : (
+      ) : fetching ? (
         <Box data-testid="posts-items-grid-skeleton">
           <ItemsGridSkeleton />
         </Box>
+      ) : (
+        <Typography variant="body2">
+          {t('pages.membership.blog.no-results')}
+        </Typography>
       )}
     </Container>
   )
