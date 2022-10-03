@@ -19,6 +19,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import orgLicensesWithHistory from '@app/queries/go1-licensing/org-licenses-with-history'
 
+import { ExportHistoryButton } from './components/ExportHistoryButton'
 import { LicensesHistoryTable } from './components/LicensesHistoryTable'
 import { ManageLicensesDialog } from './components/ManageLicensesDialog'
 
@@ -111,6 +112,10 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
               </Tile>
             </Grid>
           </Grid>
+
+          <Box mt={2} mb={2} textAlign="right">
+            <ExportHistoryButton disabled={!totalHistory} orgId={orgId} />
+          </Box>
 
           {licensesHistory ? (
             <LicensesHistoryTable items={licensesHistory}>

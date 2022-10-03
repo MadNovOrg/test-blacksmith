@@ -1537,6 +1537,16 @@
             "purchased": "Purchased at course creation",
             "revoked-by": "Revoked by {{fullName}}",
             "reserved-by": "Reserved by {{fullName}}"
+          },
+          "export": {
+            "button-text": "Export",
+            "exporting-button-text": "Exporting",
+            "col-date": "Date",
+            "col-event": "Event",
+            "col-action": "Action",
+            "col-balance": "Balance",
+            "col-reserved-balance": "Reserved balance",
+            "col-payload": "Payload"
           }
         }
       },

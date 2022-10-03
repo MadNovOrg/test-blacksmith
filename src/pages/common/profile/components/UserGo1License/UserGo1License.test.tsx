@@ -1,7 +1,8 @@
-import { addYears } from 'date-fns'
+import { addYears, differenceInCalendarMonths, format } from 'date-fns'
 import React from 'react'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { dateFormats } from '@app/i18n/config'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
 
@@ -23,16 +24,28 @@ const useFetcherMock = jest.mocked(useFetcher)
 
 describe('component: UserGo1License', () => {
   it('displays Go1 license information', () => {
-    const go1License = buildGo1License()
+    const enrolledDate = new Date()
+    const expiresDate = addYears(enrolledDate, 1)
+
+    const go1License = buildGo1License({
+      enrolledOn: enrolledDate,
+      expireDate: expiresDate,
+    })
 
     render(<UserGo1License license={go1License} editable={false} />)
 
-    expect(screen.getByTestId('enrolled-on').textContent).toMatchInlineSnapshot(
-      `"Enrolled on 1 Aug 2022"`
+    expect(screen.getByTestId('enrolled-on')).toHaveTextContent(
+      `Enrolled on ${format(enrolledDate, dateFormats.date_defaultShort)}`
     )
 
-    expect(screen.getByTestId('expires-in').textContent).toMatchInlineSnapshot(
-      `" Active until 1 Aug 2023 (expires in 11 months)."`
+    expect(screen.getByTestId('expires-in')).toHaveTextContent(
+      `Active until ${format(
+        expiresDate,
+        dateFormats.date_defaultShort
+      )} (expires in ${differenceInCalendarMonths(
+        expiresDate,
+        new Date()
+      )} months).`
     )
 
     expect(screen.queryByText('Remove')).not.toBeInTheDocument()

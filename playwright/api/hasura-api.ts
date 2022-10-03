@@ -58,7 +58,7 @@ import { getAdminIdToken } from '../util'
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 
 let graphQLClient: GraphQLClient
-const getClient = () => {
+export const getClient = () => {
   if (!graphQLClient) {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
