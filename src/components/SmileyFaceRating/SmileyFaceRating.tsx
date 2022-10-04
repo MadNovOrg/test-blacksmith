@@ -108,7 +108,8 @@ export const SmileyFaceRating: React.FC<SmileyFaceRatingProps> = ({
             className={`${iconActive ? 'active' : ''} ${
               readOnly ? 'readOnly' : ''
             } icon rating-${rating}`}
-            data-testid={`rating`}
+            data-testid="rating"
+            data-rating={`rating-${rating}`}
             onClick={() => onChange(rating)}
             onMouseEnter={() => handleHover(rating)}
             onMouseLeave={() => handleHover(+value)}

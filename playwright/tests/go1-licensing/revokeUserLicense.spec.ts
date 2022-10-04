@@ -65,7 +65,7 @@ test("removes a license for an organisation's user", async ({
     .expect(page.locator(`data-testid=go1-license-${licenseContext.licenseId}`))
     .toBeVisible()
 
-  await page.click('a:has-text("Edit Profile")')
+  await page.click('button:has-text("Edit Profile")')
   await page.click(
     `data-testid=go1-license-${licenseContext.licenseId} >> button:has-text("Remove")`
   )

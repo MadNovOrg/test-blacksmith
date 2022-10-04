@@ -80,6 +80,7 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
       min_participants
       max_participants
       name
+      course_code
       reaccreditation
       organization {
         name

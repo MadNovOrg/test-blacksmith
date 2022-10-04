@@ -20,7 +20,7 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
   const startUiTime = toUiTime(course.schedule[0].start)
   const endUiTime = toUiTime(course.schedule[0].end)
   return {
-    Name: `${translation.common['course-levels'][course.level]}${course.name}`,
+    Name: `${course.name}${course.course_code}`,
     Venue: course.schedule[0].venue
       ? `${course.schedule[0].venue.name}${course.schedule[0].venue.city}`
       : '',
