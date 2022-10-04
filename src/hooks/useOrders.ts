@@ -60,7 +60,8 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
 
     if (isFilterValid(filters.searchParam)) {
       where._or = [
-        { id: { _eq: filters.searchParam } },
+        { orderDue: { _eq: filters.searchParam } },
+        { orderTotal: { _eq: filters.searchParam } },
         { course: { name: { _ilike: `%${filters.searchParam}%` } } },
         { organization: { name: { _ilike: `%${filters.searchParam}%` } } },
       ]
