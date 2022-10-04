@@ -1393,6 +1393,25 @@ export type CreateMediaItemPayload = {
   mediaItem?: Maybe<MediaItem>;
 };
 
+export type CreateOrderInput = {
+  billingAddress: Scalars['String'];
+  billingEmail: Scalars['String'];
+  billingFamilyName: Scalars['String'];
+  billingGivenName: Scalars['String'];
+  billingPhone: Scalars['String'];
+  courseId: Scalars['Int'];
+  organizationId: Scalars['String'];
+  paymentMethod: PaymentMethod;
+  promoCodes: Array<Scalars['String']>;
+  quantity: Scalars['Int'];
+  registrants: Array<Scalars['String']>;
+};
+
+export type CreateOrderOutput = {
+  __typename?: 'CreateOrderOutput';
+  id: Scalars['uuid'];
+};
+
 /** Input for the createPage mutation */
 export type CreatePageInput = {
   /** The userId to assign as the author of the object */
@@ -4368,6 +4387,11 @@ export type Paging = {
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
 };
+
+export enum PaymentMethod {
+  Cc = 'CC',
+  Invoice = 'INVOICE'
+}
 
 export type PlanObject = {
   __typename?: 'PlanObject';
@@ -21336,6 +21360,8 @@ export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   content?: Maybe<RootMutation>;
+  /** Attempts to create a new Order */
+  createOrder?: Maybe<CreateOrderOutput>;
   /** Creates a membership subscription */
   createStripeSubscription?: Maybe<CreateSubscriptionOutput>;
   createUser: CreateUserOutput;
@@ -22066,6 +22092,12 @@ export type Mutation_Root = {
 /** mutation root */
 export type Mutation_RootAcceptOrgInviteArgs = {
   profileId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCreateOrderArgs = {
+  input: CreateOrderInput;
 };
 
 
@@ -33993,6 +34025,13 @@ export type ModuleGroupsQueryVariables = Exact<{
 
 export type ModuleGroupsQuery = { __typename?: 'query_root', groups: Array<{ __typename?: 'module_group', id: any, name: string, level: Course_Level_Enum, color: Color_Enum, mandatory: boolean, createdAt: any, updatedAt: any, modules: Array<{ __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any }>, duration: { __typename?: 'module_group_duration_aggregate', aggregate?: { __typename?: 'module_group_duration_aggregate_fields', sum?: { __typename?: 'module_group_duration_sum_fields', duration?: number | null } | null } | null } }> };
 
+export type CreateOrderMutationVariables = Exact<{
+  input: CreateOrderInput;
+}>;
+
+
+export type CreateOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'CreateOrderOutput', id: any } | null };
+
 export type GetOrderQueryVariables = Exact<{
   orderId: Scalars['uuid'];
 }>;
@@ -34009,13 +34048,6 @@ export type GetOrdersQueryVariables = Exact<{
 
 
 export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
-
-export type InsertOrderMutationVariables = Exact<{
-  input: Order_Insert_Input;
-}>;
-
-
-export type InsertOrderMutation = { __typename?: 'mutation_root', order?: { __typename?: 'order', id: any } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

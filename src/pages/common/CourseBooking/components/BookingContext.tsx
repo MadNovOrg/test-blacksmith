@@ -9,19 +9,19 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
-import { Promo_Code, Promo_Code_Type_Enum } from '@app/generated/graphql'
+import {
+  Payment_Methods_Enum,
+  Promo_Code,
+  Promo_Code_Type_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
-  QUERY as GET_ORDER,
-  ResponseType as GetOrderResp,
-} from '@app/queries/order/get-order'
-import {
-  MUTATION as INSERT_ORDER,
-  ResponseType as InsertOrderResponseType,
-  ParamsType as InsertOrderParamsType,
-} from '@app/queries/order/insert-order'
+  MUTATION as CREATE_ORDER,
+  ResponseType as CreateOrderResponseType,
+  ParamsType as CreateOrderParamsType,
+} from '@app/queries/order/create-order'
 import {
   QUERY as GET_TEMP_PROFILE,
   ResponseType as GetTempProfileResponseType,
@@ -31,7 +31,6 @@ import {
   CourseType,
   Currency,
   Order,
-  PaymentMethod,
   TransportMethod,
   InvoiceDetails,
 } from '@app/types'
@@ -64,7 +63,7 @@ type State = {
   sector: Sector
   position: string
   otherPosition: string
-  paymentMethod: PaymentMethod
+  paymentMethod: Payment_Methods_Enum
   freeSpaces: number
   trainerExpenses: number
   courseType: CourseType
@@ -178,7 +177,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       sector: '',
       position: '',
       otherPosition: '',
-      paymentMethod: PaymentMethod.INVOICE,
+      paymentMethod: Payment_Methods_Enum.Invoice,
       freeSpaces: profile.course.freeSpaces ?? 0,
       trainerExpenses,
       courseType: profile.course.type,
@@ -263,27 +262,14 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     }
   }, [booking, ready])
 
-  const waitForOrderEnriched = useCallback(
-    async (orderId: string, tries = 0, maxTries = 5): Promise<void> => {
-      const { order } = await fetcher<GetOrderResp>(GET_ORDER, { orderId })
-      if (tries === maxTries) return
-
-      if (!order.orderTotal) {
-        await new Promise(res => setTimeout(res, 500))
-        return waitForOrderEnriched(orderId, tries + 1)
-      }
-    },
-    [fetcher]
-  )
-
   const placeOrder = useCallback(async () => {
     const promoCodes =
       booking.courseType !== CourseType.CLOSED ? booking.promoCodes : []
 
     const response = await fetcher<
-      InsertOrderResponseType,
-      InsertOrderParamsType
-    >(INSERT_ORDER, {
+      CreateOrderResponseType,
+      CreateOrderParamsType
+    >(CREATE_ORDER, {
       input: {
         courseId: course.id,
         quantity: booking.quantity,
@@ -299,11 +285,9 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       },
     })
 
-    await waitForOrderEnriched(response.order.id)
-
     setOrderId(response.order.id)
     return response.order
-  }, [booking, fetcher, course, waitForOrderEnriched])
+  }, [booking, fetcher, course])
 
   const value = useMemo<ContextType>(
     () => ({

@@ -339,7 +339,10 @@ Object {
           </p>
         </label>
         <div
-          class="MuiBox-root css-163v3sq"
+          class="MuiBox-root css-10irpkx"
+        />
+        <div
+          class="MuiBox-root css-ns0zoh"
         >
           <button
             class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-174o8gv-MuiButtonBase-root-MuiButton-root"
@@ -713,7 +716,10 @@ Object {
         </p>
       </label>
       <div
-        class="MuiBox-root css-163v3sq"
+        class="MuiBox-root css-10irpkx"
+      />
+      <div
+        class="MuiBox-root css-ns0zoh"
       >
         <button
           class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-174o8gv-MuiButtonBase-root-MuiButton-root"
@@ -1163,7 +1169,10 @@ Object {
           </p>
         </label>
         <div
-          class="MuiBox-root css-163v3sq"
+          class="MuiBox-root css-10irpkx"
+        />
+        <div
+          class="MuiBox-root css-ns0zoh"
         >
           <button
             class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-174o8gv-MuiButtonBase-root-MuiButton-root"
@@ -1509,7 +1518,10 @@ Object {
         </p>
       </label>
       <div
-        class="MuiBox-root css-163v3sq"
+        class="MuiBox-root css-10irpkx"
+      />
+      <div
+        class="MuiBox-root css-ns0zoh"
       >
         <button
           class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-174o8gv-MuiButtonBase-root-MuiButton-root"

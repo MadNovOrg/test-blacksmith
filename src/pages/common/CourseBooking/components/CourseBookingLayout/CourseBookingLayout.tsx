@@ -5,7 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
-import { PaymentMethod } from '@app/types'
+import { Payment_Methods_Enum } from '@app/generated/graphql'
 
 import { useBooking } from '../BookingContext'
 
@@ -31,7 +31,7 @@ export const CourseBookingLayout: React.FC = () => {
         key: 'review',
         label: t('pages.book-course.step-2'),
       },
-      booking.paymentMethod === PaymentMethod.CC
+      booking.paymentMethod === Payment_Methods_Enum.Cc
         ? { key: 'payment', label: t('pages.book-course.step-3') }
         : null,
     ].filter(Boolean)

@@ -673,7 +673,8 @@
       "payment-cc-error-ORDER_INVALID": "Invalid Order",
       "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment",
       "free-spaces": "Free spaces",
-      "trainer-expenses": "Trainer expenses"
+      "trainer-expenses": "Trainer expenses",
+      "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}"
     },
     "home": {
       "title": "Home"

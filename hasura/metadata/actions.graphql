@@ -11,6 +11,12 @@ type Query {
 }
 
 type Mutation {
+  createOrder(
+    input: CreateOrderInput!
+  ): CreateOrderOutput
+}
+
+type Mutation {
   createStripeSubscription(
     priceId: String!
     customerId: String!
@@ -230,6 +236,11 @@ enum Go1ChangeType {
   LICENSES_PURCHASED
 }
 
+enum PaymentMethod {
+  CC
+  INVOICE
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -319,6 +330,20 @@ input Go1LicensesChangeInput {
 input CanApplyPromoCodeInput {
   courseId: Int!
   code: String!
+}
+
+input CreateOrderInput {
+  courseId: Int!
+  quantity: Int!
+  paymentMethod: PaymentMethod!
+  billingAddress: String!
+  billingGivenName: String!
+  billingFamilyName: String!
+  billingEmail: String!
+  billingPhone: String!
+  registrants: [String!]!
+  organizationId: String!
+  promoCodes: [String!]!
 }
 
 type LinkProfileResult {
@@ -574,5 +599,9 @@ type UpdateAvatarResponse {
 
 type CanApplyPromoCodeOutput {
   result: Boolean!
+}
+
+type CreateOrderOutput {
+  id: uuid!
 }
 

@@ -1,7 +1,8 @@
 import React from 'react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 
-import { CourseType, Currency, PaymentMethod } from '@app/types'
+import { Payment_Methods_Enum } from '@app/generated/graphql'
+import { CourseType, Currency } from '@app/types'
 
 import { render } from '@test/index'
 
@@ -66,7 +67,7 @@ const getMockData = (
       sector: '',
       position: '',
       otherPosition: '',
-      paymentMethod: PaymentMethod.INVOICE,
+      paymentMethod: Payment_Methods_Enum.Invoice,
       courseType: type,
       freeSpaces,
       trainerExpenses,

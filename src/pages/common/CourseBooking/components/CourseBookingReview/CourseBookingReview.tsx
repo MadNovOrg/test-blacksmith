@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
-import { PaymentMethod } from '@app/types'
+import { Payment_Methods_Enum } from '@app/generated/graphql'
 
 import { useBooking } from '../BookingContext'
 
@@ -33,13 +33,36 @@ export const CourseBookingReview: React.FC = () => {
   const { course, booking, amounts, placeOrder } = useBooking()
 
   const [accept, setAccept] = useState(false)
+  const [creatingOrder, setCreatingOrder] = useState(false)
+  const [error, setError] = useState('')
 
   const handleConfirmBooking = async () => {
-    const order = await placeOrder()
-    if (booking.paymentMethod === PaymentMethod.CC) {
-      navigate(`../payment/${order.id}`, { replace: true })
-    } else {
-      navigate(`../done?order_id=${order.id}`, { replace: true })
+    setCreatingOrder(true)
+
+    try {
+      const order = await placeOrder()
+      setCreatingOrder(false)
+
+      if (booking.paymentMethod === Payment_Methods_Enum.Cc) {
+        navigate(`../payment/${order.id}`, { replace: true })
+      } else {
+        navigate(`../done?order_id=${order.id}`, { replace: true })
+      }
+    } catch (err) {
+      if ((err as Error)?.message?.includes('Promo codes not applicable')) {
+        const invalidPromoCodes = (err as Error).message
+          .split(': ')[1]
+          .split(',')
+
+        let codes = `${invalidPromoCodes[0]}`
+        invalidPromoCodes.slice(1).forEach(code => {
+          codes = `${codes}, ${code}`
+        })
+        setError(t('pages.book-course.promo-codes-not-applicable', { codes }))
+      }
+
+      console.error(err)
+      setCreatingOrder(false)
     }
   }
 
@@ -97,14 +120,14 @@ export const CourseBookingReview: React.FC = () => {
           {t('pages.book-course.payment-method')}
         </Typography>
         <Typography color="grey.700">
-          {booking.paymentMethod === PaymentMethod.CC
+          {booking.paymentMethod === Payment_Methods_Enum.Cc
             ? t('pages.book-course.pay-by-cc')
             : null}
-          {booking.paymentMethod === PaymentMethod.INVOICE
+          {booking.paymentMethod === Payment_Methods_Enum.Invoice
             ? t('pages.book-course.pay-by-inv')
             : null}
         </Typography>
-        {booking.paymentMethod === PaymentMethod.INVOICE && (
+        {booking.paymentMethod === Payment_Methods_Enum.Invoice && (
           <>
             <Divider sx={{ my: 2 }} />
             <Typography gutterBottom fontWeight="600">
@@ -222,13 +245,21 @@ export const CourseBookingReview: React.FC = () => {
         }
       />
 
-      <Box display="flex" justifyContent="space-between" mt={4}>
+      <Box textAlign="right" mt={4}>
+        {error ? (
+          <Typography variant="caption" color="error">
+            {error}
+          </Typography>
+        ) : null}
+      </Box>
+
+      <Box display="flex" justifyContent="space-between" mt={0}>
         <BackButton label={t('pages.book-course.back-to-booking')} />
         <Button
           variant="contained"
           color="primary"
           onClick={handleConfirmBooking}
-          disabled={!accept}
+          disabled={!accept || creatingOrder}
         >
           {t('pages.book-course.complete-booking')}
         </Button>

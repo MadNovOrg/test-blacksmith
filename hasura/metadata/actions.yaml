@@ -17,6 +17,17 @@ actions:
       - role: trainer
       - role: user
     comment: Checks whether a promo code can be applied to a given course by the current user
+  - name: createOrder
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/order/create'
+    permissions:
+      - role: tt-admin
+      - role: unverified
+      - role: tt-ops
+      - role: trainer
+      - role: user
+    comment: Attempts to create a new Order
   - name: createStripeSubscription
     definition:
       kind: synchronous
@@ -342,6 +353,14 @@ custom_types:
         - value: LICENSES_PURCHASED
           is_deprecated: null
           description: null
+    - name: PaymentMethod
+      values:
+        - value: CC
+          is_deprecated: null
+          description: null
+        - value: INVOICE
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -358,6 +377,7 @@ custom_types:
     - name: XeroInvoicesStatusInput
     - name: Go1LicensesChangeInput
     - name: CanApplyPromoCodeInput
+    - name: CreateOrderInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -398,4 +418,5 @@ custom_types:
     - name: Go1LicensesChangeOutput
     - name: UpdateAvatarResponse
     - name: CanApplyPromoCodeOutput
+    - name: CreateOrderOutput
   scalars: []

@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { PaymentMethod } from '@app/types'
+import { Payment_Methods_Enum } from '@app/generated/graphql'
 
 export type ResponseType = { order: { id: string } }
 
@@ -8,7 +8,7 @@ export type ParamsType = {
   input: {
     courseId: number
     quantity: number
-    paymentMethod: PaymentMethod
+    paymentMethod: Payment_Methods_Enum
     billingAddress: string
     billingGivenName: string
     billingFamilyName: string
@@ -21,8 +21,8 @@ export type ParamsType = {
 }
 
 export const MUTATION = gql`
-  mutation InsertOrder($input: order_insert_input!) {
-    order: insert_order_one(object: $input) {
+  mutation CreateOrder($input: CreateOrderInput!) {
+    order: createOrder(input: $input) {
       id
     }
   }
