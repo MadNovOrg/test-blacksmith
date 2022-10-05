@@ -27,8 +27,9 @@ describe('user-pages/MyCourses', () => {
       }: {
         variables: UserCoursesQueryVariables
       }) => {
+        const conditions = variables.where?._or ?? []
         const courses =
-          variables.where?.name?._ilike === `%${KEYWORD}%`
+          conditions[0]?.name?._ilike === `%${KEYWORD}%`
             ? [filteredCourse]
             : [course]
 

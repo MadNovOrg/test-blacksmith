@@ -116,13 +116,20 @@ export const MyCourses: React.FC = () => {
     }
 
     const query = keyword.trim()
-    if (query.length) {
-      const onlyDigits = /^\d+$/.test(query)
-      if (onlyDigits) {
-        obj.id = { _eq: Number(query) }
-      } else {
-        obj.name = { _ilike: `%${query}%` }
-      }
+
+    const onlyDigits = /^\d+$/.test(query || '')
+
+    if (query?.length) {
+      const orClauses = [
+        onlyDigits ? { id: { _eq: Number(query) } } : null,
+        { name: { _ilike: `%${query}%` } },
+        { organization: { name: { _ilike: `%${query}%` } } },
+        { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
+        { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+      ]
+
+      obj._or = orClauses.filter(Boolean)
+
       isFiltered = true
     }
 

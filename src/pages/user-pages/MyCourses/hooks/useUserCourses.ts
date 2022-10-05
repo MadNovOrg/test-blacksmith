@@ -160,8 +160,19 @@ export function useUserCourses(
     }
 
     const query = filters?.keyword?.trim()
+
+    const onlyDigits = /^\d+$/.test(query || '')
+
     if (query?.length) {
-      obj.name = { _ilike: `%${query}%` }
+      const orClauses = [
+        onlyDigits ? { id: { _eq: Number(query) } } : null,
+        { name: { _ilike: `%${query}%` } },
+        { organization: { name: { _ilike: `%${query}%` } } },
+        { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
+        { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+      ]
+
+      obj._or = orClauses.filter(Boolean)
     }
 
     return obj
