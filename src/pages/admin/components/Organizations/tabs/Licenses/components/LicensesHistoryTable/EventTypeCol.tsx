@@ -104,6 +104,15 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
       )
     }
 
+    case Go1_History_Events_Enum.LicensesCancelled: {
+      return (
+        <>
+          <Typography sx={{ mb: 1 }}>{item.payload?.courseId}</Typography>
+          <Typography variant="body2">{t('licenses-cancelled')}</Typography>
+        </>
+      )
+    }
+
     default: {
       return null
     }

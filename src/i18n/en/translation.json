@@ -1544,7 +1544,8 @@
             "released-licenses": "Unused licenses during course",
             "purchased": "Purchased at course creation",
             "revoked-by": "Revoked by {{fullName}}",
-            "reserved-by": "Reserved by {{fullName}}"
+            "reserved-by": "Reserved by {{fullName}}",
+            "licenses-cancelled": "Course cancelled"
           },
           "export": {
             "button-text": "Export",
