@@ -95,6 +95,7 @@ select_permissions:
         - original_record
         - preferences
         - region
+        - reserved_go1_licenses
         - sector
         - tags
         - trust_name
