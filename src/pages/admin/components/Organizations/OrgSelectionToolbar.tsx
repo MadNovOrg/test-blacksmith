@@ -9,7 +9,13 @@ import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 
-export const OrgSelectionToolbar: React.FC = () => {
+export type OrgSelectionToolbarProps = {
+  prefix: string
+}
+
+export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
+  prefix,
+}) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
@@ -40,7 +46,7 @@ export const OrgSelectionToolbar: React.FC = () => {
           <Link
             flex={1}
             component={StyledSubNavLink}
-            to="/organizations/all"
+            to={`${prefix}/all`}
             whiteSpace="nowrap"
           >
             {t('pages.org-details.all-organizations')}
@@ -50,7 +56,7 @@ export const OrgSelectionToolbar: React.FC = () => {
               key={org.id}
               flex={1}
               component={StyledSubNavLink}
-              to={`/organizations/${org.id}`}
+              to={`${prefix}/${org.id}`}
               whiteSpace="nowrap"
             >
               {org.name}
@@ -71,7 +77,7 @@ export const OrgSelectionToolbar: React.FC = () => {
                 <Link
                   key={org.id}
                   component={StyledSubNavLink}
-                  to={`/organizations/${org.id}`}
+                  to={`${prefix}/${org.id}`}
                 >
                   {org.name}
                 </Link>

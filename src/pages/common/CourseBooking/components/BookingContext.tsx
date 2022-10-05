@@ -219,7 +219,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     }
 
     setBooking({ ...booking, discounts })
-  }, [booking.price, booking.promoCodes, promoCodes, arePromoCodesLoading])
+  }, [booking, promoCodes, arePromoCodesLoading])
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>

@@ -131,7 +131,13 @@ select_permissions:
         - invoice_id
         - profile_id
         - registration_id
-      filter: {}
+      filter:
+        profile:
+          organizations:
+            organization:
+              members:
+                profile_id:
+                  _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: trainer

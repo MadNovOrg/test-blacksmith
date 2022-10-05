@@ -79,6 +79,7 @@ select_permissions:
           trainers:
             profile_id:
               _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:

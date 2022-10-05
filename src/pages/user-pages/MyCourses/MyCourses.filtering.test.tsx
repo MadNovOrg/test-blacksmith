@@ -122,7 +122,7 @@ describe('user-pages/MyCourses', () => {
     })
   })
 
-  it('filters by types', async () => {
+  it('should hide filters in participant context', async () => {
     const course = buildUserCourse()
     const filteredCourse = buildUserCourse()
 
@@ -155,6 +155,46 @@ describe('user-pages/MyCourses', () => {
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
           <MyCourses />
+        </MemoryRouter>
+      </Provider>
+    )
+
+    expect(screen.queryByTestId('FilterCourseType')).not.toBeInTheDocument()
+  })
+
+  it('should show filters by type in org admin context', async () => {
+    const course = buildUserCourse()
+    const filteredCourse = buildUserCourse()
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: UserCoursesQueryVariables
+      }) => {
+        const courses =
+          variables.where?.type?._in?.includes(Course_Type_Enum.Open) &&
+          variables.where.type._in.includes(Course_Type_Enum.Closed)
+            ? [filteredCourse]
+            : [course]
+
+        return fromValue<{ data: UserCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    render(
+      <Provider value={client as unknown as Client}>
+        <MemoryRouter initialEntries={['/']}>
+          <MyCourses orgId="123" />
         </MemoryRouter>
       </Provider>
     )

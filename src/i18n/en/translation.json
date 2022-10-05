@@ -822,7 +822,9 @@
       "col-end": "End",
       "col-trainers": "Trainer(s)",
       "col-registrants": "Regist.",
-      "col-status": "Status"
+      "col-status": "Status",
+      "find-available-courses": "Find available courses",
+      "col-registrations": "Registrations"
     },
     "create-course": {
       "OPEN-course-title": "Open course creation",
@@ -978,7 +980,8 @@
         "description": "Proceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
         "proceed-with-cancellation": "Proceed with cancellation",
         "transfer-attendees-first": "Transfer attendees first"
-      }
+      },
+      "request-cancellation": "Request cancellation"
     },
     "course-details": {
       "tabs": {

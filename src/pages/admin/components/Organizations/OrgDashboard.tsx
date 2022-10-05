@@ -67,7 +67,7 @@ export const OrgDashboard: React.FC = () => {
         </Stack>
       ) : (
         <>
-          <OrgSelectionToolbar />
+          <OrgSelectionToolbar prefix="/organizations" />
 
           <Container maxWidth="lg" sx={{ pt: 2 }}>
             {status === LoadingStatus.ERROR ? (

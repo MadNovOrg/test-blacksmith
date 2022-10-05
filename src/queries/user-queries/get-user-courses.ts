@@ -22,6 +22,7 @@ export const QUERY = gql`
     level
     status
     course_code
+    max_participants
     trainers {
       ...CourseTrainerInfo
     }
@@ -72,6 +73,7 @@ export const QUERY = gql`
     $profileId: uuid!
     $offset: Int
     $limit: Int
+    $withParticipantAggregates: Boolean = false
   ) {
     courses: course(
       where: $where
@@ -80,6 +82,18 @@ export const QUERY = gql`
       limit: $limit
     ) {
       ...UserCourse
+      participantsAgg: participants_aggregate
+        @include(if: $withParticipantAggregates) {
+        aggregate {
+          count
+        }
+      }
+      waitlistAgg: waitlists_aggregate
+        @include(if: $withParticipantAggregates) {
+        aggregate {
+          count
+        }
+      }
     }
     course_aggregate(where: $where) {
       aggregate {

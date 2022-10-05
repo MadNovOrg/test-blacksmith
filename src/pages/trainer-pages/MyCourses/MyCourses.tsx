@@ -1,10 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  Container,
-  LinearProgress,
-  Stack,
-} from '@mui/material'
+import { Button, CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -23,6 +17,7 @@ import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
@@ -63,8 +58,6 @@ export const MyCourses: React.FC = () => {
 
   const { profile, activeRole } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
-  const canSeeWaitingLists =
-    activeRole === RoleName.TT_ADMIN || activeRole === RoleName.TT_OPS
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
@@ -81,7 +74,7 @@ export const MyCourses: React.FC = () => {
       },
       {
         id: 'registrants',
-        label: t('pages.my-courses.col-registrants'),
+        label: t('pages.my-courses.col-registrations'),
         sorting: false,
       },
       { id: 'status', label: t('pages.my-courses.col-status') },
@@ -242,10 +235,6 @@ export const MyCourses: React.FC = () => {
                 const courseTrainer = profile
                   ? findCourseTrainer(c?.trainers, profile.id)
                   : undefined
-
-                const waitingListCount = c.waitlistAgg?.aggregate?.count
-                const showWaitingListCount =
-                  canSeeWaitingLists && waitingListCount
                 return (
                   <TableRow
                     key={c.id}
@@ -319,26 +308,11 @@ export const MyCourses: React.FC = () => {
                       <TrainerAvatarGroup trainers={c.trainers} />
                     </TableCell>
                     <TableCell data-testid="participants-cell">
-                      <Typography mb={1}>
-                        <Typography component="span">
-                          {c.participantsAgg?.aggregate?.count}
-                        </Typography>
-                        <Typography component="span" variant="body2">
-                          {showWaitingListCount ? `+${waitingListCount}` : ''}/
-                          {c.max_participants}
-                        </Typography>
-                      </Typography>
-                      {c.participantsAgg?.aggregate ? (
-                        <LinearProgress
-                          variant="determinate"
-                          value={
-                            (c.participantsAgg?.aggregate?.count /
-                              c.max_participants) *
-                            100
-                          }
-                          className={showWaitingListCount ? 'dotted' : ''}
-                        />
-                      ) : null}
+                      <ParticipantsCount
+                        participating={c.participantsAgg?.aggregate?.count ?? 0}
+                        capacity={c.max_participants}
+                        waitlist={c.waitlistAgg?.aggregate?.count}
+                      />
                     </TableCell>
                     <TableCell>
                       {c.status ? <CourseStatusChip status={c.status} /> : null}

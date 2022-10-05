@@ -242,6 +242,19 @@ select_permissions:
           - trainers:
               profile_id:
                 _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - participants:
+                  profile:
+                    organizations:
+                      organization:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
           - organization:
               members:
                 _and:
@@ -349,8 +362,26 @@ select_permissions:
           - participants:
               profile_id:
                 _eq: X-Hasura-User-Id
-          - course_type:
-              _eq: OPEN
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - participants:
+                  profile:
+                    organizations:
+                      organization:
+                        members:
+                          _and:
+                            - is_admin:
+                                _eq: true
+                            - profile_id:
+                                _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - is_admin:
+                      _eq: true
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: trainer

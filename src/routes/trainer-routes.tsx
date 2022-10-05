@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
@@ -77,6 +78,16 @@ const TrainerBaseRoutes = () => {
           </Route>
         </Route>
       </Route>
+
+      {acl.canManageOrgCourses() ? (
+        <Route path="manage-courses">
+          <Route index element={<Navigate replace to="all" />} />
+          <Route path=":orgId">
+            <Route index element={<ManageCourses />} />
+            <Route path=":id/details" element={<CourseDetails />} />
+          </Route>
+        </Route>
+      ) : null}
 
       {acl.canViewOrganizations() ? (
         <Route path="organizations">

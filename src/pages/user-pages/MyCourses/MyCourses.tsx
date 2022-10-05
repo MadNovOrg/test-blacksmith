@@ -1,4 +1,4 @@
-import { CircularProgress, Container, Stack } from '@mui/material'
+import { Button, CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -9,12 +9,14 @@ import Typography from '@mui/material/Typography'
 import { isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
@@ -25,20 +27,33 @@ import {
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { AttendeeOnlyCourseStatus } from '@app/types'
+import { AllCourseStatuses, AttendeeOnlyCourseStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
 
-export const MyCourses: React.FC = () => {
+export type MyCoursesProps = {
+  title?: string
+  orgId?: string
+}
+
+// If orgId property is defined that means that we are displaying courses list
+// in context of an org admin (for course management purposes). The reason why
+// we do not check `isOrgAdmin` flag instead, is that org admin can be participant
+// of some courses as well, hence we will need to display both variations of this
+// component: one in context of participant and one in context of management.
+export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
       { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
-      { id: 'type', label: t('pages.my-courses.col-type'), sorting: true },
+      ...(orgId
+        ? [{ id: 'type', label: t('pages.my-courses.col-type'), sorting: true }]
+        : []),
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
@@ -46,9 +61,18 @@ export const MyCourses: React.FC = () => {
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
       },
+      ...(orgId
+        ? [
+            {
+              id: 'registrations',
+              label: t('pages.my-courses.col-registrations'),
+              sorting: false,
+            },
+          ]
+        : []),
       { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
-    [t]
+    [orgId, t]
   )
 
   const [keyword, setKeyword] = useState('')
@@ -106,7 +130,8 @@ export const MyCourses: React.FC = () => {
       keyword,
     },
     sorting,
-    { perPage, currentPage }
+    { perPage, currentPage },
+    orgId
   )
 
   useEffect(() => {
@@ -125,7 +150,7 @@ export const MyCourses: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" gap={4}>
         <Box width={250}>
-          <Typography variant="h1">{t('my-courses')}</Typography>
+          <Typography variant="h1">{title ?? t('my-courses')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
@@ -140,7 +165,7 @@ export const MyCourses: React.FC = () => {
 
               <Stack gap={1}>
                 <FilterCourseLevel onChange={setFilterLevel} />
-                <FilterCourseType onChange={setFilterType} />
+                {orgId ? <FilterCourseType onChange={setFilterType} /> : null}
                 <FilterAccordion
                   options={statusOptions}
                   onChange={opts => {
@@ -155,6 +180,17 @@ export const MyCourses: React.FC = () => {
         </Box>
 
         <Box flex={1}>
+          {orgId ? (
+            <Box mb={4} textAlign="right">
+              <Button
+                variant="contained"
+                onClick={() => navigate(`/organizations/${orgId}/courses`)}
+              >
+                {t('pages.my-courses.find-available-courses')}
+              </Button>
+            </Box>
+          ) : null}
+
           <Table data-testid="courses-table">
             <TableHead
               cols={cols}
@@ -178,99 +214,128 @@ export const MyCourses: React.FC = () => {
                 itemsName={t('courses').toLowerCase()}
               />
 
-              {courses?.map((c, index) => (
-                <TableRow
-                  key={c.id}
-                  className="MyCoursesRow"
-                  data-testid={`course-row-${c.id}`}
-                  data-index={index}
-                >
-                  <TableCell>
-                    <Link href={`${c.id}/details`}>
-                      <Typography mb={1}>{c.name}</Typography>
-                      <Typography variant="body2" data-testid="course-code">
-                        {c.course_code}
+              {courses?.map((c, index) => {
+                const courseEnded = isPast(new Date(c.schedule[0].end))
+                const participant = c.participants[0]
+                const evaluated = Boolean(
+                  c.evaluation_answers_aggregate.aggregate?.count
+                )
+
+                let courseStatus: AllCourseStatuses =
+                  Course_Status_Enum.Scheduled
+                if (c.status === Course_Status_Enum.Cancelled) {
+                  courseStatus = Course_Status_Enum.Cancelled
+                } else {
+                  if (courseEnded) {
+                    courseStatus = Course_Status_Enum.Completed
+                  }
+                  if (participant) {
+                    // user participated in the course
+                    if (!participant.attended && courseEnded) {
+                      courseStatus = AttendeeOnlyCourseStatus.NotAttended
+                    } else if (!participant.healthSafetyConsent) {
+                      courseStatus = AttendeeOnlyCourseStatus.InfoRequired
+                    } else if (!evaluated && courseEnded) {
+                      courseStatus = Course_Status_Enum.EvaluationMissing
+                    } else if (!participant.grade && courseEnded) {
+                      courseStatus = Course_Status_Enum.GradeMissing
+                    }
+                  }
+                }
+
+                // TODO add cancellation requested status when added
+
+                return (
+                  <TableRow
+                    key={c.id}
+                    className="MyCoursesRow"
+                    data-testid={`course-row-${c.id}`}
+                    data-index={index}
+                  >
+                    <TableCell>
+                      <Link href={`${c.id}/details`}>
+                        <Typography mb={1}>{c.name}</Typography>
+                        <Typography variant="body2" data-testid="course-code">
+                          {c.course_code}
+                        </Typography>
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Typography mb={1}>
+                        {c.schedule[0].venue?.name}
                       </Typography>
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Typography mb={1}>{c.schedule[0].venue?.name}</Typography>
-                    <Typography variant="body2">
-                      {c.schedule[0].virtualLink
-                        ? 'Online'
-                        : c.schedule[0].venue?.city}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-                  <TableCell>
-                    {c.dates?.aggregate?.start?.date && (
-                      <Box>
-                        <Typography variant="body2" gutterBottom>
-                          {t('dates.short', {
-                            date: c.dates.aggregate.start.date,
-                          })}
-                        </Typography>
-                        <Typography variant="body2" color="grey.500">
-                          {t('dates.time', {
-                            date: c.dates.aggregate.start.date,
-                          })}
-                        </Typography>
-                      </Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {c.dates?.aggregate?.end?.date && (
-                      <Box>
-                        <Typography variant="body2" gutterBottom>
-                          {t('dates.short', {
-                            date: c.dates.aggregate.end.date,
-                          })}
-                        </Typography>
-                        <Typography variant="body2" color="grey.500">
-                          {t('dates.time', {
-                            date: c.dates.aggregate.end.date,
-                          })}
-                        </Typography>
-                      </Box>
-                    )}
-                  </TableCell>
+                      <Typography variant="body2">
+                        {c.schedule[0].virtualLink
+                          ? 'Online'
+                          : c.schedule[0].venue?.city}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                    <TableCell>
+                      {c.dates?.aggregate?.start?.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {t('dates.short', {
+                              date: c.dates.aggregate.start.date,
+                            })}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
+                            {t('dates.time', {
+                              date: c.dates.aggregate.start.date,
+                            })}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {c.dates?.aggregate?.end?.date && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {t('dates.short', {
+                              date: c.dates.aggregate.end.date,
+                            })}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
+                            {t('dates.time', {
+                              date: c.dates.aggregate.end.date,
+                            })}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <TrainerAvatarGroup trainers={c.trainers ?? []} />
+                    </TableCell>
+                    {orgId ? (
+                      <TableCell data-testid="participants-cell">
+                        <ParticipantsCount
+                          participating={
+                            c.participantsAgg?.aggregate?.count ?? 0
+                          }
+                          capacity={
+                            c.type === Course_Type_Enum.Open
+                              ? undefined
+                              : c.max_participants
+                          }
+                          waitlist={c.waitlistAgg?.aggregate?.count}
+                        />
+                      </TableCell>
+                    ) : null}
 
-                  <TableCell>
-                    <TrainerAvatarGroup trainers={c.trainers ?? []} />
-                  </TableCell>
-
-                  <TableCell>
-                    {!c.participants[0].attended &&
-                    isPast(new Date(c.schedule[0].end)) ? (
-                      <CourseStatusChip
-                        status={AttendeeOnlyCourseStatus.NotAttended}
-                      />
-                    ) : !c.participants[0].healthSafetyConsent ? (
-                      <CourseStatusChip
-                        status={AttendeeOnlyCourseStatus.InfoRequired}
-                      />
-                    ) : c.evaluation_answers_aggregate.aggregate?.count === 0 &&
-                      isPast(new Date(c.schedule[0].end)) ? (
-                      <CourseStatusChip
-                        status={Course_Status_Enum.EvaluationMissing}
-                      />
-                    ) : !c.participants[0].grade &&
-                      isPast(new Date(c.schedule[0].end)) ? (
-                      <CourseStatusChip
-                        status={Course_Status_Enum.GradeMissing}
-                      />
-                    ) : (
-                      <CourseStatusChip
-                        status={
-                          isPast(new Date(c.schedule[0].end))
-                            ? Course_Status_Enum.Completed
-                            : Course_Status_Enum.Scheduled
-                        }
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              )) ?? null}
+                    <TableCell>
+                      <CourseStatusChip status={courseStatus} />
+                    </TableCell>
+                  </TableRow>
+                )
+              }) ?? null}
             </TableBody>
           </Table>
 

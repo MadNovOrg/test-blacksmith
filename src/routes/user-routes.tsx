@@ -3,12 +3,14 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
+import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
@@ -43,6 +45,16 @@ const UserRoutes = () => {
           />
         </Route>
       </Route>
+
+      {acl.canManageOrgCourses() ? (
+        <Route path="manage-courses">
+          <Route index element={<Navigate replace to="all" />} />
+          <Route path=":orgId">
+            <Route index element={<ManageCourses />} />
+            <Route path=":id/details" element={<TrainerCourseDetails />} />
+          </Route>
+        </Route>
+      ) : null}
 
       <Route path="accept-invite/:id" element={<AcceptInvite />} />
       <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />

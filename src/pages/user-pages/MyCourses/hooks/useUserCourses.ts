@@ -13,6 +13,7 @@ import {
   UserCoursesQuery,
   UserCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { ALL_ORGS } from '@app/hooks/useOrg'
 import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/user-queries/get-user-courses'
 import { AttendeeOnlyCourseStatus } from '@app/types'
@@ -37,7 +38,8 @@ type CoursesFilters = {
 export function useUserCourses(
   filters?: CoursesFilters,
   sorting?: Sorting,
-  pagination?: { perPage: number; currentPage: number }
+  pagination?: { perPage: number; currentPage: number },
+  orgId?: string
 ): {
   courses?: UserCoursesQuery['courses']
   error?: Error
@@ -126,6 +128,10 @@ export function useUserCourses(
       participants: { profile_id: { _eq: profile?.id } },
       status: { _nin: [Course_Status_Enum.Cancelled] },
     }
+    // if orgId is defined then provide all available courses within that org
+    if (orgId) {
+      obj = orgId === ALL_ORGS ? {} : { organization: { id: { _eq: orgId } } }
+    }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
       obj = deepmerge(obj, courseStatusConditionsMap.INFO_REQUIRED)
@@ -176,7 +182,7 @@ export function useUserCourses(
     }
 
     return obj
-  }, [filters, profile?.id, courseStatusConditionsMap])
+  }, [orgId, filters, profile?.id, courseStatusConditionsMap])
 
   const [{ data, error }] = useQuery<
     UserCoursesQuery,
@@ -188,6 +194,7 @@ export function useUserCourses(
       where,
       profileId: profile?.id,
       orderBy: getOrderBy(sorting),
+      withParticipantAggregates: Boolean(orgId),
       ...(pagination
         ? {
             limit: pagination.perPage,

@@ -9,7 +9,20 @@ import {
   UserCourseFragment,
 } from '@app/generated/graphql'
 
-export const buildUserCourse = build<UserCourseFragment>({
+export const buildUserCourse = build<
+  UserCourseFragment & {
+    waitlistAgg: {
+      aggregate?: {
+        count: number
+      } | null
+    }
+    participantsAgg: {
+      aggregate?: {
+        count: number
+      } | null
+    }
+  }
+>({
   fields: {
     id: fake(f => f.datatype.number()),
     name: fake(f => f.random.words()),
@@ -44,6 +57,9 @@ export const buildUserCourse = build<UserCourseFragment>({
       },
     },
     modulesAgg: null,
+    max_participants: 0,
+    waitlistAgg: { aggregate: null },
+    participantsAgg: { aggregate: null },
     dates: {
       aggregate: {
         start: {

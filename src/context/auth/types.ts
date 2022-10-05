@@ -57,4 +57,6 @@ export type ACL = {
   canViewXeroConnect: () => boolean
   canCreateOrgs: () => boolean
   canCancelCourses: () => boolean
+  canManageOrgCourses: () => boolean
+  canSeeWaitingLists: () => boolean
 }

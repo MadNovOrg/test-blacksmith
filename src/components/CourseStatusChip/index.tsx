@@ -4,9 +4,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { AttendeeOnlyCourseStatus } from '@app/types'
-
-type AllCourseStatuses = Course_Status_Enum | AttendeeOnlyCourseStatus
+import { AllCourseStatuses, AttendeeOnlyCourseStatus } from '@app/types'
 
 const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.ApprovalPending]: 'warning',

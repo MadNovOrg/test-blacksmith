@@ -20,6 +20,10 @@ configuration:
     given_name: givenName
     family_name: familyName
     created_at: createdAt
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
 insert_permissions:
   - role: anonymous
     permission:
@@ -76,6 +80,28 @@ select_permissions:
         - created_at
         - id
       filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - id
+        - created_at
+        - course_id
+        - given_name
+        - family_name
+        - email
+        - phone
+        - org_name
+        - confirmed
+      filter:
+        course:
+          organization:
+            members:
+              _and:
+                - is_admin:
+                    _eq: true
+                - profile_id:
+                    _eq: X-Hasura-User-Id
       allow_aggregations: true
 event_triggers:
   - name: waitlist_joined

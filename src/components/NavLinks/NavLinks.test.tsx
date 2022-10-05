@@ -22,7 +22,7 @@ describe('component: NavLinks', () => {
     )
 
     expect(screen.getAllByRole('link')).toHaveLength(3)
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
@@ -43,7 +43,9 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(6)
+    expect(screen.getAllByRole('link')).toHaveLength(7)
+    const myCoursesLink = screen.getByRole('link', { name: 'My Courses' })
+    expect(myCoursesLink).toBeInTheDocument()
     const coursesLink = screen.getByRole('link', { name: 'Courses' })
     expect(coursesLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
@@ -76,7 +78,7 @@ describe('component: NavLinks', () => {
     )
 
     expect(screen.getAllByRole('link')).toHaveLength(5)
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',
@@ -106,7 +108,7 @@ describe('component: NavLinks', () => {
     )
 
     expect(screen.getAllByRole('link')).toHaveLength(3)
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
@@ -130,7 +132,7 @@ describe('component: NavLinks', () => {
     )
 
     expect(screen.getAllByRole('link')).toHaveLength(2)
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
@@ -150,7 +152,7 @@ describe('component: NavLinks', () => {
     )
 
     expect(screen.getAllByRole('link')).toHaveLength(2)
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()

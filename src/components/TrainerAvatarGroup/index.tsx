@@ -19,7 +19,7 @@ import { CourseTrainerType } from '@app/types'
 import { Avatar } from '../Avatar'
 
 export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
-  profile: Pick<Profile, 'fullName'>
+  profile: Pick<Profile, 'fullName' | 'avatar'>
 }
 type Props = {
   trainers?: TrainerAvatar[]
@@ -62,6 +62,7 @@ export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
         placement="top"
       >
         <Avatar
+          src={trainer.profile.avatar ?? ''}
           name={trainer.profile.fullName ?? ''}
           size={32}
           sx={{

@@ -710,3 +710,5 @@ export type Draft = {
     invoiceDetails: InvoiceDetails
   }
 }
+
+export type AllCourseStatuses = Course_Status_Enum | AttendeeOnlyCourseStatus
