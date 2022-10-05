@@ -1,0 +1,393 @@
+import { Edit } from '@mui/icons-material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Container,
+  Grid,
+  Link,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+  useTheme,
+} from '@mui/material'
+import { styled } from '@mui/system'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
+import { Grade } from '@app/components/Grade'
+import { TableHead } from '@app/components/Table/TableHead'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { Course, SortOrder } from '@app/types'
+import { LoadingStatus } from '@app/util'
+
+type CourseGradingProps = {
+  course: Course
+}
+
+const StyledList = styled('ol')(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
+  color: theme.palette.secondary.main,
+}))
+
+const StyledText = styled(Typography)(({ theme }) => ({
+  display: 'inline',
+  color: theme.palette.secondary.main,
+}))
+
+export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
+  const { t } = useTranslation()
+  const theme = useTheme()
+  const navigate = useNavigate()
+
+  const [order, setOrder] = useState<SortOrder>('asc')
+  const [sortColumn, setSortColumn] = useState<string>('name')
+  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([])
+
+  const {
+    data: participants,
+    status,
+    total,
+  } = useCourseParticipants(course?.id ?? '', {
+    sortBy: 'name',
+    order,
+  })
+
+  const participantsWithoutGrades = (participants ?? []).filter(
+    participant => !participant.grade
+  )
+
+  const canEditGradingDetails = !course.gradingStarted
+
+  const cols = useMemo(() => {
+    return [
+      {
+        id: 'selection',
+        label: '',
+        sorting: false,
+        component: (
+          <Checkbox
+            checked={
+              selectedParticipants.length ===
+                participantsWithoutGrades.length &&
+              selectedParticipants.length > 0
+            }
+            onChange={event => {
+              setSelectedParticipants(() =>
+                event.target.checked
+                  ? participantsWithoutGrades.map(participant => participant.id)
+                  : []
+              )
+            }}
+          />
+        ),
+      },
+      {
+        id: 'name',
+        label: t('pages.course-participants.name'),
+        sorting: true,
+      },
+      {
+        id: 'contact',
+        label: t('pages.course-participants.contact'),
+        sorting: true,
+      },
+      {
+        id: 'organisation',
+        label: t('pages.course-participants.organisation'),
+        sorting: false,
+      },
+      {
+        id: 'grade',
+        label: t('pages.course-details.tabs.grading.grade'),
+        sorting: false,
+      },
+    ].filter(Boolean)
+  }, [selectedParticipants.length, participantsWithoutGrades, t])
+
+  const handleSortChange = useCallback(
+    columnName => {
+      if (sortColumn === columnName) {
+        setOrder(prevState => (prevState === 'asc' ? 'desc' : 'asc'))
+      } else {
+        setOrder('asc')
+        setSortColumn(columnName)
+      }
+    },
+    [sortColumn]
+  )
+
+  const handleParticipantSelection = useCallback((participantId, checked) => {
+    setSelectedParticipants(prevState =>
+      checked
+        ? [...prevState, participantId]
+        : prevState.filter(id => id !== participantId)
+    )
+  }, [])
+
+  return (
+    <>
+      <Container sx={{ paddingTop: 2, paddingBottom: 2 }}>
+        {course.gradingConfirmed ? (
+          <>
+            {status === LoadingStatus.FETCHING ? (
+              <Stack
+                alignItems="center"
+                justifyContent="center"
+                data-testid="course-fetching"
+              >
+                <CircularProgress />
+              </Stack>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle1" color="grey.800" mr={3}>
+                    {t('pages.course-details.tabs.grading.title')}
+                  </Typography>
+                  <Button
+                    disabled={!canEditGradingDetails}
+                    onClick={() => {
+                      navigate(`/courses/${course.id}/grading-details`)
+                    }}
+                    startIcon={<Edit fontSize="small" />}
+                  >
+                    {t(
+                      'pages.course-details.tabs.grading.modify-grading-details'
+                    )}
+                  </Button>
+                </Box>
+
+                <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
+                  {t('pages.course-details.tabs.grading.description')}
+                </Typography>
+
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ mb: 2 }}
+                >
+                  <Typography variant="body1" color="grey.500">
+                    {t('pages.course-details.tabs.grading.attendees', {
+                      number: total,
+                    })}
+                  </Typography>
+
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      disabled={selectedParticipants.length === 0}
+                      onClick={() =>
+                        navigate(
+                          `/courses/${
+                            course.id
+                          }/grading?participants=${selectedParticipants.join(
+                            ','
+                          )}`
+                        )
+                      }
+                    >
+                      {t('pages.course-details.tabs.grading.grade-selected', {
+                        number: selectedParticipants.length,
+                      })}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ ml: 2 }}
+                      onClick={() => navigate(`/courses/${course.id}/grading`)}
+                    >
+                      {t(
+                        'pages.course-details.tabs.grading.grade-all-attendees'
+                      )}
+                    </Button>
+                  </Box>
+                </Grid>
+
+                <Table>
+                  <TableHead
+                    cols={cols}
+                    order={order}
+                    orderBy={sortColumn}
+                    onRequestSort={handleSortChange}
+                  />
+                  <TableBody>
+                    {participants?.map(courseParticipant => (
+                      <TableRow
+                        key={courseParticipant.id}
+                        data-testid={`attending-participant-row-${courseParticipant.id}`}
+                      >
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedParticipants.includes(
+                              courseParticipant.id
+                            )}
+                            onChange={event =>
+                              handleParticipantSelection(
+                                courseParticipant.id,
+                                event.target.checked
+                              )
+                            }
+                            disabled={Boolean(courseParticipant.grade)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.profile.fullName}
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.profile.email}
+                          {courseParticipant.profile.contactDetails.map(
+                            contact => contact.value
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {courseParticipant.profile.organizations.map(org => (
+                            <Typography key={org.organization.id}>
+                              {org.organization.name}
+                            </Typography>
+                          ))}
+                        </TableCell>
+                        <TableCell data-testid="grade-cell">
+                          {courseParticipant.grade ? (
+                            <Box display="flex" alignItems="center">
+                              <Grade grade={courseParticipant.grade} />
+                              <Link
+                                variant="body2"
+                                sx={{
+                                  fontWeight: 600,
+                                  color: theme.colors.navy[500],
+                                }}
+                                href={`/courses/${course.id}/grading/${courseParticipant.id}`}
+                              >
+                                {' '}
+                                {t('common.view')}
+                              </Link>
+                            </Box>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="small"
+                              onClick={() =>
+                                navigate(
+                                  `/courses/${course.id}/grading?participants=${courseParticipant.id}`
+                                )
+                              }
+                            >
+                              {t('pages.course-details.tabs.grading.grade')}
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )}
+          </>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box
+              maxWidth="sm"
+              sx={{
+                borderRadius: 1,
+                backgroundColor: theme.colors.navy[50],
+                padding: 3,
+              }}
+            >
+              <StyledText variant="body1" fontWeight="600">
+                {t(
+                  'pages.course-details.tabs.grading.grading-details-confirmation.line1'
+                ) + ' '}
+              </StyledText>
+              <StyledText variant="body1">
+                {t(
+                  'pages.course-details.tabs.grading.grading-details-confirmation.line2'
+                )}
+              </StyledText>
+              <StyledList>
+                <Box sx={{ my: 2 }}>
+                  <li>
+                    <StyledText variant="body1" fontWeight="600">
+                      {t(
+                        'pages.course-details.tabs.grading.grading-details-confirmation.line3'
+                      ) + ' '}
+                    </StyledText>
+                    <StyledText variant="body1">
+                      {t(
+                        'pages.course-details.tabs.grading.grading-details-confirmation.line4'
+                      ) + ' '}
+                    </StyledText>
+                    <StyledList type="a">
+                      <li>
+                        <StyledText variant="body1">
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line5'
+                          )}
+                        </StyledText>
+                      </li>
+                      <li>
+                        <StyledText variant="body1">
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line6'
+                          )}
+                        </StyledText>
+                      </li>
+                      <li>
+                        <StyledText variant="body1">
+                          {t(
+                            'pages.course-details.tabs.grading.grading-details-confirmation.line7'
+                          )}
+                        </StyledText>
+                      </li>
+                    </StyledList>
+                  </li>
+                </Box>
+                <li>
+                  <StyledText variant="body1" fontWeight="600">
+                    {t(
+                      'pages.course-details.tabs.grading.grading-details-confirmation.line8'
+                    ) + ' '}
+                  </StyledText>
+                  <StyledText variant="body1">
+                    {t(
+                      'pages.course-details.tabs.grading.grading-details-confirmation.line9'
+                    ) + ' '}
+                  </StyledText>
+                </li>
+              </StyledList>
+              <Box display="flex" justifyContent={'flex-end'}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="medium"
+                  onClick={() =>
+                    navigate(`/courses/${course.id}/grading-details`)
+                  }
+                  sx={{ py: 1 }}
+                >
+                  <Typography variant="body1" fontWeight={600}>
+                    {t(
+                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
+                    )}
+                  </Typography>
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+      </Container>
+    </>
+  )
+}

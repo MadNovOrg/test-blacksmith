@@ -84,6 +84,7 @@ export const CourseGrading = () => {
       {
         id: string
         name: string
+        mandatory: boolean
         modules: Array<{ id: string; name: string; covered: boolean }>
       }
     > = {}
@@ -104,6 +105,7 @@ export const CourseGrading = () => {
         groups[courseModule.module.moduleGroup.id] = {
           id: courseModule.module.moduleGroup.id,
           name: courseModule.module.moduleGroup.name,
+          mandatory: courseModule.module.moduleGroup.mandatory,
           modules: [],
         }
       }
@@ -161,6 +163,7 @@ export const CourseGrading = () => {
         participantIds: attendedParticipants,
         grade,
         feedback,
+        courseId: course.id,
       })
 
       localStorage.removeItem(STORAGE_KEY)
@@ -280,11 +283,15 @@ export const CourseGrading = () => {
               </Box>
 
               {course?.modules?.length ? (
-                <Box flex={1} mt={8}>
-                  <Typography variant="h6" fontWeight="500" mb={1}>
+                <Box flex={1} mt={'6px'}>
+                  <Typography variant="h5" fontWeight="500" mb={2}>
                     {t('pages.course-grading.modules-selection-title')}
                   </Typography>
-                  <Typography mb={2}>
+                  <Typography
+                    variant="body1"
+                    mb={4}
+                    color={theme.palette.dimGrey.main}
+                  >
                     {t('pages.course-grading.modules-selection-description')}
                   </Typography>
 

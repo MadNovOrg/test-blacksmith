@@ -78,6 +78,48 @@ describe('page: ModulesSelection', () => {
     expect(useCourseModulesMock).toHaveBeenCalledWith(COURSE_ID)
   })
 
+  it('displays mandatory course modules within groups as selected by default and not clickable', () => {
+    const COURSE_ID = 'course-id'
+
+    const courseModules = [
+      buildCourseModule(),
+      buildCourseModule(),
+      buildCourseModule(),
+    ]
+
+    courseModules[0].module.moduleGroup.mandatory = true
+
+    useCourseModulesMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: courseModules,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </MemoryRouter>
+    )
+
+    const mandatoryModuleGroup = screen.getByTestId(
+      `module-group-${courseModules[0].module.moduleGroup.id}`
+    )
+
+    expect(
+      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name)
+    ).toBeChecked()
+
+    expect(
+      within(mandatoryModuleGroup).getByLabelText(courseModules[0].module.name)
+    ).toBeDisabled()
+
+    expect(useCourseModulesMock).toHaveBeenCalledWith(COURSE_ID)
+  })
+
   it('saves to local storage when selection is changed', () => {
     const COURSE_ID = 'course-id'
 
@@ -203,7 +245,7 @@ describe('page: ModulesSelection', () => {
     await waitForText('Manage page')
   })
 
-  it('navigates back to the module attendance page when clicked on the button', async () => {
+  it('navigates back to the module grading clearance page when clicked on the button', async () => {
     const COURSE_ID = 'course-id'
 
     useCourseModulesMock.mockReturnValue({
@@ -220,14 +262,14 @@ describe('page: ModulesSelection', () => {
           />
           <Route
             path="/courses/:id/grading-details"
-            element={<h1>Attendance page</h1>}
+            element={<h1>Grading clearance page</h1>}
           />
         </Routes>
       </MemoryRouter>
     )
 
-    userEvent.click(screen.getByText('Back to attendees'))
+    userEvent.click(screen.getByText('Back to grading clearance'))
 
-    await waitForText('Attendance page')
+    await waitForText('Grading clearance page')
   })
 })

@@ -10,7 +10,7 @@ type ParamsType = {
 
 type ResponseType = {
   course: {
-    id: string
+    id: number
     name: string
     type: CourseType
     level: CourseLevel
@@ -27,7 +27,7 @@ type ResponseType = {
       module: {
         id: string
         name: string
-        moduleGroup: { id: string; name: string }
+        moduleGroup: { id: string; name: string; mandatory: boolean }
       }
     }>
   }
@@ -59,6 +59,7 @@ const QUERY = gql`
           moduleGroup {
             id
             name
+            mandatory
           }
         }
       }

@@ -65,7 +65,7 @@ export const CourseGradingDetails = () => {
                   <Typography variant="h2" mb={2}>
                     {t('pages.course-grading-details.title')}
                   </Typography>
-                  <Typography variant="h3" mb={5}>
+                  <Typography variant="h3" mb={5} fontWeight="600">
                     {course?.name}
                   </Typography>
                   <CourseGradingSteps

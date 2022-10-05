@@ -13,6 +13,7 @@ export const PillTabList = styled(TabList)(({ theme }) => ({
 export const PillTab = styled(Tab)(({ theme }) => ({
   minHeight: theme.spacing(4),
   height: theme.spacing(4),
+  color: theme.palette.secondary.main,
 
   '& + &': {
     marginLeft: theme.spacing(3),
@@ -24,5 +25,6 @@ export const PillTab = styled(Tab)(({ theme }) => ({
     ...theme.typography.body1,
     fontWeight: '500',
     border: 0,
+    color: theme.palette.secondary.main,
   },
 }))

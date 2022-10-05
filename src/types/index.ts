@@ -31,6 +31,7 @@ export type Course = {
   schedule: CourseSchedule[]
   trainers?: CourseTrainer[]
   gradingConfirmed: boolean
+  gradingStarted: boolean
   aolCostOfCourse?: number
   aolCountry?: string
   aolRegion?: string

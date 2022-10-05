@@ -19,7 +19,12 @@ export interface Props {
   moduleGroups: Array<{
     id: string
     name: string
-    modules: Array<{ id: string; name: string; covered: boolean }>
+    mandatory: boolean
+    modules: Array<{
+      id: string
+      name: string
+      covered: boolean
+    }>
   }>
   onChange?: (holds: HoldsRecord) => void
 }
@@ -90,6 +95,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
   return (
     <>
       {moduleGroups.map(group => {
+        const groupIsMandatory = group.mandatory
         const groupIsChecked = checkedGroups.includes(group.id)
         const isIndeterminate =
           !groupIsChecked &&
@@ -112,12 +118,13 @@ export const ModulesSelectionList: React.FC<Props> = ({
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={groupIsChecked}
+                      checked={groupIsChecked || groupIsMandatory}
                       indeterminate={isIndeterminate}
                       onChange={() => {
                         toggleModuleGroupChange(group.id)
                       }}
                       onClick={e => e.stopPropagation()}
+                      disabled={groupIsMandatory}
                     />
                   }
                   label={
@@ -142,7 +149,8 @@ export const ModulesSelectionList: React.FC<Props> = ({
                     control={
                       <Checkbox
                         onChange={() => toggleModuleHold(module.id)}
-                        checked={holds[module.id]}
+                        checked={holds[module.id] || groupIsMandatory}
+                        disabled={groupIsMandatory}
                       />
                     }
                     label={

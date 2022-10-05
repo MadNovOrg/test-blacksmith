@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  styled,
   Typography,
 } from '@mui/material'
 import { differenceInCalendarDays } from 'date-fns'
@@ -29,6 +30,11 @@ import {
   getTimeDifferenceAndContext,
   now,
 } from '@app/util'
+
+const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
+  minWidth: '32px',
+  color: theme.palette.secondary.main,
+}))
 
 interface Props {
   course: Course
@@ -127,6 +133,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
             <Typography
               variant="h3"
               marginBottom={3}
+              marginTop={1}
               fontWeight={600}
               data-testid="course-name"
             >
@@ -160,26 +167,36 @@ export const CourseHeroSummary: React.FC<Props> = ({
 
             <List dense disablePadding>
               <ListItem disableGutters disablePadding>
-                <ListItemIcon>
+                <StyledListIcon>
                   <TodayIcon />
-                </ListItemIcon>
+                </StyledListIcon>
                 <ListItemText>
                   {t('pages.course-participants.course-beggins')}{' '}
-                  <Typography component="span" fontWeight={500}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    fontWeight={600}
+                    color="secondary"
+                  >
                     {t('dates.withTime', { date: course.schedule[0].start })}
                   </Typography>
                 </ListItemText>
               </ListItem>
               <ListItem disableGutters disablePadding>
-                <ListItemText inset>
+                <ListItemText sx={{ paddingLeft: 4 }}>
                   {t('pages.course-participants.course-ends')}{' '}
-                  <Typography component="span" fontWeight={500}>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    fontWeight={600}
+                    color="secondary"
+                  >
                     {t('dates.withTime', { date: course.schedule[0].end })}
                   </Typography>
                 </ListItemText>
               </ListItem>
               <ListItem disableGutters disablePadding>
-                <ListItemText inset>
+                <ListItemText sx={{ paddingLeft: 4 }}>
                   <Typography variant="body2">
                     {courseDurationMessage}
                   </Typography>
@@ -191,9 +208,9 @@ export const CourseHeroSummary: React.FC<Props> = ({
             <List dense disablePadding>
               {courseTrainer?.profile ? (
                 <ListItem>
-                  <ListItemIcon>
+                  <StyledListIcon>
                     <PersonOutlineIcon />
-                  </ListItemIcon>
+                  </StyledListIcon>
                   <ListItemText>
                     {courseTrainer.profile.id === profile?.id
                       ? t('pages.course-participants.trainer')
@@ -205,9 +222,9 @@ export const CourseHeroSummary: React.FC<Props> = ({
               ) : null}
 
               <ListItem>
-                <ListItemIcon>
+                <StyledListIcon>
                   <PinDropIcon />
-                </ListItemIcon>
+                </StyledListIcon>
                 <ListItemText>
                   {[
                     course.schedule[0].venue?.name,
@@ -217,9 +234,9 @@ export const CourseHeroSummary: React.FC<Props> = ({
               </ListItem>
               {course.schedule[0].virtualLink ? (
                 <ListItem>
-                  <ListItemIcon>
+                  <StyledListIcon>
                     <VideocamIcon />
-                  </ListItemIcon>
+                  </StyledListIcon>
                   <ListItemText>
                     <Button
                       href={course.schedule[0].virtualLink}

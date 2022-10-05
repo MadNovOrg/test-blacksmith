@@ -123,6 +123,7 @@ export const CourseGradingMenu: React.FC<Props> = ({
             key={option.key}
             selected={index === selectedIndex}
             onClick={event => handleMenuItemClick(event, index, option.key)}
+            sx={{ minWidth: '200px' }}
           >
             {option.icon}
             {option.label}

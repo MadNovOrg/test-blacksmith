@@ -1,3 +1,4 @@
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Typography, CircularProgress, Stack } from '@mui/material'
 import { styled } from '@mui/system'
@@ -18,6 +19,11 @@ import { CourseAttendanceList } from '../CourseAttendanceList'
 
 const StyledList = styled('ol')(({ theme }) => ({
   paddingLeft: theme.spacing(3),
+  color: theme.palette.dimGrey.main,
+}))
+
+const StyledText = styled(Typography)(({ theme }) => ({
+  display: 'inline',
   color: theme.palette.dimGrey.main,
 }))
 
@@ -113,39 +119,39 @@ export const CourseAttendance = () => {
       ) : null}
       {participants.length ? (
         <>
-          <Box mb={2}>
+          <Box mb={4}>
             <Typography variant="h5" fontWeight="500" mb={2}>
               {t('pages.course-attendance.title')}
             </Typography>
-            <Typography variant="body2" display="inline">
+            <StyledText variant="body1">
               {t('pages.course-attendance.page-description-line1') + ' '}
-            </Typography>
-            <Typography variant="body2" fontWeight="600" display="inline">
+            </StyledText>
+            <StyledText variant="body1" fontWeight="600">
               {t('pages.course-attendance.page-description-line2') + ' '}
-            </Typography>
-            <Typography variant="body2" display="inline">
+            </StyledText>
+            <StyledText variant="body1">
               {t('pages.course-attendance.page-description-line3')}
-            </Typography>
+            </StyledText>
             <StyledList>
               <li>
-                <Typography variant="body2">
+                <StyledText variant="body1">
                   {t('pages.course-attendance.page-description-line4')}
-                </Typography>
+                </StyledText>
               </li>
               <li>
-                <Typography variant="body2">
+                <StyledText variant="body1">
                   {t('pages.course-attendance.page-description-line5')}
-                </Typography>
+                </StyledText>
               </li>
               <li>
-                <Typography variant="body2">
+                <StyledText variant="body1">
                   {t('pages.course-attendance.page-description-line6')}
-                </Typography>
+                </StyledText>
               </li>
             </StyledList>
-            <Typography variant="body2" fontWeight="600" display="inline">
+            <StyledText variant="body1" fontWeight="600">
               {t('pages.course-attendance.page-description-line7')}
-            </Typography>
+            </StyledText>
           </Box>
 
           <CourseAttendanceList
@@ -157,8 +163,12 @@ export const CourseAttendance = () => {
               loading={attendanceSavingStatus === LoadingStatus.FETCHING}
               variant="contained"
               onClick={saveAttendance}
+              sx={{ py: 1 }}
+              endIcon={<ArrowForwardIcon />}
             >
-              {t('pages.course-attendance.next-page-button-text')}
+              <Typography variant="body1" fontWeight={600}>
+                {t('pages.course-attendance.next-page-button-text')}
+              </Typography>
             </LoadingButton>
           </Box>
         </>

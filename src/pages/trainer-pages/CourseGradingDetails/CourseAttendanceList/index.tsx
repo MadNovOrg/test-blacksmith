@@ -8,7 +8,7 @@ import {
   Checkbox,
   ListItemButton,
 } from '@mui/material'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -28,15 +28,17 @@ export const CourseAttendanceList: React.FC<Props> = ({
   onChange = noop,
 }) => {
   const { t } = useTranslation()
-  const [attendance, setAttendance] = useState<Record<string, boolean>>(() => {
-    const attending: Record<string, boolean> = {}
 
+  const [attendance, setAttendance] = useState<Record<string, boolean>>({})
+
+  useEffect(() => {
+    const attending: Record<string, boolean> = {}
     participants.forEach(participant => {
       attending[participant.id] = participant.attending
     })
 
-    return attending
-  })
+    setAttendance(attending)
+  }, [participants])
 
   const attendingCount = useMemo(() => {
     const count = Object.values(attendance).reduce((count, attending) => {
@@ -125,7 +127,7 @@ export const CourseAttendanceList: React.FC<Props> = ({
         >
           <Box display="flex" alignItems="center">
             <Checkbox
-              checked={attendance[participant.id]}
+              checked={attendance[participant.id] || false}
               data-testid={`${participant.id}-attendance-checkbox`}
             />
             <Avatar sx={{ marginRight: 2, width: 32, height: 32 }} />

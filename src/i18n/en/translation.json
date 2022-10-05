@@ -223,6 +223,7 @@
     "grade": {
       "PASS": "Pass",
       "FAIL": "Fail",
+      "ASSIST_ONLY": "Assist only",
       "OBSERVE_ONLY": "Observe only"
     },
     "role-names": {
@@ -1135,7 +1136,7 @@
       "page-description-line5": "Identification was checked",
       "page-description-line6": "Passed the course quiz",
       "page-description-line7": "Please note it is an automatic fail if the individual does not meet ALL the criteria.",
-      "next-page-button-text": "Next: Confirm modules and techniques",
+      "next-page-button-text": "Confirm modules and physical techniques",
       "master-checkbox-label-checked": "Deselect all",
       "master-checkbox-label-unchecked": "Select all",
       "participant-attended-chip-label": "Clear for grading",
@@ -1145,10 +1146,10 @@
     },
     "modules-selection": {
       "title": "Modules and Techniques",
-      "page-description-line1": "Please confirm modules and techniques covered or not covered in the course.",
-      "page-description-line2": "This informs the modules and techniques the attendee will be graded on at an individual level.",
+      "page-description-line1": "Please confirm modules and physical techniques covered or not covered in the course.",
+      "page-description-line2": "This informs the modules and physical techniques the attendee will be graded on at an individual level.",
       "save-button-text": "Continue to grading attendees",
-      "back-button-text": "Back to attendees"
+      "back-button-text": "Back to grading clearance"
     },
     "my-training": {
       "common": {

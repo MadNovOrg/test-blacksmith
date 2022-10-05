@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab'
-import { Box, CircularProgress, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, Stack, styled, Typography } from '@mui/material'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -15,6 +15,11 @@ import {
 import { LoadingStatus } from '@app/util'
 
 import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
+
+const StyledText = styled(Typography)(({ theme }) => ({
+  display: 'inline',
+  color: theme.palette.dimGrey.main,
+}))
 
 export const ModulesSelection = () => {
   const { t } = useTranslation()
@@ -40,7 +45,12 @@ export const ModulesSelection = () => {
       {
         id: string
         name: string
-        modules: Array<{ id: string; name: string; covered: boolean }>
+        mandatory: boolean
+        modules: Array<{
+          id: string
+          name: string
+          covered: boolean
+        }>
       }
     > = {}
 
@@ -56,6 +66,7 @@ export const ModulesSelection = () => {
         groups[courseModule.module.moduleGroup.id] = {
           id: courseModule.module.moduleGroup.id,
           name: courseModule.module.moduleGroup.name,
+          mandatory: courseModule.module.moduleGroup.mandatory,
           modules: [],
         }
       }
@@ -144,16 +155,16 @@ export const ModulesSelection = () => {
       ) : null}
       {moduleGroups.length ? (
         <>
-          <Box mb={2}>
-            <Typography variant="h5" fontWeight="500" mb={1}>
+          <Box mb={4}>
+            <Typography variant="h5" fontWeight="500" mb={2}>
               {t('pages.modules-selection.title')}
             </Typography>
-            <Typography>
+            <StyledText variant="body1">
               {t('pages.modules-selection.page-description-line1')}
-            </Typography>
-            <Typography fontWeight="500">
+            </StyledText>
+            <StyledText variant="body1" fontWeight="600">
               {t('pages.modules-selection.page-description-line2')}
-            </Typography>
+            </StyledText>
           </Box>
 
           <ModulesSelectionList
@@ -167,15 +178,21 @@ export const ModulesSelection = () => {
               onClick={() => {
                 navigate(`/courses/${courseId}/grading-details`)
               }}
+              sx={{ py: 1 }}
             >
-              {t('pages.modules-selection.back-button-text')}
+              <Typography variant="body1" fontWeight={600}>
+                {t('pages.modules-selection.back-button-text')}
+              </Typography>
             </LoadingButton>
             <LoadingButton
               loading={savingSelectionStatus === LoadingStatus.FETCHING}
               variant="contained"
               onClick={saveModulesSelection}
+              sx={{ py: 1 }}
             >
-              {t('pages.modules-selection.save-button-text')}
+              <Typography variant="body1" fontWeight={600}>
+                {t('pages.modules-selection.save-button-text')}
+              </Typography>
             </LoadingButton>
           </Box>
         </>

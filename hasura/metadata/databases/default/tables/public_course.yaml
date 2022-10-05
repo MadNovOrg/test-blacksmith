@@ -22,6 +22,8 @@ configuration:
       custom_name: status
     sales_representative_id:
       custom_name: salesRepresentativeId
+    grading_started:
+      custom_name: gradingStarted
     grading_confirmed:
       custom_name: gradingConfirmed
     course_level:
@@ -48,6 +50,7 @@ configuration:
     aol_country: aolCountry
     course_status: status
     sales_representative_id: salesRepresentativeId
+    grading_started: gradingStarted
     grading_confirmed: gradingConfirmed
     course_level: level
     updated_at: updatedAt
@@ -223,6 +226,7 @@ select_permissions:
         - free_spaces
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -270,6 +274,7 @@ select_permissions:
         - free_spaces
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -297,6 +302,7 @@ select_permissions:
         - description
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -327,6 +333,7 @@ select_permissions:
         - free_spaces
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -361,6 +368,7 @@ update_permissions:
         - free_spaces
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -400,6 +408,7 @@ update_permissions:
         - free_spaces
         - go1_integration
         - grading_confirmed
+        - grading_started
         - id
         - max_participants
         - min_participants
@@ -415,6 +424,7 @@ update_permissions:
       columns:
         - course_status
         - grading_confirmed
+        - grading_started
       filter:
         trainers:
           profile_id:

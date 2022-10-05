@@ -21,6 +21,7 @@ Default.args = {
     {
       id: 'CORE - Theory Module',
       name: 'CORE - Theory Module',
+      mandatory: true,
       modules: [
         { id: 'Values excercise', name: 'Values excercise', covered: true },
         { id: 'Legal framework', name: 'Legal framework', covered: true },
@@ -29,6 +30,7 @@ Default.args = {
     {
       id: 'CORE - Personal Space & Body Language Module',
       name: 'CORE - Personal Space & Body Language Module',
+      mandatory: false,
       modules: [
         {
           id: 'Circles of danger  ',

@@ -11,14 +11,14 @@ export const MUTATION = gql`
   mutation SaveCourseAttendance($attended: [uuid!]!, $notAttended: [uuid!]!) {
     saveAttended: update_course_participant(
       where: { id: { _in: $attended } }
-      _set: { attended: true }
+      _set: { attended: true, grade: null, dateGraded: null }
     ) {
       affectedRows: affected_rows
     }
 
     saveNotAttended: update_course_participant(
       where: { id: { _in: $notAttended } }
-      _set: { attended: false }
+      _set: { attended: false, grade: FAIL, dateGraded: "${new Date().toISOString()}" }
     ) {
       affectedRows: affected_rows
     }

@@ -411,6 +411,7 @@ describe('page: CourseGrading', () => {
       participantIds: [courseParticipants[1].id],
       grade: Grade.OBSERVE_ONLY,
       feedback: 'Feedback',
+      courseId: course.id,
     })
 
     await waitForText('Course details')

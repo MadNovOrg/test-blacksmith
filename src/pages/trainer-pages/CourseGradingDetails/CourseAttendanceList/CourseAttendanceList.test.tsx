@@ -6,7 +6,7 @@ import { render, screen, chance, within } from '@test/index'
 import { CourseAttendanceList } from './index'
 
 describe('component: CourseAttendanceList', () => {
-  it('selects single participant as attended', () => {
+  it('selects single participant as attended and mark them as clear for grading', () => {
     const participants = [
       { id: chance.guid(), attending: false, name: chance.name() },
     ]
@@ -34,7 +34,7 @@ describe('component: CourseAttendanceList', () => {
     ).toBeInTheDocument()
   })
 
-  it('selects single participant as did not attend', () => {
+  it('selects single participant as did not attend and mark them as automatic fail', () => {
     const participants = [
       { id: chance.guid(), attending: true, name: chance.name() },
     ]

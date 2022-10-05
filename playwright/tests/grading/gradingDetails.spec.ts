@@ -66,7 +66,7 @@ test('marks participants as attended and enables grading', async ({
     .expect(page.locator(`text=${participants.length - 1} selected`))
     .toBeVisible()
 
-  await page.locator('text=Next: Confirm modules and techniques').click()
+  await page.locator('text=Confirm modules and physical techniques').click()
   await page.locator(`text="${modules[0].module.moduleGroup.name}"`).click()
   await page.locator('text=Continue to grading attendees').click()
 

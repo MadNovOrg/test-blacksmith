@@ -98,6 +98,7 @@ export const COURSE = gql`
     min_participants
     max_participants
     gradingConfirmed
+    gradingStarted
     go1Integration
     aolCostOfCourse
     aolCountry
