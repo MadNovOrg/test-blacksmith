@@ -81,6 +81,7 @@ const getMockData = (
       vat: vatAmount,
       total,
       trainerExpenses,
+      paymentProcessingFee: 0,
     },
     placeOrder: jest.fn(),
     orderId: null,

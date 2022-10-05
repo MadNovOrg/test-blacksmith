@@ -16,6 +16,7 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
+import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
   MUTATION as CREATE_ORDER,
@@ -86,6 +87,7 @@ export type ContextType = {
     vat: number
     total: number
     trainerExpenses: number
+    paymentProcessingFee: number
   }
   positions: typeof positions
   sectors: typeof sectors
@@ -212,7 +214,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
             ? booking.price * promoCode.amount
-            : promoCode.amount,
+            : (booking.price * promoCode.amount) / 100,
       }
     }
 
@@ -235,7 +237,10 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   }, [])
 
   const amounts: ContextType['amounts'] = useMemo(() => {
-    const subtotal = !ready ? 0 : booking.price * booking.quantity
+    const courseCost = !ready ? 0 : booking.price * booking.quantity
+    const trainerExpenses = !ready ? 0 : booking.trainerExpenses
+    const subtotal = courseCost + trainerExpenses
+
     const freeSpacesDiscount = !ready ? 0 : booking.price * booking.freeSpaces
     const discount = !ready
       ? 0
@@ -243,13 +248,17 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
           (acc, c) => acc + booking.discounts[c]?.amountCurrency ?? 0,
           0
         )
+
     const subtotalDiscounted = max(subtotal - discount - freeSpacesDiscount, 0)
-    const trainerExpenses = !ready ? 0 : booking.trainerExpenses
-    const vat = max(
-      (subtotalDiscounted + trainerExpenses) * (booking.vat / 100),
-      0
-    )
-    const total = max(subtotalDiscounted + vat + trainerExpenses, 0)
+    const paymentProcessingFee =
+      booking.paymentMethod === Payment_Methods_Enum.Cc
+        ? stripeProcessingFeeRate.percent * subtotalDiscounted +
+          stripeProcessingFeeRate.flat
+        : 0
+
+    const vat =
+      (subtotalDiscounted + paymentProcessingFee) * (booking.vat / 100)
+    const total = subtotalDiscounted + vat + paymentProcessingFee
 
     return {
       subtotal,
@@ -259,6 +268,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       vat,
       total,
       trainerExpenses,
+      paymentProcessingFee,
     }
   }, [booking, ready])
 

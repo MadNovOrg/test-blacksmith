@@ -7,6 +7,11 @@ export * from '@stripe/react-stripe-js'
 
 export const stripe = loadStripe(import.meta.env.VITE_STRIPE_KEY)
 
+export const stripeProcessingFeeRate = {
+  flat: 0.2,
+  percent: 0.014,
+}
+
 export type StripeCreatePaymentInput = {
   input: {
     orderId: string
