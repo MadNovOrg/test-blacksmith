@@ -66,7 +66,7 @@ export type CourseTableRow = {
   Status: string
   Venue: string
   'Trainer(s)': string
-  'Regist.'?: string
+  Registrations?: string
 }
 
 export type ModuleGroup = {

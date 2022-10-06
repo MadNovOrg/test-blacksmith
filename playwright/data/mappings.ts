@@ -32,7 +32,7 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
       course.trainers
         ?.map(trainer => getInitialsFromName(trainer.profile.fullName))
         .join('') ?? '',
-    'Regist.': `${course.participants_aggregate?.aggregate?.count}/${course.max_participants}`,
+    Registrations: `${course.participants_aggregate?.aggregate?.count}/${course.max_participants}`,
   }
 }
 
