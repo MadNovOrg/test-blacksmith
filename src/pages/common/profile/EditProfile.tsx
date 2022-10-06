@@ -190,7 +190,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
         : yup.string().nullable()
     return yup
       .object({
-        avatar: yup.string(),
+        avatar: yup.string().nullable(),
         firstName: yup
           .string()
           .required(
