@@ -64,7 +64,7 @@ Object {
                 for="surname"
                 id="surname-label"
               >
-                Surname
+                Last Name
                 <span
                   aria-hidden="true"
                   class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -103,7 +103,7 @@ Object {
               for="email"
               id="email-label"
             >
-              Email
+              Work email
               <span
                 aria-hidden="true"
                 class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -392,7 +392,7 @@ Object {
               for="surname"
               id="surname-label"
             >
-              Surname
+              Last Name
               <span
                 aria-hidden="true"
                 class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -431,7 +431,7 @@ Object {
             for="email"
             id="email-label"
           >
-            Email
+            Work email
             <span
               aria-hidden="true"
               class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"

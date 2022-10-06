@@ -147,6 +147,8 @@
     "apply": "Apply",
     "save-changes": "Save Changes",
     "goto-tt": "Go to TeamTeach.co.uk",
+    "need-help": "Need help",
+    "contact-us": "Contact us",
     "clear": "Clear",
     "poor": "Poor",
     "fair": "Fair",
@@ -622,7 +624,7 @@
     "waitlist": {
       "course-full": "Course fully booked",
       "form-errors": {
-        "constraint-violation": "You've already added to the waiting list."
+        "constraint-violation": "You've already been added to the waiting list."
       }
     },
     "enquiry": {

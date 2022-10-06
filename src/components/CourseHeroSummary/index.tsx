@@ -14,7 +14,6 @@ import {
   styled,
   Typography,
 } from '@mui/material'
-import { differenceInCalendarDays } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -24,11 +23,10 @@ import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
 import { Course } from '@app/types'
 import {
-  courseEnded,
-  courseStarted,
+  getCourseBeginsForMessage,
+  getCourseDurationMessage,
   getCourseTrainer,
   getTimeDifferenceAndContext,
-  now,
 } from '@app/util'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
@@ -55,68 +53,15 @@ export const CourseHeroSummary: React.FC<Props> = ({
   )
   const courseStartDate = new Date(course.schedule[0].start)
   const courseEndDate = new Date(course.schedule[0].end)
-  const courseBeginsFor = courseStarted(course)
-    ? 0
-    : differenceInCalendarDays(new Date(), new Date(courseStartDate))
 
-  let courseBeginsForMessage
-
-  if (courseEnded(course)) {
-    courseBeginsForMessage = t('pages.course-participants.course-ended')
-  } else if (courseStarted(course)) {
-    courseBeginsForMessage = t('pages.course-participants.course-began')
-  } else if (courseBeginsFor === 0) {
-    courseBeginsForMessage = t('pages.course-participants.course-begins-today')
-  } else if (courseBeginsFor === -1) {
-    courseBeginsForMessage = t(
-      'pages.course-participants.until-course-begins_days_one'
-    )
-  } else {
-    courseBeginsForMessage = t(
-      'pages.course-participants.until-course-begins_days_other',
-      {
-        count: differenceInCalendarDays(
-          new Date(course.schedule[0].start),
-          now()
-        ),
-      }
-    )
-  }
+  const courseBeginsForMessage = getCourseBeginsForMessage(course, t)
 
   const courseDuration = getTimeDifferenceAndContext(
     courseEndDate,
     courseStartDate
   )
-  const { context: durationContext, count: durationCount } = courseDuration
 
-  let courseDurationMessage
-  if (durationContext == 'days' && durationCount === 1) {
-    courseDurationMessage = t(
-      'pages.course-participants.course-duration_days_one'
-    )
-  } else if (durationContext == 'days') {
-    courseDurationMessage = t(
-      'pages.course-participants.course-duration_days_other',
-      { count: durationCount }
-    )
-  } else if (durationContext == 'hours' && durationCount === 1) {
-    courseDurationMessage = t(
-      'pages.course-participants.course-duration_hours_one',
-      { count: durationCount }
-    )
-  } else if (durationContext == 'hours') {
-    courseDurationMessage = t(
-      'pages.course-participants.course-duration_hours_other',
-      { count: durationCount }
-    )
-  } else if (durationContext == 'minutes') {
-    courseDurationMessage = t(
-      'pages.course-participants.course-duration_minutes_other',
-      { count: durationCount }
-    )
-  } else {
-    courseDurationMessage = t('pages.course-participants.course-duration_none')
-  }
+  const courseDurationMessage = getCourseDurationMessage(courseDuration, t)
 
   return (
     <Box

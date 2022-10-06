@@ -17,18 +17,18 @@ Object {
           />
         </div>
         <div
-          class="MuiBox-root css-1wlfb0w"
+          class="MuiBox-root css-xv2g5n"
         >
           <div
             class="MuiBox-root css-dvxtzn"
           >
-            <h6
-              class="MuiTypography-root MuiTypography-subtitle1 MuiTypography-gutterBottom css-1qu2ikj-MuiTypography-root"
+            <h3
+              class="MuiTypography-root MuiTypography-h3 MuiTypography-gutterBottom css-1qeeog1-MuiTypography-root"
             >
               Join the course waiting list
-            </h6>
+            </h3>
             <p
-              class="MuiTypography-root MuiTypography-body1 css-12xmzka-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 css-1m9prz8-MuiTypography-root"
             >
               The course you are interested in is currently full. We will notify you via email if a space becomes available.
             </p>
@@ -92,7 +92,7 @@ Object {
                     for="surname"
                     id="surname-label"
                   >
-                    Surname
+                    Last Name
                     <span
                       aria-hidden="true"
                       class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -131,7 +131,7 @@ Object {
                   for="email"
                   id="email-label"
                 >
-                  Email
+                  Work email
                   <span
                     aria-hidden="true"
                     class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -359,6 +359,20 @@ Object {
             </div>
           </form>
         </div>
+        <div
+          class="MuiBox-root css-h5fkc8"
+        >
+          <a
+            class="css-uutsv4"
+            href="mailto:undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            Need help
+            ? 
+            Contact us
+          </a>
+        </div>
       </div>
     </div>
   </body>,
@@ -375,18 +389,18 @@ Object {
         />
       </div>
       <div
-        class="MuiBox-root css-1wlfb0w"
+        class="MuiBox-root css-xv2g5n"
       >
         <div
           class="MuiBox-root css-dvxtzn"
         >
-          <h6
-            class="MuiTypography-root MuiTypography-subtitle1 MuiTypography-gutterBottom css-1qu2ikj-MuiTypography-root"
+          <h3
+            class="MuiTypography-root MuiTypography-h3 MuiTypography-gutterBottom css-1qeeog1-MuiTypography-root"
           >
             Join the course waiting list
-          </h6>
+          </h3>
           <p
-            class="MuiTypography-root MuiTypography-body1 css-12xmzka-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 css-1m9prz8-MuiTypography-root"
           >
             The course you are interested in is currently full. We will notify you via email if a space becomes available.
           </p>
@@ -450,7 +464,7 @@ Object {
                   for="surname"
                   id="surname-label"
                 >
-                  Surname
+                  Last Name
                   <span
                     aria-hidden="true"
                     class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -489,7 +503,7 @@ Object {
                 for="email"
                 id="email-label"
               >
-                Email
+                Work email
                 <span
                   aria-hidden="true"
                   class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-aihfuz-MuiFormLabel-asterisk"
@@ -716,6 +730,20 @@ Object {
             </button>
           </div>
         </form>
+      </div>
+      <div
+        class="MuiBox-root css-h5fkc8"
+      >
+        <a
+          class="css-uutsv4"
+          href="mailto:undefined"
+          rel="noopener"
+          target="_blank"
+        >
+          Need help
+          ? 
+          Contact us
+        </a>
       </div>
     </div>
   </div>,

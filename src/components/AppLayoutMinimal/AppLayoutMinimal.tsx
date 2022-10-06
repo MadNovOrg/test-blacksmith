@@ -1,15 +1,19 @@
-import { Box } from '@mui/material'
+import { Box, SxProps } from '@mui/material'
 import React from 'react'
 
 import { Logo } from '@app/components/Logo'
 
 type Props = {
   width?: number
+  contentBoxStyles?: SxProps
+  footer?: React.ReactElement
 }
 
 export const AppLayoutMinimal: React.FC<Props> = ({
   width = 500,
+  contentBoxStyles,
   children,
+  footer,
 }) => {
   return (
     <Box
@@ -31,9 +35,11 @@ export const AppLayoutMinimal: React.FC<Props> = ({
         borderRadius={2}
         width={width}
         position="relative"
+        sx={contentBoxStyles}
       >
         {children}
       </Box>
+      {footer}
     </Box>
   )
 }

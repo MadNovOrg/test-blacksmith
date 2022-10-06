@@ -1,5 +1,6 @@
 import { Auth } from 'aws-amplify'
 import {
+  differenceInCalendarDays,
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
@@ -408,6 +409,73 @@ export const getTimeDifferenceAndContext = (
   }
 
   return result
+}
+
+export const getCourseDurationMessage = (
+  courseDuration: TimeDifferenceAndContext,
+  t: TFunction
+) => {
+  const { context, count } = courseDuration
+
+  let courseDurationMessage
+  if (context == 'days' && count === 1) {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_days_one'
+    )
+  } else if (context == 'days') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_days_other',
+      { count }
+    )
+  } else if (context == 'hours' && count === 1) {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_hours_one',
+      { count }
+    )
+  } else if (context == 'hours') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_hours_other',
+      { count }
+    )
+  } else if (context == 'minutes') {
+    courseDurationMessage = t(
+      'pages.course-participants.course-duration_minutes_other',
+      { count }
+    )
+  } else {
+    courseDurationMessage = t('pages.course-participants.course-duration_none')
+  }
+  return courseDurationMessage
+}
+
+export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
+  const courseStartDate = new Date(course.schedule[0].start)
+  const courseBeginsFor = courseStarted(course)
+    ? 0
+    : differenceInCalendarDays(new Date(), new Date(courseStartDate))
+  let courseBeginsForMessage
+  if (courseEnded(course)) {
+    courseBeginsForMessage = t('pages.course-participants.course-ended')
+  } else if (courseStarted(course)) {
+    courseBeginsForMessage = t('pages.course-participants.course-began')
+  } else if (courseBeginsFor === 0) {
+    courseBeginsForMessage = t('pages.course-participants.course-begins-today')
+  } else if (courseBeginsFor === -1) {
+    courseBeginsForMessage = t(
+      'pages.course-participants.until-course-begins_days_one'
+    )
+  } else {
+    courseBeginsForMessage = t(
+      'pages.course-participants.until-course-begins_days_other',
+      {
+        count: differenceInCalendarDays(
+          new Date(course.schedule[0].start),
+          now()
+        ),
+      }
+    )
+  }
+  return courseBeginsForMessage
 }
 
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6

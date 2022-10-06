@@ -120,7 +120,7 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
           <Grid item md={6}>
             <TextField
               id="surname"
-              label={t('surname')}
+              label={t('last-name')}
               variant="standard"
               placeholder={t('surname-placeholder')}
               error={!!errors.surname}
@@ -137,7 +137,7 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
         <Box mb={3}>
           <TextField
             id="email"
-            label={t('email')}
+            label={t('work-email')}
             variant="standard"
             placeholder={t('email-placeholder')}
             error={!!errors.email}
