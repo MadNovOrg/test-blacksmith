@@ -30,7 +30,7 @@ import {
   InvoiceForm,
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
-import { Payment_Methods_Enum } from '@app/generated/graphql'
+import { PaymentMethod } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
 import { CourseType, InvoiceDetails } from '@app/types'
 import { getFieldError, requiredMsg } from '@app/util'
@@ -45,7 +45,7 @@ type FormInputs = {
   sector: Sector
   position: string
   otherPosition: string
-  paymentMethod: Payment_Methods_Enum
+  paymentMethod: PaymentMethod
 
   invoiceDetails?: InvoiceDetails
 }
@@ -106,11 +106,11 @@ export const CourseBookingDetails: React.FC = () => {
 
       paymentMethod: yup
         .string()
-        .oneOf(Object.values(Payment_Methods_Enum))
+        .oneOf(Object.values(PaymentMethod))
         .required(),
 
       invoiceDetails: yup.object().when('paymentMethod', {
-        is: Payment_Methods_Enum.Invoice,
+        is: PaymentMethod.Invoice,
         then: invoiceDetailsFormSchema(t),
       }),
     })
@@ -125,7 +125,7 @@ export const CourseBookingDetails: React.FC = () => {
       sector: booking.sector,
       position: booking.position,
       otherPosition: booking.otherPosition,
-      paymentMethod: Payment_Methods_Enum.Invoice,
+      paymentMethod: PaymentMethod.Invoice,
       invoiceDetails: booking.invoiceDetails,
     },
   })
@@ -456,7 +456,7 @@ export const CourseBookingDetails: React.FC = () => {
                 return (
                   <RadioGroup aria-labelledby="payment-method" {...field}>
                     <FormControlLabel
-                      value={Payment_Methods_Enum.Cc}
+                      value={PaymentMethod.Cc}
                       control={<Radio />}
                       label={
                         <Box>
@@ -470,7 +470,7 @@ export const CourseBookingDetails: React.FC = () => {
                       }
                     />
                     <FormControlLabel
-                      value={Payment_Methods_Enum.Invoice}
+                      value={PaymentMethod.Invoice}
                       control={<Radio />}
                       label={
                         <Box>
@@ -489,7 +489,7 @@ export const CourseBookingDetails: React.FC = () => {
             />
           </FormControl>
 
-          {values.paymentMethod === Payment_Methods_Enum.Invoice ? (
+          {values.paymentMethod === PaymentMethod.Invoice ? (
             <Box bgcolor="grey.100" p={2}>
               <Typography variant="body1" fontWeight="600" mb={3}>
                 {t('invoice-contact')}

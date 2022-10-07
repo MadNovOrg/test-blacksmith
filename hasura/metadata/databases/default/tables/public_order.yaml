@@ -4,6 +4,8 @@ table:
 configuration:
   custom_root_fields: {}
   column_config:
+    client_purchase_order:
+      custom_name: clientPurchaseOrder
     course_id:
       custom_name: courseId
     billing_family_name:
@@ -31,6 +33,7 @@ configuration:
     profile_id:
       custom_name: profileId
   custom_column_names:
+    client_purchase_order: clientPurchaseOrder
     course_id: courseId
     billing_family_name: billingFamilyName
     payment_method: paymentMethod

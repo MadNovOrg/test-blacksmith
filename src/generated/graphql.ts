@@ -1399,6 +1399,7 @@ export type CreateOrderInput = {
   billingFamilyName: Scalars['String'];
   billingGivenName: Scalars['String'];
   billingPhone: Scalars['String'];
+  clientPurchaseOrder: Scalars['String'];
   courseId: Scalars['Int'];
   organizationId: Scalars['String'];
   paymentMethod: PaymentMethod;
@@ -24690,6 +24691,7 @@ export type Order = {
   billingFamilyName: Scalars['String'];
   billingGivenName: Scalars['String'];
   billingPhone: Scalars['String'];
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
   /** An object relationship */
   course: Course;
   courseId: Scalars['Int'];
@@ -24811,6 +24813,7 @@ export type Order_Bool_Exp = {
   billingFamilyName?: InputMaybe<String_Comparison_Exp>;
   billingGivenName?: InputMaybe<String_Comparison_Exp>;
   billingPhone?: InputMaybe<String_Comparison_Exp>;
+  clientPurchaseOrder?: InputMaybe<String_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -24884,6 +24887,7 @@ export type Order_Insert_Input = {
   billingFamilyName?: InputMaybe<Scalars['String']>;
   billingGivenName?: InputMaybe<Scalars['String']>;
   billingPhone?: InputMaybe<Scalars['String']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -24911,6 +24915,7 @@ export type Order_Max_Fields = {
   billingFamilyName?: Maybe<Scalars['String']>;
   billingGivenName?: Maybe<Scalars['String']>;
   billingPhone?: Maybe<Scalars['String']>;
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
@@ -24932,6 +24937,7 @@ export type Order_Max_Order_By = {
   billingFamilyName?: InputMaybe<Order_By>;
   billingGivenName?: InputMaybe<Order_By>;
   billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   currency?: InputMaybe<Order_By>;
@@ -24954,6 +24960,7 @@ export type Order_Min_Fields = {
   billingFamilyName?: Maybe<Scalars['String']>;
   billingGivenName?: Maybe<Scalars['String']>;
   billingPhone?: Maybe<Scalars['String']>;
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
   courseId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   currency?: Maybe<Scalars['String']>;
@@ -24975,6 +24982,7 @@ export type Order_Min_Order_By = {
   billingFamilyName?: InputMaybe<Order_By>;
   billingGivenName?: InputMaybe<Order_By>;
   billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   currency?: InputMaybe<Order_By>;
@@ -25012,6 +25020,7 @@ export type Order_Order_By = {
   billingFamilyName?: InputMaybe<Order_By>;
   billingGivenName?: InputMaybe<Order_By>;
   billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
@@ -25054,6 +25063,8 @@ export enum Order_Select_Column {
   /** column name */
   BillingPhone = 'billingPhone',
   /** column name */
+  ClientPurchaseOrder = 'clientPurchaseOrder',
+  /** column name */
   CourseId = 'courseId',
   /** column name */
   CreatedAt = 'createdAt',
@@ -25092,6 +25103,7 @@ export type Order_Set_Input = {
   billingFamilyName?: InputMaybe<Scalars['String']>;
   billingGivenName?: InputMaybe<Scalars['String']>;
   billingPhone?: InputMaybe<Scalars['String']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
@@ -25205,6 +25217,8 @@ export enum Order_Update_Column {
   BillingGivenName = 'billingGivenName',
   /** column name */
   BillingPhone = 'billingPhone',
+  /** column name */
+  ClientPurchaseOrder = 'clientPurchaseOrder',
   /** column name */
   CourseId = 'courseId',
   /** column name */

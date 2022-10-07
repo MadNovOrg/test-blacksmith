@@ -341,6 +341,7 @@ input CreateOrderInput {
   billingFamilyName: String!
   billingEmail: String!
   billingPhone: String!
+  clientPurchaseOrder: String!
   registrants: [String!]!
   organizationId: String!
   promoCodes: [String!]!

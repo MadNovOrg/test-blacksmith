@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
-import { Payment_Methods_Enum } from '@app/generated/graphql'
+import { PaymentMethod } from '@app/generated/graphql'
 
 import { useBooking } from '../BookingContext'
 
@@ -43,7 +43,11 @@ export const CourseBookingReview: React.FC = () => {
       const order = await placeOrder()
       setCreatingOrder(false)
 
-      if (booking.paymentMethod === Payment_Methods_Enum.Cc) {
+      if (!order) {
+        throw new Error('Error issuing order')
+      }
+
+      if (booking.paymentMethod === PaymentMethod.Cc) {
         navigate(`../payment/${order.id}`, { replace: true })
       } else {
         navigate(`../done?order_id=${order.id}`, { replace: true })
@@ -120,14 +124,14 @@ export const CourseBookingReview: React.FC = () => {
           {t('pages.book-course.payment-method')}
         </Typography>
         <Typography color="grey.700">
-          {booking.paymentMethod === Payment_Methods_Enum.Cc
+          {booking.paymentMethod === PaymentMethod.Cc
             ? t('pages.book-course.pay-by-cc')
             : null}
-          {booking.paymentMethod === Payment_Methods_Enum.Invoice
+          {booking.paymentMethod === PaymentMethod.Invoice
             ? t('pages.book-course.pay-by-inv')
             : null}
         </Typography>
-        {booking.paymentMethod === Payment_Methods_Enum.Invoice && (
+        {booking.paymentMethod === PaymentMethod.Invoice && (
           <>
             <Divider sx={{ my: 2 }} />
             <Typography gutterBottom fontWeight="600">

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
 import {
-  Payment_Methods_Enum,
+  PaymentMethod,
   Promo_Code,
   Promo_Code_Type_Enum,
 } from '@app/generated/graphql'
@@ -31,7 +31,6 @@ import {
   CourseExpenseType,
   CourseType,
   Currency,
-  Order,
   TransportMethod,
   InvoiceDetails,
 } from '@app/types'
@@ -64,7 +63,7 @@ type State = {
   sector: Sector
   position: string
   otherPosition: string
-  paymentMethod: Payment_Methods_Enum
+  paymentMethod: PaymentMethod
   freeSpaces: number
   trainerExpenses: number
   courseType: CourseType
@@ -94,7 +93,7 @@ export type ContextType = {
   setBooking: (_: Partial<State>) => void
   addPromo: (_: string) => void
   removePromo: (_: string) => void
-  placeOrder: () => Promise<Pick<Order, 'id'>>
+  placeOrder: () => Promise<CreateOrderResponseType['order']>
 }
 
 const initialContext = {}
@@ -179,7 +178,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       sector: '',
       position: '',
       otherPosition: '',
-      paymentMethod: Payment_Methods_Enum.Invoice,
+      paymentMethod: PaymentMethod.Invoice,
       freeSpaces: profile.course.freeSpaces ?? 0,
       trainerExpenses,
       courseType: profile.course.type,
@@ -218,8 +217,8 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       }
     }
 
-    setBooking({ ...booking, discounts })
-  }, [booking, promoCodes, arePromoCodesLoading])
+    setBooking(b => ({ ...b, discounts }))
+  }, [arePromoCodesLoading, booking.price, booking.promoCodes, promoCodes])
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>
@@ -251,7 +250,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
     const subtotalDiscounted = max(subtotal - discount - freeSpacesDiscount, 0)
     const paymentProcessingFee =
-      booking.paymentMethod === Payment_Methods_Enum.Cc
+      booking.paymentMethod === PaymentMethod.Cc
         ? stripeProcessingFeeRate.percent * subtotalDiscounted +
           stripeProcessingFeeRate.flat
         : 0
@@ -289,13 +288,14 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         billingFamilyName: booking.invoiceDetails?.surname ?? '',
         billingEmail: booking.invoiceDetails?.email ?? '',
         billingPhone: booking.invoiceDetails?.phone ?? '',
+        clientPurchaseOrder: booking.invoiceDetails?.purchaseOrder ?? '',
         registrants: booking.emails,
         organizationId: booking.orgId,
         promoCodes,
       },
     })
 
-    setOrderId(response.order.id)
+    setOrderId(response.order?.id)
     return response.order
   }, [booking, fetcher, course])
 
