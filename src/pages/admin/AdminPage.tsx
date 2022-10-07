@@ -1,54 +1,51 @@
-import Box from '@mui/material/Box'
-import Link from '@mui/material/Link'
-import Toolbar from '@mui/material/Toolbar'
+import { Box, Link, List, ListItem, Typography } from '@mui/material'
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
-import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
-import { useAuth } from '@app/context/auth'
+import { FullHeightPage } from '@app/components/FullHeightPage'
+import { Tile } from '@app/components/Tile'
+import theme from '@app/theme'
 
 type AdminPageProps = unknown
 
+const hubSettings = [
+  { name: 'users', link: '/admin' },
+  { name: 'organisations', link: '/admin' },
+  { name: 'course-pricing', link: '/admin/discounts' },
+  { name: 'waitlist-notifications', link: '/admin' },
+  { name: 'course-renewals', link: '/admin' },
+  { name: 'cancellations-transfers-replacements', link: '/admin' },
+]
+
 export const AdminPage: React.FC<AdminPageProps> = () => {
-  const { acl } = useAuth()
-
-  const tabs = [
-    {
-      id: '/admin/contacts',
-      title: 'Contacts',
-    },
-    ...(acl.canViewXeroConnect()
-      ? [{ id: '/admin/xero/connect', title: 'Xero Connect' }]
-      : []),
-  ]
-
+  const { t } = useTranslation()
   return (
-    <>
-      <Toolbar
-        sx={{
-          justifyContent: 'space-between',
-          borderBottom: '1px solid',
-          borderColor: 'grey.300',
-        }}
-      >
-        <Box
-          flex={1}
-          height={44}
-          lineHeight={2}
-          display="flex"
-          justifyContent="left"
-          px={3}
-          color="secondary.dark"
-        >
-          {tabs.map(t => (
-            <Link key={t.id} component={StyledSubNavLink} to={t.id}>
-              {t.title}
-            </Link>
+    <FullHeightPage
+      bgcolor={theme.palette.grey[100]}
+      pb={3}
+      sx={{ display: 'flex', justifyContent: 'center' }}
+    >
+      <Box sx={{ width: '80%', maxWidth: '628px' }}>
+        <Typography variant="h1" pt={3} pb={2} fontWeight={600}>
+          {t(`pages.admin.hub-settings.title`)}
+        </Typography>
+        <List>
+          {hubSettings.map(({ name, link }) => (
+            <ListItem sx={{ padding: 0, marginBottom: 2 }} key={name}>
+              <Link href={link} sx={{ width: '100%' }}>
+                <Tile sx={{ display: 'block' }}>
+                  <Typography variant="subtitle2" mb={1}>
+                    {t(`pages.admin.hub-settings.${name}.title`)}
+                  </Typography>
+                  <Typography variant="body1">
+                    {t(`pages.admin.hub-settings.${name}.description`)}
+                  </Typography>
+                </Tile>
+              </Link>
+            </ListItem>
           ))}
-        </Box>
-      </Toolbar>
-
-      <Outlet />
-    </>
+        </List>
+      </Box>
+    </FullHeightPage>
   )
 }

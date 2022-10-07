@@ -118,7 +118,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={groupIsChecked || groupIsMandatory}
+                      checked={groupIsChecked || groupIsMandatory || false}
                       indeterminate={isIndeterminate}
                       onChange={() => {
                         toggleModuleGroupChange(group.id)
@@ -149,7 +149,7 @@ export const ModulesSelectionList: React.FC<Props> = ({
                     control={
                       <Checkbox
                         onChange={() => toggleModuleHold(module.id)}
-                        checked={holds[module.id] || groupIsMandatory}
+                        checked={holds[module.id] || groupIsMandatory || false}
                         disabled={groupIsMandatory}
                       />
                     }

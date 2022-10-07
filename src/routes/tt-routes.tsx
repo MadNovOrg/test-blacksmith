@@ -92,23 +92,23 @@ const TTAdminRoutes = () => {
       </Route>
 
       {acl.isTTAdmin() ? (
-        <Route path="admin" element={<AdminPage />}>
-          <Route index element={<Navigate replace to="contacts" />} />
-
-          <Route path="contacts" element={<Contacts />} />
-
-          <Route path="discounts">
-            <Route index element={<DiscountsList />} />
-            <Route path="new" element={<DiscountCreate />} />
-          </Route>
-
-          {acl.canViewXeroConnect() ? (
-            <Route path="xero">
-              <Route index element={<Navigate replace to="connect" />} />
-              <Route path="connect" element={<XeroConnect />} />
+        <>
+          <Route path="admin">
+            <Route index element={<AdminPage />} />
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="discounts">
+              <Route index element={<DiscountsList />} />
+              <Route path="new" element={<DiscountCreate />} />
             </Route>
-          ) : null}
-        </Route>
+
+            {acl.canViewXeroConnect() ? (
+              <Route path="xero">
+                <Route index element={<Navigate replace to="connect" />} />
+                <Route path="connect" element={<XeroConnect />} />
+              </Route>
+            ) : null}
+          </Route>
+        </>
       ) : null}
 
       <Route path="*" element={<NotFound />} />

@@ -1358,6 +1358,33 @@
           "group": "Group"
         },
         "add-new-organization": "Add new organisation"
+      },
+      "hub-settings": {
+        "title": "Hub settings",
+        "users": {
+          "title": "Users",
+          "description": "Manage all internal and external users and permissions."
+        },
+        "organisations": {
+          "title": "Organisations",
+          "description": "Manage all organisation details and organisation users."
+        },
+        "course-pricing": {
+          "title": "Course pricing",
+          "description": "Manage course pricing and discounts."
+        },
+        "waitlist-notifications": {
+          "title": "Waitlist notifications",
+          "description": "Set timing measures on when to notify users of course availability."
+        },
+        "course-renewals": {
+          "title": "Course renewals",
+          "description": "Modify expiration dates for future certifications."
+        },
+        "cancellations-transfers-replacements": {
+          "title": "Cancellations, Transfers, and Replacements",
+          "description": "An audit log of all cancellations, transfers, and replacements."
+        }
       }
     },
     "my-profile": {

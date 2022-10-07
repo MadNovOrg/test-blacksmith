@@ -2,12 +2,14 @@ import {
   Box,
   CircularProgress,
   Container,
+  Link,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TablePagination,
   TableRow,
+  Toolbar,
 } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
@@ -18,7 +20,9 @@ import useSWR from 'swr'
 import { useDebounce } from 'use-debounce'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
+import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import {
   ParamsType as GetContactsParamsType,
   QUERY as GetContacts,
@@ -39,6 +43,16 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const Contacts: React.FC<ContactsProps> = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+  const tabs = [
+    {
+      id: '/admin/contacts',
+      title: 'Contacts',
+    },
+    ...(acl.canViewXeroConnect()
+      ? [{ id: '/admin/xero/connect', title: 'Xero Connect' }]
+      : []),
+  ]
   const cols = useMemo(
     () => [
       {
@@ -142,6 +156,29 @@ export const Contacts: React.FC<ContactsProps> = () => {
 
   return (
     <>
+      <Toolbar
+        sx={{
+          justifyContent: 'space-between',
+          borderBottom: '1px solid',
+          borderColor: 'grey.300',
+        }}
+      >
+        <Box
+          flex={1}
+          height={44}
+          lineHeight={2}
+          display="flex"
+          justifyContent="left"
+          px={3}
+          color="secondary.dark"
+        >
+          {tabs.map(t => (
+            <Link key={t.id} component={StyledSubNavLink} to={t.id}>
+              {t.title}
+            </Link>
+          ))}
+        </Box>
+      </Toolbar>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         <Box display="flex">
           <Box width={250} display="flex" flexDirection="column" pr={4}>

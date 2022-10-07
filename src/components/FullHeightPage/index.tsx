@@ -2,8 +2,7 @@ import { Box } from '@mui/material'
 import { BoxProps } from '@mui/system'
 import React from 'react'
 
-const APP_BAR_HEIGHT = 114
-const FOOTER_HEIGHT = 51
+import { APP_BAR_HEIGHT, FOOTER_HEIGHT } from '@app/theme'
 
 const HEIGHT_TO_REDUCE = APP_BAR_HEIGHT + FOOTER_HEIGHT
 

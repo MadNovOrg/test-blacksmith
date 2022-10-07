@@ -169,7 +169,7 @@ Object {
           class="MuiTablePagination-root css-jtlhu6-MuiTablePagination-root"
         >
           <div
-            class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-17xoeoc-MuiToolbar-root-MuiTablePagination-toolbar"
+            class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-ervr1a-MuiToolbar-root-MuiTablePagination-toolbar"
           >
             <div
               class="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"
@@ -432,7 +432,7 @@ Object {
         class="MuiTablePagination-root css-jtlhu6-MuiTablePagination-root"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-17xoeoc-MuiToolbar-root-MuiTablePagination-toolbar"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-ervr1a-MuiToolbar-root-MuiTablePagination-toolbar"
         >
           <div
             class="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"

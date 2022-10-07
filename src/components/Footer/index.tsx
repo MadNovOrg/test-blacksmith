@@ -6,7 +6,7 @@ import { Box, Container, Link, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import theme from '@app/theme'
+import theme, { FOOTER_HEIGHT } from '@app/theme'
 
 import { Logo } from '../Logo'
 
@@ -14,7 +14,7 @@ export const Footer = () => {
   const { t } = useTranslation()
 
   return (
-    <Box bgcolor={theme.palette.primary.main}>
+    <Box bgcolor={theme.palette.primary.main} sx={{ minHeight: FOOTER_HEIGHT }}>
       <Container
         maxWidth="lg"
         sx={{

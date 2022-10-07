@@ -315,7 +315,7 @@ export const TrainerExpenses: React.FC<Props> = ({
                           currentDisplay[idx] = e.target.checked
                           setDisplayAccommodation(currentDisplay)
                         }}
-                        checked={displayAccommodation[idx]}
+                        checked={displayAccommodation[idx] || false}
                         data-testid={`accommodation-${idx}-switch`}
                       />
                     }

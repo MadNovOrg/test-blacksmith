@@ -188,6 +188,9 @@ const breakpoints = {
   },
 }
 
+export const APP_BAR_HEIGHT = 72
+export const FOOTER_HEIGHT = 96
+
 export default createTheme({
   ...theme,
   breakpoints,
@@ -261,6 +264,16 @@ export default createTheme({
           border: 'none',
           background: 'transparent',
           borderBottom: '1px solid rgba(0, 0, 0, .12)',
+          minHeight: APP_BAR_HEIGHT,
+        },
+      },
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          [theme.breakpoints.up('xs')]: {
+            minHeight: APP_BAR_HEIGHT,
+          },
         },
       },
     },

@@ -29,7 +29,7 @@ export const NavLinks = () => {
       ) : null}
 
       {acl.isTTAdmin() ? (
-        <Link component={StyledNavLink} to="/admin">
+        <Link component={StyledNavLink} to="/admin/contacts">
           {t('contacts')}
         </Link>
       ) : null}
