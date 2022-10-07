@@ -4,7 +4,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { AllCourseStatuses, AttendeeOnlyCourseStatus } from '@app/types'
+import {
+  AdminOnlyCourseStatus,
+  AllCourseStatuses,
+  AttendeeOnlyCourseStatus,
+} from '@app/types'
 
 const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.ApprovalPending]: 'warning',
@@ -20,6 +24,7 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.TrainerUnavailable]: 'warning',
   [AttendeeOnlyCourseStatus.InfoRequired]: 'warning',
   [AttendeeOnlyCourseStatus.NotAttended]: 'default',
+  [AdminOnlyCourseStatus.CancellationRequested]: 'warning',
 }
 
 type Props = {

@@ -27,7 +27,11 @@ import {
 } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { AllCourseStatuses, AttendeeOnlyCourseStatus } from '@app/types'
+import {
+  AdminOnlyCourseStatus,
+  AllCourseStatuses,
+  AttendeeOnlyCourseStatus,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
@@ -225,6 +229,8 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                   Course_Status_Enum.Scheduled
                 if (c.status === Course_Status_Enum.Cancelled) {
                   courseStatus = Course_Status_Enum.Cancelled
+                } else if (c.cancellationRequest) {
+                  courseStatus = AdminOnlyCourseStatus.CancellationRequested
                 } else {
                   if (courseEnded) {
                     courseStatus = Course_Status_Enum.Completed

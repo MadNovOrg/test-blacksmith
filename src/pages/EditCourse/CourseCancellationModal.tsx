@@ -108,6 +108,15 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
     const startDate = course.schedule[0].start
 
     useEffect(() => {
+      if (course.cancellationRequest) {
+        setReasonType('other')
+        setValue('cancellationReason', course.cancellationRequest.reason, {
+          shouldValidate: true,
+        })
+      }
+    }, [course.cancellationRequest, setValue])
+
+    useEffect(() => {
       if (feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS) {
         setValue('cancellationFeePercent', getCancellationTermsFee(startDate))
       } else if (feeType === FeesRadioValue.NO_FEES) {
@@ -294,12 +303,7 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
               sx: { height: 40 },
             }}
             sx={{ bgcolor: 'grey.100', my: 2 }}
-            value={values.cancellationReason}
-            onChange={e =>
-              setValue('cancellationReason', e.target.value, {
-                shouldValidate: isSubmitted,
-              })
-            }
+            {...register('cancellationReason')}
           />
         ) : null}
 

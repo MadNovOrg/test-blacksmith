@@ -60,6 +60,13 @@ configuration:
     contact_profile_id: contactProfileId
     course_delivery_type: deliveryType
 object_relationships:
+  - name: cancellationRequest
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_cancellation_request
   - name: contactProfile
     using:
       foreign_key_constraint_on: contact_profile_id

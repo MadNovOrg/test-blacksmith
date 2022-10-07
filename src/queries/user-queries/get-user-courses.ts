@@ -65,6 +65,9 @@ export const QUERY = gql`
         count
       }
     }
+    cancellationRequest {
+      id
+    }
   }
 
   query UserCourses(

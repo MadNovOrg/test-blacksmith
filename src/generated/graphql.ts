@@ -12367,6 +12367,8 @@ export type Course = {
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
   /** An object relationship */
+  cancellationRequest?: Maybe<Course_Cancellation_Request>;
+  /** An object relationship */
   contactProfile?: Maybe<Profile>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   /** A computed field, executes function "course_code" */
@@ -12639,6 +12641,7 @@ export type Course_Bool_Exp = {
   aolRegion?: InputMaybe<String_Comparison_Exp>;
   cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
   cancellationReason?: InputMaybe<String_Comparison_Exp>;
+  cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
   contactProfile?: InputMaybe<Profile_Bool_Exp>;
   contactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
@@ -12670,6 +12673,243 @@ export type Course_Bool_Exp = {
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   waitlists?: InputMaybe<Waitlist_Bool_Exp>;
+};
+
+/** columns and relationships of "course_cancellation_request" */
+export type Course_Cancellation_Request = {
+  __typename?: 'course_cancellation_request';
+  /** An object relationship */
+  course: Course;
+  course_id: Scalars['Int'];
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  /** An object relationship */
+  profile: Profile;
+  reason: Scalars['String'];
+  requested_by: Scalars['uuid'];
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "course_cancellation_request" */
+export type Course_Cancellation_Request_Aggregate = {
+  __typename?: 'course_cancellation_request_aggregate';
+  aggregate?: Maybe<Course_Cancellation_Request_Aggregate_Fields>;
+  nodes: Array<Course_Cancellation_Request>;
+};
+
+/** aggregate fields of "course_cancellation_request" */
+export type Course_Cancellation_Request_Aggregate_Fields = {
+  __typename?: 'course_cancellation_request_aggregate_fields';
+  avg?: Maybe<Course_Cancellation_Request_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Cancellation_Request_Max_Fields>;
+  min?: Maybe<Course_Cancellation_Request_Min_Fields>;
+  stddev?: Maybe<Course_Cancellation_Request_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Cancellation_Request_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Cancellation_Request_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Cancellation_Request_Sum_Fields>;
+  var_pop?: Maybe<Course_Cancellation_Request_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Cancellation_Request_Var_Samp_Fields>;
+  variance?: Maybe<Course_Cancellation_Request_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_cancellation_request" */
+export type Course_Cancellation_Request_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Cancellation_Request_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Course_Cancellation_Request_Avg_Fields = {
+  __typename?: 'course_cancellation_request_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "course_cancellation_request". All fields are combined with a logical 'AND'. */
+export type Course_Cancellation_Request_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Cancellation_Request_Bool_Exp>>;
+  _not?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Cancellation_Request_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
+  reason?: InputMaybe<String_Comparison_Exp>;
+  requested_by?: InputMaybe<Uuid_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_cancellation_request" */
+export enum Course_Cancellation_Request_Constraint {
+  /** unique or primary key constraint */
+  CourseCancellationRequestCourseIdKey = 'course_cancellation_request_course_id_key',
+  /** unique or primary key constraint */
+  CourseCancellationRequestPkey = 'course_cancellation_request_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_cancellation_request" */
+export type Course_Cancellation_Request_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_cancellation_request" */
+export type Course_Cancellation_Request_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  reason?: InputMaybe<Scalars['String']>;
+  requested_by?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Course_Cancellation_Request_Max_Fields = {
+  __typename?: 'course_cancellation_request_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  reason?: Maybe<Scalars['String']>;
+  requested_by?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** aggregate min on columns */
+export type Course_Cancellation_Request_Min_Fields = {
+  __typename?: 'course_cancellation_request_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  reason?: Maybe<Scalars['String']>;
+  requested_by?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** response of any mutation on the table "course_cancellation_request" */
+export type Course_Cancellation_Request_Mutation_Response = {
+  __typename?: 'course_cancellation_request_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Cancellation_Request>;
+};
+
+/** input type for inserting object relation for remote table "course_cancellation_request" */
+export type Course_Cancellation_Request_Obj_Rel_Insert_Input = {
+  data: Course_Cancellation_Request_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Cancellation_Request_On_Conflict>;
+};
+
+/** on_conflict condition type for table "course_cancellation_request" */
+export type Course_Cancellation_Request_On_Conflict = {
+  constraint: Course_Cancellation_Request_Constraint;
+  update_columns?: Array<Course_Cancellation_Request_Update_Column>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_cancellation_request". */
+export type Course_Cancellation_Request_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
+  reason?: InputMaybe<Order_By>;
+  requested_by?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_cancellation_request */
+export type Course_Cancellation_Request_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_cancellation_request" */
+export enum Course_Cancellation_Request_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Reason = 'reason',
+  /** column name */
+  RequestedBy = 'requested_by',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "course_cancellation_request" */
+export type Course_Cancellation_Request_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  reason?: InputMaybe<Scalars['String']>;
+  requested_by?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Cancellation_Request_Stddev_Fields = {
+  __typename?: 'course_cancellation_request_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Cancellation_Request_Stddev_Pop_Fields = {
+  __typename?: 'course_cancellation_request_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Cancellation_Request_Stddev_Samp_Fields = {
+  __typename?: 'course_cancellation_request_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Cancellation_Request_Sum_Fields = {
+  __typename?: 'course_cancellation_request_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "course_cancellation_request" */
+export enum Course_Cancellation_Request_Update_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Reason = 'reason',
+  /** column name */
+  RequestedBy = 'requested_by',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** aggregate var_pop on columns */
+export type Course_Cancellation_Request_Var_Pop_Fields = {
+  __typename?: 'course_cancellation_request_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Cancellation_Request_Var_Samp_Fields = {
+  __typename?: 'course_cancellation_request_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Course_Cancellation_Request_Variance_Fields = {
+  __typename?: 'course_cancellation_request_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
 };
 
 /** columns and relationships of "course_certificate" */
@@ -15194,6 +15434,7 @@ export type Course_Insert_Input = {
   aolRegion?: InputMaybe<Scalars['String']>;
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
+  cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
   contactProfile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
@@ -16217,6 +16458,7 @@ export type Course_Order_By = {
   aolRegion?: InputMaybe<Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
+  cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
   contactProfile?: InputMaybe<Profile_Order_By>;
   contactProfileId?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
@@ -21398,6 +21640,10 @@ export type Mutation_Root = {
   delete_course?: Maybe<Course_Mutation_Response>;
   /** delete single row from the table: "course" */
   delete_course_by_pk?: Maybe<Course>;
+  /** delete data from the table: "course_cancellation_request" */
+  delete_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
+  /** delete single row from the table: "course_cancellation_request" */
+  delete_course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
   /** delete data from the table: "course_certificate" */
   delete_course_certificate?: Maybe<Course_Certificate_Mutation_Response>;
   /** delete single row from the table: "course_certificate" */
@@ -21634,6 +21880,10 @@ export type Mutation_Root = {
   insert_color_one?: Maybe<Color>;
   /** insert data into the table: "course" */
   insert_course?: Maybe<Course_Mutation_Response>;
+  /** insert data into the table: "course_cancellation_request" */
+  insert_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
+  /** insert a single row into the table: "course_cancellation_request" */
+  insert_course_cancellation_request_one?: Maybe<Course_Cancellation_Request>;
   /** insert data into the table: "course_certificate" */
   insert_course_certificate?: Maybe<Course_Certificate_Mutation_Response>;
   /** insert data into the table: "course_certificate_changelog" */
@@ -21876,6 +22126,10 @@ export type Mutation_Root = {
   update_course?: Maybe<Course_Mutation_Response>;
   /** update single row of the table: "course" */
   update_course_by_pk?: Maybe<Course>;
+  /** update data of the table: "course_cancellation_request" */
+  update_course_cancellation_request?: Maybe<Course_Cancellation_Request_Mutation_Response>;
+  /** update single row of the table: "course_cancellation_request" */
+  update_course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
   /** update data of the table: "course_certificate" */
   update_course_certificate?: Maybe<Course_Certificate_Mutation_Response>;
   /** update single row of the table: "course_certificate" */
@@ -22188,6 +22442,18 @@ export type Mutation_RootDelete_CourseArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Cancellation_RequestArgs = {
+  where: Course_Cancellation_Request_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Cancellation_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -22905,6 +23171,20 @@ export type Mutation_RootInsert_Color_OneArgs = {
 export type Mutation_RootInsert_CourseArgs = {
   objects: Array<Course_Insert_Input>;
   on_conflict?: InputMaybe<Course_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Cancellation_RequestArgs = {
+  objects: Array<Course_Cancellation_Request_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Cancellation_Request_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Cancellation_Request_OneArgs = {
+  object: Course_Cancellation_Request_Insert_Input;
+  on_conflict?: InputMaybe<Course_Cancellation_Request_On_Conflict>;
 };
 
 
@@ -23758,6 +24038,22 @@ export type Mutation_RootUpdate_Course_By_PkArgs = {
   _inc?: InputMaybe<Course_Inc_Input>;
   _set?: InputMaybe<Course_Set_Input>;
   pk_columns: Course_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_RequestArgs = {
+  _inc?: InputMaybe<Course_Cancellation_Request_Inc_Input>;
+  _set?: InputMaybe<Course_Cancellation_Request_Set_Input>;
+  where: Course_Cancellation_Request_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Cancellation_Request_By_PkArgs = {
+  _inc?: InputMaybe<Course_Cancellation_Request_Inc_Input>;
+  _set?: InputMaybe<Course_Cancellation_Request_Set_Input>;
+  pk_columns: Course_Cancellation_Request_Pk_Columns_Input;
 };
 
 
@@ -24711,6 +25007,7 @@ export type Order = {
   registrants: Scalars['json'];
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 
@@ -24831,6 +25128,7 @@ export type Order_Bool_Exp = {
   registrants?: InputMaybe<Json_Comparison_Exp>;
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   vat?: InputMaybe<Float8_Comparison_Exp>;
+  xero_invoice_number?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** column ordering options */
@@ -24905,6 +25203,7 @@ export type Order_Insert_Input = {
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   vat?: InputMaybe<Scalars['float8']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -24928,6 +25227,7 @@ export type Order_Max_Fields = {
   quantity?: Maybe<Scalars['Int']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "order" */
@@ -24950,6 +25250,7 @@ export type Order_Max_Order_By = {
   quantity?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -24973,6 +25274,7 @@ export type Order_Min_Fields = {
   quantity?: Maybe<Scalars['Int']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
+  xero_invoice_number?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "order" */
@@ -24995,6 +25297,7 @@ export type Order_Min_Order_By = {
   quantity?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "order" */
@@ -25038,6 +25341,7 @@ export type Order_Order_By = {
   registrants?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
+  xero_invoice_number?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: order */
@@ -25093,7 +25397,9 @@ export enum Order_Select_Column {
   /** column name */
   StripePaymentId = 'stripePaymentId',
   /** column name */
-  Vat = 'vat'
+  Vat = 'vat',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 /** input type for updating data in table "order" */
@@ -25119,6 +25425,7 @@ export type Order_Set_Input = {
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   vat?: InputMaybe<Scalars['float8']>;
+  xero_invoice_number?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -25248,7 +25555,9 @@ export enum Order_Update_Column {
   /** column name */
   StripePaymentId = 'stripePaymentId',
   /** column name */
-  Vat = 'vat'
+  Vat = 'vat',
+  /** column name */
+  XeroInvoiceNumber = 'xero_invoice_number'
 }
 
 /** aggregate var_pop on columns */
@@ -28482,6 +28791,12 @@ export type Query_Root = {
   course_aggregate: Course_Aggregate;
   /** fetch data from the table: "course" using primary key columns */
   course_by_pk?: Maybe<Course>;
+  /** fetch data from the table: "course_cancellation_request" */
+  course_cancellation_request: Array<Course_Cancellation_Request>;
+  /** fetch aggregated fields from the table: "course_cancellation_request" */
+  course_cancellation_request_aggregate: Course_Cancellation_Request_Aggregate;
+  /** fetch data from the table: "course_cancellation_request" using primary key columns */
+  course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
   /** fetch data from the table: "course_certificate" */
   course_certificate: Array<Course_Certificate>;
   /** fetch aggregated fields from the table: "course_certificate" */
@@ -28949,6 +29264,29 @@ export type Query_RootCourse_AggregateArgs = {
 
 export type Query_RootCourse_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Query_RootCourse_Cancellation_RequestArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Request_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Cancellation_Request_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Request_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Cancellation_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -30549,6 +30887,12 @@ export type Subscription_Root = {
   course_aggregate: Course_Aggregate;
   /** fetch data from the table: "course" using primary key columns */
   course_by_pk?: Maybe<Course>;
+  /** fetch data from the table: "course_cancellation_request" */
+  course_cancellation_request: Array<Course_Cancellation_Request>;
+  /** fetch aggregated fields from the table: "course_cancellation_request" */
+  course_cancellation_request_aggregate: Course_Cancellation_Request_Aggregate;
+  /** fetch data from the table: "course_cancellation_request" using primary key columns */
+  course_cancellation_request_by_pk?: Maybe<Course_Cancellation_Request>;
   /** fetch data from the table: "course_certificate" */
   course_certificate: Array<Course_Certificate>;
   /** fetch aggregated fields from the table: "course_certificate" */
@@ -30992,6 +31336,29 @@ export type Subscription_RootCourse_AggregateArgs = {
 
 export type Subscription_RootCourse_By_PkArgs = {
   id: Scalars['Int'];
+};
+
+
+export type Subscription_RootCourse_Cancellation_RequestArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Request_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Cancellation_Request_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Cancellation_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Cancellation_Request_Order_By>>;
+  where?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Cancellation_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -33529,12 +33896,19 @@ export type CancelCourseMutationVariables = Exact<{
 
 export type CancelCourseMutation = { __typename?: 'mutation_root', cancelledCourse?: { __typename?: 'course', id: number } | null };
 
+export type DeleteCourseCancellationRequestMutationVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type DeleteCourseCancellationRequestMutation = { __typename?: 'mutation_root', delete_course_cancellation_request_by_pk?: { __typename?: 'course_cancellation_request', id: any } | null };
+
 export type GetCourseByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', freeSpaces?: number | null, accountCode?: string | null, level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
+export type GetCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', freeSpaces?: number | null, accountCode?: string | null, level?: Course_Level_Enum | null, id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any, reason: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null, contactProfile?: { __typename?: 'profile', id: any, fullName?: string | null } | null, salesRepresentative?: { __typename?: 'profile', id: any, fullName?: string | null } | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, moduleGroupIds: Array<{ __typename?: 'course_module', module: { __typename?: 'module', moduleGroup?: { __typename?: 'module_group', id: any } | null } }>, certificateCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, attendeesCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } } | null };
 
 export type GetCourseDraftQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -33601,6 +33975,13 @@ export type RemoveCourseDraftMutationVariables = Exact<{
 
 
 export type RemoveCourseDraftMutation = { __typename?: 'mutation_root', delete_course_draft?: { __typename?: 'course_draft_mutation_response', returning: Array<{ __typename?: 'course_draft', id: any }> } | null };
+
+export type RequestCourseCancellationMutationVariables = Exact<{
+  cancellationRequest: Course_Cancellation_Request_Insert_Input;
+}>;
+
+
+export type RequestCourseCancellationMutation = { __typename?: 'mutation_root', insert_course_cancellation_request?: { __typename?: 'course_cancellation_request_mutation_response', affected_rows: number } | null };
 
 export type SaveCourseAttendanceMutationVariables = Exact<{
   attended: Array<Scalars['uuid']> | Scalars['uuid'];
@@ -34289,7 +34670,7 @@ export type GetUserCourseByIdQueryVariables = Exact<{
 
 export type GetUserCourseByIdQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level?: Course_Level_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, createdAt: any, updatedAt: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }>, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null };
 
-export type UserCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } };
+export type UserCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 
 export type UserCoursesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Order_By> | Course_Order_By>;
@@ -34301,7 +34682,7 @@ export type UserCoursesQueryVariables = Exact<{
 }>;
 
 
-export type UserCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null } }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
+export type UserCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, trainers: Array<{ __typename?: 'course_trainer', id: any, status?: Course_Invite_Status_Enum | null, type: Course_Trainer_Type_Enum, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', id: any, start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, participants: Array<{ __typename?: 'course_participant', healthSafetyConsent: boolean, grade?: Grade_Enum | null, attended?: boolean | null }>, evaluation_answers_aggregate: { __typename?: 'course_evaluation_answers_aggregate', aggregate?: { __typename?: 'course_evaluation_answers_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
 
 export type SaveHealthSafetyConsentMutationVariables = Exact<{
   courseId: Scalars['Int'];

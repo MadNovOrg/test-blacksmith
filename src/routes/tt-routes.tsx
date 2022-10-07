@@ -5,6 +5,7 @@ import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
 import Contacts from '@app/pages/admin/components/Contacts'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
 import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
@@ -20,7 +21,10 @@ import { ReviewLicenseOrder } from '@app/pages/CreateCourse/components/ReviewLic
 import { TrainerExpenses } from '@app/pages/CreateCourse/components/TrainerExpenses'
 import { EditCourse } from '@app/pages/EditCourse'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
-import { CourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import {
+  CourseDetails as TrainerCourseDetails,
+  CourseDetails,
+} from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
@@ -68,6 +72,16 @@ const TTAdminRoutes = () => {
           />
         </Route>
       </Route>
+
+      {acl.canManageOrgCourses() ? (
+        <Route path="manage-courses">
+          <Route index element={<Navigate replace to="all" />} />
+          <Route path=":orgId">
+            <Route index element={<ManageCourses />} />
+            <Route path=":id/details" element={<TrainerCourseDetails />} />
+          </Route>
+        </Route>
+      ) : null}
 
       {acl.canViewOrganizations() ? (
         <Route path="organizations">

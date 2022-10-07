@@ -203,7 +203,8 @@
       "TRAINER_PENDING": "Trainer pending",
       "TRAINER_UNAVAILABLE": "Trainer unavailable",
       "INFO_REQUIRED": "Info required",
-      "NOT_ATTENDED": "Unattended"
+      "NOT_ATTENDED": "Unattended",
+      "CANCELLATION_REQUESTED": "Cancellation requested"
     },
     "course-invite-status": {
       "PENDING": "Pending",
@@ -1035,7 +1036,15 @@
           "joined": "Joined"
         }
       },
-      "course-has-been-cancelled": "{{ code }} has been cancelled."
+      "course-has-been-cancelled": "{{ code }} has been cancelled.",
+      "request-cancellation-modal": {
+        "description": "This will be escalated with Team Teach and a representative will contact you to complete this action.",
+        "warning": "Cancellation terms apply based on the course start date.",
+        "title": "Request to cancel this course"
+      },
+      "cancellation-request-alert": "This course has a pending cancellation request.",
+      "delete-request": "Delete request",
+      "approve-cancellation": "Approve cancellation"
     },
     "course-participants": {
       "none-registered-message": "No invites accepted",

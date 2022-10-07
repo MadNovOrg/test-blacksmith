@@ -16,5 +16,10 @@ export const CANCEL_COURSE_MUTATION = gql`
     ) {
       id
     }
+    delete_course_cancellation_request(
+      where: { course_id: { _eq: $courseId } }
+    ) {
+      affected_rows
+    }
   }
 `

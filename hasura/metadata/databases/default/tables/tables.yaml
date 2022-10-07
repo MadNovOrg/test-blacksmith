@@ -3,6 +3,7 @@
 - "!include public_certificate_status.yaml"
 - "!include public_color.yaml"
 - "!include public_course.yaml"
+- "!include public_course_cancellation_request.yaml"
 - "!include public_course_certificate.yaml"
 - "!include public_course_certificate_changelog.yaml"
 - "!include public_course_delivery_type.yaml"

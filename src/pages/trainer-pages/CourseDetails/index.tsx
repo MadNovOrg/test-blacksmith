@@ -1,3 +1,4 @@
+import Cancel from '@mui/icons-material/Cancel'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
   Alert,
@@ -22,6 +23,8 @@ import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAtten
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
+import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
+import { CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {
@@ -41,8 +44,9 @@ export const CourseDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { id: courseId } = useParams()
-  const { acl } = useAuth()
+  const { acl, isOrgAdmin } = useAuth()
   const [searchParams] = useSearchParams()
+
   const showCancelledAlert = searchParams.get('cancelled')
   const alertType = searchParams.get('success') as keyof typeof successAlerts
   const alertMessage = alertType ? successAlerts[alertType] : null
@@ -51,6 +55,8 @@ export const CourseDetails = () => {
   const [selectedTab, setSelectedTab] = useState(
     initialTab || CourseDetailsTabs.ATTENDEES
   )
+  const [showCancellationRequestModal, setShowCancellationRequestModal] =
+    useState(false)
 
   useEffect(() => {
     if (initialTab) setSelectedTab(initialTab)
@@ -60,6 +66,7 @@ export const CourseDetails = () => {
     status: courseLoadingStatus,
     data: course,
     error: courseError,
+    mutate,
   } = useCourse(courseId ?? '')
 
   const courseHasEnded = course && courseEnded(course)
@@ -107,9 +114,22 @@ export const CourseDetails = () => {
                 />
               </CourseHeroSummary>
 
+              <CourseCancellationRequestFeature
+                course={course}
+                open={showCancellationRequestModal}
+                onClose={() => setShowCancellationRequestModal(false)}
+                onChange={mutate}
+              />
+
               <TabContext value={selectedTab}>
                 <Box borderBottom={1} borderColor="divider">
-                  <Container>
+                  <Container
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}
+                  >
                     <PillTabList
                       onChange={(_, tab) => navigate(`.?tab=${tab}`)}
                     >
@@ -140,6 +160,20 @@ export const CourseDetails = () => {
                         />
                       ) : null}
                     </PillTabList>
+                    <Box>
+                      {!course.cancellationRequest &&
+                      course.type === CourseType.CLOSED &&
+                      isOrgAdmin &&
+                      !acl.canCancelCourses() ? (
+                        <Button
+                          variant="text"
+                          startIcon={<Cancel />}
+                          onClick={() => setShowCancellationRequestModal(true)}
+                        >
+                          {t('pages.edit-course.request-cancellation')}
+                        </Button>
+                      ) : null}
+                    </Box>
                   </Container>
                 </Box>
 

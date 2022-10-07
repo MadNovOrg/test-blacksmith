@@ -19,6 +19,10 @@ export const QUERY = gql`
       freeSpaces
       accountCode
       level
+      cancellationRequest {
+        id
+        reason
+      }
       trainers {
         id
         type

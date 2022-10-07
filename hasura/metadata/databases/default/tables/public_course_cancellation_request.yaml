@@ -1,0 +1,83 @@
+table:
+  schema: public
+  name: course_cancellation_request
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: requested_by
+insert_permissions:
+  - role: user
+    permission:
+      check:
+        _and:
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+          - requested_by:
+              _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - reason
+        - created_at
+        - updated_at
+        - id
+        - requested_by
+      backend_only: false
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - course_id
+        - requested_by
+        - reason
+        - created_at
+        - updated_at
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - course_id
+        - requested_by
+        - reason
+        - created_at
+        - updated_at
+      filter:
+        _and:
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+          - requested_by:
+              _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
+  - role: user
+    permission:
+      filter:
+        _and:
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
+          - requested_by:
+              _eq: X-Hasura-User-Id

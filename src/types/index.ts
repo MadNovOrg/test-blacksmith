@@ -57,6 +57,10 @@ export type Course = {
   description?: string
   freeSpaces?: number
   accountCode?: string
+  cancellationRequest?: {
+    id: string
+    reason: string
+  }
 } & Base
 
 export type CourseModule = {
@@ -580,6 +584,10 @@ export enum AttendeeOnlyCourseStatus {
   NotAttended = 'NOT_ATTENDED',
 }
 
+export enum AdminOnlyCourseStatus {
+  CancellationRequested = 'CANCELLATION_REQUESTED',
+}
+
 export type TrainerInput = {
   profile_id: string
   type: CourseTrainerType
@@ -711,4 +719,7 @@ export type Draft = {
   }
 }
 
-export type AllCourseStatuses = Course_Status_Enum | AttendeeOnlyCourseStatus
+export type AllCourseStatuses =
+  | Course_Status_Enum
+  | AttendeeOnlyCourseStatus
+  | AdminOnlyCourseStatus
