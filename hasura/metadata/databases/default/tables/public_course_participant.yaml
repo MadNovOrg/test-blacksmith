@@ -169,6 +169,10 @@ update_permissions:
         profile_id:
           _eq: X-Hasura-User-Id
       check: {}
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
 event_triggers:
   - name: course_participant_graded
     definition:

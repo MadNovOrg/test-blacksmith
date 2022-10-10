@@ -1,0 +1,10 @@
+table:
+  schema: public
+  name: course_participant_audit
+object_relationships:
+  - name: authorizedBy
+    using:
+      foreign_key_constraint_on: authorized_by
+  - name: courseParticipant
+    using:
+      foreign_key_constraint_on: participant_id
