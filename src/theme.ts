@@ -334,8 +334,10 @@ export default createTheme({
     MuiTableHead: {
       styleOverrides: {
         root: {
+          color: theme.palette.dimGrey.main,
+          fontWeight: 500,
           '.MuiTableRow-root': {
-            backgroundColor: theme.palette.grey[100],
+            backgroundColor: theme.palette.grey[200],
           },
           '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
             fontSize: 13,
@@ -364,8 +366,12 @@ export default createTheme({
     MuiTableBody: {
       styleOverrides: {
         root: {
-          '.MuiTableRow-root:nth-of-type(even)': {
-            backgroundColor: theme.palette.grey[50],
+          '.MuiTableRow-root:last-of-type': {
+            borderBottom: 'none',
+          },
+          '.MuiTableRow-root': {
+            borderBottom: '1px solid',
+            borderColor: theme.palette.grey[200],
           },
         },
       },

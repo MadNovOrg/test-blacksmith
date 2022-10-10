@@ -34,6 +34,7 @@ export const dateFormats = {
   date_short: 'dd MMM',
   date_withTime: 'd MMMM yyyy, hh:mm aa',
   date_long: 'EEE, dd MMM yyyy',
+  date_long_withTime: 'EEE, dd MMM yyyy, hh:mm aa',
   date_full: 'PPpp',
   date_onlyTime: 'hh:mm aa',
 }

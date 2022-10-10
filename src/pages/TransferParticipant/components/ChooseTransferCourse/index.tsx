@@ -24,7 +24,7 @@ export const ChooseTransferCourse: React.FC = () => {
     'pages.transfer-participant.choose-course'
   )
 
-  const { courseChoosen } = useTransferParticipantContext()
+  const { courseChosen } = useTransferParticipantContext()
 
   const [choosenCourse, setChoosenCourse] = useState<EligibleCourse>()
 
@@ -45,9 +45,9 @@ export const ChooseTransferCourse: React.FC = () => {
     [t]
   )
 
-  const handleCourseChoosen = () => {
+  const handleCourseChosen = () => {
     if (choosenCourse) {
-      courseChoosen(choosenCourse)
+      courseChosen(choosenCourse)
     }
   }
 
@@ -134,7 +134,7 @@ export const ChooseTransferCourse: React.FC = () => {
               variant="contained"
               endIcon={<ArrowForward />}
               disabled={!choosenCourse}
-              onClick={() => handleCourseChoosen()}
+              onClick={() => handleCourseChosen()}
             >
               {t('next-btn-text')}
             </Button>

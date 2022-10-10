@@ -8,16 +8,23 @@ import { InfoRow } from './InfoRow'
 
 export { InfoRow }
 
-export const InfoPanel: React.FC<{ title?: string }> = ({
-  title,
-  children,
-}) => (
-  <Box p={2} bgcolor={theme.palette.common.white}>
-    {title ? (
-      <Typography variant="h6" mb={2}>
+export const InfoPanel: React.FC<{
+  title?: string
+  titlePosition?: 'inside' | 'outside'
+}> = ({ title, children, titlePosition = 'inside' }) => (
+  <>
+    {titlePosition === 'outside' && title ? (
+      <Typography variant="h4" mb={2}>
         {title}
       </Typography>
     ) : null}
-    {children}
-  </Box>
+    <Box p={2} bgcolor={theme.palette.common.white}>
+      {title && titlePosition === 'inside' ? (
+        <Typography variant="h6" mb={2}>
+          {title}
+        </Typography>
+      ) : null}
+      {children}
+    </Box>
+  </>
 )

@@ -6,4 +6,10 @@ export enum TransferStepsEnum {
   REVIEW = 'review',
 }
 
+export enum FeeType {
+  APPLY_TERMS = 'APPLY_TERMS',
+  CUSTOM_FEE = 'CUSTOM_FEE',
+  NO_FEE = 'NO_FEE',
+}
+
 export type EligibleCourse = TransferEligibleCoursesQuery['eligibleCourses'][0]

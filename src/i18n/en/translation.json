@@ -100,6 +100,7 @@
     "code": "Code",
     "type": "Type",
     "amount-due": "Amount due",
+    "amount-due-currency": "Amount due (GBP)",
     "other": "Other",
     "sector": "Sector",
     "select-sector": "Please select a sector to see positions",
@@ -1741,6 +1742,30 @@
         "no-courses": "No eligible courses for transfer at the moment",
         "next-btn-text": "Transfer details",
         "venue-virtual": "Virtual"
+      },
+      "transfer-details": {
+        "title": "Transfer details",
+        "col-start-date": "Before course start date",
+        "col-fee": "Transfer fee",
+        "0-fee-label": "4+ weeks",
+        "0-fee": "Free",
+        "15-fee-label": "2-4 weeks",
+        "15-fee": "15% of payment due",
+        "25-fee-label": "Less than 2 weeks",
+        "25-fee": "25% of payment due",
+        "fees-panel-title": "Fees",
+        "fees-radio-group-title": "Will any fees apply?",
+        "apply-terms-option": "Apply transfer terms",
+        "custom-fee-option": "Custom fee",
+        "no-fee-option": "No fees",
+        "next-btn-label": "Review & confirm",
+        "back-btn-label": "Back to selection"
+      },
+      "review-transfer": {
+        "title": "Review & confirm",
+        "custom-fee": "Custom fee",
+        "back-btn-text": "Back to transfer details",
+        "submit-btn-text": "Confirm transfer"
       }
     }
   },
@@ -1815,6 +1840,7 @@
     "defaultShort": "{{date, date_defaultShort}}",
     "withTime": "{{date, date_withTime}}",
     "long": "{{date, date_long}}",
+    "longWithTime": "{{date, date_long_withTime}}",
     "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
     "fullDateTime": "{{date, date_full}}"
   },

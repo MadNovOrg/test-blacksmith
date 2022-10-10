@@ -12,7 +12,7 @@ Object {
           class="MuiTable-root css-16un4wc-MuiTable-root"
         >
           <thead
-            class="MuiTableHead-root css-95fec7-MuiTableHead-root"
+            class="MuiTableHead-root css-ivi6of-MuiTableHead-root"
             data-testid="table-head"
           >
             <tr
@@ -120,7 +120,7 @@ Object {
             </tr>
           </thead>
           <tbody
-            class="MuiTableBody-root css-6wwm3k-MuiTableBody-root"
+            class="MuiTableBody-root css-wrc2bj-MuiTableBody-root"
           >
             <tr
               class="MuiTableRow-root css-1la21jl-MuiTableRow-root"
@@ -167,7 +167,7 @@ Object {
         class="MuiTable-root css-16un4wc-MuiTable-root"
       >
         <thead
-          class="MuiTableHead-root css-95fec7-MuiTableHead-root"
+          class="MuiTableHead-root css-ivi6of-MuiTableHead-root"
           data-testid="table-head"
         >
           <tr
@@ -275,7 +275,7 @@ Object {
           </tr>
         </thead>
         <tbody
-          class="MuiTableBody-root css-6wwm3k-MuiTableBody-root"
+          class="MuiTableBody-root css-wrc2bj-MuiTableBody-root"
         >
           <tr
             class="MuiTableRow-root css-1la21jl-MuiTableRow-root"
