@@ -397,7 +397,9 @@
     "pay-by-inv": "Pay by invoice",
     "avatar-too-large": "The avatar submitted is too large. Maximum size is {{maxSize}} MB.",
     "unknown-error": "Unknown error",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "replace": "Replace",
+    "transfer": "Transfer"
   },
   "components": {
     "not-found": {
@@ -1105,7 +1107,8 @@
       "cancel-invite": "Cancel invite",
       "invite-sent": "Invite sent.",
       "invite-canceled": "Invite canceled.",
-      "no-attendees": "No attendees"
+      "no-attendees": "No attendees",
+      "manage-attendance": "Manage attendance"
     },
     "course-grading-details": {
       "title": "Grading details",

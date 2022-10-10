@@ -8,7 +8,7 @@ import { StyledNavLink } from '../StyledNavLink'
 
 export const NavLinks = () => {
   const { t } = useTranslation()
-  const { acl, isOrgAdmin } = useAuth()
+  const { acl } = useAuth()
 
   return (
     <>
@@ -16,7 +16,7 @@ export const NavLinks = () => {
         {t('my-courses')}
       </Link>
 
-      {acl.isTTAdmin() || isOrgAdmin ? (
+      {acl.canManageOrgCourses() ? (
         <Link component={StyledNavLink} to="/manage-courses">
           {t('courses')}
         </Link>

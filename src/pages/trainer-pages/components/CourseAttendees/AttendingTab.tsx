@@ -1,6 +1,14 @@
+import MoveDownIcon from '@mui/icons-material/MoveDown'
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import {
   Box,
+  Button,
   Chip,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -34,6 +42,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const isBlendedCourse = course.go1Integration
 
   const {
@@ -99,9 +108,25 @@ export const AttendingTab = ({ course }: TabProperties) => {
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
+        {
+          id: 'actions',
+          label: '',
+          sorting: false,
+        },
       ].filter(Boolean),
     [t, isBlendedCourse]
   )
+
+  const onActionsClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget)
+    },
+    []
+  )
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null)
+  }, [])
 
   return (
     <>
@@ -153,6 +178,57 @@ export const AttendingTab = ({ course }: TabProperties) => {
                     </TableCell>
                   )}
                   <TableCell>View</TableCell>
+                  <TableCell>
+                    <Button onClick={onActionsClick} variant="text">
+                      {t('pages.course-participants.manage-attendance')}
+                    </Button>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <MoveDownIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText>
+                          <Typography
+                            variant="body1"
+                            color="primary"
+                            fontWeight={500}
+                          >
+                            {t('common.replace')}
+                          </Typography>
+                        </ListItemText>
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <SwapHorizIcon color="primary" />
+                        </ListItemIcon>
+                        <Typography
+                          variant="body1"
+                          color="primary"
+                          fontWeight={500}
+                        >
+                          {t('common.transfer')}
+                        </Typography>
+                      </MenuItem>
+                      <MenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <PersonRemoveIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText>
+                          <Typography
+                            variant="body1"
+                            color="primary"
+                            fontWeight={500}
+                          >
+                            {t('common.remove')}
+                          </Typography>
+                        </ListItemText>
+                      </MenuItem>
+                    </Menu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
