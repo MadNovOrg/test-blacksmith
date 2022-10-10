@@ -28,6 +28,10 @@ import {
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
+import { TransferParticipantPage } from '@app/pages/TransferParticipant'
+import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
+import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
+import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
@@ -70,6 +74,14 @@ const TTAdminRoutes = () => {
             path="grading/:participantId"
             element={<ParticipantGrading />}
           />
+          <Route
+            path="transfer/:participantId"
+            element={<TransferParticipantPage />}
+          >
+            <Route index element={<ChooseTransferCourse />} />
+            <Route path="details" element={<TransferDetails />} />
+            <Route path="review" element={<TransferReview />} />
+          </Route>
         </Route>
       </Route>
 

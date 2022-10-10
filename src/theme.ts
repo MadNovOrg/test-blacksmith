@@ -1,4 +1,4 @@
-import { alpha, createTheme } from '@mui/material'
+import { alpha, createTheme } from '@mui/material/styles'
 import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
@@ -474,7 +474,19 @@ export default createTheme({
 
           '& .MuiAlert-icon': {
             alignItems: 'center',
-            color: '#0290A1',
+            color: theme.colors.teal[500],
+          },
+        },
+        outlinedInfo: {
+          backgroundColor: theme.colors.teal[100],
+          borderColor: theme.colors.teal[500],
+          color: theme.palette.secondary.main,
+          boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+          fontWeight: 500,
+
+          '& .MuiAlert-icon': {
+            alignItems: 'center',
+            color: theme.colors.teal[500],
           },
         },
       },

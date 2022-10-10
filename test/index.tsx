@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material'
+import { ThemeProvider } from '@mui/material/styles'
 import { waitFor, render as _render, screen } from '@testing-library/react'
 import Chance from 'chance'
 import { deepmerge } from 'deepmerge-ts'

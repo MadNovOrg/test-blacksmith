@@ -10,6 +10,7 @@ module.exports = {
     '!src/**/*.d.ts',
   ],
   roots: ['<rootDir>/src/', '<rootDir>/test/'],
+  setupFiles: ['<rootDir>/node_modules/jest-offline'],
   setupFilesAfterEnv: ['<rootDir>/test/jest-setup.ts'],
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',

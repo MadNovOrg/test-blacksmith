@@ -33260,8 +33260,6 @@ export enum Venue_Update_Column {
 export type Waitlist = {
   __typename?: 'waitlist';
   confirmed: Scalars['Boolean'];
-  /** An object relationship */
-  course: Course;
   courseId: Scalars['Int'];
   createdAt: Scalars['timestamptz'];
   email: Scalars['String'];
@@ -33341,7 +33339,6 @@ export type Waitlist_Bool_Exp = {
   _not?: InputMaybe<Waitlist_Bool_Exp>;
   _or?: InputMaybe<Array<Waitlist_Bool_Exp>>;
   confirmed?: InputMaybe<Boolean_Comparison_Exp>;
-  course?: InputMaybe<Course_Bool_Exp>;
   courseId?: InputMaybe<Int_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
@@ -33368,7 +33365,6 @@ export type Waitlist_Inc_Input = {
 /** input type for inserting data into table "waitlist" */
 export type Waitlist_Insert_Input = {
   confirmed?: InputMaybe<Scalars['Boolean']>;
-  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   courseId?: InputMaybe<Scalars['Int']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
@@ -33448,7 +33444,6 @@ export type Waitlist_On_Conflict = {
 /** Ordering options when selecting data from "waitlist". */
 export type Waitlist_Order_By = {
   confirmed?: InputMaybe<Order_By>;
-  course?: InputMaybe<Course_Order_By>;
   courseId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
@@ -33747,6 +33742,29 @@ export type StripeCreatePaymentMutationVariables = Exact<{
 
 
 export type StripeCreatePaymentMutation = { __typename?: 'mutation_root', paymentIntent?: { __typename?: 'StripeCreatePaymentIntentOutput', clientSecret: string, amount: number, currency: Currency } | null };
+
+export type ParticipantTransferQueryVariables = Exact<{
+  id: Scalars['uuid'];
+}>;
+
+
+export type ParticipantTransferQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+
+export type TransferParticipantDetailsQueryVariables = Exact<{
+  courseId: Scalars['Int'];
+  participantId: Scalars['uuid'];
+}>;
+
+
+export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+
+export type TransferEligibleCoursesQueryVariables = Exact<{
+  level?: InputMaybe<Course_Level_Enum>;
+  startDate?: InputMaybe<Scalars['timestamptz']>;
+}>;
+
+
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null, course_code?: string | null, schedule: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
 
 export type CourseGradingDataQueryVariables = Exact<{
   id: Scalars['Int'];

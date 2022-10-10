@@ -1719,6 +1719,26 @@
       },
       "please-select-organization": "Please select organisation to sort by distance.",
       "select-organization": "Please select organization"
+    },
+    "transfer-participant": {
+      "title": "Transfer participant",
+      "back-btn-text": "Course details",
+      "attendee-label": "Attendee",
+      "steps": {
+        "step-select-course": "Select a new course",
+        "step-transfer-details": "Transfer details",
+        "step-review": "Review & confirm"
+      },
+      "choose-course": {
+        "title": "Select a new course",
+        "col-name": "Course name",
+        "col-venue": "Venue",
+        "col-start-date": "Starts",
+        "col-end-date": "Ends",
+        "no-courses": "No eligible courses for transfer at the moment",
+        "next-btn-text": "Transfer details",
+        "venue-virtual": "Virtual"
+      }
     }
   },
   "course-evaluation": {
