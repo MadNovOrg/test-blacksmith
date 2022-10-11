@@ -267,7 +267,8 @@
       "confirm-password-required": "Please re-enter the new password",
       "confirm-password-invalid": "Confirm password must be same as password",
       "otp-required": "Please enter 6 digit passcode received in email",
-      "other-position-required": "Please enter your job position"
+      "other-position-required": "Please enter your job position",
+      "maximum-chars-limit": "Maximum {{ number }} characters exceeded"
     },
     "validation-notice": "All fields are mandatory.",
     "create-free-account": "Create your free Team Teach Hub account",
@@ -400,7 +401,8 @@
     "unknown-error": "Unknown error",
     "cancelled": "Cancelled",
     "replace": "Replace",
-    "transfer": "Transfer"
+    "transfer": "Transfer",
+    "cancellation-reason": "Cancellation reason"
   },
   "components": {
     "not-found": {
@@ -1767,6 +1769,11 @@
         "back-btn-text": "Back to transfer details",
         "submit-btn-text": "Confirm transfer"
       }
+    },
+    "individual-cancellation": {
+      "title": "Remove {{ name }} from {{ course }}?",
+      "description": "This action will immediately remove this attendee from this course. This will notify the attendee and organisation (if applicable). Finance will make changes on the invoice(s), where necessary.",
+      "remove-attendee": "Remove attendee"
     }
   },
   "course-evaluation": {

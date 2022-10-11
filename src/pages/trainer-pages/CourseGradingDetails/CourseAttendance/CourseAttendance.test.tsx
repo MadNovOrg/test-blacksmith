@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -30,6 +30,7 @@ describe('component: CourseAttendance', () => {
 
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
+      mutate: jest.fn(),
     })
 
     render(
@@ -57,6 +58,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(
@@ -92,6 +94,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(
@@ -135,6 +138,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(
@@ -174,6 +178,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     localStorage.setItem(
@@ -217,6 +222,7 @@ describe('component: CourseAttendance', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(

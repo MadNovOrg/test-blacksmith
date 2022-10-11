@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import { KeyedMutator } from 'swr/dist/types'
 
 import {
   ParamsType,
@@ -49,6 +50,7 @@ export default function useCourseParticipants(
   error?: Error
   total?: number
   status: LoadingStatus
+  mutate: KeyedMutator<ResponseType>
 } {
   const sortBy = options?.sortBy ?? 'name'
   const order = options?.order ?? 'asc'
@@ -70,7 +72,11 @@ export default function useCourseParticipants(
     queryConditions.push(options.where)
   }
 
-  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
+  const { data, error, mutate } = useSWR<
+    ResponseType,
+    Error,
+    [string, ParamsType]
+  >([
     QUERY,
     {
       limit: options?.pagination?.limit,
@@ -85,5 +91,6 @@ export default function useCourseParticipants(
     error,
     total: data?.courseParticipantsAggregation.aggregate.count,
     status: getSWRLoadingStatus(data, error),
+    mutate,
   }
 }

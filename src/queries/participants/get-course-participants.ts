@@ -36,6 +36,7 @@ export const QUERY = gql`
       id
       attended
       profile {
+        id
         fullName
         email
         contactDetails

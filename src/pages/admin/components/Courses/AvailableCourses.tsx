@@ -55,7 +55,8 @@ export const AvailableCourses: React.FC = () => {
   const { Pagination, perPage, offset } = useTablePagination()
   const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
     id ?? ALL_ORGS,
-    profile?.id
+    profile?.id,
+    acl.isTTAdmin()
   )
 
   const distances = useMemo(() => {

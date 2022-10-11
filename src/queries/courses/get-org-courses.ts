@@ -6,10 +6,14 @@ export const Matcher = /(query GetOrgCourses)/i
 
 export const QUERY = gql`
   ${COURSE}
-  query GetOrgCourses($where: organization_bool_exp = {}) {
+  query GetOrgCourses(
+    $where: organization_bool_exp = {}
+    $courseFilter: course_bool_exp = {}
+  ) {
     courses: course(
       where: {
         _and: [
+          $courseFilter
           { organization: $where }
           { schedule: { start: { _gt: "now()" } } }
         ]

@@ -72,6 +72,7 @@ describe('component: CourseAttendees', () => {
 
     useCourseParticipantsMock.mockReturnValue({
       status: LoadingStatus.FETCHING,
+      mutate: jest.fn(),
     })
 
     render(<CourseAttendees course={course} />)
@@ -92,6 +93,7 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: participants.length,
+      mutate: jest.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -133,6 +135,7 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: participants.length,
+      mutate: jest.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -164,6 +167,7 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 15,
+      mutate: jest.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -204,6 +208,7 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 15,
+      mutate: jest.fn(),
     })
 
     useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -254,6 +259,7 @@ describe('component: CourseAttendees', () => {
       status: LoadingStatus.SUCCESS,
       data: participants,
       total: 3,
+      mutate: jest.fn(),
     })
 
     useWaitlistMock.mockReturnValue({
@@ -321,6 +327,7 @@ describe('component: CourseAttendees', () => {
         status: LoadingStatus.SUCCESS,
         data: [],
         total: 0,
+        mutate: jest.fn(),
       })
       useCourseMock.mockReturnValue({
         mutate: jest.fn(),

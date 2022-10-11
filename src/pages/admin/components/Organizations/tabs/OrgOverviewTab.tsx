@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
+import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import useOrg from '@app/hooks/useOrg'
 import useOrgCourses from '@app/hooks/useOrgCourses'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
@@ -49,7 +50,14 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
   } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
   const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
     orgId,
-    profile?.id
+    profile?.id,
+    acl.isTTAdmin(),
+    {
+      _and: [
+        { type: { _eq: Course_Type_Enum.Open } },
+        { status: { _neq: Course_Status_Enum.Cancelled } },
+      ],
+    }
   )
 
   const defaultTab =

@@ -5,7 +5,7 @@ import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { Grade } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
 import { CourseGrading } from './CourseGrading'
@@ -19,6 +19,7 @@ describe('component: CourseGrading', () => {
     course.gradingConfirmed = true
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.FETCHING,
+      mutate: jest.fn(),
     })
 
     render(
@@ -41,6 +42,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(
@@ -76,6 +78,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(
@@ -114,6 +117,7 @@ describe('component: CourseGrading', () => {
     useCourseParticipantsMocked.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: participants,
+      mutate: jest.fn(),
     })
 
     render(

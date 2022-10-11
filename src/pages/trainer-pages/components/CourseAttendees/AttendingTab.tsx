@@ -21,9 +21,11 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
 import {
   BlendedLearningStatus,
   Course,
+  CourseParticipant,
   CourseType,
   SortOrder,
 } from '@app/types'
@@ -43,12 +45,15 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [individual, setIndividual] = useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
+  const isOpenCourse = course.type === CourseType.OPEN
 
   const {
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
+    mutate,
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: sortColumn,
     order,
@@ -108,11 +113,13 @@ export const AttendingTab = ({ course }: TabProperties) => {
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        {
-          id: 'actions',
-          label: '',
-          sorting: false,
-        },
+        isOpenCourse
+          ? {
+              id: 'actions',
+              label: '',
+              sorting: false,
+            }
+          : null,
       ].filter(Boolean),
     [t, isBlendedCourse]
   )
@@ -127,6 +134,14 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const handleClose = useCallback(() => {
     setAnchorEl(null)
   }, [])
+
+  const handleRemove = useCallback(
+    (participant: CourseParticipant) => {
+      handleClose()
+      setIndividual(participant)
+    },
+    [handleClose]
+  )
 
   return (
     <>
@@ -178,57 +193,61 @@ export const AttendingTab = ({ course }: TabProperties) => {
                     </TableCell>
                   )}
                   <TableCell>View</TableCell>
-                  <TableCell>
-                    <Button onClick={onActionsClick} variant="text">
-                      {t('pages.course-participants.manage-attendance')}
-                    </Button>
-                    <Menu
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <MoveDownIcon color="primary" />
-                        </ListItemIcon>
-                        <ListItemText>
+                  {isOpenCourse ? (
+                    <TableCell>
+                      <Button onClick={onActionsClick} variant="text">
+                        {t('pages.course-participants.manage-attendance')}
+                      </Button>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleClose}>
+                          <ListItemIcon>
+                            <MoveDownIcon color="primary" />
+                          </ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              variant="body1"
+                              color="primary"
+                              fontWeight={500}
+                            >
+                              {t('common.replace')}
+                            </Typography>
+                          </ListItemText>
+                        </MenuItem>
+                        <MenuItem onClick={handleClose}>
+                          <ListItemIcon>
+                            <SwapHorizIcon color="primary" />
+                          </ListItemIcon>
                           <Typography
                             variant="body1"
                             color="primary"
                             fontWeight={500}
                           >
-                            {t('common.replace')}
+                            {t('common.transfer')}
                           </Typography>
-                        </ListItemText>
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <SwapHorizIcon color="primary" />
-                        </ListItemIcon>
-                        <Typography
-                          variant="body1"
-                          color="primary"
-                          fontWeight={500}
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => handleRemove(courseParticipant)}
                         >
-                          {t('common.transfer')}
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <PersonRemoveIcon color="primary" />
-                        </ListItemIcon>
-                        <ListItemText>
-                          <Typography
-                            variant="body1"
-                            color="primary"
-                            fontWeight={500}
-                          >
-                            {t('common.remove')}
-                          </Typography>
-                        </ListItemText>
-                      </MenuItem>
-                    </Menu>
-                  </TableCell>
+                          <ListItemIcon>
+                            <PersonRemoveIcon color="primary" />
+                          </ListItemIcon>
+                          <ListItemText>
+                            <Typography
+                              variant="body1"
+                              color="primary"
+                              fontWeight={500}
+                            >
+                              {t('common.remove')}
+                            </Typography>
+                          </ListItemText>
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               ))}
             </TableBody>
@@ -244,6 +263,15 @@ export const AttendingTab = ({ course }: TabProperties) => {
               rowsPerPage={perPage}
               rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
               data-testid="course-participants-pagination"
+            />
+          ) : null}
+
+          {individual ? (
+            <RemoveIndividualModal
+              participant={individual}
+              course={course}
+              onClose={() => setIndividual(undefined)}
+              onSave={mutate}
             />
           ) : null}
         </>
