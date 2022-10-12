@@ -167,6 +167,34 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
+              Course Cost
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              £240.00
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Trainer expenses
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              £721.50
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1gy2hxq"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
               Subtotal
             </p>
             <p
@@ -204,20 +232,6 @@ Object {
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
               £20.00
-            </p>
-          </div>
-          <div
-            class="MuiBox-root css-3mllz6"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              Trainer expenses
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              £721.50
             </p>
           </div>
           <div
@@ -1096,6 +1110,34 @@ After you confirm your order you will be taken to a secure page where you can pa
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
+            Course Cost
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            £240.00
+          </p>
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Trainer expenses
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            £721.50
+          </p>
+        </div>
+        <div
+          class="MuiBox-root css-1gy2hxq"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
             Subtotal
           </p>
           <p
@@ -1133,20 +1175,6 @@ After you confirm your order you will be taken to a secure page where you can pa
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
             £20.00
-          </p>
-        </div>
-        <div
-          class="MuiBox-root css-3mllz6"
-        >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            Trainer expenses
-          </p>
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            £721.50
           </p>
         </div>
         <div
@@ -2083,7 +2111,7 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              Subtotal
+              Course Cost
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
@@ -2092,20 +2120,17 @@ Object {
             </p>
           </div>
           <div
-            class="MuiBox-root css-3mllz6"
+            class="MuiBox-root css-1gy2hxq"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              VAT (20%)
-               (
-              10
-              %)
+              Subtotal
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              £6.00
+              £60.00
             </p>
           </div>
           <div
@@ -2132,6 +2157,23 @@ Object {
                 </button>
               </div>
             </div>
+          </div>
+          <div
+            class="MuiBox-root css-3mllz6"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              VAT (20%)
+               (
+              10
+              %)
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              £6.00
+            </p>
           </div>
           <div
             class="MuiBox-root css-17vpr0m"
@@ -2963,7 +3005,7 @@ After you confirm your order you will be taken to a secure page where you can pa
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Subtotal
+            Course Cost
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
@@ -2972,20 +3014,17 @@ After you confirm your order you will be taken to a secure page where you can pa
           </p>
         </div>
         <div
-          class="MuiBox-root css-3mllz6"
+          class="MuiBox-root css-1gy2hxq"
         >
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            VAT (20%)
-             (
-            10
-            %)
+            Subtotal
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            £6.00
+            £60.00
           </p>
         </div>
         <div
@@ -3012,6 +3051,23 @@ After you confirm your order you will be taken to a secure page where you can pa
               </button>
             </div>
           </div>
+        </div>
+        <div
+          class="MuiBox-root css-3mllz6"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            VAT (20%)
+             (
+            10
+            %)
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            £6.00
+          </p>
         </div>
         <div
           class="MuiBox-root css-17vpr0m"

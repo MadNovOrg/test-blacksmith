@@ -610,6 +610,7 @@ export type ExpensesInput = {
     value?: number
     flightDays?: number
     accommodationNights?: number
+    accommodationCost?: number
   }>
   miscellaneous?: Array<
     | {
@@ -688,6 +689,7 @@ export type CourseExpenseData =
   | {
       type: CourseExpenseType.Accommodation
       accommodationNights: number
+      accommodationCost: number
     }
 
 export type Go1LicensingPrices = {

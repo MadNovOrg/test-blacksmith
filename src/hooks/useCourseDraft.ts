@@ -41,13 +41,14 @@ export function useCourseDraft(
     [string, GetCourseDraftQueryVariables]
   >([GET_COURSE_DRAFT, { profileId, courseType }])
 
-  const fetchDraft = useCallback(() => {
-    return {
+  const fetchDraft = useCallback(
+    () => ({
       data: data?.course_draft[0]?.data ?? {},
       error,
       status: getSWRLoadingStatus(data, error),
-    }
-  }, [data, error])
+    }),
+    [data, error]
+  )
 
   const removeDraft = useCallback(async () => {
     await fetcher<
@@ -59,9 +60,19 @@ export function useCourseDraft(
 
   const setDraft = useCallback(
     async (draft: Draft) => {
+      const normalizedDraft = draft
+      if (normalizedDraft.expenses) {
+        for (const key in normalizedDraft.expenses) {
+          normalizedDraft.expenses[key].transport =
+            normalizedDraft.expenses[key].transport?.filter(Boolean) ?? []
+          normalizedDraft.expenses[key].miscellaneous =
+            normalizedDraft.expenses[key].miscellaneous?.filter(Boolean) ?? []
+        }
+      }
+
       await fetcher<SetCourseDraftMutation, SetCourseDraftMutationVariables>(
         SET_COURSE_DRAFT,
-        { courseType, data: draft, profileId }
+        { courseType, data: normalizedDraft, profileId }
       )
     },
     [fetcher, courseType, profileId]

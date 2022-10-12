@@ -74,6 +74,7 @@ const getMockData = (
     ready: true,
     setBooking: jest.fn(),
     amounts: {
+      courseCost: subtotal,
       freeSpacesDiscount,
       subtotal,
       discount,

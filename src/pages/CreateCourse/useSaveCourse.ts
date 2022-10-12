@@ -36,40 +36,51 @@ const prepareExpensesData = (
     const { transport, miscellaneous } = expenses[trainerId]
 
     let accommodationNightsTotal = 0
+    let accommodationCostTotal = 0
 
     transport
       .filter(t => t.method !== TransportMethod.NONE)
-      .forEach(({ method, value, accommodationNights, flightDays }) => {
-        if (accommodationNights && accommodationNights > 0) {
-          accommodationNightsTotal += accommodationNights
-        }
-
-        const expense: Course_Expenses_Insert_Input = {
-          trainerId,
-          data: {
-            type: CourseExpenseType.Transport,
-            method,
-          },
-        }
-
-        if (method === TransportMethod.CAR) {
-          expense.data.mileage = value
-        } else {
-          expense.data.cost = value
-
-          if (method === TransportMethod.FLIGHTS) {
-            expense.data.flightDays = flightDays
+      .forEach(
+        ({
+          method,
+          value,
+          accommodationCost,
+          accommodationNights,
+          flightDays,
+        }) => {
+          if (accommodationNights && accommodationNights > 0) {
+            accommodationNightsTotal += accommodationNights ?? 0
+            accommodationCostTotal += accommodationCost ?? 0
           }
-        }
 
-        courseExpenses.push(expense)
-      })
+          const expense: Course_Expenses_Insert_Input = {
+            trainerId,
+            data: {
+              type: CourseExpenseType.Transport,
+              method,
+            },
+          }
+
+          if (method === TransportMethod.CAR) {
+            expense.data.mileage = value
+          } else {
+            expense.data.cost = value
+
+            if (method === TransportMethod.FLIGHTS) {
+              expense.data.flightDays = flightDays
+            }
+          }
+
+          courseExpenses.push(expense)
+        }
+      )
 
     if (accommodationNightsTotal > 0) {
       courseExpenses.push({
         trainerId,
         data: {
           type: CourseExpenseType.Accommodation,
+          accommodationCost: accommodationCostTotal,
           accommodationNights: accommodationNightsTotal,
         },
       })
@@ -178,11 +189,7 @@ export function useSaveCourse(): {
                 }
               : null),
             ...(courseData.type === CourseType.CLOSED
-              ? {
-                  expenses: {
-                    data: prepareExpensesData(expenses),
-                  },
-                }
+              ? { expenses: { data: prepareExpensesData(expenses) } }
               : null),
             ...(courseData.type === CourseType.INDIRECT &&
             go1Licensing?.prices.amountDue

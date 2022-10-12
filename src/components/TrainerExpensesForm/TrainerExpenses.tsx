@@ -21,7 +21,7 @@ import { DropdownMenu } from '@app/components/DropdownMenu'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { ExpensesInput, TrainerInput, TransportMethod } from '@app/types'
-import { noop } from '@app/util'
+import { DEFAULT_ACCOMMODATION_COST_PER_NIGHT, noop } from '@app/util'
 
 import { getError, transportMethodToDropdownItem } from './helpers'
 
@@ -91,23 +91,33 @@ export const makeSchema = (t: TFunction) =>
             .number()
             .integer()
             .min(
-              0,
+              1,
               t('pages.create-course.trainer-expenses.num-error', {
-                min: 0,
+                min: 1,
               })
             )
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
-                min: 0,
+                min: 1,
               })
+            ),
+          accommodationCost: yup
+            .number()
+            .min(
+              0,
+              t('pages.create-course.trainer-expenses.num-error', { min: 0 })
             )
-            .when('method', {
-              is: TransportMethod.NONE,
-              then: s => s.optional(),
-              otherwise: s =>
-                s.required(
-                  t('pages.create-course.trainer-expenses.nights-error')
-                ),
+            .typeError(
+              t('pages.create-course.trainer-expenses.num-error', { min: 0 })
+            )
+            .when('accommodationNights', (accommodationNights, s) => {
+              if (accommodationNights) {
+                return s.required(
+                  t(
+                    'pages.create-course.trainer-expenses.accommodation-cost-error'
+                  )
+                )
+              }
             }),
         })
       )
@@ -145,15 +155,13 @@ export const TrainerExpenses: React.FC<Props> = ({
 
   const schema = useMemo(() => makeSchema(t), [t])
 
-  const [displayAccommodation, setDisplayAccommodation] = useState<boolean[]>([
-    false,
-  ])
+  const [displayAccommodation, setDisplayAccommodation] = useState<
+    Record<number, boolean>
+  >({})
 
   const { control, formState, register, setValue, unregister } =
     useForm<FormValues>({
-      defaultValues: value ?? {
-        transport: [{ accommodationNights: 0, method: TransportMethod.NONE }],
-      },
+      defaultValues: value ?? { transport: [{ method: TransportMethod.NONE }] },
       mode: 'all',
       resolver: yupResolver(schema) as Resolver<FormValues>,
     })
@@ -164,25 +172,25 @@ export const TrainerExpenses: React.FC<Props> = ({
   const { transport, miscellaneous } = formValues
 
   useEffect(() => {
-    onChange(formValues as FormValues, isValid)
-
-    const newDisplayAccommodations: boolean[] = []
-    formValues?.transport?.forEach(t => {
-      if (t.accommodationNights && t.accommodationNights > 0) {
-        newDisplayAccommodations.push(true)
-      } else {
-        newDisplayAccommodations.push(false)
+    const newDisplayAccommodation = { ...displayAccommodation }
+    transport?.forEach((entry, idx) => {
+      if (entry?.accommodationNights && entry.accommodationNights > 0) {
+        newDisplayAccommodation[idx] = true
       }
     })
-    setDisplayAccommodation(newDisplayAccommodations)
+    setDisplayAccommodation(newDisplayAccommodation)
+  }, []) /* eslint-disable-line react-hooks/exhaustive-deps */
+
+  useEffect(() => {
+    onChange(formValues as FormValues, isValid)
   }, [formValues, isValid, onChange])
 
-  const showAddTripButton = Boolean(
-    transport &&
-      transport?.length > 0 &&
-      transport[transport.length - 1] &&
-      transport[transport.length - 1].method !== TransportMethod.NONE
-  )
+  const validTransport = transport?.filter(Boolean) ?? []
+
+  const showAddTripButton =
+    validTransport &&
+    validTransport.length > 0 &&
+    validTransport[validTransport.length - 1].method !== TransportMethod.NONE
 
   return (
     <Stack spacing={0} ml={2} mt={3}>
@@ -251,14 +259,20 @@ export const TrainerExpenses: React.FC<Props> = ({
                 <Grid item xs={5} />
               )}
 
-              {transport?.length && transport.length > 1 ? (
+              {validTransport.length > 1 ? (
                 <Grid item xs={1} mt={2}>
                   <Button
                     variant="text"
                     onClick={() => {
+                      unregister(`transport.${idx}.method`)
+                      unregister(`transport.${idx}.value`)
+                      unregister(`transport.${idx}.flightDays`)
+                      unregister(`transport.${idx}.accommodationNights`)
+                      unregister(`transport.${idx}.accommodationCost`)
                       unregister(`transport.${idx}`)
-                      const currentDisplay = [...displayAccommodation]
-                      currentDisplay.splice(idx, 1)
+
+                      const currentDisplay = { ...displayAccommodation }
+                      delete currentDisplay[idx]
                       setDisplayAccommodation(currentDisplay)
                     }}
                     sx={{
@@ -311,7 +325,16 @@ export const TrainerExpenses: React.FC<Props> = ({
                     control={
                       <Switch
                         onChange={e => {
-                          const currentDisplay = [...displayAccommodation]
+                          if (e.target.checked) {
+                            entry.accommodationNights = 1
+                            entry.accommodationCost =
+                              DEFAULT_ACCOMMODATION_COST_PER_NIGHT
+                          } else {
+                            entry.accommodationNights = 0
+                            entry.accommodationCost = 0
+                          }
+
+                          const currentDisplay = { ...displayAccommodation }
                           currentDisplay[idx] = e.target.checked
                           setDisplayAccommodation(currentDisplay)
                         }}
@@ -329,7 +352,7 @@ export const TrainerExpenses: React.FC<Props> = ({
 
             {entry.method !== TransportMethod.NONE &&
             displayAccommodation[idx] ? (
-              <Grid container mt={0}>
+              <Grid container spacing={2} mt={0}>
                 <Grid item xs={6}>
                   <TextField
                     label={t(
@@ -352,13 +375,38 @@ export const TrainerExpenses: React.FC<Props> = ({
                       getError(errors, idx, 'accommodationNights')
                     )}
                   />
+                  <FormHelperText error>
+                    {getError(errors, idx, 'accommodationNights')}
+                  </FormHelperText>
+                </Grid>
+
+                <Grid item xs={5}>
+                  <TextField
+                    label={t(
+                      'pages.create-course.trainer-expenses.accommodation-cost'
+                    )}
+                    {...register(`transport.${idx}.accommodationCost`, {
+                      valueAsNumber: true,
+                    })}
+                    variant="filled"
+                    fullWidth
+                    type="number"
+                    inputProps={{
+                      min: 0,
+                      step: 0.01,
+                      inputMode: 'numeric',
+                      pattern: '\\d*(\\.\\d*)?',
+                      'data-testid': `trip-${idx}-accommodation-cost`,
+                    }}
+                    error={Boolean(getError(errors, idx, 'accommodationCost'))}
+                  />
                   <Typography variant="caption">
                     {t(
                       'pages.create-course.trainer-expenses.accommodation-caption'
                     )}
                   </Typography>
                   <FormHelperText error>
-                    {getError(errors, idx, 'accommodationNights')}
+                    {getError(errors, idx, 'accommodationCost')}
                   </FormHelperText>
                 </Grid>
               </Grid>
@@ -377,15 +425,11 @@ export const TrainerExpenses: React.FC<Props> = ({
           }}
           startIcon={<AddIcon />}
           onClick={() => {
-            const name: `transport.${number}` = `transport.${
-              transport?.length ?? 0
-            }`
-            const newEntry = {
-              accommodationNights: 0,
-              method: TransportMethod.NONE,
-            }
+            const idx = transport?.length ?? 0
+            const name: `transport.${number}` = `transport.${idx}`
+            const newEntry = { method: TransportMethod.NONE }
             setValue(name, newEntry)
-            setDisplayAccommodation([...displayAccommodation, false])
+            setDisplayAccommodation({ ...displayAccommodation, [idx]: false })
           }}
           data-testid="add-trip-button"
         >
@@ -395,7 +439,7 @@ export const TrainerExpenses: React.FC<Props> = ({
 
       {miscellaneous?.map((entry, idx) =>
         entry ? (
-          <Grid container spacing={2} mt={2}>
+          <Grid key={idx} container spacing={2} mt={2}>
             <Grid item xs={6}>
               <TextField
                 label={t('pages.create-course.trainer-expenses.misc-item-name')}
@@ -435,7 +479,11 @@ export const TrainerExpenses: React.FC<Props> = ({
             <Grid item xs={1} mt={2}>
               <Button
                 variant="text"
-                onClick={() => unregister(`miscellaneous.${idx}`)}
+                onClick={() => {
+                  unregister(`miscellaneous.${idx}.name`)
+                  unregister(`miscellaneous.${idx}.value`)
+                  unregister(`miscellaneous.${idx}`)
+                }}
                 sx={{
                   minWidth: 0,
                   ':hover': {

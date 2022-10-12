@@ -32,6 +32,7 @@ export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
 export const INPUT_TIME_FORMAT = 'HH:mm'
 export const DATE_MASK = '__/__/____'
 export const TIME_MASK = '__:__ _M'
+export const DEFAULT_ACCOMMODATION_COST_PER_NIGHT = 95.0
 
 export const noop = () => {
   // empty
@@ -480,7 +481,7 @@ export const getCourseBeginsForMessage = (course: Course, t: TFunction) => {
 
 export const getTrainerCarCostPerMile = (miles = 0) => miles * 0.6
 
-export const getTrainerAccommodationCost = (nights = 0) => nights * 30
+export const getTrainerSubsistenceCost = (nights = 0) => nights * 30
 
 export const getVatAmount = (amount = 0) => amount * 0.2
 

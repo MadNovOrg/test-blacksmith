@@ -220,6 +220,24 @@ export const CourseBookingDetails: React.FC = () => {
           </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">{t('course-cost')}</Typography>
+            <Typography color="grey.700">
+              {formatCurrency(amounts.courseCost)}
+            </Typography>
+          </Box>
+
+          {booking.trainerExpenses > 0 ? (
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography color="grey.700">
+                {t('pages.book-course.trainer-expenses')}
+              </Typography>
+              <Typography color="grey.700">
+                {formatCurrency(amounts.trainerExpenses)}
+              </Typography>
+            </Box>
+          ) : null}
+
+          <Box mt={2} display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">{t('subtotal')}</Typography>
             <Typography color="grey.700">
               {formatCurrency(amounts.subtotal)}
@@ -237,26 +255,6 @@ export const CourseBookingDetails: React.FC = () => {
             </Box>
           ) : null}
 
-          <Box display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">
-              {t('vat')} ({booking.vat}%)
-            </Typography>
-            <Typography color="grey.700">
-              {formatCurrency(amounts.vat)}
-            </Typography>
-          </Box>
-
-          {booking.trainerExpenses > 0 ? (
-            <Box display="flex" justifyContent="space-between" mb={1}>
-              <Typography color="grey.700">
-                {t('pages.book-course.trainer-expenses')}
-              </Typography>
-              <Typography color="grey.700">
-                {formatCurrency(amounts.trainerExpenses)}
-              </Typography>
-            </Box>
-          ) : null}
-
           {booking.courseType !== CourseType.CLOSED ? (
             <Box>
               <PromoCode
@@ -268,6 +266,15 @@ export const CourseBookingDetails: React.FC = () => {
               />
             </Box>
           ) : null}
+
+          <Box display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">
+              {t('vat')} ({booking.vat}%)
+            </Typography>
+            <Typography color="grey.700">
+              {formatCurrency(amounts.vat)}
+            </Typography>
+          </Box>
 
           <Box mt={2} display="flex" justifyContent="space-between">
             <Typography fontWeight="500" color="primary">

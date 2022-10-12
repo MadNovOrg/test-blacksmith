@@ -35,7 +35,7 @@ import {
   InvoiceDetails,
 } from '@app/types'
 import {
-  getTrainerAccommodationCost,
+  getTrainerSubsistenceCost,
   getTrainerCarCostPerMile,
   max,
 } from '@app/util'
@@ -79,6 +79,7 @@ export type ContextType = {
   ready: boolean
   availableSeats: number
   amounts: {
+    courseCost: number
     freeSpacesDiscount: number
     subtotal: number
     discount: number
@@ -140,7 +141,11 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       profile.course.expenses?.reduce((acc, { data: e }) => {
         switch (e.type) {
           case CourseExpenseType.Accommodation:
-            return acc + getTrainerAccommodationCost(e.accommodationNights)
+            return (
+              acc +
+              getTrainerSubsistenceCost(e.accommodationNights) +
+              e.accommodationCost
+            )
 
           case CourseExpenseType.Miscellaneous:
             return acc + e.cost
@@ -249,17 +254,19 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
         )
 
     const subtotalDiscounted = max(subtotal - discount - freeSpacesDiscount, 0)
+    const vat = (subtotalDiscounted * booking.vat) / 100
+    const amountDue = subtotalDiscounted + vat
+
     const paymentProcessingFee =
       booking.paymentMethod === PaymentMethod.Cc
-        ? stripeProcessingFeeRate.percent * subtotalDiscounted +
+        ? stripeProcessingFeeRate.percent * amountDue +
           stripeProcessingFeeRate.flat
         : 0
 
-    const vat =
-      (subtotalDiscounted + paymentProcessingFee) * (booking.vat / 100)
-    const total = subtotalDiscounted + vat + paymentProcessingFee
+    const total = amountDue + paymentProcessingFee
 
     return {
+      courseCost,
       subtotal,
       discount,
       freeSpacesDiscount,

@@ -15,8 +15,8 @@ import {
   generateCourseName,
   getSWRLoadingStatus,
   getTimeDifferenceAndContext,
+  getTrainerSubsistenceCost,
   getTrainerCarCostPerMile,
-  getTrainerAccommodationCost,
   getVatAmount,
   LoadingStatus,
   roundToTwoDecimals,
@@ -34,6 +34,7 @@ type PageRowProps = {
   caption?: string | null
   isBold?: boolean
   label?: string | null
+  mt?: number
   value?: string | null
   testId?: string
 }
@@ -42,10 +43,11 @@ const PageRow: React.FC<PageRowProps> = ({
   caption,
   isBold,
   label,
+  mt = 4,
   value,
   testId,
 }) => (
-  <Grid container spacing={0} mt={4} data-testid={testId}>
+  <Grid container spacing={0} mt={mt} data-testid={testId}>
     <Grid item xs={8}>
       <Typography
         color={isBold ? mainColor : secondaryColor}
@@ -154,16 +156,35 @@ const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
         0
       ) ?? 0
 
-    const label = t('pages.create-course.trainer-expenses.accommodation')
-    const formattedAmount = t('common.currency', {
-      amount: getTrainerAccommodationCost(accommodationNights),
+    const accommodationCost =
+      expenses.transport.reduce(
+        (acc, { accommodationCost: n }) => (n && n > 0 ? acc + n : acc),
+        0
+      ) ?? 0
+
+    const aLabel = t('pages.create-course.trainer-expenses.accommodation')
+    const aFormattedAmount = t('common.currency', { amount: accommodationCost })
+
+    const sLabel = t('pages.create-course.trainer-expenses.subsistence')
+    const sFormattedAmount = t('common.currency', {
+      amount: getTrainerSubsistenceCost(accommodationNights),
     })
-    const caption = t(
+    const sCaption = t(
       'pages.create-course.review-and-confirm.caption.accommodation',
       { count: accommodationNights }
     )
 
-    return <PageRow label={label} value={formattedAmount} caption={caption} />
+    return (
+      <>
+        <PageRow label={aLabel} value={aFormattedAmount} />
+        <PageRow
+          mt={0}
+          label={sLabel}
+          value={sFormattedAmount}
+          caption={sCaption}
+        />
+      </>
+    )
   }, [t, expenses.transport])
 
   return (
@@ -248,20 +269,21 @@ export const PageContent = () => {
 
     for (const expense of Object.values(expenses)) {
       const transportCost = expense.transport.reduce(
-        (acc, { method, value, accommodationNights }) => {
+        (acc, { method, value, accommodationCost, accommodationNights }) => {
           const cost =
             (method === TransportMethod.CAR
               ? getTrainerCarCostPerMile(value)
               : value) ?? 0
-          const accommodationCost =
+          const subsistenceCost =
             (accommodationNights ?? 0) > 0
-              ? getTrainerAccommodationCost(accommodationNights)
+              ? getTrainerSubsistenceCost(accommodationNights)
               : 0
 
           return (
             roundToTwoDecimals(acc) +
             roundToTwoDecimals(cost) +
-            roundToTwoDecimals(accommodationCost)
+            roundToTwoDecimals(accommodationCost) +
+            roundToTwoDecimals(subsistenceCost)
           )
         },
         0
