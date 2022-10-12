@@ -84,6 +84,32 @@ select_permissions:
             - course_status:
                 _eq: SCHEDULED
       allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - attended
+        - hs_consent
+        - course_id
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - booking_date
+        - created_at
+        - date_graded
+        - updated_at
+        - certificate_id
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
@@ -132,12 +158,15 @@ select_permissions:
         - profile_id
         - registration_id
       filter:
-        profile:
-          organizations:
-            organization:
-              members:
-                profile_id:
-                  _eq: X-Hasura-User-Id
+        _or:
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    profile_id:
+                      _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
   - role: trainer
