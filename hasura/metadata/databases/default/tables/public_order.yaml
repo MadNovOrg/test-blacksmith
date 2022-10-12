@@ -32,6 +32,8 @@ configuration:
       custom_name: orderTotal
     profile_id:
       custom_name: profileId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
   custom_column_names:
     client_purchase_order: clientPurchaseOrder
     course_id: courseId
@@ -47,6 +49,7 @@ configuration:
     billing_email: billingEmail
     order_total: orderTotal
     profile_id: profileId
+    xero_invoice_number: xeroInvoiceNumber
 object_relationships:
   - name: course
     using:
@@ -96,6 +99,7 @@ insert_permissions:
         - promo_codes
         - quantity
         - registrants
+        - xero_invoice_number
       backend_only: false
   - role: tt-ops
     permission:
@@ -117,6 +121,7 @@ insert_permissions:
         - promo_codes
         - quantity
         - registrants
+        - xero_invoice_number
       backend_only: false
   - role: unverified
     permission:
@@ -180,6 +185,7 @@ select_permissions:
         - registrants
         - stripePaymentId
         - vat
+        - xero_invoice_number
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -205,6 +211,7 @@ select_permissions:
         - registrants
         - stripePaymentId
         - vat
+        - xero_invoice_number
       filter: {}
       allow_aggregations: true
   - role: unverified

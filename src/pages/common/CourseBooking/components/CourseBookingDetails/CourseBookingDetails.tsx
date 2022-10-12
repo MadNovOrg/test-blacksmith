@@ -371,7 +371,7 @@ export const CourseBookingDetails: React.FC = () => {
             multiple
             id="emails"
             options={[] as string[]}
-            value={values.emails}
+            value={values?.emails}
             freeSolo
             autoSelect
             onChange={(_, v) =>
@@ -406,7 +406,7 @@ export const CourseBookingDetails: React.FC = () => {
                       bgcolor="common.white"
                     >
                       <Typography variant="caption">
-                        {values.emails.length} / {values.quantity}
+                        {values?.emails?.length} / {values.quantity}
                       </Typography>
 
                       <Typography variant="caption">
@@ -415,7 +415,7 @@ export const CourseBookingDetails: React.FC = () => {
                     </Box>
                   ) : (
                     <Typography variant="caption">
-                      {values.emails.length} / {values.quantity}
+                      {values?.emails?.length} / {values.quantity}
                     </Typography>
                   )
                 }

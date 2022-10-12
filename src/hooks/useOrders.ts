@@ -59,12 +59,23 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     }
 
     if (isFilterValid(filters.searchParam)) {
-      where._or = [
-        { orderDue: { _eq: filters.searchParam } },
-        { orderTotal: { _eq: filters.searchParam } },
-        { course: { name: { _ilike: `%${filters.searchParam}%` } } },
-        { organization: { name: { _ilike: `%${filters.searchParam}%` } } },
-      ]
+      where._or = []
+      where._or.push({
+        course: { name: { _ilike: `%${filters.searchParam}%` } },
+      })
+      where._or.push({
+        organization: { name: { _ilike: `%${filters.searchParam}%` } },
+      })
+      where._or.push({
+        xeroInvoiceNumber: { _ilike: `%${filters.searchParam}%` },
+      })
+
+      const onlyDigits = /^\d+$/.test(filters.searchParam || '')
+
+      if (onlyDigits) {
+        where._or.push({ orderDue: { _eq: filters.searchParam } })
+        where._or.push({ orderTotal: { _eq: filters.searchParam } })
+      }
     }
 
     // TODO

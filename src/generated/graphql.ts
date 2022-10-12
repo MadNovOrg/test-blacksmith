@@ -26233,7 +26233,7 @@ export type Order = {
   registrants: Scalars['json'];
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
-  xero_invoice_number?: Maybe<Scalars['String']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
 
@@ -26354,7 +26354,7 @@ export type Order_Bool_Exp = {
   registrants?: InputMaybe<Json_Comparison_Exp>;
   stripePaymentId?: InputMaybe<String_Comparison_Exp>;
   vat?: InputMaybe<Float8_Comparison_Exp>;
-  xero_invoice_number?: InputMaybe<String_Comparison_Exp>;
+  xeroInvoiceNumber?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** column ordering options */
@@ -26429,7 +26429,7 @@ export type Order_Insert_Input = {
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   vat?: InputMaybe<Scalars['float8']>;
-  xero_invoice_number?: InputMaybe<Scalars['String']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -26453,7 +26453,7 @@ export type Order_Max_Fields = {
   quantity?: Maybe<Scalars['Int']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
-  xero_invoice_number?: Maybe<Scalars['String']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
 /** order by max() on columns of table "order" */
@@ -26476,7 +26476,7 @@ export type Order_Max_Order_By = {
   quantity?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
-  xero_invoice_number?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -26500,7 +26500,7 @@ export type Order_Min_Fields = {
   quantity?: Maybe<Scalars['Int']>;
   stripePaymentId?: Maybe<Scalars['String']>;
   vat?: Maybe<Scalars['float8']>;
-  xero_invoice_number?: Maybe<Scalars['String']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
 };
 
 /** order by min() on columns of table "order" */
@@ -26523,7 +26523,7 @@ export type Order_Min_Order_By = {
   quantity?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
-  xero_invoice_number?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "order" */
@@ -26567,7 +26567,7 @@ export type Order_Order_By = {
   registrants?: InputMaybe<Order_By>;
   stripePaymentId?: InputMaybe<Order_By>;
   vat?: InputMaybe<Order_By>;
-  xero_invoice_number?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: order */
@@ -26625,7 +26625,7 @@ export enum Order_Select_Column {
   /** column name */
   Vat = 'vat',
   /** column name */
-  XeroInvoiceNumber = 'xero_invoice_number'
+  XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
 /** input type for updating data in table "order" */
@@ -26651,7 +26651,7 @@ export type Order_Set_Input = {
   registrants?: InputMaybe<Scalars['json']>;
   stripePaymentId?: InputMaybe<Scalars['String']>;
   vat?: InputMaybe<Scalars['float8']>;
-  xero_invoice_number?: InputMaybe<Scalars['String']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -26783,7 +26783,7 @@ export enum Order_Update_Column {
   /** column name */
   Vat = 'vat',
   /** column name */
-  XeroInvoiceNumber = 'xero_invoice_number'
+  XeroInvoiceNumber = 'xeroInvoiceNumber'
 }
 
 /** aggregate var_pop on columns */
@@ -36015,7 +36015,7 @@ export type GetOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
+export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, xeroInvoiceNumber?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

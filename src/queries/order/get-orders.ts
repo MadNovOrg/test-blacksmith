@@ -25,6 +25,7 @@ export const QUERY = gql`
       orderTotal
       currency
       stripePaymentId
+      xeroInvoiceNumber
       course {
         name
         schedule {
@@ -74,6 +75,7 @@ export type ResponseType = {
       | 'currency'
       | 'stripePaymentId'
       | 'promoCodes'
+      | 'xeroInvoiceNumber'
     > & {
       course: Pick<Order['course'], 'name'> & {
         schedule: Pick<Course['schedule'][number], 'start'>

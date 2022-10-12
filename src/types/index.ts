@@ -516,6 +516,7 @@ export type Order = {
   orderDue: number
   currency: Currency | null
   stripePaymentId: string | null
+  xeroInvoiceNumber: string | null
   course: Partial<Course>
   organization: Partial<Organization>
   promoCodes?: string[]

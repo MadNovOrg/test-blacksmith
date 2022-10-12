@@ -44,7 +44,7 @@ export const List: React.FC<Props> = ({
     const _t = (col: string) => t(`pages.orders.cols-${col}`)
     return [
       checkbox.headCol(orders.map(o => o.id)),
-      { id: 'id', label: _t('invoiceNumber'), sorting: true },
+      { id: 'xeroInvoiceNumber', label: _t('invoiceNumber'), sorting: true },
       { id: 'organization.name', label: _t('billTo'), sorting: true },
       { id: 'paymentMethod', label: _t('paymentMethod'), sorting: true },
       { id: 'orderTotal', label: _t('amount'), sorting: true },
@@ -100,7 +100,7 @@ export const List: React.FC<Props> = ({
           const { due, status, dueDate } = getOrderInfo(o)
 
           return [
-            o.id,
+            o.xeroInvoiceNumber,
             o.organization?.name ?? '-NA-',
             t(`pages.orders.paymentMethod-${o.paymentMethod}`),
             o.orderTotal,
@@ -187,7 +187,7 @@ export const List: React.FC<Props> = ({
                 {checkbox.rowCell(order.id)}
 
                 <TableCell>
-                  <Link href={order.id}>{order.id}</Link>
+                  <Link href={order.id}>{order.xeroInvoiceNumber}</Link>
                 </TableCell>
 
                 <TableCell>{order.organization?.name ?? '-NA-'}</TableCell>
