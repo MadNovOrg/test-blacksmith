@@ -1,0 +1,67 @@
+import {
+  Button,
+  Container,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material'
+import React, { useCallback } from 'react'
+
+type ActionsMenuProperties<T> = {
+  item: T
+  label: string
+  actions: {
+    icon: React.ReactNode
+    label: string
+    onClick: (item: T) => void
+  }[]
+}
+
+export const ActionsMenu = <T,>({
+  label,
+  actions,
+  item,
+}: ActionsMenuProperties<T>) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  const onActionsClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget)
+    },
+    []
+  )
+
+  const onClose = useCallback(() => {
+    setAnchorEl(null)
+  }, [])
+
+  const onClick = useCallback(
+    action => {
+      setAnchorEl(null)
+      action.onClick(item)
+    },
+    [item]
+  )
+
+  return (
+    <Container>
+      <Button onClick={onActionsClick} variant="text">
+        {label}
+      </Button>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
+        {actions.map(action => (
+          <MenuItem key={action.label} onClick={() => onClick(action)}>
+            <ListItemIcon>{action.icon}</ListItemIcon>
+            <ListItemText>
+              <Typography variant="body1" color="primary" fontWeight={500}>
+                {action.label}
+              </Typography>
+            </ListItemText>
+          </MenuItem>
+        ))}
+      </Menu>
+    </Container>
+  )
+}

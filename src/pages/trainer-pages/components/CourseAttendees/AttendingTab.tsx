@@ -3,12 +3,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import {
   Box,
-  Button,
   Chip,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -19,6 +14,7 @@ import {
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ActionsMenu } from '@app/components/ActionsMenu'
 import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
@@ -44,7 +40,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [individual, setIndividual] = useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
@@ -121,27 +116,34 @@ export const AttendingTab = ({ course }: TabProperties) => {
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse]
+    [t, isBlendedCourse, isOpenCourse]
   )
 
-  const onActionsClick = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(event.currentTarget)
-    },
-    []
-  )
-
-  const handleClose = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
-
-  const handleRemove = useCallback(
-    (participant: CourseParticipant) => {
-      handleClose()
-      setIndividual(participant)
-    },
-    [handleClose]
-  )
+  const actions = useMemo(() => {
+    return [
+      {
+        label: t('common.replace'),
+        icon: <MoveDownIcon color="primary" />,
+        onClick: (_: CourseParticipant) => {
+          // TODO not implemented yet
+        },
+      },
+      {
+        label: t('common.transfer'),
+        icon: <SwapHorizIcon color="primary" />,
+        onClick: (_: CourseParticipant) => {
+          // TODO not implemented yet
+        },
+      },
+      {
+        label: t('common.remove'),
+        icon: <PersonRemoveIcon color="primary" />,
+        onClick: (participant: CourseParticipant) => {
+          setIndividual(participant)
+        },
+      },
+    ]
+  }, [t])
 
   return (
     <>
@@ -195,57 +197,11 @@ export const AttendingTab = ({ course }: TabProperties) => {
                   <TableCell>View</TableCell>
                   {isOpenCourse ? (
                     <TableCell>
-                      <Button onClick={onActionsClick} variant="text">
-                        {t('pages.course-participants.manage-attendance')}
-                      </Button>
-                      <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleClose}>
-                          <ListItemIcon>
-                            <MoveDownIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              variant="body1"
-                              color="primary"
-                              fontWeight={500}
-                            >
-                              {t('common.replace')}
-                            </Typography>
-                          </ListItemText>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                          <ListItemIcon>
-                            <SwapHorizIcon color="primary" />
-                          </ListItemIcon>
-                          <Typography
-                            variant="body1"
-                            color="primary"
-                            fontWeight={500}
-                          >
-                            {t('common.transfer')}
-                          </Typography>
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleRemove(courseParticipant)}
-                        >
-                          <ListItemIcon>
-                            <PersonRemoveIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText>
-                            <Typography
-                              variant="body1"
-                              color="primary"
-                              fontWeight={500}
-                            >
-                              {t('common.remove')}
-                            </Typography>
-                          </ListItemText>
-                        </MenuItem>
-                      </Menu>
+                      <ActionsMenu
+                        item={courseParticipant}
+                        label={t('pages.course-participants.manage-attendance')}
+                        actions={actions}
+                      />
                     </TableCell>
                   ) : null}
                 </TableRow>

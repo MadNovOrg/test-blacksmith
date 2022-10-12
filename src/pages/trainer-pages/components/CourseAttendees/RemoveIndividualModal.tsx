@@ -77,7 +77,7 @@ export const RemoveIndividualModal = ({
           ),
       })
       .required()
-  }, [])
+  }, [t])
 
   const {
     register,
@@ -243,6 +243,8 @@ export const RemoveIndividualModal = ({
           />
 
           {error && <Alert severity="error">{error}</Alert>}
+
+          {participant.profile.fullName}
 
           <Box display="flex" justifyContent="space-between" mt={4}>
             <Button
