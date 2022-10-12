@@ -107,7 +107,7 @@ const FeesPanel: React.FC<Props> = ({ courseStartDate, onChange }) => {
             <TextField
               fullWidth
               variant="filled"
-              label={t('custom-fee-option')}
+              label={t('custom-fee-label')}
               error={Boolean(formState.errors.customFee?.message)}
               {...register('customFee')}
             />

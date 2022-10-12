@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 export const PARTICIPANT_TRANSFER = gql`
   query ParticipantTransfer($id: uuid!) {
@@ -68,6 +68,24 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
           postCode
         }
       }
+    }
+  }
+`
+export const TRANSFER_PARTICIPANT = gql`
+  mutation TransferParticipant(
+    $participantId: uuid!
+    $courseId: Int!
+    $auditInput: course_participant_audit_insert_input!
+  ) {
+    update_course_participant_by_pk(
+      pk_columns: { id: $participantId }
+      _set: { course_id: $courseId }
+    ) {
+      id
+    }
+
+    insert_course_participant_audit(objects: [$auditInput]) {
+      affected_rows
     }
   }
 `

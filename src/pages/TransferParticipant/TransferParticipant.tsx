@@ -31,7 +31,7 @@ export const TransferParticipant: React.FC = () => {
           <Box width={400} display="flex" flexDirection="column" pr={4}>
             <Sticky top={20}>
               <Box mb={2}>
-                <BackButton label={t('back-btn-text')} />
+                <BackButton label={t('back-btn-text')} to={'../details'} />
               </Box>
 
               <Box mb={5}>
@@ -51,7 +51,7 @@ export const TransferParticipant: React.FC = () => {
                 <List>
                   <ListItem disableGutters>
                     <ListItemAvatar>
-                      <Avatar />
+                      <Avatar src={participant?.profile.avatar ?? undefined} />
                     </ListItemAvatar>
                     <ListItemText
                       primary={`${participant?.profile.fullName}`}

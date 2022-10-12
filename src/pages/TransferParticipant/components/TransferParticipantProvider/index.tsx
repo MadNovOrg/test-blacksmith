@@ -1,3 +1,7 @@
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import Container from '@mui/material/Container'
 import React, {
   useCallback,
   useContext,
@@ -8,19 +12,25 @@ import React, {
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Course, Course_Participant, Profile } from '@app/generated/graphql'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { useTransferDetails } from '../../hooks/useTransferDetails'
 import { EligibleCourse, FeeType, TransferStepsEnum } from '../../types'
 
-export type FromCourse = Pick<Course, 'id' | 'type' | 'status' | 'level'> & {
+export type FromCourse = Pick<
+  Course,
+  'id' | 'type' | 'status' | 'level' | 'course_code'
+> & {
   start?: string | null
   end?: string | null
 }
 
-type ContextValue = {
-  participant?: Pick<Course_Participant, 'id'> & {
-    profile: Pick<Profile, 'fullName' | 'avatar'>
-  }
+export type ChosenParticipant = Pick<Course_Participant, 'id'> & {
+  profile: Pick<Profile, 'fullName' | 'avatar'>
+}
+
+export type ContextValue = {
+  participant?: ChosenParticipant
   fromCourse?: FromCourse
   toCourse?: EligibleCourse
   fees?: {
@@ -63,18 +73,16 @@ export const TransferParticipantProvider: React.FC<{
     participantId: string
   }
 
-  const { course, participant: fetchedParticipant } = useTransferDetails(
-    Number(courseId),
-    participantId
-  )
+  const { t } = useScopedTranslation('pages.transfer-participant')
+
+  const {
+    course,
+    participant: fetchedParticipant,
+    fetching,
+    error,
+  } = useTransferDetails(Number(courseId), participantId)
 
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!fromCourse) {
-      navigate(`../transfer/${participantId}`)
-    }
-  }, [fromCourse, navigate, participantId])
 
   useEffect(() => {
     if (fetchedParticipant) {
@@ -172,6 +180,34 @@ export const TransferParticipantProvider: React.FC<{
       backFrom,
     ]
   )
+
+  if (fetching) {
+    return (
+      <Box display="flex" justifyContent="center" mt={5}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (!fetching && (!fromCourse || !participant)) {
+    return (
+      <Container>
+        <Alert severity="error" sx={{ mt: 5 }}>
+          {t('no-data-error')}
+        </Alert>
+      </Container>
+    )
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <Alert severity="error" sx={{ mt: 5 }}>
+          {t('generic-error')}
+        </Alert>
+      </Container>
+    )
+  }
 
   return (
     <TransferParticipantContext.Provider value={value}>

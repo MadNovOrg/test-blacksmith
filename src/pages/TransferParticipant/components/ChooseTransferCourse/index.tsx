@@ -26,7 +26,7 @@ export const ChooseTransferCourse: React.FC = () => {
 
   const { courseChosen } = useTransferParticipantContext()
 
-  const [choosenCourse, setChoosenCourse] = useState<EligibleCourse>()
+  const [chosenCourse, setChoosenCourse] = useState<EligibleCourse>()
 
   const { courses, fetching } = useEligibleCourses()
 
@@ -46,8 +46,8 @@ export const ChooseTransferCourse: React.FC = () => {
   )
 
   const handleCourseChosen = () => {
-    if (choosenCourse) {
-      courseChosen(choosenCourse)
+    if (chosenCourse) {
+      courseChosen(chosenCourse)
     }
   }
 
@@ -65,21 +65,14 @@ export const ChooseTransferCourse: React.FC = () => {
 
       {courses?.eligibleCourses?.length ? (
         <>
-          <Table>
-            <TableHead
-              cols={cols}
-              sx={{
-                '.MuiTableRow-root': {
-                  backgroundColor: 'grey.300',
-                },
-              }}
-            />
+          <Table sx={{ background: 'white' }}>
+            <TableHead cols={cols} />
             <TableBody>
               {courses.eligibleCourses.map((course, index) => (
                 <TableRow key={course.id} data-index={index}>
                   <TableCell>
                     <Radio
-                      checked={choosenCourse?.id === course.id}
+                      checked={chosenCourse?.id === course.id}
                       onClick={() => setChoosenCourse(course)}
                       value={course.id}
                       inputProps={{ 'aria-label': String(course.id) }}
@@ -133,7 +126,7 @@ export const ChooseTransferCourse: React.FC = () => {
             <Button
               variant="contained"
               endIcon={<ArrowForward />}
-              disabled={!choosenCourse}
+              disabled={!chosenCourse}
               onClick={() => handleCourseChosen()}
             >
               {t('next-btn-text')}

@@ -35277,7 +35277,7 @@ export type TransferParticipantDetailsQueryVariables = Exact<{
 }>;
 
 
-export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
   level?: InputMaybe<Course_Level_Enum>;
@@ -35286,6 +35286,15 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 
 
 export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null, course_code?: string | null, schedule: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
+
+export type TransferParticipantMutationVariables = Exact<{
+  participantId: Scalars['uuid'];
+  courseId: Scalars['Int'];
+  auditInput: Course_Participant_Audit_Insert_Input;
+}>;
+
+
+export type TransferParticipantMutation = { __typename?: 'mutation_root', update_course_participant_by_pk?: { __typename?: 'course_participant', id: any } | null, insert_course_participant_audit?: { __typename?: 'course_participant_audit_mutation_response', affected_rows: number } | null };
 
 export type CourseGradingDataQueryVariables = Exact<{
   id: Scalars['Int'];

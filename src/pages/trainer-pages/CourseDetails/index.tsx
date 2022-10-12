@@ -38,6 +38,7 @@ const successAlerts = {
   course_submitted:
     'pages.trainer-base.create-course.new-course.submitted-course',
   course_evaluated: 'course-evaluation.saved',
+  participant_transferred: 'pages.transfer-participant.success-message',
 } as const
 
 export const CourseDetails = () => {

@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { ActionsMenu } from '@app/components/ActionsMenu'
 import { TableHead } from '@app/components/Table/TableHead'
@@ -43,6 +44,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [individual, setIndividual] = useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
+  const navigate = useNavigate()
 
   const {
     data: courseParticipants,
@@ -119,6 +121,13 @@ export const AttendingTab = ({ course }: TabProperties) => {
     [t, isBlendedCourse, isOpenCourse]
   )
 
+  const handleTransfer = useCallback(
+    (id: string) => {
+      navigate(`../transfer/${id}`)
+    },
+    [navigate]
+  )
+
   const actions = useMemo(() => {
     return [
       {
@@ -131,8 +140,8 @@ export const AttendingTab = ({ course }: TabProperties) => {
       {
         label: t('common.transfer'),
         icon: <SwapHorizIcon color="primary" />,
-        onClick: (_: CourseParticipant) => {
-          // TODO not implemented yet
+        onClick: (p: CourseParticipant) => {
+          handleTransfer(p.id)
         },
       },
       {
@@ -143,7 +152,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
         },
       },
     ]
-  }, [t])
+  }, [t, handleTransfer])
 
   return (
     <>

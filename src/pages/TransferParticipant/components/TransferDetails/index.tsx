@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useMemo, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 import { MarkOptional } from 'ts-essentials'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -46,7 +47,7 @@ export const TransferDetails: React.FC = () => {
   )
 
   if (!toCourse) {
-    return null
+    return <Navigate to={'../'} replace />
   }
 
   return (

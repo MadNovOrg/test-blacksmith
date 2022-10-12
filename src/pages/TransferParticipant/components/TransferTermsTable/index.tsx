@@ -27,7 +27,7 @@ export const TransferTermsTable: React.FC<Props> = ({ startDate }) => {
   const applicableFee = getTransferTermsFee(startDate)
 
   return (
-    <Table>
+    <Table data-testid="transfer-terms-table">
       <TableHead>
         <TableRow>
           <TableCell>{t('col-start-date')}</TableCell>

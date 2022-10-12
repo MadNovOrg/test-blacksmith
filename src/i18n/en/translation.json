@@ -1730,6 +1730,9 @@
       "title": "Transfer participant",
       "back-btn-text": "Course details",
       "attendee-label": "Attendee",
+      "success-message": "Participant transferred",
+      "no-data-error": "Invalid course or participant for the transfer.",
+      "generic-error": "An error occurred. Please contact your administrator",
       "steps": {
         "step-select-course": "Select a new course",
         "step-transfer-details": "Transfer details",
@@ -1759,6 +1762,7 @@
         "fees-radio-group-title": "Will any fees apply?",
         "apply-terms-option": "Apply transfer terms",
         "custom-fee-option": "Custom fee",
+        "custom-fee-label": "Amount",
         "no-fee-option": "No fees",
         "next-btn-label": "Review & confirm",
         "back-btn-label": "Back to selection"
@@ -1767,7 +1771,8 @@
         "title": "Review & confirm",
         "custom-fee": "Custom fee",
         "back-btn-text": "Back to transfer details",
-        "submit-btn-text": "Confirm transfer"
+        "submit-btn-text": "Confirm transfer",
+        "transferring-error": "There was an error transferring the participant"
       }
     },
     "individual-cancellation": {

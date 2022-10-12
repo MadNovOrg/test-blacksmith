@@ -8,3 +8,41 @@ object_relationships:
   - name: courseParticipant
     using:
       foreign_key_constraint_on: participant_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - participant_id
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - participant_id
+      backend_only: false
+select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true

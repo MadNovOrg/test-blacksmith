@@ -14,6 +14,7 @@ import {
 import { render, screen, userEvent, waitFor } from '@test/index'
 
 import {
+  ChosenParticipant,
   FromCourse,
   TransferParticipantProvider,
   useTransferParticipantContext,
@@ -23,6 +24,21 @@ import { ChooseTransferCourse } from '.'
 
 describe('page: ChooseTransferCourse', () => {
   it('displays an alert if there are no eligible courses for transfer', () => {
+    const fromCourse: FromCourse = {
+      id: 1,
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      end: addDays(new Date(), 1).toISOString(),
+      type: Course_Type_Enum.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
     const client = {
       executeQuery: () =>
         fromValue<{ data: TransferEligibleCoursesQuery }>({
@@ -37,13 +53,8 @@ describe('page: ChooseTransferCourse', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{
-              fromCourse: {
-                id: 1,
-                level: Course_Level_Enum.Level_1,
-                start: new Date().toISOString(),
-                end: new Date().toISOString(),
-                type: Course_Type_Enum.Open,
-              },
+              fromCourse,
+              participant,
             }}
           >
             <ChooseTransferCourse />
@@ -67,6 +78,13 @@ describe('page: ChooseTransferCourse', () => {
       start: fromStartDate.toISOString(),
       end: addDays(fromStartDate, 1).toISOString(),
       type: Course_Type_Enum.Open,
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
     }
 
     const MockTransferDetails: React.FC = () => {
@@ -115,6 +133,7 @@ describe('page: ChooseTransferCourse', () => {
           <TransferParticipantProvider
             initialValue={{
               fromCourse,
+              participant,
             }}
           >
             <Routes>

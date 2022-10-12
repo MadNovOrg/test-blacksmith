@@ -154,6 +154,28 @@ update_permissions:
             profile_id:
               _eq: X-Hasura-User-Id
       check: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - registration_id
+        - invoice_id
+        - booking_date
+        - profile_id
+        - invite_id
+        - go1_enrolment_id
+        - attended
+        - go1_enrolment_status
+        - created_at
+        - updated_at
+        - grading_feedback
+        - grade
+        - date_graded
+        - course_id
+        - certificate_id
+        - hs_consent
+      filter: {}
+      check: null
   - role: tt-ops
     permission:
       columns:
