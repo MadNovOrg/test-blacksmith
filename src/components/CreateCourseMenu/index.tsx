@@ -79,10 +79,6 @@ export const CreateCourseMenu = () => {
               {option.label}
             </MenuItem>
           ))}
-
-          <MenuItem disabled data-testid="bulk-import-option">
-            {t('components.create-course-menu.bulk-import-label')}
-          </MenuItem>
         </Menu>
       ) : null}
     </div>
