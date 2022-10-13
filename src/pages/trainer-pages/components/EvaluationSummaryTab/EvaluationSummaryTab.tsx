@@ -82,7 +82,11 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
   )
 
   const didAllParticipantsSubmitEvaluation = useMemo(() => {
-    if (!data?.evaluations) {
+    if (
+      !data?.evaluations ||
+      data?.evaluations?.length === 0 ||
+      data?.evaluations?.length < data?.attendees?.length
+    ) {
       return false
     }
 
