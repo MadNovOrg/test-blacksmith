@@ -17,6 +17,12 @@ actions:
       - role: trainer
       - role: user
     comment: Checks whether a promo code can be applied to a given course by the current user
+  - name: cancelIndividualFromCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/participant/cancel/individual'
+    permissions:
+      - role: user
   - name: cancelMyselfFromCourse
     definition:
       kind: synchronous

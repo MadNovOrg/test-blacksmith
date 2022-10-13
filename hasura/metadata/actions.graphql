@@ -11,6 +11,15 @@ type Query {
 }
 
 type Mutation {
+  cancelIndividualFromCourse(
+    courseId: Int!
+    profileId: uuid!
+    reason: String!
+    fee: Int!
+  ): Boolean
+}
+
+type Mutation {
   cancelMyselfFromCourse(
     courseId: Int!
   ): Boolean

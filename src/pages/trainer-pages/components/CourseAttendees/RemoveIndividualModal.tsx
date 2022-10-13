@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Container,
   FormControlLabel,
   FormHelperText,
@@ -18,20 +19,21 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
+import { useAuth } from '@app/context/auth'
 import {
-  CancelCourseIndividualMutation,
-  CancelCourseIndividualMutationVariables,
+  CancelIndividualFromCourseMutation,
+  CancelIndividualFromCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/utils'
-import { CANCEL_COURSE_INDIVIDUAL_MUTATION } from '@app/queries/courses/cancel-course-individual'
+import { CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION } from '@app/queries/participants/cancel-individual-from-course'
 import { yup } from '@app/schemas'
 import { Course, CourseParticipant } from '@app/types'
 import { capitalize } from '@app/util'
 
 type FormInput = {
-  cancellationFeePercent?: number
+  cancellationFeePercent: number
   cancellationReason: string
 }
 
@@ -56,9 +58,13 @@ export const RemoveIndividualModal = ({
 }: RemoveIndividualModalProps) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
-  const [feeType, setFeeType] = useState<FeesRadioValue | null>(null)
+  const { acl } = useAuth()
+  const [feeType, setFeeType] = useState<FeesRadioValue>(
+    FeesRadioValue.APPLY_CANCELLATION_TERMS
+  )
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [confirmed, setConfirmed] = useState(false)
 
   const schema = useMemo(() => {
     return yup
@@ -89,6 +95,7 @@ export const RemoveIndividualModal = ({
     resolver: yupResolver(schema),
     defaultValues: {
       cancellationReason: '',
+      cancellationFeePercent: 0,
     },
   })
   const values = watch()
@@ -118,17 +125,15 @@ export const RemoveIndividualModal = ({
 
     try {
       await fetcher<
-        CancelCourseIndividualMutation,
-        CancelCourseIndividualMutationVariables
-      >(CANCEL_COURSE_INDIVIDUAL_MUTATION, {
-        courseParticipantId: participant.id,
-        cancellation: {
-          profile_id: participant.profile.id,
-          course_id: course.id,
-          cancellation_reason: capitalize(data.cancellationReason),
-          cancellation_fee_percent: data.cancellationFeePercent,
-        },
+        CancelIndividualFromCourseMutation,
+        CancelIndividualFromCourseMutationVariables
+      >(CANCEL_INDIVIDUAL_FROM_COURSE_MUTATION, {
+        courseId: course.id,
+        profileId: participant.profile.id,
+        reason: capitalize(data.cancellationReason),
+        fee: data.cancellationFeePercent,
       })
+
       if (onSave) {
         onSave()
       }
@@ -153,52 +158,62 @@ export const RemoveIndividualModal = ({
             })}
           </Typography>
         }
-        maxWidth={600}
+        maxWidth={800}
       >
         <Container>
           <Typography variant="body1" color="grey.600">
             {t('pages.individual-cancellation.description')}
           </Typography>
-          <Typography variant="h4" fontWeight={600} mt={4}>
-            {t('pages.edit-course.cancellation-modal.will-any-fees-apply')}
-          </Typography>
-          <RadioGroup
-            onChange={(event, v: string) => setFeeType(v as FeesRadioValue)}
-            row
-            value={feeType}
-            sx={{ mt: 1 }}
-          >
-            {Object.values(FeesRadioValue).map(value => (
-              <FormControlLabel
-                key={value}
-                value={value}
-                control={
-                  <Radio
-                    sx={
-                      !feeType && errors.cancellationFeePercent
-                        ? {
-                            color: 'error.main',
-                            '&.Mui-checked': {
-                              color: 'error.main',
-                            },
-                          }
-                        : {}
+
+          {acl.isTTAdmin() ? (
+            <>
+              <Typography variant="h4" fontWeight={600} mt={4}>
+                {t('pages.edit-course.cancellation-modal.will-any-fees-apply')}
+              </Typography>
+              <RadioGroup
+                onChange={(event, v: string) => setFeeType(v as FeesRadioValue)}
+                row
+                value={feeType}
+                sx={{ mt: 1 }}
+              >
+                {Object.values(FeesRadioValue).map(value => (
+                  <FormControlLabel
+                    key={value}
+                    value={value}
+                    control={
+                      <Radio
+                        sx={
+                          !feeType && errors.cancellationFeePercent
+                            ? {
+                                color: 'error.main',
+                                '&.Mui-checked': {
+                                  color: 'error.main',
+                                },
+                              }
+                            : {}
+                        }
+                      />
                     }
+                    label={t(`pages.edit-course.cancellation-modal.${value}`)}
                   />
-                }
-                label={t(`pages.edit-course.cancellation-modal.${value}`)}
-              />
-            ))}
-            {!feeType && errors.cancellationFeePercent ? (
-              <FormHelperText error>
-                {t('common.validation-errors.this-field-is-required')}
-              </FormHelperText>
-            ) : null}
-          </RadioGroup>
+                ))}
+                {!feeType && errors.cancellationFeePercent ? (
+                  <FormHelperText error>
+                    {t('common.validation-errors.this-field-is-required')}
+                  </FormHelperText>
+                ) : null}
+              </RadioGroup>
+            </>
+          ) : (
+            <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
+              {t('pages.course-details.request-cancellation-modal.warning')}
+            </Alert>
+          )}
+
           {feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS ? (
             <CancellationTermsTable
               courseStartDate={startDate}
-              sx={{ mt: 2 }}
+              sx={{ mt: 4 }}
             />
           ) : null}
           {feeType === FeesRadioValue.CUSTOM_FEE ? (
@@ -242,9 +257,21 @@ export const RemoveIndividualModal = ({
             {...register('cancellationReason')}
           />
 
-          {error && <Alert severity="error">{error}</Alert>}
+          {!acl.isTTAdmin() ? (
+            <Box mt={4}>
+              <FormControlLabel
+                label={t(
+                  'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
+                )}
+                control={<Checkbox />}
+                checked={confirmed}
+                onChange={(_, v) => setConfirmed(v)}
+                sx={{ userSelect: 'none' }}
+              />
+            </Box>
+          ) : null}
 
-          {participant.profile.fullName}
+          {error && <Alert severity="error">{error}</Alert>}
 
           <Box display="flex" justifyContent="space-between" mt={4}>
             <Button
@@ -257,6 +284,7 @@ export const RemoveIndividualModal = ({
             </Button>
             <LoadingButton
               loading={loading}
+              disabled={!confirmed && !acl.isTTAdmin()}
               onClick={handleSubmit(onFormSubmit)}
               type="button"
               variant="contained"

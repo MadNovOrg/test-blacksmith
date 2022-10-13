@@ -22631,6 +22631,7 @@ export enum Module_Update_Column {
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
+  cancelIndividualFromCourse: Scalars['Boolean'];
   cancelMyselfFromCourse: Scalars['Boolean'];
   content?: Maybe<RootMutation>;
   /** Attempts to create a new Order */
@@ -23437,6 +23438,15 @@ export type Mutation_Root = {
 /** mutation root */
 export type Mutation_RootAcceptOrgInviteArgs = {
   profileId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCancelIndividualFromCourseArgs = {
+  courseId: Scalars['Int'];
+  fee: Scalars['Int'];
+  profileId: Scalars['uuid'];
+  reason: Scalars['String'];
 };
 
 
@@ -35521,14 +35531,6 @@ export type SaveCourseEvaluationMutationVariables = Exact<{
 
 export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
 
-export type CancelCourseIndividualMutationVariables = Exact<{
-  courseParticipantId: Scalars['uuid'];
-  cancellation: Course_Participant_Cancellation_Insert_Input;
-}>;
-
-
-export type CancelCourseIndividualMutation = { __typename?: 'mutation_root', delete_course_participant_by_pk?: { __typename?: 'course_participant', id: any } | null, insert_course_participant_cancellation_one?: { __typename?: 'course_participant_cancellation', id: any } | null };
-
 export type CancelCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
@@ -36177,6 +36179,16 @@ export type UpdateOrgMutationVariables = Exact<{
 
 
 export type UpdateOrgMutation = { __typename?: 'mutation_root', updated?: { __typename?: 'organization', id: any } | null };
+
+export type CancelIndividualFromCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  profileId: Scalars['uuid'];
+  reason: Scalars['String'];
+  fee: Scalars['Int'];
+}>;
+
+
+export type CancelIndividualFromCourseMutation = { __typename?: 'mutation_root', cancelIndividualFromCourse: boolean };
 
 export type CourseParticipantQueryVariables = Exact<{
   id: Scalars['uuid'];
