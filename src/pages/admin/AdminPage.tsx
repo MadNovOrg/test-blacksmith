@@ -9,7 +9,7 @@ import theme from '@app/theme'
 type AdminPageProps = unknown
 
 const hubSettings = [
-  { name: 'users', link: '/admin' },
+  { name: 'users', link: '/admin/users' },
   { name: 'organisations', link: '/admin' },
   { name: 'course-pricing', link: '/admin/discounts' },
   { name: 'waitlist-notifications', link: '/admin' },

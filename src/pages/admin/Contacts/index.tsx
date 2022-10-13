@@ -252,5 +252,3 @@ export const Contacts: React.FC<ContactsProps> = () => {
     </>
   )
 }
-
-export default Contacts

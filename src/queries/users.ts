@@ -11,15 +11,6 @@ export const getRoles = gql`
   }
 `
 
-export const getProfiles = gql`
-  ${PROFILE}
-  query GetProfile {
-    profile {
-      ...Profile
-    }
-  }
-`
-
 export const getUserProfile = gql`
   ${PROFILE}
   query GetProfileById($id: uuid!) {
@@ -29,24 +20,6 @@ export const getUserProfile = gql`
         aggregate {
           count
         }
-      }
-    }
-  }
-`
-
-export const getProfileWithCriteria = gql`
-  ${PROFILE}
-  query GetProfileWithCriteria(
-    $limit: Int = 20
-    $offset: Int = 0
-    $where: profile_bool_exp
-  ) {
-    profiles: profile(limit: $limit, offset: $offset, where: $where) {
-      ...Profile
-    }
-    profile_aggregate(where: $where) {
-      aggregate {
-        count
       }
     }
   }

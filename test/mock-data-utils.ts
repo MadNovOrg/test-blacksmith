@@ -44,6 +44,8 @@ import {
   InviteStatus,
   CourseCertificate,
   CertificateStatus,
+  Role,
+  RoleName,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -84,6 +86,13 @@ export const buildOrganization = build<Organization>({
   },
 })
 
+export const buildRole = build<Role>({
+  fields: {
+    id: fake(f => f.datatype.uuid()),
+    name: RoleName.USER,
+  },
+})
+
 export const buildProfile = build<Profile>({
   fields: {
     id: fake(f => f.datatype.uuid()),
@@ -102,7 +111,11 @@ export const buildProfile = build<Profile>({
     jobTitle: fake(f => f.name.jobTitle()),
     tags: null,
     preferences: {},
-    roles: [{ role: { name: fake(f => f.random.word()) } }],
+    roles: [
+      {
+        role: buildRole(),
+      },
+    ],
     organizations: [{ organization: buildOrganization() }],
     dietaryRestrictions: null,
     disabilities: null,

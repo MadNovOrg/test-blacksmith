@@ -161,7 +161,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
 
             <TableNoRows
               noRecords={!loading && !currentPageProfiles?.length}
-              itemsName={t('users').toLowerCase()}
+              itemsName={t('common.users').toLowerCase()}
               colSpan={cols.length}
             />
 

@@ -37,6 +37,7 @@
     "join-waitlist-notice": "The course you are interested in is currently full. We will notify you via email if a space becomes available.",
     "waitlist-added": "You’ve been added to the course waitlist.",
     "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
+    "users": "Users",
     "courses": "Courses",
     "contacts": "Contacts",
     "community": "Community",
@@ -129,6 +130,7 @@
     "evaluation": "Evaluation",
     "name": "Name",
     "attendee": "Attendee",
+    "trainer-type": "Trainer type",
     "course-type": "Course Type",
     "course-status": "Course Status",
     "bl-status": "Blended Learning Status",
@@ -233,10 +235,12 @@
     },
     "role-names": {
       "user": "User",
+      "unverified": "Unverified",
       "trainer": "Trainer",
       "org-admin": "Organisation Administrator",
       "tt-ops": "Team Teach Operations",
       "tt-admin": "Team Teach Administrator",
+      "sales-representative": "Sales representative",
       "admin": "Administrator"
     },
     "validation-hints": {
@@ -1387,6 +1391,7 @@
         },
         "add-new-organization": "Add new organisation"
       },
+      "back-to-settings": "Back to settings",
       "hub-settings": {
         "title": "Hub settings",
         "users": {
@@ -1413,6 +1418,9 @@
           "title": "Cancellations, Transfers, and Replacements",
           "description": "An audit log of all cancellations, transfers, and replacements."
         }
+      },
+      "users": {
+        "title": "User management"
       }
     },
     "my-profile": {
@@ -1883,6 +1891,5 @@
     "requires_improvement": "Requires improvement",
     "serious_weaknesses": "Serious weaknesses",
     "special_measures": "Special measures"
-  },
-  "users": "users"
+  }
 }

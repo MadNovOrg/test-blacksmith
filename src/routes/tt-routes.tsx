@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
-import Contacts from '@app/pages/admin/components/Contacts'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -11,6 +10,8 @@ import { CreateOrganization } from '@app/pages/admin/components/Organizations/Cr
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { Contacts } from '@app/pages/admin/Contacts'
+import { Users } from '@app/pages/admin/Users'
 import { NotFound } from '@app/pages/common/NotFound'
 import { CreateCourse } from '@app/pages/CreateCourse'
 import { AssignTrainers } from '@app/pages/CreateCourse/components/AssignTrainers'
@@ -122,6 +123,7 @@ const TTAdminRoutes = () => {
           <Route path="admin">
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
+            <Route path="users" element={<Users />} />
             <Route path="discounts">
               <Route index element={<DiscountsList />} />
               <Route path="new" element={<DiscountCreate />} />
