@@ -172,17 +172,19 @@ export const CourseDetails = () => {
                       />
                     ) : null}
                   </PillTabList>
-                  <Button variant="text">
-                    <Typography
-                      variant="body2"
-                      fontWeight={600}
-                      color="primary"
-                      my={1}
-                      onClick={() => setShowModifyAttendanceModal(true)}
-                    >
-                      {t('pages.participant-course.change-my-attendance')}
-                    </Typography>
-                  </Button>
+                  {!courseHasStarted && course.type === CourseType.OPEN ? (
+                    <Button variant="text">
+                      <Typography
+                        variant="body2"
+                        fontWeight={600}
+                        color="primary"
+                        my={1}
+                        onClick={() => setShowModifyAttendanceModal(true)}
+                      >
+                        {t('pages.participant-course.change-my-attendance')}
+                      </Typography>
+                    </Button>
+                  ) : null}
                 </Box>
               </Container>
             </Box>
