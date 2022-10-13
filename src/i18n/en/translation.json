@@ -729,7 +729,8 @@
           "research-summaries": "Research summaries"
         },
         "app-banner": {
-          "title": "Download the Team Teach Journal app"
+          "title": "Download the Team Teach Journal app",
+          "description": "Struggling with student behaviour? Find the simple way to understand the triggers and patterns behind it, with our expert tips to help you build stronger relationships with your class."
         },
         "grid-show-all-button": {
           "see-all": "See all"

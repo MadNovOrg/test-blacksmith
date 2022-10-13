@@ -40,9 +40,7 @@ export const AppBanner: React.FC = () => {
           {t('pages.membership.components.app-banner.title')}
         </Typography>
         <Typography lineHeight={1.8} color={theme.palette.grey[800]}>
-          Sapien, volutpat commodo aliquam justo odio. Condimentum in suscipit
-          pretium commodo neque dictum nisl, diam, duis. Luctus eros, adipiscing
-          ut fringilla sit platea elementum.
+          {t('pages.membership.components.app-banner.description')}
         </Typography>
         <Box mt={4}>
           <img
