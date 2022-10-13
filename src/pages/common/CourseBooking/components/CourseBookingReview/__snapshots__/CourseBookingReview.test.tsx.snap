@@ -306,7 +306,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Due on 1 January 1980
+            Due immediately
           </p>
         </div>
         <label
@@ -686,7 +686,7 @@ Object {
         <p
           class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
         >
-          Due on 1 January 1980
+          Due immediately
         </p>
       </div>
       <label
@@ -1142,7 +1142,7 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Due on 1 January 1980
+            Due immediately
           </p>
         </div>
         <label
@@ -1494,7 +1494,7 @@ Object {
         <p
           class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
         >
-          Due on 1 January 1980
+          Due immediately
         </p>
       </div>
       <label

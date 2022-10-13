@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { differenceInDays, isPast, subDays } from 'date-fns'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -68,6 +69,16 @@ export const CourseBookingReview: React.FC = () => {
       console.error(err)
       setCreatingOrder(false)
     }
+  }
+
+  const INVOICE_DUE_OFFSET_DAYS = 8 * 7
+  const calculateDueDate = (date: Date) => {
+    return Math.abs(differenceInDays(new Date(), date)) <
+      INVOICE_DUE_OFFSET_DAYS || isPast(date)
+      ? t('pages.book-course.due-immediately')
+      : t('pages.book-course.due-on', {
+          date: subDays(date, INVOICE_DUE_OFFSET_DAYS),
+        })
   }
 
   const formatCurrency = (amount: number) => {
@@ -240,7 +251,7 @@ export const CourseBookingReview: React.FC = () => {
           </Typography>
         </Box>
         <Typography color="grey.700">
-          {t('pages.book-course.due-on', { date: new Date('1980-01-01') })}
+          {calculateDueDate(new Date(course.dates.aggregate.start.date))}
         </Typography>
       </Box>
 

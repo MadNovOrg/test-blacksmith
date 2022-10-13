@@ -690,7 +690,8 @@
       "free-spaces": "Free spaces",
       "payment-processing-fee": "Payment processing fee",
       "trainer-expenses": "Trainer expenses",
-      "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}"
+      "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}",
+      "due-immediately": "Due immediately"
     },
     "home": {
       "title": "Home"
