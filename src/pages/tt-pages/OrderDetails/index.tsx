@@ -442,7 +442,7 @@ ${invoice?.contact?.name}`
                 ) : null}
 
                 {course?.type === 'CLOSED' &&
-                course?.contactProfile?.fullName ? (
+                course?.salesRepresentative?.fullName ? (
                   <Box p={2} bgcolor="common.white" mt={0.3}>
                     <Row
                       label={_t('sales-person')}
@@ -453,7 +453,10 @@ ${invoice?.contact?.name}`
                         color: 'inherit',
                       }}
                     />
-                    <Row label={course?.contactProfile?.fullName} value="" />
+                    <Row
+                      label={course?.salesRepresentative?.fullName}
+                      value=""
+                    />
                   </Box>
                 ) : null}
 
