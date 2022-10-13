@@ -11,6 +11,12 @@ type Query {
 }
 
 type Mutation {
+  cancelMyselfFromCourse(
+    courseId: Int!
+  ): Boolean
+}
+
+type Mutation {
   createOrder(
     input: CreateOrderInput!
   ): CreateOrderOutput

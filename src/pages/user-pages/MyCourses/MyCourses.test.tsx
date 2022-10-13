@@ -1,7 +1,7 @@
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider } from 'urql'
-import { never, fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import {
   Course_Type_Enum,
@@ -131,7 +131,6 @@ describe('user-pages/MyCourses', () => {
     expect(
       within(courseRowElem).getByText(course.schedule[0].venue?.name ?? '')
     ).toBeInTheDocument()
-    expect(within(courseRowElem).getByText('Open')).toBeInTheDocument()
   })
 
   it('sorts courses by name', async () => {

@@ -5,9 +5,12 @@ object_relationships:
   - name: authorizedBy
     using:
       foreign_key_constraint_on: authorized_by
-  - name: courseParticipant
+  - name: course
     using:
-      foreign_key_constraint_on: participant_id
+      foreign_key_constraint_on: course_id
+  - name: profile
+    using:
+      foreign_key_constraint_on: profile_id
 insert_permissions:
   - role: tt-admin
     permission:
@@ -19,19 +22,8 @@ insert_permissions:
         - updated_at
         - authorized_by
         - id
-        - participant_id
-      backend_only: false
-  - role: user
-    permission:
-      check: {}
-      columns:
-        - payload
-        - type
-        - created_at
-        - updated_at
-        - authorized_by
-        - id
-        - participant_id
+        - profile_id
+        - course_id
       backend_only: false
 select_permissions:
   - role: tt-admin
@@ -43,6 +35,7 @@ select_permissions:
         - updated_at
         - authorized_by
         - id
-        - participant_id
+        - profile_id
+        - course_id
       filter: {}
       allow_aggregations: true

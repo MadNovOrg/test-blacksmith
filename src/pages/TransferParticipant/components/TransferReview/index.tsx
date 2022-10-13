@@ -50,7 +50,8 @@ export const TransferReview: React.FC = () => {
         auditInput: {
           authorized_by: profile?.id,
           type: Course_Participant_Audit_Type_Enum.Transfer,
-          participant_id: participant.id,
+          course_id: fromCourse?.id,
+          profile_id: profile?.id,
           payload: {
             fromCourse: {
               id: fromCourse?.id,

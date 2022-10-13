@@ -276,7 +276,9 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                           : c.schedule[0].venue?.city}
                       </Typography>
                     </TableCell>
-                    <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                    {orgId ? (
+                      <TableCell>{t(`course-types.${c.type}`)}</TableCell>
+                    ) : null}
                     <TableCell>
                       {c.dates?.aggregate?.start?.date && (
                         <Box>

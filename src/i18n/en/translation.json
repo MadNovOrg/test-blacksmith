@@ -403,7 +403,8 @@
     "cancelled": "Cancelled",
     "replace": "Replace",
     "transfer": "Transfer",
-    "cancellation-reason": "Cancellation reason"
+    "cancellation-reason": "Cancellation reason",
+    "never-mind": "Never mind"
   },
   "components": {
     "not-found": {
@@ -1054,7 +1055,13 @@
       },
       "cancellation-request-alert": "This course has a pending cancellation request.",
       "delete-request": "Delete request",
-      "approve-cancellation": "Approve cancellation"
+      "approve-cancellation": "Approve cancellation",
+      "modify-my-attendance": {
+        "title": "Modify my attendance",
+        "description": "Please select one of the following options.",
+        "cancel-my-attendance": "Cancel my attendance",
+        "transfer-to-another-course": "Transfer to another course"
+      }
     },
     "course-participants": {
       "none-registered-message": "No invites accepted",
@@ -1212,7 +1219,8 @@
       "review-and-submit": "Review and submit",
       "course-summary-evaluation-title": "Course summary evaluation",
       "course-summary-button-after-completion": "Available after course",
-      "resources-empty-message": "Trainer will provide course materials here"
+      "resources-empty-message": "Trainer will provide course materials here",
+      "change-my-attendance": "Change my attendance"
     },
     "upcoming-training": {
       "course-upcoming": "Course Upcoming",

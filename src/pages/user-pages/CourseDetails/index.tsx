@@ -1,44 +1,45 @@
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { TabContext, TabPanel } from '@mui/lab'
 import {
-  Container,
-  CircularProgress,
-  Stack,
   Alert,
-  Button,
   Box,
-  Typography,
+  Button,
   Chip,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
 } from '@mui/material'
 import { styled } from '@mui/system'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
-import { PillTabList, PillTab } from '@app/components/PillTabs'
+import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
+import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import {
+  ParamsType as GetFeedbackUsersParamsType,
   QUERY as GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
-  ParamsType as GetFeedbackUsersParamsType,
 } from '@app/queries/course-evaluation/get-feedback-users'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
+  ParamsType as GetCourseParamsType,
   QUERY as GET_COURSE_QUERY,
   ResponseType as GetCourseResponseType,
-  ParamsType as GetCourseParamsType,
 } from '@app/queries/user-queries/get-course-by-id'
-import { CourseParticipant } from '@app/types'
+import { CourseParticipant, CourseType } from '@app/types'
 import {
-  LoadingStatus,
   courseEnded,
   courseStarted,
   getSWRLoadingStatus,
+  LoadingStatus,
 } from '@app/util'
 
 const ChecklistItem = styled(Box)(({ theme }) => ({
@@ -70,7 +71,9 @@ export const CourseDetails = () => {
   const course = courseData?.course
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseError)
 
-  const [activeTab, setActiveTab] = React.useState('checklist')
+  const [activeTab, setActiveTab] = useState('checklist')
+  const [showModifyAttendanceModal, setShowModifyAttendanceModal] =
+    useState(false)
 
   const handleActiveTabChange = (_: unknown, newValue: string) => {
     setActiveTab(newValue)
@@ -143,27 +146,44 @@ export const CourseDetails = () => {
           <TabContext value={activeTab}>
             <Box borderBottom={1} borderColor="divider">
               <Container>
-                <PillTabList
-                  onChange={handleActiveTabChange}
-                  aria-label="Course participant tabs"
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="end"
                 >
-                  <PillTab
-                    label={t('pages.participant-course.checklist-tab-title')}
-                    value="checklist"
-                  />
-                  <PillTab
-                    label={t('pages.participant-course.resources-tab-title')}
-                    value="resources"
-                  />
-                  {courseParticipant?.certificate ? (
+                  <PillTabList
+                    onChange={handleActiveTabChange}
+                    aria-label="Course participant tabs"
+                  >
                     <PillTab
-                      label={t(
-                        'pages.participant-course.certification-tab-title'
-                      )}
-                      value="certification"
+                      label={t('pages.participant-course.checklist-tab-title')}
+                      value="checklist"
                     />
-                  ) : null}
-                </PillTabList>
+                    <PillTab
+                      label={t('pages.participant-course.resources-tab-title')}
+                      value="resources"
+                    />
+                    {courseParticipant?.certificate ? (
+                      <PillTab
+                        label={t(
+                          'pages.participant-course.certification-tab-title'
+                        )}
+                        value="certification"
+                      />
+                    ) : null}
+                  </PillTabList>
+                  <Button variant="text">
+                    <Typography
+                      variant="body2"
+                      fontWeight={600}
+                      color="primary"
+                      my={1}
+                      onClick={() => setShowModifyAttendanceModal(true)}
+                    >
+                      {t('pages.participant-course.change-my-attendance')}
+                    </Typography>
+                  </Button>
+                </Box>
               </Container>
             </Box>
 
@@ -264,6 +284,13 @@ export const CourseDetails = () => {
               ) : null}
             </Container>
           </TabContext>
+
+          {course.type === CourseType.OPEN && showModifyAttendanceModal ? (
+            <ModifyAttendanceModal
+              course={course}
+              onClose={() => setShowModifyAttendanceModal(false)}
+            />
+          ) : null}
         </>
       ) : (
         <Container sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>

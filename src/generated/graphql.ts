@@ -17011,11 +17011,14 @@ export type Course_Participant_Audit = {
   authorizedBy: Profile;
   authorized_by: Scalars['uuid'];
   /** An object relationship */
-  courseParticipant: Course_Participant;
+  course: Course;
+  course_id: Scalars['Int'];
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  participant_id: Scalars['uuid'];
   payload: Scalars['jsonb'];
+  /** An object relationship */
+  profile: Profile;
+  profile_id: Scalars['uuid'];
   type: Course_Participant_Audit_Type_Enum;
   updated_at: Scalars['timestamptz'];
 };
@@ -17036,9 +17039,17 @@ export type Course_Participant_Audit_Aggregate = {
 /** aggregate fields of "course_participant_audit" */
 export type Course_Participant_Audit_Aggregate_Fields = {
   __typename?: 'course_participant_audit_aggregate_fields';
+  avg?: Maybe<Course_Participant_Audit_Avg_Fields>;
   count: Scalars['Int'];
   max?: Maybe<Course_Participant_Audit_Max_Fields>;
   min?: Maybe<Course_Participant_Audit_Min_Fields>;
+  stddev?: Maybe<Course_Participant_Audit_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Participant_Audit_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Participant_Audit_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Participant_Audit_Sum_Fields>;
+  var_pop?: Maybe<Course_Participant_Audit_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Participant_Audit_Var_Samp_Fields>;
+  variance?: Maybe<Course_Participant_Audit_Variance_Fields>;
 };
 
 
@@ -17053,6 +17064,12 @@ export type Course_Participant_Audit_Append_Input = {
   payload?: InputMaybe<Scalars['jsonb']>;
 };
 
+/** aggregate avg on columns */
+export type Course_Participant_Audit_Avg_Fields = {
+  __typename?: 'course_participant_audit_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
 /** Boolean expression to filter rows from the table "course_participant_audit". All fields are combined with a logical 'AND'. */
 export type Course_Participant_Audit_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Participant_Audit_Bool_Exp>>;
@@ -17060,11 +17077,13 @@ export type Course_Participant_Audit_Bool_Exp = {
   _or?: InputMaybe<Array<Course_Participant_Audit_Bool_Exp>>;
   authorizedBy?: InputMaybe<Profile_Bool_Exp>;
   authorized_by?: InputMaybe<Uuid_Comparison_Exp>;
-  courseParticipant?: InputMaybe<Course_Participant_Bool_Exp>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  participant_id?: InputMaybe<Uuid_Comparison_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -17090,15 +17109,22 @@ export type Course_Participant_Audit_Delete_Key_Input = {
   payload?: InputMaybe<Scalars['String']>;
 };
 
+/** input type for incrementing numeric columns in table "course_participant_audit" */
+export type Course_Participant_Audit_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
 /** input type for inserting data into table "course_participant_audit" */
 export type Course_Participant_Audit_Insert_Input = {
   authorizedBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   authorized_by?: InputMaybe<Scalars['uuid']>;
-  courseParticipant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  course_id?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  participant_id?: InputMaybe<Scalars['uuid']>;
   payload?: InputMaybe<Scalars['jsonb']>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -17107,9 +17133,10 @@ export type Course_Participant_Audit_Insert_Input = {
 export type Course_Participant_Audit_Max_Fields = {
   __typename?: 'course_participant_audit_max_fields';
   authorized_by?: Maybe<Scalars['uuid']>;
+  course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  participant_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -17117,9 +17144,10 @@ export type Course_Participant_Audit_Max_Fields = {
 export type Course_Participant_Audit_Min_Fields = {
   __typename?: 'course_participant_audit_min_fields';
   authorized_by?: Maybe<Scalars['uuid']>;
+  course_id?: Maybe<Scalars['Int']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  participant_id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -17143,11 +17171,13 @@ export type Course_Participant_Audit_On_Conflict = {
 export type Course_Participant_Audit_Order_By = {
   authorizedBy?: InputMaybe<Profile_Order_By>;
   authorized_by?: InputMaybe<Order_By>;
-  courseParticipant?: InputMaybe<Course_Participant_Order_By>;
+  course?: InputMaybe<Course_Order_By>;
+  course_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  participant_id?: InputMaybe<Order_By>;
   payload?: InputMaybe<Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
+  profile_id?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
@@ -17167,13 +17197,15 @@ export enum Course_Participant_Audit_Select_Column {
   /** column name */
   AuthorizedBy = 'authorized_by',
   /** column name */
+  CourseId = 'course_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
   /** column name */
-  ParticipantId = 'participant_id',
-  /** column name */
   Payload = 'payload',
+  /** column name */
+  ProfileId = 'profile_id',
   /** column name */
   Type = 'type',
   /** column name */
@@ -17183,12 +17215,37 @@ export enum Course_Participant_Audit_Select_Column {
 /** input type for updating data in table "course_participant_audit" */
 export type Course_Participant_Audit_Set_Input = {
   authorized_by?: InputMaybe<Scalars['uuid']>;
+  course_id?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  participant_id?: InputMaybe<Scalars['uuid']>;
   payload?: InputMaybe<Scalars['jsonb']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Participant_Audit_Stddev_Fields = {
+  __typename?: 'course_participant_audit_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Participant_Audit_Stddev_Pop_Fields = {
+  __typename?: 'course_participant_audit_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Participant_Audit_Stddev_Samp_Fields = {
+  __typename?: 'course_participant_audit_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Course_Participant_Audit_Sum_Fields = {
+  __typename?: 'course_participant_audit_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
 };
 
 /** columns and relationships of "course_participant_audit_type" */
@@ -17313,18 +17370,38 @@ export enum Course_Participant_Audit_Update_Column {
   /** column name */
   AuthorizedBy = 'authorized_by',
   /** column name */
+  CourseId = 'course_id',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Id = 'id',
   /** column name */
-  ParticipantId = 'participant_id',
-  /** column name */
   Payload = 'payload',
+  /** column name */
+  ProfileId = 'profile_id',
   /** column name */
   Type = 'type',
   /** column name */
   UpdatedAt = 'updated_at'
 }
+
+/** aggregate var_pop on columns */
+export type Course_Participant_Audit_Var_Pop_Fields = {
+  __typename?: 'course_participant_audit_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Participant_Audit_Var_Samp_Fields = {
+  __typename?: 'course_participant_audit_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Course_Participant_Audit_Variance_Fields = {
+  __typename?: 'course_participant_audit_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
 
 /** aggregate avg on columns */
 export type Course_Participant_Avg_Fields = {
@@ -22554,6 +22631,7 @@ export enum Module_Update_Column {
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
+  cancelMyselfFromCourse: Scalars['Boolean'];
   content?: Maybe<RootMutation>;
   /** Attempts to create a new Order */
   createOrder?: Maybe<CreateOrderOutput>;
@@ -23359,6 +23437,12 @@ export type Mutation_Root = {
 /** mutation root */
 export type Mutation_RootAcceptOrgInviteArgs = {
   profileId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootCancelMyselfFromCourseArgs = {
+  courseId: Scalars['Int'];
 };
 
 
@@ -25503,6 +25587,7 @@ export type Mutation_RootUpdate_Course_Participant_AuditArgs = {
   _delete_at_path?: InputMaybe<Course_Participant_Audit_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Course_Participant_Audit_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Course_Participant_Audit_Delete_Key_Input>;
+  _inc?: InputMaybe<Course_Participant_Audit_Inc_Input>;
   _prepend?: InputMaybe<Course_Participant_Audit_Prepend_Input>;
   _set?: InputMaybe<Course_Participant_Audit_Set_Input>;
   where: Course_Participant_Audit_Bool_Exp;
@@ -25515,6 +25600,7 @@ export type Mutation_RootUpdate_Course_Participant_Audit_By_PkArgs = {
   _delete_at_path?: InputMaybe<Course_Participant_Audit_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Course_Participant_Audit_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Course_Participant_Audit_Delete_Key_Input>;
+  _inc?: InputMaybe<Course_Participant_Audit_Inc_Input>;
   _prepend?: InputMaybe<Course_Participant_Audit_Prepend_Input>;
   _set?: InputMaybe<Course_Participant_Audit_Set_Input>;
   pk_columns: Course_Participant_Audit_Pk_Columns_Input;
@@ -35277,7 +35363,7 @@ export type TransferParticipantDetailsQueryVariables = Exact<{
 }>;
 
 
-export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, course_code?: string | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
+export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
   level?: InputMaybe<Course_Level_Enum>;
@@ -35451,6 +35537,13 @@ export type CancelCourseMutationVariables = Exact<{
 
 
 export type CancelCourseMutation = { __typename?: 'mutation_root', cancelledCourse?: { __typename?: 'course', id: number } | null, delete_course_cancellation_request?: { __typename?: 'course_cancellation_request_mutation_response', affected_rows: number } | null };
+
+export type CancelMyselfFromCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type CancelMyselfFromCourseMutation = { __typename?: 'mutation_root', cancelMyselfFromCourse: boolean };
 
 export type DeleteCourseCancellationRequestMutationVariables = Exact<{
   id: Scalars['uuid'];
