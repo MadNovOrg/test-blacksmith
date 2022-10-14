@@ -124,6 +124,36 @@ select_permissions:
         - fullName
       filter: {}
       allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - addresses
+        - attributes
+        - avatar
+        - contact_details
+        - created_at
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - email
+        - family_name
+        - given_name
+        - go1_id
+        - go1_profile
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - phone
+        - preferences
+        - stripe_customer_id
+        - tags
+        - title
+        - updated_at
+      computed_fields:
+        - fullName
+      filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:
@@ -211,6 +241,34 @@ update_permissions:
         - id
       filter: {}
       check: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - family_name
+        - given_name
+        - stripe_customer_id
+        - title
+        - dob
+        - go1_id
+        - addresses
+        - attributes
+        - contact_details
+        - go1_profile
+        - original_record
+        - preferences
+        - tags
+        - avatar
+        - dietary_restrictions
+        - disabilities
+        - email
+        - job_title
+        - phone
+        - created_at
+        - last_activity
+        - updated_at
+        - id
+      filter: {}
+      check: null
   - role: unverified
     permission:
       columns:

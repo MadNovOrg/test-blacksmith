@@ -110,6 +110,6 @@ describe('page: Users', () => {
     expect(
       within(tableBody).getByText(profile.organizations[0].organization.name)
     ).toBeInTheDocument()
-    expect(within(tableBody).getByText('User')).toBeInTheDocument()
+    expect(within(tableBody).getByText('Individual')).toBeInTheDocument()
   })
 })

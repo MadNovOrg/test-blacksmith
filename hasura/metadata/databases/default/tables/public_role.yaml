@@ -10,6 +10,30 @@ array_relationships:
           schema: public
           name: profile_role
 select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - data
+        - id
+        - name
+        - rank
+      filter: {}
   - role: unverified
     permission:
       columns:

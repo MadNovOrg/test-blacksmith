@@ -21,6 +21,26 @@ insert_permissions:
         - role_id
       backend_only: false
 select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - _source
+        - created_at
+        - id
+        - profile_id
+        - role_id
+        - updated_at
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - _source
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - role_id
+      filter: {}
   - role: unverified
     permission:
       columns:
@@ -45,6 +65,17 @@ select_permissions:
       filter: {}
 update_permissions:
   - role: tt-admin
+    permission:
+      columns:
+        - _source
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - role_id
+      filter: {}
+      check: null
+  - role: tt-ops
     permission:
       columns:
         - _source

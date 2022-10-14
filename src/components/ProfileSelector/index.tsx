@@ -20,7 +20,7 @@ import {
   QUERY,
   ResponseType,
 } from '@app/queries/profile/find-profiles'
-import { Profile, RoleName, ExtraRoleName } from '@app/types'
+import { Profile, RoleName } from '@app/types'
 
 export type ProfileSelectorProps = {
   value?: Profile
@@ -30,7 +30,7 @@ export type ProfileSelectorProps = {
   textFieldProps?: TextFieldProps
   placeholder?: string
   disabled?: boolean
-  roleName?: RoleName | ExtraRoleName
+  roleName?: RoleName
   testId?: string
 }
 

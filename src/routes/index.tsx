@@ -30,6 +30,9 @@ const UnverifiedRoutes = React.lazy(() => import('./unverified-routes'))
 
 const roleRoutesMap = {
   [RoleName.SALES_REPRESENTATIVE]: UnverifiedRoutes,
+  [RoleName.SALES_ADMIN]: UnverifiedRoutes,
+  [RoleName.FINANCE]: UnverifiedRoutes,
+  [RoleName['L&D']]: UnverifiedRoutes,
   [RoleName.TRAINER]: TrainerRoutes,
   [RoleName.USER]: UserRoutes,
   [RoleName.TT_OPS]: TTRoutes,

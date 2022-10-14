@@ -165,7 +165,7 @@ export type Profile = {
 
 export type Role = {
   id: string
-  name: RoleName | ExtraRoleName
+  name: RoleName
 }
 
 export enum PaymentMethod {
@@ -174,16 +174,15 @@ export enum PaymentMethod {
 }
 
 export enum RoleName {
-  UNVERIFIED = 'unverified',
-  USER = 'user',
-  SALES_REPRESENTATIVE = 'sales-representative',
-  TRAINER = 'trainer',
-  TT_OPS = 'tt-ops',
   TT_ADMIN = 'tt-admin',
-}
-
-export enum ExtraRoleName {
+  TT_OPS = 'tt-ops',
+  SALES_ADMIN = 'sales-admin',
   SALES_REPRESENTATIVE = 'sales-representative',
+  FINANCE = 'finance',
+  'L&D' = 'l&d',
+  TRAINER = 'trainer',
+  USER = 'user',
+  UNVERIFIED = 'unverified',
 }
 
 export enum CourseType {

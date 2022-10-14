@@ -234,14 +234,15 @@
       "OBSERVE_ONLY": "Observe only"
     },
     "role-names": {
-      "user": "User",
+      "user": "Individual",
       "unverified": "Unverified",
       "trainer": "Trainer",
-      "org-admin": "Organisation Administrator",
-      "tt-ops": "Team Teach Operations",
-      "tt-admin": "Team Teach Administrator",
+      "tt-ops": "Operations",
+      "tt-admin": "Administrator",
       "sales-representative": "Sales representative",
-      "admin": "Administrator"
+      "sales-admin": " Sales administrator",
+      "l&d": "L&D",
+      "finance": "Finance"
     },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
@@ -459,9 +460,8 @@
       "subtitle": "Switch Role",
       "user": "Attendee",
       "trainer": "Trainer",
-      "org-admin": "Organisation Admin",
-      "tt-ops": "TT Ops",
-      "tt-admin": "TT Admin"
+      "tt-ops": "Ops",
+      "tt-admin": "Admin"
     },
     "course-form": {
       "general-details-title": "General details",
@@ -1737,11 +1737,8 @@
         "unverified": "Unverified user",
         "user": "Individual",
         "trainer": "Trainer",
-        "org-admin": "Organisation admin",
-        "mta-admin": "MTA admin",
-        "tt-ops": "TeamTeach operations",
-        "tt-admin": "TeamTeach administrator",
-        "admin": "Global administrator"
+        "tt-ops": "Operations",
+        "tt-admin": "Administrator"
       }
     },
     "available-courses": {
