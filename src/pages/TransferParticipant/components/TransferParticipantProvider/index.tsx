@@ -9,7 +9,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Course, Course_Participant, Profile } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
@@ -29,6 +29,12 @@ export type ChosenParticipant = Pick<Course_Participant, 'id'> & {
   profile: Pick<Profile, 'fullName' | 'avatar'>
 }
 
+export enum TransferModeEnum {
+  ADMIN_TRANSFERS = 'ADMIN_TRANSFERS',
+  ORG_ADMIN_TRANSFERS = 'ORG_ADMIN_TRANSFERS',
+  ATTENDEE_TRANSFERS = 'ATTENDEE_TRANSFERS',
+}
+
 export type ContextValue = {
   participant?: ChosenParticipant
   fromCourse?: FromCourse
@@ -38,19 +44,33 @@ export type ContextValue = {
     customFee?: number | null
   }
   completedSteps: TransferStepsEnum[]
+  completeStep: (step: TransferStepsEnum) => void
   currentStepKey: TransferStepsEnum
   courseChosen: (course: EligibleCourse) => void
   feesChosen: (type?: FeeType, customFee?: number | null) => void
   backFrom: (step: TransferStepsEnum) => void
+  mode: TransferModeEnum
+  cancel: () => void
 }
 
 export const TransferParticipantContext = React.createContext<
   ContextValue | undefined
 >(undefined)
 
-export const TransferParticipantProvider: React.FC<{
+type Props = {
+  courseId: Course['id']
+  participantId: Course_Participant['id']
   initialValue?: Partial<Omit<ContextValue, 'courseChosen'>>
-}> = ({ children, initialValue }) => {
+  mode?: ContextValue['mode']
+}
+
+export const TransferParticipantProvider: React.FC<Props> = ({
+  children,
+  initialValue,
+  courseId,
+  participantId,
+  mode = TransferModeEnum.ADMIN_TRANSFERS,
+}) => {
   const [participant, setParticipant] = useState<ContextValue['participant']>(
     initialValue?.participant
   )
@@ -60,18 +80,17 @@ export const TransferParticipantProvider: React.FC<{
   const [toCourse, setToCourse] = useState<ContextValue['toCourse']>(
     initialValue?.toCourse
   )
-  const [fees, setFees] = useState<ContextValue['fees']>(initialValue?.fees)
+  const [fees, setFees] = useState<ContextValue['fees']>(() =>
+    mode === TransferModeEnum.ADMIN_TRANSFERS
+      ? initialValue?.fees
+      : { type: FeeType.APPLY_TERMS }
+  )
   const [completedSteps, setCompletedSteps] = useState<
     ContextValue['completedSteps']
   >(initialValue?.completedSteps ?? [])
   const [currentStepKey, setCurrentStepKey] = useState<TransferStepsEnum>(
     initialValue?.currentStepKey ?? TransferStepsEnum.SELECT_COURSE
   )
-
-  const { id: courseId, participantId } = useParams() as {
-    id: string
-    participantId: string
-  }
 
   const { t } = useScopedTranslation('pages.transfer-participant')
 
@@ -80,7 +99,7 @@ export const TransferParticipantProvider: React.FC<{
     participant: fetchedParticipant,
     fetching,
     error,
-  } = useTransferDetails(Number(courseId), participantId)
+  } = useTransferDetails(courseId, participantId)
 
   const navigate = useNavigate()
 
@@ -98,8 +117,8 @@ export const TransferParticipantProvider: React.FC<{
     }
   }, [course, fetchedParticipant])
 
-  const completeStep = useCallback(
-    (step: TransferStepsEnum) => {
+  const completeStep: ContextValue['completeStep'] = useCallback(
+    step => {
       setCompletedSteps([...completedSteps, step])
     },
     [completedSteps]
@@ -116,8 +135,13 @@ export const TransferParticipantProvider: React.FC<{
         }
 
         case TransferStepsEnum.REVIEW: {
+          const previousPath =
+            mode === TransferModeEnum.ATTENDEE_TRANSFERS
+              ? `../transfer`
+              : `../transfer/${participantId}/details`
+
           setCurrentStepKey(TransferStepsEnum.TRANSFER_DETAILS)
-          navigate(`../transfer/${participantId}/details`)
+          navigate(previousPath)
 
           break
         }
@@ -127,17 +151,25 @@ export const TransferParticipantProvider: React.FC<{
         }
       }
     },
-    [navigate, participantId]
+    [navigate, participantId, mode]
   )
 
   const courseChosen: ContextValue['courseChosen'] = useCallback(
     course => {
       setToCourse(course)
       completeStep(TransferStepsEnum.SELECT_COURSE)
-      navigate('./details')
-      setCurrentStepKey(TransferStepsEnum.TRANSFER_DETAILS)
+
+      const nextStep =
+        mode === TransferModeEnum.ATTENDEE_TRANSFERS ? './review' : './details'
+      const nextStepKey =
+        mode === TransferModeEnum.ATTENDEE_TRANSFERS
+          ? TransferStepsEnum.REVIEW
+          : TransferStepsEnum.TRANSFER_DETAILS
+
+      navigate(nextStep)
+      setCurrentStepKey(nextStepKey)
     },
-    [completeStep, navigate]
+    [completeStep, navigate, mode]
   )
 
   const feesChosen: ContextValue['feesChosen'] = useCallback(
@@ -154,6 +186,10 @@ export const TransferParticipantProvider: React.FC<{
     [completeStep, navigate]
   )
 
+  const cancel: ContextValue['cancel'] = useCallback(() => {
+    navigate(`/courses/${fromCourse?.id}/details`)
+  }, [navigate, fromCourse])
+
   const value = useMemo(
     () => ({
       participant,
@@ -166,6 +202,8 @@ export const TransferParticipantProvider: React.FC<{
       backFrom,
       fees,
       feesChosen,
+      mode,
+      cancel,
     }),
     [
       participant,
@@ -178,6 +216,8 @@ export const TransferParticipantProvider: React.FC<{
       fees,
       feesChosen,
       backFrom,
+      mode,
+      cancel,
     ]
   )
 

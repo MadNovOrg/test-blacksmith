@@ -11,6 +11,10 @@ import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashb
 import { NotFound } from '@app/pages/common/NotFound'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
+import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
+import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
+import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTransferParticipant'
 import { AcceptInvite } from '@app/pages/user-pages/AcceptInvite'
 import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
@@ -43,6 +47,11 @@ const UserRoutes = () => {
             path="health-and-safety"
             element={<CourseHealthAndSafetyForm />}
           />
+          <Route path="transfer" element={<UserTransferParticipant />}>
+            <Route index element={<ChooseTransferCourse />} />
+            <Route path="details" element={<TransferDetails />} />
+            <Route path="review" element={<TransferReview />} />
+          </Route>
         </Route>
       </Route>
 

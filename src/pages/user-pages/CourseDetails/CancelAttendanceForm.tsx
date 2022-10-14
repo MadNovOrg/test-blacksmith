@@ -1,12 +1,5 @@
 import { LoadingButton } from '@mui/lab'
-import {
-  Alert,
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormControlLabel,
-} from '@mui/material'
+import { Alert, Box, Button, Checkbox, FormControlLabel } from '@mui/material'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -58,7 +51,7 @@ export const CancelAttendanceForm: React.FC<CancelAttendanceFormProps> = ({
   }
 
   return (
-    <Container>
+    <Box>
       <Alert severity="warning" variant="outlined" sx={{ mt: 4 }}>
         {t('pages.course-details.request-cancellation-modal.warning')}
       </Alert>
@@ -95,6 +88,6 @@ export const CancelAttendanceForm: React.FC<CancelAttendanceFormProps> = ({
           {t('pages.edit-course.cancellation-modal.cancel-entire-course')}
         </LoadingButton>
       </Box>
-    </Container>
+    </Box>
   )
 }

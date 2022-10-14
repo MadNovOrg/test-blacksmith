@@ -25,6 +25,21 @@ insert_permissions:
         - profile_id
         - course_id
       backend_only: false
+  - role: user
+    permission:
+      check:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+        - profile_id
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:

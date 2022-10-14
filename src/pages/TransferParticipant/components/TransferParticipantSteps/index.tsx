@@ -4,15 +4,18 @@ import { StepsNavigation } from '@app/components/StepsNavigation'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { TransferStepsEnum } from '../../types'
+import { TransferModeEnum } from '../TransferParticipantProvider'
 
 type Props = {
   completedSteps: TransferStepsEnum[]
   currentStepKey: TransferStepsEnum
+  mode: TransferModeEnum
 }
 
 export const TransferParticipantSteps: React.FC<Props> = ({
   completedSteps,
   currentStepKey,
+  mode,
 }) => {
   const { t } = useScopedTranslation('pages.transfer-participant.steps')
 
@@ -21,15 +24,19 @@ export const TransferParticipantSteps: React.FC<Props> = ({
       key: TransferStepsEnum.SELECT_COURSE,
       label: t(`step-${TransferStepsEnum.SELECT_COURSE}`),
     },
-    {
+  ]
+
+  if (mode !== TransferModeEnum.ATTENDEE_TRANSFERS) {
+    steps.push({
       key: TransferStepsEnum.TRANSFER_DETAILS,
       label: t(`step-${TransferStepsEnum.TRANSFER_DETAILS}`),
-    },
-    {
-      key: TransferStepsEnum.REVIEW,
-      label: t(`step-${TransferStepsEnum.REVIEW}`),
-    },
-  ]
+    })
+  }
+
+  steps.push({
+    key: TransferStepsEnum.REVIEW,
+    label: t(`step-${TransferStepsEnum.REVIEW}`),
+  })
 
   return (
     <StepsNavigation

@@ -16,6 +16,7 @@ import { render, waitFor, screen, within, userEvent } from '@test/index'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
 import { EligibleCourse, FeeType } from '../../types'
+import { getTransferTermsFee } from '../../utils'
 import {
   ChosenParticipant,
   ContextValue,
@@ -57,6 +58,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/review" element={<TransferReview />} />
@@ -93,13 +96,9 @@ describe('page: TransferReview', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -118,6 +117,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse, fees }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/review" element={<TransferReview />} />
@@ -130,7 +131,9 @@ describe('page: TransferReview', () => {
     expect(screen.getByText('Apply transfer terms')).toBeInTheDocument()
     expect(
       within(screen.getByTestId('fee-type-panel')).getByText(
-        '25% of payment due'
+        `${getTransferTermsFee(
+          new Date(fromCourse?.start ?? '')
+        )}% of payment due`
       )
     ).toBeInTheDocument()
   })
@@ -156,13 +159,9 @@ describe('page: TransferReview', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -182,6 +181,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse, fees }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/review" element={<TransferReview />} />
@@ -218,13 +219,9 @@ describe('page: TransferReview', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -243,6 +240,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse, fees }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/review" element={<TransferReview />} />
@@ -283,13 +282,9 @@ describe('page: TransferReview', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -308,6 +303,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse, fees }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/transfer/review" element={<TransferReview />} />
@@ -395,13 +392,9 @@ describe('page: TransferReview', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -426,6 +419,8 @@ describe('page: TransferReview', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse, fees }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/transfer/review" element={<TransferReview />} />

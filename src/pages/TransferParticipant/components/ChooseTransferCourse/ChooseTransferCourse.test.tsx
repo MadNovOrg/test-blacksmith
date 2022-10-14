@@ -43,7 +43,7 @@ describe('page: ChooseTransferCourse', () => {
       executeQuery: () =>
         fromValue<{ data: TransferEligibleCoursesQuery }>({
           data: {
-            eligibleCourses: [],
+            eligibleTransferCourses: [],
           },
         }),
     } as unknown as Client
@@ -56,6 +56,8 @@ describe('page: ChooseTransferCourse', () => {
               fromCourse,
               participant,
             }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <ChooseTransferCourse />
           </TransferParticipantProvider>
@@ -99,26 +101,17 @@ describe('page: ChooseTransferCourse', () => {
       }: {
         variables: TransferEligibleCoursesQueryVariables
       }) => {
-        const variablesMatch =
-          variables.level === fromCourse.level &&
-          variables.startDate === fromCourse.start
+        const variablesMatch = variables.fromCourseId === fromCourse.id
 
         return fromValue<{ data: TransferEligibleCoursesQuery }>({
           data: {
-            eligibleCourses: variablesMatch
+            eligibleTransferCourses: variablesMatch
               ? [
                   {
                     id: TO_COURSE_ID,
-                    level: Course_Level_Enum.Level_1,
-                    course_code: 'course-code',
-                    schedule: [
-                      {
-                        venue: null,
-                        start: new Date().toISOString(),
-                        end: new Date().toISOString(),
-                        virtualLink: '',
-                      },
-                    ],
+                    courseCode: 'course-code',
+                    startDate: new Date().toISOString(),
+                    endDate: new Date().toISOString(),
                   },
                 ]
               : [],
@@ -135,6 +128,8 @@ describe('page: ChooseTransferCourse', () => {
               fromCourse,
               participant,
             }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route index element={<ChooseTransferCourse />} />

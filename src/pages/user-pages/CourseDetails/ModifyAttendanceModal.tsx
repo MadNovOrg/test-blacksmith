@@ -16,6 +16,8 @@ import { Dialog } from '@app/components/Dialog'
 import { CancelAttendanceForm } from '@app/pages/user-pages/CourseDetails/CancelAttendanceForm'
 import { Course } from '@app/types'
 
+import { ParticipantTransferInfo } from './ParticipantTransferInfo'
+
 type ModifyAttendanceModalProps = {
   course: Course
   onClose: () => void
@@ -30,7 +32,9 @@ export const ModifyAttendanceModal: React.FC<ModifyAttendanceModalProps> =
   function ({ course, onClose }) {
     const { t } = useTranslation()
     const navigate = useNavigate()
-    const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>()
+    const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>(
+      ACTION_TYPE.CANCEL
+    )
 
     return (
       <Container>
@@ -62,6 +66,7 @@ export const ModifyAttendanceModal: React.FC<ModifyAttendanceModalProps> =
                 onChange={e =>
                   setSelectedAction(e.currentTarget.value as ACTION_TYPE)
                 }
+                value={selectedAction}
               >
                 <FormControlLabel
                   value={ACTION_TYPE.CANCEL}
@@ -88,7 +93,12 @@ export const ModifyAttendanceModal: React.FC<ModifyAttendanceModalProps> =
               onSubmit={() => navigate('/courses')}
             />
           ) : null}
-          {selectedAction === ACTION_TYPE.TRANSFER ? <Box>TODO</Box> : null}
+          {selectedAction === ACTION_TYPE.TRANSFER ? (
+            <ParticipantTransferInfo
+              startDate={new Date(course.schedule[0].start)}
+              onCancel={onClose}
+            />
+          ) : null}
           {!selectedAction ? (
             <Box display="flex" mt={4}>
               <Button

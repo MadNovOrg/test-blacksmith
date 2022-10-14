@@ -9312,6 +9312,18 @@ export type TrainerLevels = {
   profile_id: Scalars['uuid'];
 };
 
+export type TransferCourse = {
+  __typename?: 'TransferCourse';
+  courseCode: Scalars['String'];
+  endDate: Scalars['String'];
+  id: Scalars['Int'];
+  startDate: Scalars['String'];
+  venue?: Maybe<Scalars['String']>;
+  venueCity?: Maybe<Scalars['String']>;
+  venueName?: Maybe<Scalars['String']>;
+  virtualLink?: Maybe<Scalars['String']>;
+};
+
 /** Any node that has a URI */
 export type UniformResourceIdentifiable = {
   /** The unique resource identifier path */
@@ -30305,6 +30317,8 @@ export type Query_Root = {
   dfe_establishment_aggregate: Dfe_Establishment_Aggregate;
   /** fetch data from the table: "dfe_establishment" using primary key columns */
   dfe_establishment_by_pk?: Maybe<Dfe_Establishment>;
+  /** eligibleTransferCourses */
+  eligibleTransferCourses: Array<TransferCourse>;
   /** fetch data from the table: "expire_go1_license_jobs" */
   expire_go1_license_jobs: Array<Expire_Go1_License_Jobs>;
   /** fetch aggregated fields from the table: "expire_go1_license_jobs" */
@@ -31352,6 +31366,11 @@ export type Query_RootDfe_Establishment_AggregateArgs = {
 
 export type Query_RootDfe_Establishment_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootEligibleTransferCoursesArgs = {
+  fromCourseId: Scalars['Int'];
 };
 
 
@@ -35376,12 +35395,11 @@ export type TransferParticipantDetailsQueryVariables = Exact<{
 export type TransferParticipantDetailsQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, level?: Course_Level_Enum | null, type: Course_Type_Enum, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } | null, participant?: { __typename?: 'course_participant', id: any, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } } | null };
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
-  level?: InputMaybe<Course_Level_Enum>;
-  startDate?: InputMaybe<Scalars['timestamptz']>;
+  fromCourseId: Scalars['Int'];
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null, course_code?: string | null, schedule: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   participantId: Scalars['uuid'];

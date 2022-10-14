@@ -50,6 +50,8 @@ describe('page: TransferDetails', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route path="/details" element={<TransferDetails />} />
@@ -86,13 +88,9 @@ describe('page: TransferDetails', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -107,6 +105,8 @@ describe('page: TransferDetails', () => {
         <Provider value={client}>
           <TransferParticipantProvider
             initialValue={{ fromCourse, participant, toCourse }}
+            participantId={participant.id}
+            courseId={fromCourse.id}
           >
             <Routes>
               <Route
@@ -151,13 +151,9 @@ describe('page: TransferDetails', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -182,6 +178,8 @@ describe('page: TransferDetails', () => {
       <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
         <Provider value={client}>
           <TransferParticipantProvider
+            participantId={participant.id}
+            courseId={fromCourse.id}
             initialValue={{ fromCourse, participant, toCourse }}
           >
             <Routes>
@@ -230,13 +228,9 @@ describe('page: TransferDetails', () => {
 
     const toCourse: EligibleCourse = {
       id: 2,
-      level: Course_Level_Enum.Level_1,
-      schedule: [
-        {
-          start: new Date().toISOString(),
-          end: addDays(new Date(), 1).toISOString(),
-        },
-      ],
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
     }
 
     const participant: ChosenParticipant = {
@@ -261,6 +255,8 @@ describe('page: TransferDetails', () => {
       <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
         <Provider value={client}>
           <TransferParticipantProvider
+            participantId={participant.id}
+            courseId={fromCourse.id}
             initialValue={{ fromCourse, participant, toCourse }}
           >
             <Routes>

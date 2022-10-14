@@ -4,8 +4,6 @@ import { Chance } from 'chance'
 import { addHours } from 'date-fns/esm'
 import React from 'react'
 
-import { Course_Level_Enum } from '@app/generated/graphql'
-
 import { CourseInfoPanel } from '.'
 
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
@@ -27,15 +25,15 @@ const Template: ComponentStory<typeof CourseInfoPanel> = args => (
 export const Default = Template.bind({})
 Default.args = {
   course: {
-    level: Course_Level_Enum.Level_1,
+    courseCode: 'OP.L1.10000',
     startDate: new Date().toISOString(),
     endDate: addHours(new Date(), 8).toISOString(),
-    venue: {
-      name: chance.name(),
-      addressLineOne: chance.address(),
-      addressLineTwo: chance.address(),
-      city: chance.city(),
-      postCode: chance.postcode(),
-    },
+    venue: [
+      chance.name(),
+      chance.address(),
+      chance.address(),
+      chance.city(),
+      chance.postcode(),
+    ].join(', '),
   },
 }

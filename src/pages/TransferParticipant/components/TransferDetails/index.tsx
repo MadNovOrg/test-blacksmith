@@ -15,18 +15,19 @@ import FeesPanel, { FormValues } from '../FeesPanel'
 import { useTransferParticipantContext } from '../TransferParticipantProvider'
 
 export const TransferDetails: React.FC = () => {
-  const { toCourse, backFrom, feesChosen } = useTransferParticipantContext()
+  const { toCourse, backFrom, feesChosen, fromCourse } =
+    useTransferParticipantContext()
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
 
   const courseStartDate = useMemo(() => {
-    if (toCourse?.schedule[0].start) {
-      return new Date(toCourse.schedule[0].start)
+    if (fromCourse?.start) {
+      return new Date(fromCourse.start)
     }
 
     return new Date()
-  }, [toCourse])
+  }, [fromCourse])
 
   const [formData, setFormData] = useState<
     MarkOptional<FormValues, 'feeType'> & { isValid: boolean }
@@ -58,10 +59,10 @@ export const TransferDetails: React.FC = () => {
       <Box mb={2}>
         <CourseInfoPanel
           course={{
-            level: toCourse.level,
-            startDate: toCourse.schedule[0].start,
-            endDate: toCourse.schedule[0].end,
-            venue: toCourse.schedule[0].venue,
+            courseCode: toCourse.courseCode,
+            startDate: toCourse.startDate,
+            endDate: toCourse.endDate,
+            venue: toCourse.venue ?? '',
           }}
         />
       </Box>

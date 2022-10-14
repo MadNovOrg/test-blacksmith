@@ -1065,7 +1065,13 @@
         "title": "Modify my attendance",
         "description": "Please select one of the following options.",
         "cancel-my-attendance": "Cancel my attendance",
-        "transfer-to-another-course": "Transfer to another course"
+        "transfer-to-another-course": "Transfer to another course",
+        "transfer-info": {
+          "alert-message": "Transfer terms apply based on the course start date.",
+          "terms-notice": "I understand the terms and conditions.",
+          "transfer-btn-text": "Transfer to another course",
+          "cancel-btn-text": "Never mind"
+        }
       }
     },
     "course-participants": {
@@ -1749,8 +1755,11 @@
       "select-organization": "Please select organization"
     },
     "transfer-participant": {
-      "title": "Transfer participant",
+      "title-ADMIN_TRANSFERS": "Transfer participant",
+      "title-ATTENDEE_TRANSFERS": "Transfer to another course",
+      "title-ORG_ADMIN_TRANSFERS": "Transfer attendee",
       "back-btn-text": "Course details",
+      "cancel-btn-text": "Never mind",
       "attendee-label": "Attendee",
       "success-message": "Participant transferred",
       "no-data-error": "Invalid course or participant for the transfer.",
@@ -1767,7 +1776,9 @@
         "col-start-date": "Starts",
         "col-end-date": "Ends",
         "no-courses": "No eligible courses for transfer at the moment",
-        "next-btn-text": "Transfer details",
+        "next-btn-text_ADMIN_TRANSFERS": "Transfer details",
+        "next-btn-text_ORG_ADMIN_TRANSFERS": "Transfer details",
+        "next-btn-text_ATTENDEE_TRANSFERS": "Review & confirm",
         "venue-virtual": "Virtual"
       },
       "transfer-details": {
@@ -1792,9 +1803,14 @@
       "review-transfer": {
         "title": "Review & confirm",
         "custom-fee": "Custom fee",
-        "back-btn-text": "Back to transfer details",
+        "back-btn-text_ADMIN_TRANSFERS": "Back to transfer details",
+        "back-btn-text_ORG_ADMIN_TRANSFERS": "Back to transfer details",
+        "back-btn-text_ATTENDEE_TRANSFERS": "Select courses",
         "submit-btn-text": "Confirm transfer",
-        "transferring-error": "There was an error transferring the participant"
+        "transferring-error": "There was an error transferring the participant",
+        "success-message": "You have successfully transferred onto another course.",
+        "success-info": "You will receive a confirmation email with details of the course.",
+        "success-btn-text": "Go to my courses"
       }
     },
     "individual-cancellation": {

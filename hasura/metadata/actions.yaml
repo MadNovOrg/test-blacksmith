@@ -64,6 +64,13 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: eligibleTransferCourses
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
+    permissions:
+      - role: user
+    comment: eligibleTransferCourses
   - name: fetchPlans
     definition:
       kind: ""
@@ -431,4 +438,5 @@ custom_types:
     - name: UpdateAvatarResponse
     - name: CanApplyPromoCodeOutput
     - name: CreateOrderOutput
+    - name: TransferCourse
   scalars: []

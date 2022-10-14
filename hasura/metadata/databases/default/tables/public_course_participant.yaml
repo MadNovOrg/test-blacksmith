@@ -215,6 +215,7 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - course_id
         - hs_consent
       filter:
         profile_id:

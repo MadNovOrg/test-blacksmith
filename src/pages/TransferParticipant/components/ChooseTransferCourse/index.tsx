@@ -17,14 +17,15 @@ import theme from '@app/theme'
 
 import { useEligibleCourses } from '../../hooks/useEligibleCourses'
 import { EligibleCourse } from '../../types'
-import { useTransferParticipantContext } from '../TransferParticipantProvider'
+import {
+  TransferModeEnum,
+  useTransferParticipantContext,
+} from '../TransferParticipantProvider'
 
 export const ChooseTransferCourse: React.FC = () => {
-  const { t, _t } = useScopedTranslation(
-    'pages.transfer-participant.choose-course'
-  )
+  const { t, _t } = useScopedTranslation('pages.transfer-participant')
 
-  const { courseChosen } = useTransferParticipantContext()
+  const { courseChosen, mode, cancel } = useTransferParticipantContext()
 
   const [chosenCourse, setChoosenCourse] = useState<EligibleCourse>()
 
@@ -33,12 +34,16 @@ export const ChooseTransferCourse: React.FC = () => {
   const cols = useMemo(
     () => [
       { id: 'radio', label: '', sorting: false },
-      { id: 'name', label: t('col-name'), sorting: false },
-      { id: 'venue', label: t('col-venue'), sorting: false },
-      { id: 'start-date', label: t('col-start-date'), sorting: false },
+      { id: 'name', label: t('choose-course.col-name'), sorting: false },
+      { id: 'venue', label: t('choose-course.col-venue'), sorting: false },
+      {
+        id: 'start-date',
+        label: t('choose-course.col-start-date'),
+        sorting: false,
+      },
       {
         id: 'end-date',
-        label: t('col-end-date'),
+        label: t('choose-course.col-end-date'),
         sorting: false,
       },
     ],
@@ -54,68 +59,64 @@ export const ChooseTransferCourse: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" mb={2}>
-        {t('title')}
+        {t('choose-course.title')}
       </Typography>
 
-      {!courses?.eligibleCourses.length && !fetching ? (
+      {!courses?.length && !fetching ? (
         <Alert severity="info" variant="outlined" icon={<Info />}>
-          {t('no-courses')}
+          {t('choose-course.no-courses')}
         </Alert>
       ) : null}
 
-      {courses?.eligibleCourses?.length ? (
+      {courses?.length ? (
         <>
           <Table sx={{ background: 'white' }}>
             <TableHead cols={cols} />
             <TableBody>
-              {courses.eligibleCourses.map((course, index) => (
-                <TableRow key={course.id} data-index={index}>
+              {courses.map((course, index) => (
+                <TableRow key={course?.id} data-index={index}>
                   <TableCell>
                     <Radio
-                      checked={chosenCourse?.id === course.id}
+                      checked={chosenCourse?.id === course?.id}
                       onClick={() => setChoosenCourse(course)}
-                      value={course.id}
-                      inputProps={{ 'aria-label': String(course.id) }}
+                      value={course?.id}
+                      inputProps={{ 'aria-label': String(course?.id) }}
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography>{course.level}</Typography>
-                    <Typography color={theme.palette.dimGrey.main}>
-                      {course.course_code}
-                    </Typography>
+                    <Typography>{course.courseCode}</Typography>
                   </TableCell>
                   <TableCell>
-                    {course.schedule[0].venue ? (
-                      <>
-                        <Typography>
-                          {course.schedule[0].venue?.name}
-                        </Typography>
-                        <Typography color={theme.palette.dimGrey.main}>
-                          {course.schedule[0].venue?.city}
-                        </Typography>
-                      </>
+                    {course.venueName ? (
+                      <Typography>{course.venueName}</Typography>
                     ) : null}
 
-                    {course.schedule[0].virtualLink ? (
+                    {course.venueCity ? (
                       <Typography color={theme.palette.dimGrey.main}>
-                        {t('venue-virtual')}
+                        {course.venueCity}
+                      </Typography>
+                    ) : null}
+
+                    {course.virtualLink ? (
+                      <Typography color={theme.palette.dimGrey.main}>
+                        {t('choose-course.venue-virtual')}
                       </Typography>
                     ) : null}
                   </TableCell>
                   <TableCell>
                     <Typography>
-                      {_t('dates.short', { date: course.schedule[0].start })}
+                      {_t('dates.short', { date: course.startDate })}
                     </Typography>
                     <Typography color={theme.palette.dimGrey.main}>
-                      {_t('dates.time', { date: course.schedule[0].start })}
+                      {_t('dates.time', { date: course.startDate })}
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography>
-                      {_t('dates.short', { date: course.schedule[0].end })}
+                      {_t('dates.short', { date: course.endDate })}
                     </Typography>
                     <Typography color={theme.palette.dimGrey.main}>
-                      {_t('dates.time', { date: course.schedule[0].end })}
+                      {_t('dates.time', { date: course.endDate })}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -123,14 +124,21 @@ export const ChooseTransferCourse: React.FC = () => {
             </TableBody>
           </Table>
           <Box display="flex" justifyContent="flex-end" mt={3}>
-            <Button
-              variant="contained"
-              endIcon={<ArrowForward />}
-              disabled={!chosenCourse}
-              onClick={() => handleCourseChosen()}
-            >
-              {t('next-btn-text')}
-            </Button>
+            <Box>
+              {mode !== TransferModeEnum.ADMIN_TRANSFERS ? (
+                <Button onClick={cancel} sx={{ mr: 2 }}>
+                  {t('cancel-btn-text')}
+                </Button>
+              ) : null}
+              <Button
+                variant="contained"
+                endIcon={<ArrowForward />}
+                disabled={!chosenCourse}
+                onClick={() => handleCourseChosen()}
+              >
+                {t(`choose-course.next-btn-text_${mode}`)}
+              </Button>
+            </Box>
           </Box>
         </>
       ) : null}

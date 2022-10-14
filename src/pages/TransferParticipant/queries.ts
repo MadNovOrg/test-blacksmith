@@ -42,32 +42,16 @@ export const TRANSFER_PARTICIPANT_DETAILS = gql`
 `
 
 export const TRANSFER_ELIGIBLE_COURSES = gql`
-  query TransferEligibleCourses(
-    $level: course_level_enum
-    $startDate: timestamptz
-  ) {
-    eligibleCourses: course(
-      where: {
-        level: { _eq: $level }
-        schedule: { start: { _gt: $startDate } }
-        status: { _in: [CONFIRM_MODULES, SCHEDULED, DRAFT] }
-      }
-    ) {
+  query TransferEligibleCourses($fromCourseId: Int!) {
+    eligibleTransferCourses(fromCourseId: $fromCourseId) {
       id
-      level
-      course_code
-      schedule {
-        start
-        end
-        virtualLink
-        venue {
-          name
-          addressLineOne
-          addressLineTwo
-          city
-          postCode
-        }
-      }
+      courseCode
+      startDate
+      endDate
+      virtualLink
+      venue
+      venueName
+      venueCity
     }
   }
 `

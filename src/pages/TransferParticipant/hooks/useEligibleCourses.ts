@@ -11,16 +11,20 @@ import { TRANSFER_ELIGIBLE_COURSES } from '../queries'
 export function useEligibleCourses() {
   const { fromCourse } = useTransferParticipantContext()
 
+  if (!fromCourse) {
+    throw new Error('From course needed')
+  }
+
   const [{ data, fetching, error }] = useQuery<
     TransferEligibleCoursesQuery,
     TransferEligibleCoursesQueryVariables
   >({
     query: TRANSFER_ELIGIBLE_COURSES,
-    variables: { level: fromCourse?.level, startDate: fromCourse?.start },
+    variables: { fromCourseId: fromCourse.id },
   })
 
   return {
-    courses: data,
+    courses: data?.eligibleTransferCourses,
     fetching,
     error,
   }

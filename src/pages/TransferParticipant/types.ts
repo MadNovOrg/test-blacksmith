@@ -12,4 +12,5 @@ export enum FeeType {
   NO_FEE = 'NO_FEE',
 }
 
-export type EligibleCourse = TransferEligibleCoursesQuery['eligibleCourses'][0]
+export type EligibleCourse =
+  TransferEligibleCoursesQuery['eligibleTransferCourses'][0]

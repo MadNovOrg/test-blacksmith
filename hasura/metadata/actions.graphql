@@ -55,6 +55,12 @@ type Mutation {
 }
 
 type Query {
+  eligibleTransferCourses(
+    fromCourseId: Int!
+  ): [TransferCourse!]!
+}
+
+type Query {
   fetchPlans: [PlanObject]
 }
 
@@ -619,5 +625,16 @@ type CanApplyPromoCodeOutput {
 
 type CreateOrderOutput {
   id: uuid!
+}
+
+type TransferCourse {
+  id: Int!
+  courseCode: String!
+  startDate: String!
+  endDate: String!
+  virtualLink: String
+  venue: String
+  venueName: String
+  venueCity: String
 }
 

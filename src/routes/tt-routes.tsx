@@ -29,7 +29,7 @@ import {
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
 import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
-import { TransferParticipantPage } from '@app/pages/TransferParticipant'
+import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
@@ -77,7 +77,7 @@ const TTAdminRoutes = () => {
           />
           <Route
             path="transfer/:participantId"
-            element={<TransferParticipantPage />}
+            element={<AdminTransferParticipantPage />}
           >
             <Route index element={<ChooseTransferCourse />} />
             <Route path="details" element={<TransferDetails />} />
