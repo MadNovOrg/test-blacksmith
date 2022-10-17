@@ -10,21 +10,24 @@ import React, { memo, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 
 import { InfoPanel } from '@app/components/InfoPanel'
+import { TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 
-import { FeeType } from '../../types'
 import { TransferTermsTable } from '../TransferTermsTable'
 
 const formSchema = yup.object({
-  feeType: yup.mixed<FeeType>().oneOf(Object.values(FeeType)).required(),
+  feeType: yup
+    .mixed<TransferFeeType>()
+    .oneOf(Object.values(TransferFeeType))
+    .required(),
   customFee: yup
     .number()
     .nullable(true)
     .transform(v => (isNaN(v) ? null : v))
     .when('feeType', {
-      is: (value: FeeType) => value === FeeType.CUSTOM_FEE,
+      is: (value: TransferFeeType) => value === TransferFeeType.CustomFee,
       then: schema => schema.required(),
     }),
 })
@@ -74,19 +77,19 @@ const FeesPanel: React.FC<Props> = ({ courseStartDate, onChange }) => {
                 row
               >
                 <FormControlLabel
-                  value={FeeType.APPLY_TERMS}
+                  value={TransferFeeType.ApplyTerms}
                   control={<Radio />}
                   label={t('apply-terms-option')}
                   sx={{ color: theme.palette.dimGrey.main }}
                 />
                 <FormControlLabel
-                  value={FeeType.CUSTOM_FEE}
+                  value={TransferFeeType.CustomFee}
                   control={<Radio />}
                   label={t('custom-fee-option')}
                   sx={{ color: theme.palette.dimGrey.main }}
                 />
                 <FormControlLabel
-                  value={FeeType.NO_FEE}
+                  value={TransferFeeType.Free}
                   control={<Radio />}
                   label={t('no-fee-option')}
                   sx={{ color: theme.palette.dimGrey.main }}
@@ -96,13 +99,13 @@ const FeesPanel: React.FC<Props> = ({ courseStartDate, onChange }) => {
           )}
         ></Controller>
 
-        {formValues.feeType === FeeType.APPLY_TERMS ? (
+        {formValues.feeType === TransferFeeType.ApplyTerms ? (
           <Box mt={2}>
             <TransferTermsTable startDate={courseStartDate} />
           </Box>
         ) : null}
 
-        {formValues.feeType === FeeType.CUSTOM_FEE ? (
+        {formValues.feeType === TransferFeeType.CustomFee ? (
           <Box mt={2}>
             <TextField
               fullWidth

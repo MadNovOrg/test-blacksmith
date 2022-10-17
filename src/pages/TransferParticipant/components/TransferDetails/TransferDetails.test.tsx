@@ -4,11 +4,15 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
-import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Level_Enum,
+  Course_Type_Enum,
+  TransferFeeType,
+} from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { EligibleCourse, FeeType } from '../../types'
+import { EligibleCourse } from '../../types'
 import {
   ChosenParticipant,
   FromCourse,
@@ -130,7 +134,7 @@ describe('page: TransferDetails', () => {
     })
   })
 
-  it(`navigates to the review step when fee type is ${FeeType.APPLY_TERMS}`, async () => {
+  it(`navigates to the review step when fee type is ${TransferFeeType.ApplyTerms}`, async () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -207,7 +211,7 @@ describe('page: TransferDetails', () => {
     })
   })
 
-  it(`navigates to the review step when fee type is ${FeeType.CUSTOM_FEE}`, async () => {
+  it(`navigates to the review step when fee type is ${TransferFeeType.CustomFee}`, async () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -281,7 +285,7 @@ describe('page: TransferDetails', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText(FeeType.CUSTOM_FEE)).toBeInTheDocument()
+      expect(screen.getByText(TransferFeeType.CustomFee)).toBeInTheDocument()
       expect(screen.getByText('50')).toBeInTheDocument()
     })
   })

@@ -9324,6 +9324,29 @@ export type TransferCourse = {
   virtualLink?: Maybe<Scalars['String']>;
 };
 
+export type TransferFee = {
+  customFee?: InputMaybe<Scalars['Int']>;
+  type: TransferFeeType;
+};
+
+export enum TransferFeeType {
+  ApplyTerms = 'APPLY_TERMS',
+  CustomFee = 'CUSTOM_FEE',
+  Free = 'FREE'
+}
+
+export type TransferInput = {
+  fee: TransferFee;
+  participantId: Scalars['uuid'];
+  toCourseId: Scalars['Int'];
+};
+
+export type TransferParticipantOutput = {
+  __typename?: 'TransferParticipantOutput';
+  error?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
 /** Any node that has a URI */
 export type UniformResourceIdentifiable = {
   /** The unique resource identifier path */
@@ -23178,6 +23201,8 @@ export type Mutation_Root = {
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
+  /** transferParticipant */
+  transferParticipant?: Maybe<TransferParticipantOutput>;
   updateAvatar?: Maybe<UpdateAvatarResponse>;
   /** update data of the table: "availability" */
   update_availability?: Maybe<Availability_Mutation_Response>;
@@ -25198,6 +25223,12 @@ export type Mutation_RootPlansCreateArgs = {
 /** mutation root */
 export type Mutation_RootStripeCreatePaymentIntentArgs = {
   input: StripeCreatePaymentIntentInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootTransferParticipantArgs = {
+  input: TransferInput;
 };
 
 
@@ -35402,13 +35433,11 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
-  participantId: Scalars['uuid'];
-  courseId: Scalars['Int'];
-  auditInput: Course_Participant_Audit_Insert_Input;
+  input: TransferInput;
 }>;
 
 
-export type TransferParticipantMutation = { __typename?: 'mutation_root', update_course_participant_by_pk?: { __typename?: 'course_participant', id: any } | null, insert_course_participant_audit?: { __typename?: 'course_participant_audit_mutation_response', affected_rows: number } | null };
+export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: string | null } | null };
 
 export type CourseGradingDataQueryVariables = Exact<{
   id: Scalars['Int'];

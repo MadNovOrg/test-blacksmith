@@ -11,16 +11,15 @@ import { useMutation } from 'urql'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { LinkBehavior } from '@app/components/LinkBehavior'
-import { useAuth } from '@app/context/auth'
 import {
-  Course_Participant_Audit_Type_Enum,
+  TransferFeeType,
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
-import { FeeType, TransferStepsEnum } from '../../types'
+import { TransferStepsEnum } from '../../types'
 import { getTransferTermsFee } from '../../utils'
 import { CourseInfoPanel } from '../CourseInfoPanel'
 import {
@@ -31,8 +30,8 @@ import {
 export const TransferReview: React.FC = () => {
   const { t, _t } = useScopedTranslation('pages.transfer-participant')
   const navigate = useNavigate()
-  const { profile } = useAuth()
   const [success, setSuccess] = useState<boolean | undefined>()
+  const [error, setError] = useState('')
 
   const {
     toCourse,
@@ -45,48 +44,26 @@ export const TransferReview: React.FC = () => {
     cancel,
   } = useTransferParticipantContext()
 
-  const [{ error, fetching }, transferParticipant] = useMutation<
+  const [{ error: networkError, fetching }, transferParticipant] = useMutation<
     TransferParticipantMutation,
     TransferParticipantMutationVariables
   >(TRANSFER_PARTICIPANT)
 
   const handleTransfer = async () => {
-    if (toCourse && participant) {
+    if (toCourse && participant && fees && fees.type) {
       try {
         const result = await transferParticipant({
-          participantId: participant?.id,
-          courseId: toCourse?.id,
-          auditInput: {
-            authorized_by: profile?.id,
-            type: Course_Participant_Audit_Type_Enum.Transfer,
-            course_id: fromCourse?.id,
-            profile_id: profile?.id,
-            payload: {
-              fromCourse: {
-                id: fromCourse?.id,
-                courseCode: fromCourse?.course_code,
-              },
-              toCourse: {
-                id: toCourse?.id,
-                courseCode: toCourse.courseCode,
-              },
-              type: fees?.type,
-              ...(fees?.type === FeeType.APPLY_TERMS
-                ? {
-                    percentage: getTransferTermsFee(
-                      new Date(fromCourse?.start ?? '')
-                    ),
-                  }
-                : null),
-              ...(fees?.type === FeeType.CUSTOM_FEE
-                ? { customFee: fees.customFee }
-                : null),
+          input: {
+            participantId: participant.id,
+            toCourseId: toCourse.id,
+            fee: {
+              type: fees.type,
+              customFee: fees.customFee,
             },
           },
         })
 
-        const transferSuccessfull =
-          result.data?.update_course_participant_by_pk?.id
+        const transferSuccessfull = result.data?.transferParticipant?.success
 
         if (
           transferSuccessfull &&
@@ -96,6 +73,9 @@ export const TransferReview: React.FC = () => {
         } else if (transferSuccessfull) {
           completeStep(TransferStepsEnum.REVIEW)
           setSuccess(true)
+        } else {
+          setSuccess(false)
+          setError(result.data?.transferParticipant?.error ?? 'Generic error')
         }
       } catch (err) {
         // declaratively doing error handling from useMutation
@@ -130,7 +110,7 @@ export const TransferReview: React.FC = () => {
             {t('review-transfer.title')}
           </Typography>
 
-          {error ? (
+          {error || networkError ? (
             <Alert severity="error" sx={{ mb: 2 }}>
               {t('review-transfer.transferring-error')}
             </Alert>
@@ -145,7 +125,7 @@ export const TransferReview: React.FC = () => {
                 venue: toCourse.venue ?? '',
               }}
             />
-            {fees.customFee && fees.type === FeeType.CUSTOM_FEE ? (
+            {fees.customFee && fees.type === TransferFeeType.CustomFee ? (
               <>
                 <InfoPanel data-testid="fee-type-panel">
                   <InfoRow
@@ -166,7 +146,7 @@ export const TransferReview: React.FC = () => {
               </>
             ) : null}
 
-            {fees.type === FeeType.APPLY_TERMS ? (
+            {fees.type === TransferFeeType.ApplyTerms ? (
               <>
                 <InfoPanel data-testid="fee-type-panel">
                   <InfoRow

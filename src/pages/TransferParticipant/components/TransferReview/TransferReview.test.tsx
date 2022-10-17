@@ -2,12 +2,13 @@ import { addDays } from 'date-fns'
 import matches from 'lodash-es/matches'
 import React from 'react'
 import { MemoryRouter, Route, Routes, useSearchParams } from 'react-router-dom'
-import { Client, CombinedError, Provider, TypedDocumentNode } from 'urql'
+import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
 import {
   Course_Level_Enum,
   Course_Type_Enum,
+  TransferFeeType,
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
@@ -15,7 +16,7 @@ import {
 import { render, waitFor, screen, within, userEvent } from '@test/index'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
-import { EligibleCourse, FeeType } from '../../types'
+import { EligibleCourse } from '../../types'
 import { getTransferTermsFee } from '../../utils'
 import {
   ChosenParticipant,
@@ -75,7 +76,7 @@ describe('page: TransferReview', () => {
     })
   })
 
-  it(`displays ${FeeType.APPLY_TERMS} info properly`, async () => {
+  it(`displays ${TransferFeeType.ApplyTerms} info properly`, async () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -109,7 +110,7 @@ describe('page: TransferReview', () => {
     }
 
     const fees: ContextValue['fees'] = {
-      type: FeeType.APPLY_TERMS,
+      type: TransferFeeType.ApplyTerms,
     }
 
     render(
@@ -138,7 +139,7 @@ describe('page: TransferReview', () => {
     ).toBeInTheDocument()
   })
 
-  it(`displays ${FeeType.CUSTOM_FEE} info properly`, () => {
+  it(`displays ${TransferFeeType.CustomFee} info properly`, () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -172,7 +173,7 @@ describe('page: TransferReview', () => {
     }
 
     const fees: ContextValue['fees'] = {
-      type: FeeType.CUSTOM_FEE,
+      type: TransferFeeType.CustomFee,
       customFee: 50,
     }
 
@@ -198,7 +199,7 @@ describe('page: TransferReview', () => {
     ).toBeInTheDocument()
   })
 
-  it(`displays ${FeeType.NO_FEE} info properly`, () => {
+  it(`displays ${TransferFeeType.Free} info properly`, () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -232,7 +233,7 @@ describe('page: TransferReview', () => {
     }
 
     const fees: ContextValue['fees'] = {
-      type: FeeType.NO_FEE,
+      type: TransferFeeType.Free,
     }
 
     render(
@@ -264,10 +265,13 @@ describe('page: TransferReview', () => {
           },
         }),
       executeMutation: () => {
-        return fromValue({
-          error: new CombinedError({
-            networkError: Error('something went wrong!'),
-          }),
+        return fromValue<{ data: TransferParticipantMutation }>({
+          data: {
+            transferParticipant: {
+              success: false,
+              error: 'Error',
+            },
+          },
         })
       },
     } as unknown as Client
@@ -295,7 +299,7 @@ describe('page: TransferReview', () => {
     }
 
     const fees: ContextValue['fees'] = {
-      type: FeeType.APPLY_TERMS,
+      type: TransferFeeType.ApplyTerms,
     }
 
     render(
@@ -325,9 +329,8 @@ describe('page: TransferReview', () => {
 
   it('transfers the participant and navigates to the course details page with the success query param', async () => {
     const TO_COURSE_ID = 2
-    const FROM_COURSE_ID = 1
     const PARTICIPANT_ID = 'participant-id'
-    const CHOSEN_FEE_TYPE = FeeType.APPLY_TERMS
+    const CHOSEN_FEE_TYPE = TransferFeeType.ApplyTerms
 
     const client = {
       executeQuery: () =>
@@ -347,18 +350,11 @@ describe('page: TransferReview', () => {
         const mutationMatches = matches({
           query: TRANSFER_PARTICIPANT,
           variables: {
-            courseId: TO_COURSE_ID,
-            participantId: PARTICIPANT_ID,
-            auditInput: {
-              payload: {
-                fromCourse: {
-                  id: FROM_COURSE_ID,
-                },
-                toCourse: {
-                  id: TO_COURSE_ID,
-                },
+            input: {
+              toCourseId: TO_COURSE_ID,
+              participantId: PARTICIPANT_ID,
+              fee: {
                 type: CHOSEN_FEE_TYPE,
-                percentage: 0,
               },
             },
           } as TransferParticipantMutationVariables,
@@ -367,16 +363,19 @@ describe('page: TransferReview', () => {
         if (mutationMatches({ query, variables })) {
           return fromValue<{ data: TransferParticipantMutation }>({
             data: {
-              update_course_participant_by_pk: {
-                id: PARTICIPANT_ID,
+              transferParticipant: {
+                success: true,
               },
             },
           })
         } else {
-          return fromValue({
-            error: new CombinedError({
-              networkError: Error('something went wrong!'),
-            }),
+          return fromValue<{ data: TransferParticipantMutation }>({
+            data: {
+              transferParticipant: {
+                success: false,
+                error: 'Error message',
+              },
+            },
           })
         }
       },
@@ -405,7 +404,7 @@ describe('page: TransferReview', () => {
     }
 
     const fees: ContextValue['fees'] = {
-      type: FeeType.APPLY_TERMS,
+      type: TransferFeeType.ApplyTerms,
     }
 
     const CourseDetailsMock = () => {

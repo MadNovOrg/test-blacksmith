@@ -11,11 +11,16 @@ import React, {
 } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Course, Course_Participant, Profile } from '@app/generated/graphql'
+import {
+  Course,
+  Course_Participant,
+  Profile,
+  TransferFeeType,
+} from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { useTransferDetails } from '../../hooks/useTransferDetails'
-import { EligibleCourse, FeeType, TransferStepsEnum } from '../../types'
+import { EligibleCourse, TransferStepsEnum } from '../../types'
 
 export type FromCourse = Pick<
   Course,
@@ -40,14 +45,14 @@ export type ContextValue = {
   fromCourse?: FromCourse
   toCourse?: EligibleCourse
   fees?: {
-    type?: FeeType
+    type?: TransferFeeType
     customFee?: number | null
   }
   completedSteps: TransferStepsEnum[]
   completeStep: (step: TransferStepsEnum) => void
   currentStepKey: TransferStepsEnum
   courseChosen: (course: EligibleCourse) => void
-  feesChosen: (type?: FeeType, customFee?: number | null) => void
+  feesChosen: (type?: TransferFeeType, customFee?: number | null) => void
   backFrom: (step: TransferStepsEnum) => void
   mode: TransferModeEnum
   cancel: () => void
@@ -83,7 +88,7 @@ export const TransferParticipantProvider: React.FC<Props> = ({
   const [fees, setFees] = useState<ContextValue['fees']>(() =>
     mode === TransferModeEnum.ADMIN_TRANSFERS
       ? initialValue?.fees
-      : { type: FeeType.APPLY_TERMS }
+      : { type: TransferFeeType.ApplyTerms }
   )
   const [completedSteps, setCompletedSteps] = useState<
     ContextValue['completedSteps']

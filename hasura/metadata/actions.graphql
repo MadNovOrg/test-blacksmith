@@ -137,6 +137,12 @@ type Mutation {
 }
 
 type Mutation {
+  transferParticipant(
+    input: TransferInput!
+  ): TransferParticipantOutput
+}
+
+type Mutation {
   updateAvatar(
     avatar: bytea!
   ): UpdateAvatarResponse
@@ -262,6 +268,18 @@ enum PaymentMethod {
   INVOICE
 }
 
+enum TransferFeeType {
+  APPLY_TERMS
+  CUSTOM_FEE
+  FREE
+}
+
+enum TransferFeeTypeEnum {
+  APPLY_TERMS
+  CUSTOM_FEE
+  FREE
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -366,6 +384,17 @@ input CreateOrderInput {
   registrants: [String!]!
   organizationId: String!
   promoCodes: [String!]!
+}
+
+input TransferFee {
+  type: TransferFeeType!
+  customFee: Int
+}
+
+input TransferInput {
+  participantId: uuid!
+  toCourseId: Int!
+  fee: TransferFee!
 }
 
 type LinkProfileResult {
@@ -636,5 +665,10 @@ type TransferCourse {
   venue: String
   venueName: String
   venueCity: String
+}
+
+type TransferParticipantOutput {
+  success: Boolean!
+  error: String
 }
 

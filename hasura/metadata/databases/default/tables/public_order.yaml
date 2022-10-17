@@ -8,6 +8,8 @@ configuration:
       custom_name: clientPurchaseOrder
     course_id:
       custom_name: courseId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
     billing_family_name:
       custom_name: billingFamilyName
     payment_method:
@@ -32,11 +34,10 @@ configuration:
       custom_name: orderTotal
     profile_id:
       custom_name: profileId
-    xero_invoice_number:
-      custom_name: xeroInvoiceNumber
   custom_column_names:
     client_purchase_order: clientPurchaseOrder
     course_id: courseId
+    xero_invoice_number: xeroInvoiceNumber
     billing_family_name: billingFamilyName
     payment_method: paymentMethod
     billing_address: billingAddress
@@ -49,7 +50,6 @@ configuration:
     billing_email: billingEmail
     order_total: orderTotal
     profile_id: profileId
-    xero_invoice_number: xeroInvoiceNumber
 object_relationships:
   - name: course
     using:

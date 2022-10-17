@@ -162,6 +162,13 @@ actions:
     permissions:
       - role: user
       - role: unverified
+  - name: transferParticipant
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/transfer'
+    permissions:
+      - role: user
+    comment: transferParticipant
   - name: updateAvatar
     definition:
       kind: synchronous
@@ -380,6 +387,28 @@ custom_types:
         - value: INVOICE
           is_deprecated: null
           description: null
+    - name: TransferFeeType
+      values:
+        - value: APPLY_TERMS
+          is_deprecated: null
+          description: null
+        - value: CUSTOM_FEE
+          is_deprecated: null
+          description: null
+        - value: FREE
+          is_deprecated: null
+          description: null
+    - name: TransferFeeTypeEnum
+      values:
+        - value: APPLY_TERMS
+          is_deprecated: null
+          description: null
+        - value: CUSTOM_FEE
+          is_deprecated: null
+          description: null
+        - value: FREE
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -397,6 +426,8 @@ custom_types:
     - name: Go1LicensesChangeInput
     - name: CanApplyPromoCodeInput
     - name: CreateOrderInput
+    - name: TransferFee
+    - name: TransferInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -439,4 +470,5 @@ custom_types:
     - name: CanApplyPromoCodeOutput
     - name: CreateOrderOutput
     - name: TransferCourse
+    - name: TransferParticipantOutput
   scalars: []
