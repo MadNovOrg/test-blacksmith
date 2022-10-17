@@ -107,7 +107,7 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'admin')), -- admin@teamteach.testinator.com
 ('48c9c19b-e7bf-4309-9679-52d5619d27dd', (SELECT id from role WHERE name = 'tt-ops')), -- ops@teamteach.testinator.com
 ('48812860-89a5-41be-95c9-b8889e88bffd', (SELECT id from role WHERE name = 'tt-ops')), -- moderator@teamteach.testinator.com
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'org-admin')), -- org.admin@teamteach.testinator.com
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'user')), -- org.admin@teamteach.testinator.com
 ('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', (SELECT id from role WHERE name = 'trainer')), -- password@teamteach.testinator.com
 ('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', (SELECT id from role WHERE name = 'trainer')), -- trainer01@teamteach.testinator.com
 ('30ebb1e1-0491-44f8-b0a2-3087bd454b19', (SELECT id from role WHERE name = 'trainer')), -- trainer02@teamteach.testinator.com
@@ -153,3 +153,5 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('14184530-d2a8-4cc2-ad42-2b7312aa5b3d', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer08@teamteach.testinator.com
 ('d7c8cfe9-827c-4fc5-88b6-1a799d02dd81', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer09@teamteach.testinator.com
 ('b414536d-29dd-4902-81f9-e808503428ee', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'); -- trainer10@teamteach.testinator.com
+
+UPDATE organization_member SET is_admin = true WHERE profile_id = 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa';
