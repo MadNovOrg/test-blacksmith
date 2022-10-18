@@ -16,6 +16,7 @@ import { EligibleCourse } from '../../types'
 import {
   ChosenParticipant,
   FromCourse,
+  TransferModeEnum,
   TransferParticipantProvider,
   useTransferParticipantContext,
 } from '../TransferParticipantProvider'
@@ -287,6 +288,75 @@ describe('page: TransferDetails', () => {
     await waitFor(() => {
       expect(screen.getByText(TransferFeeType.CustomFee)).toBeInTheDocument()
       expect(screen.getByText('50')).toBeInTheDocument()
+    })
+  })
+
+  it("doesn't display fee options when an org admin is doing the transfer", async () => {
+    const client = {
+      executeQuery: () =>
+        fromValue({
+          data: {
+            course: null,
+            participant: null,
+          },
+        }),
+    } as unknown as Client
+
+    const fromCourse: FromCourse = {
+      id: 1,
+      level: Course_Level_Enum.Level_1,
+      start: new Date().toISOString(),
+      end: addDays(new Date(), 1).toISOString(),
+      type: Course_Type_Enum.Open,
+    }
+
+    const toCourse: EligibleCourse = {
+      id: 2,
+      courseCode: 'course-code',
+      startDate: new Date().toISOString(),
+      endDate: addDays(new Date(), 1).toISOString(),
+    }
+
+    const participant: ChosenParticipant = {
+      id: 'participant-id',
+      profile: {
+        fullName: 'John Doe',
+      },
+    }
+
+    render(
+      <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
+        <Provider value={client}>
+          <TransferParticipantProvider
+            participantId={participant.id}
+            courseId={fromCourse.id}
+            initialValue={{
+              fromCourse,
+              participant,
+              toCourse,
+            }}
+            mode={TransferModeEnum.ORG_ADMIN_TRANSFERS}
+          >
+            <Routes>
+              <Route
+                path="/transfer/:participantId/details"
+                element={<TransferDetails />}
+              />
+            </Routes>
+          </TransferParticipantProvider>
+        </Provider>
+      </MemoryRouter>
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByLabelText(/apply transfer terms/i)
+      ).not.toBeInTheDocument()
+
+      expect(screen.queryByLabelText(/custom fee/i)).not.toBeInTheDocument()
+      expect(screen.queryByLabelText(/no fees/i)).not.toBeInTheDocument()
+
+      expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
     })
   })
 })

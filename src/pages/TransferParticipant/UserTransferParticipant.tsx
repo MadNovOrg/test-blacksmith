@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
@@ -25,11 +25,10 @@ export const UserTransferParticipant: React.FC = () => {
   // we are fetching participant only at the beginning
   const participantFetched = useRef(false)
 
-  const { id } = useParams<{ id: string }>()
-
-  const [params] = useSearchParams()
-
-  const participantId = params.get('participantId')
+  const { id, participantId } = useParams<{
+    id: string
+    participantId: string
+  }>()
 
   const [{ data: participantData, fetching: participantFetching }] = useQuery<
     GetCourseParticipantIdQuery,

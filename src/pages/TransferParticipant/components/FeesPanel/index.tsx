@@ -15,6 +15,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 
+import { TransferModeEnum } from '../TransferParticipantProvider'
 import { TransferTermsTable } from '../TransferTermsTable'
 
 const formSchema = yup.object({
@@ -36,16 +37,26 @@ export type FormValues = yup.InferType<typeof formSchema>
 type Props = {
   courseStartDate: Date
   onChange?: (values: FormValues, isValid: boolean) => void
+  mode?: TransferModeEnum
 }
 
-const FeesPanel: React.FC<Props> = ({ courseStartDate, onChange }) => {
+const FeesPanel: React.FC<Props> = ({
+  courseStartDate,
+  onChange,
+  mode = TransferModeEnum.ADMIN_TRANSFERS,
+}) => {
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )
 
+  const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
+
   const { watch, control, register, formState } = useForm<FormValues>({
     resolver: yupResolver(formSchema),
     mode: 'onChange',
+    defaultValues: {
+      feeType: orgAdminMode ? TransferFeeType.ApplyTerms : undefined,
+    },
   })
 
   const formValues = watch()
@@ -59,45 +70,47 @@ const FeesPanel: React.FC<Props> = ({ courseStartDate, onChange }) => {
   return (
     <Box>
       <InfoPanel titlePosition="inside">
-        <Controller
-          control={control}
-          name="feeType"
-          render={({ field }) => (
-            <FormControl {...field}>
-              <FormLabel
-                id="fees-radio-group-label"
-                focused={false}
-                sx={{ fontWeight: 600, color: theme.palette.secondary.main }}
-              >
-                {t('fees-radio-group-title')}
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="fees-radio-group-label"
-                name="fees-radio-group"
-                row
-              >
-                <FormControlLabel
-                  value={TransferFeeType.ApplyTerms}
-                  control={<Radio />}
-                  label={t('apply-terms-option')}
-                  sx={{ color: theme.palette.dimGrey.main }}
-                />
-                <FormControlLabel
-                  value={TransferFeeType.CustomFee}
-                  control={<Radio />}
-                  label={t('custom-fee-option')}
-                  sx={{ color: theme.palette.dimGrey.main }}
-                />
-                <FormControlLabel
-                  value={TransferFeeType.Free}
-                  control={<Radio />}
-                  label={t('no-fee-option')}
-                  sx={{ color: theme.palette.dimGrey.main }}
-                />
-              </RadioGroup>
-            </FormControl>
-          )}
-        ></Controller>
+        {!orgAdminMode ? (
+          <Controller
+            control={control}
+            name="feeType"
+            render={({ field }) => (
+              <FormControl {...field}>
+                <FormLabel
+                  id="fees-radio-group-label"
+                  focused={false}
+                  sx={{ fontWeight: 600, color: theme.palette.secondary.main }}
+                >
+                  {t('fees-radio-group-title')}
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="fees-radio-group-label"
+                  name="fees-radio-group"
+                  row
+                >
+                  <FormControlLabel
+                    value={TransferFeeType.ApplyTerms}
+                    control={<Radio />}
+                    label={t('apply-terms-option')}
+                    sx={{ color: theme.palette.dimGrey.main }}
+                  />
+                  <FormControlLabel
+                    value={TransferFeeType.CustomFee}
+                    control={<Radio />}
+                    label={t('custom-fee-option')}
+                    sx={{ color: theme.palette.dimGrey.main }}
+                  />
+                  <FormControlLabel
+                    value={TransferFeeType.Free}
+                    control={<Radio />}
+                    label={t('no-fee-option')}
+                    sx={{ color: theme.palette.dimGrey.main }}
+                  />
+                </RadioGroup>
+              </FormControl>
+            )}
+          ></Controller>
+        ) : null}
 
         {formValues.feeType === TransferFeeType.ApplyTerms ? (
           <Box mt={2}>

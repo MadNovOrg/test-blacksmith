@@ -15,7 +15,7 @@ import FeesPanel, { FormValues } from '../FeesPanel'
 import { useTransferParticipantContext } from '../TransferParticipantProvider'
 
 export const TransferDetails: React.FC = () => {
-  const { toCourse, backFrom, feesChosen, fromCourse } =
+  const { toCourse, backFrom, feesChosen, fromCourse, mode } =
     useTransferParticipantContext()
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
@@ -74,6 +74,7 @@ export const TransferDetails: React.FC = () => {
       <FeesPanel
         courseStartDate={courseStartDate}
         onChange={handleFeesChange}
+        mode={mode}
       />
 
       <Box mt={4} display="flex" justifyContent="space-between">

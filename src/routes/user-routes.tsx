@@ -60,7 +60,17 @@ const UserRoutes = () => {
           <Route index element={<Navigate replace to="all" />} />
           <Route path=":orgId">
             <Route index element={<ManageCourses />} />
-            <Route path=":id/details" element={<TrainerCourseDetails />} />
+            <Route path=":id">
+              <Route path="details" element={<TrainerCourseDetails />} />
+              <Route
+                path="transfer/:participantId"
+                element={<UserTransferParticipant />}
+              >
+                <Route index element={<ChooseTransferCourse />} />
+                <Route path="details" element={<TransferDetails />} />
+                <Route path="review" element={<TransferReview />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
       ) : null}
