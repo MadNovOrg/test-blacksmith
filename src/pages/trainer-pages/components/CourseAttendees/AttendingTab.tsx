@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { ActionsMenu } from '@app/components/ActionsMenu'
+import { ReplaceParticipantDialog } from '@app/components/ReplaceParticipantDialog'
 import { TableHead } from '@app/components/Table/TableHead'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
@@ -42,6 +43,8 @@ export const AttendingTab = ({ course }: TabProperties) => {
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
   const [individual, setIndividual] = useState<CourseParticipant>()
+  const [participantToReplace, setParticipantToReplace] =
+    useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
   const navigate = useNavigate()
@@ -133,8 +136,8 @@ export const AttendingTab = ({ course }: TabProperties) => {
       {
         label: t('common.replace'),
         icon: <MoveDownIcon color="primary" />,
-        onClick: (_: CourseParticipant) => {
-          // TODO not implemented yet
+        onClick: (participant: CourseParticipant) => {
+          setParticipantToReplace(participant)
         },
       },
       {
@@ -237,6 +240,18 @@ export const AttendingTab = ({ course }: TabProperties) => {
               course={course}
               onClose={() => setIndividual(undefined)}
               onSave={mutate}
+            />
+          ) : null}
+
+          {participantToReplace ? (
+            <ReplaceParticipantDialog
+              participant={{
+                id: participantToReplace.id,
+                fullName: participantToReplace.profile.fullName,
+                avatar: participantToReplace.profile.avatar,
+              }}
+              onClose={() => setParticipantToReplace(undefined)}
+              onSuccess={mutate}
             />
           ) : null}
         </>

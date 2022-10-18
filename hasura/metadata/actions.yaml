@@ -149,6 +149,13 @@ actions:
     permissions:
       - role: user
     comment: Podcasts list
+  - name: replaceParticipant
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/replace-participant'
+    permissions:
+      - role: user
+    comment: replaceParticipant
   - name: searchTrainers
     definition:
       kind: ""
@@ -387,6 +394,20 @@ custom_types:
         - value: INVOICE
           is_deprecated: null
           description: null
+    - name: ReplaceParticipantError
+      values:
+        - value: NO_PARTICIPANT
+          is_deprecated: null
+          description: null
+        - value: INVALID_EMAIL
+          is_deprecated: null
+          description: null
+        - value: GENERIC_ERROR
+          is_deprecated: null
+          description: null
+        - value: NOT_AUTHORIZED
+          is_deprecated: null
+          description: null
     - name: TransferFeeType
       values:
         - value: APPLY_TERMS
@@ -426,6 +447,7 @@ custom_types:
     - name: Go1LicensesChangeInput
     - name: CanApplyPromoCodeInput
     - name: CreateOrderInput
+    - name: ReplaceParticipantInput
     - name: TransferFee
     - name: TransferInput
   objects:
@@ -471,4 +493,5 @@ custom_types:
     - name: CreateOrderOutput
     - name: TransferCourse
     - name: TransferParticipantOutput
+    - name: ReplaceParticipantOutput
   scalars: []

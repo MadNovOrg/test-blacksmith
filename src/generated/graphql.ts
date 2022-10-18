@@ -5660,6 +5660,24 @@ export enum RelationEnum {
   Or = 'OR'
 }
 
+export enum ReplaceParticipantError {
+  GenericError = 'GENERIC_ERROR',
+  InvalidEmail = 'INVALID_EMAIL',
+  NotAuthorized = 'NOT_AUTHORIZED',
+  NoParticipant = 'NO_PARTICIPANT'
+}
+
+export type ReplaceParticipantInput = {
+  inviteeEmail: Scalars['String'];
+  participantId: Scalars['uuid'];
+};
+
+export type ReplaceParticipantOutput = {
+  __typename?: 'ReplaceParticipantOutput';
+  error?: Maybe<ReplaceParticipantError>;
+  success: Scalars['Boolean'];
+};
+
 /** The ResearchSummariesCategory type */
 export type ResearchSummariesCategory = DatabaseIdentifier & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'ResearchSummariesCategory';
@@ -23200,6 +23218,8 @@ export type Mutation_Root = {
   insert_xero_credential_one?: Maybe<Xero_Credential>;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
+  /** replaceParticipant */
+  replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
   /** transferParticipant */
   transferParticipant?: Maybe<TransferParticipantOutput>;
@@ -25217,6 +25237,12 @@ export type Mutation_RootInsert_Xero_Credential_OneArgs = {
 /** mutation root */
 export type Mutation_RootPlansCreateArgs = {
   data: PlansCreateInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootReplaceParticipantArgs = {
+  input: ReplaceParticipantInput;
 };
 
 
@@ -35372,6 +35398,13 @@ export enum Xero_Credential_Update_Column {
   /** column name */
   Token = 'token'
 }
+
+export type ReplaceParticipantMutationVariables = Exact<{
+  input: ReplaceParticipantInput;
+}>;
+
+
+export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;

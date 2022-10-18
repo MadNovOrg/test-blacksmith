@@ -412,6 +412,18 @@
     "never-mind": "Never mind"
   },
   "components": {
+    "replace-participant": {
+      "title": "Replace with new attendee",
+      "description": "This action will immediately remove the original attendee and invite the new attendee entered below. This will notify the organisation, original attendee, new attendee, and finance to make changes on the invoice(s), where necessary.",
+      "participant-title": "Original attendee",
+      "invite-title": "Replace with",
+      "input-placeholder": "Enter new attendee email *",
+      "alert-message": "<strong>Important:</strong> Please make sure email is entered correctly. Course details will be sent to email address.",
+      "cancel-btn-text": "Never mind",
+      "submit-btn-text": "Replace attendee",
+      "replacement-error": "There was an error replacing the participant.",
+      "terms-notice": "I acknowledge that the new attendee has the same billing details as the original booking. A charge will only incur if billing details change."
+    },
     "not-found": {
       "title": "Page not found",
       "info": "Either you followed an invalid link or you do not have access to view this page. Please use the main navigation to find your way."

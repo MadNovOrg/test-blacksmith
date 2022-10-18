@@ -1,0 +1,174 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import LoadingButton from '@mui/lab/LoadingButton'
+import Alert from '@mui/material/Alert'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemText from '@mui/material/ListItemText'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import React, { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Trans } from 'react-i18next'
+import { noop } from 'ts-essentials'
+import { useMutation } from 'urql'
+import { InferType } from 'yup'
+
+import {
+  ReplaceParticipantMutation,
+  ReplaceParticipantMutationVariables,
+} from '@app/generated/graphql'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { schemas, yup } from '@app/schemas'
+
+import { Avatar } from '../Avatar'
+import { Dialog } from '../Dialog'
+
+import { REPLACE_PARTICIPANT } from './queries'
+
+export enum Mode {
+  TT_ADMIN,
+  ORG_ADMIN,
+}
+
+export type Props = {
+  onClose?: () => void
+  onSuccess?: () => void
+  mode?: Mode
+  participant: {
+    id: string
+    fullName: string
+    avatar?: string
+  }
+}
+
+export const ReplaceParticipantDialog: React.FC<Props> = ({
+  onClose = noop,
+  onSuccess = noop,
+  mode = Mode.TT_ADMIN,
+  participant,
+}) => {
+  const { t, _t } = useScopedTranslation('components.replace-participant')
+
+  const schema = yup.object({
+    email: schemas.email(_t).required(),
+    termsAccepted: yup.bool().required(),
+  })
+
+  const { register, formState, handleSubmit } = useForm<
+    InferType<typeof schema>
+  >({
+    resolver: yupResolver(schema),
+    mode: 'all',
+    defaultValues: {
+      termsAccepted: mode === Mode.TT_ADMIN,
+    },
+  })
+
+  const [{ data, fetching, error }, replaceParticipant] = useMutation<
+    ReplaceParticipantMutation,
+    ReplaceParticipantMutationVariables
+  >(REPLACE_PARTICIPANT)
+
+  const onSubmit: SubmitHandler<InferType<typeof schema>> = data => {
+    replaceParticipant({
+      input: { participantId: participant.id, inviteeEmail: data.email },
+    })
+  }
+
+  useEffect(() => {
+    if (data?.replaceParticipant?.success) {
+      onSuccess()
+      onClose()
+    }
+  }, [data, onSuccess, onClose])
+
+  const hasError = error || data?.replaceParticipant?.error
+
+  return (
+    <Dialog
+      title={
+        <Typography variant="h3" color="grey.800">
+          {t('title')}
+        </Typography>
+      }
+      open
+      onClose={onClose ?? noop}
+      maxWidth={700}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Typography sx={{ mb: 4 }} color="dimGrey.main">
+          {t('description')}
+        </Typography>
+
+        {hasError ? (
+          <Alert
+            severity="error"
+            variant="outlined"
+            sx={{ mb: 2 }}
+            data-testid="error-alert"
+          >
+            {t('replacement-error')}
+          </Alert>
+        ) : null}
+
+        <Typography color="grey.700" fontWeight={600} mb={1}>
+          {t('participant-title')}
+        </Typography>
+
+        <Box display="flex" mb={3}>
+          <ListItemAvatar sx={{ minWidth: 0, mr: 1 }}>
+            <Avatar src={participant.avatar} />
+          </ListItemAvatar>
+          <ListItemText primary={participant.fullName} />
+        </Box>
+
+        <Box mb={5}>
+          <Typography color="grey.700" fontWeight={600} mb={1}>
+            {t('invite-title')}
+          </Typography>
+
+          <TextField
+            variant="filled"
+            placeholder={t('input-placeholder')}
+            fullWidth
+            error={Boolean(formState.errors.email?.message)}
+            helperText={formState.errors.email?.message}
+            {...register('email')}
+          />
+
+          <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
+            <Trans i18nKey="components.replace-participant.alert-message" />
+          </Alert>
+
+          {mode === Mode.ORG_ADMIN ? (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  {...register('termsAccepted')}
+                  data-testid="terms-checkbox"
+                />
+              }
+              label={t('terms-notice')}
+              sx={{ mt: 2, color: 'dimGrey.main' }}
+            />
+          ) : null}
+        </Box>
+
+        <Box display="flex" justifyContent="space-between">
+          <Button onClick={onClose}>{t('cancel-btn-text')}</Button>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            disabled={!formState.isValid}
+            loading={fetching}
+          >
+            {t('submit-btn-text')}
+          </LoadingButton>
+        </Box>
+      </form>
+    </Dialog>
+  )
+}

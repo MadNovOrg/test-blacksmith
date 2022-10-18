@@ -124,6 +124,12 @@ type Query {
   ): PodcastsPayload
 }
 
+type Mutation {
+  replaceParticipant(
+    input: ReplaceParticipantInput!
+  ): ReplaceParticipantOutput
+}
+
 type Query {
   searchTrainers(
     input: SearchTrainersInput!
@@ -268,6 +274,13 @@ enum PaymentMethod {
   INVOICE
 }
 
+enum ReplaceParticipantError {
+  NO_PARTICIPANT
+  INVALID_EMAIL
+  GENERIC_ERROR
+  NOT_AUTHORIZED
+}
+
 enum TransferFeeType {
   APPLY_TERMS
   CUSTOM_FEE
@@ -384,6 +397,11 @@ input CreateOrderInput {
   registrants: [String!]!
   organizationId: String!
   promoCodes: [String!]!
+}
+
+input ReplaceParticipantInput {
+  participantId: uuid!
+  inviteeEmail: String!
 }
 
 input TransferFee {
@@ -670,5 +688,10 @@ type TransferCourse {
 type TransferParticipantOutput {
   success: Boolean!
   error: String
+}
+
+type ReplaceParticipantOutput {
+  success: Boolean!
+  error: ReplaceParticipantError
 }
 
