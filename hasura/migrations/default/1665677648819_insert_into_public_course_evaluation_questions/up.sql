@@ -1,0 +1,1 @@
+INSERT INTO "public"."course_evaluation_questions"("id", "question", "display_order", "type", "group", "question_key", "required") VALUES (E'1ce0b2e6-6a02-40cf-a0d6-f6ccca775354', E'Trainer comments', 2, E'TEXT', null, E'TRAINER_COMMENTS', true);

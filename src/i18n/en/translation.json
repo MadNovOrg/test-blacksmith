@@ -1866,7 +1866,8 @@
       "VALUE_OF_TRAINING": "Value of training",
       "KEY_STRENGTHS_OF_COURSE": "What would you describe as the key strengths of this course?",
       "SUGGESTIONS": "What follow up or changes can you suggest to further develop our practice?",
-      "ANY_INJURIES": "Were there any injuries?"
+      "ANY_INJURIES": "Were there any injuries?",
+      "TRAINER_COMMENTS": "Trainer comments"
     },
     "disclaimer": "Your ratings and comments are appreciated as the course involves physical participation including attention to Health and Safety issues working within the Team Teach Code of Practice. By completing this evaluation, you consent to Team Teach collecting and processing this data in compliance with the General Data Protection Regulations (GDPR). See our Privacy Policy for more.",
     "pdf-export": {
