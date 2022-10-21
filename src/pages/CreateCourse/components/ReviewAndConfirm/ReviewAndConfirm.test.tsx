@@ -287,7 +287,7 @@ describe('component: ReviewAndConfirm', () => {
       screen.getByText(`${formatCurrency(totalExpenses)}`, { exact: false })
     ).toBeInTheDocument()
 
-    expect(screen.getByText(/Attendees? x \d+/)).toBeInTheDocument()
+    expect(screen.getByText(/Course Cost/)).toBeInTheDocument()
     expect(screen.getByText('£1,100.00', { exact: false })).toBeInTheDocument()
 
     expect(screen.getByText(/Sub total/)).toBeInTheDocument()

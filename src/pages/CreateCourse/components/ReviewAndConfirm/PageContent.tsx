@@ -395,10 +395,15 @@ export const PageContent = () => {
         <PageRow />
 
         <PageRow
-          label={t('pages.create-course.review-and-confirm.base-price', {
-            count: courseData.maxParticipants,
-          })}
+          label={t('pages.create-course.review-and-confirm.base-price')}
           value={t('common.currency', { amount: courseBasePrice })}
+        />
+
+        <PageRow
+          label={t('pages.create-course.review-and-confirm.free-spaces', {
+            count: courseData.freeSpaces,
+          })}
+          value={t('common.currency', { amount: freeSpacesDiscount })}
         />
 
         <PageRow />
@@ -407,12 +412,7 @@ export const PageContent = () => {
           label={t('pages.create-course.review-and-confirm.subtotal')}
           value={t('common.currency', { amount: subtotal })}
         />
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.free-spaces', {
-            count: courseData.freeSpaces,
-          })}
-          value={t('common.currency', { amount: freeSpacesDiscount })}
-        />
+
         <PageRow
           label={t('pages.create-course.review-and-confirm.vat')}
           value={t('common.currency', { amount: vat })}
