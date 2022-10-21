@@ -421,7 +421,9 @@
     "replace": "Replace",
     "transfer": "Transfer",
     "cancellation-reason": "Cancellation reason",
-    "never-mind": "Never mind"
+    "never-mind": "Never mind",
+    "course": "Course",
+    "records": "records"
   },
   "components": {
     "replace-participant": {
@@ -654,6 +656,9 @@
     "invoice-details": {
       "title": "Invoice contact details",
       "billing-address": "Billing address"
+    },
+    "audit-filtering-sidebar": {
+      "filter-by-date": "Filter by date"
     }
   },
   "pages": {
@@ -1846,6 +1851,25 @@
       "title": "Remove {{ name }} from {{ course }}?",
       "description": "This action will immediately remove this attendee from this course. This will notify the attendee and organisation (if applicable). Finance will make changes on the invoice(s), where necessary.",
       "remove-attendee": "Remove attendee"
+    },
+    "audits": {
+      "title": "Cancellations, Transfers, and Replacements",
+      "back-to-settings": "Back to settings",
+      "attendee-cancellation": "Attendee cancellation",
+      "attendee-replacement": "Attendee replacement",
+      "attendee-transfer": "Attendee transfer",
+      "course-cancellation": "Course cancellation",
+      "course-rescheduling": "Course rescheduling",
+      "event-time": "Event time",
+      "attendee-email": "Attendee email",
+      "authorised-by": "Authorised by",
+      "original-attendee": "Original attendee",
+      "new-attendee": "New attendee",
+      "original-course": "Original course",
+      "new-course": "New course",
+      "course": "Course",
+      "original-date": "Original date",
+      "new-date": "New date"
     }
   },
   "course-evaluation": {

@@ -14,7 +14,7 @@ const hubSettings = [
   { name: 'course-pricing', link: '/admin/discounts' },
   { name: 'waitlist-notifications', link: '/admin' },
   { name: 'course-renewals', link: '/admin' },
-  { name: 'cancellations-transfers-replacements', link: '/admin' },
+  { name: 'cancellations-transfers-replacements', link: '/admin/audit' },
 ]
 
 export const AdminPage: React.FC<AdminPageProps> = () => {

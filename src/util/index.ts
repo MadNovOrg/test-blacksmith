@@ -25,6 +25,7 @@ import {
   CourseType,
   SearchTrainer,
   SetCourseTrainerInput,
+  SortOrder,
   TimeDifferenceAndContext,
 } from '@app/types'
 
@@ -495,4 +496,19 @@ export const max = (...values: number[] | number[][]) => {
 export const min = (...values: number[] | number[][]) => {
   const data = values.flat()
   return data.reduce((acc, n) => (n < acc ? n : acc), data[0])
+}
+
+export const buildNestedSort = (sortBy: string, sortDir: SortOrder) => {
+  let orderBy: { [key: string]: object | string } = {}
+  sortBy
+    .split('.')
+    .reverse()
+    .forEach((part, index) => {
+      if (index === 0) {
+        orderBy = { [part]: sortDir as string }
+      } else {
+        orderBy = { [part]: orderBy }
+      }
+    })
+  return orderBy
 }

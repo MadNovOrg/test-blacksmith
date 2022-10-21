@@ -1,0 +1,161 @@
+import {
+  Box,
+  CircularProgress,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material'
+import React, { useCallback, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
+import { TableHead } from '@app/components/Table/TableHead'
+import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
+import useCourseAuditLogs from '@app/hooks/useCourseAuditLogs'
+import { useTablePagination } from '@app/hooks/useTablePagination'
+import { useTableSort } from '@app/hooks/useTableSort'
+import {
+  AuditFilteringSidebar,
+  FilterChangeEvent,
+} from '@app/pages/admin/Audits/AuditFilteringSidebar'
+
+export const CourseReschedulingTable: React.FC = () => {
+  const { t } = useTranslation()
+  const { Pagination, limit, offset } = useTablePagination()
+  const sort = useTableSort('created_at', 'desc')
+  const [from, setFrom] = useState<Date>()
+  const [to, setTo] = useState<Date>()
+  const [query, setQuery] = useState<string>()
+
+  const { logs, count, loading } = useCourseAuditLogs({
+    type: Course_Audit_Type_Enum.Reschedule,
+    filter: {
+      from,
+      to,
+      query,
+    },
+    sort,
+    offset,
+    limit,
+  })
+
+  const cols = useMemo(
+    () => [
+      { id: 'created_at', label: t('pages.audits.event-time'), sorting: true },
+      {
+        id: 'course.course_code',
+        label: t('pages.audits.course'),
+        sorting: true,
+      },
+      {
+        id: 'course.course_code',
+        label: t('pages.audits.course'),
+        sorting: true,
+      },
+      {
+        id: 'course.old_schedule', // TODO change when rescheduling done
+        label: t('pages.audits.original-date'),
+        sorting: false,
+      },
+      {
+        id: 'course.new_schedule', // TODO change when rescheduling done
+        label: t('pages.audits.new-date'),
+        sorting: false,
+      },
+      {
+        id: 'authorizedBy.fullName',
+        label: t('pages.audits.authorised-by'),
+        sorting: true,
+      },
+    ],
+    [t]
+  )
+
+  const onFilterChange = useCallback((e: FilterChangeEvent) => {
+    if (e.source === 'search') {
+      setQuery(e.value)
+    } else {
+      setFrom(e.value[0])
+      setTo(e.value[1])
+    }
+  }, [])
+
+  return (
+    <Box display="flex" gap={4}>
+      <AuditFilteringSidebar count={count} onChange={onFilterChange} />
+
+      <Box flex={1}>
+        {loading ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            data-testid="logs-fetching"
+          >
+            <CircularProgress />
+          </Stack>
+        ) : (
+          <>
+            <Table data-testid="logs-table">
+              <TableHead
+                cols={cols}
+                orderBy={sort.by}
+                order={sort.dir}
+                onRequestSort={sort.onSort}
+              />
+
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={cols.length}>
+                      <Stack direction="row" alignItems="center">
+                        <CircularProgress size={20} />
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                ) : null}
+
+                <TableNoRows
+                  noRecords={!loading && logs.length === 0}
+                  filtered={false}
+                  itemsName={t('common.records').toLowerCase()}
+                  colSpan={cols.length}
+                />
+
+                {logs.map(log => (
+                  <TableRow
+                    key={log.id}
+                    data-testid={`audit-log-entry-${log.id}`}
+                  >
+                    <TableCell>
+                      {t('dates.withTime', {
+                        date: log.created_at,
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {log.course.course_code}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{/* TODO */}</TableCell>
+                    <TableCell>{/* TODO */}</TableCell>
+                    <TableCell>
+                      {log.authorizedBy ? (
+                        <ProfileWithAvatar profile={log.authorizedBy} />
+                      ) : null}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Pagination total={count} />
+          </>
+        )}
+      </Box>
+    </Box>
+  )
+}

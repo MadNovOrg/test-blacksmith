@@ -12672,6 +12672,21 @@ export type Course_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "course" */
+export type Course_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Max_Order_By>;
+  min?: InputMaybe<Course_Min_Order_By>;
+  stddev?: InputMaybe<Course_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Variance_Order_By>;
+};
+
 /** columns and relationships of "course_audit" */
 export type Course_Audit = {
   __typename?: 'course_audit';
@@ -13063,6 +13078,16 @@ export type Course_Avg_Fields = {
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course" */
+export type Course_Avg_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course". All fields are combined with a logical 'AND'. */
@@ -16536,6 +16561,27 @@ export type Course_Max_Fields = {
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
 
+/** order by max() on columns of table "course" */
+export type Course_Max_Order_By = {
+  accountCode?: InputMaybe<Order_By>;
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  aolCountry?: InputMaybe<Order_By>;
+  aolRegion?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationReason?: InputMaybe<Order_By>;
+  contactProfileId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  organization_id?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Course_Min_Fields = {
   __typename?: 'course_min_fields';
@@ -16556,6 +16602,27 @@ export type Course_Min_Fields = {
   organization_id?: Maybe<Scalars['uuid']>;
   salesRepresentativeId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "course" */
+export type Course_Min_Order_By = {
+  accountCode?: InputMaybe<Order_By>;
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  aolCountry?: InputMaybe<Order_By>;
+  aolRegion?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  cancellationReason?: InputMaybe<Order_By>;
+  contactProfileId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  organization_id?: InputMaybe<Order_By>;
+  salesRepresentativeId?: InputMaybe<Order_By>;
+  updatedAt?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_module" */
@@ -17069,19 +17136,45 @@ export type Course_Participant_Audit = {
   course: Course;
   course_id: Scalars['Int'];
   created_at: Scalars['timestamptz'];
+  /** A computed field, executes function "course_participant_audit_from_course" */
+  fromCourse?: Maybe<Array<Course>>;
   id: Scalars['uuid'];
+  /** A computed field, executes function "course_participant_audit_new_attendee" */
+  newAttendeeEmail?: Maybe<Scalars['String']>;
   payload: Scalars['jsonb'];
   /** An object relationship */
   profile: Profile;
   profile_id: Scalars['uuid'];
+  /** A computed field, executes function "course_participant_audit_to_course" */
+  toCourse?: Maybe<Array<Course>>;
   type: Course_Participant_Audit_Type_Enum;
   updated_at: Scalars['timestamptz'];
 };
 
 
 /** columns and relationships of "course_participant_audit" */
+export type Course_Participant_AuditFromCourseArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course_participant_audit" */
 export type Course_Participant_AuditPayloadArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "course_participant_audit" */
+export type Course_Participant_AuditToCourseArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
 };
 
 /** aggregated selection of "course_participant_audit" */
@@ -17135,10 +17228,13 @@ export type Course_Participant_Audit_Bool_Exp = {
   course?: InputMaybe<Course_Bool_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  fromCourse?: InputMaybe<Course_Bool_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  newAttendeeEmail?: InputMaybe<String_Comparison_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  toCourse?: InputMaybe<Course_Bool_Exp>;
   type?: InputMaybe<Course_Participant_Audit_Type_Enum_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -17229,10 +17325,13 @@ export type Course_Participant_Audit_Order_By = {
   course?: InputMaybe<Course_Order_By>;
   course_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
+  fromCourse_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
+  newAttendeeEmail?: InputMaybe<Order_By>;
   payload?: InputMaybe<Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profile_id?: InputMaybe<Order_By>;
+  toCourse_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
   type?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
@@ -19074,6 +19173,16 @@ export type Course_Stddev_Fields = {
   min_participants?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "course" */
+export type Course_Stddev_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Course_Stddev_Pop_Fields = {
   __typename?: 'course_stddev_pop_fields';
@@ -19083,6 +19192,16 @@ export type Course_Stddev_Pop_Fields = {
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course" */
+export type Course_Stddev_Pop_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -19096,6 +19215,16 @@ export type Course_Stddev_Samp_Fields = {
   min_participants?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "course" */
+export type Course_Stddev_Samp_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Course_Sum_Fields = {
   __typename?: 'course_sum_fields';
@@ -19105,6 +19234,16 @@ export type Course_Sum_Fields = {
   id?: Maybe<Scalars['Int']>;
   max_participants?: Maybe<Scalars['Int']>;
   min_participants?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course" */
+export type Course_Sum_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_trainer" */
@@ -19836,6 +19975,16 @@ export type Course_Var_Pop_Fields = {
   min_participants?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "course" */
+export type Course_Var_Pop_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Course_Var_Samp_Fields = {
   __typename?: 'course_var_samp_fields';
@@ -19847,6 +19996,16 @@ export type Course_Var_Samp_Fields = {
   min_participants?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "course" */
+export type Course_Var_Samp_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Course_Variance_Fields = {
   __typename?: 'course_variance_fields';
@@ -19856,6 +20015,16 @@ export type Course_Variance_Fields = {
   id?: Maybe<Scalars['Float']>;
   max_participants?: Maybe<Scalars['Float']>;
   min_participants?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course" */
+export type Course_Variance_Order_By = {
+  aolCostOfCourse?: InputMaybe<Order_By>;
+  cancellationFeePercent?: InputMaybe<Order_By>;
+  freeSpaces?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  max_participants?: InputMaybe<Order_By>;
+  min_participants?: InputMaybe<Order_By>;
 };
 
 export type CreateSubscriptionOutput = {
@@ -29749,8 +29918,8 @@ export type Profile_Trainer_Role_Type = {
   id: Scalars['uuid'];
   profile_id: Scalars['uuid'];
   /** An object relationship */
-  trainer_role_type?: Maybe<Trainer_Role_Type>;
-  trainer_role_type_id?: Maybe<Scalars['uuid']>;
+  trainer_role_type: Trainer_Role_Type;
+  trainer_role_type_id: Scalars['uuid'];
   updated_at: Scalars['timestamptz'];
 };
 
@@ -36129,6 +36298,26 @@ export type OrganizationsQueryVariables = Exact<{
 
 export type OrganizationsQuery = { __typename?: 'query_root', organizations: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members_aggregate: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } }>, organizationsAggregation: { __typename?: 'organization_aggregate', aggregate?: { __typename?: 'organization_aggregate_fields', count: number } | null } };
 
+export type GetAttendeeAuditLogsQueryVariables = Exact<{
+  where: Course_Participant_Audit_Bool_Exp;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<Course_Participant_Audit_Order_By> | Course_Participant_Audit_Order_By>;
+}>;
+
+
+export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', avatar?: string | null, fullName?: string | null }, profile: { __typename?: 'profile', avatar?: string | null, fullName?: string | null, email?: string | null }, course: { __typename?: 'course', course_code?: string | null }, fromCourse?: Array<{ __typename?: 'course', course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
+
+export type GetCourseAuditLogsQueryVariables = Exact<{
+  where: Course_Audit_Bool_Exp;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<Course_Audit_Order_By> | Course_Audit_Order_By>;
+}>;
+
+
+export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', course_code?: string | null } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;
   limit?: InputMaybe<Scalars['Int']>;
@@ -36944,7 +37133,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type?: { __typename?: 'trainer_role_type', name: string, id: any } | null }>, course_trainer: Array<{ __typename?: 'course_trainer', id: any, can_be_moderator: boolean }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }>, course_trainer: Array<{ __typename?: 'course_trainer', id: any, can_be_moderator: boolean }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 

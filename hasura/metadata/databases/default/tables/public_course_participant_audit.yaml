@@ -11,6 +11,22 @@ object_relationships:
   - name: profile
     using:
       foreign_key_constraint_on: profile_id
+computed_fields:
+  - name: fromCourse
+    definition:
+      function:
+        schema: public
+        name: course_participant_audit_from_course
+  - name: newAttendeeEmail
+    definition:
+      function:
+        schema: public
+        name: course_participant_audit_new_attendee
+  - name: toCourse
+    definition:
+      function:
+        schema: public
+        name: course_participant_audit_to_course
 insert_permissions:
   - role: tt-admin
     permission:
@@ -37,6 +53,8 @@ select_permissions:
         - id
         - profile_id
         - course_id
+      computed_fields:
+        - newAttendeeEmail
       filter: {}
       allow_aggregations: true
 event_triggers:

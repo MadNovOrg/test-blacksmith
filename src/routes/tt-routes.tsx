@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AdminPage } from '@app/pages/admin'
+import { AuditsPage } from '@app/pages/admin/Audits'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -135,6 +136,8 @@ const TTAdminRoutes = () => {
                 <Route path="connect" element={<XeroConnect />} />
               </Route>
             ) : null}
+
+            <Route path="audit" element={<AuditsPage />} />
           </Route>
         </>
       ) : null}

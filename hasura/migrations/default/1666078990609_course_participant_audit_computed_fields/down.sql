@@ -1,0 +1,3 @@
+DROP FUNCTION course_participant_audit_new_attendee(log_record course_participant_audit);
+DROP FUNCTION course_participant_audit_to_course(log_record course_participant_audit);
+DROP FUNCTION course_participant_audit_from_course(log_record course_participant_audit);

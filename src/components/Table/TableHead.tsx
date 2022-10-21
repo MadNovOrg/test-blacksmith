@@ -14,6 +14,7 @@ export type Col = {
   id: string
   label?: string
   align?: TableCellProps['align']
+  sortBy?: string
   sorting?: boolean
   component?: React.ReactNode
 }
