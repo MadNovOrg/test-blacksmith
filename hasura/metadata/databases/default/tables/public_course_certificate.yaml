@@ -185,3 +185,7 @@ select_permissions:
                       - is_admin:
                           _eq: true
       allow_aggregations: true
+delete_permissions:
+  - role: tt-ops
+    permission:
+      filter: {}

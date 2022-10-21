@@ -58,6 +58,19 @@ array_relationships:
           schema: public
           name: course_participant_module
 insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - attended
+        - booking_date
+        - course_id
+        - date_graded
+        - grade
+        - grading_feedback
+        - invite_id
+        - profile_id
+      backend_only: false
   - role: user
     permission:
       check:
@@ -105,10 +118,20 @@ select_permissions:
         - profile_id
         - registration_id
       filter:
-        course:
-          trainers:
-            profile_id:
-              _eq: X-Hasura-User-Id
+        _or:
+          - course:
+              trainers:
+                profile_id:
+                  _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - is_admin:
+                          _eq: true
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-ops
     permission:

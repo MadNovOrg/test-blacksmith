@@ -150,6 +150,10 @@ update_permissions:
         - venue_id
       filter: {}
       check: null
+delete_permissions:
+  - role: tt-ops
+    permission:
+      filter: {}
 event_triggers:
   - name: course_end_date_changed
     definition:

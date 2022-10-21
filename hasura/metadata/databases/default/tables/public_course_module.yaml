@@ -27,10 +27,22 @@ insert_permissions:
             profile_id:
               _eq: X-Hasura-User-Id
       columns:
+        - course_id
+        - covered
+        - created_at
         - id
+        - module_id
+        - updated_at
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - covered
+        - course_id
         - created_at
         - updated_at
-        - course_id
+        - id
         - module_id
       backend_only: false
 select_permissions:

@@ -24,6 +24,14 @@ object_relationships:
   - name: profile
     using:
       foreign_key_constraint_on: profile_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - organization_id
+        - profile_id
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:

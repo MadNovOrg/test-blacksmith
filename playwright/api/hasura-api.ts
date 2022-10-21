@@ -53,7 +53,6 @@ import {
 
 import { HASURA_BASE_URL } from '../constants'
 import { Course, User } from '../data/types'
-import { getAdminIdToken } from '../util'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 
@@ -62,8 +61,7 @@ export const getClient = () => {
   if (!graphQLClient) {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
-        authorization: `Bearer ${getAdminIdToken()}`,
-        'x-hasura-role': 'admin',
+        'x-hasura-admin-secret': 'tth-hasura-key',
       },
     })
   }
@@ -71,42 +69,101 @@ export const getClient = () => {
 }
 
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
-  const query = gql`query MyQuery {
-    course(where: {trainers: {profile: {email: {_eq: "${email}"}}}}, order_by: {name: asc}) {
-      id
-      deliveryType
-      description
-      level
-      min_participants
-      max_participants
-      name
-      course_code
-      reaccreditation
-      organization {
-        name
-      }
-      schedule {
-        start
-        end
-        venue {
-          name
-          city
+  const query = gql`
+    query MyQuery {
+      course(
+        where: {
+          _or: [
+            {
+              trainers: {
+                profile: {
+                  email: { _eq: "${email}" }
+                }
+              }
+            }
+            {
+              _and: [
+                { type: { _eq: OPEN } }
+                {
+                  participants: {
+                    profile: {
+                      organizations: {
+                        organization: {
+                          members: {
+                            _and: [
+                              { isAdmin: { _eq: true } }
+                              {
+                                profile: {
+                                  email: {
+                                    _eq: "${email}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+            {
+              organization: {
+                members: {
+                  _and: [
+                    {
+                      profile: {
+                        email: {
+                          _eq: "${email}"
+                        }
+                      }
+                    }
+                    { isAdmin: { _eq: true } }
+                  ]
+                }
+              }
+            }
+            { _and: [{ type: { _eq: OPEN } }, { status: { _eq: SCHEDULED } }] }
+          ]
         }
-      }
-      trainers {
+        order_by: { name: asc }
+      ) {
         id
-        profile {
-          fullName
+        deliveryType
+        description
+        level
+        min_participants
+        max_participants
+        name
+        course_code
+        reaccreditation
+        organization {
+          name
         }
-      }
-      participants_aggregate {
-        aggregate {
-          count
+        schedule {
+          start
+          end
+          venue {
+            name
+            city
+          }
         }
+        trainers {
+          id
+          profile {
+            fullName
+          }
+        }
+        participants_aggregate {
+          aggregate {
+            count
+          }
+        }
+        status
+        type
       }
-      status
-      type
-    }}
+    }
   `
   const response = await getClient().request(query)
   response.course.forEach((course: Course) => {

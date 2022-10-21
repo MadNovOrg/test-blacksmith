@@ -13,7 +13,7 @@ export const users: { [key: string]: User } = {
     email: 'ops@teamteach.testinator.com',
     password: 'Test12345!',
   },
-  orgAdmin: {
+  userOrgAdmin: {
     givenName: 'Alex',
     familyName: 'Admin',
     email: 'org.admin@teamteach.testinator.com',

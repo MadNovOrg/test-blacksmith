@@ -48,7 +48,7 @@ test('displays video items with featured and grid display', async ({
 
   test
     .expect(
-      page.locator(`data-testid=video-series-grid-item-${videoItems[1]?.id}`)
+      page.locator(`data-testid=video-series-grid-item-${videoItems[0]?.id}`)
     )
     .toBeVisible()
 

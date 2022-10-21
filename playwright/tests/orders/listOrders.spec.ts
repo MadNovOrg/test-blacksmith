@@ -67,7 +67,9 @@ test('list orders', async ({
 
   unfilteredOrders.forEach(order => {
     test
-      .expect(adminPage.locator(`tbody >> tr >> text="${order.id}"`))
+      .expect(
+        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
+      )
       .toBeVisible()
   })
 
@@ -78,7 +80,9 @@ test('list orders', async ({
 
   ccOrders.forEach(order => {
     test
-      .expect(adminPage.locator(`tbody >> tr >> text="${order.id}"`))
+      .expect(
+        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
+      )
       .toBeVisible()
   })
 
@@ -89,7 +93,9 @@ test('list orders', async ({
 
   invoiceOrders.forEach(order => {
     test
-      .expect(adminPage.locator(`tbody >> tr >> text="${order.id}"`))
+      .expect(
+        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
+      )
       .toBeVisible()
   })
 })

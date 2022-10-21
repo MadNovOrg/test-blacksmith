@@ -8,6 +8,17 @@ configuration:
       custom_name: reservedBalance
   custom_column_names:
     reserved_balance: reservedBalance
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - balance
+        - change
+        - event
+        - org_id
+        - payload
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:

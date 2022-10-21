@@ -31,6 +31,7 @@ insert_permissions:
       columns:
         - course_id
         - email
+        - status
       backend_only: false
   - role: user
     permission:
@@ -43,6 +44,7 @@ insert_permissions:
       columns:
         - course_id
         - email
+        - status
       backend_only: false
 select_permissions:
   - role: tt-admin
@@ -57,6 +59,17 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter: {}
   - role: user
     permission:
       columns:
@@ -78,6 +91,14 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
+        - status
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - email
         - status
       filter: {}
       check: null

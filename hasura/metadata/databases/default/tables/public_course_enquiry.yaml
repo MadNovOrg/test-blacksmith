@@ -37,3 +37,24 @@ insert_permissions:
         - sector
         - source
       backend_only: false
+select_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - interest
+        - message
+        - org_name
+        - phone
+        - sector
+        - source
+        - created_at
+        - id
+      filter: {}
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}

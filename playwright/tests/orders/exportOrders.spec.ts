@@ -48,7 +48,7 @@ async function assertDownloadedCSV(download: Download, data: Orders) {
   data.forEach((order, index) => {
     const cellIndex = index + 2
 
-    test.expect(sheet[`A${cellIndex}`].v).toBe(order.id)
+    test.expect(sheet[`A${cellIndex}`].v).toBe(order.xeroInvoiceNumber)
     test.expect(sheet[`B${cellIndex}`].v).toBe(order.organization.name)
     test
       .expect(sheet[`C${cellIndex}`].v)

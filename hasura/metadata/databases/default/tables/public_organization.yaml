@@ -63,6 +63,7 @@ insert_permissions:
         - attributes
         - contact_details
         - geo_coordinates
+        - go1_licenses
         - name
         - original_record
         - preferences
@@ -206,6 +207,10 @@ update_permissions:
             - profile_id:
                 _eq: X-Hasura-User-Id
       check: null
+delete_permissions:
+  - role: tt-admin
+    permission:
+      filter: {}
 event_triggers:
   - name: organization_address_update
     definition:

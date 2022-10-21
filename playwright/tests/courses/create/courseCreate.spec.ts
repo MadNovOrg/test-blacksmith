@@ -28,7 +28,7 @@ const dataSet = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
-      course.contactProfile = users.orgAdmin
+      course.contactProfile = users.userOrgAdmin
       return course
     })(),
   },
@@ -48,7 +48,7 @@ const dataSet = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
-      course.contactProfile = users.orgAdmin
+      course.contactProfile = users.userOrgAdmin
       course.reaccreditation = true
       course.deliveryType = CourseDeliveryType.MIXED
       return course
