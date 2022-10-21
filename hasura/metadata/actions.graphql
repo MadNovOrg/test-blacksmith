@@ -86,7 +86,7 @@ type Query {
 
 type Query {
   getXeroInvoicesForOrders(
-    orderIds: [uuid!]!
+    invoiceNumbers: [String!]!
   ): [XeroInvoice]!
 }
 
@@ -367,8 +367,8 @@ input GetCoursePricingInput {
 }
 
 input XeroInvoicesStatusInput {
-  orderIds: [String]!
-  idContains: String
+  invoiceNumbers: [String]!
+  invoiceNumberContains: String
   statuses: [XeroInvoiceStatus]
 }
 
@@ -608,7 +608,7 @@ type XeroInvoicesStatusOutput {
 }
 
 type XeroInvoiceStatusKV {
-  orderId: String!
+  invoiceNumber: String!
   status: XeroInvoiceStatus!
 }
 

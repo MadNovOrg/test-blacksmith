@@ -28,6 +28,8 @@ export const useOrder = (orderId: string): UseOrder => {
     [string, GetOrderQueryVariables]
   >([GET_ORDER, { orderId }])
 
+  const { order } = getOrderData ?? ({ order: {} } as UseOrder)
+
   const {
     data: getXeroInvoicesForOrdersData,
     error: getXeroInvoicesForOrdersError,
@@ -35,9 +37,10 @@ export const useOrder = (orderId: string): UseOrder => {
     GetXeroInvoicesForOrdersQuery,
     Error,
     [string, GetXeroInvoicesForOrdersQueryVariables]
-  >([GET_XERO_INVOICES_FOR_ORDERS, { orderIds: [orderId] }])
-
-  const { order } = getOrderData ?? ({ order: {} } as UseOrder)
+  >([
+    GET_XERO_INVOICES_FOR_ORDERS,
+    { invoiceNumbers: [order?.xeroInvoiceNumber ?? ''] },
+  ])
 
   const { invoices } = getXeroInvoicesForOrdersData ?? { invoices: [] }
   const invoice = (invoices[0] ?? {}) as UseOrder['invoice']

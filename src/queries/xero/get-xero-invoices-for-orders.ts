@@ -5,8 +5,8 @@ import { XeroInvoice as XeroInvoiceSummary } from '@app/queries/fragments'
 export const QUERY = gql`
   ${XeroInvoiceSummary}
 
-  query GetXeroInvoicesForOrders($orderIds: [uuid!]!) {
-    invoices: getXeroInvoicesForOrders(orderIds: $orderIds) {
+  query GetXeroInvoicesForOrders($invoiceNumbers: [String!]!) {
+    invoices: getXeroInvoicesForOrders(invoiceNumbers: $invoiceNumbers) {
       ...XeroInvoiceSummary
     }
   }

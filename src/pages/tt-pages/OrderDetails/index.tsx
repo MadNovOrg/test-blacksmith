@@ -225,7 +225,7 @@ ${invoice?.contact?.name}`
                   {_t('title')}
                 </Typography>
                 <Typography variant="h2" mb={4}>
-                  {order?.id}
+                  {order?.xeroInvoiceNumber}
                 </Typography>
                 {isInvoiceInXero ? (
                   <Button

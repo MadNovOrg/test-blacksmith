@@ -11828,13 +11828,13 @@ export enum XeroInvoiceStatus {
 
 export type XeroInvoiceStatusKv = {
   __typename?: 'XeroInvoiceStatusKV';
-  orderId: Scalars['String'];
+  invoiceNumber: Scalars['String'];
   status: XeroInvoiceStatus;
 };
 
 export type XeroInvoicesStatusInput = {
-  idContains?: InputMaybe<Scalars['String']>;
-  orderIds: Array<InputMaybe<Scalars['String']>>;
+  invoiceNumberContains?: InputMaybe<Scalars['String']>;
+  invoiceNumbers: Array<InputMaybe<Scalars['String']>>;
   statuses?: InputMaybe<Array<InputMaybe<XeroInvoiceStatus>>>;
 };
 
@@ -16090,6 +16090,8 @@ export type Course_Invites_Bool_Exp = {
 /** unique or primary key constraints on table "course_invites" */
 export enum Course_Invites_Constraint {
   /** unique or primary key constraint */
+  CourseInvitesEmailCourseIdKey = 'course_invites_email_course_id_key',
+  /** unique or primary key constraint */
   CourseInvitesPkey = 'course_invites_pkey'
 }
 
@@ -17740,7 +17742,9 @@ export type Course_Participant_Cancellation_Variance_Fields = {
 /** unique or primary key constraints on table "course_participant" */
 export enum Course_Participant_Constraint {
   /** unique or primary key constraint */
-  CourseParticipantPkey = 'course_participant_pkey'
+  CourseParticipantPkey = 'course_participant_pkey',
+  /** unique or primary key constraint */
+  CourseParticipantProfileIdCourseIdKey = 'course_participant_profile_id_course_id_key'
 }
 
 /** input type for incrementing numeric columns in table "course_participant" */
@@ -31827,7 +31831,7 @@ export type Query_RootGetTrainersLevelsArgs = {
 
 
 export type Query_RootGetXeroInvoicesForOrdersArgs = {
-  orderIds: Array<Scalars['uuid']>;
+  invoiceNumbers: Array<Scalars['String']>;
 };
 
 
@@ -36795,7 +36799,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null } | null };
 
 export type GetOrdersQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
@@ -37085,7 +37089,7 @@ export type InsertVenueMutationVariables = Exact<{
 export type InsertVenueMutation = { __typename?: 'mutation_root', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null };
 
 export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
-  orderIds: Array<Scalars['uuid']> | Scalars['uuid'];
+  invoiceNumbers: Array<Scalars['String']> | Scalars['String'];
 }>;
 
 
@@ -37096,7 +37100,7 @@ export type GetXeroInvoicesStatusQueryVariables = Exact<{
 }>;
 
 
-export type GetXeroInvoicesStatusQuery = { __typename?: 'query_root', xeroInvoicesStatus?: { __typename?: 'XeroInvoicesStatusOutput', invoices: Array<{ __typename?: 'XeroInvoiceStatusKV', orderId: string, status: XeroInvoiceStatus } | null> } | null };
+export type GetXeroInvoicesStatusQuery = { __typename?: 'query_root', xeroInvoicesStatus?: { __typename?: 'XeroInvoicesStatusOutput', invoices: Array<{ __typename?: 'XeroInvoiceStatusKV', invoiceNumber: string, status: XeroInvoiceStatus } | null> } | null };
 
 export type SearchXeroContactsQueryVariables = Exact<{
   input: XeroContactSearchInput;

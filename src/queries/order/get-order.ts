@@ -18,6 +18,7 @@ export const QUERY = gql`
       currency
       stripePaymentId
       promoCodes
+      xeroInvoiceNumber
     }
   }
 `

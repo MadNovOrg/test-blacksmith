@@ -34,6 +34,7 @@ const mockedOrder = {
   currency: 'GBP',
   stripePaymentId: null,
   promoCodes: [],
+  xeroInvoiceNumber: 'INV-0001',
 }
 
 const mockedInvoice = {
@@ -82,7 +83,7 @@ const mockedInvoice = {
   reference: mockedOrder.courseId,
   amountPaid: 0,
   currencyCode: 'GBP',
-  invoiceNumber: chance.guid(),
+  invoiceNumber: 'INV-0001',
   totalDiscount: 0,
   fullyPaidOnDate: null,
 }
@@ -99,10 +100,7 @@ describe('useOrder', () => {
     expect(course).toStrictEqual({})
     expect(invoice).toStrictEqual({})
 
-    expect(useSWRMock).toBeCalledWith([
-      expect.any(String),
-      { orderIds: [orderId] },
-    ])
+    expect(useSWRMock).toBeCalledWith([expect.any(String), { orderId }])
   })
 
   it('should return expected data for valid order id', async () => {
@@ -131,7 +129,7 @@ describe('useOrder', () => {
 
     expect(useSWRMock).toBeCalledWith([
       expect.any(String),
-      { orderIds: [orderId] },
+      { invoiceNumbers: [mockedOrder.xeroInvoiceNumber] },
     ])
   })
 })

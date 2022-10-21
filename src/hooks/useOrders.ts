@@ -153,7 +153,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       GET_XERO_INVOICES_STATUS,
       {
         input: {
-          orderIds: orders.map(o => o.id),
+          invoiceNumbers: orders.map(o => o.xeroInvoiceNumber as string),
           ...getXeroInvoicesStatusWhere,
         },
       },
@@ -170,7 +170,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     (order: GetOrdersQuery['orders'][number]) => {
       const status =
         getXeroInvoicesStatusData?.xeroInvoicesStatus?.invoices.find(
-          i => i?.orderId === order.id
+          i => i?.invoiceNumber === order.xeroInvoiceNumber
         )?.status ?? XeroInvoiceStatus.Unknown
 
       const { start } = order?.course?.schedule
