@@ -1,0 +1,39 @@
+table:
+  schema: public
+  name: profile_trainer_role_type
+object_relationships:
+  - name: trainer_role_type
+    using:
+      foreign_key_constraint_on: trainer_role_type_id
+insert_permissions:
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+      backend_only: false
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
+update_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+      filter: {}
+      check: null

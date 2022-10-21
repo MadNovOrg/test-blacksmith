@@ -185,6 +185,18 @@ export enum RoleName {
   UNVERIFIED = 'unverified',
 }
 
+export enum TrainerRoleType {
+  PRINCIPAL = 'principal',
+  SENIOR = 'senior',
+  SENIOR_ASSIST = 'senior-assist',
+  EMPLOYER_TRAINER = 'employer-trainer',
+  ETA = 'eta',
+  BILD_SENIOR = 'bild-senior',
+  BILD_CERTIFIED = 'bild-certified',
+  EMPLOYER_AOL = 'employer-aol',
+  SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
+}
+
 export enum CourseType {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',

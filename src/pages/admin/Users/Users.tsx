@@ -10,6 +10,10 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Chip,
+  styled,
+  Checkbox,
+  FormControlLabel,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +27,16 @@ import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleType } from '@app/types'
+
+const StyledLink = styled('a')(() => ({
+  '&:hover, &:active': {
+    textDecoration: 'none',
+  },
+  '&:hover p, &:active p': {
+    textDecoration: 'underline',
+  },
+}))
 
 export const Users = () => {
   const { t } = useTranslation()
@@ -36,9 +49,20 @@ export const Users = () => {
     }))
   }, [t])
 
+  const trainerTypeOptions = useMemo<FilterOption[]>(() => {
+    return Object.values(TrainerRoleType).map<FilterOption>(type => ({
+      id: type,
+      title: t(`trainer-role-types.${type}`),
+      selected: false,
+    }))
+  }, [t])
+
   const [keyword, setKeyword] = useState('')
   const [keywordDebounced] = useDebounce(keyword, 300)
   const [roleFilter, setRoleFilter] = useState<FilterOption[]>(roleOptions)
+  const [filterByModerator, setFilterByModerator] = useState(false)
+  const [trainerTypeFilter, setTrainerTypeFilter] =
+    useState<FilterOption[]>(trainerTypeOptions)
 
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
@@ -48,10 +72,23 @@ export const Users = () => {
       item.selected ? item.id : []
     )
 
+    const selectedTrainerTypes = trainerTypeFilter.flatMap(item =>
+      item.selected ? item.id : []
+    )
+
     if (selectedRoles.length) {
       obj.roles = {
         role: {
           name: { _in: selectedRoles },
+        },
+      }
+      isFiltered = true
+    }
+
+    if (selectedTrainerTypes.length) {
+      obj.trainer_role_types = {
+        trainer_role_type: {
+          name: { _in: selectedTrainerTypes },
         },
       }
       isFiltered = true
@@ -68,8 +105,15 @@ export const Users = () => {
       isFiltered = true
     }
 
+    if (filterByModerator) {
+      obj.course_trainer = {
+        can_be_moderator: { _eq: true },
+      }
+      isFiltered = true
+    }
+
     return [obj, isFiltered]
-  }, [roleFilter, keywordDebounced])
+  }, [roleFilter, trainerTypeFilter, keywordDebounced, filterByModerator])
 
   const { Pagination, perPage, currentPage } = useTablePagination()
 
@@ -109,6 +153,9 @@ export const Users = () => {
     ] as Col[]
   }, [t])
 
+  const isExternalRole = (role: string) =>
+    [RoleName.TRAINER, RoleName.USER].some(r => r === role)
+
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       <Box mb={4}>
@@ -132,7 +179,26 @@ export const Users = () => {
               options={roleFilter}
               title={t('role')}
               onChange={setRoleFilter}
-              defaultExpanded={true}
+              defaultExpanded={false}
+              data-testid="FilterUserRole"
+            />
+            <FilterAccordion
+              options={trainerTypeFilter}
+              title={t('trainer-type')}
+              onChange={setTrainerTypeFilter}
+              defaultExpanded={false}
+              data-testid="FilterTrainerType"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={e => {
+                    setFilterByModerator(e.target.checked)
+                  }}
+                  data-testid="FilterModerator"
+                />
+              }
+              label={t('moderator')}
             />
           </Stack>
         </Box>
@@ -162,21 +228,23 @@ export const Users = () => {
                     return (
                       <TableRow key={user.id}>
                         <TableCell>
-                          <Box
-                            pt={1}
-                            display="flex"
-                            flexDirection="row"
-                            alignItems="center"
-                            gap={1}
-                          >
-                            <Avatar
-                              src={user.avatar || undefined}
-                              name={user.fullName || undefined}
-                            />
-                            <Typography variant="body2" color="secondary">
-                              {user.fullName}
-                            </Typography>
-                          </Box>
+                          <StyledLink href={`/profile/${user.id}`}>
+                            <Box
+                              pt={1}
+                              display="flex"
+                              flexDirection="row"
+                              alignItems="center"
+                              gap={1}
+                            >
+                              <Avatar
+                                src={user.avatar || undefined}
+                                name={user.fullName || undefined}
+                              />
+                              <Typography variant="body2" color="secondary">
+                                {user.fullName}
+                              </Typography>
+                            </Box>
+                          </StyledLink>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" color="secondary">
@@ -196,17 +264,51 @@ export const Users = () => {
                         </TableCell>
 
                         <TableCell>
-                          {user.roles.map(obj => (
-                            <Typography
-                              key={obj.role.id}
-                              variant="caption"
-                              color="secondary"
-                            >
-                              {t(`role-names.${obj.role.name}`)}
-                            </Typography>
-                          ))}
+                          <Box display="flex" flexWrap="wrap">
+                            {user.roles.map(obj => (
+                              <Chip
+                                key={obj.role.id}
+                                sx={{ fontSize: '12px', marginRight: '4px' }}
+                                size="small"
+                                color={
+                                  isExternalRole(obj.role.name)
+                                    ? 'success'
+                                    : 'info'
+                                }
+                                label={t(`role-names.${obj.role.name}`)}
+                                data-testid="user-role-chip"
+                              />
+                            ))}
+                          </Box>
                         </TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>
+                          <Box display="flex" flexWrap="wrap">
+                            {user.trainer_role_types.map(obj => {
+                              const { trainer_role_type } = obj
+                              return trainer_role_type ? (
+                                <Chip
+                                  key={trainer_role_type.id}
+                                  sx={{ fontSize: '12px', marginRight: '4px' }}
+                                  size="small"
+                                  label={t(
+                                    `trainer-role-types.${trainer_role_type.name}`
+                                  )}
+                                  data-testid="trainer-role-type-chip"
+                                />
+                              ) : null
+                            })}
+                            {user.course_trainer.some(
+                              course => course.can_be_moderator
+                            ) && (
+                              <Chip
+                                sx={{ fontSize: '12px' }}
+                                size="small"
+                                label={t(`moderator`)}
+                                data-testid="moderator-chip"
+                              />
+                            )}
+                          </Box>
+                        </TableCell>
                       </TableRow>
                     )
                   })}

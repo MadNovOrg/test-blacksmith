@@ -1,0 +1,58 @@
+table:
+  schema: public
+  name: trainer_role_type
+array_relationships:
+  - name: profiles
+    using:
+      foreign_key_constraint_on:
+        column: trainer_role_type_id
+        table:
+          schema: public
+          name: profile_trainer_role_type
+select_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+update_permissions:
+  - role: trainer
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+      check: null

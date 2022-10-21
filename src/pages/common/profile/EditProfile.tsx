@@ -685,7 +685,9 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                 <Autocomplete
                   multiple={true}
                   value={roles || []}
-                  options={systemRoles as Role[]}
+                  options={
+                    systemRoles.filter(role => role.name !== 'admin') as Role[]
+                  }
                   isOptionEqualToValue={(o, v) => o.id === v.id}
                   getOptionLabel={role =>
                     t(`pages.view-profile.roles.${role.name}`)

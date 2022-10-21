@@ -173,6 +173,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                       key={role.name}
                       label={t(`pages.view-profile.roles.${role?.name}`)}
                       color={getRoleColor(role.name)}
+                      sx={{ marginRight: '8px' }}
                     />
                   ))}
                 </Box>

@@ -19106,6 +19106,7 @@ export type Course_Sum_Fields = {
 /** columns and relationships of "course_trainer" */
 export type Course_Trainer = {
   __typename?: 'course_trainer';
+  can_be_moderator: Scalars['Boolean'];
   /** An object relationship */
   course: Course;
   course_id: Scalars['Int'];
@@ -19185,6 +19186,7 @@ export type Course_Trainer_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Trainer_Bool_Exp>>;
   _not?: InputMaybe<Course_Trainer_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Trainer_Bool_Exp>>;
+  can_be_moderator?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -19211,6 +19213,7 @@ export type Course_Trainer_Inc_Input = {
 
 /** input type for inserting data into table "course_trainer" */
 export type Course_Trainer_Insert_Input = {
+  can_be_moderator?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -19268,6 +19271,7 @@ export type Course_Trainer_On_Conflict = {
 
 /** Ordering options when selecting data from "course_trainer". */
 export type Course_Trainer_Order_By = {
+  can_be_moderator?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   course_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -19285,6 +19289,8 @@ export type Course_Trainer_Pk_Columns_Input = {
 /** select columns of table "course_trainer" */
 export enum Course_Trainer_Select_Column {
   /** column name */
+  CanBeModerator = 'can_be_moderator',
+  /** column name */
   CourseId = 'course_id',
   /** column name */
   Id = 'id',
@@ -19298,6 +19304,7 @@ export enum Course_Trainer_Select_Column {
 
 /** input type for updating data in table "course_trainer" */
 export type Course_Trainer_Set_Input = {
+  can_be_moderator?: InputMaybe<Scalars['Boolean']>;
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -19468,6 +19475,8 @@ export enum Course_Trainer_Type_Update_Column {
 
 /** update columns of table "course_trainer" */
 export enum Course_Trainer_Update_Column {
+  /** column name */
+  CanBeModerator = 'can_be_moderator',
   /** column name */
   CourseId = 'course_id',
   /** column name */
@@ -22926,6 +22935,10 @@ export type Mutation_Root = {
   delete_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** delete single row from the table: "profile_temp" */
   delete_profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** delete data from the table: "profile_trainer_role_type" */
+  delete_profile_trainer_role_type?: Maybe<Profile_Trainer_Role_Type_Mutation_Response>;
+  /** delete single row from the table: "profile_trainer_role_type" */
+  delete_profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
   /** delete data from the table: "promo_code" */
   delete_promo_code?: Maybe<Promo_Code_Mutation_Response>;
   /** delete single row from the table: "promo_code" */
@@ -22938,6 +22951,10 @@ export type Mutation_Root = {
   delete_role?: Maybe<Role_Mutation_Response>;
   /** delete single row from the table: "role" */
   delete_role_by_pk?: Maybe<Role>;
+  /** delete data from the table: "trainer_role_type" */
+  delete_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
+  /** delete single row from the table: "trainer_role_type" */
+  delete_trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
   /** delete data from the table: "trust_type" */
   delete_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** delete single row from the table: "trust_type" */
@@ -23188,6 +23205,10 @@ export type Mutation_Root = {
   insert_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** insert a single row into the table: "profile_temp" */
   insert_profile_temp_one?: Maybe<Profile_Temp>;
+  /** insert data into the table: "profile_trainer_role_type" */
+  insert_profile_trainer_role_type?: Maybe<Profile_Trainer_Role_Type_Mutation_Response>;
+  /** insert a single row into the table: "profile_trainer_role_type" */
+  insert_profile_trainer_role_type_one?: Maybe<Profile_Trainer_Role_Type>;
   /** insert data into the table: "promo_code" */
   insert_promo_code?: Maybe<Promo_Code_Mutation_Response>;
   /** insert a single row into the table: "promo_code" */
@@ -23200,6 +23221,10 @@ export type Mutation_Root = {
   insert_role?: Maybe<Role_Mutation_Response>;
   /** insert a single row into the table: "role" */
   insert_role_one?: Maybe<Role>;
+  /** insert data into the table: "trainer_role_type" */
+  insert_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
+  /** insert a single row into the table: "trainer_role_type" */
+  insert_trainer_role_type_one?: Maybe<Trainer_Role_Type>;
   /** insert data into the table: "trust_type" */
   insert_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** insert a single row into the table: "trust_type" */
@@ -23456,6 +23481,10 @@ export type Mutation_Root = {
   update_profile_temp?: Maybe<Profile_Temp_Mutation_Response>;
   /** update single row of the table: "profile_temp" */
   update_profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** update data of the table: "profile_trainer_role_type" */
+  update_profile_trainer_role_type?: Maybe<Profile_Trainer_Role_Type_Mutation_Response>;
+  /** update single row of the table: "profile_trainer_role_type" */
+  update_profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
   /** update data of the table: "promo_code" */
   update_promo_code?: Maybe<Promo_Code_Mutation_Response>;
   /** update single row of the table: "promo_code" */
@@ -23468,6 +23497,10 @@ export type Mutation_Root = {
   update_role?: Maybe<Role_Mutation_Response>;
   /** update single row of the table: "role" */
   update_role_by_pk?: Maybe<Role>;
+  /** update data of the table: "trainer_role_type" */
+  update_trainer_role_type?: Maybe<Trainer_Role_Type_Mutation_Response>;
+  /** update single row of the table: "trainer_role_type" */
+  update_trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
   /** update data of the table: "trust_type" */
   update_trust_type?: Maybe<Trust_Type_Mutation_Response>;
   /** update single row of the table: "trust_type" */
@@ -24235,6 +24268,18 @@ export type Mutation_RootDelete_Profile_Temp_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Profile_Trainer_Role_TypeArgs = {
+  where: Profile_Trainer_Role_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Profile_Trainer_Role_Type_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Promo_CodeArgs = {
   where: Promo_Code_Bool_Exp;
 };
@@ -24266,6 +24311,18 @@ export type Mutation_RootDelete_RoleArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Role_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Trainer_Role_TypeArgs = {
+  where: Trainer_Role_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Trainer_Role_Type_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -25137,6 +25194,20 @@ export type Mutation_RootInsert_Profile_Temp_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Profile_Trainer_Role_TypeArgs = {
+  objects: Array<Profile_Trainer_Role_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Profile_Trainer_Role_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Profile_Trainer_Role_Type_OneArgs = {
+  object: Profile_Trainer_Role_Type_Insert_Input;
+  on_conflict?: InputMaybe<Profile_Trainer_Role_Type_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Promo_CodeArgs = {
   objects: Array<Promo_Code_Insert_Input>;
   on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
@@ -25175,6 +25246,20 @@ export type Mutation_RootInsert_RoleArgs = {
 export type Mutation_RootInsert_Role_OneArgs = {
   object: Role_Insert_Input;
   on_conflict?: InputMaybe<Role_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Trainer_Role_TypeArgs = {
+  objects: Array<Trainer_Role_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Trainer_Role_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Trainer_Role_Type_OneArgs = {
+  object: Trainer_Role_Type_Insert_Input;
+  on_conflict?: InputMaybe<Trainer_Role_Type_On_Conflict>;
 };
 
 
@@ -26217,6 +26302,20 @@ export type Mutation_RootUpdate_Profile_Temp_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Profile_Trainer_Role_TypeArgs = {
+  _set?: InputMaybe<Profile_Trainer_Role_Type_Set_Input>;
+  where: Profile_Trainer_Role_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Profile_Trainer_Role_Type_By_PkArgs = {
+  _set?: InputMaybe<Profile_Trainer_Role_Type_Set_Input>;
+  pk_columns: Profile_Trainer_Role_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Promo_CodeArgs = {
   _append?: InputMaybe<Promo_Code_Append_Input>;
   _delete_at_path?: InputMaybe<Promo_Code_Delete_At_Path_Input>;
@@ -26279,6 +26378,20 @@ export type Mutation_RootUpdate_Role_By_PkArgs = {
   _prepend?: InputMaybe<Role_Prepend_Input>;
   _set?: InputMaybe<Role_Set_Input>;
   pk_columns: Role_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Trainer_Role_TypeArgs = {
+  _set?: InputMaybe<Trainer_Role_Type_Set_Input>;
+  where: Trainer_Role_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Trainer_Role_Type_By_PkArgs = {
+  _set?: InputMaybe<Trainer_Role_Type_Set_Input>;
+  pk_columns: Trainer_Role_Type_Pk_Columns_Input;
 };
 
 
@@ -28432,6 +28545,10 @@ export type Profile = {
   certificates_aggregate: Course_Certificate_Aggregate;
   contactDetails: Scalars['jsonb'];
   /** An array relationship */
+  course_trainer: Array<Course_Trainer>;
+  /** An aggregate relationship */
+  course_trainer_aggregate: Course_Trainer_Aggregate;
+  /** An array relationship */
   courses: Array<Course_Participant>;
   /** An aggregate relationship */
   courses_aggregate: Course_Participant_Aggregate;
@@ -28470,6 +28587,10 @@ export type Profile = {
   stripe_customer_id?: Maybe<Scalars['String']>;
   tags?: Maybe<Scalars['jsonb']>;
   title?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  trainer_role_types: Array<Profile_Trainer_Role_Type>;
+  /** An aggregate relationship */
+  trainer_role_types_aggregate: Profile_Trainer_Role_Type_Aggregate;
   /** An array relationship */
   upcomingEnrollments: Array<Upcoming_Enrollments>;
   /** An aggregate relationship */
@@ -28513,6 +28634,26 @@ export type ProfileCertificates_AggregateArgs = {
 /** columns and relationships of "profile" */
 export type ProfileContactDetailsArgs = {
   path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCourse_TrainerArgs = {
+  distinct_on?: InputMaybe<Array<Course_Trainer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Trainer_Order_By>>;
+  where?: InputMaybe<Course_Trainer_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCourse_Trainer_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Trainer_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Trainer_Order_By>>;
+  where?: InputMaybe<Course_Trainer_Bool_Exp>;
 };
 
 
@@ -28641,6 +28782,26 @@ export type ProfileTagsArgs = {
 
 
 /** columns and relationships of "profile" */
+export type ProfileTrainer_Role_TypesArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileTrainer_Role_Types_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
 export type ProfileUpcomingEnrollmentsArgs = {
   distinct_on?: InputMaybe<Array<Upcoming_Enrollments_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -28716,6 +28877,7 @@ export type Profile_Bool_Exp = {
   avatar?: InputMaybe<String_Comparison_Exp>;
   certificates?: InputMaybe<Course_Certificate_Bool_Exp>;
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
+  course_trainer?: InputMaybe<Course_Trainer_Bool_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dietaryRestrictions?: InputMaybe<String_Comparison_Exp>;
@@ -28740,6 +28902,7 @@ export type Profile_Bool_Exp = {
   stripe_customer_id?: InputMaybe<String_Comparison_Exp>;
   tags?: InputMaybe<Jsonb_Comparison_Exp>;
   title?: InputMaybe<String_Comparison_Exp>;
+  trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
   upcomingEnrollments?: InputMaybe<Upcoming_Enrollments_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
@@ -28799,6 +28962,7 @@ export type Profile_Insert_Input = {
   avatar?: InputMaybe<Scalars['String']>;
   certificates?: InputMaybe<Course_Certificate_Arr_Rel_Insert_Input>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
+  course_trainer?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
   courses?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
@@ -28822,6 +28986,7 @@ export type Profile_Insert_Input = {
   stripe_customer_id?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['jsonb']>;
   title?: InputMaybe<Scalars['String']>;
+  trainer_role_types?: InputMaybe<Profile_Trainer_Role_Type_Arr_Rel_Insert_Input>;
   upcomingEnrollments?: InputMaybe<Upcoming_Enrollments_Arr_Rel_Insert_Input>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
@@ -28898,6 +29063,7 @@ export type Profile_Order_By = {
   avatar?: InputMaybe<Order_By>;
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
+  course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
   courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dietaryRestrictions?: InputMaybe<Order_By>;
@@ -28922,6 +29088,7 @@ export type Profile_Order_By = {
   stripe_customer_id?: InputMaybe<Order_By>;
   tags?: InputMaybe<Order_By>;
   title?: InputMaybe<Order_By>;
+  trainer_role_types_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Order_By>;
   upcomingEnrollments_aggregate?: InputMaybe<Upcoming_Enrollments_Aggregate_Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -29570,6 +29737,189 @@ export type Profile_Temp_Variance_Fields = {
   id?: Maybe<Scalars['Float']>;
   quantity?: Maybe<Scalars['Float']>;
 };
+
+/** columns and relationships of "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type = {
+  __typename?: 'profile_trainer_role_type';
+  created_at: Scalars['timestamptz'];
+  id: Scalars['uuid'];
+  profile_id: Scalars['uuid'];
+  /** An object relationship */
+  trainer_role_type?: Maybe<Trainer_Role_Type>;
+  trainer_role_type_id?: Maybe<Scalars['uuid']>;
+  updated_at: Scalars['timestamptz'];
+};
+
+/** aggregated selection of "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Aggregate = {
+  __typename?: 'profile_trainer_role_type_aggregate';
+  aggregate?: Maybe<Profile_Trainer_Role_Type_Aggregate_Fields>;
+  nodes: Array<Profile_Trainer_Role_Type>;
+};
+
+/** aggregate fields of "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Aggregate_Fields = {
+  __typename?: 'profile_trainer_role_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Profile_Trainer_Role_Type_Max_Fields>;
+  min?: Maybe<Profile_Trainer_Role_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Profile_Trainer_Role_Type_Max_Order_By>;
+  min?: InputMaybe<Profile_Trainer_Role_Type_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Arr_Rel_Insert_Input = {
+  data: Array<Profile_Trainer_Role_Type_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Profile_Trainer_Role_Type_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "profile_trainer_role_type". All fields are combined with a logical 'AND'. */
+export type Profile_Trainer_Role_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Profile_Trainer_Role_Type_Bool_Exp>>;
+  _not?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Profile_Trainer_Role_Type_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  profile_id?: InputMaybe<Uuid_Comparison_Exp>;
+  trainer_role_type?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+  trainer_role_type_id?: InputMaybe<Uuid_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "profile_trainer_role_type" */
+export enum Profile_Trainer_Role_Type_Constraint {
+  /** unique or primary key constraint */
+  ProfileTrainerRoleTypePkey = 'profile_trainer_role_type_pkey'
+}
+
+/** input type for inserting data into table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  trainer_role_type?: InputMaybe<Trainer_Role_Type_Obj_Rel_Insert_Input>;
+  trainer_role_type_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** aggregate max on columns */
+export type Profile_Trainer_Role_Type_Max_Fields = {
+  __typename?: 'profile_trainer_role_type_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  trainer_role_type_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by max() on columns of table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Max_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  trainer_role_type_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Profile_Trainer_Role_Type_Min_Fields = {
+  __typename?: 'profile_trainer_role_type_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  profile_id?: Maybe<Scalars['uuid']>;
+  trainer_role_type_id?: Maybe<Scalars['uuid']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Min_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  trainer_role_type_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Mutation_Response = {
+  __typename?: 'profile_trainer_role_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Profile_Trainer_Role_Type>;
+};
+
+/** on_conflict condition type for table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_On_Conflict = {
+  constraint: Profile_Trainer_Role_Type_Constraint;
+  update_columns?: Array<Profile_Trainer_Role_Type_Update_Column>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "profile_trainer_role_type". */
+export type Profile_Trainer_Role_Type_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  trainer_role_type?: InputMaybe<Trainer_Role_Type_Order_By>;
+  trainer_role_type_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: profile_trainer_role_type */
+export type Profile_Trainer_Role_Type_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "profile_trainer_role_type" */
+export enum Profile_Trainer_Role_Type_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  TrainerRoleTypeId = 'trainer_role_type_id',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "profile_trainer_role_type" */
+export type Profile_Trainer_Role_Type_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  profile_id?: InputMaybe<Scalars['uuid']>;
+  trainer_role_type_id?: InputMaybe<Scalars['uuid']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+};
+
+/** update columns of table "profile_trainer_role_type" */
+export enum Profile_Trainer_Role_Type_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  ProfileId = 'profile_id',
+  /** column name */
+  TrainerRoleTypeId = 'trainer_role_type_id',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
 
 /** update columns of table "profile" */
 export enum Profile_Update_Column {
@@ -30344,9 +30694,9 @@ export type Query_Root = {
   course_status_aggregate: Course_Status_Aggregate;
   /** fetch data from the table: "course_status" using primary key columns */
   course_status_by_pk?: Maybe<Course_Status>;
-  /** fetch data from the table: "course_trainer" */
+  /** An array relationship */
   course_trainer: Array<Course_Trainer>;
-  /** fetch aggregated fields from the table: "course_trainer" */
+  /** An aggregate relationship */
   course_trainer_aggregate: Course_Trainer_Aggregate;
   /** fetch data from the table: "course_trainer" using primary key columns */
   course_trainer_by_pk?: Maybe<Course_Trainer>;
@@ -30517,6 +30867,12 @@ export type Query_Root = {
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** fetch data from the table: "profile_trainer_role_type" */
+  profile_trainer_role_type: Array<Profile_Trainer_Role_Type>;
+  /** fetch aggregated fields from the table: "profile_trainer_role_type" */
+  profile_trainer_role_type_aggregate: Profile_Trainer_Role_Type_Aggregate;
+  /** fetch data from the table: "profile_trainer_role_type" using primary key columns */
+  profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
   /** fetch data from the table: "promo_code" */
   promo_code: Array<Promo_Code>;
   /** fetch aggregated fields from the table: "promo_code" */
@@ -30536,6 +30892,12 @@ export type Query_Root = {
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
   searchTrainers?: Maybe<Array<Maybe<SearchTrainer>>>;
+  /** fetch data from the table: "trainer_role_type" */
+  trainer_role_type: Array<Trainer_Role_Type>;
+  /** fetch aggregated fields from the table: "trainer_role_type" */
+  trainer_role_type_aggregate: Trainer_Role_Type_Aggregate;
+  /** fetch data from the table: "trainer_role_type" using primary key columns */
+  trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
   /** fetch data from the table: "trust_type" */
   trust_type: Array<Trust_Type>;
   /** fetch aggregated fields from the table: "trust_type" */
@@ -31944,6 +32306,29 @@ export type Query_RootProfile_Temp_By_PkArgs = {
 };
 
 
+export type Query_RootProfile_Trainer_Role_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Query_RootProfile_Trainer_Role_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Query_RootProfile_Trainer_Role_Type_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootPromo_CodeArgs = {
   distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -32015,6 +32400,29 @@ export type Query_RootRole_By_PkArgs = {
 
 export type Query_RootSearchTrainersArgs = {
   input: SearchTrainersInput;
+};
+
+
+export type Query_RootTrainer_Role_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Query_RootTrainer_Role_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Query_RootTrainer_Role_Type_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -32592,9 +33000,9 @@ export type Subscription_Root = {
   course_status_aggregate: Course_Status_Aggregate;
   /** fetch data from the table: "course_status" using primary key columns */
   course_status_by_pk?: Maybe<Course_Status>;
-  /** fetch data from the table: "course_trainer" */
+  /** An array relationship */
   course_trainer: Array<Course_Trainer>;
-  /** fetch aggregated fields from the table: "course_trainer" */
+  /** An aggregate relationship */
   course_trainer_aggregate: Course_Trainer_Aggregate;
   /** fetch data from the table: "course_trainer" using primary key columns */
   course_trainer_by_pk?: Maybe<Course_Trainer>;
@@ -32748,6 +33156,12 @@ export type Subscription_Root = {
   profile_temp_aggregate: Profile_Temp_Aggregate;
   /** fetch data from the table: "profile_temp" using primary key columns */
   profile_temp_by_pk?: Maybe<Profile_Temp>;
+  /** fetch data from the table: "profile_trainer_role_type" */
+  profile_trainer_role_type: Array<Profile_Trainer_Role_Type>;
+  /** fetch aggregated fields from the table: "profile_trainer_role_type" */
+  profile_trainer_role_type_aggregate: Profile_Trainer_Role_Type_Aggregate;
+  /** fetch data from the table: "profile_trainer_role_type" using primary key columns */
+  profile_trainer_role_type_by_pk?: Maybe<Profile_Trainer_Role_Type>;
   /** fetch data from the table: "promo_code" */
   promo_code: Array<Promo_Code>;
   /** fetch aggregated fields from the table: "promo_code" */
@@ -32766,6 +33180,12 @@ export type Subscription_Root = {
   role_aggregate: Role_Aggregate;
   /** fetch data from the table: "role" using primary key columns */
   role_by_pk?: Maybe<Role>;
+  /** fetch data from the table: "trainer_role_type" */
+  trainer_role_type: Array<Trainer_Role_Type>;
+  /** fetch aggregated fields from the table: "trainer_role_type" */
+  trainer_role_type_aggregate: Trainer_Role_Type_Aggregate;
+  /** fetch data from the table: "trainer_role_type" using primary key columns */
+  trainer_role_type_by_pk?: Maybe<Trainer_Role_Type>;
   /** fetch data from the table: "trust_type" */
   trust_type: Array<Trust_Type>;
   /** fetch aggregated fields from the table: "trust_type" */
@@ -34131,6 +34551,29 @@ export type Subscription_RootProfile_Temp_By_PkArgs = {
 };
 
 
+export type Subscription_RootProfile_Trainer_Role_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootProfile_Trainer_Role_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootProfile_Trainer_Role_Type_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootPromo_CodeArgs = {
   distinct_on?: InputMaybe<Array<Promo_Code_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -34196,6 +34639,29 @@ export type Subscription_RootRole_AggregateArgs = {
 
 
 export type Subscription_RootRole_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootTrainer_Role_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootTrainer_Role_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootTrainer_Role_Type_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -34334,6 +34800,155 @@ export type Timestamptz_Comparison_Exp = {
   _neq?: InputMaybe<Scalars['timestamptz']>;
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>;
 };
+
+/** Trainer role types */
+export type Trainer_Role_Type = {
+  __typename?: 'trainer_role_type';
+  id: Scalars['uuid'];
+  name: Scalars['String'];
+  /** An array relationship */
+  profiles: Array<Profile_Trainer_Role_Type>;
+  /** An aggregate relationship */
+  profiles_aggregate: Profile_Trainer_Role_Type_Aggregate;
+};
+
+
+/** Trainer role types */
+export type Trainer_Role_TypeProfilesArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+
+/** Trainer role types */
+export type Trainer_Role_TypeProfiles_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Profile_Trainer_Role_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Profile_Trainer_Role_Type_Order_By>>;
+  where?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+/** aggregated selection of "trainer_role_type" */
+export type Trainer_Role_Type_Aggregate = {
+  __typename?: 'trainer_role_type_aggregate';
+  aggregate?: Maybe<Trainer_Role_Type_Aggregate_Fields>;
+  nodes: Array<Trainer_Role_Type>;
+};
+
+/** aggregate fields of "trainer_role_type" */
+export type Trainer_Role_Type_Aggregate_Fields = {
+  __typename?: 'trainer_role_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Trainer_Role_Type_Max_Fields>;
+  min?: Maybe<Trainer_Role_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "trainer_role_type" */
+export type Trainer_Role_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Trainer_Role_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "trainer_role_type". All fields are combined with a logical 'AND'. */
+export type Trainer_Role_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Trainer_Role_Type_Bool_Exp>>;
+  _not?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Trainer_Role_Type_Bool_Exp>>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  profiles?: InputMaybe<Profile_Trainer_Role_Type_Bool_Exp>;
+};
+
+/** unique or primary key constraints on table "trainer_role_type" */
+export enum Trainer_Role_Type_Constraint {
+  /** unique or primary key constraint */
+  TrainerRoleTypeNameKey = 'trainer_role_type_name_key',
+  /** unique or primary key constraint */
+  TrainerRoleTypePkey = 'trainer_role_type_pkey'
+}
+
+/** input type for inserting data into table "trainer_role_type" */
+export type Trainer_Role_Type_Insert_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+  profiles?: InputMaybe<Profile_Trainer_Role_Type_Arr_Rel_Insert_Input>;
+};
+
+/** aggregate max on columns */
+export type Trainer_Role_Type_Max_Fields = {
+  __typename?: 'trainer_role_type_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Trainer_Role_Type_Min_Fields = {
+  __typename?: 'trainer_role_type_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "trainer_role_type" */
+export type Trainer_Role_Type_Mutation_Response = {
+  __typename?: 'trainer_role_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Trainer_Role_Type>;
+};
+
+/** input type for inserting object relation for remote table "trainer_role_type" */
+export type Trainer_Role_Type_Obj_Rel_Insert_Input = {
+  data: Trainer_Role_Type_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Trainer_Role_Type_On_Conflict>;
+};
+
+/** on_conflict condition type for table "trainer_role_type" */
+export type Trainer_Role_Type_On_Conflict = {
+  constraint: Trainer_Role_Type_Constraint;
+  update_columns?: Array<Trainer_Role_Type_Update_Column>;
+  where?: InputMaybe<Trainer_Role_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "trainer_role_type". */
+export type Trainer_Role_Type_Order_By = {
+  id?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  profiles_aggregate?: InputMaybe<Profile_Trainer_Role_Type_Aggregate_Order_By>;
+};
+
+/** primary key columns input for table: trainer_role_type */
+export type Trainer_Role_Type_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "trainer_role_type" */
+export enum Trainer_Role_Type_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "trainer_role_type" */
+export type Trainer_Role_Type_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "trainer_role_type" */
+export enum Trainer_Role_Type_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Name = 'name'
+}
 
 /** columns and relationships of "trust_type" */
 export type Trust_Type = {
@@ -36325,7 +36940,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type?: { __typename?: 'trainer_role_type', name: string, id: any } | null }>, course_trainer: Array<{ __typename?: 'course_trainer', id: any, can_be_moderator: boolean }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 

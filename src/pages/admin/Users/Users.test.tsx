@@ -2,11 +2,14 @@ import { build, fake } from '@jackfranklin/test-data-bot'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
-import { GetProfilesQuery } from '@app/generated/graphql'
+import {
+  GetProfilesQuery,
+  GetProfilesQueryVariables,
+} from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleType } from '@app/types'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
 
 import { Users } from './Users'
 
@@ -26,6 +29,20 @@ const mockProfile = build<GetProfilesQuery['profiles'][0]>({
           id: fake(f => f.datatype.uuid()),
           name: RoleName.USER,
         },
+      },
+    ],
+    trainer_role_types: [
+      {
+        trainer_role_type: {
+          id: fake(f => f.datatype.uuid()),
+          name: TrainerRoleType.PRINCIPAL,
+        },
+      },
+    ],
+    course_trainer: [
+      {
+        id: fake(f => f.datatype.uuid()),
+        can_be_moderator: false,
       },
     ],
     organizations: [
@@ -105,11 +122,133 @@ describe('page: Users', () => {
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)
-    expect(within(tableBody).getByText(profile.fullName!)).toBeInTheDocument()
-    expect(within(tableBody).getByText(profile.email!)).toBeInTheDocument()
+    if (profile.fullName) {
+      expect(within(tableBody).getByText(profile.fullName)).toBeInTheDocument()
+    }
+    if (profile.email) {
+      expect(within(tableBody).getByText(profile.email)).toBeInTheDocument()
+    }
     expect(
       within(tableBody).getByText(profile.organizations[0].organization.name)
     ).toBeInTheDocument()
     expect(within(tableBody).getByText('Individual')).toBeInTheDocument()
+    expect(within(tableBody).getByText('Principal')).toBeInTheDocument()
+  })
+
+  it('filters users by organisation search', async () => {
+    const keyword = chance.word()
+
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const conditions = where?._or ?? []
+        const profiles =
+          conditions[0]?.organizations?.organization?.name?._ilike ===
+          `%${keyword}%`
+            ? [filteredProfile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+        }
+      }
+    )
+
+    render(
+      <MemoryRouter>
+        <Users />
+      </MemoryRouter>
+    )
+
+    const search = screen.getByTestId('FilterSearch-Input')
+    userEvent.type(search, keyword)
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('filters users by role and trainer type', async () => {
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const profiles =
+          where?.roles?.role?.name?._in?.includes(RoleName.TRAINER) &&
+          where?.trainer_role_types?.trainer_role_type?.name?._in?.includes(
+            TrainerRoleType.PRINCIPAL
+          )
+            ? [filteredProfile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+        }
+      }
+    )
+
+    render(
+      <MemoryRouter>
+        <Users />
+      </MemoryRouter>
+    )
+
+    userEvent.click(
+      within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
+    )
+    userEvent.click(
+      within(screen.getByTestId('FilterTrainerType')).getByText('Principal')
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('filters users by moderator', async () => {
+    const profile = mockProfile()
+    const filteredProfile = mockProfile()
+
+    useProfilesMocked.mockImplementation(
+      ({ where }: GetProfilesQueryVariables) => {
+        const profiles =
+          where?.course_trainer?.can_be_moderator?._eq === true
+            ? [filteredProfile]
+            : [profile]
+        return {
+          profiles,
+          isLoading: false,
+          count: 0,
+          error: undefined,
+        }
+      }
+    )
+
+    render(
+      <MemoryRouter>
+        <Users />
+      </MemoryRouter>
+    )
+
+    userEvent.click(screen.getByLabelText('Moderator'))
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(`${filteredProfile.fullName}`)
+      ).toBeInTheDocument()
+      expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
   })
 })

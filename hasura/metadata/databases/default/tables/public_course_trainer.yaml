@@ -23,11 +23,12 @@ insert_permissions:
     permission:
       check: {}
       columns:
+        - can_be_moderator
         - course_id
-        - status
-        - type
         - id
         - profile_id
+        - status
+        - type
       backend_only: false
 select_permissions:
   - role: trainer
@@ -42,11 +43,12 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
+        - can_be_moderator
         - course_id
-        - status
-        - type
         - id
         - profile_id
+        - status
+        - type
       filter: {}
   - role: user
     permission:
@@ -65,6 +67,14 @@ update_permissions:
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - can_be_moderator
+        - status
+        - type
+      filter: {}
       check: null
 delete_permissions:
   - role: trainer

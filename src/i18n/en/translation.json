@@ -45,6 +45,7 @@
     "change": "Change",
     "remove": "Remove",
     "admin": "Administrator",
+    "moderator": "Moderator",
     "invoice-contact": "Invoice contact details",
     "error-no-booking": "Unable to find booking",
     "error-no-pricing": "Unable to load course pricing",
@@ -243,6 +244,17 @@
       "sales-admin": " Sales administrator",
       "l&d": "L&D",
       "finance": "Finance"
+    },
+    "trainer-role-types": {
+      "principal": "Principal",
+      "senior": "Senior",
+      "senior-assist": "Senior assist",
+      "employer-trainer": "Employer trainer",
+      "eta": "ETA",
+      "bild-senior": "Bild senior",
+      "bild-certified": "Bild certified",
+      "employer-aol": "Employer AOL",
+      "special-agreement-aol": "Special agreement AOL"
     },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
@@ -1746,11 +1758,16 @@
       "hub-access": "Hub access",
       "user-roles": "User roles",
       "roles": {
+        "tt-employee": "TT Employee",
         "unverified": "Unverified user",
         "user": "Individual",
         "trainer": "Trainer",
         "tt-ops": "Operations",
-        "tt-admin": "Administrator"
+        "tt-admin": "Administrator",
+        "sales-representative": "Sales representative",
+        "sales-admin": " Sales administrator",
+        "l&d": "L&D",
+        "finance": "Finance"
       }
     },
     "available-courses": {

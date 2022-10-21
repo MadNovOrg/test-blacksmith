@@ -19,6 +19,16 @@ export const getProfiles = gql`
           name
         }
       }
+      trainer_role_types {
+        trainer_role_type {
+          name
+          id
+        }
+      }
+      course_trainer {
+        id
+        can_be_moderator
+      }
     }
     profile_aggregate(where: $where) {
       aggregate {
