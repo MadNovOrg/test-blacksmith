@@ -1650,7 +1650,11 @@
             "col-action": "Action",
             "col-balance": "Balance",
             "col-reserved-balance": "Reserved balance",
-            "col-payload": "Payload"
+            "col-payload": "Payload",
+            "col-invoice-id": "Invoice number",
+            "col-course-id": "Course code",
+            "col-note": "Note",
+            "col-invoked-by": "Invoked by"
           }
         }
       },
