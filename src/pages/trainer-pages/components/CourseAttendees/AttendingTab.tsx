@@ -16,8 +16,12 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { ActionsMenu } from '@app/components/ActionsMenu'
-import { ReplaceParticipantDialog } from '@app/components/ReplaceParticipantDialog'
+import {
+  Mode,
+  ReplaceParticipantDialog,
+} from '@app/components/ReplaceParticipantDialog'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
 import {
@@ -37,6 +41,7 @@ const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const AttendingTab = ({ course }: TabProperties) => {
+  const { isOrgAdmin } = useAuth()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
@@ -252,6 +257,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
               }}
               onClose={() => setParticipantToReplace(undefined)}
               onSuccess={mutate}
+              mode={isOrgAdmin ? Mode.ORG_ADMIN : Mode.TT_ADMIN}
             />
           ) : null}
         </>
