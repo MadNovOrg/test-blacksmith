@@ -51,66 +51,68 @@ export const OrderDetails: React.FC<Props> = ({
         alignItems="center"
       >
         <Box>
-          <Typography variant="h6" mb={1}>
-            {t('order-title')}
-          </Typography>
-          <Typography color={theme.palette.grey[600]}>
-            {t('price-per-attendee', {
-              price: _t('common.currency', { amount: PRICE_PER_LICENSE }),
-            })}
-          </Typography>
+          <Typography variant="h6">{t('order-title')}</Typography>
+          {amountDue > 0 ? (
+            <Typography color={theme.palette.grey[600]} mt={1}>
+              {t('price-per-attendee', {
+                price: _t('common.currency', { amount: PRICE_PER_LICENSE }),
+              })}
+            </Typography>
+          ) : null}
         </Box>
         <Box sx={{ textAlign: 'right' }}>
           <Typography variant="body2">{t('quantity')}</Typography>
           <Typography>{numberOfLicenses}</Typography>
         </Box>
       </DetailsItemBox>
-      <DetailsItemBox>
-        <ItemRow>
-          <Typography color={theme.palette.grey[600]} mb={1}>
-            {t('subtotal')}
-          </Typography>
-          <Typography
-            color={theme.palette.grey[600]}
-            data-testid="amount-subtotal"
-            mb={1}
-          >
-            {_t('common.currency', { amount: subtotal })}
-          </Typography>
-        </ItemRow>
-        {licensesBalance ? (
+      {amountDue > 0 ? (
+        <DetailsItemBox>
           <ItemRow>
-            <Typography color={theme.palette.grey[600]}>
-              {t('license-allowance', { balance: licensesLeft })}
+            <Typography color={theme.palette.grey[600]} mb={1}>
+              {t('subtotal')}
             </Typography>
             <Typography
               color={theme.palette.grey[600]}
+              data-testid="amount-subtotal"
               mb={1}
-              data-testid="amount-allowance"
             >
-              -
-              {_t('common.currency', {
-                amount: allowancePrice,
-              })}
+              {_t('common.currency', { amount: subtotal })}
             </Typography>
           </ItemRow>
-        ) : null}
-        {vat ? (
-          <ItemRow>
-            <Typography color={theme.palette.grey[600]} mt={1}>
-              {t('vat')}
-            </Typography>
+          {licensesBalance ? (
+            <ItemRow>
+              <Typography color={theme.palette.grey[600]}>
+                {t('license-allowance', { balance: licensesLeft })}
+              </Typography>
+              <Typography
+                color={theme.palette.grey[600]}
+                mb={1}
+                data-testid="amount-allowance"
+              >
+                -
+                {_t('common.currency', {
+                  amount: allowancePrice,
+                })}
+              </Typography>
+            </ItemRow>
+          ) : null}
+          {vat ? (
+            <ItemRow>
+              <Typography color={theme.palette.grey[600]} mt={1}>
+                {t('vat')}
+              </Typography>
 
-            <Typography
-              color={theme.palette.grey[600]}
-              data-testid="amount-vat"
-              mt={1}
-            >
-              {_t('common.currency', { amount: vat })}
-            </Typography>
-          </ItemRow>
-        ) : null}
-      </DetailsItemBox>
+              <Typography
+                color={theme.palette.grey[600]}
+                data-testid="amount-vat"
+                mt={1}
+              >
+                {_t('common.currency', { amount: vat })}
+              </Typography>
+            </ItemRow>
+          ) : null}
+        </DetailsItemBox>
+      ) : null}
       <DetailsItemBox>
         <ItemRow>
           <Typography variant="h6">

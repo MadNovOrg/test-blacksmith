@@ -12,11 +12,12 @@ describe('component: OrderDetails', () => {
 
     render(<OrderDetails licensesBalance={6} numberOfLicenses={2} {...costs} />)
 
-    expect(screen.getByText('License allowance (4 left)')).toBeInTheDocument()
-    expect(screen.getByTestId('amount-allowance')).toHaveTextContent('-£50.00')
-    expect(screen.getByTestId('amount-subtotal')).toHaveTextContent('£50.00')
-    expect(screen.getByTestId('amount-due')).toHaveTextContent('£0.00')
+    expect(screen.queryByText(/license allowance/i)).not.toBeInTheDocument()
+    expect(screen.queryByTestId('amount-allowance')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('amount-subtotal')).not.toBeInTheDocument()
     expect(screen.queryByTestId('amount-vat')).not.toBeInTheDocument()
+
+    expect(screen.getByTestId('amount-due')).toHaveTextContent('£0.00')
   })
 
   it('calculates correctly if there is a partial license allowance', () => {
