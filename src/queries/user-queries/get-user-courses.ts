@@ -42,6 +42,10 @@ export const QUERY = gql`
       grade
       attended
     }
+    organization {
+      id
+      name
+    }
     evaluation_answers_aggregate(
       distinct_on: profileId
       where: { profileId: { _eq: $profileId } }

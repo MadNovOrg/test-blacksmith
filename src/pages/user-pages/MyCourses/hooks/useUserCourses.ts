@@ -46,7 +46,7 @@ export function useUserCourses(
   status: LoadingStatus
   total?: number
 } {
-  const { profile } = useAuth()
+  const { profile, organizationIds } = useAuth()
   const dateRef = useRef(new Date().toISOString())
 
   const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
@@ -130,7 +130,10 @@ export function useUserCourses(
     }
     // if orgId is defined then provide all available courses within that org
     if (orgId) {
-      obj = orgId === ALL_ORGS ? {} : { organization: { id: { _eq: orgId } } }
+      obj =
+        orgId === ALL_ORGS
+          ? { organization: { id: { _in: organizationIds } } }
+          : { organization: { id: { _eq: orgId } } }
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
