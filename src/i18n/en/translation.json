@@ -423,7 +423,8 @@
     "cancellation-reason": "Cancellation reason",
     "never-mind": "Never mind",
     "course": "Course",
-    "records": "records"
+    "records": "records",
+    "export": "Export"
   },
   "components": {
     "replace-participant": {
@@ -1450,8 +1451,8 @@
           "description": "Modify expiration dates for future certifications."
         },
         "cancellations-transfers-replacements": {
-          "title": "Cancellations, Transfers, and Replacements",
-          "description": "An audit log of all cancellations, transfers, and replacements."
+          "title": "Cancellations, Transfers & Replacements",
+          "description": "An audit log of all cancellations, transfers and replacements."
         }
       },
       "users": {
@@ -1853,7 +1854,7 @@
       "remove-attendee": "Remove attendee"
     },
     "audits": {
-      "title": "Cancellations, Transfers, and Replacements",
+      "title": "Cancellations, Transfers & Replacements",
       "back-to-settings": "Back to settings",
       "attendee-cancellation": "Attendee cancellation",
       "attendee-replacement": "Attendee replacement",

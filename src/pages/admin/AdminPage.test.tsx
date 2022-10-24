@@ -21,7 +21,7 @@ describe('page: adminPage', () => {
     expect(links[3]).toHaveTextContent('Waitlist notifications')
     expect(links[4]).toHaveTextContent('Course renewals')
     expect(links[5]).toHaveTextContent(
-      'Cancellations, Transfers, and Replacements'
+      'Cancellations, Transfers & Replacements'
     )
   })
 })

@@ -13,7 +13,10 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Participant_Audit_Type_Enum,
+  GetAttendeeAuditLogsQuery,
+} from '@app/generated/graphql'
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -21,6 +24,10 @@ import {
   AuditFilteringSidebar,
   FilterChangeEvent,
 } from '@app/pages/admin/Audits/AuditFilteringSidebar'
+import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
+import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
+
+type LogType = GetAttendeeAuditLogsQuery['logs'][0]
 
 export const AttendeeCancellationTable: React.FC = () => {
   const { t } = useTranslation()
@@ -44,25 +51,46 @@ export const AttendeeCancellationTable: React.FC = () => {
 
   const cols = useMemo(
     () => [
-      { id: 'created_at', label: t('pages.audits.event-time'), sorting: true },
+      {
+        id: 'created_at',
+        label: t('pages.audits.event-time'),
+        sorting: true,
+        exportRender: (log: LogType) =>
+          t('dates.withTime', {
+            date: log.created_at,
+          }),
+      },
       {
         id: 'profile.fullName',
         label: t('common.attendee'),
         sorting: true,
+        exportRender: (log: LogType) => log.profile.fullName ?? '',
       },
       {
         id: 'profile.email',
         label: t('pages.audits.attendee-email'),
         sorting: true,
+        exportRender: (log: LogType) => log.profile.email ?? '',
       },
-      { id: 'course.course_code', label: t('common.course'), sorting: true },
+      {
+        id: 'course.course_code',
+        label: t('common.course'),
+        sorting: true,
+        exportRender: (log: LogType) => log.course.course_code ?? '',
+      },
       {
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
+        exportRender: (log: LogType) => log.authorizedBy.fullName ?? '',
       },
     ],
     [t]
+  )
+
+  const renderExportData = useMemo(
+    () => getExportDataRenderFunction<LogType>(cols, logs),
+    [cols, logs]
   )
 
   const onFilterChange = useCallback((e: FilterChangeEvent) => {
@@ -89,6 +117,12 @@ export const AttendeeCancellationTable: React.FC = () => {
           </Stack>
         ) : (
           <>
+            <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
+              <ExportAuditsButton
+                renderData={renderExportData}
+                prefix={'attendee-cancellations-'}
+              />
+            </Box>
             <Table data-testid="logs-table">
               <TableHead
                 cols={cols}
