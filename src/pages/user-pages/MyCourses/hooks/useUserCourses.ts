@@ -46,7 +46,7 @@ export function useUserCourses(
   status: LoadingStatus
   total?: number
 } {
-  const { profile, organizationIds } = useAuth()
+  const { acl, profile, organizationIds } = useAuth()
   const dateRef = useRef(new Date().toISOString())
 
   const { courses: unevaluatedCourses } = useUnevaluatedUserCourses()
@@ -130,10 +130,14 @@ export function useUserCourses(
     }
     // if orgId is defined then provide all available courses within that org
     if (orgId) {
-      obj =
-        orgId === ALL_ORGS
-          ? { organization: { id: { _in: organizationIds } } }
-          : { organization: { id: { _eq: orgId } } }
+      const allAvailableOrgs = {}
+      const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
+      const specificOrg = { organization: { id: { _eq: orgId } } }
+      if (orgId === ALL_ORGS) {
+        obj = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+      } else {
+        obj = specificOrg
+      }
     }
 
     if (filters?.statuses?.includes(AttendeeOnlyCourseStatus.InfoRequired)) {
