@@ -80,18 +80,18 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 
 -- Adding all roles to all dev users
 INSERT INTO profile_role (profile_id, role_id) VALUES
-('434de6da-cdc5-431b-b109-022854319d69', (SELECT id from role WHERE name = 'admin')), -- jonpaul.little@teamteach.co.uk
-('83156e3f-a075-43b5-b345-dacb06d5b057', (SELECT id from role WHERE name = 'admin')), -- aneesa.ramzan@teamteach.co.uk
-('77eaddad-ba95-4ab7-9ef7-801b347d6502', (SELECT id from role WHERE name = 'admin')), -- andrew.winterbotham@nearform.com
-('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', (SELECT id from role WHERE name = 'admin')), -- grzegorz.ilach@nearform.com
-('bb665826-8ff0-45f7-a75f-babdad3d8e17', (SELECT id from role WHERE name = 'admin')), -- salman.mitha@nearform.com
-('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', (SELECT id from role WHERE name = 'admin')), -- spyridon.chortis@nearform.com
-('99a03e41-f518-49a2-98cd-c77cb2e33483', (SELECT id from role WHERE name = 'admin')), -- maksym.barvinskyi@nearform.com
-('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', (SELECT id from role WHERE name = 'admin')), -- lefteris.paraskevas@nearform.com
-('7eb8bd38-3048-4416-90d2-4b2299e4633b', (SELECT id from role WHERE name = 'admin')), -- alex.parra@nearform.com
-('7584edda-3772-447c-9162-25f7fc6a9b38', (SELECT id from role WHERE name = 'admin')), -- danijel.maksimovic@nearform.com
-('8fc963f5-1942-4e70-9107-7a84fe2e68d5', (SELECT id from role WHERE name = 'admin')), -- piotr.piech@nearform.com
-('00c5f39b-785a-46f5-8475-ea2d349efaf8', (SELECT id from role WHERE name = 'admin')); -- wilk.maia@nearform.com
+('434de6da-cdc5-431b-b109-022854319d69', (SELECT id from role WHERE name = 'tt-admin')), -- jonpaul.little@teamteach.co.uk
+('83156e3f-a075-43b5-b345-dacb06d5b057', (SELECT id from role WHERE name = 'tt-admin')), -- aneesa.ramzan@teamteach.co.uk
+('77eaddad-ba95-4ab7-9ef7-801b347d6502', (SELECT id from role WHERE name = 'tt-admin')), -- andrew.winterbotham@nearform.com
+('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', (SELECT id from role WHERE name = 'tt-admin')), -- grzegorz.ilach@nearform.com
+('bb665826-8ff0-45f7-a75f-babdad3d8e17', (SELECT id from role WHERE name = 'tt-admin')), -- salman.mitha@nearform.com
+('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', (SELECT id from role WHERE name = 'tt-admin')), -- spyridon.chortis@nearform.com
+('99a03e41-f518-49a2-98cd-c77cb2e33483', (SELECT id from role WHERE name = 'tt-admin')), -- maksym.barvinskyi@nearform.com
+('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', (SELECT id from role WHERE name = 'tt-admin')), -- lefteris.paraskevas@nearform.com
+('7eb8bd38-3048-4416-90d2-4b2299e4633b', (SELECT id from role WHERE name = 'tt-admin')), -- alex.parra@nearform.com
+('7584edda-3772-447c-9162-25f7fc6a9b38', (SELECT id from role WHERE name = 'tt-admin')), -- danijel.maksimovic@nearform.com
+('8fc963f5-1942-4e70-9107-7a84fe2e68d5', (SELECT id from role WHERE name = 'tt-admin')), -- piotr.piech@nearform.com
+('00c5f39b-785a-46f5-8475-ea2d349efaf8', (SELECT id from role WHERE name = 'tt-admin')); -- wilk.maia@nearform.com
 
 -- Adding roles to test users
 INSERT INTO profile_role (profile_id, role_id) VALUES
@@ -104,7 +104,7 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'user')), -- user2@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'user')), -- user1.with.org@teamteach.testinator.com
 ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', (SELECT id from role WHERE name = 'user')), -- user2.with.org@teamteach.testinator.com
-('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'admin')), -- admin@teamteach.testinator.com
+('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'tt-admin')), -- admin@teamteach.testinator.com
 ('48c9c19b-e7bf-4309-9679-52d5619d27dd', (SELECT id from role WHERE name = 'tt-ops')), -- ops@teamteach.testinator.com
 ('48812860-89a5-41be-95c9-b8889e88bffd', (SELECT id from role WHERE name = 'tt-ops')), -- moderator@teamteach.testinator.com
 ('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'user')), -- org.admin@teamteach.testinator.com
