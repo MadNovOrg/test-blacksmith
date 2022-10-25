@@ -249,7 +249,14 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                   }
                 }
 
-                // TODO add cancellation requested status when added
+                const nameCell = (
+                  <>
+                    <Typography mb={1}>{c.name}</Typography>
+                    <Typography variant="body2" data-testid="course-code">
+                      {c.course_code}
+                    </Typography>
+                  </>
+                )
 
                 return (
                   <TableRow
@@ -259,12 +266,11 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                     data-index={index}
                   >
                     <TableCell>
-                      <Link href={`${c.id}/details`}>
-                        <Typography mb={1}>{c.name}</Typography>
-                        <Typography variant="body2" data-testid="course-code">
-                          {c.course_code}
-                        </Typography>
-                      </Link>
+                      {c.status !== Course_Status_Enum.Cancelled ? (
+                        <Link href={`${c.id}/details`}>{nameCell}</Link>
+                      ) : (
+                        nameCell
+                      )}
                     </TableCell>
                     <TableCell>
                       <Typography mb={1}>

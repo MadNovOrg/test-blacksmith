@@ -126,7 +126,6 @@ export function useUserCourses(
   const where = useMemo(() => {
     let obj: Course_Bool_Exp = {
       participants: { profile_id: { _eq: profile?.id } },
-      status: { _nin: [Course_Status_Enum.Cancelled] },
     }
     // if orgId is defined then provide all available courses within that org
     if (orgId) {
