@@ -1029,7 +1029,20 @@
         "proceed-with-cancellation": "Proceed with cancellation",
         "transfer-attendees-first": "Transfer attendees first"
       },
-      "request-cancellation": "Request cancellation"
+      "request-cancellation": "Request cancellation",
+      "review-changes-modal": {
+        "title": "Review and confirm changes",
+        "description": "This will change immediately and notify all trainers, organisation admins, and registered attendees of changes made to this course.",
+        "col-property": "Property",
+        "col-old-value": "Old value",
+        "col-new-value": "New value",
+        "col-date-type": "Date",
+        "col-venue-type": "Venue",
+        "reason-field-placeholder": "Reason for change *",
+        "error-reason-required-field": "Reason is a required field",
+        "cancel-btn-text": "Never mind",
+        "confirm-btn-text": "Confirm changes"
+      }
     },
     "course-details": {
       "tabs": {
@@ -1870,7 +1883,11 @@
       "new-course": "New course",
       "course": "Course",
       "original-date": "Original date",
-      "new-date": "New date"
+      "new-date": "New date",
+      "old-start-date": "Original start date",
+      "old-end-date": "Original end date",
+      "new-start-date": "New start date",
+      "new-end-date": "New end date"
     }
   },
   "course-evaluation": {

@@ -22,11 +22,18 @@ import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum, GetCourseByIdQuery } from '@app/generated/graphql'
+import {
+  Course_Audit_Type_Enum,
+  Course_Status_Enum,
+  GetCourseByIdQuery,
+  InsertCourseAuditMutation,
+  InsertCourseAuditMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
+import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
 import {
   ParamsType,
   ResponseType,
@@ -50,6 +57,8 @@ import {
 } from '@app/util'
 
 import { NotFound } from '../common/NotFound'
+
+import { CourseDiff, ReviewChangesModal } from './components/ReviewChangesModal'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -75,6 +84,7 @@ export const EditCourse: React.FC<unknown> = () => {
     showRegistrantsCancellationModal,
     setShowRegistrantsCancellationModal,
   ] = useState(false)
+  const [showReviewModal, setShowReviewModal] = useState(false)
   const fetcher = useFetcher()
 
   const {
@@ -100,6 +110,46 @@ export const EditCourse: React.FC<unknown> = () => {
     []
   )
 
+  const courseDiffs: CourseDiff[] = useMemo(() => {
+    if (course?.type !== CourseType.INDIRECT) {
+      return []
+    }
+
+    const diffs: CourseDiff[] = []
+
+    if (
+      course?.schedule[0].start &&
+      course.schedule[0].end &&
+      courseData?.startDateTime &&
+      courseData.endDateTime
+    ) {
+      const oldStart = new Date(course.schedule[0].start)
+      const oldEnd = new Date(course.schedule[0].end)
+
+      const newStart = courseData.startDateTime
+      const newEnd = courseData.endDateTime
+
+      if (
+        oldStart.getTime() !== newStart.getTime() ||
+        oldEnd.getTime() !== newEnd.getTime()
+      ) {
+        diffs.push({
+          type: 'date',
+          oldValue: `${t('dates.longWithTime', { date: oldStart })} - ${t(
+            'dates.longWithTime',
+            { date: oldEnd }
+          )}`,
+          newValue: `${t('dates.longWithTime', { date: newStart })} - ${t(
+            'dates.longWithTime',
+            { date: newEnd }
+          )}`,
+        })
+      }
+    }
+
+    return diffs
+  }, [course, courseData, t])
+
   const handleTrainersDataChange = useCallback(
     (data: TrainersFormValues, isValid: boolean) => {
       setTrainersData(data)
@@ -112,7 +162,7 @@ export const EditCourse: React.FC<unknown> = () => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
 
-  const saveChanges = async () => {
+  const saveChanges = async (reason?: string) => {
     const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
 
     try {
@@ -146,7 +196,7 @@ export const EditCourse: React.FC<unknown> = () => {
           )
         }
 
-        const response = await fetcher<ResponseType, ParamsType>(
+        const editResponse = await fetcher<ResponseType, ParamsType>(
           UPDATE_COURSE_MUTATION,
           {
             courseId: String(course.id),
@@ -198,7 +248,33 @@ export const EditCourse: React.FC<unknown> = () => {
           }
         )
 
-        if (response.updateCourse.id) {
+        if (editResponse.updateCourse.id && courseDiffs.length) {
+          const dateChanged = courseDiffs.find(d => d.type === 'date')
+
+          const payload = dateChanged
+            ? {
+                oldStartDate: course.schedule[0].start,
+                oldEndDate: course.schedule[0].end,
+                newStartDate: courseData.startDateTime,
+                newEndDate: courseData.endDateTime,
+                reason,
+              }
+            : {}
+
+          await fetcher<
+            InsertCourseAuditMutation,
+            InsertCourseAuditMutationVariables
+          >(INSERT_COURSE_AUDIT, {
+            object: {
+              type: Course_Audit_Type_Enum.Reschedule,
+              course_id: course.id,
+              payload,
+              authorized_by: profile?.id,
+            },
+          })
+        }
+
+        if (editResponse.updateCourse.id) {
           mutateCourse()
           navigate(`/courses/${course.id}/details`)
         } else {
@@ -207,6 +283,14 @@ export const EditCourse: React.FC<unknown> = () => {
       }
     } catch (err) {
       setSavingStatus(LoadingStatus.ERROR)
+    }
+  }
+
+  const editCourse = () => {
+    if (courseDiffs.length) {
+      setShowReviewModal(true)
+    } else {
+      saveChanges()
     }
   }
 
@@ -305,7 +389,7 @@ export const EditCourse: React.FC<unknown> = () => {
                   <LoadingButton
                     disabled={!editCourseValid}
                     variant="contained"
-                    onClick={saveChanges}
+                    onClick={editCourse}
                     loading={savingStatus === LoadingStatus.FETCHING}
                   >
                     {t('pages.edit-course.save-button-text')}
@@ -357,6 +441,15 @@ export const EditCourse: React.FC<unknown> = () => {
               }}
             />
           </Dialog>
+
+          <ReviewChangesModal
+            open={showReviewModal}
+            diff={courseDiffs}
+            onCancel={() => setShowReviewModal(false)}
+            onConfirm={({ reason }) => {
+              saveChanges(reason)
+            }}
+          />
         </>
       ) : null}
     </FullHeightPage>

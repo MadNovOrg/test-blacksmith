@@ -68,16 +68,32 @@ export const CourseReschedulingTable: React.FC = () => {
         exportRender: (log: LogType) => log.course.course_code ?? '',
       },
       {
-        id: 'course.old_schedule', // TODO change when rescheduling done
-        label: t('pages.audits.original-date'),
+        id: 'course.old_start_date',
+        label: t('pages.audits.old-start-date'),
         sorting: false,
-        exportRender: (_: LogType) => '',
+        exportRender: (log: LogType) =>
+          new Date(log.payload?.oldStartDate).toString(),
       },
       {
-        id: 'course.new_schedule', // TODO change when rescheduling done
-        label: t('pages.audits.new-date'),
+        id: 'course.new_start_date',
+        label: t('pages.audits.new-start-date'),
         sorting: false,
-        exportRender: (_: LogType) => '',
+        exportRender: (log: LogType) =>
+          new Date(log.payload?.newStartDate).toString(),
+      },
+      {
+        id: 'course.old_end_date',
+        label: t('pages.audits.old-end-date'),
+        sorting: false,
+        exportRender: (log: LogType) =>
+          new Date(log.payload?.oldEndDate).toString(),
+      },
+      {
+        id: 'course.new_end_date',
+        label: t('pages.audits.new-end-date'),
+        sorting: false,
+        exportRender: (log: LogType) =>
+          new Date(log.payload?.newEndDate).toString(),
       },
       {
         id: 'authorizedBy.fullName',
@@ -121,7 +137,7 @@ export const CourseReschedulingTable: React.FC = () => {
             <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
               <ExportAuditsButton
                 renderData={renderExportData}
-                prefix={'course-cancellations-'}
+                prefix={'course-rescheduling-'}
               />
             </Box>
             <Table data-testid="logs-table">
@@ -165,8 +181,36 @@ export const CourseReschedulingTable: React.FC = () => {
                         {log.course.course_code}
                       </Typography>
                     </TableCell>
-                    <TableCell>{/* TODO */}</TableCell>
-                    <TableCell>{/* TODO */}</TableCell>
+                    <TableCell
+                      sx={{
+                        textDecoration: 'line-through',
+                        color: 'dimGrey.main',
+                      }}
+                    >
+                      {t('dates.defaultShort', {
+                        date: new Date(log.payload?.oldStartDate),
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {t('dates.defaultShort', {
+                        date: new Date(log.payload?.newStartDate),
+                      })}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textDecoration: 'line-through',
+                        color: 'dimGrey.main',
+                      }}
+                    >
+                      {t('dates.defaultShort', {
+                        date: new Date(log.payload?.oldEndDate),
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {t('dates.defaultShort', {
+                        date: new Date(log.payload?.newEndDate),
+                      })}
+                    </TableCell>
                     <TableCell>
                       {log.authorizedBy ? (
                         <ProfileWithAvatar profile={log.authorizedBy} />

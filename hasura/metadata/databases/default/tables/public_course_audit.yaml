@@ -8,6 +8,19 @@ object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+insert_permissions:
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - course_id
+        - authorized_by
+        - type
+        - payload
+      backend_only: false
 select_permissions:
   - role: tt-admin
     permission:
