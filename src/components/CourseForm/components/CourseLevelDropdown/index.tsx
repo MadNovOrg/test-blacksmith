@@ -12,12 +12,14 @@ interface Props {
   value: SelectValue
   onChange: (event: SelectChangeEvent<SelectValue>) => void
   courseType: CourseType
+  disabled?: boolean
 }
 
 export const CourseLevelDropdown: React.FC<Props> = ({
   value,
   onChange,
   courseType,
+  disabled = false,
 }) => {
   const { t } = useTranslation()
 
@@ -37,6 +39,7 @@ export const CourseLevelDropdown: React.FC<Props> = ({
       onChange={onChange}
       data-testid="course-level-select"
       id="course-level"
+      disabled={disabled}
     >
       {levels.map(level => (
         <MenuItem

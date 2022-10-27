@@ -38,6 +38,7 @@ type Props = {
   value?: SearchTrainer[]
   onChange?: (ev: { target: { value: SearchTrainer[] } }) => void
   matchesFilter?: (matches: SearchTrainer[]) => SearchTrainer[]
+  disabled?: boolean
 }
 
 const T_PREFIX = 'components.searchTrainers'
@@ -53,6 +54,7 @@ export function SearchTrainers({
   value = undefined,
   onChange = noop,
   matchesFilter = t => t,
+  disabled = false,
 }: Props) {
   const { t } = useTranslation()
   const isMounted = useMountedState()
@@ -83,6 +85,7 @@ export function SearchTrainers({
       hidden: maxReached,
       showSearchIcon: selected.length === 0,
       autoFocus,
+      disabled,
     })
   }
 
@@ -149,6 +152,7 @@ export function SearchTrainers({
           padding: '5px 8px !important', // important needed to override mui styles
         },
       }}
+      disabled={disabled}
     />
   )
 }
@@ -160,6 +164,7 @@ function renderTextField({
   hidden,
   showSearchIcon,
   autoFocus,
+  disabled,
 }: {
   params: AutocompleteRenderInputParams
   loading: boolean
@@ -167,6 +172,7 @@ function renderTextField({
   hidden: boolean
   showSearchIcon: boolean
   autoFocus: boolean
+  disabled: boolean
 }) {
   return (
     <TextField
@@ -196,7 +202,7 @@ function renderTextField({
       }}
       inputProps={{
         ...params.inputProps,
-        disabled: hidden,
+        disabled: hidden || disabled,
         tabIndex: hidden ? -1 : 0,
         style: { fontSize: hidden ? '.8em' : 'inherit' },
         'data-testid': 'SearchTrainers-input',
@@ -237,7 +243,6 @@ function renderSelected(
       avatar={<Avatar src={s.avatar} name={s.fullName} />}
       key={s.id}
       label={s.fullName}
-      disabled={false}
       data-testid="SearchTrainers-selected"
     />
   ))

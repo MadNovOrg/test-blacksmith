@@ -36,6 +36,7 @@ export type OrgSelectorProps = {
   allowAdding?: boolean
   error?: string
   value?: Organization
+  disabled?: boolean
 }
 
 type OptionToAdd = Establishment | { name: string }
@@ -50,6 +51,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   placeholder,
   allowAdding = false,
   error,
+  disabled = false,
   ...props
 }) {
   const { t } = useTranslation()
@@ -168,6 +170,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
           return o.id === v.id
         }}
         loading={loading}
+        disabled={disabled}
         groupBy={(value: Option) => {
           if ('urn' in value) {
             return t('components.org-selector.dfe-suggestions')

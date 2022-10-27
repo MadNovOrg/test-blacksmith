@@ -17,7 +17,7 @@ import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
-import CourseForm from '@app/components/CourseForm'
+import CourseForm, { DisabledFields } from '@app/components/CourseForm'
 import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
@@ -294,6 +294,26 @@ export const EditCourse: React.FC<unknown> = () => {
     }
   }
 
+  const disabledFields = useMemo(() => {
+    if (course && !acl.canEditWithoutRestrictions(course.type)) {
+      return new Set<DisabledFields>([
+        'organization',
+        'contactProfile',
+        'courseLevel',
+        'blendedLearning',
+        'reaccreditation',
+        'deliveryType',
+        'usesAOL',
+        'aolCountry',
+        'aolRegion',
+        'minParticipants',
+        'maxParticipants',
+      ])
+    }
+
+    return new Set([])
+  }, [acl, course])
+
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
     (course && !acl.canCreateCourse(course.type))
@@ -345,6 +365,7 @@ export const EditCourse: React.FC<unknown> = () => {
                     courseInput={courseInput}
                     type={course?.type}
                     onChange={handleCourseFormChange}
+                    disabledFields={disabledFields}
                   />
                 </Box>
 
@@ -361,6 +382,7 @@ export const EditCourse: React.FC<unknown> = () => {
                     trainers={course.trainers}
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
+                    disabled={!acl.canEditWithoutRestrictions(course.type)}
                   />
                 ) : null}
 

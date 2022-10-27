@@ -48,9 +48,12 @@ import {
   makeDate,
 } from './helpers'
 
+export type DisabledFields = Partial<keyof CourseInput>
+
 interface Props {
   type?: CourseType
   courseInput?: CourseInput
+  disabledFields?: Set<DisabledFields>
   onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
 }
 
@@ -60,6 +63,7 @@ const CourseForm: React.FC<Props> = ({
   onChange = noop,
   type: courseType = CourseType.OPEN,
   courseInput,
+  disabledFields = new Set(),
 }) => {
   const { t } = useTranslation()
 
@@ -392,8 +396,11 @@ const CourseForm: React.FC<Props> = ({
               onChange={org => {
                 setValue('organization', org, { shouldValidate: true })
               }}
-              textFieldProps={{ variant: 'filled' }}
+              textFieldProps={{
+                variant: 'filled',
+              }}
               sx={{ marginBottom: 2 }}
+              disabled={disabledFields.has('organization')}
             />
           </>
         ) : null}
@@ -414,7 +421,10 @@ const CourseForm: React.FC<Props> = ({
               }}
               sx={{ marginBottom: 2 }}
               textFieldProps={{ variant: 'filled' }}
-              disabled={!getValues('organization')}
+              disabled={
+                !getValues('organization') ||
+                disabledFields.has('contactProfile')
+              }
               placeholder={t(
                 'components.course-form.contact-person-placeholder'
               )}
@@ -437,6 +447,7 @@ const CourseForm: React.FC<Props> = ({
                 value={field.value}
                 onChange={field.onChange}
                 courseType={courseType}
+                disabled={disabledFields.has('courseLevel')}
               />
             )}
           />
@@ -451,7 +462,7 @@ const CourseForm: React.FC<Props> = ({
           render={({ field }) => (
             <FormControlLabel
               sx={{ mr: theme.spacing(5) }}
-              disabled={!canBlended}
+              disabled={!canBlended || disabledFields.has('blendedLearning')}
               control={<Switch {...field} checked={values.blendedLearning} />}
               label={t('components.course-form.blended-learning-label')}
             />
@@ -463,7 +474,7 @@ const CourseForm: React.FC<Props> = ({
           control={control}
           render={({ field }) => (
             <FormControlLabel
-              disabled={!canReacc}
+              disabled={!canReacc || disabledFields.has('reaccreditation')}
               control={<Switch {...field} checked={values.reaccreditation} />}
               label={t('components.course-form.reaccreditation-label')}
             />
@@ -492,19 +503,31 @@ const CourseForm: React.FC<Props> = ({
           >
             <FormControlLabel
               value={CourseDeliveryType.F2F}
-              control={<Radio disabled={!canF2F} />}
+              control={
+                <Radio
+                  disabled={!canF2F || disabledFields.has('deliveryType')}
+                />
+              }
               label={t('components.course-form.f2f-option-label')}
               data-testid={`delivery-${CourseDeliveryType.F2F}`}
             />
             <FormControlLabel
               value={CourseDeliveryType.VIRTUAL}
-              control={<Radio disabled={!canVirtual} />}
+              control={
+                <Radio
+                  disabled={!canVirtual || disabledFields.has('deliveryType')}
+                />
+              }
               label={t('components.course-form.virtual-option-label')}
               data-testid={`delivery-${CourseDeliveryType.VIRTUAL}`}
             />
             <FormControlLabel
               value={CourseDeliveryType.MIXED}
-              control={<Radio disabled={!canMixed} />}
+              control={
+                <Radio
+                  disabled={!canMixed || disabledFields.has('deliveryType')}
+                />
+              }
               label={t('components.course-form.mixed-option-label')}
               data-testid={`delivery-${CourseDeliveryType.MIXED}`}
             />
@@ -651,6 +674,7 @@ const CourseForm: React.FC<Props> = ({
                     }
                   }}
                   checked={usesAOL}
+                  disabled={disabledFields.has('usesAOL')}
                 />
               }
               label={t('components.course-form.aol-label')}
@@ -664,6 +688,7 @@ const CourseForm: React.FC<Props> = ({
                       variant="filled"
                       sx={{ mb: theme.spacing(2) }}
                       fullWidth
+                      disabled={disabledFields.has('aolCountry')}
                     >
                       <Controller
                         name="aolCountry"
@@ -694,6 +719,7 @@ const CourseForm: React.FC<Props> = ({
                             onChange={field.onChange}
                             usesAOL={usesAOL}
                             aolCountry={aolCountry}
+                            disabled={disabledFields.has('aolRegion')}
                           />
                         )}
                       />
@@ -718,6 +744,7 @@ const CourseForm: React.FC<Props> = ({
                       <InputAdornment position="start">£</InputAdornment>
                     ),
                   }}
+                  disabled={disabledFields.has('courseCost')}
                   {...register('courseCost')}
                 />
               </>
@@ -749,6 +776,7 @@ const CourseForm: React.FC<Props> = ({
                 helperText={errors.minParticipants?.message}
                 inputProps={{ min: 1 }}
                 data-testid="min-attendees"
+                disabled={disabledFields.has('minParticipants')}
               />
             </Grid>
           ) : null}
@@ -772,6 +800,7 @@ const CourseForm: React.FC<Props> = ({
               helperText={errors.maxParticipants?.message}
               inputProps={{ min: 1 }}
               data-testid="max-attendees"
+              disabled={disabledFields.has('maxParticipants')}
             />
           </Grid>
         </Grid>
@@ -799,6 +828,7 @@ const CourseForm: React.FC<Props> = ({
                   helperText={errors.freeSpaces?.message}
                   inputProps={{ min: 0 }}
                   data-testid="free-spaces"
+                  disabled={disabledFields.has('freeSpaces')}
                 />
               </Grid>
             </Grid>
@@ -823,6 +853,7 @@ const CourseForm: React.FC<Props> = ({
               textFieldProps={{ variant: 'filled' }}
               placeholder={t('components.course-form.sales-rep-placeholder')}
               testId="profile-selector-sales-representative"
+              disabled={disabledFields.has('salesRepresentative')}
             />
           </FormPanel>
 

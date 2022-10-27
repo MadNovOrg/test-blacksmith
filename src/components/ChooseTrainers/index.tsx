@@ -41,6 +41,7 @@ type Props = {
   courseSchedule: Pick<CourseSchedule, 'start' | 'end'>
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
+  disabled?: boolean
 }
 
 const courseTrainerToFormValues = (
@@ -69,6 +70,7 @@ const ChooseTrainers: React.FC<Props> = ({
   trainers = [],
   onChange = noop,
   autoFocus = true,
+  disabled = false,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -184,6 +186,7 @@ const ChooseTrainers: React.FC<Props> = ({
                 value={field.value}
                 onChange={field.onChange}
                 matchesFilter={notUsedElsewhere('lead')}
+                disabled={disabled}
               />
             )}
           />
@@ -213,6 +216,7 @@ const ChooseTrainers: React.FC<Props> = ({
                 value={field.value}
                 onChange={field.onChange}
                 matchesFilter={notUsedElsewhere('assist')}
+                disabled={disabled}
               />
             )}
           />

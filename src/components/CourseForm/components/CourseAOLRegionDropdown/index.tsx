@@ -9,6 +9,7 @@ interface Props {
   onChange: (value: string | null) => void
   usesAOL: boolean
   aolCountry: string | null
+  disabled?: boolean
 }
 
 export const CourseAOLRegionDropdown: React.FC<Props> = ({
@@ -16,6 +17,7 @@ export const CourseAOLRegionDropdown: React.FC<Props> = ({
   onChange,
   usesAOL,
   aolCountry,
+  disabled,
 }) => {
   const { t } = useTranslation()
 
@@ -62,6 +64,7 @@ export const CourseAOLRegionDropdown: React.FC<Props> = ({
           fullWidth
           sx={{ bgcolor: 'grey.100' }}
           variant="filled"
+          disabled={disabled}
         />
       )}
     />

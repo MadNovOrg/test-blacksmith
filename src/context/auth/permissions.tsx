@@ -2,12 +2,12 @@ import { MarkOptional } from 'ts-essentials'
 
 import { CourseType, RoleName } from '@app/types'
 
-import type { AuthContextType } from './types'
+import type { ACL, AuthContextType } from './types'
 
 export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()
 
-  const acl = Object.freeze({
+  const acl: ACL = Object.freeze({
     isAdmin: () => acl.isTTOps() || acl.isTTAdmin(),
 
     isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
@@ -101,6 +101,18 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     canSeeWaitingLists: () => {
       const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
       return roles.some(r => r === auth.activeRole)
+    },
+
+    canEditWithoutRestrictions: (courseType: CourseType) => {
+      if (
+        auth.activeRole &&
+        ![RoleName.TT_ADMIN].includes(auth.activeRole) &&
+        courseType === CourseType.INDIRECT
+      ) {
+        return false
+      }
+
+      return true
     },
   })
 

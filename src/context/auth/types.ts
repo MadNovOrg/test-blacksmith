@@ -1,6 +1,6 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
 
-import type { CourseType, Profile, RoleName } from '@app/types'
+import { CourseType, Profile, RoleName } from '@app/types'
 
 export type { Profile } from '@app/types'
 
@@ -59,4 +59,5 @@ export type ACL = {
   canCancelCourses: () => boolean
   canManageOrgCourses: () => boolean
   canSeeWaitingLists: () => boolean
+  canEditWithoutRestrictions: (courseType: CourseType) => boolean
 }
