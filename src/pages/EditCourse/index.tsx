@@ -257,8 +257,8 @@ export const EditCourse: React.FC<unknown> = () => {
             ? {
                 oldStartDate: course.schedule[0].start,
                 oldEndDate: course.schedule[0].end,
-                newStartDate: courseData.startDateTime,
-                newEndDate: courseData.endDateTime,
+                newStartDate: courseData.startDateTime.toISOString(),
+                newEndDate: courseData.endDateTime.toISOString(),
                 reason,
               }
             : {}
