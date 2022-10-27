@@ -102,6 +102,13 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
       return roles.some(r => r === auth.activeRole)
     },
+    canRescheduleWithoutWarning: () => {
+      if (auth.activeRole) {
+        return [RoleName.TT_ADMIN, RoleName.TT_OPS].includes(auth.activeRole)
+      }
+
+      return false
+    },
 
     canEditWithoutRestrictions: (courseType: CourseType) => {
       if (

@@ -59,5 +59,6 @@ export type ACL = {
   canCancelCourses: () => boolean
   canManageOrgCourses: () => boolean
   canSeeWaitingLists: () => boolean
+  canRescheduleWithoutWarning: () => boolean
   canEditWithoutRestrictions: (courseType: CourseType) => boolean
 }

@@ -29,9 +29,14 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
 
 type Props = {
   status: AllCourseStatuses
+  hideIcon?: boolean
 } & ChipProps
 
-export const CourseStatusChip: React.FC<Props> = ({ status, ...rest }) => {
+export const CourseStatusChip: React.FC<Props> = ({
+  status,
+  hideIcon = false,
+  ...rest
+}) => {
   const { t } = useTranslation()
 
   const chipColor = colorsMap[status]
@@ -46,7 +51,9 @@ export const CourseStatusChip: React.FC<Props> = ({ status, ...rest }) => {
         sx={{ marginRight: chipColor === 'warning' ? 1 : 0 }}
         data-testid="course-status-chip"
       />
-      {chipColor === 'warning' ? <Warning color="warning" /> : null}
+      {chipColor === 'warning' && !hideIcon ? (
+        <Warning color="warning" />
+      ) : null}
     </Box>
   )
 }

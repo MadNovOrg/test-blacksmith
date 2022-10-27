@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { differenceInDays } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -18,6 +19,7 @@ import ChooseTrainers, {
   FormValues as TrainersFormValues,
 } from '@app/components/ChooseTrainers'
 import CourseForm, { DisabledFields } from '@app/components/CourseForm'
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
@@ -352,9 +354,33 @@ export const EditCourse: React.FC<unknown> = () => {
                     to="/courses"
                   />
                 </Box>
-                <Typography variant="h2" mb={2}>
+                <Typography variant="h2" mb={4}>
                   {t('pages.edit-course.title')}
                 </Typography>
+
+                <Box mb={4}>
+                  <Typography
+                    mb={1}
+                    variant="h6"
+                    fontWeight={600}
+                    color="dimGrey.main"
+                  >
+                    {t('status')}
+                  </Typography>
+                  <CourseStatusChip status={course.status} hideIcon />
+                </Box>
+
+                <Box>
+                  <Typography
+                    variant="h6"
+                    mb={1}
+                    fontWeight={600}
+                    color="dimGrey.main"
+                  >
+                    {t('course-type')}
+                  </Typography>
+                  <Typography>{t(`course-types.${course.type}`)}</Typography>
+                </Box>
               </Sticky>
             </Box>
 
@@ -471,7 +497,15 @@ export const EditCourse: React.FC<unknown> = () => {
             onConfirm={({ reason }) => {
               saveChanges(reason)
             }}
-          />
+          >
+            {courseData?.startDateTime &&
+            differenceInDays(courseData.startDateTime, new Date()) <= 14 &&
+            !acl.canRescheduleWithoutWarning() ? (
+              <Alert severity="warning" variant="outlined">
+                {t('pages.edit-course.protocol-not-met')}
+              </Alert>
+            ) : null}
+          </ReviewChangesModal>
         </>
       ) : null}
     </FullHeightPage>

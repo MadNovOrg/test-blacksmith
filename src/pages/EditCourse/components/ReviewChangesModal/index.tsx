@@ -42,6 +42,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
   onConfirm,
   diff,
   open = false,
+  children,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
 
@@ -67,6 +68,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
       onClose={onCancel}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
+        {children ? <Box mb={2}>{children}</Box> : null}
         <Typography color="dimGrey.main" mb={2}>
           {t('description')}
         </Typography>

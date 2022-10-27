@@ -9,6 +9,22 @@ object_relationships:
     using:
       foreign_key_constraint_on: course_id
 insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      columns:
+        - course_id
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - authorized_by
+        - id
+      backend_only: false
   - role: tt-admin
     permission:
       check: {}

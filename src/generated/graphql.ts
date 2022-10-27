@@ -36506,7 +36506,7 @@ export type InsertCourseAuditMutationVariables = Exact<{
 }>;
 
 
-export type InsertCourseAuditMutation = { __typename?: 'mutation_root', insert_course_audit_one?: { __typename?: 'course_audit', id: any } | null };
+export type InsertCourseAuditMutation = { __typename?: 'mutation_root', insert_course_audit?: { __typename?: 'course_audit_mutation_response', affected_rows: number } | null };
 
 export type InsertCourseMutationVariables = Exact<{
   course: Course_Insert_Input;
