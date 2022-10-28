@@ -5,12 +5,20 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import aolRegionsByCountry from './aolRegions'
 
 export function makeDate(date: Date | string | null, time: Date | string) {
-  const _date = new Date(date || Date.now())
-  return new Date(`${format(_date, 'yyyy-MM-dd')} ${time}`)
+  try {
+    const _date = new Date(date || Date.now())
+    return new Date(`${format(_date, 'yyyy-MM-dd')} ${time}`)
+  } catch (e) {
+    return null
+  }
 }
 
-export function extractTime(date: Date | string) {
-  return format(new Date(date), 'HH:mm')
+export function extractTime(date: Date | string | null) {
+  try {
+    return format(new Date(date || Date.now()), 'HH:mm')
+  } catch (e) {
+    return ''
+  }
 }
 
 export function getLevels(courseType: CourseType) {
