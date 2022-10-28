@@ -188,7 +188,14 @@ export function useUserCourses(
     }
 
     return obj
-  }, [orgId, filters, profile?.id, courseStatusConditionsMap])
+  }, [
+    orgId,
+    filters,
+    profile?.id,
+    courseStatusConditionsMap,
+    acl,
+    organizationIds,
+  ])
 
   const [{ data, error }] = useQuery<
     UserCoursesQuery,

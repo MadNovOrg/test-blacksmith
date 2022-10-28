@@ -39,6 +39,7 @@ import { DetailsRow } from '@app/components/DetailsRow'
 import { Dialog } from '@app/components/Dialog'
 import { useAuth } from '@app/context/auth'
 import {
+  Profile_Role_Insert_Input,
   UpdateProfileRolesMutation,
   UpdateProfileRolesMutationVariables,
 } from '@app/generated/graphql'
@@ -62,8 +63,9 @@ import {
 } from '@app/queries/profile/update-profile'
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import theme from '@app/theme'
-import { Role } from '@app/types'
+import { Role, RoleName } from '@app/types'
 
+import { EditRoles } from './components/EditRoles'
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
@@ -110,6 +112,34 @@ const maxAvatarFileSizeBytes = Number.parseInt(
   import.meta.env.VITE_PROFILE_AVATAR_MAX_SIZE_BYTES ?? 0
 )
 
+export const topRolesNames: RoleName[] = [
+  RoleName.USER,
+  RoleName.TRAINER,
+  RoleName.TT_ADMIN,
+  'tt-employee' as RoleName,
+]
+
+export const employeeRolesNames: RoleName[] = [
+  RoleName.TT_OPS,
+  RoleName.FINANCE,
+  RoleName['L&D'],
+  'sales' as RoleName,
+]
+
+export const salesRolesNames: RoleName[] = [
+  RoleName.SALES_ADMIN,
+  RoleName.SALES_REPRESENTATIVE,
+]
+
+export const employeeRole = {
+  id: '0',
+  name: 'tt-employee' as RoleName,
+}
+export const salesRole = {
+  id: '1',
+  name: 'sales' as RoleName,
+}
+
 export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
@@ -133,17 +163,56 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
     useState<DisabilitiesRadioValues | null>(null)
   const [showImportModal, setShowImportModal] = useState(false)
   const [orgToLeave, setOrgToLeave] = useState<OrgMemberType>()
-  const [roles, setRoles] = useState<Role[] | null>(null)
+  const [roles, setRoles] = useState<string[][]>([])
 
   const ratherNotSayText = t<string>('rather-not-say')
 
   const canEditRoles = acl.isTTAdmin()
 
   useEffect(() => {
-    if (profile && !roles) {
-      setRoles(profile.roles.map(profileRole => profileRole.role as Role))
+    if (profile && !roles.length) {
+      const isEmployeeRole = (roleName: RoleName) =>
+        employeeRolesNames.some(name => name == roleName)
+
+      const isSalesRole = (roleName: RoleName) =>
+        salesRolesNames.some(name => name == roleName)
+
+      const ttEmployeeRoles: string[] = []
+      const topRoles: string[][] = []
+
+      if (profile.roles.length) {
+        profile.roles.map(obj => {
+          if (isEmployeeRole(obj.role.name as RoleName)) {
+            ttEmployeeRoles.push(obj.role.name)
+            if (ttEmployeeRoles.indexOf(employeeRole.name) === -1) {
+              ttEmployeeRoles.push(employeeRole.name)
+            }
+          } else if (isSalesRole(obj.role.name as RoleName)) {
+            ttEmployeeRoles.push(obj.role.name)
+            if (ttEmployeeRoles.indexOf(salesRole.name) === -1) {
+              ttEmployeeRoles.push(salesRole.name)
+            }
+            if (ttEmployeeRoles.indexOf(employeeRole.name) === -1) {
+              ttEmployeeRoles.push(employeeRole.name)
+            }
+          } else {
+            topRoles.push([obj.role.name])
+          }
+        })
+      }
+      const updatedRoles: string[][] = []
+      if (ttEmployeeRoles.length) {
+        updatedRoles.push(ttEmployeeRoles)
+      }
+      if (topRoles.length) {
+        updatedRoles.push(...topRoles)
+      }
+      if (!updatedRoles.length) {
+        updatedRoles.push([''])
+      }
+      setRoles(updatedRoles)
     }
-  }, [profile, roles])
+  }, [profile, roles.length])
 
   useEffect(() => {
     const restriction = profile?.dietaryRestrictions
@@ -280,14 +349,25 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
         }
       )
       if (canEditRoles) {
+        const currentRoles = roles.flat()
+        const filteredRoles = systemRoles?.reduce(
+          (filteredRoles, systemRole) => {
+            if (currentRoles.find(role => role === systemRole.name)) {
+              filteredRoles.push({
+                role_id: systemRole.id,
+                profile_id: profile.id,
+              })
+            }
+            return filteredRoles
+          },
+          [] as Profile_Role_Insert_Input[]
+        )
         await fetcher<
           UpdateProfileRolesMutation,
           UpdateProfileRolesMutationVariables
         >(UPDATE_PROFILE_ROLES_MUTATION, {
           id: profile?.id,
-          roles: roles
-            ? roles.map(role => ({ role_id: role.id, profile_id: profile.id }))
-            : [],
+          roles: filteredRoles ?? [],
         })
       }
 
@@ -680,41 +760,19 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               {t('pages.view-profile.hub-access')}
             </Typography>
 
-            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-              {canEditRoles ? (
-                <Autocomplete
-                  multiple={true}
-                  value={roles || []}
-                  options={
-                    systemRoles.filter(role => role.name !== 'admin') as Role[]
-                  }
-                  isOptionEqualToValue={(o, v) => o.id === v.id}
-                  getOptionLabel={role =>
-                    t(`pages.view-profile.roles.${role.name}`)
-                  }
-                  renderOption={(props, role) => {
-                    return (
-                      <Box {...props} component="li" key={role.id}>
-                        {t(`pages.view-profile.roles.${role.name}`)}
-                      </Box>
-                    )
-                  }}
-                  onChange={(event, value) => setRoles(value)}
-                  disableClearable={true}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label={t(
-                        'pages.create-organization.fields.organization-name'
-                      )}
-                      variant="standard"
-                      sx={{ bgcolor: 'grey.100' }}
-                      fullWidth
-                    />
-                  )}
-                  data-testid="SelectLevels"
-                />
-              ) : (
+            {canEditRoles ? (
+              <EditRoles
+                systemRoles={systemRoles as Role[]}
+                roles={roles}
+                setRoles={setRoles}
+                topRolesNames={topRolesNames}
+                employeeRolesNames={employeeRolesNames}
+                salesRolesNames={salesRolesNames}
+                employeeRole={employeeRole}
+                salesRole={salesRole}
+              />
+            ) : (
+              <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
                 <DetailsRow label={t('pages.view-profile.user-roles')}>
                   <Box flex={1}>
                     {profile.roles.length > 0 ? (
@@ -733,8 +791,8 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     )}
                   </Box>
                 </DetailsRow>
-              )}
-            </Box>
+              </Box>
+            )}
 
             {profile.organizations.length > 0 ? (
               <>

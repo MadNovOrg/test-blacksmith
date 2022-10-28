@@ -1779,7 +1779,10 @@
     },
     "view-profile": {
       "hub-access": "Hub access",
-      "user-roles": "User roles",
+      "user-role": "User role",
+      "add-role": "Additional role",
+      "remove-role": "Remove",
+      "sales-permissions": "Sales permission",
       "roles": {
         "tt-employee": "TT Employee",
         "unverified": "Unverified user",
@@ -1790,7 +1793,8 @@
         "sales-representative": "Sales representative",
         "sales-admin": " Sales administrator",
         "l&d": "L&D",
-        "finance": "Finance"
+        "finance": "Finance",
+        "sales": "Sales"
       }
     },
     "available-courses": {

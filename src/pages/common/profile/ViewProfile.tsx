@@ -166,14 +166,14 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
               {t('pages.view-profile.hub-access')}
             </Typography>
             <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-              <DetailsRow label={t('pages.view-profile.user-roles')}>
+              <DetailsRow label={t('pages.view-profile.user-role')}>
                 <Box flex={1}>
                   {profile.roles.map(({ role }) => (
                     <Chip
                       key={role.name}
                       label={t(`pages.view-profile.roles.${role?.name}`)}
                       color={getRoleColor(role.name)}
-                      sx={{ marginRight: '8px' }}
+                      sx={{ marginRight: 1, marginBottom: 1 }}
                     />
                   ))}
                 </Box>
