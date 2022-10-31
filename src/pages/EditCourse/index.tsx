@@ -60,7 +60,8 @@ import {
 
 import { NotFound } from '../common/NotFound'
 
-import { CourseDiff, ReviewChangesModal } from './components/ReviewChangesModal'
+import { FormValues, ReviewChangesModal } from './components/ReviewChangesModal'
+import { CourseDiff } from './types'
 
 function assertCourseDataValid(
   data: CourseInput,
@@ -112,12 +113,9 @@ export const EditCourse: React.FC<unknown> = () => {
     []
   )
 
-  const courseDiffs: CourseDiff[] = useMemo(() => {
-    if (course?.type !== CourseType.INDIRECT) {
-      return []
-    }
-
+  const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
     const diffs: CourseDiff[] = []
+    let approved = true
 
     if (
       course?.schedule[0].start &&
@@ -137,20 +135,16 @@ export const EditCourse: React.FC<unknown> = () => {
       ) {
         diffs.push({
           type: 'date',
-          oldValue: `${t('dates.longWithTime', { date: oldStart })} - ${t(
-            'dates.longWithTime',
-            { date: oldEnd }
-          )}`,
-          newValue: `${t('dates.longWithTime', { date: newStart })} - ${t(
-            'dates.longWithTime',
-            { date: newEnd }
-          )}`,
+          oldValue: [oldStart, oldEnd],
+          newValue: [newStart, newEnd],
         })
+
+        approved = newStart > oldStart
       }
     }
 
-    return diffs
-  }, [course, courseData, t])
+    return [diffs, approved]
+  }, [course, courseData])
 
   const handleTrainersDataChange = useCallback(
     (data: TrainersFormValues, isValid: boolean) => {
@@ -164,7 +158,7 @@ export const EditCourse: React.FC<unknown> = () => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
 
-  const saveChanges = async (reason?: string) => {
+  const saveChanges = async (reviewInput?: FormValues) => {
     const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
 
     try {
@@ -253,15 +247,22 @@ export const EditCourse: React.FC<unknown> = () => {
         if (editResponse.updateCourse.id && courseDiffs.length) {
           const dateChanged = courseDiffs.find(d => d.type === 'date')
 
-          const payload = dateChanged
-            ? {
-                oldStartDate: course.schedule[0].start,
-                oldEndDate: course.schedule[0].end,
-                newStartDate: courseData.startDateTime.toISOString(),
-                newEndDate: courseData.endDateTime.toISOString(),
-                reason,
-              }
-            : {}
+          const payload =
+            dateChanged && reviewInput
+              ? {
+                  oldStartDate: course.schedule[0].start,
+                  oldEndDate: course.schedule[0].end,
+                  newStartDate: courseData.startDateTime.toISOString(),
+                  newEndDate: courseData.endDateTime.toISOString(),
+                  reason: reviewInput.reason,
+                  ...(course.type === CourseType.CLOSED
+                    ? {
+                        feeType: reviewInput.feeType,
+                        customFee: reviewInput.customFee,
+                      }
+                    : null),
+                }
+              : {}
 
           await fetcher<
             InsertCourseAuditMutation,
@@ -289,7 +290,7 @@ export const EditCourse: React.FC<unknown> = () => {
   }
 
   const editCourse = () => {
-    if (courseDiffs.length) {
+    if (courseDiffs.length && !autoapproved) {
       setShowReviewModal(true)
     } else {
       saveChanges()
@@ -494,9 +495,10 @@ export const EditCourse: React.FC<unknown> = () => {
             open={showReviewModal}
             diff={courseDiffs}
             onCancel={() => setShowReviewModal(false)}
-            onConfirm={({ reason }) => {
-              saveChanges(reason)
+            onConfirm={reviewInput => {
+              saveChanges(reviewInput)
             }}
+            withFees={course.type === CourseType.CLOSED}
           >
             {courseData?.startDateTime &&
             differenceInDays(courseData.startDateTime, new Date()) <= 14 &&

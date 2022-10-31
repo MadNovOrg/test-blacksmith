@@ -427,6 +427,13 @@
     "export": "Export"
   },
   "components": {
+    "fees-form": {
+      "fees-radio-group-title": "Will any fees apply?",
+      "apply-terms-option": "Apply terms",
+      "custom-fee-option": "Custom fee",
+      "custom-fee-label": "Amount",
+      "no-fee-option": "No fees"
+    },
     "replace-participant": {
       "title": "Replace with new attendee",
       "description": "This action will immediately remove the original attendee and invite the new attendee entered below. This will notify the organisation, original attendee, new attendee, and finance to make changes on the invoice(s), where necessary.",
@@ -1042,7 +1049,16 @@
         "reason-field-placeholder": "Reason for change *",
         "error-reason-required-field": "Reason is a required field",
         "cancel-btn-text": "Never mind",
-        "confirm-btn-text": "Confirm changes"
+        "confirm-btn-text": "Confirm changes",
+        "col-start-date": "Before course start date",
+        "col-fee": "Rescheduling fee",
+        "0-fee-label": "4+ weeks",
+        "0-fee": "Free",
+        "15-fee-label": "2-4 weeks",
+        "15-fee": "15% of payment due",
+        "25-fee-label": "Less than 2 weeks",
+        "25-fee": "25% of payment due",
+        "apply-terms-option": "Apply rescheduling terms"
       }
     },
     "course-details": {
@@ -1845,11 +1861,7 @@
         "25-fee-label": "Less than 2 weeks",
         "25-fee": "25% of payment due",
         "fees-panel-title": "Fees",
-        "fees-radio-group-title": "Will any fees apply?",
         "apply-terms-option": "Apply transfer terms",
-        "custom-fee-option": "Custom fee",
-        "custom-fee-label": "Amount",
-        "no-fee-option": "No fees",
         "next-btn-label": "Review & confirm",
         "back-btn-label": "Back to selection"
       },

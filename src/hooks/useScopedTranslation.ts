@@ -1,7 +1,10 @@
+import { TFunction } from 'i18next'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const useScopedTranslation = (scope: string) => {
+export const useScopedTranslation = (
+  scope: string
+): { _t: TFunction; t: TFunction } => {
   const { t: _t } = useTranslation()
 
   const t = useCallback(

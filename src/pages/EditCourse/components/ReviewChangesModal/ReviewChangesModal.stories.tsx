@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { addHours } from 'date-fns'
 import React from 'react'
 
 import { ReviewChangesModal } from '.'
@@ -25,8 +26,21 @@ DateChanged.args = {
   diff: [
     {
       type: 'date',
-      oldValue: '9 Sep 2022 9:00 AM - 11 Sep 2022 5:00 PM',
-      newValue: '8 Oct 2022 9:00 AM - 14 Oct 2022 5:00 PM',
+      oldValue: [new Date(), addHours(new Date(), 5)],
+      newValue: [new Date(), addHours(new Date(), 8)],
+    },
+  ],
+}
+
+export const WithFees = Template.bind({})
+WithFees.args = {
+  open: true,
+  withFees: true,
+  diff: [
+    {
+      type: 'date',
+      oldValue: [new Date(), addHours(new Date(), 5)],
+      newValue: [new Date(), addHours(new Date(), 8)],
     },
   ],
 }

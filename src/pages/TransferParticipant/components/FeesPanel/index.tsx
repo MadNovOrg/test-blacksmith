@@ -1,43 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormLabel from '@mui/material/FormLabel'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import TextField from '@mui/material/TextField'
 import React, { memo, useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
+import { FeesForm, schema as feesFormSchema } from '@app/components/FeesForm'
 import { InfoPanel } from '@app/components/InfoPanel'
 import { TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
-import theme from '@app/theme'
 
 import { TransferModeEnum } from '../TransferParticipantProvider'
 import { TransferTermsTable } from '../TransferTermsTable'
 
-const formSchema = yup.object({
-  feeType: yup
-    .mixed<TransferFeeType>()
-    .oneOf(Object.values(TransferFeeType))
-    .required(),
-  customFee: yup
-    .number()
-    .nullable(true)
-    .transform(v => (isNaN(v) ? null : v))
-    .when('feeType', {
-      is: (value: TransferFeeType) => value === TransferFeeType.CustomFee,
-      then: schema => schema.required(),
-    }),
-})
-
-export type FormValues = yup.InferType<typeof formSchema>
+export type FormValues = yup.InferType<typeof feesFormSchema>
 type Props = {
   courseStartDate: Date
   onChange?: (values: FormValues, isValid: boolean) => void
   mode?: TransferModeEnum
+  termsTable?: React.ReactElement
+  optionLabels?: Record<TransferFeeType, string>
 }
 
 const FeesPanel: React.FC<Props> = ({
@@ -49,15 +30,18 @@ const FeesPanel: React.FC<Props> = ({
     'pages.transfer-participant.transfer-details'
   )
 
-  const orgAdminMode = mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
-
-  const { watch, control, register, formState } = useForm<FormValues>({
-    resolver: yupResolver(formSchema),
+  const methods = useForm<FormValues>({
+    resolver: yupResolver(feesFormSchema),
     mode: 'onChange',
     defaultValues: {
-      feeType: orgAdminMode ? TransferFeeType.ApplyTerms : undefined,
+      feeType:
+        mode === TransferModeEnum.ORG_ADMIN_TRANSFERS
+          ? TransferFeeType.ApplyTerms
+          : undefined,
     },
   })
+
+  const { watch, formState } = methods
 
   const formValues = watch()
 
@@ -70,65 +54,16 @@ const FeesPanel: React.FC<Props> = ({
   return (
     <Box>
       <InfoPanel titlePosition="inside">
-        {!orgAdminMode ? (
-          <Controller
-            control={control}
-            name="feeType"
-            render={({ field }) => (
-              <FormControl {...field}>
-                <FormLabel
-                  id="fees-radio-group-label"
-                  focused={false}
-                  sx={{ fontWeight: 600, color: theme.palette.secondary.main }}
-                >
-                  {t('fees-radio-group-title')}
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="fees-radio-group-label"
-                  name="fees-radio-group"
-                  row
-                >
-                  <FormControlLabel
-                    value={TransferFeeType.ApplyTerms}
-                    control={<Radio />}
-                    label={t('apply-terms-option')}
-                    sx={{ color: theme.palette.dimGrey.main }}
-                  />
-                  <FormControlLabel
-                    value={TransferFeeType.CustomFee}
-                    control={<Radio />}
-                    label={t('custom-fee-option')}
-                    sx={{ color: theme.palette.dimGrey.main }}
-                  />
-                  <FormControlLabel
-                    value={TransferFeeType.Free}
-                    control={<Radio />}
-                    label={t('no-fee-option')}
-                    sx={{ color: theme.palette.dimGrey.main }}
-                  />
-                </RadioGroup>
-              </FormControl>
-            )}
-          ></Controller>
-        ) : null}
-
-        {formValues.feeType === TransferFeeType.ApplyTerms ? (
-          <Box mt={2}>
+        <FormProvider {...methods}>
+          <FeesForm
+            mode={mode}
+            optionLabels={{
+              [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
+            }}
+          >
             <TransferTermsTable startDate={courseStartDate} />
-          </Box>
-        ) : null}
-
-        {formValues.feeType === TransferFeeType.CustomFee ? (
-          <Box mt={2}>
-            <TextField
-              fullWidth
-              variant="filled"
-              label={t('custom-fee-label')}
-              error={Boolean(formState.errors.customFee?.message)}
-              {...register('customFee')}
-            />
-          </Box>
-        ) : null}
+          </FeesForm>
+        </FormProvider>
       </InfoPanel>
     </Box>
   )
