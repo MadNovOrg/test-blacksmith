@@ -1351,6 +1351,7 @@
       "view-in-xero": "View in Xero",
       "quantity": "Quantity",
       "locale": "en-GB",
+      "processing-fee": "Payment Processing Fee",
       "subtotal": "Sub total",
       "vat": "VAT (20%)",
       "promo-code": "Promo code: {{code}}",

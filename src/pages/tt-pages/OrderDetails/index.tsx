@@ -156,6 +156,21 @@ ${invoice?.contact?.name}`
     return result
   }, [invoice])
 
+  const processingFee = useMemo(() => {
+    if (order?.paymentMethod !== Payment_Methods_Enum.Cc) {
+      return 0
+    }
+
+    const processingFeeLineItem = invoice?.lineItems?.find(
+      li => li?.itemCode === 'CREDIT CARD FEE'
+    )
+    if (!processingFeeLineItem) {
+      return 0
+    }
+
+    return processingFeeLineItem.unitAmount ?? 0
+  }, [order?.paymentMethod, invoice?.lineItems])
+
   const xeroInvoiceUrl = useMemo(() => {
     if (invoice?.invoiceID) {
       return `${
@@ -298,6 +313,12 @@ ${invoice?.contact?.name}`
                 ) : null}
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
+                  {processingFee > 0 ? (
+                    <Row
+                      label={_t('processing-fee')}
+                      value={t('common.currency', { amount: processingFee })}
+                    />
+                  ) : null}
                   <Row
                     label={_t('subtotal')}
                     value={t('common.currency', {
