@@ -88,7 +88,14 @@ export const TransferDetails: React.FC = () => {
           variant="contained"
           endIcon={<ArrowForward />}
           disabled={!formData.isValid}
-          onClick={() => feesChosen(formData.feeType, formData.customFee)}
+          onClick={() =>
+            feesChosen(
+              formData.feeType,
+              isNaN(Number(formData.customFee))
+                ? undefined
+                : Number(formData.customFee)
+            )
+          }
         >
           {t('next-btn-label')}
         </Button>
