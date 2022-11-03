@@ -116,6 +116,7 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -146,6 +147,7 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -176,6 +178,7 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -207,6 +210,7 @@ select_permissions:
         - avatar
         - contact_details
         - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -230,57 +234,59 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
-        - family_name
-        - given_name
-        - stripe_customer_id
-        - title
-        - dob
-        - go1_id
         - addresses
         - attributes
-        - contact_details
-        - go1_profile
-        - original_record
-        - preferences
-        - tags
         - avatar
+        - contact_details
+        - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
+        - dob
         - email
-        - job_title
-        - phone
-        - created_at
-        - last_activity
-        - updated_at
+        - family_name
+        - given_name
+        - go1_id
+        - go1_profile
         - id
+        - job_title
+        - last_activity
+        - original_record
+        - phone
+        - preferences
+        - stripe_customer_id
+        - tags
+        - title
+        - updated_at
       filter: {}
       check: {}
   - role: tt-ops
     permission:
       columns:
-        - family_name
-        - given_name
-        - stripe_customer_id
-        - title
-        - dob
-        - go1_id
         - addresses
         - attributes
-        - contact_details
-        - go1_profile
-        - original_record
-        - preferences
-        - tags
         - avatar
+        - contact_details
+        - created_at
+        - dbs
         - dietary_restrictions
         - disabilities
+        - dob
         - email
-        - job_title
-        - phone
-        - created_at
-        - last_activity
-        - updated_at
+        - family_name
+        - given_name
+        - go1_id
+        - go1_profile
         - id
+        - job_title
+        - last_activity
+        - original_record
+        - phone
+        - preferences
+        - stripe_customer_id
+        - tags
+        - title
+        - updated_at
       filter: {}
       check: null
   - role: unverified
@@ -290,6 +296,7 @@ update_permissions:
         - attributes
         - avatar
         - contact_details
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob
@@ -312,6 +319,7 @@ update_permissions:
         - attributes
         - avatar
         - contact_details
+        - dbs
         - dietary_restrictions
         - disabilities
         - dob

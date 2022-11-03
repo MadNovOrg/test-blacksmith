@@ -80,6 +80,8 @@
     "first-name": "First Name",
     "last-name": "Last Name",
     "dietary-restrictions": "Dietary restrictions",
+    "dbs-label": "Disclosure and Barring Service (DBS) certificate number",
+    "dbs": "Disclosure and Barring Service",
     "dietary-restrictions-question": "Do you have any dietary restrictions (intolerances, etc.)?",
     "dietary-restrictions-text-label": "What kind of restrictions?",
     "disabilities": "Disabilities",

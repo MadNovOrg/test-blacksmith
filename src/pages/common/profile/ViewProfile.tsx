@@ -147,6 +147,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
               <DetailsRow label={t('phone')} value={profile.phone} />
               <DetailsRow label={t('dob')} value={profile.dob} />
               <DetailsRow label={t('job-title')} value={profile.jobTitle} />
+              <DetailsRow label={t('dbs')} value={profile.dbs} />
               <DetailsRow
                 label={t('dietary-restrictions')}
                 value={

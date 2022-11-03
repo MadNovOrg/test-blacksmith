@@ -13,6 +13,7 @@ export type ParamsType = {
     jobTitle: string
     dietaryRestrictions: string | null
     disabilities: string | null
+    dbs: string | null
   }
 }
 

@@ -79,6 +79,7 @@ type ProfileInput = {
   jobTitle: string
   disabilities: string | null
   dietaryRestrictions: string | null
+  dbs: string | null
 }
 
 type EditProfilePageProps = unknown
@@ -296,6 +297,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
       phone: '',
       dob: null,
       jobTitle: '',
+      dbs: null,
       disabilities: null,
       dietaryRestrictions: null,
     },
@@ -318,6 +320,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
       setValue('phone', profile.phone ?? '')
       setValue('dob', profile.dob ? new Date(profile.dob) : null)
       setValue('jobTitle', profile.jobTitle ?? '')
+      setValue('dbs', profile.dbs ?? null)
       setValue('disabilities', profile.disabilities ?? '')
       setValue('dietaryRestrictions', profile.dietaryRestrictions ?? '')
     }
@@ -343,6 +346,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             phone: data.phone,
             dob: data.dob,
             jobTitle: data.jobTitle,
+            dbs: data.dbs,
             disabilities: data.disabilities,
             dietaryRestrictions: data.dietaryRestrictions,
           },
@@ -650,6 +654,21 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     {...register('jobTitle')}
                     fullWidth
                     inputProps={{ 'data-testid': 'job-title' }}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={9}>
+                  <TextField
+                    id="dbs"
+                    label={t('dbs-label')}
+                    variant="standard"
+                    error={!!errors.dbs}
+                    helperText={errors.dbs?.message}
+                    {...register('dbs')}
+                    fullWidth
+                    inputProps={{ 'data-testid': 'disclosure-barring-service' }}
                   />
                 </Grid>
               </Grid>

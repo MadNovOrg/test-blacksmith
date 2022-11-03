@@ -28726,6 +28726,7 @@ export type Profile = {
   /** An aggregate relationship */
   courses_aggregate: Course_Participant_Aggregate;
   createdAt: Scalars['timestamptz'];
+  dbs?: Maybe<Scalars['String']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
   dob?: Maybe<Scalars['date']>;
@@ -29053,6 +29054,7 @@ export type Profile_Bool_Exp = {
   course_trainer?: InputMaybe<Course_Trainer_Bool_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  dbs?: InputMaybe<String_Comparison_Exp>;
   dietaryRestrictions?: InputMaybe<String_Comparison_Exp>;
   disabilities?: InputMaybe<String_Comparison_Exp>;
   dob?: InputMaybe<Date_Comparison_Exp>;
@@ -29138,6 +29140,7 @@ export type Profile_Insert_Input = {
   course_trainer?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
   courses?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  dbs?: InputMaybe<Scalars['String']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
   dob?: InputMaybe<Scalars['date']>;
@@ -29169,6 +29172,7 @@ export type Profile_Max_Fields = {
   __typename?: 'profile_max_fields';
   avatar?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  dbs?: Maybe<Scalars['String']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
   dob?: Maybe<Scalars['date']>;
@@ -29190,6 +29194,7 @@ export type Profile_Min_Fields = {
   __typename?: 'profile_min_fields';
   avatar?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  dbs?: Maybe<Scalars['String']>;
   dietaryRestrictions?: Maybe<Scalars['String']>;
   disabilities?: Maybe<Scalars['String']>;
   dob?: Maybe<Scalars['date']>;
@@ -29239,6 +29244,7 @@ export type Profile_Order_By = {
   course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
   courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
+  dbs?: InputMaybe<Order_By>;
   dietaryRestrictions?: InputMaybe<Order_By>;
   disabilities?: InputMaybe<Order_By>;
   dob?: InputMaybe<Order_By>;
@@ -29498,6 +29504,8 @@ export enum Profile_Select_Column {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
+  Dbs = 'dbs',
+  /** column name */
   DietaryRestrictions = 'dietaryRestrictions',
   /** column name */
   Disabilities = 'disabilities',
@@ -29542,6 +29550,7 @@ export type Profile_Set_Input = {
   avatar?: InputMaybe<Scalars['String']>;
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  dbs?: InputMaybe<Scalars['String']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
   disabilities?: InputMaybe<Scalars['String']>;
   dob?: InputMaybe<Scalars['date']>;
@@ -30106,6 +30115,8 @@ export enum Profile_Update_Column {
   ContactDetails = 'contactDetails',
   /** column name */
   CreatedAt = 'createdAt',
+  /** column name */
+  Dbs = 'dbs',
   /** column name */
   DietaryRestrictions = 'dietaryRestrictions',
   /** column name */
@@ -36287,7 +36298,7 @@ export type ProfilesQueryVariables = Exact<{
 }>;
 
 
-export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string, id: any } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type ProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', name: string, id: any, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', name: string, id: any } }> }>, profilesAggregation: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type OrganizationsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -36513,7 +36524,7 @@ export type InsertCourseMutationVariables = Exact<{
 }>;
 
 
-export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course_mutation_response', affectedRows: number, inserted: Array<{ __typename?: 'course', id: number, expenses: Array<{ __typename?: 'course_expenses', id: any }> }> } | null };
+export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course_mutation_response', affectedRows: number, inserted: Array<{ __typename?: 'course', id: number, course_code?: string | null, expenses: Array<{ __typename?: 'course_expenses', id: any }> }> } | null };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
   courseType: Scalars['String'];
@@ -36608,7 +36619,7 @@ export type FindEstablishmentQuery = { __typename?: 'query_root', establishments
 
 export type OrganizationFragment = { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null };
 
-export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> };
+export type ProfileFragment = { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> };
 
 export type ModuleFragment = { __typename?: 'module', id: any, name: string, description?: string | null, level: Course_Level_Enum, type: Module_Category_Enum, createdAt: any, updatedAt: any };
 
@@ -36785,7 +36796,7 @@ export type GetOrgInvitesQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgInvitesQuery = { __typename?: 'query_root', orgInvites: Array<{ __typename?: 'organization_invites', id: any, createdAt: any, updatedAt: any, email: string, status: string, isAdmin: boolean, profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, total: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
+export type GetOrgInvitesQuery = { __typename?: 'query_root', orgInvites: Array<{ __typename?: 'organization_invites', id: any, createdAt: any, updatedAt: any, email: string, status: string, isAdmin: boolean, profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, total: { __typename?: 'organization_invites_aggregate', aggregate?: { __typename?: 'organization_invites_aggregate_fields', count: number } | null } };
 
 export type InitAuthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -37012,7 +37023,7 @@ export type GetOrgWithKeyContactsQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } }> } | null };
+export type GetOrgWithKeyContactsQuery = { __typename?: 'query_root', organization?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } }> } | null };
 
 export type GetOrgDetailsQueryVariables = Exact<{
   where?: InputMaybe<Organization_Bool_Exp>;
@@ -37029,7 +37040,7 @@ export type GetOrgUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } }>, total: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
+export type GetOrgUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, profile: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, activeCertificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } }>, total: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null } };
 
 export type GetOrganizationsQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Organization_Order_By> | Organization_Order_By>;
@@ -37122,7 +37133,7 @@ export type FindProfilesQueryVariables = Exact<{
 }>;
 
 
-export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> }> };
+export type FindProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> }> };
 
 export type GetProfileDetailsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
@@ -37131,7 +37142,7 @@ export type GetProfileDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null }> };
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level?: Course_Level_Enum | null }> };
 
 export type GetProfilesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -37268,7 +37279,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, lastActivity: any, adminRights: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, adminRights: { __typename?: 'organization_member_aggregate', aggregate?: { __typename?: 'organization_member_aggregate_fields', count: number } | null }, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }> } | null };
 
 export type FindVenuesQueryVariables = Exact<{
   query: Scalars['String'];
