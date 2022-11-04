@@ -235,6 +235,14 @@ update_permissions:
         - updated_at
       filter: {}
       check: null
+  - role: user
+    permission:
+      columns:
+        - hs_consent
+      filter:
+        profile_id:
+          _eq: X-Hasura-User-Id
+      check: null
 delete_permissions:
   - role: tt-admin
     permission:
