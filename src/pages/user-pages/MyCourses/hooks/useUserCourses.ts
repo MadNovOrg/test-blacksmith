@@ -182,6 +182,7 @@ export function useUserCourses(
         { organization: { name: { _ilike: `%${query}%` } } },
         { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
         { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+        { course_code: { _ilike: `%${query}%` } },
       ]
 
       obj._or = orClauses.filter(Boolean)

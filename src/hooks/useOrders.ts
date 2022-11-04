@@ -64,6 +64,9 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
         course: { name: { _ilike: `%${filters.searchParam}%` } },
       })
       where._or.push({
+        course: { course_code: { _ilike: `%${filters.searchParam}%` } },
+      })
+      where._or.push({
         organization: { name: { _ilike: `%${filters.searchParam}%` } },
       })
       where._or.push({
