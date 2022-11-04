@@ -1,27 +1,16 @@
 import { CircularProgress, Stack } from '@mui/material'
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
-import {
-  PaymentMethod,
-  Promo_Code,
-  Promo_Code_Type_Enum,
-} from '@app/generated/graphql'
+import { PaymentMethod, Promo_Code } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
 import {
   MUTATION as CREATE_ORDER,
-  ResponseType as CreateOrderResponseType,
   ParamsType as CreateOrderParamsType,
+  ResponseType as CreateOrderResponseType,
 } from '@app/queries/order/create-order'
 import {
   QUERY as GET_TEMP_PROFILE,
@@ -31,12 +20,12 @@ import {
   CourseExpenseType,
   CourseType,
   Currency,
-  TransportMethod,
   InvoiceDetails,
+  TransportMethod,
 } from '@app/types'
 import {
-  getTrainerSubsistenceCost,
   getTrainerCarCostPerMile,
+  getTrainerSubsistenceCost,
   max,
 } from '@app/util'
 
@@ -192,6 +181,9 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     setReady(true)
   })
 
+  /* Disabled because of TTHP-817.
+   * This needs to be rewritten so that the whole promo code validation
+   * happens on backend. More info in the ticket.
   const { promoCodes, isLoading: arePromoCodesLoading } = usePromoCodes({
     sort: { by: 'code', dir: 'asc' },
     filters: { code: booking.promoCodes },
@@ -224,6 +216,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
     setBooking(b => ({ ...b, discounts }))
   }, [arePromoCodesLoading, booking.price, booking.promoCodes, promoCodes])
+   */
 
   const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
     setBooking(b =>

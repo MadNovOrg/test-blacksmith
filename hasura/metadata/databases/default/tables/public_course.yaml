@@ -333,8 +333,11 @@ select_permissions:
       computed_fields:
         - course_code
       filter:
-        course_type:
-          _eq: OPEN
+        _and:
+          - course_type:
+              _eq: OPEN
+          - course_status:
+              _eq: SCHEDULED
   - role: user
     permission:
       columns:
@@ -389,6 +392,11 @@ select_permissions:
                       _eq: true
                   - profile_id:
                       _eq: X-Hasura-User-Id
+          - _and:
+              - course_type:
+                  _eq: OPEN
+              - course_status:
+                  _eq: SCHEDULED
       allow_aggregations: true
 update_permissions:
   - role: trainer
