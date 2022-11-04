@@ -1,5 +1,5 @@
 import { Auth } from 'aws-amplify'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import { MUTATION as UPDATE_PROFILE_ACTIVITY_QUERY } from '@app/queries/profile/update-profile-activity'
@@ -7,7 +7,7 @@ import { RoleName } from '@app/types'
 
 import { fetchUserProfile, lsActiveRoleClient } from './helpers'
 import { injectACL } from './permissions'
-import type { AuthContextType, CognitoUser, AuthState, E } from './types'
+import type { AuthContextType, AuthState, CognitoUser, E } from './types'
 
 export const AuthContext = React.createContext({} as AuthContextType)
 export const useAuth = () => React.useContext(AuthContext)
@@ -50,7 +50,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       try {
         const user = await Auth.signIn(email, password)
         await loadProfile(user)
-        return { error: undefined }
+        return { user, error: undefined }
       } catch (err) {
         return { error: err as E }
       }

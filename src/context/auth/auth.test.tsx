@@ -193,7 +193,7 @@ describe('context: Auth', () => {
 
       await act(async () => {
         const resp = await result.current.login(email, pass)
-        expect(resp).toStrictEqual({ error: undefined })
+        expect(resp).toStrictEqual({ user: undefined, error: undefined })
       })
 
       expect(cognitoToProfileMock).toBeCalledTimes(2)

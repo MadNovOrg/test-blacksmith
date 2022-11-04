@@ -1,10 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Box, TextField, Typography, Link, FormHelperText } from '@mui/material'
+import {
+  Alert,
+  Box,
+  FormHelperText,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom'
 import * as yup from 'yup'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
@@ -66,10 +78,21 @@ export const LoginPage = () => {
     setIsLoading(true)
     setLoginError(null)
 
-    const { error } = await auth.login(data.email, data.password)
+    const { user, error } = await auth.login(data.email, data.password)
 
     if (!error) {
       const to = `${from.pathname || '/'}${from.search || ''}`
+      // https://github.com/aws-amplify/amplify-js/issues/3733
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (user?.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        return navigate({
+          pathname: '/change-password',
+          search: `?${createSearchParams({
+            email: data.email,
+          })}`,
+        })
+      }
       return navigate(to, { replace: true })
     }
 
@@ -83,7 +106,9 @@ export const LoginPage = () => {
   return (
     <AppLayoutMinimal>
       {showResetPassMessage ? (
-        <Typography variant="body2">{t('pages.login.reset-pass')}</Typography>
+        <Alert variant="outlined" severity="info" sx={{ mb: 2 }}>
+          {t('pages.login.reset-pass')}
+        </Alert>
       ) : null}
 
       <Typography

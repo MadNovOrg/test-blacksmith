@@ -477,7 +477,10 @@ export enum SearchTrainerAvailability {
 
 export type SearchTrainer = {
   availability?: SearchTrainerAvailability
-  levels?: CourseLevel[]
+  levels?: {
+    courseLevel: CourseLevel
+    expiryDate: Date
+  }[]
 } & Pick<Profile, 'id' | 'fullName' | 'avatar'>
 
 export type CourseCertificateChangelog = {

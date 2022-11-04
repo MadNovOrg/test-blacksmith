@@ -426,7 +426,11 @@
     "never-mind": "Never mind",
     "course": "Course",
     "records": "records",
-    "export": "Export"
+    "export": "Export",
+    "old-password": "Old password",
+    "new-password": "New password",
+    "confirm-password": "Confirm new password",
+    "password-do-not-match": "Password does not match."
   },
   "components": {
     "fees-form": {
@@ -1908,6 +1912,15 @@
       "old-end-date": "Original end date",
       "new-start-date": "New start date",
       "new-end-date": "New end date"
+    },
+    "change-password": {
+      "title": {
+        "forced": "Password update required",
+        "standard": "Update your password"
+      },
+      "subtitle": {
+        "forced": "Temporary password needs to be updated before account activation."
+      }
     }
   },
   "course-evaluation": {

@@ -7,7 +7,7 @@ export type { Profile } from '@app/types'
 export type { CognitoUser } from 'amazon-cognito-identity-js'
 
 export type E = { code: number; message: string }
-export type LoginResult = { error?: E }
+export type LoginResult = { error?: E; user?: CognitoUser }
 
 export type AuthState = {
   profile?: Profile
