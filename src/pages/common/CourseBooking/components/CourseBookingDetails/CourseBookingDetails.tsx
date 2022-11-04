@@ -162,6 +162,19 @@ export const CourseBookingDetails: React.FC = () => {
 
   const positionOptions = values.sector ? positions[values.sector] : []
 
+  const emailsOnChange = (_: unknown, values: string[]) => {
+    let processed: string[] = []
+    values.forEach(value => {
+      processed = processed.concat(
+        value
+          .split(/[,\s;]/)
+          .map(s => s.trim())
+          .filter(Boolean)
+      )
+    })
+    setValue('emails', processed, { shouldValidate: isSubmitted })
+  }
+
   return (
     <FormProvider {...methods}>
       <Box
@@ -381,9 +394,7 @@ export const CourseBookingDetails: React.FC = () => {
             value={values?.emails}
             freeSolo
             autoSelect
-            onChange={(_, v) =>
-              setValue('emails', v, { shouldValidate: isSubmitted })
-            }
+            onChange={emailsOnChange}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 // disable key rule because getTagProps already sets correct key
