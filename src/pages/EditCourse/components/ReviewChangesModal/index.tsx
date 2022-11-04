@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Link from '@mui/material/Link/Link'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { TFunction } from 'i18next'
@@ -18,6 +19,8 @@ import { yup } from '@app/schemas'
 import { CourseDiffTable } from '../../CourseDiffTable'
 import { CourseDiff } from '../../types'
 import { ReschedulingTermsTable } from '../ReschedulingTermsTable'
+
+const TRAINING_EMAIL = import.meta.env.VITE_TT_TRAINING_EMAIL_ADDRESS
 
 function schema(t: TFunction, withFees = false) {
   const defaultSchema = yup.object({
@@ -43,6 +46,7 @@ type Props = {
   diff: CourseDiff[]
   open?: boolean
   withFees?: boolean
+  alignedWithProtocol?: boolean
 }
 
 export const ReviewChangesModal: React.FC<Props> = ({
@@ -52,6 +56,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
   open = false,
   withFees = false,
   children,
+  alignedWithProtocol = true,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
 
@@ -80,48 +85,63 @@ export const ReviewChangesModal: React.FC<Props> = ({
       }
       onClose={onCancel}
     >
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {children ? <Box mb={2}>{children}</Box> : null}
-          <Typography color="dimGrey.main" mb={2}>
-            {t('description')}
+      {alignedWithProtocol ? (
+        <FormProvider {...methods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {children ? <Box mb={2}>{children}</Box> : null}
+            <Typography color="dimGrey.main" mb={2}>
+              {t('description')}
+            </Typography>
+
+            <CourseDiffTable diff={diff} />
+
+            {withFees && dateDiff && Array.isArray(dateDiff.newValue) ? (
+              <Box mt={2} mb={2}>
+                <FeesForm
+                  optionLabels={{
+                    [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
+                  }}
+                >
+                  <ReschedulingTermsTable startDate={dateDiff.newValue[0]} />
+                </FeesForm>
+              </Box>
+            ) : null}
+
+            <TextField
+              placeholder={t('reason-field-placeholder')}
+              fullWidth
+              variant="filled"
+              error={Boolean(formState.errors.reason?.message)}
+              helperText={formState.errors.reason?.message}
+              {...register('reason')}
+            />
+
+            <Box display="flex" justifyContent="space-between" mt={5}>
+              <Button onClick={onCancel}>{t('cancel-btn-text')}</Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={!formState.isValid}
+              >
+                {t('confirm-btn-text')}
+              </Button>
+            </Box>
+          </form>
+        </FormProvider>
+      ) : (
+        <>
+          <Typography>
+            {t('protocol-not-met')}{' '}
+            <Link href={`mailto:${TRAINING_EMAIL}`} component="a">
+              {TRAINING_EMAIL}
+            </Link>
           </Typography>
 
-          <CourseDiffTable diff={diff} />
-
-          {withFees && dateDiff && Array.isArray(dateDiff.newValue) ? (
-            <Box mt={2} mb={2}>
-              <FeesForm
-                optionLabels={{
-                  [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
-                }}
-              >
-                <ReschedulingTermsTable startDate={dateDiff.newValue[0]} />
-              </FeesForm>
-            </Box>
-          ) : null}
-
-          <TextField
-            placeholder={t('reason-field-placeholder')}
-            fullWidth
-            variant="filled"
-            error={Boolean(formState.errors.reason?.message)}
-            helperText={formState.errors.reason?.message}
-            {...register('reason')}
-          />
-
-          <Box display="flex" justifyContent="space-between" mt={5}>
-            <Button onClick={onCancel}>{t('cancel-btn-text')}</Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={!formState.isValid}
-            >
-              {t('confirm-btn-text')}
-            </Button>
-          </Box>
-        </form>
-      </FormProvider>
+          <Button onClick={onCancel} sx={{ mt: 2 }}>
+            {t('cancel-btn-text')}
+          </Button>
+        </>
+      )}
     </Dialog>
   )
 }

@@ -44,3 +44,17 @@ WithFees.args = {
     },
   ],
 }
+
+export const NotAlignedWithProtocol = Template.bind({})
+NotAlignedWithProtocol.args = {
+  open: true,
+  withFees: true,
+  alignedWithProtocol: false,
+  diff: [
+    {
+      type: 'date',
+      oldValue: [new Date(), addHours(new Date(), 5)],
+      newValue: [new Date(), addHours(new Date(), 8)],
+    },
+  ],
+}

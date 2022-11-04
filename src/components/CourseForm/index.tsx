@@ -587,6 +587,7 @@ const CourseForm: React.FC<Props> = ({
                     inputFormat={INPUT_DATE_FORMAT}
                     value={field.value}
                     onChange={handleStartDateTimeChange}
+                    minDate={new Date()}
                     renderInput={params => (
                       <TextField
                         variant="filled"
@@ -629,6 +630,7 @@ const CourseForm: React.FC<Props> = ({
                     inputFormat={INPUT_DATE_FORMAT}
                     value={field.value}
                     onChange={handleEndDateTimeChange}
+                    minDate={values.startDateTime ?? new Date()}
                     renderInput={params => (
                       <TextField
                         variant="filled"

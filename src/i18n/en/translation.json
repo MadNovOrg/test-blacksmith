@@ -1005,7 +1005,6 @@
       "save-button-text": "Save changes",
       "cancel-this-course": "Cancel this course",
       "cancel-this-entire-course": "Cancel this entire course",
-      "protocol-not-met": "This does not meet Team Teach protocols.",
       "cancellation-modal": {
         "title": "Cancel this entire course",
         "description-p-1": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",
@@ -1064,7 +1063,8 @@
         "15-fee": "15% of payment due",
         "25-fee-label": "Less than 2 weeks",
         "25-fee": "25% of payment due",
-        "apply-terms-option": "Apply rescheduling terms"
+        "apply-terms-option": "Apply rescheduling terms",
+        "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at"
       }
     },
     "course-details": {

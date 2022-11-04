@@ -290,7 +290,7 @@ export const EditCourse: React.FC<unknown> = () => {
   }
 
   const editCourse = () => {
-    if (courseDiffs.length && !autoapproved) {
+    if (!autoapproved) {
       setShowReviewModal(true)
     } else {
       saveChanges()
@@ -325,6 +325,11 @@ export const EditCourse: React.FC<unknown> = () => {
   }
 
   const editCourseValid = courseDataValid && trainersDataValid
+
+  const alignedWithProtocol =
+    (courseData?.startDateTime &&
+      differenceInDays(courseData.startDateTime, new Date()) > 14) ||
+    acl.canRescheduleWithoutWarning()
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -499,15 +504,8 @@ export const EditCourse: React.FC<unknown> = () => {
               saveChanges(reviewInput)
             }}
             withFees={course.type === CourseType.CLOSED}
-          >
-            {courseData?.startDateTime &&
-            differenceInDays(courseData.startDateTime, new Date()) <= 14 &&
-            !acl.canRescheduleWithoutWarning() ? (
-              <Alert severity="warning" variant="outlined">
-                {t('pages.edit-course.protocol-not-met')}
-              </Alert>
-            ) : null}
-          </ReviewChangesModal>
+            alignedWithProtocol={alignedWithProtocol}
+          />
         </>
       ) : null}
     </FullHeightPage>
