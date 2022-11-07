@@ -34,6 +34,7 @@ import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/Adm
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
+import { UserTransferParticipant } from '@app/pages/TransferParticipant/UserTransferParticipant'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
@@ -92,7 +93,17 @@ const TTAdminRoutes = () => {
           <Route index element={<Navigate replace to="all" />} />
           <Route path=":orgId">
             <Route index element={<ManageCourses />} />
-            <Route path=":id/details" element={<TrainerCourseDetails />} />
+            <Route path=":id">
+              <Route path="details" element={<TrainerCourseDetails />} />
+              <Route
+                path="transfer/:participantId"
+                element={<UserTransferParticipant />}
+              >
+                <Route index element={<ChooseTransferCourse />} />
+                <Route path="details" element={<TransferDetails />} />
+                <Route path="review" element={<TransferReview />} />
+              </Route>
+            </Route>
           </Route>
         </Route>
       ) : null}
