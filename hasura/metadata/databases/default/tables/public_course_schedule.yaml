@@ -22,6 +22,22 @@ object_relationships:
     using:
       foreign_key_constraint_on: venue_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check:
+        course:
+          course_type:
+            _eq: CLOSED
+      columns:
+        - course_id
+        - virtual_link
+        - created_at
+        - end
+        - start
+        - updated_at
+        - id
+        - venue_id
+      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -67,6 +83,22 @@ select_permissions:
                 _eq: OPEN
             - course_status:
                 _eq: SCHEDULED
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - virtual_link
+        - created_at
+        - end
+        - start
+        - updated_at
+        - id
+        - venue_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
       allow_aggregations: true
   - role: trainer
     permission:
@@ -124,6 +156,22 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - virtual_link
+        - created_at
+        - end
+        - start
+        - updated_at
+        - id
+        - venue_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
+      check: null
   - role: trainer
     permission:
       columns:

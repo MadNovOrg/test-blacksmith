@@ -92,6 +92,22 @@ insert_permissions:
         - profile_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - certification_date
+        - expiry_date
+        - course_id
+        - course_level
+        - course_name
+        - number
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+      computed_fields:
+        - status
+      filter: {}
   - role: trainer
     permission:
       columns:

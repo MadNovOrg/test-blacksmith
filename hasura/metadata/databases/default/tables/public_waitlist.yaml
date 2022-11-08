@@ -39,6 +39,20 @@ insert_permissions:
         - phone
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - confirmed
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+        - created_at
+        - id
+      filter: {}
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:

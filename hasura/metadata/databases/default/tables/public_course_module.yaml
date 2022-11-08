@@ -63,6 +63,20 @@ select_permissions:
             - course_status:
                 _eq: SCHEDULED
       allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:

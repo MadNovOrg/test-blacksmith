@@ -37,6 +37,18 @@ select_permissions:
         - id
         - module_group_id
       filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - course_level
+        - description
+        - module_category
+        - name
+        - created_at
+        - updated_at
+        - id
+        - module_group_id
+      filter: {}
   - role: user
     permission:
       columns:

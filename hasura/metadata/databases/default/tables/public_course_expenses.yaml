@@ -25,6 +25,17 @@ object_relationships:
     using:
       foreign_key_constraint_on: trainer_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -48,6 +59,16 @@ insert_permissions:
         - updated_at
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter: {}
   - role: tt-admin
     permission:
       columns:

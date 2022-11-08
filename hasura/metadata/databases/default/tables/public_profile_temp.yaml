@@ -53,6 +53,25 @@ insert_permissions:
         - quantity
         - sector
       backend_only: false
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - accept_marketing
+        - accept_tcs
+        - dob
+        - course_id
+        - id
+        - quantity
+        - email
+        - family_name
+        - given_name
+        - job_title
+        - phone
+        - sector
+        - created_at
+        - organization_id
+      backend_only: false
   - role: unverified
     permission:
       check: {}

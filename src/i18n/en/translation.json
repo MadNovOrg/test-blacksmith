@@ -243,7 +243,7 @@
       "tt-ops": "Operations",
       "tt-admin": "Administrator",
       "sales-representative": "Sales representative",
-      "sales-admin": " Sales administrator",
+      "sales-admin": "Sales administrator",
       "l&d": "L&D",
       "finance": "Finance"
     },
@@ -501,7 +501,8 @@
       "user": "Attendee",
       "trainer": "Trainer",
       "tt-ops": "Ops",
-      "tt-admin": "Admin"
+      "tt-admin": "Admin",
+      "sales-admin": "Sales administrator"
     },
     "course-form": {
       "general-details-title": "General details",
@@ -1064,7 +1065,8 @@
         "25-fee-label": "Less than 2 weeks",
         "25-fee": "25% of payment due",
         "apply-terms-option": "Apply rescheduling terms",
-        "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at"
+        "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at",
+        "protocol-not-met-sales-admin": "This change does not meet Team Teach protocols, only TT Admin can action this change"
       }
     },
     "course-details": {

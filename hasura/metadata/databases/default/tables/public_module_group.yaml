@@ -41,6 +41,17 @@ select_permissions:
         - updated_at
         - id
       filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - mandatory
+        - color
+        - course_level
+        - name
+        - created_at
+        - updated_at
+        - id
+      filter: {}
   - role: user
     permission:
       columns:

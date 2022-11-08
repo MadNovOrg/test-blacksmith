@@ -108,6 +108,37 @@ computed_fields:
         name: profile_full_name
     comment: ""
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - family_name
+        - given_name
+        - stripe_customer_id
+        - title
+        - dob
+        - go1_id
+        - addresses
+        - attributes
+        - contact_details
+        - go1_profile
+        - original_record
+        - preferences
+        - tags
+        - avatar
+        - dbs
+        - dietary_restrictions
+        - disabilities
+        - email
+        - job_title
+        - phone
+        - created_at
+        - last_activity
+        - updated_at
+        - id
+      computed_fields:
+        - fullName
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:

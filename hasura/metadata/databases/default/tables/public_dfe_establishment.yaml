@@ -65,6 +65,29 @@ select_permissions:
         - ofsted_last_inspection
       filter: {}
       allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - address_line_1
+        - address_line_2
+        - address_line_3
+        - county
+        - head_first_name
+        - head_job_title
+        - head_last_name
+        - head_title
+        - local_authority
+        - name
+        - ofsted_last_inspection
+        - ofsted_rating
+        - postcode
+        - town
+        - trust_name
+        - trust_type
+        - urn
+        - id
+      filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:

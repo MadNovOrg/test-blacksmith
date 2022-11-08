@@ -12,6 +12,7 @@ import { InferType } from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
 import { FeesForm, schema as feesSchema } from '@app/components/FeesForm'
+import { useAuth } from '@app/context/auth'
 import { TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
@@ -59,6 +60,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
   alignedWithProtocol = true,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
+  const { activeRole } = useAuth()
 
   const methods = useForm<FormValues>({
     resolver: yupResolver(schema(t, withFees)),
@@ -73,6 +75,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
   }
 
   const dateDiff = diff.find(d => d.type === 'date')
+  const roleProtocolNotMet = t(`protocol-not-met-${activeRole}`)
 
   return (
     <Dialog
@@ -131,10 +134,16 @@ export const ReviewChangesModal: React.FC<Props> = ({
       ) : (
         <>
           <Typography>
-            {t('protocol-not-met')}{' '}
-            <Link href={`mailto:${TRAINING_EMAIL}`} component="a">
-              {TRAINING_EMAIL}
-            </Link>
+            {roleProtocolNotMet ? (
+              roleProtocolNotMet
+            ) : (
+              <>
+                {t('protocol-not-met')}{' '}
+                <Link href={`mailto:${TRAINING_EMAIL}`} component="a">
+                  {TRAINING_EMAIL}
+                </Link>
+              </>
+            )}
           </Typography>
 
           <Button onClick={onCancel} sx={{ mt: 2 }}>

@@ -35,6 +35,21 @@ array_relationships:
           schema: public
           name: course_schedule
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - geo_coordinates
+        - address_line_one
+        - address_line_two
+        - city
+        - google_places_id
+        - name
+        - post_code
+        - created_at
+        - updated_at
+        - id
+      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -69,6 +84,20 @@ select_permissions:
                   _eq: OPEN
               - course_status:
                   _eq: SCHEDULED
+  - role: sales-admin
+    permission:
+      columns:
+        - geo_coordinates
+        - address_line_one
+        - address_line_two
+        - city
+        - google_places_id
+        - name
+        - post_code
+        - created_at
+        - updated_at
+        - id
+      filter: {}
   - role: trainer
     permission:
       columns:

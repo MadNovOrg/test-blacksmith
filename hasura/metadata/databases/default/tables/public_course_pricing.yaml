@@ -15,6 +15,18 @@ configuration:
     price_currency: priceCurrency
     price_amount: priceAmount
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - blended
+        - reaccreditation
+        - level
+        - price_currency
+        - type
+        - xero_code
+        - id
+        - price_amount
+      filter: {}
   - role: tt-admin
     permission:
       columns:

@@ -97,6 +97,31 @@ select_permissions:
             - course_status:
                 _eq: SCHEDULED
       allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - attended
+        - hs_consent
+        - course_id
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - booking_date
+        - created_at
+        - date_graded
+        - updated_at
+        - certificate_id
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:

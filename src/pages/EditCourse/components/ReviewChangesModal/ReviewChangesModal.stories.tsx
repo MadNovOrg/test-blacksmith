@@ -2,8 +2,11 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { addHours } from 'date-fns'
 import React from 'react'
 
+import { RoleName } from '@app/types'
+
 import { ReviewChangesModal } from '.'
 
+import withAuthContext from '@storybook-decorators/withAuthContext'
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 
 export default {
@@ -31,6 +34,7 @@ DateChanged.args = {
     },
   ],
 }
+DateChanged.decorators = [withAuthContext({ activeRole: RoleName.TT_ADMIN })]
 
 export const WithFees = Template.bind({})
 WithFees.args = {
@@ -44,6 +48,7 @@ WithFees.args = {
     },
   ],
 }
+WithFees.decorators = [withAuthContext({ activeRole: RoleName.TT_ADMIN })]
 
 export const NotAlignedWithProtocol = Template.bind({})
 NotAlignedWithProtocol.args = {
@@ -58,3 +63,23 @@ NotAlignedWithProtocol.args = {
     },
   ],
 }
+NotAlignedWithProtocol.decorators = [
+  withAuthContext({ activeRole: RoleName.TRAINER }),
+]
+
+export const SalesNotAlignedWithProtocol = Template.bind({})
+SalesNotAlignedWithProtocol.args = {
+  open: true,
+  withFees: true,
+  alignedWithProtocol: false,
+  diff: [
+    {
+      type: 'date',
+      oldValue: [new Date(), addHours(new Date(), 5)],
+      newValue: [new Date(), addHours(new Date(), 8)],
+    },
+  ],
+}
+SalesNotAlignedWithProtocol.decorators = [
+  withAuthContext({ activeRole: RoleName.SALES_ADMIN }),
+]

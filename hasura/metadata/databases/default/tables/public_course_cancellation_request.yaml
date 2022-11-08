@@ -32,6 +32,19 @@ insert_permissions:
         - requested_by
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - reason
+        - created_at
+        - updated_at
+        - id
+        - requested_by
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
   - role: tt-admin
     permission:
       columns:

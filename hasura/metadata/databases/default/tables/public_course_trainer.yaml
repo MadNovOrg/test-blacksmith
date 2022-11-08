@@ -9,6 +9,20 @@ object_relationships:
     using:
       foreign_key_constraint_on: profile_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check:
+        course:
+          course_type:
+            _eq: CLOSED
+      columns:
+        - can_be_moderator
+        - course_id
+        - status
+        - type
+        - id
+        - profile_id
+      backend_only: false
   - role: trainer
     permission:
       check: {}
@@ -31,6 +45,19 @@ insert_permissions:
         - type
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - can_be_moderator
+        - course_id
+        - status
+        - type
+        - id
+        - profile_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
   - role: trainer
     permission:
       columns:
@@ -60,6 +87,20 @@ select_permissions:
         - type
       filter: {}
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - can_be_moderator
+        - course_id
+        - status
+        - type
+        - id
+        - profile_id
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
+      check: null
   - role: trainer
     permission:
       columns:
@@ -77,6 +118,12 @@ update_permissions:
       filter: {}
       check: null
 delete_permissions:
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          course_type:
+            _eq: CLOSED
   - role: trainer
     permission:
       filter: {}

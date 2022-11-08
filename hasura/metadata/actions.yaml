@@ -161,6 +161,7 @@ actions:
       kind: ""
       handler: '{{ACTIONS_HOST}}/trainers/search'
     permissions:
+      - role: sales-admin
       - role: trainer
   - name: stripeCreatePaymentIntent
     definition:
@@ -191,6 +192,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/zoom/upsert-meeting'
     permissions:
+      - role: sales-admin
       - role: tt-ops
       - role: tt-admin
       - role: trainer

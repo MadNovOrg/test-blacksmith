@@ -64,6 +64,9 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
           return true
         case RoleName.TT_OPS:
           return [CourseType.OPEN, CourseType.CLOSED].includes(type)
+        case RoleName.SALES_ADMIN: {
+          return [CourseType.CLOSED].includes(type)
+        }
         case RoleName.TRAINER:
           return [CourseType.INDIRECT].includes(type)
       }
@@ -72,7 +75,7 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canAssignLeadTrainer: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -111,15 +114,25 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canEditWithoutRestrictions: (courseType: CourseType) => {
-      if (
-        auth.activeRole &&
-        ![RoleName.TT_ADMIN].includes(auth.activeRole) &&
-        courseType === CourseType.INDIRECT
-      ) {
+      if (!auth.activeRole) {
         return false
       }
 
-      return true
+      if (auth.activeRole === RoleName.TT_ADMIN) {
+        return true
+      }
+
+      switch (courseType) {
+        case CourseType.INDIRECT: {
+          return false
+        }
+
+        case CourseType.CLOSED: {
+          return [RoleName.TT_OPS].includes(auth.activeRole)
+        }
+      }
+
+      return false
     },
   })
 

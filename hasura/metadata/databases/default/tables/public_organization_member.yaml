@@ -33,6 +33,19 @@ insert_permissions:
         - profile_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - member_type
+        - _source
+        - position
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
   - role: tt-admin
     permission:
       columns:
