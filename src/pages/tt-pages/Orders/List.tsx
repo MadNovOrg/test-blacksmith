@@ -19,6 +19,7 @@ import * as XLSX from 'xlsx'
 
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { XeroInvoiceStatus } from '@app/generated/graphql'
 import { OrderType } from '@app/hooks/useOrders'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
@@ -187,7 +188,11 @@ export const List: React.FC<Props> = ({
                 {checkbox.rowCell(order.id)}
 
                 <TableCell>
-                  <Link href={order.id}>{order.xeroInvoiceNumber}</Link>
+                  {order.status !== XeroInvoiceStatus.Unknown ? (
+                    <Link href={order.id}>{order.xeroInvoiceNumber}</Link>
+                  ) : (
+                    order.xeroInvoiceNumber
+                  )}
                 </TableCell>
 
                 <TableCell>{order.organization?.name ?? '-NA-'}</TableCell>

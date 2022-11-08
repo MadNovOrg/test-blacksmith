@@ -82,11 +82,13 @@ export const OrderDetails: React.FC<unknown> = () => {
     offset: 0,
   })
 
-  const getLineItemForEmail = useCallback(
-    (email: string) =>
-      invoice?.lineItems?.find(li => li?.description?.includes(email)),
-    [invoice]
-  )
+  const lineItemForRegistrants = useMemo(() => {
+    return course?.name
+      ? invoice?.lineItems?.find(li =>
+          li?.description?.includes(t(`course-levels.${course.level}`))
+        )
+      : null
+  }, [invoice, course, t])
 
   const getDiscountForPromoCode = useCallback(
     (total: number, code: string, quantity = 1) => {
@@ -281,7 +283,7 @@ ${invoice?.contact?.name}`
                         key={email}
                         label={email}
                         value={t('common.currency', {
-                          amount: getLineItemForEmail(email)?.unitAmount,
+                          amount: lineItemForRegistrants?.unitAmount,
                         })}
                       />
                     ))}
