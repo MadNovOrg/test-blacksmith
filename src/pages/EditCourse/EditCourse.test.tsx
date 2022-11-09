@@ -1,5 +1,7 @@
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { never } from 'wonka'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import useCourse from '@app/hooks/useCourse'
@@ -31,11 +33,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>
     )
 
@@ -49,11 +57,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
@@ -69,11 +83,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>,
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
@@ -97,11 +117,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>,
       { auth: { activeRole: RoleName.TRAINER } }
     )
@@ -122,11 +148,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>,
       { auth: { activeRole: RoleName.TRAINER } }
     )
@@ -147,11 +179,17 @@ describe('page: EditCourse', () => {
       mutate: jest.fn(),
     })
 
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
     render(
       <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Routes>
-          <Route path="/courses/edit/:id" element={<EditCourse />} />
-        </Routes>
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/edit/:id" element={<EditCourse />} />
+          </Routes>
+        </Provider>
       </MemoryRouter>,
       { auth: { activeRole: RoleName.TT_OPS } }
     )

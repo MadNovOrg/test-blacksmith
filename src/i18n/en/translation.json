@@ -1006,6 +1006,7 @@
       "save-button-text": "Save changes",
       "cancel-this-course": "Cancel this course",
       "cancel-this-entire-course": "Cancel this entire course",
+      "updating-error": "There was an error updating the course, please try again later.",
       "cancellation-modal": {
         "title": "Cancel this entire course",
         "description-p-1": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",

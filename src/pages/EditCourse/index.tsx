@@ -13,6 +13,7 @@ import { differenceInDays } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation } from 'urql'
 
 import { BackButton } from '@app/components/BackButton'
 import ChooseTrainers, {
@@ -31,7 +32,6 @@ import {
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
 } from '@app/generated/graphql'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
@@ -81,14 +81,19 @@ export const EditCourse: React.FC<unknown> = () => {
   const [courseDataValid, setCourseDataValid] = useState(false)
   const [trainersData, setTrainersData] = useState<TrainersFormValues>()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
-  const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const [showCancellationModal, setShowCancellationModal] = useState(false)
   const [
     showRegistrantsCancellationModal,
     setShowRegistrantsCancellationModal,
   ] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
-  const fetcher = useFetcher()
+
+  const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
+    useMutation<ResponseType, ParamsType>(UPDATE_COURSE_MUTATION)
+  const [{ error: auditError, fetching: insertingAudit }, insertAudit] =
+    useMutation<InsertCourseAuditMutation, InsertCourseAuditMutationVariables>(
+      INSERT_COURSE_AUDIT
+    )
 
   const {
     data: course,
@@ -192,59 +197,56 @@ export const EditCourse: React.FC<unknown> = () => {
           )
         }
 
-        const editResponse = await fetcher<ResponseType, ParamsType>(
-          UPDATE_COURSE_MUTATION,
-          {
-            courseId: String(course.id),
-            courseInput: {
-              name: generateCourseName(
-                {
-                  level: courseData.courseLevel,
-                  reaccreditation: courseData.reaccreditation,
-                },
-                t
-              ),
-              deliveryType: courseData.deliveryType,
-              level: courseData.courseLevel,
-              reaccreditation: courseData.reaccreditation,
-              go1Integration: courseData.blendedLearning,
-              freeSpaces: courseData.freeSpaces,
-              ...(courseData.minParticipants
-                ? { min_participants: courseData.minParticipants }
-                : null),
-              max_participants: courseData.maxParticipants,
-              ...(courseData.organization
-                ? { organization_id: courseData.organization.id }
-                : null),
-              ...(courseData.contactProfile
-                ? { contactProfileId: courseData.contactProfile.id }
-                : null),
-              ...(courseData.salesRepresentative
-                ? { salesRepresentativeId: courseData.salesRepresentative.id }
-                : null),
-              ...(courseData.usesAOL
-                ? {
-                    aolCostOfCourse: courseData.courseCost,
-                    aolCountry: courseData.aolCountry,
-                    aolRegion: courseData.aolRegion,
-                  }
-                : null),
-            },
-            trainers,
-            scheduleId: course?.schedule[0].id,
-            scheduleInput: {
-              venue_id: courseData.venue.id,
-              virtualLink:
-                courseData.deliveryType === CourseDeliveryType.F2F
-                  ? ''
-                  : courseData.zoomMeetingUrl,
-              start: courseData.startDateTime,
-              end: courseData.endDateTime,
-            },
-          }
-        )
+        const editResponse = await updateCourse({
+          courseId: course.id,
+          courseInput: {
+            name: generateCourseName(
+              {
+                level: courseData.courseLevel,
+                reaccreditation: courseData.reaccreditation,
+              },
+              t
+            ),
+            deliveryType: courseData.deliveryType,
+            level: courseData.courseLevel,
+            reaccreditation: courseData.reaccreditation,
+            go1Integration: courseData.blendedLearning,
+            freeSpaces: courseData.freeSpaces,
+            ...(courseData.minParticipants
+              ? { min_participants: courseData.minParticipants }
+              : null),
+            max_participants: courseData.maxParticipants,
+            ...(courseData.organization
+              ? { organization_id: courseData.organization.id }
+              : null),
+            ...(courseData.contactProfile
+              ? { contactProfileId: courseData.contactProfile.id }
+              : null),
+            ...(courseData.salesRepresentative
+              ? { salesRepresentativeId: courseData.salesRepresentative.id }
+              : null),
+            ...(courseData.usesAOL
+              ? {
+                  aolCostOfCourse: courseData.courseCost,
+                  aolCountry: courseData.aolCountry,
+                  aolRegion: courseData.aolRegion,
+                }
+              : null),
+          },
+          trainers,
+          scheduleId: course?.schedule[0].id,
+          scheduleInput: {
+            venue_id: courseData.venue.id,
+            virtualLink:
+              courseData.deliveryType === CourseDeliveryType.F2F
+                ? ''
+                : courseData.zoomMeetingUrl,
+            start: courseData.startDateTime,
+            end: courseData.endDateTime,
+          },
+        })
 
-        if (editResponse.updateCourse.id && courseDiffs.length) {
+        if (editResponse.data?.updateCourse.id && courseDiffs.length) {
           const dateChanged = courseDiffs.find(d => d.type === 'date')
 
           const payload =
@@ -264,10 +266,7 @@ export const EditCourse: React.FC<unknown> = () => {
                 }
               : {}
 
-          await fetcher<
-            InsertCourseAuditMutation,
-            InsertCourseAuditMutationVariables
-          >(INSERT_COURSE_AUDIT, {
+          await insertAudit({
             object: {
               type: Course_Audit_Type_Enum.Reschedule,
               course_id: course.id,
@@ -277,15 +276,15 @@ export const EditCourse: React.FC<unknown> = () => {
           })
         }
 
-        if (editResponse.updateCourse.id) {
+        if (editResponse.data?.updateCourse.id) {
           mutateCourse()
           navigate(`/courses/${course.id}/details`)
         } else {
-          setSavingStatus(LoadingStatus.ERROR)
+          console.error('error updating course')
         }
       }
     } catch (err) {
-      setSavingStatus(LoadingStatus.ERROR)
+      console.error(err)
     }
   }
 
@@ -331,6 +330,9 @@ export const EditCourse: React.FC<unknown> = () => {
       differenceInDays(courseData.startDateTime, new Date()) > 14) ||
     acl.canRescheduleWithoutWarning()
 
+  const hasError = updatingError || auditError
+  const fetching = updatingCourse || insertingAudit
+
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -345,7 +347,7 @@ export const EditCourse: React.FC<unknown> = () => {
         ) : null}
 
         {courseStatus === LoadingStatus.ERROR ? (
-          <Alert severity="error">
+          <Alert severity="error" variant="outlined">
             {t('pages.edit-course.course-not-found')}
           </Alert>
         ) : null}
@@ -392,6 +394,11 @@ export const EditCourse: React.FC<unknown> = () => {
 
             <Box flex={1}>
               <Box mt={8}>
+                {hasError ? (
+                  <Alert severity="error" variant="outlined" sx={{ mb: 2 }}>
+                    {t('pages.edit-course.updating-error')}
+                  </Alert>
+                ) : null}
                 <Box mb={2}>
                   <CourseForm
                     courseInput={courseInput}
@@ -444,7 +451,7 @@ export const EditCourse: React.FC<unknown> = () => {
                     disabled={!editCourseValid}
                     variant="contained"
                     onClick={editCourse}
-                    loading={savingStatus === LoadingStatus.FETCHING}
+                    loading={fetching}
                   >
                     {t('pages.edit-course.save-button-text')}
                   </LoadingButton>
