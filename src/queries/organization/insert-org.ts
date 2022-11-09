@@ -9,7 +9,7 @@ export const MUTATION = gql`
     $trustName: String!
     $trustType: trust_type_enum!
     $address: jsonb!
-    $attributes: jsonb
+    $attributes: jsonb = {}
     $xeroId: String
     $invites: [organization_invites_insert_input!] = []
   ) {
