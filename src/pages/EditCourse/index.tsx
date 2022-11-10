@@ -236,7 +236,7 @@ export const EditCourse: React.FC<unknown> = () => {
           trainers,
           scheduleId: course?.schedule[0].id,
           scheduleInput: {
-            venue_id: courseData.venue.id,
+            venue_id: courseData.venue ? courseData.venue.id : undefined,
             virtualLink:
               courseData.deliveryType === CourseDeliveryType.F2F
                 ? ''
