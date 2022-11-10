@@ -25,6 +25,13 @@ export const QUERY = gql`
       min_participants
       max_participants
       level
+      organization {
+        id
+        members(where: { isAdmin: { _eq: true } }) {
+          isAdmin
+          profile_id
+        }
+      }
       trainers {
         id
         type

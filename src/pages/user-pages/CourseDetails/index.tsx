@@ -20,8 +20,10 @@ import { BackButton } from '@app/components/BackButton'
 import { CourseCertification } from '@app/components/CourseCertification'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
+import { LinkBehavior } from '@app/components/LinkBehavior'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
+import { Organization } from '@app/generated/graphql'
 import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import {
   ParamsType as GetFeedbackUsersParamsType,
@@ -64,7 +66,11 @@ export const CourseDetails = () => {
   const courseId = params.id as string
 
   const { data: courseData, error: courseError } = useSWR<
-    GetCourseResponseType,
+    {
+      course: GetCourseResponseType['course'] & {
+        organization?: Pick<Organization, 'members'>
+      }
+    },
     Error,
     [string, GetCourseParamsType]
   >([GET_COURSE_QUERY, { id: courseId }])
@@ -94,6 +100,14 @@ export const CourseDetails = () => {
   const didAttendeeSubmitFeedback = useMemo(() => {
     return !!usersData?.users.find(u => u.profile.id === profileId)
   }, [usersData, profileId])
+
+  const canManageCourse = useMemo(() => {
+    return Boolean(
+      course?.organization?.members.find(
+        member => member.isAdmin && member.profile_id === profileId
+      )
+    )
+  }, [course, profileId])
 
   if (courseLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -146,45 +160,66 @@ export const CourseDetails = () => {
           <TabContext value={activeTab}>
             <Box borderBottom={1} borderColor="divider">
               <Container>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="end"
-                >
-                  <PillTabList
-                    onChange={handleActiveTabChange}
-                    aria-label="Course participant tabs"
-                  >
-                    <PillTab
-                      label={t('pages.participant-course.checklist-tab-title')}
-                      value="checklist"
-                    />
-                    <PillTab
-                      label={t('pages.participant-course.resources-tab-title')}
-                      value="resources"
-                    />
-                    {courseParticipant?.certificate ? (
+                <Box display="flex" justifyContent="space-between">
+                  <Box display="flex" justifyContent="space-between">
+                    <PillTabList
+                      onChange={handleActiveTabChange}
+                      aria-label="Course participant tabs"
+                    >
                       <PillTab
                         label={t(
-                          'pages.participant-course.certification-tab-title'
+                          'pages.participant-course.checklist-tab-title'
                         )}
-                        value="certification"
+                        value="checklist"
                       />
+                      <PillTab
+                        label={t(
+                          'pages.participant-course.resources-tab-title'
+                        )}
+                        value="resources"
+                      />
+                      {courseParticipant?.certificate ? (
+                        <PillTab
+                          label={t(
+                            'pages.participant-course.certification-tab-title'
+                          )}
+                          value="certification"
+                        />
+                      ) : null}
+                    </PillTabList>
+                  </Box>
+                  <Box>
+                    {!courseHasStarted && course.type === CourseType.OPEN ? (
+                      <Button variant="text">
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          color="primary"
+                          my={1}
+                          onClick={() => setShowModifyAttendanceModal(true)}
+                        >
+                          {t('pages.participant-course.change-my-attendance')}
+                        </Typography>
+                      </Button>
                     ) : null}
-                  </PillTabList>
-                  {!courseHasStarted && course.type === CourseType.OPEN ? (
-                    <Button variant="text">
-                      <Typography
-                        variant="body2"
-                        fontWeight={600}
-                        color="primary"
-                        my={1}
-                        onClick={() => setShowModifyAttendanceModal(true)}
+
+                    {canManageCourse ? (
+                      <Button
+                        variant="text"
+                        component={LinkBehavior}
+                        href={`/manage-courses/${course?.organization?.id}/${courseId}/details`}
                       >
-                        {t('pages.participant-course.change-my-attendance')}
-                      </Typography>
-                    </Button>
-                  ) : null}
+                        <Typography
+                          variant="body2"
+                          fontWeight={600}
+                          color="primary"
+                          my={1}
+                        >
+                          {t('pages.participant-course.manage-course')}
+                        </Typography>
+                      </Button>
+                    ) : null}
+                  </Box>
                 </Box>
               </Container>
             </Box>

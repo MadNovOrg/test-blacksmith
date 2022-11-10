@@ -4,7 +4,7 @@ import useSWR from 'swr'
 
 import { Course } from '@app/types'
 
-import { render, screen } from '@test/index'
+import { chance, render, screen, userEvent, waitFor } from '@test/index'
 import {
   buildCourse,
   buildEndedCourse,
@@ -20,7 +20,7 @@ const useSWRMock = jest.mocked(useSWR)
 
 function registerMocks(course: Course) {
   useSWRMock.mockReturnValueOnce({
-    data: { course },
+    data: { course: { ...course, organization: { members: [] } } },
     mutate: jest.fn(),
     isValidating: false,
   })
@@ -113,7 +113,7 @@ describe('page: CourseDetails', () => {
     const course = buildStartedCourse()
 
     useSWRMock.mockReturnValueOnce({
-      data: { course },
+      data: { course: { ...course, organization: { members: [] } } },
       mutate: jest.fn(),
       isValidating: false,
     })
@@ -150,7 +150,7 @@ describe('page: CourseDetails', () => {
     const course = buildEndedCourse()
 
     useSWRMock.mockReturnValueOnce({
-      data: { course },
+      data: { course: { ...course, organization: { members: [] } } },
       mutate: jest.fn(),
       isValidating: false,
     })
@@ -181,5 +181,65 @@ describe('page: CourseDetails', () => {
     )
 
     expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
+  })
+
+  it('displays button to manage course if a participant is also an org admin', async () => {
+    const PROFILE_ID = chance.guid()
+    const course = buildCourse()
+
+    useSWRMock.mockReturnValueOnce({
+      data: {
+        course: {
+          ...course,
+          organization: {
+            members: [{ profile_id: PROFILE_ID, isAdmin: true }],
+          },
+        },
+      },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: {
+        course_participant: [{ ...buildParticipant(), attended: false }],
+      },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { users: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+    useSWRMock.mockReturnValueOnce({
+      data: { certificates: [], upcomingCourses: [] },
+      mutate: jest.fn(),
+      isValidating: false,
+    })
+
+    render(
+      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
+        <Routes>
+          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+          <Route
+            path={`/manage-courses/:orgId/:id/details`}
+            element={<p>Manage course page</p>}
+          />
+        </Routes>
+      </MemoryRouter>,
+      {
+        auth: {
+          profile: {
+            id: PROFILE_ID,
+          },
+        },
+      }
+    )
+
+    userEvent.click(screen.getByText(/manage course/i))
+
+    await waitFor(() => {
+      expect(screen.getByText(/manage course page/i)).toBeInTheDocument()
+    })
   })
 })

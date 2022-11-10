@@ -1299,7 +1299,8 @@
       "course-summary-evaluation-title": "Course summary evaluation",
       "course-summary-button-after-completion": "Available after course",
       "resources-empty-message": "Trainer will provide course materials here",
-      "change-my-attendance": "Change my attendance"
+      "change-my-attendance": "Change my attendance",
+      "manage-course": "Manage course"
     },
     "upcoming-training": {
       "course-upcoming": "Course Upcoming",
