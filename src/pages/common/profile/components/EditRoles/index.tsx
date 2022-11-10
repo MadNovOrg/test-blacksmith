@@ -5,107 +5,95 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
+  FormHelperText,
   FormLabel,
   InputLabel,
   List,
   MenuItem,
   Select,
 } from '@mui/material'
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { InferType } from 'yup'
 
-import { Role, RoleName } from '@app/types'
+import { yup } from '@app/schemas'
+import { RoleName } from '@app/types'
 
-type Props = {
-  systemRoles: Role[]
-  roles: string[][]
-  setRoles: React.Dispatch<React.SetStateAction<string[][]>>
-  topRolesNames: RoleName[]
-  employeeRolesNames: RoleName[]
-  salesRolesNames: RoleName[]
-  employeeRole: Role
-  salesRole: Role
-}
-
-export const EditRoles: React.FC<Props> = ({
-  systemRoles,
-  roles,
-  setRoles,
-  topRolesNames,
+import {
   employeeRolesNames,
   salesRolesNames,
+  userRolesNames,
+  UserRoleName,
+  EmployeeRoleName,
   employeeRole,
   salesRole,
-}) => {
-  const { t } = useTranslation()
+  trainerRolesNames,
+  AOLRolesNames,
+  BILDRolesNames,
+} from '../../EditProfile'
 
-  const [topRolesOptions, employeeRolesOptions, salesRolesOptions] =
-    useMemo(() => {
-      const roleOptions: Role[] = []
-      const allRoles: RoleName[] = [
-        ...topRolesNames,
-        ...employeeRolesNames,
-        ...salesRolesNames,
-      ]
-      allRoles.forEach(role => {
-        systemRoles?.find(systemRole => {
-          if (systemRole.name == role) {
-            roleOptions.push({
-              id: systemRole.id,
-              name: systemRole.name,
-            })
-          }
-        })
+export function rolesFormSchema() {
+  return yup
+    .array()
+    .of(
+      yup.object({
+        userRole: yup.string().oneOf(userRolesNames).required(),
+        employeeRoles: yup
+          .array()
+          .of(yup.string().oneOf(employeeRolesNames))
+          .when('userRole', {
+            is: employeeRole.name,
+            then: s => s.min(1),
+          })
+          .required(),
+        salesRoles: yup
+          .array()
+          .of(yup.string().oneOf(salesRolesNames))
+          .when('employeeRoles', {
+            is: (val: EmployeeRoleName[]) => val.includes('sales'),
+            then: s => s.min(1),
+          })
+          .required(),
+        trainerRoleTypes: yup
+          .object()
+          .shape({
+            trainerRole: yup.string(),
+            AOLRole: yup.string(),
+            BILDRole: yup.string(),
+          })
+          .required(),
       })
-      roleOptions.push(employeeRole, salesRole)
-      const topRolesOptions = roleOptions.filter(
-        option => topRolesNames.indexOf(option.name) > -1
-      )
-      const employeeRolesOptions = roleOptions.filter(
-        option => employeeRolesNames.indexOf(option.name) > -1
-      )
+    )
+    .required()
+}
 
-      const salesRolesOptions = roleOptions.filter(
-        option => salesRolesNames.indexOf(option.name) > -1
-      )
+export type RolesFields = InferType<ReturnType<typeof rolesFormSchema>>
 
-      return [topRolesOptions, employeeRolesOptions, salesRolesOptions]
-    }, [
-      systemRoles,
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
-    ])
-
-  const isEmployeeSelected = useCallback(
-    (role: string[]) => {
-      return (
-        role.some(name => name == employeeRole.name) ||
-        employeeRolesOptions.some(option =>
-          role.find(name => name == option.name)
-        )
-      )
-    },
-    [roles, employeeRole.name, employeeRolesOptions]
-  )
-
-  const isSalesSelected = useCallback(
-    (role: string[]) => {
-      return (
-        role.some(role => role == salesRole.name) ||
-        salesRolesOptions.some(option => role.find(name => name == option.name))
-      )
-    },
-    [roles, salesRole.name, salesRolesOptions]
-  )
+export const EditRoles = () => {
+  const { t } = useTranslation()
+  const { formState, control, watch } = useFormContext<{
+    roles: RolesFields
+  }>()
+  const { fields, append, remove, replace } = useFieldArray({
+    control,
+    name: 'roles',
+  })
+  const { errors } = formState
 
   return (
     <>
-      {roles.map((role, index) => {
+      {fields.map((field, index) => {
         const showAddRoleButton =
-          index < topRolesNames.length - 1 && index === roles.length - 1
+          index < userRolesNames.length - 1 && index === fields.length - 1
+        const selectedUserRole = watch(
+          `roles.${index}.userRole` as 'roles.0.userRole'
+        )
+        const selectedEmployeeRoles = watch(
+          `roles.${index}.employeeRoles` as 'roles.0.employeeRoles'
+        )
+
         return (
           <Box
             bgcolor="common.white"
@@ -113,151 +101,300 @@ export const EditRoles: React.FC<Props> = ({
             pb={1}
             borderRadius={1}
             mb={2}
-            key={index}
+            key={field.id}
           >
             <Box>
               <FormControl fullWidth variant="filled">
                 <Box display="flex">
                   <InputLabel>{t('pages.view-profile.user-role')}</InputLabel>
-                  <Select
-                    data-testid="user-role-select"
-                    value={
-                      topRolesOptions.find(option =>
-                        role.some(name => name === option.name)
-                      )?.name ?? ''
-                    }
-                    label={t('pages.view-profile.user-role')}
-                    onChange={e => {
-                      const isEmployeeOption =
-                        e.target.value === employeeRole.name
-                      const filteredRoles = role.filter(name => {
-                        if (isEmployeeOption) {
-                          return !topRolesOptions.some(el => el.name == name)
-                        } else {
-                          return ![
-                            ...topRolesOptions,
-                            ...employeeRolesOptions,
-                            ...salesRolesOptions,
-                          ].some(el => el.name == name)
-                        }
-                      })
-                      filteredRoles.push(e.target.value)
-                      const updatedRoles = [...roles]
-                      updatedRoles[index] = filteredRoles
-                      setRoles(updatedRoles)
-                    }}
-                    sx={{ flexGrow: 1, marginRight: 1 }}
-                  >
-                    {topRolesOptions.map(option => (
-                      <MenuItem value={option.name} key={option.id}>
-                        {t(`pages.view-profile.roles.${option.name}`)}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {roles.length > 1 && (
+                  <Controller
+                    name={`roles.${index}.userRole` as 'roles.0.userRole'}
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        data-testid="user-role-select"
+                        label={t('pages.view-profile.user-role')}
+                        sx={{ flexGrow: 1, marginRight: 1 }}
+                        {...field}
+                        value={field.value}
+                        onChange={e => {
+                          const isEmployeeOption =
+                            e.target.value === employeeRole.name
+                          if (isEmployeeOption) {
+                            field.onChange(e.target.value)
+                          } else {
+                            const updatedRoles = [...fields]
+                            updatedRoles[index].userRole = e.target
+                              .value as UserRoleName
+                            updatedRoles[index].employeeRoles = []
+                            updatedRoles[index].salesRoles = []
+                            replace(updatedRoles)
+                          }
+                        }}
+                      >
+                        {userRolesNames.map(roleName => (
+                          <MenuItem
+                            value={roleName}
+                            key={roleName}
+                            disabled={fields.some(
+                              field => field.userRole === roleName
+                            )}
+                          >
+                            {t(`pages.view-profile.roles.${roleName}`)}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  {fields.length > 1 && (
                     <Button
                       variant="text"
                       onClick={() => {
-                        const updatedRoles = [...roles]
-                        updatedRoles.splice(index, 1)
-                        setRoles(updatedRoles)
+                        remove(index)
                       }}
                     >
                       {t(`pages.view-profile.remove-role`)}
                     </Button>
                   )}
                 </Box>
-
-                {(isEmployeeSelected(role) || isSalesSelected(role)) && (
-                  <List>
-                    {employeeRolesOptions.map(option => (
-                      <FormControlLabel
-                        key={option.id}
-                        control={
-                          <Checkbox
-                            checked={role.some(name => name == option.name)}
-                            onChange={e => {
-                              const isSalesOption =
-                                option.name === salesRole.name
-                              if (e.target.checked) {
-                                const updatedRoles = [...roles]
-                                updatedRoles[index].push(option.name)
-                                setRoles(updatedRoles)
-                              } else {
-                                const filteredRoles = role.filter(name => {
-                                  if (isSalesOption) {
-                                    return (
-                                      name !== option.name &&
-                                      !salesRolesOptions.some(
-                                        el => el.name == name
-                                      )
-                                    )
-                                  } else {
-                                    return name !== option.name
-                                  }
-                                })
-                                const updatedRoles = [...roles]
-                                updatedRoles[index] = filteredRoles
-                                setRoles(updatedRoles)
-                              }
-                            }}
-                          />
-                        }
-                        label={t(`pages.view-profile.roles.${option.name}`)}
-                      />
-                    ))}
-                  </List>
-                )}
-                {isSalesSelected(role) && (
-                  <>
-                    <FormLabel id="sales-permissions-label">
-                      {t(`pages.view-profile.sales-permissions`)}
-                    </FormLabel>
-                    <List>
-                      {salesRolesOptions.map(option => (
-                        <FormControlLabel
-                          key={option.id}
-                          value={option.name}
-                          label={t(`pages.view-profile.roles.${option.name}`)}
-                          control={
-                            <Checkbox
-                              checked={role.some(name => name == option.name)}
-                              onChange={e => {
-                                if (e.target.checked) {
-                                  const updatedRoles = [...roles]
-                                  updatedRoles[index].push(option.name)
-                                  setRoles(updatedRoles)
-                                } else {
-                                  const filteredRoles = role.filter(
-                                    name => name !== option.name
-                                  )
-                                  const updatedRoles = [...roles]
-                                  updatedRoles[index] = filteredRoles
-                                  setRoles(updatedRoles)
-                                }
-                              }}
-                            />
-                          }
-                        />
-                      ))}
-                    </List>
-                  </>
+                {errors?.roles?.[index]?.userRole && (
+                  <FormHelperText error sx={{ marginLeft: 0 }}>
+                    {t(`pages.view-profile.user-role-error`)}
+                  </FormHelperText>
                 )}
               </FormControl>
-              {showAddRoleButton && (
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  sx={{ marginTop: 2 }}
-                  onClick={() => {
-                    setRoles([...roles, ['']])
-                  }}
-                >
-                  {t('pages.view-profile.add-role')}
-                </Button>
+              {selectedUserRole === RoleName.TRAINER && (
+                <>
+                  <Box display="flex" mt={2}>
+                    <FormControl
+                      fullWidth
+                      variant="filled"
+                      sx={{ marginRight: 2 }}
+                    >
+                      <InputLabel>
+                        {t('pages.view-profile.trainer-role')}
+                      </InputLabel>
+                      <Controller
+                        name={
+                          `roles.${index}.trainerRoleTypes.trainerRole` as 'roles.0.trainerRoleTypes.trainerRole'
+                        }
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            data-testid="trainer-role-select"
+                            label={t('pages.view-profile.trainer-role')}
+                            sx={{ flexGrow: 1, marginRight: 1 }}
+                            {...field}
+                            value={field.value}
+                          >
+                            {trainerRolesNames.map(roleName => (
+                              <MenuItem value={roleName} key={roleName}>
+                                {t(`trainer-role-types.${roleName}`)}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                    </FormControl>
+                    <FormControl fullWidth variant="filled">
+                      <InputLabel>
+                        {t('pages.view-profile.aol-role')}
+                      </InputLabel>
+                      <Controller
+                        name={
+                          `roles.${index}.trainerRoleTypes.AOLRole` as 'roles.0.trainerRoleTypes.AOLRole'
+                        }
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            data-testid="aol-role-select"
+                            label={t('pages.view-profile.aol-role')}
+                            sx={{ flexGrow: 1, marginRight: 1 }}
+                            {...field}
+                            value={field.value}
+                          >
+                            {AOLRolesNames.map(roleName => (
+                              <MenuItem value={roleName} key={roleName}>
+                                {t(`trainer-role-types.${roleName}`)}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box mt={2}>
+                    <FormControl fullWidth variant="filled">
+                      <InputLabel>
+                        {t('pages.view-profile.bild-role')}
+                      </InputLabel>
+                      <Controller
+                        name={
+                          `roles.${index}.trainerRoleTypes.BILDRole` as 'roles.0.trainerRoleTypes.BILDRole'
+                        }
+                        control={control}
+                        render={({ field }) => (
+                          <Select
+                            data-testid="bild-role-select"
+                            label={t('pages.view-profile.bild-role')}
+                            sx={{ flexGrow: 1, marginRight: 1 }}
+                            {...field}
+                            value={field.value}
+                          >
+                            {BILDRolesNames.map(roleName => (
+                              <MenuItem value={roleName} key={roleName}>
+                                {t(`trainer-role-types.${roleName}`)}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                    </FormControl>
+                  </Box>
+                </>
+              )}
+              {selectedUserRole === employeeRole.name && (
+                <FormGroup>
+                  <List>
+                    <Controller
+                      name={
+                        `roles.${index}.employeeRoles` as 'roles.0.employeeRoles'
+                      }
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                          {employeeRolesNames.map(roleName => (
+                            <FormControlLabel
+                              key={roleName}
+                              control={
+                                <Checkbox
+                                  {...field}
+                                  checked={field.value.includes(roleName)}
+                                  value={roleName}
+                                  onChange={e => {
+                                    if (e.target.checked) {
+                                      field.onChange([
+                                        ...field.value,
+                                        e.target.value as EmployeeRoleName,
+                                      ])
+                                    } else {
+                                      const isSalesOption =
+                                        e.target.value === salesRole.name
+                                      if (isSalesOption) {
+                                        const updatedRoles = [...fields]
+                                        updatedRoles[index].employeeRoles = [
+                                          ...field.value.filter(
+                                            value =>
+                                              value !==
+                                              (e.target
+                                                .value as EmployeeRoleName)
+                                          ),
+                                        ]
+                                        updatedRoles[index].salesRoles = []
+                                        replace(updatedRoles)
+                                      } else {
+                                        field.onChange(
+                                          field.value.filter(
+                                            value =>
+                                              value !==
+                                              (e.target
+                                                .value as EmployeeRoleName)
+                                          )
+                                        )
+                                      }
+                                    }
+                                  }}
+                                />
+                              }
+                              label={t(`pages.view-profile.roles.${roleName}`)}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+                  </List>
+                  {errors?.roles?.[index]?.employeeRoles && (
+                    <FormHelperText error sx={{ marginLeft: 0 }}>
+                      {t(`pages.view-profile.employee-role-error`)}
+                    </FormHelperText>
+                  )}
+                </FormGroup>
+              )}
+              {selectedEmployeeRoles.includes(salesRole.name) && (
+                <FormControl>
+                  <FormLabel id="sales-permissions-label">
+                    {t(`pages.view-profile.sales-permissions`)}
+                  </FormLabel>
+                  <List>
+                    <Controller
+                      name={`roles.${index}.salesRoles` as 'roles.0.salesRoles'}
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                          {salesRolesNames.map(roleName => (
+                            <FormControlLabel
+                              key={roleName}
+                              label={t(`pages.view-profile.roles.${roleName}`)}
+                              control={
+                                <Checkbox
+                                  {...field}
+                                  checked={field.value.includes(roleName)}
+                                  value={roleName}
+                                  onChange={e => {
+                                    if (e.target.checked) {
+                                      field.onChange([
+                                        ...field.value,
+                                        e.target.value as RoleName,
+                                      ])
+                                    } else {
+                                      field.onChange(
+                                        field.value.filter(
+                                          value =>
+                                            value !==
+                                            (e.target.value as RoleName)
+                                        )
+                                      )
+                                    }
+                                  }}
+                                />
+                              }
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+                  </List>
+                  {errors?.roles?.[index]?.salesRoles && (
+                    <FormHelperText error sx={{ marginLeft: 0 }}>
+                      {t(`pages.view-profile.sales-role-error`)}
+                    </FormHelperText>
+                  )}
+                </FormControl>
               )}
             </Box>
+            {showAddRoleButton && (
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<AddIcon />}
+                sx={{ marginTop: 2 }}
+                onClick={() => {
+                  append({
+                    userRole: '',
+                    employeeRoles: [] as RoleName[],
+                    salesRoles: [] as RoleName[],
+                    trainerRoleTypes: {
+                      trainerRole: '',
+                      AOLRole: '',
+                      BILDRole: '',
+                      // moderator: false,
+                    },
+                  })
+                }}
+              >
+                {t('pages.view-profile.add-role')}
+              </Button>
+            )}
           </Box>
         )
       })}

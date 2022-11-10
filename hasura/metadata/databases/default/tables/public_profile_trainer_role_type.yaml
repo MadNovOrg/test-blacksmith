@@ -6,15 +6,15 @@ object_relationships:
     using:
       foreign_key_constraint_on: trainer_role_type_id
 insert_permissions:
-  - role: tt-ops
+  - role: tt-admin
     permission:
       check: {}
       columns:
         - created_at
-        - updated_at
         - id
         - profile_id
         - trainer_role_type_id
+        - updated_at
       backend_only: false
 select_permissions:
   - role: user
@@ -26,14 +26,7 @@ select_permissions:
         - created_at
         - updated_at
       filter: {}
-update_permissions:
-  - role: tt-ops
+delete_permissions:
+  - role: tt-admin
     permission:
-      columns:
-        - created_at
-        - updated_at
-        - id
-        - profile_id
-        - trainer_role_type_id
       filter: {}
-      check: null

@@ -174,7 +174,14 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                       key={role.name}
                       label={t(`pages.view-profile.roles.${role?.name}`)}
                       color={getRoleColor(role.name)}
-                      sx={{ marginRight: 1, marginBottom: 1 }}
+                      sx={{ marginRight: 1, marginBottom: 0.5 }}
+                    />
+                  ))}
+                  {profile.trainer_role_types.map(({ trainer_role_type }) => (
+                    <Chip
+                      key={trainer_role_type.name}
+                      label={t(`trainer-role-types.${trainer_role_type?.name}`)}
+                      sx={{ marginRight: 1, marginBottom: 0.5 }}
                     />
                   ))}
                 </Box>

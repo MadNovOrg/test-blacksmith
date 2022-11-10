@@ -48,6 +48,12 @@ export const PROFILE = gql`
         name
       }
     }
+    trainer_role_types {
+      trainer_role_type {
+        id
+        name
+      }
+    }
     preferences
     createdAt
     updatedAt

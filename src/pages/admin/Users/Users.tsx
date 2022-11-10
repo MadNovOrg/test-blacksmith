@@ -268,7 +268,10 @@ export const Users = () => {
                             {user.roles.map(obj => (
                               <Chip
                                 key={obj.role.id}
-                                sx={{ fontSize: '12px', marginRight: '4px' }}
+                                sx={{
+                                  fontSize: '12px',
+                                  margin: '0 4px 4px 0',
+                                }}
                                 size="small"
                                 color={
                                   isExternalRole(obj.role.name)
@@ -288,7 +291,10 @@ export const Users = () => {
                               return trainer_role_type ? (
                                 <Chip
                                   key={trainer_role_type.id}
-                                  sx={{ fontSize: '12px', marginRight: '4px' }}
+                                  sx={{
+                                    fontSize: '12px',
+                                    margin: '0 4px 4px 0',
+                                  }}
                                   size="small"
                                   label={t(
                                     `trainer-role-types.${trainer_role_type.name}`

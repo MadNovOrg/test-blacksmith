@@ -1,47 +1,54 @@
 import React from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleType } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 
-import {
-  topRolesNames,
-  employeeRolesNames,
-  salesRolesNames,
-  employeeRole,
-  salesRole,
-} from '../../EditProfile'
+import { EmployeeRoleName } from '../../EditProfile'
 
-import { EditRoles } from '.'
+import { EditRoles, RolesFields } from '.'
 
 describe('component: EditRoles', () => {
+  type FormValues = {
+    roles: RolesFields
+  }
+
+  const FormWrapper: React.FC<{
+    children: React.ReactNode
+    mockRoles: FormValues
+  }> = ({ children, mockRoles }) => {
+    const formMethods = useForm<FormValues>({
+      defaultValues: mockRoles,
+    })
+
+    return <FormProvider {...formMethods}>{children}</FormProvider>
+  }
+
   it('displays employee roles', () => {
-    const mockRoles = [
-      { id: 'a', name: RoleName.FINANCE },
-      { id: 'b', name: RoleName.TT_OPS },
-      { id: 'c', name: RoleName.SALES_ADMIN },
-      { id: 'd', name: RoleName.SALES_REPRESENTATIVE },
-      { id: 'e', name: RoleName['L&D'] },
-    ]
-    const props = {
-      systemRoles: mockRoles,
+    const mockRoles = {
       roles: [
-        [
-          RoleName.FINANCE,
-          RoleName.TT_OPS,
-          RoleName.SALES_ADMIN,
-          employeeRole.name,
-          salesRole.name,
-        ],
+        {
+          userRole: 'tt-employee',
+          employeeRoles: [
+            RoleName.TT_OPS,
+            RoleName.FINANCE,
+            'sales',
+          ] as EmployeeRoleName[],
+          salesRoles: [RoleName.SALES_ADMIN],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
       ],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
     }
-    render(<EditRoles {...props} />)
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
       'TT Employee'
@@ -62,18 +69,25 @@ describe('component: EditRoles', () => {
   })
 
   it('displays admin role', () => {
-    const mockRoles = [{ id: 'a', name: RoleName.TT_ADMIN }]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.TT_ADMIN]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TT_ADMIN,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
+      ],
     }
-    render(<EditRoles {...props} />)
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
       'Administrator'
@@ -81,18 +95,25 @@ describe('component: EditRoles', () => {
   })
 
   it('displays user role', () => {
-    const mockRoles = [{ id: 'a', name: RoleName.USER }]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.USER]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.USER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
+      ],
     }
-    render(<EditRoles {...props} />)
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent(
       'Individual'
@@ -100,96 +121,106 @@ describe('component: EditRoles', () => {
   })
 
   it('displays trainer role', () => {
-    const mockRoles = [{ id: 'a', name: RoleName.TRAINER }]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.TRAINER]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.TRAINER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: TrainerRoleType.PRINCIPAL,
+            AOLRole: TrainerRoleType.EMPLOYER_AOL,
+            BILDRole: TrainerRoleType.BILD_SENIOR,
+          },
+        },
+      ],
     }
-    render(<EditRoles {...props} />)
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
 
     expect(screen.getByTestId('user-role-select')).toHaveTextContent('Trainer')
-  })
-
-  it('allows editing roles', async () => {
-    const mockRoles = [
-      { id: 'a', name: RoleName.TT_ADMIN },
-      { id: 'b', name: RoleName.TRAINER },
-    ]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.TT_ADMIN]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
-    }
-    render(<EditRoles {...props} />)
-
-    await waitFor(() =>
-      userEvent.click(
-        within(screen.getByTestId('user-role-select')).getByText(
-          'Administrator'
-        )
-      )
+    expect(screen.getByTestId('trainer-role-select')).toHaveTextContent(
+      'Principal'
     )
-    userEvent.click(screen.getByText('Trainer'))
-    expect(props.setRoles).toHaveBeenCalledTimes(1)
-    expect(props.setRoles).toHaveBeenCalledWith([[RoleName.TRAINER]])
+    expect(screen.getByTestId('aol-role-select')).toHaveTextContent(
+      'Employer AOL'
+    )
+    expect(screen.getByTestId('bild-role-select')).toHaveTextContent(
+      'BILD senior'
+    )
   })
 
   it('allows deleting roles', async () => {
-    const mockRoles = [
-      { id: 'a', name: RoleName.TT_ADMIN },
-      { id: 'b', name: RoleName.TRAINER },
-    ]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.TT_ADMIN], [RoleName.TRAINER]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.USER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
+        {
+          userRole: RoleName.TT_ADMIN,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
+      ],
     }
-    render(<EditRoles {...props} />)
-
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
+    expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
+    expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
+      'Individual'
+    )
     await waitFor(() =>
       userEvent.click(screen.getAllByRole('button', { name: 'Remove' })[0])
     )
-    expect(props.setRoles).toHaveBeenCalledTimes(1)
-    expect(props.setRoles).toHaveBeenCalledWith([[RoleName.TRAINER]])
+    expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
+    expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
+      'Administrator'
+    )
   })
 
   it('allows adding roles', async () => {
-    const mockRoles = [
-      { id: 'a', name: RoleName.TT_ADMIN },
-      { id: 'b', name: RoleName.TRAINER },
-    ]
-    const props = {
-      systemRoles: mockRoles,
-      roles: [[RoleName.TT_ADMIN]],
-      setRoles: jest.fn(),
-      topRolesNames,
-      employeeRolesNames,
-      salesRolesNames,
-      employeeRole,
-      salesRole,
+    const mockRoles = {
+      roles: [
+        {
+          userRole: RoleName.USER,
+          employeeRoles: [],
+          salesRoles: [],
+          trainerRoleTypes: {
+            trainerRole: '',
+            AOLRole: '',
+            BILDRole: '',
+          },
+        },
+      ],
     }
-    render(<EditRoles {...props} />)
+    render(
+      <FormWrapper mockRoles={mockRoles}>
+        <EditRoles />
+      </FormWrapper>
+    )
 
+    expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
     await waitFor(() =>
       userEvent.click(screen.getByRole('button', { name: 'Additional role' }))
     )
-    expect(props.setRoles).toHaveBeenCalledTimes(1)
-    expect(props.setRoles).toHaveBeenCalledWith([[RoleName.TT_ADMIN], ['']])
+    expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
   })
 })
