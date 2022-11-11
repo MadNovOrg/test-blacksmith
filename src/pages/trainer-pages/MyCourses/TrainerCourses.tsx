@@ -158,9 +158,7 @@ export const TrainerCourses: React.FC<Props> = ({
       <Box display="flex" gap={4}>
         <Box width={250}>
           <Typography variant="h1">
-            <Typography variant="h1">
-              {title ?? t(isTrainer ? 'courses' : 'pages.my-courses.h1')}
-            </Typography>
+            {title ?? t(isTrainer ? 'courses' : 'pages.my-courses.h1')}
           </Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
