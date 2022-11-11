@@ -488,7 +488,7 @@ const CourseForm: React.FC<Props> = ({
         ) : null}
 
         <Typography mb={2} mt={2} fontWeight={600}>
-          {t('components.course-form.location-section-title')}
+          {t('components.course-form.delivery-type-section-title')}
         </Typography>
         <FormControl>
           <RadioGroup
