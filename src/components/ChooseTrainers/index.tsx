@@ -1,13 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Typography, Box, FormHelperText, Stack } from '@mui/material'
+import { Box, FormHelperText, Stack, Typography } from '@mui/material'
 import { differenceInDays } from 'date-fns'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import {
-  useForm,
   Controller,
   NestedValue,
   Resolver,
   UnpackNestedValue,
+  useForm,
   useWatch,
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +20,7 @@ import {
   CourseSchedule,
   CourseTrainer,
   CourseTrainerType,
+  CourseType,
   SearchTrainer,
 } from '@app/types'
 import { getNumberOfAssistants } from '@app/util'
@@ -37,6 +38,7 @@ type NestedFormValues = {
 type Props = {
   maxParticipants: number
   trainers?: CourseTrainer[]
+  courseType: CourseType
   courseLevel: CourseLevel
   courseSchedule: Pick<CourseSchedule, 'start' | 'end'>
   onChange?: (data: FormValues, isValid: boolean) => void
@@ -65,6 +67,7 @@ const courseTrainerToFormValues = (
 
 const ChooseTrainers: React.FC<Props> = ({
   maxParticipants,
+  courseType,
   courseLevel,
   courseSchedule,
   trainers = [],
@@ -82,6 +85,11 @@ const ChooseTrainers: React.FC<Props> = ({
   const adminBypassAssistMin = useMemo(
     () => (acl.isAdmin() ? 0 : assistMin),
     [acl, assistMin]
+  )
+
+  const leadMin = useMemo(
+    () => (courseType === CourseType.OPEN ? 0 : 1),
+    [courseType]
   )
 
   const needsModerator = useMemo(() => {
@@ -104,7 +112,7 @@ const ChooseTrainers: React.FC<Props> = ({
     return yup.object({
       lead: yup
         .array()
-        .min(1, t('pages.create-course.assign-trainers.lead-error-min'))
+        .min(leadMin, t('pages.create-course.assign-trainers.lead-error-min'))
         .max(1, t('pages.create-course.assign-trainers.lead-error-max')),
       assist: yup.array().min(
         adminBypassAssistMin,
@@ -123,7 +131,7 @@ const ChooseTrainers: React.FC<Props> = ({
           t('pages.create-course.assign-trainers.moderator-error-max')
         ),
     })
-  }, [t, adminBypassAssistMin, needsModerator])
+  }, [leadMin, t, adminBypassAssistMin, needsModerator])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
@@ -197,7 +205,6 @@ const ChooseTrainers: React.FC<Props> = ({
           ) : null}
         </Box>
       ) : null}
-
       {assistMin > 0 ? (
         <Box data-testid="AssignTrainers-assist">
           <Typography variant="subtitle1">
@@ -231,7 +238,6 @@ const ChooseTrainers: React.FC<Props> = ({
           )}
         </Box>
       ) : null}
-
       {needsModerator ? (
         <Box data-testid="AssignTrainers-moderator">
           <Typography variant="subtitle1">

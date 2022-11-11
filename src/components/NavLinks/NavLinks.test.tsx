@@ -46,7 +46,7 @@ describe('component: NavLinks', () => {
     expect(screen.getAllByRole('link')).toHaveLength(7)
     const myCoursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(myCoursesLink).toBeInTheDocument()
-    const coursesLink = screen.getByRole('link', { name: 'Courses' })
+    const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
     expect(coursesLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',

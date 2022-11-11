@@ -1,29 +1,91 @@
 import { useMemo } from 'react'
 import { useQuery } from 'urql'
 
+import { useAuth } from '@app/context/auth'
 import {
+  Course_Bool_Exp,
+  Course_Level_Enum,
   Course_Order_By,
+  Course_Status_Enum,
+  Course_Type_Enum,
   Order_By,
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { ALL_ORGS } from '@app/hooks/useOrg'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
 import { RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
+type CoursesFilters = {
+  keyword?: string
+  levels?: Course_Level_Enum[]
+  types?: Course_Type_Enum[]
+  statuses?: Course_Status_Enum[]
+}
+
 type Props = {
   sorting: Sorting
-  where: Record<string, unknown>
+  filters?: CoursesFilters
   pagination?: { perPage: number; currentPage: number }
+  orgId?: string
 }
 
 export const useCourses = (
   _role: RoleName,
-  { sorting, where, pagination }: Props
+  { sorting, filters, pagination, orgId }: Props
 ) => {
+  const { acl, organizationIds } = useAuth()
   const orderBy = getOrderBy(sorting)
+
+  const where = useMemo(() => {
+    let obj: Course_Bool_Exp = {}
+
+    // if orgId is defined then provide all available courses within that org
+    if (orgId) {
+      const allAvailableOrgs = {}
+      const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
+      const specificOrg = { organization: { id: { _eq: orgId } } }
+      if (orgId === ALL_ORGS) {
+        obj = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+      } else {
+        obj = specificOrg
+      }
+    }
+
+    if (filters?.levels?.length) {
+      obj.level = { _in: filters.levels }
+    }
+
+    if (filters?.types?.length) {
+      obj.type = { _in: filters.types }
+    }
+
+    if (filters?.statuses?.length) {
+      obj.status = { _in: filters.statuses }
+    }
+
+    const query = filters?.keyword?.trim()
+
+    const onlyDigits = /^\d+$/.test(query || '')
+
+    if (query?.length) {
+      const orClauses = [
+        onlyDigits ? { id: { _eq: Number(query) } } : null,
+        { name: { _ilike: `%${query}%` } },
+        { organization: { name: { _ilike: `%${query}%` } } },
+        { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
+        { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+        { course_code: { _ilike: `%${query}%` } },
+      ]
+
+      obj._or = orClauses.filter(Boolean)
+    }
+
+    return obj
+  }, [acl, filters, orgId, organizationIds])
 
   const [{ data, error }, refetch] = useQuery<
     TrainerCoursesQuery,

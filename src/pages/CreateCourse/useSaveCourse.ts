@@ -10,13 +10,14 @@ import {
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import {
-  ResponseType,
-  ParamsType,
   MUTATION,
+  ParamsType,
+  ResponseType,
 } from '@app/queries/courses/insert-course'
 import {
   CourseDeliveryType,
   CourseExpenseType,
+  CourseTrainerType,
   CourseType,
   Currency,
   ExpensesInput,
@@ -122,9 +123,14 @@ export function useSaveCourse(): {
       if (courseData) {
         setSavingStatus(LoadingStatus.FETCHING)
 
+        const leadTrainerMissing =
+          trainers.filter(t => t.type === CourseTrainerType.LEADER).length === 0
+
         const status =
           courseData.type === CourseType.INDIRECT
             ? Course_Status_Enum.ApprovalPending
+            : leadTrainerMissing
+            ? Course_Status_Enum.TrainerMissing
             : Course_Status_Enum.TrainerPending
 
         const response = await fetcher<ResponseType, ParamsType>(MUTATION, {

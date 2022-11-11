@@ -247,7 +247,12 @@ select_permissions:
           - course_type:
               _eq: OPEN
           - course_status:
-              _eq: SCHEDULED
+              _in:
+                - CONFIRM_MODULES
+                - SCHEDULED
+                - TRAINER_MISSING
+                - TRAINER_PENDING
+                - TRAINER_UNAVAILABLE
   - role: sales-admin
     permission:
       columns:
@@ -403,7 +408,12 @@ select_permissions:
           - course_type:
               _eq: OPEN
           - course_status:
-              _eq: SCHEDULED
+              _in:
+                - CONFIRM_MODULES
+                - SCHEDULED
+                - TRAINER_MISSING
+                - TRAINER_PENDING
+                - TRAINER_UNAVAILABLE
   - role: user
     permission:
       columns:

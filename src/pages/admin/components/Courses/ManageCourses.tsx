@@ -7,7 +7,7 @@ import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
-import { MyCourses } from '@app/pages/user-pages/MyCourses'
+import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { LoadingStatus } from '@app/util'
 
 export const ManageCourses: React.FC = () => {
@@ -45,7 +45,12 @@ export const ManageCourses: React.FC = () => {
             ) : null}
 
             {data && status === LoadingStatus.SUCCESS ? (
-              <MyCourses title={t('courses')} orgId={orgId} />
+              <TrainerCourses
+                title={t('courses')}
+                orgId={orgId}
+                hideActions={true}
+                showAvailableCoursesButton={true}
+              />
             ) : null}
           </Container>
         </>

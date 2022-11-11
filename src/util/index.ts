@@ -12,9 +12,12 @@ import {
 import { TFunction } from 'i18next'
 import { FieldError } from 'react-hook-form'
 
-import { Profile } from '@app/generated/graphql'
+import { Course_Status_Enum, Grade_Enum, Profile } from '@app/generated/graphql'
 import {
   Address,
+  AdminOnlyCourseStatus,
+  AllCourseStatuses,
+  AttendeeOnlyCourseStatus,
   CertificateStatus,
   Course,
   CourseInput,
@@ -511,4 +514,52 @@ export const buildNestedSort = (sortBy: string, sortDir: SortOrder) => {
       }
     })
   return orderBy
+}
+
+export const getCourseStatus = (courseData: {
+  schedule: { end: Date }[]
+  evaluation_answers_aggregate?: {
+    aggregate?: { count: number } | null
+  }
+  status?: Course_Status_Enum | null
+  cancellationRequest?: { id: string } | null
+  participants: {
+    attended?: boolean | null
+    healthSafetyConsent: boolean
+    grade?: Grade_Enum | null
+  }[]
+}) => {
+  const courseEnded = isPast(new Date(courseData.schedule[0].end))
+  const participant = courseData.participants[0]
+  const evaluated = Boolean(
+    courseData.evaluation_answers_aggregate?.aggregate?.count
+  )
+
+  let courseStatus: AllCourseStatuses = Course_Status_Enum.Scheduled
+  if (courseData.status === Course_Status_Enum.Cancelled) {
+    courseStatus = Course_Status_Enum.Cancelled
+  } else if (courseData.cancellationRequest) {
+    courseStatus = AdminOnlyCourseStatus.CancellationRequested
+  } else {
+    if (courseEnded) {
+      courseStatus = Course_Status_Enum.Completed
+    }
+    if (participant) {
+      // user participated in the course
+      if (!participant.attended && courseEnded) {
+        courseStatus = AttendeeOnlyCourseStatus.NotAttended
+      } else if (!participant.healthSafetyConsent) {
+        courseStatus = AttendeeOnlyCourseStatus.InfoRequired
+      } else if (
+        courseData.evaluation_answers_aggregate &&
+        !evaluated &&
+        courseEnded
+      ) {
+        courseStatus = Course_Status_Enum.EvaluationMissing
+      } else if (!participant.grade && courseEnded) {
+        courseStatus = Course_Status_Enum.GradeMissing
+      }
+    }
+  }
+  return courseStatus
 }

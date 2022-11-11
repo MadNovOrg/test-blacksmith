@@ -2,7 +2,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import { Client, Provider } from 'urql'
-import { never, fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import {
   Course_Level_Enum,
@@ -14,12 +14,12 @@ import {
 } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
-import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
 import { Providers } from '@test/providers'
 
-import { MyCourses } from './MyCourses'
 import { buildTrainerCourse } from './test-utils'
+import { TrainerCourses } from './TrainerCourses'
 
 const _render = (
   ui: React.ReactElement,
@@ -36,7 +36,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -64,7 +64,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -96,7 +96,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -128,7 +128,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -173,7 +173,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -221,7 +221,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -274,7 +274,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -328,7 +328,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -379,7 +379,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -421,7 +421,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>
     )
 
@@ -468,7 +468,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>,
       {
         auth: {
@@ -501,7 +501,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>,
       {
         auth: {
@@ -534,7 +534,7 @@ describe('trainers-pages/MyCourses', () => {
 
     _render(
       <Provider value={client as unknown as Client}>
-        <MyCourses />
+        <TrainerCourses />
       </Provider>,
       {
         auth: {

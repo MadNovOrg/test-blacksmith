@@ -45,6 +45,10 @@ export const AllStatuses = () => (
     </ChipContainer>
 
     <ChipContainer>
+      <CourseStatusChip status={Course_Status_Enum.TrainerMissing} />
+    </ChipContainer>
+
+    <ChipContainer>
       <CourseStatusChip status={Course_Status_Enum.Cancelled} />
     </ChipContainer>
 

@@ -34,6 +34,7 @@ export type ParamsType = {
     status:
       | Course_Status_Enum.ApprovalPending
       | Course_Status_Enum.TrainerPending
+      | Course_Status_Enum.TrainerMissing
     trainers?: {
       data: Array<{
         profile_id: string

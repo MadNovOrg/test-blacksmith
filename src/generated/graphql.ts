@@ -19089,6 +19089,7 @@ export enum Course_Status_Enum {
   EvaluationMissing = 'EVALUATION_MISSING',
   GradeMissing = 'GRADE_MISSING',
   Scheduled = 'SCHEDULED',
+  TrainerMissing = 'TRAINER_MISSING',
   TrainerPending = 'TRAINER_PENDING',
   TrainerUnavailable = 'TRAINER_UNAVAILABLE'
 }

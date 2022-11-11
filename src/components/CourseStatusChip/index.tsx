@@ -22,6 +22,7 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
   [Course_Status_Enum.Scheduled]: 'info',
   [Course_Status_Enum.TrainerPending]: 'warning',
   [Course_Status_Enum.TrainerUnavailable]: 'warning',
+  [Course_Status_Enum.TrainerMissing]: 'info',
   [AttendeeOnlyCourseStatus.InfoRequired]: 'warning',
   [AttendeeOnlyCourseStatus.NotAttended]: 'default',
   [AdminOnlyCourseStatus.CancellationRequested]: 'warning',
@@ -30,16 +31,18 @@ const colorsMap: Record<AllCourseStatuses, ChipProps['color']> = {
 type Props = {
   status: AllCourseStatuses
   hideIcon?: boolean
+  color?: ChipProps['color']
 } & ChipProps
 
 export const CourseStatusChip: React.FC<Props> = ({
   status,
   hideIcon = false,
+  color,
   ...rest
 }) => {
   const { t } = useTranslation()
 
-  const chipColor = colorsMap[status]
+  const chipColor = color ?? colorsMap[status]
 
   return (
     <Box display="flex">

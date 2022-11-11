@@ -21,7 +21,7 @@ import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
 import { MyCertifications } from '@app/pages/user-pages/MyCertifications'
-import { MyCourses } from '@app/pages/user-pages/MyCourses'
+import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 
 import MembershipRoutes from './membership'
 
@@ -38,7 +38,7 @@ const UserRoutes = () => {
       />
 
       <Route path="courses">
-        <Route index element={<MyCourses />} />
+        <Route index element={<AttendeeCourses />} />
 
         <Route path=":id">
           <Route path="details" element={<CourseDetails />} />

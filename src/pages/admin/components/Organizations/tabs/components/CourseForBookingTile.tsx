@@ -31,12 +31,12 @@ export const CourseForBookingTile: React.FC<CourseForBookingTileParams> = ({
     const end = new Date(course.schedules[0].end)
     const days = Math.abs(differenceInDays(start, end)) + 1
     return days === 1
-      ? `${t('dates.short', {
+      ? `${t('dates.defaultShort', {
           date: start,
         })} (${days} ${t('common.day')})`
-      : `${t('dates.short', {
+      : `${t('dates.defaultShort', {
           date: start,
-        })}-${t('dates.short', {
+        })}-${t('dates.defaultShort', {
           date: end,
         })} (${days} ${t('common.days')})`
   }, [course, t])

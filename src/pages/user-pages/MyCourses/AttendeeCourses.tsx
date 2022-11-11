@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container, Stack } from '@mui/material'
+import { CircularProgress, Container, Stack } from '@mui/material'
 import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
@@ -9,22 +9,15 @@ import Typography from '@mui/material/Typography'
 import { isPast } from 'date-fns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
-import {
-  Course_Level_Enum,
-  Course_Status_Enum,
-  Course_Type_Enum,
-} from '@app/generated/graphql'
+import { Course_Level_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import {
@@ -36,28 +29,14 @@ import { LoadingStatus } from '@app/util'
 
 import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
 
-export type MyCoursesProps = {
-  title?: string
-  orgId?: string
-}
-
-// If orgId property is defined that means that we are displaying courses list
-// in context of an org admin (for course management purposes). The reason why
-// we do not check `isOrgAdmin` flag instead, is that org admin can be participant
-// of some courses as well, hence we will need to display both variations of this
-// component: one in context of participant and one in context of management.
-export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
+export const AttendeeCourses: React.FC = () => {
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   const sorting = useTableSort('start', 'desc')
   const cols = useMemo(
     () => [
       { id: 'name', label: t('pages.my-courses.col-name'), sorting: true },
       { id: 'venue', label: t('pages.my-courses.col-venue'), sorting: false },
-      ...(orgId
-        ? [{ id: 'type', label: t('pages.my-courses.col-type'), sorting: true }]
-        : []),
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
@@ -65,23 +44,13 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
       },
-      ...(orgId
-        ? [
-            {
-              id: 'registrations',
-              label: t('pages.my-courses.col-registrations'),
-              sorting: false,
-            },
-          ]
-        : []),
       { id: 'status', label: t('pages.my-courses.col-status'), sorting: false },
     ],
-    [orgId, t]
+    [t]
   )
 
   const [keyword, setKeyword] = useState('')
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
-  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
 
   const [statusOptions, setStatusOptions] = useState<
     FilterOption<UserCourseStatus>[]
@@ -129,13 +98,11 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
   const { courses, status, total } = useUserCourses(
     {
       statuses: filterStatus,
-      types: filterType,
       levels: filterLevel,
       keyword,
     },
     sorting,
-    { perPage, currentPage },
-    orgId
+    { perPage, currentPage }
   )
 
   useEffect(() => {
@@ -146,15 +113,13 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
 
   const loading = status === LoadingStatus.FETCHING
 
-  const filtered = Boolean(
-    keyword || filterStatus.length || filterType.length || filterLevel.length
-  )
+  const filtered = Boolean(keyword || filterStatus.length || filterLevel.length)
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
       <Box display="flex" gap={4}>
         <Box width={250}>
-          <Typography variant="h1">{title ?? t('my-courses')}</Typography>
+          <Typography variant="h1">{t('my-courses')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
             {loading ? <>&nbsp;</> : t('x-items', { count })}
           </Typography>
@@ -169,7 +134,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
 
               <Stack gap={1}>
                 <FilterCourseLevel onChange={setFilterLevel} />
-                {orgId ? <FilterCourseType onChange={setFilterType} /> : null}
                 <FilterAccordion
                   options={statusOptions}
                   onChange={opts => {
@@ -184,17 +148,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
         </Box>
 
         <Box flex={1}>
-          {orgId ? (
-            <Box mb={4} textAlign="right">
-              <Button
-                variant="contained"
-                onClick={() => navigate(`/organizations/${orgId}/courses`)}
-              >
-                {t('pages.my-courses.find-available-courses')}
-              </Button>
-            </Box>
-          ) : null}
-
           <Table data-testid="courses-table">
             <TableHead
               cols={cols}
@@ -282,14 +235,11 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                           : c.schedule[0].venue?.city}
                       </Typography>
                     </TableCell>
-                    {orgId ? (
-                      <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-                    ) : null}
                     <TableCell>
                       {c.dates?.aggregate?.start?.date && (
                         <Box>
                           <Typography variant="body2" gutterBottom>
-                            {t('dates.short', {
+                            {t('dates.defaultShort', {
                               date: c.dates.aggregate.start.date,
                             })}
                           </Typography>
@@ -309,7 +259,7 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                       {c.dates?.aggregate?.end?.date && (
                         <Box>
                           <Typography variant="body2" gutterBottom>
-                            {t('dates.short', {
+                            {t('dates.defaultShort', {
                               date: c.dates.aggregate.end.date,
                             })}
                           </Typography>
@@ -328,22 +278,6 @@ export const MyCourses: React.FC<MyCoursesProps> = ({ title, orgId }) => {
                     <TableCell>
                       <TrainerAvatarGroup trainers={c.trainers ?? []} />
                     </TableCell>
-                    {orgId ? (
-                      <TableCell data-testid="participants-cell">
-                        <ParticipantsCount
-                          participating={
-                            c.participantsAgg?.aggregate?.count ?? 0
-                          }
-                          capacity={
-                            c.type === Course_Type_Enum.Open
-                              ? undefined
-                              : c.max_participants
-                          }
-                          waitlist={c.waitlistAgg?.aggregate?.count}
-                        />
-                      </TableCell>
-                    ) : null}
-
                     <TableCell>
                       <CourseStatusChip status={courseStatus} />
                     </TableCell>

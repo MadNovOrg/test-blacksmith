@@ -39,6 +39,7 @@
     "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
     "users": "Users",
     "courses": "Courses",
+    "manage-courses": "Manage Courses",
     "contacts": "Contacts",
     "community": "Community",
     "orders": "Orders",
@@ -211,7 +212,8 @@
       "TRAINER_UNAVAILABLE": "Trainer unavailable",
       "INFO_REQUIRED": "Info required",
       "NOT_ATTENDED": "Unattended",
-      "CANCELLATION_REQUESTED": "Cancellation requested"
+      "CANCELLATION_REQUESTED": "Cancellation requested",
+      "TRAINER_MISSING": "Trainer missing"
     },
     "course-invite-status": {
       "PENDING": "Pending",

@@ -24,7 +24,7 @@ import { CourseGradingDetails } from '@app/pages/trainer-pages/CourseGradingDeta
 import { CourseAttendance } from '@app/pages/trainer-pages/CourseGradingDetails/CourseAttendance'
 import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/ModulesSelection'
 import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
-import { MyCourses } from '@app/pages/trainer-pages/MyCourses'
+import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
@@ -43,7 +43,7 @@ const TrainerBaseRoutes = () => {
       />
 
       <Route path="courses">
-        <Route index element={<MyCourses />} />
+        <Route index element={<TrainerCourses />} />
 
         <Route path="new" element={<CreateCourse />}>
           <Route index element={<CreateCourseForm />} />

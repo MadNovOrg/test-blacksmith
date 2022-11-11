@@ -105,7 +105,7 @@ export const ChooseTransferCourse: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography>
-                      {_t('dates.short', { date: course.startDate })}
+                      {_t('dates.defaultShort', { date: course.startDate })}
                     </Typography>
                     <Typography color={theme.palette.dimGrey.main}>
                       {_t('dates.time', { date: course.startDate })}
@@ -113,7 +113,7 @@ export const ChooseTransferCourse: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Typography>
-                      {_t('dates.short', { date: course.endDate })}
+                      {_t('dates.defaultShort', { date: course.endDate })}
                     </Typography>
                     <Typography color={theme.palette.dimGrey.main}>
                       {_t('dates.time', { date: course.endDate })}

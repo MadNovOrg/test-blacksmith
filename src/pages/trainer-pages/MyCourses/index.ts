@@ -1,1 +1,1 @@
-export { MyCourses } from './MyCourses'
+export { TrainerCourses } from './TrainerCourses'

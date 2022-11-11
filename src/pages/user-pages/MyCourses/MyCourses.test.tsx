@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildEntities } from '@test/mock-data-utils'
 
-import { MyCourses } from './MyCourses'
+import { AttendeeCourses } from './AttendeeCourses'
 import { buildUserCourse } from './test-utils'
 
 describe('user-pages/MyCourses', () => {
@@ -25,7 +25,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={fetchingClient as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -51,7 +51,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -78,7 +78,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -116,7 +116,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -163,7 +163,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -207,7 +207,7 @@ describe('user-pages/MyCourses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )

@@ -55,7 +55,7 @@ const CourseDetails = React.lazy(() =>
 
 const MyCourses = React.lazy(() =>
   import('@app/pages/trainer-pages/MyCourses').then(module => ({
-    default: module.MyCourses,
+    default: module.TrainerCourses,
   }))
 )
 

@@ -1,7 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Box, Button, Alert, Stack } from '@mui/material'
+import { Alert, Box, Button, Stack } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -137,6 +137,7 @@ export const AssignTrainers = () => {
     <Stack spacing={5}>
       <ChooseTrainers
         maxParticipants={courseData.maxParticipants}
+        courseType={courseData.type}
         courseLevel={courseData.courseLevel}
         courseSchedule={{
           start: courseData.startDateTime,

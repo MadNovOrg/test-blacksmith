@@ -8,7 +8,7 @@ import { Grade_Enum, UserCoursesQuery } from '@app/generated/graphql'
 
 import { render, screen, within } from '@test/index'
 
-import { MyCourses } from './MyCourses'
+import { AttendeeCourses } from './AttendeeCourses'
 import { buildUserCourse } from './test-utils'
 
 describe('user-pages/MyCourses - displaying statuses', () => {
@@ -37,7 +37,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -88,7 +88,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -137,7 +137,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -187,7 +187,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -237,7 +237,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )
@@ -293,7 +293,7 @@ describe('user-pages/MyCourses - displaying statuses', () => {
     render(
       <Provider value={client as unknown as Client}>
         <MemoryRouter initialEntries={['/']}>
-          <MyCourses />
+          <AttendeeCourses />
         </MemoryRouter>
       </Provider>
     )

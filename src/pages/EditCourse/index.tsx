@@ -426,6 +426,7 @@ export const EditCourse: React.FC<unknown> = () => {
                 courseData.endDateTime ? (
                   <ChooseTrainers
                     maxParticipants={courseData?.maxParticipants ?? 0}
+                    courseType={courseData.type || CourseType.CLOSED}
                     courseLevel={courseData.courseLevel || CourseLevel.LEVEL_1}
                     courseSchedule={{
                       start: courseData.startDateTime,
