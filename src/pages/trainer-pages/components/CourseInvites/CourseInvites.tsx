@@ -62,7 +62,7 @@ export const CourseInvites = ({ course }: Props) => {
     }
 
     const [last] = value.slice(-1) as string[]
-    const newEntries = last.split(',').map(e => e.toLowerCase().trim())
+    const newEntries = last.split(/[,\s;]/).map(e => e.toLowerCase().trim())
     const allValid = yup.array(emailSchema).min(1).isValidSync(newEntries)
     if (!allValid) {
       ev.preventDefault()
