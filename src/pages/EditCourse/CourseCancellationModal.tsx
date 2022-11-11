@@ -22,11 +22,14 @@ import { useTranslation } from 'react-i18next'
 import {
   CancelCourseMutation,
   CancelCourseMutationVariables,
+  CancelIndirectCourseMutation,
+  CancelIndirectCourseMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { CancellationTermsTable } from '@app/pages/EditCourse/CancellationTermsTable'
 import { getCancellationTermsFee } from '@app/pages/EditCourse/utils'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
+import { CANCEL_INDIRECT_COURSE_MUTATION } from '@app/queries/courses/cancel-indirect-course'
 import { yup } from '@app/schemas'
 import { Course, CourseType } from '@app/types'
 
@@ -139,14 +142,24 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
       setLoading(true)
 
       try {
-        await fetcher<CancelCourseMutation, CancelCourseMutationVariables>(
-          CANCEL_COURSE_MUTATION,
-          {
+        if (course.type === CourseType.INDIRECT) {
+          await fetcher<
+            CancelIndirectCourseMutation,
+            CancelIndirectCourseMutationVariables
+          >(CANCEL_INDIRECT_COURSE_MUTATION, {
             courseId: course.id,
-            cancellationFeePercent: data.cancellationFeePercent,
             cancellationReason: data.cancellationReason,
-          }
-        )
+          })
+        } else {
+          await fetcher<CancelCourseMutation, CancelCourseMutationVariables>(
+            CANCEL_COURSE_MUTATION,
+            {
+              courseId: course.id,
+              cancellationFeePercent: data.cancellationFeePercent,
+              cancellationReason: data.cancellationReason,
+            }
+          )
+        }
         if (onSubmit) {
           onSubmit()
         }

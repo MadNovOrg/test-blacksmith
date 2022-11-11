@@ -503,6 +503,7 @@ update_permissions:
         - aol_cost_of_course
         - aol_country
         - aol_region
+        - cancellation_reason
         - contact_profile_id
         - course_delivery_type
         - course_level

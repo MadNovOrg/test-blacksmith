@@ -36439,6 +36439,14 @@ export type CancelCourseMutationVariables = Exact<{
 
 export type CancelCourseMutation = { __typename?: 'mutation_root', cancelledCourse?: { __typename?: 'course', id: number } | null, delete_course_cancellation_request?: { __typename?: 'course_cancellation_request_mutation_response', affected_rows: number } | null };
 
+export type CancelIndirectCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  cancellationReason: Scalars['String'];
+}>;
+
+
+export type CancelIndirectCourseMutation = { __typename?: 'mutation_root', cancelledCourse?: { __typename?: 'course', id: number } | null, delete_course_cancellation_request?: { __typename?: 'course_cancellation_request_mutation_response', affected_rows: number } | null };
+
 export type CancelMyselfFromCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
 }>;

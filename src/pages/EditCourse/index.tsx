@@ -332,7 +332,7 @@ export const EditCourse: React.FC<unknown> = () => {
 
   const hasError = updatingError || auditError
   const fetching = updatingCourse || insertingAudit
-  const isCancellable =
+  const cancellableCourse =
     course &&
     [
       Course_Status_Enum.TrainerUnavailable,
@@ -340,6 +340,11 @@ export const EditCourse: React.FC<unknown> = () => {
       Course_Status_Enum.Scheduled,
       Course_Status_Enum.ConfirmModules,
     ].indexOf(course.status) !== -1
+  const canCancelCourse =
+    acl.canCancelCourses() ||
+    course?.trainers?.find(
+      t => t.profile.id === profile?.id && t.type === CourseTrainerType.LEADER
+    )
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -434,7 +439,7 @@ export const EditCourse: React.FC<unknown> = () => {
                 ) : null}
 
                 <Box display="flex" justifyContent="space-between" mt={4}>
-                  {isCancellable && acl.canCancelCourses() ? (
+                  {cancellableCourse && canCancelCourse ? (
                     <Button
                       variant="outlined"
                       onClick={() => {
