@@ -106,8 +106,10 @@ export const Users = () => {
     }
 
     if (filterByModerator) {
-      obj.course_trainer = {
-        can_be_moderator: { _eq: true },
+      obj.trainer_role_types = {
+        trainer_role_type: {
+          name: { _eq: TrainerRoleType.MODERATOR },
+        },
       }
       isFiltered = true
     }
@@ -303,16 +305,6 @@ export const Users = () => {
                                 />
                               ) : null
                             })}
-                            {user.course_trainer.some(
-                              course => course.can_be_moderator
-                            ) && (
-                              <Chip
-                                sx={{ fontSize: '12px' }}
-                                size="small"
-                                label={t(`moderator`)}
-                                data-testid="moderator-chip"
-                              />
-                            )}
                           </Box>
                         </TableCell>
                       </TableRow>

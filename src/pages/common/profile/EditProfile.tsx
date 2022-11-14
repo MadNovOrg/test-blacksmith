@@ -140,6 +140,7 @@ const defaultTrainerRoleTypes = {
   trainerRole: '',
   AOLRole: '',
   BILDRole: '',
+  moderatorRole: false,
 }
 
 export const trainerRolesNames: TrainerRoleType[] = [
@@ -147,13 +148,13 @@ export const trainerRolesNames: TrainerRoleType[] = [
   TrainerRoleType.SENIOR,
   TrainerRoleType.SENIOR_ASSIST,
   TrainerRoleType.EMPLOYER_TRAINER,
-  TrainerRoleType.ETA,
+  TrainerRoleType.TRAINER_ETA,
 ]
 
 export const AOLRolesNames: TrainerRoleType[] = [
   TrainerRoleType.EMPLOYER_AOL,
   TrainerRoleType.SPECIAL_AGREEMENT_AOL,
-  TrainerRoleType.ETA,
+  TrainerRoleType.AOL_ETA,
 ]
 
 export const BILDRolesNames: TrainerRoleType[] = [
@@ -340,6 +341,10 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               )
             ) {
               formattedTrainerRoleTypes.BILDRole = obj.trainer_role_type.name
+            } else if (
+              obj.trainer_role_type.name == TrainerRoleType.MODERATOR
+            ) {
+              formattedTrainerRoleTypes.moderatorRole = true
             }
             return formattedTrainerRoleTypes
           },
@@ -435,7 +440,10 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
             updatedTrainerRoleTypes.push(
               obj.trainerRoleTypes.trainerRole,
               obj.trainerRoleTypes.AOLRole,
-              obj.trainerRoleTypes.BILDRole
+              obj.trainerRoleTypes.BILDRole,
+              obj.trainerRoleTypes.moderatorRole
+                ? TrainerRoleType.MODERATOR
+                : null
             )
           }
 

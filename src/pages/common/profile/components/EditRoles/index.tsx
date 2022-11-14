@@ -12,6 +12,7 @@ import {
   List,
   MenuItem,
   Select,
+  Switch,
 } from '@mui/material'
 import React from 'react'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
@@ -19,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import { yup } from '@app/schemas'
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleType } from '@app/types'
 
 import {
   employeeRolesNames,
@@ -62,6 +63,7 @@ export function rolesFormSchema() {
             trainerRole: yup.string(),
             AOLRole: yup.string(),
             BILDRole: yup.string(),
+            moderatorRole: yup.boolean(),
           })
           .required(),
       })
@@ -189,7 +191,10 @@ export const EditRoles = () => {
                           >
                             {trainerRolesNames.map(roleName => (
                               <MenuItem value={roleName} key={roleName}>
-                                {t(`trainer-role-types.${roleName}`)}
+                                {roleName == TrainerRoleType.AOL_ETA ||
+                                roleName == TrainerRoleType.TRAINER_ETA
+                                  ? t(`trainer-role-types.eta`)
+                                  : t(`trainer-role-types.${roleName}`)}
                               </MenuItem>
                             ))}
                           </Select>
@@ -215,7 +220,10 @@ export const EditRoles = () => {
                           >
                             {AOLRolesNames.map(roleName => (
                               <MenuItem value={roleName} key={roleName}>
-                                {t(`trainer-role-types.${roleName}`)}
+                                {roleName == TrainerRoleType.AOL_ETA ||
+                                roleName == TrainerRoleType.TRAINER_ETA
+                                  ? t(`trainer-role-types.eta`)
+                                  : t(`trainer-role-types.${roleName}`)}
                               </MenuItem>
                             ))}
                           </Select>
@@ -223,8 +231,12 @@ export const EditRoles = () => {
                       />
                     </FormControl>
                   </Box>
-                  <Box mt={2}>
-                    <FormControl fullWidth variant="filled">
+                  <Box mt={2} display="flex">
+                    <FormControl
+                      fullWidth
+                      variant="filled"
+                      sx={{ marginRight: 2 }}
+                    >
                       <InputLabel>
                         {t('pages.view-profile.bild-role')}
                       </InputLabel>
@@ -247,6 +259,28 @@ export const EditRoles = () => {
                               </MenuItem>
                             ))}
                           </Select>
+                        )}
+                      />
+                    </FormControl>
+                    <FormControl fullWidth variant="filled">
+                      <Controller
+                        name={
+                          `roles.${index}.trainerRoleTypes.moderatorRole` as 'roles.0.trainerRoleTypes.moderatorRole'
+                        }
+                        control={control}
+                        render={({ field }) => (
+                          <FormControlLabel
+                            key={field.name}
+                            value={field.value}
+                            control={
+                              <Switch
+                                {...field}
+                                checked={Boolean(field.value)}
+                              />
+                            }
+                            label={t(`common.moderator`)}
+                            sx={{ alignItems: 'center' }}
+                          />
                         )}
                       />
                     </FormControl>
@@ -387,7 +421,7 @@ export const EditRoles = () => {
                       trainerRole: '',
                       AOLRole: '',
                       BILDRole: '',
-                      // moderator: false,
+                      moderator: false,
                     },
                   })
                 }}

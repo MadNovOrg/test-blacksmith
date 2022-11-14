@@ -16,7 +16,6 @@ insert_permissions:
           course_type:
             _eq: CLOSED
       columns:
-        - can_be_moderator
         - course_id
         - status
         - type
@@ -37,7 +36,6 @@ insert_permissions:
     permission:
       check: {}
       columns:
-        - can_be_moderator
         - course_id
         - id
         - profile_id
@@ -48,7 +46,6 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - can_be_moderator
         - course_id
         - status
         - type
@@ -70,7 +67,6 @@ select_permissions:
   - role: tt-ops
     permission:
       columns:
-        - can_be_moderator
         - course_id
         - id
         - profile_id
@@ -90,7 +86,6 @@ update_permissions:
   - role: sales-admin
     permission:
       columns:
-        - can_be_moderator
         - course_id
         - status
         - type
@@ -112,7 +107,6 @@ update_permissions:
   - role: tt-ops
     permission:
       columns:
-        - can_be_moderator
         - status
         - type
       filter: {}

@@ -25,10 +25,6 @@ export const getProfiles = gql`
           id
         }
       }
-      course_trainer {
-        id
-        can_be_moderator
-      }
     }
     profile_aggregate(where: $where) {
       aggregate {

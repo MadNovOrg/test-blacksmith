@@ -190,11 +190,13 @@ export enum TrainerRoleType {
   SENIOR = 'senior',
   SENIOR_ASSIST = 'senior-assist',
   EMPLOYER_TRAINER = 'employer-trainer',
-  ETA = 'eta',
+  TRAINER_ETA = 'trainer-eta',
+  AOL_ETA = 'aol-eta',
   BILD_SENIOR = 'bild-senior',
   BILD_CERTIFIED = 'bild-certified',
   EMPLOYER_AOL = 'employer-aol',
   SPECIAL_AGREEMENT_AOL = 'special-agreement-aol',
+  MODERATOR = 'moderator',
 }
 
 export enum CourseType {

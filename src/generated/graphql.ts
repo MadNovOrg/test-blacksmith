@@ -19250,7 +19250,6 @@ export type Course_Sum_Order_By = {
 /** columns and relationships of "course_trainer" */
 export type Course_Trainer = {
   __typename?: 'course_trainer';
-  can_be_moderator: Scalars['Boolean'];
   /** An object relationship */
   course: Course;
   course_id: Scalars['Int'];
@@ -19330,7 +19329,6 @@ export type Course_Trainer_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Trainer_Bool_Exp>>;
   _not?: InputMaybe<Course_Trainer_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Trainer_Bool_Exp>>;
-  can_be_moderator?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -19357,7 +19355,6 @@ export type Course_Trainer_Inc_Input = {
 
 /** input type for inserting data into table "course_trainer" */
 export type Course_Trainer_Insert_Input = {
-  can_be_moderator?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
@@ -19415,7 +19412,6 @@ export type Course_Trainer_On_Conflict = {
 
 /** Ordering options when selecting data from "course_trainer". */
 export type Course_Trainer_Order_By = {
-  can_be_moderator?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   course_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -19433,8 +19429,6 @@ export type Course_Trainer_Pk_Columns_Input = {
 /** select columns of table "course_trainer" */
 export enum Course_Trainer_Select_Column {
   /** column name */
-  CanBeModerator = 'can_be_moderator',
-  /** column name */
   CourseId = 'course_id',
   /** column name */
   Id = 'id',
@@ -19448,7 +19442,6 @@ export enum Course_Trainer_Select_Column {
 
 /** input type for updating data in table "course_trainer" */
 export type Course_Trainer_Set_Input = {
-  can_be_moderator?: InputMaybe<Scalars['Boolean']>;
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
@@ -19619,8 +19612,6 @@ export enum Course_Trainer_Type_Update_Column {
 
 /** update columns of table "course_trainer" */
 export enum Course_Trainer_Update_Column {
-  /** column name */
-  CanBeModerator = 'can_be_moderator',
   /** column name */
   CourseId = 'course_id',
   /** column name */
@@ -37160,7 +37151,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }>, course_trainer: Array<{ __typename?: 'course_trainer', id: any, can_be_moderator: boolean }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
+export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', name: string, id: any } }> }>, profile_aggregate: { __typename?: 'profile_aggregate', aggregate?: { __typename?: 'profile_aggregate_fields', count: number } | null } };
 
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 

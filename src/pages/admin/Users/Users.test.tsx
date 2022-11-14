@@ -39,12 +39,6 @@ const mockProfile = build<GetProfilesQuery['profiles'][0]>({
         },
       },
     ],
-    course_trainer: [
-      {
-        id: fake(f => f.datatype.uuid()),
-        can_be_moderator: false,
-      },
-    ],
     organizations: [
       {
         id: fake(f => f.datatype.uuid()),
@@ -224,7 +218,8 @@ describe('page: Users', () => {
     useProfilesMocked.mockImplementation(
       ({ where }: GetProfilesQueryVariables) => {
         const profiles =
-          where?.course_trainer?.can_be_moderator?._eq === true
+          where?.trainer_role_types?.trainer_role_type?.name?._eq ===
+          TrainerRoleType.MODERATOR
             ? [filteredProfile]
             : [profile]
         return {

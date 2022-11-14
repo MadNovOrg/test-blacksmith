@@ -255,10 +255,13 @@
       "senior-assist": "Senior assist",
       "employer-trainer": "Employer trainer",
       "eta": "ETA",
+      "trainer-eta": "Trainer ETA",
+      "aol-eta": "AOL ETA",
       "bild-senior": "BILD senior",
       "bild-certified": "BILD certified",
       "employer-aol": "Employer AOL",
-      "special-agreement-aol": "Special agreement AOL"
+      "special-agreement-aol": "Special agreement AOL",
+      "moderator": "Moderator"
     },
     "validation-hints": {
       "pw-format": "Password must be at least 8 characters, one uppercase, one lowercase, one number and one special character"
@@ -1829,8 +1832,7 @@
         "sales-representative": "Sales representative",
         "sales-admin": " Sales administrator",
         "l&d": "L&D",
-        "finance": "Finance",
-        "sales": "Sales"
+        "finance": "Finance"
       }
     },
     "available-courses": {
