@@ -148,24 +148,12 @@ describe('getCourseAssistants', () => {
 })
 
 describe('getTimeDifferenceAndContext() -', () => {
-  describe('>1 day && <2 days', () => {
-    const start = new Date('2022-01-01 00:00')
-    const end = new Date('2022-01-02 00:01')
-    const { count, context } = getTimeDifferenceAndContext(end, start)
-    test('count: 1', () => {
-      expect(count).toEqual(1)
-    })
-    test('context: days', () => {
-      expect(context).toEqual('days')
-    })
-  })
-
-  describe('1 day', () => {
+  describe('2 days', () => {
     const start = new Date('2022-01-01 00:00')
     const end = new Date('2022-01-02 00:00')
     const { count, context } = getTimeDifferenceAndContext(end, start)
-    test('count: 1', () => {
-      expect(count).toEqual(1)
+    test('count: 2', () => {
+      expect(count).toEqual(2)
     })
     test('context: days', () => {
       expect(context).toEqual('days')

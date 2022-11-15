@@ -395,11 +395,10 @@ export const getTimeDifferenceAndContext = (
   start: Date
 ): TimeDifferenceAndContext => {
   const result: TimeDifferenceAndContext = {
-    count: differenceInDays(end, start),
+    count: differenceInDays(end, start) + 1,
     context: 'days',
   }
-
-  if (result.count === 0) {
+  if (result.count === 1) {
     result.count = differenceInHours(end, start)
     result.context = 'hours'
   }

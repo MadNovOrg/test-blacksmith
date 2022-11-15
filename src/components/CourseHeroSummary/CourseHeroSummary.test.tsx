@@ -169,27 +169,11 @@ describe('component: CourseHeroSummary', () => {
     expect(screen.getByText('Duration 2 hours')).toBeInTheDocument()
   })
 
-  it('displays a correct message if course lasts 1 day', () => {
-    const courseSchedule = buildCourseSchedule({
-      overrides: {
-        start: add(new Date(), { minutes: 0 }).toISOString(),
-        end: add(new Date(), { days: 1 }).toISOString(),
-      },
-    })
-    const course = buildCourse({
-      overrides: { schedule: [courseSchedule] },
-    })
-
-    render(<CourseHeroSummary course={course} />)
-
-    expect(screen.getByText('Duration 1 day')).toBeInTheDocument()
-  })
-
   it('displays a correct message if course lasts 2 days', () => {
     const courseSchedule = buildCourseSchedule({
       overrides: {
         start: add(new Date(), { minutes: 0 }).toISOString(),
-        end: add(new Date(), { days: 2 }).toISOString(),
+        end: add(new Date(), { days: 1 }).toISOString(),
       },
     })
     const course = buildCourse({
