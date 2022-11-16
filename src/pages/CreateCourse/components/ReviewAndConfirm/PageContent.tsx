@@ -158,12 +158,15 @@ const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
 
     const accommodationCost =
       expenses.transport.reduce(
-        (acc, { accommodationCost: n }) => (n && n > 0 ? acc + n : acc),
+        (acc, { accommodationCost: c, accommodationNights: n }) =>
+          n && c && n > 0 ? acc + n * c : acc,
         0
       ) ?? 0
 
     const aLabel = t('pages.create-course.trainer-expenses.accommodation')
-    const aFormattedAmount = t('common.currency', { amount: accommodationCost })
+    const aFormattedAmount = t('common.currency', {
+      amount: accommodationCost,
+    })
 
     const sLabel = t('pages.create-course.trainer-expenses.subsistence')
     const sFormattedAmount = t('common.currency', {
@@ -282,7 +285,11 @@ export const PageContent = () => {
           return (
             roundToTwoDecimals(acc) +
             roundToTwoDecimals(cost) +
-            roundToTwoDecimals(accommodationCost) +
+            roundToTwoDecimals(
+              accommodationCost && accommodationNights
+                ? accommodationCost * accommodationNights
+                : 0
+            ) +
             roundToTwoDecimals(subsistenceCost)
           )
         },
