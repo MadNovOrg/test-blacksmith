@@ -17,21 +17,26 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
       created_at
       updated_at
       authorizedBy {
+        id
         avatar
         fullName
       }
       profile {
+        id
         avatar
         fullName
         email
       }
       course {
+        id
         course_code
       }
       fromCourse {
+        id
         course_code
       }
       toCourse {
+        id
         course_code
       }
       payload

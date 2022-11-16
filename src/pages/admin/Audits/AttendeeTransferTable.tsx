@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -159,10 +160,8 @@ export const AttendeeTransferTable: React.FC = () => {
                 />
 
                 {logs.map(log => {
-                  const from = log.fromCourse
-                    ? log.fromCourse[0].course_code
-                    : ''
-                  const to = log.toCourse ? log.toCourse[0].course_code : ''
+                  const from = log.fromCourse ? log.fromCourse[0] : null
+                  const to = log.toCourse ? log.toCourse[0] : null
                   return (
                     <TableRow
                       key={log.id}
@@ -174,19 +173,28 @@ export const AttendeeTransferTable: React.FC = () => {
                         })}
                       </TableCell>
                       <TableCell>
-                        <Typography
-                          variant="body2"
-                          sx={{ textDecoration: 'line-through' }}
-                        >
-                          {from}
-                        </Typography>
+                        <Link href={`/manage-courses/all/${from?.id}/details`}>
+                          <Typography
+                            variant="body2"
+                            sx={{ textDecoration: 'line-through' }}
+                          >
+                            {from?.course_code ?? ''}
+                          </Typography>
+                        </Link>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{to}</Typography>
+                        <Link href={`/manage-courses/all/${to?.id}/details`}>
+                          <Typography variant="body2">
+                            {to?.course_code ?? ''}
+                          </Typography>
+                        </Link>
                       </TableCell>
                       <TableCell>
                         {log.profile ? (
-                          <ProfileWithAvatar profile={log.profile} />
+                          <ProfileWithAvatar
+                            profile={log.profile}
+                            useLink={true}
+                          />
                         ) : null}
                       </TableCell>
                       <TableCell>
@@ -196,7 +204,10 @@ export const AttendeeTransferTable: React.FC = () => {
                       </TableCell>
                       <TableCell>
                         {log.authorizedBy ? (
-                          <ProfileWithAvatar profile={log.authorizedBy} />
+                          <ProfileWithAvatar
+                            profile={log.authorizedBy}
+                            useLink={true}
+                          />
                         ) : null}
                       </TableCell>
                     </TableRow>

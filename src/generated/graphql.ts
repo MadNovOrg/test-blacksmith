@@ -36309,7 +36309,7 @@ export type GetAttendeeAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', avatar?: string | null, fullName?: string | null }, profile: { __typename?: 'profile', avatar?: string | null, fullName?: string | null, email?: string | null }, course: { __typename?: 'course', course_code?: string | null }, fromCourse?: Array<{ __typename?: 'course', course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
+export type GetAttendeeAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_participant_audit', id: any, created_at: any, updated_at: any, payload: any, newAttendeeEmail?: string | null, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, profile: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, email?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null }, fromCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null, toCourse?: Array<{ __typename?: 'course', id: number, course_code?: string | null }> | null }>, logsAggregate: { __typename?: 'course_participant_audit_aggregate', aggregate?: { __typename?: 'course_participant_audit_aggregate_fields', count: number } | null } };
 
 export type GetCourseAuditLogsQueryVariables = Exact<{
   where: Course_Audit_Bool_Exp;
@@ -36319,7 +36319,7 @@ export type GetCourseAuditLogsQueryVariables = Exact<{
 }>;
 
 
-export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', course_code?: string | null } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
 
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;

@@ -17,10 +17,12 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
       created_at
       updated_at
       authorizedBy {
+        id
         avatar
         fullName
       }
       course {
+        id
         course_code
       }
       payload

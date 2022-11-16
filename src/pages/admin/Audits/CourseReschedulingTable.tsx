@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -177,9 +178,13 @@ export const CourseReschedulingTable: React.FC = () => {
                       })}
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">
-                        {log.course.course_code}
-                      </Typography>
+                      <Link
+                        href={`/manage-courses/all/${log.course.id}/details`}
+                      >
+                        <Typography variant="body2">
+                          {log.course.course_code}
+                        </Typography>
+                      </Link>
                     </TableCell>
                     <TableCell
                       sx={{
@@ -213,7 +218,10 @@ export const CourseReschedulingTable: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       {log.authorizedBy ? (
-                        <ProfileWithAvatar profile={log.authorizedBy} />
+                        <ProfileWithAvatar
+                          profile={log.authorizedBy}
+                          useLink={true}
+                        />
                       ) : null}
                     </TableCell>
                   </TableRow>

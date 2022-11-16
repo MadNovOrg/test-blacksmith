@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -173,6 +174,7 @@ export const AttendeeReplacementTable: React.FC = () => {
                           typographySx={{
                             textDecoration: 'line-through',
                           }}
+                          useLink={true}
                         />
                       ) : null}
                     </TableCell>
@@ -185,10 +187,19 @@ export const AttendeeReplacementTable: React.FC = () => {
                       </Typography>
                     </TableCell>
                     <TableCell>{log.newAttendeeEmail}</TableCell>
-                    <TableCell>{log.course.course_code}</TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/manage-courses/all/${log.course.id}/details`}
+                      >
+                        {log.course.course_code}
+                      </Link>
+                    </TableCell>
                     <TableCell>
                       {log.authorizedBy ? (
-                        <ProfileWithAvatar profile={log.authorizedBy} />
+                        <ProfileWithAvatar
+                          profile={log.authorizedBy}
+                          useLink={true}
+                        />
                       ) : null}
                     </TableCell>
                   </TableRow>

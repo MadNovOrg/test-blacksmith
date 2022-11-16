@@ -109,10 +109,7 @@ export const CourseDetails = () => {
                   ) : null
                 }
               >
-                <BackButton
-                  to="/courses"
-                  label={t('pages.course-participants.back-button')}
-                />
+                <BackButton label={t('back')} />
               </CourseHeroSummary>
 
               <CourseCancellationRequestFeature

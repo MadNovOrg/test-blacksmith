@@ -1,6 +1,7 @@
 import {
   Box,
   CircularProgress,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -161,14 +162,26 @@ export const AttendeeCancellationTable: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       {log.profile ? (
-                        <ProfileWithAvatar profile={log.profile} />
+                        <ProfileWithAvatar
+                          profile={log.profile}
+                          useLink={true}
+                        />
                       ) : null}
                     </TableCell>
                     <TableCell>{log.profile.email}</TableCell>
-                    <TableCell>{log.course.course_code}</TableCell>
+                    <TableCell>
+                      <Link
+                        href={`/manage-courses/all/${log.course.id}/details`}
+                      >
+                        {log.course.course_code}
+                      </Link>
+                    </TableCell>
                     <TableCell>
                       {log.authorizedBy ? (
-                        <ProfileWithAvatar profile={log.authorizedBy} />
+                        <ProfileWithAvatar
+                          profile={log.authorizedBy}
+                          useLink={true}
+                        />
                       ) : null}
                     </TableCell>
                   </TableRow>
