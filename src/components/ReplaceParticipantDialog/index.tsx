@@ -33,6 +33,8 @@ export enum Mode {
   ORG_ADMIN,
 }
 
+const TRANSLATION_SCOPE = 'components.replace-participant'
+
 export type Props = {
   onClose?: () => void
   onSuccess?: () => void
@@ -50,7 +52,7 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
   mode = Mode.TT_ADMIN,
   participant,
 }) => {
-  const { t, _t } = useScopedTranslation('components.replace-participant')
+  const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
 
   const schema = yup.object({
     email: schemas.email(_t).required(),
@@ -110,7 +112,10 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
             sx={{ mb: 2 }}
             data-testid="error-alert"
           >
-            {t('replacement-error')}
+            {_t([
+              `${TRANSLATION_SCOPE}.replacement-error-${data?.replaceParticipant?.error}`,
+              `${TRANSLATION_SCOPE}.replacement-error`,
+            ])}
           </Alert>
         ) : null}
 

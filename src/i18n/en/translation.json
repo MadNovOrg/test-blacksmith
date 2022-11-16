@@ -455,6 +455,7 @@
       "cancel-btn-text": "Never mind",
       "submit-btn-text": "Replace attendee",
       "replacement-error": "There was an error replacing the participant.",
+      "replacement-error-INVALID_EMAIL": "Invite email is already registered on the course.",
       "terms-notice": "I acknowledge that the new attendee has the same billing details as the original booking. A charge will only incur if billing details change."
     },
     "not-found": {

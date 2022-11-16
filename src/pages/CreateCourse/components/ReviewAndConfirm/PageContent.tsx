@@ -397,6 +397,7 @@ export const PageContent = () => {
             'pages.create-course.review-and-confirm.trainer-expenses-total'
           )}
           value={t('common.currency', { amount: trainerExpensesTotal })}
+          testId="trainer-total-expenses"
         />
 
         <PageRow />

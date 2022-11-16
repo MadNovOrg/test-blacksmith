@@ -283,9 +283,9 @@ describe('component: ReviewAndConfirm', () => {
     })
 
     expect(screen.getByText(/Trainer expenses total/)).toBeInTheDocument()
-    expect(
-      screen.getByText(`${formatCurrency(totalExpenses)}`, { exact: false })
-    ).toBeInTheDocument()
+    expect(screen.getByTestId('trainer-total-expenses')).toHaveTextContent(
+      formatCurrency(totalExpenses)
+    )
 
     expect(screen.getByText(/Course Cost/)).toBeInTheDocument()
     expect(screen.getByText('£1,100.00', { exact: false })).toBeInTheDocument()

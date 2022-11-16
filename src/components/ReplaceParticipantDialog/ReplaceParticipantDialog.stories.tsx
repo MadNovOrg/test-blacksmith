@@ -119,3 +119,23 @@ export const AsOrgAdmin = () => {
     </Provider>
   )
 }
+
+export const WithParticipantExistsError = () => {
+  const client = {
+    executeMutation: () =>
+      fromValue<{ data: ReplaceParticipantMutation }>({
+        data: {
+          replaceParticipant: {
+            success: false,
+            error: ReplaceParticipantError.InvalidEmail,
+          },
+        },
+      }),
+  } as unknown as Client
+
+  return (
+    <Provider value={client}>
+      <ReplaceParticipantDialog participant={participant} />
+    </Provider>
+  )
+}
