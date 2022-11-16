@@ -67,7 +67,7 @@ import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update
 import { MUTATION as UPDATE_PROFILE_ROLES_MUTATION } from '@app/queries/profile/update-profile-roles'
 import { MUTATION as UPDATE_PROFILE_TRAINER_ROLE_TYPES } from '@app/queries/trainer/update-trainer-role-types'
 import theme from '@app/theme'
-import { RoleName, TrainerRoleType } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { EditRoles, RolesFields, rolesFormSchema } from './components/EditRoles'
 import { UserGo1License } from './components/UserGo1License'
@@ -136,30 +136,30 @@ export const salesRole = {
   name: 'sales' as RoleName,
 }
 
-const defaultTrainerRoleTypes = {
+const defaultTrainerRoles = {
   trainerRole: '',
   AOLRole: '',
   BILDRole: '',
   moderatorRole: false,
 }
 
-export const trainerRolesNames: TrainerRoleType[] = [
-  TrainerRoleType.PRINCIPAL,
-  TrainerRoleType.SENIOR,
-  TrainerRoleType.SENIOR_ASSIST,
-  TrainerRoleType.EMPLOYER_TRAINER,
-  TrainerRoleType.TRAINER_ETA,
+export const trainerRolesNames: TrainerRoleTypeName[] = [
+  TrainerRoleTypeName.PRINCIPAL,
+  TrainerRoleTypeName.SENIOR,
+  TrainerRoleTypeName.SENIOR_ASSIST,
+  TrainerRoleTypeName.EMPLOYER_TRAINER,
+  TrainerRoleTypeName.TRAINER_ETA,
 ]
 
-export const AOLRolesNames: TrainerRoleType[] = [
-  TrainerRoleType.EMPLOYER_AOL,
-  TrainerRoleType.SPECIAL_AGREEMENT_AOL,
-  TrainerRoleType.AOL_ETA,
+export const AOLRolesNames: TrainerRoleTypeName[] = [
+  TrainerRoleTypeName.EMPLOYER_AOL,
+  TrainerRoleTypeName.SPECIAL_AGREEMENT_AOL,
+  TrainerRoleTypeName.AOL_ETA,
 ]
 
-export const BILDRolesNames: TrainerRoleType[] = [
-  TrainerRoleType.BILD_SENIOR,
-  TrainerRoleType.BILD_CERTIFIED,
+export const BILDRolesNames: TrainerRoleTypeName[] = [
+  TrainerRoleTypeName.BILD_SENIOR,
+  TrainerRoleTypeName.BILD_CERTIFIED,
 ]
 
 export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
@@ -278,7 +278,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           userRole: '',
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: defaultTrainerRoleTypes,
+          trainerRoles: defaultTrainerRoles,
         },
       ],
     },
@@ -325,31 +325,31 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           (formattedTrainerRoleTypes, obj) => {
             if (
               trainerRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleType
+                obj.trainer_role_type.name as TrainerRoleTypeName
               )
             ) {
               formattedTrainerRoleTypes.trainerRole = obj.trainer_role_type.name
             } else if (
               AOLRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleType
+                obj.trainer_role_type.name as TrainerRoleTypeName
               )
             ) {
               formattedTrainerRoleTypes.AOLRole = obj.trainer_role_type.name
             } else if (
               BILDRolesNames.includes(
-                obj.trainer_role_type.name as TrainerRoleType
+                obj.trainer_role_type.name as TrainerRoleTypeName
               )
             ) {
               formattedTrainerRoleTypes.BILDRole = obj.trainer_role_type.name
             } else if (
-              obj.trainer_role_type.name == TrainerRoleType.MODERATOR
+              obj.trainer_role_type.name == TrainerRoleTypeName.MODERATOR
             ) {
               formattedTrainerRoleTypes.moderatorRole = true
             }
             return formattedTrainerRoleTypes
           },
           {
-            ...defaultTrainerRoleTypes,
+            ...defaultTrainerRoles,
           }
         )
 
@@ -363,7 +363,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               userRole: obj.role.name as UserRoleName,
               employeeRoles: [],
               salesRoles: [],
-              trainerRoleTypes: formattedTrainerRoleTypes,
+              trainerRoles: formattedTrainerRoleTypes,
             })
           } else if (isEmployeeRole(obj.role.name as EmployeeRoleName)) {
             if (existingEmployeeRole) {
@@ -375,7 +375,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                 userRole: employeeRole.name,
                 employeeRoles: [obj.role.name as EmployeeRoleName],
                 salesRoles: [],
-                trainerRoleTypes: defaultTrainerRoleTypes,
+                trainerRoles: defaultTrainerRoles,
               })
             }
           } else if (isSalesRole(obj.role.name as RoleName)) {
@@ -389,7 +389,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                 userRole: employeeRole.name,
                 employeeRoles: [salesRole.name],
                 salesRoles: [obj.role.name as RoleName],
-                trainerRoleTypes: defaultTrainerRoleTypes,
+                trainerRoles: defaultTrainerRoles,
               })
             }
           } else if (userRolesNames.includes(obj.role.name as UserRoleName)) {
@@ -397,7 +397,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
               userRole: obj.role.name as UserRoleName,
               employeeRoles: [],
               salesRoles: [],
-              trainerRoleTypes: defaultTrainerRoleTypes,
+              trainerRoles: defaultTrainerRoles,
             })
           }
         })
@@ -434,15 +434,15 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
       )
       if (canEditRoles) {
         const updatedRoles: string[] = []
-        const updatedTrainerRoleTypes: (string | null)[] = []
+        const updatedTrainerRoles: (string | null)[] = []
         data.roles.map(obj => {
           if (obj.userRole === RoleName.TRAINER) {
-            updatedTrainerRoleTypes.push(
-              obj.trainerRoleTypes.trainerRole,
-              obj.trainerRoleTypes.AOLRole,
-              obj.trainerRoleTypes.BILDRole,
-              obj.trainerRoleTypes.moderatorRole
-                ? TrainerRoleType.MODERATOR
+            updatedTrainerRoles.push(
+              obj.trainerRoles.trainerRole,
+              obj.trainerRoles.AOLRole,
+              obj.trainerRoles.BILDRole,
+              obj.trainerRoles.moderatorRole
+                ? TrainerRoleTypeName.MODERATOR
                 : null
             )
           }
@@ -468,7 +468,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
         const filteredTrainerRoleTypes = systemTrainerRoleTypes?.reduce(
           (filteredTrainerRoleTypes, systemTrainerRoleType) => {
             if (
-              updatedTrainerRoleTypes.find(
+              updatedTrainerRoles.find(
                 role => role === systemTrainerRoleType.name
               )
             ) {

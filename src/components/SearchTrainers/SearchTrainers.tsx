@@ -89,6 +89,31 @@ export function SearchTrainers({
     })
   }
 
+  const renderOption = (
+    props: HTMLAttributes<HTMLLIElement>,
+    option: SearchTrainer,
+    _state: AutocompleteRenderOptionState
+  ) => {
+    const trainerRoles = option.trainer_role_types
+      .map(obj => t(`trainer-role-types.${obj.trainer_role_type.name}`))
+      .join(', ')
+    return (
+      <Box
+        {...props}
+        component="li"
+        sx={{ display: 'flex', gap: 2 }}
+        data-testid="SearchTrainers-option"
+      >
+        <Avatar size={32} src={option.avatar} name={option.fullName} />
+        <Box sx={{ flex: 1 }}>
+          <Typography variant="body1">{option.fullName}</Typography>
+          <Typography variant="body2">{trainerRoles}</Typography>
+        </Box>
+        <TrainerAvailabilityStatus availability={option.availability} />
+      </Box>
+    )
+  }
+
   const searchTrainers = useDebouncedCallback(async (query: string) => {
     const { trainers } = await search(query)
     if (!isMounted()) return
@@ -208,28 +233,6 @@ function renderTextField({
         'data-testid': 'SearchTrainers-input',
       }}
     />
-  )
-}
-
-function renderOption(
-  props: HTMLAttributes<HTMLLIElement>,
-  option: SearchTrainer,
-  _state: AutocompleteRenderOptionState
-) {
-  return (
-    <Box
-      {...props}
-      component="li"
-      sx={{ display: 'flex', gap: 2 }}
-      data-testid="SearchTrainers-option"
-    >
-      <Avatar size={32} src={option.avatar} name={option.fullName} />
-      <Box sx={{ flex: 1 }}>
-        <Typography variant="body1">{option.fullName}</Typography>
-        <Typography variant="body2">Principal</Typography>
-      </Box>
-      <TrainerAvailabilityStatus availability={option.availability} />
-    </Box>
   )
 }
 

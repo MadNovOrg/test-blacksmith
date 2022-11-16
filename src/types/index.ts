@@ -160,12 +160,18 @@ export type Profile = {
     organization: Organization
   }>
   roles: Array<{ role: Role }> // roles assigned in profile_role
+  trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
   lastActivity: Date
 } & Base
 
 export type Role = {
   id: string
   name: RoleName
+}
+
+export type TrainerRoleType = {
+  id: string
+  name: TrainerRoleTypeName
 }
 
 export enum PaymentMethod {
@@ -185,7 +191,7 @@ export enum RoleName {
   UNVERIFIED = 'unverified',
 }
 
-export enum TrainerRoleType {
+export enum TrainerRoleTypeName {
   PRINCIPAL = 'principal',
   SENIOR = 'senior',
   SENIOR_ASSIST = 'senior-assist',
@@ -483,7 +489,7 @@ export type SearchTrainer = {
     courseLevel: CourseLevel
     expiryDate: Date
   }[]
-} & Pick<Profile, 'id' | 'fullName' | 'avatar'>
+} & Pick<Profile, 'id' | 'fullName' | 'avatar' | 'trainer_role_types'>
 
 export type CourseCertificateChangelog = {
   oldGrade: Grade

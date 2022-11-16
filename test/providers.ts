@@ -1,7 +1,7 @@
 import { MarkOptional } from 'ts-essentials'
 
 import type { AuthContextType } from '@app/context/auth/types'
-import { RoleName } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 export const profile = {
   id: 'cacb559d-b85d-5e64-b623-37252520ebda',
@@ -23,6 +23,9 @@ export const profile = {
   updatedAt: '',
   organizations: [],
   roles: [{ role: { id: '1', name: RoleName.USER } }],
+  trainer_role_types: [
+    { trainer_role_type: { id: '1', name: TrainerRoleTypeName.PRINCIPAL } },
+  ],
   dietaryRestrictions: null,
   disabilities: null,
   lastActivity: new Date('2020-01-01 00:00:00'),

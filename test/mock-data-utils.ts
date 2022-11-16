@@ -116,6 +116,7 @@ export const buildProfile = build<Profile>({
         role: buildRole(),
       },
     ],
+    trainer_role_types: [],
     organizations: [{ organization: buildOrganization() }],
     dietaryRestrictions: null,
     disabilities: null,

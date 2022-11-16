@@ -515,6 +515,7 @@ type SearchTrainer {
   id: uuid!
   fullName: String!
   avatar: String
+  trainer_role_types: [TrainerRoleType!]!
   levels: [CourseLevel!]!
   availability: SearchTrainerAvailability
 }
@@ -693,5 +694,14 @@ type TransferParticipantOutput {
 type ReplaceParticipantOutput {
   success: Boolean!
   error: ReplaceParticipantError
+}
+
+type TrainerRoleTypeObj {
+  id: String!
+  name: String!
+}
+
+type TrainerRoleType {
+  trainerRoleType: TrainerRoleTypeObj
 }
 

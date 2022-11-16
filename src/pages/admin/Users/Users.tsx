@@ -27,7 +27,7 @@ import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
-import { RoleName, TrainerRoleType } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 const StyledLink = styled('a')(() => ({
   '&:hover, &:active': {
@@ -50,7 +50,7 @@ export const Users = () => {
   }, [t])
 
   const trainerTypeOptions = useMemo<FilterOption[]>(() => {
-    return Object.values(TrainerRoleType).map<FilterOption>(type => ({
+    return Object.values(TrainerRoleTypeName).map<FilterOption>(type => ({
       id: type,
       title: t(`trainer-role-types.${type}`),
       selected: false,
@@ -108,7 +108,7 @@ export const Users = () => {
     if (filterByModerator) {
       obj.trainer_role_types = {
         trainer_role_type: {
-          name: { _eq: TrainerRoleType.MODERATOR },
+          name: { _eq: TrainerRoleTypeName.MODERATOR },
         },
       }
       isFiltered = true

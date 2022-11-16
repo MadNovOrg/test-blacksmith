@@ -35,6 +35,12 @@ export const SEARCH_TRAINERS = gql`
       avatar
       levels
       availability
+      trainer_role_types {
+        trainer_role_type: trainerRoleType {
+          name
+          id
+        }
+      }
     }
   }
 `

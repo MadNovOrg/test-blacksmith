@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { RoleName, TrainerRoleType } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -36,7 +36,7 @@ describe('component: EditRoles', () => {
             'sales',
           ] as EmployeeRoleName[],
           salesRoles: [RoleName.SALES_ADMIN],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',
@@ -75,7 +75,7 @@ describe('component: EditRoles', () => {
           userRole: RoleName.TT_ADMIN,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',
@@ -101,7 +101,7 @@ describe('component: EditRoles', () => {
           userRole: RoleName.USER,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',
@@ -127,10 +127,10 @@ describe('component: EditRoles', () => {
           userRole: RoleName.TRAINER,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
-            trainerRole: TrainerRoleType.PRINCIPAL,
-            AOLRole: TrainerRoleType.EMPLOYER_AOL,
-            BILDRole: TrainerRoleType.BILD_SENIOR,
+          trainerRoles: {
+            trainerRole: TrainerRoleTypeName.PRINCIPAL,
+            AOLRole: TrainerRoleTypeName.EMPLOYER_AOL,
+            BILDRole: TrainerRoleTypeName.BILD_SENIOR,
           },
         },
       ],
@@ -160,7 +160,7 @@ describe('component: EditRoles', () => {
           userRole: RoleName.USER,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',
@@ -170,7 +170,7 @@ describe('component: EditRoles', () => {
           userRole: RoleName.TT_ADMIN,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',
@@ -203,7 +203,7 @@ describe('component: EditRoles', () => {
           userRole: RoleName.USER,
           employeeRoles: [],
           salesRoles: [],
-          trainerRoleTypes: {
+          trainerRoles: {
             trainerRole: '',
             AOLRole: '',
             BILDRole: '',

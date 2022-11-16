@@ -1,8 +1,20 @@
 import React from 'react'
 
-import { SearchTrainer, CourseTrainerType, CourseLevel } from '@app/types'
+import {
+  SearchTrainer,
+  CourseTrainerType,
+  CourseLevel,
+  TrainerRoleTypeName,
+} from '@app/types'
 
-import { render, screen, chance, userEvent, waitForCalls } from '@test/index'
+import {
+  render,
+  screen,
+  chance,
+  userEvent,
+  waitForCalls,
+  within,
+} from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { SearchTrainers } from './SearchTrainers'
@@ -93,10 +105,33 @@ describe('component: SearchTrainers', () => {
     const lastName = 'Smith'
     mockSearch.mockResolvedValueOnce({
       trainers: [
-        { id: chance.guid(), fullName: `John Mc${lastName}` },
-        { id: chance.guid(), fullName: `Ivan ${lastName}ovich` },
-        { id: chance.guid(), fullName: `Coen De${lastName}` },
-        { id: chance.guid(), fullName: `Mary NotAMatch` },
+        {
+          id: chance.guid(),
+          fullName: `John Mc${lastName}`,
+          trainer_role_types: [
+            {
+              trainer_role_type: {
+                id: '0',
+                name: TrainerRoleTypeName.PRINCIPAL,
+              },
+            },
+          ],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Ivan ${lastName}ovich`,
+          trainer_role_types: [],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Coen De${lastName}`,
+          trainer_role_types: [],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Mary NotAMatch`,
+          trainer_role_types: [],
+        },
       ],
     })
 
@@ -113,6 +148,16 @@ describe('component: SearchTrainers', () => {
 
     await waitForCalls(mockSearch)
     expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(3)
+    expect(
+      within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
+        'John McSmith'
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
+        'Principal'
+      )
+    ).toBeInTheDocument()
   })
 
   it('calls matchesFilter to further filter options', async () => {
@@ -147,10 +192,26 @@ describe('component: SearchTrainers', () => {
     const lastName = 'Smith'
     mockSearch.mockResolvedValueOnce({
       trainers: [
-        { id: chance.guid(), fullName: `John Mc${lastName}` },
-        { id: chance.guid(), fullName: `Ivan ${lastName}ovich` },
-        { id: chance.guid(), fullName: `Coen De${lastName}` },
-        { id: chance.guid(), fullName: `Mary NotAMatch` },
+        {
+          id: chance.guid(),
+          fullName: `John Mc${lastName}`,
+          trainer_role_types: [],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Ivan ${lastName}ovich`,
+          trainer_role_types: [],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Coen De${lastName}`,
+          trainer_role_types: [],
+        },
+        {
+          id: chance.guid(),
+          fullName: `Mary NotAMatch`,
+          trainer_role_types: [],
+        },
       ],
     })
 
@@ -231,9 +292,29 @@ describe('component: SearchTrainers', () => {
 
 function makeTrainers(): SearchTrainer[] {
   return [
-    { id: chance.guid(), fullName: chance.name(), avatar: '' },
-    { id: chance.guid(), fullName: chance.name(), avatar: '' },
-    { id: chance.guid(), fullName: chance.name(), avatar: '' },
-    { id: chance.guid(), fullName: chance.name(), avatar: '' },
+    {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: '',
+      trainer_role_types: [],
+    },
+    {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: '',
+      trainer_role_types: [],
+    },
+    {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: '',
+      trainer_role_types: [],
+    },
+    {
+      id: chance.guid(),
+      fullName: chance.name(),
+      avatar: '',
+      trainer_role_types: [],
+    },
   ]
 }

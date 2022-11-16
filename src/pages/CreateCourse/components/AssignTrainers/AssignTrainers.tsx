@@ -70,6 +70,7 @@ const trainerInputToCourseTrainer = (
       preferences: [],
       organizations: [],
       roles: [],
+      trainer_role_types: [],
       lastActivity: now,
       createdAt: now.toISOString(),
     },

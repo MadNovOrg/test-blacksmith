@@ -496,4 +496,6 @@ custom_types:
     - name: TransferCourse
     - name: TransferParticipantOutput
     - name: ReplaceParticipantOutput
+    - name: TrainerRoleTypeObj
+    - name: TrainerRoleType
   scalars: []

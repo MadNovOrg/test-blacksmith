@@ -52,6 +52,7 @@ const courseTrainerToFormValues = (
   const mappedTrainers = trainers.map(t => ({
     id: t.profile.id,
     fullName: t.profile.fullName ?? '',
+    trainer_role_types: t.profile.trainer_role_types ?? [],
     avatar: t.profile.avatar,
     type: t.type,
   }))

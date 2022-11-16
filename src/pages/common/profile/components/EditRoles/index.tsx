@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
 import { yup } from '@app/schemas'
-import { RoleName, TrainerRoleType } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import {
   employeeRolesNames,
@@ -57,7 +57,7 @@ export function rolesFormSchema() {
             then: s => s.min(1),
           })
           .required(),
-        trainerRoleTypes: yup
+        trainerRoles: yup
           .object()
           .shape({
             trainerRole: yup.string(),
@@ -178,7 +178,7 @@ export const EditRoles = () => {
                       </InputLabel>
                       <Controller
                         name={
-                          `roles.${index}.trainerRoleTypes.trainerRole` as 'roles.0.trainerRoleTypes.trainerRole'
+                          `roles.${index}.trainerRoles.trainerRole` as 'roles.0.trainerRoles.trainerRole'
                         }
                         control={control}
                         render={({ field }) => (
@@ -191,8 +191,8 @@ export const EditRoles = () => {
                           >
                             {trainerRolesNames.map(roleName => (
                               <MenuItem value={roleName} key={roleName}>
-                                {roleName == TrainerRoleType.AOL_ETA ||
-                                roleName == TrainerRoleType.TRAINER_ETA
+                                {roleName == TrainerRoleTypeName.AOL_ETA ||
+                                roleName == TrainerRoleTypeName.TRAINER_ETA
                                   ? t(`trainer-role-types.eta`)
                                   : t(`trainer-role-types.${roleName}`)}
                               </MenuItem>
@@ -207,7 +207,7 @@ export const EditRoles = () => {
                       </InputLabel>
                       <Controller
                         name={
-                          `roles.${index}.trainerRoleTypes.AOLRole` as 'roles.0.trainerRoleTypes.AOLRole'
+                          `roles.${index}.trainerRoles.AOLRole` as 'roles.0.trainerRoles.AOLRole'
                         }
                         control={control}
                         render={({ field }) => (
@@ -220,8 +220,8 @@ export const EditRoles = () => {
                           >
                             {AOLRolesNames.map(roleName => (
                               <MenuItem value={roleName} key={roleName}>
-                                {roleName == TrainerRoleType.AOL_ETA ||
-                                roleName == TrainerRoleType.TRAINER_ETA
+                                {roleName == TrainerRoleTypeName.AOL_ETA ||
+                                roleName == TrainerRoleTypeName.TRAINER_ETA
                                   ? t(`trainer-role-types.eta`)
                                   : t(`trainer-role-types.${roleName}`)}
                               </MenuItem>
@@ -242,7 +242,7 @@ export const EditRoles = () => {
                       </InputLabel>
                       <Controller
                         name={
-                          `roles.${index}.trainerRoleTypes.BILDRole` as 'roles.0.trainerRoleTypes.BILDRole'
+                          `roles.${index}.trainerRoles.BILDRole` as 'roles.0.trainerRoles.BILDRole'
                         }
                         control={control}
                         render={({ field }) => (
@@ -265,7 +265,7 @@ export const EditRoles = () => {
                     <FormControl fullWidth variant="filled">
                       <Controller
                         name={
-                          `roles.${index}.trainerRoleTypes.moderatorRole` as 'roles.0.trainerRoleTypes.moderatorRole'
+                          `roles.${index}.trainerRoles.moderatorRole` as 'roles.0.trainerRoles.moderatorRole'
                         }
                         control={control}
                         render={({ field }) => (
@@ -417,7 +417,7 @@ export const EditRoles = () => {
                     userRole: '',
                     employeeRoles: [] as RoleName[],
                     salesRoles: [] as RoleName[],
-                    trainerRoleTypes: {
+                    trainerRoles: {
                       trainerRole: '',
                       AOLRole: '',
                       BILDRole: '',

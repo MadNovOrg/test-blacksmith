@@ -7,7 +7,7 @@ import {
   GetProfilesQueryVariables,
 } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
-import { RoleName, TrainerRoleType } from '@app/types'
+import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { render, screen, within, chance, userEvent, waitFor } from '@test/index'
 
@@ -35,7 +35,7 @@ const mockProfile = build<GetProfilesQuery['profiles'][0]>({
       {
         trainer_role_type: {
           id: fake(f => f.datatype.uuid()),
-          name: TrainerRoleType.PRINCIPAL,
+          name: TrainerRoleTypeName.PRINCIPAL,
         },
       },
     ],
@@ -177,7 +177,7 @@ describe('page: Users', () => {
         const profiles =
           where?.roles?.role?.name?._in?.includes(RoleName.TRAINER) &&
           where?.trainer_role_types?.trainer_role_type?.name?._in?.includes(
-            TrainerRoleType.PRINCIPAL
+            TrainerRoleTypeName.PRINCIPAL
           )
             ? [filteredProfile]
             : [profile]
@@ -219,7 +219,7 @@ describe('page: Users', () => {
       ({ where }: GetProfilesQueryVariables) => {
         const profiles =
           where?.trainer_role_types?.trainer_role_type?.name?._eq ===
-          TrainerRoleType.MODERATOR
+          TrainerRoleTypeName.MODERATOR
             ? [filteredProfile]
             : [profile]
         return {

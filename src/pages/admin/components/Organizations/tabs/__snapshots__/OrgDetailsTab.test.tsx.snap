@@ -667,6 +667,14 @@ Object {
         ],
         "tags": Array [],
         "title": "Mr",
+        "trainer_role_types": Array [
+          Object {
+            "trainer_role_type": Object {
+              "id": "1",
+              "name": "principal",
+            },
+          },
+        ],
         "updatedAt": "",
       },
       "reloadCurrentProfile": [MockFunction],

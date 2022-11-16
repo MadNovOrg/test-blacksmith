@@ -8673,6 +8673,7 @@ export type SearchTrainer = {
   fullName: Scalars['String'];
   id: Scalars['uuid'];
   levels: Array<CourseLevel>;
+  trainer_role_types: Array<TrainerRoleType>;
 };
 
 export enum SearchTrainerAvailability {
@@ -9328,6 +9329,17 @@ export type TrainerLevels = {
   availability: SearchTrainerAvailability;
   levels: Array<CourseLevel>;
   profile_id: Scalars['uuid'];
+};
+
+export type TrainerRoleType = {
+  __typename?: 'TrainerRoleType';
+  trainerRoleType?: Maybe<TrainerRoleTypeObj>;
+};
+
+export type TrainerRoleTypeObj = {
+  __typename?: 'TrainerRoleTypeObj';
+  id: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type TransferCourse = {
@@ -36202,7 +36214,7 @@ export type SearchTrainersQueryVariables = Exact<{
 }>;
 
 
-export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, levels: Array<CourseLevel>, availability?: SearchTrainerAvailability | null } | null> | null };
+export type SearchTrainersQuery = { __typename?: 'query_root', trainers?: Array<{ __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, levels: Array<CourseLevel>, availability?: SearchTrainerAvailability | null, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> } | null> | null };
 
 export type SearchCourseFragment = { __typename?: 'course', id: number, name: string, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, schedule: Array<{ __typename?: 'course_schedule', start: any, venue?: { __typename?: 'venue', city: string } | null }> };
 
