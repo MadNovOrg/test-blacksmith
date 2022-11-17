@@ -25,6 +25,8 @@ import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 
 import MembershipRoutes from './membership'
 
+const ResourcesRoutes = React.lazy(() => import('./resources'))
+
 const UserRoutes = () => {
   const { acl } = useAuth()
 
@@ -94,6 +96,9 @@ const UserRoutes = () => {
       ) : null}
 
       <Route path="membership/*" element={<MembershipRoutes />} />
+
+      <Route path="resources/*" element={<ResourcesRoutes />} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

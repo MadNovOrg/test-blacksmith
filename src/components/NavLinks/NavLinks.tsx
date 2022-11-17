@@ -16,6 +16,12 @@ export const NavLinks = () => {
         {t('my-courses')}
       </Link>
 
+      {acl.canViewResources() ? (
+        <Link component={StyledNavLink} to="/resources">
+          {t('resources')}
+        </Link>
+      ) : null}
+
       {acl.canManageOrgCourses() ? (
         <Link component={StyledNavLink} to="/manage-courses">
           {t('manage-courses')}

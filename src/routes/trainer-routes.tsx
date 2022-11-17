@@ -29,6 +29,7 @@ import { TrainerFeedback } from '@app/pages/trainer-pages/TrainerFeedback'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const MembershipRoutes = React.lazy(() => import('./membership'))
+const ResourcesRoutes = React.lazy(() => import('./resources'))
 
 const TrainerBaseRoutes = () => {
   const { acl } = useAuth()
@@ -103,6 +104,8 @@ const TrainerBaseRoutes = () => {
       ) : null}
 
       <Route path="membership/*" element={<MembershipRoutes />} />
+
+      <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -41,6 +41,8 @@ import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
 
+const ResourcesRoutes = React.lazy(() => import('./resources'))
+
 const TTAdminRoutes = () => {
   const { acl } = useAuth()
 
@@ -152,6 +154,8 @@ const TTAdminRoutes = () => {
           </Route>
         </>
       ) : null}
+
+      <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

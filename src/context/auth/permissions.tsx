@@ -134,6 +134,10 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return false
     },
+    canViewResources: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.USER, RoleName.TRAINER]
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return { ...auth, acl }

@@ -21,13 +21,15 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(3)
+    expect(screen.getAllByRole('link')).toHaveLength(4)
     const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
     const membershipLink = screen.getByRole('link', { name: 'Membership' })
     expect(membershipLink).toBeInTheDocument()
+    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
+    expect(resourcesLink).toBeInTheDocument()
   })
 
   it('renders TT ADMIN role links', async () => {
@@ -43,7 +45,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(7)
+    expect(screen.getAllByRole('link')).toHaveLength(8)
     const myCoursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(myCoursesLink).toBeInTheDocument()
     const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
@@ -62,6 +64,8 @@ describe('component: NavLinks', () => {
     expect(certificationsLink).toBeInTheDocument()
     const ordersLink = screen.getByRole('link', { name: 'Orders' })
     expect(ordersLink).toBeInTheDocument()
+    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
+    expect(resourcesLink).toBeInTheDocument()
   })
 
   it('renders TT OPS role links', async () => {
@@ -107,7 +111,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(3)
+    expect(screen.getAllByRole('link')).toHaveLength(4)
     const coursesLink = screen.getByRole('link', { name: 'My Courses' })
     expect(coursesLink).toBeInTheDocument()
     const communityLink = screen.getByRole('link', { name: 'Community' })
@@ -116,6 +120,8 @@ describe('component: NavLinks', () => {
       name: 'Membership',
     })
     expect(membershipLink).toBeInTheDocument()
+    const resourcesLink = screen.getByRole('link', { name: 'Resources' })
+    expect(resourcesLink).toBeInTheDocument()
   })
 
   it('renders UNVERIFIED role links', async () => {
