@@ -337,7 +337,7 @@ export default createTheme({
           color: theme.palette.dimGrey.main,
           fontWeight: 500,
           '.MuiTableRow-root': {
-            backgroundColor: theme.palette.grey[200],
+            backgroundColor: theme.palette.grey[100],
           },
           '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
             fontSize: 13,
@@ -366,6 +366,7 @@ export default createTheme({
     MuiTableBody: {
       styleOverrides: {
         root: {
+          backgroundColor: theme.palette.common.white,
           '.MuiTableRow-root:last-of-type': {
             borderBottom: 'none',
           },

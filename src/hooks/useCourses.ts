@@ -4,6 +4,7 @@ import { useQuery } from 'urql'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Bool_Exp,
+  Course_Invite_Status_Enum,
   Course_Level_Enum,
   Course_Order_By,
   Course_Status_Enum,
@@ -24,6 +25,7 @@ type CoursesFilters = {
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
   statuses?: Course_Status_Enum[]
+  excludedStatuses?: Course_Status_Enum[]
 }
 
 type Props = {
@@ -34,10 +36,10 @@ type Props = {
 }
 
 export const useCourses = (
-  _role: RoleName,
+  role: RoleName,
   { sorting, filters, pagination, orgId }: Props
 ) => {
-  const { acl, organizationIds } = useAuth()
+  const { acl, organizationIds, profile } = useAuth()
   const orderBy = getOrderBy(sorting)
 
   const where = useMemo(() => {
@@ -67,6 +69,20 @@ export const useCourses = (
       obj.status = { _in: filters.statuses }
     }
 
+    if (filters?.excludedStatuses?.length) {
+      obj.status = {
+        ...obj.status,
+        _nin: filters.excludedStatuses,
+      }
+    }
+
+    if (role === RoleName.TRAINER) {
+      obj.trainers = {
+        status: { _neq: Course_Invite_Status_Enum.Pending },
+        profile_id: { _eq: profile?.id },
+      }
+    }
+
     const query = filters?.keyword?.trim()
 
     const onlyDigits = /^\d+$/.test(query || '')
@@ -85,7 +101,7 @@ export const useCourses = (
     }
 
     return obj
-  }, [acl, filters, orgId, organizationIds])
+  }, [acl, filters, orgId, organizationIds, profile?.id, role])
 
   const [{ data, error }, refetch] = useQuery<
     TrainerCoursesQuery,

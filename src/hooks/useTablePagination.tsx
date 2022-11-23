@@ -1,4 +1,4 @@
-import { TablePagination } from '@mui/material'
+import { Box, TablePagination } from '@mui/material'
 import React, { useState, useCallback } from 'react'
 
 const PER_PAGE = 12
@@ -17,25 +17,35 @@ export const useTablePagination = (initialPerPage = PER_PAGE) => {
   )
 
   const Pagination = useCallback(
-    ({ total }: { total: number }) => {
+    ({
+      total,
+      rowsPerPage = ROWS_PER_PAGE_OPTIONS,
+      testId,
+    }: {
+      total: number
+      rowsPerPage?: number[]
+      testId?: string
+    }) => {
       return (
-        <TablePagination
-          component="div"
-          count={total}
-          page={currentPage}
-          onPageChange={(_, page) => setCurrentPage(page)}
-          onRowsPerPageChange={handlePerPageChange}
-          rowsPerPage={perPage}
-          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-          sx={{
-            '.MuiTablePagination-toolbar': { pl: 0 },
-            '.MuiTablePagination-spacer': { flex: 0 },
-            '.MuiTablePagination-displayedRows': {
-              flex: 1,
-              textAlign: 'center',
-            },
-          }}
-        />
+        <Box data-testid={testId}>
+          <TablePagination
+            component="div"
+            count={total}
+            page={currentPage}
+            onPageChange={(_, page) => setCurrentPage(page)}
+            onRowsPerPageChange={handlePerPageChange}
+            rowsPerPage={perPage}
+            rowsPerPageOptions={rowsPerPage}
+            sx={{
+              '.MuiTablePagination-toolbar': { pl: 0 },
+              '.MuiTablePagination-spacer': { flex: 0 },
+              '.MuiTablePagination-displayedRows': {
+                flex: 1,
+                textAlign: 'center',
+              },
+            }}
+          />
+        </Box>
       )
     },
     [currentPage, handlePerPageChange, perPage]

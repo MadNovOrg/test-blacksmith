@@ -31,7 +31,6 @@ export type AcceptDeclineProps = {
 export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
   trainer,
   onUpdate,
-  children,
 }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
@@ -72,7 +71,7 @@ export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
   )
 
   if (!trainer || trainer?.status === Course_Invite_Status_Enum.Accepted) {
-    return <>{children}</>
+    return null
   }
 
   if (trainer?.status === Course_Invite_Status_Enum.Declined) {
@@ -88,10 +87,9 @@ export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
 
   return (
     <>
-      <Stack direction="column" gap={1}>
+      <Stack direction="row" gap={1}>
         <Button
           size="small"
-          variant="contained"
           color="primary"
           onClick={openModal(Action.ACCEPT)}
           data-testid="AcceptDeclineCourse-acceptBtn"

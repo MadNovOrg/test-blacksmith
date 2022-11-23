@@ -891,7 +891,10 @@
       "col-registrants": "Regist.",
       "col-status": "Status",
       "find-available-courses": "Find available courses",
-      "col-registrations": "Registrations"
+      "col-registrations": "Registrations",
+      "actionable-courses-title-trainer": "Action required",
+      "actionable-courses-title": "Course approvals",
+      "courses-title": "All courses"
     },
     "resources": {
       "title": "Resources",

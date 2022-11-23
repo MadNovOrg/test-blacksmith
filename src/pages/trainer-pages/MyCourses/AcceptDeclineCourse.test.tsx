@@ -26,7 +26,6 @@ describe('AcceptDeclineCourse', () => {
   it('renders children if current user is not assigned trainer (tt-ops, etc)', async () => {
     _render()
 
-    expect(screen.getByText('FALLBACK_CONTENT')).toBeInTheDocument()
     expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
     expect(screen.queryByTestId(tid('declineBtn'))).not.toBeInTheDocument()
     expect(screen.queryByTestId(tid('declinedChip'))).not.toBeInTheDocument()
@@ -35,7 +34,6 @@ describe('AcceptDeclineCourse', () => {
   it('renders children if current user has accepted', async () => {
     _render(Course_Invite_Status_Enum.Accepted)
 
-    expect(screen.getByText('FALLBACK_CONTENT')).toBeInTheDocument()
     expect(screen.queryByTestId(tid('acceptBtn'))).not.toBeInTheDocument()
     expect(screen.queryByTestId(tid('declineBtn'))).not.toBeInTheDocument()
     expect(screen.queryByTestId(tid('declinedChip'))).not.toBeInTheDocument()

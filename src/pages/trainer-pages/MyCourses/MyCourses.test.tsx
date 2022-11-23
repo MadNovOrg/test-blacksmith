@@ -1,3 +1,4 @@
+import { isEqual } from 'lodash-es'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
@@ -20,6 +21,7 @@ import { Providers } from '@test/providers'
 
 import { buildTrainerCourse } from './test-utils'
 import { TrainerCourses } from './TrainerCourses'
+import { getActionableStatuses } from './utils'
 
 const _render = (
   ui: React.ReactElement,
@@ -40,11 +42,7 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    const tbl = screen.getByTestId('courses-table')
-
-    expect(within(tbl).getByTestId('fetching-courses')).toBeInTheDocument()
-    expect(within(tbl).queryByTestId('TableNoRows')).not.toBeInTheDocument()
-    expect(tbl.querySelectorAll('.MyCoursesRow')).toHaveLength(0)
+    expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
 
   it('renders no results', async () => {
@@ -132,10 +130,12 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    const courseTitle = screen.getByTestId('course-title')
+    const table = screen.getByTestId('courses-table')
+
+    const courseTitle = within(table).getByTestId('course-title')
     expect(courseTitle).toBeInTheDocument()
     expect(courseTitle).toHaveTextContent(`${courses[0].name}`)
-    const courseCode = screen.getByTestId('course-code')
+    const courseCode = within(table).getByTestId('course-code')
     expect(courseCode).toBeInTheDocument
     expect(courseCode).toHaveTextContent('OP-L1-10000')
   })
@@ -383,7 +383,9 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    userEvent.click(screen.getByText('Name'))
+    const table = screen.getByTestId('courses-table')
+
+    userEvent.click(within(table).getByText('Name'))
 
     await waitFor(() => {
       expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
@@ -425,6 +427,12 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
+    const coursesPagination = screen.getByTestId('courses-pagination')
+
+    expect(
+      within(coursesPagination).getByLabelText('Go to previous page')
+    ).toBeDisabled()
+
     expect(
       screen.getByTestId(`course-row-${firstBatch[firstBatch.length - 1].id}`)
     ).toBeInTheDocument()
@@ -432,7 +440,7 @@ describe('trainers-pages/MyCourses', () => {
       screen.queryByTestId(`course-row-${secondBatch[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByLabelText('Go to next page'))
+    userEvent.click(within(coursesPagination).getByLabelText('Go to next page'))
 
     await waitFor(() => {
       expect(
@@ -443,9 +451,6 @@ describe('trainers-pages/MyCourses', () => {
       expect(
         screen.queryByTestId(`course-row-${firstBatch[0].id}`)
       ).not.toBeInTheDocument()
-
-      expect(screen.getByLabelText('Go to next page')).toBeDisabled()
-      expect(screen.getByLabelText('Go to previous page')).toBeEnabled()
     })
   })
 
@@ -477,7 +482,9 @@ describe('trainers-pages/MyCourses', () => {
       }
     )
 
-    const participantsCell = screen.getByTestId('participants-cell')
+    const table = screen.getByTestId('courses-table')
+
+    const participantsCell = within(table).getByTestId('participants-cell')
     expect(participantsCell).toBeInTheDocument()
     expect(participantsCell).toHaveTextContent(/^12\+2\/12$/)
   })
@@ -510,7 +517,9 @@ describe('trainers-pages/MyCourses', () => {
       }
     )
 
-    const participantsCell = screen.getByTestId('participants-cell')
+    const table = screen.getByTestId('courses-table')
+
+    const participantsCell = within(table).getByTestId('participants-cell')
     expect(participantsCell).toBeInTheDocument()
     expect(participantsCell).toHaveTextContent(/^12\+2\/12$/)
   })
@@ -543,8 +552,114 @@ describe('trainers-pages/MyCourses', () => {
       }
     )
 
-    const participantsCell = screen.getByTestId('participants-cell')
+    const table = screen.getByTestId('courses-table')
+
+    const participantsCell = within(table).getByTestId('participants-cell')
     expect(participantsCell).toBeInTheDocument()
     expect(participantsCell).toHaveTextContent(/^12\/12$/)
+  })
+
+  it("doesn't display actionable courses table if there are no courses", async () => {
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const coursesToReturn = isEqual(
+          variables.where?.status?._in,
+          Array.from(getActionableStatuses(RoleName.TT_ADMIN))
+        )
+          ? []
+          : [buildTrainerCourse()]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: coursesToReturn,
+            course_aggregate: {
+              aggregate: {
+                count: coursesToReturn.length,
+              },
+            },
+          },
+        })
+      },
+    } as unknown as Client
+
+    _render(
+      <Provider value={client}>
+        <TrainerCourses />
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
+    )
+
+    expect(
+      screen.queryByTestId('actionable-courses-table')
+    ).not.toBeInTheDocument()
+
+    expect(screen.getByTestId('courses-table')).toBeInTheDocument()
+    expect(screen.queryByText(/all courses/i)).not.toBeInTheDocument()
+  })
+
+  it('renders accept and decline buttons for a trainer if there are actionable courses', () => {
+    const TRAINER_PROFILE_ID = chance.guid()
+
+    const actionableCourse = buildTrainerCourse({
+      overrides: {
+        status: Course_Status_Enum.TrainerPending,
+        trainers: [{ profile: { id: TRAINER_PROFILE_ID } }],
+      },
+    })
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const coursesToReturn = isEqual(
+          variables.where?.status?._in,
+          Array.from(getActionableStatuses(RoleName.TRAINER))
+        )
+          ? [actionableCourse]
+          : [buildTrainerCourse()]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses: coursesToReturn,
+            course_aggregate: {
+              aggregate: {
+                count: coursesToReturn.length,
+              },
+            },
+          },
+        })
+      },
+    } as unknown as Client
+
+    _render(
+      <Provider value={client}>
+        <TrainerCourses />
+      </Provider>,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+          profile: { id: TRAINER_PROFILE_ID },
+        },
+      }
+    )
+
+    expect(screen.getByTestId('actionable-courses-table')).toBeInTheDocument()
+
+    expect(screen.getByTestId('courses-table')).toBeInTheDocument()
+
+    const actionableCourseRow = screen.getByTestId(
+      `actionable-course-${actionableCourse.id}`
+    )
+
+    expect(within(actionableCourseRow).getByText(/accept/i)).toBeInTheDocument()
+    expect(
+      within(actionableCourseRow).getByText(/decline/i)
+    ).toBeInTheDocument()
   })
 })

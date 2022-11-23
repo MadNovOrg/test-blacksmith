@@ -48,7 +48,6 @@ export const ManageCourses: React.FC = () => {
               <TrainerCourses
                 title={t('courses')}
                 orgId={orgId}
-                hideActions={true}
                 showAvailableCoursesButton={true}
               />
             ) : null}

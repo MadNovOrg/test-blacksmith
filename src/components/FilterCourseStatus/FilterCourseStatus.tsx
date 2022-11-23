@@ -8,20 +8,30 @@ import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
   onChange: (selected: Course_Status_Enum[]) => void
+  excludedStatuses?: Set<Course_Status_Enum>
 }
 
 const statuses = Object.values(Course_Status_Enum)
 
-export const FilterCourseStatus: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterCourseStatus: React.FC<Props> = ({
+  onChange = noop,
+  excludedStatuses = new Set(),
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption<Course_Status_Enum>[]>(
     () => {
-      return statuses.map(status => ({
-        id: status,
-        title: t(`course-statuses.${status}`),
-        selected: false,
-      }))
+      return statuses
+        .map(status =>
+          excludedStatuses.has(status)
+            ? null
+            : {
+                id: status,
+                title: t(`course-statuses.${status}`),
+                selected: false,
+              }
+        )
+        .filter(Boolean)
     }
   )
 
