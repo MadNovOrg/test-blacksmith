@@ -439,6 +439,11 @@
     "password-do-not-match": "Password does not match."
   },
   "components": {
+    "error-page": {
+      "title": "Sorry! Something went wrong...",
+      "message": "We have been notified about the issue and are working on fixing it.",
+      "back-btn-text": "Home"
+    },
     "fees-form": {
       "fees-radio-group-title": "Will any fees apply?",
       "apply-terms-option": "Apply terms",
