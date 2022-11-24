@@ -5,12 +5,12 @@ on:
     inputs:
       environment:
         default: 'dev'
-        description: 'Environment - "dev/stg"'
+        description: 'Environment - "DEV/STG"'
         required: true
         type: choice
         options:
-        - dev
-        - stg
+          - DEV
+          - STG
   schedule:
     - cron: '30 21 * * 1-5'
 
@@ -20,7 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: 'true'
-      DEFAULT_TARGET: 'dev'
+      DEFAULT_TARGET: 'DEV'
+      HASURA_SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', env.ENV_NAME)] }}
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
@@ -35,7 +36,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm set-script prepare "" && npm ci 
+        run: npm set-script prepare "" && npm ci
 
       - name: Playwright setup
         run: npx playwright install chromium

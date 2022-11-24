@@ -2,6 +2,7 @@ const TARGET_ENV = (process.env.TARGET ?? 'local').toLowerCase()
 
 let BASE_URL: string
 let HASURA_BASE_URL: string
+const HASURA_SECRET = process.env.HASURA_SECRET ?? 'tth-hasura-key'
 
 switch (TARGET_ENV) {
   case 'local':
@@ -24,4 +25,4 @@ switch (TARGET_ENV) {
 
 const TEMP_DIR = './tmp'
 
-export { TARGET_ENV, BASE_URL, TEMP_DIR, HASURA_BASE_URL }
+export { TARGET_ENV, BASE_URL, TEMP_DIR, HASURA_BASE_URL, HASURA_SECRET }

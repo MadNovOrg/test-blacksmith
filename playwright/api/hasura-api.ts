@@ -51,7 +51,7 @@ import {
   InviteStatus,
 } from '@app/types'
 
-import { HASURA_BASE_URL } from '../constants'
+import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
 import { Course, User } from '../data/types'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
@@ -61,7 +61,7 @@ export const getClient = () => {
   if (!graphQLClient) {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
-        'x-hasura-admin-secret': 'tth-hasura-key',
+        'x-hasura-admin-secret': HASURA_SECRET,
       },
     })
   }
