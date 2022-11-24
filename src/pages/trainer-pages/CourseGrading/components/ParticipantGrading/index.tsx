@@ -94,7 +94,7 @@ export const ParticipantGrading = () => {
                 >
                   <ListItem disableGutters key={participant.id}>
                     <ListItemAvatar>
-                      <Avatar />
+                      <Avatar src={participant.profile.avatar ?? ''} />
                     </ListItemAvatar>
                     <ListItemText primary={`${participant.profile.fullName}`} />
                   </ListItem>

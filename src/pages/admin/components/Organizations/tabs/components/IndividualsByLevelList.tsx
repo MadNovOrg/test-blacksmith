@@ -141,7 +141,11 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
               <TableRow key={profile.id} sx={{ backgroundColor: 'white' }}>
                 <TableCell>
                   <Box display="flex" flexDirection="row" alignItems="center">
-                    <Avatar size={32} name={profile.fullName ?? ''} />
+                    <Avatar
+                      size={32}
+                      src={profile.avatar ?? ''}
+                      name={profile.fullName ?? ''}
+                    />
                     <Link
                       variant="body2"
                       color={theme.palette.grey[900]}

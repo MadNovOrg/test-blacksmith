@@ -253,7 +253,7 @@ export const CourseGrading = () => {
                       return participant.attended && !participant.grade ? (
                         <ListItem disableGutters key={participant.id}>
                           <ListItemAvatar>
-                            <Avatar />
+                            <Avatar src={participant.profile.avatar ?? ''} />
                           </ListItemAvatar>
                           <ListItemText
                             primary={`${participant.profile.fullName}`}

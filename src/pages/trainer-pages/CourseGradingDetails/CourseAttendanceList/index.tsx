@@ -19,6 +19,7 @@ interface Props {
     id: string
     attending: boolean
     name: string
+    avatar?: string
   }>
   onChange?: (attendance: Record<string, boolean>) => void
 }
@@ -130,7 +131,10 @@ export const CourseAttendanceList: React.FC<Props> = ({
               checked={attendance[participant.id] || false}
               data-testid={`${participant.id}-attendance-checkbox`}
             />
-            <Avatar sx={{ marginRight: 2, width: 32, height: 32 }} />
+            <Avatar
+              sx={{ marginRight: 2, width: 32, height: 32 }}
+              src={participant.avatar ?? ''}
+            />
             <Typography>{participant.name}</Typography>
           </Box>
           {attendance[participant.id] ? (

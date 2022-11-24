@@ -104,6 +104,7 @@ export const Row: React.FC<Props> = ({ promo, showApprove = false }) => {
             name={promo.creator?.fullName ?? ''}
             size={32}
             sx={{ display: 'inline-flex' }}
+            src={promo.creator?.avatar ?? ''}
           />
         </Tooltip>
       </TableCell>

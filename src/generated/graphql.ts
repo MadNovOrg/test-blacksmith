@@ -1056,8 +1056,6 @@ export enum ContentTypeEnum {
   /** The Type of Content object */
   Resource = 'RESOURCE',
   /** The Type of Content object */
-  ResourceCategory = 'RESOURCE_CATEGORY',
-  /** The Type of Content object */
   VideoSeries = 'VIDEO_SERIES',
   /** The Type of Content object */
   Webinar = 'WEBINAR'
@@ -1173,6 +1171,12 @@ export enum ContentTypesOfPostFormatEnum {
 export enum ContentTypesOfResearchSummariesCategoryEnum {
   /** The Type of Content object */
   ResearchSummary = 'RESEARCH_SUMMARY'
+}
+
+/** Allowed Content Types of the ResourceCategory taxonomy. */
+export enum ContentTypesOfResourceCategoryEnum {
+  /** The Type of Content object */
+  Resource = 'RESOURCE'
 }
 
 /** Allowed Content Types of the Tag taxonomy. */
@@ -1578,22 +1582,18 @@ export type CreateResearchSummaryPayload = {
 
 /** Input for the createResourceCategory mutation */
 export type CreateResourceCategoryInput = {
+  /** The slug that the resource_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars['String']>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars['Int']>;
-  /** The ID of the parent object */
+  /** The description of the resource_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The name of the resource_category object to mutate */
+  name: Scalars['String'];
+  /** The ID of the resource_category that should be set as the parent */
   parentId?: InputMaybe<Scalars['ID']>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars['String']>;
-  /** The slug of the object */
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars['String']>;
 };
 
 /** The payload for the createResourceCategory mutation */
@@ -1601,7 +1601,7 @@ export type CreateResourceCategoryPayload = {
   __typename?: 'CreateResourceCategoryPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']>;
-  /** The Post object mutation type. */
+  /** The created resource_category */
   resourceCategory?: Maybe<ResourceCategory>;
 };
 
@@ -1613,10 +1613,10 @@ export type CreateResourceInput = {
   date?: InputMaybe<Scalars['String']>;
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']>;
-  /** The ID of the parent object */
-  parentId?: InputMaybe<Scalars['ID']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Resource and ResourceCategories */
+  resourceCategories?: InputMaybe<ResourceResourceCategoriesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']>;
   /** The status of the object */
@@ -2094,8 +2094,6 @@ export type DeleteResearchSummaryPayload = {
 export type DeleteResourceCategoryInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** Whether the object should be force deleted instead of being moved to the trash */
-  forceDelete?: InputMaybe<Scalars['Boolean']>;
   /** The ID of the ResourceCategory to delete */
   id: Scalars['ID'];
 };
@@ -2107,7 +2105,7 @@ export type DeleteResourceCategoryPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   /** The ID of the deleted object */
   deletedId?: Maybe<Scalars['ID']>;
-  /** The object before it was deleted */
+  /** The deteted term object */
   resourceCategory?: Maybe<ResourceCategory>;
 };
 
@@ -6330,12 +6328,8 @@ export type ResetUserPasswordPayload = {
 };
 
 /** The Resource type */
-export type Resource = ContentNode & DatabaseIdentifier & HierarchicalContentNode & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
+export type Resource = ContentNode & DatabaseIdentifier & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
   __typename?: 'Resource';
-  /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
-  ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
-  /** Connection between the HierarchicalContentNode type and the ContentNode type */
-  children?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
   /** Connection between the ContentNode type and the ContentType type */
   contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
   /** The name of the Content Type the node belongs to */
@@ -6380,26 +6374,18 @@ export type Resource = ContentNode & DatabaseIdentifier & HierarchicalContentNod
   lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
   /** The permalink of the post */
   link?: Maybe<Scalars['String']>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: Maybe<Scalars['Int']>;
   /** The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time. */
   modified?: Maybe<Scalars['String']>;
   /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
   modifiedGmt?: Maybe<Scalars['String']>;
-  /** The parent of the node. The parent object can be of various types */
-  parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
-  /** Database id of the parent node */
-  parentDatabaseId?: Maybe<Scalars['Int']>;
-  /** The globally unique identifier of the parent node. */
-  parentId?: Maybe<Scalars['ID']>;
   /** Connection between the Resource type and the Resource type */
   preview?: Maybe<ResourceToPreviewConnectionEdge>;
   /** The database id of the preview node */
   previewRevisionDatabaseId?: Maybe<Scalars['Int']>;
   /** Whether the object is a node in the preview state */
   previewRevisionId?: Maybe<Scalars['ID']>;
-  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource Category&quot; was set to Show in GraphQL. */
-  resourceCategory?: Maybe<Resource_Resourcecategory>;
+  /** Connection between the Resource type and the ResourceCategory type */
+  resourceCategories?: Maybe<ResourceToResourceCategoryConnection>;
   /** The id field matches the WP_Post-&gt;ID field. */
   resourceId: Scalars['Int'];
   /** Added to the GraphQL Schema because the ACF Field Group &quot;Resource type&quot; was set to Show in GraphQL. */
@@ -6410,30 +6396,12 @@ export type Resource = ContentNode & DatabaseIdentifier & HierarchicalContentNod
   status?: Maybe<Scalars['String']>;
   /** The template assigned to a node of content */
   template?: Maybe<ContentTemplate>;
+  /** Connection between the Resource type and the TermNode type */
+  terms?: Maybe<ResourceToTermNodeConnection>;
   /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
   title?: Maybe<Scalars['String']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
-};
-
-
-/** The Resource type */
-export type ResourceAncestorsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
-};
-
-
-/** The Resource type */
-export type ResourceChildrenArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
 };
 
 
@@ -6456,87 +6424,83 @@ export type ResourceEnqueuedStylesheetsArgs = {
 
 
 /** The Resource type */
+export type ResourceResourceCategoriesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResourceToResourceCategoryConnectionWhereArgs>;
+};
+
+
+/** The Resource type */
+export type ResourceTermsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResourceToTermNodeConnectionWhereArgs>;
+};
+
+
+/** The Resource type */
 export type ResourceTitleArgs = {
   format?: InputMaybe<PostObjectFieldFormatEnum>;
 };
 
 /** The ResourceCategory type */
-export type ResourceCategory = ContentNode & DatabaseIdentifier & HierarchicalContentNode & MenuItemLinkable & Node & NodeWithFeaturedImage & NodeWithPageAttributes & NodeWithTemplate & NodeWithTitle & UniformResourceIdentifiable & {
+export type ResourceCategory = DatabaseIdentifier & HierarchicalTermNode & MenuItemLinkable & Node & TermNode & UniformResourceIdentifiable & {
   __typename?: 'ResourceCategory';
-  /** Returns ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
-  ancestors?: Maybe<HierarchicalContentNodeToContentNodeAncestorsConnection>;
-  /** Connection between the HierarchicalContentNode type and the ContentNode type */
-  children?: Maybe<HierarchicalContentNodeToContentNodeChildrenConnection>;
-  /** Connection between the ContentNode type and the ContentType type */
-  contentType?: Maybe<ContentNodeToContentTypeConnectionEdge>;
-  /** The name of the Content Type the node belongs to */
-  contentTypeName: Scalars['String'];
+  /** The ancestors of the node. Default ordered as lowest (closest to the child) to highest (closest to the root). */
+  ancestors?: Maybe<ResourceCategoryToAncestorsResourceCategoryConnection>;
+  /** Connection between the ResourceCategory type and the ResourceCategory type */
+  children?: Maybe<ResourceCategoryToResourceCategoryConnection>;
+  /** Connection between the ResourceCategory type and the ContentNode type */
+  contentNodes?: Maybe<ResourceCategoryToContentNodeConnection>;
+  /** The number of objects connected to the object */
+  count?: Maybe<Scalars['Int']>;
   /** The unique resource identifier path */
   databaseId: Scalars['Int'];
-  /** Post publishing date. */
-  date?: Maybe<Scalars['String']>;
-  /** The publishing date set in GMT. */
-  dateGmt?: Maybe<Scalars['String']>;
-  /** The desired slug of the post */
-  desiredSlug?: Maybe<Scalars['String']>;
-  /** If a user has edited the node within the past 15 seconds, this will return the user that last edited. Null if the edit lock doesn&#039;t exist or is greater than 15 seconds */
-  editingLockedBy?: Maybe<ContentNodeToEditLockConnectionEdge>;
-  /** The RSS enclosure for the object */
-  enclosure?: Maybe<Scalars['String']>;
-  /** Connection between the ContentNode type and the EnqueuedScript type */
-  enqueuedScripts?: Maybe<ContentNodeToEnqueuedScriptConnection>;
-  /** Connection between the ContentNode type and the EnqueuedStylesheet type */
-  enqueuedStylesheets?: Maybe<ContentNodeToEnqueuedStylesheetConnection>;
-  /** Connection between the NodeWithFeaturedImage type and the MediaItem type */
-  featuredImage?: Maybe<NodeWithFeaturedImageToMediaItemConnectionEdge>;
-  /** The database identifier for the featured image node assigned to the content node */
-  featuredImageDatabaseId?: Maybe<Scalars['Int']>;
-  /** Globally unique ID of the featured image assigned to the node */
-  featuredImageId?: Maybe<Scalars['ID']>;
-  /** The global unique identifier for this post. This currently matches the value stored in WP_Post-&gt;guid and the guid column in the &quot;post_objects&quot; database table. */
-  guid?: Maybe<Scalars['String']>;
-  /** The globally unique identifier of the resource-category object. */
+  /** The description of the object */
+  description?: Maybe<Scalars['String']>;
+  /** Connection between the TermNode type and the EnqueuedScript type */
+  enqueuedScripts?: Maybe<TermNodeToEnqueuedScriptConnection>;
+  /** Connection between the TermNode type and the EnqueuedStylesheet type */
+  enqueuedStylesheets?: Maybe<TermNodeToEnqueuedStylesheetConnection>;
+  /** The unique resource identifier path */
   id: Scalars['ID'];
   /** Whether the node is a Content Node */
   isContentNode: Scalars['Boolean'];
-  /** Whether the object is a node in the preview state */
-  isPreview?: Maybe<Scalars['Boolean']>;
   /** Whether the object is restricted from the current viewer */
   isRestricted?: Maybe<Scalars['Boolean']>;
   /** Whether the node is a Term */
   isTermNode: Scalars['Boolean'];
-  /** The user that most recently edited the node */
-  lastEditedBy?: Maybe<ContentNodeToEditLastConnectionEdge>;
-  /** The permalink of the post */
+  /** The link to the term */
   link?: Maybe<Scalars['String']>;
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: Maybe<Scalars['Int']>;
-  /** The local modified time for a post. If a post was recently updated the modified field will change to match the corresponding time. */
-  modified?: Maybe<Scalars['String']>;
-  /** The GMT modified time for a post. If a post was recently updated the modified field will change to match the corresponding time in GMT. */
-  modifiedGmt?: Maybe<Scalars['String']>;
-  /** The parent of the node. The parent object can be of various types */
-  parent?: Maybe<HierarchicalContentNodeToParentContentNodeConnectionEdge>;
+  /** The human friendly name of the object. */
+  name?: Maybe<Scalars['String']>;
+  /** Connection between the ResourceCategory type and the ResourceCategory type */
+  parent?: Maybe<ResourceCategoryToParentResourceCategoryConnectionEdge>;
   /** Database id of the parent node */
   parentDatabaseId?: Maybe<Scalars['Int']>;
   /** The globally unique identifier of the parent node. */
   parentId?: Maybe<Scalars['ID']>;
-  /** Connection between the ResourceCategory type and the ResourceCategory type */
-  preview?: Maybe<ResourceCategoryToPreviewConnectionEdge>;
-  /** The database id of the preview node */
-  previewRevisionDatabaseId?: Maybe<Scalars['Int']>;
-  /** Whether the object is a node in the preview state */
-  previewRevisionId?: Maybe<Scalars['ID']>;
+  /** Added to the GraphQL Schema because the ACF Field Group &quot;Resouce icon&quot; was set to Show in GraphQL. */
+  resouceIcon?: Maybe<ResourceCategory_Resouceicon>;
   /** The id field matches the WP_Post-&gt;ID field. */
-  resourceCategoryId: Scalars['Int'];
-  /** The uri slug for the post. This is equivalent to the WP_Post-&gt;post_name field and the post_name column in the database for the &quot;post_objects&quot; table. */
+  resourceCategoryId?: Maybe<Scalars['Int']>;
+  /** Connection between the ResourceCategory type and the Resource type */
+  resources?: Maybe<ResourceCategoryToResourceConnection>;
+  /** An alphanumeric identifier for the object unique to its type. */
   slug?: Maybe<Scalars['String']>;
-  /** The current status of the object */
-  status?: Maybe<Scalars['String']>;
-  /** The template assigned to a node of content */
-  template?: Maybe<ContentTemplate>;
-  /** The title of the post. This is currently just the raw title. An amendment to support rendered title needs to be made. */
-  title?: Maybe<Scalars['String']>;
+  /** Connection between the ResourceCategory type and the Taxonomy type */
+  taxonomy?: Maybe<ResourceCategoryToTaxonomyConnectionEdge>;
+  /** The name of the taxonomy that the object is associated with */
+  taxonomyName?: Maybe<Scalars['String']>;
+  /** The ID of the term group that this term object belongs to */
+  termGroupId?: Maybe<Scalars['Int']>;
+  /** The taxonomy ID that the object is associated with */
+  termTaxonomyId?: Maybe<Scalars['Int']>;
   /** The unique resource identifier path */
   uri?: Maybe<Scalars['String']>;
 };
@@ -6548,7 +6512,6 @@ export type ResourceCategoryAncestorsArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<HierarchicalContentNodeToContentNodeAncestorsConnectionWhereArgs>;
 };
 
 
@@ -6558,7 +6521,17 @@ export type ResourceCategoryChildrenArgs = {
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<HierarchicalContentNodeToContentNodeChildrenConnectionWhereArgs>;
+  where?: InputMaybe<ResourceCategoryToResourceCategoryConnectionWhereArgs>;
+};
+
+
+/** The ResourceCategory type */
+export type ResourceCategoryContentNodesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResourceCategoryToContentNodeConnectionWhereArgs>;
 };
 
 
@@ -6581,25 +6554,250 @@ export type ResourceCategoryEnqueuedStylesheetsArgs = {
 
 
 /** The ResourceCategory type */
-export type ResourceCategoryTitleArgs = {
-  format?: InputMaybe<PostObjectFieldFormatEnum>;
+export type ResourceCategoryResourcesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ResourceCategoryToResourceConnectionWhereArgs>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
 export enum ResourceCategoryIdType {
-  /** Identify a resource by the Database ID. */
+  /** The Database ID for the node */
   DatabaseId = 'DATABASE_ID',
-  /** Identify a resource by the (hashed) Global ID. */
+  /** The hashed Global ID */
   Id = 'ID',
-  /** Identify a resource by the URI. */
+  /** The name of the node */
+  Name = 'NAME',
+  /** Url friendly name of the node */
+  Slug = 'SLUG',
+  /** The URI for the node */
   Uri = 'URI'
 }
 
 /** Connection between the ResourceCategory type and the ResourceCategory type */
-export type ResourceCategoryToPreviewConnectionEdge = {
-  __typename?: 'ResourceCategoryToPreviewConnectionEdge';
+export type ResourceCategoryToAncestorsResourceCategoryConnection = {
+  __typename?: 'ResourceCategoryToAncestorsResourceCategoryConnection';
+  /** Edges for the ResourceCategoryToAncestorsResourceCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceCategoryToAncestorsResourceCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResourceCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceCategoryToAncestorsResourceCategoryConnectionEdge = {
+  __typename?: 'ResourceCategoryToAncestorsResourceCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResourceCategory>;
+};
+
+/** Connection between the ResourceCategory type and the ContentNode type */
+export type ResourceCategoryToContentNodeConnection = {
+  __typename?: 'ResourceCategoryToContentNodeConnection';
+  /** Edges for the ResourceCategoryToContentNodeConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceCategoryToContentNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ContentNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceCategoryToContentNodeConnectionEdge = {
+  __typename?: 'ResourceCategoryToContentNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ContentNode>;
+};
+
+/** Arguments for filtering the ResourceCategoryToContentNodeConnection connection */
+export type ResourceCategoryToContentNodeConnectionWhereArgs = {
+  /** The Types of content to filter */
+  contentTypes?: InputMaybe<Array<InputMaybe<ContentTypesOfResourceCategoryEnum>>>;
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the ResourceCategory type and the ResourceCategory type */
+export type ResourceCategoryToParentResourceCategoryConnectionEdge = {
+  __typename?: 'ResourceCategoryToParentResourceCategoryConnectionEdge';
   /** The node of the connection, without the edges */
   node?: Maybe<ResourceCategory>;
+};
+
+/** Connection between the ResourceCategory type and the ResourceCategory type */
+export type ResourceCategoryToResourceCategoryConnection = {
+  __typename?: 'ResourceCategoryToResourceCategoryConnection';
+  /** Edges for the ResourceCategoryToResourceCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceCategoryToResourceCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResourceCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceCategoryToResourceCategoryConnectionEdge = {
+  __typename?: 'ResourceCategoryToResourceCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResourceCategory>;
+};
+
+/** Arguments for filtering the ResourceCategoryToResourceCategoryConnection connection */
+export type ResourceCategoryToResourceCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Connection between the ResourceCategory type and the Resource type */
+export type ResourceCategoryToResourceConnection = {
+  __typename?: 'ResourceCategoryToResourceConnection';
+  /** Edges for the ResourceCategoryToResourceConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceCategoryToResourceConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<Resource>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceCategoryToResourceConnectionEdge = {
+  __typename?: 'ResourceCategoryToResourceConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<Resource>;
+};
+
+/** Arguments for filtering the ResourceCategoryToResourceConnection connection */
+export type ResourceCategoryToResourceConnectionWhereArgs = {
+  /** Filter the connection based on dates */
+  dateQuery?: InputMaybe<DateQueryInput>;
+  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
+  hasPassword?: InputMaybe<Scalars['Boolean']>;
+  /** Specific database ID of the object */
+  id?: InputMaybe<Scalars['Int']>;
+  /** Array of IDs for the objects to retrieve */
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Get objects with a specific mimeType property */
+  mimeType?: InputMaybe<MimeTypeEnum>;
+  /** Slug / post_name of the object */
+  name?: InputMaybe<Scalars['String']>;
+  /** Specify objects to retrieve. Use slugs */
+  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
+  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** What paramater to use to order the objects by. */
+  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
+  /** Use ID to return only children. Use 0 to return only top-level items */
+  parent?: InputMaybe<Scalars['ID']>;
+  /** Specify objects whose parent is in an array */
+  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Specify posts whose parent is not in an array */
+  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Show posts with a specific password. */
+  password?: InputMaybe<Scalars['String']>;
+  /** Show Posts based on a keyword search */
+  search?: InputMaybe<Scalars['String']>;
+  /** Retrieve posts where post status is in an array. */
+  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
+  /** Show posts with a specific status. */
+  status?: InputMaybe<PostStatusEnum>;
+  /** Title of the object */
+  title?: InputMaybe<Scalars['String']>;
+};
+
+/** Connection between the ResourceCategory type and the Taxonomy type */
+export type ResourceCategoryToTaxonomyConnectionEdge = {
+  __typename?: 'ResourceCategoryToTaxonomyConnectionEdge';
+  /** The node of the connection, without the edges */
+  node?: Maybe<Taxonomy>;
+};
+
+/** Field Group */
+export type ResourceCategory_Resouceicon = AcfFieldGroup & {
+  __typename?: 'ResourceCategory_Resouceicon';
+  /** The name of the ACF Field Group */
+  fieldGroupName?: Maybe<Scalars['String']>;
+  resourceicon?: Maybe<Scalars['String']>;
 };
 
 /** The Type of Identifier used to fetch a single resource. Default is ID. */
@@ -6608,15 +6806,167 @@ export enum ResourceIdType {
   DatabaseId = 'DATABASE_ID',
   /** Identify a resource by the (hashed) Global ID. */
   Id = 'ID',
+  /** Identify a resource by the slug. Available to non-hierarchcial Types where the slug is a unique identifier. */
+  Slug = 'SLUG',
   /** Identify a resource by the URI. */
   Uri = 'URI'
 }
+
+/** Set relationships between the Resource to ResourceCategories */
+export type ResourceResourceCategoriesInput = {
+  /** If true, this will append the ResourceCategory to existing related ResourceCategories. If false, this will replace existing relationships. Default true. */
+  append?: InputMaybe<Scalars['Boolean']>;
+  /** The input list of items to set. */
+  nodes?: InputMaybe<Array<InputMaybe<ResourceResourceCategoriesNodeInput>>>;
+};
+
+/** List of ResourceCategories to connect the Resource to. If an ID is set, it will be used to create the connection. If not, it will look for a slug. If neither are valid existing terms, and the site is configured to allow terms to be created during post mutations, a term will be created using the Name if it exists in the input, then fallback to the slug if it exists. */
+export type ResourceResourceCategoriesNodeInput = {
+  /** The description of the ResourceCategory. This field is used to set a description of the ResourceCategory if a new one is created during the mutation. */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the ResourceCategory. If present, this will be used to connect to the Resource. If no existing ResourceCategory exists with this ID, no connection will be made. */
+  id?: InputMaybe<Scalars['ID']>;
+  /** The name of the ResourceCategory. This field is used to create a new term, if term creation is enabled in nested mutations, and if one does not already exist with the provided slug or ID or if a slug or ID is not provided. If no name is included and a term is created, the creation will fallback to the slug field. */
+  name?: InputMaybe<Scalars['String']>;
+  /** The slug of the ResourceCategory. If no ID is present, this field will be used to make a connection. If no existing term exists with this slug, this field will be used as a fallback to the Name field when creating a new term to connect to, if term creation is enabled as a nested mutation. */
+  slug?: InputMaybe<Scalars['String']>;
+};
 
 /** Connection between the Resource type and the Resource type */
 export type ResourceToPreviewConnectionEdge = {
   __typename?: 'ResourceToPreviewConnectionEdge';
   /** The node of the connection, without the edges */
   node?: Maybe<Resource>;
+};
+
+/** Connection between the Resource type and the ResourceCategory type */
+export type ResourceToResourceCategoryConnection = {
+  __typename?: 'ResourceToResourceCategoryConnection';
+  /** Edges for the ResourceToResourceCategoryConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceToResourceCategoryConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<ResourceCategory>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceToResourceCategoryConnectionEdge = {
+  __typename?: 'ResourceToResourceCategoryConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<ResourceCategory>;
+};
+
+/** Arguments for filtering the ResourceToResourceCategoryConnection connection */
+export type ResourceToResourceCategoryConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Connection between the Resource type and the TermNode type */
+export type ResourceToTermNodeConnection = {
+  __typename?: 'ResourceToTermNodeConnection';
+  /** Edges for the ResourceToTermNodeConnection connection */
+  edges?: Maybe<Array<Maybe<ResourceToTermNodeConnectionEdge>>>;
+  /** The nodes of the connection, without the edges */
+  nodes?: Maybe<Array<Maybe<TermNode>>>;
+  /** Information about pagination in a connection. */
+  pageInfo?: Maybe<WpPageInfo>;
+};
+
+/** An edge in a connection */
+export type ResourceToTermNodeConnectionEdge = {
+  __typename?: 'ResourceToTermNodeConnectionEdge';
+  /** A cursor for use in pagination */
+  cursor?: Maybe<Scalars['String']>;
+  /** The item at the end of the edge */
+  node?: Maybe<TermNode>;
+};
+
+/** Arguments for filtering the ResourceToTermNodeConnection connection */
+export type ResourceToTermNodeConnectionWhereArgs = {
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
+  search?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** The Taxonomy to filter terms by */
+  taxonomies?: InputMaybe<Array<InputMaybe<TaxonomyEnum>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Field Group */
@@ -6626,16 +6976,6 @@ export type Resource_Downloads = AcfFieldGroup & {
   fieldGroupName?: Maybe<Scalars['String']>;
   file?: Maybe<MediaItem>;
 };
-
-/** Field Group */
-export type Resource_Resourcecategory = AcfFieldGroup & {
-  __typename?: 'Resource_Resourcecategory';
-  /** The name of the ACF Field Group */
-  fieldGroupName?: Maybe<Scalars['String']>;
-  resourcecategory?: Maybe<Array<Maybe<Resource_Resourcecategory_Resourcecategory>>>;
-};
-
-export type Resource_Resourcecategory_Resourcecategory = ResourceCategory;
 
 /** Field Group */
 export type Resource_Resourcetype = AcfFieldGroup & {
@@ -6770,7 +7110,7 @@ export type RootMutation = {
   updateResearchSummary?: Maybe<UpdateResearchSummaryPayload>;
   /** The payload for the updateResource mutation */
   updateResource?: Maybe<UpdateResourcePayload>;
-  /** The payload for the updateResourceCategory mutation */
+  /** The payload for the UpdateResourceCategory mutation */
   updateResourceCategory?: Maybe<UpdateResourceCategoryPayload>;
   /** The payload for the updateSettings mutation */
   updateSettings?: Maybe<UpdateSettingsPayload>;
@@ -7182,10 +7522,8 @@ export type RootQuery = {
   resourceBy?: Maybe<Resource>;
   /** Connection between the RootQuery type and the ResourceCategory type */
   resourceCategories?: Maybe<RootQueryToResourceCategoryConnection>;
-  /** An object of the ResourceCategory Type.  */
+  /** A 0bject */
   resourceCategory?: Maybe<ResourceCategory>;
-  /** A ResourceCategory object */
-  resourceCategoryBy?: Maybe<ResourceCategory>;
   /** Connection between the RootQuery type and the Resource type */
   resources?: Maybe<RootQueryToResourceConnection>;
   /** Connection between the RootQuery type and the ContentRevisionUnion type */
@@ -7546,6 +7884,7 @@ export type RootQueryResourceArgs = {
 export type RootQueryResourceByArgs = {
   id?: InputMaybe<Scalars['ID']>;
   resourceId?: InputMaybe<Scalars['Int']>;
+  slug?: InputMaybe<Scalars['String']>;
   uri?: InputMaybe<Scalars['String']>;
 };
 
@@ -7560,16 +7899,8 @@ export type RootQueryResourceCategoriesArgs = {
 
 
 export type RootQueryResourceCategoryArgs = {
-  asPreview?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['ID'];
   idType?: InputMaybe<ResourceCategoryIdType>;
-};
-
-
-export type RootQueryResourceCategoryByArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  resourceCategoryId?: InputMaybe<Scalars['Int']>;
-  uri?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -8720,40 +9051,46 @@ export type RootQueryToResourceCategoryConnectionEdge = {
 
 /** Arguments for filtering the RootQueryToResourceCategoryConnection connection */
 export type RootQueryToResourceCategoryConnectionWhereArgs = {
-  /** Filter the connection based on dates */
-  dateQuery?: InputMaybe<DateQueryInput>;
-  /** True for objects with passwords; False for objects without passwords; null for all objects with or without passwords */
-  hasPassword?: InputMaybe<Scalars['Boolean']>;
-  /** Specific database ID of the object */
-  id?: InputMaybe<Scalars['Int']>;
-  /** Array of IDs for the objects to retrieve */
-  in?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** Get objects with a specific mimeType property */
-  mimeType?: InputMaybe<MimeTypeEnum>;
-  /** Slug / post_name of the object */
-  name?: InputMaybe<Scalars['String']>;
-  /** Specify objects to retrieve. Use slugs */
-  nameIn?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** Specify IDs NOT to retrieve. If this is used in the same query as "in", it will be ignored */
-  notIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** What paramater to use to order the objects by. */
-  orderby?: InputMaybe<Array<InputMaybe<PostObjectsConnectionOrderbyInput>>>;
-  /** Use ID to return only children. Use 0 to return only top-level items */
-  parent?: InputMaybe<Scalars['ID']>;
-  /** Specify objects whose parent is in an array */
-  parentIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** Specify posts whose parent is not in an array */
-  parentNotIn?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
-  /** Show posts with a specific password. */
-  password?: InputMaybe<Scalars['String']>;
-  /** Show Posts based on a keyword search */
+  /** Unique cache key to be produced when this query is stored in an object cache. Default is 'core'. */
+  cacheDomain?: InputMaybe<Scalars['String']>;
+  /** Term ID to retrieve child terms of. If multiple taxonomies are passed, $child_of is ignored. Default 0. */
+  childOf?: InputMaybe<Scalars['Int']>;
+  /** True to limit results to terms that have no children. This parameter has no effect on non-hierarchical taxonomies. Default false. */
+  childless?: InputMaybe<Scalars['Boolean']>;
+  /** Retrieve terms where the description is LIKE the input value. Default empty. */
+  descriptionLike?: InputMaybe<Scalars['String']>;
+  /** Array of term ids to exclude. If $include is non-empty, $exclude is ignored. Default empty array. */
+  exclude?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of term ids to exclude along with all of their descendant terms. If $include is non-empty, $exclude_tree is ignored. Default empty array. */
+  excludeTree?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to hide terms not assigned to any posts. Accepts true or false. Default false */
+  hideEmpty?: InputMaybe<Scalars['Boolean']>;
+  /** Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default true. */
+  hierarchical?: InputMaybe<Scalars['Boolean']>;
+  /** Array of term ids to include. Default empty array. */
+  include?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Array of names to return term(s) for. Default empty. */
+  name?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Retrieve terms where the name is LIKE the input value. Default empty. */
+  nameLike?: InputMaybe<Scalars['String']>;
+  /** Array of object IDs. Results will be limited to terms associated with these objects. */
+  objectIds?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Direction the connection should be ordered in */
+  order?: InputMaybe<OrderEnum>;
+  /** Field(s) to order terms by. Defaults to 'name'. */
+  orderby?: InputMaybe<TermObjectsConnectionOrderbyEnum>;
+  /** Whether to pad the quantity of a term's children in the quantity of each term's "count" object variable. Default false. */
+  padCounts?: InputMaybe<Scalars['Boolean']>;
+  /** Parent term ID to retrieve direct-child terms of. Default empty. */
+  parent?: InputMaybe<Scalars['Int']>;
+  /** Search criteria to match terms. Will be SQL-formatted with wildcards before and after. Default empty. */
   search?: InputMaybe<Scalars['String']>;
-  /** Retrieve posts where post status is in an array. */
-  stati?: InputMaybe<Array<InputMaybe<PostStatusEnum>>>;
-  /** Show posts with a specific status. */
-  status?: InputMaybe<PostStatusEnum>;
-  /** Title of the object */
-  title?: InputMaybe<Scalars['String']>;
+  /** Array of slugs to return term(s) for. Default empty. */
+  slug?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** Array of term taxonomy IDs, to match when querying terms. */
+  termTaxonomId?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Whether to prime meta caches for matched terms. Default true. */
+  updateTermMetaCache?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Connection between the RootQuery type and the Resource type */
@@ -9743,6 +10080,8 @@ export enum TaxonomyEnum {
   Postformat = 'POSTFORMAT',
   /** Taxonomy enum research_summaries_category */
   Researchsummariescategory = 'RESEARCHSUMMARIESCATEGORY',
+  /** Taxonomy enum resource_category */
+  Resourcecategory = 'RESOURCECATEGORY',
   /** Taxonomy enum post_tag */
   Tag = 'TAG',
   /** Taxonomy enum video_series_category */
@@ -10366,34 +10705,30 @@ export type UpdateResearchSummaryPayload = {
   researchSummary?: Maybe<ResearchSummary>;
 };
 
-/** Input for the updateResourceCategory mutation */
+/** Input for the UpdateResourceCategory mutation */
 export type UpdateResourceCategoryInput = {
+  /** The slug that the resource_category will be an alias of */
+  aliasOf?: InputMaybe<Scalars['String']>;
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** The date of the object. Preferable to enter as year/month/day (e.g. 01/31/2017) as it will rearrange date as fit if it is not specified. Incomplete dates may have unintended results for example, "2017" as the input will use current date with timestamp 20:17  */
-  date?: InputMaybe<Scalars['String']>;
-  /** The ID of the ResourceCategory object */
+  /** The description of the resource_category object */
+  description?: InputMaybe<Scalars['String']>;
+  /** The ID of the ResourceCategory object to update */
   id: Scalars['ID'];
-  /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
-  menuOrder?: InputMaybe<Scalars['Int']>;
-  /** The ID of the parent object */
+  /** The name of the resource_category object to mutate */
+  name?: InputMaybe<Scalars['String']>;
+  /** The ID of the resource_category that should be set as the parent */
   parentId?: InputMaybe<Scalars['ID']>;
-  /** The password used to protect the content of the object */
-  password?: InputMaybe<Scalars['String']>;
-  /** The slug of the object */
+  /** If this argument exists then the slug will be checked to see if it is not an existing valid term. If that check succeeds (it is not a valid term), then it is added and the term id is given. If it fails, then a check is made to whether the taxonomy is hierarchical and the parent argument is not empty. If the second check succeeds, the term will be inserted and the term id will be given. If the slug argument is empty, then it will be calculated from the term name. */
   slug?: InputMaybe<Scalars['String']>;
-  /** The status of the object */
-  status?: InputMaybe<PostStatusEnum>;
-  /** The title of the object */
-  title?: InputMaybe<Scalars['String']>;
 };
 
-/** The payload for the updateResourceCategory mutation */
+/** The payload for the UpdateResourceCategory mutation */
 export type UpdateResourceCategoryPayload = {
   __typename?: 'UpdateResourceCategoryPayload';
   /** If a &#039;clientMutationId&#039; input is provided to the mutation, it will be returned as output on the mutation. This ID can be used by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
   clientMutationId?: Maybe<Scalars['String']>;
-  /** The Post object mutation type. */
+  /** The created resource_category */
   resourceCategory?: Maybe<ResourceCategory>;
 };
 
@@ -10407,10 +10742,10 @@ export type UpdateResourceInput = {
   id: Scalars['ID'];
   /** A field used for ordering posts. This is typically used with nav menu items or for special ordering of hierarchical content types. */
   menuOrder?: InputMaybe<Scalars['Int']>;
-  /** The ID of the parent object */
-  parentId?: InputMaybe<Scalars['ID']>;
   /** The password used to protect the content of the object */
   password?: InputMaybe<Scalars['String']>;
+  /** Set connections between the Resource and ResourceCategories */
+  resourceCategories?: InputMaybe<ResourceResourceCategoriesInput>;
   /** The slug of the object */
   slug?: InputMaybe<Scalars['String']>;
   /** The status of the object */
@@ -36978,14 +37313,7 @@ export type CourseGradingDataQueryVariables = Exact<{
 }>;
 
 
-export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
-
-export type ActionableCoursesQueryVariables = Exact<{
-  statuses?: InputMaybe<Array<Course_Status_Enum> | Course_Status_Enum>;
-}>;
-
-
-export type ActionableCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> }> };
+export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -37111,7 +37439,7 @@ export type GetEvaluationsSummaryQueryVariables = Exact<{
 }>;
 
 
-export type GetEvaluationsSummaryQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
+export type GetEvaluationsSummaryQuery = { __typename?: 'query_root', answers: Array<{ __typename?: 'course_evaluation_answers', id: any, answer?: string | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null }, question: { __typename?: 'course_evaluation_questions', questionKey?: string | null, type?: Course_Evaluation_Question_Type_Enum | null, group?: Course_Evaluation_Question_Group_Enum | null } }> };
 
 export type GetEvaluationsQueryVariables = Exact<{
   courseId: Scalars['Int'];
@@ -37217,6 +37545,8 @@ export type GetOrgCoursesQueryVariables = Exact<{
 
 export type GetOrgCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level?: Course_Level_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, schedules: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string, geoCoordinates?: any | null } | null }>, participantsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } }> };
 
+export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> };
+
 export type TrainerCoursesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Course_Order_By> | Course_Order_By>;
   where?: InputMaybe<Course_Bool_Exp>;
@@ -37225,7 +37555,7 @@ export type TrainerCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
+export type TrainerCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> }>, course_aggregate: { __typename?: 'course_aggregate', aggregate?: { __typename?: 'course_aggregate_fields', count: number } | null } };
 
 export type InsertCourseAuditMutationVariables = Exact<{
   object: Course_Audit_Insert_Input;
@@ -37387,8 +37717,6 @@ export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', descrip
 export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> };
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
-
-export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level?: Course_Level_Enum | null, status?: Course_Status_Enum | null, course_code?: string | null, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }> };
 
 export type DeleteGo1LicenseMutationVariables = Exact<{
   id: Scalars['uuid'];
@@ -37661,7 +37989,7 @@ export type TermQueryVariables = Exact<{
 }>;
 
 
-export type TermQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', termNode?: { __typename: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'EbooksCategory', id: string, name?: string | null, ebooks?: { __typename?: 'EbooksCategoryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'PostFormat', id: string, name?: string | null } | { __typename: 'ResearchSummariesCategory', id: string, name?: string | null, researchSummaries?: { __typename?: 'ResearchSummariesCategoryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'VideoSeriesCategory', id: string, name?: string | null, videoSeriesItems?: { __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'WebinarsCategory', id: string, name?: string | null, webinars?: { __typename?: 'WebinarsCategoryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
+export type TermQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', termNode?: { __typename: 'Category', id: string, name?: string | null, posts?: { __typename?: 'CategoryToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'EbooksCategory', id: string, name?: string | null, ebooks?: { __typename?: 'EbooksCategoryToEbookConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Ebook', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'Ebook_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, ebooksCategories?: { __typename?: 'EbookToEbooksCategoryConnection', nodes?: Array<{ __typename?: 'EbooksCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'PostFormat', id: string, name?: string | null } | { __typename: 'ResearchSummariesCategory', id: string, name?: string | null, researchSummaries?: { __typename?: 'ResearchSummariesCategoryToResearchSummaryConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'ResearchSummary', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, downloads?: { __typename?: 'ResearchSummary_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, researchSummariesCategories?: { __typename?: 'ResearchSummaryToResearchSummariesCategoryConnection', nodes?: Array<{ __typename?: 'ResearchSummariesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'ResourceCategory', id: string, name?: string | null } | { __typename: 'Tag', id: string, name?: string | null, posts?: { __typename?: 'TagToPostConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, content?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, tags?: { __typename?: 'PostToTagConnection', nodes?: Array<{ __typename?: 'Tag', id: string, name?: string | null } | null> | null } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node?: { __typename?: 'User', firstName?: string | null, lastName?: string | null } | null } | null, customAuthor?: { __typename?: 'Post_Customauthor', displayAuthor?: boolean | null, authorName?: string | null } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes?: Array<{ __typename?: 'Category', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'VideoSeriesCategory', id: string, name?: string | null, videoSeriesItems?: { __typename?: 'VideoSeriesCategoryToVideoSeriesItemConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'VideoSeriesItem', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'VideoSeriesItem_Youtube', url?: string | null, duration?: number | null } | null, downloads?: { __typename?: 'VideoSeriesItem_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null, videoSeriesCategories?: { __typename?: 'VideoSeriesItemToVideoSeriesCategoryConnection', nodes?: Array<{ __typename?: 'VideoSeriesCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | { __typename: 'WebinarsCategory', id: string, name?: string | null, webinars?: { __typename?: 'WebinarsCategoryToWebinarConnection', pageInfo?: { __typename?: 'WPPageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } | null, nodes?: Array<{ __typename?: 'Webinar', id: string, title?: string | null, excerpt?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node?: { __typename?: 'MediaItem', mediaItemUrl?: string | null, srcSet?: string | null } | null } | null, youtube?: { __typename?: 'Webinar_Youtube', url?: string | null, duration?: number | null } | null, webinarsCategories?: { __typename?: 'WebinarToWebinarsCategoryConnection', nodes?: Array<{ __typename?: 'WebinarsCategory', id: string, name?: string | null } | null> | null } | null } | null> | null } | null } | null } | null };
 
 export type VideoItemQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -37836,7 +38164,7 @@ export type CourseParticipantsQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string } | null, course: { __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level?: Course_Level_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null } }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+export type CourseParticipantsQuery = { __typename?: 'query_root', courseParticipants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, invoiceID?: any | null, bookingDate?: any | null, go1EnrolmentStatus?: Blended_Learning_Status_Enum | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string } | null, course: { __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level?: Course_Level_Enum | null, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null } }>, courseParticipantsAggregation: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
 
 export type DeleteTempProfileMutationVariables = Exact<{
   email: Scalars['String'];
@@ -37943,7 +38271,7 @@ export type GetPromoCodesQueryVariables = Exact<{
 }>;
 
 
-export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
 
 export type InsertPromoCodeMutationVariables = Exact<{
   promoCode: Promo_Code_Insert_Input;

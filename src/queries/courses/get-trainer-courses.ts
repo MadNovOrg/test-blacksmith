@@ -27,6 +27,7 @@ export const QUERY = gql`
       profile {
         id
         fullName
+        avatar
       }
     }
     max_participants

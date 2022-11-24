@@ -56,6 +56,7 @@ export const CourseAttendance = () => {
     return participantsData.map(participant => ({
       name: participant.profile.fullName,
       id: participant.id,
+      avatar: participant.profile.avatar,
       attending:
         participant.attended ?? storedAttendance[participant.id] ?? true,
     }))

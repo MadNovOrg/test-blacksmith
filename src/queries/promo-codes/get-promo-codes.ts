@@ -43,6 +43,7 @@ export const QUERY = gql`
       creator {
         id
         fullName
+        avatar
       }
       createdAt
       updatedAt

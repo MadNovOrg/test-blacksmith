@@ -32,6 +32,7 @@ export const QUERY = gql`
       profile {
         id
         fullName
+        avatar
       }
       answer
       question {

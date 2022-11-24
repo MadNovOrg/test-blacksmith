@@ -116,6 +116,10 @@ const Term: React.FC = () => {
     setPagination(initialPagination)
   }, [id])
 
+  if (data?.content?.termNode?.__typename === 'ResourceCategory') {
+    return null
+  }
+
   return (
     <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 5 }}>
       <Typography mb={3} variant="h3" color="primary">
