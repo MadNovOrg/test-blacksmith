@@ -32,6 +32,10 @@ export const QUERY = gql`
           givenName
           familyName
           fullName
+          certificates {
+            courseLevel
+            expiryDate
+          }
         }
       }
       schedule {

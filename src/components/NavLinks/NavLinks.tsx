@@ -12,9 +12,11 @@ export const NavLinks = () => {
 
   return (
     <>
-      <Link component={StyledNavLink} to="/courses">
-        {t('my-courses')}
-      </Link>
+      {acl.canParticipateInCourses() ? (
+        <Link component={StyledNavLink} to="/courses">
+          {t('my-courses')}
+        </Link>
+      ) : null}
 
       {acl.canViewResources() ? (
         <Link component={StyledNavLink} to="/resources">

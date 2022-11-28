@@ -125,15 +125,15 @@ export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
 
 export const getCourseTrainer = (trainers: CourseTrainer[]) => {
-  return trainers.find(t => t.type === CourseTrainerType.LEADER)
+  return trainers.find(t => t.type === CourseTrainerType.Leader)
 }
 
 export const getCourseAssistants = (trainers: CourseTrainer[]) => {
-  return trainers.filter(t => t.type === CourseTrainerType.ASSISTANT)
+  return trainers.filter(t => t.type === CourseTrainerType.Assistant)
 }
 
 export const getCourseModerator = (trainers: CourseTrainer[]) => {
-  return trainers.find(t => t.type === CourseTrainerType.MODERATOR)
+  return trainers.find(t => t.type === CourseTrainerType.Moderator)
 }
 
 export const transformModulesToGroups = (
@@ -179,7 +179,7 @@ export const generateCourseName = (
 ) => {
   let courseLevelLabel = t(`common.course-levels.${courseData.level}`)
 
-  if (courseData.level === CourseLevel.ADVANCED) {
+  if (courseData.level === CourseLevel.Advanced) {
     courseLevelLabel = `${courseLevelLabel} ${t('common.modules')}`
   }
 
@@ -195,13 +195,13 @@ export const COURSE_TYPE_TO_PREFIX = {
 }
 
 export const COURSE_LEVEL_TO_PREFIX = {
-  [CourseLevel.LEVEL_1]: 'L1',
-  [CourseLevel.LEVEL_2]: 'L2',
-  [CourseLevel.ADVANCED]: 'ADV',
-  [CourseLevel.BILD_ACT]: 'ACT',
-  [CourseLevel.INTERMEDIATE_TRAINER]: 'INT-T',
-  [CourseLevel.ADVANCED_TRAINER]: 'ADV-T',
-  [CourseLevel.BILD_ACT_TRAINER]: 'ACT-T',
+  [CourseLevel.Level_1]: 'L1',
+  [CourseLevel.Level_2]: 'L2',
+  [CourseLevel.Advanced]: 'ADV',
+  [CourseLevel.BildAct]: 'ACT',
+  [CourseLevel.IntermediateTrainer]: 'INT-T',
+  [CourseLevel.AdvancedTrainer]: 'ADV-T',
+  [CourseLevel.BildActTrainer]: 'ACT-T',
 }
 
 export const getCertificateNumberPrefix = (
@@ -359,23 +359,23 @@ export function getProfileCertificationLevels(
   const levels = []
 
   const advancedTrainer = certificates.find(
-    c => c.courseLevel === CourseLevel.ADVANCED_TRAINER
+    c => c.courseLevel === CourseLevel.AdvancedTrainer
   )
   if (advancedTrainer) {
-    levels.push(CourseLevel.ADVANCED_TRAINER)
+    levels.push(CourseLevel.AdvancedTrainer)
     if (advancedTrainer.status !== CertificateStatus.EXPIRED_RECENTLY) {
       return levels
     }
   }
 
-  if (certificates.find(c => c.courseLevel === CourseLevel.ADVANCED)) {
-    levels.push(CourseLevel.ADVANCED)
+  if (certificates.find(c => c.courseLevel === CourseLevel.Advanced)) {
+    levels.push(CourseLevel.Advanced)
   }
 
   const hierarchy = [
-    CourseLevel.INTERMEDIATE_TRAINER,
-    CourseLevel.LEVEL_2,
-    CourseLevel.LEVEL_1,
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.Level_2,
+    CourseLevel.Level_1,
   ]
   for (const level of hierarchy) {
     const certificate = certificates.find(c => c.courseLevel === level)

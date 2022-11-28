@@ -2,7 +2,7 @@ import Chance from 'chance'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 
-import { CourseTrainerType, TransportMethod, TrainerInput } from '@app/types'
+import { CourseTrainerType, TrainerInput, TransportMethod } from '@app/types'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
 
@@ -14,6 +14,7 @@ const makeTrainer = (type: CourseTrainerType) => ({
   fullName: chance.name(),
   profile_id: chance.guid(),
   type,
+  levels: [],
 })
 
 const makeTrainers = ({
@@ -25,15 +26,15 @@ const makeTrainers = ({
   assistant?: number
   moderator?: boolean
 }): TrainerInput[] => {
-  const leadTrainers = lead ? [makeTrainer(CourseTrainerType.LEADER)] : []
+  const leadTrainers = lead ? [makeTrainer(CourseTrainerType.Leader)] : []
 
   const assistantTrainers = assistant
     ? new Array(assistant)
         .fill(null)
-        .map(() => makeTrainer(CourseTrainerType.ASSISTANT))
+        .map(() => makeTrainer(CourseTrainerType.Assistant))
     : []
 
-  const moderators = moderator ? [makeTrainer(CourseTrainerType.MODERATOR)] : []
+  const moderators = moderator ? [makeTrainer(CourseTrainerType.Moderator)] : []
 
   return [...leadTrainers, ...assistantTrainers, ...moderators]
 }

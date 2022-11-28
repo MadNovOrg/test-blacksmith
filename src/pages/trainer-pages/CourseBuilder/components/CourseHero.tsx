@@ -2,10 +2,10 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Course } from '@app/types'
+import { GetCourseByIdQuery } from '@app/generated/graphql'
 
 type CourseHeroProps = {
-  data: Course
+  data: NonNullable<GetCourseByIdQuery['course']>
 }
 
 export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {

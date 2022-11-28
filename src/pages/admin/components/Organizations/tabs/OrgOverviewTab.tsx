@@ -29,11 +29,11 @@ type OrgOverviewTabParams = {
 }
 
 const LEVELS_IN_ORDER = [
-  CourseLevel.LEVEL_1,
-  CourseLevel.LEVEL_2,
-  CourseLevel.INTERMEDIATE_TRAINER,
-  CourseLevel.ADVANCED,
-  CourseLevel.ADVANCED_TRAINER,
+  CourseLevel.Level_1,
+  CourseLevel.Level_2,
+  CourseLevel.IntermediateTrainer,
+  CourseLevel.Advanced,
+  CourseLevel.AdvancedTrainer,
   null,
 ]
 

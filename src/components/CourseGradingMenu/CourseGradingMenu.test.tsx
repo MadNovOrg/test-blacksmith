@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CourseLevel, CourseDeliveryType } from '@app/types'
+import { CourseDeliveryType, CourseLevel } from '@app/types'
 
 import { render, screen, userEvent, within } from '@test/index'
 
@@ -10,7 +10,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct option for virtual L1 course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.LEVEL_1}
+        courseLevel={CourseLevel.Level_1}
         courseDeliveryType={CourseDeliveryType.VIRTUAL}
       />
     )
@@ -28,7 +28,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for F2F L1 course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.LEVEL_1}
+        courseLevel={CourseLevel.Level_1}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )
@@ -46,7 +46,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for F2F L2 course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.LEVEL_2}
+        courseLevel={CourseLevel.Level_2}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )
@@ -64,7 +64,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for advanced trainer F2F course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.ADVANCED_TRAINER}
+        courseLevel={CourseLevel.AdvancedTrainer}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )
@@ -82,7 +82,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for intermediate trainer F2F course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.INTERMEDIATE_TRAINER}
+        courseLevel={CourseLevel.IntermediateTrainer}
         courseDeliveryType={CourseDeliveryType.F2F}
       />
     )
@@ -100,7 +100,7 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for blended course', () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.LEVEL_1}
+        courseLevel={CourseLevel.Level_1}
         courseDeliveryType={CourseDeliveryType.MIXED}
       />
     )

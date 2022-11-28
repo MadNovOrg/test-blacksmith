@@ -61,6 +61,7 @@ export type Course = {
     id: string
     reason: string
   }
+  modulesDuration?: number
 } & Base
 
 export type CourseModule = {
@@ -162,6 +163,7 @@ export type Profile = {
   roles: Array<{ role: Role }> // roles assigned in profile_role
   trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
   lastActivity: Date
+  certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
 } & Base
 
 export type Role = {
@@ -185,7 +187,7 @@ export enum RoleName {
   SALES_ADMIN = 'sales-admin',
   SALES_REPRESENTATIVE = 'sales-representative',
   FINANCE = 'finance',
-  'L&D' = 'l&d',
+  LD = 'ld',
   TRAINER = 'trainer',
   USER = 'user',
   UNVERIFIED = 'unverified',
@@ -212,13 +214,13 @@ export enum CourseType {
 }
 
 export enum CourseLevel {
-  LEVEL_1 = 'LEVEL_1',
-  LEVEL_2 = 'LEVEL_2',
-  ADVANCED = 'ADVANCED',
-  BILD_ACT = 'BILD_ACT',
-  INTERMEDIATE_TRAINER = 'INTERMEDIATE_TRAINER',
-  ADVANCED_TRAINER = 'ADVANCED_TRAINER',
-  BILD_ACT_TRAINER = 'BILD_ACT_TRAINER',
+  Level_1 = 'LEVEL_1',
+  Level_2 = 'LEVEL_2',
+  Advanced = 'ADVANCED',
+  BildAct = 'BILD_ACT',
+  IntermediateTrainer = 'INTERMEDIATE_TRAINER',
+  AdvancedTrainer = 'ADVANCED_TRAINER',
+  BildActTrainer = 'BILD_ACT_TRAINER',
 }
 
 export enum CourseDeliveryType {
@@ -232,12 +234,16 @@ export type CourseTrainer = {
   type: CourseTrainerType
   status: InviteStatus
   profile: Profile
+  levels: {
+    courseLevel: CourseLevel
+    expiryDate: string
+  }[]
 }
 
 export enum CourseTrainerType {
-  LEADER = 'LEADER',
-  ASSISTANT = 'ASSISTANT',
-  MODERATOR = 'MODERATOR',
+  Leader = 'LEADER',
+  Assistant = 'ASSISTANT',
+  Moderator = 'MODERATOR',
 }
 
 export enum Color {
@@ -485,9 +491,9 @@ export enum SearchTrainerAvailability {
 
 export type SearchTrainer = {
   availability?: SearchTrainerAvailability
-  levels?: {
+  levels: {
     courseLevel: CourseLevel
-    expiryDate: Date
+    expiryDate: string
   }[]
 } & Pick<Profile, 'id' | 'fullName' | 'avatar' | 'trainer_role_types'>
 
@@ -616,6 +622,10 @@ export type TrainerInput = {
   type: CourseTrainerType
   fullName?: string
   status?: InviteStatus
+  levels: {
+    courseLevel: CourseLevel
+    expiryDate: string
+  }[]
 }
 
 export enum TransportMethod {

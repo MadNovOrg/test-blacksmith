@@ -12,6 +12,7 @@ declare module '@mui/system' {
       yellow: ColorPartial
       purple: ColorPartial
       fuschia: ColorPartial
+      grey: ColorPartial
     }
   }
 }
@@ -25,6 +26,7 @@ declare module '@mui/material/styles' {
       yellow: ColorPartial
       purple: ColorPartial
       fuschia: ColorPartial
+      grey: ColorPartial
     }
   }
   // allow configuration using `createTheme`
@@ -36,6 +38,7 @@ declare module '@mui/material/styles' {
       yellow?: ColorPartial
       purple?: ColorPartial
       fuschia?: ColorPartial
+      grey?: ColorPartial
     }
   }
 

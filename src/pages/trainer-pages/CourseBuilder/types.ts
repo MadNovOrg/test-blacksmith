@@ -1,4 +1,6 @@
-import { ModuleGroup } from '@app/types'
+import { ModuleGroupsQuery } from '@app/generated/graphql'
+
+export type ModuleGroup = ModuleGroupsQuery['groups'][0]
 
 export type AvailableModule = ModuleGroup & {
   used?: boolean

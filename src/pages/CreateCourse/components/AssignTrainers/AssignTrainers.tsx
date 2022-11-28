@@ -7,6 +7,12 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import ChooseTrainers, { FormValues } from '@app/components/ChooseTrainers'
+import { useAuth } from '@app/context/auth'
+import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
+import {
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   CourseTrainer,
   CourseTrainerType,
@@ -28,18 +34,21 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
   return [
     ...trainers.assist.map(assistant => ({
       profile_id: assistant.id,
-      type: CourseTrainerType.ASSISTANT,
+      type: CourseTrainerType.Assistant,
       fullName: assistant.fullName,
+      levels: assistant.levels,
     })),
     ...trainers.moderator.map(moderator => ({
       profile_id: moderator.id,
-      type: CourseTrainerType.MODERATOR,
+      type: CourseTrainerType.Moderator,
       fullName: moderator.fullName,
+      levels: moderator.levels,
     })),
     ...trainers.lead.map(trainer => ({
       profile_id: trainer.id,
-      type: CourseTrainerType.LEADER,
+      type: CourseTrainerType.Leader,
       fullName: trainer.fullName,
+      levels: trainer.levels,
     })),
   ]
 }
@@ -77,10 +86,12 @@ const trainerInputToCourseTrainer = (
     type: t.type,
     status: InviteStatus.PENDING,
     id: t.profile_id,
+    levels: t.levels,
   }))
 
 export const AssignTrainers = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const {
     completeStep,
     courseData,
@@ -92,6 +103,9 @@ export const AssignTrainers = () => {
   const navigate = useNavigate()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
   const { savingStatus, saveCourse } = useSaveCourse()
+  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
+    []
+  )
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.ASSIGN_TRAINER)
@@ -105,7 +119,7 @@ export const AssignTrainers = () => {
     [setTrainers]
   )
 
-  const handleSubmitButtonClick = async () => {
+  const submit = useCallback(async () => {
     if (courseData && trainers) {
       const isClosedCourse = courseData.type === CourseType.CLOSED
 
@@ -120,7 +134,18 @@ export const AssignTrainers = () => {
       completeStep(StepsEnum.ASSIGN_TRAINER)
       navigate(nextPage)
     }
-  }
+  }, [completeStep, courseData, navigate, saveCourse, trainers])
+
+  const handleSubmitButtonClick = useCallback(async () => {
+    if (courseData) {
+      const exceptions = checkCourseDetailsForExceptions(courseData, trainers)
+      if (!acl.isTTAdmin() && exceptions.length > 0) {
+        setCourseExceptions(exceptions)
+      } else {
+        await submit()
+      }
+    }
+  }, [acl, courseData, submit, trainers])
 
   if (!courseData) {
     return (
@@ -175,6 +200,13 @@ export const AssignTrainers = () => {
           </LoadingButton>
         </Box>
       </Box>
+
+      <CourseExceptionsConfirmation
+        open={courseExceptions.length > 0}
+        onCancel={() => setCourseExceptions([])}
+        onSubmit={submit}
+        exceptions={courseExceptions}
+      />
     </Stack>
   ) : null
 }

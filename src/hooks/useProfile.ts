@@ -18,16 +18,13 @@ const isValidCertificate = (certificate: { expiryDate: string }) =>
   !isPast(new Date(certificate.expiryDate))
 
 const requiredCertificateLevel = {
-  [CourseLevel.LEVEL_1]: [],
-  [CourseLevel.LEVEL_2]: [],
-  [CourseLevel.ADVANCED]: [CourseLevel.LEVEL_2],
-  [CourseLevel.BILD_ACT]: [],
-  [CourseLevel.INTERMEDIATE_TRAINER]: [
-    CourseLevel.LEVEL_1,
-    CourseLevel.LEVEL_2,
-  ],
-  [CourseLevel.ADVANCED_TRAINER]: [CourseLevel.INTERMEDIATE_TRAINER],
-  [CourseLevel.BILD_ACT_TRAINER]: [CourseLevel.BILD_ACT],
+  [CourseLevel.Level_1]: [],
+  [CourseLevel.Level_2]: [],
+  [CourseLevel.Advanced]: [CourseLevel.Level_2],
+  [CourseLevel.BildAct]: [],
+  [CourseLevel.IntermediateTrainer]: [CourseLevel.Level_1, CourseLevel.Level_2],
+  [CourseLevel.AdvancedTrainer]: [CourseLevel.IntermediateTrainer],
+  [CourseLevel.BildActTrainer]: [CourseLevel.BildAct],
 }
 
 export type MissingCertificateInfo = {
@@ -62,7 +59,7 @@ export default function useProfile(
       return courses
         .map(c => {
           const requiredCertificate =
-            requiredCertificateLevel[c.level || CourseLevel.LEVEL_1]
+            requiredCertificateLevel[c.level || CourseLevel.Level_1]
           if (requiredCertificate.length === 0) {
             return false
           }

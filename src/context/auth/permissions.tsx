@@ -8,13 +8,15 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()
 
   const acl: ACL = Object.freeze({
-    isAdmin: () => acl.isTTOps() || acl.isTTAdmin(),
+    isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
 
     isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
 
     isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
 
     isTrainer: () => allowedRoles.has(RoleName.TRAINER),
+
+    isLD: () => allowedRoles.has(RoleName.LD),
 
     isOrgAdmin: () => auth.isOrgAdmin,
 
@@ -29,39 +31,56 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewAdmin: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewContacts: () => {
-      const roles = [RoleName.TRAINER, RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [
+        RoleName.TRAINER,
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewCertifications: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewOrders: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewAllOrganizations: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewOrganizations: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
+    },
+
+    canCreateCourses: () => {
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+        RoleName.TRAINER,
+      ]
+      return roles.some(r => r === auth.activeRole)
     },
 
     canCreateCourse: (type: CourseType) => {
       switch (auth.activeRole) {
         case RoleName.TT_ADMIN:
           return true
+        case RoleName.LD:
         case RoleName.TT_OPS:
           return [CourseType.OPEN, CourseType.CLOSED].includes(type)
         case RoleName.SALES_ADMIN: {
@@ -75,7 +94,12 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canAssignLeadTrainer: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.LD,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -98,7 +122,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canManageOrgCourses: () => {
-      return auth.isOrgAdmin || auth.activeRole === RoleName.TT_ADMIN
+      return (
+        auth.isOrgAdmin ||
+        auth.activeRole === RoleName.TT_ADMIN ||
+        auth.activeRole === RoleName.LD
+      )
     },
 
     canSeeWaitingLists: () => {
@@ -136,6 +164,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
     canViewResources: () => {
       const roles = [RoleName.TT_ADMIN, RoleName.USER, RoleName.TRAINER]
+      return roles.some(r => r === auth.activeRole)
+    },
+
+    canParticipateInCourses: () => {
+      const roles = [RoleName.USER, RoleName.TRAINER]
       return roles.some(r => r === auth.activeRole)
     },
   })

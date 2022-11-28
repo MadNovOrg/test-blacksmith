@@ -498,4 +498,5 @@ custom_types:
     - name: ReplaceParticipantOutput
     - name: TrainerRoleTypeObj
     - name: TrainerRoleType
+    - name: CourseCertificateLevel
   scalars: []

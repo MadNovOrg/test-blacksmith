@@ -1,3 +1,6 @@
+- role_name: ld
+  role_set:
+    - tt-ops
 - role_name: trainer
   role_set:
     - user

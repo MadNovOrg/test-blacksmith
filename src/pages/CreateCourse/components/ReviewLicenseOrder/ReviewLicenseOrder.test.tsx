@@ -53,7 +53,7 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {
-      courseLevel: CourseLevel.LEVEL_1,
+      courseLevel: CourseLevel.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
     }
@@ -133,7 +133,7 @@ describe('component: ReviewLicenseOrder', () => {
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {
-      courseLevel: CourseLevel.LEVEL_1,
+      courseLevel: CourseLevel.Level_1,
       startDateTime: startDate,
       endDateTime: endDate,
       type: CourseType.INDIRECT,

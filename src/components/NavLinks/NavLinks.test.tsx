@@ -45,9 +45,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(8)
-    const myCoursesLink = screen.getByRole('link', { name: 'My Courses' })
-    expect(myCoursesLink).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(7)
     const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
     expect(coursesLink).toBeInTheDocument()
     const organisationsLink = screen.getByRole('link', {
@@ -81,9 +79,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(5)
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
-    expect(coursesLink).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(4)
     const organisationsLink = screen.getByRole('link', {
       name: 'Organisations',
     })
@@ -137,9 +133,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(2)
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
-    expect(coursesLink).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
   })
@@ -157,9 +151,7 @@ describe('component: NavLinks', () => {
       }
     )
 
-    expect(screen.getAllByRole('link')).toHaveLength(2)
-    const coursesLink = screen.getByRole('link', { name: 'My Courses' })
-    expect(coursesLink).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
     const communityLink = screen.getByRole('link', { name: 'Community' })
     expect(communityLink).toBeInTheDocument()
   })

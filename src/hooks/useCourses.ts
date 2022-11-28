@@ -51,7 +51,7 @@ export const useCourses = (
       const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
-        obj = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+        obj = acl.canViewAllOrganizations() ? allAvailableOrgs : onlyUserOrgs
       } else {
         obj = specificOrg
       }

@@ -15,37 +15,37 @@ import {
   ResearchSummaryDetailsFragment,
   TagSummaryFragment,
   VideoItemSummaryFragment,
-  WebinarSummaryFragment,
   WaitlistSummaryFragment,
+  WebinarSummaryFragment,
 } from '@app/generated/graphql'
 import {
   Address,
+  BlendedLearningStatus,
+  CertificateStatus,
+  Color,
   Course,
+  CourseCertificate,
   CourseDeliveryType,
+  CourseInvite,
   CourseLevel,
+  CourseModule,
   CourseParticipant,
+  CourseParticipantModule,
   CourseSchedule,
+  CourseTrainer,
+  CourseTrainerType,
   CourseType,
   ExpensesInput,
+  InviteStatus,
+  Module,
+  ModuleGroup,
   Organization,
   Profile,
+  Role,
+  RoleName,
   TrainerInput,
   TransportMethod,
   Venue,
-  CourseInvite,
-  ModuleGroup,
-  Color,
-  Module,
-  CourseModule,
-  BlendedLearningStatus,
-  CourseParticipantModule,
-  CourseTrainerType,
-  CourseTrainer,
-  InviteStatus,
-  CourseCertificate,
-  CertificateStatus,
-  Role,
-  RoleName,
 } from '@app/types'
 
 export const buildAddress = build<Address>({
@@ -175,21 +175,22 @@ export const buildCourseSchedule = build<CourseSchedule>({
 export const buildCourseTrainer = build<CourseTrainer>({
   fields: {
     id: fake(f => f.datatype.uuid()),
-    type: CourseTrainerType.LEADER,
+    type: CourseTrainerType.Leader,
     status: InviteStatus.ACCEPTED,
     profile: perBuild(() => buildProfile()),
+    levels: [],
   },
 })
 
 export const buildCourseLeader = (overrides?: Partial<CourseTrainer>) => {
   return buildCourseTrainer({
-    overrides: { ...overrides, type: CourseTrainerType.LEADER },
+    overrides: { ...overrides, type: CourseTrainerType.Leader },
   })
 }
 
 export const buildCourseAssistant = (overrides?: Partial<CourseTrainer>) => {
   return buildCourseTrainer({
-    overrides: { ...overrides, type: CourseTrainerType.ASSISTANT },
+    overrides: { ...overrides, type: CourseTrainerType.Assistant },
   })
 }
 
@@ -209,7 +210,7 @@ export const buildCourse = build<Course>({
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     course_code: 'CL-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
@@ -249,7 +250,7 @@ export const buildStartedCourse = build<Course>({
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseSchedule()],
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     course_code: 'CL-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
@@ -286,7 +287,7 @@ export const buildEndedCourse = build<Course>({
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseScheduleEndedCourse()],
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     course_code: 'OP-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
@@ -321,7 +322,7 @@ export const buildNotStartedCourse = build<Course>({
     go1Integration: perBuild(() => false),
     organization: buildOrganization(),
     schedule: [buildCourseScheduleNotStartedCourse()],
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     course_code: 'OP-L1-10000',
     trainers: [buildCourseTrainer()],
     dates: {
@@ -345,7 +346,7 @@ export const buildModuleGroup = build<ModuleGroup>({
     id: fake(f => f.datatype.uuid()),
     createdAt: new Date().toISOString(),
     name: fake(f => f.random.words(3)),
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     mandatory: null,
     modules: [],
     color: Color.FUSCHIA,
@@ -359,7 +360,7 @@ export const buildModule = build<Module>({
     name: fake(f => f.random.words(3)),
     createdAt: new Date().toISOString(),
     description: fake(f => f.random.words(3)),
-    level: CourseLevel.LEVEL_1,
+    level: CourseLevel.Level_1,
     type: '',
     moduleGroup: perBuild(() => buildModuleGroup()),
   },
@@ -408,7 +409,7 @@ export const buildCertificate = build<CourseCertificate>({
     courseName: fake(f => f.random.words(3)),
     expiryDate: add(new Date(), { days: 1 }).toISOString(),
     certificationDate: new Date().toISOString(),
-    courseLevel: CourseLevel.LEVEL_1,
+    courseLevel: CourseLevel.Level_1,
     status: CertificateStatus.ACTIVE,
   },
 })
@@ -605,9 +606,10 @@ export const buildExpensesInput = build<ExpensesInput>({
 export const buildTrainerInput = build<TrainerInput>({
   fields: {
     profile_id: fake(f => f.datatype.uuid()),
-    type: CourseTrainerType.LEADER,
+    type: CourseTrainerType.Leader,
     fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
     status: InviteStatus.ACCEPTED,
+    levels: [],
   },
 })
 
@@ -615,7 +617,7 @@ export const buildTrainerInputAssistant = (
   overrides?: Partial<TrainerInput>
 ) => {
   return buildTrainerInput({
-    overrides: { ...overrides, type: CourseTrainerType.ASSISTANT },
+    overrides: { ...overrides, type: CourseTrainerType.Assistant },
   })
 }
 
@@ -623,6 +625,6 @@ export const buildTrainerInputModerator = (
   overrides?: Partial<TrainerInput>
 ) => {
   return buildTrainerInput({
-    overrides: { ...overrides, type: CourseTrainerType.MODERATOR },
+    overrides: { ...overrides, type: CourseTrainerType.Moderator },
   })
 }

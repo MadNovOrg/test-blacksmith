@@ -30,8 +30,8 @@ describe('component: SearchTrainers', () => {
 
     const { container } = render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
       />
     )
@@ -54,8 +54,8 @@ describe('component: SearchTrainers', () => {
     const placeholder = chance.sentence()
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         placeholder={placeholder}
       />
@@ -71,8 +71,8 @@ describe('component: SearchTrainers', () => {
 
     const { container } = render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
       />
     )
@@ -137,8 +137,8 @@ describe('component: SearchTrainers', () => {
 
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
       />
     )
@@ -169,8 +169,8 @@ describe('component: SearchTrainers', () => {
     const matchesFilter = jest.fn().mockReturnValueOnce([trainers[2]])
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         matchesFilter={matchesFilter}
       />
@@ -196,29 +196,33 @@ describe('component: SearchTrainers', () => {
           id: chance.guid(),
           fullName: `John Mc${lastName}`,
           trainer_role_types: [],
+          levels: [],
         },
         {
           id: chance.guid(),
           fullName: `Ivan ${lastName}ovich`,
           trainer_role_types: [],
+          levels: [],
         },
         {
           id: chance.guid(),
           fullName: `Coen De${lastName}`,
           trainer_role_types: [],
+          levels: [],
         },
         {
           id: chance.guid(),
           fullName: `Mary NotAMatch`,
           trainer_role_types: [],
+          levels: [],
         },
       ],
     })
 
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         max={1}
       />
@@ -245,8 +249,8 @@ describe('component: SearchTrainers', () => {
     const onChange = jest.fn()
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
         onChange={onChange}
       />
@@ -270,8 +274,8 @@ describe('component: SearchTrainers', () => {
 
     render(
       <SearchTrainers
-        trainerType={CourseTrainerType.LEADER}
-        courseLevel={CourseLevel.LEVEL_1}
+        trainerType={CourseTrainerType.Leader}
+        courseLevel={CourseLevel.Level_1}
         courseSchedule={course.schedule[0]}
       />
     )
@@ -297,24 +301,28 @@ function makeTrainers(): SearchTrainer[] {
       fullName: chance.name(),
       avatar: '',
       trainer_role_types: [],
+      levels: [],
     },
     {
       id: chance.guid(),
       fullName: chance.name(),
       avatar: '',
       trainer_role_types: [],
+      levels: [],
     },
     {
       id: chance.guid(),
       fullName: chance.name(),
       avatar: '',
       trainer_role_types: [],
+      levels: [],
     },
     {
       id: chance.guid(),
       fullName: chance.name(),
       avatar: '',
       trainer_role_types: [],
+      levels: [],
     },
   ]
 }

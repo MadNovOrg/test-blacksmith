@@ -6,8 +6,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  QUERY as FindLegacyCertificateQuery,
   ParamsType as FindLegacyCertificateParamsType,
+  QUERY as FindLegacyCertificateQuery,
   ResponseType as FindLegacyCertificateResponseType,
 } from '@app/queries/certificate/find-legacy-certificate'
 import {
@@ -22,8 +22,8 @@ export type ImportCertificateModalProps = {
 }
 
 const COURSE_PREFIX_TO_LEVEL = {
-  LEVEL1: CourseLevel.LEVEL_1,
-  LEVEL2: CourseLevel.LEVEL_2,
+  LEVEL1: CourseLevel.Level_1,
+  LEVEL2: CourseLevel.Level_2,
 }
 
 function parseCourseLevel(number: string) {

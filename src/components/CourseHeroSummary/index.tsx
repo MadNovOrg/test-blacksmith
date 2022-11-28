@@ -63,6 +63,10 @@ export const CourseHeroSummary: React.FC<Props> = ({
 
   const courseDurationMessage = getCourseDurationMessage(courseDuration, t)
 
+  const showStatus =
+    course.status === Course_Status_Enum.Cancelled ||
+    course.status === Course_Status_Enum.Declined
+
   return (
     <Box
       sx={{
@@ -87,7 +91,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
             <Typography variant="body2" color="secondary">
               {course.course_code}
             </Typography>
-            {course.status === Course_Status_Enum.Cancelled ? (
+            {showStatus ? (
               <Box mt={1}>
                 <CourseStatusChip status={course.status} />
               </Box>

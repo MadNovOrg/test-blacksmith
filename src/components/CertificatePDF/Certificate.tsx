@@ -87,7 +87,7 @@ export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
       <Page size="A4" orientation="landscape" style={styles.page}>
         <Image
           src={
-            courseLevel === CourseLevel.BILD_ACT
+            courseLevel === CourseLevel.BildAct
               ? BILDOutlineImage
               : ICMOutlineImage
           }
@@ -106,9 +106,9 @@ export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
         </Text>
 
         {[
-          CourseLevel.LEVEL_1,
-          CourseLevel.LEVEL_2,
-          CourseLevel.ADVANCED,
+          CourseLevel.Level_1,
+          CourseLevel.Level_2,
+          CourseLevel.Advanced,
         ].includes(courseLevel) ? (
           <Text style={styles.smallerText}>
             {t('common.course-certificate.levels-limitation-message')}

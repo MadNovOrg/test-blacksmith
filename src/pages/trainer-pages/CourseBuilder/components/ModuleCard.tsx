@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 import { IconDialog } from '@app/components/IconDialog'
-import { ModuleGroup } from '@app/types'
+import { ModuleGroup } from '@app/pages/trainer-pages/CourseBuilder/types'
 import { formatDurationShort } from '@app/util'
 
 type ModuleCardProps = {
@@ -58,7 +58,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
       left={4}
       data-testid="module-duration"
     >
-      {formatDurationShort(data.duration.aggregate.sum.duration)}
+      {formatDurationShort(data?.duration?.aggregate?.sum?.duration ?? 0)}
     </Typography>
     <Box position="absolute" bottom={0} right={0}>
       <IconDialog icon={<InfoIcon />}>

@@ -110,6 +110,7 @@ export const COURSE = gql`
     aolCostOfCourse
     aolCountry
     aolRegion
+    modulesDuration
   }
 `
 

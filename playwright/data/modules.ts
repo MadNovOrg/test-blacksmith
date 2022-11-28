@@ -77,7 +77,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 f2f reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_1
+      course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -144,7 +144,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.LEVEL_1
+      course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -211,7 +211,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.VIRTUAL
-      course.level = CourseLevel.LEVEL_1
+      course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -277,7 +277,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 1 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_1
+      course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
@@ -345,7 +345,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.LEVEL_1
+      course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
@@ -412,7 +412,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
@@ -487,7 +487,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.MIXED
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
@@ -561,7 +561,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -635,7 +635,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 mixed reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
@@ -709,7 +709,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f blended',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
@@ -784,7 +784,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'level 2 f2f blended reaccred',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.LEVEL_2
+      course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
@@ -860,7 +860,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     name: 'advanced f2f @smoke',
     course: (() => {
       const course = UNIQUE_COURSE()
-      course.level = CourseLevel.ADVANCED
+      course.level = CourseLevel.Advanced
       course.type = CourseType.CLOSED
       course.organization = { name: 'London First School' }
       return course
@@ -900,7 +900,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
 
 const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
   [
-    CourseLevel.LEVEL_1,
+    CourseLevel.Level_1,
     [
       'Theory',
       'Personal Space & Body Language',

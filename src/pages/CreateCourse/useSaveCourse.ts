@@ -124,7 +124,7 @@ export function useSaveCourse(): {
         setSavingStatus(LoadingStatus.FETCHING)
 
         const leadTrainerMissing =
-          trainers.filter(t => t.type === CourseTrainerType.LEADER).length === 0
+          trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
 
         const status =
           courseData.type === CourseType.INDIRECT

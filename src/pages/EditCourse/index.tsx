@@ -172,11 +172,11 @@ export const EditCourse: React.FC<unknown> = () => {
 
         const trainers = [
           ...trainersData.assist.map(t => ({
-            ...profileToInput(course, CourseTrainerType.ASSISTANT)(t),
+            ...profileToInput(course, CourseTrainerType.Assistant)(t),
             status: trainersMap.get(t.id)?.status,
           })),
           ...trainersData.moderator.map(t => ({
-            ...profileToInput(course, CourseTrainerType.MODERATOR)(t),
+            ...profileToInput(course, CourseTrainerType.Moderator)(t),
             status: trainersMap.get(t.id)?.status,
           })),
         ]
@@ -185,13 +185,13 @@ export const EditCourse: React.FC<unknown> = () => {
           trainers.push({
             course_id: course.id,
             profile_id: profile.id,
-            type: CourseTrainerType.LEADER,
+            type: CourseTrainerType.Leader,
             status: InviteStatus.ACCEPTED,
           })
         } else {
           trainers.push(
             ...trainersData.lead.map(t => ({
-              ...profileToInput(course, CourseTrainerType.LEADER)(t),
+              ...profileToInput(course, CourseTrainerType.Leader)(t),
               status: trainersMap.get(t.id)?.status,
             }))
           )
@@ -343,7 +343,7 @@ export const EditCourse: React.FC<unknown> = () => {
   const canCancelCourse =
     acl.canCancelCourses() ||
     course?.trainers?.find(
-      t => t.profile.id === profile?.id && t.type === CourseTrainerType.LEADER
+      t => t.profile.id === profile?.id && t.type === CourseTrainerType.Leader
     )
 
   return (
@@ -427,7 +427,7 @@ export const EditCourse: React.FC<unknown> = () => {
                   <ChooseTrainers
                     maxParticipants={courseData?.maxParticipants ?? 0}
                     courseType={courseData.type || CourseType.CLOSED}
-                    courseLevel={courseData.courseLevel || CourseLevel.LEVEL_1}
+                    courseLevel={courseData.courseLevel || CourseLevel.Level_1}
                     courseSchedule={{
                       start: courseData.startDateTime,
                       end: courseData.endDateTime,

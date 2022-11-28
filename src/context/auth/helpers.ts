@@ -9,6 +9,7 @@ export const ActiveRoles = new Set([
   RoleName.TRAINER,
   RoleName.TT_OPS,
   RoleName.TT_ADMIN,
+  RoleName.LD,
   RoleName.SALES_ADMIN,
 ])
 

@@ -2,7 +2,7 @@ import { Box, useTheme } from '@mui/material'
 import React from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { ModuleGroup } from '@app/types'
+import { ModuleGroup } from '@app/pages/trainer-pages/CourseBuilder/types'
 
 import { ModuleCard } from './ModuleCard'
 

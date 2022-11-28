@@ -118,7 +118,7 @@ export const userRolesNames: UserRoleName[] = [
 export const employeeRolesNames: EmployeeRoleName[] = [
   RoleName.TT_OPS,
   RoleName.FINANCE,
-  RoleName['L&D'],
+  RoleName.LD,
   'sales',
 ]
 

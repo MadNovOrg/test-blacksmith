@@ -40,7 +40,9 @@ export const CourseInvites = ({ course }: Props) => {
     ? course.max_participants - invitesNotDeclined.length
     : 0
 
-  const courseCancelled = course?.status === Course_Status_Enum.Cancelled
+  const courseCancelled =
+    course?.status === Course_Status_Enum.Cancelled ||
+    course?.status === Course_Status_Enum.Declined
 
   const closeModal = useCallback(() => {
     setNewEmail('')

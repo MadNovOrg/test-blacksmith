@@ -7,8 +7,9 @@ import {
   CircularProgress,
   Container,
   Stack,
+  Typography,
 } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -17,14 +18,21 @@ import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
 import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
-import { Course_Status_Enum } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  SetCourseStatusMutation,
+  SetCourseStatusMutationVariables,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import { checkCourseDetailsForExceptions } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseAttendees } from '@app/pages/trainer-pages/components/CourseAttendees'
 import { CourseCertifications } from '@app/pages/trainer-pages/components/CourseCertifications'
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
-import { CourseType } from '@app/types'
+import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
+import { CourseLevel, CourseType } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {
@@ -47,6 +55,7 @@ export const CourseDetails = () => {
   const { id: courseId } = useParams()
   const { acl, isOrgAdmin } = useAuth()
   const [searchParams] = useSearchParams()
+  const fetcher = useFetcher()
 
   const showCancelledAlert = searchParams.get('cancelled')
   const alertType = searchParams.get('success') as keyof typeof successAlerts
@@ -58,6 +67,7 @@ export const CourseDetails = () => {
   )
   const [showCancellationRequestModal, setShowCancellationRequestModal] =
     useState(false)
+  const [approvalError, setApprovalError] = useState<string>()
 
   useEffect(() => {
     if (initialTab) setSelectedTab(initialTab)
@@ -72,7 +82,71 @@ export const CourseDetails = () => {
 
   const courseHasEnded = course && courseEnded(course)
   const courseCancelled =
-    course && course.status === Course_Status_Enum.Cancelled
+    course &&
+    (course.status === Course_Status_Enum.Cancelled ||
+      course.status === Course_Status_Enum.Declined)
+
+  const courseExceptions = useMemo(() => {
+    if (
+      !acl.isLD() ||
+      !course ||
+      !course.trainers ||
+      course.status !== Course_Status_Enum.ExceptionsApprovalPending
+    )
+      return []
+
+    return checkCourseDetailsForExceptions(
+      {
+        startDateTime: new Date(course.dates?.aggregate?.start?.date),
+        courseLevel: course.level,
+        maxParticipants: course.max_participants,
+        modulesDuration: course.modulesDuration,
+      },
+      course.trainers.map(t => ({
+        type: t.type,
+        levels: (t.profile.certificates ?? []).map(c => ({
+          courseLevel: c.courseLevel as CourseLevel,
+          expiryDate: c.expiryDate,
+        })),
+      }))
+    )
+  }, [acl, course])
+
+  const onExceptionsReject = useCallback(async () => {
+    if (!course) return
+    setApprovalError(undefined)
+    try {
+      await fetcher<SetCourseStatusMutation, SetCourseStatusMutationVariables>(
+        SET_COURSE_STATUS_MUTATION,
+        {
+          id: course.id,
+          status: Course_Status_Enum.Declined,
+        }
+      )
+      navigate('/')
+    } catch (e: unknown) {
+      console.error(e)
+      setApprovalError((e as Error).message)
+    }
+  }, [course, fetcher, navigate])
+
+  const onExceptionsApprove = useCallback(async () => {
+    if (!course) return
+    setApprovalError(undefined)
+    try {
+      await fetcher<SetCourseStatusMutation, SetCourseStatusMutationVariables>(
+        SET_COURSE_STATUS_MUTATION,
+        {
+          id: course.id,
+          status: null,
+        }
+      )
+      await mutate()
+    } catch (e: unknown) {
+      console.error(e)
+      setApprovalError((e as Error).message)
+    }
+  }, [course, fetcher, mutate])
 
   return (
     <>
@@ -118,6 +192,55 @@ export const CourseDetails = () => {
                 onClose={() => setShowCancellationRequestModal(false)}
                 onChange={mutate}
               />
+
+              {courseExceptions?.length > 0 ? (
+                <Alert
+                  severity="warning"
+                  variant="outlined"
+                  sx={{
+                    mx: 3,
+                    my: 2,
+                    '&& .MuiAlert-message': {
+                      width: '100%',
+                    },
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="stretch"
+                    gap={1}
+                  >
+                    <Box>
+                      <Typography variant="body1" fontWeight={600}>
+                        {t('pages.create-course.exceptions.warning-header')}
+                      </Typography>
+                      <ul>
+                        {courseExceptions.map(exception => (
+                          <li key={exception}>
+                            {t(
+                              `pages.create-course.exceptions.type_${exception}`
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                      {approvalError ? (
+                        <Typography variant="caption" color="error">
+                          {approvalError}
+                        </Typography>
+                      ) : null}
+                    </Box>
+                    <Box>
+                      <Button variant="text" onClick={onExceptionsReject}>
+                        {t('common.reject')}
+                      </Button>
+                      <Button variant="text" onClick={onExceptionsApprove}>
+                        {t('common.approve')}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Alert>
+              ) : null}
 
               <TabContext value={selectedTab}>
                 <Box borderBottom={1} borderColor="divider">

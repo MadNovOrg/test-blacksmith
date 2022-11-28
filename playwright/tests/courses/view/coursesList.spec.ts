@@ -4,8 +4,8 @@ import { test as base } from '@playwright/test'
 import { CourseLevel } from '@app/types'
 
 import {
-  makeSureTrainerHasCourses,
   getTrainerCourses,
+  makeSureTrainerHasCourses,
 } from '../../../api/hasura-api'
 import { COURSES_TO_VIEW } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -39,7 +39,7 @@ const test = base.extend<{
     const courses = await getTrainerCourses(users.trainerWithOrg.email)
     await use(
       courses.filter(
-        c => c.level == CourseLevel.LEVEL_1 || c.level == CourseLevel.LEVEL_2
+        c => c.level == CourseLevel.Level_1 || c.level == CourseLevel.Level_2
       )
     )
   },

@@ -25,9 +25,9 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 
-    expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
-    expect(getOption(CourseLevel.INTERMEDIATE_TRAINER)).toBeInTheDocument()
-    expect(getOption(CourseLevel.ADVANCED_TRAINER)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Level_1)).toBeInTheDocument()
+    expect(getOption(CourseLevel.IntermediateTrainer)).toBeInTheDocument()
+    expect(getOption(CourseLevel.AdvancedTrainer)).toBeInTheDocument()
   })
 
   it('renders correctly when type is CLOSED', () => {
@@ -43,11 +43,11 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(5)
 
-    expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
-    expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
-    expect(getOption(CourseLevel.ADVANCED)).toBeInTheDocument()
-    expect(getOption(CourseLevel.INTERMEDIATE_TRAINER)).toBeInTheDocument()
-    expect(getOption(CourseLevel.ADVANCED_TRAINER)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Level_1)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Level_2)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Advanced)).toBeInTheDocument()
+    expect(getOption(CourseLevel.IntermediateTrainer)).toBeInTheDocument()
+    expect(getOption(CourseLevel.AdvancedTrainer)).toBeInTheDocument()
   })
 
   it('renders correctly when type is INDIRECT', () => {
@@ -63,8 +63,8 @@ describe('component: CourseLevelDropdown', () => {
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 
-    expect(getOption(CourseLevel.LEVEL_1)).toBeInTheDocument()
-    expect(getOption(CourseLevel.LEVEL_2)).toBeInTheDocument()
-    expect(getOption(CourseLevel.ADVANCED)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Level_1)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Level_2)).toBeInTheDocument()
+    expect(getOption(CourseLevel.Advanced)).toBeInTheDocument()
   })
 })

@@ -48,7 +48,7 @@ const TTAdminRoutes = () => {
 
   return (
     <Routes>
-      <Route index element={<Navigate replace to="courses" />} />
+      <Route index element={<Navigate replace to="manage-courses" />} />
 
       <Route
         path="certification/:certificateId"

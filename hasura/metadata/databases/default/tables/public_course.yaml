@@ -18,6 +18,8 @@ configuration:
       custom_name: aolRegion
     aol_country:
       custom_name: aolCountry
+    modules_duration:
+      custom_name: modulesDuration
     course_status:
       custom_name: status
     sales_representative_id:
@@ -48,6 +50,7 @@ configuration:
     course_type: type
     aol_region: aolRegion
     aol_country: aolCountry
+    modules_duration: modulesDuration
     course_status: status
     sales_representative_id: salesRepresentativeId
     grading_started: gradingStarted
@@ -171,6 +174,7 @@ insert_permissions:
         - contact_profile_id
         - organization_id
         - sales_representative_id
+        - modules_duration
       backend_only: false
   - role: trainer
     permission:
@@ -196,6 +200,7 @@ insert_permissions:
         - organization_id
         - reaccreditation
         - updated_at
+        - modules_duration
       backend_only: false
   - role: tt-ops
     permission:
@@ -223,6 +228,7 @@ insert_permissions:
         - reaccreditation
         - sales_representative_id
         - updated_at
+        - modules_duration
       backend_only: false
 select_permissions:
   - role: anonymous
@@ -281,6 +287,7 @@ select_permissions:
         - contact_profile_id
         - organization_id
         - sales_representative_id
+        - modules_duration
       computed_fields:
         - course_code
       filter:
@@ -313,6 +320,7 @@ select_permissions:
         - reaccreditation
         - sales_representative_id
         - updated_at
+        - modules_duration
       computed_fields:
         - course_code
       filter:
@@ -374,6 +382,7 @@ select_permissions:
         - reaccreditation
         - sales_representative_id
         - updated_at
+        - modules_duration
       computed_fields:
         - course_code
       filter: {}
@@ -441,6 +450,7 @@ select_permissions:
         - reaccreditation
         - sales_representative_id
         - updated_at
+        - modules_duration
       computed_fields:
         - course_code
       filter:
@@ -503,6 +513,7 @@ update_permissions:
         - contact_profile_id
         - organization_id
         - sales_representative_id
+        - modules_duration
       filter:
         course_type:
           _eq: CLOSED
@@ -531,6 +542,7 @@ update_permissions:
         - organization_id
         - reaccreditation
         - updated_at
+        - modules_duration
       filter:
         _or:
           - trainers:
@@ -572,6 +584,7 @@ update_permissions:
         - reaccreditation
         - sales_representative_id
         - updated_at
+        - modules_duration
       filter: {}
       check: {}
   - role: user
@@ -623,6 +636,17 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/email/course-status-changed'
+  - name: course_status_recalculation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - course_status
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/course/status/clear'
   - name: release_licenses
     definition:
       enable_manual: true

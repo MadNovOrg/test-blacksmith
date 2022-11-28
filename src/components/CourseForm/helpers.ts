@@ -25,24 +25,24 @@ export function getLevels(courseType: CourseType) {
   const types = {
     [CourseType.OPEN]: () => {
       return [
-        CourseLevel.LEVEL_1,
-        CourseLevel.INTERMEDIATE_TRAINER,
-        CourseLevel.ADVANCED_TRAINER,
+        CourseLevel.Level_1,
+        CourseLevel.IntermediateTrainer,
+        CourseLevel.AdvancedTrainer,
       ]
     },
 
     [CourseType.CLOSED]: () => {
       return [
-        CourseLevel.LEVEL_1,
-        CourseLevel.LEVEL_2,
-        CourseLevel.ADVANCED,
-        CourseLevel.INTERMEDIATE_TRAINER,
-        CourseLevel.ADVANCED_TRAINER,
+        CourseLevel.Level_1,
+        CourseLevel.Level_2,
+        CourseLevel.Advanced,
+        CourseLevel.IntermediateTrainer,
+        CourseLevel.AdvancedTrainer,
       ]
     },
 
     [CourseType.INDIRECT]: () => {
-      return [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2, CourseLevel.ADVANCED]
+      return [CourseLevel.Level_1, CourseLevel.Level_2, CourseLevel.Advanced]
     },
   }
 
@@ -81,7 +81,7 @@ export function canBeBlended(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
         return levels.includes(courseLevel)
       }
 
@@ -90,7 +90,7 @@ export function canBeBlended(
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.LEVEL_1]
+        const levels = [CourseLevel.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -101,7 +101,7 @@ export function canBeBlended(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
         return levels.includes(courseLevel)
       }
 
@@ -110,7 +110,7 @@ export function canBeBlended(
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.LEVEL_1]
+        const levels = [CourseLevel.Level_1]
         return levels.includes(courseLevel)
       }
 
@@ -137,8 +137,8 @@ export function canBeReacc(
 
       if (isF2F) {
         const levels = [
-          CourseLevel.INTERMEDIATE_TRAINER,
-          CourseLevel.ADVANCED_TRAINER,
+          CourseLevel.IntermediateTrainer,
+          CourseLevel.AdvancedTrainer,
         ]
         if (levels.includes(courseLevel)) return !blended
       }
@@ -159,21 +159,21 @@ export function canBeReacc(
 
       if (isF2F) {
         const levels = [
-          CourseLevel.LEVEL_1,
-          CourseLevel.INTERMEDIATE_TRAINER,
-          CourseLevel.ADVANCED_TRAINER,
+          CourseLevel.Level_1,
+          CourseLevel.IntermediateTrainer,
+          CourseLevel.AdvancedTrainer,
         ]
         if (levels.includes(courseLevel)) return !blended
-        if (courseLevel === CourseLevel.LEVEL_2) return true
+        if (courseLevel === CourseLevel.Level_2) return true
       }
 
       if (isMixed) {
-        const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
         if (levels.includes(courseLevel)) return !blended
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.LEVEL_1]
+        const levels = [CourseLevel.Level_1]
         if (levels.includes(courseLevel)) return !blended
       }
 
@@ -184,18 +184,18 @@ export function canBeReacc(
       if (!courseLevel) return false
 
       if (isF2F) {
-        const levels = [CourseLevel.LEVEL_1]
+        const levels = [CourseLevel.Level_1]
         if (levels.includes(courseLevel)) return !blended
-        if (courseLevel === CourseLevel.LEVEL_2) return true
+        if (courseLevel === CourseLevel.Level_2) return true
       }
 
       if (isMixed) {
-        const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+        const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
         if (levels.includes(courseLevel)) return !blended
       }
 
       if (isVirtual) {
-        const levels = [CourseLevel.LEVEL_1]
+        const levels = [CourseLevel.Level_1]
         if (levels.includes(courseLevel)) return !blended
       }
 
@@ -215,9 +215,9 @@ export function canBeF2F(
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.LEVEL_1,
-        CourseLevel.INTERMEDIATE_TRAINER,
-        CourseLevel.ADVANCED_TRAINER,
+        CourseLevel.Level_1,
+        CourseLevel.IntermediateTrainer,
+        CourseLevel.AdvancedTrainer,
       ]
       return levels.includes(courseLevel)
     },
@@ -226,11 +226,11 @@ export function canBeF2F(
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.LEVEL_1,
-        CourseLevel.LEVEL_2,
-        CourseLevel.ADVANCED,
-        CourseLevel.INTERMEDIATE_TRAINER,
-        CourseLevel.ADVANCED_TRAINER,
+        CourseLevel.Level_1,
+        CourseLevel.Level_2,
+        CourseLevel.Advanced,
+        CourseLevel.IntermediateTrainer,
+        CourseLevel.AdvancedTrainer,
       ]
       return levels.includes(courseLevel)
     },
@@ -239,9 +239,9 @@ export function canBeF2F(
       if (!courseLevel) return false
 
       const levels = [
-        CourseLevel.LEVEL_1,
-        CourseLevel.LEVEL_2,
-        CourseLevel.ADVANCED,
+        CourseLevel.Level_1,
+        CourseLevel.Level_2,
+        CourseLevel.Advanced,
       ]
       return levels.includes(courseLevel)
     },
@@ -262,14 +262,14 @@ export function canBeMixed(
     [CourseType.CLOSED]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+      const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
       return levels.includes(courseLevel)
     },
 
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.LEVEL_1, CourseLevel.LEVEL_2]
+      const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
       return levels.includes(courseLevel)
     },
   }
@@ -285,21 +285,21 @@ export function canBeVirtual(
     [CourseType.OPEN]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.LEVEL_1]
+      const levels = [CourseLevel.Level_1]
       return levels.includes(courseLevel)
     },
 
     [CourseType.CLOSED]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.LEVEL_1]
+      const levels = [CourseLevel.Level_1]
       return levels.includes(courseLevel)
     },
 
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
 
-      const levels = [CourseLevel.LEVEL_1]
+      const levels = [CourseLevel.Level_1]
       return levels.includes(courseLevel)
     },
   }

@@ -7,11 +7,11 @@ import {
 
 import { CourseTrainerType } from './types'
 import {
-  courseStarted,
   courseEnded,
+  courseStarted,
   formatDateForDraft,
-  getCourseTrainer,
   getCourseAssistants,
+  getCourseTrainer,
   getTimeDifferenceAndContext,
 } from './util'
 
@@ -126,7 +126,7 @@ describe('getCourseAssistants', () => {
     expect(assistants).toHaveLength(2)
 
     const notAssistants = assistants.filter(a => {
-      return a.type !== CourseTrainerType.ASSISTANT
+      return a.type !== CourseTrainerType.Assistant
     })
     expect(notAssistants).toHaveLength(0)
 

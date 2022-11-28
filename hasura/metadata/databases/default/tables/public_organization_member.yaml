@@ -60,6 +60,20 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - is_admin
+        - member_type
+        - _source
+        - position
+        - created_at
+        - updated_at
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:

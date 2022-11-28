@@ -516,7 +516,7 @@ type SearchTrainer {
   fullName: String!
   avatar: String
   trainer_role_types: [TrainerRoleType!]!
-  levels: [CourseLevel!]!
+  levels: [CourseCertificateLevel!]!
   availability: SearchTrainerAvailability
 }
 
@@ -703,5 +703,10 @@ type TrainerRoleTypeObj {
 
 type TrainerRoleType {
   trainerRoleType: TrainerRoleTypeObj
+}
+
+type CourseCertificateLevel {
+  courseLevel: CourseLevel!
+  expiryDate: date!
 }
 

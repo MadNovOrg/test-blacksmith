@@ -18,25 +18,31 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
-import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import ProgressBar from '@app/components/ProgressBar'
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { useAuth } from '@app/context/auth'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Status_Enum,
+  GetCourseByIdQuery,
+  GetCourseByIdQueryVariables,
+  ModuleGroupsQuery,
+  ModuleGroupsQueryVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
+import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
-  ParamsType as GetCourseByIdParamsType,
-  QUERY as GetCourseById,
-  ResponseType as GetCourseByIdResponseType,
-} from '@app/queries/courses/get-course-by-id'
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
+import { QUERY as GetCourseById } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
-import {
-  ParamsType as GetModuleGroupsParamsType,
-  QUERY as GetModuleGroups,
-  ResponseType as GetModuleGroupsResponseType,
-} from '@app/queries/modules/get-module-groups'
-import { CourseLevel, ModuleGroup } from '@app/types'
+import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
+import { CourseLevel } from '@app/types'
 import {
   formatDateForDraft,
   formatDurationShort,
@@ -48,32 +54,30 @@ import {
 import { CourseHero } from './components/CourseHero'
 import { ModuleCard } from './components/ModuleCard'
 import { ModuleSlot } from './components/ModuleSlot'
-import { AvailableModule, ModuleGroupSlot } from './types'
+import { AvailableModule, ModuleGroup, ModuleGroupSlot } from './types'
 
 type CourseBuilderProps = unknown
 
 const MAX_COURSE_DURATION_MAP = {
   normal: {
-    [CourseLevel.LEVEL_1]: 6 * 60, // 1 training day
-    [CourseLevel.LEVEL_2]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.INTERMEDIATE_TRAINER]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.BILD_ACT_TRAINER]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.ADVANCED_TRAINER]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.ADVANCED]: 4 * 6 * 60, // 4 training days
-    [CourseLevel.BILD_ACT]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
+    [CourseLevel.Level_1]: 6 * 60, // 1 training day
+    [CourseLevel.Level_2]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.BildActTrainer]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.Advanced]: 4 * 6 * 60, // 4 training days
+    [CourseLevel.BildAct]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
   },
   reaccreditation: {
-    [CourseLevel.LEVEL_1]: 6 * 60, // 1 training day
-    [CourseLevel.LEVEL_2]: 6 * 60, // 1 training day
-    [CourseLevel.INTERMEDIATE_TRAINER]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.BILD_ACT_TRAINER]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.ADVANCED_TRAINER]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.ADVANCED]: 3 * 6 * 60, // 3 training days
-    [CourseLevel.BILD_ACT]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
+    [CourseLevel.Level_1]: 6 * 60, // 1 training day
+    [CourseLevel.Level_2]: 6 * 60, // 1 training day
+    [CourseLevel.IntermediateTrainer]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.BildActTrainer]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.AdvancedTrainer]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.Advanced]: 3 * 6 * 60, // 3 training days
+    [CourseLevel.BildAct]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
   },
 }
-
-const MIN_DURATION_FOR_TIME_COMMITMENT = 6
 
 export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const { t } = useTranslation()
@@ -82,8 +86,11 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const navigate = useNavigate()
   const theme = useTheme()
 
-  const [displayTimeModal, setDisplayTimeModal] = useState(false)
+  const { acl } = useAuth()
 
+  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
+    []
+  )
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
@@ -98,26 +105,27 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     error: courseDataError,
     mutate: mutateCourse,
   } = useSWR<
-    GetCourseByIdResponseType,
+    GetCourseByIdQuery,
     Error,
-    [string, GetCourseByIdParamsType] | null
-  >(courseId ? [GetCourseById, { id: courseId }] : null)
+    [string, GetCourseByIdQueryVariables] | null
+  >(courseId ? [GetCourseById, { id: Number(courseId) }] : null)
 
   const courseLoadingStatus = getSWRLoadingStatus(courseData, courseDataError)
 
   const { data: modulesDataResponse, error: moduleDataError } = useSWR<
-    GetModuleGroupsResponseType,
+    ModuleGroupsQuery,
     Error,
-    [string, GetModuleGroupsParamsType] | null
+    [string, ModuleGroupsQueryVariables] | null
   >(
     courseData?.course
       ? [
           GetModuleGroups,
           {
-            level: courseData?.course.level,
-            courseDeliveryType: courseData?.course.deliveryType,
-            reaccreditation: courseData?.course.reaccreditation,
-            go1Integration: courseData?.course.go1Integration,
+            level: courseData?.course.level ?? Course_Level_Enum.Level_1,
+            courseDeliveryType:
+              courseData?.course.deliveryType ?? Course_Delivery_Type_Enum.F2F,
+            reaccreditation: courseData?.course.reaccreditation ?? false,
+            go1Integration: courseData?.course.go1Integration ?? false,
           },
         ]
       : null
@@ -126,7 +134,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const modulesData = useMemo(
     () =>
       modulesDataResponse?.groups.filter(
-        group => group.duration.aggregate.sum.duration > 0
+        group => (group?.duration?.aggregate?.sum?.duration ?? 0) > 0
       ),
     [modulesDataResponse]
   )
@@ -137,27 +145,25 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     if (!mandatoryModules || !courseModuleSlots) return 0
     const selectedModules = courseModuleSlots.flatMap(slot => slot.module ?? [])
     return [...mandatoryModules, ...selectedModules].reduce(
-      (sum, module) => sum + (module?.duration?.aggregate.sum.duration ?? 0),
+      (sum, module) => sum + (module?.duration?.aggregate?.sum?.duration ?? 0),
       0
     )
   }, [courseModuleSlots, mandatoryModules])
-
-  const estimatedDurationInHours = Math.ceil(estimatedCourseDuration / 60)
 
   const maxDuration = useMemo(() => {
     const course = courseData?.course
     return course
       ? MAX_COURSE_DURATION_MAP[
           course.reaccreditation ? 'reaccreditation' : 'normal'
-        ][course.level]
+        ][course.level ?? Course_Level_Enum.Level_1]
       : 0
   }, [courseData])
 
   useEffect(() => {
     if (availableModules.length === 0 && modulesData && courseData) {
       const addedModuleGroupIds = new Set<string>(
-        courseData.course.moduleGroupIds.map(
-          courseModule => courseModule.module.moduleGroup.id
+        courseData.course?.moduleGroupIds.map(
+          courseModule => courseModule.module.moduleGroup?.id
         )
       )
       const modules = {
@@ -210,12 +216,13 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       }
 
       async function saveCourseModules(moduleGroups: ModuleGroup[]) {
-        if (courseData) {
+        if (courseData?.course) {
+          const courseId = courseData.course.id
           await fetcher(SaveCourseModules, {
-            courseId: courseData.course.id,
+            courseId: courseId,
             modules: moduleGroups.flatMap(moduleGroup =>
               moduleGroup.modules.map(module => ({
-                courseId: courseData.course.id,
+                courseId: courseId,
                 moduleId: module.id,
               }))
             ),
@@ -306,28 +313,50 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     ]
   )
 
-  const submitCourse = async () => {
+  const submitCourse = useCallback(async () => {
     if (courseData?.course) {
       setSubmitError(undefined)
+      const hasExceptions = courseExceptions.length > 0
       try {
-        await fetcher(SetCourseStatus, {
+        await fetcher(FINALIZE_COURSE_BUILDER_MUTATION, {
           id: courseData.course.id,
-          status: Course_Status_Enum.Scheduled,
+          duration: estimatedCourseDuration,
+          status: hasExceptions
+            ? Course_Status_Enum.ExceptionsApprovalPending
+            : Course_Status_Enum.Scheduled,
         })
-        navigate('../details?success=course_submitted')
+        navigate(hasExceptions ? '/' : '../details?success=course_submitted')
       } catch (e: unknown) {
         setSubmitError((e as Error).message)
       }
     }
-  }
+  }, [courseData, courseExceptions, estimatedCourseDuration, fetcher, navigate])
 
-  const onCourseSubmit = () => {
-    if (estimatedDurationInHours >= MIN_DURATION_FOR_TIME_COMMITMENT) {
-      setDisplayTimeModal(true)
-    } else {
-      submitCourse()
+  const onCourseSubmit = useCallback(async () => {
+    if (!courseData?.course) return
+
+    if (!acl.isTTAdmin()) {
+      const exceptions = checkCourseDetailsForExceptions(
+        {
+          startDateTime: courseData.course.dates?.aggregate?.start?.date,
+          courseLevel: (courseData.course.level ??
+            CourseLevel.Level_1) as CourseLevel,
+          maxParticipants: courseData.course.max_participants,
+          modulesDuration: estimatedCourseDuration,
+        },
+        courseData.course.trainers.map(t => ({
+          type: t.type,
+          levels: t.profile.certificates.map(c => ({
+            courseLevel: c.courseLevel as CourseLevel,
+            expiryDate: c.expiryDate,
+          })),
+        }))
+      )
+      setCourseExceptions(exceptions)
+      if (exceptions.length > 0) return
     }
-  }
+    await submitCourse()
+  }, [acl, courseData, estimatedCourseDuration, submitCourse])
 
   function getModuleCardColor(
     module: AvailableModule | ModuleGroup,
@@ -341,7 +370,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   }
 
   const onClearCourse = async () => {
-    if (courseData) {
+    if (courseData?.course) {
+      const courseId = courseData.course.id
       setAvailableModules(prevState =>
         prevState.map(module => ({
           ...module,
@@ -355,10 +385,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         }))
       )
       await fetcher(SaveCourseModules, {
-        courseId: courseData.course.id,
+        courseId: courseId,
         modules: mandatoryModules.flatMap(moduleGroup =>
           moduleGroup.modules.map(module => ({
-            courseId: courseData.course.id,
+            courseId: courseId,
             moduleId: module.id,
           }))
         ),
@@ -631,19 +661,11 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           </Box>
         )}
       </DragDropContext>
-      <ConfirmDialog
-        open={displayTimeModal}
-        onOk={submitCourse}
-        onCancel={() => setDisplayTimeModal(false)}
-        message={t(
-          'pages.trainer-base.create-course.new-course.time-commitment-message',
-          { hours: estimatedDurationInHours }
-        )}
-        title={t(
-          'pages.trainer-base.create-course.new-course.time-commitment-title'
-        )}
-        okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
-        data-testid="time-commitment-dialog"
+      <CourseExceptionsConfirmation
+        open={courseExceptions.length > 0}
+        onCancel={() => setCourseExceptions([])}
+        onSubmit={submitCourse}
+        exceptions={courseExceptions}
       />
     </>
   )

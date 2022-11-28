@@ -55,13 +55,14 @@ const courseTrainerToFormValues = (
     trainer_role_types: t.profile.trainer_role_types ?? [],
     avatar: t.profile.avatar,
     type: t.type,
+    levels: t.levels,
   }))
 
   return {
-    lead: mappedTrainers.filter(t => t.type === CourseTrainerType.LEADER),
-    assist: mappedTrainers.filter(t => t.type === CourseTrainerType.ASSISTANT),
+    lead: mappedTrainers.filter(t => t.type === CourseTrainerType.Leader),
+    assist: mappedTrainers.filter(t => t.type === CourseTrainerType.Assistant),
     moderator: mappedTrainers.filter(
-      t => t.type === CourseTrainerType.MODERATOR
+      t => t.type === CourseTrainerType.Moderator
     ),
   }
 }
@@ -83,11 +84,6 @@ const ChooseTrainers: React.FC<Props> = ({
     return getNumberOfAssistants(maxParticipants)
   }, [maxParticipants])
 
-  const adminBypassAssistMin = useMemo(
-    () => (acl.isAdmin() ? 0 : assistMin),
-    [acl, assistMin]
-  )
-
   const leadMin = useMemo(
     () => (courseType === CourseType.OPEN ? 0 : 1),
     [courseType]
@@ -97,11 +93,11 @@ const ChooseTrainers: React.FC<Props> = ({
     const duration = differenceInDays(courseSchedule.end, courseSchedule.start)
 
     switch (courseLevel) {
-      case CourseLevel.ADVANCED:
-      case CourseLevel.ADVANCED_TRAINER:
+      case CourseLevel.Advanced:
+      case CourseLevel.AdvancedTrainer:
         return duration >= 4
 
-      case CourseLevel.INTERMEDIATE_TRAINER:
+      case CourseLevel.IntermediateTrainer:
         return duration >= 5
 
       default:
@@ -115,12 +111,7 @@ const ChooseTrainers: React.FC<Props> = ({
         .array()
         .min(leadMin, t('pages.create-course.assign-trainers.lead-error-min'))
         .max(1, t('pages.create-course.assign-trainers.lead-error-max')),
-      assist: yup.array().min(
-        adminBypassAssistMin,
-        t('pages.create-course.assign-trainers.assist-hint', {
-          count: adminBypassAssistMin,
-        })
-      ),
+      assist: yup.array().min(0),
       moderator: yup
         .array()
         .min(
@@ -132,7 +123,7 @@ const ChooseTrainers: React.FC<Props> = ({
           t('pages.create-course.assign-trainers.moderator-error-max')
         ),
     })
-  }, [leadMin, t, adminBypassAssistMin, needsModerator])
+  }, [leadMin, t, needsModerator])
 
   const formTrainers = useMemo(
     () => courseTrainerToFormValues(trainers),
@@ -187,7 +178,7 @@ const ChooseTrainers: React.FC<Props> = ({
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
-                trainerType={CourseTrainerType.LEADER}
+                trainerType={CourseTrainerType.Leader}
                 courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
                 max={1}
@@ -210,7 +201,7 @@ const ChooseTrainers: React.FC<Props> = ({
         <Box data-testid="AssignTrainers-assist">
           <Typography variant="subtitle1">
             {t('pages.create-course.assign-trainers.assist-title', {
-              count: adminBypassAssistMin,
+              count: assistMin,
             })}
           </Typography>
           <Controller
@@ -218,7 +209,7 @@ const ChooseTrainers: React.FC<Props> = ({
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
-                trainerType={CourseTrainerType.ASSISTANT}
+                trainerType={CourseTrainerType.Assistant}
                 courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
                 value={field.value}
@@ -249,7 +240,7 @@ const ChooseTrainers: React.FC<Props> = ({
             control={form.control}
             render={({ field }) => (
               <SearchTrainers
-                trainerType={CourseTrainerType.MODERATOR}
+                trainerType={CourseTrainerType.Moderator}
                 courseLevel={courseLevel}
                 courseSchedule={courseSchedule}
                 value={field.value}

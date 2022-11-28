@@ -4,7 +4,7 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { selectLevel, selectDelivery } from './test-helpers'
+import { selectDelivery, selectLevel } from './test-helpers'
 
 import CourseForm from '.'
 
@@ -15,7 +15,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1 to be F2F, VIRTUAL or MIXED', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeEnabled()
@@ -25,7 +25,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+LEVEL_2 to be F2F or MIXED', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_2)
+    await selectLevel(CourseLevel.Level_2)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -35,7 +35,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+ADVANCED to be F2F', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.ADVANCED)
+    await selectLevel(CourseLevel.Advanced)
 
     expect(screen.getByLabelText('Face to face')).toBeEnabled()
     expect(screen.getByLabelText('Virtual')).toBeDisabled()
@@ -46,7 +46,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1+F2F to be Blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -60,7 +60,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+LEVEL_1+MIXED to Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -71,7 +71,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1+VIRTUAL to be Blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -85,7 +85,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_2+F2F to be Blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_2)
+    await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -99,7 +99,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+LEVEL_2+MIXED to Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_2)
+    await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -110,7 +110,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('restricts INDIRECT+ADVANCED+F2F to Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.ADVANCED)
+    await selectLevel(CourseLevel.Advanced)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -122,7 +122,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1+F2F Reaccreditation if Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -142,7 +142,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1+MIXED Reaccreditation if Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -157,7 +157,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_1+VIRTUAL Reaccreditation if Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_1)
+    await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -177,7 +177,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_2+F2F Reaccreditation for Blended or Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_2)
+    await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
     const blended = screen.getByLabelText('Go1: Blended learning')
@@ -197,7 +197,7 @@ describe('component: CourseForm - INDIRECT', () => {
   it('allows INDIRECT+LEVEL_2+MIXED Reaccreditation if Non-blended', async () => {
     await waitFor(() => render(<CourseForm type={type} />))
 
-    await selectLevel(CourseLevel.LEVEL_2)
+    await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
     const blended = screen.getByLabelText('Go1: Blended learning')

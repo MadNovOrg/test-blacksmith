@@ -8,21 +8,28 @@ import {
   FormGroup,
   Typography,
 } from '@mui/material'
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
+import useProfile from '@app/hooks/useProfile'
+import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import {
+  CourseInput,
   CourseLevel,
   CourseTrainerType,
   CourseType,
-  SearchTrainer,
-  CourseInput,
-  ValidCourseInput,
   InviteStatus,
+  SearchTrainer,
+  TrainerInput,
+  ValidCourseInput,
 } from '@app/types'
 import { getNumberOfAssistants, LoadingStatus } from '@app/util'
 
@@ -55,7 +62,13 @@ export const CreateCourseForm = () => {
   const [courseDataValid, setCourseDataValid] = useState(false)
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
+
+  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
+    []
+  )
+
+  const { certifications } = useProfile(profile?.id)
 
   const [consentFlags, setConsentFlags] = useState({
     healthLeaflet: false,
@@ -64,21 +77,23 @@ export const CreateCourseForm = () => {
   })
 
   useEffect(() => {
-    if (courseType === CourseType.INDIRECT && profile) {
+    if (courseType === CourseType.INDIRECT && profile && certifications) {
       setTrainers([
         {
           profile_id: profile.id,
-          type: CourseTrainerType.LEADER,
+          type: CourseTrainerType.Leader,
           status: InviteStatus.ACCEPTED,
+          levels: certifications as TrainerInput['levels'],
         },
         ...assistants.map(assistant => ({
           profile_id: assistant.id,
-          type: CourseTrainerType.ASSISTANT,
+          type: CourseTrainerType.Assistant,
           status: InviteStatus.PENDING,
+          levels: certifications as TrainerInput['levels'],
         })),
       ])
     }
-  }, [assistants, courseType, setTrainers, profile])
+  }, [assistants, courseType, setTrainers, profile, certifications])
 
   useEffect(() => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
@@ -109,10 +124,8 @@ export const CreateCourseForm = () => {
     }
   }, [minAssistants])
 
-  const handleNextStepButtonClick = async () => {
+  const submit = useCallback(async () => {
     if (!courseData || !profile) return
-
-    assertCourseDataValid(courseData, courseDataValid)
 
     completeStep(StepsEnum.COURSE_DETAILS)
 
@@ -124,6 +137,27 @@ export const CreateCourseForm = () => {
     } else {
       navigate('./assign-trainers')
     }
+  }, [completeStep, courseData, courseType, navigate, profile, saveCourse])
+
+  const handleNextStepButtonClick = async () => {
+    if (!courseData || !profile) return
+
+    assertCourseDataValid(courseData, courseDataValid)
+
+    if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
+      const exceptions = checkCourseDetailsForExceptions(
+        courseData,
+        assistants.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.Assistant,
+          fullName: assistant.fullName,
+          levels: assistant.levels,
+        }))
+      )
+      setCourseExceptions(exceptions)
+      if (exceptions.length > 0) return
+    }
+    await submit()
   }
 
   const handleConsentFlagChange = (
@@ -175,8 +209,8 @@ export const CreateCourseForm = () => {
               </Typography>
 
               <SearchTrainers
-                trainerType={CourseTrainerType.ASSISTANT}
-                courseLevel={courseData?.courseLevel || CourseLevel.LEVEL_1}
+                trainerType={CourseTrainerType.Assistant}
+                courseLevel={courseData?.courseLevel || CourseLevel.Level_1}
                 courseSchedule={{
                   start: courseData?.startDateTime ?? undefined,
                   end: courseData?.endDateTime ?? undefined,
@@ -255,6 +289,13 @@ export const CreateCourseForm = () => {
           {t(`pages.create-course.${nextStepButtonLabel}`)}
         </LoadingButton>
       </Box>
+
+      <CourseExceptionsConfirmation
+        open={courseExceptions.length > 0}
+        onCancel={() => setCourseExceptions([])}
+        onSubmit={submit}
+        exceptions={courseExceptions}
+      />
     </Box>
   )
 }
