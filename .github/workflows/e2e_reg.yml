@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        default: 'dev'
+        default: 'DEV'
         description: 'Environment - "DEV/STG"'
         required: true
         type: choice
@@ -21,7 +21,7 @@ jobs:
     env:
       CI: 'true'
       DEFAULT_TARGET: 'DEV'
-      HASURA_SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', env.ENV_NAME)] }}
+      HASURA_SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
