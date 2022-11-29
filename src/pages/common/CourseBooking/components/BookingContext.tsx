@@ -133,7 +133,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
             return (
               acc +
               getTrainerSubsistenceCost(e.accommodationNights) +
-              e.accommodationCost
+              e.accommodationCost * e.accommodationNights
             )
 
           case CourseExpenseType.Miscellaneous:

@@ -221,4 +221,21 @@ describe('component: CourseForm', () => {
       [{ isValid: false }]
     )
   })
+
+  it('calculates account code based on start date', async () => {
+    setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />)
+    })
+
+    await waitFor(() => {
+      userEvent.paste(screen.getByLabelText('Start date'), '12/05/2022')
+      userEvent.paste(screen.getByLabelText('Start time'), '09:00 AM')
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('810A May22')).toBeInTheDocument()
+    })
+  })
 })

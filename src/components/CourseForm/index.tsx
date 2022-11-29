@@ -217,7 +217,7 @@ const CourseForm: React.FC<Props> = ({
       aolCountry: courseInput?.aolCountry ?? null,
       aolRegion: courseInput?.aolRegion ?? null,
       courseCost: courseInput?.courseCost ?? null,
-      accountCode: courseInput?.accountCode ?? null,
+      accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
       notes: courseInput?.notes ?? null,
     }),
@@ -255,7 +255,6 @@ const CourseForm: React.FC<Props> = ({
   const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
   const aolCountry = values.aolCountry
   const isValid = formState.isValid && Boolean(startTime) && Boolean(endTime)
-  const accountCode = values.accountCode
 
   useEffect(() => {
     const s = watch(data => {
@@ -267,11 +266,6 @@ const CourseForm: React.FC<Props> = ({
   useEffect(() => {
     onChange({ isValid })
   }, [onChange, isValid])
-
-  useEffect(() => {
-    const mustChange = !accountCode
-    mustChange && setValue('accountCode', accountCodeValue)
-  }, [setValue, accountCode])
 
   useEffect(() => {
     const mustChange = !canBlended && values.blendedLearning
@@ -318,6 +312,12 @@ const CourseForm: React.FC<Props> = ({
       trigger('endDateTime')
     }
   }, [endTime, getValues, setValue, trigger])
+
+  useEffect(() => {
+    if (values.startDateTime) {
+      setValue('accountCode', getAccountCode(values.startDateTime))
+    }
+  }, [values.startDateTime, setValue])
 
   const handleStartDateTimeChange = (date: Date | null) => {
     let dateToSet = date
@@ -883,24 +883,11 @@ const CourseForm: React.FC<Props> = ({
           </FormPanel>
 
           <FormPanel>
-            <Typography fontWeight={600}>
+            <Typography fontWeight={600} mb={1}>
               {t('components.course-form.account-code-title')}
             </Typography>
 
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  variant="filled"
-                  fullWidth
-                  type="text"
-                  {...register('accountCode')}
-                  error={Boolean(errors.accountCode)}
-                  helperText={errors.accountCode?.message}
-                  data-testid="account-code"
-                  disabled={true}
-                />
-              </Grid>
-            </Grid>
+            <Typography color="dimGrey.main">{values.accountCode}</Typography>
           </FormPanel>
         </>
       ) : null}

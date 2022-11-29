@@ -321,8 +321,7 @@ export function getAOLRegions(country: string | null): string[] {
   return aolRegionsByCountry[country as keyof typeof aolRegionsByCountry]
 }
 
-export function getAccountCode(): string {
-  const d = new Date()
+export function getAccountCode(d = new Date()): string {
   const month = format(d, 'MMM')
   const year = format(d, 'yy')
 
