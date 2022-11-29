@@ -1,3 +1,4 @@
+import { Info } from '@mui/icons-material'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
 import TodayIcon from '@mui/icons-material/Today'
@@ -12,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   styled,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import React, { useMemo } from 'react'
@@ -194,6 +196,20 @@ export const CourseHeroSummary: React.FC<Props> = ({
                     >
                       {t('common.join-zoom')}
                     </Button>
+                  </ListItemText>
+                </ListItem>
+              ) : null}
+              {course.notes ? (
+                <ListItem>
+                  <StyledListIcon>
+                    <Info />
+                  </StyledListIcon>
+                  <ListItemText>
+                    <Tooltip title={course.notes}>
+                      <Typography component="span">
+                        {t('components.course-hero-summary.notes-label')}
+                      </Typography>
+                    </Tooltip>
                   </ListItemText>
                 </ListItem>
               ) : null}

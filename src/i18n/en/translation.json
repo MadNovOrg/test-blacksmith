@@ -441,6 +441,9 @@
     "password-do-not-match": "Password does not match."
   },
   "components": {
+    "course-hero-summary": {
+      "notes-label": "Additional notes"
+    },
     "error-page": {
       "title": "Sorry! Something went wrong...",
       "message": "We have been notified about the issue and are working on fixing it.",
@@ -571,7 +574,10 @@
       "finance-section-title": "Finance",
       "sales-rep-title": "Sales",
       "sales-rep-placeholder": "Sales representative",
-      "account-code-title": "Account Code"
+      "account-code-title": "Account Code",
+      "notes-title": "Notes",
+      "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
+      "notes-placeholder": "Additional notes"
     },
     "searchTrainers": {
       "loading": "Loading...",
@@ -931,6 +937,7 @@
       "assists-needed_one": "{{count}} assist trainer needed.",
       "assists-needed_other": "{{count}} assist trainers needed.",
       "course-not-found": "Course not found",
+      "error-creating-course": "There was an error creating a course.",
       "assign-trainers": {
         "lead-title": "Lead Trainer",
         "lead-error-min": "Lead trainer is required",

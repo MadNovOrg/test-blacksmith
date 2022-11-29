@@ -111,6 +111,7 @@ export const COURSE = gql`
     aolCountry
     aolRegion
     modulesDuration
+    notes
   }
 `
 

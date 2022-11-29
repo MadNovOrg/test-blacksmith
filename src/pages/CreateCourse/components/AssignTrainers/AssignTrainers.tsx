@@ -127,8 +127,12 @@ export const AssignTrainers = () => {
       if (isClosedCourse) {
         nextPage = '../trainer-expenses'
       } else {
-        await saveCourse()
+        const id = await saveCourse()
         nextPage = '/courses'
+
+        if (!id) {
+          return
+        }
       }
 
       completeStep(StepsEnum.ASSIGN_TRAINER)
@@ -151,7 +155,7 @@ export const AssignTrainers = () => {
     return (
       <Alert
         severity="error"
-        variant="filled"
+        variant="outlined"
         data-testid="AssignTrainers-alert"
       >
         {t('pages.create-course.course-not-found')}
@@ -160,53 +164,64 @@ export const AssignTrainers = () => {
   }
 
   return courseData ? (
-    <Stack spacing={5}>
-      <ChooseTrainers
-        maxParticipants={courseData.maxParticipants}
-        courseType={courseData.type}
-        courseLevel={courseData.courseLevel}
-        courseSchedule={{
-          start: courseData.startDateTime,
-          end: courseData.endDateTime,
-        }}
-        onChange={handleTrainersDataChange}
-        trainers={trainerInputToCourseTrainer(trainers)}
-      />
-      <Box display="flex" justifyContent="space-between" sx={{ marginTop: 4 }}>
-        <Button
-          onClick={() => navigate(`../../new?type=${courseData.type}`)}
-          startIcon={<ArrowBackIcon />}
+    <>
+      {savingStatus === LoadingStatus.ERROR ? (
+        <Alert variant="outlined" severity="error" sx={{ mb: 2 }}>
+          {t('pages.create-course.error-creating-course')}
+        </Alert>
+      ) : null}
+      <Stack spacing={5}>
+        <ChooseTrainers
+          maxParticipants={courseData.maxParticipants}
+          courseType={courseData.type}
+          courseLevel={courseData.courseLevel}
+          courseSchedule={{
+            start: courseData.startDateTime,
+            end: courseData.endDateTime,
+          }}
+          onChange={handleTrainersDataChange}
+          trainers={trainerInputToCourseTrainer(trainers)}
+        />
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          sx={{ marginTop: 4 }}
         >
-          {t('pages.create-course.assign-trainers.back-btn')}
-        </Button>
-
-        <Box>
-          <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
-            {t('pages.create-course.save-as-draft')}
+          <Button
+            onClick={() => navigate(`../../new?type=${courseData.type}`)}
+            startIcon={<ArrowBackIcon />}
+          >
+            {t('pages.create-course.assign-trainers.back-btn')}
           </Button>
 
-          <LoadingButton
-            type="submit"
-            variant="contained"
-            disabled={!trainersDataValid}
-            loading={savingStatus === LoadingStatus.FETCHING}
-            endIcon={<ArrowForwardIcon />}
-            data-testid="AssignTrainers-submit"
-            onClick={handleSubmitButtonClick}
-          >
-            {courseData.type === CourseType.CLOSED
-              ? t('pages.create-course.step-navigation-trainer-expenses')
-              : t('pages.create-course.assign-trainers.submit-btn')}
-          </LoadingButton>
-        </Box>
-      </Box>
+          <Box>
+            <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
+              {t('pages.create-course.save-as-draft')}
+            </Button>
 
-      <CourseExceptionsConfirmation
-        open={courseExceptions.length > 0}
-        onCancel={() => setCourseExceptions([])}
-        onSubmit={submit}
-        exceptions={courseExceptions}
-      />
-    </Stack>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              disabled={!trainersDataValid}
+              loading={savingStatus === LoadingStatus.FETCHING}
+              endIcon={<ArrowForwardIcon />}
+              data-testid="AssignTrainers-submit"
+              onClick={handleSubmitButtonClick}
+            >
+              {courseData.type === CourseType.CLOSED
+                ? t('pages.create-course.step-navigation-trainer-expenses')
+                : t('pages.create-course.assign-trainers.submit-btn')}
+            </LoadingButton>
+          </Box>
+        </Box>
+
+        <CourseExceptionsConfirmation
+          open={courseExceptions.length > 0}
+          onCancel={() => setCourseExceptions([])}
+          onSubmit={submit}
+          exceptions={courseExceptions}
+        />
+      </Stack>
+    </>
   ) : null
 }

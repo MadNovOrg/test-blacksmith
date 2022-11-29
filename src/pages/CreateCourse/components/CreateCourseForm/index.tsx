@@ -1,6 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -127,14 +128,17 @@ export const CreateCourseForm = () => {
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
 
-    completeStep(StepsEnum.COURSE_DETAILS)
-
     if (courseData.blendedLearning && courseData.type === CourseType.INDIRECT) {
+      completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./license-order-details')
     } else if (courseType === CourseType.INDIRECT) {
       const id = await saveCourse()
-      navigate(`/courses/${id}/modules`)
+
+      if (id) {
+        navigate(`/courses/${id}/modules`)
+      }
     } else {
+      completeStep(StepsEnum.COURSE_DETAILS)
       navigate('./assign-trainers')
     }
   }, [completeStep, courseData, courseType, navigate, profile, saveCourse])
@@ -194,6 +198,11 @@ export const CreateCourseForm = () => {
 
   return (
     <Box paddingBottom={5}>
+      {savingStatus === LoadingStatus.ERROR ? (
+        <Alert variant="outlined" severity="error" sx={{ mb: 2 }}>
+          {t('pages.create-course.error-creating-course')}
+        </Alert>
+      ) : null}
       <CourseForm
         onChange={handleCourseFormChange}
         type={courseType}

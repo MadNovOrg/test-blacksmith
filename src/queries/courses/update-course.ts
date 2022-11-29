@@ -21,6 +21,7 @@ export type ParamsType = {
     min_participants?: number
     max_participants?: number
     freeSpaces?: number
+    notes?: string
   }
   scheduleInput: {
     start: Date

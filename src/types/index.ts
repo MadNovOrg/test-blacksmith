@@ -36,6 +36,7 @@ export type Course = {
   aolCountry?: string
   aolRegion?: string
   go1Integration: boolean
+  notes?: string
   dates: {
     aggregate: {
       start: { date: string }
@@ -526,6 +527,7 @@ export type CourseInput = {
   aolCountry: string | null
   aolRegion: string | null
   courseCost: number | null
+  notes: string | null
 }
 
 export type ValidCourseInput = DeepNonNullable<

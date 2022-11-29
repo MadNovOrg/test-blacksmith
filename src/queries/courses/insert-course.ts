@@ -31,6 +31,7 @@ export type ParamsType = {
     max_participants?: number
     freeSpaces?: number
     accountCode?: string
+    notes?: string
     status:
       | Course_Status_Enum.ApprovalPending
       | Course_Status_Enum.TrainerPending

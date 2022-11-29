@@ -25,6 +25,7 @@ export const QUERY = gql`
       min_participants
       max_participants
       level
+      notes
       organization {
         id
         members(where: { isAdmin: { _eq: true } }) {

@@ -187,6 +187,7 @@ const CourseForm: React.FC<Props> = ({
             is: true,
             then: schema => schema.required('Provide the price of the course'),
           }),
+        notes: yup.string().nullable(),
       }),
 
     [t, hasOrg, isClosedCourse, hasMinParticipants]
@@ -218,6 +219,7 @@ const CourseForm: React.FC<Props> = ({
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? null,
       type: courseType,
+      notes: courseInput?.notes ?? null,
     }),
     [courseInput, courseType]
   )
@@ -806,6 +808,27 @@ const CourseForm: React.FC<Props> = ({
             />
           </Grid>
         </Grid>
+      </FormPanel>
+
+      <FormPanel mb={2} mt={2}>
+        <Typography fontWeight={600}>
+          {t('components.course-form.notes-title')}
+        </Typography>
+        <Typography variant="body2" mb={2}>
+          {t('components.course-form.notes-description')}
+        </Typography>
+
+        <TextField
+          label={t('components.course-form.notes-placeholder')}
+          variant="filled"
+          fullWidth
+          {...register('notes')}
+          error={Boolean(errors.notes)}
+          helperText={errors.notes?.message}
+          inputProps={{ min: 0 }}
+          data-testid="notes"
+          disabled={disabledFields.has('notes')}
+        />
       </FormPanel>
 
       {isClosedCourse ? (

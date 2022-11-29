@@ -212,6 +212,7 @@ export const EditCourse: React.FC<unknown> = () => {
             reaccreditation: courseData.reaccreditation,
             go1Integration: courseData.blendedLearning,
             freeSpaces: courseData.freeSpaces,
+            notes: courseData.notes,
             ...(courseData.minParticipants
               ? { min_participants: courseData.minParticipants }
               : null),
