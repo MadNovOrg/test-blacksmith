@@ -58,7 +58,7 @@ export const TrainerCourses: React.FC<Props> = ({
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 
-  const { activeRole, profile } = useAuth()
+  const { activeRole, profile, acl } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
   const sorting = useTableSort('start', 'desc')
@@ -182,6 +182,7 @@ export const TrainerCourses: React.FC<Props> = ({
           >
             <Box></Box>
             <Box display="flex" gap={1}>
+              {acl.canCreateCourses() ? <CreateCourseMenu /> : null}
               {showAvailableCoursesButton ? (
                 <Button
                   variant="contained"
@@ -189,9 +190,7 @@ export const TrainerCourses: React.FC<Props> = ({
                 >
                   {t('pages.my-courses.find-available-courses')}
                 </Button>
-              ) : (
-                <CreateCourseMenu />
-              )}
+              ) : null}
             </Box>
           </Box>
 
