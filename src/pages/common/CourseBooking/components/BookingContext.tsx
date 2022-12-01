@@ -1,4 +1,4 @@
-import { CircularProgress, Stack } from '@mui/material'
+import { Alert, CircularProgress, Stack } from '@mui/material'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
@@ -334,6 +334,14 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       <Stack alignItems="center" justifyContent="center">
         <CircularProgress />
       </Stack>
+    )
+  }
+
+  if (availableSeats < booking.quantity) {
+    return (
+      <Alert severity="error" variant="outlined">
+        {t('pages.book-course.not-enough-spaces')}
+      </Alert>
     )
   }
 

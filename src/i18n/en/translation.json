@@ -721,6 +721,7 @@
     },
     "book-course": {
       "title": "Book a course",
+      "not-enough-spaces": "There aren't enough spaces left for the quantity you want to book.",
       "your-info": "Your information",
       "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",
       "repeat-own-email": "If you are making a booking for yourself, please reconfirm your email address",
