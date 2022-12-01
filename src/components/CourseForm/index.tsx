@@ -17,6 +17,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material'
+import { isDate } from 'date-fns'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -314,7 +315,7 @@ const CourseForm: React.FC<Props> = ({
   }, [endTime, getValues, setValue, trigger])
 
   useEffect(() => {
-    if (values.startDateTime) {
+    if (values.startDateTime && isDate(values.startDateTime)) {
       setValue('accountCode', getAccountCode(values.startDateTime))
     }
   }, [values.startDateTime, setValue])
