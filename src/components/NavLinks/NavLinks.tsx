@@ -36,16 +36,6 @@ export const NavLinks = () => {
         </Link>
       ) : null}
 
-      {acl.isTTAdmin() ? (
-        <Link component={StyledNavLink} to="/admin/contacts">
-          {t('contacts')}
-        </Link>
-      ) : null}
-
-      <Link component={StyledNavLink} to="/community">
-        {t('community')}
-      </Link>
-
       {acl.canViewCertifications() && (
         <Link component={StyledNavLink} to="/certifications">
           {t('common.certifications')}

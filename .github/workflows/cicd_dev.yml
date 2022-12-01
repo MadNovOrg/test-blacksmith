@@ -39,7 +39,7 @@ jobs:
         run: npm run typecheck
 
       - name: Test
-        run: npm t -- --maxWorkers=2
+        run: npm run test  -- --maxWorkers=2 --changedSince=${{ github.event.pull_request.base.sha }}
 
       - name: Build web
         run: npm run build
