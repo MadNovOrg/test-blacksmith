@@ -20,7 +20,7 @@ Sentry.init({
   integrations: [new BrowserTracing(), new ExtraErrorDataIntegration()],
   tracesSampleRate: Number(import.meta.env.VITE_SENTRY_TRACING_SAMPLE_RATE),
   environment: import.meta.env.VITE_SENTRY_ENVIRONMENT,
-  denyUrls: ['localhost'],
+  denyUrls: [/localhost/i],
 })
 
 Amplify.configure({
