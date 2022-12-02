@@ -757,7 +757,8 @@
       "payment-processing-fee": "Payment processing fee",
       "trainer-expenses": "Trainer expenses",
       "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}",
-      "due-immediately": "Due immediately"
+      "due-immediately": "Due immediately",
+      "error-creating-order": "There was an error placing the order."
     },
     "home": {
       "title": "Home"

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -44,8 +45,11 @@ export const CourseBookingReview: React.FC = () => {
       const order = await placeOrder()
       setCreatingOrder(false)
 
+      console.log(order)
+
       if (!order) {
-        throw new Error('Error issuing order')
+        setError(t('pages.book-course.error-creating-order'))
+        return
       }
 
       if (booking.paymentMethod === PaymentMethod.Cc) {
@@ -68,6 +72,7 @@ export const CourseBookingReview: React.FC = () => {
 
       console.error(err)
       setCreatingOrder(false)
+      setError(t('pages.book-course.error-creating-order'))
     }
   }
 
@@ -90,6 +95,13 @@ export const CourseBookingReview: React.FC = () => {
       <Typography variant="subtitle1" fontWeight="500">
         {t('pages.book-course.confirm-title')}
       </Typography>
+
+      {error ? (
+        <Alert severity="error" variant="outlined" sx={{ mb: 2, mt: 2 }}>
+          {error}
+        </Alert>
+      ) : null}
+
       <Box bgcolor="common.white" p={2} mb={1}>
         <Typography gutterBottom fontWeight="600">
           {t('pages.book-course.your-info')}
@@ -272,14 +284,6 @@ export const CourseBookingReview: React.FC = () => {
           </Typography>
         }
       />
-
-      <Box textAlign="right" mt={4}>
-        {error ? (
-          <Typography variant="caption" color="error">
-            {error}
-          </Typography>
-        ) : null}
-      </Box>
 
       <Box display="flex" justifyContent="space-between" mt={0}>
         <BackButton label={t('pages.book-course.back-to-booking')} />
