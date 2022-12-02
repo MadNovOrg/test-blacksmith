@@ -5,6 +5,7 @@ import { never, fromValue } from 'wonka'
 import {
   ReplaceParticipantError,
   ReplaceParticipantMutation,
+  ReplaceParticipantMutationVariables,
 } from '@app/generated/graphql'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
@@ -86,15 +87,29 @@ describe('component: ReplaceParticipantDialog', () => {
   })
 
   it('calls success prop when participant successfully replaced', async () => {
+    const inviteeEmail = 'example@example.com'
+    const inviteeFirstName = 'John'
+    const inviteeSurname = 'Doe'
+
     const client = {
-      executeMutation: () =>
-        fromValue<{ data: ReplaceParticipantMutation }>({
+      executeMutation: ({
+        variables,
+      }: {
+        variables: ReplaceParticipantMutationVariables
+      }) => {
+        const success =
+          variables.input.inviteeEmail === inviteeEmail &&
+          variables.input.inviteeFirstName === inviteeFirstName &&
+          variables.input.inviteeLastName === inviteeSurname
+
+        return fromValue<{ data: ReplaceParticipantMutation }>({
           data: {
             replaceParticipant: {
-              success: true,
+              success,
             },
           },
-        }),
+        })
+      },
     } as unknown as Client
 
     const participant: Props['participant'] = {
@@ -114,6 +129,8 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
+    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
 
     await waitFor(() => {
@@ -153,6 +170,8 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
+    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
 
     await waitFor(() => {
@@ -185,6 +204,8 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
+    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
     userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
 
     await waitFor(() => {

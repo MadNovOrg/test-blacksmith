@@ -5777,6 +5777,8 @@ export enum ReplaceParticipantError {
 
 export type ReplaceParticipantInput = {
   inviteeEmail: Scalars['String'];
+  inviteeFirstName: Scalars['String'];
+  inviteeLastName: Scalars['String'];
   participantId: Scalars['uuid'];
 };
 

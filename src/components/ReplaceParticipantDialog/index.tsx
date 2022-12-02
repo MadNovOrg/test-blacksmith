@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import Grid from '@mui/material/Grid'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
 import TextField from '@mui/material/TextField'
@@ -22,6 +23,7 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { schemas, yup } from '@app/schemas'
+import { requiredMsg } from '@app/util'
 
 import { Avatar } from '../Avatar'
 import { Dialog } from '../Dialog'
@@ -55,7 +57,9 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
   const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
 
   const schema = yup.object({
-    email: schemas.email(_t).required(),
+    email: schemas.email(_t, true).required(),
+    firstName: yup.string().required(requiredMsg(_t, 'first-name')),
+    surname: yup.string().required(requiredMsg(_t, 'surname')),
     termsAccepted: yup.bool().required(),
   })
 
@@ -76,7 +80,12 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
 
   const onSubmit: SubmitHandler<InferType<typeof schema>> = data => {
     replaceParticipant({
-      input: { participantId: participant.id, inviteeEmail: data.email },
+      input: {
+        participantId: participant.id,
+        inviteeEmail: data.email,
+        inviteeFirstName: data.firstName,
+        inviteeLastName: data.surname,
+      },
     })
   }
 
@@ -135,14 +144,38 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
             {t('invite-title')}
           </Typography>
 
-          <TextField
-            variant="filled"
-            placeholder={t('input-placeholder')}
-            fullWidth
-            error={Boolean(formState.errors.email?.message)}
-            helperText={formState.errors.email?.message}
-            {...register('email')}
-          />
+          <Grid container spacing={2} mb={4}>
+            <Grid item xs={6}>
+              <TextField
+                variant="filled"
+                placeholder={t('first-name-placeholder')}
+                fullWidth
+                error={Boolean(formState.errors.firstName?.message)}
+                helperText={formState.errors.firstName?.message}
+                {...register('firstName')}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant="filled"
+                placeholder={t('surname-placeholder')}
+                fullWidth
+                error={Boolean(formState.errors.surname?.message)}
+                helperText={formState.errors.surname?.message}
+                {...register('surname')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="filled"
+                placeholder={t('email-placeholder')}
+                fullWidth
+                error={Boolean(formState.errors.email?.message)}
+                helperText={formState.errors.email?.message}
+                {...register('email')}
+              />
+            </Grid>
+          </Grid>
 
           <Alert severity="info" variant="outlined" sx={{ mt: 1 }}>
             <Trans i18nKey="components.replace-participant.alert-message" />

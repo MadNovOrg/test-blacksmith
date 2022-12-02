@@ -402,6 +402,8 @@ input CreateOrderInput {
 input ReplaceParticipantInput {
   participantId: uuid!
   inviteeEmail: String!
+  inviteeFirstName: String!
+  inviteeLastName: String!
 }
 
 input TransferFee {

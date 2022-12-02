@@ -78,7 +78,9 @@ export const AttendeeReplacementTable: React.FC = () => {
         id: 'newAttendeeEmail',
         label: t('pages.audits.new-attendee'),
         sorting: true,
-        exportRender: (log: LogType) => log.newAttendeeEmail ?? '',
+        exportRender: (log: LogType) =>
+          `${log.payload?.inviteeFirstName} ${log.payload?.inviteeLastName} \n${log.newAttendeeEmail}` ??
+          '',
       },
       {
         id: 'course.course_code',
@@ -186,7 +188,25 @@ export const AttendeeReplacementTable: React.FC = () => {
                         {log.profile.email}
                       </Typography>
                     </TableCell>
-                    <TableCell>{log.newAttendeeEmail}</TableCell>
+                    <TableCell>
+                      {log.payload?.inviteeFirstName &&
+                      log.payload?.inviteeLastName ? (
+                        <Typography>
+                          {log.payload?.inviteeFirstName}{' '}
+                          {log.payload?.inviteeLastName}
+                        </Typography>
+                      ) : null}
+                      <Typography
+                        variant={
+                          log.payload?.inviteeFirstName &&
+                          log.payload?.inviteeLastName
+                            ? 'body2'
+                            : 'body1'
+                        }
+                      >
+                        {log.newAttendeeEmail}
+                      </Typography>
+                    </TableCell>
                     <TableCell>
                       <Link
                         href={`/manage-courses/all/${log.course.id}/details`}
