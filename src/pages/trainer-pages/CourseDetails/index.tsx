@@ -32,7 +32,12 @@ import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
 import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
-import { CourseLevel, CourseType } from '@app/types'
+import {
+  CourseLevel,
+  CourseTrainerType,
+  CourseType,
+  TrainerRoleTypeName,
+} from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
 export enum CourseDetailsTabs {
@@ -95,12 +100,19 @@ export const CourseDetails = () => {
     )
       return []
 
+    const leader = course.trainers.find(
+      c => c.type === CourseTrainerType.Leader
+    )
+
     return checkCourseDetailsForExceptions(
       {
         startDateTime: new Date(course.dates?.aggregate?.start?.date),
         courseLevel: course.level,
         maxParticipants: course.max_participants,
         modulesDuration: course.modulesDuration,
+        type: course.type,
+        deliveryType: course.deliveryType,
+        reaccreditation: course.reaccreditation ?? false,
       },
       course.trainers.map(t => ({
         type: t.type,
@@ -108,7 +120,14 @@ export const CourseDetails = () => {
           courseLevel: c.courseLevel as CourseLevel,
           expiryDate: c.expiryDate,
         })),
-      }))
+      })),
+      (leader &&
+        leader.profile.trainer_role_types.some(
+          ({ trainer_role_type: role }) =>
+            role.name === TrainerRoleTypeName.SENIOR ||
+            role.name === TrainerRoleTypeName.PRINCIPAL
+        )) ??
+        false
     )
   }, [acl, course])
 

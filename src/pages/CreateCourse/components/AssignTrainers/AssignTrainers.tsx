@@ -2,7 +2,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
 import { Alert, Box, Button, Stack } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -19,8 +19,10 @@ import {
   CourseType,
   InviteStatus,
   TrainerInput,
+  TrainerRoleTypeName,
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
+import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -37,12 +39,14 @@ const formValuesToTrainerInput = (trainers?: FormValues): TrainerInput[] => {
       type: CourseTrainerType.Assistant,
       fullName: assistant.fullName,
       levels: assistant.levels,
+      seniorOrPrincipalLeader: false,
     })),
     ...trainers.moderator.map(moderator => ({
       profile_id: moderator.id,
       type: CourseTrainerType.Moderator,
       fullName: moderator.fullName,
       levels: moderator.levels,
+      seniorOrPrincipalLeader: false,
     })),
     ...trainers.lead.map(trainer => ({
       profile_id: trainer.id,
@@ -102,6 +106,7 @@ export const AssignTrainers = () => {
   } = useCreateCourse()
   const navigate = useNavigate()
   const [trainersDataValid, setTrainersDataValid] = useState(false)
+  const [seniorOrPrincipalLead, setSeniorOrPrincipalLead] = useState(false)
   const { savingStatus, saveCourse } = useSaveCourse()
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
@@ -113,11 +118,34 @@ export const AssignTrainers = () => {
 
   const handleTrainersDataChange = useCallback(
     (data: FormValues, isValid: boolean) => {
+      setSeniorOrPrincipalLead(
+        data.lead.some(lead =>
+          lead.trainer_role_types.some(
+            ({ trainer_role_type: role }) =>
+              role.name === TrainerRoleTypeName.SENIOR ||
+              role.name === TrainerRoleTypeName.PRINCIPAL
+          )
+        )
+      )
       setTrainers(formValuesToTrainerInput(data))
       setTrainersDataValid(isValid)
     },
     [setTrainers]
   )
+
+  const requiredAssistants = useMemo(() => {
+    if (courseData) {
+      return getRequiredAssistants({
+        ...courseData,
+        hasSeniorOrPrincipalLeader:
+          courseData.type === CourseType.INDIRECT && seniorOrPrincipalLead,
+      })
+    }
+    return {
+      min: 0,
+      max: 0,
+    }
+  }, [courseData, seniorOrPrincipalLead])
 
   const submit = useCallback(async () => {
     if (courseData && trainers) {
@@ -142,14 +170,18 @@ export const AssignTrainers = () => {
 
   const handleSubmitButtonClick = useCallback(async () => {
     if (courseData) {
-      const exceptions = checkCourseDetailsForExceptions(courseData, trainers)
+      const exceptions = checkCourseDetailsForExceptions(
+        courseData,
+        trainers,
+        seniorOrPrincipalLead
+      )
       if (!acl.isTTAdmin() && exceptions.length > 0) {
         setCourseExceptions(exceptions)
       } else {
         await submit()
       }
     }
-  }, [acl, courseData, submit, trainers])
+  }, [acl, courseData, seniorOrPrincipalLead, submit, trainers])
 
   if (!courseData) {
     return (
@@ -181,6 +213,7 @@ export const AssignTrainers = () => {
           }}
           onChange={handleTrainersDataChange}
           trainers={trainerInputToCourseTrainer(trainers)}
+          requiredAssistants={requiredAssistants}
         />
         <Box
           display="flex"

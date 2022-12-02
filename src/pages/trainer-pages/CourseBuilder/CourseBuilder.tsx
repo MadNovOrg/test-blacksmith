@@ -25,6 +25,7 @@ import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
   ModuleGroupsQuery,
@@ -42,7 +43,7 @@ import { QUERY as GetCourseById } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
 import { MUTATION as SetCourseStatus } from '@app/queries/courses/set-course-status'
 import { QUERY as GetModuleGroups } from '@app/queries/modules/get-module-groups'
-import { CourseLevel } from '@app/types'
+import { CourseLevel, TrainerRoleTypeName } from '@app/types'
 import {
   formatDateForDraft,
   formatDurationShort,
@@ -336,6 +337,9 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
     if (!courseData?.course) return
 
     if (!acl.isTTAdmin()) {
+      const leader = courseData.course.trainers.find(
+        c => c.type === Course_Trainer_Type_Enum.Leader
+      )
       const exceptions = checkCourseDetailsForExceptions(
         {
           startDateTime: courseData.course.dates?.aggregate?.start?.date,
@@ -343,6 +347,9 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             CourseLevel.Level_1) as CourseLevel,
           maxParticipants: courseData.course.max_participants,
           modulesDuration: estimatedCourseDuration,
+          type: courseData.course.type,
+          deliveryType: courseData.course.deliveryType,
+          reaccreditation: courseData.course.reaccreditation ?? false,
         },
         courseData.course.trainers.map(t => ({
           type: t.type,
@@ -350,7 +357,14 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             courseLevel: c.courseLevel as CourseLevel,
             expiryDate: c.expiryDate,
           })),
-        }))
+        })),
+        (leader &&
+          leader.profile.trainer_role_types.some(
+            ({ trainer_role_type: role }) =>
+              role.name === TrainerRoleTypeName.SENIOR ||
+              role.name === TrainerRoleTypeName.PRINCIPAL
+          )) ??
+          false
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return

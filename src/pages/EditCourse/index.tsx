@@ -49,6 +49,7 @@ import {
   CourseTrainerType,
   CourseType,
   InviteStatus,
+  TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
 import {
@@ -57,6 +58,7 @@ import {
   LoadingStatus,
   profileToInput,
 } from '@app/util'
+import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 import { NotFound } from '../common/NotFound'
 
@@ -317,6 +319,31 @@ export const EditCourse: React.FC<unknown> = () => {
     return new Set([])
   }, [acl, course])
 
+  const requiredAssistants = useMemo(() => {
+    if (course) {
+      const leader = course.trainers?.find(
+        c => c.type === CourseTrainerType.Leader
+      )
+      return getRequiredAssistants({
+        courseLevel: course.level,
+        deliveryType: course.deliveryType,
+        maxParticipants: course.max_participants,
+        reaccreditation: course.reaccreditation,
+        type: course.type,
+        hasSeniorOrPrincipalLeader:
+          leader?.profile.trainer_role_types.some(
+            ({ trainer_role_type: role }) =>
+              role.name === TrainerRoleTypeName.SENIOR ||
+              role.name === TrainerRoleTypeName.PRINCIPAL
+          ) ?? false,
+      })
+    }
+    return {
+      min: 0,
+      max: 0,
+    }
+  }, [course])
+
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
     (course && !acl.canCreateCourse(course.type))
@@ -437,6 +464,7 @@ export const EditCourse: React.FC<unknown> = () => {
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
                     disabled={!acl.canEditWithoutRestrictions(course.type)}
+                    requiredAssistants={requiredAssistants}
                   />
                 ) : null}
 

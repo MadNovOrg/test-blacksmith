@@ -1,8 +1,17 @@
 import { differenceInDays, isFuture } from 'date-fns'
 
-import { Course_Trainer_Type_Enum } from '@app/generated/graphql'
-import { CourseLevel, CourseTrainerType } from '@app/types'
-import { getNumberOfAssistants } from '@app/util'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Trainer_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import {
+  CourseDeliveryType,
+  CourseLevel,
+  CourseTrainerType,
+  CourseType,
+} from '@app/types'
+import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 export enum CourseException {
   ADVISED_TIME_EXCEEDED = 'ADVISED_TIME_EXCEEDED',
@@ -35,6 +44,9 @@ const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 export type CourseData = {
   startDateTime: Date
   courseLevel: CourseLevel
+  type: CourseType | Course_Type_Enum
+  deliveryType: CourseDeliveryType | Course_Delivery_Type_Enum
+  reaccreditation: boolean
   maxParticipants: number
   modulesDuration?: number
 }
@@ -70,12 +82,16 @@ export const isLeadTrainerInGracePeriod = (
 
 export const isTrainersRatioNotMet = (
   courseData: CourseData,
-  trainers: TrainerData
+  trainers: TrainerData,
+  hasSeniorOrPrincipalLeader: boolean
 ) => {
-  const requiredAssistants = getNumberOfAssistants(courseData.maxParticipants)
+  const { min } = getRequiredAssistants({
+    ...courseData,
+    hasSeniorOrPrincipalLeader,
+  })
   const missingAssistants =
     trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant).length <
-    requiredAssistants
+    min
   return missingAssistants
 }
 
@@ -88,7 +104,8 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
-  trainerData: TrainerData
+  trainerData: TrainerData,
+  hasSeniorOrPrincipalLeader: boolean
 ): CourseException[] {
   const exceptions: CourseException[] = []
 
@@ -100,7 +117,9 @@ export function checkCourseDetailsForExceptions(
     exceptions.push(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD)
   }
 
-  if (isTrainersRatioNotMet(courseData, trainerData)) {
+  if (
+    isTrainersRatioNotMet(courseData, trainerData, hasSeniorOrPrincipalLeader)
+  ) {
     exceptions.push(CourseException.TRAINER_RATIO_NOT_MET)
   }
 

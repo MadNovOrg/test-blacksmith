@@ -30,9 +30,11 @@ import {
   InviteStatus,
   SearchTrainer,
   TrainerInput,
+  TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
-import { getNumberOfAssistants, LoadingStatus } from '@app/util'
+import { LoadingStatus } from '@app/util'
+import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -100,13 +102,25 @@ export const CreateCourseForm = () => {
     setCurrentStepKey(StepsEnum.COURSE_DETAILS)
   }, [setCurrentStepKey])
 
-  const minAssistants = useMemo(() => {
-    if (courseData?.maxParticipants) {
-      return getNumberOfAssistants(courseData?.maxParticipants)
-    }
+  const seniorOrPrincipalLead = useMemo(() => {
+    return (
+      profile?.trainer_role_types.some(
+        ({ trainer_role_type: role }) =>
+          role.name === TrainerRoleTypeName.SENIOR ||
+          role.name === TrainerRoleTypeName.PRINCIPAL
+      ) ?? false
+    )
+  }, [profile])
 
-    return 0
-  }, [courseData])
+  const requiredAssistants = useMemo(() => {
+    if (courseData) {
+      return getRequiredAssistants({
+        ...courseData,
+        hasSeniorOrPrincipalLeader:
+          courseType === CourseType.INDIRECT && seniorOrPrincipalLead,
+      })
+    }
+  }, [courseData, courseType, seniorOrPrincipalLead])
 
   const nextStepEnabled = useMemo(() => {
     if (courseType !== CourseType.INDIRECT) {
@@ -120,10 +134,10 @@ export const CreateCourseForm = () => {
   }, [consentFlags, courseDataValid, courseType])
 
   useEffect(() => {
-    if (minAssistants === 0) {
+    if (requiredAssistants?.min === 0) {
       setAssistants([])
     }
-  }, [minAssistants])
+  }, [requiredAssistants])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
@@ -156,7 +170,8 @@ export const CreateCourseForm = () => {
           type: CourseTrainerType.Assistant,
           fullName: assistant.fullName,
           levels: assistant.levels,
-        }))
+        })),
+        seniorOrPrincipalLead
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return
@@ -211,7 +226,7 @@ export const CreateCourseForm = () => {
 
       {courseType === CourseType.INDIRECT ? (
         <>
-          {minAssistants > 0 ? (
+          {requiredAssistants && requiredAssistants.min > 0 ? (
             <>
               <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
                 {t('pages.create-course.assign-trainers-title')}

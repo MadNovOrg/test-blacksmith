@@ -36,6 +36,12 @@ export const QUERY = gql`
             courseLevel
             expiryDate
           }
+          trainer_role_types {
+            trainer_role_type {
+              id
+              name
+            }
+          }
         }
       }
       schedule {

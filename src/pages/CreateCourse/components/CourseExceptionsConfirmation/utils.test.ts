@@ -1,6 +1,10 @@
 import { extend } from 'lodash-es'
 
 import {
+  Course_Delivery_Type_Enum,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import {
   CourseData,
   isAdvisedTimeExceeded,
   isLeadTrainerInGracePeriod,
@@ -10,6 +14,9 @@ import { CourseLevel, CourseTrainerType } from '@app/types'
 
 describe('course exception utils', () => {
   const defaultCourseData: CourseData = {
+    deliveryType: Course_Delivery_Type_Enum.F2F,
+    reaccreditation: false,
+    type: Course_Type_Enum.Open,
     startDateTime: new Date('2022-03-01 10:00'),
     courseLevel: CourseLevel.Level_1,
     maxParticipants: 0,

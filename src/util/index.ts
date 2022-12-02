@@ -212,10 +212,6 @@ export const getCertificateNumberPrefix = (
   return `${COURSE_TYPE_TO_PREFIX[type]}-${COURSE_LEVEL_TO_PREFIX[level]}-${courseId}`
 }
 
-export const getNumberOfAssistants = (maxParticipants: number) => {
-  return Math.floor((maxParticipants ?? 0) / 12)
-}
-
 export const requiredMsg = (t: TFunction, name: string) => {
   return t('validation-errors.required-field', { name: t(name) })
 }

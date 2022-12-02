@@ -23,7 +23,7 @@ import {
   CourseType,
   SearchTrainer,
 } from '@app/types'
-import { getNumberOfAssistants } from '@app/util'
+import { RequiredAssistants } from '@app/util/trainerRatio'
 
 import { SearchTrainers } from '../SearchTrainers'
 
@@ -44,6 +44,7 @@ type Props = {
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
   disabled?: boolean
+  requiredAssistants: RequiredAssistants
 }
 
 const courseTrainerToFormValues = (
@@ -72,6 +73,7 @@ const ChooseTrainers: React.FC<Props> = ({
   courseType,
   courseLevel,
   courseSchedule,
+  requiredAssistants,
   trainers = [],
   onChange = noop,
   autoFocus = true,
@@ -79,10 +81,6 @@ const ChooseTrainers: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
-
-  const assistMin = useMemo(() => {
-    return getNumberOfAssistants(maxParticipants)
-  }, [maxParticipants])
 
   const leadMin = useMemo(
     () => (courseType === CourseType.OPEN ? 0 : 1),
@@ -159,12 +157,10 @@ const ChooseTrainers: React.FC<Props> = ({
   )
 
   useEffect(() => {
-    const minAssistants = getNumberOfAssistants(maxParticipants)
-
-    if (minAssistants === 0) {
+    if (requiredAssistants.min === 0) {
       form.setValue('assist', [], { shouldValidate: true })
     }
-  }, [maxParticipants, form])
+  }, [maxParticipants, form, requiredAssistants])
 
   return (
     <Stack component="form" spacing={5} data-testid="AssignTrainers-form">
@@ -197,11 +193,11 @@ const ChooseTrainers: React.FC<Props> = ({
           ) : null}
         </Box>
       ) : null}
-      {assistMin > 0 ? (
+      {requiredAssistants.min > 0 ? (
         <Box data-testid="AssignTrainers-assist">
           <Typography variant="subtitle1">
             {t('pages.create-course.assign-trainers.assist-title', {
-              count: assistMin,
+              count: requiredAssistants.min,
             })}
           </Typography>
           <Controller
