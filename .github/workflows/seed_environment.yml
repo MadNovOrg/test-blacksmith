@@ -34,4 +34,4 @@ jobs:
           echo Hasura Metadata Reload
           hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
           echo Hasura Seed Apply
-          hasura seed apply --admin-secret $SECRET --endpoint $ENDPOINT
+          hasura seed apply --admin-secret $SECRET --endpoint $ENDPOINT --database-name default
