@@ -24,6 +24,7 @@ TRUNCATE TABLE public.private_course_booking CASCADE;
 TRUNCATE TABLE public.profile CASCADE;
 TRUNCATE TABLE public.profile_role CASCADE;
 TRUNCATE TABLE public.profile_temp CASCADE;
+TRUNCATE TABLE public.profile_trainer_role_type CASCADE;
 TRUNCATE TABLE public.promo_code CASCADE;
 TRUNCATE TABLE public.venue CASCADE;
 TRUNCATE TABLE public.waitlist CASCADE;
