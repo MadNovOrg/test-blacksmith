@@ -1,0 +1,37 @@
+name: Seed environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        default: 'DEV'
+        description: 'Environment - "DEV/STG"'
+        required: true
+        type: choice
+        options:
+          - DEV
+          - STG
+env:
+  SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
+  ENDPOINT: ${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)] }}
+jobs:
+  data:
+    name: Seed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Hasura CLI
+        run: |
+          curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.6.1 bash
+
+      - name: Seed environment
+        working-directory: ./hasura
+        run: |
+          echo Hasura Migrate Apply
+          hasura migrate apply --all-databases --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Metadata Reload
+          hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
+          echo Hasura Seed Apply
+          hasura seed apply --admin-secret $SECRET --endpoint $ENDPOINT
