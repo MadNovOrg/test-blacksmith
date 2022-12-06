@@ -11,12 +11,14 @@ on:
         options:
           - DEV
           - STG
+  schedule:
+    - cron: '30 21 * * 1-5'
 env:
   SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
   ENDPOINT: ${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment)] }}
 jobs:
   data:
-    name: Seed
+    name: Seed ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
