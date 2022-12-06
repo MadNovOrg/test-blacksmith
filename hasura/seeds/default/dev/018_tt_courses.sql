@@ -1,0 +1,250 @@
+insert into public.course (name, course_type, course_delivery_type, course_level, organization_id, reaccreditation,
+                           course_status, min_participants, max_participants, grading_confirmed, go1_integration, id,
+                           contact_profile_id, free_spaces, sales_representative_id, account_code, cancellation_reason,
+                           cancellation_fee_percent, grading_started, modules_duration, notes)
+values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'SCHEDULED', 6, 6, false, false, 10026, 'dccd780a-9745-4972-a43e-95ec3ef361df', 0,
+        'dccd780a-9745-4972-a43e-95ec3ef361df', '810A Jul23', null, null, false, 305, null),
+       ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'SCHEDULED', 5, 8, false,
+        false, 10025, null, null, null, '810A Apr23', null, null, false, 315, null),
+       ('Positive Behaviour Training: Advanced Modules Modules ', 'CLOSED', 'F2F', 'ADVANCED',
+        'a24397aa-b059-46b9-a728-955580823ce4', false, 'CANCELLED', 6, 5, false, false, 10024,
+        'dccd780a-9745-4972-a43e-95ec3ef361df', 0, 'dccd780a-9745-4972-a43e-95ec3ef361df', '810A Feb23',
+        'Wrong course date.', 25, false, 540, null),
+       ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'SCHEDULED', 6, 9, false, false, 10023, null, 0, null, '810A Dec23', null, null, false, 305, null),
+       ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'SCHEDULED', 5, 10, false,
+        false, 10022, null, null, null, '810A Apr23', null, null, false, 305, null),
+       ('Positive Behaviour Training: Intermediate Trainer ', 'OPEN', 'F2F', 'INTERMEDIATE_TRAINER', null, false,
+        'CONFIRM_MODULES', 3, 10, false, false, 10021, null, null, null, '810A Jun23', null, null, false, 0, null),
+       ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', null, false, 'TRAINER_MISSING', 5, 10,
+        false, false, 10020, null, null, null, '810A Jun23', null, null, false, 0, null),
+       ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'EVALUATION_MISSING', 6, 20, true, false, 10019, null, 0, null, '810A Nov22', null, null, true, 305,
+        null),
+       ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'TRAINER_PENDING', 6, 5, false, false, 10018, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 0,
+        '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', '810A Feb23', null, null, false, 0, null),
+       ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'DECLINED', 6, 5, false, false, 10017, null, 0, null, '810A Jan23', null, null, false, 315, null),
+       ('Positive Behaviour Training: Level Two ', 'INDIRECT', 'F2F', 'LEVEL_2', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'CANCELLED', 6, 20, false, false, 10016, null, 0, null, '810A Jan23', 'Changed my mind.', null, false,
+        480, null),
+       ('Positive Behaviour Training: Advanced Modules Modules ', 'INDIRECT', 'F2F', 'ADVANCED',
+        'a24397aa-b059-46b9-a728-955580823ce4', false, 'EXCEPTIONS_APPROVAL_PENDING', 6, 5, false, false, 10015, null,
+        0, null, '810A May23', null, null, false, 455, null),
+       ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, null, '810A Feb23', null, null, false, 305, '');
+
+SELECT setval('course_id_seq', 10027);
+
+insert into public.course_audit (course_id, authorized_by, type, payload)
+values (10016, '749791ef-e4c4-4a5f-881a-461e4724138d', 'CANCELLATION',
+        '{"cancellation_reason": "Changed my mind.", "cancellation_fee_percent": ""}'),
+       (10024, '22015a3e-8907-4333-8811-85f782265a63', 'CANCELLATION',
+        '{"cancellation_reason": "Wrong course date.", "cancellation_fee_percent": "25"}');
+
+insert into public.course_cancellation_request (course_id, requested_by, reason)
+values (10026, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'Wrong venue.');
+
+insert into public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level,
+                                       certification_date)
+values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'INDR-L1-10019-1', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+       ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'INDR-L1-10019-2', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+       ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'INDR-L1-10019-3', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+       ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'INDR-L1-10019-4', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+       ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'INDR-L1-10019-5', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06');
+
+insert into public.course_invites (status, email, course_id)
+values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
+       ('PENDING', 'arlo.dibbert40@teamteach.testinator.com', 10014),
+       ('PENDING', 'guiseppe.bogan15@teamteach.testinator.com', 10014),
+       ('PENDING', 'nicola_simonis@teamteach.testinator.com', 10014),
+       ('PENDING', 'rylee_lang@teamteach.testinator.com', 10014),
+       ('ACCEPTED', 'john.doe@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'apolonija.deo@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'zaman.wilt@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'balbus.linde@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'linwood.darien@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'cheyanne.kathryn@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'cassandra.jess@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'jorie.nolene@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'lynda.claud@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'maxene.netta@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'lilac.reuben@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'audrea.nona@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'henrietta.dewey@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'lotus.mimi@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'deacon.hope@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'coby.bert@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'khloe.izzy@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'bryan.chuckie@teamteach.testinator.com', 10019),
+       ('PENDING', 'stacey.liptak@teamteach.testinator.com', 10019),
+       ('PENDING', 'james.phenlan@teamteach.testinator.com', 10019),
+       ('PENDING', 'charles.scanlon@teamteach.testinator.com', 10019),
+       ('DECLINED', 'timothy.murphy@teamteach.testinator.com', 10019),
+       ('DECLINED', 'marquis.pappas@teamteach.testinator.com', 10019);
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10014 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10015 as course_id
+from public.module
+where module.course_level = 'ADVANCED';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10016 as course_id
+from public.module
+where module.course_level = 'LEVEL_2';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10017 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10018 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10019 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10020 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10021 as course_id
+from public.module
+where module.course_level = 'INTERMEDIATE_TRAINER';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10022 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10023 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10024 as course_id
+from public.module
+where module.course_level = 'ADVANCED';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10025 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10026 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
+insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded,
+                                       course_id, certificate_id, hs_consent)
+values ('2022-12-06 12:42:07.622554 +00:00', '127ac7f5-9c91-4b1c-8c13-13e226d60f78', true, '', 'FAIL',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '2e06729d-7436-427a-a5cf-ff7c9496b85c', true, 'Some note here? Maybe?',
+        'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1e345ec4-f99f-4ce7-b765-ee2d36d7f338', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'b5702c04-35a6-4c55-b24a-592dc0a05142', true, 'Some note here? Maybe?',
+        'OBSERVE_ONLY', '2022-12-06 11:43:48.227000 +00:00', 10019, '1fc58c17-0eae-40ff-81fb-b33daaf474c8', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fdedead5-1218-4332-8199-8b2bdce414a7', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '11935252-570f-42ef-a141-5cdf8f78270d', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '41e9fa1d-0712-43cd-8571-bbf219ab016b', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '43ead544-671c-46fb-ba8f-b5858c83a2d8', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', '6896b053-0d36-45b4-889c-9472d846c4a1', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, null, false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'ae8f617c-2411-42aa-9501-f2f08b16a76e', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, 'c10eee83-dc6d-426d-af21-cf46a6202751', false),
+       ('2022-12-06 12:42:07.622554 +00:00', '47b5b128-0a47-4094-86f6-87005eb12d71', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, '919645da-1eb0-4862-a1f4-6cf06558f61f', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10019, 'df5b8cab-f132-4936-bb66-9219b3f0a6b9', false);
+
+INSERT INTO public.course_participant_module (course_participant_id, module_id, completed)
+SELECT participant.id as course_participant_id, module.id as module_id, TRUE as completed
+FROM public.course_participant participant
+         JOIN public.course course ON participant.course_id = course.id
+         JOIN public.course_module cmodule ON cmodule.course_id = course.id
+         JOIN public.module module ON cmodule.module_id = module.id
+WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026);
+
+insert into public.venue (id, name, geo_coordinates, city, address_line_one, address_line_two, post_code,
+                          google_places_id)
+values ('b936752f-52fc-4d82-a212-90105a51c05e', 'London School of Economics and Political Science',
+        '(51.5144388,-0.1164513)', 'Greater London', 'Houghton St, London WC2A 2AE, UK', null, 'WC2A 2AE',
+        'ChIJWwWza3sadkgR77gsD5ccs70'),
+       ('84daabd8-359f-4497-a421-293e95ae9a70', 'London Academy of Excellence Tottenham',
+        '(51.60572939999999,-0.06638010000000001)', 'Greater London',
+        'Lilywhite House, 780 High Rd, London N17 0BX, UK', null, 'N17 0BX', 'ChIJS7qCPJkedkgRq5TrG1YF0Is'),
+       ('0a6e3839-b28f-4042-b42c-27d62fc1f92d', 'Barlows Primary School', '(53.468886,-2.9402807)', 'Merseyside',
+        'Barlow''s Ln, Fazakerley, Liverpool L9 9EH, UK', null, 'L9 9EH', 'ChIJA9sfnU8ie0gRTktxTrgWVnw'),
+       ('a7013539-a2c5-44cb-a014-e07598647648', 'London School of Barbering - Liverpool Street',
+        '(51.5185185,-0.0787479)', 'Greater London', '13 Artillery Ln, London E1 7HY, UK', null, 'E1 7HY',
+        'ChIJYx_Vnp0ddkgR5sZdvWuAQjs'),
+       ('cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 'Glasgow School of Sport', '(55.8467257,-4.299916899999999)',
+        'Glasgow City', '30 Gower Terrace, Bellahouston, Glasgow G41 5QE, UK', null, 'G41 5QE',
+        'ChIJC_cuN3BGiEgRPhAolcA28Vc');
+
+insert into public.course_schedule (start, "end", venue_id, course_id)
+values (date(now()) + time '09:00' + interval '3 month', date(now()) + time '17:00' + interval '3 month',
+        'b936752f-52fc-4d82-a212-90105a51c05e', 10014),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
+        '84daabd8-359f-4497-a421-293e95ae9a70', 10015),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
+        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10016),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
+        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10017),
+       (date(now()) + time '09:00' + interval '4 month', date(now()) + time '17:00' + interval '4 month',
+        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10018),
+       (date(now()) + time '09:00' + interval '6 month', date(now()) + time '17:00' + interval '6 month',
+        'b936752f-52fc-4d82-a212-90105a51c05e', 10020),
+       (date(now()) + time '09:00' - interval '1 month', date(now()) + time '17:00' - interval '1 month',
+        '84daabd8-359f-4497-a421-293e95ae9a70', 10019),
+       (date(now()) + time '09:00' + interval '7 month', date(now()) + time '17:00' + interval '7 month',
+        '0a6e3839-b28f-4042-b42c-27d62fc1f92d', 10021),
+       (date(now()) + time '09:00' + interval '8 month', date(now()) + time '17:00' + interval '8 month',
+        'a7013539-a2c5-44cb-a014-e07598647648', 10022),
+       (date(now()) + time '09:00' + interval '9 month', date(now()) + time '17:00' + interval '9 month',
+        'a7013539-a2c5-44cb-a014-e07598647648', 10023),
+       (date(now()) + time '09:00' + interval '1 month', date(now()) + time '17:00' + interval '1 month',
+        'a7013539-a2c5-44cb-a014-e07598647648', 10024),
+       (date(now()) + time '09:00' + interval '10 month', date(now()) + time '17:00' + interval '10 month',
+        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10025),
+       (date(now()) + time '09:00' + interval '11 month', date(now()) + time '17:00' + interval '11 month',
+        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10026);
+
+insert into public.course_trainer (profile_id, type, course_id, status)
+values  ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10014, 'ACCEPTED'),
+        ('749791ef-e4c4-4a5f-881a-461e4724138d', 'ASSISTANT', 10014, 'ACCEPTED'),
+        ('749791ef-e4c4-4a5f-881a-461e4724138d', 'LEADER', 10015, 'ACCEPTED'),
+        ('749791ef-e4c4-4a5f-881a-461e4724138d', 'LEADER', 10016, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'ASSISTANT', 10016, 'PENDING'),
+        ('749791ef-e4c4-4a5f-881a-461e4724138d', 'LEADER', 10017, 'ACCEPTED'),
+        ('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'LEADER', 10018, 'PENDING'),
+        ('749791ef-e4c4-4a5f-881a-461e4724138d', 'LEADER', 10019, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10021, 'ACCEPTED'),
+        ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10022, 'ACCEPTED'),
+        ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10023, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10024, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10025, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10026, 'ACCEPTED');
