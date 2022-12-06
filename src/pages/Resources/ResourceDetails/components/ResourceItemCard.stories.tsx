@@ -1,26 +1,35 @@
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import { Box } from '@mui/material'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 import React from 'react'
 
 import theme from '@app/theme'
 
-import { ExternalResourceCard, Props } from './ExternalResourceCard'
+import { ResourceItemCard, Props } from './ResourceItemCard'
 
 import withMuiThemeProvider from '@storybook-decorators/withMuiThemeProvider'
 
 export default {
-  title: 'Resources/ExternalResourceCard',
-  component: ExternalResourceCard,
+  title: 'Resources/ResourceItemCard',
+  component: ResourceItemCard,
   decorators: [withMuiThemeProvider],
-} as ComponentMeta<typeof ExternalResourceCard>
+} as ComponentMeta<typeof ResourceItemCard>
 
 const props: Props = {
-  text: '2015 Children Homes Standards Summary',
-  icon: <PictureAsPdfIcon color="success" fontSize="small" />,
+  resource: {
+    id: '1',
+    title: '2015 Children Homes Standards Summary',
+    resourceType: {
+      resourcetype: 'pdf',
+    },
+    downloads: {
+      file: {
+        mediaItemUrl: 'https://dummy-url',
+      },
+    },
+  },
 }
 
-const Template: ComponentStory<typeof ExternalResourceCard> = args => (
+const Template: ComponentStory<typeof ResourceItemCard> = args => (
   <Box
     bgcolor={theme.palette.grey[100]}
     display="flex"
@@ -29,7 +38,7 @@ const Template: ComponentStory<typeof ExternalResourceCard> = args => (
     sx={{ pt: 5 }}
   >
     <Box width={600}>
-      <ExternalResourceCard {...args} />
+      <ResourceItemCard {...args} />
     </Box>
   </Box>
 )

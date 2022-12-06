@@ -13,6 +13,7 @@ type Props = {
   debounce?: number
   placeholder?: string
   InputProps?: InputProps
+  fullWidth?: boolean
 }
 
 export const FilterSearch: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const FilterSearch: React.FC<Props> = ({
   onChange = noop,
   debounce = 300,
   InputProps,
+  fullWidth,
   ...rest
 }) => {
   const { t } = useTranslation()
@@ -43,6 +45,7 @@ export const FilterSearch: React.FC<Props> = ({
       variant="standard"
       onChange={handleChange}
       inputProps={{ 'data-testid': 'FilterSearch-Input' }}
+      fullWidth={fullWidth}
       InputProps={{
         startAdornment: <SearchIcon sx={{ color: 'grey.500', mr: 0.5 }} />,
         endAdornment: (

@@ -920,7 +920,8 @@
         "title": "Additional resources"
       },
       "resource-details": {
-        "back-to-resources": "Back to resources"
+        "back-to-resources": "Back to resources",
+        "search": "Search resources"
       }
     },
     "create-course": {

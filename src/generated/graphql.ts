@@ -38352,6 +38352,23 @@ export type InsertPromoCodeMutationVariables = Exact<{
 
 export type InsertPromoCodeMutation = { __typename?: 'mutation_root', insert_promo_code_one?: { __typename?: 'promo_code', id: any } | null };
 
+export type AllResourceCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllResourceCategoriesQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', resourceCategories?: { __typename?: 'RootQueryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resouceIcon?: { __typename?: 'ResourceCategory_Resouceicon', resourceicon?: string | null } | null, resourceArea?: { __typename?: 'ResourceCategory_Resourcearea', resourcearea?: string | null } | null } | null> | null } | null } | null };
+
+export type ResourceDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  term?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type ResourceDetailsQuery = { __typename?: 'query_root', content?: { __typename?: 'RootQuery', resourceCategory?: { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, children?: { __typename?: 'ResourceCategoryToResourceCategoryConnection', nodes?: Array<{ __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceType?: { __typename?: 'Resource_Resourcetype', resourcetype?: string | null } | null, downloads?: { __typename?: 'Resource_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceType?: { __typename?: 'Resource_Resourcetype', resourcetype?: string | null } | null, downloads?: { __typename?: 'Resource_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null> | null } | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceType?: { __typename?: 'Resource_Resourcetype', resourcetype?: string | null } | null, downloads?: { __typename?: 'Resource_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null } | null } | null };
+
+export type ResourceCategorySummaryFragment = { __typename?: 'ResourceCategory', id: string, name?: string | null, description?: string | null, resources?: { __typename?: 'ResourceCategoryToResourceConnection', nodes?: Array<{ __typename?: 'Resource', id: string, title?: string | null, resourceType?: { __typename?: 'Resource_Resourcetype', resourcetype?: string | null } | null, downloads?: { __typename?: 'Resource_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null } | null> | null } | null };
+
+export type ResourceSummaryFragment = { __typename?: 'Resource', id: string, title?: string | null, resourceType?: { __typename?: 'Resource_Resourcetype', resourcetype?: string | null } | null, downloads?: { __typename?: 'Resource_Downloads', file?: { __typename?: 'MediaItem', mediaItemUrl?: string | null } | null } | null };
+
 export type TrainerScheduleQueryVariables = Exact<{ [key: string]: never; }>;
 
 

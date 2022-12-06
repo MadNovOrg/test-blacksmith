@@ -12,7 +12,6 @@ describe('component: ResourceCard', () => {
         title="foo"
         description="bar"
         icon={<TopicOutlinedIcon />}
-        onClick={jest.fn()}
       />
     )
 

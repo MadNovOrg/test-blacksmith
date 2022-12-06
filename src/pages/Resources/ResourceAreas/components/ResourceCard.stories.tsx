@@ -20,7 +20,6 @@ const props: Props = {
   description:
     'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
   icon: <TopicOutlinedIcon />,
-  onClick: () => null,
 }
 
 const Template: ComponentStory<typeof ResourceCard> = args => (

@@ -13,6 +13,7 @@ import {
   Podcast,
   PostSummaryFragment,
   ResearchSummaryDetailsFragment,
+  ResourceCategory,
   TagSummaryFragment,
   VideoItemSummaryFragment,
   WaitlistSummaryFragment,
@@ -628,3 +629,15 @@ export const buildTrainerInputModerator = (
     overrides: { ...overrides, type: CourseTrainerType.Moderator },
   })
 }
+
+export const buildResourceCategory = (resourceArea: string) =>
+  build<Omit<ResourceCategory, 'databaseId' | 'isContentNode' | 'isTermNode'>>({
+    fields: {
+      id: fake(f => f.datatype.uuid()),
+      name: fake(f => f.random.words()),
+      description: fake(f => f.random.words()),
+      resourceArea: {
+        resourcearea: resourceArea,
+      },
+    },
+  })

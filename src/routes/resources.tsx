@@ -7,7 +7,7 @@ function ResourcesRoutes() {
   return (
     <Routes>
       <Route index element={<ResourcesList />} />
-      <Route path="details" element={<ResourceDetails />} />
+      <Route path=":id" element={<ResourceDetails />} />
     </Routes>
   )
 }
