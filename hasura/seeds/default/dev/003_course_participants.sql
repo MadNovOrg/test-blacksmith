@@ -111,7 +111,13 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 ('cc025226-c93e-4fe7-9909-f754882ffe19', 'james.phenlan@gmail.com', 'PENDING', 10000),
 ('b36d524e-577e-45c6-a652-09d981435218', 'charles.scanlon@gmail.com', 'PENDING', 10000),
 ('e2f6c2c7-c19a-41f3-b405-e92ed5dd9305', 'timothy.murphy@gmail.com', 'DECLINED', 10000),
-('2c562361-efb2-4683-aab0-f2d3ebc86d3b', 'marquis.pappas@gmail.com', 'DECLINED', 10000);
+('2c562361-efb2-4683-aab0-f2d3ebc86d3b', 'marquis.pappas@gmail.com', 'DECLINED', 10000),
+
+('d1d9a569-6f96-42ee-ac83-1ecb3f849019', 'john.doe@gmail.com', 'ACCEPTED', 10010),
+('d1d9a569-6f96-42ee-ac83-1ecb3f849020', 'apolonija.deo@mail.com', 'ACCEPTED', 10010),
+('d1d9a569-6f96-42ee-ac83-1ecb3f849021', 'zaman.wilt@mail.com', 'ACCEPTED', 10010),
+('d1d9a569-6f96-42ee-ac83-1ecb3f849022', 'balbus.linde@mail.com', 'ACCEPTED', 10010),
+('d1d9a569-6f96-42ee-ac83-1ecb3f849023', 'linwood.darien@mail.com', 'ACCEPTED', 10010);
 
 INSERT INTO public.course_participant (registration_id, course_id, profile_id, invoice_id, invite_id, attended, hs_consent, grade) VALUES
 ('8aba9220-8e09-433b-ad83-51c53f2523c0', 10001, 'ab528bc4-0d66-417f-8a34-eed6b949ea27', '0b156d52-b6a1-4238-bab0-4b1e99a9dc88', 'd1d9a569-6f96-42ee-ac83-1ecb3f849016', true, false, NULL),
@@ -121,11 +127,11 @@ INSERT INTO public.course_participant (registration_id, course_id, profile_id, i
 ('3c665955-9ae8-47bc-84b6-9c103fea3b06', 10004, 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'c90c93de-24a5-47cb-816d-d1a379543d86', 'd1d9a569-6f96-42ee-ac83-1ecb3f849011', true, false, NULL),
 ('5cedc5b2-d27f-43a2-84ed-d0b59df4efad', 10004, 'd1b97054-357e-4a53-9a43-4acf8353a465', 'ed3537bf-1338-4490-b1d4-ad4e4924ea74', 'd1d9a569-6f96-42ee-ac83-1ecb3f849012', true, false, NULL),
 ('fa8a138d-66ce-4fc8-b1dd-54f20fab46e9', 10004, 'bdc08f2a-6a23-4a53-9587-65f32d16c41e', '4b6d073c-b5f3-488a-a8e4-ce16e2fb9ac1', 'd1d9a569-6f96-42ee-ac83-1ecb3f849013', true, false, NULL),
-('edb0661b-bede-4a09-9066-339b7a0fe78b', 10010, 'fdedead5-1218-4332-8199-8b2bdce414a7', '26e05f96-b687-4348-b6d8-1c863a8499f9', 'd1d9a569-6f96-42ee-ac83-1ecb3f849001', true, false, NULL),
-('424d6da7-bb67-4353-88f7-640ddd6db6e3', 10010, '11935252-570f-42ef-a141-5cdf8f78270d', '949c2685-4a9f-4cbb-82f2-d5fdaa1565aa', 'd1d9a569-6f96-42ee-ac83-1ecb3f849002', true, false, NULL),
-('9b7c7e36-666c-4a0f-a01f-bbbced0c0b82', 10010, '41e9fa1d-0712-43cd-8571-bbf219ab016b', '1813431c-fe22-4e49-b603-97ee02dc1df9', 'd1d9a569-6f96-42ee-ac83-1ecb3f849003', true, false, NULL),
-('33ff3352-ac87-476c-bb6e-4fadc423abc8', 10010, '127ac7f5-9c91-4b1c-8c13-13e226d60f78', '47988253-2329-4674-b47c-bf861f2c2169', 'd1d9a569-6f96-42ee-ac83-1ecb3f849004', true, false, NULL),
-('5ab9a7e6-1da8-412d-81a9-faf8c099c092', 10010, '47b5b128-0a47-4094-86f6-87005eb12d71', '2f0d984b-7942-41c6-ac5a-339805a77845', 'd1d9a569-6f96-42ee-ac83-1ecb3f849005', true, false, NULL),
+('edb0661b-bede-4a09-9066-339b7a0fe78b', 10010, 'fdedead5-1218-4332-8199-8b2bdce414a7', '26e05f96-b687-4348-b6d8-1c863a8499f9', 'd1d9a569-6f96-42ee-ac83-1ecb3f849019', true, false, NULL),
+('424d6da7-bb67-4353-88f7-640ddd6db6e3', 10010, '11935252-570f-42ef-a141-5cdf8f78270d', '949c2685-4a9f-4cbb-82f2-d5fdaa1565aa', 'd1d9a569-6f96-42ee-ac83-1ecb3f849020', true, false, NULL),
+('9b7c7e36-666c-4a0f-a01f-bbbced0c0b82', 10010, '41e9fa1d-0712-43cd-8571-bbf219ab016b', '1813431c-fe22-4e49-b603-97ee02dc1df9', 'd1d9a569-6f96-42ee-ac83-1ecb3f849021', true, false, NULL),
+('33ff3352-ac87-476c-bb6e-4fadc423abc8', 10010, '127ac7f5-9c91-4b1c-8c13-13e226d60f78', '47988253-2329-4674-b47c-bf861f2c2169', 'd1d9a569-6f96-42ee-ac83-1ecb3f849022', true, false, NULL),
+('5ab9a7e6-1da8-412d-81a9-faf8c099c092', 10010, '47b5b128-0a47-4094-86f6-87005eb12d71', '2f0d984b-7942-41c6-ac5a-339805a77845', 'd1d9a569-6f96-42ee-ac83-1ecb3f849023', true, false, NULL),
 ('90e56c4d-14b4-4112-b452-0361090eabda', 10006, '2e06729d-7436-427a-a5cf-ff7c9496b85c', '3bb3603e-bf8d-40b4-b0a7-cabb101bccb9', 'd1d9a569-6f96-42ee-ac83-1ecb3f849006', true, false, 'PASS'),
 ('867f2221-9b1b-4afe-a662-d896da3f2398', 10006, 'b5702c04-35a6-4c55-b24a-592dc0a05142', '134e0572-30d0-4dc7-b026-18203f01e88b', 'd1d9a569-6f96-42ee-ac83-1ecb3f849007', true, false, 'PASS'),
 ('15408e55-79ef-41d0-915e-1c81513d3e39', 10006, '43ead544-671c-46fb-ba8f-b5858c83a2d8', '25478835-6d99-4d99-b0f7-3957fd8a7241', 'd1d9a569-6f96-42ee-ac83-1ecb3f849008', true, false, 'PASS'),

@@ -20,7 +20,7 @@ export const Matcher = /(query GetCourseInvites)/i
 export const QUERY = gql`
   query GetCourseInvites(
     $courseId: Int!
-    $limit: Int = 20
+    $limit: Int
     $offset: Int = 0
     $where: course_invites_bool_exp = {}
     $orderBy: [course_invites_order_by!] = { email: asc }
