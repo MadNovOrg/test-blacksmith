@@ -1,18 +1,4 @@
 INSERT INTO profile (id, given_name, family_name, email) VALUES
-('434de6da-cdc5-431b-b109-022854319d69', 'Jon-Paul', 'Little', 'jonpaul.little@teamteach.co.uk'),
-('83156e3f-a075-43b5-b345-dacb06d5b057', 'Aneesa', 'Ramzan', 'aneesa.ramzan@teamteach.co.uk'),
-('77eaddad-ba95-4ab7-9ef7-801b347d6502', 'Andrew', 'Winterbotham', 'andrew.winterbotham@nearform.com'),
-('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'Greg', 'Ilach', 'grzegorz.ilach@nearform.com'),
-('bb665826-8ff0-45f7-a75f-babdad3d8e17', 'Salman', 'Mitha', 'salman.mitha@nearform.com'),
-('1aadd944-4876-46c1-a8e6-36122636dffa', 'Salman', 'M Learner', 'salman.mitha+learner@nearform.com'),
-('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'Spyridon', 'Chortis', 'spyridon.chortis@nearform.com'),
-('99a03e41-f518-49a2-98cd-c77cb2e33483', 'Maksym', 'Barvinskyi', 'maksym.barvinskyi@nearform.com'),
-('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', 'Lefteris', 'Paraskevas', 'lefteris.paraskevas@nearform.com'),
-('7eb8bd38-3048-4416-90d2-4b2299e4633b', 'Alex', 'Parra', 'alex.parra@nearform.com'),
-('7584edda-3772-447c-9162-25f7fc6a9b38', 'Danijel', 'Maksimovic', 'danijel.maksimovic@nearform.com'),
-('8fc963f5-1942-4e70-9107-7a84fe2e68d5', 'Piotr', 'Piech', 'piotr.piech@nearform.com'),
-('00c5f39b-785a-46f5-8475-ea2d349efaf8', 'Wilk', 'Maia', 'wilk.maia@nearform.com'),
--- test users
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', 'trainer@teamteach.testinator.com'),
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'Mark', 'Trainer', 'trainer.with.org@teamteach.testinator.com'),
 ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'Steven', 'Trainer', 'trainer.and.user@teamteach.testinator.com'),
@@ -41,61 +27,83 @@ INSERT INTO profile (id, given_name, family_name, email) VALUES
 ('6987feba-0877-4a2a-b7da-982de1977eb3', 'Learning', 'Development', 'ld@teamteach.testinator.com');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
-('5b01499b-b0f6-4d2f-81a6-20d17581f888', '434de6da-cdc5-431b-b109-022854319d69', 'cognito'), -- jonpaul.little@teamteach.co.uk
-('2bc05586-55fb-4f3f-b9a5-64ed8cdaed61', '83156e3f-a075-43b5-b345-dacb06d5b057', 'cognito'), -- aneesa.ramzan@teamteach.co.uk
-('f0a23d6a-fcea-43fd-b418-ce138ed3bd1a', '77eaddad-ba95-4ab7-9ef7-801b347d6502', 'cognito'), -- andrew.winterbotham@nearform.com
-('740b9591-757a-44d2-ade5-35c70ed76cdf', 'fa65eb40-e964-481c-a42d-7c6c7a20c7b0', 'cognito'), -- grzegorz.ilach@nearform.com
-('4b3bd6d5-5f58-4dee-adfe-3ed1838c7b64', 'bb665826-8ff0-45f7-a75f-babdad3d8e17', 'cognito'), -- salman.mitha@nearform.com
-('3f03a312-dab3-47ff-beb0-f9e2f8a99e8b', '1aadd944-4876-46c1-a8e6-36122636dffa', 'cognito'), -- salman.mitha+learner@nearform.com
-('323da9cb-e3fc-4eef-9bcc-716ffbe41d1a', 'aa0302db-e4b4-4fb0-9b54-42082f57b0fd', 'cognito'), -- spyridon.chortis@nearform.com
-('07c545cc-3c1d-4b2c-bb6f-632ac7a1d91f', '99a03e41-f518-49a2-98cd-c77cb2e33483', 'cognito'), -- maksym.barvinskyi@nearform.com
-('51ad2627-cd6f-4b1d-ad98-44de733c7ba8', 'ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', 'cognito'), -- lefteris.paraskevas@nearform.com
-('6392f477-ce2f-4408-b80d-37e237b9aa11', '7eb8bd38-3048-4416-90d2-4b2299e4633b', 'cognito'), -- alex.parra@nearform.com
-('22b8b110-a559-472a-84ca-d92880044315', '7584edda-3772-447c-9162-25f7fc6a9b38', 'cognito'), -- danijel.maksimovic@nearform.com
-('483ae253-c815-4f63-bf40-5c2173f5ca23', '8fc963f5-1942-4e70-9107-7a84fe2e68d5', 'cognito'), -- piotr.piech@nearform.com
-('13d205f5-1e83-4e1b-a62f-4ed047507e69', '00c5f39b-785a-46f5-8475-ea2d349efaf8', 'cognito'), -- wilk.maia@nearform.com
--- test users
 ('fa021939-81e5-4101-8f8b-c02d28b127be', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com
-('49f998c9-dfc7-4a02-8de1-2207a1bd93d9', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
-('d96bafb4-5605-4029-99b9-792702727519', 'bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'cognito'), -- trainer.and.user@teamteach.testinator.com
-('f741910a-7680-4082-8910-99b7bbf807eb', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'cognito'), -- assistant@teamteach.testinator.com
-('df720183-c8e6-4f29-ac96-4e443eec0550', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com
-('3e904cc3-c091-4cb6-90c9-c7aece4558a9', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 'cognito'), -- user1@teamteach.testinator.com
-('828d9bac-bb11-4d54-ad52-41f8e04d49a6', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com
-('9201c823-8380-46c5-a618-47d0abe2d9ae', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'cognito'), -- user1.with.org@teamteach.testinator.com
-('fa6d5346-465a-4b34-8294-a4a5e256ee5c', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'cognito'), -- user2.with.org@teamteach.testinator.com
-('8ca1d482-7e20-4448-8eb6-946550e01b1e', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- admin@teamteach.testinator.com
-('f04574f6-893f-4ff0-bae5-8cd58ea9e065', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com
-('a33cc575-1642-4435-87bf-21edaebb52e9', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
-('99ac246d-1b0a-4075-bff6-1550330c5ea8', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com
-('9e148a44-ee2f-446d-a188-da5dfdb0f6ac', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com
-('854aaf25-9c84-461d-9ff6-dd9a022a2eb5', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'cognito'), -- trainer01@teamteach.testinator.com
-('cf937e22-7688-47c5-935d-227a41bf5bf4', '30ebb1e1-0491-44f8-b0a2-3087bd454b19', 'cognito'), -- trainer02@teamteach.testinator.com
-('c6433596-ffee-44e9-8239-68f5a12cb2e2', 'e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', 'cognito'), -- trainer03@teamteach.testinator.com
-('7aa06b76-aefb-4af0-8220-3a3bc5ba3c82', 'd54f86ca-0181-4264-8c73-7b73ff395405', 'cognito'), -- trainer04@teamteach.testinator.com
-('680d6442-1560-4a1f-ba40-14203e3abb6f', '62946c00-1da3-44f7-97a6-4b1c8da4f2ef', 'cognito'), -- trainer05@teamteach.testinator.com
-('0ab0bebe-d25e-4b6a-917b-85b61ae6956b', '8ba2c43e-a7e5-47c5-8d03-0383719d77df', 'cognito'), -- trainer06@teamteach.testinator.com
-('24458448-7e3d-479f-bce5-8e2e9f588dbf', '2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'cognito'), -- trainer07@teamteach.testinator.com
-('637094bf-e72d-470a-b909-60e3eb26a23f', '14184530-d2a8-4cc2-ad42-2b7312aa5b3d', 'cognito'), -- trainer08@teamteach.testinator.com
-('ac877f52-0764-43e8-b66c-67d6061d0c6f', 'd7c8cfe9-827c-4fc5-88b6-1a799d02dd81', 'cognito'), -- trainer09@teamteach.testinator.com
-('c898e47b-99d4-4e5a-a0f2-3b41cf05bab6', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com
-('04f81b0c-286b-4415-bf7d-17b3b0f3e991', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
-('83050492-393c-4e3e-94b3-1ffd49014fbb', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'); -- ld@teamteach.testinator.com
+('966a5a92-b112-48d3-9031-31d85b5e14b4', '13a223a8-2184-42f1-ba37-b49e115e59a2', 'cognito'), -- trainer@teamteach.testinator.com staging
 
--- Adding all roles to all dev users
-INSERT INTO profile_role (profile_id, role_id) VALUES
-('434de6da-cdc5-431b-b109-022854319d69', (SELECT id from role WHERE name = 'tt-admin')), -- jonpaul.little@teamteach.co.uk
-('83156e3f-a075-43b5-b345-dacb06d5b057', (SELECT id from role WHERE name = 'tt-admin')), -- aneesa.ramzan@teamteach.co.uk
-('77eaddad-ba95-4ab7-9ef7-801b347d6502', (SELECT id from role WHERE name = 'tt-admin')), -- andrew.winterbotham@nearform.com
-('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', (SELECT id from role WHERE name = 'tt-admin')), -- grzegorz.ilach@nearform.com
-('bb665826-8ff0-45f7-a75f-babdad3d8e17', (SELECT id from role WHERE name = 'tt-admin')), -- salman.mitha@nearform.com
-('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', (SELECT id from role WHERE name = 'tt-admin')), -- spyridon.chortis@nearform.com
-('99a03e41-f518-49a2-98cd-c77cb2e33483', (SELECT id from role WHERE name = 'tt-admin')), -- maksym.barvinskyi@nearform.com
-('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', (SELECT id from role WHERE name = 'tt-admin')), -- lefteris.paraskevas@nearform.com
-('7eb8bd38-3048-4416-90d2-4b2299e4633b', (SELECT id from role WHERE name = 'tt-admin')), -- alex.parra@nearform.com
-('7584edda-3772-447c-9162-25f7fc6a9b38', (SELECT id from role WHERE name = 'tt-admin')), -- danijel.maksimovic@nearform.com
-('8fc963f5-1942-4e70-9107-7a84fe2e68d5', (SELECT id from role WHERE name = 'tt-admin')), -- piotr.piech@nearform.com
-('00c5f39b-785a-46f5-8475-ea2d349efaf8', (SELECT id from role WHERE name = 'tt-admin')); -- wilk.maia@nearform.com
+('49f998c9-dfc7-4a02-8de1-2207a1bd93d9', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com
+('42d5e858-a41e-4589-adc5-499d643c5771', '5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'cognito'), -- trainer.with.org@teamteach.testinator.com staging
+
+('d96bafb4-5605-4029-99b9-792702727519', 'bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'cognito'), -- trainer.and.user@teamteach.testinator.com
+('33e445ce-7fd5-4125-8d48-0643151fe588', 'bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'cognito'), -- trainer.and.user@teamteach.testinator.com staging
+
+('f741910a-7680-4082-8910-99b7bbf807eb', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'cognito'), -- assistant@teamteach.testinator.com
+('d1b41d43-5796-4560-8f40-d3f0f22fa242', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'cognito'), -- assistant@teamteach.testinator.com staging
+
+('df720183-c8e6-4f29-ac96-4e443eec0550', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com
+('6b59bac0-91cc-453e-9df5-cba479fddd3e', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'cognito'), -- assistant.with.org@teamteach.testinator.com staging
+
+('3e904cc3-c091-4cb6-90c9-c7aece4558a9', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 'cognito'), -- user1@teamteach.testinator.com
+('5fb6bb03-6c64-4c49-bae7-e8810c27b994', '6b72504a-6447-4b30-9909-e8e6fc1d300f', 'cognito'), -- user1@teamteach.testinator.com staging
+
+('828d9bac-bb11-4d54-ad52-41f8e04d49a6', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com
+('40eff78d-fff8-467f-b95d-fb26683263e5', 'd394a9ff-7517-4e35-91aa-466f9d4c1b77', 'cognito'), -- user2@teamteach.testinator.com staging
+
+('9201c823-8380-46c5-a618-47d0abe2d9ae', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'cognito'), -- user1.with.org@teamteach.testinator.com
+('6bb0cf5c-54eb-4432-a9df-5dc61445a02c', 'fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'cognito'), -- user1.with.org@teamteach.testinator.com staging
+
+('fa6d5346-465a-4b34-8294-a4a5e256ee5c', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'cognito'), -- user2.with.org@teamteach.testinator.com
+('570f4fd2-eb0f-4dbb-9c52-a118e26fdf42', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'cognito'), -- user2.with.org@teamteach.testinator.com staging
+
+('8ca1d482-7e20-4448-8eb6-946550e01b1e', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- admin@teamteach.testinator.com
+('34c565f8-0932-459e-8d2c-dac35d369326', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- admin@teamteach.testinator.com staging
+
+('f04574f6-893f-4ff0-bae5-8cd58ea9e065', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com
+('2c436c6a-db32-4b91-ba8a-bcabc1a7affa', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com staging
+
+('a33cc575-1642-4435-87bf-21edaebb52e9', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
+('281fbeeb-99a3-46d0-81b6-c3dca984d1af', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com staging
+
+('99ac246d-1b0a-4075-bff6-1550330c5ea8', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com
+('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com staging
+
+('9e148a44-ee2f-446d-a188-da5dfdb0f6ac', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com
+('90f81462-ccbc-44c2-bf46-ceedea2f383f', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com staging
+
+('854aaf25-9c84-461d-9ff6-dd9a022a2eb5', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'cognito'), -- trainer01@teamteach.testinator.com
+('5abd6b91-6d6b-4fd4-9fac-9798158fe22a', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'cognito'), -- trainer01@teamteach.testinator.com staging
+
+('cf937e22-7688-47c5-935d-227a41bf5bf4', '30ebb1e1-0491-44f8-b0a2-3087bd454b19', 'cognito'), -- trainer02@teamteach.testinator.com
+('1b1bbae4-1dd6-4170-909d-4c1907510ba3', '30ebb1e1-0491-44f8-b0a2-3087bd454b19', 'cognito'), -- trainer02@teamteach.testinator.com staging
+
+('c6433596-ffee-44e9-8239-68f5a12cb2e2', 'e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', 'cognito'), -- trainer03@teamteach.testinator.com
+('766a3a28-b9c9-4af2-af4f-2e316d68f91f', 'e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', 'cognito'), -- trainer03@teamteach.testinator.com staging
+
+('7aa06b76-aefb-4af0-8220-3a3bc5ba3c82', 'd54f86ca-0181-4264-8c73-7b73ff395405', 'cognito'), -- trainer04@teamteach.testinator.com
+('116dc1f9-09e1-4071-be6a-c44a4235629e', 'd54f86ca-0181-4264-8c73-7b73ff395405', 'cognito'), -- trainer04@teamteach.testinator.com staging
+
+('680d6442-1560-4a1f-ba40-14203e3abb6f', '62946c00-1da3-44f7-97a6-4b1c8da4f2ef', 'cognito'), -- trainer05@teamteach.testinator.com
+('05164cb0-f6c2-4aa5-82ba-4af967705225', '62946c00-1da3-44f7-97a6-4b1c8da4f2ef', 'cognito'), -- trainer05@teamteach.testinator.com staging
+
+('0ab0bebe-d25e-4b6a-917b-85b61ae6956b', '8ba2c43e-a7e5-47c5-8d03-0383719d77df', 'cognito'), -- trainer06@teamteach.testinator.com
+('85ac2061-a97c-4923-8712-2c9ba254dfaa', '8ba2c43e-a7e5-47c5-8d03-0383719d77df', 'cognito'), -- trainer06@teamteach.testinator.com staging
+
+('24458448-7e3d-479f-bce5-8e2e9f588dbf', '2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'cognito'), -- trainer07@teamteach.testinator.com
+('9032c2b4-b607-42f7-8fd4-39884a4986cb', '2a451ef2-99fe-4350-9f0e-2081b6f3f87f', 'cognito'), -- trainer07@teamteach.testinator.com staging
+
+('637094bf-e72d-470a-b909-60e3eb26a23f', '14184530-d2a8-4cc2-ad42-2b7312aa5b3d', 'cognito'), -- trainer08@teamteach.testinator.com
+('952af9c2-a02e-4ceb-92ef-d6a4bf08c108', '14184530-d2a8-4cc2-ad42-2b7312aa5b3d', 'cognito'), -- trainer08@teamteach.testinator.com staging
+
+('ac877f52-0764-43e8-b66c-67d6061d0c6f', 'd7c8cfe9-827c-4fc5-88b6-1a799d02dd81', 'cognito'), -- trainer09@teamteach.testinator.com
+('3543318d-d9ce-480f-8fef-822011bf2b71', 'd7c8cfe9-827c-4fc5-88b6-1a799d02dd81', 'cognito'), -- trainer09@teamteach.testinator.com staging
+
+('c898e47b-99d4-4e5a-a0f2-3b41cf05bab6', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com
+('34559459-91f6-4fc8-b9c4-0daab3215a70', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com staging
+
+('04f81b0c-286b-4415-bf7d-17b3b0f3e991', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
+('99707aa6-356e-421b-99b3-aecda469fa7c', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com staging
+
+('83050492-393c-4e3e-94b3-1ffd49014fbb', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'), -- ld@teamteach.testinator.com
+('f6edff23-9ef5-4843-8e13-64610b4cfa41', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'); -- ld@teamteach.testinator.com staging
 
 -- Adding roles to test users
 INSERT INTO profile_role (profile_id, role_id) VALUES
@@ -131,19 +139,6 @@ INSERT INTO organization (id, name, original_record, address) VALUES
 ('c43b2ba0-8630-43e5-9558-f59ee9a224f0', 'London First School', '{}', '{"line1": "107 Queen Victoria Street", "city": "London", "postCode": "EC4V 3AL"}');
 
 INSERT INTO organization_member (profile_id, organization_id) VALUES
-('434de6da-cdc5-431b-b109-022854319d69', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- jonpaul.little@teamteach.co.uk
-('77eaddad-ba95-4ab7-9ef7-801b347d6502', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- andrew.winterbotham@nearform.com
-('fa65eb40-e964-481c-a42d-7c6c7a20c7b0', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- grzegorz.ilach@nearform.com
-('bb665826-8ff0-45f7-a75f-babdad3d8e17', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- salman.mitha@nearform.com
-('83156e3f-a075-43b5-b345-dacb06d5b057', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- aneesa.ramzan@teamteach.co.uk
-('aa0302db-e4b4-4fb0-9b54-42082f57b0fd', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- spyridon.chortis@nearform.com
-('99a03e41-f518-49a2-98cd-c77cb2e33483', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- maksym.barvinskyi@nearform.com
-('ab5dc61d-dafa-45a9-abc7-e0d1663f2c3b', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- lefteris.paraskevas@nearform.com
-('7eb8bd38-3048-4416-90d2-4b2299e4633b', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- alex.parra@nearform.com
-('7584edda-3772-447c-9162-25f7fc6a9b38', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- danijel.maksimovic@nearform.com
-('8fc963f5-1942-4e70-9107-7a84fe2e68d5', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- piotr.piech@nearform.com
-('00c5f39b-785a-46f5-8475-ea2d349efaf8', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- wilk.maia@nearform.com
--- test users
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- trainer.with.org@teamteach.testinator.com
 ('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- assistant.with.org@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- user1.with.org@teamteach.testinator.com
