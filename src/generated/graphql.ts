@@ -37342,6 +37342,14 @@ export type StripeCreatePaymentMutationVariables = Exact<{
 
 export type StripeCreatePaymentMutation = { __typename?: 'mutation_root', paymentIntent?: { __typename?: 'StripeCreatePaymentIntentOutput', clientSecret: string, amount: number, currency: Currency } | null };
 
+export type OnboardUserMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  input: Profile_Set_Input;
+}>;
+
+
+export type OnboardUserMutation = { __typename?: 'mutation_root', update_profile_by_pk?: { __typename?: 'profile', id: any } | null };
+
 export type ParticipantTransferQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;

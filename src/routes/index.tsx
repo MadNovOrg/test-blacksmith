@@ -1,10 +1,16 @@
 import { Box } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { Suspense } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import React, { ReactNode, Suspense, useEffect } from 'react'
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 
 import { AppLayout } from '@app/components/AppLayout'
-import { SuspenseLoading } from '@app/components/SuspenseLoading'
+import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { useAuth } from '@app/context/auth'
 import { AutoLogin } from '@app/pages/common/AutoLogin'
 import { AutoRegisterPage } from '@app/pages/common/AutoRegister'
@@ -21,6 +27,7 @@ import { ResetPasswordPage } from '@app/pages/common/ResetPassword'
 import { ContactedConfirmationPage } from '@app/pages/ContactedConfirmation'
 import { InvitationPage } from '@app/pages/Invitation'
 import { OrgInvitationPage } from '@app/pages/Invitation/OrgInvitation'
+import { Onboarding } from '@app/pages/Onboarding'
 import { RoleName } from '@app/types'
 
 const ProfileRoutes = React.lazy(() => import('./profile'))
@@ -106,35 +113,91 @@ function LoggedOutRoutes() {
 }
 
 function LoggedInRoutes() {
-  const { activeRole } = useAuth()
+  const { activeRole, profile } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!profile?.givenName || !profile.familyName) {
+      navigate('onboarding')
+    }
+  }, [profile, navigate])
 
   if (!activeRole) return null
 
   const RouteComp = roleRoutesMap[activeRole]
 
   return (
-    <AppLayout>
-      <Suspense fallback={<SuspenseLoading />}>
-        <Routes>
-          <Route path="profile/*" element={<ProfileRoutes />} />
-          <Route path="booking/*" element={<CourseBookingPage />} />
-          <Route path="booking/done" element={<CourseBookingDone />} />
+    <Routes>
+      <Route
+        path="profile/*"
+        element={
+          <AppShell>
+            <ProfileRoutes />
+          </AppShell>
+        }
+      />
+      <Route
+        path="booking/*"
+        element={
+          <AppShell>
+            <CourseBookingPage />
+          </AppShell>
+        }
+      />
+      <Route
+        path="booking/done"
+        element={
+          <AppShell>
+            <CourseBookingDone />
+          </AppShell>
+        }
+      />
+      <Route
+        path="onboarding"
+        element={
+          <AppLayoutMinimal width={628}>
+            <Suspense fallback={<AppLoading />}>
+              <Onboarding />
+            </Suspense>
+          </AppLayoutMinimal>
+        }
+      />
 
-          {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
-          <Route path="registration" element={<RegistrationPage />} />
+      {/* This is a dummy registration page to capture course/qty for course booking for logged in users */}
+      <Route
+        path="registration"
+        element={
+          <AppShell>
+            <RegistrationPage />
+          </AppShell>
+        }
+      />
 
-          <Route path="*" element={<RouteComp />} />
+      <Route
+        path="*"
+        element={
+          <AppShell>
+            <RouteComp />
+          </AppShell>
+        }
+      />
 
-          <Route path="login/*" element={<Navigate replace to="/" />} />
-        </Routes>
-      </Suspense>
-    </AppLayout>
+      <Route path="login/*" element={<Navigate replace to="/" />} />
+    </Routes>
   )
 }
 
 function RedirectToLogin() {
   const { pathname, search } = useLocation()
   return <Navigate replace to="login" state={{ from: { pathname, search } }} />
+}
+
+function AppShell({ children }: { children: ReactNode }) {
+  return (
+    <AppLayout>
+      <Suspense fallback={<AppLoading />}>{children}</Suspense>
+    </AppLayout>
+  )
 }
 
 function AppLoading() {

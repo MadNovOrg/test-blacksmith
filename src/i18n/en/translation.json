@@ -700,6 +700,13 @@
     }
   },
   "pages": {
+    "onboarding": {
+      "title": "We need a bit more information",
+      "submit-btn-text": "Update information",
+      "tcs-label": "I accept the <1>Terms of Business</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
+      "tcs-required": "Accepting our T&C is required",
+      "error-saving": "We're having issue saving your personal information."
+    },
     "waitlist": {
       "course-full": "Course fully booked",
       "form-errors": {
