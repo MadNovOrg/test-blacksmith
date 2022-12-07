@@ -402,6 +402,15 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
           }
         })
         setValue('roles', formattedRoles)
+      } else {
+        setValue('roles', [
+          {
+            userRole: RoleName.USER,
+            employeeRoles: [],
+            salesRoles: [],
+            trainerRoles: defaultTrainerRoles,
+          },
+        ])
       }
     }
   }, [profile, setValue])
