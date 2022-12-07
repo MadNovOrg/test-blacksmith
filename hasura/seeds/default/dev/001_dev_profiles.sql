@@ -99,10 +99,10 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('c898e47b-99d4-4e5a-a0f2-3b41cf05bab6', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com
 ('34559459-91f6-4fc8-b9c4-0daab3215a70', 'b414536d-29dd-4902-81f9-e808503428ee', 'cognito'), -- trainer10@teamteach.testinator.com staging
 
-('04f81b0c-286b-4415-bf7d-17b3b0f3e991', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
+('83050492-393c-4e3e-94b3-1ffd49014fbb', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com
 ('99707aa6-356e-421b-99b3-aecda469fa7c', '7a35d3ce-cc02-4a66-9446-16b6740bfb23', 'cognito'), -- sales.adm@teamteach.testinator.com staging
 
-('83050492-393c-4e3e-94b3-1ffd49014fbb', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'), -- ld@teamteach.testinator.com
+('04f81b0c-286b-4415-bf7d-17b3b0f3e991', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'), -- ld@teamteach.testinator.com
 ('f6edff23-9ef5-4843-8e13-64610b4cfa41', '6987feba-0877-4a2a-b7da-982de1977eb3', 'cognito'); -- ld@teamteach.testinator.com staging
 
 -- Adding roles to test users

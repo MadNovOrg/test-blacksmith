@@ -17,6 +17,15 @@ insert_permissions:
         - updated_at
       backend_only: false
 select_permissions:
+  - role: unverified
+    permission:
+      columns:
+        - created_at
+        - updated_at
+        - id
+        - profile_id
+        - trainer_role_type_id
+      filter: {}
   - role: user
     permission:
       columns:

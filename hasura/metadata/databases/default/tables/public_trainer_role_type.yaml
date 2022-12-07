@@ -10,6 +10,12 @@ array_relationships:
           schema: public
           name: profile_trainer_role_type
 select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - id
+      filter: {}
   - role: trainer
     permission:
       columns:

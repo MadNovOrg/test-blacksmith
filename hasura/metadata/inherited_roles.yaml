@@ -1,6 +1,9 @@
 - role_name: ld
   role_set:
     - tt-ops
+- role_name: sales-admin
+  role_set:
+    - trainer
 - role_name: trainer
   role_set:
     - user
