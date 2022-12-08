@@ -162,6 +162,33 @@ insert_permissions:
         - registrants
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - order_due
+        - order_total
+        - price
+        - vat
+        - course_id
+        - quantity
+        - registrants
+        - promo_codes
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - currency
+        - payment_method
+        - stripePaymentId
+        - xero_invoice_number
+        - created_at
+        - id
+        - organization_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:

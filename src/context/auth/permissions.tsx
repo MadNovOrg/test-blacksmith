@@ -31,7 +31,12 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewAdmin: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
@@ -41,27 +46,48 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_OPS,
         RoleName.TT_ADMIN,
         RoleName.LD,
+        RoleName.SALES_ADMIN,
       ]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewCertifications: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewOrders: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewAllOrganizations: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 
     canViewOrganizations: () => {
-      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.LD]
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
 
@@ -122,11 +148,13 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canManageOrgCourses: () => {
-      return (
-        auth.isOrgAdmin ||
-        auth.activeRole === RoleName.TT_ADMIN ||
-        auth.activeRole === RoleName.LD
-      )
+      const roles = [
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.LD,
+        RoleName.SALES_ADMIN,
+      ]
+      return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
 
     canSeeWaitingLists: () => {

@@ -1,6 +1,18 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
+import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
+import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
+import Organizations from '@app/pages/admin/components/Organizations'
+import { CreateOrganization } from '@app/pages/admin/components/Organizations/CreateOrganization'
+import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
+import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
+import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import { Certifications } from '@app/pages/tt-pages/Certifications'
+import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
+import { Orders } from '@app/pages/tt-pages/Orders'
+
 const NotFound = React.lazy(() =>
   import('@app/pages/common/NotFound').then(module => ({
     default: module.NotFound,
@@ -62,7 +74,17 @@ const MyCourses = React.lazy(() =>
 const SalesAdminRoutes = () => {
   return (
     <Routes>
-      <Route index element={<Navigate replace to="courses" />} />
+      <Route index element={<Navigate replace to="manage-courses" />} />
+
+      <Route path="manage-courses">
+        <Route index element={<Navigate replace to="all" />} />
+        <Route path=":orgId">
+          <Route index element={<ManageCourses />} />
+          <Route path=":id">
+            <Route path="details" element={<TrainerCourseDetails />} />
+          </Route>
+        </Route>
+      </Route>
 
       <Route path="courses">
         <Route index element={<MyCourses />} />
@@ -80,6 +102,26 @@ const SalesAdminRoutes = () => {
           <Route index element={<Navigate replace to="details" />} />
           <Route path="details" element={<CourseDetails />} />
         </Route>
+      </Route>
+
+      <Route path="organizations">
+        <Route index element={<Navigate replace to="all" />} />
+        <Route path="new" element={<CreateOrganization />} />
+        <Route path="list" element={<Organizations />} />
+        <Route path=":id">
+          <Route index element={<OrgDashboard />} />
+          <Route path="edit" element={<EditOrgDetails />} />
+          <Route path="invite" element={<InviteUserToOrganization />} />
+          <Route path="courses" element={<AvailableCourses />} />
+        </Route>
+      </Route>
+
+      <Route path="certifications" element={<Certifications />} />
+
+      <Route path="orders">
+        <Route index element={<Orders />} />
+
+        <Route path=":id" element={<OrderDetails />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
