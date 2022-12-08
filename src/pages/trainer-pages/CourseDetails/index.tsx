@@ -91,12 +91,15 @@ export const CourseDetails = () => {
     (course.status === Course_Status_Enum.Cancelled ||
       course.status === Course_Status_Enum.Declined)
 
+  const exceptionsApprovalPending =
+    course?.status === Course_Status_Enum.ExceptionsApprovalPending
+
   const courseExceptions = useMemo(() => {
     if (
       !acl.isLD() ||
       !course ||
       !course.trainers ||
-      course.status !== Course_Status_Enum.ExceptionsApprovalPending
+      !exceptionsApprovalPending
     )
       return []
 
@@ -129,7 +132,7 @@ export const CourseDetails = () => {
         )) ??
         false
     )
-  }, [acl, course])
+  }, [acl, course, exceptionsApprovalPending])
 
   const onExceptionsReject = useCallback(async () => {
     if (!course) return
@@ -212,7 +215,7 @@ export const CourseDetails = () => {
                 onChange={mutate}
               />
 
-              {courseExceptions?.length > 0 ? (
+              {exceptionsApprovalPending ? (
                 <Alert
                   severity="warning"
                   variant="outlined"

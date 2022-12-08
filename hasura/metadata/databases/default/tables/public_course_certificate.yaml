@@ -125,6 +125,8 @@ select_permissions:
         - status
       filter:
         _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
           - course:
               trainers:
                 profile_id:

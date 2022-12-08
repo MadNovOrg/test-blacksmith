@@ -160,6 +160,28 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       : 0
   }, [courseData])
 
+  const saveModules = useCallback(
+    async (modules: ModuleGroup[]) => {
+      const course = courseData?.course
+      if (!course) return
+
+      const mappedModules = modules.flatMap(moduleGroup =>
+        moduleGroup.modules.map(module => ({
+          courseId: course.id,
+          moduleId: module.id,
+        }))
+      )
+      if (modules.length) {
+        await fetcher(SaveCourseModules, {
+          courseId: course.id,
+          modules: mappedModules,
+        })
+        await mutateCourse()
+      }
+    },
+    [courseData, fetcher, mutateCourse]
+  )
+
   useEffect(() => {
     if (availableModules.length === 0 && modulesData && courseData) {
       const addedModuleGroupIds = new Set<string>(
@@ -193,8 +215,11 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           draggableId: `course-modules-slot-drag-${i}`,
         }))
       )
+      if (!courseData.course?.moduleGroupIds.length) {
+        saveModules(modules.mandatory)
+      }
     }
-  }, [availableModules, mandatoryModules, modulesData, courseData])
+  }, [availableModules, mandatoryModules, modulesData, courseData, saveModules])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     async result => {
@@ -342,7 +367,9 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       )
       const exceptions = checkCourseDetailsForExceptions(
         {
-          startDateTime: courseData.course.dates?.aggregate?.start?.date,
+          startDateTime: new Date(
+            courseData.course.dates?.aggregate?.start?.date
+          ),
           courseLevel: (courseData.course.level ??
             CourseLevel.Level_1) as CourseLevel,
           maxParticipants: courseData.course.max_participants,
