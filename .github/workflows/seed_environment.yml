@@ -24,6 +24,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm set-script prepare "" && npm ci
+
       - name: Install Hasura CLI
         run: |
           curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | VERSION=v2.6.1 bash
@@ -37,3 +46,6 @@ jobs:
           hasura metadata reload --admin-secret $SECRET --endpoint $ENDPOINT
           echo Hasura Seed Apply
           hasura seed apply --admin-secret $SECRET --endpoint $ENDPOINT --database-name default
+
+      - name: Seed orders
+        run: npm run seed:orders
