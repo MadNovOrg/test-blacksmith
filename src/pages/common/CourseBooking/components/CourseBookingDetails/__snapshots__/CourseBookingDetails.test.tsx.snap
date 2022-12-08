@@ -502,17 +502,11 @@ Object {
           Payment details
         </h6>
         <div
-          class="MuiBox-root css-j08n2y"
+          class="MuiBox-root css-urreo2"
         >
           <div
             class="MuiFormControl-root css-18lcray-MuiFormControl-root"
           >
-            <label
-              class="MuiFormLabel-root MuiFormLabel-colorPrimary css-1s3hik4-MuiFormLabel-root"
-              id="payment-method"
-            >
-              Payment method
-            </label>
             <div
               aria-labelledby="payment-method"
               class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
@@ -648,7 +642,7 @@ After you confirm your order you will be taken to a secure page where you can pa
             </div>
           </div>
           <div
-            class="MuiBox-root css-10h6yx"
+            class="MuiBox-root css-19midj6"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-1wyi116-MuiTypography-root"
@@ -1445,17 +1439,11 @@ After you confirm your order you will be taken to a secure page where you can pa
         Payment details
       </h6>
       <div
-        class="MuiBox-root css-j08n2y"
+        class="MuiBox-root css-urreo2"
       >
         <div
           class="MuiFormControl-root css-18lcray-MuiFormControl-root"
         >
-          <label
-            class="MuiFormLabel-root MuiFormLabel-colorPrimary css-1s3hik4-MuiFormLabel-root"
-            id="payment-method"
-          >
-            Payment method
-          </label>
           <div
             aria-labelledby="payment-method"
             class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
@@ -1591,7 +1579,7 @@ After you confirm your order you will be taken to a secure page where you can pa
           </div>
         </div>
         <div
-          class="MuiBox-root css-10h6yx"
+          class="MuiBox-root css-19midj6"
         >
           <p
             class="MuiTypography-root MuiTypography-body1 css-1wyi116-MuiTypography-root"
@@ -2451,17 +2439,11 @@ Object {
           Payment details
         </h6>
         <div
-          class="MuiBox-root css-j08n2y"
+          class="MuiBox-root css-urreo2"
         >
           <div
             class="MuiFormControl-root css-18lcray-MuiFormControl-root"
           >
-            <label
-              class="MuiFormLabel-root MuiFormLabel-colorPrimary css-1s3hik4-MuiFormLabel-root"
-              id="payment-method"
-            >
-              Payment method
-            </label>
             <div
               aria-labelledby="payment-method"
               class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
@@ -2597,7 +2579,7 @@ After you confirm your order you will be taken to a secure page where you can pa
             </div>
           </div>
           <div
-            class="MuiBox-root css-10h6yx"
+            class="MuiBox-root css-19midj6"
           >
             <p
               class="MuiTypography-root MuiTypography-body1 css-1wyi116-MuiTypography-root"
@@ -3345,17 +3327,11 @@ After you confirm your order you will be taken to a secure page where you can pa
         Payment details
       </h6>
       <div
-        class="MuiBox-root css-j08n2y"
+        class="MuiBox-root css-urreo2"
       >
         <div
           class="MuiFormControl-root css-18lcray-MuiFormControl-root"
         >
-          <label
-            class="MuiFormLabel-root MuiFormLabel-colorPrimary css-1s3hik4-MuiFormLabel-root"
-            id="payment-method"
-          >
-            Payment method
-          </label>
           <div
             aria-labelledby="payment-method"
             class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
@@ -3491,7 +3467,7 @@ After you confirm your order you will be taken to a secure page where you can pa
           </div>
         </div>
         <div
-          class="MuiBox-root css-10h6yx"
+          class="MuiBox-root css-19midj6"
         >
           <p
             class="MuiTypography-root MuiTypography-body1 css-1wyi116-MuiTypography-root"

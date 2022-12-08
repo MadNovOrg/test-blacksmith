@@ -9,7 +9,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  FormLabel,
   IconButton,
   InputLabel,
   MenuItem,
@@ -214,7 +213,7 @@ export const CourseBookingDetails: React.FC = () => {
                 <NativeSelect
                   inputProps={{ id: 'qty-select' }}
                   disabled={booking.courseType === CourseType.CLOSED}
-                  {...register('quantity')}
+                  {...register('quantity', { valueAsNumber: true })}
                 >
                   {qtyOptions.map(o => (
                     <option key={o} value={o}>
@@ -453,7 +452,7 @@ export const CourseBookingDetails: React.FC = () => {
         <Typography variant="subtitle1" fontWeight="500">
           {t('pages.book-course.payment-details')}
         </Typography>
-        <Box bgcolor="common.white" p={2} mb={4}>
+        <Box bgcolor="common.white" p={2} pt={4} mb={4}>
           <FormControl
             sx={{
               '& .MuiRadio-root': { paddingY: 0 },
@@ -463,9 +462,6 @@ export const CourseBookingDetails: React.FC = () => {
               },
             }}
           >
-            <FormLabel id="payment-method" sx={{ mb: 2, fontWeight: '600' }}>
-              {t('pages.book-course.payment-method')}
-            </FormLabel>
             <Controller
               rules={{ required: true }}
               control={control}
@@ -508,7 +504,7 @@ export const CourseBookingDetails: React.FC = () => {
           </FormControl>
 
           {values.paymentMethod === PaymentMethod.Invoice ? (
-            <Box bgcolor="grey.100" p={2}>
+            <Box p={2}>
               <Typography variant="body1" fontWeight="600" mb={3}>
                 {t('invoice-contact')}
               </Typography>

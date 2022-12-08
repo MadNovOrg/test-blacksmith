@@ -370,8 +370,9 @@ Object {
             />
           </button>
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-hhrqw7-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             disabled=""
+            id="mui-2"
             tabindex="-1"
             type="button"
           >
@@ -747,8 +748,9 @@ Object {
           />
         </button>
         <button
-          class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+          class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-hhrqw7-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
           disabled=""
+          id="mui-2"
           tabindex="-1"
           type="button"
         >
@@ -1208,8 +1210,9 @@ Object {
             />
           </button>
           <button
-            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-hhrqw7-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             disabled=""
+            id="mui-1"
             tabindex="-1"
             type="button"
           >
@@ -1557,8 +1560,9 @@ Object {
           />
         </button>
         <button
-          class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-u3jo4d-MuiButtonBase-root-MuiButton-root"
+          class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-hhrqw7-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
           disabled=""
+          id="mui-1"
           tabindex="-1"
           type="button"
         >

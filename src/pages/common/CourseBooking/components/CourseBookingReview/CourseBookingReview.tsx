@@ -1,7 +1,7 @@
+import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -287,14 +287,15 @@ export const CourseBookingReview: React.FC = () => {
 
       <Box display="flex" justifyContent="space-between" mt={0}>
         <BackButton label={t('pages.book-course.back-to-booking')} />
-        <Button
+        <LoadingButton
           variant="contained"
           color="primary"
           onClick={handleConfirmBooking}
-          disabled={!accept || creatingOrder}
+          disabled={!accept}
+          loading={creatingOrder}
         >
           {t('pages.book-course.complete-booking')}
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   )
