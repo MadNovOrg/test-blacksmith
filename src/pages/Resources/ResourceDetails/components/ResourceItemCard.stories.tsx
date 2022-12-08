@@ -18,10 +18,8 @@ const props: Props = {
   resource: {
     id: '1',
     title: '2015 Children Homes Standards Summary',
-    resourceType: {
+    resourceAttachment: {
       resourcetype: 'pdf',
-    },
-    downloads: {
       file: {
         mediaItemUrl: 'https://dummy-url',
       },

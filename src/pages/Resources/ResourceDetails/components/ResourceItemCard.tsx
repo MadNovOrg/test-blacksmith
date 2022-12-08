@@ -16,7 +16,11 @@ const iconsByResourceType: Record<string, ReactNode> = {
 }
 
 export const ResourceItemCard = ({ resource }: Props) => {
-  const resourceType = resource.resourceType?.resourcetype
+  const resourceType = resource.resourceAttachment?.resourcetype
+  const attachmentURL =
+    resourceType === 'video'
+      ? resource.resourceAttachment?.videourl
+      : resource.resourceAttachment?.file?.mediaItemUrl
 
   return (
     <Card sx={{ boxShadow: 'none', p: 1 }}>
@@ -29,11 +33,7 @@ export const ResourceItemCard = ({ resource }: Props) => {
         >
           {resource.title}
         </Typography>
-        <Link
-          target="_blank"
-          component={'a'}
-          href={resource.downloads?.file?.mediaItemUrl ?? ''}
-        >
+        <Link target="_blank" component={'a'} href={attachmentURL ?? ''}>
           <LaunchIcon fontSize="small" />
         </Link>
       </Box>

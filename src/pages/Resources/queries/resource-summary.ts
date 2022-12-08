@@ -4,10 +4,9 @@ export const RESOURCE_SUMMARY = gql`
   fragment ResourceSummary on Resource {
     id
     title
-    resourceType {
+    resourceAttachment {
       resourcetype
-    }
-    downloads {
+      videourl
       file {
         mediaItemUrl
       }
