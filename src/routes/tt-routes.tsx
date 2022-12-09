@@ -29,6 +29,10 @@ import {
 } from '@app/pages/trainer-pages/CourseDetails'
 import { CourseGrading } from '@app/pages/trainer-pages/CourseGrading'
 import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
+import { CourseGradingDetails } from '@app/pages/trainer-pages/CourseGradingDetails'
+import { CourseAttendance } from '@app/pages/trainer-pages/CourseGradingDetails/CourseAttendance'
+import { ModulesSelection } from '@app/pages/trainer-pages/CourseGradingDetails/ModulesSelection'
+import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { AdminTransferParticipantPage } from '@app/pages/TransferParticipant/AdminTransferParticipant'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
@@ -40,6 +44,7 @@ import { DiscountCreate, DiscountsList } from '@app/pages/tt-pages/Discounts'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
 import { XeroConnect } from '@app/pages/tt-pages/Xero'
+import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 
@@ -79,6 +84,15 @@ const TTAdminRoutes = () => {
             path="grading/:participantId"
             element={<ParticipantGrading />}
           />
+          <Route path="grading-details" element={<CourseGradingDetails />}>
+            <Route element={<CourseAttendance />} index />
+            <Route path="modules" element={<ModulesSelection />} />
+          </Route>
+          <Route path="evaluation">
+            <Route path="view" element={<CourseEvaluation />} />
+            <Route path="summary" element={<EvaluationSummary />} />
+          </Route>
+
           <Route
             path="transfer/:participantId"
             element={<AdminTransferParticipantPage />}

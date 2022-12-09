@@ -37533,7 +37533,7 @@ export type GetFeedbackUsersQueryVariables = Exact<{
 }>;
 
 
-export type GetFeedbackUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'course_evaluation_answers', profile: { __typename?: 'profile', id: any, fullName?: string | null } }> };
+export type GetFeedbackUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'course_evaluation_answers', profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }> };
 
 export type GetCourseEvaluationQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
 

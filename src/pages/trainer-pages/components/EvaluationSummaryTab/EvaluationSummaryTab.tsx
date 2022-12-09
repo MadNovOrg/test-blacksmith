@@ -181,7 +181,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
             <Button
               variant="outlined"
               color="primary"
-              disabled={!didTrainerSubmitEvaluation}
+              disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
               data-testid="export-summary"
               onClick={() => setIsPDFExporting(true)}
             >
@@ -193,7 +193,7 @@ export const EvaluationSummaryTab: React.FC<unknown> = () => {
               variant="contained"
               color="primary"
               href="../evaluation/summary"
-              disabled={!didTrainerSubmitEvaluation}
+              disabled={!didTrainerSubmitEvaluation && isCourseTrainer}
               data-testid="view-summary-evaluation"
               sx={{ ml: 1 }}
             >

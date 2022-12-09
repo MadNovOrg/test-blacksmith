@@ -117,8 +117,7 @@ export const CourseEvaluation = () => {
               {
                 id: a.profile.id,
                 name: a.profile.fullName,
-                avatar:
-                  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80', // TODO:
+                avatar: a.profile.avatar,
               },
             ]
       ) ?? [],
@@ -252,7 +251,7 @@ export const CourseEvaluation = () => {
     return null
   }
 
-  if (!canSubmitFeedback) {
+  if (!canSubmitFeedback && !readOnly) {
     return <Navigate to="../details" />
   }
 

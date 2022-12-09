@@ -2,7 +2,7 @@ import { gql } from 'graphql-request'
 
 export type ResponseType = {
   users: {
-    profile: { id: string; fullName: string }
+    profile: { id: string; fullName: string; avatar?: string }
   }[]
 }
 
@@ -17,6 +17,7 @@ export const QUERY = gql`
       profile {
         id
         fullName
+        avatar
       }
     }
   }

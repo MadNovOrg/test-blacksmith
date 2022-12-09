@@ -10,7 +10,7 @@ type AttendeeMenuProps = {
   options: {
     id: string
     name: string
-    avatar: string
+    avatar?: string
   }[]
   value?: string
   placeholder?: string
@@ -80,7 +80,7 @@ export const AttendeeMenu: React.FC<AttendeeMenuProps> = ({
             }}
             disableRipple
           >
-            <Avatar src={u.avatar} name={u.name} sx={{ mr: 1 }} />
+            <Avatar src={u.avatar ?? ''} name={u.name} sx={{ mr: 1 }} />
             {u.name}
           </MenuItem>
         ))}

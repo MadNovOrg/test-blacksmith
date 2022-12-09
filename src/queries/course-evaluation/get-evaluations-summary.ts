@@ -11,6 +11,7 @@ export type ResponseType = {
     profile: {
       id: string
       fullName: string
+      avatar?: string
     }
     answer: string
     question: {
