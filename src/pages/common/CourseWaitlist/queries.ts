@@ -1,0 +1,44 @@
+import { gql } from 'urql'
+
+export const WAITLIST_COURSE = gql`
+  query WaitlistCourse($id: Int!) {
+    courses: course(
+      limit: 1
+      where: {
+        id: { _eq: $id }
+        type: { _eq: OPEN }
+        status: {
+          _in: [
+            CONFIRM_MODULES
+            SCHEDULED
+            TRAINER_MISSING
+            TRAINER_PENDING
+            TRAINER_UNAVAILABLE
+          ]
+        }
+      }
+    ) {
+      id
+      name
+      schedule {
+        end
+        start
+        venue {
+          name
+          addressLineOne
+          addressLineTwo
+          city
+          postCode
+        }
+      }
+    }
+  }
+`
+
+export const JOIN_WAITLIST = gql`
+  mutation JoinWaitlist($input: waitlist_insert_input!) {
+    waitlist: insert_waitlist(objects: [$input]) {
+      affected_rows
+    }
+  }
+`

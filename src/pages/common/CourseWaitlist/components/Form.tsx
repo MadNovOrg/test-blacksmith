@@ -1,26 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
-import {
-  Box,
-  FormHelperText,
-  Grid,
-  styled,
-  TextField as MuiTextField,
-} from '@mui/material'
+import { Box, Grid, styled, TextField as MuiTextField } from '@mui/material'
 import MuiPhoneNumber from 'material-ui-phone-number'
-import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useMemo } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { InferType } from 'yup'
 
-import { OrgSelector } from '@app/components/OrgSelector'
-import { gqlRequest } from '@app/lib/gql-request'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/booking/insert-waitlist'
-
-import { FormInputs, getFormSchema } from './types'
+import { getFormSchema } from './types'
 
 const onlyCountries = ['au', 'gb']
 
@@ -30,15 +17,15 @@ const TextField = styled(MuiTextField)(() => ({
   },
 }))
 
+export type FormInputs = InferType<ReturnType<typeof getFormSchema>>
+
 type Props = {
-  onSuccess: (email: string) => void
-  courseId: number
+  onSuccess: (data: FormInputs) => void
+  saving: boolean
 }
 
-export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
+export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
   const { t } = useTranslation()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const schema = useMemo(() => getFormSchema(t), [t])
 
@@ -61,33 +48,8 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
 
   const values = watch()
 
-  const onSubmit = async (data: FormInputs) => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const input = {
-        email: data.email,
-        givenName: data.firstName,
-        familyName: data.surname,
-        phone: data.phone,
-        orgName: data.orgName,
-        courseId,
-      }
-
-      await gqlRequest<ResponseType, ParamsType>(MUTATION, { input })
-
-      setLoading(false)
-
-      onSuccess(data.email)
-    } catch (err) {
-      console.log(err)
-      const { code = 'UnknownError' } = err as Error & { code: string }
-      setError(
-        t(`pages.waitlist.form-errors.${code}`) || t(`form-errors.UnknownError`)
-      )
-      setLoading(false)
-    }
+  const onSubmit: SubmitHandler<FormInputs> = data => {
+    onSuccess(data)
   }
 
   return (
@@ -171,44 +133,32 @@ export const Form: React.FC<Props> = ({ onSuccess, courseId }) => {
         </Box>
 
         <Box mb={3}>
-          <OrgSelector
-            allowAdding
-            onChange={org => {
-              setValue('orgName', org?.name ?? '', { shouldValidate: true })
-            }}
-            textFieldProps={{
-              required: true,
-              variant: 'standard',
-              inputProps: {
-                'data-testid': 'input-orgName',
-                sx: { height: 40 },
-              },
-              label: t('common.org-name'),
-            }}
-            sx={{
-              bgcolor: 'grey.100',
-            }}
-            error={errors.orgName?.message}
+          <TextField
+            id="orgName"
+            label={t('org-name')}
+            variant="standard"
+            placeholder={t('orgName-placeholder')}
+            error={!!errors.orgName}
+            helperText={errors.orgName?.message}
+            {...register('orgName')}
+            inputProps={{ 'data-testid': 'input-orgName' }}
+            sx={{ bgcolor: 'grey.100' }}
+            fullWidth
+            required
           />
         </Box>
 
         <Box display="flex" flexDirection="column" alignItems="center">
           <LoadingButton
-            loading={loading}
             type="submit"
             variant="contained"
             color="primary"
             data-testid="btn-submit"
             size="large"
+            loading={saving}
           >
             {t('join-waitlist')}
           </LoadingButton>
-
-          {error ? (
-            <FormHelperText sx={{ mt: 2 }} error data-testid="form-error">
-              {error}
-            </FormHelperText>
-          ) : null}
         </Box>
       </Box>
     </>

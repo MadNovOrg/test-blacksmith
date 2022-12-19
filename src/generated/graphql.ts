@@ -37388,6 +37388,20 @@ export type TransferParticipantMutationVariables = Exact<{
 
 export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: string | null } | null };
 
+export type WaitlistCourseQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type WaitlistCourseQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, name: string, schedule: Array<{ __typename?: 'course_schedule', end: any, start: any, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string } | null }> }> };
+
+export type JoinWaitlistMutationVariables = Exact<{
+  input: Waitlist_Insert_Input;
+}>;
+
+
+export type JoinWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affected_rows: number } | null };
+
 export type CourseGradingDataQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;

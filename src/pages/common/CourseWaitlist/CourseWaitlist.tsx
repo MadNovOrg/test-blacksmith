@@ -1,38 +1,21 @@
-import PinDropIcon from '@mui/icons-material/PinDrop'
-import TodayIcon from '@mui/icons-material/Today'
-import {
-  Alert,
-  Box,
-  Button,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Typography,
-  styled,
-  Stack,
-  CircularProgress,
-} from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, Typography, styled, Alert } from '@mui/material'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
+import { useMutation, useQuery } from 'urql'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
-import { LinkBehavior } from '@app/components/LinkBehavior'
-import useCourse from '@app/hooks/useCourse'
 import {
-  getCourseDurationMessage,
-  getTimeDifferenceAndContext,
-  LoadingStatus,
-} from '@app/util'
+  JoinWaitlistMutation,
+  JoinWaitlistMutationVariables,
+  WaitlistCourseQuery,
+  WaitlistCourseQueryVariables,
+} from '@app/generated/graphql'
 
-import { Form } from './components/Form'
-
-const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
-  minWidth: '32px',
-  color: theme.palette.secondary.main,
-}))
+import { CourseInfo, CourseInfoSkeleton } from './components/CourseInfo'
+import { Form, FormInputs } from './components/Form'
+import { JoinedWaitlist } from './components/JoinedWaitlist'
+import { JOIN_WAITLIST, WAITLIST_COURSE } from './queries'
 
 const StyledMailToLink = styled('a')(({ theme }) => ({
   fontSize: '1rem',
@@ -44,70 +27,47 @@ const StyledMailToLink = styled('a')(({ theme }) => ({
   },
 }))
 
-const VenueAddressField: React.FC<{ field: string }> = ({ field }) => (
-  <ListItem disableGutters disablePadding>
-    <ListItemText sx={{ paddingLeft: 4 }}>
-      {' '}
-      <Typography variant="body2">{field}</Typography>
-    </ListItemText>
-  </ListItem>
-)
-
 export const CourseWaitlist: React.FC = () => {
   const { t } = useTranslation()
-  const [email, setEmail] = useState<string | null>(null)
   const [searchParams] = useSearchParams()
-  const [courseDurationMessage, setCourseDurationMessage] = useState('')
   const courseId = searchParams.get('course_id')
+  const emailRef = useRef('')
 
-  const { data: course, status: courseLoadingStatus } = useCourse(
-    courseId ?? ''
+  const [{ data, fetching }] = useQuery<
+    WaitlistCourseQuery,
+    WaitlistCourseQueryVariables
+  >({
+    query: WAITLIST_COURSE,
+    variables: { id: Number(courseId) ?? 0 },
+  })
+  const [
+    { data: joinedWaitlist, fetching: joiningWaitlist },
+    joinWaitlistMutation,
+  ] = useMutation<JoinWaitlistMutation, JoinWaitlistMutationVariables>(
+    JOIN_WAITLIST
   )
 
-  useEffect(() => {
-    if (course) {
-      const duration = getTimeDifferenceAndContext(
-        new Date(course.schedule[0].end),
-        new Date(course.schedule[0].start)
-      )
-      setCourseDurationMessage(getCourseDurationMessage(duration, t))
-    }
-  }, [course, t])
+  const course = data?.courses.length ? data.courses[0] : null
 
-  if (email) {
-    return (
-      <AppLayoutMinimal width={628}>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <Alert
-            variant="outlined"
-            color="success"
-            sx={{ mb: 3 }}
-            data-testid="success-alert"
-          >
-            {t('waitlist-added')}
-          </Alert>
-
-          <Typography
-            variant="subtitle1"
-            fontWeight="500"
-            mb={2}
-            textAlign="center"
-          >
-            {t('confirmation-email-sent', { email })}
-          </Typography>
-
-          <Button
-            variant="contained"
-            color="primary"
-            component={LinkBehavior}
-            href="/"
-          >
-            {t('goto-tt')}
-          </Button>
-        </Box>
-      </AppLayoutMinimal>
-    )
+  const joinWaitlist = (data: FormInputs) => {
+    emailRef.current = data.email ?? ''
+    joinWaitlistMutation({
+      input: {
+        courseId: Number(courseId),
+        givenName: data.firstName,
+        familyName: data.surname,
+        phone: data.phone,
+        email: data.email,
+        orgName: data.orgName,
+      },
+    })
   }
+
+  if (joinedWaitlist?.waitlist?.affected_rows && emailRef.current) {
+    return <JoinedWaitlist email={emailRef.current} />
+  }
+
+  const courseFound = course && !fetching
 
   return (
     <AppLayoutMinimal
@@ -134,114 +94,31 @@ export const CourseWaitlist: React.FC = () => {
         >
           {t('join-waitlist-title')}
         </Typography>
-        <Typography variant="body1" textAlign="center" color="grey.700" mb={4}>
-          {t('join-waitlist-notice')}
-        </Typography>
+        {courseFound ? (
+          <Typography
+            variant="body1"
+            textAlign="center"
+            color="grey.700"
+            mb={4}
+          >
+            {t('join-waitlist-notice')}
+          </Typography>
+        ) : null}
+
+        {fetching && !course ? <CourseInfoSkeleton /> : null}
+
+        {course ? <CourseInfo course={course} /> : null}
       </Box>
-      {course ? (
-        <>
-          {courseLoadingStatus === LoadingStatus.FETCHING ? (
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              data-testid="course-fetching"
-            >
-              <CircularProgress />
-            </Stack>
-          ) : (
-            <>
-              <Typography variant="body1" fontWeight={600} pb={2}>
-                {course.name}
-              </Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <List dense disablePadding>
-                    <ListItem disableGutters disablePadding>
-                      <StyledListIcon>
-                        <TodayIcon />
-                      </StyledListIcon>
-                      <ListItemText>
-                        {t('pages.course-participants.course-beggins')}{' '}
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          fontWeight={600}
-                        >
-                          {t('dates.withTime', {
-                            date: course.schedule[0].start,
-                          })}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                    <ListItem disableGutters disablePadding>
-                      <ListItemText sx={{ paddingLeft: 4 }}>
-                        {t('pages.course-participants.course-ends')}{' '}
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          fontWeight={600}
-                        >
-                          {t('dates.withTime', {
-                            date: course.schedule[0].end,
-                          })}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                    <ListItem disableGutters disablePadding>
-                      <ListItemText sx={{ paddingLeft: 4 }}>
-                        <Typography variant="body2">
-                          {courseDurationMessage}
-                        </Typography>
-                      </ListItemText>
-                    </ListItem>
-                  </List>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <List dense disablePadding>
-                    <ListItem disableGutters disablePadding>
-                      <StyledListIcon>
-                        <PinDropIcon />
-                      </StyledListIcon>
-                      {course.schedule[0].venue?.name && (
-                        <ListItemText>
-                          {' '}
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            fontWeight={600}
-                          >
-                            {course.schedule[0].venue?.name}
-                          </Typography>
-                        </ListItemText>
-                      )}
-                    </ListItem>
-                    {course.schedule[0].venue?.addressLineOne && (
-                      <VenueAddressField
-                        field={course.schedule[0].venue?.addressLineOne}
-                      />
-                    )}
-                    {course.schedule[0].venue?.addressLineTwo && (
-                      <VenueAddressField
-                        field={course.schedule[0].venue?.addressLineTwo}
-                      />
-                    )}
-                    {course.schedule[0].venue?.city && (
-                      <VenueAddressField
-                        field={`${course.schedule[0].venue?.city}${
-                          course.schedule[0].venue?.postCode
-                            ? ', ' + course.schedule[0].venue.postCode
-                            : ''
-                        }`}
-                      />
-                    )}
-                  </List>
-                </Grid>
-              </Grid>
-            </>
-          )}
-        </>
+
+      {!course && !fetching ? (
+        <Alert variant="outlined" severity="error" sx={{ mt: 2 }}>
+          {t('waitlist-not-found')}
+        </Alert>
       ) : null}
-      {courseId ? <Form onSuccess={setEmail} courseId={+courseId} /> : null}
+
+      {course && !fetching ? (
+        <Form onSuccess={joinWaitlist} saving={joiningWaitlist} />
+      ) : null}
     </AppLayoutMinimal>
   )
 }

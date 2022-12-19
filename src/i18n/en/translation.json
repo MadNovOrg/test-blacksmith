@@ -37,6 +37,7 @@
     "join-waitlist-title": "Join the course waiting list",
     "join-waitlist-notice": "The course you are interested in is currently full. We will notify you via email if a space becomes available.",
     "waitlist-added": "You’ve been added to the course waitlist.",
+    "waitlist-not-found": "It seems like a course your trying to join the waitlist doesn't exist anymore.",
     "confirmation-email-sent": "A confirmation email has been sent to {{email}}.",
     "users": "Users",
     "courses": "Courses",

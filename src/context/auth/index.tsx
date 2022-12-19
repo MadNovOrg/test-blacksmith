@@ -64,8 +64,13 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   const getJWT = useCallback(async () => {
-    const session = await Auth.currentSession()
-    return session.getIdToken().getJwtToken()
+    try {
+      const session = await Auth.currentSession()
+      return session.getIdToken().getJwtToken()
+    } catch (err) {
+      console.error(err)
+      return ''
+    }
   }, [])
 
   const changeRole = useCallback(
