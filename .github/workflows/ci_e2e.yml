@@ -38,10 +38,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Build
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16.3.0'
           cache: 'npm'
@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: npm set-script prepare "" && npm ci
 
-      - name: Hasura Migration Validation Up/Down
+      - name: Hasura Migration
         run: |
           cp hasura/.env.sample hasura/.env
           npm run hasura -- metadata apply
@@ -69,11 +69,12 @@ jobs:
           npx playwright install chromium
 
       - name: Playwright tests
-        run: npm run test:e2e:smoke
+        id: playwright
+        run: TARGET_ENV=local npm run test:e2e:smoke
 
       - name: Playwright report
-        uses: actions/upload-artifact@v2
-        if: failure()
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.playwright.outcome == 'failure'
         with:
           name: test-artifacts
           path: |

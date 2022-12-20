@@ -70,7 +70,10 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async checkSuccessMessage(text: string) {
-    await expect(this.successMessage).toHaveText(text)
+    const successMessageVisible = await this.successMessage.isVisible()
+    if (successMessageVisible) {
+      await expect(this.successMessage).toHaveText(text)
+    }
   }
 
   async checkInvitesLeftText(text: string) {

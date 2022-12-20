@@ -71,64 +71,7 @@ export const getClient = () => {
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   const query = gql`
     query MyQuery {
-      course(
-        where: {
-          _or: [
-            {
-              trainers: {
-                profile: {
-                  email: { _eq: "${email}" }
-                }
-              }
-            }
-            {
-              _and: [
-                { type: { _eq: OPEN } }
-                {
-                  participants: {
-                    profile: {
-                      organizations: {
-                        organization: {
-                          members: {
-                            _and: [
-                              { isAdmin: { _eq: true } }
-                              {
-                                profile: {
-                                  email: {
-                                    _eq: "${email}"
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-            {
-              organization: {
-                members: {
-                  _and: [
-                    {
-                      profile: {
-                        email: {
-                          _eq: "${email}"
-                        }
-                      }
-                    }
-                    { isAdmin: { _eq: true } }
-                  ]
-                }
-              }
-            }
-            { _and: [{ type: { _eq: OPEN } }, { status: { _eq: SCHEDULED } }] }
-          ]
-        }
-        order_by: { name: asc }
-      ) {
+      course(where: {_and: {trainers: {profile: {email: {_eq: "${email}"}}}, status: {_nin: [CONFIRM_MODULES, TRAINER_PENDING]}}}) {
         id
         deliveryType
         description

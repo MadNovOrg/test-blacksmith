@@ -28,9 +28,7 @@ for (const data of MODULES_SETUP) {
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto()
     await myCoursesPage.searchCourse(`${course.id}`)
-    const courseBuilderPage = await myCoursesPage.clickCourseBuildButton(
-      course.id
-    )
+    const courseBuilderPage = await myCoursesPage.clickCourse(course.id)
     await courseBuilderPage.checkMandatoryModules(data.mandatoryModules)
     await courseBuilderPage.checkAvailableModules(data.optionalModules)
     await courseBuilderPage.checkEstimatedDuration(data.durationBefore)

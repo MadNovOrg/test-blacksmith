@@ -39,7 +39,7 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-test('course evaluation', async ({ browser, course }) => {
+test.skip('course evaluation', async ({ browser, course }) => {
   test.setTimeout(60000)
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),

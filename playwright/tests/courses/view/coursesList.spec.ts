@@ -46,20 +46,24 @@ const test = base.extend<{
 })
 test.use({ storageState: stateFilePath('trainerWithOrg') })
 
-test('my courses view @smoke', async ({ page, coursesToView }) => {
+test.skip('my courses view @smoke', async ({ page, coursesToView }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.checkRows(coursesToView)
 })
 
-test('my courses search', async ({ page, courseSearchText, searchResults }) => {
+test.skip('my courses search', async ({
+  page,
+  courseSearchText,
+  searchResults,
+}) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(courseSearchText)
   await myCoursesPage.checkRows(searchResults)
 })
 
-test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
+test.skip('my courses filter', async ({ page, oneTwoLevelCourses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.filterCourses('FilterCourseLevel', [

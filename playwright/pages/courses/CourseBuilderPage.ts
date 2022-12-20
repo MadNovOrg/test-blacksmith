@@ -45,7 +45,7 @@ export class CourseBuilderPage extends BasePage {
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
-    this.confirmDialog = this.page.locator('data-testid=time-commitment-dialog')
+    this.confirmDialog = this.page.locator('[role=dialog]')
   }
 
   async goto(courseId: string) {
@@ -102,9 +102,7 @@ export class CourseBuilderPage extends BasePage {
     const confirmModalVisible = await this.confirmDialog.isVisible()
 
     if (confirmModalVisible) {
-      await this.confirmDialog
-        .locator('button:has-text("Submit Course")')
-        .click()
+      await this.confirmDialog.locator('button:has-text("Proceed")').click()
     }
 
     return new CourseDetailsPage(this.page)

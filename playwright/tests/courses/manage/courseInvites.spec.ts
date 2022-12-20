@@ -51,7 +51,7 @@ test('course invites', async ({ browser, course }) => {
   const page = await trainerContext.newPage()
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  const courseDetailsPage = await myCoursesPage.clickCourseManageButton(
+  const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )
   await courseDetailsPage.checkInvitesLeftText(

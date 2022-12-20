@@ -4,7 +4,7 @@ const config: PlaywrightTestConfig = {
   forbidOnly: !!process.env.CI,
   globalSetup: require.resolve('./hooks/global-setup'),
   use: {
-    trace: 'on',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'on',
     timezoneId: 'UTC',

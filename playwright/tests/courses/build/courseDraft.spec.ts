@@ -30,16 +30,14 @@ test('course draft', async ({ page, course }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)
-  const courseBuilderPage = await myCoursesPage.clickCourseBuildButton(
-    course.id
-  )
+  const courseBuilderPage = await myCoursesPage.clickCourse(course.id)
   await courseBuilderPage.checkNoDraftText()
   await courseBuilderPage.dragModulesToRight(modules)
   await courseBuilderPage.checkDraftTextAppeared()
   await page.goBack()
   await myCoursesPage.searchCourse(`${course.id}`)
   await myCoursesPage.checkCourseStatus(course.id, 'Draft')
-  await myCoursesPage.clickCourseBuildButton(course.id)
+  await myCoursesPage.clickCourse(course.id)
   await courseBuilderPage.checkSelectedModulesContain(modules)
 })
 
@@ -48,13 +46,11 @@ test('course draft: clear modules', async ({ page, course }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)
-  const courseBuilderPage = await myCoursesPage.clickCourseBuildButton(
-    course.id
-  )
+  const courseBuilderPage = await myCoursesPage.clickCourse(course.id)
   await courseBuilderPage.dragModulesToRight(modules)
   await courseBuilderPage.clickClearButton()
   await page.goBack()
   await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.clickCourseBuildButton(course.id)
+  await myCoursesPage.clickCourse(course.id)
   await courseBuilderPage.checkModulesNotSelected(modules)
 })

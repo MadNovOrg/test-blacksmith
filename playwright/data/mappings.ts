@@ -12,7 +12,7 @@ const toUiTime = (date: Date) => {
   return `${formatInTimeZone(
     date,
     tz,
-    dateFormats.date_short
+    dateFormats.date_defaultShort
   )}${formatInTimeZone(date, tz, dateFormats.date_onlyTime)}`
 }
 
