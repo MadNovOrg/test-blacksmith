@@ -65,7 +65,7 @@ export const RatingSummary: React.FC<Props> = ({ answers, questionKey }) => {
         <Box display="flex" flexDirection="column" alignItems="center">
           <Typography variant="subtitle2">{values[0]}%</Typography>
           <Typography variant="body2" fontWeight="600" color="green.main">
-            Excellant
+            {t(`course-evaluation.excellent`)}
           </Typography>
         </Box>
       </Box>

@@ -2006,6 +2006,8 @@
     "required-field": "This is a required question",
     "complete-my-evaluation": "Complete my evaluation",
     "trainer-evaluate": "Submit your Trainer Summary Evaluation to view summary evaluation and complete this course.",
+    "excellent": "Excellent",
+    "no-answer": "N/A",
     "groups": {
       "TRAINING_RATING": "Rating of training",
       "TRAINING_RELEVANCE": "Relevance of training",

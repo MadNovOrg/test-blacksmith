@@ -314,7 +314,7 @@ export const EvaluationSummary = () => {
                     >
                       {answers.map(a => (
                         <QuestionText key={a.id}>
-                          {a.answer || 'N/A'}
+                          {a.answer || t('course-evaluation.no-answer')}
                         </QuestionText>
                       ))}
                     </Box>
@@ -397,7 +397,7 @@ export const EvaluationSummary = () => {
                     >
                       {answers.map(a => (
                         <QuestionText key={a.id}>
-                          {a.answer || 'N/A'}
+                          {a.answer || t('course-evaluation.no-answer')}
                         </QuestionText>
                       ))}
                     </Box>
