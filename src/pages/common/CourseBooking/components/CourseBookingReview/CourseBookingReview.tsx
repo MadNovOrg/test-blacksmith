@@ -247,7 +247,7 @@ export const CourseBookingReview: React.FC = () => {
         <Divider sx={{ my: 2 }} />
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography color="grey.700">
-            {t('vat')} ({booking.vat}%)
+            {t('custom-vat', { amount: booking.vat })}
           </Typography>
           <Typography color="grey.700">
             {formatCurrency(amounts.vat)}
