@@ -8,17 +8,17 @@ on:
         required: true
         type: choice
         options:
-        - DEV
-        - STG
-        - PROD
+          - DEV
+          - STG
+          - PROD
       git_commit_sha:
         description: 'Provide Rollback Git commit sha - If "default" will rollback to previous commit'
         required: false
         default: 'default'
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
 
 env:
   AWS_REGION: eu-west-2
@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Source Code Rollback Action
         run: |
@@ -51,7 +51,7 @@ jobs:
           role-duration-seconds: 1200
 
       - name: Build
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '16.3.0'
           cache: 'npm'

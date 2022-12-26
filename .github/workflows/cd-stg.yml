@@ -4,13 +4,15 @@ on:
   workflow_dispatch:
 
 permissions:
-      id-token: write
-      contents: read  
-      
+  id-token: write
+  contents: read
+
 jobs:
   stg-cd:
     name: STG
     uses: ./.github/workflows/pipeline.yml
+    with:
+      mode: 'staging'
     secrets:
       cognito_user_pool_id: ${{ secrets.COGNITO_POOL_ID_STG }}
       cognito_user_pool_client_id: ${{ secrets.COGNITO_CLIENT_ID_STG }}
