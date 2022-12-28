@@ -119,6 +119,10 @@ const TTAdminRoutes = () => {
                 <Route path="details" element={<TransferDetails />} />
                 <Route path="review" element={<TransferReview />} />
               </Route>
+              <Route path="evaluation">
+                <Route path="view" element={<CourseEvaluation />} />
+                <Route path="summary" element={<EvaluationSummary />} />
+              </Route>
             </Route>
           </Route>
         </Route>
