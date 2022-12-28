@@ -499,4 +499,5 @@ custom_types:
     - name: TrainerRoleTypeObj
     - name: TrainerRoleType
     - name: CourseCertificateLevel
+    - name: PromoCodeOutput
   scalars: []

@@ -670,7 +670,7 @@ type UpdateAvatarResponse {
 }
 
 type CanApplyPromoCodeOutput {
-  result: Boolean!
+  result: PromoCodeOutput
 }
 
 type CreateOrderOutput {
@@ -710,5 +710,11 @@ type TrainerRoleType {
 type CourseCertificateLevel {
   courseLevel: CourseLevel!
   expiryDate: date!
+}
+
+type PromoCodeOutput {
+  code: String!
+  amount: Int!
+  type: String!
 }
 

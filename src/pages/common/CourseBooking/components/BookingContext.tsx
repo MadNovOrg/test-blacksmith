@@ -1,9 +1,20 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useMount } from 'react-use'
 
-import { PaymentMethod, Promo_Code } from '@app/generated/graphql'
+import {
+  PaymentMethod,
+  Promo_Code,
+  Promo_Code_Type_Enum,
+  PromoCodeOutput,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { stripeProcessingFeeRate } from '@app/lib/stripe'
 import { GetCoursePricing } from '@app/queries/courses/get-course-pricing'
@@ -81,7 +92,7 @@ export type ContextType = {
   positions: typeof positions
   sectors: typeof sectors
   setBooking: (_: Partial<State>) => void
-  addPromo: (_: string) => void
+  addPromo: (_: PromoCodeOutput) => void
   removePromo: (_: string) => void
   placeOrder: () => Promise<CreateOrderResponseType['order']>
 }
@@ -108,6 +119,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   const [availableSeats, setAvailableSeats] = useState(0)
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
+  const [promoCodes, setPromoCodes] = useState<PromoCodeOutput[]>([])
 
   useMount(async () => {
     const data = await fetcher<GetTempProfileResponseType>(GET_TEMP_PROFILE)
@@ -181,21 +193,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     setReady(true)
   })
 
-  /* Disabled because of TTHP-817.
-   * This needs to be rewritten so that the whole promo code validation
-   * happens on backend. More info in the ticket.
-  const { promoCodes, isLoading: arePromoCodesLoading } = usePromoCodes({
-    sort: { by: 'code', dir: 'asc' },
-    filters: { code: booking.promoCodes },
-    limit: booking.promoCodes.length,
-    offset: 0,
-  })
-
   useEffect(() => {
-    if (arePromoCodesLoading) {
-      return
-    }
-
     const discounts: Discounts = {}
     for (const code of booking.promoCodes) {
       const promoCode = promoCodes.find(pc => pc.code === code)
@@ -206,7 +204,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
       discounts[code] = {
         amount: promoCode.amount,
-        type: promoCode.type,
+        type: promoCode.type as Promo_Code_Type_Enum,
         amountCurrency:
           promoCode.type === Promo_Code_Type_Enum.FreePlaces
             ? booking.price * promoCode.amount
@@ -215,23 +213,25 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     }
 
     setBooking(b => ({ ...b, discounts }))
-  }, [arePromoCodesLoading, booking.price, booking.promoCodes, promoCodes])
-   */
+  }, [booking.price, booking.promoCodes, promoCodes])
 
-  const addPromo = useCallback<ContextType['addPromo']>((code: string) => {
-    setBooking(b =>
-      b.promoCodes.includes(code)
-        ? b
-        : { ...b, promoCodes: [...b.promoCodes, code] }
-    )
-  }, [])
+  const addPromo = useCallback<ContextType['addPromo']>(
+    (code: PromoCodeOutput) => {
+      setPromoCodes(codes => [...codes, code])
+      setBooking(b => ({ ...b, promoCodes: [...b.promoCodes, code.code] }))
+    },
+    []
+  )
 
-  const removePromo = useCallback<ContextType['addPromo']>((code: string) => {
-    setBooking(b => ({
-      ...b,
-      promoCodes: b.promoCodes.filter(c => c !== code),
-    }))
-  }, [])
+  const removePromo = useCallback<ContextType['removePromo']>(
+    (code: string) => {
+      setBooking(b => ({
+        ...b,
+        promoCodes: b.promoCodes.filter(c => c !== code),
+      }))
+    },
+    []
+  )
 
   const amounts: ContextType['amounts'] = useMemo(() => {
     const courseCost = !ready ? 0 : booking.price * booking.quantity

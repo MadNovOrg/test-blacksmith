@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import {
   CanApplyPromoCodeQuery,
   CanApplyPromoCodeQueryVariables,
+  PromoCodeOutput,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { QUERY as CAN_APPLY_PROMO_CODE } from '@app/queries/promo-codes/can-apply-promo-code'
@@ -23,7 +24,7 @@ type Props = {
   codes: string[]
   discounts: Discounts
   courseId: number
-  onAdd: (_: string) => void
+  onAdd: (_: PromoCodeOutput) => void
   onRemove: (_: string) => void
 }
 
@@ -68,14 +69,16 @@ export const PromoCode: React.FC<Props> = ({
         throw new Error('Code cannot be applied')
       }
 
-      onAdd(value)
+      if (!codes.find(c => c === result.code)) {
+        onAdd(result)
+      }
       setValue('')
       setAdding(false)
     } catch (err) {
       console.error(err)
       setApplyError(t('invalid-promo-code'))
     }
-  }, [courseId, fetcher, onAdd, t, value])
+  }, [codes, courseId, fetcher, onAdd, t, value])
 
   return (
     <Stack>

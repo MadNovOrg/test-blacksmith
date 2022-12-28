@@ -107,7 +107,7 @@ export type CanApplyPromoCodeInput = {
 
 export type CanApplyPromoCodeOutput = {
   __typename?: 'CanApplyPromoCodeOutput';
-  result: Scalars['Boolean'];
+  result?: Maybe<PromoCodeOutput>;
 };
 
 /** The category type */
@@ -5698,6 +5698,13 @@ export type Post_Customauthor = AcfFieldGroup & {
   displayAuthor?: Maybe<Scalars['Boolean']>;
   /** The name of the ACF Field Group */
   fieldGroupName?: Maybe<Scalars['String']>;
+};
+
+export type PromoCodeOutput = {
+  __typename?: 'PromoCodeOutput';
+  amount: Scalars['Int'];
+  code: Scalars['String'];
+  type: Scalars['String'];
 };
 
 /** The reading setting type */
@@ -38364,7 +38371,7 @@ export type CanApplyPromoCodeQueryVariables = Exact<{
 }>;
 
 
-export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result: boolean } };
+export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result?: { __typename?: 'PromoCodeOutput', code: string, amount: number, type: string } | null } };
 
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
