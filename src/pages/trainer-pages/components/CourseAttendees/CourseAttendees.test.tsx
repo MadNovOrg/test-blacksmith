@@ -8,7 +8,13 @@ import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
-import { Course, CourseInvite, CourseParticipant } from '@app/types'
+import {
+  Course,
+  CourseInvite,
+  CourseParticipant,
+  CourseType,
+  RoleName,
+} from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, within } from '@test/index'
@@ -290,16 +296,20 @@ describe('component: CourseAttendees', () => {
       error: undefined,
     })
 
+    const openCourse = buildCourse()
+    openCourse.type = CourseType.OPEN
+
     useCourseMock.mockReturnValue({
       mutate: jest.fn(),
       status: LoadingStatus.SUCCESS,
-      data: course,
+      data: openCourse,
     })
 
     render(
       <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
+        <CourseAttendees course={openCourse} />
+      </MemoryRouter>,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
     useCourseParticipantsMock.mockClear()
@@ -316,7 +326,7 @@ describe('component: CourseAttendees', () => {
     ])
     expect(useWaitlistMock.mock.calls[1]).toMatchObject([
       {
-        courseId: course.id,
+        courseId: openCourse.id,
         sort: { by: 'createdAt', dir: 'asc' },
         limit: 12,
         offset: 0,

@@ -605,7 +605,7 @@ ALTER TABLE ONLY public.course
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT course_course_level_fkey FOREIGN KEY (course_level) REFERENCES public.course_level(name) ON UPDATE CASCADE ON DELETE RESTRICT;
 ALTER TABLE ONLY public.course
-    ADD CONSTRAINT course_course_status_fkey FOREIGN KEY (course_status) REFERENCES public.course_status(name) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT course_course_status_fkey FOREIGN KEY (course_status) REFERENCES public.course_status(name) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT course_course_type_fkey FOREIGN KEY (course_type) REFERENCES public.course_type(name) ON UPDATE CASCADE ON DELETE RESTRICT;
 ALTER TABLE ONLY public.course_evaluation_answers
@@ -631,7 +631,7 @@ ALTER TABLE ONLY public.course_trainer
 ALTER TABLE ONLY public.course_module
     ADD CONSTRAINT course_module_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.course(id) ON DELETE CASCADE;
 ALTER TABLE ONLY public.course_module
-    ADD CONSTRAINT course_module_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.module(id) ON UPDATE CASCADE ON DELETE RESTRICT;
+    ADD CONSTRAINT course_module_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.module(id) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY public.course
     ADD CONSTRAINT course_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organization(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.course_participant
@@ -647,7 +647,7 @@ ALTER TABLE ONLY public.course_participant
 ALTER TABLE ONLY public.course_participant_module
     ADD CONSTRAINT course_participant_module_course_participant_id_fkey FOREIGN KEY (course_participant_id) REFERENCES public.course_participant(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.course_participant_module
-    ADD CONSTRAINT course_participant_module_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.module(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+    ADD CONSTRAINT course_participant_module_module_id_fkey FOREIGN KEY (module_id) REFERENCES public.module(id) ON UPDATE RESTRICT ON DELETE CASCADE;
 ALTER TABLE ONLY public.course_participant
     ADD CONSTRAINT course_participant_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.profile(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 ALTER TABLE ONLY public.course_schedule

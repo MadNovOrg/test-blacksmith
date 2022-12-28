@@ -12,6 +12,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useWaitlist } from '@app/hooks/useWaitlist'
@@ -30,6 +31,7 @@ type CourseAttendeesProps = {
 export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
   const { id: courseId } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
+  const { acl } = useAuth()
 
   const { t } = useTranslation()
 
@@ -89,36 +91,41 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
             <CourseInvites course={course} />
           </Grid>
 
-          {isOpenCourse ? (
-            <AttendingTab course={course} />
-          ) : (
-            <TabContext value={selectedTab}>
-              <TabList
-                onChange={(_, selectedTab: React.SetStateAction<string>) =>
-                  setSelectedTab(selectedTab)
-                }
-              >
-                <Tab
-                  label={t('pages.course-participants.tabs.attending', {
-                    number: courseParticipantsTotal,
-                  })}
-                  value="0"
-                  data-testid="tabParticipants"
-                />
-                <Tab
-                  label={t('pages.course-participants.tabs.pending', {
-                    number: pendingTotal,
-                  })}
-                  value="1"
-                  data-testid="tabPending"
-                />
-                <Tab
-                  label={t('pages.course-participants.tabs.declined', {
-                    number: declinedTotal,
-                  })}
-                  value="2"
-                  data-testid="tabDeclined"
-                />
+          <TabContext value={selectedTab}>
+            <TabList
+              onChange={(_, selectedTab: React.SetStateAction<string>) =>
+                setSelectedTab(selectedTab)
+              }
+            >
+              <Tab
+                label={t('pages.course-participants.tabs.attending', {
+                  number: courseParticipantsTotal,
+                })}
+                value="0"
+                data-testid="tabParticipants"
+              />
+              {!isOpenCourse
+                ? [
+                    <Tab
+                      label={t('pages.course-participants.tabs.pending', {
+                        number: pendingTotal,
+                      })}
+                      value="1"
+                      data-testid="tabPending"
+                      key="1"
+                    />,
+                    <Tab
+                      label={t('pages.course-participants.tabs.declined', {
+                        number: declinedTotal,
+                      })}
+                      value="2"
+                      data-testid="tabDeclined"
+                      key="2"
+                    />,
+                  ]
+                : null}
+
+              {isOpenCourse && acl.canSeeWaitingLists() ? (
                 <Tab
                   label={t('pages.course-participants.tabs.waitlist', {
                     number: waitlistTotal,
@@ -126,28 +133,34 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
                   value="3"
                   data-testid="tabWaitlist"
                 />
-              </TabList>
+              ) : null}
+            </TabList>
 
-              <TabPanel value="0" sx={{ px: 0 }}>
-                <AttendingTab course={course} />
-              </TabPanel>
-              <TabPanel value="1" sx={{ px: 0 }}>
-                <InvitesTab
-                  course={course}
-                  inviteStatus={InviteStatus.PENDING}
-                />
-              </TabPanel>
-              <TabPanel value="2" sx={{ px: 0 }}>
-                <InvitesTab
-                  course={course}
-                  inviteStatus={InviteStatus.DECLINED}
-                />
-              </TabPanel>
+            <TabPanel value="0" sx={{ px: 0 }}>
+              <AttendingTab course={course} />
+            </TabPanel>
+            {!isOpenCourse ? (
+              <>
+                <TabPanel value="1" sx={{ px: 0 }}>
+                  <InvitesTab
+                    course={course}
+                    inviteStatus={InviteStatus.PENDING}
+                  />
+                </TabPanel>
+                <TabPanel value="2" sx={{ px: 0 }}>
+                  <InvitesTab
+                    course={course}
+                    inviteStatus={InviteStatus.DECLINED}
+                  />
+                </TabPanel>
+              </>
+            ) : null}
+            {isOpenCourse && acl.canSeeWaitingLists() ? (
               <TabPanel value="3" sx={{ px: 0 }}>
                 <WaitlistTab course={course} />
               </TabPanel>
-            </TabContext>
-          )}
+            ) : null}
+          </TabContext>
         </>
       )}
     </Container>
