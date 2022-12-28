@@ -66,6 +66,7 @@ export type ResponseType = {
     affectedRows: number
     inserted: Array<{
       id: string
+      course_code: string
       expenses?: Array<{ id: string }>
       orders?: Array<{ id: string }>
     }>
@@ -78,6 +79,7 @@ export const MUTATION = gql`
       affectedRows: affected_rows
       inserted: returning {
         id
+        course_code
         expenses {
           id
         }

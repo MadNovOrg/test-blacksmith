@@ -58,7 +58,6 @@ export const Onboarding: React.FC = () => {
   >(ONBOARD_USER)
 
   useEffect(() => {
-    console.log(onboardedUser)
     if (onboardedUser?.update_profile_by_pk?.id) {
       reloadCurrentProfile().then(() => {
         navigate('/')

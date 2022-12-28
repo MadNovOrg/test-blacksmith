@@ -8,6 +8,7 @@ import { DeepPartial } from 'ts-essentials'
 import '@app/i18n/config'
 import { AuthContext } from '@app/context/auth'
 import { injectACL } from '@app/context/auth/permissions'
+import { SnackbarProvider } from '@app/context/snackbar'
 import theme from '@app/theme'
 
 import { defaultProviders, Providers } from './providers'
@@ -23,7 +24,9 @@ function render(
   const wrapper: React.FC = ({ children }) => {
     return (
       <AuthContext.Provider value={injectACL(context.auth)}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider>{children}</SnackbarProvider>
+        </ThemeProvider>
       </AuthContext.Provider>
     )
   }

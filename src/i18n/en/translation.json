@@ -1047,6 +1047,7 @@
         "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
       },
       "save-as-draft": "Save as draft",
+      "submitted-course": "{{code}} has been created.",
       "exceptions": {
         "course-contain-exceptions": "Course contains exceptions",
         "course-approval-required": "Course approval required",

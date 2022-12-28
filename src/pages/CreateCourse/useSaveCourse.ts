@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
@@ -108,6 +109,7 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
+  const { showSnackbar } = useSnackbar()
   const { courseData, expenses, trainers, go1Licensing } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
@@ -235,9 +237,15 @@ export function useSaveCourse(): {
             })
           }
 
-          const insertedId = response.insertCourse.inserted[0].id
+          const insertedCourse = response.insertCourse.inserted[0]
 
-          return insertedId
+          showSnackbar({
+            message: t('pages.create-course.submitted-course', {
+              code: insertedCourse.course_code,
+            }),
+          })
+
+          return insertedCourse.id
         }
       } else {
         setSavingStatus(LoadingStatus.ERROR)
@@ -245,7 +253,16 @@ export function useSaveCourse(): {
     } catch (err) {
       setSavingStatus(LoadingStatus.ERROR)
     }
-  }, [courseData, expenses, fetcher, go1Licensing, removeDraft, t, trainers])
+  }, [
+    courseData,
+    expenses,
+    fetcher,
+    go1Licensing,
+    removeDraft,
+    t,
+    trainers,
+    showSnackbar,
+  ])
 
   return {
     savingStatus,

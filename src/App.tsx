@@ -3,9 +3,9 @@ import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
+import { SnackbarProvider } from './context/snackbar'
 import { useFetcher } from './hooks/use-fetcher'
 import { AppRoutes } from './routes'
-
 import './style.css'
 
 function App() {
@@ -23,7 +23,9 @@ function App() {
     <GQLProvider>
       <SWRConfig value={config}>
         <CssBaseline />
-        <AppRoutes />
+        <SnackbarProvider>
+          <AppRoutes />
+        </SnackbarProvider>
       </SWRConfig>
     </GQLProvider>
   )
