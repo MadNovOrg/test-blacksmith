@@ -223,8 +223,8 @@ describe('component: LicenseOrderDetails', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText('Prices are saved!'))
-      expect(screen.getByText('Invoice details are saved!'))
+      expect(screen.getByText('Prices are saved!')).toBeInTheDocument()
+      expect(screen.getByText('Invoice details are saved!')).toBeInTheDocument()
     })
   })
 })

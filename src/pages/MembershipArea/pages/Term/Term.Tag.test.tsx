@@ -70,7 +70,7 @@ describe('page: Term - Tag', () => {
     const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
     userEvent.click(within(firstPost).getByAltText(posts[0].title ?? ''))
 
-    expect(screen.getByText('Post page'))
+    expect(screen.getByText('Post page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {

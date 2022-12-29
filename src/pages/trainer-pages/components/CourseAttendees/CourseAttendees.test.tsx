@@ -123,7 +123,9 @@ describe('component: CourseAttendees', () => {
     )
 
     participants.forEach(participant => {
-      expect(screen.getByTestId(`course-participant-row-${participant.id}`))
+      expect(
+        screen.getByTestId(`course-participant-row-${participant.id}`)
+      ).toBeInTheDocument()
     })
 
     const participantRow = screen.getByTestId(
@@ -134,7 +136,9 @@ describe('component: CourseAttendees', () => {
       within(participantRow).getByText(`${participants[0].profile.fullName}`)
     ).toBeInTheDocument()
 
-    expect(within(participantRow).getByText(participants[0].profile.email))
+    expect(
+      within(participantRow).getByText(participants[0].profile.email)
+    ).toBeInTheDocument()
 
     expect(
       within(participantRow).getByText(

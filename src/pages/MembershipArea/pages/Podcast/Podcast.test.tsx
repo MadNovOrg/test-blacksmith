@@ -59,7 +59,7 @@ describe('page: Podcast', () => {
       </Provider>
     )
 
-    expect(screen.getByText('Podcast not found'))
+    expect(screen.getByText('Podcast not found')).toBeInTheDocument()
   })
 
   it("displays error message if can't load the podcast", () => {
@@ -83,7 +83,9 @@ describe('page: Podcast', () => {
       </Provider>
     )
 
-    expect(screen.getByText('There was an error loading the podcast'))
+    expect(
+      screen.getByText('There was an error loading the podcast')
+    ).toBeInTheDocument()
   })
 
   it('displays podcast info and the player', () => {
@@ -116,7 +118,7 @@ describe('page: Podcast', () => {
     expect(screen.getByText(`by ${podcast.author}`)).toBeInTheDocument()
     expect(
       screen.getByText(format(new Date(podcast.publishedDate), 'd MMMM yyyy'))
-    )
+    ).toBeInTheDocument()
   })
 
   it('links back to the podcasts page', async () => {

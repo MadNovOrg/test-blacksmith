@@ -49,7 +49,7 @@ describe('component: TableNoRows', () => {
     expect(fixFilters).toBeInTheDocument()
   })
 
-  it('renders when noRecords is true', async () => {
+  it('has correct table cell attribute when noRecords is true', async () => {
     const colSpan = chance.integer()
     _render(<TableNoRows noRecords={true} colSpan={colSpan} />)
 

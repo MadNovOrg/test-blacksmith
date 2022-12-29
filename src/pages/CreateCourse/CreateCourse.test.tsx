@@ -226,7 +226,7 @@ describe('page: CreateCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow non-authorized users to create open course", () => {
+  it("doesn't allow non-authorized users to create indirect course", () => {
     render(
       <MemoryRouter
         initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}

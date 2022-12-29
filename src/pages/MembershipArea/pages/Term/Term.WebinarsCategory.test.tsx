@@ -73,7 +73,7 @@ describe('page: Term - WebinarsCategory', () => {
     const firstPost = screen.getByTestId(`webinar-grid-item-${webinars[0].id}`)
     userEvent.click(within(firstPost).getByAltText(webinars[0].title ?? ''))
 
-    expect(screen.getByText('Webinar page'))
+    expect(screen.getByText('Webinar page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {

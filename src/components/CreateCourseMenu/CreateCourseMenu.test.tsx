@@ -4,7 +4,7 @@ import { MemoryRouter, Routes, Route, useSearchParams } from 'react-router-dom'
 
 import { RoleName } from '@app/types'
 
-import { render, userEvent, screen, within, waitForText } from '@test/index'
+import { render, userEvent, screen, within, waitFor } from '@test/index'
 import { generateRolesUpTo } from '@test/utils'
 
 import { CreateCourseMenu } from '.'
@@ -39,7 +39,9 @@ describe('components: CreateCourseMenu', () => {
       )
     )
 
-    await waitForText('OPEN form')
+    await waitFor(() =>
+      expect(screen.getByText('OPEN form')).toBeInTheDocument()
+    )
   })
 
   it('given the user is TT admin, it redirects to the course creation page for the closed course', async () => {
@@ -65,7 +67,9 @@ describe('components: CreateCourseMenu', () => {
       )
     )
 
-    await waitForText('CLOSED form')
+    await waitFor(async () => {
+      expect(screen.getByText('CLOSED form')).toBeInTheDocument()
+    })
   })
 
   it('given the user is TT admin, it redirects to the course creation page for the indirect course', async () => {
@@ -91,7 +95,9 @@ describe('components: CreateCourseMenu', () => {
       )
     )
 
-    await waitForText('INDIRECT form')
+    await waitFor(() => {
+      expect(screen.getByText('INDIRECT form')).toBeInTheDocument()
+    })
   })
 
   it("given the user is TT ops, it doesn't display the indirect course creation option", async () => {
@@ -136,6 +142,8 @@ describe('components: CreateCourseMenu', () => {
 
     userEvent.click(screen.getByText('Create course'))
 
-    await waitForText('INDIRECT form')
+    await waitFor(() => {
+      expect(screen.getByText('INDIRECT form')).toBeInTheDocument()
+    })
   })
 })

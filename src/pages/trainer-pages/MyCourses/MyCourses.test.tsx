@@ -136,7 +136,7 @@ describe('trainers-pages/MyCourses', () => {
     expect(courseTitle).toBeInTheDocument()
     expect(courseTitle).toHaveTextContent(`${courses[0].name}`)
     const courseCode = within(table).getByTestId('course-code')
-    expect(courseCode).toBeInTheDocument
+    expect(courseCode).toBeInTheDocument()
     expect(courseCode).toHaveTextContent('OP-L1-10000')
   })
 

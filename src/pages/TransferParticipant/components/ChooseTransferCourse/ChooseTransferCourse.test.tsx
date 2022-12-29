@@ -144,7 +144,9 @@ describe('page: ChooseTransferCourse', () => {
     userEvent.click(screen.getByText(/transfer details/i))
 
     await waitFor(() => {
-      expect(screen.getByText(`choosen course for transfer is ${TO_COURSE_ID}`))
+      expect(
+        screen.getByText(`choosen course for transfer is ${TO_COURSE_ID}`)
+      ).toBeInTheDocument()
     })
   })
 })

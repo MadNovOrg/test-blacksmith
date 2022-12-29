@@ -128,7 +128,9 @@ describe('page: ParticipantGrading', () => {
       within(secondModuleGroupElem).queryByText('Incomplete')
     ).not.toBeInTheDocument()
 
-    expect(within(secondModuleGroupElem).getByText('1 of 1 completed'))
+    expect(
+      within(secondModuleGroupElem).getByText('1 of 1 completed')
+    ).toBeInTheDocument()
   })
 
   it('navigates back to the course details page with grading query param', async () => {

@@ -54,7 +54,7 @@ describe('page: Podcasts', () => {
       </Provider>
     )
 
-    expect(screen.getByText('There are no podcasts yet.'))
+    expect(screen.getByText('There are no podcasts yet.')).toBeInTheDocument()
   })
 
   it('displays first podcast as featured', () => {
@@ -238,7 +238,7 @@ describe('page: Podcasts', () => {
       </Provider>
     )
 
-    expect(screen.getByText('1-12 of 20'))
+    expect(screen.getByText('1-12 of 20')).toBeInTheDocument()
 
     userEvent.click(screen.getByTestId('pagination-next-page'))
 
@@ -255,7 +255,7 @@ describe('page: Podcasts', () => {
       screen.getByTestId(`podcast-grid-item-${secondPodcastBatch[0].id}`)
     ).toBeInTheDocument()
 
-    expect(screen.getByText('13-20 of 20'))
+    expect(screen.getByText('13-20 of 20')).toBeInTheDocument()
   })
 
   it('sorts by published date', () => {

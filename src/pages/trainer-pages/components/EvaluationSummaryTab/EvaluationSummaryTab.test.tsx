@@ -282,10 +282,12 @@ describe('component: EvaluationSummaryTab', () => {
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[0].profile.id) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).toBeInTheDocument()
         } else {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).not.toBeInTheDocument()
@@ -313,10 +315,12 @@ describe('component: EvaluationSummaryTab', () => {
 
       for (const evaluation of evaluations) {
         if (evaluation.profile.id !== trainers[1].profile.id) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).toBeInTheDocument()
         } else {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(
             screen.queryByText(evaluation.profile.fullName)
           ).not.toBeInTheDocument()

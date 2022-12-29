@@ -17,7 +17,9 @@ jest.mock('@app/hooks/useProfiles')
 
 const useProfilesMocked = jest.mocked(useProfiles)
 
-const mockProfile = build<GetProfilesQuery['profiles'][0]>({
+const mockProfile = build<
+  Exclude<GetProfilesQuery['profiles'], undefined | null>[0]
+>({
   fields: {
     id: fake(f => f.datatype.uuid()),
     fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
@@ -116,12 +118,12 @@ describe('page: Users', () => {
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)
-    if (profile.fullName) {
-      expect(within(tableBody).getByText(profile.fullName)).toBeInTheDocument()
-    }
-    if (profile.email) {
-      expect(within(tableBody).getByText(profile.email)).toBeInTheDocument()
-    }
+    expect(
+      within(tableBody).getByText(profile.fullName ?? '')
+    ).toBeInTheDocument()
+
+    expect(within(tableBody).getByText(profile.email ?? '')).toBeInTheDocument()
+
     expect(
       within(tableBody).getByText(profile.organizations[0].organization.name)
     ).toBeInTheDocument()

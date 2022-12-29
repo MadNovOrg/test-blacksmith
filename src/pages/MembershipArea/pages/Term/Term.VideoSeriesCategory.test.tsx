@@ -75,7 +75,7 @@ describe('page: Term - WebinarsCategory', () => {
     )
     userEvent.click(within(firstPost).getByAltText(videoItems[0].title ?? ''))
 
-    expect(screen.getByText('Video page'))
+    expect(screen.getByText('Video page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {

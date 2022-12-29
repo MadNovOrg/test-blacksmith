@@ -140,7 +140,7 @@ describe('page: Blog', () => {
 
     userEvent.click(within(featuredPost).getByAltText(posts[0].title ?? ''))
 
-    expect(screen.getByText('Post page'))
+    expect(screen.getByText('Post page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {

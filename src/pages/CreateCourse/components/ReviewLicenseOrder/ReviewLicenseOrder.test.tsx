@@ -109,7 +109,7 @@ describe('component: ReviewLicenseOrder', () => {
           dateFormats.date_onlyTime
         )}`
       )
-    )
+    ).toBeInTheDocument()
 
     expect(
       screen.getByText(go1Licensing.invoiceDetails.billingAddress)

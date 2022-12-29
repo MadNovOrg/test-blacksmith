@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import { add } from 'date-fns'
 import React from 'react'
 import useSWR from 'swr'

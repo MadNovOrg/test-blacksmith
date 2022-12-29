@@ -34,7 +34,7 @@ describe('component: CourseHeroSummary', () => {
 
     render(<CourseHeroSummary course={course} />)
 
-    expect(screen.getByText('Course has begun.'))
+    expect(screen.getByText('Course has begun.')).toBeInTheDocument()
   })
 
   it('displays a correct message if a course begins today', () => {

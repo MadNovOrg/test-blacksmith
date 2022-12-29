@@ -117,7 +117,7 @@ describe('page: VideoSeries', () => {
       within(featuredVideo).getByAltText(videoItems[0].title ?? '')
     )
 
-    expect(screen.getByText('Video item page'))
+    expect(screen.getByText('Video item page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {

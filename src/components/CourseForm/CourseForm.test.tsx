@@ -82,8 +82,10 @@ describe('component: CourseForm', () => {
       }
 
       if (result) {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(input).toBeInTheDocument()
       } else {
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(input).toBe(null)
       }
     }

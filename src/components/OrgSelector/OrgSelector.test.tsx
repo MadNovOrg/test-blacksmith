@@ -76,7 +76,9 @@ describe('component: OrgSelector', () => {
 
     jest.runAllTimers()
     await waitFor(() => {
-      expect(within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME))
+      expect(
+        within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
+      ).toBeInTheDocument()
     })
 
     userEvent.click(

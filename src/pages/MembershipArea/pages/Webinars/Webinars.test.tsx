@@ -117,7 +117,7 @@ describe('page: Webinars', () => {
       within(featuredWebinar).getByAltText(webinars[0].title ?? '')
     )
 
-    expect(screen.getByText('Webinar page'))
+    expect(screen.getByText('Webinar page')).toBeInTheDocument()
   })
 
   it('displays items in a grid', () => {
