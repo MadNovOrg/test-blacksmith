@@ -1540,9 +1540,9 @@
           "title": "Organisations",
           "description": "Manage all organisation details and organisation users."
         },
-        "course-pricing": {
-          "title": "Course pricing",
-          "description": "Manage course pricing and discounts."
+        "discounts": {
+          "title": "Discounts",
+          "description": "Manage discounts."
         },
         "waitlist-notifications": {
           "title": "Waitlist notifications",
