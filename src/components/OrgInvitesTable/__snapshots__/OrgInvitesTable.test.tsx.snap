@@ -67,7 +67,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-1xq0vnt-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -80,7 +80,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-1xq0vnt-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -96,7 +96,7 @@ Object {
                   class="MuiBox-root css-1bvc4cc"
                 >
                   <button
-                    class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-zcpmcl-MuiButtonBase-root-MuiButton-root"
+                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge css-zcpmcl-MuiButtonBase-root-MuiButton-root"
                     data-testid="resend-invite-button"
                     tabindex="0"
                     type="button"
@@ -107,7 +107,7 @@ Object {
                     />
                   </button>
                   <button
-                    class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-zcpmcl-MuiButtonBase-root-MuiButton-root"
+                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge css-zcpmcl-MuiButtonBase-root-MuiButton-root"
                     data-testid="cancel-invite-button"
                     tabindex="0"
                     type="button"
@@ -137,7 +137,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-164ptnp-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-han9dj-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -150,7 +150,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-18em1z5-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-1pkeih1-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -169,7 +169,7 @@ Object {
           class="MuiTablePagination-root css-jtlhu6-MuiTablePagination-root"
         >
           <div
-            class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-ervr1a-MuiToolbar-root-MuiTablePagination-toolbar"
+            class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-1w6yoqr-MuiToolbar-root-MuiTablePagination-toolbar"
           >
             <div
               class="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"
@@ -182,13 +182,12 @@ Object {
             </p>
             <div
               class="MuiInputBase-root MuiInputBase-colorPrimary css-i13sg4-MuiInputBase-root-MuiTablePagination-select"
-              variant="standard"
             >
               <div
                 aria-expanded="false"
                 aria-haspopup="listbox"
                 aria-labelledby="mui-2 mui-1"
-                class="MuiTablePagination-select MuiSelect-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
+                class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
                 id="mui-1"
                 role="button"
                 tabindex="0"
@@ -203,7 +202,7 @@ Object {
               />
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTablePagination-selectIcon MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
                 data-testid="ArrowDropDownIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -330,7 +329,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-1xq0vnt-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -343,7 +342,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-dpfr3s-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-filledSecondary css-1xq0vnt-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -359,7 +358,7 @@ Object {
                 class="MuiBox-root css-1bvc4cc"
               >
                 <button
-                  class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-zcpmcl-MuiButtonBase-root-MuiButton-root"
+                  class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge css-zcpmcl-MuiButtonBase-root-MuiButton-root"
                   data-testid="resend-invite-button"
                   tabindex="0"
                   type="button"
@@ -370,7 +369,7 @@ Object {
                   />
                 </button>
                 <button
-                  class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-zcpmcl-MuiButtonBase-root-MuiButton-root"
+                  class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge css-zcpmcl-MuiButtonBase-root-MuiButton-root"
                   data-testid="cancel-invite-button"
                   tabindex="0"
                   type="button"
@@ -400,7 +399,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-164ptnp-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorSuccess MuiChip-filledSuccess css-han9dj-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -413,7 +412,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-18em1z5-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-1pkeih1-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -432,7 +431,7 @@ Object {
         class="MuiTablePagination-root css-jtlhu6-MuiTablePagination-root"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-ervr1a-MuiToolbar-root-MuiTablePagination-toolbar"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular MuiTablePagination-toolbar css-1w6yoqr-MuiToolbar-root-MuiTablePagination-toolbar"
         >
           <div
             class="MuiTablePagination-spacer css-1psng7p-MuiTablePagination-spacer"
@@ -445,13 +444,12 @@ Object {
           </p>
           <div
             class="MuiInputBase-root MuiInputBase-colorPrimary css-i13sg4-MuiInputBase-root-MuiTablePagination-select"
-            variant="standard"
           >
             <div
               aria-expanded="false"
               aria-haspopup="listbox"
               aria-labelledby="mui-2 mui-1"
-              class="MuiTablePagination-select MuiSelect-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
+              class="MuiSelect-select MuiTablePagination-select MuiSelect-standard MuiInputBase-input css-194a1fa-MuiSelect-select-MuiInputBase-input"
               id="mui-1"
               role="button"
               tabindex="0"
@@ -466,7 +464,7 @@ Object {
             />
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiTablePagination-selectIcon MuiSelect-icon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiTablePagination-selectIcon MuiSelect-iconStandard css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon"
               data-testid="ArrowDropDownIcon"
               focusable="false"
               viewBox="0 0 24 24"

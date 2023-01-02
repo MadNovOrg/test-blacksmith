@@ -19,7 +19,7 @@ import { getSWRLoadingStatus } from '@app/util'
 const emailsSchema = yup.array(yup.string().email().required()).min(1)
 
 export default function useCourseInvites(
-  courseId?: string,
+  courseId?: number,
   status?: InviteStatus,
   order?: SortOrder,
   limit?: number,

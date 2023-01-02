@@ -84,7 +84,7 @@ describe('component: SearchTrainers', () => {
     const shortQuery = chance.last().slice(0, 3)
     userEvent.type(input, shortQuery)
     expect(input).toHaveValue(shortQuery)
-    expect(mockSearch).not.toBeCalled()
+    expect(mockSearch).not.toHaveBeenCalled()
 
     userEvent.clear(input)
 
@@ -94,7 +94,7 @@ describe('component: SearchTrainers', () => {
     expect(loadingIcon).toHaveClass('MuiCircularProgress-indeterminate') // loading
 
     await waitForCalls(mockSearch)
-    expect(mockSearch).toBeCalledWith(enoughQuery)
+    expect(mockSearch).toHaveBeenCalledWith(enoughQuery)
 
     expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
   })
@@ -264,7 +264,7 @@ describe('component: SearchTrainers', () => {
     expect(matches).toHaveLength(1)
     userEvent.click(matches[0])
 
-    expect(onChange).toBeCalledWith({ target: { value: [trainers[2]] } })
+    expect(onChange).toHaveBeenCalledWith({ target: { value: [trainers[2]] } })
   })
 
   it('shows info message when no matches are found', async () => {

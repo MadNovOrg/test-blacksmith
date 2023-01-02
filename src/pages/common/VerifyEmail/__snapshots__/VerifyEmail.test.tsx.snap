@@ -25,7 +25,7 @@ exports[`page: VerifyEmailPage matchs snapshot 1`] = `
             Please verify your email in order to access features within the Team Teach Hub.
           </p>
           <button
-            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiLoadingButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-root MuiLoadingButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge css-o5kj1d-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             data-testid="signup-verify-now-btn"
             id="mui-1"
             tabindex="0"
@@ -38,7 +38,7 @@ exports[`page: VerifyEmailPage matchs snapshot 1`] = `
           </button>
         </div>
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root  css-e432cs-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge css-e432cs-MuiButtonBase-root-MuiButton-root"
           data-testid="signup-verify-later-btn"
           tabindex="0"
           type="button"

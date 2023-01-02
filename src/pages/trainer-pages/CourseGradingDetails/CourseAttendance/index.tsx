@@ -37,7 +37,7 @@ export const CourseAttendance = () => {
   const { t } = useTranslation()
 
   const { data: participantsData, status } = useCourseParticipants(
-    courseId ?? ''
+    Number(courseId) ?? ''
   )
 
   const ATTENDANCE_KEY = `course-attendance-${courseId}`

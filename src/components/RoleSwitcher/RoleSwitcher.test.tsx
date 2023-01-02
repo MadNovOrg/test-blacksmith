@@ -58,7 +58,7 @@ describe('component: RoleSwitcher', () => {
     const roleSwitcherRoles = screen.getAllByTestId('RoleSwitcher-otherRole')
     userEvent.click(roleSwitcherRoles[0])
 
-    expect(context.auth.changeRole).toBeCalledWith(RoleName.USER)
+    expect(context.auth.changeRole).toHaveBeenCalledWith(RoleName.USER)
 
     await waitFor(() => {
       expect(screen.queryByTestId('RoleSwitcher-list')).not.toBeInTheDocument()

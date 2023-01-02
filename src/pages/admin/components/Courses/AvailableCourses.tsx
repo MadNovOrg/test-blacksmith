@@ -1,5 +1,3 @@
-import { DatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import {
   Alert,
   CircularProgress,
@@ -10,6 +8,8 @@ import {
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import { isNumber } from 'lodash-es'
@@ -148,7 +148,7 @@ export const AvailableCourses: React.FC = () => {
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} locale={enLocale}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
       <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
         <Container maxWidth="lg" sx={{ py: 5 }}>
           <Box display="flex" gap={4}>
@@ -188,8 +188,6 @@ export const AvailableCourses: React.FC = () => {
                     </TextField>
 
                     <DatePicker
-                      clearable
-                      clearText={t('common.clear')}
                       value={dateFrom}
                       onChange={setDateFrom}
                       renderInput={params => (
@@ -204,8 +202,6 @@ export const AvailableCourses: React.FC = () => {
                     />
 
                     <DatePicker
-                      clearable
-                      clearText={t('common.clear')}
                       value={dateTo}
                       onChange={setDateTo}
                       renderInput={params => (

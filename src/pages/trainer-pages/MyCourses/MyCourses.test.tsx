@@ -8,6 +8,7 @@ import { fromValue, never } from 'wonka'
 import {
   Course_Level_Enum,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Order_By,
   TrainerCoursesQuery,
@@ -607,7 +608,13 @@ describe('trainers-pages/MyCourses', () => {
     const actionableCourse = buildTrainerCourse({
       overrides: {
         status: Course_Status_Enum.TrainerPending,
-        trainers: [{ profile: { id: TRAINER_PROFILE_ID } }],
+        trainers: [
+          {
+            id: chance.guid(),
+            profile: { id: TRAINER_PROFILE_ID },
+            type: Course_Trainer_Type_Enum.Leader,
+          },
+        ],
       },
     })
 

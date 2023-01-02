@@ -33,7 +33,7 @@ describe('course exception utils', () => {
   }
 
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     jest.setSystemTime(new Date(2022, 1, 1, 10, 0))
   })
 

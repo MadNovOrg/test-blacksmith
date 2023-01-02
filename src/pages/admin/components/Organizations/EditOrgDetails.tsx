@@ -1,6 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
@@ -12,6 +10,8 @@ import {
   Typography,
 } from '@mui/material'
 import { styled } from '@mui/system'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

@@ -30,8 +30,8 @@ describe('page: ForgotPassword', () => {
     )
 
     expect(screen.getByTestId('forgot-pass-submit')).toBeInTheDocument()
-    expect(Auth.forgotPassword).not.toBeCalled()
-    expect(mockNavigate).not.toBeCalled()
+    expect(Auth.forgotPassword).not.toHaveBeenCalled()
+    expect(mockNavigate).not.toHaveBeenCalled()
   })
 
   it('does not submit if email is empty', async () => {
@@ -48,8 +48,8 @@ describe('page: ForgotPassword', () => {
 
     await waitForText('Please enter your email')
 
-    expect(Auth.forgotPassword).not.toBeCalled()
-    expect(mockNavigate).not.toBeCalled()
+    expect(Auth.forgotPassword).not.toHaveBeenCalled()
+    expect(mockNavigate).not.toHaveBeenCalled()
   })
 
   it('does not submit if email is invalid', async () => {
@@ -67,8 +67,8 @@ describe('page: ForgotPassword', () => {
 
     await waitForText('Please enter a valid email address')
 
-    expect(Auth.forgotPassword).not.toBeCalled()
-    expect(mockNavigate).not.toBeCalled()
+    expect(Auth.forgotPassword).not.toHaveBeenCalled()
+    expect(mockNavigate).not.toHaveBeenCalled()
   })
 
   it('submits when email is valid', async () => {
@@ -86,9 +86,9 @@ describe('page: ForgotPassword', () => {
     userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForCalls(AuthMock.forgotPassword)
-    expect(AuthMock.forgotPassword).toBeCalledWith(email)
+    expect(AuthMock.forgotPassword).toHaveBeenCalledWith(email)
 
-    expect(mockNavigate).toBeCalledWith({
+    expect(mockNavigate).toHaveBeenCalledWith({
       pathname: '/reset-password',
       search: `?${createSearchParams({ email })}`,
     })

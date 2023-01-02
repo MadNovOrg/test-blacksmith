@@ -8,7 +8,7 @@ export type ResponseType = {
 }
 
 export type ParamsType = {
-  courseId: string
+  courseId: number
   where?: object
   orderBy?: object | null
   limit?: number

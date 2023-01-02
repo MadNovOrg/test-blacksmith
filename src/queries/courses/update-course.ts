@@ -3,7 +3,7 @@ import { gql } from 'graphql-request'
 import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
 
 export type ParamsType = {
-  courseId: string
+  courseId: number
   scheduleId: string
   courseInput: {
     name: string

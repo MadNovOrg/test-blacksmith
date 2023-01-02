@@ -156,7 +156,7 @@ describe('context: Auth', () => {
         await result.current.login(email, pass)
       })
 
-      expect(Auth.signIn).toBeCalledWith(email, pass)
+      expect(Auth.signIn).toHaveBeenCalledWith(email, pass)
       expect(result.current.profile?.email).toBe(email)
     })
 
@@ -170,11 +170,11 @@ describe('context: Auth', () => {
       await waitForNextUpdate()
       await act(result.current.logout)
 
-      expect(cognitoToProfileMock).toBeCalledTimes(1)
+      expect(cognitoToProfileMock).toHaveBeenCalledTimes(1)
 
       const resp = await result.current.login(email, pass)
       expect(resp).toStrictEqual({ error: Error('Failed for tests') })
-      expect(cognitoToProfileMock).toBeCalledTimes(1) // not called again
+      expect(cognitoToProfileMock).toHaveBeenCalledTimes(1) // not called again
     })
 
     it('returns error if profile GraphQL fails', async () => {
@@ -187,7 +187,7 @@ describe('context: Auth', () => {
       await waitForNextUpdate()
       await act(result.current.logout)
 
-      expect(cognitoToProfileMock).toBeCalledTimes(1)
+      expect(cognitoToProfileMock).toHaveBeenCalledTimes(1)
 
       cognitoToProfileMock.mockRejectedValueOnce(Error('Failed for tests'))
 
@@ -196,8 +196,8 @@ describe('context: Auth', () => {
         expect(resp).toStrictEqual({ user: undefined, error: undefined })
       })
 
-      expect(cognitoToProfileMock).toBeCalledTimes(2)
-      expect(console.error).toBeCalledWith(Error('Failed for tests'))
+      expect(cognitoToProfileMock).toHaveBeenCalledTimes(2)
+      expect(console.error).toHaveBeenCalledWith(Error('Failed for tests'))
     })
   })
 
@@ -214,7 +214,7 @@ describe('context: Auth', () => {
 
       await act(result.current.logout)
 
-      expect(Auth.signOut).toBeCalledWith()
+      expect(Auth.signOut).toHaveBeenCalledWith()
       expect(result.current.profile).toBeUndefined()
       expect(result.current.activeRole).toBeUndefined()
 

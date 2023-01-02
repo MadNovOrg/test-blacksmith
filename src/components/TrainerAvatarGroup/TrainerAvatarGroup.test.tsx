@@ -1,4 +1,4 @@
-import { build, fake } from '@jackfranklin/test-data-bot'
+import { build, perBuild } from '@jackfranklin/test-data-bot'
 import React from 'react'
 
 import {
@@ -6,17 +6,17 @@ import {
   Course_Trainer_Type_Enum,
 } from '@app/generated/graphql'
 
-import { render, screen } from '@test/index'
+import { chance, render, screen } from '@test/index'
 
 import { TrainerAvatar, TrainerAvatarGroup } from '.'
 
 const buildTrainerAvatar = build<TrainerAvatar>({
   fields: {
-    id: fake(f => f.datatype.uuid()),
+    id: perBuild(() => chance.guid()),
     type: Course_Trainer_Type_Enum.Assistant,
     status: Course_Invite_Status_Enum.Accepted,
     profile: {
-      fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
+      fullName: perBuild(() => chance.name({ full: true })),
     },
   },
 })

@@ -63,7 +63,7 @@ export type Course = {
     reason: string
   }
   modulesDuration?: number
-} & Base
+} & Omit<Base, 'id'>
 
 export type CourseModule = {
   covered?: boolean
@@ -118,6 +118,7 @@ export type Organization = {
   sector: string
   trustName: string
   trustType: TrustType
+  go1Licenses?: number
 } & Base
 
 export type OrganizationMember = {
@@ -339,8 +340,8 @@ export type TrainerSchedule = {
 } & Base
 
 export type CourseSchedule = {
-  start: Date
-  end: Date
+  start: string
+  end: string
   course?: Course
   venue?: Venue
   virtualLink?: string
@@ -392,7 +393,7 @@ export type CourseInvite = {
 export type SortOrder = 'asc' | 'desc'
 
 export type GqlError = {
-  code: string
+  code?: string
   message: string
 }
 

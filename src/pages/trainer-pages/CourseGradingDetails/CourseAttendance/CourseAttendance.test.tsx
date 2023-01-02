@@ -246,7 +246,7 @@ describe('component: CourseAttendance', () => {
 
     userEvent.click(screen.getByText('Confirm modules and physical techniques'))
 
-    expect(fetcherMock).toBeCalledTimes(1)
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock.mock.calls[0]).toEqual([
       MUTATION,
       {

@@ -100,7 +100,10 @@ export const CourseCancellationRequestModal: React.FC<CourseCancellationRequestM
           {t('pages.course-details.request-cancellation-modal.warning')}
         </Alert>
 
-        <CancellationTermsTable courseStartDate={startDate} sx={{ mt: 4 }} />
+        <CancellationTermsTable
+          courseStartDate={new Date(startDate)}
+          sx={{ mt: 4 }}
+        />
 
         <TextField
           fullWidth

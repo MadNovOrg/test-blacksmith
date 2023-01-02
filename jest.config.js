@@ -22,4 +22,8 @@ module.exports = {
   },
   modulePathIgnorePatterns: ['<rootDir>/playwright'],
   transformIgnorePatterns: ['/!node_modules\\/lodash-es/'],
+  snapshotFormat: {
+    escapeString: true,
+    printBasicPrototype: true,
+  },
 }

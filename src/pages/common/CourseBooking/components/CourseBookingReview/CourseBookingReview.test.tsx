@@ -92,7 +92,7 @@ const getMockData = (
 
 describe('CourseBookingReview', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
   })
 
   afterAll(() => {

@@ -38,7 +38,7 @@ exports[`Login matches snapshot 1`] = `
               title="Email Address"
             >
               <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-colorPrimary Mui-focused MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard css-rl2i38-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="true"
                 for="email"
                 id="email-label"
@@ -46,11 +46,11 @@ exports[`Login matches snapshot 1`] = `
                 Email Address
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
+                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-1ci57tt-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
-                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
                   data-testid="input-email"
                   id="email"
                   name="email"
@@ -69,7 +69,7 @@ exports[`Login matches snapshot 1`] = `
               title="Password"
             >
               <label
-                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard css-1n83x2o-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
                 for="password"
                 id="password-label"
@@ -77,11 +77,11 @@ exports[`Login matches snapshot 1`] = `
                 Password
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1nkheju-MuiInputBase-root-MuiInput-root"
+                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1ci57tt-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
-                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
                   data-testid="input-password"
                   id="password"
                   name="password"
@@ -97,7 +97,7 @@ exports[`Login matches snapshot 1`] = `
           class="MuiBox-root css-dvxtzn"
         >
           <button
-            class="MuiLoadingButton-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButtonBase-root css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiLoadingButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge MuiButton-root MuiLoadingButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge css-14srt4-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
             data-testid="login-submit"
             id="mui-1"
             tabindex="0"
@@ -109,7 +109,7 @@ exports[`Login matches snapshot 1`] = `
             />
           </button>
           <a
-            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-1qgrw7x-MuiTypography-root-MuiLink-root"
+            class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-1146k72-MuiTypography-root-MuiLink-root"
             data-testid="sign-up-link"
             href="/registration"
           >
@@ -121,7 +121,7 @@ exports[`Login matches snapshot 1`] = `
         class="MuiBox-root css-15ne9z9"
       >
         <a
-          class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-ihnw6p-MuiTypography-root-MuiLink-root"
+          class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-khwz85-MuiTypography-root-MuiLink-root"
           data-testid="forgot-password-link"
           href="/forgot-password"
         >

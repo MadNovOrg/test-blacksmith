@@ -21,7 +21,7 @@ const defaultProps = {
 
 describe('Form', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
   })
   afterAll(() => {
     jest.useRealTimers()

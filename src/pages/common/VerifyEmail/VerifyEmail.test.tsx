@@ -57,7 +57,7 @@ describe('page: VerifyEmailPage', () => {
     expect(screen.queryByTestId('signup-verify-btn')).not.toBeInTheDocument()
     userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitForCalls(AuthMock.verifyCurrentUserAttribute)
-    expect(AuthMock.verifyCurrentUserAttribute).toBeCalledWith('email')
+    expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
@@ -104,7 +104,7 @@ describe('page: VerifyEmailPage', () => {
       'Please enter 6 digit passcode received in email'
     )
 
-    expect(AuthMock.verifyCurrentUserAttributeSubmit).not.toBeCalled()
+    expect(AuthMock.verifyCurrentUserAttributeSubmit).not.toHaveBeenCalled()
   })
 
   it('calls cognito submit when code is valid', async () => {
@@ -127,7 +127,7 @@ describe('page: VerifyEmailPage', () => {
     userEvent.click(submitBtn)
 
     await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
-    expect(AuthMock.verifyCurrentUserAttributeSubmit).toBeCalledWith(
+    expect(AuthMock.verifyCurrentUserAttributeSubmit).toHaveBeenCalledWith(
       'email',
       code
     )
@@ -204,7 +204,7 @@ describe('page: VerifyEmailPage', () => {
     userEvent.click(resendBtn)
 
     await waitForCalls(AuthMock.verifyCurrentUserAttribute, 2)
-    expect(AuthMock.verifyCurrentUserAttribute).toBeCalledWith('email')
+    expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
   })
 
   it('reloads profile before navigating away', async () => {

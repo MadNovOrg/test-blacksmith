@@ -1,8 +1,8 @@
-import { DatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import enLocale from 'date-fns/locale/en-GB'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,15 +22,13 @@ export const FilterDates: React.FC<Props> = ({ onChange }) => {
   }, [from, to, onChange])
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} locale={enLocale}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
       <Box display="flex" flexDirection="column" gap={1}>
         <Typography variant="body2" fontWeight="bold">
           {t('filters.date-range')}
         </Typography>
 
         <DatePicker
-          clearable
-          clearText={t('common.clear')}
           value={from}
           onChange={setFrom}
           renderInput={params => (
@@ -45,8 +43,6 @@ export const FilterDates: React.FC<Props> = ({ onChange }) => {
         />
 
         <DatePicker
-          clearable
-          clearText={t('common.clear')}
           value={to}
           onChange={setTo}
           renderInput={params => (

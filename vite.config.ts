@@ -2,7 +2,6 @@ import path from 'path'
 
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import shimReactPdf from 'vite-plugin-shim-react-pdf'
 import svgrPlugin from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
@@ -14,6 +13,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    port: 3000,
   },
   resolve: {
     alias: {
@@ -33,6 +33,5 @@ export default defineConfig({
         icon: true,
       },
     }),
-    shimReactPdf(),
   ],
 })

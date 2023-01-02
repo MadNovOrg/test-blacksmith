@@ -17,7 +17,10 @@ describe('component: FilterDates', () => {
     userEvent.paste(from, '30/05/2022')
     expect(from).toHaveValue('30/05/2022')
 
-    expect(onChange).toBeCalledWith(new Date('2022-05-30T00:00:00'), undefined)
+    expect(onChange).toHaveBeenCalledWith(
+      new Date('2022-05-30T00:00:00'),
+      undefined
+    )
   })
 
   it('calls onChange as expected when to changes', async () => {
@@ -29,6 +32,9 @@ describe('component: FilterDates', () => {
     userEvent.paste(to, '30/05/2022')
     expect(to).toHaveValue('30/05/2022')
 
-    expect(onChange).toBeCalledWith(undefined, new Date('2022-05-30T00:00:00'))
+    expect(onChange).toHaveBeenCalledWith(
+      undefined,
+      new Date('2022-05-30T00:00:00')
+    )
   })
 })

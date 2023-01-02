@@ -17,7 +17,6 @@ import { useAuth } from '@app/context/auth'
 import { yup } from '@app/schemas'
 import {
   CourseLevel,
-  CourseSchedule,
   CourseTrainer,
   CourseTrainerType,
   CourseType,
@@ -40,7 +39,7 @@ type Props = {
   trainers?: CourseTrainer[]
   courseType: CourseType
   courseLevel: CourseLevel
-  courseSchedule: Pick<CourseSchedule, 'start' | 'end'>
+  courseSchedule: { start: Date; end: Date }
   onChange?: (data: FormValues, isValid: boolean) => void
   autoFocus?: boolean
   disabled?: boolean
@@ -88,7 +87,10 @@ const ChooseTrainers: React.FC<Props> = ({
   )
 
   const needsModerator = useMemo(() => {
-    const duration = differenceInDays(courseSchedule.end, courseSchedule.start)
+    const duration = differenceInDays(
+      new Date(courseSchedule.end),
+      new Date(courseSchedule.start)
+    )
 
     switch (courseLevel) {
       case CourseLevel.Advanced:

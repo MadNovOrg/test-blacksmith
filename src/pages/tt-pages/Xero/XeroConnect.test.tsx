@@ -48,7 +48,7 @@ describe('page: XeroConnect', () => {
 
     await waitForCalls(mockFetcher)
 
-    expect(mockFetcher).toBeCalledWith(
+    expect(mockFetcher).toHaveBeenCalledWith(
       expect.stringContaining('query XeroConnect')
     )
 
@@ -68,7 +68,7 @@ describe('page: XeroConnect', () => {
 
     await waitForCalls(mockFetcher)
 
-    expect(mockFetcher).toBeCalledWith(
+    expect(mockFetcher).toHaveBeenCalledWith(
       expect.stringContaining('mutation XeroCallback'),
       { input: { url } }
     )

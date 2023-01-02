@@ -59,7 +59,10 @@ export const CourseBookingPayment = () => {
         }
 
         const vars = { input: { orderId: order.id } }
-        const { paymentIntent } = await fetcher(STRIPE_CREATE_PAYMENT, vars)
+        const { paymentIntent } = await fetcher<StripeCreatePaymentResp>(
+          STRIPE_CREATE_PAYMENT,
+          vars
+        )
 
         const s = await getStripe()
         const pi = await s.retrievePaymentIntent(paymentIntent.clientSecret)

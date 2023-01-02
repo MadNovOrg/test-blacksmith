@@ -2,7 +2,7 @@ import { add, sub } from 'date-fns'
 import React from 'react'
 
 import useCourseInvites from '@app/hooks/useCourseInvites'
-import { Course, CourseType } from '@app/types'
+import { Course, CourseType, InviteStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { chance, render, userEvent, waitForCalls } from '@test/index'
@@ -117,8 +117,8 @@ describe('CourseInvites', () => {
       ...useCourseInvitesDefaults,
       data: [
         buildInvite(),
-        buildInvite({ overrides: { status: 'ACCEPTED' } }),
-        buildInvite({ overrides: { status: 'DECLINED' } }),
+        buildInvite({ overrides: { status: InviteStatus.ACCEPTED } }),
+        buildInvite({ overrides: { status: InviteStatus.DECLINED } }),
       ],
     })
 
@@ -149,7 +149,7 @@ describe('CourseInvites', () => {
     expect(input.value).toBe(emails[0]) // chip not created
 
     userEvent.click(getByTestId('modal-invites-send'))
-    expect(useCourseInvitesDefaults.send).not.toBeCalled()
+    expect(useCourseInvitesDefaults.send).not.toHaveBeenCalled()
   })
 
   it('calls invites.send with a single valid email address', async () => {
@@ -169,7 +169,7 @@ describe('CourseInvites', () => {
     userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toBeCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
   })
 
   it('calls invites.send with a csv email addresses', async () => {
@@ -189,7 +189,7 @@ describe('CourseInvites', () => {
     userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toBeCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
   })
 
   it('calls invites.send when all emails are valid', async () => {
@@ -212,7 +212,7 @@ describe('CourseInvites', () => {
     userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toBeCalledWith(emails)
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
   })
 
   it('calls invites.send with left overs (not tagged)', async () => {
@@ -235,6 +235,9 @@ describe('CourseInvites', () => {
     userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
-    expect(useCourseInvitesDefaults.send).toBeCalledWith([email, leftOver])
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith([
+      email,
+      leftOver,
+    ])
   })
 })

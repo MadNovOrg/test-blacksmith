@@ -66,11 +66,17 @@ describe('AcceptDeclineCourse', () => {
 
     await waitForCalls(onUpdate)
 
-    expect(onUpdate).toBeCalledWith(trainer, Course_Invite_Status_Enum.Accepted)
-    expect(mockFetcher).toBeCalledWith(expect.stringContaining('mutation'), {
-      id: trainer.id,
-      status: Course_Invite_Status_Enum.Accepted,
-    })
+    expect(onUpdate).toHaveBeenCalledWith(
+      trainer,
+      Course_Invite_Status_Enum.Accepted
+    )
+    expect(mockFetcher).toHaveBeenCalledWith(
+      expect.stringContaining('mutation'),
+      {
+        id: trainer.id,
+        status: Course_Invite_Status_Enum.Accepted,
+      }
+    )
   })
 
   it('calls onUpdate as expected when user DECLINES', async () => {
@@ -82,11 +88,17 @@ describe('AcceptDeclineCourse', () => {
 
     await waitForCalls(onUpdate)
 
-    expect(onUpdate).toBeCalledWith(trainer, Course_Invite_Status_Enum.Declined)
-    expect(mockFetcher).toBeCalledWith(expect.stringContaining('mutation'), {
-      id: trainer.id,
-      status: Course_Invite_Status_Enum.Declined,
-    })
+    expect(onUpdate).toHaveBeenCalledWith(
+      trainer,
+      Course_Invite_Status_Enum.Declined
+    )
+    expect(mockFetcher).toHaveBeenCalledWith(
+      expect.stringContaining('mutation'),
+      {
+        id: trainer.id,
+        status: Course_Invite_Status_Enum.Declined,
+      }
+    )
   })
 
   it('does not call onUpdate when user CANCELs', async () => {
@@ -100,8 +112,8 @@ describe('AcceptDeclineCourse', () => {
       screen.queryByTestId(tid('modalCancel'))
     )
 
-    expect(onUpdate).not.toBeCalled()
-    expect(mockFetcher).not.toBeCalled()
+    expect(onUpdate).not.toHaveBeenCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('does not crash if fetcher throws', async () => {
@@ -116,8 +128,8 @@ describe('AcceptDeclineCourse', () => {
 
     await waitForCalls(mockFetcher)
 
-    expect(onUpdate).not.toBeCalled()
-    expect(logSpy).toBeCalledWith(Error('Failed for testing'))
+    expect(onUpdate).not.toHaveBeenCalled()
+    expect(logSpy).toHaveBeenCalledWith(Error('Failed for testing'))
     expect(screen.getByTestId(tid('modalSubmit'))).toBeInTheDocument()
   })
 })

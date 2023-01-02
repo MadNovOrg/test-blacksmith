@@ -31,5 +31,5 @@ export function normalizeGqlError(error: ClientError): GqlError | null {
   if (!error) return null
 
   const { message, extensions } = error.response?.errors?.[0] || {}
-  return { message, ...extensions }
+  return { message: message ?? '', ...extensions }
 }

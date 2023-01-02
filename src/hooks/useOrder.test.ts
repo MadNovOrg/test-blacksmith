@@ -100,7 +100,7 @@ describe('useOrder', () => {
     expect(course).toStrictEqual({})
     expect(invoice).toStrictEqual({})
 
-    expect(useSWRMock).toBeCalledWith([expect.any(String), { orderId }])
+    expect(useSWRMock).toHaveBeenCalledWith([expect.any(String), { orderId }])
   })
 
   it('should return expected data for valid order id', async () => {
@@ -127,7 +127,7 @@ describe('useOrder', () => {
     expect(course).toStrictEqual(mockedCourse)
     expect(invoice).toStrictEqual(mockedInvoice)
 
-    expect(useSWRMock).toBeCalledWith([
+    expect(useSWRMock).toHaveBeenCalledWith([
       expect.any(String),
       { invoiceNumbers: [mockedOrder.xeroInvoiceNumber] },
     ])

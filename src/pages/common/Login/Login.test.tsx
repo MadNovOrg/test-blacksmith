@@ -48,7 +48,7 @@ describe('Login', () => {
     await waitForText('Please enter your email')
     await waitForText('Please enter your password')
 
-    expect(providers.auth.login).not.toBeCalled()
+    expect(providers.auth.login).not.toHaveBeenCalled()
   })
 
   it('shows error when email is invalid', async () => {
@@ -65,7 +65,7 @@ describe('Login', () => {
 
     await waitForText('Please enter a valid email address')
 
-    expect(providers.auth.login).not.toBeCalled()
+    expect(providers.auth.login).not.toHaveBeenCalled()
   })
 
   it('attempts login when email is valid', async () => {
@@ -130,6 +130,6 @@ describe('Login', () => {
     fireEvent.click(screen.getByTestId('login-submit'))
     await waitForCalls(providers.auth.login, 1)
 
-    expect(mockNavigate).toBeCalledWith('/', { replace: true })
+    expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true })
   })
 })

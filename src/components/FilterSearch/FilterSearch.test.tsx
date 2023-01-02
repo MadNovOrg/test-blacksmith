@@ -15,7 +15,7 @@ describe('components: FilterSearch', () => {
     expect(screen.getByTestId('FilterSearch-Clear')).toBeDisabled()
 
     await expect(waitForCalls(onChange)).rejects.toThrow()
-    expect(onChange).not.toBeCalled()
+    expect(onChange).not.toHaveBeenCalled()
   })
 
   it('takes in a value', async () => {
@@ -29,7 +29,7 @@ describe('components: FilterSearch', () => {
     expect(screen.getByTestId('FilterSearch-Clear')).not.toBeDisabled()
 
     await expect(waitForCalls(onChange)).rejects.toThrow()
-    expect(onChange).not.toBeCalled()
+    expect(onChange).not.toHaveBeenCalled()
   })
 
   it('calls onChange debounced when user types', async () => {
@@ -43,8 +43,8 @@ describe('components: FilterSearch', () => {
     userEvent.type(input, value)
 
     await waitForCalls(onChange)
-    expect(onChange).toBeCalledTimes(1)
-    expect(onChange).toBeCalledWith(value)
+    expect(onChange).toHaveBeenCalledTimes(1)
+    expect(onChange).toHaveBeenCalledWith(value)
   })
 
   it('calls onChange not debounced when user types', async () => {
@@ -58,10 +58,10 @@ describe('components: FilterSearch', () => {
     await userEvent.type(input, value, { delay: 25 })
 
     await waitForCalls(onChange, value.length)
-    expect(onChange).toBeCalledTimes(value.length)
+    expect(onChange).toHaveBeenCalledTimes(value.length)
 
     for (let i = 1; i <= value.length; i++) {
-      expect(onChange).toBeCalledWith(value.slice(0, i))
+      expect(onChange).toHaveBeenCalledWith(value.slice(0, i))
     }
   })
 
@@ -80,6 +80,6 @@ describe('components: FilterSearch', () => {
 
     await waitForCalls(onChange)
     expect(input).toHaveValue('')
-    expect(onChange).toBeCalledWith('')
+    expect(onChange).toHaveBeenCalledWith('')
   })
 })

@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { LoadingButton, DatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Stack,
@@ -14,7 +13,10 @@ import {
   MenuItem,
   InputAdornment,
   Alert,
+  TextFieldProps,
 } from '@mui/material'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { startOfDay, endOfDay } from 'date-fns'
 import { omit } from 'lodash-es'
 import React, { useEffect, useRef, useState } from 'react'
@@ -30,7 +32,11 @@ import { SelectLevels } from '@app/components/SelectLevels'
 import { useAuth } from '@app/context/auth'
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { QUERY as GET_PROMOCODES } from '@app/queries/promo-codes/get-promo-codes'
+import {
+  InputType,
+  ResponseType,
+  QUERY as GET_PROMOCODES,
+} from '@app/queries/promo-codes/get-promo-codes'
 import INSERT_PROMO_CODE from '@app/queries/promo-codes/insert-promo-code'
 import { CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
@@ -97,7 +103,10 @@ export const Create: React.FC = () => {
   const checkDuplicateCode = useDebouncedCallback(async () => {
     try {
       const where = { code: { _eq: values.code } }
-      const { promoCodes } = await fetcher(GET_PROMOCODES, { where })
+      const { promoCodes } = await fetcher<ResponseType, InputType>(
+        GET_PROMOCODES,
+        { where }
+      )
       if (promoCodes.length) {
         setError('code', { message: t('pages.promoCodes.fld-code-dup') })
       } else {
@@ -426,7 +435,7 @@ export const Create: React.FC = () => {
                 }}
                 minDate={minDate}
                 maxDate={values.validTo}
-                renderInput={params => (
+                renderInput={(params: TextFieldProps) => (
                   <TextField
                     {...params}
                     label={t('pages.promoCodes.fld-validFrom-label')}

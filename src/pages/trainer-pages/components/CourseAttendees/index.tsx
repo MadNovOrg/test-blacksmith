@@ -29,27 +29,29 @@ type CourseAttendeesProps = {
 }
 
 export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
-  const { id: courseId } = useParams()
+  const { id } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
   const { acl } = useAuth()
 
   const { t } = useTranslation()
 
+  const courseId = Number(id ?? 0)
+
   const {
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
-  } = useCourseParticipants(courseId ?? '')
+  } = useCourseParticipants(courseId)
   const { total: pendingTotal } = useCourseInvites(
-    courseId ?? '',
+    courseId,
     InviteStatus.PENDING
   )
   const { total: declinedTotal } = useCourseInvites(
-    courseId ?? '',
+    courseId,
     InviteStatus.DECLINED
   )
   const { total: waitlistTotal } = useWaitlist({
-    courseId: Number(courseId ?? 0),
+    courseId: courseId,
     sort: { by: 'createdAt', dir: 'asc' },
   })
 

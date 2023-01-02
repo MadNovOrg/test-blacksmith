@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
@@ -16,6 +15,7 @@ import {
   FormControlLabel,
 } from '@mui/material'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Auth } from 'aws-amplify'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import MuiPhoneNumber from 'material-ui-phone-number'

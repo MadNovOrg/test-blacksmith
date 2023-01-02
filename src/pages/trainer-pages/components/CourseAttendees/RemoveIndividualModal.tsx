@@ -212,7 +212,7 @@ export const RemoveIndividualModal = ({
 
           {feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS ? (
             <CancellationTermsTable
-              courseStartDate={startDate}
+              courseStartDate={new Date(startDate)}
               sx={{ mt: 4 }}
             />
           ) : null}

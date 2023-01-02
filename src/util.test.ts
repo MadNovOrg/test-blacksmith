@@ -17,7 +17,7 @@ import {
 
 describe('formatDateForDraft', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
   })
   afterAll(() => {
     jest.useRealTimers()
@@ -57,13 +57,13 @@ describe('formatDateForDraft', () => {
 describe('courseStarted', () => {
   it('should return false', () => {
     const course = buildCourse()
-    course.schedule[0].start = new Date(2030, 0, 1)
+    course.schedule[0].start = new Date(2030, 0, 1).toISOString()
     expect(courseStarted(course)).toBeFalsy()
   })
 
   it('should return true', () => {
     const course = buildCourse()
-    course.schedule[0].start = new Date(2000, 0, 1)
+    course.schedule[0].start = new Date(2000, 0, 1).toISOString()
     expect(courseStarted(course)).toBeTruthy()
   })
 })
@@ -71,13 +71,13 @@ describe('courseStarted', () => {
 describe('courseEnded', () => {
   it('should return false', () => {
     const course = buildCourse()
-    course.schedule[0].end = new Date(2030, 0, 1)
+    course.schedule[0].end = new Date(2030, 0, 1).toISOString()
     expect(courseEnded(course)).toBeFalsy()
   })
 
   it('should return true', () => {
     const course = buildCourse()
-    course.schedule[0].end = new Date(2000, 0, 1)
+    course.schedule[0].end = new Date(2000, 0, 1).toISOString()
     expect(courseEnded(course)).toBeTruthy()
   })
 })

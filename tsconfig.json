@@ -16,11 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "typeRoots": ["./src/types"],
-    "types": [
-      "vite-plugin-svgr/client",
-      "@types/jest",
-      "@types/amazon-cognito-auth-js"
-    ],
+    "types": ["vite-plugin-svgr/client", "@types/jest"],
     "baseUrl": "./",
     "paths": {
       "@app/*": ["./src/*"],

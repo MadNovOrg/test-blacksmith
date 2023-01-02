@@ -56,7 +56,10 @@ export const CancelAttendanceForm: React.FC<CancelAttendanceFormProps> = ({
         {t('pages.course-details.request-cancellation-modal.warning')}
       </Alert>
 
-      <CancellationTermsTable courseStartDate={startDate} sx={{ mt: 2 }} />
+      <CancellationTermsTable
+        courseStartDate={new Date(startDate)}
+        sx={{ mt: 2 }}
+      />
 
       <Box mt={4}>
         <FormControlLabel

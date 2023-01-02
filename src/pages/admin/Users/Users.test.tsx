@@ -1,4 +1,4 @@
-import { build, fake } from '@jackfranklin/test-data-bot'
+import { build, perBuild } from '@jackfranklin/test-data-bot'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -21,14 +21,14 @@ const mockProfile = build<
   Exclude<GetProfilesQuery['profiles'], undefined | null>[0]
 >({
   fields: {
-    id: fake(f => f.datatype.uuid()),
-    fullName: fake(f => `${f.name.firstName()} ${f.name.lastName()}`),
-    email: fake(f => f.internet.email()),
-    avatar: fake(f => f.internet.avatar()),
+    id: perBuild(() => chance.guid()),
+    fullName: perBuild(() => chance.name({ full: true })),
+    email: perBuild(() => chance.email()),
+    avatar: perBuild(() => chance.avatar()),
     roles: [
       {
         role: {
-          id: fake(f => f.datatype.uuid()),
+          id: perBuild(() => chance.guid()),
           name: RoleName.USER,
         },
       },
@@ -36,17 +36,16 @@ const mockProfile = build<
     trainer_role_types: [
       {
         trainer_role_type: {
-          id: fake(f => f.datatype.uuid()),
+          id: perBuild(() => chance.guid()),
           name: TrainerRoleTypeName.PRINCIPAL,
         },
       },
     ],
     organizations: [
       {
-        id: fake(f => f.datatype.uuid()),
         organization: {
-          id: fake(f => f.datatype.uuid()),
-          name: fake(f => f.random.word()),
+          id: perBuild(() => chance.guid()),
+          name: perBuild(() => chance.word()),
         },
       },
     ],

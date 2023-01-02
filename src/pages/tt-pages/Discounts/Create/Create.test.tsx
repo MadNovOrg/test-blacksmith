@@ -124,7 +124,7 @@ describe('page: CreateDiscount', () => {
 
     expect(fldCode.parentElement).toHaveClass('Mui-error')
     expect(codeError).toHaveClass('Mui-error')
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('validates level(s) selected if appliesTo is LEVELS', async () => {
@@ -144,7 +144,7 @@ describe('page: CreateDiscount', () => {
 
     expect(screen.queryByTestId('SelectLevels')).toBeInTheDocument()
     expect(screen.queryByText(levelsRequiredText)).toBeInTheDocument()
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('validates course(s) selected if appliesTo is COURSES', async () => {
@@ -164,7 +164,7 @@ describe('page: CreateDiscount', () => {
 
     expect(screen.queryByTestId('SelectCourses')).toBeInTheDocument()
     expect(screen.queryByText(coursesRequiredText)).toBeInTheDocument()
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('validates validFrom is required', async () => {
@@ -189,7 +189,7 @@ describe('page: CreateDiscount', () => {
       )
     ).toBeInTheDocument()
 
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('validates validTo is >= to validFrom', async () => {
@@ -215,7 +215,7 @@ describe('page: CreateDiscount', () => {
       )
     ).toBeInTheDocument()
 
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('validates usesMax is greater than 0 if filled', async () => {
@@ -250,7 +250,7 @@ describe('page: CreateDiscount', () => {
       'Maximum usages must be greater than or equal to 1'
     )
 
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('navigates to Discounts list when cancel is clicked', async () => {
@@ -259,8 +259,8 @@ describe('page: CreateDiscount', () => {
     const btnCancel = screen.getByTestId('btn-cancel')
     await waitFor(() => userEvent.click(btnCancel))
 
-    expect(mockFetcher).not.toBeCalled()
-    expect(mockNavigate).toBeCalledWith('..')
+    expect(mockFetcher).not.toHaveBeenCalled()
+    expect(mockNavigate).toHaveBeenCalledWith('..')
   })
 
   it('submits as expected when all data is valid', async () => {
@@ -274,7 +274,7 @@ describe('page: CreateDiscount', () => {
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
 
-    expect(mockFetcher).toBeCalledWith(
+    expect(mockFetcher).toHaveBeenCalledWith(
       expect.stringContaining('mutation InsertPromoCode'),
       {
         promoCode: {
@@ -292,7 +292,7 @@ describe('page: CreateDiscount', () => {
         },
       }
     )
-    expect(mockNavigate).toBeCalledWith('..')
+    expect(mockNavigate).toHaveBeenCalledWith('..')
   })
 
   it('shows Approval Needed if PERCENT exceeds 15', async () => {
@@ -320,7 +320,7 @@ describe('page: CreateDiscount', () => {
 
     const reasonTestId = `approvalNeeded-reason-${Promo_Code_Type_Enum.Percent}`
     expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 
   it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
@@ -345,7 +345,7 @@ describe('page: CreateDiscount', () => {
 
     const reasonTestId = `approvalNeeded-reason-${FreePlaces}`
     expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
-    expect(mockFetcher).not.toBeCalled()
+    expect(mockFetcher).not.toHaveBeenCalled()
   })
 })
 

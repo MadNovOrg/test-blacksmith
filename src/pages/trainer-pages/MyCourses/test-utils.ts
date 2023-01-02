@@ -1,4 +1,5 @@
-import { build, fake } from '@jackfranklin/test-data-bot'
+import { build, perBuild } from '@jackfranklin/test-data-bot'
+import { Chance } from 'chance'
 import { addHours } from 'date-fns'
 
 import {
@@ -10,25 +11,27 @@ import {
   TrainerCourseFragment,
 } from '@app/generated/graphql'
 
+const chance = new Chance()
+
 export const buildTrainerCourse = build<TrainerCourseFragment>({
   fields: {
-    id: fake(f => f.datatype.uuid()),
-    name: fake(f => f.random.words()),
+    id: perBuild(() => chance.integer()),
+    name: perBuild(() => chance.word({ length: 3 })),
     type: Course_Type_Enum.Open,
     level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.Scheduled,
     course_code: 'OP-L1-10000',
     organization: {
-      name: fake(f => f.random.words()),
+      name: perBuild(() => chance.word({ length: 3 })),
     },
     trainers: [
       {
-        id: fake(f => f.datatype.uuid()),
+        id: perBuild(() => chance.guid()),
         type: Course_Trainer_Type_Enum.Leader,
         status: Course_Invite_Status_Enum.Accepted,
         profile: {
-          id: fake(f => f.datatype.uuid()),
-          fullName: fake(f => f.random.words()),
+          id: perBuild(() => chance.guid()),
+          fullName: perBuild(() => chance.name({ full: true })),
         },
       },
     ],
@@ -45,11 +48,11 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
     },
     schedule: [
       {
-        id: fake(f => f.datatype.uuid()),
+        id: perBuild(() => chance.guid()),
         venue: {
-          id: fake(f => f.datatype.uuid()),
-          name: fake(f => f.random.words()),
-          city: fake(f => f.random.words()),
+          id: perBuild(() => chance.guid()),
+          name: perBuild(() => chance.word()),
+          city: perBuild(() => chance.city()),
         },
         virtualLink: null,
       },

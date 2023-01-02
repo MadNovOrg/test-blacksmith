@@ -11,7 +11,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type CourseParticipantCriteria =
   | {
-      course_id: { _eq: string }
+      course_id: { _eq: number }
     }
   | {
       attended?: { _eq: boolean }
@@ -38,7 +38,7 @@ export type CourseParticipantCriteria =
     }
 
 export default function useCourseParticipants(
-  courseId?: string,
+  courseId?: number,
   options?: {
     sortBy?: string
     order?: SortOrder

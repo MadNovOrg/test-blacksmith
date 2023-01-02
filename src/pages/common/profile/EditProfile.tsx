@@ -1,6 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { DatePicker, LocalizationProvider } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Alert,
@@ -19,6 +17,8 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import { styled } from '@mui/system'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { formatDistanceToNow, isPast } from 'date-fns'
 import { uniq } from 'lodash-es'
 import React, {

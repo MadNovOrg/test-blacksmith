@@ -229,7 +229,7 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
 
             {feeType === FeesRadioValue.APPLY_CANCELLATION_TERMS ? (
               <CancellationTermsTable
-                courseStartDate={startDate}
+                courseStartDate={new Date(startDate)}
                 sx={{ mt: 2 }}
               />
             ) : null}

@@ -96,7 +96,7 @@ Object {
                   class="css-lyd85o-MuiStack-root"
                 >
                   <div
-                    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-fs5m4j-MuiPaper-root-MuiAlert-root"
+                    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-acqq0o-MuiPaper-root-MuiAlert-root"
                     role="alert"
                   >
                     <div
@@ -115,7 +115,7 @@ Object {
                       </svg>
                     </div>
                     <div
-                      class="MuiAlert-message css-acap47-MuiAlert-message"
+                      class="MuiAlert-message css-1pxa9xg-MuiAlert-message"
                     >
                       Your order has been successfully submitted.
                     </div>
@@ -225,7 +225,7 @@ Object {
                 class="css-lyd85o-MuiStack-root"
               >
                 <div
-                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-fs5m4j-MuiPaper-root-MuiAlert-root"
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-outlinedSuccess MuiAlert-outlined css-acqq0o-MuiPaper-root-MuiAlert-root"
                   role="alert"
                 >
                   <div
@@ -244,7 +244,7 @@ Object {
                     </svg>
                   </div>
                   <div
-                    class="MuiAlert-message css-acap47-MuiAlert-message"
+                    class="MuiAlert-message css-1pxa9xg-MuiAlert-message"
                   >
                     Your order has been successfully submitted.
                   </div>

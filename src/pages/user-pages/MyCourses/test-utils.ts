@@ -1,13 +1,17 @@
-import { build, fake } from '@jackfranklin/test-data-bot'
+import { build, perBuild } from '@jackfranklin/test-data-bot'
+import { Chance } from 'chance'
 import { addHours } from 'date-fns'
 
 import {
   Course_Level_Enum,
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Grade_Enum,
   UserCourseFragment,
 } from '@app/generated/graphql'
+
+const chance = new Chance()
 
 export const buildUserCourse = build<
   UserCourseFragment & {
@@ -24,26 +28,30 @@ export const buildUserCourse = build<
   }
 >({
   fields: {
-    id: fake(f => f.datatype.number()),
-    name: fake(f => f.random.words()),
+    id: perBuild(() => chance.integer()),
+    name: perBuild(() => chance.name({ full: true })),
     type: Course_Type_Enum.Open,
     level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.Scheduled,
     trainers: [
       {
-        id: fake(f => f.datatype.uuid()),
-        profile: { fullName: fake(f => f.random.words()) },
+        id: perBuild(() => chance.guid()),
+        type: Course_Trainer_Type_Enum.Leader,
+        profile: {
+          id: perBuild(() => chance.guid()),
+          fullName: perBuild(() => chance.name({ full: true })),
+        },
       },
     ],
     schedule: [
       {
-        id: fake(f => f.datatype.uuid()),
+        id: perBuild(() => chance.guid()),
         start: new Date().toISOString(),
         end: addHours(new Date(), 8),
         venue: {
-          id: fake(f => f.datatype.uuid()),
-          name: fake(f => f.random.words()),
-          city: fake(f => f.random.words()),
+          id: perBuild(() => chance.guid()),
+          name: perBuild(() => chance.word()),
+          city: perBuild(() => chance.city()),
         },
         virtualLink: null,
       },
@@ -56,7 +64,7 @@ export const buildUserCourse = build<
         count: 5,
       },
     },
-    modulesAgg: null,
+    modulesAgg: { aggregate: null },
     max_participants: 0,
     waitlistAgg: { aggregate: null },
     participantsAgg: { aggregate: null },
