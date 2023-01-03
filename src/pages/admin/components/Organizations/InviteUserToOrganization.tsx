@@ -98,7 +98,14 @@ export const InviteUserToOrganization = () => {
         `../?tab=${OrgDashboardTabs.INDIVIDUALS}&subtab=${OrgIndividualsSubtabs.INVITES}`
       )
     } catch (e: unknown) {
-      setError((e as Error).message)
+      const errorMessage = (e as Error).message
+      if (
+        errorMessage.indexOf('organization_invites_org_id_email_key') !== -1
+      ) {
+        setError(t('pages.invite-to-org.duplicate-email'))
+      } else {
+        setError(errorMessage)
+      }
     } finally {
       setLoading(false)
     }
