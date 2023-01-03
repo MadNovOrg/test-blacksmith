@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import { Avatar } from '@app/components/Avatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
-import useOrg from '@app/hooks/useOrg'
+import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import { useTableSort } from '@app/hooks/useTableSort'
 import theme from '@app/theme'
 import { CertificateStatus, CourseLevel } from '@app/types'
@@ -150,7 +150,9 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
                       variant="body2"
                       color={theme.palette.grey[900]}
                       ml={1}
-                      href={`/profile/${profile.id}?orgId=${orgId}`}
+                      href={`/profile/${profile.id}${
+                        orgId !== ALL_ORGS ? `?orgId=${orgId}` : ''
+                      }`}
                     >
                       {profile.fullName}
                     </Link>
