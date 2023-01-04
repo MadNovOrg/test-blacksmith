@@ -104,7 +104,7 @@ const SalesAdminRoutes = () => {
         </Route>
       </Route>
 
-      <Route path="organizations">
+      <Route path="organisations">
         <Route index element={<Navigate replace to="all" />} />
         <Route path="new" element={<CreateOrganization />} />
         <Route path="list" element={<Organizations />} />

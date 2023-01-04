@@ -31,7 +31,7 @@ export const NavLinks = () => {
       ) : null}
 
       {acl.canViewOrganizations() ? (
-        <Link component={StyledNavLink} to="/organizations">
+        <Link component={StyledNavLink} to="/organisations">
           {t('organizations')}
         </Link>
       ) : null}

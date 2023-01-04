@@ -31,7 +31,7 @@ type OrganizationsProps = unknown
 export const Organizations: React.FC<OrganizationsProps> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
 
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
@@ -91,8 +91,21 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
       isFiltered = true
     }
 
+    obj.members = acl.canViewAllOrganizations()
+      ? {}
+      : {
+          _and: [
+            {
+              profile_id: {
+                _eq: profile?.id,
+              },
+            },
+            { isAdmin: { _eq: true } },
+          ],
+        }
+
     return [obj, isFiltered]
-  }, [filterSector, query])
+  }, [acl, filterSector, profile, query])
 
   const { orgs, loading } = useOrganizations(sorting, where)
 
@@ -151,7 +164,7 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
               {acl.canCreateOrgs() ? (
                 <Button
                   variant="contained"
-                  onClick={() => navigate('/organizations/new')}
+                  onClick={() => navigate('/organisations/new')}
                 >
                   {t('pages.admin.organizations.add-new-organization')}
                 </Button>

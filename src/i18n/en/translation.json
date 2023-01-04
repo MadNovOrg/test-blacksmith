@@ -1706,7 +1706,20 @@
           "organization-summary": "Organisation summary",
           "see-all-organizations": "See all organisations",
           "available-courses-for-booking": "Available courses for booking",
-          "see-all-courses": "See all courses"
+          "see-all-courses": "See all courses",
+          "certificates": {
+            "level-one": "Level One ({{ count }})",
+            "level-two": "Level Two ({{ count }})",
+            "advanced": "Advanced ({{ count }})",
+            "bild-act-certified": "BILD ACT Certified ({{ count }})",
+            "level_1": "Level One ({{ count }})",
+            "level_2": "Level Two ({{ count }})",
+            "bild_act": "BILD ACT Certified ({{ count }})",
+            "intermediate_trainer": "Intermediate Trainer ({{ count }})",
+            "bild_act_trainer": "BILD ACT Trainer ({{ count }})",
+            "advanced_trainer": "Advanced Trainer ({{ count }})",
+            "no-certification": "No certification ({{ count }})"
+          }
         },
         "licenses": {
           "title": "Blended learning licences",

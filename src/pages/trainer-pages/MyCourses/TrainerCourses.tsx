@@ -186,7 +186,7 @@ export const TrainerCourses: React.FC<Props> = ({
               {showAvailableCoursesButton ? (
                 <Button
                   variant="contained"
-                  onClick={() => navigate(`/organizations/${orgId}/courses`)}
+                  onClick={() => navigate(`/organisations/${orgId}/courses`)}
                 >
                   {t('pages.my-courses.find-available-courses')}
                 </Button>

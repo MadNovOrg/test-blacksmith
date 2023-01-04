@@ -174,7 +174,7 @@ export const AvailableCourses: React.FC = () => {
                         'pages.available-courses.select-organization'
                       )}
                       onChange={event =>
-                        navigate(`/organizations/${event.target.value}/courses`)
+                        navigate(`/organisations/${event.target.value}/courses`)
                       }
                     >
                       <MenuItem value={ALL_ORGS}>

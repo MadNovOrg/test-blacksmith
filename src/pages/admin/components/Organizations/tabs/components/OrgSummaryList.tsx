@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
+import Link from '@mui/material/Link'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -58,7 +59,15 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
         <TableBody>
           {data?.map(org => (
             <TableRow key={org.id} sx={{ backgroundColor: 'white' }}>
-              <TableCell>{org.name}</TableCell>
+              <TableCell>
+                {org?.id === orgId ? (
+                  org?.name
+                ) : (
+                  <Link href={`../../${org?.id}`} variant="body2">
+                    {org?.name}
+                  </Link>
+                )}
+              </TableCell>
               <TableCell>{org.address?.city}</TableCell>
               <TableCell>
                 <AvatarGroup

@@ -120,11 +120,14 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
                 courseLevel => (
                   <Tab
                     key={courseLevel}
-                    label={
-                      courseLevel
-                        ? t(`common.certificates.${courseLevel.toLowerCase()}`)
-                        : t('common.certificates.no-certification')
-                    }
+                    label={t(
+                      `pages.org-details.tabs.overview.certificates.${
+                        courseLevel
+                          ? courseLevel.toLowerCase()
+                          : 'no-certification'
+                      }`,
+                      { count: profilesByLevel.get(courseLevel)?.length ?? 0 }
+                    )}
                     value={courseLevel ?? 'none'}
                   />
                 )
@@ -154,7 +157,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
           </Typography>
           <Button
             variant="outlined"
-            onClick={() => navigate('/organizations/list')}
+            onClick={() => navigate('/organisations/list')}
           >
             {t('pages.org-details.tabs.overview.see-all-organizations')}
           </Button>

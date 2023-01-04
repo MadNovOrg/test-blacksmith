@@ -83,7 +83,7 @@ const UserRoutes = () => {
       <Route path="certifications" element={<MyCertifications />} />
 
       {acl.canViewOrganizations() ? (
-        <Route path="organizations">
+        <Route path="organisations">
           <Route index element={<Navigate replace to="all" />} />
           <Route path="list" element={<Organizations />} />
           <Route path=":id">

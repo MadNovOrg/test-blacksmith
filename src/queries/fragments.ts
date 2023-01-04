@@ -34,7 +34,7 @@ export const PROFILE = gql`
     contactDetails
     dietaryRestrictions
     disabilities
-    organizations {
+    organizations(order_by: { organization: { name: asc } }) {
       id
       isAdmin
       position

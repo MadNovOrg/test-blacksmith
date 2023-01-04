@@ -32,7 +32,7 @@ const test = base.extend<{ orgId: string }>({
 test.use({ storageState: stateFilePath('admin') })
 
 test('export licenses as CSV', async ({ page, orgId }) => {
-  await page.goto(`${BASE_URL}/organizations/${orgId}`)
+  await page.goto(`${BASE_URL}/organisations/${orgId}`)
   await page.waitForLoadState('networkidle')
 
   await page.click('button:has-text("Blended learning licences")')
