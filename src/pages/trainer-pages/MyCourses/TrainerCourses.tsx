@@ -8,10 +8,12 @@ import {
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { differenceInCalendarMonths } from 'date-fns'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
+import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
@@ -94,6 +96,18 @@ export const TrainerCourses: React.FC<Props> = ({
     },
     orgId,
   })
+
+  const actionRequiredCourses = useMemo(
+    () =>
+      (actionableCourses?.courses ?? []).filter(course => {
+        const startDate = new Date(course.dates?.aggregate?.start?.date)
+        return (
+          course.status !== Course_Status_Enum.TrainerMissing ||
+          differenceInCalendarMonths(startDate, new Date()) < 1
+        )
+      }),
+    [actionableCourses]
+  )
 
   const { courses, loading, mutate, total } = useCourses(
     activeRole ?? RoleName.USER,
@@ -200,17 +214,14 @@ export const TrainerCourses: React.FC<Props> = ({
             </Stack>
           ) : null}
 
-          {actionableCourses?.courses.length ? (
+          {actionRequiredCourses.length ? (
             <Box mb={3}>
               <Typography variant="h6" mb={1}>
-                {t([
-                  `pages.my-courses.actionable-courses-title-${activeRole}`,
-                  'pages.my-courses.actionable-courses-title',
-                ])}
+                {t('pages.my-courses.actionable-courses-title')}
               </Typography>
               <Box px={1} pb={1} bgcolor="grey.100" borderRadius={1}>
                 <CoursesTable
-                  courses={actionableCourses?.courses ?? []}
+                  courses={actionRequiredCourses}
                   hiddenColumns={new Set(['status'])}
                   data-testid="actionable-courses-table"
                   loading={fetchingActionableCourses}
@@ -236,8 +247,8 @@ export const TrainerCourses: React.FC<Props> = ({
                           waitlist={c.waitlistAgg?.aggregate?.count}
                         />
                       </TableCell>
-                      {c.status === Course_Status_Enum.TrainerPending ? (
-                        <TableCell>
+                      <TableCell>
+                        {c.status === Course_Status_Enum.TrainerPending ? (
                           <AcceptDeclineCourse
                             trainer={
                               profile
@@ -248,16 +259,17 @@ export const TrainerCourses: React.FC<Props> = ({
                               onAcceptedOrDeclined(c, trainer, status)
                             }
                           />
-                        </TableCell>
-                      ) : (
-                        <TableCell></TableCell>
-                      )}
+                        ) : null}
+                        {c.status === Course_Status_Enum.TrainerMissing ? (
+                          <CourseStatusChip status={c.status} />
+                        ) : null}
+                      </TableCell>
                     </TableRow>
                   )}
                 />
-                {actionableCourses.course_aggregate.aggregate?.count ? (
+                {actionableCourses?.course_aggregate.aggregate?.count ? (
                   <ActionablePagination
-                    total={actionableCourses.course_aggregate.aggregate?.count}
+                    total={actionableCourses.course_aggregate.aggregate.count}
                     rowsPerPage={[5, 10, 15]}
                     testId="actionable-courses-pagination"
                   />
