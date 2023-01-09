@@ -14,7 +14,7 @@ import {
 } from '@app/types'
 import { courseToCourseInput, roundToTwoDecimals } from '@app/util'
 
-import { render, screen, within, waitFor } from '@test/index'
+import { render, screen, waitFor, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -274,7 +274,7 @@ describe('component: ReviewAndConfirm', () => {
           trainerData.getByText(name as string, { exact: false })
         ).toBeInTheDocument()
         expect(
-          trainerData.getByText(`${roundValue}`, {
+          trainerData.getByText(`${formatCurrency(roundValue)}`, {
             exact: false,
           })
         ).toBeInTheDocument()
