@@ -419,7 +419,9 @@ Object {
                 >
                   I accept the 
                   <a
-                    href=""
+                    href="https://www.teamteach.co.uk/policies-procedures/terms-of-business/"
+                    rel="noreferrer"
+                    target="_blank"
                   >
                     Terms of Business
                   </a>
@@ -868,7 +870,9 @@ Object {
               >
                 I accept the 
                 <a
-                  href=""
+                  href="https://www.teamteach.co.uk/policies-procedures/terms-of-business/"
+                  rel="noreferrer"
+                  target="_blank"
                 >
                   Terms of Business
                 </a>

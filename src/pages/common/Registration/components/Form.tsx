@@ -281,9 +281,16 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
                 <>
                   <Typography variant="body2">
                     <Trans i18nKey="pages.signup.tcs-label">
-                      I accept the <a href="">Terms of Business</a> and agree to
-                      Team Teach processing my personal data in accordance with
-                      our
+                      I accept the
+                      <a
+                        href="https://www.teamteach.co.uk/policies-procedures/terms-of-business/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Terms of Business
+                      </a>
+                      and agree to Team Teach processing my personal data in
+                      accordance with our
                       <a href="">Privacy Policy</a>
                     </Trans>
                   </Typography>
