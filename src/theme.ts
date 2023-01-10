@@ -53,6 +53,7 @@ declare module '@mui/material/styles' {
     }
     green: PaletteOptions['primary']
     teal: PaletteOptions['primary']
+    gray: PaletteOptions['primary']
     dimGrey: PaletteOptions['primary']
   }
 }
@@ -60,6 +61,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
     teal: true
+    gray: true
   }
 }
 
@@ -174,6 +176,10 @@ const theme = createTheme({
     teal: {
       contrastText: '#fff',
       main: '#0290A1',
+    },
+    gray: {
+      contrastText: '#3B3A3C',
+      main: '#EEEEEE',
     },
     dimGrey: {
       main: '#6C6A6F',

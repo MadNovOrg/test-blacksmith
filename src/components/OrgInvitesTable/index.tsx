@@ -118,7 +118,7 @@ export const OrgInvitesTable: React.FC<OrgInvitesTableParams> = ({ orgId }) => {
                         ? t('pages.org-details.tabs.users.organization-admin')
                         : t('pages.org-details.tabs.users.no-permissions')
                     }
-                    color={invite.isAdmin ? 'success' : 'secondary'}
+                    color={invite.isAdmin ? 'success' : 'gray'}
                     size="small"
                   />
                 </TableCell>

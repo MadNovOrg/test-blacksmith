@@ -212,7 +212,12 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                       const certificationStatus =
                         cert?.status as CertificateStatus
                       return (
-                        <Box key={cert.id} display="flex" alignItems="center">
+                        <Box
+                          key={cert.id}
+                          display="flex"
+                          alignItems="center"
+                          py={1}
+                        >
                           <Chip
                             label={t(
                               `common.certification-status.${certificationStatus.toLowerCase()}`
@@ -249,7 +254,7 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
                           ? t('pages.org-details.tabs.users.organization-admin')
                           : t('pages.org-details.tabs.users.no-permissions')
                       }
-                      color={orgMember?.isAdmin ? 'success' : 'secondary'}
+                      color={orgMember?.isAdmin ? 'success' : 'gray'}
                       size="small"
                     />
                   </TableCell>

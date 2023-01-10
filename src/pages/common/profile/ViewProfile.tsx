@@ -234,7 +234,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                                 )
                               : t('pages.org-details.tabs.users.no-permissions')
                           }
-                          color={orgMember.isAdmin ? 'success' : 'secondary'}
+                          color={orgMember.isAdmin ? 'success' : 'gray'}
                           size="small"
                         />
                       </TableCell>
