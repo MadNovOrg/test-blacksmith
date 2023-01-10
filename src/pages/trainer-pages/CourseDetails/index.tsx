@@ -274,7 +274,9 @@ export const CourseDetails = () => {
                     }}
                   >
                     <PillTabList
-                      onChange={(_, tab) => navigate(`.?tab=${tab}`)}
+                      onChange={(_, tab) =>
+                        navigate(`.?tab=${tab}`, { replace: true })
+                      }
                     >
                       <PillTab
                         label={t('pages.course-details.tabs.attendees.title')}
