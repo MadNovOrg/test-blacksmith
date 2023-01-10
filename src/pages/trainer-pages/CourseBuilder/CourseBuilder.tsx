@@ -638,7 +638,15 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
                     />
                   ))}
                 </Box>
-
+                {courseData?.course?.level === Course_Level_Enum.Level_1 && (
+                  <Box mb={{ xs: 4, md: 2 }}>
+                    <Alert severity="info">
+                      {t(
+                        'pages.trainer-base.create-course.new-course.course-level-one-info'
+                      )}
+                    </Alert>
+                  </Box>
+                )}
                 <Box
                   sx={{
                     display: 'grid',

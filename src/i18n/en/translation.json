@@ -581,7 +581,8 @@
       "account-code-title": "Account Code",
       "notes-title": "Notes",
       "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
-      "notes-placeholder": "Additional notes"
+      "notes-placeholder": "Additional notes",
+      "course-level-one-info": "Please be aware some holds may fall under Level Two certification."
     },
     "searchTrainers": {
       "loading": "Loading...",
@@ -902,7 +903,8 @@
           "submitted-course": "You have successfully created your {{id}} Course",
           "organization": "Organisation",
           "time-commitment-title": "Time commitment",
-          "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training."
+          "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
+          "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, please resubmit the course as Level Two.\n\nPlease note: It may not effect your delivery timings."
         }
       }
     },

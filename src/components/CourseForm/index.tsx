@@ -27,7 +27,12 @@ import { FormPanel } from '@app/components/FormPanel'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseInput, CourseType } from '@app/types'
+import {
+  CourseDeliveryType,
+  CourseInput,
+  CourseType,
+  CourseLevel,
+} from '@app/types'
 import { DATE_MASK, INPUT_DATE_FORMAT, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
@@ -458,6 +463,11 @@ const CourseForm: React.FC<Props> = ({
               />
             )}
           />
+          {values.courseLevel === CourseLevel.Level_1 && (
+            <Alert severity="info" sx={{ mt: 2 }}>
+              {t('components.course-form.course-level-one-info')}
+            </Alert>
+          )}
           {errors.courseLevel?.message ? (
             <FormHelperText error>{errors.courseLevel.message}</FormHelperText>
           ) : null}

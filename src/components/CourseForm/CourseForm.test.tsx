@@ -1,8 +1,9 @@
 import { format } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
+import { getI18n } from 'react-i18next'
 
-import { CourseDeliveryType, CourseType } from '@app/types'
+import { CourseDeliveryType, CourseType, CourseLevel } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -12,9 +13,13 @@ import {
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
 
-import { ZOOM_MOCKED_URL } from './test-helpers'
+import { ZOOM_MOCKED_URL, selectLevel } from './test-helpers'
 
 import CourseForm from '.'
+
+const { t } = getI18n()
+
+const levelOneInfoMessage = t(`components.course-form.course-level-one-info`)
 
 describe('component: CourseForm', () => {
   it('displays venue selector if F2F delivery type', async () => {
@@ -239,5 +244,39 @@ describe('component: CourseForm', () => {
     await waitFor(() => {
       expect(screen.getByText('810A May22')).toBeInTheDocument()
     })
+  })
+
+  it('shows an info alert for level 1 course', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.CLOSED} />)
+    })
+
+    const level = screen.getByTestId('course-level-select')
+    expect(level.querySelector('input')).toHaveValue(CourseLevel.Level_1)
+
+    await waitFor(() => {
+      expect(screen.getByText(levelOneInfoMessage)).toBeInTheDocument()
+    })
+  })
+
+  it('hides the info alert for level 2 course', async () => {
+    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await selectLevel(CourseLevel.Level_2)
+
+    expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
+  })
+
+  it('hides the info alert for intermediate trainer course', async () => {
+    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await selectLevel(CourseLevel.IntermediateTrainer)
+
+    expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
+  })
+
+  it('hides the info alert for advanced trainer course', async () => {
+    await waitFor(() => render(<CourseForm type={CourseType.CLOSED} />))
+    await selectLevel(CourseLevel.AdvancedTrainer)
+
+    expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
   })
 })
