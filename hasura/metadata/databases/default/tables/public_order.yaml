@@ -290,6 +290,7 @@ select_permissions:
         - registrants
         - stripePaymentId
         - vat
+        - xero_invoice_number
       filter:
         profile_id:
           _eq: X-Hasura-User-Id
