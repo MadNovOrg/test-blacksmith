@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Link, Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material'
 import { Auth } from 'aws-amplify'
 import React, { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -8,7 +8,10 @@ import { useTranslation } from 'react-i18next'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
-import { yup, schemas } from '@app/schemas'
+import { ResendPasswordMutation } from '@app/generated/graphql'
+import { gqlRequest } from '@app/lib/gql-request'
+import { RESEND_PASSWORD_MUTATION } from '@app/queries/user-queries/resend-password'
+import { schemas, yup } from '@app/schemas'
 
 type ForgotPasswordInput = {
   email: string
@@ -18,6 +21,7 @@ export const ForgotPasswordPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   const schema = useMemo(() => yup.object({ email: schemas.email(t) }), [t])
 
@@ -32,18 +36,28 @@ export const ForgotPasswordPage = () => {
 
   const onSubmit = async (data: ForgotPasswordInput) => {
     setIsLoading(true)
+    setError(false)
 
     try {
       // tell cognito to send either email or sms with pw reset code and link to reset form
       await Auth.forgotPassword(data.email)
+      navigate({
+        pathname: '/reset-password',
+        search: `?${createSearchParams({ email: data.email })}`,
+      })
     } catch (err: unknown) {
-      setIsLoading(false)
+      // user cannot reset password via amplify in some cases (temporary password not changed)
+      // so we use backend API to do it
+      const result = await gqlRequest<ResendPasswordMutation>(
+        RESEND_PASSWORD_MUTATION,
+        { email: data.email }
+      )
+      if (result?.resendPassword) {
+        navigate('/login?passwordResent=true')
+      } else {
+        setError(true)
+      }
     }
-
-    navigate({
-      pathname: '/reset-password',
-      search: `?${createSearchParams({ email: data.email })}`,
-    })
   }
 
   return (
@@ -58,6 +72,12 @@ export const ForgotPasswordPage = () => {
       <Typography variant="body2">
         {t('pages.forgot-password.subtitle')}
       </Typography>
+
+      {error ? (
+        <Alert severity="error">
+          {t('pages.forgot-password.generic-error')}
+        </Alert>
+      ) : null}
 
       <Box
         component="form"

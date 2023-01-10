@@ -370,8 +370,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           startDateTime: new Date(
             courseData.course.dates?.aggregate?.start?.date
           ),
-          courseLevel: (courseData.course.level ??
-            CourseLevel.Level_1) as CourseLevel,
+          courseLevel: courseData.course.level,
           maxParticipants: courseData.course.max_participants,
           modulesDuration: estimatedCourseDuration,
           type: courseData.course.type,

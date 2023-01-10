@@ -156,6 +156,12 @@ actions:
     permissions:
       - role: user
     comment: replaceParticipant
+  - name: resendPassword
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/resend-password'
+    permissions:
+      - role: anonymous
   - name: searchTrainers
     definition:
       kind: ""

@@ -1402,7 +1402,8 @@
         "NotAuthorizedException": "Email address or password was incorrect, please try again",
         "401": "New password required",
         "UnknownError": "Email address or password was incorrect, please try again"
-      }
+      },
+      "password-resent": "Your temporary password has been resent."
     },
     "forgot-password": {
       "generic-error": "An error occurred. Please contact your administrator",

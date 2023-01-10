@@ -44,6 +44,8 @@ export const LoginPage = () => {
     searchParams.get('email') &&
     searchParams.get('justResetPassword') === 'true'
 
+  const passwordResent = searchParams.get('passwordResent')
+
   const from = (location.state as LocationState)?.from || {}
 
   const schema = useMemo(
@@ -108,6 +110,12 @@ export const LoginPage = () => {
       {showResetPassMessage ? (
         <Alert variant="outlined" severity="info" sx={{ mb: 2 }}>
           {t('pages.login.reset-pass')}
+        </Alert>
+      ) : null}
+
+      {passwordResent ? (
+        <Alert variant="outlined" severity="success" sx={{ mb: 2 }}>
+          {t('pages.login.password-resent')}
         </Alert>
       ) : null}
 

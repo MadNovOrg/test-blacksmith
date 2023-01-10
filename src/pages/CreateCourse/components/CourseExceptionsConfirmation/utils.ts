@@ -2,6 +2,7 @@ import { differenceInDays, isFuture } from 'date-fns'
 
 import {
   Course_Delivery_Type_Enum,
+  Course_Level_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -43,7 +44,7 @@ const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h
 
 export type CourseData = {
   startDateTime: Date
-  courseLevel: CourseLevel
+  courseLevel: CourseLevel | Course_Level_Enum
   type: CourseType | Course_Type_Enum
   deliveryType: CourseDeliveryType | Course_Delivery_Type_Enum
   reaccreditation: boolean

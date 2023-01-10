@@ -1,17 +1,23 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
-import { MemoryRouter, createSearchParams } from 'react-router-dom'
+import { createSearchParams, MemoryRouter } from 'react-router-dom'
+
+import { gqlRequest } from '@app/lib/gql-request'
 
 import {
-  screen,
-  render,
-  userEvent,
-  waitForText,
   chance,
+  render,
+  screen,
+  userEvent,
   waitForCalls,
+  waitForText,
 } from '@test/index'
 
 import { ForgotPasswordPage } from './ForgotPassword'
+
+jest.mock('@app/lib/gql-request')
+
+const gqlRequestMocked = jest.mocked(gqlRequest)
 
 const AuthMock = jest.mocked(Auth)
 
@@ -92,5 +98,31 @@ describe('page: ForgotPassword', () => {
       pathname: '/reset-password',
       search: `?${createSearchParams({ email })}`,
     })
+  })
+
+  it('should call backend API for temporary password reset', async () => {
+    render(
+      <MemoryRouter>
+        <ForgotPasswordPage />
+      </MemoryRouter>
+    )
+
+    AuthMock.forgotPassword.mockImplementation(() => {
+      throw new Error()
+    })
+    gqlRequestMocked.mockResolvedValue({
+      resendPassword: true,
+    })
+
+    const emailInput = screen.getByTestId('forgot-email-input')
+    const email = chance.email()
+    userEvent.type(emailInput, email)
+    userEvent.click(screen.getByTestId('forgot-pass-submit'))
+
+    await waitForCalls(AuthMock.forgotPassword)
+    await waitForCalls(gqlRequestMocked)
+    expect(AuthMock.forgotPassword).toHaveBeenCalledWith(email)
+
+    expect(mockNavigate).toHaveBeenCalledWith('/login?passwordResent=true')
   })
 })

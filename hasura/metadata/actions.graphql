@@ -130,6 +130,12 @@ type Mutation {
   ): ReplaceParticipantOutput
 }
 
+type Mutation {
+  resendPassword(
+    email: String!
+  ): Boolean
+}
+
 type Query {
   searchTrainers(
     input: SearchTrainersInput!
