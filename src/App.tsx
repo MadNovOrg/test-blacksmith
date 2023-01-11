@@ -4,17 +4,20 @@ import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
 import { SnackbarProvider } from './context/snackbar'
-import { useFetcher } from './hooks/use-fetcher'
+import { useSWRFetcher } from './hooks/use-fetcher'
 import { AppRoutes } from './routes'
 import './style.css'
 
 function App() {
-  const fetcher = useFetcher()
+  const fetcher = useSWRFetcher()
 
   const config = useMemo(
     () => ({
       fetcher,
-      onError: () => console.error('fetcher error, check network tab'),
+      onError: (err: Error) => {
+        console.error(err)
+        console.error('fetcher error, check network tab')
+      },
     }),
     [fetcher]
   )

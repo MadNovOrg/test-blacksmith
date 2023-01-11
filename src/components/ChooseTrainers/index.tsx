@@ -4,7 +4,6 @@ import { differenceInDays } from 'date-fns'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import {
   Controller,
-  NestedValue,
   Resolver,
   UnpackNestedValue,
   useForm,
@@ -29,9 +28,9 @@ import { SearchTrainers } from '../SearchTrainers'
 export type FormValues = UnpackNestedValue<NestedFormValues>
 
 type NestedFormValues = {
-  lead: NestedValue<SearchTrainer[]>
-  assist: NestedValue<SearchTrainer[]>
-  moderator: NestedValue<SearchTrainer[]>
+  lead: SearchTrainer[]
+  assist: SearchTrainer[]
+  moderator: SearchTrainer[]
 }
 
 type Props = {

@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
-import { TransProps, useTranslation } from 'react-i18next'
+import { TFunction, useTranslation } from 'react-i18next'
 
 import { DropdownMenu } from '@app/components/DropdownMenu'
 import { yup } from '@app/schemas'
@@ -32,8 +32,6 @@ type Props = {
   trainer: TrainerInput
   onChange?: (data: FormValues, isValid: boolean) => void
 }
-
-type TFunction = NonNullable<TransProps<string>['t']>
 
 export const makeSchema = (t: TFunction) =>
   yup.object({

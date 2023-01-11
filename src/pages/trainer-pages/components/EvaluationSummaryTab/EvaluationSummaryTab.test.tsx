@@ -16,6 +16,7 @@ const baseSWRMockData = {
   error: null,
   isValidating: false,
   mutate: jest.fn(),
+  isLoading: false,
 }
 
 const attendees = [

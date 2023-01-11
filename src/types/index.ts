@@ -761,3 +761,5 @@ export type AllCourseStatuses =
   | Course_Status_Enum
   | AttendeeOnlyCourseStatus
   | AdminOnlyCourseStatus
+
+export type NonNullish<T> = Exclude<T, undefined | null>

@@ -88,6 +88,7 @@ describe('component: ReviewAndConfirm', () => {
       error: new Error(),
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
     })
 
     render(
@@ -112,6 +113,7 @@ describe('component: ReviewAndConfirm', () => {
       error: new Error(),
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
     })
 
     render(
@@ -153,6 +155,8 @@ describe('component: ReviewAndConfirm', () => {
       },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
 
     render(

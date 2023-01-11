@@ -10,7 +10,7 @@ import {
   parse,
 } from 'date-fns'
 import { TFunction } from 'i18next'
-import { FieldError } from 'react-hook-form'
+import { FieldError, Merge } from 'react-hook-form'
 
 import { Course_Status_Enum, Grade_Enum, Profile } from '@app/generated/graphql'
 import {
@@ -328,14 +328,16 @@ export function getInitialsFromName(name: string) {
  * Although both these issues are marked as closed, there is no good solution to this
  * Hence the forced type `as FieldError & FieldError[]` is used
  */
-export function getFieldError(err: FieldError[]) {
-  const error = err as FieldError & FieldError[]
+export function getFieldError(
+  err: Merge<FieldError, (FieldError | undefined)[]>
+) {
+  const error = err as (FieldError & FieldError[]) | undefined
 
-  if (error.length) {
+  if (error?.length) {
     return error.filter(Boolean)[0].message
   }
 
-  return error.message
+  return error?.message
 }
 
 export const xeroInvoiceStatusColors: { [key: string]: string[] } = {

@@ -1,1 +1,0 @@
-export { MyCertifications } from './MyCertifications'

@@ -20,7 +20,6 @@ import { AcceptOrgInvite } from '@app/pages/user-pages/AcceptOrgInvite'
 import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
-import { MyCertifications } from '@app/pages/user-pages/MyCertifications'
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
 
 import MembershipRoutes from './membership'
@@ -79,8 +78,6 @@ const UserRoutes = () => {
 
       <Route path="accept-invite/:id" element={<AcceptInvite />} />
       <Route path="accept-org-invite/:id" element={<AcceptOrgInvite />} />
-
-      <Route path="certifications" element={<MyCertifications />} />
 
       {acl.canViewOrganizations() ? (
         <Route path="organisations">

@@ -34,6 +34,8 @@ const buildSWRCourseAndGroupsResponse = (level: CourseLevel) => {
     mutate: jest.fn(),
     isValidating: false,
     data: { course, groups: [moduleGroup] },
+    isLoading: false,
+    error: null,
   }
 }
 

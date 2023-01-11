@@ -23,21 +23,29 @@ function registerMocks(course: Course) {
     data: { course: { ...course, organization: { members: [] } } },
     mutate: jest.fn(),
     isValidating: false,
+    error: null,
+    isLoading: false,
   })
   useSWRMock.mockReturnValueOnce({
     data: { course_participant: [buildParticipant()] },
     mutate: jest.fn(),
     isValidating: false,
+    error: null,
+    isLoading: false,
   })
   useSWRMock.mockReturnValueOnce({
     data: { users: [] },
     mutate: jest.fn(),
     isValidating: false,
+    isLoading: false,
+    error: null,
   })
   useSWRMock.mockReturnValueOnce({
     data: { certificates: [], upcomingCourses: [] },
     mutate: jest.fn(),
     isValidating: false,
+    error: null,
+    isLoading: false,
   })
 }
 
@@ -116,6 +124,8 @@ describe('page: CourseDetails', () => {
       data: { course: { ...course, organization: { members: [] } } },
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
+      error: null,
     })
     useSWRMock.mockReturnValueOnce({
       data: {
@@ -123,16 +133,22 @@ describe('page: CourseDetails', () => {
       },
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
+      error: null,
     })
     useSWRMock.mockReturnValueOnce({
       data: { users: [] },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: { certificates: [], upcomingCourses: [] },
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
+      error: null,
     })
 
     render(
@@ -153,6 +169,8 @@ describe('page: CourseDetails', () => {
       data: { course: { ...course, organization: { members: [] } } },
       mutate: jest.fn(),
       isValidating: false,
+      isLoading: false,
+      error: null,
     })
     useSWRMock.mockReturnValueOnce({
       data: {
@@ -160,16 +178,22 @@ describe('page: CourseDetails', () => {
       },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: { users: [] },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: { certificates: [], upcomingCourses: [] },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
 
     render(
@@ -198,6 +222,8 @@ describe('page: CourseDetails', () => {
       },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: {
@@ -205,16 +231,22 @@ describe('page: CourseDetails', () => {
       },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: { users: [] },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
     useSWRMock.mockReturnValueOnce({
       data: { certificates: [], upcomingCourses: [] },
       mutate: jest.fn(),
       isValidating: false,
+      error: null,
+      isLoading: false,
     })
 
     render(

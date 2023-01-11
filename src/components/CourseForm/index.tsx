@@ -30,8 +30,8 @@ import theme from '@app/theme'
 import {
   CourseDeliveryType,
   CourseInput,
-  CourseType,
   CourseLevel,
+  CourseType,
 } from '@app/types'
 import { DATE_MASK, INPUT_DATE_FORMAT, LoadingStatus } from '@app/util'
 
@@ -204,7 +204,7 @@ const CourseForm: React.FC<Props> = ({
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
-      courseLevel: courseInput?.courseLevel ?? '',
+      courseLevel: courseInput?.courseLevel ?? CourseLevel.Level_1,
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
       deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,

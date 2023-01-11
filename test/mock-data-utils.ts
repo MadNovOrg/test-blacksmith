@@ -579,7 +579,13 @@ export const buildExpensesInput = build<ExpensesInput>({
         const method = chance.pickone(
           Object.keys(TransportMethod)
         ) as TransportMethod
-        const tripData: ExpensesInput['transport'][number] = { method }
+        const tripData: ExpensesInput['transport'][number] = {
+          method,
+          accommodationCost: undefined,
+          accommodationNights: undefined,
+          flightDays: undefined,
+          value: undefined,
+        }
 
         if (method !== TransportMethod.NONE) {
           tripData.value = chance.integer({

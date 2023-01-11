@@ -20,3 +20,18 @@ export const useFetcher = () => {
     [getJWT, activeRole]
   )
 }
+
+export const useSWRFetcher = () => {
+  const { getJWT, activeRole } = useAuth()
+
+  return useCallback(
+    async function <T, V = Variables>([query, variables]: [
+      query: RequestDocument,
+      variables?: V
+    ]): Promise<T> {
+      const token = await getJWT()
+      return gqlRequest(query, variables, { token, role: activeRole })
+    },
+    [getJWT, activeRole]
+  )
+}

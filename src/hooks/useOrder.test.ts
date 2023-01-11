@@ -12,6 +12,8 @@ const useSWRMockDefaults = {
   data: undefined,
   mutate: jest.fn(),
   isValidating: false,
+  error: null,
+  isLoading: false,
 }
 
 const date = chance.date()

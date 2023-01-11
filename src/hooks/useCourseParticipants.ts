@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { KeyedMutator } from 'swr/dist/types'
+import { KeyedMutator } from 'swr'
 
 import {
   ParamsType,

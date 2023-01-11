@@ -1,7 +1,9 @@
 import { FieldErrors } from 'react-hook-form'
 
 import { DropdownMenuItem } from '@app/components/DropdownMenu'
-import { TransportMethod } from '@app/types'
+import { ExpensesInput, NonNullish, TransportMethod } from '@app/types'
+
+type ExpensesErrors = FieldErrors<ExpensesInput>
 
 export function transportMethodToDropdownItem(
   tm: TransportMethod
@@ -12,31 +14,45 @@ export function transportMethodToDropdownItem(
   }
 }
 
+function isTransportError(
+  error: NonNullish<ExpensesErrors['transport']>[0],
+  field: string
+): field is
+  | 'accommodationCost'
+  | 'flightDays'
+  | 'accommodationNights'
+  | 'accommodationCost' {
+  return Boolean(error && field in error)
+}
+
+function isMiscellaneousError(
+  error: NonNullish<ExpensesErrors['miscellaneous']>[0],
+  field: string
+): field is 'name' | 'value' {
+  return Boolean(error && field in error)
+}
+
 export function getError(
-  errors: FieldErrors,
+  errors: ExpensesErrors,
   idx: number,
   field: string
-): string | null {
-  let message: string | null = null
+): string | null | undefined {
+  let message: string | null | undefined = null
 
   if (!errors) {
     return message
   }
 
-  if (
-    errors.transport &&
-    errors.transport[idx] &&
-    errors.transport[idx][field]
-  ) {
-    message = errors.transport[idx][field].message
+  const transportError = errors.transport && errors.transport[idx]
+  const miscellaneousError = errors.miscellaneous && errors.miscellaneous[idx]
+
+  if (transportError && isTransportError(transportError, field)) {
+    message = transportError[field]?.message
   } else if (
-    errors.miscellaneous &&
-    errors.miscellaneous[idx] &&
-    errors.miscellaneous[idx][field]
+    miscellaneousError &&
+    isMiscellaneousError(miscellaneousError, field)
   ) {
-    message = errors.miscellaneous[idx][field].message
-  } else if (errors[field]) {
-    message = errors[field].message
+    message = miscellaneousError[field]?.message
   }
 
   return message
