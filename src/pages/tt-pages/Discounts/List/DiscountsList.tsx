@@ -3,6 +3,7 @@ import React, { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { BackButton } from '@app/components/BackButton'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -48,6 +49,9 @@ export const DiscountsList: React.FC = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
+      <Box mb={4}>
+        <BackButton label={t('pages.admin.back-to-settings')} />
+      </Box>
       <Box display="flex" gap={4}>
         <Box width={250}>
           <Typography variant="h1">{t('pages.promoCodes.title')}</Typography>
