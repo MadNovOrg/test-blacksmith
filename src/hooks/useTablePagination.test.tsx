@@ -1,11 +1,12 @@
 import { renderHook } from '@testing-library/react-hooks'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { render, screen, userEvent } from '@test/index'
 
 import { useTablePagination } from './useTablePagination'
 
 const Wrapper: React.FC<{ total?: number }> = ({ total = 36 }) => {
+  const [halveTotal, setHalveTotal] = useState(false)
   const { Pagination, perPage, currentPage, limit, offset } =
     useTablePagination()
 
@@ -15,7 +16,14 @@ const Wrapper: React.FC<{ total?: number }> = ({ total = 36 }) => {
       <div data-testid="currentPage">{currentPage}</div>
       <div data-testid="limit">{limit}</div>
       <div data-testid="offset">{offset}</div>
-      <Pagination total={total} />
+      <input
+        type="button"
+        value="Halve total"
+        onClick={() => {
+          setHalveTotal(true)
+        }}
+      />
+      <Pagination total={halveTotal ? total / 2 : total} />
     </>
   )
 }
@@ -113,5 +121,20 @@ describe('useTablePagination', () => {
     expect(screen.getByTestId('offset')).toHaveTextContent('0')
 
     expect(screen.getByLabelText('Go to previous page')).toBeDisabled()
+  })
+
+  it('resets the current page if the total changes', async () => {
+    render(<Wrapper total={48} />)
+
+    // Go to last page
+    clickNext()
+    clickNext()
+    clickNext()
+    expect(screen.getByText('37–48 of 48')).toBeInTheDocument()
+
+    // Reduce the total number of items to 24
+    userEvent.click(screen.getByText('Halve total'))
+
+    expect(screen.getByText('1–12 of 24')).toBeInTheDocument()
   })
 })
