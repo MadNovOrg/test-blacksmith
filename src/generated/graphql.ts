@@ -38178,7 +38178,7 @@ export type GetOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, xeroInvoiceNumber?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
+export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, xeroInvoiceNumber?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string, id: any } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

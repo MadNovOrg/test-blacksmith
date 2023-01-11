@@ -34,6 +34,7 @@ export const QUERY = gql`
       }
       organization {
         name
+        id
       }
       promoCodes
     }

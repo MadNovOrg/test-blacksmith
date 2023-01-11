@@ -195,8 +195,13 @@ export const List: React.FC<Props> = ({
                   )}
                 </TableCell>
 
-                <TableCell>{order.organization?.name ?? '-NA-'}</TableCell>
-
+                <TableCell>
+                  {order.organization && (
+                    <Link href={`/organisations/${order.organization.id}`}>
+                      {order.organization.name}
+                    </Link>
+                  )}
+                </TableCell>
                 <TableCell>
                   {t(`pages.orders.paymentMethod-${order.paymentMethod}`)}
                 </TableCell>
