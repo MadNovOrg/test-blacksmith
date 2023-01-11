@@ -21,10 +21,12 @@ jobs:
     env:
       CI: 'true'
       DEFAULT_TARGET: 'DEV'
-      HASURA_SECRET: ${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment)] }}
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+
+      - name: Set Hasura secret
+        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
 
       - name: Checkout
         uses: actions/checkout@v3
