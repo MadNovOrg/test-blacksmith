@@ -60,6 +60,7 @@ type State = {
   promoCodes: string[]
   discounts: Discounts
   orgId: string
+  orgName: string
   sector: Sector
   position: string
   otherPosition: string
@@ -181,6 +182,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       promoCodes: [],
       discounts: {},
       orgId: '',
+      orgName: '',
       sector: '',
       position: '',
       otherPosition: '',

@@ -3,23 +3,12 @@ import { t, TFunction } from 'i18next'
 import MuiPhoneNumber from 'material-ui-phone-number'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
+import { InferType } from 'yup'
 
 import { yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
-
-type FieldValues = {
-  invoiceDetails: {
-    orgId: string
-    billingAddress: string
-    firstName: string
-    surname: string
-    email: string
-    phone: string
-    purchaseOrder: string
-  }
-}
 
 const onlyCountries = ['au', 'gb']
 
@@ -29,6 +18,9 @@ export function formSchema(t: TFunction) {
       .string()
       .required(requiredMsg(t, 'org-name'))
       .typeError(requiredMsg(t, 'org-name')),
+
+    orgName: yup.string(),
+    billingAddress: yup.string(),
 
     firstName: yup.string().required(requiredMsg(t, 'first-name')),
     surname: yup.string().required(requiredMsg(t, 'last-name')),
@@ -47,6 +39,10 @@ export function formSchema(t: TFunction) {
   })
 }
 
+type FieldValues = {
+  invoiceDetails?: InferType<ReturnType<typeof formSchema>>
+}
+
 export const InvoiceForm: React.FC = () => {
   const {
     register,
@@ -61,12 +57,23 @@ export const InvoiceForm: React.FC = () => {
     <>
       <Box mb={3}>
         <OrgSelector
+          value={
+            values.invoiceDetails?.orgId && values.invoiceDetails?.orgName
+              ? {
+                  name: values.invoiceDetails.orgName,
+                  id: values.invoiceDetails.orgId,
+                }
+              : undefined
+          }
           allowAdding
           textFieldProps={{ variant: 'filled' }}
           onChange={org => {
             setValue('invoiceDetails.orgId', org?.id ?? '', {
               shouldValidate: true,
             })
+
+            setValue('invoiceDetails.orgName', org?.name ?? '')
+
             const address =
               org && 'address' in org
                 ? (normalizeAddr(org.address) ?? []).filter(Boolean).join(',')

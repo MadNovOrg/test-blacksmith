@@ -60,6 +60,7 @@ const getMockData = (
       quantity,
       vat,
       orgId: '',
+      orgName: '',
       sector: '',
       position: '',
       otherPosition: '',

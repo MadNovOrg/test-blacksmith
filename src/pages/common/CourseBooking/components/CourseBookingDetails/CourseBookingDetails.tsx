@@ -41,6 +41,7 @@ type FormInputs = {
   quantity: number
   emails: string[]
   orgId: string
+  orgName: string
   sector: Sector
   position: string
   otherPosition: string
@@ -94,6 +95,8 @@ export const CourseBookingDetails: React.FC = () => {
         .required(requiredMsg(t, 'org-name'))
         .typeError(requiredMsg(t, 'org-name')),
 
+      orgName: yup.string(),
+
       sector: yup.string().required(),
       position: yup.string().required(),
       otherPosition: yup.string().when('position', {
@@ -121,6 +124,7 @@ export const CourseBookingDetails: React.FC = () => {
       quantity: booking.quantity,
       emails: booking.emails,
       orgId: booking.orgId,
+      orgName: booking.orgName,
       sector: booking.sector,
       position: booking.position,
       otherPosition: booking.otherPosition,
@@ -304,9 +308,15 @@ export const CourseBookingDetails: React.FC = () => {
         <Box bgcolor="common.white" p={2} mb={4}>
           <Box mb={3}>
             <OrgSelector
+              value={
+                values.orgId && values.orgName
+                  ? { name: values.orgName, id: values.orgId }
+                  : undefined
+              }
               allowAdding
               onChange={org => {
                 setValue('orgId', org?.id ?? '', { shouldValidate: true })
+                setValue('orgName', org?.name ?? '')
               }}
               textFieldProps={{ variant: 'standard' }}
               sx={{ marginBottom: 2 }}

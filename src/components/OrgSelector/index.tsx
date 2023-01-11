@@ -35,7 +35,7 @@ export type OrgSelectorProps = {
   placeholder?: string
   allowAdding?: boolean
   error?: string
-  value?: Organization
+  value?: Pick<Organization, 'name' | 'id'>
   disabled?: boolean
 }
 
@@ -57,7 +57,7 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [open, setOpen] = useState(false)
-  const [adding, setAdding] = useState<OptionToAdd | null>(null)
+  const [adding, setAdding] = useState<OptionToAdd | null>()
   const [options, setOptions] = useState<Option[]>([])
   const [loading, setLoading] = useState(false)
   const [q, setQ] = useState('')
