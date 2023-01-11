@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
-import useOrg from '@app/hooks/useOrg'
+import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 import useOrgCourses from '@app/hooks/useOrgCourses'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
@@ -151,19 +151,23 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
           </TabContext>
         )}
 
-        <Box display="flex" justifyContent="space-between" my={2}>
-          <Typography variant="h4">
-            {t('pages.org-details.tabs.overview.organization-summary')}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => navigate('/organisations/list')}
-          >
-            {t('pages.org-details.tabs.overview.see-all-organizations')}
-          </Button>
-        </Box>
+        {orgId === ALL_ORGS ? (
+          <>
+            <Box display="flex" justifyContent="space-between" my={2}>
+              <Typography variant="h4">
+                {t('pages.org-details.tabs.overview.organization-summary')}
+              </Typography>
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/organisations/list')}
+              >
+                {t('pages.org-details.tabs.overview.see-all-organizations')}
+              </Button>
+            </Box>
 
-        <OrgSummaryList orgId={orgId} />
+            <OrgSummaryList orgId={orgId} />
+          </>
+        ) : null}
       </Grid>
 
       <Grid item xs={12} md={3} p={1} mt={2}>
