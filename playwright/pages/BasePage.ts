@@ -9,7 +9,7 @@ export class BasePage {
 
   async goto(url: string, mandatoryElement: Locator, timeout = 30000) {
     await this.page.goto(url)
-    await this.page.waitForLoadState('networkidle')
+    await this.page.waitForLoadState()
     await mandatoryElement.waitFor({ timeout })
   }
 

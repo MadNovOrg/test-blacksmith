@@ -10,9 +10,6 @@ const config: PlaywrightTestConfig = {
     timezoneId: 'UTC',
   },
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
-  expect: {
-    timeout: 10 * 1000,
-  },
   projects: [
     {
       name: 'chromium',

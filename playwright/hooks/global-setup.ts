@@ -1,4 +1,4 @@
-import { rm } from 'fs'
+import fs, { rm } from 'fs'
 
 import { Browser, chromium } from '@playwright/test'
 
@@ -38,6 +38,9 @@ async function globalSetup() {
     rm(TEMP_DIR, { recursive: true, force: true }, () => {
       console.log('Removed temp directory')
     })
+    if (!fs.existsSync(TEMP_DIR)) {
+      fs.mkdirSync(TEMP_DIR)
+    }
     const browser = await chromium.launch()
     await login(browser, 'admin', 'Admin')
     await login(browser, 'ops', 'Ops')

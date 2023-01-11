@@ -52,18 +52,14 @@ test.skip('my courses view @smoke', async ({ page, coursesToView }) => {
   await myCoursesPage.checkRows(coursesToView)
 })
 
-test.skip('my courses search', async ({
-  page,
-  courseSearchText,
-  searchResults,
-}) => {
+test('my courses search', async ({ page, courseSearchText, searchResults }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(courseSearchText)
   await myCoursesPage.checkRows(searchResults)
 })
 
-test.skip('my courses filter', async ({ page, oneTwoLevelCourses }) => {
+test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.filterCourses('FilterCourseLevel', [
