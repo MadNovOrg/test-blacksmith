@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
+import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
@@ -77,6 +78,8 @@ export const TrainerCourses: React.FC<Props> = ({
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [filterStatus, setFilterStatus] = useState<Course_Status_Enum[]>([])
+  const [filterBlendedLearning, setFilterBlendedLearning] =
+    useState<boolean>(false)
 
   const { Pagination, perPage, currentPage } = useTablePagination()
   const {
@@ -117,6 +120,7 @@ export const TrainerCourses: React.FC<Props> = ({
         statuses: filterStatus,
         levels: filterLevel,
         types: filterType,
+        go1Integration: filterBlendedLearning,
         keyword,
         excludedStatuses: Array.from(actionableStatuses),
       },
@@ -176,6 +180,10 @@ export const TrainerCourses: React.FC<Props> = ({
               </Typography>
 
               <Stack gap={1}>
+                <FilterByBlendedLearning
+                  selected={filterBlendedLearning}
+                  onChange={setFilterBlendedLearning}
+                />
                 <FilterCourseLevel onChange={setFilterLevel} />
                 <FilterCourseType onChange={setFilterType} />
                 <FilterCourseStatus

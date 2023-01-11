@@ -26,6 +26,7 @@ type CoursesFilters = {
   types?: Course_Type_Enum[]
   statuses?: Course_Status_Enum[]
   excludedStatuses?: Course_Status_Enum[]
+  go1Integration?: boolean
 }
 
 type Props = {
@@ -74,6 +75,10 @@ export const useCourses = (
         ...obj.status,
         _nin: filters.excludedStatuses,
       }
+    }
+
+    if (filters?.go1Integration) {
+      obj.go1Integration = { _eq: filters?.go1Integration }
     }
 
     if (role === RoleName.TRAINER) {

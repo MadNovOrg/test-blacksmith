@@ -17,6 +17,7 @@ export const QUERY = gql`
     level
     status
     course_code
+    go1Integration
     organization {
       name
     }

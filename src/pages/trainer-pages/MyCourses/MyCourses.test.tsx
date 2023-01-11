@@ -1,5 +1,6 @@
 import { isEqual } from 'lodash-es'
 import React from 'react'
+import { getI18n } from 'react-i18next'
 import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import { Client, Provider } from 'urql'
@@ -23,6 +24,9 @@ import { Providers } from '@test/providers'
 import { buildTrainerCourse } from './test-utils'
 import { TrainerCourses } from './TrainerCourses'
 import { getActionableStatuses } from './utils'
+
+const { t } = getI18n()
+const blendedLearningLabel = t('common.blended-learning')
 
 const _render = (
   ui: React.ReactElement,
@@ -141,6 +145,38 @@ describe('trainers-pages/MyCourses', () => {
     expect(courseCode).toHaveTextContent('OP-L1-10000')
   })
 
+  it('shows the blended learning label', async () => {
+    const courseWithBlendedLearning = buildTrainerCourse({
+      overrides: { go1Integration: true },
+    })
+    const courseWithoutBlendedLearning = buildTrainerCourse()
+    const courses = [courseWithBlendedLearning, courseWithoutBlendedLearning]
+
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        }),
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>
+    )
+
+    const table = screen.getByTestId('courses-table')
+    const blendedLearning = within(table).getByText(blendedLearningLabel)
+    expect(blendedLearning).toBeInTheDocument()
+  })
+
   it('filters by search', async () => {
     const keyword = chance.word()
 
@@ -187,6 +223,64 @@ describe('trainers-pages/MyCourses', () => {
       ).toBeInTheDocument()
       expect(
         screen.queryByTestId(`course-row-${course.id}`)
+      ).not.toBeInTheDocument()
+    })
+  })
+
+  it('filters by blended learning', async () => {
+    const courseWithBlendedLearning = buildTrainerCourse({
+      overrides: { go1Integration: true },
+    })
+    const courseWithoutBlendedLearning = buildTrainerCourse()
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const conditions = variables.where?.go1Integration?._eq ?? false
+        const courses = conditions
+          ? [courseWithBlendedLearning]
+          : [courseWithBlendedLearning, courseWithoutBlendedLearning]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`course-row-${courseWithBlendedLearning.id}`)
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByTestId(`course-row-${courseWithoutBlendedLearning.id}`)
+      ).toBeInTheDocument()
+    })
+
+    const blendedLearningFilter = screen.getByLabelText(blendedLearningLabel)
+    userEvent.click(blendedLearningFilter)
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`course-row-${courseWithBlendedLearning.id}`)
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByTestId(`course-row-${courseWithoutBlendedLearning.id}`)
       ).not.toBeInTheDocument()
     })
   })

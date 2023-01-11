@@ -21,6 +21,7 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
     level: Course_Level_Enum.Level_1,
     status: Course_Status_Enum.Scheduled,
     course_code: 'OP-L1-10000',
+    go1Integration: false,
     organization: {
       name: perBuild(() => chance.word({ length: 3 })),
     },

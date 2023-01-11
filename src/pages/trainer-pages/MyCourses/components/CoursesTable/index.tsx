@@ -97,9 +97,7 @@ export const CoursesTable: React.FC<Props> = ({
                 <CourseTitleCell course={c} />
               ) : null}
               {!hiddenColumns.has('venue') ? <VenueCell course={c} /> : null}
-              {!hiddenColumns.has('type') ? (
-                <TableCell>{t(`course-types.${c.type}`)}</TableCell>
-              ) : null}
+              {!hiddenColumns.has('type') ? <TypeCell course={c} /> : null}
               {!hiddenColumns.has('start') ? (
                 <DateCell date={c.dates?.aggregate?.start?.date} />
               ) : null}
@@ -191,6 +189,29 @@ export function VenueCell({ course }: { course: TableCourse }) {
           ? 'Online'
           : course.schedule[0].venue?.city}
       </Typography>
+    </TableCell>
+  )
+}
+
+function TypeCell({ course }: { course: TableCourse }) {
+  const { t } = useTranslation()
+
+  return (
+    <TableCell>
+      <Typography
+        variant="body2"
+        sx={{ color: 'inherit' }}
+        gutterBottom={course.go1Integration}
+      >
+        {t(`course-types.${course.type}`)}
+      </Typography>
+      {course.go1Integration ? (
+        <Typography variant="body2" color="grey.500">
+          {t('common.blended-learning')}
+        </Typography>
+      ) : (
+        ''
+      )}
     </TableCell>
   )
 }
