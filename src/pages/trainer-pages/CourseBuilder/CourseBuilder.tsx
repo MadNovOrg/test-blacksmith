@@ -215,11 +215,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
           draggableId: `course-modules-slot-drag-${i}`,
         }))
       )
-      if (!courseData.course?.moduleGroupIds.length) {
-        saveModules(modules.mandatory)
-      }
     }
-  }, [availableModules, mandatoryModules, modulesData, courseData, saveModules])
+  }, [availableModules, mandatoryModules, modulesData, courseData])
 
   const handleDrop = useCallback<DragDropContextProps['onDragEnd']>(
     async result => {
@@ -341,6 +338,9 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
 
   const submitCourse = useCallback(async () => {
     if (courseData?.course) {
+      if (modulesData && courseData.course.moduleGroupIds.length === 0) {
+        await saveModules(modulesData.filter(group => group.mandatory))
+      }
       setSubmitError(undefined)
       const hasExceptions = courseExceptions.length > 0
       try {
@@ -356,7 +356,15 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         setSubmitError((e as Error).message)
       }
     }
-  }, [courseData, courseExceptions, estimatedCourseDuration, fetcher, navigate])
+  }, [
+    courseData,
+    courseExceptions,
+    estimatedCourseDuration,
+    fetcher,
+    modulesData,
+    navigate,
+    saveModules,
+  ])
 
   const onCourseSubmit = useCallback(async () => {
     if (!courseData?.course) return
