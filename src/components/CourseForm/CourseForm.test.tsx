@@ -180,7 +180,7 @@ describe('component: CourseForm', () => {
     const level = screen.getByTestId('course-level-select')
     expect(level.querySelector('input')).toHaveValue(course.level)
 
-    expect(screen.getByLabelText('Go1: Blended learning')).not.toBeChecked()
+    expect(screen.getByLabelText('Blended learning')).not.toBeChecked()
     expect(screen.getByLabelText('Reaccreditation')).not.toBeChecked()
     expect(screen.getByLabelText('Face to face')).toBeChecked()
 

@@ -264,7 +264,7 @@
     },
     "license-order-details": {
       "title": "Order details",
-      "order-title": "Go1: Blended learning license",
+      "order-title": "Blended learning license",
       "quantity": "Quantity",
       "price-per-attendee": "{{price}} per attendee",
       "license-allowance": "License allowance ({{balance}} left)",

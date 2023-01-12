@@ -49,7 +49,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
@@ -63,7 +63,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
     expect(blended).not.toBeChecked()
   })
@@ -74,7 +74,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
@@ -88,7 +88,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
@@ -102,7 +102,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
     expect(blended).not.toBeChecked()
   })
@@ -113,7 +113,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Advanced)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     expect(blended).toBeDisabled()
     expect(blended).not.toBeChecked()
   })
@@ -125,7 +125,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).not.toBeChecked()
@@ -145,7 +145,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
@@ -160,7 +160,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_1)
     await selectDelivery(CourseDeliveryType.VIRTUAL)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).not.toBeChecked()
@@ -180,7 +180,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.F2F)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).not.toBeChecked()
@@ -200,7 +200,7 @@ describe('component: CourseForm - INDIRECT', () => {
     await selectLevel(CourseLevel.Level_2)
     await selectDelivery(CourseDeliveryType.MIXED)
 
-    const blended = screen.getByLabelText('Go1: Blended learning')
+    const blended = screen.getByLabelText('Blended learning')
     const reacc = screen.getByLabelText('Reaccreditation')
 
     expect(blended).toBeDisabled()
