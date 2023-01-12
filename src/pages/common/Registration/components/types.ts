@@ -1,4 +1,6 @@
-import { schemas, yup, TFunction } from '@app/schemas'
+import { TFunction } from 'i18next'
+
+import { schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
 
 export type FormInputs = {

@@ -4,28 +4,33 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
 import aol from './en/aol.json'
-import translation from './en/translation.json'
-
-type Locales = Record<string, { name: string; display: string }>
+import common from './en/common.json'
+import components from './en/components.json'
+import dates from './en/dates.json'
+import pages from './en/pages.json'
 
 const dateLocales: Record<string, Locale> = {}
 
-export const supportedLocales: Locales = {
+export const supportedLocales = {
   en: {
     name: 'English',
     display: '**English**',
-    ...translation,
-    ...aol,
+    pages,
+    common,
+    components,
+    dates,
+    aol,
   },
 } as const
 
 i18n.use(initReactI18next).init({
   lng: 'en',
   resources: supportedLocales,
-  ns: [...Object.keys(translation), 'aol'],
+  ns: ['common', 'components', 'dates', 'pages', 'aol'],
   defaultNS: 'common',
   nsSeparator: '.',
   parseMissingKeyHandler: () => '',
+  returnNull: false,
 })
 
 export const dateFormats = {

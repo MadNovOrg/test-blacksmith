@@ -38,7 +38,7 @@ export const LoginPage = () => {
   const { t } = useTranslation()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [loginError, setLoginError] = useState(null)
+  const [loginError, setLoginError] = useState<string | null>(null)
 
   const showResetPassMessage =
     searchParams.get('email') &&

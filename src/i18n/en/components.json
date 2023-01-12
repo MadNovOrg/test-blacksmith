@@ -1,0 +1,260 @@
+{
+  "course-hero-summary": {
+    "notes-label": "Additional notes"
+  },
+  "error-page": {
+    "title": "Sorry! Something went wrong...",
+    "message": "We have been notified about the issue and are working on fixing it.",
+    "back-btn-text": "Home"
+  },
+  "fees-form": {
+    "fees-radio-group-title": "Will any fees apply?",
+    "apply-terms-option": "Apply terms",
+    "custom-fee-option": "Custom fee",
+    "custom-fee-label": "Amount",
+    "no-fee-option": "No fees"
+  },
+  "replace-participant": {
+    "title": "Replace with new attendee",
+    "description": "This action will immediately remove the original attendee and invite the new attendee entered below. This will notify the organisation, original attendee, new attendee, and finance to make changes on the invoice(s), where necessary.",
+    "participant-title": "Original attendee",
+    "invite-title": "Replace with",
+    "email-placeholder": "Email *",
+    "first-name-placeholder": "First name *",
+    "surname-placeholder": "Surname *",
+    "alert-message": "<strong>Important:</strong> Please make sure email is entered correctly. Course details will be sent to email address.",
+    "cancel-btn-text": "Never mind",
+    "submit-btn-text": "Replace attendee",
+    "replacement-error": "There was an error replacing the participant.",
+    "replacement-error-INVALID_EMAIL": "Invite email is already registered on the course.",
+    "terms-notice": "I acknowledge that the new attendee has the same billing details as the original booking. A charge will only incur if billing details change."
+  },
+  "not-found": {
+    "title": "Page not found",
+    "info": "Either you followed an invalid link or you do not have access to view this page. Please use the main navigation to find your way."
+  },
+  "certification-details": {
+    "certification-passed": "Certification Passed",
+    "course-passed-on": "Course passed on {{date, date_default}}",
+    "remaining": "remaining",
+    "digital-certificate": "Digital Certificate",
+    "dbs-certificate": "DBS Certificate",
+    "feedback": "Feedback",
+    "view-or-download-here": "View or download here"
+  },
+  "venue-selector": {
+    "placeholder": "Start typing venue name or address",
+    "min-chars-label": "Please type at least 3 characters for suggestions.",
+    "google-maps-api-error": "Unknown error while communicating with Google Maps API.",
+    "suggestions": "Suggestions",
+    "venues": "Venues",
+    "modal": {
+      "title": "Confirm venue details",
+      "description": "Before you add this venue, please confirm the location details below.",
+      "submit": "Add as venue",
+      "fields": {
+        "name": "Venue name",
+        "addressLineOne": "Address line 1",
+        "addressLineTwo": "Address line 2 (optional)",
+        "city": "Town/City",
+        "postCode": "Postcode"
+      }
+    },
+    "no-results": "No results found.",
+    "add-new-venue": "Add new venue?"
+  },
+  "suspense-loading": {
+    "text": "Loading..."
+  },
+  "create-course-menu": {
+    "button-text": "Create course",
+    "open-course-label": "Open course",
+    "closed-course-label": "Closed course",
+    "indirect-course-label": "Indirect course",
+    "bulk-import-label": "Bulk import open courses"
+  },
+  "role-switcher": {
+    "subtitle": "Switch Role",
+    "user": "Attendee",
+    "trainer": "Trainer",
+    "tt-ops": "Ops",
+    "tt-admin": "Admin",
+    "sales-admin": "Sales administrator",
+    "ld": "L&D"
+  },
+  "course-form": {
+    "general-details-title": "General details",
+    "organization-label": "Organisation",
+    "contact-person-label": "Contact",
+    "course-level-section-title": "Course level and attributes",
+    "course-level-placeholder": "Course level",
+    "blended-learning-label": "Go1: Blended learning",
+    "blended-learning-price-label": "There is a £25 (plus VAT) licence fee for each person attending this course.",
+    "reaccreditation-label": "Reaccreditation",
+    "delivery-type-section-title": "Delivery type",
+    "f2f-option-label": "Face to face",
+    "virtual-option-label": "Virtual",
+    "mixed-option-label": "Both",
+    "start-datepicker-section-title": "Starts",
+    "start-date-placeholder": "Start date",
+    "start-date-required": "Start date is required field",
+    "start-date-format": "Start date must be a valid date",
+    "start-time-placeholder": "Start time",
+    "end-datepicker-section-title": "Ends",
+    "end-date-placeholder": "End date",
+    "end-date-required": "End date is required field",
+    "end-date-format": "End date must be a valid date",
+    "end-time-placeholder": "End time",
+    "attendees-section-title": "Attendees",
+    "attendees-number-title": "How many attendees?",
+    "attendees-description": "Assist trainer(s) may be required based on the number of attendees.",
+    "min-attendees-placeholder": "Minimum",
+    "max-attendees-placeholder": "Maximum",
+    "num-attendees-placeholder": "Number of attendees",
+    "course-level-required": "Course level is required field",
+    "end-date-before-start-date": "End date must be after the start date",
+    "min-participants-required": "Minimum number of attendees is required field",
+    "min-participants-less-than": "Minimum number of attendees must be less than the maximum number of attendees",
+    "max-participants-required": "Maximum number of attendees is required field",
+    "venue-required": "Venue is required field",
+    "online-meeting-link-label": "Online meeting link",
+    "online-meeting-link-required": "Online meeting link is a required field",
+    "contact-person-placeholder": "Contact name",
+    "aol-title": "Area Operating License (AOL)",
+    "aol-label": "I will be using an AOL for this course",
+    "course-cost-placeholder": "Cost of course",
+    "course-cost": "How much are you charging for this course?",
+    "course-cost-disclaimer": "TeamTeach is not responsible for collecting fees for this course",
+    "country": "Country",
+    "aol-region": "AOL Region",
+    "free-spaces-title": "Free Spaces",
+    "free-spaces-description": "This will add free spaces onto the order and invoice for the given organisation selected",
+    "free-spaces-placeholder": "Number of free spaces",
+    "free-spaces-required": "Free spaces is a required field",
+    "finance-section-title": "Finance",
+    "sales-rep-title": "Sales",
+    "sales-rep-placeholder": "Sales representative",
+    "account-code-title": "Account Code",
+    "notes-title": "Notes",
+    "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
+    "notes-placeholder": "Additional notes",
+    "course-level-one-info": "Please be aware some holds may fall under Level Two certification."
+  },
+  "searchTrainers": {
+    "loading": "Loading...",
+    "noResults": "No trainers found. Try another search term.",
+    "placeholder": "Search eligible trainers...",
+    "maxReachedPlaceholder": "(max allowed reached)"
+  },
+  "profile-selector": {
+    "placeholder": "Search for a profile",
+    "min-chars": "Start typing to get suggestions",
+    "no-results": "No results found."
+  },
+  "org-selector": {
+    "placeholder": "Organisation name",
+    "min-chars": "Start typing to get suggestions",
+    "no-results": "No organisations found",
+    "modal": {
+      "title": "Add Organisation"
+    },
+    "dfe-suggestions": "Suggestions from Department for Education",
+    "existing-organizations": "Found in Team Teach Hub",
+    "add-manually": "Create new organisation"
+  },
+  "certification-list": {
+    "title": "Certifications",
+    "organization": "Organisation",
+    "download-selected": "Download selected ({{ number }})",
+    "download-all-certifications": "Download all certifications",
+    "grade": "Grade",
+    "certificate": "Certificate",
+    "view-certificate": "View certificate",
+    "contact": "Contact",
+    "name": "Name",
+    "status": "Status",
+    "course-code": "Course code",
+    "status-expired": "Expired",
+    "status-active": "Active"
+  },
+  "changelog-modal": {
+    "administrator": "Administrator",
+    "date": "Date",
+    "change": "Change"
+  },
+  "accept-decline-course": {
+    "accept": "Accept",
+    "decline": "Decline",
+    "declined": "Declined",
+    "modal_ACCEPT": {
+      "title": "Ready to build the course?",
+      "msg": "After you have accepted a course, you must confirm the modules and techniques that will be covered.",
+      "cancel": "Cancel",
+      "submit": "Continue to course builder"
+    },
+    "modal_DECLINE": {
+      "title": "Are you sure you want to decline this course?",
+      "msg": "You will no longer have access to this course once you have declined.",
+      "cancel": "Cancel",
+      "submit": "Decline"
+    }
+  },
+  "footer": {
+    "follow": "Follow Team Teach"
+  },
+  "table-no-rows": {
+    "itemsName": "records",
+    "noRecords-first": "No {{itemsName}} at this time",
+    "noMatches-first": "No matching {{itemsName}} found",
+    "noMatches-second": "Please adjust your filter or search criteria"
+  },
+  "trainer-avatar-group": {
+    "lead-trainer": "Lead",
+    "assist-trainer": "Assist"
+  },
+  "course-enquiry-form": {
+    "required-first-name": "First name is required",
+    "required-last-name": "Last name is required",
+    "required-email": "Email is required",
+    "required-interest": "Interest is required",
+    "required-organization": "Organisation name is required",
+    "required-sector": "Sector is required",
+    "required-phone": "Phone is required",
+    "interest-label": "What is your interest?",
+    "email-label": "Work email",
+    "source-label": "How did you hear about us? (optional)",
+    "message-label": "Message (optional)",
+    "participants-label": "Number of course participants",
+    "participants-negative": "Number of participants must be positive number",
+    "submit-button-label": "Enquire now",
+    "source-word-of-mouth": "Word of mouth",
+    "source-facebook": "Facebook",
+    "source-twitter": "Twitter",
+    "source-linkedin": "LinkedIn",
+    "source-instagram": "Instagram",
+    "source-reddit": "Reddit",
+    "source-email": "Email",
+    "source-google": "Google",
+    "source-bing": "Bing",
+    "source-other-search": "Other search engine",
+    "source-telemarketing": "Tele-marketing",
+    "source-leaflet": "Leaflet/Brochure"
+  },
+  "selectLevels": {
+    "placeholder": "Search course level(s)"
+  },
+  "selectCourses": {
+    "btn-browse": "Browse courses",
+    "loading": "Loading...",
+    "no-results": "No courses found. Try another search.",
+    "modal-title": "Select course(s)",
+    "modal-hint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending)."
+  },
+  "invoice-details": {
+    "title": "Invoice contact details",
+    "billing-address": "Billing address"
+  },
+  "audit-filtering-sidebar": {
+    "filter-by-date": "Filter by date"
+  }
+}

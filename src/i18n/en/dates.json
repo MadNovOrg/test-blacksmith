@@ -1,0 +1,11 @@
+{
+  "short": "{{date, date_short}}",
+  "time": "{{date, date_onlyTime}}",
+  "default": "{{date, date_default}}",
+  "defaultShort": "{{date, date_defaultShort}}",
+  "withTime": "{{date, date_withTime}}",
+  "long": "{{date, date_long}}",
+  "longWithTime": "{{date, date_long_withTime}}",
+  "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
+  "fullDateTime": "{{date, date_full}}"
+}

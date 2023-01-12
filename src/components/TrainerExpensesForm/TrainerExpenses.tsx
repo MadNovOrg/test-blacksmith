@@ -13,9 +13,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { TFunction } from 'i18next'
 import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
-import { TFunction, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { DropdownMenu } from '@app/components/DropdownMenu'
 import { yup } from '@app/schemas'

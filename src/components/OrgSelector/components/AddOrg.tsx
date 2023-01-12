@@ -58,11 +58,11 @@ export const AddOrg: React.FC<Props> = function ({
   const schema = useMemo(() => {
     return yup.object({
       name: yup.string().required(requiredMsg(t, 'org-name')),
-      trustType: yup
-        .string()
-        .required(
-          t('validation-errors.required-field', { name: t('trust-type') })
-        ),
+      trustType: yup.string().required(
+        t('validation-errors.required-field', {
+          name: t(t('pages.edit-org-details.trust-type')),
+        })
+      ),
       trustName: yup.string(),
       addressLine1: yup.string().required(requiredMsg(t, 'addr.line1')),
       addressLine2: yup.string(),

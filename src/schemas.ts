@@ -1,4 +1,4 @@
-import type { TFunction } from 'react-i18next'
+import { TFunction } from 'i18next'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
 
@@ -40,4 +40,4 @@ const schemas = {
   },
 }
 
-export { yup, schemas, SIGNUP_VERIFY_LENGTH as EMAIL_VERIFY_LEN, TFunction }
+export { yup, schemas, SIGNUP_VERIFY_LENGTH as EMAIL_VERIFY_LEN }

@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import pdf from '@react-pdf/renderer'
 import { groupBy } from 'lodash-es'
 import React, { Fragment, useMemo } from 'react'
@@ -203,7 +203,11 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
   }
 
   if (!pdfDocument) {
-    return t('pages.course-details.tabs.evaluation.no-evaluations')
+    return (
+      <Typography>
+        {t('pages.course-details.tabs.evaluation.no-evaluations')}
+      </Typography>
+    )
   }
 
   return (

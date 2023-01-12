@@ -9,7 +9,6 @@ import {
 } from '@mui/material'
 import { addWeeks, parseISO } from 'date-fns'
 import React, { useCallback, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
@@ -25,6 +24,7 @@ import {
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { xeroInvoiceStatusColors } from '@app/util'
@@ -66,12 +66,7 @@ const add8Weeks = (dateStr: string) => addWeeks(parseISO(dateStr), 8)
 
 export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
-  const { t } = useTranslation()
-
-  const _t = useCallback(
-    (n: string, ...rest) => t(`pages.order-details.${n}`, ...rest),
-    [t]
-  )
+  const { t, _t } = useScopedTranslation('pages.order-details')
 
   const { order, error, course, invoice, isLoading } = useOrder(id ?? '')
 
@@ -85,10 +80,10 @@ export const OrderDetails: React.FC<unknown> = () => {
   const lineItemForRegistrants = useMemo(() => {
     return course?.name
       ? invoice?.lineItems?.find(li =>
-          li?.description?.includes(t(`course-levels.${course.level}`))
+          li?.description?.includes(_t(`course-levels.${course.level}`))
         )
       : null
-  }, [invoice, course, t])
+  }, [invoice, course, _t])
 
   const getDiscountForPromoCode = useCallback(
     (total: number, code: string, quantity = 1) => {
@@ -194,7 +189,7 @@ ${invoice?.contact?.name}`
   }
 
   const localizedDateString = new Date(invoice?.date as string).toLocaleString(
-    _t('locale'),
+    t('locale'),
     {
       weekday: 'long',
       year: 'numeric',
@@ -229,17 +224,17 @@ ${invoice?.contact?.name}`
           </Stack>
         ) : null}
 
-        {error ? <Alert severity="error">{_t('error')}</Alert> : null}
+        {error ? <Alert severity="error">{t('error')}</Alert> : null}
 
         {order && !loadingData ? (
           <Box display="flex" paddingBottom={5}>
             <Box display="flex" flexDirection="column" pr={4}>
               <Sticky top={20}>
                 <Box mb={4}>
-                  <BackButton label={_t('back-button-label')} to="/orders" />
+                  <BackButton label={t('back-button-label')} to="/orders" />
                 </Box>
                 <Typography variant="h2" mb={3}>
-                  {_t('title')}
+                  {t('title')}
                 </Typography>
                 <Typography variant="h2" mb={4}>
                   {order?.xeroInvoiceNumber}
@@ -252,7 +247,7 @@ ${invoice?.contact?.name}`
                     data-testid="order-details-view-in-xero-button"
                     onClick={handleOpenInXeroClick}
                   >
-                    {_t('view-in-xero')}
+                    {t('view-in-xero')}
                   </Button>
                 ) : null}
               </Sticky>
@@ -265,7 +260,7 @@ ${invoice?.contact?.name}`
                     label={`${course?.name} ${
                       course?.course_code && `(${course?.course_code})`
                     }}`}
-                    value={_t('quantity')}
+                    value={t('quantity')}
                     labelProps={{
                       variant: 'body1',
                       fontWeight: 600,
@@ -282,7 +277,7 @@ ${invoice?.contact?.name}`
                       <Row
                         key={email}
                         label={email}
-                        value={t('common.currency', {
+                        value={_t('common.currency', {
                           amount: lineItemForRegistrants?.unitAmount,
                         })}
                       />
@@ -293,11 +288,11 @@ ${invoice?.contact?.name}`
                 {!order?.registrants?.length ? (
                   <Box p={2} bgcolor="common.white" mt={0.3}>
                     {invoice?.lineItems?.map(lineItem => {
-                      const unitAmount = t('common.currency', {
+                      const unitAmount = _t('common.currency', {
                         amount: lineItem?.unitAmount,
                       })
 
-                      const lineAmount = t('common.currency', {
+                      const lineAmount = _t('common.currency', {
                         amount: lineItem?.lineAmount,
                       })
 
@@ -317,19 +312,19 @@ ${invoice?.contact?.name}`
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   {processingFee > 0 ? (
                     <Row
-                      label={_t('processing-fee')}
-                      value={t('common.currency', { amount: processingFee })}
+                      label={t('processing-fee')}
+                      value={_t('common.currency', { amount: processingFee })}
                     />
                   ) : null}
                   <Row
-                    label={_t('subtotal')}
-                    value={t('common.currency', {
+                    label={t('subtotal')}
+                    value={_t('common.currency', {
                       amount: invoice?.subTotal,
                     })}
                   />
                   <Row
-                    label={_t('vat')}
-                    value={t('common.currency', {
+                    label={t('vat')}
+                    value={_t('common.currency', {
                       amount: invoice?.totalTax,
                     })}
                   />
@@ -340,8 +335,8 @@ ${invoice?.contact?.name}`
                     {order.promoCodes.map((code: string) => (
                       <Row
                         key={code}
-                        label={_t('promo-code', { code })}
-                        value={t('common.currency', {
+                        label={t('promo-code', { code })}
+                        value={_t('common.currency', {
                           amount: getDiscountForPromoCode(
                             order?.orderTotal,
                             code,
@@ -355,18 +350,18 @@ ${invoice?.contact?.name}`
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('total')}
-                    value={t('common.currency', { amount: invoice?.total })}
+                    label={t('total')}
+                    value={_t('common.currency', { amount: invoice?.total })}
                   />
                 </Box>
 
                 {invoice?.status === XeroInvoiceStatus.Paid ? (
                   <Box p={2} bgcolor="common.white" mt={0.3}>
                     <Row
-                      label={_t('paid-on', {
+                      label={t('paid-on', {
                         date: new Date(invoice?.fullyPaidOnDate as string),
                       })}
-                      value={t('common.currency', {
+                      value={_t('common.currency', {
                         amount: invoice?.amountPaid,
                       })}
                       labelProps={{ fontWeight: 600 }}
@@ -377,10 +372,12 @@ ${invoice?.contact?.name}`
 
                 <Box p={2} bgcolor="common.white" mt={4}>
                   <Row
-                    label={_t('amount-due', {
+                    label={t('amount-due', {
                       currency: invoice?.currencyCode,
                     })}
-                    value={t('common.currency', { amount: invoice?.amountDue })}
+                    value={_t('common.currency', {
+                      amount: invoice?.amountDue,
+                    })}
                     labelProps={{
                       variant: 'body1',
                       fontWeight: 600,
@@ -389,8 +386,8 @@ ${invoice?.contact?.name}`
                     valueProps={{ variant: 'h3' }}
                   />
                   <Row
-                    label={_t('due-on', { date: dueDate })}
-                    value={t(`common.filters.${invoice?.status ?? 'UNKNOWN'}`)}
+                    label={t('due-on', { date: dueDate })}
+                    value={_t(`common.filters.${invoice?.status ?? 'UNKNOWN'}`)}
                     valueProps={{
                       variant: 'caption',
                       fontWeight: 600,
@@ -404,7 +401,7 @@ ${invoice?.contact?.name}`
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('date-reference')}
+                    label={t('date-reference')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -413,14 +410,14 @@ ${invoice?.contact?.name}`
                     }}
                   />
                   <Row
-                    label={t('dates.default', { date: invoice?.date })}
+                    label={_t('dates.default', { date: invoice?.date })}
                     value=""
                   />
                 </Box>
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('payment-method')}
+                    label={t('payment-method')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -429,7 +426,7 @@ ${invoice?.contact?.name}`
                     }}
                   />
                   <Row
-                    label={`Pay by ${_t(
+                    label={`Pay by ${t(
                       `payment-method-${order?.paymentMethod}`
                     )}`}
                     value=""
@@ -438,7 +435,7 @@ ${invoice?.contact?.name}`
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('ordered-by')}
+                    label={t('ordered-by')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -452,7 +449,7 @@ ${invoice?.contact?.name}`
                 {order?.paymentMethod === Payment_Methods_Enum.Invoice ? (
                   <Box p={2} bgcolor="common.white" mt={0.3}>
                     <Row
-                      label={_t('invoiced-to')}
+                      label={t('invoiced-to')}
                       value=""
                       labelProps={{
                         variant: 'body1',
@@ -468,7 +465,7 @@ ${invoice?.contact?.name}`
                 course?.salesRepresentative?.fullName ? (
                   <Box p={2} bgcolor="common.white" mt={0.3}>
                     <Row
-                      label={_t('sales-person')}
+                      label={t('sales-person')}
                       value=""
                       labelProps={{
                         variant: 'body1',
@@ -485,7 +482,7 @@ ${invoice?.contact?.name}`
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('source')}
+                    label={t('source')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -493,12 +490,12 @@ ${invoice?.contact?.name}`
                       color: 'inherit',
                     }}
                   />
-                  <Row label={_t('mailout')} value="" />
+                  <Row label={t('mailout')} value="" />
                 </Box>
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('region')}
+                    label={t('region')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -506,12 +503,12 @@ ${invoice?.contact?.name}`
                       color: 'inherit',
                     }}
                   />
-                  <Row label={_t('UK')} value="" />
+                  <Row label={t('UK')} value="" />
                 </Box>
 
                 <Box p={2} bgcolor="common.white" mt={0.3}>
                   <Row
-                    label={_t('currency')}
+                    label={t('currency')}
                     value=""
                     labelProps={{
                       variant: 'body1',
@@ -519,7 +516,7 @@ ${invoice?.contact?.name}`
                       color: 'inherit',
                     }}
                   />
-                  <Row label={_t(invoice?.currencyCode ?? 'GBP')} value="" />
+                  <Row label={t(invoice?.currencyCode ?? 'GBP')} value="" />
                 </Box>
               </Box>
             </Container>

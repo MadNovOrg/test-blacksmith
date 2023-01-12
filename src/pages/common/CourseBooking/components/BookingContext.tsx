@@ -116,7 +116,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   const fetcher = useFetcher()
   const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [availableSeats, setAvailableSeats] = useState(0)
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)

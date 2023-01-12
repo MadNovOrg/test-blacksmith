@@ -1,7 +1,7 @@
 import { formatInTimeZone } from 'date-fns-tz'
 
 import { dateFormats } from '@app/i18n/config'
-import translation from '@app/i18n/en/translation.json'
+import common from '@app/i18n/en/common.json'
 import { getInitialsFromName } from '@app/util'
 
 import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
@@ -24,10 +24,10 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
     Venue: course.schedule[0].venue
       ? `${course.schedule[0].venue.name}${course.schedule[0].venue.city}`
       : '',
-    Type: translation.common['course-types'][course.type],
+    Type: common['course-types'][course.type],
     'Startsorted descending': startUiTime,
     End: endUiTime,
-    Status: translation.common['course-statuses'][course.status],
+    Status: common['course-statuses'][course.status],
     'Trainer(s)':
       course.trainers
         ?.map(trainer => getInitialsFromName(trainer.profile.fullName))

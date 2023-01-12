@@ -1,0 +1,1308 @@
+{
+  "onboarding": {
+    "title": "We need a bit more information",
+    "submit-btn-text": "Update information",
+    "tcs-label": "I accept the <1>Terms of Business</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
+    "tcs-required": "Accepting our T&C is required",
+    "error-saving": "We're having issue saving your personal information."
+  },
+  "waitlist": {
+    "course-full": "Course fully booked",
+    "form-errors": {
+      "constraint-violation": "You've already been added to the waiting list."
+    }
+  },
+  "enquiry": {
+    "title": "Enquire now",
+    "subtitle": "Tell us a little more about yourself so we can help you better.",
+    "success-title": "Thank you for your enquiry",
+    "success-message": "We’ll get back to you as soon as possible.",
+    "error-message": "There was an error saving the enquiry"
+  },
+  "book-private-course": {
+    "title": "Book a private course",
+    "subtitle": "Tell us a little more about yourself so we can help you better.",
+    "number-participants": "Number of course participants",
+    "success-title": "Thank you for your enquiry",
+    "success-message": "We’ll get back to you as soon as possible.",
+    "error-message": "There was an error saving the enquiry"
+  },
+  "book-course": {
+    "title": "Book a course",
+    "not-enough-spaces": "There aren't enough spaces left for the quantity you want to book.",
+    "your-info": "Your information",
+    "notice": "Please make sure email(s) is entered correctly. Course registration details will be sent to email address(es).",
+    "repeat-own-email": "If you are making a booking for yourself, please reconfirm your email address",
+    "order-details": "Order details",
+    "payment-details": "Payment details",
+    "apply-promo": "Apply promo or voucher code",
+    "step-1": "Booking details",
+    "step-2": "Review & confirm",
+    "step-3": "Payment",
+    "complete-booking": "Complete booking",
+    "order-summary": "Order summary",
+    "due-on": "Due on {{date, date_default}}",
+    "confirm-title": "Please confirm to complete booking",
+    "review-tnc": "I confirm I and/or those individuals added as registrants on this course will attend even if it starts during my 14 day cancellation period. I understand that I will lose my right to cancel the contract once the course is complete and that I must pay for services provided prior to cancellation.",
+    "payment-method": "Payment method",
+    "pay-by-cc": "Pay by credit card (Corporate Card only)",
+    "pay-by-inv": "Pay by invoice",
+    "billing-address": "Billing address",
+    "pay-by-cc-info": "Payment by credit card allows you to secure your registration(s) immediately.\n\nAfter you confirm your order you will be taken to a secure page where you can pay online with an additional charge of 1.4% + 20p per transaction.\n\n*Team Teach Limited holds no liability if a consumer card is used.",
+    "pay-by-inv-info": "Please note that payment is due at least 8 weeks before the course begins. If the course begins less than 8 weeks, then payment is due immediately.",
+    "back-to-booking": "Back to booking details",
+    "order-success-info": "Your order has been successfully submitted.",
+    "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.",
+    "payment-cc-title": "Pay by Credit Card (Corporate Card only)",
+    "payment-cc-subtitle": "Enter your card details below and press Pay finalize your order",
+    "payment-cc-chargeInfo": "Your card will be charged:",
+    "payment-cc-submit": "Pay now",
+    "payment-cc-error-ORDER_NOT_FOUND": "Order not found",
+    "payment-cc-error-ORDER_NOT_ENRICHED": "Invalid Order",
+    "payment-cc-error-ORDER_INVALID": "Invalid Order",
+    "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment",
+    "free-spaces": "Free spaces",
+    "payment-processing-fee": "Payment processing fee",
+    "trainer-expenses": "Trainer expenses",
+    "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}",
+    "due-immediately": "Due immediately",
+    "error-creating-order": "There was an error placing the order."
+  },
+  "home": {
+    "title": "Home"
+  },
+  "account": {
+    "title": "Account"
+  },
+  "my-organization": {
+    "overview": {
+      "title": "Overview",
+      "organization-name": "Organisation Name",
+      "location": "Location",
+      "contact-name": "Contact Name",
+      "contact-email": "Contact Email",
+      "contact-number": "Contact Number",
+      "no-org-assigned": "No organizasion assigned to current user."
+    },
+    "profiles": {
+      "title": "Individual records"
+    }
+  },
+  "membership": {
+    "common": {
+      "author": "by {{author}}"
+    },
+    "components": {
+      "order-menu": {
+        "asc-order": "Oldest",
+        "desc-order": "Newest"
+      },
+      "arrow-pagination": {
+        "pagination-count": "{{start}}-{{end}} of {{total}}"
+      },
+      "browse-by-media": {
+        "title": "Explore",
+        "podcasts": "Podcasts",
+        "blogs": "Blogs",
+        "video-series": "Video series",
+        "webinars": "Webinars",
+        "ebooks": "Ebooks",
+        "research-summaries": "Research summaries"
+      },
+      "app-banner": {
+        "title": "Download the Team Teach Journal app",
+        "description": "Struggling with student behaviour? Find the simple way to understand the triggers and patterns behind it, with our expert tips to help you build stronger relationships with your class."
+      },
+      "grid-show-all-button": {
+        "see-all": "See all"
+      }
+    },
+    "home": {
+      "title": "Your membership",
+      "error": "There was an error fetching membership content",
+      "recommended-label": "Team Teach recommends"
+    },
+    "blog": {
+      "title": "Blog",
+      "featured-label": "New post",
+      "list-title": "All blog posts",
+      "search-placeholder": "Search posts",
+      "no-post-id-error": "No post ID has been provided",
+      "recent": "Recent posts",
+      "not-found": "Post not found",
+      "results-for": "Results for",
+      "no-results": "No results found."
+    },
+    "error": "Error loading",
+    "podcasts": {
+      "featured-label": "New episode",
+      "title": "Podcasts",
+      "list-title": "All podcast episodes",
+      "empty": "There are no podcasts yet.",
+      "search-placeholder": "Search podcasts",
+      "error-loading-podcast": "There was an error loading the podcast",
+
+      "recent": "Recent podcast episodes",
+      "not-found": "Podcast not found",
+      "episode-number": "Episode #{{number}}"
+    },
+    "video-series": {
+      "featured-label": "New video",
+      "title": "Video Series",
+      "list-title": "All videos in the series",
+      "empty": "There are no videos yet.",
+      "search-placeholder": "Search videos",
+      "recent": "Recent videos in the series",
+      "not-found": "Video series item not found",
+      "download-button-label": "Download resource"
+    },
+    "ebooks": {
+      "featured-label": "New ebook",
+      "title": "Ebooks",
+      "list-title": "All ebooks",
+      "empty": "There are ebooks yet.",
+      "search-placeholder": "Search ebooks",
+      "download-button": "Download resource"
+    },
+    "research-summaries": {
+      "featured-label": "New summary",
+      "title": "Research Summaries",
+      "list-title": "All research summaries",
+      "empty": "There are no research summaries yet.",
+      "search-placeholder": "Search summaries",
+      "recent": "Recent research summaries",
+      "download-button": "Download resource"
+    },
+    "webinars": {
+      "featured-label": "New webinar",
+      "title": "Webinars",
+      "list-title": "All webinars",
+      "empty": "There are no webinars yet.",
+      "search-placeholder": "Search webinars",
+      "recent": "Recent webinars",
+      "not-found": "Webinar not found"
+    }
+  },
+  "trainer-base": {
+    "create-course": {
+      "new-course": {
+        "description": "To submit a course, choose from the modules available to create a course {{duration}} hours in duration. Times indicated on the modules are the minimum recommended duration for each.",
+        "location": "Location",
+        "starts": "Starts",
+        "ends": "Ends",
+        "course-type": "Course Type",
+        "modules-available": "Modules Available",
+        "my-course": "My Course",
+        "mandatory-modules": "Mandatory modules",
+        "estimated-duration": "Estimated duration",
+        "submit-course": "Submit Course",
+        "submitted-course": "You have successfully created your {{id}} Course",
+        "organization": "Organisation",
+        "time-commitment-title": "Time commitment",
+        "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
+        "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, please resubmit the course as Level Two.\n\nPlease note: It may not effect your delivery timings."
+      }
+    }
+  },
+  "my-courses": {
+    "h1": "Courses",
+    "col-name": "Name",
+    "col-type": "Type",
+    "col-org": "Organisation",
+    "col-venue": "Venue",
+    "col-start": "Start",
+    "col-end": "End",
+    "col-trainers": "Trainer(s)",
+    "col-registrants": "Regist.",
+    "col-status": "Status",
+    "find-available-courses": "Find available courses",
+    "col-registrations": "Registrations",
+    "actionable-courses-title": "Action required",
+    "courses-title": "All courses"
+  },
+  "resources": {
+    "title": "Resources",
+    "additional-resources": {
+      "title": "Additional resources"
+    },
+    "resource-details": {
+      "back-to-resources": "Back to resources",
+      "search": "Search resources"
+    }
+  },
+  "create-course": {
+    "OPEN-course-title": "Open course creation",
+    "CLOSED-course-title": "Closed course creation",
+    "INDIRECT-course-title": "Course creation",
+    "back-button-text": "All courses",
+    "step-navigation-course-details": "Course details",
+    "step-navigation-license-order-details": "Order details",
+    "step-navigation-assign-trainer": "Assign trainer(s)",
+    "step-navigation-trainer-expenses": "Trainer expenses",
+    "step-navigation-review-and-confirm": "Review & confirm",
+    "step-navigation-course-builder": "Course builder",
+    "select-trainers-button-text": "Select trainer(s)",
+    "course-builder-button-text": "Course builder",
+    "order-details-button-text": "Order details",
+    "assign-trainers-title": "Assign an assist trainer",
+    "assists-needed_one": "{{count}} assist trainer needed.",
+    "assists-needed_other": "{{count}} assist trainers needed.",
+    "course-not-found": "Course not found",
+    "error-creating-course": "There was an error creating a course.",
+    "assign-trainers": {
+      "lead-title": "Lead Trainer",
+      "lead-error-min": "Lead trainer is required",
+      "lead-error-max": "There can be only one Lead trainer",
+      "assist-title_one": "Assistant Trainer",
+      "assist-title_other": "Assistant Trainers",
+      "assist-hint": "Assist trainer(s) may be required based on the number of attendees.",
+      "back-btn": "Course details",
+      "submit-btn": "Create course",
+      "moderator-title": "Moderator",
+      "moderator-error-min": "Moderator is required",
+      "moderator-error-max": "There can be only one Moderator"
+    },
+    "license-order-details": {
+      "title": "Order details",
+      "order-title": "Go1: Blended learning license",
+      "quantity": "Quantity",
+      "price-per-attendee": "{{price}} per attendee",
+      "license-allowance": "License allowance ({{balance}} left)",
+      "subtotal": "Sub total",
+      "amound-due": "Amount due ({{currency}})",
+      "vat": "VAT (20%)",
+      "invoice-title": "Invoice contact details",
+      "invoice-contact": "Invoice to:"
+    },
+    "license-order-review": {
+      "title": "Confirm to complete creation",
+      "back-btn-text": "Order details",
+      "saving-error-message": "There was an error creating a course. Please try again later."
+    },
+    "trainer-expenses": {
+      "title": "Trainer Expenses",
+      "back-btn": "Assign trainers",
+      "submit-btn": "Review & confirm",
+      "method-error": "Method is required",
+      "name-error": "Name is required",
+      "value-error": "Value is required",
+      "days-error": "Flight days is required",
+      "nights-error": "Accommodation nights is required",
+      "accommodation-cost-error": "Accommodation cost is required",
+      "num-error": "Please enter a number greater than or equal to {{min}}",
+      "method-of-transport": "Method of transport",
+      "CAR": "Car",
+      "PUBLIC": "Public (eg. bus/train)",
+      "PRIVATE": "Private (eg. car hire/taxi)",
+      "FLIGHTS": "Flights (international)",
+      "NONE": "None",
+      "accommodation": "Accommodation",
+      "accommodation-nights": "Number of nights",
+      "accommodation-cost": "Accommodation cost per night",
+      "accommodation-caption": "In addition, £30 per night of subsistence included",
+      "subsistence": "Subsistence",
+      "another-trip": "Another trip",
+      "miscellaneous-costs": "Miscellaneous costs",
+      "misc-item-name": "Item name",
+      "misc-item-cost": "Cost of item",
+      "value-label": {
+        "CAR": "Total mileage",
+        "PUBLIC": "Cost of travel",
+        "PRIVATE": "Cost of travel",
+        "FLIGHTS": "Total flight cost",
+        "FLIGHTS-days": "Days of travel"
+      }
+    },
+    "review-and-confirm": {
+      "unknown-error": "Something went wrong. Please try again later",
+      "pricing-fetching-error": "Error fetching course pricing information",
+      "back-btn": "Trainer details",
+      "submit-btn": "Create course",
+      "title": "Confirm to complete creation",
+      "sales-representative": "Sales representative",
+      "account-code": "Account code",
+      "no-travels": "No travel",
+      "trainer-expenses-total": "Trainer expenses total",
+      "base-price": "Course Cost",
+      "subtotal": "Sub total",
+      "free-spaces_one": "Free space x {{count}}",
+      "free-spaces_other": "Free spaces x {{count}}",
+      "vat": "VAT (20%)",
+      "amount-due": "Amount due (GBP)",
+      "caption": {
+        "FLIGHTS_one": "{{count}} day of travel",
+        "FLIGHTS_other": "{{count}} days of travel",
+        "CAR_one": "{{count}} mile",
+        "CAR_other": "{{count}} miles",
+        "accommodation_one": "{{count}} night",
+        "accommodation_other": "{{count}} nights"
+      }
+    },
+    "form": {
+      "health-leaflet-copy": "I acknowledge I must send the health and safety leaflet at least 2 weeks before the course begins. (If the course is starting in less than 2 weeks, send as soon as possible before the course begins.)",
+      "practice-protocol-copy": "I acknowledge I will confirm practice protocols and a first aider.",
+      "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
+    },
+    "save-as-draft": "Save as draft",
+    "submitted-course": "{{code}} has been created.",
+    "exceptions": {
+      "course-contain-exceptions": "Course contains exceptions",
+      "course-approval-required": "Course approval required",
+      "send-for-approval": "Send for approval",
+      "admin-header": "This course contains exceptions to TeamTeach standard course creation rules:",
+      "warning-header": "This course requires approval from a Team Teach Administrator due to some or all of the following reasons:",
+      "type_ADVISED_TIME_EXCEEDED": "Advised time exceeded",
+      "type_OUTSIDE_NOTICE_PERIOD": "Start date is less than 4 weeks away",
+      "type_LEAD_TRAINER_IN_GRACE_PERIOD": "Lead trainer certification is expired (within grace period) or expiring soon",
+      "type_TRAINER_RATIO_NOT_MET": "Insufficient amount of trainers per participants",
+      "proceed": "Proceed"
+    }
+  },
+  "edit-course": {
+    "title": "Edit course",
+    "course-not-found": "There was an error loading the course",
+    "save-button-text": "Save changes",
+    "cancel-this-course": "Cancel this course",
+    "cancel-this-entire-course": "Cancel this entire course",
+    "updating-error": "There was an error updating the course, please try again later.",
+    "cancellation-modal": {
+      "title": "Cancel this entire course",
+      "description-p-1": "This action will permanently cancel the course and notify all trainers, registered attendees, and organisations.",
+      "description-p-2": "Finance will make changes on the invoice(s), where necessary. ",
+      "description-p-3": "Registered attendees will not incur cancellation charges. ",
+      "will-any-fees-apply": "Will any fees apply?",
+      "apply-cancellation-terms": "Apply cancellation terms",
+      "custom-fee": "Custom fee",
+      "no-fees": "No fees",
+      "reason-for-cancellation": "Reason for cancellation",
+      "reasons": {
+        "booking-amendments-made-by-venue": "Booking amendments made by venue",
+        "booking-amendments-made-by-team-teach": "Booking amendments made by Team Teach",
+        "booking-amendments-made-by-organization": "Booking amendments made by Organisation",
+        "trainer-availability": "Trainer availability",
+        "other": "Other"
+      },
+      "specify-reason": "Specify reason",
+      "never-mind": "Never mind",
+      "cancel-entire-course": "Cancel entire course",
+      "fee": "Fee",
+      "before-course-start-date": "Before course start date",
+      "cancellation-fee": "Cancellation fee",
+      "terms": {
+        "percent-of-payment-due": "{{ percent }}% of payment due",
+        "four-weeks-plus": "4+ weeks",
+        "two-to-four-weeks": "2 - 4 weeks",
+        "one-to-two-weeks": "1 - 2 weeks",
+        "less-than-week": "Less than 1 week"
+      },
+      "cannot-be-undone-confirmation": "I understand this cannot be undone."
+    },
+    "registrants-cancellation-modal": {
+      "description": "Proceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
+      "proceed-with-cancellation": "Proceed with cancellation",
+      "transfer-attendees-first": "Transfer attendees first"
+    },
+    "request-cancellation": "Request cancellation",
+    "review-changes-modal": {
+      "title": "Review and confirm changes",
+      "description": "This will change immediately and notify all trainers, organisation admins, and registered attendees of changes made to this course.",
+      "col-property": "Property",
+      "col-old-value": "Old value",
+      "col-new-value": "New value",
+      "col-date-type": "Date",
+      "col-venue-type": "Venue",
+      "reason-field-placeholder": "Reason for change *",
+      "error-reason-required-field": "Reason is a required field",
+      "cancel-btn-text": "Never mind",
+      "confirm-btn-text": "Confirm changes",
+      "col-start-date": "Before course start date",
+      "col-fee": "Rescheduling fee",
+      "0-fee-label": "4+ weeks",
+      "0-fee": "Free",
+      "15-fee-label": "2-4 weeks",
+      "15-fee": "15% of payment due",
+      "25-fee-label": "Less than 2 weeks",
+      "25-fee": "25% of payment due",
+      "apply-terms-option": "Apply rescheduling terms",
+      "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at",
+      "protocol-not-met-sales-admin": "This change does not meet Team Teach protocols, only TT Admin can action this change"
+    }
+  },
+  "course-details": {
+    "tabs": {
+      "attendees": {
+        "title": "Attendees"
+      },
+      "grading": {
+        "title": "Grading",
+        "grading-details-confirmation": {
+          "line1": "You are now at the end of your course and need to prepare for grading.",
+          "line2": "The following details need to be confirmed before grading each attendee:",
+          "line3": "Confirm criteria for grading.",
+          "line4": "It is an automatic fail if an individual does not meet the following:",
+          "line5": "Completed the course",
+          "line6": "Identification was checked",
+          "line7": "Passed the course quiz",
+          "line8": "Confirm modules and physical techniques",
+          "line9": "covered or not covered in the course. This informs the modules and techniques the attendee will be graded on at an individual level.",
+          "confirm-grading-details": "Confirm grading details"
+        },
+        "grade": "Grade",
+        "attendees": "{{ number }} attendees",
+        "grade-selected": "Grade selected ({{ number }})",
+        "grade-all-attendees": "Grade all attendees",
+        "description": "Grade attendees individually, in multiples, or altogether as a group. Please note, grading details may not be modified once you’ve begun grading.",
+        "modify-grading-details": "Modify grading details"
+      },
+      "evaluation": {
+        "title": "Summary Evaluation",
+        "button": "View Summary Evaluation",
+        "full-summary": "Full Summary Evaluation",
+        "desc": "View an attendee's course evaluation and a summary of all evaluations.",
+        "view-evaluation": "View Evaluation",
+        "attendee-feedback": "Attendee Feedback",
+        "trainer-feedback": "Trainer Feedback",
+        "export-error": "Error generating document",
+        "export-loading": "Generating summary...",
+        "export-idle": "Export Summary",
+        "export-done": "Download Summary",
+        "no-evaluations": "No evaluations to export"
+      },
+      "certifications": {
+        "title": "Certifications"
+      },
+      "waitlist": {
+        "waitlist": "Waitlist",
+        "name": "Name",
+        "contact": "Contact",
+        "joined": "Joined"
+      }
+    },
+    "course-has-been-cancelled": "{{ code }} has been cancelled.",
+    "request-cancellation-modal": {
+      "description": "This will be escalated with Team Teach and a representative will contact you to complete this action.",
+      "warning": "Cancellation terms apply based on the course start date.",
+      "title": "Request to cancel this course"
+    },
+    "cancellation-request-alert": "This course has a pending cancellation request.",
+    "delete-request": "Delete request",
+    "approve-cancellation": "Approve cancellation",
+    "modify-my-attendance": {
+      "title": "Modify my attendance",
+      "description": "Please select one of the following options.",
+      "cancel-my-attendance": "Cancel my attendance",
+      "transfer-to-another-course": "Transfer to another course",
+      "transfer-info": {
+        "alert-message": "Transfer terms apply based on the course start date.",
+        "terms-notice": "I understand the terms and conditions.",
+        "transfer-btn-text": "Transfer to another course",
+        "cancel-btn-text": "Never mind"
+      }
+    }
+  },
+  "course-participants": {
+    "none-registered-message": "No invites accepted",
+    "none-pending-message": "No invites pending",
+    "none-declined-message": "No invites declined",
+    "edit-course-button": "Edit course details",
+    "course-beggins": "Begins",
+    "course-ends": "Ends",
+    "course-duration_days_one": "Duration 1 day",
+    "course-duration_days_other": "Duration {{count}} days",
+    "until-course-begins_days_one": "1 day until course begins",
+    "until-course-begins_days_other": "{{count}} days until course begins",
+    "course-duration_hours_one": "Duration {{count}} hour",
+    "course-duration_hours_other": "Duration {{count}} hours",
+    "until-course-begins_hours_one": "{{count}} hour until course begins",
+    "until-course-begins_hours_other": "{{count}} hours until course begins",
+    "course-duration_minutes_one": "Duration {{count}} minute",
+    "course-duration_minutes_other": "Duration {{count}} minutes",
+    "until-course-begins_minutes_one": "{{count}} minute until course begins",
+    "until-course-begins_minutes_other": "{{count}} minutes until course begins",
+    "course-duration_none": "No duration",
+    "until-course-begins_none": "Course has already begun",
+    "no-participants-registered": "No participants registered yet for this course.",
+    "course-began": "Course has begun.",
+    "course-begins-today": "Course begins today.",
+    "course-ended": "Course has ended.",
+    "trainer": "You are the trainer",
+    "hosted-by": "Hosted by {{trainer}}",
+    "back-button": "All courses",
+    "name": "Name",
+    "contact": "Contact",
+    "invite-date": "Invite Date",
+    "organisation": "Organisation",
+    "prerequisites": "Prerequisites",
+    "attending": "{{attending}} of {{max}} attending",
+    "invites-left_one": "{{count}} invite left",
+    "invites-left_other": "{{count}} invites left",
+    "invite-btn": "Invite attendees",
+    "invite-modal-title": "Invite attendees",
+    "invite-modal-intro": "Attendees must upload their forms and documents to fully register to the course.",
+    "invite-send-btn": "Send invites",
+    "invite-input-placeholder": "Email address...",
+    "invite-input-hint": "Press ENTER to add multiple emails",
+    "invite-error-EMAIL_REQUIRED": "Please enter at least one email address",
+    "invite-error-INVALID_EMAILS": "Some emails are invalid",
+    "invite-error-EMAILS_ALREADY_INVITED": "All emails entered have already been invited",
+    "invite-error-LIMIT_REACHED": "Invites limit reached",
+    "invite-error-UNKNOWN": "Unknown error",
+    "status": "Status",
+    "documents": "Documents",
+    "tabs": {
+      "attending": "Attending ({{number}})",
+      "pending": "Pending ({{number}})",
+      "declined": "Declined ({{number}})",
+      "waitlist": "Waitlist ({{number}})"
+    },
+    "resend-invite": "Resend invite",
+    "cancel-invite": "Cancel invite",
+    "invite-sent": "Invite sent.",
+    "invite-canceled": "Invite canceled.",
+    "no-attendees": "No attendees",
+    "manage-attendance": "Manage attendance"
+  },
+  "course-grading-details": {
+    "title": "Grading details",
+    "back-button-text": "Back to course details",
+    "course-error-alert-text": "There was an error loading the course",
+    "grading-clearance-step": "Grading clearance",
+    "modules-step": "Modules and Techniques"
+  },
+  "course-grading": {
+    "title": "Final grading",
+    "attendees-list-title": "{{count}} attendee(s)",
+    "attendees-list-title-all": "All attendees",
+    "grading-menu-title": "Final grade",
+    "grading-menu-description": "Once grade is submitted, this cannot be modified.",
+    "grade-select": "Please select a grade",
+    "grade-pass": "Pass",
+    "grade-observe-only": "Observe only",
+    "grade-assist-only": "Assist only",
+    "grade-fail": "Fail",
+    "modules-selection-title": "Grade the attendee(s) for each module and hold",
+    "modules-selection-description": "Any markings below will be reflected on the attendee’s certificate.",
+    "feedback-field-title": "Written feedback",
+    "feedback-field-placeholder": "Any notes attendee(s) (optional)",
+    "submit-button-text": "Submit final grade",
+    "modal-title": "Grading confirmation",
+    "modal-description": "Are you sure you want to confirm your grading against attendees? Please note you will not be able to make changes after this has been submitted.",
+    "modal-cancel-btn-text": "Cancel",
+    "modal-confirm-btn-text": "Confirm"
+  },
+  "participant-grading": {
+    "title": "View grade",
+    "attendee-title": "Attendee(s)",
+    "modules-title": "Completed modules and techniques",
+    "completed-modules-subtitle": "{{completedNum}} of {{totalNum}} completed",
+    "incomplete-list-subtitle": "Incomplete"
+  },
+  "course-attendance": {
+    "title": "Grading clearance",
+    "page-description-line1": "Please confirm that the individual has met",
+    "page-description-line2": "ALL",
+    "page-description-line3": "the following criteria:",
+    "page-description-line4": "Completed the course",
+    "page-description-line5": "Identification was checked",
+    "page-description-line6": "Passed the course quiz",
+    "page-description-line7": "Please note it is an automatic fail if the individual does not meet ALL the criteria.",
+    "next-page-button-text": "Confirm modules and physical techniques",
+    "master-checkbox-label-checked": "Deselect all",
+    "master-checkbox-label-unchecked": "Select all",
+    "participant-attended-chip-label": "Clear for grading",
+    "participant-not-attended-chip-label": "Automatic fail",
+    "attending-count": "{{count}} selected",
+    "no-participants-warning": "There are no participants for this course"
+  },
+  "modules-selection": {
+    "title": "Modules and Techniques",
+    "page-description-line1": "Please confirm modules and physical techniques covered or not covered in the course.",
+    "page-description-line2": "This informs the modules and physical techniques the attendee will be graded on at an individual level.",
+    "save-button-text": "Continue to grading attendees",
+    "back-button-text": "Back to grading clearance"
+  },
+  "my-training": {
+    "common": {
+      "my-certification-and-credentials": "My Certifications & Credentials"
+    },
+    "dashboard": {
+      "title": "My Training",
+      "my-upcoming-training": "My Upcoming Training",
+      "next-course": "Next Course",
+      "latest-certification": "Latest Certification",
+      "my-resources": "My Resources",
+      "latest-available": "Latest Available",
+      "membership-status": "Membership Status",
+      "my-membership": "My Membership"
+    },
+    "resources": {
+      "title": "My Resources"
+    },
+    "membership": {
+      "title": "My Membership"
+    },
+    "upcoming-training": {
+      "title": "My Upcoming Training"
+    }
+  },
+  "participant-course": {
+    "certification-course-not-ended": "You will see your certificate here once the course is over and you have recvieved a passing grade",
+    "certification-tab-title": "Certification",
+    "evaluate-course": "Evaluate course",
+    "invite-accepted": "You are now attending this course. Please complete the checklist.",
+    "checklist-tab-title": "Checklist",
+    "resources-tab-title": "Resources",
+    "personal-data-document-title": "Personal Data and Health & Safety Consent Form",
+    "review-and-submit": "Review and submit",
+    "course-summary-evaluation-title": "Course summary evaluation",
+    "course-summary-button-after-completion": "Available after course",
+    "resources-empty-message": "Trainer will provide course materials here",
+    "change-my-attendance": "Change my attendance",
+    "manage-course": "Manage course"
+  },
+  "upcoming-training": {
+    "course-upcoming": "Course Upcoming",
+    "course-takes-place-on": "Course takes place on",
+    "your-status": "Your Status",
+    "registration-complete": "Registration Complete",
+    "health-check-complete": "Health Check Complete",
+    "dbs-check-complete": "DBS Check Complete",
+    "change-availability": "Change Availability"
+  },
+  "manage-availability": {
+    "title": "Manage Availability",
+    "event-form": {
+      "from": "From",
+      "to": "To",
+      "for": "For",
+      "submit-event": "Submit Event",
+      "add-reason-optional": "Add Reason (optional)",
+      "validation": {
+        "end-before-start-date": "The end date cannot be before the start date."
+      },
+      "delete-event": "Delete Event"
+    }
+  },
+  "login": {
+    "reset-pass": "Please login with your new password",
+    "email-label": "Email Address",
+    "email-placeholder": "Please enter your email address",
+    "email-title": "Email Address",
+    "pass-label": "Password",
+    "pass-placeholder": "Please enter your password",
+    "pass-title": "Password",
+    "submit-label": "Login",
+    "sign-up-message": "or Sign up for an account",
+    "forgot-label": "Forgot password",
+    "loading-state-part-one": "If you have trouble loading, please ",
+    "loading-state-part-two": "contact us",
+    "auth-errors": {
+      "NotAuthorizedException": "Email address or password was incorrect, please try again",
+      "401": "New password required",
+      "UnknownError": "Email address or password was incorrect, please try again"
+    },
+    "password-resent": "Your temporary password has been resent."
+  },
+  "forgot-password": {
+    "generic-error": "An error occurred. Please contact your administrator",
+    "generic-email-error": "Please enter a valid email address",
+    "title": "Reset password",
+    "subtitle": "If you've forgotten your password, simply enter your email address below and we'll send you a link to reset your password ",
+    "email-placeholder": "Please enter your email address",
+    "email-address": "Email Address",
+    "loading-state-part-one": "If you have trouble loading, please ",
+    "loading-state-part-two": "contact us"
+  },
+  "order-details": {
+    "error": "Something wrong happened. Please try again later",
+    "back-button-label": "Back to Orders",
+    "title": "Order details",
+    "view-in-xero": "View in Xero",
+    "quantity": "Quantity",
+    "locale": "en-GB",
+    "processing-fee": "Payment Processing Fee",
+    "subtotal": "Sub total",
+    "vat": "VAT (20%)",
+    "promo-code": "Promo code: {{code}}",
+    "total": "Total",
+    "paid-on": "Fully paid on {{date, date_default}}",
+    "amount-due": "Amount due ({{currency}})",
+    "due-on": "Due on {{date, date_default}}",
+    "date-reference": "Date/reference",
+    "payment-method": "Payment method",
+    "payment-method-INVOICE": "invoice",
+    "payment-method-CC": "credit card",
+    "ordered-by": "Ordered by",
+    "invoiced-to": "Invoiced to",
+    "sales-person": "Sales person",
+    "source": "Source",
+    "mailout": "Mailout",
+    "region": "Region",
+    "UK": "United Kingdom",
+    "currency": "Curency",
+    "GBP": "GBP - Pound sterling"
+  },
+  "reset-password": {
+    "not-recieved-email": "If you still haven’t received it, you can",
+    "resend-code": "resend the code here",
+    "changing-password-text": "Changing password for",
+    "new-password-label": "New Password",
+    "confirm-new-password-label": "Confirm New Password",
+    "please-contact": "please contact us",
+    "reset": "Reset Password",
+    "incorrect-username-or-password": "Incorrect username or password",
+    "enter-password": "Please enter a password",
+    "invalid-password": "Invalid password",
+    "incorrect-passcode": "Passcode is incorrect",
+    "passwords-must-match": "Passwords must match",
+    "empty-password": "Password cannot be empty",
+    "verification-code-six-digits": "Verification code must be six digits",
+    "password-placeholder": "Please enter your password",
+    "enter-passcode": "Enter Passcode",
+    "title": "A six-digit verification code has been sent to your chosen method of 2fa, please enter it below, along with your new password",
+    "auth-errors": {
+      "NotAuthorizedException": "Incorrect username or password",
+      "InvalidPasswordException": "Password does not conform to policy",
+      "CodeMismatchException": "Passcode is incorrect",
+      "ExpiredCodeException": "Invalid passcode",
+      "UnknownError": "An error occurred. Please contact your administrator",
+      "LimitExceededException": "Attempt limit exceeded, please try again after some time"
+    }
+  },
+  "signup": {
+    "back-to-login": "Back to login",
+    "didnt-get-mail": "Didn't get the email?",
+    "heading": "Sign up for Team Teach",
+    "verify-heading": "Verify your email",
+    "verify-subtitle": "Please verify your email in order to access features within the Team Teach Hub.",
+    "email-label": "Email Address",
+    "email-placeholder": "Please enter your email address",
+    "givenName-label": "Given name",
+    "givenName-placeholder": "",
+    "familyName-label": "Family name",
+    "familyName-placeholder": "",
+    "pass-label": "Password",
+    "pass-placeholder": "Please enter your password",
+    "confirmPassword-label": "Confirm Password",
+    "confirmPassword-placeholder": "Please re-enter your password",
+    "marketing-title": "Marketing",
+    "marketing-label": "By ticking this box you agree to receive marketing materials with information on courses and offers from Team Teach.",
+    "marketing-hint": "Your details will be processed in accordance with the Team Teach Ltd Privacy Policy",
+    "tcs-title": "Terms & Conditions",
+    "tcs-label": "I accept the <1>Terms of Business</1> and agree to Team Teach processing my personal data in accordance with our <3>Privacy Policy</3>",
+    "tcs-required": "Accepting our T&C is required",
+    "submit-btn": "Create account",
+    "verify-hint": "A six-digit verification code has been sent to your email, please enter it below.",
+    "verify-code-label": "Verification code",
+    "verify-btn": "Verify",
+    "verify-now": "Send verification code",
+    "verify-later": "Verify Later",
+    "resend": "Resend",
+    "verify-resend-btn": "Resend verification email",
+    "success-hint": "Thank you for signing up. \n You can now login to your Team Teach account.",
+    "success-btn": "Go to Login",
+    "form-errors": {
+      "UnknownError": "An error occurred. Please try again.",
+      "UsernameExistsException": "An account with the given email already exists."
+    },
+    "verify-errors": {
+      "CodeMismatchException": "Verification code is incorrect.",
+      "ExpiredCodeException": "Verification code expired. Please request new code.",
+      "UnknownError": "An error occurred. Please try again."
+    }
+  },
+  "admin": {
+    "organizations": {
+      "title": "Organisations",
+      "columns": {
+        "name": "Name",
+        "status": "Status",
+        "members-count": "Members Count",
+        "country": "Country",
+        "region": "Region",
+        "sector": "Sector",
+        "last-activity": "Last activity",
+        "created-on": "Created on",
+        "group": "Group"
+      },
+      "add-new-organization": "Add new organisation"
+    },
+    "back-to-settings": "Back to settings",
+    "hub-settings": {
+      "title": "Hub settings",
+      "users": {
+        "title": "Users",
+        "description": "Manage all internal and external users and permissions."
+      },
+      "organisations": {
+        "title": "Organisations",
+        "description": "Manage all organisation details and organisation users."
+      },
+      "discounts": {
+        "title": "Discounts",
+        "description": "Manage discounts."
+      },
+      "waitlist-notifications": {
+        "title": "Waitlist notifications",
+        "description": "Set timing measures on when to notify users of course availability."
+      },
+      "course-renewals": {
+        "title": "Course renewals",
+        "description": "Modify expiration dates for future certifications."
+      },
+      "cancellations-transfers-replacements": {
+        "title": "Cancellations, Transfers & Replacements",
+        "description": "An audit log of all cancellations, transfers and replacements."
+      }
+    },
+    "users": {
+      "title": "User management"
+    }
+  },
+  "my-profile": {
+    "verify-email-notice": "You must verify your email to have full access on the Team Team Hub.",
+    "missing-details-header": "Please complete your profile by providing the following details:",
+    "add-certificate": "Add certificate",
+    "user-is-not-assigned-to-org": "User is not assigned to any organisation.",
+    "organization-details": "Organisation details",
+    "org-leave-confirm-message": "Are you sure you want to leave {{ name }} organisation?",
+    "bl-license-title": "Blended learning license",
+    "bl-license-enrolled-on": "Enrolled on {{date}}",
+    "bl-license-expires-in_other": "Active until {{date}} (expires in {{months}} months).",
+    "bl-license-expires-in_one": "Active until {{date}} (expires in {{months}} month).",
+    "bl-license-remove": "Remove",
+    "bl-license-deleting-error": "There was an error deleting the license. Please try again later"
+  },
+  "orders": {
+    "cols-invoiceNumber": "Invoice no.",
+    "cols-billTo": "Organisation",
+    "cols-paymentMethod": "Payment Method",
+    "cols-amount": "Amount",
+    "cols-due": "Due",
+    "cols-dueDate": "Due Date",
+    "cols-status": "Status",
+    "paymentMethod-INVOICE": "Invoice",
+    "paymentMethod-CC": "Credit Card",
+    "qty": "Participants",
+    "export-selected": "Export selected",
+    "export-whole-page": "Export whole page"
+  },
+  "hs-form": {
+    "back-to-checklist": "Back to checklist",
+    "heading": "Health & safety consent form",
+    "information": {
+      "p1": "In order for Team Teach Ltd to keep accurate and up-to-date records of your personal data, training certification and remind you of when your certification is due for renewal, we require your permission to collect and store your personal data on our training management system in accordance with our Privacy Policy.",
+      "h1": "Health guidance & training information",
+      "health-check-label": "I confirm that I have read and understood the Health Guidance & Training Information leaflet distributed prior to this course, and I agree to abide by the participant conduct instructions as issued by the lead trainer.",
+      "p2": "The Health guidance &training information leaflet should be found in the email containing the Course Instructions. If this is missing, please contact Team Teach.",
+      "h2": "Risk assessments",
+      "risk-check-label": "I agree to adhere to all Team Teach Training Protocols. Participants are encouraged to take personal responsibility for conducting their own risk assessments and may opt out of an activity at any time. Course members are asked not to offer any resistance when learning techniques during practical sessions.",
+      "h3": "Signature",
+      "p3": "Please enter the full name that matches with your account. Your signature confirms the information provided is an accurate representation of your experience."
+    },
+    "incorrect-signature": "Incorrect signature"
+  },
+  "xero": {
+    "connect-h1": "Xero Connection",
+    "connect-hint": "A user with access to a priviledged account must setup the Hub connection with Xero by clicking the button below.",
+    "connect-btn": "Connect to Xero",
+    "connect-done": "HUB is connected to Xero.",
+    "connect-error": "Failed to determine Xero connection status. \nPlease try again later."
+  },
+  "create-organization": {
+    "title": "Create Organisation",
+    "fields": {
+      "organization-name": "Organisation name",
+      "work-email": "Work email"
+    },
+    "add-new-organization": "Add new organisation",
+    "organization-details": "Organisation details",
+    "organization-admin-details": "Organisation admin details",
+    "organization-admin-details-subtitle": "Please assign an administrator to this organisation. An Organisation Admin can invite additional users to their organisation.",
+    "email-alert": "Please make sure the email is entered correctly.",
+    "save-organization": "Save organisation"
+  },
+  "org-details": {
+    "org-not-found": "Organisation not found.",
+    "back-to-organizations": "Back to organisations",
+    "tabs": {
+      "details": {
+        "title": "Details",
+        "org-details-section": {
+          "title": "Organisation details",
+          "name": "Name",
+          "address": "Address",
+          "org-email": "Organisation email",
+          "sector": "Sector",
+          "trust-type": "Trust type",
+          "trust": "Trust",
+          "local-authority": "Local authority",
+          "ofsted-rating": "Ofsted rating",
+          "ofsted-last-inspection": "Ofsted last inspection"
+        },
+        "additional-details": {
+          "title": "Additional details",
+          "head-first-name": "Head first name",
+          "head-last-name": "Head last name",
+          "head-title": "Head title",
+          "head-preffered-job-title": "Head preffered job title",
+          "website": "Website",
+          "head-preferred-job-title": "Head preferred job title"
+        },
+        "user-details": {
+          "title": "User details",
+          "total-number-of-users": "Total number of users",
+          "active-certifications": "Active certifications",
+          "expiring-soon-certifications": "Expiring soon",
+          "expired-certifications": "Expired certifications"
+        },
+        "organization-address": {
+          "title": "Organisation address"
+        }
+      },
+      "users": {
+        "title": "Individuals",
+        "tabs": {
+          "individuals": "Individuals ({{number}})",
+          "pending": "Pending ({{number}})"
+        },
+        "cols-name": "Name",
+        "cols-certification": "Certification",
+        "cols-blended-learning": "Blended learning license",
+        "cols-last-activity": "Last activity",
+        "cols-created-on": "Created on",
+        "cols-permissions": "Permissions",
+        "organization-admin": "Organisation admin",
+        "no-permissions": "No permissions",
+        "invited-on": "Invited on",
+        "permissions": "Permissions",
+        "invite-status": {
+          "pending": "Pending",
+          "accepted": "Accepted",
+          "declined": "Declined"
+        },
+        "edit-user-modal": {
+          "title": "Modify permissions for {{name}}",
+          "modification-info": "Modifications will go into effect immediately.",
+          "remove-from-organization": "Remove from organisation",
+          "organization-admin": "Organisation admin",
+          "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user."
+        },
+        "total-number-of-individuals": "Total number of individuals",
+        "invite-individual-to-organization": "Invite individual to organisation"
+      },
+      "overview": {
+        "title": "Overview",
+        "total-individuals": "Total individuals",
+        "currently-enrolled": "{{count}} currently enrolled",
+        "active": "Active",
+        "expiring-soon": "Expiring soon",
+        "expired": "Expired",
+        "individuals-by-training-level": "Individuals by training level",
+        "no-org-users": "Organisation does not have any members yet.",
+        "click-here-to-invite": "Click here to invite new users.",
+        "organization-summary": "Organisation summary",
+        "see-all-organizations": "See all organisations",
+        "available-courses-for-booking": "Available courses for booking",
+        "see-all-courses": "See all courses",
+        "certificates": {
+          "level-one": "Level One ({{ count }})",
+          "level-two": "Level Two ({{ count }})",
+          "advanced": "Advanced ({{ count }})",
+          "bild-act-certified": "BILD ACT Certified ({{ count }})",
+          "level_1": "Level One ({{ count }})",
+          "level_2": "Level Two ({{ count }})",
+          "bild_act": "BILD ACT Certified ({{ count }})",
+          "intermediate_trainer": "Intermediate Trainer ({{ count }})",
+          "bild_act_trainer": "BILD ACT Trainer ({{ count }})",
+          "advanced_trainer": "Advanced Trainer ({{ count }})",
+          "no-certification": "No certification ({{ count }})"
+        }
+      },
+      "licenses": {
+        "title": "Blended learning licences",
+        "remaining-licenses": "Total remaining licences",
+        "unused-licenses": "Unused licences that are reserved for upcoming course(s).",
+        "manage-button-label": "Manage",
+        "manage-modal-title": "Manage licences",
+        "manage-modal-description": "Add or remove number of licences for this organisation. Any modifications will be applied immediately.",
+        "org-history-fetch-error": "There was an error loading organisation's licenses data",
+        "error-ADD-licenses": "There was an error adding licenses, please try again later.",
+        "error-REMOVE-licenses": "There was an error removing licenses, please try again later.",
+        "form": {
+          "add-radio-button-label": "Add",
+          "remove-radio-button-label": "Remove",
+          "amount-label": "Number of licenses *",
+          "invoice-label": "Invoice number *",
+          "license-price-label": "Price per license *",
+          "total-licenses": "Total remaining licenses",
+          "note-label": "Add a note (optional)",
+          "save-button-label": "Save details",
+          "cancel-button-label": "Cancel",
+          "error-amount-positive": "Amount must be a positive number",
+          "error-amount-max": "Maximum number of licenses to remove is {{max}}",
+          "error-license-price-positive": "Number of licenses must be a positive number",
+          "error-amount-required": "Amount is a required field",
+          "error-invoice-required": "Invoice number is a required field",
+          "error-license-price-required": "Licenses number is a required field",
+          "issue-refund-label": "Issue a refund. This will add a credit note to the invoice."
+        },
+        "table": {
+          "col-date": "Date",
+          "col-event": "Event",
+          "col-action": "Action",
+          "col-balance": "Balance",
+          "col-reserved-balance": "Reserved balance",
+          "added-by": "Added by {{fullName}}",
+          "removed-by": "Removed by {{fullName}}",
+          "released-licenses": "Unused licenses during course",
+          "purchased": "Purchased at course creation",
+          "revoked-by": "Revoked by {{fullName}}",
+          "reserved-by": "Reserved by {{fullName}}",
+          "licenses-cancelled": "Course cancelled"
+        },
+        "export": {
+          "button-text": "Export",
+          "exporting-button-text": "Exporting",
+          "col-date": "Date",
+          "col-event": "Event",
+          "col-action": "Action",
+          "col-balance": "Balance",
+          "col-reserved-balance": "Reserved balance",
+          "col-payload": "Payload",
+          "col-invoice-id": "Invoice number",
+          "col-course-id": "Course code",
+          "col-note": "Note",
+          "col-invoked-by": "Invoked by"
+        }
+      }
+    },
+    "edit-organization": "Edit organisation",
+    "all-organizations": "All organisations"
+  },
+  "edit-org-details": {
+    "title": "Please complete your organisation profile",
+    "organization-details": "Organisation Details",
+    "org-name": "Organisation name",
+    "trust-name": "Trust name",
+    "org-email": "Organisation email",
+    "trust-type": "Trust type",
+    "org-phone": "Organisation phone",
+    "sector": "Sector",
+    "local-authority": "Local authority",
+    "ofsted-rating": "Ofsted rating",
+    "ofsted-last-inspection": "Ofsted last inspection",
+    "additional-details": "Additional details (optional)",
+    "head-first-name": "Head first name (optional)",
+    "head-last-name": "Head last name (optional)",
+    "head-title": "Head title (optional)",
+    "head-preferred-job-title": "Head preferred job title (optional)",
+    "website": "Organisation website (optional)",
+    "address": "Organisation address"
+  },
+  "invite-to-org": {
+    "title": "Invite user to organization",
+    "user-details": "User details",
+    "work-email": "Work email",
+    "work-email-hint": "Press ENTER to add multiple emails.",
+    "notice": "Please make sure the emails are entered correctly. Recipients will receive an invite to the organisation.",
+    "invite-users": "Invite user(s)",
+    "permissions": "Permissions",
+    "organization-admin": "Organisation admin",
+    "organization-admin-hint": "Ability to manage users within the organisation, book private courses for the organisation, and same access as a user. ",
+    "duplicate-email": "User with provided email address has already been invited to this organisation."
+  },
+  "promoCodes": {
+    "title": "Discounts",
+    "list-title-all": "All discounts",
+    "list-title-pending": "Pending approval",
+    "none-pending": "No discount codes to approve.",
+    "cols-createdAt": "Created at",
+    "cols-code": "Discount code",
+    "cols-type": "Type",
+    "cols-appliesTo": "Applies to",
+    "cols-start": "Start",
+    "cols-end": "End",
+    "cols-createdBy": "Created by",
+    "cols-status": "Status",
+    "status-ACTIVE": "Active",
+    "status-EXPIRED": "Expired",
+    "status-SCHEDULED": "Scheduled",
+    "status-APPROVAL_PENDING": "Approval pending",
+    "status-DENIED": "Declined",
+    "neverExpires": "Always active",
+    "new-btn": "Create discount",
+    "new-title": "Create a discount",
+    "new-section-general": "General details",
+    "new-section-usage": "Usage criteria",
+    "fld-createdBy-label": "Created by",
+    "fld-code-label": "Discount code",
+    "fld-code-hint": "This will be the code entered at course booking.",
+    "fld-code-dup": "This code has already been used",
+    "fld-code-dup-failed": "Failed to check if code is duplicate!",
+    "fld-description-label": "Description (optional)",
+    "fld-description-hint": "",
+    "fld-type-label": "Type",
+    "fld-type-hint": "Which type of this discount will this code apply",
+    "fld-type-PERCENT": "Percent",
+    "fld-type-FREE_PLACES": "Free spaces",
+    "fld-amount-label": "Amount",
+    "fld-amount-percent-hint": "This applies to the entire booking.",
+    "fld-amount-typeError": "Discount Amount is required and must be a number between 0 and 100",
+    "courses-title": "Applies to",
+    "appliesTo-ALL": "All courses",
+    "appliesTo-LEVELS": "Specific level(s)",
+    "appliesTo-LEVELS-required": "Please select at least one level",
+    "appliesTo-COURSES": "Specific course(s)",
+    "appliesTo-COURSES-required": "Please select at least one course",
+    "selectCourses-titleHint": "This applies discounts to existing courses (e.g. Scheduled, Draft, or Trainer Pending).",
+    "dates-title": "Active date",
+    "fld-validFrom-label": "Start date",
+    "fld-validFrom-hint": "Limit usage to after this date",
+    "fld-validTo-label": "End date (optional)",
+    "fld-validTo-hint": "Limit usage up to this date",
+    "fld-bookerSingleUse-label": "Limit to one time use per booker email",
+    "fld-limitBookings-label": "Limit number of bookings this discount can be used",
+    "fld-usesMax-label": "Maximum usages",
+    "new-submit": "Create discount",
+    "approvalNeeded-title": "Discount approval required",
+    "approvalNeeded-intro": "This discount requires approval from a Team Teach Administrator due to the following reason:",
+    "approvalNeeded-reason-PERCENT": "Percentage exceeds 15%",
+    "approvalNeeded-reason-FREE_PLACES": "Number of free spaces exceeds 3",
+    "approvalNeeded-submit": "Send for approval"
+  },
+  "org-invite": {
+    "title": "You're invited to join {{orgName}}",
+    "accept": "Accept",
+    "decline": "Decline",
+    "continue-to-organization": "Continue to organisation"
+  },
+  "view-profile": {
+    "hub-access": "Hub access",
+    "user-role": "User role",
+    "trainer-role": "Trainer role (optional)",
+    "aol-role": "AOL role (optional)",
+    "bild-role": "BILD role (optional)",
+    "add-role": "Additional role",
+    "remove-role": "Remove",
+    "sales-permissions": "Sales permission",
+    "user-role-error": "Please select a user role",
+    "employee-role-error": " Please select an employee role",
+    "sales-role-error": "Please select a sales role",
+    "roles": {
+      "tt-employee": "TT Employee",
+      "sales": "Sales",
+      "unverified": "Unverified user",
+      "user": "Individual",
+      "trainer": "Trainer",
+      "tt-ops": "Operations",
+      "tt-admin": "Administrator",
+      "sales-representative": "Sales representative",
+      "sales-admin": " Sales administrator",
+      "ld": "L&D",
+      "finance": "Finance"
+    }
+  },
+  "available-courses": {
+    "title": "Available courses for booking",
+    "sorting": {
+      "distance-to-org": "Distance to organisation",
+      "date-ascending": "Date ascending",
+      "date-descending": "Date descending"
+    },
+    "please-select-organization": "Please select organisation to sort by distance.",
+    "select-organization": "Please select organization"
+  },
+  "transfer-participant": {
+    "title-ADMIN_TRANSFERS": "Transfer participant",
+    "title-ATTENDEE_TRANSFERS": "Transfer to another course",
+    "title-ORG_ADMIN_TRANSFERS": "Transfer attendee",
+    "back-btn-text": "Course details",
+    "cancel-btn-text": "Never mind",
+    "attendee-label": "Attendee",
+    "success-message": "Participant transferred",
+    "no-data-error": "Invalid course or participant for the transfer.",
+    "generic-error": "An error occurred. Please contact your administrator",
+    "steps": {
+      "step-select-course": "Select a new course",
+      "step-transfer-details": "Transfer details",
+      "step-review": "Review & confirm"
+    },
+    "choose-course": {
+      "title": "Select a new course",
+      "col-name": "Course name",
+      "col-venue": "Venue",
+      "col-start-date": "Starts",
+      "col-end-date": "Ends",
+      "no-courses": "No eligible courses for transfer at the moment",
+      "next-btn-text_ADMIN_TRANSFERS": "Transfer details",
+      "next-btn-text_ORG_ADMIN_TRANSFERS": "Transfer details",
+      "next-btn-text_ATTENDEE_TRANSFERS": "Review & confirm",
+      "venue-virtual": "Virtual"
+    },
+    "transfer-details": {
+      "title": "Transfer details",
+      "col-start-date": "Before course start date",
+      "col-fee": "Transfer fee",
+      "0-fee-label": "4+ weeks",
+      "0-fee": "Free",
+      "15-fee-label": "2-4 weeks",
+      "15-fee": "15% of payment due",
+      "25-fee-label": "Less than 2 weeks",
+      "25-fee": "25% of payment due",
+      "fees-panel-title": "Fees",
+      "apply-terms-option": "Apply transfer terms",
+      "next-btn-label": "Review & confirm",
+      "back-btn-label": "Back to selection"
+    },
+    "review-transfer": {
+      "title": "Review & confirm",
+      "custom-fee": "Custom fee",
+      "back-btn-text_ADMIN_TRANSFERS": "Back to transfer details",
+      "back-btn-text_ORG_ADMIN_TRANSFERS": "Back to transfer details",
+      "back-btn-text_ATTENDEE_TRANSFERS": "Select courses",
+      "submit-btn-text": "Confirm transfer",
+      "transferring-error": "There was an error transferring the participant",
+      "success-message": "You have successfully transferred onto another course.",
+      "success-info": "You will receive a confirmation email with details of the course.",
+      "success-btn-text": "Go to my courses"
+    }
+  },
+  "individual-cancellation": {
+    "title": "Remove {{ name }} from {{ course }}?",
+    "description": "This action will immediately remove this attendee from this course. This will notify the attendee and organisation (if applicable). Finance will make changes on the invoice(s), where necessary.",
+    "remove-attendee": "Remove attendee"
+  },
+  "audits": {
+    "title": "Cancellations, Transfers & Replacements",
+    "back-to-settings": "Back to settings",
+    "attendee-cancellation": "Attendee cancellation",
+    "attendee-replacement": "Attendee replacement",
+    "attendee-transfer": "Attendee transfer",
+    "course-cancellation": "Course cancellation",
+    "course-rescheduling": "Course rescheduling",
+    "event-time": "Event time",
+    "attendee-email": "Attendee email",
+    "authorised-by": "Authorised by",
+    "original-attendee": "Original attendee",
+    "new-attendee": "New attendee",
+    "original-course": "Original course",
+    "new-course": "New course",
+    "course": "Course",
+    "original-date": "Original date",
+    "new-date": "New date",
+    "old-start-date": "Original start date",
+    "old-end-date": "Original end date",
+    "new-start-date": "New start date",
+    "new-end-date": "New end date"
+  },
+  "change-password": {
+    "title": {
+      "forced": "Password update required",
+      "standard": "Update your password"
+    },
+    "subtitle": {
+      "forced": "Temporary password needs to be updated before account activation."
+    }
+  }
+}
