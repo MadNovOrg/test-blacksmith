@@ -118,7 +118,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
-    "@vitejs/plugin-react": "^3.0.0",
+    "@vitejs/plugin-react": "^3.0.1",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^9.1.0",
     "babel-preset-vite": "1.0.4",
