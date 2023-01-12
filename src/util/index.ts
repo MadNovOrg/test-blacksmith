@@ -32,6 +32,8 @@ import {
   TimeDifferenceAndContext,
 } from '@app/types'
 
+export { formatCourseVenue } from './formatCourseVenue'
+
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
 export const INPUT_TIME_FORMAT = 'HH:mm'
 export const DATE_MASK = '__/__/____'

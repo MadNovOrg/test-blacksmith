@@ -14,6 +14,7 @@ import {
   CourseEvaluationGroupedQuestion,
   CourseEvaluationUngroupedQuestion,
 } from '@app/types'
+import { formatCourseVenue } from '@app/util'
 
 const { Document, Font, Page, StyleSheet, Text, View } = pdf
 
@@ -389,10 +390,7 @@ export const SummaryDocument: React.FC<SummaryDocumentProps> = props => {
               <Text style={styles.text}>
                 {t('course-evaluation.pdf-export.venue')}:{' '}
                 {course.schedule[0].venue
-                  ? [
-                      course.schedule[0].venue?.name,
-                      course.schedule[0].venue?.city,
-                    ].join(', ')
+                  ? formatCourseVenue(course.schedule[0].venue)
                   : t('common.course-delivery-type.VIRTUAL')}
               </Text>
             </View>

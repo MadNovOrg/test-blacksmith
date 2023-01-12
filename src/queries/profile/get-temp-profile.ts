@@ -1,8 +1,8 @@
 import { gql } from 'graphql-request'
 
-import { Course, CourseExpenseData, CourseType } from '@app/types'
+import { Course, CourseExpenseData, CourseType, Venue } from '@app/types'
 
-import { COURSE_DATES } from '../fragments'
+import { COURSE_DATES, VENUE } from '../fragments'
 
 export type ResponseType = {
   tempProfiles: {
@@ -26,6 +26,9 @@ export type ResponseType = {
           fullName: string
         }
       }>
+      schedule: Array<{
+        venue: Venue
+      }>
     }
     quantity: number
   }[]
@@ -33,6 +36,7 @@ export type ResponseType = {
 
 export const QUERY = gql`
   ${COURSE_DATES}
+  ${VENUE}
   query GetTempProfile {
     tempProfiles: profile_temp(order_by: { createdAt: desc }, limit: 1) {
       course {
@@ -55,6 +59,11 @@ export const QUERY = gql`
           trainer {
             id
             fullName
+          }
+        }
+        schedule {
+          venue {
+            ...Venue
           }
         }
       }

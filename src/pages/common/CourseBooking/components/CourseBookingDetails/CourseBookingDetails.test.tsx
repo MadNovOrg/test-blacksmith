@@ -5,6 +5,7 @@ import { PaymentMethod } from '@app/generated/graphql'
 import { CourseType, Currency } from '@app/types'
 
 import { render } from '@test/index'
+import { buildVenue } from '@test/mock-data-utils'
 
 import { useBooking, ContextType } from '../BookingContext'
 import { positions, sectors } from '../org-data'
@@ -52,6 +53,16 @@ const getMockData = (
       participants: { aggregate: { count: 12 - quantity } },
       type,
       freeSpaces,
+      schedule: [
+        {
+          venue: buildVenue({
+            overrides: {
+              name: 'London School of Economics and Political Science',
+              city: 'Greater London',
+            },
+          }),
+        },
+      ],
     },
     addPromo: jest.fn(),
     removePromo: jest.fn(),

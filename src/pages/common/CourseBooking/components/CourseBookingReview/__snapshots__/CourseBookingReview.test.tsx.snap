@@ -106,12 +106,20 @@ Object {
                 10 April 2022, 10:00 AM
               </p>
               <p
-                class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+                class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
               >
                 End
                 :
                  
                 10 April 2022, 12:00 PM
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+              >
+                Venue
+                :
+                 
+                London School of Economics and Political Science, Greater London
               </p>
             </div>
             <div
@@ -481,12 +489,20 @@ Object {
               10 April 2022, 10:00 AM
             </p>
             <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
             >
               End
               :
                
               10 April 2022, 12:00 PM
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Venue
+              :
+               
+              London School of Economics and Political Science, Greater London
             </p>
           </div>
           <div
@@ -968,12 +984,20 @@ Object {
                 10 April 2022, 10:00 AM
               </p>
               <p
-                class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+                class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
               >
                 End
                 :
                  
                 10 April 2022, 12:00 PM
+              </p>
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+              >
+                Venue
+                :
+                 
+                London School of Economics and Political Science, Greater London
               </p>
             </div>
             <div
@@ -1315,12 +1339,20 @@ Object {
               10 April 2022, 10:00 AM
             </p>
             <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-15v3a2l-MuiTypography-root"
             >
               End
               :
                
               10 April 2022, 12:00 PM
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Venue
+              :
+               
+              London School of Economics and Political Science, Greater London
             </p>
           </div>
           <div

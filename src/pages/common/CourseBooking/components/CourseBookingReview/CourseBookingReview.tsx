@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
 import { PaymentMethod } from '@app/generated/graphql'
+import { formatCourseVenue } from '@app/util'
 
 import { useBooking } from '../BookingContext'
 
@@ -128,11 +129,18 @@ export const CourseBookingReview: React.FC = () => {
                 date: course.dates.aggregate.start.date,
               })}
             </Typography>
-            <Typography color="grey.700">
+            <Typography gutterBottom color="grey.700">
               {t('end')}:{' '}
               {t('dates.withTime', {
                 date: course.dates.aggregate.end.date,
               })}
+            </Typography>
+
+            <Typography color="grey.700">
+              {t('pages.book-course.venue')}:{' '}
+              {course.schedule[0].venue
+                ? formatCourseVenue(course.schedule[0].venue)
+                : t('common.course-delivery-type.VIRTUAL')}
             </Typography>
           </Box>
           <Stack alignItems="flex-end">

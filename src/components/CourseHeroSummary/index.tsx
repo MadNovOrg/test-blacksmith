@@ -29,6 +29,7 @@ import {
   getCourseDurationMessage,
   getCourseTrainer,
   getTimeDifferenceAndContext,
+  formatCourseVenue,
 } from '@app/util'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
@@ -177,10 +178,7 @@ export const CourseHeroSummary: React.FC<Props> = ({
                   <PinDropIcon />
                 </StyledListIcon>
                 <ListItemText>
-                  {[
-                    course.schedule[0].venue?.name,
-                    course.schedule[0].venue?.city,
-                  ].join(', ')}
+                  {formatCourseVenue(course.schedule[0].venue)}
                 </ListItemText>
               </ListItem>
               {course.schedule[0].virtualLink ? (
