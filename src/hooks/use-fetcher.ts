@@ -25,11 +25,13 @@ export const useSWRFetcher = () => {
   const { getJWT, activeRole } = useAuth()
 
   return useCallback(
-    async function <T, V = Variables>([query, variables]: [
-      query: RequestDocument,
-      variables?: V
-    ]): Promise<T> {
+    async function <T, V = Variables>(
+      params: [query: RequestDocument, variables?: V] | RequestDocument
+    ): Promise<T> {
+      const [query, variables] = Array.isArray(params) ? params : [params, {}]
+
       const token = await getJWT()
+      console.log({ query, variables })
       return gqlRequest(query, variables, { token, role: activeRole })
     },
     [getJWT, activeRole]
