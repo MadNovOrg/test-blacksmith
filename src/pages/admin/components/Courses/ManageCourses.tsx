@@ -1,7 +1,7 @@
 import { Alert, CircularProgress, Container, Stack } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useAuth } from '@app/context/auth'
@@ -14,14 +14,26 @@ export const ManageCourses: React.FC = () => {
   const { orgId: id } = useParams()
   const { profile, acl } = useAuth()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const orgId = id ?? ALL_ORGS
 
+  const { data: allOrgs } = useOrg(
+    ALL_ORGS,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
   const { data, status } = useOrg(
     orgId,
     profile?.id,
     acl.canViewAllOrganizations()
   )
+
+  useEffect(() => {
+    if (allOrgs && allOrgs.length === 1) {
+      navigate('/manage-courses/' + allOrgs[0].id)
+    }
+  }, [allOrgs, navigate])
 
   return (
     <FullHeightPage pb={3}>
@@ -35,7 +47,9 @@ export const ManageCourses: React.FC = () => {
         </Stack>
       ) : (
         <>
-          <OrgSelectionToolbar prefix="/manage-courses" />
+          {allOrgs && allOrgs.length > 1 ? (
+            <OrgSelectionToolbar prefix="/manage-courses" />
+          ) : null}
 
           <Container maxWidth="lg" sx={{ pt: 2 }}>
             {status === LoadingStatus.ERROR ? (

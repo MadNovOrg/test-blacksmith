@@ -519,5 +519,6 @@
     "requires_improvement": "Requires improvement",
     "serious_weaknesses": "Serious weaknesses",
     "special_measures": "Special measures"
-  }
+  },
+  "more": "More"
 }

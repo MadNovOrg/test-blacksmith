@@ -8,9 +8,9 @@ import {
   Tab,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
@@ -43,12 +43,24 @@ export const OrgDashboard: React.FC = () => {
   const { profile, acl } = useAuth()
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
+  const { data: allOrgs } = useOrg(
+    ALL_ORGS,
+    profile?.id,
+    acl.canViewAllOrganizations()
+  )
   const { data, status } = useOrg(
     id ?? ALL_ORGS,
     profile?.id,
     acl.canViewAllOrganizations()
   )
+
+  useEffect(() => {
+    if (allOrgs && allOrgs.length === 1) {
+      navigate('/organisations/' + allOrgs[0].id)
+    }
+  }, [allOrgs, navigate])
 
   const initialTab = searchParams.get('tab') as OrgDashboardTabs | null
   const [selectedTab, setSelectedTab] = useState(
@@ -67,7 +79,9 @@ export const OrgDashboard: React.FC = () => {
         </Stack>
       ) : (
         <>
-          <OrgSelectionToolbar prefix="/organisations" />
+          {allOrgs && allOrgs.length > 1 ? (
+            <OrgSelectionToolbar prefix="/organisations" />
+          ) : null}
 
           <Container maxWidth="lg" sx={{ pt: 2 }}>
             {status === LoadingStatus.ERROR ? (
@@ -78,17 +92,19 @@ export const OrgDashboard: React.FC = () => {
 
             {data && status === LoadingStatus.SUCCESS ? (
               <>
-                <Box display="flex" paddingBottom={5}>
-                  <Box width="100%" pr={4}>
-                    <Sticky top={20}>
-                      <Typography variant="h2" my={2}>
-                        {id !== ALL_ORGS
-                          ? data[0].name
-                          : t('pages.org-details.all-organizations')}
-                      </Typography>
-                    </Sticky>
+                {allOrgs && allOrgs.length > 1 ? (
+                  <Box display="flex" paddingBottom={5}>
+                    <Box width="100%" pr={4}>
+                      <Sticky top={20}>
+                        <Typography variant="h2" my={2}>
+                          {id !== ALL_ORGS
+                            ? data[0].name
+                            : t('pages.org-details.all-organizations')}
+                        </Typography>
+                      </Sticky>
+                    </Box>
                   </Box>
-                </Box>
+                ) : null}
 
                 {id && id !== ALL_ORGS ? (
                   <TabContext value={selectedTab}>

@@ -7,5 +7,6 @@ export const StyledSubNavLink = styled(NavLink)(({ theme }) => ({
   '&.active': {
     fontWeight: '600',
     backgroundColor: theme.palette.grey[100],
+    borderRadius: 4,
   },
 }))
