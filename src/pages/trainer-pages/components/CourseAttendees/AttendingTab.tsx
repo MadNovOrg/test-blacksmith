@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import Link from '@mui/material/Link'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -182,10 +183,12 @@ export const AttendingTab = ({ course }: TabProperties) => {
                 >
                   <TableCell>{courseParticipant.profile.fullName}</TableCell>
                   <TableCell>
-                    {courseParticipant.profile.email}
-                    {courseParticipant.profile.contactDetails.map(
-                      contact => contact.value
-                    )}
+                    <Link href={`/profile/${courseParticipant.profile.id}`}>
+                      {courseParticipant.profile.email}
+                      {courseParticipant.profile.contactDetails.map(
+                        contact => contact.value
+                      )}
+                    </Link>
                   </TableCell>
                   <TableCell>
                     {courseParticipant.profile.organizations.map(org => (

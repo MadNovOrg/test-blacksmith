@@ -52,6 +52,7 @@ export const ManageLicensesDialog: React.FC<Props> = ({
         ...(data.licensePrice ? { licensePrice: data.licensePrice } : null),
         note: data.note,
         invokedBy: profile?.fullName,
+        invokedById: profile?.id,
       },
       orgId,
     }

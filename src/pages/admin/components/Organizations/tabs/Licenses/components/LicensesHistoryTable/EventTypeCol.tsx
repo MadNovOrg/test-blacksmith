@@ -1,5 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info'
-import { Tooltip, Typography } from '@mui/material'
+import { Link, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 
 import {
@@ -28,7 +28,9 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
             ) : null}
           </Typography>
           <Typography variant="body2">
-            {t('added-by', { fullName: item.payload.invokedBy })}
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('added-by', { fullName: item.payload.invokedBy })}
+            </Link>
           </Typography>
         </>
       )
@@ -52,7 +54,9 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
             variant={!item.payload?.invoiceId ? 'body1' : 'body2'}
             sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {t('removed-by', { fullName: item.payload.invokedBy })}
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('removed-by', { fullName: item.payload.invokedBy })}
+            </Link>
             {item.payload?.note && !item.payload?.invoiceId ? (
               <Tooltip title={item.payload.note}>
                 <InfoIcon fontSize="small" color="primary" />
@@ -67,13 +71,23 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
       return (
         <>
           <Typography sx={{ mb: 1 }}>{t('released-licenses')}</Typography>
-          <Typography variant="body2">{item.payload?.courseId}</Typography>
+          <Typography variant="body2">
+            <Link href={`/courses/${item.payload?.courseId}/details`}>
+              {item.payload?.courseCode}
+            </Link>
+          </Typography>
         </>
       )
     }
 
     case Go1_History_Events_Enum.LicenseIssued: {
-      return <Typography>{item.payload?.courseId}</Typography>
+      return (
+        <Typography>
+          <Link href={`/courses/${item.payload?.courseId}/details`}>
+            {item.payload?.courseCode}
+          </Link>
+        </Typography>
+      )
     }
 
     case Go1_History_Events_Enum.LicensesPurchased: {
@@ -88,7 +102,9 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
     case Go1_History_Events_Enum.LicenseRevoked: {
       return (
         <Typography>
-          {t('revoked-by', { fullName: item.payload?.invokedBy })}
+          <Link href={`/profile/${item.payload?.invokedById}`}>
+            {t('revoked-by', { fullName: item.payload?.invokedBy })}
+          </Link>
         </Typography>
       )
     }
@@ -96,9 +112,15 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
     case Go1_History_Events_Enum.LicensesReserved: {
       return (
         <>
-          <Typography sx={{ mb: 1 }}>{item.payload?.courseId}</Typography>
+          <Typography sx={{ mb: 1 }}>
+            <Link href={`/courses/${item.payload?.courseId}/details`}>
+              {item.payload?.courseCode}
+            </Link>
+          </Typography>
           <Typography variant="body2">
-            {t('reserved-by', { fullName: item.payload.invokedBy })}
+            <Link href={`/profile/${item.payload?.invokedById}`}>
+              {t('reserved-by', { fullName: item.payload.invokedBy })}
+            </Link>
           </Typography>
         </>
       )
@@ -107,7 +129,11 @@ export const EventTypeCol: React.FC<Props> = ({ item }) => {
     case Go1_History_Events_Enum.LicensesCancelled: {
       return (
         <>
-          <Typography sx={{ mb: 1 }}>{item.payload?.courseId}</Typography>
+          <Typography sx={{ mb: 1 }}>
+            <Link href={`/courses/${item.payload?.courseId}/details`}>
+              {item.payload?.courseCode}
+            </Link>
+          </Typography>
           <Typography variant="body2">{t('licenses-cancelled')}</Typography>
         </>
       )
