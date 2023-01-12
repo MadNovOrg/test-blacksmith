@@ -78,7 +78,7 @@ export const CourseInvites = ({ course }: Props) => {
       return setError('LIMIT_REACHED')
     }
 
-    setEmails(emails.concat(newEntries))
+    setEmails([...new Set(emails.concat(newEntries))])
     setNewEmail('')
   }
 
