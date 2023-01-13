@@ -13526,6 +13526,10 @@ export type Course = {
   participants: Array<Course_Participant>;
   /** An aggregate relationship */
   participants_aggregate: Course_Participant_Aggregate;
+  /** An array relationship */
+  promo_codes: Array<Course_Promo_Code>;
+  /** An aggregate relationship */
+  promo_codes_aggregate: Course_Promo_Code_Aggregate;
   reaccreditation?: Maybe<Scalars['Boolean']>;
   /** An object relationship */
   salesRepresentative?: Maybe<Profile>;
@@ -13645,6 +13649,26 @@ export type CourseParticipants_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Participant_Order_By>>;
   where?: InputMaybe<Course_Participant_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CoursePromo_CodesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CoursePromo_Codes_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
 };
 
 
@@ -14193,6 +14217,7 @@ export type Course_Bool_Exp = {
   organization?: InputMaybe<Organization_Bool_Exp>;
   organization_id?: InputMaybe<Uuid_Comparison_Exp>;
   participants?: InputMaybe<Course_Participant_Bool_Exp>;
+  promo_codes?: InputMaybe<Course_Promo_Code_Bool_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   salesRepresentative?: InputMaybe<Profile_Bool_Exp>;
   salesRepresentativeId?: InputMaybe<Uuid_Comparison_Exp>;
@@ -16988,6 +17013,7 @@ export type Course_Insert_Input = {
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   organization_id?: InputMaybe<Scalars['uuid']>;
   participants?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
+  promo_codes?: InputMaybe<Course_Promo_Code_Arr_Rel_Insert_Input>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   salesRepresentative?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   salesRepresentativeId?: InputMaybe<Scalars['uuid']>;
@@ -18067,6 +18093,7 @@ export type Course_Order_By = {
   organization?: InputMaybe<Organization_Order_By>;
   organization_id?: InputMaybe<Order_By>;
   participants_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
+  promo_codes_aggregate?: InputMaybe<Course_Promo_Code_Aggregate_Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   salesRepresentative?: InputMaybe<Profile_Order_By>;
   salesRepresentativeId?: InputMaybe<Order_By>;
@@ -19698,6 +19725,277 @@ export type Course_Pricing_Variance_Fields = {
   __typename?: 'course_pricing_variance_fields';
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['Float']>;
+};
+
+/** columns and relationships of "course_promo_code" */
+export type Course_Promo_Code = {
+  __typename?: 'course_promo_code';
+  /** An object relationship */
+  course?: Maybe<Course>;
+  course_id?: Maybe<Scalars['Int']>;
+  id: Scalars['uuid'];
+  /** An object relationship */
+  promo_code?: Maybe<Promo_Code>;
+  promo_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregated selection of "course_promo_code" */
+export type Course_Promo_Code_Aggregate = {
+  __typename?: 'course_promo_code_aggregate';
+  aggregate?: Maybe<Course_Promo_Code_Aggregate_Fields>;
+  nodes: Array<Course_Promo_Code>;
+};
+
+/** aggregate fields of "course_promo_code" */
+export type Course_Promo_Code_Aggregate_Fields = {
+  __typename?: 'course_promo_code_aggregate_fields';
+  avg?: Maybe<Course_Promo_Code_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Course_Promo_Code_Max_Fields>;
+  min?: Maybe<Course_Promo_Code_Min_Fields>;
+  stddev?: Maybe<Course_Promo_Code_Stddev_Fields>;
+  stddev_pop?: Maybe<Course_Promo_Code_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Course_Promo_Code_Stddev_Samp_Fields>;
+  sum?: Maybe<Course_Promo_Code_Sum_Fields>;
+  var_pop?: Maybe<Course_Promo_Code_Var_Pop_Fields>;
+  var_samp?: Maybe<Course_Promo_Code_Var_Samp_Fields>;
+  variance?: Maybe<Course_Promo_Code_Variance_Fields>;
+};
+
+
+/** aggregate fields of "course_promo_code" */
+export type Course_Promo_Code_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "course_promo_code" */
+export type Course_Promo_Code_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Promo_Code_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Promo_Code_Max_Order_By>;
+  min?: InputMaybe<Course_Promo_Code_Min_Order_By>;
+  stddev?: InputMaybe<Course_Promo_Code_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Promo_Code_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Promo_Code_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Promo_Code_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Promo_Code_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Promo_Code_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Promo_Code_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_promo_code" */
+export type Course_Promo_Code_Arr_Rel_Insert_Input = {
+  data: Array<Course_Promo_Code_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Promo_Code_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Course_Promo_Code_Avg_Fields = {
+  __typename?: 'course_promo_code_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Avg_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "course_promo_code". All fields are combined with a logical 'AND'. */
+export type Course_Promo_Code_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Promo_Code_Bool_Exp>>;
+  _not?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Promo_Code_Bool_Exp>>;
+  course?: InputMaybe<Course_Bool_Exp>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  promo_code?: InputMaybe<Promo_Code_Bool_Exp>;
+  promo_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_promo_code" */
+export enum Course_Promo_Code_Constraint {
+  /** unique or primary key constraint */
+  CoursePromoCodePkey = 'course_promo_code_pkey'
+}
+
+/** input type for incrementing numeric columns in table "course_promo_code" */
+export type Course_Promo_Code_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "course_promo_code" */
+export type Course_Promo_Code_Insert_Input = {
+  course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  promo_code?: InputMaybe<Promo_Code_Obj_Rel_Insert_Input>;
+  promo_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Course_Promo_Code_Max_Fields = {
+  __typename?: 'course_promo_code_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  promo_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Max_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  promo_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Course_Promo_Code_Min_Fields = {
+  __typename?: 'course_promo_code_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  promo_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Min_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  promo_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "course_promo_code" */
+export type Course_Promo_Code_Mutation_Response = {
+  __typename?: 'course_promo_code_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Promo_Code>;
+};
+
+/** on_conflict condition type for table "course_promo_code" */
+export type Course_Promo_Code_On_Conflict = {
+  constraint: Course_Promo_Code_Constraint;
+  update_columns?: Array<Course_Promo_Code_Update_Column>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_promo_code". */
+export type Course_Promo_Code_Order_By = {
+  course?: InputMaybe<Course_Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  promo_code?: InputMaybe<Promo_Code_Order_By>;
+  promo_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_promo_code */
+export type Course_Promo_Code_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_promo_code" */
+export enum Course_Promo_Code_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PromoId = 'promo_id'
+}
+
+/** input type for updating data in table "course_promo_code" */
+export type Course_Promo_Code_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  promo_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Course_Promo_Code_Stddev_Fields = {
+  __typename?: 'course_promo_code_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Stddev_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Course_Promo_Code_Stddev_Pop_Fields = {
+  __typename?: 'course_promo_code_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Stddev_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Course_Promo_Code_Stddev_Samp_Fields = {
+  __typename?: 'course_promo_code_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Stddev_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Course_Promo_Code_Sum_Fields = {
+  __typename?: 'course_promo_code_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Sum_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "course_promo_code" */
+export enum Course_Promo_Code_Update_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  PromoId = 'promo_id'
+}
+
+/** aggregate var_pop on columns */
+export type Course_Promo_Code_Var_Pop_Fields = {
+  __typename?: 'course_promo_code_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Var_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Course_Promo_Code_Var_Samp_Fields = {
+  __typename?: 'course_promo_code_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Var_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Course_Promo_Code_Variance_Fields = {
+  __typename?: 'course_promo_code_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_promo_code" */
+export type Course_Promo_Code_Variance_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_schedule" */
@@ -24095,6 +24393,10 @@ export type Mutation_Root = {
   delete_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
   /** delete single row from the table: "course_pricing" */
   delete_course_pricing_by_pk?: Maybe<Course_Pricing>;
+  /** delete data from the table: "course_promo_code" */
+  delete_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
+  /** delete single row from the table: "course_promo_code" */
+  delete_course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
   /** delete data from the table: "course_schedule" */
   delete_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** delete single row from the table: "course_schedule" */
@@ -24365,6 +24667,10 @@ export type Mutation_Root = {
   insert_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
   /** insert a single row into the table: "course_pricing" */
   insert_course_pricing_one?: Maybe<Course_Pricing>;
+  /** insert data into the table: "course_promo_code" */
+  insert_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
+  /** insert a single row into the table: "course_promo_code" */
+  insert_course_promo_code_one?: Maybe<Course_Promo_Code>;
   /** insert data into the table: "course_schedule" */
   insert_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** insert a single row into the table: "course_schedule" */
@@ -24642,6 +24948,10 @@ export type Mutation_Root = {
   update_course_pricing?: Maybe<Course_Pricing_Mutation_Response>;
   /** update single row of the table: "course_pricing" */
   update_course_pricing_by_pk?: Maybe<Course_Pricing>;
+  /** update data of the table: "course_promo_code" */
+  update_course_promo_code?: Maybe<Course_Promo_Code_Mutation_Response>;
+  /** update single row of the table: "course_promo_code" */
+  update_course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
   /** update data of the table: "course_schedule" */
   update_course_schedule?: Maybe<Course_Schedule_Mutation_Response>;
   /** update single row of the table: "course_schedule" */
@@ -25200,6 +25510,18 @@ export type Mutation_RootDelete_Course_PricingArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Course_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Promo_CodeArgs = {
+  where: Course_Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Promo_Code_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -26071,6 +26393,20 @@ export type Mutation_RootInsert_Course_PricingArgs = {
 export type Mutation_RootInsert_Course_Pricing_OneArgs = {
   object: Course_Pricing_Insert_Input;
   on_conflict?: InputMaybe<Course_Pricing_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Promo_CodeArgs = {
+  objects: Array<Course_Promo_Code_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Promo_Code_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Promo_Code_OneArgs = {
+  object: Course_Promo_Code_Insert_Input;
+  on_conflict?: InputMaybe<Course_Promo_Code_On_Conflict>;
 };
 
 
@@ -27115,6 +27451,22 @@ export type Mutation_RootUpdate_Course_Pricing_By_PkArgs = {
   _inc?: InputMaybe<Course_Pricing_Inc_Input>;
   _set?: InputMaybe<Course_Pricing_Set_Input>;
   pk_columns: Course_Pricing_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Promo_CodeArgs = {
+  _inc?: InputMaybe<Course_Promo_Code_Inc_Input>;
+  _set?: InputMaybe<Course_Promo_Code_Set_Input>;
+  where: Course_Promo_Code_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Promo_Code_By_PkArgs = {
+  _inc?: InputMaybe<Course_Promo_Code_Inc_Input>;
+  _set?: InputMaybe<Course_Promo_Code_Set_Input>;
+  pk_columns: Course_Promo_Code_Pk_Columns_Input;
 };
 
 
@@ -31288,7 +31640,10 @@ export type Promo_Code = {
   approver?: Maybe<Profile>;
   bookerSingleUse: Scalars['Boolean'];
   code: Scalars['String'];
-  courses: Scalars['jsonb'];
+  /** An array relationship */
+  courses: Array<Course_Promo_Code>;
+  /** An aggregate relationship */
+  courses_aggregate: Course_Promo_Code_Aggregate;
   createdAt: Scalars['timestamptz'];
   createdBy: Scalars['uuid'];
   /** An object relationship */
@@ -31308,7 +31663,21 @@ export type Promo_Code = {
 
 /** columns and relationships of "promo_code" */
 export type Promo_CodeCoursesArgs = {
-  path?: InputMaybe<Scalars['String']>;
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+/** columns and relationships of "promo_code" */
+export type Promo_CodeCourses_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
 };
 
 
@@ -31349,7 +31718,6 @@ export type Promo_Code_Aggregate_FieldsCountArgs = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Promo_Code_Append_Input = {
-  courses?: InputMaybe<Scalars['jsonb']>;
   levels?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -31370,7 +31738,7 @@ export type Promo_Code_Bool_Exp = {
   approver?: InputMaybe<Profile_Bool_Exp>;
   bookerSingleUse?: InputMaybe<Boolean_Comparison_Exp>;
   code?: InputMaybe<String_Comparison_Exp>;
-  courses?: InputMaybe<Jsonb_Comparison_Exp>;
+  courses?: InputMaybe<Course_Promo_Code_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   createdBy?: InputMaybe<Uuid_Comparison_Exp>;
   creator?: InputMaybe<Profile_Bool_Exp>;
@@ -31396,19 +31764,16 @@ export enum Promo_Code_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Promo_Code_Delete_At_Path_Input = {
-  courses?: InputMaybe<Array<Scalars['String']>>;
   levels?: InputMaybe<Array<Scalars['String']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Promo_Code_Delete_Elem_Input = {
-  courses?: InputMaybe<Scalars['Int']>;
   levels?: InputMaybe<Scalars['Int']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Promo_Code_Delete_Key_Input = {
-  courses?: InputMaybe<Scalars['String']>;
   levels?: InputMaybe<Scalars['String']>;
 };
 
@@ -31425,7 +31790,7 @@ export type Promo_Code_Insert_Input = {
   approver?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
   code?: InputMaybe<Scalars['String']>;
-  courses?: InputMaybe<Scalars['jsonb']>;
+  courses?: InputMaybe<Course_Promo_Code_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Scalars['uuid']>;
   creator?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
@@ -31484,6 +31849,13 @@ export type Promo_Code_Mutation_Response = {
   returning: Array<Promo_Code>;
 };
 
+/** input type for inserting object relation for remote table "promo_code" */
+export type Promo_Code_Obj_Rel_Insert_Input = {
+  data: Promo_Code_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Promo_Code_On_Conflict>;
+};
+
 /** on_conflict condition type for table "promo_code" */
 export type Promo_Code_On_Conflict = {
   constraint: Promo_Code_Constraint;
@@ -31498,7 +31870,7 @@ export type Promo_Code_Order_By = {
   approver?: InputMaybe<Profile_Order_By>;
   bookerSingleUse?: InputMaybe<Order_By>;
   code?: InputMaybe<Order_By>;
-  courses?: InputMaybe<Order_By>;
+  courses_aggregate?: InputMaybe<Course_Promo_Code_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   createdBy?: InputMaybe<Order_By>;
   creator?: InputMaybe<Profile_Order_By>;
@@ -31521,7 +31893,6 @@ export type Promo_Code_Pk_Columns_Input = {
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Promo_Code_Prepend_Input = {
-  courses?: InputMaybe<Scalars['jsonb']>;
   levels?: InputMaybe<Scalars['jsonb']>;
 };
 
@@ -31535,8 +31906,6 @@ export enum Promo_Code_Select_Column {
   BookerSingleUse = 'bookerSingleUse',
   /** column name */
   Code = 'code',
-  /** column name */
-  Courses = 'courses',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -31569,7 +31938,6 @@ export type Promo_Code_Set_Input = {
   approvedBy?: InputMaybe<Scalars['uuid']>;
   bookerSingleUse?: InputMaybe<Scalars['Boolean']>;
   code?: InputMaybe<Scalars['String']>;
-  courses?: InputMaybe<Scalars['jsonb']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   createdBy?: InputMaybe<Scalars['uuid']>;
   deniedBy?: InputMaybe<Scalars['uuid']>;
@@ -31738,8 +32106,6 @@ export enum Promo_Code_Update_Column {
   BookerSingleUse = 'bookerSingleUse',
   /** column name */
   Code = 'code',
-  /** column name */
-  Courses = 'courses',
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
@@ -31972,6 +32338,12 @@ export type Query_Root = {
   course_pricing_aggregate: Course_Pricing_Aggregate;
   /** fetch data from the table: "course_pricing" using primary key columns */
   course_pricing_by_pk?: Maybe<Course_Pricing>;
+  /** fetch data from the table: "course_promo_code" */
+  course_promo_code: Array<Course_Promo_Code>;
+  /** fetch aggregated fields from the table: "course_promo_code" */
+  course_promo_code_aggregate: Course_Promo_Code_Aggregate;
+  /** fetch data from the table: "course_promo_code" using primary key columns */
+  course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
   /** fetch data from the table: "course_schedule" */
   course_schedule: Array<Course_Schedule>;
   /** fetch aggregated fields from the table: "course_schedule" */
@@ -32913,6 +33285,29 @@ export type Query_RootCourse_Pricing_AggregateArgs = {
 
 
 export type Query_RootCourse_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_Promo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Promo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Promo_Code_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -34278,6 +34673,12 @@ export type Subscription_Root = {
   course_pricing_aggregate: Course_Pricing_Aggregate;
   /** fetch data from the table: "course_pricing" using primary key columns */
   course_pricing_by_pk?: Maybe<Course_Pricing>;
+  /** fetch data from the table: "course_promo_code" */
+  course_promo_code: Array<Course_Promo_Code>;
+  /** fetch aggregated fields from the table: "course_promo_code" */
+  course_promo_code_aggregate: Course_Promo_Code_Aggregate;
+  /** fetch data from the table: "course_promo_code" using primary key columns */
+  course_promo_code_by_pk?: Maybe<Course_Promo_Code>;
   /** fetch data from the table: "course_schedule" */
   course_schedule: Array<Course_Schedule>;
   /** fetch aggregated fields from the table: "course_schedule" */
@@ -35193,6 +35594,29 @@ export type Subscription_RootCourse_Pricing_AggregateArgs = {
 
 
 export type Subscription_RootCourse_Pricing_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Promo_CodeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Promo_Code_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Promo_Code_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Promo_Code_Order_By>>;
+  where?: InputMaybe<Course_Promo_Code_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Promo_Code_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -37423,6 +37847,13 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
 
+export type GetCoursesCodeQueryVariables = Exact<{
+  ids: Array<Scalars['Int']> | Scalars['Int'];
+}>;
+
+
+export type GetCoursesCodeQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, course_code?: string | null }> };
+
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -38388,7 +38819,7 @@ export type GetPromoCodesQueryVariables = Exact<{
 }>;
 
 
-export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, courses: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
+export type GetPromoCodesQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, enabled: boolean, approvedBy?: any | null, deniedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, promo_code_aggregate: { __typename?: 'promo_code_aggregate', aggregate?: { __typename?: 'promo_code_aggregate_fields', count: number } | null } };
 
 export type InsertPromoCodeMutationVariables = Exact<{
   promoCode: Promo_Code_Insert_Input;

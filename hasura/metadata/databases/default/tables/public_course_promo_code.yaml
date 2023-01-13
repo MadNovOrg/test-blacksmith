@@ -1,0 +1,36 @@
+table:
+  schema: public
+  name: course_promo_code
+object_relationships:
+  - name: course
+    using:
+      foreign_key_constraint_on: course_id
+  - name: promo_code
+    using:
+      foreign_key_constraint_on: promo_id
+insert_permissions:
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - id
+        - promo_id
+      backend_only: false
+select_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - id
+        - promo_id
+      filter: {}
+update_permissions:
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - id
+        - promo_id
+      filter: {}
+      check: {}

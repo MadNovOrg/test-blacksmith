@@ -60,7 +60,7 @@ export const Row: React.FC<Props> = ({ promo, showApprove = false }) => {
       </TableCell>
 
       <TableCell>
-        {!promo.levels.length && !promo.courses.length
+        {!promo.levels.length && !promo.courses?.length
           ? t('pages.promoCodes.appliesTo-ALL')
           : null}
         {promo.levels.length ? (
@@ -76,9 +76,14 @@ export const Row: React.FC<Props> = ({ promo, showApprove = false }) => {
             </Typography>
           </>
         ) : null}
-        {promo.courses.length ? (
+        {promo.courses?.length ? (
           <>
-            <Ellipsize text={promo.courses.join(', ')} len={25} />
+            <Ellipsize
+              text={Object.values(
+                promo.courses.map(s => s.course?.course_code) || ''
+              ).join(', ')}
+              len={25}
+            />
             <Typography variant="body2">
               {t('pages.promoCodes.appliesTo-COURSES')}
             </Typography>

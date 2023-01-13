@@ -281,7 +281,7 @@ describe('page: CreateDiscount', () => {
           amount: 5,
           bookerSingleUse: true,
           code,
-          courses: [],
+          courses: { data: [] },
           createdBy: profile?.id,
           description: '',
           levels: [],

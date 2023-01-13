@@ -35,7 +35,12 @@ export const QUERY = gql`
       bookerSingleUse
       usesMax
       levels
-      courses
+      courses {
+        course {
+          id
+          course_code
+        }
+      }
       enabled
       approvedBy
       deniedBy

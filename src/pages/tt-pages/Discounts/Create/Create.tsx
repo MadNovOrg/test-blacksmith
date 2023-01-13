@@ -210,8 +210,17 @@ export const Create: React.FC = () => {
     setSaving(true)
 
     try {
-      const promoCode = omit(values, 'appliesTo')
-      await fetcher(INSERT_PROMO_CODE, { promoCode })
+      const promoCode = omit(values, ['appliesTo', 'courses'])
+      await fetcher(INSERT_PROMO_CODE, {
+        promoCode: {
+          ...promoCode,
+          courses: {
+            data: values.courses.map(c => {
+              return { course_id: c }
+            }),
+          },
+        },
+      })
       return navigate('..')
     } catch (err) {
       console.error((err as Error).message)

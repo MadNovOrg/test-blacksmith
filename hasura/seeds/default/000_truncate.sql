@@ -11,6 +11,7 @@ TRUNCATE TABLE public.course_participant CASCADE;
 TRUNCATE TABLE public.course_pricing CASCADE;
 TRUNCATE TABLE public.course_schedule CASCADE;
 TRUNCATE TABLE public.course_trainer CASCADE;
+TRUNCATE TABLE public.course_promo_code CASCADE;
 TRUNCATE TABLE public.identity CASCADE;
 TRUNCATE TABLE public.legacy_certificate CASCADE;
 TRUNCATE TABLE public.module CASCADE;

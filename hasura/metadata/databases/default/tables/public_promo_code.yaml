@@ -47,7 +47,6 @@ insert_permissions:
         - amount
         - booker_single_use
         - code
-        - courses
         - created_by
         - description
         - enabled
@@ -66,7 +65,6 @@ select_permissions:
         - approved_by
         - booker_single_use
         - code
-        - courses
         - created_at
         - created_by
         - denied_by
@@ -89,7 +87,6 @@ update_permissions:
         - approved_by
         - booker_single_use
         - code
-        - courses
         - created_by
         - denied_by
         - description
@@ -101,6 +98,14 @@ update_permissions:
         - valid_to
       filter: {}
       check: {}
+array_relationships:
+  - name: courses
+    using:
+      foreign_key_constraint_on:
+        column: promo_id
+        table:
+          schema: public
+          name: course_promo_code
 event_triggers:
   - name: promo_code_created
     definition:

@@ -1,0 +1,2 @@
+CREATE TABLE "public"."course_promo_code" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "course_id" integer, "promo_id" uuid, PRIMARY KEY ("id") , FOREIGN KEY ("course_id") REFERENCES "public"."course"("id") ON UPDATE CASCADE ON DELETE CASCADE, FOREIGN KEY ("promo_id") REFERENCES "public"."promo_code"("id") ON UPDATE CASCADE ON DELETE CASCADE, UNIQUE ("id"));
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
