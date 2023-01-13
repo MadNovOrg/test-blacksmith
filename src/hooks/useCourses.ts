@@ -27,6 +27,10 @@ type CoursesFilters = {
   statuses?: Course_Status_Enum[]
   excludedStatuses?: Course_Status_Enum[]
   go1Integration?: boolean
+  schedule?: {
+    start?: Date
+    end?: Date
+  }
 }
 
 type Props = {
@@ -79,6 +83,18 @@ export const useCourses = (
 
     if (filters?.go1Integration) {
       obj.go1Integration = { _eq: filters?.go1Integration }
+    }
+
+    if (filters?.schedule?.start || filters?.schedule?.end) {
+      obj.schedule = {
+        _and: [],
+      }
+      if (filters?.schedule?.start) {
+        obj.schedule._and?.push({ start: { _gte: filters.schedule.start } })
+      }
+      if (filters?.schedule?.end) {
+        obj.schedule._and?.push({ end: { _lte: filters.schedule.end } })
+      }
     }
 
     if (role === RoleName.TRAINER) {

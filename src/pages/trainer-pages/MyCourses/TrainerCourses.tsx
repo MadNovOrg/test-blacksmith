@@ -19,6 +19,7 @@ import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
+import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
@@ -80,6 +81,8 @@ export const TrainerCourses: React.FC<Props> = ({
   const [filterStatus, setFilterStatus] = useState<Course_Status_Enum[]>([])
   const [filterBlendedLearning, setFilterBlendedLearning] =
     useState<boolean>(false)
+  const [filterStartDate, setFilterStartDate] = useState<Date>()
+  const [filterEndDate, setFilterEndDate] = useState<Date>()
 
   const { Pagination, perPage, currentPage } = useTablePagination()
   const {
@@ -112,18 +115,42 @@ export const TrainerCourses: React.FC<Props> = ({
     [actionableCourses]
   )
 
+  const filters = useMemo(() => {
+    let startDate = undefined
+    let endDate = undefined
+    if (filterStartDate) {
+      startDate = new Date(filterStartDate)
+      startDate.setHours(0, 0, 0)
+    }
+    if (filterEndDate) {
+      endDate = new Date(filterEndDate)
+      endDate.setHours(23, 59, 59)
+    }
+    return {
+      statuses: filterStatus,
+      levels: filterLevel,
+      types: filterType,
+      go1Integration: filterBlendedLearning,
+      keyword,
+      excludedStatuses: Array.from(actionableStatuses),
+      schedule: { start: startDate, end: endDate },
+    }
+  }, [
+    actionableStatuses,
+    filterBlendedLearning,
+    filterEndDate,
+    filterLevel,
+    filterStartDate,
+    filterStatus,
+    filterType,
+    keyword,
+  ])
+
   const { courses, loading, mutate, total } = useCourses(
     activeRole ?? RoleName.USER,
     {
       sorting,
-      filters: {
-        statuses: filterStatus,
-        levels: filterLevel,
-        types: filterType,
-        go1Integration: filterBlendedLearning,
-        keyword,
-        excludedStatuses: Array.from(actionableStatuses),
-      },
+      filters,
       pagination: {
         perPage,
         currentPage,
@@ -158,6 +185,11 @@ export const TrainerCourses: React.FC<Props> = ({
     [mutate, navigate, refetchActionableCourses]
   )
 
+  const onDatesChange = (from?: Date, to?: Date) => {
+    setFilterStartDate(from)
+    setFilterEndDate(to)
+  }
+
   const fetchingCourses = loading || fetchingActionableCourses
 
   return (
@@ -173,12 +205,12 @@ export const TrainerCourses: React.FC<Props> = ({
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
+            <FilterDates onChange={onDatesChange} />
 
             <Box>
               <Typography variant="body2" fontWeight="bold">
                 {t('filter-by')}
               </Typography>
-
               <Stack gap={1}>
                 <FilterByBlendedLearning
                   selected={filterBlendedLearning}

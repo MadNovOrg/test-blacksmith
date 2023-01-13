@@ -1,4 +1,5 @@
 import { isEqual } from 'lodash-es'
+import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
 import { MemoryRouter } from 'react-router-dom'
@@ -15,6 +16,7 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { TrainerCourseFragment } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
@@ -224,6 +226,291 @@ describe('trainers-pages/MyCourses', () => {
       expect(
         screen.queryByTestId(`course-row-${course.id}`)
       ).not.toBeInTheDocument()
+    })
+  })
+
+  describe('Start and end dates filter', () => {
+    setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+
+    const buildTrainerCourseWithDates = (
+      start: Date,
+      end: Date
+    ): TrainerCourseFragment =>
+      buildTrainerCourse({
+        overrides: {
+          dates: {
+            aggregate: {
+              start: {
+                date: start.toISOString(),
+              },
+              end: {
+                date: end.toISOString(),
+              },
+            },
+          },
+        },
+      })
+
+    let course_from_15_01_23_to_27_11_23: TrainerCourseFragment
+    let course_from_13_03_23_to_25_07_23: TrainerCourseFragment
+    let course_from_22_03_23_to_20_12_23: TrainerCourseFragment
+    let allCourses: TrainerCourseFragment[]
+    beforeAll(() => {
+      // 15/01/2023 - 27/11/2023
+      course_from_15_01_23_to_27_11_23 = buildTrainerCourseWithDates(
+        new Date(2023, 0, 15),
+        new Date(2023, 10, 27)
+      )
+      // 13/03/2023 - 25/07/2023
+      course_from_13_03_23_to_25_07_23 = buildTrainerCourseWithDates(
+        new Date(2023, 2, 13),
+        new Date(2023, 6, 25)
+      )
+      // 22/03/2023 - 20/12/2023
+      course_from_22_03_23_to_20_12_23 = buildTrainerCourseWithDates(
+        new Date(2023, 2, 22),
+        new Date(2023, 11, 20)
+      )
+
+      allCourses = [
+        course_from_15_01_23_to_27_11_23,
+        course_from_13_03_23_to_25_07_23,
+        course_from_22_03_23_to_20_12_23,
+      ]
+    })
+
+    it('shows all courses with start date equal or greater than filter from date', async () => {
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const conditions =
+            variables.where?.schedule?._and?.filter(obj =>
+              Object.keys(obj).includes('start')
+            ).length === 1 ?? false
+
+          const courses = conditions
+            ? [
+                course_from_13_03_23_to_25_07_23,
+                course_from_22_03_23_to_20_12_23,
+              ]
+            : allCourses
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).toBeInTheDocument()
+      })
+
+      const from = screen.getByLabelText('From')
+      userEvent.paste(from, '13/03/2023') // second course's start date
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('shows all courses with end date equal or lesser than filter from date', async () => {
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const conditions =
+            variables.where?.schedule?._and?.filter(obj =>
+              Object.keys(obj).includes('end')
+            ).length === 1 ?? false
+
+          const courses = conditions
+            ? [
+                course_from_15_01_23_to_27_11_23,
+                course_from_13_03_23_to_25_07_23,
+              ]
+            : allCourses
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).toBeInTheDocument()
+      })
+
+      const to = screen.getByLabelText('To')
+      userEvent.paste(to, '25/07/2023') // second course's end date
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.queryByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).not.toBeInTheDocument()
+      })
+    })
+
+    it('shows all courses falling between from and end dates', async () => {
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const conditions =
+            variables.where?.schedule?._and?.filter(obj => {
+              const keys = Object.keys(obj)
+              return keys.includes('start') || keys.includes('end')
+            }).length === 2 ?? false
+          const courses = conditions
+            ? [course_from_13_03_23_to_25_07_23]
+            : allCourses
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).toBeInTheDocument()
+      })
+
+      const from = screen.getByLabelText('From')
+      userEvent.paste(from, '13/03/2023') // second course's start date
+
+      const to = screen.getByLabelText('To')
+      userEvent.paste(to, '25/07/2023') // second course's end date
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId(
+            `course-row-${course_from_15_01_23_to_27_11_23.id}`
+          )
+        ).not.toBeInTheDocument()
+        expect(
+          screen.getByTestId(
+            `course-row-${course_from_13_03_23_to_25_07_23.id}`
+          )
+        ).toBeInTheDocument()
+        expect(
+          screen.queryByTestId(
+            `course-row-${course_from_22_03_23_to_20_12_23.id}`
+          )
+        ).not.toBeInTheDocument()
+      })
     })
   })
 
