@@ -31,7 +31,6 @@ export const useSWRFetcher = () => {
       const [query, variables] = Array.isArray(params) ? params : [params, {}]
 
       const token = await getJWT()
-      console.log({ query, variables })
       return gqlRequest(query, variables, { token, role: activeRole })
     },
     [getJWT, activeRole]
