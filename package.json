@@ -125,7 +125,7 @@
     "env-cmd": "^10.1.0",
     "esbuild": "^0.16.12",
     "eslint": "^8.31.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^27.1.7",
