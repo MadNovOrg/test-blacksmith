@@ -33,6 +33,7 @@ import {
 } from '@app/types'
 
 export { formatCourseVenue } from './formatCourseVenue'
+export { getOrderDueDate } from './orderDueDate'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'
 export const INPUT_TIME_FORMAT = 'HH:mm'

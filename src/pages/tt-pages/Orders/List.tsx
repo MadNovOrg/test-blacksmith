@@ -11,7 +11,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { add as addPeriod } from 'date-fns'
 import { saveAs } from 'file-saver'
 import React, { useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +22,7 @@ import { XeroInvoiceStatus } from '@app/generated/graphql'
 import { OrderType } from '@app/hooks/useOrders'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { xeroInvoiceStatusColors } from '@app/util'
+import { xeroInvoiceStatusColors, getOrderDueDate } from '@app/util'
 
 type Props = {
   orders: OrderType[]
@@ -63,8 +62,8 @@ export const List: React.FC<Props> = ({
     const { start } = order?.course?.schedule
       ? order.course.schedule[0]
       : { start: null }
-    const { orderDue, status } = order
-    const dueDate = addPeriod(new Date(start), { weeks: 8 })
+    const { orderDue, status, createdAt } = order
+    const dueDate = getOrderDueDate(createdAt, start)
 
     const [font, background] = xeroInvoiceStatusColors[status as string]
 
