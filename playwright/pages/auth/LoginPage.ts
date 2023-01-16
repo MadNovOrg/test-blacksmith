@@ -51,17 +51,17 @@ export class LoginPage extends BasePage {
     if (errors.generalError) {
       await expect(this.generalErrorText).toHaveText(errors.generalError)
     } else {
-      await expect(this.generalErrorText).not.toBeVisible()
+      await expect(this.generalErrorText).toBeHidden()
     }
     if (errors.emailError) {
       await expect(this.emailErrorText).toHaveText(errors.emailError)
     } else {
-      await expect(this.emailErrorText).not.toBeVisible()
+      await expect(this.emailErrorText).toBeHidden()
     }
     if (errors.passwordError) {
       await expect(this.passwordErrorText).toHaveText(errors.passwordError)
     } else {
-      await expect(this.passwordErrorText).not.toBeVisible()
+      await expect(this.passwordErrorText).toBeHidden()
     }
   }
 

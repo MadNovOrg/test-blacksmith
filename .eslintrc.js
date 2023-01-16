@@ -77,6 +77,10 @@ module.exports = {
         ],
       },
     },
+    {
+      files: ['**/playwright/**'],
+      extends: ['plugin:playwright/playwright-test'],
+    },
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -89,8 +93,8 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        'endOfLine': 'auto'
-      }
+        endOfLine: 'auto',
+      },
     ],
     'import/order': [
       'error',

@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
 
 import { getWebinarById, getWebinars } from '../../api/hasura-api'
 import { BASE_URL } from '../../constants'
@@ -29,21 +29,21 @@ test('displays video item details and recent items', async ({ page, data }) => {
   await page.goto(`${BASE_URL}/membership/webinars/${data.webinar.id}`)
   await page.waitForLoadState('networkidle')
 
-  test
-    .expect(page.locator(`data-testid=webinar-title`))
-    .toHaveText(data.webinar.title ?? '')
+  await expect(page.locator(`data-testid=webinar-title`)).toHaveText(
+    data.webinar.title ?? ''
+  )
 
   const ytFrame = page.frameLocator(`#yt-embed-${data.webinar.id}`)
 
   await ytFrame.locator('[aria-label="Play"]').click()
 
-  data.recentWebinars.map(recentItem => {
+  data.recentWebinars.map(async recentItem => {
     if (!recentItem) {
       return
     }
 
-    test
-      .expect(page.locator(`data-testid=webinars-grid-item-${recentItem.id}`))
-      .toBeVisible()
+    await expect(
+      page.locator(`data-testid=webinars-grid-item-${recentItem.id}`)
+    ).toBeVisible()
   })
 })

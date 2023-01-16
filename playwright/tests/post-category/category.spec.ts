@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
 
 import {
   getFirstCategoryIdWithPosts,
@@ -30,16 +30,18 @@ test('displays category title and posts that belong to the category', async ({
   await page.goto(`${BASE_URL}/membership/term/${category?.id}`)
   await page.waitForLoadState('networkidle')
 
-  category?.posts?.nodes?.map(post => {
-    test
-      .expect(page.locator(`data-testid=post-grid-item-${post?.id}`))
-      .toBeVisible()
+  category?.posts?.nodes?.map(async post => {
+    await expect(
+      page.locator(`data-testid=post-grid-item-${post?.id}`)
+    ).toBeVisible()
   })
 
   if (
     category?.posts?.nodes?.length &&
     category.posts.nodes.length > PER_PAGE
   ) {
-    test.expect(page.locator('data-testid=term-items-pagination')).toBeVisible()
+    await expect(
+      page.locator('data-testid=term-items-pagination')
+    ).toBeVisible()
   }
 })

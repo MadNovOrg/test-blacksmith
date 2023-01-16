@@ -217,7 +217,7 @@ export const insertCourse = async (
   const response = await getClient().request(query)
   const id = response.insert_course.returning[0].id
   if (id) {
-    console.log(`Inserted course with ID ${id}`)
+    console.log(`Inserted course with ID ${id} for ${email}`)
     return id
   }
   throw Error('Could not insert the course')

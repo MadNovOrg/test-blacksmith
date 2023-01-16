@@ -53,7 +53,10 @@ const getEmail = async (email: string, id: string): Promise<Email> => {
   }
 }
 
-export const getLatestEmail = async (email: string): Promise<Email> => {
+export const getLatestEmail = async (
+  email: string,
+  forgotPassword?: boolean
+): Promise<Email> => {
   const [inbox, domain] = email.split('@')
   const url = `${baseUrl}/domains/${domain}/inboxes/${inbox}?limit=1`
   let triesLeft = 10
@@ -62,8 +65,20 @@ export const getLatestEmail = async (email: string): Promise<Email> => {
     if (response.ok) {
       const body = await response.json()
       if (body.msgs.length > 0 && body.msgs[0].seconds_ago < 20) {
-        const mesId = body.msgs[0].id
-        const result = await getEmail(email, mesId)
+        let mesId, result
+        switch (
+          true // Adding as a switch as there will be future statements which need to be checked
+        ) {
+          // We want to exit the loop early if we have found the forgotten password email
+          case forgotPassword &&
+            body.msgs[0].subject == 'Forgot Password Confirmation Code':
+            mesId = body.msgs[0].id
+            result = await getEmail(email, mesId)
+            break
+          default:
+            mesId = body.msgs[0].id
+            result = await getEmail(email, mesId)
+        }
         await deleteEmail(email, mesId)
         return result
       }

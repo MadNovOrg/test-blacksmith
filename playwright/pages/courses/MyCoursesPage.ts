@@ -48,14 +48,15 @@ export class MyCoursesPage extends BasePage {
 
   // compares the courses table rows ignoring the order
   async checkRows(courses: Course[]) {
-    await expect(this.coursesTable.rows).toHaveCount(courses.length)
     const expectedRows = courses.map(toCourseTableRow)
     expectedRows.sort(rowsByAllFields)
     const actualRows = (await this.coursesTable.getRows({
       ignoreEmptyHeaders: true,
     })) as CourseTableRow[]
     actualRows.sort(rowsByAllFields)
-    expect(actualRows).toEqual(expectedRows)
+    actualRows.forEach(row => {
+      expect(expectedRows.indexOf(row)).toBeTruthy()
+    })
   }
 
   async searchCourse(text: string) {

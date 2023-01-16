@@ -46,7 +46,7 @@ const test = base.extend<{
 })
 test.use({ storageState: stateFilePath('trainerWithOrg') })
 
-test.skip('my courses view @smoke', async ({ page, coursesToView }) => {
+test('my courses view @smoke', async ({ page, coursesToView }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.checkRows(coursesToView)

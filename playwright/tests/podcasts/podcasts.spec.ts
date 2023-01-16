@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
 
 import { Podcast } from '@app/generated/graphql'
 
@@ -22,26 +22,23 @@ test.describe('podcasts page', () => {
     podcasts,
   }) => {
     await page.goto(`${BASE_URL}/membership/podcasts`)
-    await page.waitForLoadState('networkidle')
 
     const featuredPodcastImage = page.locator(
       '[data-testid="featured-podcast"] img'
     )
 
-    test
-      .expect(featuredPodcastImage)
-      .toHaveAttribute('src', podcasts[0].thumbnail)
-    test
-      .expect(
-        page.locator(
-          `data-testid=featured-podcast >> text="${podcasts[0].name}"`
-        )
-      )
-      .toBeVisible()
+    await expect(featuredPodcastImage).toBeVisible()
+    await expect(featuredPodcastImage).toHaveAttribute(
+      'src',
+      podcasts[0].thumbnail
+    )
+    await expect(
+      page.locator(`data-testid=featured-podcast >> text="${podcasts[0].name}"`)
+    ).toBeVisible()
 
-    test
-      .expect(page.locator(`data-testid=podcast-grid-item-${podcasts[1].id}`))
-      .toBeVisible()
-    test.expect(page.locator('data-testid=podcasts-pagination')).toBeVisible()
+    await expect(
+      page.locator(`data-testid=podcast-grid-item-${podcasts[1].id}`)
+    ).toBeVisible()
+    await expect(page.locator('data-testid=podcasts-pagination')).toBeVisible()
   })
 })

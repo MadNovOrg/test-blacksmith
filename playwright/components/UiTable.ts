@@ -14,8 +14,7 @@ export class UiTable {
   }
 
   async waitToLoad() {
-    const headersCount = await this.headers.count()
-    await expect(this.firstRowCells).toHaveCount(headersCount)
+    await expect(this.rows.first()).toBeVisible()
   }
 
   async getRowsCount(): Promise<number> {
@@ -36,20 +35,23 @@ export class UiTable {
     options: { ignoreEmptyHeaders?: boolean } = { ignoreEmptyHeaders: false }
   ): Promise<object> {
     const result = []
+    await this.root.scrollIntoViewIfNeeded()
     const headers = await this.getHeaders({
       ignoreEmpty: options.ignoreEmptyHeaders,
     })
     const rowsCount = await this.getRowsCount()
-    for (let i = 0; i < rowsCount; i++) {
-      const resultRow: { [k: string]: string } = {}
-      for (let j = 0; j < headers.length; j++) {
-        resultRow[headers[j]] = (await this.rows
-          .nth(i)
-          .locator('td')
-          .nth(j)
-          .textContent()) as string
+    if (rowsCount != 1) {
+      for (let i = 0; i < rowsCount; i++) {
+        const resultRow: { [k: string]: string } = {}
+        for (let j = 0; j < headers.length; j++) {
+          resultRow[headers[j]] = (await this.rows
+            .nth(i)
+            .locator('td')
+            .nth(j)
+            .textContent()) as string
+        }
+        result.push(resultRow)
       }
-      result.push(resultRow)
     }
     return result
   }

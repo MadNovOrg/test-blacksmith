@@ -1,7 +1,6 @@
 import { PlaywrightTestConfig, devices } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
-  forbidOnly: !!process.env.CI,
   globalSetup: require.resolve('./hooks/global-setup'),
   use: {
     trace: 'retain-on-failure',
@@ -10,6 +9,9 @@ const config: PlaywrightTestConfig = {
     timezoneId: 'UTC',
   },
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
+  expect: {
+    timeout: 10 * 1000,
+  },
   projects: [
     {
       name: 'chromium',

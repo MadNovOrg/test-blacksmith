@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
 
 import { getLatestEmail } from '../../api/email-api'
 import { TARGET_ENV } from '../../constants'
@@ -28,8 +28,18 @@ test('forgot password page @smoke', async ({ page }) => {
 test('forgot password: non-existent email', async ({ page }) => {
   const forgotPasswordPage = new ForgotPasswordPage(page)
   await forgotPasswordPage.goto()
-  const resetPasswordPage = await forgotPasswordPage.submitEmail('abc@def.ghi')
-  await resetPasswordPage.checkEmailText('abc@def.ghi')
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      resp =>
+        resp.url().includes('https://cognito-idp.eu-west-2.amazonaws.com/') &&
+        resp.status() == 400
+    ),
+    forgotPasswordPage.submitEmail('abc@def.ghi'),
+  ])
+  const json = await response.json()
+  await expect(json.message).toContain(
+    'Username/client id combination not found.'
+  )
 })
 
 test('reset password', async ({ page }) => {
