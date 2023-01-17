@@ -26,12 +26,12 @@ const ListItemTranslated: React.FC<ItemProps> = ({ i18nKey, fullName }) => {
 
 interface ListItemWrapperProps {
   courseTrainer: CourseTrainer
-  disableLinks: boolean | undefined
+  enableLinks: boolean | undefined
 }
 
 const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
   courseTrainer,
-  disableLinks,
+  enableLinks,
 }) => {
   const i18nKey = useMemo(() => {
     switch (courseTrainer.type) {
@@ -48,18 +48,18 @@ const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
 
   return (
     <>
-      {disableLinks ? (
-        <ListItemTranslated
-          i18nKey={i18nKey}
-          fullName={courseTrainer.profile.fullName}
-        />
-      ) : (
+      {enableLinks ? (
         <Link href={`/profile/${courseTrainer.profile.id}`}>
           <ListItemTranslated
             i18nKey={i18nKey}
             fullName={courseTrainer.profile.fullName}
           />
         </Link>
+      ) : (
+        <ListItemTranslated
+          i18nKey={i18nKey}
+          fullName={courseTrainer.profile.fullName}
+        />
       )}
     </>
   )
@@ -102,7 +102,7 @@ export const CourseTrainersInfo: React.FC<Props> = ({ trainers }) => {
             t('pages.course-participants.trainer')
           ) : (
             <ListItemWrapper
-              disableLinks={acl.canViewProfiles()}
+              enableLinks={acl.canViewProfiles()}
               courseTrainer={courseLeadTrainer}
             />
           )}
@@ -115,7 +115,7 @@ export const CourseTrainersInfo: React.FC<Props> = ({ trainers }) => {
               t('pages.course-participants.assistant')
             ) : (
               <ListItemWrapper
-                disableLinks={acl.canViewProfiles()}
+                enableLinks={acl.canViewProfiles()}
                 courseTrainer={assistant}
               />
             )}
@@ -140,7 +140,7 @@ export const CourseTrainersInfo: React.FC<Props> = ({ trainers }) => {
             t('pages.course-participants.moderator')
           ) : (
             <ListItemWrapper
-              disableLinks={acl.canViewProfiles()}
+              enableLinks={acl.canViewProfiles()}
               courseTrainer={courseModerator}
             />
           )}

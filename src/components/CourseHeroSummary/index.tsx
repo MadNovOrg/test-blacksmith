@@ -154,11 +154,11 @@ export const CourseHeroSummary: React.FC<Props> = ({
           </Grid>
           <Grid item xs={6} md={4}>
             <List dense disablePadding>
-              <ListItem>
+              <ListItem alignItems={'flex-start'}>
                 <StyledListIcon>
                   <PersonOutlineIcon />
                 </StyledListIcon>
-                <List>
+                <List sx={{ paddingTop: 0.5 }}>
                   <CourseTrainersInfo trainers={course.trainers} />
                   {course.organization && (
                     <CourseHostInfo
