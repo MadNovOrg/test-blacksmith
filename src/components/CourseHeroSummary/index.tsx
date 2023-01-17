@@ -16,21 +16,22 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
-import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
 import { Course } from '@app/types'
 import {
   getCourseBeginsForMessage,
   getCourseDurationMessage,
-  getCourseTrainer,
   getTimeDifferenceAndContext,
   formatCourseVenue,
 } from '@app/util'
+
+import { CourseHostInfo } from '../CourseHostInfo'
+import { CourseTrainersInfo } from '../CourseTrainersInfo'
 
 const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   minWidth: '32px',
@@ -47,13 +48,8 @@ export const CourseHeroSummary: React.FC<Props> = ({
   children,
   renderButton,
 }) => {
-  const { profile } = useAuth()
   const { t } = useTranslation()
 
-  const courseTrainer = useMemo(
-    () => getCourseTrainer(course.trainers ?? []),
-    [course]
-  )
   const courseStartDate = new Date(course.schedule[0].start)
   const courseEndDate = new Date(course.schedule[0].end)
 
@@ -158,21 +154,20 @@ export const CourseHeroSummary: React.FC<Props> = ({
           </Grid>
           <Grid item xs={6} md={4}>
             <List dense disablePadding>
-              {courseTrainer?.profile ? (
-                <ListItem>
-                  <StyledListIcon>
-                    <PersonOutlineIcon />
-                  </StyledListIcon>
-                  <ListItemText>
-                    {courseTrainer.profile.id === profile?.id
-                      ? t('pages.course-participants.trainer')
-                      : t('pages.course-participants.hosted-by', {
-                          trainer: `${courseTrainer.profile.fullName}`,
-                        })}
-                  </ListItemText>
-                </ListItem>
-              ) : null}
-
+              <ListItem>
+                <StyledListIcon>
+                  <PersonOutlineIcon />
+                </StyledListIcon>
+                <List>
+                  <CourseTrainersInfo trainers={course.trainers} />
+                  {course.organization && (
+                    <CourseHostInfo
+                      courseType={course.type}
+                      organization={course.organization}
+                    />
+                  )}
+                </List>
+              </ListItem>
               <ListItem>
                 <StyledListIcon>
                   <PinDropIcon />

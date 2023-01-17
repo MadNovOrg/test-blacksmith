@@ -28,6 +28,7 @@ export const QUERY = gql`
       notes
       organization {
         id
+        name
         members(where: { isAdmin: { _eq: true } }) {
           isAdmin
           profile_id

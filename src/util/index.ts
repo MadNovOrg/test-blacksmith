@@ -127,7 +127,7 @@ export const courseStarted = (course: Course) =>
 export const courseEnded = (course: Course) =>
   isPast(new Date(course.schedule[0].end))
 
-export const getCourseTrainer = (trainers: CourseTrainer[]) => {
+export const getCourseLeadTrainer = (trainers: CourseTrainer[]) => {
   return trainers.find(t => t.type === CourseTrainerType.Leader)
 }
 

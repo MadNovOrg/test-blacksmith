@@ -55,6 +55,7 @@ export type ACL = {
   canViewOrganizations: () => boolean
   canViewCertifications: () => boolean
   canViewOrders: () => boolean
+  canViewProfiles: () => boolean
   canOverrideGrades: () => boolean
   canViewXeroConnect: () => boolean
   canCreateOrgs: () => boolean

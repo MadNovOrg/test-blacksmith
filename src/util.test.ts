@@ -11,7 +11,7 @@ import {
   courseStarted,
   formatDateForDraft,
   getCourseAssistants,
-  getCourseTrainer,
+  getCourseLeadTrainer,
   getTimeDifferenceAndContext,
 } from './util'
 
@@ -82,13 +82,13 @@ describe('courseEnded', () => {
   })
 })
 
-describe('getCourseTrainer', () => {
+describe('getCourseLeadTrainer', () => {
   it('returns lead trainer when it exists', () => {
     const lead = buildProfile()
     const assistant1 = buildProfile()
     const assistant2 = buildProfile()
 
-    const trainer = getCourseTrainer([
+    const trainer = getCourseLeadTrainer([
       buildCourseAssistant({ profile: assistant1 }),
       buildCourseLeader({ profile: lead }),
       buildCourseAssistant({ profile: assistant2 }),
@@ -103,7 +103,7 @@ describe('getCourseTrainer', () => {
     const assistant2 = buildProfile()
     const assistant3 = buildProfile()
 
-    const trainer = getCourseTrainer([
+    const trainer = getCourseLeadTrainer([
       buildCourseAssistant({ profile: assistant1 }),
       buildCourseAssistant({ profile: assistant2 }),
       buildCourseAssistant({ profile: assistant3 }),
