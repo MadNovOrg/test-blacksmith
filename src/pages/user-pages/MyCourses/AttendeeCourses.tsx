@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
+import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
@@ -50,6 +51,8 @@ export const AttendeeCourses: React.FC = () => {
   )
 
   const [keyword, setKeyword] = useState('')
+  const [filterStartDate, setFilterStartDate] = useState<Date>()
+  const [filterEndDate, setFilterEndDate] = useState<Date>()
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
 
   const [statusOptions, setStatusOptions] = useState<
@@ -95,15 +98,29 @@ export const AttendeeCourses: React.FC = () => {
 
   const { Pagination, perPage, currentPage } = useTablePagination()
 
-  const { courses, status, total } = useUserCourses(
-    {
+  const filters = useMemo(() => {
+    let startDate = undefined
+    let endDate = undefined
+    if (filterStartDate) {
+      startDate = new Date(filterStartDate)
+      startDate.setHours(0, 0, 0)
+    }
+    if (filterEndDate) {
+      endDate = new Date(filterEndDate)
+      endDate.setHours(23, 59, 59)
+    }
+    return {
       statuses: filterStatus,
       levels: filterLevel,
       keyword,
-    },
-    sorting,
-    { perPage, currentPage }
-  )
+      schedule: { start: startDate, end: endDate },
+    }
+  }, [filterEndDate, filterLevel, filterStartDate, filterStatus, keyword])
+
+  const { courses, status, total } = useUserCourses(filters, sorting, {
+    perPage,
+    currentPage,
+  })
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -114,6 +131,11 @@ export const AttendeeCourses: React.FC = () => {
   const loading = status === LoadingStatus.FETCHING
 
   const filtered = Boolean(keyword || filterStatus.length || filterLevel.length)
+
+  const onDatesChange = (from?: Date, to?: Date) => {
+    setFilterStartDate(from)
+    setFilterEndDate(to)
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -126,6 +148,7 @@ export const AttendeeCourses: React.FC = () => {
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
+            <FilterDates onChange={onDatesChange} />
 
             <Box>
               <Typography variant="body2" fontWeight="bold">

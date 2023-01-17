@@ -33,6 +33,10 @@ type CoursesFilters = {
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
   statuses?: UserCourseStatus[]
+  schedule?: {
+    start?: Date
+    end?: Date
+  }
 }
 
 export function useUserCourses(
@@ -169,6 +173,18 @@ export function useUserCourses(
 
     if (filters?.types?.length) {
       obj.type = { _in: filters.types }
+    }
+
+    if (filters?.schedule?.start || filters?.schedule?.end) {
+      obj.schedule = {
+        _and: [],
+      }
+      if (filters?.schedule?.start) {
+        obj.schedule._and?.push({ start: { _gte: filters.schedule.start } })
+      }
+      if (filters?.schedule?.end) {
+        obj.schedule._and?.push({ end: { _lte: filters.schedule.end } })
+      }
     }
 
     const query = filters?.keyword?.trim()

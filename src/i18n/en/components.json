@@ -256,5 +256,12 @@
   },
   "audit-filtering-sidebar": {
     "filter-by-date": "Filter by date"
+  },
+  "filter-dates": {
+    "validation": {
+      "end-date-before-start-date": "The date is before the start date",
+      "start-date-after-end-date": "The date is after the end date",
+      "invalid-date": "The date is invalid"
+    }
   }
 }
