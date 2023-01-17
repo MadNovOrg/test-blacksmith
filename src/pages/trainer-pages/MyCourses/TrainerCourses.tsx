@@ -307,9 +307,11 @@ export const TrainerCourses: React.FC<Props> = ({
                     </TableRow>
                   )}
                 />
-                {actionRequiredCourses.length ? (
+                {actionableCourses?.course_aggregate?.aggregate?.count ? (
                   <ActionablePagination
-                    total={actionRequiredCourses.length}
+                    total={
+                      actionableCourses?.course_aggregate?.aggregate?.count
+                    }
                     rowsPerPage={[5, 10, 15]}
                     testId="actionable-courses-pagination"
                   />
