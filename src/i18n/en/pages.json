@@ -1223,6 +1223,7 @@
       "date-ascending": "Date ascending",
       "date-descending": "Date descending"
     },
+    "no-results": "No courses found. Try another search.",
     "please-select-organization": "Please select organisation to sort by distance.",
     "select-organization": "Please select organization"
   },

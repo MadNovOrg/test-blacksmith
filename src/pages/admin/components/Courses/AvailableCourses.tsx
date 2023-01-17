@@ -248,17 +248,24 @@ export const AvailableCourses: React.FC = () => {
                 </Alert>
               ) : null}
 
-              {currentPageRecords?.map(course => (
-                <CourseForBookingTile
-                  course={course}
-                  key={course.id}
-                  showDistance={sortByDistance}
-                  distance={distances.get(course.id)}
-                  variant="row"
-                />
-              ))}
-
-              {courses ? <Pagination total={courses.length} /> : null}
+              {courses.length > 0 ? (
+                <>
+                  {currentPageRecords?.map(course => (
+                    <CourseForBookingTile
+                      course={course}
+                      key={course.id}
+                      showDistance={sortByDistance}
+                      distance={distances.get(course.id)}
+                      variant="row"
+                    />
+                  ))}
+                  <Pagination total={courses.length} />{' '}
+                </>
+              ) : (
+                <Typography variant="body2">
+                  {t('pages.available-courses.no-results')}
+                </Typography>
+              )}
             </Box>
           </Box>
         </Container>
