@@ -25,6 +25,10 @@ import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAle
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
+import {
+  Course_Participant_Audit_Type_Enum,
+  Course_Status_Enum,
+} from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 
 import { UserGo1License } from './components/UserGo1License'
@@ -68,6 +72,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
     isPast(new Date(expiryDate))
 
   const editProFilePath = orgId ? `./edit?orgId=${orgId}` : './edit'
+
   return (
     <Box bgcolor="grey.100" pb={6} pt={3} flex={1}>
       <Container>
@@ -253,6 +258,94 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                     </TableCell>
                   </TableRow>
                 )}
+              </TableBody>
+            </Table>
+            <Typography variant="subtitle2" mb={1} mt={3}>
+              {t('course-history-log')}
+            </Typography>
+            <Table sx={{ mt: 1 }}>
+              <TableHead>
+                <TableRow
+                  sx={{
+                    '&&.MuiTableRow-root': {
+                      backgroundColor: 'grey.300',
+                    },
+                    '&& .MuiTableCell-root': {
+                      px: 2,
+                      py: 1,
+                      color: 'grey.700',
+                      fontWeight: '600',
+                    },
+                  }}
+                >
+                  <TableCell>{t('course-name')}</TableCell>
+                  <TableCell>{t('action')}</TableCell>
+                  <TableCell>{t('date')}</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {profile.participantAudits.map(row => {
+                  if (
+                    row.type === Course_Participant_Audit_Type_Enum.Replacement
+                  )
+                    return
+
+                  return (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        '&&.MuiTableRow-root': {
+                          backgroundColor: 'common.white',
+                        },
+                      }}
+                    >
+                      <TableCell>{row.course.name}</TableCell>
+                      <TableCell>
+                        {t(`participant-audit-types.${row.type}`)}
+                      </TableCell>
+                      <TableCell>
+                        {t('dates.defaultShort', {
+                          date: row.course.dates.aggregate?.end?.date,
+                        })}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+                {profile.courses.map(row => {
+                  if (row.course.status !== Course_Status_Enum.Cancelled) return
+
+                  return (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        '&&.MuiTableRow-root': {
+                          backgroundColor: 'common.white',
+                        },
+                      }}
+                    >
+                      <TableCell>{row.course.name}</TableCell>
+                      <TableCell>
+                        {t(`course-statuses.${row.course.status}`)}
+                      </TableCell>
+                      <TableCell>-</TableCell>
+                    </TableRow>
+                  )
+                })}
+
+                {profile.participantAudits.length + profile.courses.length <
+                1 ? (
+                  <TableRow
+                    sx={{
+                      '&&.MuiTableRow-root': {
+                        backgroundColor: 'common.white',
+                      },
+                    }}
+                  >
+                    <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
+                      {t('pages.my-profile.no-course-history')}
+                    </TableCell>
+                  </TableRow>
+                ) : null}
               </TableBody>
             </Table>
             {verified && (

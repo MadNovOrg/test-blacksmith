@@ -28,6 +28,26 @@ computed_fields:
         schema: public
         name: course_participant_audit_to_course
 insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        type:
+          _in:
+            - ATTENDED
+            - NOT_ATTENDED
+      set:
+        authorized_by: x-hasura-User-Id
+        payload: '{}'
+      columns:
+        - authorized_by
+        - course_id
+        - created_at
+        - id
+        - payload
+        - profile_id
+        - type
+        - updated_at
+      backend_only: false
   - role: tt-admin
     permission:
       check: {}

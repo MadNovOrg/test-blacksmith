@@ -875,6 +875,7 @@
     "missing-details-header": "Please complete your profile by providing the following details:",
     "add-certificate": "Add certificate",
     "user-is-not-assigned-to-org": "User is not assigned to any organisation.",
+    "no-course-history": "User does not have any past courses.",
     "organization-details": "Organisation details",
     "org-leave-confirm-message": "Are you sure you want to leave {{ name }} organisation?",
     "bl-license-title": "Blended learning license",

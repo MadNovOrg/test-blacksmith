@@ -77,6 +77,13 @@ array_relationships:
         table:
           schema: public
           name: organization_member
+  - name: participant_audits
+    using:
+      foreign_key_constraint_on:
+        column: profile_id
+        table:
+          schema: public
+          name: course_participant_audit
   - name: roles
     using:
       foreign_key_constraint_on:

@@ -121,7 +121,7 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 
 INSERT INTO public.course_participant (registration_id, course_id, profile_id, invoice_id, invite_id, attended, hs_consent, grade) VALUES
 ('8aba9220-8e09-433b-ad83-51c53f2523c0', 10001, 'ab528bc4-0d66-417f-8a34-eed6b949ea27', '0b156d52-b6a1-4238-bab0-4b1e99a9dc88', 'd1d9a569-6f96-42ee-ac83-1ecb3f849016', true, false, NULL),
-('8aba9220-8e09-433b-ad83-51c53f2523c0', 10001, '1054214f-1f5b-4d94-a381-ab6fba404f41', '0b156d52-b6a1-4238-bab0-4b1e99a9dc88', 'd1d9a569-6f96-42ee-ac83-1ecb3f849017', true, false, NULL),
+('8aba9220-8e09-433b-ad83-51c53f2523c0', 10001, '1054214f-1f5b-4d94-a381-ab6fba404f41', '0b156d52-b6a1-4238-bab0-4b1e99a9dc88', 'd1d9a569-6f96-42ee-ac83-1ecb3f849017', false, false, NULL),
 ('d44e5d0a-d4b2-41b1-826a-8672e5312736', 10001, '5a7f3010-cd40-454a-88d9-c93935c039ec', 'e2de96f8-7bee-428c-bc6d-f3603f84e9de', 'd1d9a569-6f96-42ee-ac83-1ecb3f849018', true, false, NULL),
 ('af9e4740-9e8e-4465-adab-4a5ebbb73e4b', 10004, '6896b053-0d36-45b4-889c-9472d846c4a1', '5e7c2158-92a8-4c70-a506-f3b205b4ccad', 'd1d9a569-6f96-42ee-ac83-1ecb3f849010', true, false, NULL),
 ('3c665955-9ae8-47bc-84b6-9c103fea3b06', 10004, 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'c90c93de-24a5-47cb-816d-d1a379543d86', 'd1d9a569-6f96-42ee-ac83-1ecb3f849011', true, false, NULL),

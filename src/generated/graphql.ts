@@ -18316,15 +18316,42 @@ export type Course_Participant_Audit_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "course_participant_audit" */
+export type Course_Participant_Audit_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Participant_Audit_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Participant_Audit_Max_Order_By>;
+  min?: InputMaybe<Course_Participant_Audit_Min_Order_By>;
+  stddev?: InputMaybe<Course_Participant_Audit_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Participant_Audit_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Participant_Audit_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Participant_Audit_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Participant_Audit_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Participant_Audit_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Participant_Audit_Variance_Order_By>;
+};
+
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Course_Participant_Audit_Append_Input = {
   payload?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "course_participant_audit" */
+export type Course_Participant_Audit_Arr_Rel_Insert_Input = {
+  data: Array<Course_Participant_Audit_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Participant_Audit_On_Conflict>;
 };
 
 /** aggregate avg on columns */
 export type Course_Participant_Audit_Avg_Fields = {
   __typename?: 'course_participant_audit_avg_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Avg_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course_participant_audit". All fields are combined with a logical 'AND'. */
@@ -18400,6 +18427,16 @@ export type Course_Participant_Audit_Max_Fields = {
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
+/** order by max() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Max_Order_By = {
+  authorized_by?: InputMaybe<Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Course_Participant_Audit_Min_Fields = {
   __typename?: 'course_participant_audit_min_fields';
@@ -18409,6 +18446,16 @@ export type Course_Participant_Audit_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+};
+
+/** order by min() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Min_Order_By = {
+  authorized_by?: InputMaybe<Order_By>;
+  course_id?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  profile_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_participant_audit" */
@@ -18493,10 +18540,20 @@ export type Course_Participant_Audit_Stddev_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Stddev_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Course_Participant_Audit_Stddev_Pop_Fields = {
   __typename?: 'course_participant_audit_stddev_pop_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Stddev_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -18505,10 +18562,20 @@ export type Course_Participant_Audit_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Stddev_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Course_Participant_Audit_Sum_Fields = {
   __typename?: 'course_participant_audit_sum_fields';
   course_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Sum_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_participant_audit_type" */
@@ -18554,7 +18621,9 @@ export enum Course_Participant_Audit_Type_Constraint {
 }
 
 export enum Course_Participant_Audit_Type_Enum {
+  Attended = 'ATTENDED',
   Cancellation = 'CANCELLATION',
+  NotAttended = 'NOT_ATTENDED',
   Replacement = 'REPLACEMENT',
   Transfer = 'TRANSFER'
 }
@@ -18654,16 +18723,31 @@ export type Course_Participant_Audit_Var_Pop_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Var_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Course_Participant_Audit_Var_Samp_Fields = {
   __typename?: 'course_participant_audit_var_samp_fields';
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Var_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Course_Participant_Audit_Variance_Fields = {
   __typename?: 'course_participant_audit_variance_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_participant_audit" */
+export type Course_Participant_Audit_Variance_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate avg on columns */
@@ -30210,6 +30294,10 @@ export type Profile = {
   /** An aggregate relationship */
   organizations_aggregate: Organization_Member_Aggregate;
   original_record: Scalars['jsonb'];
+  /** An array relationship */
+  participant_audits: Array<Course_Participant_Audit>;
+  /** An aggregate relationship */
+  participant_audits_aggregate: Course_Participant_Audit_Aggregate;
   phone?: Maybe<Scalars['String']>;
   preferences: Scalars['jsonb'];
   /** An array relationship */
@@ -30382,6 +30470,26 @@ export type ProfileOriginal_RecordArgs = {
 
 
 /** columns and relationships of "profile" */
+export type ProfileParticipant_AuditsArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
+  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileParticipant_Audits_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Audit_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Audit_Order_By>>;
+  where?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
 export type ProfilePreferencesArgs = {
   path?: InputMaybe<Scalars['String']>;
 };
@@ -30529,6 +30637,7 @@ export type Profile_Bool_Exp = {
   lastActivity?: InputMaybe<Timestamptz_Comparison_Exp>;
   organizations?: InputMaybe<Organization_Member_Bool_Exp>;
   original_record?: InputMaybe<Jsonb_Comparison_Exp>;
+  participant_audits?: InputMaybe<Course_Participant_Audit_Bool_Exp>;
   phone?: InputMaybe<String_Comparison_Exp>;
   preferences?: InputMaybe<Jsonb_Comparison_Exp>;
   roles?: InputMaybe<Profile_Role_Bool_Exp>;
@@ -30614,6 +30723,7 @@ export type Profile_Insert_Input = {
   lastActivity?: InputMaybe<Scalars['timestamptz']>;
   organizations?: InputMaybe<Organization_Member_Arr_Rel_Insert_Input>;
   original_record?: InputMaybe<Scalars['jsonb']>;
+  participant_audits?: InputMaybe<Course_Participant_Audit_Arr_Rel_Insert_Input>;
   phone?: InputMaybe<Scalars['String']>;
   preferences?: InputMaybe<Scalars['jsonb']>;
   roles?: InputMaybe<Profile_Role_Arr_Rel_Insert_Input>;
@@ -30719,6 +30829,7 @@ export type Profile_Order_By = {
   lastActivity?: InputMaybe<Order_By>;
   organizations_aggregate?: InputMaybe<Organization_Member_Aggregate_Order_By>;
   original_record?: InputMaybe<Order_By>;
+  participant_audits_aggregate?: InputMaybe<Course_Participant_Audit_Aggregate_Order_By>;
   phone?: InputMaybe<Order_By>;
   preferences?: InputMaybe<Order_By>;
   roles_aggregate?: InputMaybe<Profile_Role_Aggregate_Order_By>;
@@ -38137,10 +38248,12 @@ export type RequestCourseCancellationMutation = { __typename?: 'mutation_root', 
 export type SaveCourseAttendanceMutationVariables = Exact<{
   attended: Array<Scalars['uuid']> | Scalars['uuid'];
   notAttended: Array<Scalars['uuid']> | Scalars['uuid'];
+  attendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
+  notAttendedAudit: Array<Course_Participant_Audit_Insert_Input> | Course_Participant_Audit_Insert_Input;
 }>;
 
 
-export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null };
+export type SaveCourseAttendanceMutation = { __typename?: 'mutation_root', saveAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null, saveNotAttended?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, saveNotAttendedAudit?: { __typename?: 'course_participant_audit_mutation_response', affectedRows: number } | null };
 
 export type SaveModuleSelectionMutationVariables = Exact<{
   coveredModules: Array<Scalars['uuid']> | Scalars['uuid'];
@@ -38735,7 +38848,7 @@ export type GetProfileDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum }> };
+export type GetProfileDetailsQuery = { __typename?: 'query_root', profile?: { __typename?: 'profile', id: any, givenName: string, familyName: string, fullName?: string | null, avatar?: string | null, title?: string | null, tags?: any | null, addresses: any, attributes: any, contactDetails: any, dietaryRestrictions?: string | null, disabilities?: string | null, preferences: any, createdAt: any, updatedAt: any, email?: string | null, phone?: string | null, dob?: any | null, jobTitle?: string | null, dbs?: string | null, lastActivity: any, participantAudits: Array<{ __typename?: 'course_participant_audit', id: any, course_id: number, type: Course_Participant_Audit_Type_Enum, course: { __typename?: 'course', name: string, status?: Course_Status_Enum | null, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null } } }>, courses: Array<{ __typename?: 'course_participant', id: any, course: { __typename?: 'course', id: number, name: string, status?: Course_Status_Enum | null } }>, go1Licenses?: Array<{ __typename?: 'go1_licenses', id: any, orgId: any, expireDate: any, enrolledOn: any }>, organizations: Array<{ __typename?: 'organization_member', id: any, isAdmin?: boolean | null, position?: string | null, organization: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } }>, roles: Array<{ __typename?: 'profile_role', role: { __typename?: 'role', id: any, name: string } }>, trainer_role_types: Array<{ __typename?: 'profile_trainer_role_type', trainer_role_type: { __typename?: 'trainer_role_type', id: any, name: string } }> } | null, certificates: Array<{ __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, participant?: { __typename?: 'course_participant', grade?: Grade_Enum | null } | null }>, upcomingCourses: Array<{ __typename?: 'course', id: number, level: Course_Level_Enum }> };
 
 export type GetProfilesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;

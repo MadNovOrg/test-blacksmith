@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import {
@@ -13,6 +14,7 @@ import {
   ParamsType,
   ResponseType,
 } from '@app/queries/courses/save-course-attendance'
+import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseAttendanceList } from '../CourseAttendanceList'
@@ -82,20 +84,38 @@ export const CourseAttendance = () => {
     setAttendanceSavingStatus(LoadingStatus.FETCHING)
 
     const attended: string[] = []
+    const attendedAudit: ParamsType['attendedAudit'] = []
     const notAttended: string[] = []
+    const notAttendedAudit: ParamsType['notAttendedAudit'] = []
 
     for (const id in attendanceRef.current) {
+      const participant = participantsData?.find(
+        p => p.id === id
+      ) as CourseParticipant
+
       if (attendanceRef.current[id]) {
         attended.push(id)
+        attendedAudit.push({
+          type: Course_Participant_Audit_Type_Enum.Attended,
+          profile_id: participant?.profile.id,
+          course_id: Number(courseId),
+        })
       } else {
         notAttended.push(id)
+        notAttendedAudit.push({
+          type: Course_Participant_Audit_Type_Enum.NotAttended,
+          profile_id: participant?.profile.id,
+          course_id: Number(courseId),
+        })
       }
     }
 
     try {
       await fetcher<ResponseType, ParamsType>(MUTATION, {
         attended,
+        attendedAudit,
         notAttended,
+        notAttendedAudit,
       })
 
       setAttendanceSavingStatus(LoadingStatus.SUCCESS)

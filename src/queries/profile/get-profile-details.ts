@@ -13,6 +13,35 @@ export const QUERY = gql`
     profile: profile_by_pk(id: $profileId) {
       ...Profile
 
+      participantAudits: participant_audits {
+        id
+        course_id
+        type
+        course {
+          name
+          status
+          dates: schedule_aggregate {
+            aggregate {
+              start: min {
+                date: start
+              }
+              end: max {
+                date: end
+              }
+            }
+          }
+        }
+      }
+
+      courses(where: { course: { status: { _eq: CANCELLED } } }) {
+        id
+        course {
+          id
+          name
+          status
+        }
+      }
+
       go1Licenses(where: { orgId: { _eq: $orgId } })
         @include(if: $withGo1Licenses) {
         id

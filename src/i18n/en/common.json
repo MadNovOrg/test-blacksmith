@@ -80,8 +80,10 @@
   "edit-profile": "Edit Profile",
   "personal-details": "Personal Details",
   "org-details": "Organisation Details",
+  "course-history-log": "Course History Log",
   "first-name": "First Name",
   "last-name": "Last Name",
+  "date": "Date",
   "dietary-restrictions": "Dietary restrictions",
   "dbs-label": "Disclosure and Barring Service (DBS) certificate number",
   "dbs": "Disclosure and Barring Service",
@@ -218,6 +220,13 @@
     "NOT_ATTENDED": "Unattended",
     "CANCELLATION_REQUESTED": "Cancellation requested",
     "TRAINER_MISSING": "Trainer missing"
+  },
+  "participant-audit-types": {
+    "ATTENDED": "Attended",
+    "CANCELLATION": "Cancellation",
+    "NOT_ATTENDED": "Not Attended",
+    "REPLACEMENT": "Replacement",
+    "TRANSFER": "Transfer"
   },
   "course-invite-status": {
     "PENDING": "Pending",

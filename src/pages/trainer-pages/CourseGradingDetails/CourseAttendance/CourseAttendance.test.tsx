@@ -212,7 +212,7 @@ describe('component: CourseAttendance', () => {
 
     useFetcherMock.mockReturnValue(fetcherMock)
 
-    const COURSE_ID = 'course-id'
+    const COURSE_ID = 10001
     const participants = [
       buildParticipant(),
       buildParticipant(),
@@ -251,7 +251,26 @@ describe('component: CourseAttendance', () => {
       MUTATION,
       {
         attended: [participants[1].id, participants[2].id],
+        attendedAudit: [
+          {
+            course_id: COURSE_ID,
+            profile_id: participants[1].profile.id,
+            type: 'ATTENDED',
+          },
+          {
+            course_id: COURSE_ID,
+            profile_id: participants[2].profile.id,
+            type: 'ATTENDED',
+          },
+        ],
         notAttended: [participants[0].id],
+        notAttendedAudit: [
+          {
+            course_id: COURSE_ID,
+            profile_id: participants[0].profile.id,
+            type: 'NOT_ATTENDED',
+          },
+        ],
       },
     ])
 
