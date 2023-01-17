@@ -299,6 +299,11 @@ enum TransferFeeTypeEnum {
   FREE
 }
 
+enum Go1ChangeError {
+  GENERIC_ERROR
+  INVOICE_NOT_AUTHORIZED
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -669,6 +674,7 @@ type XeroLineItem {
 
 type Go1LicensesChangeOutput {
   success: Boolean!
+  error: Go1ChangeError
 }
 
 type UpdateAvatarResponse {

@@ -2,39 +2,9 @@ import React from 'react'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { ManageLicensesForm, FormData, Type } from '.'
+import { fillForm } from '../../test-utils'
 
-function fillForm(data: Partial<FormData>) {
-  if (data.type === Type.REMOVE) {
-    userEvent.click(screen.getByLabelText('Remove'))
-  }
-
-  if (data.issueRefund) {
-    userEvent.click(screen.getByTestId('issue-refund-checkbox'))
-  }
-
-  if (data.amount) {
-    userEvent.type(
-      screen.getByLabelText('Number of licenses *'),
-      String(data.amount)
-    )
-  }
-
-  if (data.invoiceId) {
-    userEvent.type(screen.getByLabelText('Invoice number *'), data.invoiceId)
-  }
-
-  if (data.note) {
-    userEvent.type(screen.getByLabelText('Add a note (optional)'), data.note)
-  }
-
-  if (data.licensePrice) {
-    userEvent.type(
-      screen.getByLabelText('Price per license *'),
-      String(data.licensePrice)
-    )
-  }
-}
+import { ManageLicensesForm, Type } from '.'
 
 describe('component: ManageLicensesForm', () => {
   it('validates amount field to be a positive number', async () => {

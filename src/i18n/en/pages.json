@@ -1039,8 +1039,9 @@
         "manage-modal-title": "Manage licences",
         "manage-modal-description": "Add or remove number of licences for this organisation. Any modifications will be applied immediately.",
         "org-history-fetch-error": "There was an error loading organisation's licenses data",
-        "error-ADD-licenses": "There was an error adding licenses, please try again later.",
-        "error-REMOVE-licenses": "There was an error removing licenses, please try again later.",
+        "error-LICENSES_ADDED-licenses": "There was an error adding licenses, please try again later.",
+        "error-LICENSES_REMOVED-licenses": "There was an error removing licenses, please try again later.",
+        "error-invoice-not-authorized": "Invoice must be authorized in Xero before issuing a refund.",
         "form": {
           "add-radio-button-label": "Add",
           "remove-radio-button-label": "Remove",

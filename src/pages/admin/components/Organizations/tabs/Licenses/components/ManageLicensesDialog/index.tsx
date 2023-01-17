@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Dialog } from '@app/components/Dialog'
 import { useAuth } from '@app/context/auth'
 import {
+  Go1ChangeError,
   Go1ChangeType,
   Go1LicensesChangeInput,
   Go1LicensesChangeMutation,
@@ -67,7 +68,14 @@ export const ManageLicensesDialog: React.FC<Props> = ({
     if (response.go1LicensesChange?.success) {
       onSave()
     } else {
-      setErrorMessageLabel(`error-${mutationInput.type}-licenses`)
+      if (
+        response.go1LicensesChange?.error ===
+        Go1ChangeError.InvoiceNotAuthorized
+      ) {
+        setErrorMessageLabel(`error-invoice-not-authorized`)
+      } else {
+        setErrorMessageLabel(`error-${mutationInput.type}-licenses`)
+      }
     }
   }
 

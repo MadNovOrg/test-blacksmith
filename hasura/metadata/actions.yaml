@@ -438,6 +438,14 @@ custom_types:
         - value: FREE
           is_deprecated: null
           description: null
+    - name: Go1ChangeError
+      values:
+        - value: GENERIC_ERROR
+          is_deprecated: null
+          description: null
+        - value: INVOICE_NOT_AUTHORIZED
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput

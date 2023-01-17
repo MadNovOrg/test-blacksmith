@@ -2893,6 +2893,11 @@ export type GetTrainersLevelsInput = {
   trainerType: CourseTrainerType;
 };
 
+export enum Go1ChangeError {
+  GenericError = 'GENERIC_ERROR',
+  InvoiceNotAuthorized = 'INVOICE_NOT_AUTHORIZED'
+}
+
 export enum Go1ChangeType {
   LicensesAdded = 'LICENSES_ADDED',
   LicensesPurchased = 'LICENSES_PURCHASED',
@@ -2911,6 +2916,7 @@ export type Go1LicensesChangeInput = {
 
 export type Go1LicensesChangeOutput = {
   __typename?: 'Go1LicensesChangeOutput';
+  error?: Maybe<Go1ChangeError>;
   success: Scalars['Boolean'];
 };
 
@@ -37958,13 +37964,6 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
 
-export type GetCoursesCodeQueryVariables = Exact<{
-  ids: Array<Scalars['Int']> | Scalars['Int'];
-}>;
-
-
-export type GetCoursesCodeQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, course_code?: string | null }> };
-
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -38391,7 +38390,7 @@ export type Go1LicensesChangeMutationVariables = Exact<{
 }>;
 
 
-export type Go1LicensesChangeMutation = { __typename?: 'mutation_root', go1LicensesChange?: { __typename?: 'Go1LicensesChangeOutput', success: boolean } | null };
+export type Go1LicensesChangeMutation = { __typename?: 'mutation_root', go1LicensesChange?: { __typename?: 'Go1LicensesChangeOutput', success: boolean, error?: Go1ChangeError | null } | null };
 
 export type OrgLicensesWithHistoryQueryVariables = Exact<{
   id: Scalars['uuid'];
@@ -38862,7 +38861,7 @@ export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null } }> } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;
