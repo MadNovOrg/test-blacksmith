@@ -3,6 +3,7 @@ import {
   Button,
   Chip,
   Grid,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -176,7 +177,11 @@ export const CertificationList: React.FC<CertificationListProps> = ({
                 {checkbox.rowCell(p.id)}
 
                 {showCol('name') ? (
-                  <TableCell>{p.profile.fullName}</TableCell>
+                  <TableCell>
+                    <Link href={`/profile/${p.profile.id}`}>
+                      {p.profile.fullName}
+                    </Link>
+                  </TableCell>
                 ) : null}
 
                 {showCol('contact') ? (

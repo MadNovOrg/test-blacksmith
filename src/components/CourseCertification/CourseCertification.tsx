@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Link,
   Stack,
   Typography,
 } from '@mui/material'
@@ -370,12 +371,14 @@ export const CourseCertification: React.FC<CourseCertificationProps> = ({
                     gap={1}
                   >
                     <Avatar
-                      src={certificate.profile?.avatar}
-                      name={certificate.profile?.fullName}
+                      src={certificate.profile.avatar}
+                      name={certificate.profile.fullName}
                     />
-                    <Typography variant="body1">
-                      {certificate.profile?.fullName}
-                    </Typography>
+                    <Link href={`/profile/${certificate.profile.id}`}>
+                      <Typography variant="body1">
+                        {certificate.profile.fullName}
+                      </Typography>
+                    </Link>
                   </Box>
                 </Box>
               ) : null}

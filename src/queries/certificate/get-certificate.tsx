@@ -17,6 +17,7 @@ export const QUERY = gql`
       ...Certificate
       profile {
         fullName
+        id
         avatar
       }
       participant {
@@ -45,10 +46,6 @@ export const QUERY = gql`
             fullName
             avatar
           }
-        }
-        profile {
-          fullName
-          avatar
         }
       }
     }
