@@ -39,7 +39,7 @@ export const QUERY = gql`
       promoCodes
     }
 
-    order_aggregate {
+    order_aggregate(where: $where) {
       aggregate {
         count
       }
