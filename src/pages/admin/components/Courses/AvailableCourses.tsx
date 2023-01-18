@@ -225,21 +225,25 @@ export const AvailableCourses: React.FC = () => {
                 justifyContent="flex-end"
                 mb={2}
               >
-                <TextField
-                  select
-                  variant="standard"
-                  value={sortBy}
-                  onChange={event =>
-                    setSortBy(event.target.value as keyof typeof sortFunctions)
-                  }
-                  sx={{ minWidth: 130 }}
-                >
-                  {Object.keys(sortFunctions).map(mode => (
-                    <MenuItem key={mode} value={mode}>
-                      {t(`pages.available-courses.sorting.${mode}`)}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                {courses.length > 0 ? (
+                  <TextField
+                    select
+                    variant="standard"
+                    value={sortBy}
+                    onChange={event =>
+                      setSortBy(
+                        event.target.value as keyof typeof sortFunctions
+                      )
+                    }
+                    sx={{ minWidth: 130 }}
+                  >
+                    {Object.keys(sortFunctions).map(mode => (
+                      <MenuItem key={mode} value={mode}>
+                        {t(`pages.available-courses.sorting.${mode}`)}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                ) : null}
               </Box>
 
               {sortBy === 'distance-to-org' && id === ALL_ORGS ? (
