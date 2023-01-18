@@ -8,7 +8,6 @@ import {
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { differenceInCalendarMonths } from 'date-fns'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -34,10 +33,10 @@ import {
 import { useCourses } from '@app/hooks/useCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { AcceptDeclineCourse } from '@app/pages/trainer-pages/MyCourses/AcceptDeclineCourse'
 import { RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
-import { AcceptDeclineCourse } from './AcceptDeclineCourse'
 import {
   CoursesTable,
   CourseTitleCell,
@@ -69,10 +68,10 @@ export const TrainerCourses: React.FC<Props> = ({
 
   const actionableStatuses = useMemo(() => {
     if (activeRole) {
-      return getActionableStatuses(activeRole)
+      return [...getActionableStatuses(activeRole)]
     }
 
-    return new Set<Course_Status_Enum>()
+    return []
   }, [activeRole])
 
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
@@ -95,25 +94,13 @@ export const TrainerCourses: React.FC<Props> = ({
     { data: actionableCourses, fetching: fetchingActionableCourses },
     refetchActionableCourses,
   ] = useActionableCourses({
-    statuses: Array.from(actionableStatuses),
+    statuses: actionableStatuses,
     pagination: {
       perPage: actionablePerPage,
       currentPage: actionableCurrentPage,
     },
     orgId,
   })
-
-  const actionRequiredCourses = useMemo(
-    () =>
-      (actionableCourses?.courses ?? []).filter(course => {
-        const startDate = new Date(course.dates?.aggregate?.start?.date)
-        return (
-          course.status !== Course_Status_Enum.TrainerMissing ||
-          differenceInCalendarMonths(startDate, new Date()) < 1
-        )
-      }),
-    [actionableCourses]
-  )
 
   const filters = useMemo(() => {
     let startDate = undefined
@@ -220,7 +207,7 @@ export const TrainerCourses: React.FC<Props> = ({
                 <FilterCourseType onChange={setFilterType} />
                 <FilterCourseStatus
                   onChange={setFilterStatus}
-                  excludedStatuses={actionableStatuses}
+                  excludedStatuses={new Set(actionableStatuses)}
                 />
               </Stack>
             </Box>
@@ -254,14 +241,14 @@ export const TrainerCourses: React.FC<Props> = ({
             </Stack>
           ) : null}
 
-          {actionRequiredCourses.length ? (
+          {actionableCourses?.courses.length ? (
             <Box mb={3}>
               <Typography variant="h6" mb={1}>
                 {t('pages.my-courses.actionable-courses-title')}
               </Typography>
               <Box px={1} pb={1} bgcolor="grey.100" borderRadius={1}>
                 <CoursesTable
-                  courses={actionRequiredCourses}
+                  courses={actionableCourses?.courses}
                   hiddenColumns={new Set(['status'])}
                   data-testid="actionable-courses-table"
                   loading={fetchingActionableCourses}
@@ -299,6 +286,9 @@ export const TrainerCourses: React.FC<Props> = ({
                               onAcceptedOrDeclined(c, trainer, status)
                             }
                           />
+                        ) : null}
+                        {c.status === Course_Status_Enum.ApprovalPending ? (
+                          <CourseStatusChip status={c.status} hideIcon={true} />
                         ) : null}
                         {c.status === Course_Status_Enum.TrainerMissing ? (
                           <CourseStatusChip status={c.status} />

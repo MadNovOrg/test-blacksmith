@@ -25,7 +25,7 @@ type CoursesFilters = {
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
   statuses?: Course_Status_Enum[]
-  excludedStatuses?: Course_Status_Enum[]
+  excludedCourses?: number[]
   go1Integration?: boolean
   schedule?: {
     start?: Date
@@ -74,10 +74,9 @@ export const useCourses = (
       obj.status = { _in: filters.statuses }
     }
 
-    if (filters?.excludedStatuses?.length) {
-      obj.status = {
-        ...obj.status,
-        _nin: filters.excludedStatuses,
+    if (filters?.excludedCourses?.length) {
+      obj.id = {
+        _nin: filters.excludedCourses,
       }
     }
 

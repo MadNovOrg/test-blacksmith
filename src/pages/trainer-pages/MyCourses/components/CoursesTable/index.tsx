@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
-import { differenceInDays } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -240,25 +239,9 @@ export function DateCell({ date }: { date: Date }) {
 }
 
 export function StatusCell({ course }: { course: TableCourse }) {
-  const overMonthUntilCourseStart =
-    differenceInDays(
-      new Date(course?.dates?.aggregate?.start?.date),
-      new Date()
-    ) > 30
-
   return (
     <TableCell>
-      {course.status ? (
-        <CourseStatusChip
-          status={course.status}
-          color={
-            course.status === Course_Status_Enum.TrainerMissing &&
-            !overMonthUntilCourseStart
-              ? 'warning'
-              : undefined
-          }
-        />
-      ) : null}
+      {course.status ? <CourseStatusChip status={course.status} /> : null}
     </TableCell>
   )
 }

@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash-es'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
@@ -13,10 +12,10 @@ import {
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
   Order_By,
+  TrainerCourseFragment,
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { TrainerCourseFragment } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
@@ -25,7 +24,6 @@ import { Providers } from '@test/providers'
 
 import { buildTrainerCourse } from './test-utils'
 import { TrainerCourses } from './TrainerCourses'
-import { getActionableStatuses } from './utils'
 
 const { t } = getI18n()
 const blendedLearningLabel = t('common.blended-learning')
@@ -943,24 +941,13 @@ describe('trainers-pages/MyCourses', () => {
 
   it("doesn't display actionable courses table if there are no courses", async () => {
     const client = {
-      executeQuery: ({
-        variables,
-      }: {
-        variables: TrainerCoursesQueryVariables
-      }) => {
-        const coursesToReturn = isEqual(
-          variables.where?.status?._in,
-          Array.from(getActionableStatuses(RoleName.TT_ADMIN))
-        )
-          ? []
-          : [buildTrainerCourse()]
-
+      executeQuery: () => {
         return fromValue<{ data: TrainerCoursesQuery }>({
           data: {
-            courses: coursesToReturn,
+            courses: [],
             course_aggregate: {
               aggregate: {
-                count: coursesToReturn.length,
+                count: 0,
               },
             },
           },
@@ -1000,24 +987,13 @@ describe('trainers-pages/MyCourses', () => {
     })
 
     const client = {
-      executeQuery: ({
-        variables,
-      }: {
-        variables: TrainerCoursesQueryVariables
-      }) => {
-        const coursesToReturn = isEqual(
-          variables.where?.status?._in,
-          Array.from(getActionableStatuses(RoleName.TRAINER))
-        )
-          ? [actionableCourse]
-          : [buildTrainerCourse()]
-
+      executeQuery: () => {
         return fromValue<{ data: TrainerCoursesQuery }>({
           data: {
-            courses: coursesToReturn,
+            courses: [actionableCourse],
             course_aggregate: {
               aggregate: {
-                count: coursesToReturn.length,
+                count: 1,
               },
             },
           },

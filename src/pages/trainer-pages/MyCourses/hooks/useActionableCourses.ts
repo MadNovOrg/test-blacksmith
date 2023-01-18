@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns'
 import { useMemo } from 'react'
 import { useQuery } from 'urql'
 
@@ -25,7 +26,7 @@ export default function useActionableCourses({
   const { activeRole, profile, acl, organizationIds } = useAuth()
 
   const where = useMemo(() => {
-    let obj: Course_Bool_Exp = {}
+    const conditions: Course_Bool_Exp[] = []
     if (!activeRole) {
       return {}
     }
@@ -35,23 +36,47 @@ export default function useActionableCourses({
       const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
       const specificOrg = { organization: { id: { _eq: orgId } } }
       if (orgId === ALL_ORGS) {
-        obj = acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs
+        conditions.push(acl.isTTAdmin() ? allAvailableOrgs : onlyUserOrgs)
       } else {
-        obj = specificOrg
+        conditions.push(specificOrg)
       }
     }
 
-    obj.status = { _in: statuses }
+    let statusCondition: Course_Bool_Exp = {
+      status: {
+        _in: statuses.filter(s => s !== Course_Status_Enum.TrainerMissing),
+      },
+    }
+
+    if (statuses.indexOf(Course_Status_Enum.TrainerMissing) !== -1) {
+      statusCondition = {
+        _or: [
+          statusCondition,
+          {
+            _and: [
+              { status: { _eq: Course_Status_Enum.TrainerMissing } },
+              {
+                start: { _lte: addDays(new Date(), 30).toISOString() },
+              },
+            ],
+          },
+        ],
+      }
+    }
+
+    conditions.push(statusCondition)
 
     if (RoleName.TRAINER === activeRole) {
-      obj.trainers = {
-        status: { _eq: Course_Invite_Status_Enum.Pending },
-        profile_id: { _eq: profile?.id },
-      }
+      conditions.push({
+        trainers: {
+          status: { _eq: Course_Invite_Status_Enum.Pending },
+          profile_id: { _eq: profile?.id },
+        },
+      })
     }
 
-    return obj
-  }, [activeRole, statuses, profile, acl, organizationIds, orgId])
+    return { _and: conditions }
+  }, [acl, activeRole, orgId, organizationIds, profile, statuses])
 
   return useQuery<TrainerCoursesQuery, TrainerCoursesQueryVariables>({
     query: QUERY,

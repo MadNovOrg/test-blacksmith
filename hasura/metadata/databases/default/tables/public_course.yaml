@@ -149,6 +149,16 @@ computed_fields:
       function:
         schema: public
         name: course_code
+  - name: end
+    definition:
+      function:
+        schema: public
+        name: course_end_date
+  - name: start
+    definition:
+      function:
+        schema: public
+        name: course_start_date
 insert_permissions:
   - role: sales-admin
     permission:
@@ -258,6 +268,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter:
         _and:
           - course_type:
@@ -301,6 +313,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter:
         course_type:
           _eq: CLOSED
@@ -335,6 +349,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter:
         _or:
           - trainers:
@@ -403,6 +419,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -430,6 +448,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter:
         _and:
           - course_type:
@@ -472,6 +492,8 @@ select_permissions:
         - updated_at
       computed_fields:
         - course_code
+        - end
+        - start
       filter:
         _or:
           - participants:
