@@ -66,4 +66,5 @@ export type ACL = {
   canEditWithoutRestrictions: (courseType: CourseType) => boolean
   canViewResources: () => boolean
   canParticipateInCourses: () => boolean
+  canViewCourseHistory: () => boolean
 }

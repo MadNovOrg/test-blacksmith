@@ -38852,6 +38852,7 @@ export type GetProfileDetailsQueryVariables = Exact<{
   profileId: Scalars['uuid'];
   withGo1Licenses?: InputMaybe<Scalars['Boolean']>;
   orgId?: InputMaybe<Scalars['uuid']>;
+  withCourseHistory?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 

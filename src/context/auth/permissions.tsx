@@ -199,6 +199,9 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.TT_ADMIN, RoleName.USER, RoleName.TRAINER]
       return roles.some(r => r === auth.activeRole)
     },
+    canViewCourseHistory: () => {
+      return RoleName.TT_ADMIN === auth.activeRole
+    },
 
     canParticipateInCourses: () => {
       const roles = [RoleName.USER, RoleName.TRAINER]

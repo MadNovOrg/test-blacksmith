@@ -35,7 +35,8 @@ export type MissingCertificateInfo = {
 export default function useProfile(
   profileId?: string,
   courseId?: string,
-  orgId?: string
+  orgId?: string,
+  withCourseHistory = false
 ) {
   const fetcher = useFetcher()
 
@@ -45,7 +46,15 @@ export default function useProfile(
     [string, GetProfileDetailsQueryVariables] | null
   >(
     profileId
-      ? [QUERY, { profileId, withGo1Licenses: Boolean(orgId), orgId }]
+      ? [
+          QUERY,
+          {
+            profileId,
+            withGo1Licenses: Boolean(orgId),
+            orgId,
+            withCourseHistory,
+          },
+        ]
       : null
   )
 

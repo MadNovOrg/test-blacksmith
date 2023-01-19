@@ -9,11 +9,12 @@ export const QUERY = gql`
     $profileId: uuid!
     $withGo1Licenses: Boolean = false
     $orgId: uuid
+    $withCourseHistory: Boolean = false
   ) {
     profile: profile_by_pk(id: $profileId) {
       ...Profile
 
-      participantAudits: participant_audits {
+      participantAudits: participant_audits @include(if: $withCourseHistory) {
         id
         course_id
         type

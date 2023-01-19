@@ -48,7 +48,8 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
   const { profile, go1Licenses, certifications } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
-    orgId ?? undefined
+    orgId ?? undefined,
+    acl.canViewCourseHistory()
   )
 
   const isMyProfile = !id
@@ -284,7 +285,7 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {profile.participantAudits.map(row => {
+                {profile.participantAudits?.map(row => {
                   if (
                     row.type === Course_Participant_Audit_Type_Enum.Replacement
                   )
@@ -332,7 +333,8 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                   )
                 })}
 
-                {profile.participantAudits.length + profile.courses.length <
+                {(profile.participantAudits?.length ?? 0) +
+                  profile.courses.length <
                 1 ? (
                   <TableRow
                     sx={{
