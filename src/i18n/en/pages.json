@@ -75,20 +75,6 @@
   "account": {
     "title": "Account"
   },
-  "my-organization": {
-    "overview": {
-      "title": "Overview",
-      "organization-name": "Organisation Name",
-      "location": "Location",
-      "contact-name": "Contact Name",
-      "contact-email": "Contact Email",
-      "contact-number": "Contact Number",
-      "no-org-assigned": "No organizasion assigned to current user."
-    },
-    "profiles": {
-      "title": "Individual records"
-    }
-  },
   "membership": {
     "common": {
       "author": "by {{author}}"

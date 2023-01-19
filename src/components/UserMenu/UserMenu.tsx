@@ -1,7 +1,6 @@
 import AccountIcon from '@mui/icons-material/AccountCircle'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import OrgIcon from '@mui/icons-material/CorporateFare'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
@@ -79,20 +78,6 @@ export const UserMenu: React.FC = () => {
               primaryTypographyProps={{ variant: 'body2' }}
             >
               {t('verify')}
-            </ListItemText>
-          </MenuItem>
-        )}
-
-        {acl.canViewMyOrganization() && (
-          <MenuItem onClick={() => handleMenuClick('/my-organization')}>
-            <ListItemIcon>
-              <OrgIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              data-testid="my-org-link"
-              primaryTypographyProps={{ variant: 'body2' }}
-            >
-              {t('my-org')}
             </ListItemText>
           </MenuItem>
         )}
