@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   CircularProgress,
   Container,
   Stack,
@@ -287,11 +288,22 @@ export const TrainerCourses: React.FC<Props> = ({
                             }
                           />
                         ) : null}
-                        {c.status === Course_Status_Enum.ApprovalPending ? (
+                        {c.status &&
+                        [
+                          Course_Status_Enum.ApprovalPending,
+                          Course_Status_Enum.ExceptionsApprovalPending,
+                        ].indexOf(c.status) !== -1 ? (
                           <CourseStatusChip status={c.status} hideIcon={true} />
                         ) : null}
                         {c.status === Course_Status_Enum.TrainerMissing ? (
                           <CourseStatusChip status={c.status} />
+                        ) : null}
+                        {c.cancellationRequest ? (
+                          <Chip
+                            size="small"
+                            color="warning"
+                            label={t('common.cancellation-requested')}
+                          />
                         ) : null}
                       </TableCell>
                     </TableRow>

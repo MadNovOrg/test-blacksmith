@@ -75,7 +75,17 @@ export default function useActionableCourses({
       })
     }
 
-    return { _and: conditions }
+    const where = { _and: conditions }
+
+    const cancellationPendingCondition = {
+      cancellationRequest: {
+        id: { _is_null: false },
+      },
+    }
+
+    return acl.isTTAdmin()
+      ? { _or: [where, cancellationPendingCondition] }
+      : where
   }, [acl, activeRole, orgId, organizationIds, profile, statuses])
 
   return useQuery<TrainerCoursesQuery, TrainerCoursesQueryVariables>({

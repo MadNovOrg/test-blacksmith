@@ -66,6 +66,9 @@ export const QUERY = gql`
       }
       virtualLink
     }
+    cancellationRequest {
+      id
+    }
   }
 
   query TrainerCourses(

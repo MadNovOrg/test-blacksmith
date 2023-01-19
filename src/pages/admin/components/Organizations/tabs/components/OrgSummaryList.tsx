@@ -63,7 +63,7 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
                 {org?.id === orgId ? (
                   org?.name
                 ) : (
-                  <Link href={`../../${org?.id}`} variant="body2">
+                  <Link href={`/organisations/${org?.id}`} variant="body2">
                     {org?.name}
                   </Link>
                 )}

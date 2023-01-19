@@ -14,6 +14,7 @@ export function getActionableStatuses(
       return new Set([
         Course_Status_Enum.ApprovalPending,
         Course_Status_Enum.TrainerMissing,
+        Course_Status_Enum.ExceptionsApprovalPending,
       ])
     }
   }
