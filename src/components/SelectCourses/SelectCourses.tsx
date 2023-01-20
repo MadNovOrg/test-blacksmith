@@ -129,7 +129,8 @@ export const SelectCourses: React.FC<Props> = ({
                 <Typography variant="body2">
                   {t('dates.long', { date: c.schedule[0].start })}
                   <Box component="span" ml={3}>
-                    {c.schedule[0].venue.city}
+                    {c.schedule[0].venue?.city ??
+                      t(`course-delivery-type.${c.deliveryType}`)}
                   </Box>
                 </Typography>
               </Box>
