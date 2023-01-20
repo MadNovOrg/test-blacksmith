@@ -67,6 +67,7 @@ describe('component: ManageLicensesForm', () => {
         type: 'ADD',
         amount: 50,
         invoiceId,
+        licensePrice: null,
         issueRefund: false,
         note,
       })
@@ -132,6 +133,7 @@ describe('component: ManageLicensesForm', () => {
         amount: 50,
         invoiceId: '',
         issueRefund: false,
+        licensePrice: null,
         note,
       })
     })
@@ -182,5 +184,23 @@ describe('component: ManageLicensesForm', () => {
         screen.getByText(/maximum number of licenses to remove is 1/i)
       ).toBeInTheDocument()
     })
+  })
+
+  it('enables save button when issue refund is toggled', async () => {
+    render(<ManageLicensesForm currentBalance={10} />)
+
+    fillForm({ amount: 2, type: Type.REMOVE })
+
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('issue-refund-checkbox'))
+    })
+
+    expect(screen.getByText(/save details/i)).toBeDisabled()
+
+    await waitFor(() => {
+      userEvent.click(screen.getByTestId('issue-refund-checkbox'))
+    })
+
+    expect(screen.getByText(/save details/i)).toBeEnabled()
   })
 })

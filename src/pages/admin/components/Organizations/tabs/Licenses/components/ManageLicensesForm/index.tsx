@@ -11,8 +11,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React, { useEffect, useMemo } from 'react'
+import { TFunction } from 'i18next'
+import React, { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { InferType } from 'yup'
 
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
@@ -22,14 +24,41 @@ export enum Type {
   REMOVE = 'REMOVE',
 }
 
-export type FormData = {
-  amount: number
-  invoiceId?: string
-  issueRefund?: boolean
-  licensePrice?: number
-  note?: string
-  type: Type
+function schema(t: TFunction, currentBalance: number) {
+  return yup.object({
+    type: yup.mixed().oneOf(['ADD', 'REMOVE']),
+    amount: yup
+      .number()
+      .typeError(t('error-amount-positive'))
+      .positive(t('error-amount-positive'))
+      .when('type', {
+        is: (type: string) => type === 'REMOVE',
+        then: schema =>
+          schema.max(currentBalance, value =>
+            t('error-amount-max', { max: value.max })
+          ),
+      })
+      .required(t('erorr-amount-required')),
+    note: yup.string(),
+    issueRefund: yup.bool(),
+    invoiceId: yup.string().when(['type', 'issueRefund'], {
+      is: (type: string, issueRefund: boolean) =>
+        type === Type.ADD || issueRefund === true,
+      then: schema => schema.required(t('error-invoice-required')),
+    }),
+    licensePrice: yup
+      .number()
+      .nullable(true)
+      .typeError(t('error-license-price-positive'))
+      .positive(t('error-license-price-positive'))
+      .when('issueRefund', {
+        is: true,
+        then: schema => schema.required(t('error-license-price-required')),
+      }),
+  })
 }
+
+export type FormData = InferType<ReturnType<typeof schema>>
 
 type Props = {
   onSave?: (data: FormData) => void
@@ -46,41 +75,6 @@ export const ManageLicensesForm: React.FC<Props> = ({
 }) => {
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses.form')
 
-  const schema = useMemo(
-    () =>
-      yup.object({
-        type: yup.mixed().oneOf(['ADD', 'REMOVE']),
-        amount: yup
-          .number()
-          .typeError(t('error-amount-positive'))
-          .positive(t('error-amount-positive'))
-          .when('type', {
-            is: (type: string) => type === 'REMOVE',
-            then: schema =>
-              schema.max(currentBalance, value =>
-                t('error-amount-max', { max: value.max })
-              ),
-          })
-          .required(t('erorr-amount-required')),
-        note: yup.string(),
-        issueRefund: yup.bool(),
-        invoiceId: yup.string().when(['type', 'issueRefund'], {
-          is: (type: string, issueRefund: boolean) =>
-            type === Type.ADD || issueRefund === true,
-          then: schema => schema.required(t('error-invoice-required')),
-        }),
-        licensePrice: yup
-          .number()
-          .typeError(t('error-license-price-positive'))
-          .positive(t('error-license-price-positive'))
-          .when('issueRefund', {
-            is: true,
-            then: schema => schema.required(t('error-license-price-required')),
-          }),
-      }),
-    [t, currentBalance]
-  )
-
   const {
     handleSubmit,
     register,
@@ -90,13 +84,13 @@ export const ManageLicensesForm: React.FC<Props> = ({
     setValue,
     resetField,
   } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema(t, currentBalance)),
     mode: 'onChange',
     defaultValues: {
       amount: undefined,
       invoiceId: '',
       note: '',
-      licensePrice: undefined,
+      licensePrice: null,
       type: Type.ADD,
       issueRefund: false,
     },

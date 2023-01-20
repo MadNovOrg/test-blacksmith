@@ -46,7 +46,7 @@ export const ManageLicensesDialog: React.FC<Props> = ({
     setSaving(true)
 
     const mutationInput: Go1LicensesChangeInput = {
-      type: formTypeEventMap[data.type],
+      type: formTypeEventMap[data.type as Type],
       amount: Number(data.amount),
       payload: {
         ...(data.invoiceId ? { invoiceId: data.invoiceId } : null),
