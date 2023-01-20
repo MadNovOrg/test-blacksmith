@@ -1,4 +1,5 @@
 import { Alert, CircularProgress, Stack } from '@mui/material'
+import { round } from 'lodash'
 import React, {
   useCallback,
   useContext,
@@ -254,8 +255,11 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
 
     const paymentProcessingFee =
       booking.paymentMethod === PaymentMethod.Cc
-        ? stripeProcessingFeeRate.percent * amountDue +
-          stripeProcessingFeeRate.flat
+        ? round(
+            stripeProcessingFeeRate.percent * subtotalDiscounted +
+              stripeProcessingFeeRate.flat,
+            2
+          ) // Round cent precision
         : 0
 
     const total = amountDue + paymentProcessingFee
