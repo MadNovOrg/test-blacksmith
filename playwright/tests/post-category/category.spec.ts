@@ -28,7 +28,9 @@ test('displays category title and posts that belong to the category', async ({
   category,
 }) => {
   await page.goto(`${BASE_URL}/membership/term/${category?.id}`)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
+
+  await expect(page.locator('.MuiGrid-container')).not.toBeEmpty()
 
   category?.posts?.nodes?.map(async post => {
     await expect(

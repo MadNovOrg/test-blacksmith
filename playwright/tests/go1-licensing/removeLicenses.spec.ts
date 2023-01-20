@@ -30,7 +30,7 @@ test.use({ storageState: stateFilePath('admin') })
 
 test('licenses can be removed', async ({ page, orgId }) => {
   await page.goto(`${BASE_URL}/organisations/${orgId}`)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   await page.click('button:has-text("Blended learning licences")')
 

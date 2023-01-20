@@ -9,7 +9,7 @@ export class BasePage {
 
   async goto(url: string, mandatoryElement: Locator, timeout = 30000) {
     await this.page.goto(url)
-    await this.page.waitForLoadState()
+    await this.page.waitForLoadState('domcontentloaded')
     await mandatoryElement.waitFor({ timeout })
   }
 

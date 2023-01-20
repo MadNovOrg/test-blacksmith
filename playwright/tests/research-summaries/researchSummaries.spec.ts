@@ -24,7 +24,7 @@ test('displays research summaries with featured and grid display', async ({
   researchSummaries,
 }) => {
   await page.goto(`${BASE_URL}/membership/research-summaries`)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   const featuredResearchSummary = page.locator(
     '[data-testid="featured-research-summary"] img'
@@ -62,8 +62,7 @@ test('displays research summaries with featured and grid display', async ({
   ])
 
   const path = await donwload.path()
-
-  test.expect(path).toBeTruthy() // to be downloaded basically
+  test.expect(path).toBeTruthy()
 
   if (researchSummaries.length > PER_PAGE) {
     test

@@ -37,6 +37,7 @@ test('displays video item details and recent items', async ({ page, data }) => {
 
   const ytFrame = page.frameLocator(`#yt-embed-${data.videoItem.id}`)
 
+  await ytFrame.locator('.ytp-cued-thumbnail-overlay').isVisible()
   await ytFrame.locator('[aria-label="Play"]').click()
 
   data.recentItems.map(recentItem => {

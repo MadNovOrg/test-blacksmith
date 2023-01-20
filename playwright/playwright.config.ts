@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
   use: {
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    video: 'on',
+    video: 'retain-on-failure',
     timezoneId: 'UTC',
   },
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
