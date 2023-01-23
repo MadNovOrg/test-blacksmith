@@ -25,7 +25,23 @@ object_relationships:
         column_mapping:
           id: invite_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
   - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
+  - role: tt-ops
     permission:
       check: {}
       columns:
@@ -104,6 +120,14 @@ select_permissions:
                 _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - email
+        - status
+      filter: {}
+      check: {}
   - role: tt-admin
     permission:
       columns:
@@ -137,6 +161,9 @@ update_permissions:
       check: null
 delete_permissions:
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}
   - role: user
