@@ -86,20 +86,26 @@ export const makeSchema = (t: TFunction) =>
                 ),
               otherwise: s => s.optional(),
             }),
+          accommodationRequired: yup.boolean(),
           accommodationNights: yup
             .number()
             .integer()
-            .min(
-              1,
-              t('pages.create-course.trainer-expenses.num-error', {
-                min: 1,
-              })
-            )
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', {
                 min: 1,
               })
-            ),
+            )
+            .when('accommodationRequired', (accommodationRequired, s) => {
+              if (accommodationRequired) {
+                return s.min(
+                  1,
+                  t('pages.create-course.trainer-expenses.num-error', {
+                    min: 1,
+                  })
+                )
+              }
+              return s
+            }),
           accommodationCost: yup
             .number()
             .min(
@@ -324,13 +330,19 @@ export const TrainerExpenses: React.FC<Props> = ({
                     control={
                       <Switch
                         onChange={e => {
+                          setValue(
+                            `transport.${idx}.accommodationRequired`,
+                            e.target.checked
+                          )
                           if (e.target.checked) {
-                            entry.accommodationNights = 1
-                            entry.accommodationCost =
+                            setValue(`transport.${idx}.accommodationNights`, 1)
+                            setValue(
+                              `transport.${idx}.accommodationCost`,
                               DEFAULT_ACCOMMODATION_COST_PER_NIGHT
+                            )
                           } else {
-                            entry.accommodationNights = 0
-                            entry.accommodationCost = 0
+                            setValue(`transport.${idx}.accommodationNights`, 0)
+                            setValue(`transport.${idx}.accommodationCost`, 0)
                           }
 
                           const currentDisplay = { ...displayAccommodation }

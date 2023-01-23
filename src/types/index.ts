@@ -644,6 +644,7 @@ export type ExpensesInput = {
     method: TransportMethod
     value?: number
     flightDays?: number
+    accommodationRequired?: boolean
     accommodationNights?: number
     accommodationCost?: number
   }>
