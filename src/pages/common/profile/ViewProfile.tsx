@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -300,7 +301,11 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
                         },
                       }}
                     >
-                      <TableCell>{row.course.name}</TableCell>
+                      <TableCell>
+                        <Link href={`/courses/${row.course_id}/details`}>
+                          {row.course.name}
+                        </Link>
+                      </TableCell>
                       <TableCell>
                         {t(`participant-audit-types.${row.type}`)}
                       </TableCell>
