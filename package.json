@@ -108,7 +108,7 @@
     "@types/autosuggest-highlight": "^3.2.0",
     "@types/file-saver": "^2.0.5",
     "@types/google.maps": "^3.48.7",
-    "@types/jest": "^29.2.4",
+    "@types/jest": "^29.2.6",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.11.18",
     "@types/react": "^17.0.45",
