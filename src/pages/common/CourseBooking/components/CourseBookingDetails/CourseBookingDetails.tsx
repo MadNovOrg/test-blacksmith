@@ -253,12 +253,17 @@ export const CourseBookingDetails: React.FC = () => {
             </Box>
           ) : null}
 
-          <Box mt={2} display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">{t('subtotal')}</Typography>
-            <Typography color="grey.700">
-              {formatCurrency(amounts.subtotal)}
-            </Typography>
-          </Box>
+          {booking.courseType !== CourseType.CLOSED ? (
+            <Box>
+              <PromoCode
+                codes={booking.promoCodes}
+                discounts={booking.discounts}
+                courseId={course.id}
+                onAdd={addPromo}
+                onRemove={removePromo}
+              />
+            </Box>
+          ) : null}
 
           {booking.freeSpaces > 0 ? (
             <Box display="flex" justifyContent="space-between" mb={1}>
@@ -271,17 +276,12 @@ export const CourseBookingDetails: React.FC = () => {
             </Box>
           ) : null}
 
-          {booking.courseType !== CourseType.CLOSED ? (
-            <Box>
-              <PromoCode
-                codes={booking.promoCodes}
-                discounts={booking.discounts}
-                courseId={course.id}
-                onAdd={addPromo}
-                onRemove={removePromo}
-              />
-            </Box>
-          ) : null}
+          <Box mt={2} display="flex" justifyContent="space-between" mb={1}>
+            <Typography color="grey.700">{t('subtotal')}</Typography>
+            <Typography color="grey.700">
+              {formatCurrency(amounts.subtotalDiscounted)}
+            </Typography>
+          </Box>
 
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">

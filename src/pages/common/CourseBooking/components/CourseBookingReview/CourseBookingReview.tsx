@@ -213,12 +213,6 @@ export const CourseBookingReview: React.FC = () => {
           </Box>
         ) : null}
         <Divider sx={{ my: 2 }} />
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">{t('subtotal')}</Typography>
-          <Typography color="grey.700">
-            {formatCurrency(amounts.subtotal)}
-          </Typography>
-        </Box>
         {booking.promoCodes.map(code => (
           <Box key={code} display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">
@@ -242,6 +236,21 @@ export const CourseBookingReview: React.FC = () => {
             </Typography>
           </Box>
         ) : null}
+        <Box display="flex" justifyContent="space-between" mb={1}>
+          <Typography color="grey.700">{t('subtotal')}</Typography>
+          <Typography color="grey.700">
+            {formatCurrency(amounts.subtotalDiscounted)}
+          </Typography>
+        </Box>
+        <Divider sx={{ my: 2 }} />
+        <Box display="flex" justifyContent="space-between" mb={1}>
+          <Typography color="grey.700">
+            {t('custom-vat', { amount: booking.vat })}
+          </Typography>
+          <Typography color="grey.700">
+            {formatCurrency(amounts.vat)}
+          </Typography>
+        </Box>
         {amounts.paymentProcessingFee > 0 ? (
           <Box display="flex" justifyContent="space-between" mb={1}>
             <Typography color="grey.700">
@@ -252,15 +261,6 @@ export const CourseBookingReview: React.FC = () => {
             </Typography>
           </Box>
         ) : null}
-        <Divider sx={{ my: 2 }} />
-        <Box display="flex" justifyContent="space-between" mb={1}>
-          <Typography color="grey.700">
-            {t('custom-vat', { amount: booking.vat })}
-          </Typography>
-          <Typography color="grey.700">
-            {formatCurrency(amounts.vat)}
-          </Typography>
-        </Box>
         <Divider sx={{ my: 2 }} />
         <Box display="flex" justifyContent="space-between" mb={1}>
           <Typography fontWeight="500">

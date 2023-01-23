@@ -190,20 +190,6 @@ Object {
             </p>
           </div>
           <div
-            class="MuiBox-root css-1gy2hxq"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              Subtotal
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              £240.00
-            </p>
-          </div>
-          <div
             class="MuiBox-root css-3mllz6"
           >
             <p
@@ -215,6 +201,20 @@ Object {
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
               -£40.00
+            </p>
+          </div>
+          <div
+            class="MuiBox-root css-1gy2hxq"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Subtotal
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              £200.00
             </p>
           </div>
           <div
@@ -1119,20 +1119,6 @@ After you confirm your order you will be taken to a secure page where you can pa
           </p>
         </div>
         <div
-          class="MuiBox-root css-1gy2hxq"
-        >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            Subtotal
-          </p>
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            £240.00
-          </p>
-        </div>
-        <div
           class="MuiBox-root css-3mllz6"
         >
           <p
@@ -1144,6 +1130,20 @@ After you confirm your order you will be taken to a secure page where you can pa
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
             -£40.00
+          </p>
+        </div>
+        <div
+          class="MuiBox-root css-1gy2hxq"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Subtotal
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            £200.00
           </p>
         </div>
         <div
@@ -2100,20 +2100,6 @@ Object {
             </p>
           </div>
           <div
-            class="MuiBox-root css-1gy2hxq"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              Subtotal
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-            >
-              £60.00
-            </p>
-          </div>
-          <div
             class="MuiBox-root css-0"
           >
             <div
@@ -2137,6 +2123,20 @@ Object {
                 </button>
               </div>
             </div>
+          </div>
+          <div
+            class="MuiBox-root css-1gy2hxq"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              Subtotal
+            </p>
+            <p
+              class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+            >
+              £60.00
+            </p>
           </div>
           <div
             class="MuiBox-root css-3mllz6"
@@ -2980,20 +2980,6 @@ After you confirm your order you will be taken to a secure page where you can pa
           </p>
         </div>
         <div
-          class="MuiBox-root css-1gy2hxq"
-        >
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            Subtotal
-          </p>
-          <p
-            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
-          >
-            £60.00
-          </p>
-        </div>
-        <div
           class="MuiBox-root css-0"
         >
           <div
@@ -3017,6 +3003,20 @@ After you confirm your order you will be taken to a secure page where you can pa
               </button>
             </div>
           </div>
+        </div>
+        <div
+          class="MuiBox-root css-1gy2hxq"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            Subtotal
+          </p>
+          <p
+            class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
+          >
+            £60.00
+          </p>
         </div>
         <div
           class="MuiBox-root css-3mllz6"

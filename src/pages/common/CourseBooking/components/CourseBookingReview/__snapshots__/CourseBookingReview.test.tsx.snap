@@ -249,12 +249,12 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              Subtotal
+              Free spaces
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              £240.00
+              -£40.00
             </p>
           </div>
           <div
@@ -263,12 +263,12 @@ Object {
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              Free spaces
+              Subtotal
             </p>
             <p
               class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
             >
-              -£40.00
+              £200.00
             </p>
           </div>
           <hr
@@ -632,12 +632,12 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Subtotal
+            Free spaces
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            £240.00
+            -£40.00
           </p>
         </div>
         <div
@@ -646,12 +646,12 @@ Object {
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            Free spaces
+            Subtotal
           </p>
           <p
             class="MuiTypography-root MuiTypography-body1 css-g4enr8-MuiTypography-root"
           >
-            -£40.00
+            £200.00
           </p>
         </div>
         <hr
