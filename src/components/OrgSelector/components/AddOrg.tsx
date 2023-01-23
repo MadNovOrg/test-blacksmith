@@ -177,6 +177,7 @@ export const AddOrg: React.FC<Props> = function ({
             inputProps={{ 'data-testid': 'org-name' }}
             autoFocus
             fullWidth
+            required
           />
         </Box>
 
@@ -237,6 +238,7 @@ export const AddOrg: React.FC<Props> = function ({
             inputProps={{ 'data-testid': 'addr-line1' }}
             autoFocus
             fullWidth
+            required
           />
         </Box>
 
@@ -265,6 +267,7 @@ export const AddOrg: React.FC<Props> = function ({
             {...register('city')}
             inputProps={{ 'data-testid': 'city' }}
             fullWidth
+            required
           />
         </Box>
 
@@ -279,6 +282,7 @@ export const AddOrg: React.FC<Props> = function ({
             {...register('country')}
             inputProps={{ 'data-testid': 'country' }}
             fullWidth
+            required
           />
         </Box>
 
@@ -293,6 +297,7 @@ export const AddOrg: React.FC<Props> = function ({
             {...register('postCode')}
             inputProps={{ 'data-testid': 'postCode' }}
             fullWidth
+            required
           />
         </Box>
 
