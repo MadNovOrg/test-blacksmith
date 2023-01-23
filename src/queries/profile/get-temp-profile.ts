@@ -1,6 +1,12 @@
 import { gql } from 'graphql-request'
 
-import { Course, CourseExpenseData, CourseType, Venue } from '@app/types'
+import {
+  Course,
+  CourseExpenseData,
+  CourseType,
+  Venue,
+  CourseLevel,
+} from '@app/types'
 
 import { COURSE_DATES, VENUE } from '../fragments'
 
@@ -10,6 +16,7 @@ export type ResponseType = {
       id: number
       name: string
       dates: Course['dates']
+      level: CourseLevel
       maxParticipants: number
       participants: {
         aggregate: {
@@ -52,6 +59,7 @@ export const QUERY = gql`
           }
         }
         type
+        level
         freeSpaces
         expenses {
           id

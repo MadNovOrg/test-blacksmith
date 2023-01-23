@@ -67,7 +67,19 @@
     "promo-codes-not-applicable": "Promo codes not applicable: {{codes}}",
     "due-immediately": "Due immediately",
     "error-creating-order": "There was an error placing the order.",
-    "venue": "Venue"
+    "venue": "Venue",
+    "attendee-with-valid-certificate": {
+      "message": "I confirm the $t(pages.book-course.attendee-with-valid-certificate.attendees, {\"count\": {{attendees}} }) a valid Team Teach {{- levels}} $t(pages.book-course.attendee-with-valid-certificate.certificates, {\"count\": {{certificates}} })",
+      "attendees_one": "attendee holds",
+      "attendees_other": "attendees hold",
+      "certificates_one": "certificate",
+      "certificates_other": "certificates",
+      "levels": {
+        "advanced": "$t(certificates.level-two)",
+        "intermediate-trainer": "$t(certificates.level-one)/$t(certificates.level-two)",
+        "advanced-trainer": "$t(certificates.level-one)/$t(certificates.level-two) & $t(certificates.advanced)"
+      }
+    }
   },
   "home": {
     "title": "Home"

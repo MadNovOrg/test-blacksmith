@@ -16,11 +16,18 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Checkbox,
   Typography,
 } from '@mui/material'
 import { map } from 'lodash-es'
-import React, { useEffect, useMemo } from 'react'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
+import React, { useEffect, useMemo, useCallback } from 'react'
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  Control,
+  FieldErrors,
+} from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -31,11 +38,95 @@ import {
 import { OrgSelector } from '@app/components/OrgSelector'
 import { PaymentMethod } from '@app/generated/graphql'
 import { yup } from '@app/schemas'
-import { CourseType, InvoiceDetails } from '@app/types'
+import { CourseType, InvoiceDetails, CourseLevel } from '@app/types'
 import { getFieldError, requiredMsg } from '@app/util'
 
 import { Sector, useBooking } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
+
+export type AttendeeValidCertificateProps = {
+  control: Control<FormInputs>
+  errors: FieldErrors
+  courseLevel: CourseLevel
+  totalAttendees: number
+}
+
+const AttendeeValidCertificate: React.FC<AttendeeValidCertificateProps> = ({
+  control,
+  courseLevel,
+  totalAttendees,
+  errors,
+}) => {
+  const { t } = useTranslation()
+  const showAttendeeTranslationOptions = useCallback(
+    (courseLevel: CourseLevel, attendees: number) => {
+      switch (courseLevel) {
+        case CourseLevel.Advanced:
+          return {
+            attendees,
+            certificates: 1,
+            levels: t(
+              'pages.book-course.attendee-with-valid-certificate.levels.advanced'
+            ),
+          }
+        case CourseLevel.IntermediateTrainer:
+          return {
+            attendees,
+            certificates: 2,
+            levels: t(
+              'pages.book-course.attendee-with-valid-certificate.levels.intermediate-trainer'
+            ),
+          }
+        case CourseLevel.AdvancedTrainer:
+          return {
+            attendees,
+            certificates: 3,
+            levels: t(
+              'pages.book-course.attendee-with-valid-certificate.levels.advanced-trainer'
+            ),
+          }
+        default:
+          return {}
+      }
+    },
+    [t]
+  )
+
+  return (
+    <Controller
+      control={control}
+      name="attendeeValidCertificate"
+      render={({ field }) => (
+        <Box bgcolor="common.white" pt={2}>
+          <FormControlLabel
+            {...field}
+            control={<Checkbox />}
+            label={
+              <Typography color="grey.700">
+                {t(
+                  'pages.book-course.attendee-with-valid-certificate.message',
+                  showAttendeeTranslationOptions(courseLevel, totalAttendees)
+                )}
+              </Typography>
+            }
+          />
+          {errors.attendeeValidCertificate?.message && (
+            <FormHelperText error>
+              {errors.attendeeValidCertificate?.message}
+            </FormHelperText>
+          )}
+        </Box>
+      )}
+    />
+  )
+}
+
+const isAttendeeValidCertificateMandatory = (courseLevel: CourseLevel) =>
+  [
+    CourseLevel.Advanced,
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.AdvancedTrainer,
+  ].includes(courseLevel)
 
 type FormInputs = {
   quantity: number
@@ -48,6 +139,9 @@ type FormInputs = {
   paymentMethod: PaymentMethod
 
   invoiceDetails?: InvoiceDetails
+
+  courseLevel: CourseLevel
+  attendeeValidCertificate?: boolean
 }
 
 export const CourseBookingDetails: React.FC = () => {
@@ -115,6 +209,15 @@ export const CourseBookingDetails: React.FC = () => {
         is: PaymentMethod.Invoice,
         then: invoiceDetailsFormSchema(t),
       }),
+
+      courseLevel: yup.string(),
+      attendeeValidCertificate: yup.boolean().when('courseLevel', {
+        is: isAttendeeValidCertificateMandatory,
+        then: yup
+          .boolean()
+          .oneOf([true], t('validation-errors.this-field-is-required')),
+        otherwise: yup.boolean(),
+      }),
     })
   }, [t])
 
@@ -130,6 +233,8 @@ export const CourseBookingDetails: React.FC = () => {
       otherPosition: booking.otherPosition,
       paymentMethod: PaymentMethod.Invoice,
       invoiceDetails: booking.invoiceDetails,
+      courseLevel: course.level,
+      attendeeValidCertificate: false,
     },
   })
 
@@ -177,6 +282,10 @@ export const CourseBookingDetails: React.FC = () => {
     })
     setValue('emails', processed, { shouldValidate: isSubmitted })
   }
+
+  const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
+    course.level
+  )
 
   return (
     <FormProvider {...methods}>
@@ -457,6 +566,15 @@ export const CourseBookingDetails: React.FC = () => {
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {t('pages.book-course.repeat-own-email')}
           </Alert>
+
+          {showAttendeeValidCertificate && (
+            <AttendeeValidCertificate
+              control={control}
+              errors={errors}
+              courseLevel={course.level}
+              totalAttendees={values.quantity}
+            />
+          )}
         </Box>
 
         <Typography variant="subtitle1" fontWeight="500">
