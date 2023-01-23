@@ -86,7 +86,7 @@ export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
                 <Button
                   variant="contained"
                   startIcon={<PersonAddIcon />}
-                  onClick={() => navigate('../invite')}
+                  onClick={() => navigate(`/organisations/${orgId}/invite`)}
                 >
                   {t(
                     'pages.org-details.tabs.users.invite-individual-to-organization'
