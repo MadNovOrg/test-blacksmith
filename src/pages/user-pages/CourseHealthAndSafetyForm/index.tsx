@@ -152,7 +152,7 @@ export const CourseHealthAndSafetyForm = () => {
               onFocus={() => setHasFocus(true)}
               onBlur={() => setHasFocus(false)}
               helperText={
-                !hasFocus && incorrectSignature
+                !hasFocus && incorrectSignature && Boolean(signature)
                   ? t('pages.hs-form.incorrect-signature')
                   : ''
               }
