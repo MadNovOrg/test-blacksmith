@@ -693,7 +693,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     <TextField
                       id="firstName"
                       label={t('first-name')}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('first-name-placeholder')}
                       error={!!errors.firstName}
                       helperText={errors.firstName?.message}
@@ -707,7 +707,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     <TextField
                       id="surname"
                       label={t('surname')}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('surname-placeholder')}
                       error={!!errors.surname}
                       helperText={errors.surname?.message}
@@ -722,7 +722,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                   <TextField
                     id="email"
                     label={t('email')}
-                    variant="standard"
+                    variant="filled"
                     value={profile.email}
                     inputProps={{ 'data-testid': 'email' }}
                     disabled
@@ -735,7 +735,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     <TextField
                       id="phone"
                       label={t('phone')}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('phone-placeholder')}
                       error={!!errors.phone}
                       helperText={errors.phone?.message}
@@ -757,7 +757,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                           <TextField
                             {...params}
                             label={t('dob')}
-                            variant="standard"
+                            variant="filled"
                             fullWidth
                           />
                         )}
@@ -768,7 +768,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     <TextField
                       id="job-title"
                       label={t('job-title')}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('job-title-placeholder')}
                       error={!!errors.jobTitle}
                       helperText={errors.jobTitle?.message}
@@ -784,7 +784,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                     <TextField
                       id="dbs"
                       label={t('dbs-label')}
-                      variant="standard"
+                      variant="filled"
                       error={!!errors.dbs}
                       helperText={errors.dbs?.message}
                       {...register('dbs')}
@@ -830,7 +830,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                             setValue('dietaryRestrictions', event.target.value)
                           }
                           label={t('dietary-restrictions-text-label')}
-                          variant="standard"
+                          variant="filled"
                           fullWidth
                           required
                           error={!!errors.dietaryRestrictions}
@@ -885,7 +885,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                             setValue('disabilities', event.target.value)
                           }
                           label={t('disabilities-text-label')}
-                          variant="standard"
+                          variant="filled"
                           fullWidth
                           required
                           error={!!errors.disabilities}
@@ -981,7 +981,7 @@ export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
                               <TextField
                                 {...params}
                                 fullWidth
-                                variant="standard"
+                                variant="filled"
                                 label={t('common.position')}
                                 inputProps={{
                                   ...params.inputProps,
