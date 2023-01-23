@@ -44,7 +44,7 @@ export const CourseHealthAndSafetyForm = () => {
   const [signature, setSignature] = useState('')
   const [hasFocus, setHasFocus] = useState(false)
 
-  const incorrectSignature = signature && signature !== profile?.fullName
+  const incorrectSignature = signature !== profile?.fullName
   const valid = healthCheck && riskCheck && !incorrectSignature
 
   const handleSubmit = async () => {
@@ -146,7 +146,9 @@ export const CourseHealthAndSafetyForm = () => {
               fullWidth
               value={signature}
               variant="filled"
-              error={!hasFocus && Boolean(incorrectSignature)}
+              error={
+                !hasFocus && Boolean(incorrectSignature) && Boolean(signature)
+              }
               onFocus={() => setHasFocus(true)}
               onBlur={() => setHasFocus(false)}
               helperText={
