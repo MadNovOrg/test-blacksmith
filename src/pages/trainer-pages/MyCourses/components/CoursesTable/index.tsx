@@ -3,6 +3,7 @@ import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody/TableBody'
 import TableCell from '@mui/material/TableCell'
+import { TableCellProps } from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import React, { useMemo } from 'react'
@@ -53,6 +54,7 @@ export const CoursesTable: React.FC<Props> = ({
         id: 'trainers',
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
+        align: 'center',
       },
       {
         id: 'registrants',
@@ -257,6 +259,11 @@ export type Cols =
   | 'status'
   | 'actions'
 
-export type ColHead = { id: Cols; label: string; sorting?: boolean }
+export type ColHead = {
+  id: Cols
+  label: string
+  sorting?: boolean
+  align?: TableCellProps['align']
+}
 
 export type TableCourse = TrainerCoursesQuery['courses'][0]

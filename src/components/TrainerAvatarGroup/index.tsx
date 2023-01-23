@@ -84,9 +84,7 @@ export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
 
   const sortedTrainers = trainers.slice().sort(sortTrainers)
 
-  return sortedTrainers.length === 1 ? (
-    trainerAvatar(sortedTrainers[0], 1)
-  ) : (
+  return (
     <AvatarGroup sx={{ justifyContent: 'center' }}>
       {sortedTrainers.map(trainerAvatar)}
     </AvatarGroup>

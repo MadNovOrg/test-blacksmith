@@ -48,12 +48,16 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
           >
             <TableCell>{t('common.organization')}</TableCell>
             <TableCell>{t('common.city')}</TableCell>
-            <TableCell>{t('common.individuals')}</TableCell>
-            <TableCell>{t('common.certification-status.active')}</TableCell>
-            <TableCell>
+            <TableCell align="center">{t('common.individuals')}</TableCell>
+            <TableCell align="center">
+              {t('common.certification-status.active')}
+            </TableCell>
+            <TableCell align="center">
               {t('common.certification-status.expiring_soon')}
             </TableCell>
-            <TableCell>{t('common.certification-status.expired')}</TableCell>
+            <TableCell align="center">
+              {t('common.certification-status.expired')}
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,6 +77,7 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
                 <AvatarGroup
                   max={4}
                   sx={{
+                    justifyContent: 'center',
                     '& .MuiAvatar-root': {
                       width: 32,
                       height: 32,
