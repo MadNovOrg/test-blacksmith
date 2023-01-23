@@ -26,6 +26,7 @@ export function getLevels(courseType: CourseType) {
     [CourseType.OPEN]: () => {
       return [
         CourseLevel.Level_1,
+        CourseLevel.Level_2,
         CourseLevel.IntermediateTrainer,
         CourseLevel.AdvancedTrainer,
       ]
@@ -63,11 +64,15 @@ export function canBeBlended(
       if (!courseLevel) return false
 
       if (isF2F) {
-        // OPEN + F2F can never be blended
+        const levels = [CourseLevel.Level_2]
+        return levels.includes(courseLevel)
+        // OPEN + F2F can only be Level 2
       }
 
       if (isMixed) {
-        // OPEN + Mixed can never be blended
+        const levels = [CourseLevel.Level_2]
+        return levels.includes(courseLevel)
+        // OPEN + Mixed can only be Level 2
       }
 
       if (isVirtual) {
@@ -137,14 +142,16 @@ export function canBeReacc(
 
       if (isF2F) {
         const levels = [
+          CourseLevel.Level_2,
           CourseLevel.IntermediateTrainer,
           CourseLevel.AdvancedTrainer,
         ]
         if (levels.includes(courseLevel)) return !blended
       }
 
-      if (isMixed) {
-        // OPEN + Mixed can never be reaccreditation
+      if (isMixed && courseLevel === CourseLevel.Level_2) {
+        return !blended
+        // OPEN + Mixed can only be Level 2
       }
 
       if (isVirtual) {
@@ -216,6 +223,7 @@ export function canBeF2F(
 
       const levels = [
         CourseLevel.Level_1,
+        CourseLevel.Level_2,
         CourseLevel.IntermediateTrainer,
         CourseLevel.AdvancedTrainer,
       ]
@@ -256,7 +264,10 @@ export function canBeMixed(
 ) {
   const types = {
     [CourseType.OPEN]: () => {
-      return false
+      if (!courseLevel) return false
+
+      const levels = [CourseLevel.Level_2]
+      return levels.includes(courseLevel)
     },
 
     [CourseType.CLOSED]: () => {
