@@ -797,6 +797,18 @@ export enum CommentsConnectionOrderbyEnum {
   UserId = 'USER_ID'
 }
 
+export enum ConfirmCreditCardPaymentError {
+  GenericError = 'GENERIC_ERROR',
+  OrderNotFound = 'ORDER_NOT_FOUND',
+  PaymentNotSucceeded = 'PAYMENT_NOT_SUCCEEDED'
+}
+
+export type ConfirmCreditCardPaymentOutput = {
+  __typename?: 'ConfirmCreditCardPaymentOutput';
+  confirmed: Scalars['Boolean'];
+  error?: Maybe<ConfirmCreditCardPaymentError>;
+};
+
 /** Nodes used to manage content */
 export type ContentNode = {
   /** Connection between the ContentNode type and the ContentType type */
@@ -24363,6 +24375,8 @@ export type Mutation_Root = {
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
   cancelIndividualFromCourse: Scalars['Boolean'];
   cancelMyselfFromCourse: Scalars['Boolean'];
+  /** confirmCreditCardPayment */
+  confirmCreditCardPayment?: Maybe<ConfirmCreditCardPaymentOutput>;
   content?: Maybe<RootMutation>;
   /** Attempts to create a new Order */
   createOrder?: Maybe<CreateOrderOutput>;
@@ -25224,6 +25238,12 @@ export type Mutation_RootCancelIndividualFromCourseArgs = {
 /** mutation root */
 export type Mutation_RootCancelMyselfFromCourseArgs = {
   courseId: Scalars['Int'];
+};
+
+
+/** mutation root */
+export type Mutation_RootConfirmCreditCardPaymentArgs = {
+  orderId: Scalars['uuid'];
 };
 
 
@@ -37896,6 +37916,13 @@ export type StripeCreatePaymentMutationVariables = Exact<{
 
 
 export type StripeCreatePaymentMutation = { __typename?: 'mutation_root', paymentIntent?: { __typename?: 'StripeCreatePaymentIntentOutput', clientSecret: string, amount: number, currency: Currency } | null };
+
+export type ConfirmCcPaymentMutationVariables = Exact<{
+  orderId: Scalars['uuid'];
+}>;
+
+
+export type ConfirmCcPaymentMutation = { __typename?: 'mutation_root', confirmCreditCardPayment?: { __typename?: 'ConfirmCreditCardPaymentOutput', confirmed: boolean, error?: ConfirmCreditCardPaymentError | null } | null };
 
 export type OnboardUserMutationVariables = Exact<{
   id: Scalars['uuid'];

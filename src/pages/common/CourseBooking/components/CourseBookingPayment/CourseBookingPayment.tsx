@@ -3,12 +3,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
+import {
+  ConfirmCcPaymentMutation,
+  ConfirmCcPaymentMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   stripe,
   Elements,
   STRIPE_CREATE_PAYMENT,
   StripeCreatePaymentResp,
+  CONFIRM_CC_PAYMENT,
 } from '@app/lib/stripe'
 import { QUERY as GET_ORDER, ResponseType } from '@app/queries/order/get-order'
 import { Currency } from '@app/types'
@@ -42,10 +47,9 @@ export const CourseBookingPayment = () => {
 
   const isCallback = !!searchParams.get('payment_intent_client_secret')
 
-  const onSuccess = useCallback(
-    () => navigate(`../done?order_id=${orderId}`, { replace: true }),
-    [navigate, orderId]
-  )
+  const onSuccess = useCallback(() => {
+    navigate(`../done?order_id=${orderId}`, { replace: true })
+  }, [navigate, orderId])
 
   useEffect(() => {
     if (isCallback) return
@@ -67,7 +71,7 @@ export const CourseBookingPayment = () => {
         const s = await getStripe()
         const pi = await s.retrievePaymentIntent(paymentIntent.clientSecret)
         const status = pi.paymentIntent?.status ?? ''
-        if (['succeeded', 'processing'].includes(status)) {
+        if (['succeeded'].includes(status)) {
           return onSuccess()
         }
 
@@ -92,8 +96,21 @@ export const CourseBookingPayment = () => {
         const s = await getStripe()
         const pi = await s.retrievePaymentIntent(clientSecret)
         const status = pi.paymentIntent?.status ?? ''
-        if (['succeeded', 'processing'].includes(status)) {
-          return onSuccess()
+        if (['succeeded'].includes(status)) {
+          const { confirmCreditCardPayment } = await fetcher<
+            ConfirmCcPaymentMutation,
+            ConfirmCcPaymentMutationVariables
+          >(CONFIRM_CC_PAYMENT, { orderId })
+
+          if (confirmCreditCardPayment?.confirmed) {
+            return onSuccess()
+          } else {
+            console.error('Failed to confirm cc payment')
+            setState({
+              loading: false,
+              error: Error(confirmCreditCardPayment?.error ?? ''),
+            })
+          }
         }
 
         navigate(`../payment/${orderId}`, { replace: true })
@@ -104,7 +121,15 @@ export const CourseBookingPayment = () => {
     }
 
     checkPayment()
-  }, [isCallback, setState, onSuccess, searchParams, navigate, orderId])
+  }, [
+    isCallback,
+    setState,
+    onSuccess,
+    searchParams,
+    navigate,
+    orderId,
+    fetcher,
+  ])
 
   const {
     clientSecret,

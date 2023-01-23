@@ -26,6 +26,12 @@ type Mutation {
 }
 
 type Mutation {
+  confirmCreditCardPayment(
+    orderId: uuid!
+  ): ConfirmCreditCardPaymentOutput
+}
+
+type Mutation {
   createOrder(
     input: CreateOrderInput!
   ): CreateOrderOutput
@@ -302,6 +308,12 @@ enum TransferFeeTypeEnum {
 enum Go1ChangeError {
   GENERIC_ERROR
   INVOICE_NOT_AUTHORIZED
+}
+
+enum ConfirmCreditCardPaymentError {
+  GENERIC_ERROR
+  PAYMENT_NOT_SUCCEEDED
+  ORDER_NOT_FOUND
 }
 
 input PlansCreateInput {
@@ -728,5 +740,10 @@ type PromoCodeOutput {
   code: String!
   amount: Int!
   type: String!
+}
+
+type ConfirmCreditCardPaymentOutput {
+  confirmed: Boolean!
+  error: ConfirmCreditCardPaymentError
 }
 

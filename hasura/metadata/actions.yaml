@@ -29,6 +29,14 @@ actions:
       handler: '{{ACTIONS_HOST}}/participant/cancel/self'
     permissions:
       - role: user
+  - name: confirmCreditCardPayment
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/stripe/confirm-cc-payment'
+    permissions:
+      - role: unverified
+      - role: user
+    comment: confirmCreditCardPayment
   - name: createOrder
     definition:
       kind: synchronous
@@ -446,6 +454,17 @@ custom_types:
         - value: INVOICE_NOT_AUTHORIZED
           is_deprecated: null
           description: null
+    - name: ConfirmCreditCardPaymentError
+      values:
+        - value: GENERIC_ERROR
+          is_deprecated: null
+          description: null
+        - value: PAYMENT_NOT_SUCCEEDED
+          is_deprecated: null
+          description: null
+        - value: ORDER_NOT_FOUND
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -514,4 +533,5 @@ custom_types:
     - name: TrainerRoleType
     - name: CourseCertificateLevel
     - name: PromoCodeOutput
+    - name: ConfirmCreditCardPaymentOutput
   scalars: []

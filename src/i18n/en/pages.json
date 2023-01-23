@@ -61,6 +61,8 @@
     "payment-cc-error-ORDER_NOT_ENRICHED": "Invalid Order",
     "payment-cc-error-ORDER_INVALID": "Invalid Order",
     "payment-cc-error-FAILED_TO_INITIATE_PAYMENT": "Failed to initiate payment",
+    "payment-cc-error-PAYMENT_NOT_SUCCEEDED": "Your payment has failed. Please try again later.",
+    "payment-cc-error_GENERIC_ERROR": "There was an issue processing your payment. Please try again later.",
     "free-spaces": "Free spaces",
     "payment-processing-fee": "Payment processing fee",
     "trainer-expenses": "Trainer expenses",

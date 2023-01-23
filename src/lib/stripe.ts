@@ -35,3 +35,12 @@ export const STRIPE_CREATE_PAYMENT = gql`
     }
   }
 `
+
+export const CONFIRM_CC_PAYMENT = gql`
+  mutation ConfirmCCPayment($orderId: uuid!) {
+    confirmCreditCardPayment(orderId: $orderId) {
+      confirmed
+      error
+    }
+  }
+`
