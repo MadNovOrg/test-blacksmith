@@ -22,6 +22,7 @@ import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ParticipantsCount } from '@app/components/ParticipantsCount'
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import {
@@ -181,7 +182,11 @@ export const TrainerCourses: React.FC<Props> = ({
   const fetchingCourses = loading || fetchingActionableCourses
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
+    <Container maxWidth="lg" sx={{ py: 5, position: 'relative' }}>
+      <SnackbarMessage
+        messageKey="course-created"
+        sx={{ position: 'absolute' }}
+      />
       <Box display="flex" gap={4}>
         <Box width={250}>
           <Typography variant="h1">

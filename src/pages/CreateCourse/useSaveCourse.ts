@@ -109,7 +109,6 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const { showSnackbar } = useSnackbar()
   const { courseData, expenses, trainers, go1Licensing } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
@@ -119,6 +118,8 @@ export function useSaveCourse(): {
     profile?.id ?? '',
     courseData?.type ?? CourseType.OPEN
   )
+
+  const { addSnackbarMessage } = useSnackbar()
 
   const saveCourse = useCallback(async () => {
     try {
@@ -239,8 +240,8 @@ export function useSaveCourse(): {
 
           const insertedCourse = response.insertCourse.inserted[0]
 
-          showSnackbar({
-            message: t('pages.create-course.submitted-course', {
+          addSnackbarMessage('course-created', {
+            label: t('pages.create-course.submitted-course', {
               code: insertedCourse.course_code,
             }),
           })
@@ -261,7 +262,7 @@ export function useSaveCourse(): {
     removeDraft,
     t,
     trainers,
-    showSnackbar,
+    addSnackbarMessage,
   ])
 
   return {

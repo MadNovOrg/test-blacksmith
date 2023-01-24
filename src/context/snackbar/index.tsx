@@ -1,74 +1,85 @@
-import { Alert, AlertColor, Snackbar, SnackbarOrigin } from '@mui/material'
-import React, { useState, SyntheticEvent, useMemo, useCallback } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
-type SnackbarOptions = {
-  message: string
-  autoHideDuration?: number
-  color?: AlertColor
-  origin?: SnackbarOrigin
+export type SnackbarMessageKey = 'course-created'
+export type SnackbarMessage = { label: string }
+
+export type SnackbarState = {
+  messages: Map<SnackbarMessageKey, SnackbarMessage>
+  addSnackbarMessage: (key: SnackbarMessageKey, label: SnackbarMessage) => void
+  removeSnackbarMessage: (key: SnackbarMessageKey) => void
+  getSnackbarMessage: (key: SnackbarMessageKey) => SnackbarMessage | undefined
 }
 
-type SnackbarContextType = {
-  showSnackbar: (options: SnackbarOptions) => void
+const SnackbarContext = React.createContext<SnackbarState | undefined>(
+  undefined
+)
+
+export const SnackbarProvider: React.FC<{
+  initialMessages?: SnackbarState['messages']
+}> = ({ children, initialMessages }) => {
+  const [messages, setMessages] = useState<SnackbarState['messages']>(
+    initialMessages ?? new Map()
+  )
+
+  const messagesRef = useRef(messages)
+
+  const addSnackbarMessage: SnackbarState['addSnackbarMessage'] = useCallback(
+    (key, options) => {
+      const m = new Map(messages)
+      m.set(key, options)
+      setMessages(m)
+    },
+    [messages]
+  )
+
+  const getSnackbarMessage: SnackbarState['getSnackbarMessage'] = useCallback(
+    key => {
+      return messages.get(key)
+    },
+    [messages]
+  )
+
+  const removeSnackbarMessage: SnackbarState['removeSnackbarMessage'] =
+    useCallback(key => {
+      messagesRef.current.delete(key)
+
+      setMessages(messagesRef.current)
+    }, [])
+
+  useEffect(() => {
+    messagesRef.current = messages
+  }, [messages])
+
+  const value = useMemo(
+    () => ({
+      messages,
+      addSnackbarMessage,
+      removeSnackbarMessage,
+      getSnackbarMessage,
+    }),
+    [messages, addSnackbarMessage, removeSnackbarMessage, getSnackbarMessage]
+  )
+
+  return (
+    <SnackbarContext.Provider value={value}>
+      {children}
+    </SnackbarContext.Provider>
+  )
 }
 
-export const SnackbarContext = React.createContext({} as SnackbarContextType)
 export const useSnackbar = () => {
-  const context = React.useContext(SnackbarContext)
+  const context = useContext(SnackbarContext)
 
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useSnackbar must be used within a SnackbarProvider')
   }
 
   return context
-}
-
-const DEFAULT_OPTIONS: SnackbarOptions = {
-  message: '',
-  autoHideDuration: 3000,
-  color: 'success',
-  origin: {
-    vertical: 'top',
-    horizontal: 'center',
-  } as SnackbarOrigin,
-}
-
-export const SnackbarProvider: React.FC = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [options, setOptions] = useState<SnackbarOptions>(DEFAULT_OPTIONS)
-
-  const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setIsOpen(false)
-  }
-
-  const showSnackbar = useCallback((options: SnackbarOptions) => {
-    setIsOpen(true)
-    setOptions({ ...DEFAULT_OPTIONS, ...options })
-  }, [])
-
-  const value = useMemo(() => {
-    return {
-      showSnackbar,
-    }
-  }, [showSnackbar])
-
-  return (
-    <SnackbarContext.Provider value={value}>
-      <Snackbar
-        open={isOpen}
-        anchorOrigin={options.origin}
-        autoHideDuration={options.autoHideDuration}
-        onClose={handleClose}
-      >
-        <Alert variant="outlined" color={options.color}>
-          {options.message}
-        </Alert>
-      </Snackbar>
-      {children}
-    </SnackbarContext.Provider>
-  )
 }
