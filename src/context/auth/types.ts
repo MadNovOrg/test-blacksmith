@@ -50,6 +50,7 @@ export type ACL = {
   canCreateCourse: (type: CourseType) => boolean
   canCreateCourses: () => boolean
   canAssignLeadTrainer: () => boolean
+  canApproveCourseExceptions: () => boolean
   canViewContacts: () => boolean
   canViewAllOrganizations: () => boolean
   canViewOrganizations: () => boolean

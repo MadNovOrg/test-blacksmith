@@ -235,7 +235,7 @@ export const CourseDetails = () => {
                   >
                     <Box>
                       <Typography variant="body1" fontWeight={600}>
-                        {t('pages.create-course.exceptions.warning-header')}
+                        {t('pages.create-course.exceptions.admin-header"')}
                       </Typography>
                       <ul>
                         {courseExceptions.map(exception => (
@@ -252,14 +252,20 @@ export const CourseDetails = () => {
                         </Typography>
                       ) : null}
                     </Box>
-                    <Box>
-                      <Button variant="text" onClick={onExceptionsReject}>
-                        {t('common.reject')}
-                      </Button>
-                      <Button variant="text" onClick={onExceptionsApprove}>
-                        {t('common.approve')}
-                      </Button>
-                    </Box>
+                    {acl.canApproveCourseExceptions() ? (
+                      <Box>
+                        <Button variant="text" onClick={onExceptionsReject}>
+                          {t('common.reject')}
+                        </Button>
+                        <Button variant="text" onClick={onExceptionsApprove}>
+                          {t('common.approve')}
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Typography variant="body1" fontWeight={600}>
+                        {t('pages.create-course.exceptions.warning-header')}
+                      </Typography>
+                    )}
                   </Box>
                 </Alert>
               ) : null}

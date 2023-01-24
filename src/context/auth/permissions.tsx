@@ -25,6 +25,11 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
 
+    canApproveCourseExceptions: () => {
+      const roles = [RoleName.TT_ADMIN, RoleName.LD]
+      return roles.some(r => r === auth.activeRole)
+    },
+
     canViewMembership: () => {
       const roles = [RoleName.USER, RoleName.TRAINER]
       return roles.some(r => r === auth.activeRole)
