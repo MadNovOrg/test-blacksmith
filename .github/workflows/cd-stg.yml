@@ -22,4 +22,4 @@ jobs:
       service_role_arn: ${{ secrets.IAM_SERVICE_STG }}
       hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
-      stripe_key: ${{ secrets.STRIPE_KEY }}
+      stripe_key: ${{ secrets.STRIPE_KEY_STG }}
