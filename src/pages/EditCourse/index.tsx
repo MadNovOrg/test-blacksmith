@@ -252,22 +252,23 @@ export const EditCourse: React.FC<unknown> = () => {
         if (editResponse.data?.updateCourse.id && courseDiffs.length) {
           const dateChanged = courseDiffs.find(d => d.type === 'date')
 
-          const payload =
-            dateChanged && reviewInput
+          if (!dateChanged) {
+            return
+          }
+
+          const payload = {
+            oldStartDate: course.schedule[0].start,
+            oldEndDate: course.schedule[0].end,
+            newStartDate: courseData.startDateTime.toISOString(),
+            newEndDate: courseData.endDateTime.toISOString(),
+            reason: reviewInput?.reason ?? '',
+            ...(course.type === CourseType.CLOSED && reviewInput
               ? {
-                  oldStartDate: course.schedule[0].start,
-                  oldEndDate: course.schedule[0].end,
-                  newStartDate: courseData.startDateTime.toISOString(),
-                  newEndDate: courseData.endDateTime.toISOString(),
-                  reason: reviewInput.reason,
-                  ...(course.type === CourseType.CLOSED
-                    ? {
-                        feeType: reviewInput.feeType,
-                        customFee: reviewInput.customFee,
-                      }
-                    : null),
+                  feeType: reviewInput.feeType,
+                  customFee: reviewInput.customFee,
                 }
-              : {}
+              : null),
+          }
 
           await insertAudit({
             object: {
