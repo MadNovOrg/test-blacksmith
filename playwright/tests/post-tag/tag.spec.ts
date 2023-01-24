@@ -2,6 +2,7 @@
 import { expect, test as base } from '@playwright/test'
 
 import { getFirstTagIdWithPosts, getTagById } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -25,7 +26,7 @@ test('displays tag title and posts that belong to the tag', async ({
   tag,
 }) => {
   await page.goto(`${BASE_URL}/membership/term/${tag?.id}`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
   tag?.posts?.nodes?.map(async post => {
     await expect(

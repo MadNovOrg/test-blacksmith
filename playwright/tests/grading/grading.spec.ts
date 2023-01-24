@@ -11,6 +11,7 @@ import {
   insertCourseModules,
   insertCourseParticipants,
 } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { FINISHED_COURSE } from '../../data/courses'
 import { getModulesByLevel } from '../../data/modules'
@@ -67,12 +68,13 @@ test('trainer can grade all participants', async ({
   modules,
 }) => {
   await page.goto(`${BASE_URL}/courses/${course.id}/details`)
+  await waitForPageLoad(page)
 
   await page.click('data-testid=grading-tab')
   await page.click('text=Grade all attendees')
 
   for (const participant of participants) {
-    test
+    await test
       .expect(page.locator(`text=${participant.profile.fullName}`))
       .toBeVisible()
   }
@@ -90,7 +92,7 @@ test('trainer can grade all participants', async ({
   await page.reload({ waitUntil: 'networkidle' })
 
   for (const participant of participants) {
-    test
+    await test
       .expect(
         page.locator(
           `data-testid=attending-participant-row-${participant.id} >> text=Pass`
@@ -107,16 +109,19 @@ test('trainer can grade single participant', async ({
   modules,
 }) => {
   await page.goto(`${BASE_URL}/courses/${course.id}/details`)
+  await page.waitForLoadState('domcontentloaded')
+  await test.expect(page.locator('role=progressbar')).toHaveCount(0)
+  await test.expect(page.locator('.MuiSkeleton-pulse')).toHaveCount(0)
 
   await page.click('data-testid=grading-tab')
   await page.click(
     `data-testid=attending-participant-row-${participants[0].id} >> button:has-text("Grade")`
   )
 
-  test
+  await test
     .expect(page.locator(`text=${participants[0].profile.fullName}`))
     .toBeVisible()
-  test
+  await test
     .expect(page.locator(`text=${participants[1].profile.fullName}`))
     .not.toBeVisible()
 
@@ -132,7 +137,7 @@ test('trainer can grade single participant', async ({
   // swr is not refetching in the E2E env, need to reload the page to see results
   await page.reload({ waitUntil: 'networkidle' })
 
-  test
+  await test
     .expect(
       page.locator(
         `data-testid=attending-participant-row-${participants[0].id} >> text=Pass`
@@ -140,7 +145,7 @@ test('trainer can grade single participant', async ({
     )
     .toBeVisible()
 
-  test
+  await test
     .expect(
       page.locator(
         `data-testid=attending-participant-row-${participants[1].id} >> button:has-text("Grade")`

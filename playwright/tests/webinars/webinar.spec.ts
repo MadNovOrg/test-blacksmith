@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-pattern */
-import { expect, test as base } from '@playwright/test'
+import { test as base } from '@playwright/test'
 
 import { getWebinarById, getWebinars } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -27,14 +28,15 @@ test('displays video item details and recent items', async ({ page, data }) => {
   }
 
   await page.goto(`${BASE_URL}/membership/webinars/${data.webinar.id}`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
-  await expect(page.locator(`data-testid=webinar-title`)).toHaveText(
-    data.webinar.title ?? ''
-  )
+  await test
+    .expect(page.locator(`data-testid=webinar-title`))
+    .toHaveText(data.webinar.title ?? '')
 
   const ytFrame = page.frameLocator(`#yt-embed-${data.webinar.id}`)
 
+  await ytFrame.locator('.ytp-cued-thumbnail-overlay').isVisible()
   await ytFrame.locator('[aria-label="Play"]').click()
 
   data.recentWebinars.map(async recentItem => {
@@ -42,8 +44,8 @@ test('displays video item details and recent items', async ({ page, data }) => {
       return
     }
 
-    await expect(
-      page.locator(`data-testid=webinars-grid-item-${recentItem.id}`)
-    ).toBeVisible()
+    await test
+      .expect(page.locator(`data-testid=webinars-grid-item-${recentItem.id}`))
+      .toBeVisible()
   })
 })

@@ -2,6 +2,7 @@
 import { test as base } from '@playwright/test'
 
 import { getWebinars } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -24,19 +25,21 @@ test('displays webinars with featured and grid display', async ({
   webinars,
 }) => {
   await page.goto(`${BASE_URL}/membership/webinars`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
   const featuredVideoItemImage = page.locator(
     '[data-testid="featured-webinar"] img'
   )
 
-  test
+  await test.expect(featuredVideoItemImage).toBeVisible()
+
+  await test
     .expect(featuredVideoItemImage)
     .toHaveAttribute(
       'src',
       webinars[0]?.featuredImage?.node?.mediaItemUrl ?? ''
     )
-  test
+  await test
     .expect(
       page.locator(
         `data-testid=featured-webinar >> text="${webinars[0]?.title}"`
@@ -44,12 +47,12 @@ test('displays webinars with featured and grid display', async ({
     )
     .toBeVisible()
 
-  test
+  await test
     .expect(page.locator(`data-testid=webinar-grid-item-${webinars[1]?.id}`))
     .toBeVisible()
 
   if (webinars.length > PER_PAGE) {
-    test
+    await test
       .expect(page.locator('data-testid=video-series-pagination'))
       .toBeVisible()
   }

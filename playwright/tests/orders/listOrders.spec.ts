@@ -4,6 +4,7 @@ import { test as base } from '@playwright/test'
 import { Order_By, Payment_Methods_Enum } from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -63,10 +64,10 @@ test('list orders', async ({
   const adminPage = await adminContext.newPage()
 
   await adminPage.goto(`${BASE_URL}/orders`)
-  await adminPage.waitForLoadState('networkidle')
+  await waitForPageLoad(adminPage)
 
-  unfilteredOrders.forEach(order => {
-    test
+  unfilteredOrders.forEach(async order => {
+    await test
       .expect(
         adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
       )
@@ -76,10 +77,10 @@ test('list orders', async ({
   // filter by credit card payment method
   await adminPage.click('text="Payment Method"')
   await adminPage.click('text="Credit card"')
-  await adminPage.waitForLoadState('networkidle')
+  await waitForPageLoad(adminPage)
 
-  ccOrders.forEach(order => {
-    test
+  ccOrders.forEach(async order => {
+    await test
       .expect(
         adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
       )
@@ -89,10 +90,10 @@ test('list orders', async ({
   // filter by both payment methods
   await adminPage.click('text="Credit card"')
   await adminPage.click('text="Invoice"')
-  await adminPage.waitForLoadState('networkidle')
+  await waitForPageLoad(adminPage)
 
-  invoiceOrders.forEach(order => {
-    test
+  invoiceOrders.forEach(async order => {
+    await test
       .expect(
         adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
       )

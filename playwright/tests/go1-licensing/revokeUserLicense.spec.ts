@@ -11,6 +11,7 @@ import {
   insertOrganization,
   insertOrganizationMember,
 } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -58,10 +59,9 @@ test("removes a license for an organisation's user", async ({
   await page.goto(
     `${BASE_URL}/profile/${licenseContext.profileId}?orgId=${licenseContext.orgId}`
   )
+  await waitForPageLoad(page)
 
-  await page.waitForLoadState('networkidle')
-
-  test
+  await test
     .expect(page.locator(`data-testid=go1-license-${licenseContext.licenseId}`))
     .toBeVisible()
 
@@ -71,9 +71,9 @@ test("removes a license for an organisation's user", async ({
   )
 
   await page.click('button:has-text("Save Changes")')
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
-  test
+  await test
     .expect(page.locator(`data-testid=go1-license-${licenseContext.licenseId}`))
     .not.toBeVisible()
 })

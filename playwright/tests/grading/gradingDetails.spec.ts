@@ -10,6 +10,7 @@ import {
   insertCourseModules,
   insertCourseParticipants,
 } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { FINISHED_COURSE } from '../../data/courses'
 import { getModulesByLevel } from '../../data/modules'
@@ -60,9 +61,11 @@ test('marks participants as attended and enables grading', async ({
   modules,
 }) => {
   await page.goto(`${BASE_URL}/courses/${course.id}/grading-details`)
+  await waitForPageLoad(page)
+
   await page.locator(`text="${participants[0].profile.fullName}"`).click()
 
-  test
+  await test
     .expect(page.locator(`text=${participants.length - 1} selected`))
     .toBeVisible()
 
@@ -72,7 +75,7 @@ test('marks participants as attended and enables grading', async ({
 
   await page.waitForNavigation()
 
-  test
+  await test
     .expect(page.url())
     .toEqual(`${BASE_URL}/courses/${course.id}/details?tab=GRADING`)
 })

@@ -4,6 +4,7 @@ import { test as base } from '@playwright/test'
 import { PostSummaryFragment } from '@app/generated/graphql'
 
 import { getBlogPosts, getPostById } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -29,18 +30,18 @@ test('displays video item details and recent items', async ({ page, data }) => {
   }
 
   await page.goto(`${BASE_URL}/membership/blog/${data.post.id}`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
-  test
+  await test
     .expect(page.locator(`data-testid=post-title`))
     .toHaveText(data.post.title ?? '')
 
-  data.recentPosts.map(recentPost => {
+  data.recentPosts.map(async recentPost => {
     if (!recentPost) {
       return
     }
 
-    test
+    await test
       .expect(page.locator(`data-testid=posts-grid-item-${recentPost.id}`))
       .toBeVisible()
   })

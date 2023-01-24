@@ -27,7 +27,7 @@ const test = base.extend<{ course: Course }>({
 
 test('saves course enquiry', async ({ page, course }) => {
   await page.goto(`${BASE_URL}/enquiry?course_id=${course.id}`)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   await page.locator('text=What is your interest? *').type('Course')
   await page.locator('text=First Name *').type('John')

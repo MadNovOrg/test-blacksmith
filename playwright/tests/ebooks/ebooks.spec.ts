@@ -2,6 +2,7 @@
 import { test as base } from '@playwright/test'
 
 import { getEbooks } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -24,7 +25,7 @@ test('displays ebooks with featured and grid display', async ({
   ebooks,
 }) => {
   await page.goto(`${BASE_URL}/membership/ebooks`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
   const featuredEbook = page.locator('[data-testid="featured-ebook"] img')
 

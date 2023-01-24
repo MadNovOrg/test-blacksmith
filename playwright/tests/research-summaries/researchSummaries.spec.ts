@@ -2,6 +2,7 @@
 import { test as base } from '@playwright/test'
 
 import { getResearchSummaries } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -24,19 +25,19 @@ test('displays research summaries with featured and grid display', async ({
   researchSummaries,
 }) => {
   await page.goto(`${BASE_URL}/membership/research-summaries`)
-  await page.waitForLoadState('domcontentloaded')
+  await waitForPageLoad(page)
 
   const featuredResearchSummary = page.locator(
     '[data-testid="featured-research-summary"] img'
   )
 
-  test
+  await test
     .expect(featuredResearchSummary)
     .toHaveAttribute(
       'src',
       researchSummaries[0]?.featuredImage?.node?.mediaItemUrl ?? ''
     )
-  test
+  await test
     .expect(
       page.locator(
         `data-testid=featured-research-summary >> text="${researchSummaries[0]?.title}"`
@@ -44,7 +45,7 @@ test('displays research summaries with featured and grid display', async ({
     )
     .toBeVisible()
 
-  test
+  await test
     .expect(
       page.locator(
         `data-testid=research-summary-grid-item-${researchSummaries[1]?.id}`
@@ -62,10 +63,10 @@ test('displays research summaries with featured and grid display', async ({
   ])
 
   const path = await donwload.path()
-  test.expect(path).toBeTruthy()
+  await test.expect(path).toBeTruthy()
 
   if (researchSummaries.length > PER_PAGE) {
-    test
+    await test
       .expect(page.locator('data-testid=research-summaries-pagination'))
       .toBeVisible()
   }

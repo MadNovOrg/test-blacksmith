@@ -5,6 +5,7 @@ import {
   getFirstCategoryIdWithPosts,
   getCategoryById,
 } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -28,9 +29,7 @@ test('displays category title and posts that belong to the category', async ({
   category,
 }) => {
   await page.goto(`${BASE_URL}/membership/term/${category?.id}`)
-  await page.waitForLoadState('domcontentloaded')
-
-  await expect(page.locator('.MuiGrid-container')).not.toBeEmpty()
+  await waitForPageLoad(page)
 
   category?.posts?.nodes?.map(async post => {
     await expect(

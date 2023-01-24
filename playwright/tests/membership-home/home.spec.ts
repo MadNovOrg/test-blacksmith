@@ -1,5 +1,6 @@
 import { test } from '@playwright/test'
 
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -16,12 +17,14 @@ const contentTypes = [
 
 test('displays grid for all content types', async ({ page }) => {
   await page.goto(`${BASE_URL}/membership`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
-  contentTypes.forEach(type => {
-    test.expect(page.locator(`data-testid=${type}-grid-title`)).toBeVisible()
+  contentTypes.forEach(async type => {
+    await test
+      .expect(page.locator(`data-testid=${type}-grid-title`))
+      .toBeVisible()
 
-    test
+    await test
       .expect(page.locator(`data-testid=${type}-grid >> [data-grid-item="0"]`))
       .toBeVisible()
   })

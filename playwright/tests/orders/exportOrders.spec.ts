@@ -5,6 +5,7 @@ import { readFile } from 'xlsx'
 import { Order_By, Payment_Methods_Enum } from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -63,7 +64,7 @@ async function assertDownloadedCSV(download: Download, data: Orders) {
 
 test('exports all orders from the page', async ({ page, orders }) => {
   await page.goto(`${BASE_URL}/orders`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
@@ -75,7 +76,7 @@ test('exports all orders from the page', async ({ page, orders }) => {
 
 test('exports selected orders', async ({ page, orders }) => {
   await page.goto(`${BASE_URL}/orders`)
-  await page.waitForLoadState('networkidle')
+  await waitForPageLoad(page)
 
   test.expect(page.locator('button:has-text("Export selected")')).toBeDisabled()
 

@@ -27,7 +27,7 @@ const test = base.extend<{ course: Course }>({
 
 test('saves closed course booking', async ({ page, course }) => {
   await page.goto(`${BASE_URL}/book-private-course?course_id=${course.id}`)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   await page.locator('text=Number of course participants').type('5')
   await page.locator('text=First Name *').type('John')

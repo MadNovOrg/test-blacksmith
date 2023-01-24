@@ -4,6 +4,7 @@ import { expect, test as base } from '@playwright/test'
 import { Podcast } from '@app/generated/graphql'
 
 import { getAllPodcasts } from '../../api/hasura-api'
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
 
@@ -22,6 +23,7 @@ test.describe('podcasts page', () => {
     podcasts,
   }) => {
     await page.goto(`${BASE_URL}/membership/podcasts`)
+    await waitForPageLoad(page)
 
     const featuredPodcastImage = page.locator(
       '[data-testid="featured-podcast"] img'
