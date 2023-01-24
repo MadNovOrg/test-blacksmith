@@ -106,7 +106,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
         {!stats[orgId]?.profiles.count ? (
           <Alert sx={{ mt: 2 }} severity="info">
             {t('pages.org-details.tabs.overview.no-org-users') + ' '}
-            <Link href={'/invite'}>
+            <Link href={'./invite'}>
               {t('pages.org-details.tabs.overview.click-here-to-invite')}
             </Link>
           </Alert>

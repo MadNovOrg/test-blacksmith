@@ -73,7 +73,7 @@ export const CreateOrganization = () => {
         ),
       workEmail: yup
         .string()
-        .email()
+        .email(t('validation-errors.email-invalid'))
         .required(
           requiredMsg(t, 'pages.create-organization.fields.work-email')
         ),
@@ -96,7 +96,7 @@ export const CreateOrganization = () => {
     defaultValues: {
       orgName: '',
       trustName: '',
-      trustType: '',
+      trustType: Trust_Type_Enum.NotApplicable,
       workEmail: '',
       addressLine1: '',
       addressLine2: '',

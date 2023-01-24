@@ -91,6 +91,12 @@ export const OrgDashboard: React.FC = () => {
               </Alert>
             ) : null}
 
+            {allOrgs?.length === 1 ? (
+              <Typography variant="h1" p={4}>
+                {org?.name}
+              </Typography>
+            ) : null}
+
             {status === LoadingStatus.SUCCESS ? (
               <>
                 {allOrgs && allOrgs.length > 1 ? (
