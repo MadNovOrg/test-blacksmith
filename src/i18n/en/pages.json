@@ -424,6 +424,12 @@
       "15-fee": "15% of payment due",
       "25-fee-label": "Less than 2 weeks",
       "25-fee": "25% of payment due",
+      "0-fee-trainer": "Free",
+      "0-fee-trainer-label": "4+ weeks",
+      "25-fee-trainer": "25% of payment due",
+      "25-fee-trainer-label": "1-4 weeks",
+      "50-fee-trainer": "50% of payment due",
+      "50-fee-trainer-label": "0-1 week",
       "apply-terms-option": "Apply rescheduling terms",
       "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at",
       "protocol-not-met-sales-admin": "This change does not meet Team Teach protocols, only TT Admin can action this change"

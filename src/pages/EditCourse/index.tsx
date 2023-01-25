@@ -27,6 +27,7 @@ import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Audit_Type_Enum,
+  Course_Level_Enum,
   Course_Status_Enum,
   GetCourseByIdQuery,
   InsertCourseAuditMutation,
@@ -555,6 +556,7 @@ export const EditCourse: React.FC<unknown> = () => {
             }}
             withFees={course.type === CourseType.CLOSED}
             alignedWithProtocol={alignedWithProtocol}
+            level={course.level as unknown as Course_Level_Enum}
           />
         </>
       ) : null}

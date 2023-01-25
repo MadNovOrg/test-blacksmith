@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react'
 import { addHours } from 'date-fns'
 import React from 'react'
 
+import { Course_Level_Enum } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
 import { ReviewChangesModal } from '.'
@@ -26,6 +27,7 @@ const Template: ComponentStory<typeof ReviewChangesModal> = args => (
 export const DateChanged = Template.bind({})
 DateChanged.args = {
   open: true,
+  level: Course_Level_Enum.Level_1,
   diff: [
     {
       type: 'date',
@@ -40,6 +42,7 @@ export const WithFees = Template.bind({})
 WithFees.args = {
   open: true,
   withFees: true,
+  level: Course_Level_Enum.Level_1,
   diff: [
     {
       type: 'date',
@@ -50,9 +53,27 @@ WithFees.args = {
 }
 WithFees.decorators = [withAuthContext({ activeRole: RoleName.TT_ADMIN })]
 
+export const WithFeesForTrainerCourses = Template.bind({})
+WithFees.args = {
+  open: true,
+  withFees: true,
+  level: Course_Level_Enum.AdvancedTrainer,
+  diff: [
+    {
+      type: 'date',
+      oldValue: [new Date(), addHours(new Date(), 5)],
+      newValue: [new Date(), addHours(new Date(), 8)],
+    },
+  ],
+}
+WithFeesForTrainerCourses.decorators = [
+  withAuthContext({ activeRole: RoleName.TT_ADMIN }),
+]
+
 export const NotAlignedWithProtocol = Template.bind({})
 NotAlignedWithProtocol.args = {
   open: true,
+  level: Course_Level_Enum.Level_1,
   withFees: true,
   alignedWithProtocol: false,
   diff: [
@@ -70,6 +91,7 @@ NotAlignedWithProtocol.decorators = [
 export const SalesNotAlignedWithProtocol = Template.bind({})
 SalesNotAlignedWithProtocol.args = {
   open: true,
+  level: Course_Level_Enum.Level_1,
   withFees: true,
   alignedWithProtocol: false,
   diff: [

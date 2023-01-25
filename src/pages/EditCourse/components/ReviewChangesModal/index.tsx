@@ -13,7 +13,7 @@ import { InferType } from 'yup'
 import { Dialog } from '@app/components/Dialog'
 import { FeesForm, schema as feesSchema } from '@app/components/FeesForm'
 import { useAuth } from '@app/context/auth'
-import { TransferFeeType } from '@app/generated/graphql'
+import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { yup } from '@app/schemas'
 
@@ -48,6 +48,7 @@ type Props = {
   open?: boolean
   withFees?: boolean
   alignedWithProtocol?: boolean
+  level: Course_Level_Enum
 }
 
 export const ReviewChangesModal: React.FC<Props> = ({
@@ -58,6 +59,7 @@ export const ReviewChangesModal: React.FC<Props> = ({
   withFees = false,
   children,
   alignedWithProtocol = true,
+  level,
 }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
   const { activeRole } = useAuth()
@@ -105,7 +107,10 @@ export const ReviewChangesModal: React.FC<Props> = ({
                     [TransferFeeType.ApplyTerms]: t('apply-terms-option'),
                   }}
                 >
-                  <ReschedulingTermsTable startDate={dateDiff.newValue[0]} />
+                  <ReschedulingTermsTable
+                    startDate={dateDiff.newValue[0]}
+                    level={level}
+                  />
                 </FeesForm>
               </Box>
             ) : null}

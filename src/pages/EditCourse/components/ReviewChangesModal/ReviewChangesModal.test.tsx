@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { TransferFeeType } from '@app/generated/graphql'
+import { Course_Level_Enum, TransferFeeType } from '@app/generated/graphql'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
@@ -10,7 +10,9 @@ import { ReviewChangesModal } from '.'
 
 describe('component: ReviewChangesModal', () => {
   it('validates the reason field', async () => {
-    render(<ReviewChangesModal diff={[]} open />)
+    render(
+      <ReviewChangesModal diff={[]} open level={Course_Level_Enum.Level_1} />
+    )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
       selector: 'button',
@@ -32,7 +34,14 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(<ReviewChangesModal diff={[dateDiff]} open withFees />)
+    render(
+      <ReviewChangesModal
+        diff={[dateDiff]}
+        open
+        withFees
+        level={Course_Level_Enum.Level_1}
+      />
+    )
 
     expect(screen.getByTestId('course-diff-table')).toBeInTheDocument()
 
@@ -58,7 +67,14 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(<ReviewChangesModal diff={[dateDiff]} open withFees />)
+    render(
+      <ReviewChangesModal
+        diff={[dateDiff]}
+        open
+        withFees
+        level={Course_Level_Enum.Level_1}
+      />
+    )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
       selector: 'button',
@@ -87,7 +103,14 @@ describe('component: ReviewChangesModal', () => {
       newValue: [new Date(), new Date()],
     }
 
-    render(<ReviewChangesModal diff={[dateDiff]} open withFees />)
+    render(
+      <ReviewChangesModal
+        diff={[dateDiff]}
+        open
+        withFees
+        level={Course_Level_Enum.Level_1}
+      />
+    )
 
     const confirmButton = screen.getByText(/confirm changes/i, {
       selector: 'button',
@@ -106,7 +129,14 @@ describe('component: ReviewChangesModal', () => {
   it('cancels review when clicked on cancel button', () => {
     const onCancelMock = jest.fn()
 
-    render(<ReviewChangesModal diff={[]} open onCancel={onCancelMock} />)
+    render(
+      <ReviewChangesModal
+        diff={[]}
+        open
+        onCancel={onCancelMock}
+        level={Course_Level_Enum.Level_1}
+      />
+    )
 
     userEvent.click(screen.getByText(/never mind/i))
 
@@ -124,6 +154,7 @@ describe('component: ReviewChangesModal', () => {
 
     render(
       <ReviewChangesModal
+        level={Course_Level_Enum.Level_1}
         diff={[dateDiff]}
         onConfirm={onConfirmMock}
         open

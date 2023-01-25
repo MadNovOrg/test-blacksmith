@@ -1,5 +1,7 @@
-import { differenceInDays } from 'date-fns'
+import { differenceInDays, differenceInWeeks } from 'date-fns'
 import { isDate } from 'lodash-es'
+
+import { Course_Level_Enum } from '@app/generated/graphql'
 
 export const getCancellationTermsFee = (
   courseStartDate: Date | string
@@ -19,13 +21,42 @@ export const getCancellationTermsFee = (
   }
 }
 
-export const getReschedulingTermsFee = (startDate: Date): number => {
-  const diff = differenceInDays(startDate, new Date())
-  if (diff < 14) {
-    return 25
-  } else if (diff < 29) {
-    return 15
-  } else {
-    return 0
+export const getReschedulingTermsFee = (
+  startDate: Date,
+  level: Course_Level_Enum
+): number => {
+  const diffInWeeks = differenceInWeeks(startDate, new Date())
+
+  if (
+    [
+      Course_Level_Enum.Level_1,
+      Course_Level_Enum.Level_2,
+      Course_Level_Enum.Advanced,
+    ].includes(level)
+  ) {
+    if (diffInWeeks < 2) {
+      return 25
+    } else if (diffInWeeks < 4) {
+      return 15
+    } else {
+      return 0
+    }
   }
+
+  if (
+    [
+      Course_Level_Enum.IntermediateTrainer,
+      Course_Level_Enum.AdvancedTrainer,
+    ].includes(level)
+  ) {
+    if (diffInWeeks < 1) {
+      return 50
+    } else if (diffInWeeks < 4) {
+      return 25
+    } else {
+      return 0
+    }
+  }
+
+  throw new Error('Not supported course level')
 }
