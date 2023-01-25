@@ -38,6 +38,71 @@ insert_permissions:
         - org_name
         - phone
       backend_only: false
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false
+  - role: unverified
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      set:
+        confirmed: "true"
+      columns:
+        - course_id
+        - email
+        - family_name
+        - given_name
+        - org_name
+        - phone
+      backend_only: false
 select_permissions:
   - role: sales-admin
     permission:
