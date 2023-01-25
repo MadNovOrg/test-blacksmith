@@ -51,6 +51,7 @@ test('displays webinars with featured and grid display', async ({
     .expect(page.locator(`data-testid=webinar-grid-item-${webinars[1]?.id}`))
     .toBeVisible()
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (webinars.length > PER_PAGE) {
     await test
       .expect(page.locator('data-testid=video-series-pagination'))

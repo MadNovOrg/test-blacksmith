@@ -23,6 +23,7 @@ const test = base.extend<{
 test.use({ storageState: stateFilePath('trainer') })
 
 test('displays video item details and recent items', async ({ page, data }) => {
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (!data.webinar) {
     return test.fail()
   }

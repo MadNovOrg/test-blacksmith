@@ -48,6 +48,7 @@ test('displays posts with featured and grid display', async ({
     .expect(page.locator(`data-testid=post-grid-item-${posts[1]?.id}`))
     .toBeVisible()
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (posts.length > PER_PAGE) {
     await test
       .expect(page.locator('data-testid=posts-pagination'))

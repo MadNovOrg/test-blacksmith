@@ -65,6 +65,7 @@ test('displays research summaries with featured and grid display', async ({
   const path = await donwload.path()
   await test.expect(path).toBeTruthy()
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (researchSummaries.length > PER_PAGE) {
     await test
       .expect(page.locator('data-testid=research-summaries-pagination'))

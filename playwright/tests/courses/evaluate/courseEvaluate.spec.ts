@@ -39,6 +39,7 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
+// eslint-disable-next-line playwright/no-skipped-test
 test.skip('course evaluation', async ({ browser, course }) => {
   test.setTimeout(60000)
   const userContext = await browser.newContext({

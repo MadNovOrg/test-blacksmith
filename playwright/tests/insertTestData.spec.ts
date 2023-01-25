@@ -18,8 +18,10 @@ import { getModulesByLevel } from '../data/modules'
 import { users } from '../data/users'
 
 test('insert test @data', async () => {
+  // eslint-disable-next-line playwright/no-skipped-test
   test.skip(!process.env.TRAINER)
   test.setTimeout(120000)
+  // eslint-disable-next-line playwright/no-conditional-in-test
   const email = process.env.TRAINER ?? ''
 
   // delete all trainer's courses

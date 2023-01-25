@@ -53,6 +53,7 @@ test('displays ebooks with featured and grid display', async ({
 
   test.expect(path).toBeTruthy() // to be downloaded basically
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (ebooks.length > PER_PAGE) {
     test.expect(page.locator('data-testid=ebooks-pagination')).toBeVisible()
   }

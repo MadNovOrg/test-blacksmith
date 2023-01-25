@@ -37,7 +37,9 @@ test('displays category title and posts that belong to the category', async ({
     ).toBeVisible()
   })
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (
+    // eslint-disable-next-line playwright/no-conditional-in-test
     category?.posts?.nodes?.length &&
     category.posts.nodes.length > PER_PAGE
   ) {

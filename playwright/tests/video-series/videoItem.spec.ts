@@ -25,6 +25,7 @@ const test = base.extend<{
 test.use({ storageState: stateFilePath('trainer') })
 
 test('displays video item details and recent items', async ({ page, data }) => {
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (!data.videoItem) {
     return test.fail()
   }
@@ -38,6 +39,9 @@ test('displays video item details and recent items', async ({ page, data }) => {
 
   const ytFrame = page.frameLocator(`#yt-embed-${data.videoItem.id}`)
 
+  await test
+    .expect(page.locator(`#yt-embed-${data.videoItem.id}`))
+    .toHaveCount(1)
   await test
     .expect(ytFrame.locator('.ytp-cued-thumbnail-overlay'))
     .toHaveCount(1)

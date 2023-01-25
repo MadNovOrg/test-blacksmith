@@ -41,8 +41,9 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-test('course invites', async ({ browser, course }) => {
-  test.skip(true, "Skipping until Salman's work on automatic user creation")
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('course invites', async ({ browser, course }) => {
+  // eslint-disable-next-line playwright/no-skipped-test
   test.skip(TARGET_ENV === 'local')
   test.setTimeout(60000)
   const trainerContext = await browser.newContext({

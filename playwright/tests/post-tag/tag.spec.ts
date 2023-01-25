@@ -34,6 +34,7 @@ test('displays tag title and posts that belong to the tag', async ({
     ).toBeVisible()
   })
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (tag?.posts?.nodes?.length && tag.posts.nodes.length > PER_PAGE) {
     await expect(
       page.locator('data-testid=term-items-pagination')

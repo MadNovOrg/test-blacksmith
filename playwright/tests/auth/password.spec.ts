@@ -43,6 +43,7 @@ test('forgot password: non-existent email', async ({ page }) => {
 })
 
 test('reset password', async ({ page }) => {
+  // eslint-disable-next-line playwright/no-skipped-test
   test.skip(TARGET_ENV === 'local')
   const newPassword = `$qweRTY${new Date().getMilliseconds()}`
   const forgotPasswordPage = new ForgotPasswordPage(page)
@@ -72,6 +73,7 @@ test('reset password: spaces only', async ({ resetPasswordPage }) => {
 })
 
 test('reset password: too short', async ({ page }) => {
+  // eslint-disable-next-line playwright/no-skipped-test
   test.skip(TARGET_ENV === 'local')
   const forgotPasswordPage = new ForgotPasswordPage(page)
   await forgotPasswordPage.goto()
