@@ -53,6 +53,7 @@ test('displays video items with featured and grid display', async ({
     )
     .toBeVisible()
 
+  // eslint-disable-next-line playwright/no-conditional-in-test
   if (videoItems.length > PER_PAGE) {
     await test
       .expect(page.locator('data-testid=video-series-pagination'))

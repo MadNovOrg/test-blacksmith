@@ -21,6 +21,7 @@ const fillEvaluationForm = async (page: Page, questions: Questions) => {
   for (let i = 0; i < ratingQuestionsCount; ++i) {
     const question = questions.rating.nth(i)
     const rate = Math.round(Math.random() * 4) + 1
+    // eslint-disable-next-line playwright/no-force-option
     await question
       .locator(`[data-rating="rating-${rate}"]`)
       .click({ force: true })
