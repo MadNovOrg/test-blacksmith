@@ -85,12 +85,14 @@ export const TrainerCourses: React.FC<Props> = ({
   const [filterStartDate, setFilterStartDate] = useState<Date>()
   const [filterEndDate, setFilterEndDate] = useState<Date>()
 
-  const { Pagination, perPage, currentPage } = useTablePagination()
+  const { Pagination, perPage, currentPage } = useTablePagination({
+    id: 'my-courses',
+  })
   const {
     Pagination: ActionablePagination,
     perPage: actionablePerPage,
     currentPage: actionableCurrentPage,
-  } = useTablePagination(5)
+  } = useTablePagination({ initialPerPage: 5, id: 'actionable-courses' })
 
   const [
     { data: actionableCourses, fetching: fetchingActionableCourses },

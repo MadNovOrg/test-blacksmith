@@ -35,7 +35,10 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
   const openModal = () => setManageModalOpened(true)
   const closeModal = () => setManageModalOpened(false)
 
-  const { Pagination, perPage, currentPage } = useTablePagination(5)
+  const { Pagination, perPage, currentPage } = useTablePagination({
+    id: 'tbl',
+    initialPerPage: 5,
+  })
 
   const [{ data, fetching, error }, refetch] = useQuery<
     OrgLicensesWithHistoryQuery,

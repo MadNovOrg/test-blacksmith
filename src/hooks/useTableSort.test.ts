@@ -1,10 +1,13 @@
 import { renderHook, act } from '@testing-library/react-hooks'
+import { MemoryRouter } from 'react-router-dom'
 
 import { useTableSort } from './useTableSort'
 
 describe('useTableSort', () => {
   it('returns expected defaults', async () => {
-    const { result } = renderHook(() => useTableSort())
+    const { result } = renderHook(() => useTableSort(), {
+      wrapper: MemoryRouter,
+    })
 
     expect(result.current.by).toBe('')
     expect(result.current.dir).toBe('asc')
@@ -12,7 +15,9 @@ describe('useTableSort', () => {
   })
 
   it('sets by as expected', async () => {
-    const { result } = renderHook(() => useTableSort())
+    const { result } = renderHook(() => useTableSort(), {
+      wrapper: MemoryRouter,
+    })
 
     expect(result.current.by).toBe('')
     expect(result.current.dir).toBe('asc')
@@ -31,7 +36,9 @@ describe('useTableSort', () => {
   })
 
   it('sets dir as expected', async () => {
-    const { result } = renderHook(() => useTableSort('someCol', 'desc'))
+    const { result } = renderHook(() => useTableSort('someCol', 'desc'), {
+      wrapper: MemoryRouter,
+    })
 
     expect(result.current.by).toBe('someCol')
     expect(result.current.dir).toBe('desc')
