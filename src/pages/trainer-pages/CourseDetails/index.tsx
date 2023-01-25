@@ -95,13 +95,7 @@ export const CourseDetails = () => {
     course?.status === Course_Status_Enum.ExceptionsApprovalPending
 
   const courseExceptions = useMemo(() => {
-    if (
-      !acl.isLD() ||
-      !course ||
-      !course.trainers ||
-      !exceptionsApprovalPending
-    )
-      return []
+    if (!course || !course.trainers || !exceptionsApprovalPending) return []
 
     const leader = course.trainers.find(
       c => c.type === CourseTrainerType.Leader
@@ -132,7 +126,7 @@ export const CourseDetails = () => {
         )) ??
         false
     )
-  }, [acl, course, exceptionsApprovalPending])
+  }, [course, exceptionsApprovalPending])
 
   const onExceptionsReject = useCallback(async () => {
     if (!course) return
@@ -234,9 +228,15 @@ export const CourseDetails = () => {
                     gap={1}
                   >
                     <Box>
-                      <Typography variant="body1" fontWeight={600}>
-                        {t('pages.create-course.exceptions.admin-header"')}
-                      </Typography>
+                      {acl.canApproveCourseExceptions() ? (
+                        <Typography variant="body1" fontWeight={600}>
+                          {t('pages.create-course.exceptions.admin-header')}
+                        </Typography>
+                      ) : (
+                        <Typography variant="body1" fontWeight={600}>
+                          {t('pages.create-course.exceptions.warning-header')}
+                        </Typography>
+                      )}
                       <ul>
                         {courseExceptions.map(exception => (
                           <li key={exception}>
@@ -261,11 +261,7 @@ export const CourseDetails = () => {
                           {t('common.approve')}
                         </Button>
                       </Box>
-                    ) : (
-                      <Typography variant="body1" fontWeight={600}>
-                        {t('pages.create-course.exceptions.warning-header')}
-                      </Typography>
-                    )}
+                    ) : null}
                   </Box>
                 </Alert>
               ) : null}
