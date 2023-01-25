@@ -1,6 +1,7 @@
-import { Box, Stack, styled, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
 
+import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import theme from '@app/theme'
 
@@ -14,17 +15,6 @@ type Props = {
   amountDue: number
   allowancePrice: number
 }
-
-const DetailsItemBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.common.white,
-  padding: theme.spacing(2),
-}))
-
-const ItemRow = styled(Box)(() => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-}))
 
 export const OrderDetails: React.FC<Props> = ({
   numberOfLicenses,

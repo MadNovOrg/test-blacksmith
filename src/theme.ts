@@ -161,9 +161,9 @@ const theme = createTheme({
       main: '#F2A61F',
     },
     error: {
-      main: alpha('#FF0000', 0.6),
-      light: alpha('#FF0000', 0.2),
-      dark: alpha('#FF0000', 0.8),
+      main: alpha('#990650', 0.6),
+      light: alpha('#990650', 0.2),
+      dark: alpha('#990650', 1),
     },
     success: {
       main: '#9EB934',

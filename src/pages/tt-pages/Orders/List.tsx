@@ -10,6 +10,7 @@ import {
   TableCell,
   TableRow,
   Typography,
+  Chip,
 } from '@mui/material'
 import { saveAs } from 'file-saver'
 import React, { useMemo, useCallback } from 'react'
@@ -22,7 +23,7 @@ import { XeroInvoiceStatus } from '@app/generated/graphql'
 import { OrderType } from '@app/hooks/useOrders'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { xeroInvoiceStatusColors, getOrderDueDate } from '@app/util'
+import { getOrderDueDate, INVOICE_STATUS_COLOR } from '@app/util'
 
 type Props = {
   orders: OrderType[]
@@ -65,16 +66,10 @@ export const List: React.FC<Props> = ({
     const { orderDue, status, createdAt } = order
     const dueDate = getOrderDueDate(createdAt, start)
 
-    const [font, background] = xeroInvoiceStatusColors[status as string]
-
     return {
       due: orderDue,
       status,
       dueDate,
-      statusColors: {
-        font,
-        background,
-      },
     }
   }, [])
 
@@ -176,7 +171,7 @@ export const List: React.FC<Props> = ({
           />
 
           {orders.map(order => {
-            const { due, status, dueDate, statusColors } = getOrderInfo(order)
+            const { due, status, dueDate } = getOrderInfo(order)
 
             return (
               <TableRow
@@ -230,17 +225,10 @@ export const List: React.FC<Props> = ({
                 </TableCell>
 
                 <TableCell>
-                  <Typography
-                    sx={{
-                      color: statusColors.font,
-                      backgroundColor: statusColors.background,
-                      padding: '2px 8px',
-                      borderRadius: '16px',
-                      fontSize: '12px',
-                    }}
-                  >
-                    {t(`filters.${status}`)}
-                  </Typography>
+                  <Chip
+                    label={t(`filters.${status}`)}
+                    color={INVOICE_STATUS_COLOR[status as XeroInvoiceStatus]}
+                  />
                 </TableCell>
               </TableRow>
             )

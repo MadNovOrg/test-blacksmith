@@ -1,8 +1,4 @@
-import { gql } from 'graphql-request'
-
-import { Order } from '@app/types'
-
-export type ParamsType = { orderId: string }
+import { gql } from 'urql'
 
 export const QUERY = gql`
   query GetOrder($orderId: uuid!) {
@@ -19,8 +15,23 @@ export const QUERY = gql`
       stripePaymentId
       promoCodes
       xeroInvoiceNumber
+      profile {
+        fullName
+        email
+        phone
+      }
+      course {
+        id
+        course_code
+        level
+        name
+        type
+        salesRepresentative {
+          fullName
+        }
+        start
+        end
+      }
     }
   }
 `
-
-export type ResponseType = { order: Order }

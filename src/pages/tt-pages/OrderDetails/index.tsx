@@ -6,61 +6,30 @@ import {
   Stack,
   Button,
   Typography,
+  Chip,
 } from '@mui/material'
 import { addWeeks, parseISO } from 'date-fns'
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
-import { DetailsRow } from '@app/components/DetailsRow'
+import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import {
-  XeroPhone,
-  XeroAddress,
   XeroInvoiceStatus,
-  Promo_Code_Type_Enum,
   Payment_Methods_Enum,
+  XeroPhoneType,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
-import { xeroInvoiceStatusColors } from '@app/util'
+import { INVOICE_STATUS_COLOR } from '@app/util'
 
-interface Stringifiable {
-  toString(): string
-}
-
-type RowProps = {
-  label?: Stringifiable
-  value?: Stringifiable
-  labelProps?: { [key: string]: Stringifiable }
-  valueProps?: { [key: string]: Stringifiable }
-}
-
-const Row: React.FC<RowProps> = ({ label, value, labelProps, valueProps }) => (
-  <DetailsRow
-    label={String(label) ?? ''}
-    value={String(value) ?? ''}
-    labelProps={{
-      flex: null,
-      textAlign: 'left',
-      color: theme.typography.body2.color,
-      ...(labelProps ?? {}),
-    }}
-    valueProps={{
-      flex: null,
-      textAlign: 'right',
-      color: theme.typography.body2.color,
-      ...(valueProps ?? {}),
-    }}
-    containerProps={{
-      justifyContent: 'space-between',
-    }}
-  />
-)
+import { CourseDuration } from './components/CourseDuration'
+import { CourseTitle } from './components/CourseTitle'
 
 const add8Weeks = (dateStr: string) => addWeeks(parseISO(dateStr), 8)
 
@@ -68,7 +37,7 @@ export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
   const { t, _t } = useScopedTranslation('pages.order-details')
 
-  const { order, error, course, invoice, isLoading } = useOrder(id ?? '')
+  const { order, error, invoice, isLoading } = useOrder(id ?? '')
 
   const { promoCodes, isLoading: isUsePromoCodesLoading } = usePromoCodes({
     sort: { by: 'code', dir: 'asc' },
@@ -76,6 +45,8 @@ export const OrderDetails: React.FC<unknown> = () => {
     limit: order?.promoCodes?.length ?? 0,
     offset: 0,
   })
+
+  const course = order?.course
 
   const lineItemForRegistrants = useMemo(() => {
     return course?.name
@@ -85,73 +56,22 @@ export const OrderDetails: React.FC<unknown> = () => {
       : null
   }, [invoice, course, _t])
 
-  const getDiscountForPromoCode = useCallback(
-    (total: number, code: string, quantity = 1) => {
-      const promoCode = promoCodes?.find(pc => pc?.code === code)
-      if (!promoCode) {
-        return 0
-      }
+  const go1LicensesLineItem = useMemo(() => {
+    return invoice?.lineItems.find(li => li?.description?.includes('Go1'))
+  }, [invoice])
 
-      let discount = 0
-      switch (promoCode.type) {
-        case Promo_Code_Type_Enum.FreePlaces:
-          discount = -(promoCode.amount / quantity) * total
-          break
-
-        case Promo_Code_Type_Enum.Percent:
-          discount = -(promoCode.amount / 100) * total
-          break
-
-        default:
-          break
-      }
-
-      return discount
-    },
-    [promoCodes]
+  const promoCode = promoCodes.length ? promoCodes[0] : null
+  const phone = invoice?.contact.phones?.find(
+    p => p?.phoneType === XeroPhoneType.Default
   )
 
-  const formatPhoneString = (phone: XeroPhone | null) =>
-    phone
-      ? `${phone.phoneCountryCode ? `(+${phone.phoneCountryCode})` : ''} \
-${phone.phoneAreaCode} ${phone.phoneNumber}`
-      : ''
+  const discountAmount = useMemo(() => {
+    const discountLineItem = invoice?.lineItems?.find(li =>
+      li?.description?.includes('Discount')
+    )
 
-  const getOrderedByValue = useCallback(() => {
-    const phone = invoice?.contact?.phones ? invoice.contact.phones[0] : {}
-    const formattedPhoneString = formatPhoneString(phone)
-
-    let result = invoice?.contact?.name ?? ''
-    if (invoice?.contact?.emailAddress) {
-      result += `\n${invoice.contact.emailAddress}`
-    }
-    if (phone) {
-      result += `\n${formattedPhoneString}`
-    }
-
-    return result
-  }, [invoice])
-
-  const getInvoicedToValue = useCallback(() => {
-    let result = ''
-    if (invoice?.contact?.addresses && invoice?.contact?.addresses.length > 0) {
-      const { addressLine1, addressLine2, city, region, postalCode, country } =
-        invoice?.contact?.addresses[0] as XeroAddress
-      result += `${addressLine1}, ${city}, ${region}, ${country}
-${addressLine2}
-${postalCode}
-${invoice?.contact?.name}`
-    }
-
-    result += `\n${invoice?.contact?.emailAddress}`
-
-    if (invoice?.contact?.addresses && invoice?.contact?.addresses.length > 0) {
-      const phone = invoice?.contact?.phones ? invoice.contact.phones[0] : {}
-      result += `\n${formatPhoneString(phone)}`
-    }
-
-    return result
-  }, [invoice])
+    return discountLineItem?.lineAmount ?? 0
+  }, [invoice?.lineItems])
 
   const processingFee = useMemo(() => {
     if (order?.paymentMethod !== Payment_Methods_Enum.Cc) {
@@ -178,38 +98,21 @@ ${invoice?.contact?.name}`
     return null
   }, [invoice])
 
-  const handleOpenInXeroClick = useCallback(() => {
-    if (xeroInvoiceUrl) {
-      window.open(xeroInvoiceUrl, '_blank')?.focus()
-    }
-  }, [xeroInvoiceUrl])
-
-  if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
-    return <NotFound />
-  }
-
-  const localizedDateString = new Date(invoice?.date as string).toLocaleString(
-    t('locale'),
-    {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-      timeZoneName: 'short',
-    }
-  )
-
-  const status = invoice?.status ?? 'UNKNOWN'
-  const statusColors = xeroInvoiceStatusColors[status]
+  const status = invoice?.status ?? XeroInvoiceStatus.Unknown
+  const statusColor = INVOICE_STATUS_COLOR[status]
+  const source = lineItemForRegistrants?.tracking?.find(
+    tc => tc.name === 'Sales Person'
+  )?.option
 
   const dueDate = invoice?.dueDate ?? add8Weeks(invoice?.date as string)
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   const loadingData = isLoading || isUsePromoCodesLoading
+
+  if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
+    return <NotFound />
+  }
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
@@ -239,13 +142,14 @@ ${invoice?.contact?.name}`
                 <Typography variant="h2" mb={4}>
                   {order?.xeroInvoiceNumber}
                 </Typography>
-                {isInvoiceInXero ? (
+                {isInvoiceInXero && xeroInvoiceUrl ? (
                   <Button
                     variant="outlined"
                     color="primary"
                     size="small"
                     data-testid="order-details-view-in-xero-button"
-                    onClick={handleOpenInXeroClick}
+                    href={xeroInvoiceUrl}
+                    target="_blank"
                   >
                     {t('view-in-xero')}
                   </Button>
@@ -254,270 +158,277 @@ ${invoice?.contact?.name}`
             </Box>
 
             <Container maxWidth="md">
-              <Box mt={2} display="flex" flexDirection="column">
-                <Box p={2} bgcolor="common.white">
-                  <Row
-                    label={`${course?.name} ${
-                      course?.course_code && `(${course?.course_code})`
-                    }}`}
-                    value={t('quantity')}
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                    valueProps={{ variant: 'caption', fontWeight: 600 }}
-                  />
-                  <Row label={localizedDateString} value={order?.quantity} />
-                </Box>
-
-                {order?.registrants?.length ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    {order?.registrants?.map((email: string) => (
-                      <Row
-                        key={email}
-                        label={email}
-                        value={_t('common.currency', {
-                          amount: lineItemForRegistrants?.unitAmount,
-                        })}
-                      />
-                    ))}
-                  </Box>
-                ) : null}
-
-                {!order?.registrants?.length ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    {invoice?.lineItems?.map(lineItem => {
-                      const unitAmount = _t('common.currency', {
-                        amount: lineItem?.unitAmount,
-                      })
-
-                      const lineAmount = _t('common.currency', {
-                        amount: lineItem?.lineAmount,
-                      })
-
-                      const lineItemTotal = `${unitAmount} x ${lineItem?.quantity} = ${lineAmount}`
-
-                      return (
-                        <Row
-                          key={lineItem?.item?.id}
-                          label={lineItem?.description ?? ''}
-                          value={lineItemTotal}
+              <Box>
+                <Stack spacing="2px">
+                  <DetailsItemBox
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Stack spacing={2}>
+                      <Box>
+                        {course ? <CourseTitle course={course} mb={1} /> : null}
+                        <CourseDuration
+                          start={new Date(course?.start)}
+                          end={new Date(course?.end)}
                         />
-                      )
-                    })}
-                  </Box>
-                ) : null}
+                      </Box>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  {processingFee > 0 ? (
-                    <Row
-                      label={t('processing-fee')}
-                      value={_t('common.currency', { amount: processingFee })}
-                    />
+                      {go1LicensesLineItem ? (
+                        <Typography color="grey.700">
+                          {_t('currency', {
+                            amount: go1LicensesLineItem.unitAmount,
+                          })}{' '}
+                          {t('per-attendee')}
+                        </Typography>
+                      ) : null}
+                    </Stack>
+                    <Box textAlign="right">
+                      <Typography variant="caption">{t('quantity')}</Typography>
+                      <Typography>{order.quantity}</Typography>
+                    </Box>
+                  </DetailsItemBox>
+
+                  {order?.registrants?.length ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        {order?.registrants?.map((email: string) => (
+                          <ItemRow key={email}>
+                            <Typography color="grey.700">{email}</Typography>
+                            <Typography color="grey.700">
+                              {_t('common.currency', {
+                                amount: lineItemForRegistrants?.unitAmount,
+                              })}
+                            </Typography>
+                          </ItemRow>
+                        ))}
+                      </Stack>
+                    </DetailsItemBox>
                   ) : null}
-                  <Row
-                    label={t('subtotal')}
-                    value={_t('common.currency', {
-                      amount: invoice?.subTotal,
-                    })}
-                  />
-                  <Row
-                    label={t('vat')}
-                    value={_t('common.currency', {
-                      amount: invoice?.totalTax,
-                    })}
-                  />
-                </Box>
 
-                {order?.promoCodes?.length > 0 ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    {order.promoCodes.map((code: string) => (
-                      <Row
-                        key={code}
-                        label={t('promo-code', { code })}
-                        value={_t('common.currency', {
-                          amount: getDiscountForPromoCode(
-                            order?.orderTotal,
-                            code,
-                            order?.quantity
-                          ),
-                        })}
-                      />
-                    ))}
-                  </Box>
-                ) : null}
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      {promoCode ? (
+                        <ItemRow>
+                          <Typography color="grey.700">
+                            {t('promo-code', { code: promoCode.code })}
+                          </Typography>
+                          <Typography color="grey.700">
+                            {_t('common.currency', {
+                              amount: discountAmount,
+                            })}
+                          </Typography>
+                        </ItemRow>
+                      ) : null}
+                      {processingFee > 0 ? (
+                        <ItemRow>
+                          <Typography color="grey.700">
+                            {t('processing-fee')}
+                          </Typography>
+                          <Typography color="grey.700">
+                            {_t('common.currency', { amount: processingFee })}
+                          </Typography>
+                        </ItemRow>
+                      ) : null}
+                      <ItemRow>
+                        <Typography color="grey.700">
+                          {t('subtotal')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {_t('common.currency', {
+                            amount: invoice?.subTotal,
+                          })}
+                        </Typography>
+                      </ItemRow>
+                      <ItemRow>
+                        <Typography color="grey.700">{t('vat')}</Typography>
+                        <Typography color="grey.700">
+                          {_t('common.currency', {
+                            amount: invoice?.totalTax,
+                          })}
+                        </Typography>
+                      </ItemRow>
+                    </Stack>
+                  </DetailsItemBox>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('total')}
-                    value={_t('common.currency', { amount: invoice?.total })}
-                  />
-                </Box>
+                  <DetailsItemBox>
+                    <ItemRow>
+                      <Typography color="grey.700">{t('total')}</Typography>
+                      <Typography color="grey.700">
+                        {_t('common.currency', { amount: invoice?.total })}
+                      </Typography>
+                    </ItemRow>
+                  </DetailsItemBox>
 
-                {invoice?.status === XeroInvoiceStatus.Paid ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    <Row
-                      label={t('paid-on', {
-                        date: new Date(invoice?.fullyPaidOnDate as string),
-                      })}
-                      value={_t('common.currency', {
-                        amount: invoice?.amountPaid,
-                      })}
-                      labelProps={{ fontWeight: 600 }}
-                      valueProps={{ fontWeight: 600 }}
-                    />
-                  </Box>
-                ) : null}
+                  {invoice?.status === XeroInvoiceStatus.Paid ? (
+                    <DetailsItemBox>
+                      <ItemRow>
+                        <Typography fontWeight={600}>
+                          {t('paid-on', {
+                            date: new Date(invoice?.fullyPaidOnDate as string),
+                          })}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {_t('common.currency', {
+                            amount: invoice?.amountPaid,
+                          })}
+                        </Typography>
+                      </ItemRow>
+                    </DetailsItemBox>
+                  ) : null}
 
-                <Box p={2} bgcolor="common.white" mt={4}>
-                  <Row
-                    label={t('amount-due', {
-                      currency: invoice?.currencyCode,
-                    })}
-                    value={_t('common.currency', {
-                      amount: invoice?.amountDue,
-                    })}
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                    valueProps={{ variant: 'h3' }}
-                  />
-                  <Row
-                    label={t('due-on', { date: dueDate })}
-                    value={_t(`common.filters.${invoice?.status ?? 'UNKNOWN'}`)}
-                    valueProps={{
-                      variant: 'caption',
-                      fontWeight: 600,
-                      color: statusColors[0],
-                      backgroundColor: statusColors[1],
-                      padding: '0.125rem 0.5rem',
-                      borderRadius: '1rem',
-                    }}
-                  />
-                </Box>
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <ItemRow>
+                        <Typography fontWeight={600}>
+                          {t('amount-due', {
+                            currency: invoice?.currencyCode,
+                          })}
+                        </Typography>
+                        <Typography fontWeight={600} variant="h3">
+                          {_t('common.currency', {
+                            amount: invoice?.amountDue,
+                          })}
+                        </Typography>
+                      </ItemRow>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('date-reference')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row
-                    label={_t('dates.default', { date: invoice?.date })}
-                    value=""
-                  />
-                </Box>
+                      <ItemRow>
+                        <Typography
+                          color={
+                            status === XeroInvoiceStatus.Overdue
+                              ? 'error.dark'
+                              : 'grey.700'
+                          }
+                        >
+                          {t('due-on', { date: dueDate })}
+                        </Typography>
+                        <Chip
+                          label={_t(
+                            `common.filters.${invoice?.status ?? 'UNKNOWN'}`
+                          )}
+                          color={statusColor}
+                          size="small"
+                        />
+                      </ItemRow>
+                    </Stack>
+                  </DetailsItemBox>
+                </Stack>
+              </Box>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('payment-method')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row
-                    label={`Pay by ${t(
-                      `payment-method-${order?.paymentMethod}`
-                    )}`}
-                    value=""
-                  />
-                </Box>
+              <Box mt={4}>
+                <Stack spacing="2px">
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <ItemRow>
+                        <Typography fontWeight={600}>
+                          {t('date-reference')}
+                        </Typography>
+                      </ItemRow>
+                      <ItemRow>
+                        <Typography color="grey.700">
+                          {_t('dates.default', { date: invoice?.date })}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {invoice?.reference}
+                        </Typography>
+                      </ItemRow>
+                    </Stack>
+                  </DetailsItemBox>
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('ordered-by')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row label={getOrderedByValue()} value="" />
-                </Box>
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <Typography fontWeight={600}>
+                        {t('payment-method')}
+                      </Typography>
+                      <Typography color="grey.700">
+                        {t(`payment-method-${order?.paymentMethod}`)}
+                      </Typography>
+                    </Stack>
+                  </DetailsItemBox>
 
-                {order?.paymentMethod === Payment_Methods_Enum.Invoice ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    <Row
-                      label={t('invoiced-to')}
-                      value=""
-                      labelProps={{
-                        variant: 'body1',
-                        fontWeight: 600,
-                        color: 'inherit',
-                      }}
-                    />
-                    <Row label={getInvoicedToValue()} value="" />
-                  </Box>
-                ) : null}
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <Typography fontWeight={600}>
+                        {t('ordered-by')}
+                      </Typography>
+                      <Typography color="grey.700">
+                        {order.profile.fullName}
+                      </Typography>
+                      <Typography color="grey.700">
+                        {order.profile.email}
+                      </Typography>
+                      {order.profile.phone ? (
+                        <Typography color="grey.700">
+                          {order.profile.phone}
+                        </Typography>
+                      ) : null}
+                    </Stack>
+                  </DetailsItemBox>
 
-                {course?.type === 'CLOSED' &&
-                course?.salesRepresentative?.fullName ? (
-                  <Box p={2} bgcolor="common.white" mt={0.3}>
-                    <Row
-                      label={t('sales-person')}
-                      value=""
-                      labelProps={{
-                        variant: 'body1',
-                        fontWeight: 600,
-                        color: 'inherit',
-                      }}
-                    />
-                    <Row
-                      label={course?.salesRepresentative?.fullName}
-                      value=""
-                    />
-                  </Box>
-                ) : null}
+                  {order?.paymentMethod === Payment_Methods_Enum.Invoice ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {t('invoiced-to')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {invoice?.contact.name}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {invoice?.contact.firstName}{' '}
+                          {invoice?.contact.lastName}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {invoice?.contact.emailAddress}
+                        </Typography>
+                        {phone ? (
+                          <Typography color="grey.700">
+                            {phone.phoneNumber}
+                          </Typography>
+                        ) : null}
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('source')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row label={t('mailout')} value="" />
-                </Box>
+                  {course?.type === 'CLOSED' &&
+                  course?.salesRepresentative?.fullName ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>
+                          {t('sales-person')}
+                        </Typography>
+                        <Typography color="grey.700">
+                          {course?.salesRepresentative?.fullName}
+                        </Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('region')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row label={t('UK')} value="" />
-                </Box>
+                  {source ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>{t('source')}</Typography>
+                        <Typography>{source}</Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
-                <Box p={2} bgcolor="common.white" mt={0.3}>
-                  <Row
-                    label={t('currency')}
-                    value=""
-                    labelProps={{
-                      variant: 'body1',
-                      fontWeight: 600,
-                      color: 'inherit',
-                    }}
-                  />
-                  <Row label={t(invoice?.currencyCode ?? 'GBP')} value="" />
-                </Box>
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <Typography fontWeight={600}>{t('region')}</Typography>
+                      <Typography color="grey.700">{t('UK')}</Typography>
+                    </Stack>
+                  </DetailsItemBox>
+
+                  <DetailsItemBox>
+                    <Stack spacing={2}>
+                      <Typography fontWeight={600}>{t('currency')}</Typography>
+                      <Typography color="grey.700">
+                        {t(invoice?.currencyCode ?? 'GBP')}
+                      </Typography>
+                    </Stack>
+                  </DetailsItemBox>
+                </Stack>
               </Box>
             </Container>
           </Box>

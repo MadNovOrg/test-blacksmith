@@ -12818,12 +12818,17 @@ export type XeroAddress = {
   __typename?: 'XeroAddress';
   addressLine1?: Maybe<Scalars['String']>;
   addressLine2?: Maybe<Scalars['String']>;
-  addressType?: Maybe<Scalars['String']>;
+  addressType?: Maybe<XeroAddressType>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
 };
+
+export enum XeroAddressType {
+  Pobox = 'POBOX',
+  Street = 'STREET'
+}
 
 export type XeroCallbackInput = {
   url: Scalars['String'];
@@ -12843,7 +12848,6 @@ export type XeroContact = {
   __typename?: 'XeroContact';
   addresses?: Maybe<Array<Maybe<XeroAddress>>>;
   contactID: Scalars['ID'];
-  contactNumber?: Maybe<Scalars['String']>;
   contactStatus: XeroContactStatus;
   emailAddress?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
@@ -12890,10 +12894,8 @@ export type XeroInvoice = {
   status: XeroInvoiceStatus;
   subTotal?: Maybe<Scalars['Float']>;
   total: Scalars['Float'];
-  totalDiscount?: Maybe<Scalars['Float']>;
   totalTax?: Maybe<Scalars['Float']>;
   type: Scalars['String'];
-  url?: Maybe<Scalars['String']>;
 };
 
 export enum XeroInvoiceStatus {
@@ -12927,23 +12929,20 @@ export type XeroInvoicesStatusOutput = {
 export type XeroItem = {
   __typename?: 'XeroItem';
   code: Scalars['String'];
-  id?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
+  itemID: Scalars['String'];
 };
 
 export type XeroLineItem = {
   __typename?: 'XeroLineItem';
   accountCode?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  discountAmount: Scalars['Float'];
-  discountRate: Scalars['Float'];
   item?: Maybe<XeroItem>;
   itemCode: Scalars['String'];
   lineAmount: Scalars['Float'];
-  lineItemId?: Maybe<Scalars['String']>;
   quantity: Scalars['Int'];
   taxAmount: Scalars['Float'];
   taxType: Scalars['String'];
+  tracking?: Maybe<Array<XeroTrackingCategory>>;
   unitAmount: Scalars['Float'];
 };
 
@@ -12952,7 +12951,21 @@ export type XeroPhone = {
   phoneAreaCode?: Maybe<Scalars['String']>;
   phoneCountryCode?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
-  phoneType?: Maybe<Scalars['String']>;
+  phoneType: XeroPhoneType;
+};
+
+export enum XeroPhoneType {
+  Ddi = 'DDI',
+  Default = 'DEFAULT',
+  Fax = 'FAX',
+  Mobile = 'MOBILE'
+}
+
+export type XeroTrackingCategory = {
+  __typename?: 'XeroTrackingCategory';
+  name: Scalars['String'];
+  option: Scalars['String'];
+  trackingCategoryID: Scalars['String'];
 };
 
 export type ZoomMeeting = {
@@ -28254,6 +28267,8 @@ export type Order = {
   organizationId: Scalars['uuid'];
   paymentMethod: Payment_Methods_Enum;
   price?: Maybe<Scalars['float8']>;
+  /** An object relationship */
+  profile: Profile;
   profileId: Scalars['uuid'];
   promoCodes?: Maybe<Scalars['jsonb']>;
   quantity: Scalars['Int'];
@@ -28375,6 +28390,7 @@ export type Order_Bool_Exp = {
   organizationId?: InputMaybe<Uuid_Comparison_Exp>;
   paymentMethod?: InputMaybe<Payment_Methods_Enum_Comparison_Exp>;
   price?: InputMaybe<Float8_Comparison_Exp>;
+  profile?: InputMaybe<Profile_Bool_Exp>;
   profileId?: InputMaybe<Uuid_Comparison_Exp>;
   promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
   quantity?: InputMaybe<Int_Comparison_Exp>;
@@ -28450,6 +28466,7 @@ export type Order_Insert_Input = {
   organizationId?: InputMaybe<Scalars['uuid']>;
   paymentMethod?: InputMaybe<Payment_Methods_Enum>;
   price?: InputMaybe<Scalars['float8']>;
+  profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profileId?: InputMaybe<Scalars['uuid']>;
   promoCodes?: InputMaybe<Scalars['jsonb']>;
   quantity?: InputMaybe<Scalars['Int']>;
@@ -28588,6 +28605,7 @@ export type Order_Order_By = {
   organizationId?: InputMaybe<Order_By>;
   paymentMethod?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  profile?: InputMaybe<Profile_Order_By>;
   profileId?: InputMaybe<Order_By>;
   promoCodes?: InputMaybe<Order_By>;
   quantity?: InputMaybe<Order_By>;
@@ -38399,17 +38417,17 @@ export type CourseTrainerInfoFragment = { __typename?: 'course_trainer', id: any
 
 export type WaitlistSummaryFragment = { __typename?: 'waitlist', id: any, email: string, phone: string, orgName: string, courseId: number, confirmed: boolean, createdAt: any, givenName: string, familyName: string };
 
-export type XeroPhoneSummaryFragment = { __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null };
+export type XeroPhoneSummaryFragment = { __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType };
 
-export type XeroAddressSummaryFragment = { __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null };
+export type XeroAddressSummaryFragment = { __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null };
 
-export type XeroContactSummaryFragment = { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null };
+export type XeroContactSummaryFragment = { __typename?: 'XeroContact', name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null };
 
-export type XeroItemSummaryFragment = { __typename?: 'XeroItem', id?: string | null, code: string, name: string };
+export type XeroItemSummaryFragment = { __typename?: 'XeroItem', itemID: string, code: string };
 
-export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null };
+export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, taxType: string, taxAmount: number, lineAmount: number, item?: { __typename?: 'XeroItem', itemID: string, code: string } | null, tracking?: Array<{ __typename?: 'XeroTrackingCategory', name: string, option: string }> | null };
 
-export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> };
+export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, taxType: string, taxAmount: number, lineAmount: number, item?: { __typename?: 'XeroItem', itemID: string, code: string } | null, tracking?: Array<{ __typename?: 'XeroTrackingCategory', name: string, option: string }> | null } | null> };
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
 
@@ -38746,7 +38764,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, profile: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, start?: any | null, end?: any | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null } | null } } | null };
 
 export type GetOrdersQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
@@ -39061,7 +39079,7 @@ export type GetXeroInvoicesForOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetXeroInvoicesForOrdersQuery = { __typename?: 'query_root', invoices: Array<{ __typename?: 'XeroInvoice', url?: string | null, type: string, date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, totalDiscount?: number | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', contactID: string, contactNumber?: string | null, contactStatus: XeroContactStatus, updatedDateUTC?: any | null, isCustomer?: boolean | null, name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneType?: string | null, phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: string | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, lineItemId?: string | null, taxType: string, taxAmount: number, lineAmount: number, discountRate: number, discountAmount: number, item?: { __typename?: 'XeroItem', id?: string | null, code: string, name: string } | null } | null> } | null> };
+export type GetXeroInvoicesForOrdersQuery = { __typename?: 'query_root', invoices: Array<{ __typename?: 'XeroInvoice', date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, taxType: string, taxAmount: number, lineAmount: number, item?: { __typename?: 'XeroItem', itemID: string, code: string } | null, tracking?: Array<{ __typename?: 'XeroTrackingCategory', name: string, option: string }> | null } | null> } | null> };
 
 export type GetXeroInvoicesStatusQueryVariables = Exact<{
   input: XeroInvoicesStatusInput;

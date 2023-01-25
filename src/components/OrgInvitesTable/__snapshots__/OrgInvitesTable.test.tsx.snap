@@ -150,7 +150,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
               >
                 <div
-                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-1pkeih1-MuiChip-root"
+                  class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-14qal2d-MuiChip-root"
                 >
                   <span
                     class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"
@@ -412,7 +412,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-body MuiTableCell-sizeMedium css-11mkwu5-MuiTableCell-root"
             >
               <div
-                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-1pkeih1-MuiChip-root"
+                class="MuiChip-root MuiChip-filled MuiChip-sizeSmall MuiChip-colorError MuiChip-filledError css-14qal2d-MuiChip-root"
               >
                 <span
                   class="MuiChip-label MuiChip-labelSmall css-t3ycia-MuiChip-label"

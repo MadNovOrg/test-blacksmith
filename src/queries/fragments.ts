@@ -391,10 +391,10 @@ export const Waitlist = gql`
 
 export const XeroPhone = gql`
   fragment XeroPhoneSummary on XeroPhone {
-    phoneType
     phoneCountryCode
     phoneAreaCode
     phoneNumber
+    phoneType
   }
 `
 
@@ -415,11 +415,6 @@ export const XeroContact = gql`
   ${XeroPhone}
 
   fragment XeroContactSummary on XeroContact {
-    contactID
-    contactNumber
-    contactStatus
-    updatedDateUTC
-    isCustomer
     name
     firstName
     lastName
@@ -435,9 +430,8 @@ export const XeroContact = gql`
 
 export const XeroItem = gql`
   fragment XeroItemSummary on XeroItem {
-    id
+    itemID
     code
-    name
   }
 `
 
@@ -453,12 +447,13 @@ export const XeroLineItem = gql`
     item {
       ...XeroItemSummary
     }
-    lineItemId
     taxType
     taxAmount
     lineAmount
-    discountRate
-    discountAmount
+    tracking {
+      name
+      option
+    }
   }
 `
 
@@ -467,8 +462,6 @@ export const XeroInvoice = gql`
   ${XeroContact}
 
   fragment XeroInvoiceSummary on XeroInvoice {
-    url
-    type
     date
     total
     status
@@ -487,7 +480,6 @@ export const XeroInvoice = gql`
     amountPaid
     currencyCode
     invoiceNumber
-    totalDiscount
     fullyPaidOnDate
   }
 `

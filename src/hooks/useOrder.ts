@@ -1,73 +1,55 @@
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   GetOrderQuery,
   GetOrderQueryVariables,
-  GetCourseByIdQuery as GetCourseQuery,
-  GetCourseByIdQueryVariables as GetCourseQueryVariables,
   GetXeroInvoicesForOrdersQuery,
   GetXeroInvoicesForOrdersQueryVariables,
 } from '@app/generated/graphql'
-import { QUERY as GET_COURSE } from '@app/queries/courses/get-course-by-id'
 import { QUERY as GET_ORDER } from '@app/queries/order/get-order'
 import { QUERY as GET_XERO_INVOICES_FOR_ORDERS } from '@app/queries/xero/get-xero-invoices-for-orders'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type UseOrder = {
   order?: GetOrderQuery['order']
-  course?: GetCourseQuery['course']
   invoice?: GetXeroInvoicesForOrdersQuery['invoices'][number]
   error?: Error
   isLoading?: boolean
 }
 
 export const useOrder = (orderId: string): UseOrder => {
-  const { data: getOrderData, error: getOrderError } = useSWR<
+  const [{ data, error: orderError, fetching: fetchingOrder }] = useQuery<
     GetOrderQuery,
-    Error,
-    [string, GetOrderQueryVariables]
-  >([GET_ORDER, { orderId }])
+    GetOrderQueryVariables
+  >({
+    query: GET_ORDER,
+    variables: { orderId },
+    requestPolicy: 'cache-and-network',
+  })
 
-  const { order } = getOrderData ?? ({ order: {} } as UseOrder)
+  const order = data?.order
 
-  const {
-    data: getXeroInvoicesForOrdersData,
-    error: getXeroInvoicesForOrdersError,
-  } = useSWR<
+  const [
+    {
+      data: getXeroInvoicesForOrdersData,
+      error: getXeroInvoicesForOrdersError,
+      fetching: fetchingInvoice,
+    },
+  ] = useQuery<
     GetXeroInvoicesForOrdersQuery,
-    Error,
-    [string, GetXeroInvoicesForOrdersQueryVariables]
-  >([
-    GET_XERO_INVOICES_FOR_ORDERS,
-    { invoiceNumbers: [order?.xeroInvoiceNumber ?? ''] },
-  ])
+    GetXeroInvoicesForOrdersQueryVariables
+  >({
+    query: GET_XERO_INVOICES_FOR_ORDERS,
+    pause: !order,
+    variables: { invoiceNumbers: [order?.xeroInvoiceNumber ?? ''] },
+    requestPolicy: 'cache-and-network',
+  })
 
   const { invoices } = getXeroInvoicesForOrdersData ?? { invoices: [] }
-  const invoice = (invoices[0] ?? {}) as UseOrder['invoice']
-
-  const { data: getCourseData, error: getCourseError } = useSWR<
-    GetCourseQuery,
-    Error,
-    [string, GetCourseQueryVariables]
-  >([GET_COURSE, { id: order?.courseId ?? 0 }])
-
-  const { course } = getCourseData ?? ({ course: {} } as UseOrder)
-
-  const getOrderStatus = getSWRLoadingStatus(getOrderData, getOrderError)
-  const getCourseStatus = getSWRLoadingStatus(getCourseData, getCourseError)
-  const getXeroInvoicesForOrdersStatus = getSWRLoadingStatus(
-    getXeroInvoicesForOrdersData,
-    getXeroInvoicesForOrdersError
-  )
 
   return {
     order,
-    course,
-    invoice,
-    error: getOrderError || getXeroInvoicesForOrdersError,
-    isLoading:
-      getOrderStatus === LoadingStatus.FETCHING ||
-      getCourseStatus === LoadingStatus.FETCHING ||
-      getXeroInvoicesForOrdersStatus === LoadingStatus.FETCHING,
+    invoice: invoices?.length ? invoices[0] : null,
+    error: orderError || getXeroInvoicesForOrdersError,
+    isLoading: fetchingOrder || fetchingInvoice,
   }
 }

@@ -12,7 +12,12 @@ import {
 import { TFunction } from 'i18next'
 import { FieldError, Merge } from 'react-hook-form'
 
-import { Course_Status_Enum, Grade_Enum, Profile } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Grade_Enum,
+  Profile,
+  XeroInvoiceStatus,
+} from '@app/generated/graphql'
 import {
   Address,
   AdminOnlyCourseStatus,
@@ -343,15 +348,18 @@ export function getFieldError(
   return error?.message
 }
 
-export const xeroInvoiceStatusColors: { [key: string]: string[] } = {
-  VOIDED: ['#3B3A3C', '#EEEEEE'],
-  DELETED: ['#3B3A3C', '#EEEEEE'],
-  UNKNOWN: ['#3B3A3C', '#EEEEEE'],
-  PAID: ['#394700', '#F3F5E6'],
-  DRAFT: ['#7A4E00', '#FEF4E4'],
-  SUBMITTED: ['#7A4E00', '#FEF4E4'],
-  AUTHORISED: ['#7A4E00', '#FEF4E4'],
-  OVERDUE: ['#990F0F', '#FAE6E6'],
+export const INVOICE_STATUS_COLOR: Record<
+  XeroInvoiceStatus,
+  'success' | 'default' | 'error' | 'warning'
+> = {
+  [XeroInvoiceStatus.Authorised]: 'warning',
+  [XeroInvoiceStatus.Deleted]: 'default',
+  [XeroInvoiceStatus.Draft]: 'default',
+  [XeroInvoiceStatus.Overdue]: 'error',
+  [XeroInvoiceStatus.Paid]: 'success',
+  [XeroInvoiceStatus.Submitted]: 'warning',
+  [XeroInvoiceStatus.Unknown]: 'default',
+  [XeroInvoiceStatus.Voided]: 'default',
 }
 
 // more on this logic [here](https://github.com/TeamTeach/application/wiki/Organisations)

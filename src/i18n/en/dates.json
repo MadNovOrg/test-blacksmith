@@ -7,5 +7,7 @@
   "long": "{{date, date_long}}",
   "longWithTime": "{{date, date_long_withTime}}",
   "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
+  "dateFromTo": "{{from, date_short}} - {{to, date_short}}",
+  "dateTimeFromTo": "{{from, date_withTime}} - {{to, date_withTime}}",
   "fullDateTime": "{{date, date_full}}"
 }

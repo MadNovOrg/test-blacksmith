@@ -2,23 +2,23 @@ import { Alert, Box, Container, Stack, Typography } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  QUERY as GET_ORDER_QUERY,
-  ResponseType as GetOrderResponseType,
-  ParamsType as GetOrderParamsType,
-} from '@app/queries/order/get-order'
+  GetOrderQuery,
+  GetOrderQueryVariables,
+  Payment_Methods_Enum,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
 import {
   MUTATION as DELETE_TEMP_PROFILE,
   ResponseType as DeleteTempProfileResponseType,
   ParamsType as DeleteTempProfileParamsType,
 } from '@app/queries/profile/delete-temp-profile'
-import { PaymentMethod } from '@app/types'
 
 const completedSteps = ['details', 'review', 'payment']
 
@@ -38,11 +38,11 @@ export const CourseBookingDone: React.FC = () => {
     )
   }, [fetcher, profile])
 
-  const { data, error } = useSWR<
-    GetOrderResponseType,
-    Error,
-    [string, GetOrderParamsType] | null
-  >(orderId ? [GET_ORDER_QUERY, { orderId }] : null)
+  const [{ data, error }] = useQuery<GetOrderQuery, GetOrderQueryVariables>({
+    query: GET_ORDER_QUERY,
+    variables: { orderId },
+    pause: !orderId,
+  })
   const order = data?.order
   const noOrder = order === null || error
 
@@ -58,7 +58,7 @@ export const CourseBookingDone: React.FC = () => {
         key: 'review',
         label: t('pages.book-course.step-2'),
       },
-      order.paymentMethod === PaymentMethod.CC
+      order.paymentMethod === Payment_Methods_Enum.Cc
         ? { key: 'payment', label: t('pages.book-course.step-3') }
         : null,
     ].filter(Boolean)

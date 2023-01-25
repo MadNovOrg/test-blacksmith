@@ -465,6 +465,28 @@ custom_types:
         - value: ORDER_NOT_FOUND
           is_deprecated: null
           description: null
+    - name: XeroPhoneType
+      values:
+        - value: DEFAULT
+          is_deprecated: null
+          description: null
+        - value: DDI
+          is_deprecated: null
+          description: null
+        - value: FAX
+          is_deprecated: null
+          description: null
+        - value: MOBILE
+          is_deprecated: null
+          description: null
+    - name: XeroAddressType
+      values:
+        - value: POBOX
+          is_deprecated: null
+          description: null
+        - value: STREET
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -534,4 +556,5 @@ custom_types:
     - name: CourseCertificateLevel
     - name: PromoCodeOutput
     - name: ConfirmCreditCardPaymentOutput
+    - name: XeroTrackingCategory
   scalars: []

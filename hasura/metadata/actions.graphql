@@ -316,6 +316,18 @@ enum ConfirmCreditCardPaymentError {
   ORDER_NOT_FOUND
 }
 
+enum XeroPhoneType {
+  DEFAULT
+  DDI
+  FAX
+  MOBILE
+}
+
+enum XeroAddressType {
+  POBOX
+  STREET
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -579,7 +591,6 @@ type XeroContactSearchOutput {
 
 type XeroContact {
   contactID: ID!
-  contactNumber: String
   contactStatus: XeroContactStatus!
   updatedDateUTC: date
   isCustomer: Boolean
@@ -592,14 +603,14 @@ type XeroContact {
 }
 
 type XeroPhone {
-  phoneType: String
+  phoneType: XeroPhoneType!
   phoneCountryCode: String
   phoneAreaCode: String
   phoneNumber: String
 }
 
 type XeroAddress {
-  addressType: String
+  addressType: XeroAddressType
   addressLine1: String
   addressLine2: String
   city: String
@@ -644,7 +655,6 @@ type XeroDisconnectOutput {
 
 type XeroInvoice {
   invoiceID: ID!
-  url: String
   type: String!
   date: String!
   total: Float!
@@ -657,15 +667,13 @@ type XeroInvoice {
   reference: String
   currencyCode: Currency!
   invoiceNumber: String
-  totalDiscount: Float
   fullyPaidOnDate: String
   amountPaid: String
   amountDue: String
 }
 
 type XeroItem {
-  id: String
-  name: String!
+  itemID: String!
   code: String!
 }
 
@@ -676,12 +684,10 @@ type XeroLineItem {
   itemCode: String!
   accountCode: String
   item: XeroItem
-  lineItemId: String
   taxType: String!
   taxAmount: Float!
   lineAmount: Float!
-  discountRate: Float!
-  discountAmount: Float!
+  tracking: [XeroTrackingCategory!]
 }
 
 type Go1LicensesChangeOutput {
@@ -745,5 +751,11 @@ type PromoCodeOutput {
 type ConfirmCreditCardPaymentOutput {
   confirmed: Boolean!
   error: ConfirmCreditCardPaymentError
+}
+
+type XeroTrackingCategory {
+  trackingCategoryID: String!
+  name: String!
+  option: String!
 }
 

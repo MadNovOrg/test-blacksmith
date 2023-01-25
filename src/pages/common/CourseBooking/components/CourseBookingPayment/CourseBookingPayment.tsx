@@ -6,6 +6,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   ConfirmCcPaymentMutation,
   ConfirmCcPaymentMutationVariables,
+  GetOrderQuery,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -15,7 +16,7 @@ import {
   StripeCreatePaymentResp,
   CONFIRM_CC_PAYMENT,
 } from '@app/lib/stripe'
-import { QUERY as GET_ORDER, ResponseType } from '@app/queries/order/get-order'
+import { QUERY as GET_ORDER } from '@app/queries/order/get-order'
 import { Currency } from '@app/types'
 
 import { PaymentForm } from './Form'
@@ -57,7 +58,7 @@ export const CourseBookingPayment = () => {
     const initiatePayment = async () => {
       try {
         setState({ loading: true })
-        const { order } = await fetcher<ResponseType>(GET_ORDER, { orderId })
+        const { order } = await fetcher<GetOrderQuery>(GET_ORDER, { orderId })
         if (!order || !order.orderTotal) {
           return setState({ loading: false, error: Error('ORDER_INVALID') })
         }

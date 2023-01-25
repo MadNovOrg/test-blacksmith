@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { ElementProps } from '@app/types'
 
@@ -14,14 +14,14 @@ export const DetailsRow = ({
   containerProps,
   children,
 }: {
-  label: string
-  value?: string | null
+  label: string | ReactNode
+  value?: string | ReactNode
   labelProps?: TypographyProps
   valueProps?: TypographyProps
   containerProps?: BoxProps
   children?: React.ReactNode
 }) => (
-  <Box display="flex" alignItems="center" mb={2} {...(containerProps ?? {})}>
+  <Box display="flex" alignItems="center" {...(containerProps ?? {})}>
     <Typography flex={1} color="grey.700" {...(labelProps ?? {})}>
       {label}
     </Typography>

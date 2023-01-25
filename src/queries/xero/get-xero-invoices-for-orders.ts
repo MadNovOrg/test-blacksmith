@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request'
+import { gql } from 'urql'
 
 import { XeroInvoice as XeroInvoiceSummary } from '@app/queries/fragments'
 
