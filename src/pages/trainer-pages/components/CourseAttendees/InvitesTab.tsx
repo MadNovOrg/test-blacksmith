@@ -84,7 +84,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
 
   const handleCancelInvite = async (invite: CourseInvite) => {
     await cancel(invite)
-    setSnackbarMessage(t('pages.course-participants.invite-canceled'))
+    setSnackbarMessage(t('pages.course-participants.invite-cancelled'))
     setMessageSnackbarOpen(true)
   }
 

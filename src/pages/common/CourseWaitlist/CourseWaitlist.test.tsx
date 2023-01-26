@@ -52,7 +52,7 @@ describe('page: Waitlist', () => {
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"It seems like a course your trying to join the waitlist doesn't exist anymore."`
+      `"It seems like a course you're trying to join the waitlist for doesn't exist anymore."`
     )
   })
 

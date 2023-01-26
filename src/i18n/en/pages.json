@@ -575,7 +575,7 @@
     "resend-invite": "Resend invite",
     "cancel-invite": "Cancel invite",
     "invite-sent": "Invite sent.",
-    "invite-canceled": "Invite canceled.",
+    "invite-cancelled": "Invite cancelled.",
     "no-attendees": "No attendees",
     "manage-attendance": "Manage attendance"
   },
@@ -1121,7 +1121,7 @@
     "address": "Organisation address"
   },
   "invite-to-org": {
-    "title": "Invite user to organization",
+    "title": "Invite user to organisation",
     "user-details": "User details",
     "work-email": "Work email",
     "work-email-hint": "Press ENTER to add multiple emails.",
@@ -1232,7 +1232,7 @@
     },
     "no-results": "No courses found. Try another search.",
     "please-select-organization": "Please select organisation to sort by distance.",
-    "select-organization": "Please select organization"
+    "select-organization": "Please select organisation"
   },
   "transfer-participant": {
     "title-ADMIN_TRANSFERS": "Transfer participant",
