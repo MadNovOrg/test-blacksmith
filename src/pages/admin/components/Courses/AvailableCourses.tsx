@@ -17,11 +17,14 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useAuth } from '@app/context/auth'
-import { Course_Type_Enum, GetOrgCoursesQuery } from '@app/generated/graphql'
+import {
+  Course_Status_Enum,
+  Course_Type_Enum,
+  GetOrgCoursesQuery,
+} from '@app/generated/graphql'
 import useOrg from '@app/hooks/useOrg'
 import useOrgCourses, { ALL_ORGS } from '@app/hooks/useOrgCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
@@ -38,11 +41,11 @@ export const AvailableCourses: React.FC = () => {
   const navigate = useNavigate()
 
   const [keyword, setKeyword] = useState('')
-  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [dateFrom, setDateFrom] = useState<Date | null>(null)
   const [dateTo, setDateTo] = useState<Date | null>(null)
-  const [sortBy, setSortBy] =
-    useState<keyof typeof sortFunctions>('date-ascending')
+  const [sortBy, setSortBy] = useState<keyof typeof sortFunctions>(
+    id !== ALL_ORGS ? 'distance-to-org' : 'date-ascending'
+  )
 
   const sortByDistance = sortBy === 'distance-to-org'
 
@@ -56,7 +59,24 @@ export const AvailableCourses: React.FC = () => {
   const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
     id ?? ALL_ORGS,
     profile?.id,
-    acl.isTTAdmin()
+    acl.isTTAdmin(),
+    {
+      _and: [
+        { type: { _eq: Course_Type_Enum.Open } },
+        {
+          status: {
+            _nin: [
+              Course_Status_Enum.Cancelled,
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.Declined,
+              Course_Status_Enum.EvaluationMissing,
+              Course_Status_Enum.GradeMissing,
+              Course_Status_Enum.Draft,
+            ],
+          },
+        },
+      ],
+    }
   )
 
   const distances = useMemo(() => {
@@ -105,7 +125,7 @@ export const AvailableCourses: React.FC = () => {
         return false
       if (dateTo && start > dateTo && differenceInDays(start, dateTo) > 0)
         return false
-      return filterType.length > 0 ? filterType.some(t => t === c.type) : true
+      return true
     })
     if (sortByDistance) {
       const knownDistances = values.filter(c => !!distances.get(c.id))
@@ -127,7 +147,6 @@ export const AvailableCourses: React.FC = () => {
     sortBy,
     dateFrom,
     dateTo,
-    filterType,
     distances,
   ])
 
@@ -162,8 +181,6 @@ export const AvailableCourses: React.FC = () => {
 
                 <Box>
                   <Stack gap={1}>
-                    <FilterCourseType onChange={setFilterType} />
-
                     <TextField
                       select
                       variant="standard"

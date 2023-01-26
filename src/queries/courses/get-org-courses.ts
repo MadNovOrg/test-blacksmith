@@ -9,6 +9,7 @@ export const QUERY = gql`
   query GetOrgCourses(
     $where: organization_bool_exp = {}
     $courseFilter: course_bool_exp = {}
+    $limit: Int = 5
   ) {
     courses: course(
       where: {
@@ -18,6 +19,8 @@ export const QUERY = gql`
           { schedule: { start: { _gt: "now()" } } }
         ]
       }
+      order_by: { start: asc }
+      limit: $limit
     ) {
       ...Course
       schedules: schedule {

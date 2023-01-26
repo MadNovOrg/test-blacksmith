@@ -49,13 +49,24 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
     loading: orgLoading,
   } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
   const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
-    orgId,
+    ALL_ORGS,
     profile?.id,
-    acl.isTTAdmin(),
+    true,
     {
       _and: [
         { type: { _eq: Course_Type_Enum.Open } },
-        { status: { _neq: Course_Status_Enum.Cancelled } },
+        {
+          status: {
+            _nin: [
+              Course_Status_Enum.Cancelled,
+              Course_Status_Enum.Completed,
+              Course_Status_Enum.Declined,
+              Course_Status_Enum.EvaluationMissing,
+              Course_Status_Enum.GradeMissing,
+              Course_Status_Enum.Draft,
+            ],
+          },
+        },
       ],
     }
   )
