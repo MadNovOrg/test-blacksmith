@@ -8,7 +8,6 @@ import {
   Typography,
   Chip,
 } from '@mui/material'
-import { addWeeks, parseISO } from 'date-fns'
 import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -30,8 +29,6 @@ import { INVOICE_STATUS_COLOR } from '@app/util'
 
 import { CourseDuration } from './components/CourseDuration'
 import { CourseTitle } from './components/CourseTitle'
-
-const add8Weeks = (dateStr: string) => addWeeks(parseISO(dateStr), 8)
 
 export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
@@ -103,8 +100,6 @@ export const OrderDetails: React.FC<unknown> = () => {
   const source = lineItemForRegistrants?.tracking?.find(
     tc => tc.name === 'Sales Person'
   )?.option
-
-  const dueDate = invoice?.dueDate ?? add8Weeks(invoice?.date as string)
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
@@ -300,7 +295,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                               : 'grey.700'
                           }
                         >
-                          {t('due-on', { date: dueDate })}
+                          {t('due-on', { date: invoice?.dueDate })}
                         </Typography>
                         <Chip
                           label={_t(

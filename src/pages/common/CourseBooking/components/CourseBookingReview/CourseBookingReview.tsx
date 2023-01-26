@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { differenceInDays, isPast, subDays } from 'date-fns'
+import { isPast } from 'date-fns'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -16,7 +16,11 @@ import { useNavigate } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { useAuth } from '@app/context/auth'
 import { PaymentMethod } from '@app/generated/graphql'
-import { formatCourseVenue } from '@app/util'
+import {
+  formatCourseVenue,
+  isOrderDueDateImmediate,
+  getOrderDueDate,
+} from '@app/util'
 
 import { useBooking } from '../BookingContext'
 
@@ -77,13 +81,13 @@ export const CourseBookingReview: React.FC = () => {
     }
   }
 
-  const INVOICE_DUE_OFFSET_DAYS = 8 * 7
   const calculateDueDate = (date: Date) => {
-    return Math.abs(differenceInDays(new Date(), date)) <
-      INVOICE_DUE_OFFSET_DAYS || isPast(date)
+    const today = new Date()
+    return isOrderDueDateImmediate(today, date, booking.paymentMethod) ||
+      isPast(date)
       ? t('pages.book-course.due-immediately')
       : t('pages.book-course.due-on', {
-          date: subDays(date, INVOICE_DUE_OFFSET_DAYS),
+          date: getOrderDueDate(today, date, booking.paymentMethod),
         })
   }
 

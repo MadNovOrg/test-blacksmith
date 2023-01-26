@@ -1,15 +1,27 @@
-import { add, differenceInWeeks } from 'date-fns'
+import { sub, differenceInWeeks } from 'date-fns'
+
+import { PaymentMethod, Payment_Methods_Enum } from '@app/generated/graphql'
+
+export const isOrderDueDateImmediate = (
+  creationDate: Date,
+  startDate: Date,
+  paymentMethod?: PaymentMethod | Payment_Methods_Enum
+): boolean => {
+  const isCreditCard = paymentMethod === PaymentMethod.Cc
+  return isCreditCard || differenceInWeeks(startDate, creationDate) < 8
+}
 
 export const getOrderDueDate = (
-  creationDateString: string,
-  startDateString: string
+  creationDateString: string | Date,
+  startDateString: string | Date,
+  paymentMethod?: PaymentMethod | Payment_Methods_Enum
 ): Date => {
   const creationDate = new Date(creationDateString)
   const startDate = new Date(startDateString)
 
-  if (differenceInWeeks(startDate, creationDate) < 8) {
+  if (isOrderDueDateImmediate(creationDate, startDate, paymentMethod)) {
     return creationDate
   }
 
-  return add(startDate, { weeks: 8 })
+  return sub(startDate, { weeks: 8 })
 }

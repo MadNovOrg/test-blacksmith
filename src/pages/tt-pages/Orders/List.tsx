@@ -64,7 +64,7 @@ export const List: React.FC<Props> = ({
       ? order.course.schedule[0]
       : { start: null }
     const { orderDue, status, createdAt } = order
-    const dueDate = getOrderDueDate(createdAt, start)
+    const dueDate = getOrderDueDate(createdAt, start, order.paymentMethod)
 
     return {
       due: orderDue,
