@@ -560,10 +560,7 @@ export const CourseBookingDetails: React.FC = () => {
           />
 
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
-            <b>{t('important')}:</b> {t('pages.book-course.notice')}
-          </Alert>
-
-          <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
+            <b>{t('important')}:</b> {`${t('pages.book-course.notice')}\n`}
             <b>{t('important')}:</b> {t('pages.book-course.repeat-own-email')}
           </Alert>
 
