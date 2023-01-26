@@ -1,16 +1,13 @@
 import { gql } from 'graphql-request'
 
-import { GetPromoCodesQueryVariables, Query_Root } from '@app/generated/graphql'
+import {
+  GetPromoCodesQuery,
+  GetPromoCodesQueryVariables,
+} from '@app/generated/graphql'
 
-export type InputType = GetPromoCodesQueryVariables & {
-  limit?: number
-  offset?: number
-}
+export type InputType = GetPromoCodesQueryVariables
 
-export type ResponseType = {
-  promoCodes: Query_Root['promo_code']
-  promo_code_aggregate: { aggregate: { count: number } }
-}
+export type ResponseType = GetPromoCodesQuery
 
 export const QUERY = gql`
   query GetPromoCodes(

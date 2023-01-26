@@ -203,7 +203,7 @@ export const usePromoCodes = ({
 
   return {
     promoCodes: data?.promoCodes ?? [],
-    total: data?.promo_code_aggregate.aggregate.count ?? 0,
+    total: data?.promo_code_aggregate.aggregate?.count ?? 0,
     error,
     status,
     isLoading: status === LoadingStatus.FETCHING,

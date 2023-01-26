@@ -1,5 +1,4 @@
 import {
-  Alert,
   Box,
   CircularProgress,
   Container,
@@ -34,7 +33,7 @@ export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
   const { t, _t } = useScopedTranslation('pages.order-details')
 
-  const { order, error, invoice, isLoading } = useOrder(id ?? '')
+  const { order, invoice, isLoading } = useOrder(id ?? '')
 
   const { promoCodes, isLoading: isUsePromoCodesLoading } = usePromoCodes({
     sort: { by: 'code', dir: 'asc' },
@@ -106,7 +105,7 @@ export const OrderDetails: React.FC<unknown> = () => {
   const loadingData = isLoading || isUsePromoCodesLoading
 
   if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
-    return <NotFound />
+    return <NotFound title={t('error')} description="" />
   }
 
   return (
@@ -121,8 +120,6 @@ export const OrderDetails: React.FC<unknown> = () => {
             <CircularProgress />
           </Stack>
         ) : null}
-
-        {error ? <Alert severity="error">{t('error')}</Alert> : null}
 
         {order && !loadingData ? (
           <Box display="flex" paddingBottom={5}>
@@ -178,7 +175,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                         </Typography>
                       ) : null}
                     </Stack>
-                    <Box textAlign="right">
+                    <Box textAlign="right" data-testid="order-quantity">
                       <Typography variant="caption">{t('quantity')}</Typography>
                       <Typography>{order.quantity}</Typography>
                     </Box>
@@ -188,7 +185,10 @@ export const OrderDetails: React.FC<unknown> = () => {
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         {order?.registrants?.map((email: string) => (
-                          <ItemRow key={email}>
+                          <ItemRow
+                            key={email}
+                            data-testid={`order-registrant-${email}`}
+                          >
                             <Typography color="grey.700">{email}</Typography>
                             <Typography color="grey.700">
                               {_t('common.currency', {
@@ -204,7 +204,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                   <DetailsItemBox>
                     <Stack spacing={2}>
                       {promoCode ? (
-                        <ItemRow>
+                        <ItemRow data-testid="order-promo-code">
                           <Typography color="grey.700">
                             {t('promo-code', { code: promoCode.code })}
                           </Typography>
@@ -216,7 +216,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                         </ItemRow>
                       ) : null}
                       {processingFee > 0 ? (
-                        <ItemRow>
+                        <ItemRow data-testid="order-processing-fee">
                           <Typography color="grey.700">
                             {t('processing-fee')}
                           </Typography>
@@ -225,7 +225,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                           </Typography>
                         </ItemRow>
                       ) : null}
-                      <ItemRow>
+                      <ItemRow data-testid="order-subtotal">
                         <Typography color="grey.700">
                           {t('subtotal')}
                         </Typography>
@@ -235,7 +235,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                           })}
                         </Typography>
                       </ItemRow>
-                      <ItemRow>
+                      <ItemRow data-testid="order-vat">
                         <Typography color="grey.700">{t('vat')}</Typography>
                         <Typography color="grey.700">
                           {_t('common.currency', {
@@ -247,7 +247,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                   </DetailsItemBox>
 
                   <DetailsItemBox>
-                    <ItemRow>
+                    <ItemRow data-testid="order-total">
                       <Typography color="grey.700">{t('total')}</Typography>
                       <Typography color="grey.700">
                         {_t('common.currency', { amount: invoice?.total })}
@@ -257,7 +257,7 @@ export const OrderDetails: React.FC<unknown> = () => {
 
                   {invoice?.status === XeroInvoiceStatus.Paid ? (
                     <DetailsItemBox>
-                      <ItemRow>
+                      <ItemRow data-testid="order-paid-on">
                         <Typography fontWeight={600}>
                           {t('paid-on', {
                             date: new Date(invoice?.fullyPaidOnDate as string),
@@ -274,7 +274,7 @@ export const OrderDetails: React.FC<unknown> = () => {
 
                   <DetailsItemBox>
                     <Stack spacing={2}>
-                      <ItemRow>
+                      <ItemRow data-testid="order-amount-due">
                         <Typography fontWeight={600}>
                           {t('amount-due', {
                             currency: invoice?.currencyCode,
@@ -287,7 +287,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                         </Typography>
                       </ItemRow>
 
-                      <ItemRow>
+                      <ItemRow data-testid="order-due-date">
                         <Typography
                           color={
                             status === XeroInvoiceStatus.Overdue
@@ -361,7 +361,7 @@ export const OrderDetails: React.FC<unknown> = () => {
                   </DetailsItemBox>
 
                   {order?.paymentMethod === Payment_Methods_Enum.Invoice ? (
-                    <DetailsItemBox>
+                    <DetailsItemBox data-testid="order-invoiced-to">
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>
                           {t('invoiced-to')}

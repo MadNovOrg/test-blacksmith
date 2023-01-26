@@ -4,12 +4,12 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useAuth } from '@app/context/auth'
-import { Promo_Code } from '@app/generated/graphql'
+import { GetPromoCodesQuery } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { APPROVE_CODE, DENY_CODE } from '@app/queries/promo-codes/approve-deny'
 
 type Props = {
-  promoCode: Partial<Promo_Code>
+  promoCode: GetPromoCodesQuery['promoCodes'][number]
 }
 
 export const ApproveDeny: React.FC<Props> = ({ promoCode }) => {

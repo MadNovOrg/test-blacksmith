@@ -53,6 +53,15 @@ function waitForText(text: string, timeout?: number): Promise<void> {
   })
 }
 
+const currencyFormatter = Intl.NumberFormat('en-GB', {
+  style: 'currency',
+  currency: 'GBP',
+})
+
+function formatCurrency(amount: number) {
+  return currencyFormatter.format(amount)
+}
+
 // Re-export everything
 export * from '@testing-library/react'
 export { default as userEvent } from '@testing-library/user-event'
@@ -63,4 +72,5 @@ export {
   waitForCalls,
   chance,
   waitForText,
+  formatCurrency,
 }

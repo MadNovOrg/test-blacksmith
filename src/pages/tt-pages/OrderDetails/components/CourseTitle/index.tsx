@@ -18,7 +18,12 @@ export const CourseTitle: React.FC<Props> = ({ course, ...props }) => {
   )
 
   return (
-    <Typography {...props} variant="h6" fontWeight={600}>
+    <Typography
+      {...props}
+      variant="h6"
+      fontWeight={600}
+      data-testid="order-course-title"
+    >
       {t(`course-levels.${course?.level}`)}{' '}
       {difference.context === 'hours'
         ? ` - ${difference.count} ${t('hours')} `

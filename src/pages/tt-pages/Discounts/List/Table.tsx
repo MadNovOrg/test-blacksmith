@@ -12,13 +12,13 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { Promo_Code } from '@app/generated/graphql'
+import { GetPromoCodesQuery } from '@app/generated/graphql'
 import type { Sorting } from '@app/hooks/useTableSort'
 
 import { Row } from './Row'
 
 type Props = {
-  promoCodes: Array<Partial<Promo_Code>>
+  promoCodes: GetPromoCodesQuery['promoCodes']
   sorting: Sorting
   loading: boolean
   filtered: boolean

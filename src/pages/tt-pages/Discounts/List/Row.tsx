@@ -12,8 +12,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
 import { Ellipsize } from '@app/components/Ellipsize'
-import { Promo_Code_Type_Enum } from '@app/generated/graphql'
-import { Promo_Code } from '@app/generated/graphql'
+import {
+  GetPromoCodesQuery,
+  Promo_Code_Type_Enum,
+} from '@app/generated/graphql'
 import { CourseLevel } from '@app/types'
 
 import { getPromoCodeStatus, getPromoCodeStatusColor } from '../helpers'
@@ -21,7 +23,7 @@ import { getPromoCodeStatus, getPromoCodeStatusColor } from '../helpers'
 import { ApproveDeny } from './ApproveDeny'
 
 type Props = {
-  promo: Partial<Promo_Code>
+  promo: GetPromoCodesQuery['promoCodes'][number]
   showApprove?: boolean
 }
 
