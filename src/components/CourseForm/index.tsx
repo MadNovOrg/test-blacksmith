@@ -157,7 +157,7 @@ const CourseForm: React.FC<Props> = ({
                 .typeError(
                   t('components.course-form.min-participants-required')
                 )
-                .positive()
+                .positive(t('components.course-form.min-participants-positive'))
                 .required(t('components.course-form.min-participants-required'))
                 .lessThan(
                   yup.ref('maxParticipants', {}),
