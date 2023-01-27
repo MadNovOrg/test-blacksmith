@@ -211,7 +211,8 @@
   },
   "trainer-avatar-group": {
     "lead-trainer": "Lead",
-    "assist-trainer": "Assist"
+    "assist-trainer": "Assist",
+    "moderator": "Moderator"
   },
   "course-enquiry-form": {
     "required-first-name": "First name is required",

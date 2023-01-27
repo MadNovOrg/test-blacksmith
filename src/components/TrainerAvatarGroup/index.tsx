@@ -28,7 +28,7 @@ type Props = {
 const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
   [Course_Trainer_Type_Enum.Assistant]: 'assist-trainer',
   [Course_Trainer_Type_Enum.Leader]: 'lead-trainer',
-  [Course_Trainer_Type_Enum.Moderator]: '',
+  [Course_Trainer_Type_Enum.Moderator]: 'moderator',
 }
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
