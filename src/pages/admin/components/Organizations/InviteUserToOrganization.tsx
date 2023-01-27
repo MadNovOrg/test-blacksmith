@@ -151,7 +151,7 @@ export const InviteUserToOrganization = () => {
             </Sticky>
           </Box>
 
-          <Box flex={1}>
+          <Box flex={1} paddingBottom={5}>
             <Box display="flex" flexDirection="column" gap={2} mt={8}>
               <Typography variant="subtitle1">{t('organization')}</Typography>
 
