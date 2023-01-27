@@ -23,6 +23,19 @@ const INTROSPECTION_QUERY = gql`
           name
         }
       }
+
+      types {
+        name
+        fields {
+          name
+          args {
+            name
+          }
+        }
+        inputFields {
+          name
+        }
+      }
     }
   }
 `
@@ -46,6 +59,18 @@ export async function introspection(
       queryType: {
         fields: { name: string }[]
       }
+      types: {
+        name: string
+        fields: {
+          name: string
+          args: {
+            name: string
+          }[]
+        }[]
+        inputFields: {
+          name: string
+        }[]
+      }[]
     }
   }>(
     INTROSPECTION_QUERY,
