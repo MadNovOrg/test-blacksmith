@@ -346,6 +346,7 @@
     },
     "save-as-draft": "Save as draft",
     "submitted-course": "{{code}} has been created.",
+    "order-your-workbooks": "Please click here if you have not ordered your workbooks <0>Team Teach login</0>",
     "exceptions": {
       "course-contain-exceptions": "Course contains exceptions",
       "course-approval-required": "Course approval required",

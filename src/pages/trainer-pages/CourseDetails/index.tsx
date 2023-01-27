@@ -40,6 +40,8 @@ import {
 } from '@app/types'
 import { courseEnded, LoadingStatus } from '@app/util'
 
+import { OrderYourWorkbookAlert } from './components/OrderYourWorkbookAlert'
+
 export enum CourseDetailsTabs {
   ATTENDEES = 'ATTENDEES',
   GRADING = 'GRADING',
@@ -265,6 +267,7 @@ export const CourseDetails = () => {
                   </Box>
                 </Alert>
               ) : null}
+              <OrderYourWorkbookAlert course={course} />
 
               <TabContext value={selectedTab}>
                 <Box borderBottom={1} borderColor="divider">
