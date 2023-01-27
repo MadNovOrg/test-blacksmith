@@ -148,6 +148,11 @@ select_permissions:
         email:
           _eq: X-Hasura-User-Email
 delete_permissions:
+  - role: unverified
+    permission:
+      filter:
+        email:
+          _eq: X-Hasura-User-Email
   - role: user
     permission:
       filter:

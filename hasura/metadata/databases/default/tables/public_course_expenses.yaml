@@ -91,6 +91,19 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: unverified
+    permission:
+      columns:
+        - course_id
+        - data
+        - created_at
+        - updated_at
+        - id
+        - trainer_id
+      filter:
+        course:
+          course_type:
+            _eq: OPEN
   - role: user
     permission:
       columns:

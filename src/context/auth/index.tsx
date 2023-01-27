@@ -28,7 +28,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         { profileId: data.profile.id },
         {
           token,
-          role: RoleName.USER,
+          role: data.activeRole,
         }
       )
     }

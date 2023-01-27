@@ -436,6 +436,7 @@ select_permissions:
         - course_type
         - created_at
         - description
+        - free_spaces
         - go1_integration
         - grading_confirmed
         - grading_started

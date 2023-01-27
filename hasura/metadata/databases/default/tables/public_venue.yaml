@@ -117,6 +117,24 @@ select_permissions:
         - post_code
         - updated_at
       filter: {}
+  - role: unverified
+    permission:
+      columns:
+        - address_line_one
+        - address_line_two
+        - city
+        - created_at
+        - geo_coordinates
+        - google_places_id
+        - id
+        - name
+        - post_code
+        - updated_at
+      filter:
+        schedule:
+          course:
+            course_type:
+              _eq: OPEN
   - role: user
     permission:
       columns:
