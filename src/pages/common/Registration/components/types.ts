@@ -28,8 +28,8 @@ export const getFormSchema = (t: TFunction) => {
 
     dob: yup
       .date()
-      .typeError(t('validation-errors.invalid-date-optional'))
-      .nullable(),
+      .typeError(t('validation-errors.invalid-date'))
+      .required(t('validation-errors.date-required')),
 
     tcs: yup.boolean().oneOf([true], t('pages.signup.tcs-required')),
   })

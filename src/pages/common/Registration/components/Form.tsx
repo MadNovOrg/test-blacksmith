@@ -60,9 +60,9 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
     watch,
     setValue,
-    control,
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -243,7 +243,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
               control={control}
               render={({ field }) => (
                 <DatePicker
-                  label={t('dob-optional')}
+                  label={t('dob')}
                   mask={DATE_MASK}
                   inputFormat={INPUT_DATE_FORMAT}
                   value={field.value}
@@ -252,14 +252,11 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
                     <TextField
                       {...params}
                       variant="standard"
-                      inputProps={{
-                        ...params.inputProps,
-                        'data-testid': 'input-dob',
-                      }}
                       fullWidth
                       sx={{ bgcolor: 'grey.100' }}
                       error={!!errors.dob}
                       helperText={errors.dob?.message}
+                      required
                     />
                   )}
                 />

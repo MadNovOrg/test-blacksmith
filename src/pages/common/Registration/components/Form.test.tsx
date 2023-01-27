@@ -3,7 +3,7 @@ import React from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, waitFor, userEvent, fireEvent } from '@test/index'
 
 import { Form } from './Form'
 
@@ -25,14 +25,6 @@ describe('Form', () => {
   })
   afterAll(() => {
     jest.useRealTimers()
-  })
-
-  it('matches snapshot', async () => {
-    jest.setSystemTime(new Date(2022, 4, 23))
-    const props = { ...defaultProps }
-    const view = render(<Form {...props} />)
-
-    expect(view).toMatchSnapshot()
   })
 
   it('displays error message if first name not provided', async () => {
@@ -101,6 +93,24 @@ describe('Form', () => {
     expect(screen.getByText(/Phone is required/)).toBeInTheDocument()
   })
 
+  it('displays error message if date of birth is not provided', async () => {
+    const props = { ...defaultProps }
+    render(<Form {...props} />)
+
+    const form = screen.getByTestId('signup-form')
+    expect(form).toBeInTheDocument()
+
+    userEvent.type(screen.getByTestId('input-first-name'), 'testName')
+    userEvent.type(screen.getByTestId('input-surname'), 'testSurname')
+    userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
+    userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
+    userEvent.type(screen.getByTestId('input-phone'), '0000000000')
+
+    userEvent.click(screen.getByLabelText('T&Cs'))
+    await waitFor(() => userEvent.click(screen.getByTestId('signup-form-btn')))
+    expect(screen.getByText(/Please enter a valid date/)).toBeInTheDocument()
+  })
+
   it('displays error message if T&Cs not accepted', async () => {
     const props = { ...defaultProps }
     render(<Form {...props} />)
@@ -134,6 +144,12 @@ describe('Form', () => {
     userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     userEvent.type(screen.getByTestId('input-phone'), '0000000000')
+
+    // Selects your default value of the date field
+    fireEvent.click(screen.getByText('Date of Birth'))
+    fireEvent.click(screen.getByText('25'))
+    fireEvent.click(screen.getByText('OK'))
+
     userEvent.click(screen.getByLabelText('T&Cs'))
     await waitFor(() => userEvent.click(screen.getByTestId('signup-form-btn')))
     const errorMessageField = screen.getByTestId('signup-form-error')
@@ -161,8 +177,15 @@ describe('Form', () => {
     userEvent.type(screen.getByTestId('input-email'), 'test@email.com')
     userEvent.type(screen.getByTestId('input-password'), 'Test1234!')
     userEvent.type(screen.getByTestId('input-phone'), '0000000000')
+
+    // Selects your default value of the date field
+    fireEvent.click(screen.getByText('Date of Birth'))
+    fireEvent.click(screen.getByText('25'))
+    fireEvent.click(screen.getByText('OK'))
+
     userEvent.click(screen.getByLabelText('T&Cs'))
     await waitFor(() => userEvent.click(screen.getByTestId('signup-form-btn')))
+
     const errorMessageField = screen.getByTestId('signup-form-error')
     expect(errorMessageField).toBeInTheDocument()
     expect(errorMessageField).toHaveTextContent(

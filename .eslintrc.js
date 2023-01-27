@@ -56,9 +56,6 @@ module.exports = {
                 'src/pages/common/Login/__snapshots__/Login.test.tsx.snap'
               )]: ['Login matches snapshot 1'],
               [path.resolve(
-                'src/pages/common/Registration/components/__snapshots__/Form.test.tsx.snap'
-              )]: ['Form matches snapshot 1'],
-              [path.resolve(
                 'src/pages/common/VerifyEmail/__snapshots__/VerifyEmail.test.tsx.snap'
               )]: ['page: VerifyEmailPage matchs snapshot 1'],
             },

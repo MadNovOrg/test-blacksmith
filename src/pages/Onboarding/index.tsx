@@ -165,7 +165,7 @@ export const Onboarding: React.FC = () => {
               control={control}
               render={({ field }) => (
                 <DatePicker
-                  label={_t('dob-optional')}
+                  label={_t('dob')}
                   mask={DATE_MASK}
                   inputFormat={INPUT_DATE_FORMAT}
                   value={field.value}
@@ -174,14 +174,11 @@ export const Onboarding: React.FC = () => {
                     <TextField
                       {...params}
                       variant="standard"
-                      inputProps={{
-                        ...params.inputProps,
-                        'data-testid': 'input-dob',
-                      }}
                       fullWidth
                       sx={{ bgcolor: 'grey.100' }}
                       error={Boolean(errors.dob)}
                       helperText={errors.dob?.message}
+                      required
                     />
                   )}
                 />
