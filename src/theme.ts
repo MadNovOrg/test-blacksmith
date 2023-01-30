@@ -65,6 +65,12 @@ declare module '@mui/material/Chip' {
   }
 }
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    gray: true
+  }
+}
+
 declare module '@mui/material/SvgIcon' {
   interface SvgIconPropsColorOverrides {
     tertiary: true

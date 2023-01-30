@@ -1,3 +1,4 @@
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Menu, MenuItem, TextField } from '@mui/material'
 import Link from '@mui/material/Link'
@@ -27,8 +28,8 @@ export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
 
   const sorted = sortBy(data || [], org => org.name.toLowerCase())
 
-  const lastElementRef = useRef(null)
-  const observer = useIntersection(lastElementRef, {
+  const intersectionRef = useRef(null)
+  const observer = useIntersection(intersectionRef, {
     threshold: 1,
   })
   const showMoreButton = !observer?.isIntersecting
@@ -60,30 +61,37 @@ export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
           color="secondary.dark"
           overflow="hidden"
         >
-          <Link
-            flex={1}
-            component={StyledSubNavLink}
-            to={`${prefix}/all`}
-            whiteSpace="nowrap"
-          >
-            {t('pages.org-details.all-organizations')}
-          </Link>
-          {sorted.map((org, i) => (
+          <Box ref={intersectionRef} display="flex">
             <Link
-              ref={i === filtered.length - 1 ? lastElementRef : undefined}
-              key={org.id}
               flex={1}
               component={StyledSubNavLink}
-              to={`${prefix}/${org.id}`}
+              to={`${prefix}/all`}
               whiteSpace="nowrap"
             >
-              {org.name}
+              {t('pages.org-details.all-organizations')}
             </Link>
-          ))}
+            {sorted.map(org => (
+              <Link
+                key={org.id}
+                flex={1}
+                component={StyledSubNavLink}
+                to={`${prefix}/${org.id}`}
+                whiteSpace="nowrap"
+              >
+                {org.name}
+              </Link>
+            ))}
+          </Box>
         </Box>
         <Box>
           {showMoreButton ? (
             <Button
+              color="gray"
+              sx={{
+                boxShadow: 'none',
+              }}
+              variant="contained"
+              endIcon={<ArrowDropDownIcon />}
               onClick={event => {
                 setAnchorEl(event.currentTarget)
                 setQuery('')
@@ -106,10 +114,16 @@ export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
                 e.preventDefault()
               }}
               onKeyDown={e => e.stopPropagation()}
+              sx={{
+                '&.Mui-focusVisible': {
+                  backgroundColor: 'inherit',
+                },
+              }}
             >
               <TextField
                 sx={{
                   bgcolor: 'grey.100',
+                  pt: 1,
                 }}
                 type="text"
                 placeholder={t('common.search')}
