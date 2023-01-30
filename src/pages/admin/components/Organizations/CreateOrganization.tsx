@@ -205,7 +205,7 @@ export const CreateOrganization = () => {
                         select
                         required
                         label={t('pages.edit-org-details.trust-type')}
-                        variant="standard"
+                        variant="filled"
                         error={!!errors.trustType}
                         helperText={errors.trustType?.message}
                         value={field.value}
@@ -232,7 +232,7 @@ export const CreateOrganization = () => {
                     id="trustName"
                     required
                     label={t('pages.edit-org-details.trust-name')}
-                    variant="standard"
+                    variant="filled"
                     error={!!errors.trustName}
                     helperText={errors.trustName?.message}
                     {...register('trustName')}
@@ -250,7 +250,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="line1"
                   label={t('common.addr.line1')}
-                  variant="standard"
+                  variant="filled"
                   placeholder={t('common.addr.line1-placeholder')}
                   error={!!errors.addressLine1}
                   helperText={errors.addressLine1?.message}
@@ -263,7 +263,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="line2"
                   label={t('addr.line2')}
-                  variant="standard"
+                  variant="filled"
                   placeholder={t('addr.line2-placeholder')}
                   error={!!errors.addressLine2}
                   helperText={errors.addressLine2?.message}
@@ -275,7 +275,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="city"
                   label={t('addr.city')}
-                  variant="standard"
+                  variant="filled"
                   placeholder={t('addr.city')}
                   error={!!errors.city}
                   helperText={errors.city?.message}
@@ -288,7 +288,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="country"
                   label={t('addr.country')}
-                  variant="standard"
+                  variant="filled"
                   placeholder={t('addr.country')}
                   error={!!errors.country}
                   helperText={errors.country?.message}
@@ -301,7 +301,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="postCode"
                   label={t('addr.postCode')}
-                  variant="standard"
+                  variant="filled"
                   placeholder={t('addr.postCode')}
                   error={!!errors.postCode}
                   helperText={errors.postCode?.message}
@@ -326,7 +326,7 @@ export const CreateOrganization = () => {
                 <TextField
                   id="workEmail"
                   label={t('pages.create-organization.fields.work-email')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.workEmail}
                   helperText={errors.workEmail?.message}
                   {...register('workEmail')}

@@ -269,7 +269,7 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
               'pages.edit-course.cancellation-modal.reason-for-cancellation'
             )}
             sx={{ mt: 4 }}
-            variant="standard"
+            variant="filled"
             error={Boolean(errors.cancellationReason) && reasonType !== 'other'}
             helperText={
               Boolean(errors.cancellationReason) &&
@@ -299,7 +299,7 @@ export const CourseCancellationModal: React.FC<CourseCancellationModalProps> =
           <TextField
             fullWidth
             required
-            variant="standard"
+            variant="filled"
             error={!!errors.cancellationReason}
             helperText={
               !!errors.cancellationReason &&

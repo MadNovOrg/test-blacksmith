@@ -126,7 +126,7 @@ export const PromoCode: React.FC<Props> = ({
           <Box pr={2} flex={1}>
             <TextField
               autoFocus
-              variant="standard"
+              variant="filled"
               label={t('enter-promo-code')}
               placeholder={t('promo-code')}
               fullWidth

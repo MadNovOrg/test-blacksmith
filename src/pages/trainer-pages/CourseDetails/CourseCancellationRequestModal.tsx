@@ -108,7 +108,7 @@ export const CourseCancellationRequestModal: React.FC<CourseCancellationRequestM
         <TextField
           fullWidth
           required
-          variant="standard"
+          variant="filled"
           error={!!errors.cancellationReason}
           helperText={
             !!errors.cancellationReason &&

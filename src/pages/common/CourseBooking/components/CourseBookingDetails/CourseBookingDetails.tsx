@@ -438,7 +438,7 @@ export const CourseBookingDetails: React.FC = () => {
               select
               value={values.sector}
               {...register('sector')}
-              variant="standard"
+              variant="filled"
               fullWidth
               label={t('sector')}
               error={!!errors.sector}
@@ -462,7 +462,7 @@ export const CourseBookingDetails: React.FC = () => {
               select
               value={values.position}
               {...register('position')}
-              variant="standard"
+              variant="filled"
               fullWidth
               label={t('position')}
               error={!!errors.position}
@@ -487,7 +487,7 @@ export const CourseBookingDetails: React.FC = () => {
               {values.position === 'other' ? (
                 <TextField
                   id="other-position"
-                  variant="standard"
+                  variant="filled"
                   label={t('position-name')}
                   placeholder={t('position-placeholder')}
                   error={!!errors.otherPosition}
@@ -527,7 +527,7 @@ export const CourseBookingDetails: React.FC = () => {
             renderInput={params => (
               <TextField
                 {...params}
-                variant="standard"
+                variant="filled"
                 label={t('enter-emails')}
                 placeholder={t('emails')}
                 inputProps={{ ...params.inputProps, sx: { height: 40 } }}

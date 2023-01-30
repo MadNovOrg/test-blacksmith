@@ -242,7 +242,7 @@ export const EditOrgDetails: React.FC = () => {
                   id="orgName"
                   required
                   label={t('pages.edit-org-details.org-name')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.orgName}
                   helperText={errors.orgName?.message}
                   {...register('orgName')}
@@ -260,7 +260,7 @@ export const EditOrgDetails: React.FC = () => {
                       id="trustType"
                       select
                       label={t('pages.edit-org-details.trust-type')}
-                      variant="standard"
+                      variant="filled"
                       error={!!errors.trustType}
                       helperText={errors.trustType?.message}
                       value={field.value}
@@ -286,7 +286,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="trustName"
                   label={t('pages.edit-org-details.trust-name')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.trustName}
                   helperText={errors.trustName?.message}
                   {...register('trustName')}
@@ -299,7 +299,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="orgEmail"
                   label={t('pages.edit-org-details.org-email')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.orgEmail}
                   helperText={errors.orgEmail?.message}
                   {...register('orgEmail')}
@@ -312,7 +312,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="orgPhone"
                   label={t('pages.edit-org-details.org-phone')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.orgPhone}
                   helperText={errors.orgPhone?.message}
                   {...register('orgPhone')}
@@ -326,7 +326,7 @@ export const EditOrgDetails: React.FC = () => {
                   <TextField
                     id="sector"
                     label={t('pages.edit-org-details.sector')}
-                    variant="standard"
+                    variant="filled"
                     error={!!errors.sector}
                     helperText={errors.sector?.message}
                     {...register('sector')}
@@ -338,7 +338,7 @@ export const EditOrgDetails: React.FC = () => {
                   <TextField
                     id="localAuthority"
                     label={t('pages.edit-org-details.local-authority')}
-                    variant="standard"
+                    variant="filled"
                     error={!!errors.localAuthority}
                     helperText={errors.localAuthority?.message}
                     {...register('localAuthority')}
@@ -358,7 +358,7 @@ export const EditOrgDetails: React.FC = () => {
                         id="ofstedRating"
                         select
                         label={t('pages.edit-org-details.ofsted-rating')}
-                        variant="standard"
+                        variant="filled"
                         error={!!errors.ofstedRating}
                         helperText={errors.ofstedRating?.message}
                         value={field.value}
@@ -397,7 +397,7 @@ export const EditOrgDetails: React.FC = () => {
                               label={t(
                                 'pages.edit-org-details.ofsted-last-inspection'
                               )}
-                              variant="standard"
+                              variant="filled"
                               fullWidth
                             />
                           )}
@@ -418,7 +418,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="line1"
                   label={t('common.addr.line1')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.line1}
                   helperText={errors.line1?.message}
                   {...register('line1')}
@@ -430,7 +430,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="line2"
                   label={t('common.addr.line2')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.line2}
                   helperText={errors.line2?.message}
                   {...register('line2')}
@@ -442,7 +442,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="city"
                   label={t('common.addr.city')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.city}
                   helperText={errors.city?.message}
                   {...register('city')}
@@ -454,7 +454,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="country"
                   label={t('common.addr.country')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.country}
                   helperText={errors.country?.message}
                   {...register('country')}
@@ -466,7 +466,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="postCode"
                   label={t('common.addr.postCode')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.postCode}
                   helperText={errors.postCode?.message}
                   {...register('postCode')}
@@ -486,7 +486,7 @@ export const EditOrgDetails: React.FC = () => {
                   <TextField
                     id="headFirstName"
                     label={t('pages.edit-org-details.head-first-name')}
-                    variant="standard"
+                    variant="filled"
                     error={!!errors.headFirstName}
                     helperText={errors.headFirstName?.message}
                     {...register('headFirstName')}
@@ -498,7 +498,7 @@ export const EditOrgDetails: React.FC = () => {
                   <TextField
                     id="headLastName"
                     label={t('pages.edit-org-details.head-last-name')}
-                    variant="standard"
+                    variant="filled"
                     error={!!errors.headLastName}
                     helperText={errors.headLastName?.message}
                     {...register('headLastName')}
@@ -512,7 +512,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="headTitle"
                   label={t('pages.edit-org-details.head-title')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.headTitle}
                   helperText={errors.headTitle?.message}
                   {...register('headTitle')}
@@ -525,7 +525,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="headPreferredJobTitle"
                   label={t('pages.edit-org-details.head-preferred-job-title')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.headPreferredJobTitle}
                   helperText={errors.headPreferredJobTitle?.message}
                   {...register('headPreferredJobTitle')}
@@ -538,7 +538,7 @@ export const EditOrgDetails: React.FC = () => {
                 <TextField
                   id="website"
                   label={t('pages.edit-org-details.website')}
-                  variant="standard"
+                  variant="filled"
                   error={!!errors.website}
                   helperText={errors.website?.message}
                   {...register('website')}

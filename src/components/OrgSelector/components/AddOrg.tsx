@@ -169,7 +169,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="orgName"
             label={t('org-name')}
-            variant="standard"
+            variant="filled"
             placeholder={t('org-name-placeholder')}
             error={!!errors.name}
             helperText={errors.name?.message}
@@ -191,7 +191,7 @@ export const AddOrg: React.FC<Props> = function ({
                 select
                 required
                 label={t('pages.edit-org-details.trust-type')}
-                variant="standard"
+                variant="filled"
                 error={!!errors.trustType}
                 helperText={errors.trustType?.message}
                 value={field.value}
@@ -217,7 +217,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="trustName"
             label={t('pages.edit-org-details.trust-name')}
-            variant="standard"
+            variant="filled"
             error={!!errors.trustName}
             helperText={errors.trustName?.message}
             {...register('trustName')}
@@ -230,7 +230,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="line1"
             label={t('addr.line1')}
-            variant="standard"
+            variant="filled"
             placeholder={t('addr.line1-placeholder')}
             error={!!errors.addressLine1}
             helperText={errors.addressLine1?.message}
@@ -246,7 +246,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="line2"
             label={t('addr.line2')}
-            variant="standard"
+            variant="filled"
             placeholder={t('addr.line2-placeholder')}
             error={!!errors.addressLine2}
             helperText={errors.addressLine2?.message}
@@ -260,7 +260,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="city"
             label={t('addr.city')}
-            variant="standard"
+            variant="filled"
             placeholder={t('addr.city')}
             error={!!errors.city}
             helperText={errors.city?.message}
@@ -275,7 +275,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="country"
             label={t('addr.country')}
-            variant="standard"
+            variant="filled"
             placeholder={t('addr.country')}
             error={!!errors.country}
             helperText={errors.country?.message}
@@ -290,7 +290,7 @@ export const AddOrg: React.FC<Props> = function ({
           <TextField
             id="postCode"
             label={t('addr.postCode')}
-            variant="standard"
+            variant="filled"
             placeholder={t('addr.postCode')}
             error={!!errors.postCode}
             helperText={errors.postCode?.message}

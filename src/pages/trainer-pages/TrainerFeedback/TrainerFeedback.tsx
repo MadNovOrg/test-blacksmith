@@ -196,7 +196,7 @@ export const TrainerFeedback = () => {
                   >
                     <TextField
                       sx={{ bgcolor: 'common.white', mt: 1 }}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('course-evaluation.your-response')}
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
                       data-testid="course-evaluation-text-question"
@@ -219,7 +219,7 @@ export const TrainerFeedback = () => {
             {signatureQuestion && (
               <TextField
                 sx={{ mt: 1 }}
-                variant="standard"
+                variant="filled"
                 placeholder="Full name"
                 inputProps={{ sx: { bgcolor: 'common.white', px: 1, py: 1.5 } }}
                 fullWidth

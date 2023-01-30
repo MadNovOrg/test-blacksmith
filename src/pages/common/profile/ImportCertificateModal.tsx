@@ -100,7 +100,7 @@ const ImportCertificateModal: React.FC<ImportCertificateModalProps> =
         <TextField
           sx={{ my: 3 }}
           onChange={event => setCode(event.target.value)}
-          variant="standard"
+          variant="filled"
           label={t('common.course-certificate.enter-valid-certification-code')}
           error={Boolean(error)}
           helperText={error}

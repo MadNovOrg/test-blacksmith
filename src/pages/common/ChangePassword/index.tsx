@@ -123,7 +123,7 @@ export const ChangePasswordPage = () => {
         <Box component="section">
           <Box mb={4}>
             <TextField
-              variant="standard"
+              variant="filled"
               type="password"
               label={t('common.old-password')}
               placeholder={t('common.old-password')}
@@ -136,7 +136,7 @@ export const ChangePasswordPage = () => {
           </Box>
           <Box mb={4}>
             <TextField
-              variant="standard"
+              variant="filled"
               type="password"
               label={t('common.new-password')}
               placeholder={t('common.new-password')}
@@ -149,7 +149,7 @@ export const ChangePasswordPage = () => {
           </Box>
           <Box mb={4}>
             <TextField
-              variant="standard"
+              variant="filled"
               type="password"
               label={t('common.confirm-password')}
               placeholder={t('common.confirm-password')}

@@ -244,7 +244,7 @@ export const RemoveIndividualModal = ({
           <TextField
             fullWidth
             required
-            variant="standard"
+            variant="filled"
             error={!!errors.cancellationReason}
             helperText={errors.cancellationReason?.message}
             label={t(

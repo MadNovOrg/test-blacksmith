@@ -358,7 +358,7 @@ export const CourseEvaluation = () => {
                   >
                     <TextField
                       sx={{ bgcolor: 'common.white', mt: 1 }}
-                      variant="standard"
+                      variant="filled"
                       placeholder={t('course-evaluation.your-response')}
                       inputProps={{ sx: { px: 1, py: 1.5 } }}
                       {...register(q.id)}
@@ -382,7 +382,7 @@ export const CourseEvaluation = () => {
                 </Typography>
                 <TextField
                   sx={{ mt: 1 }}
-                  variant="standard"
+                  variant="filled"
                   placeholder="Full name"
                   inputProps={{
                     sx: { bgcolor: 'common.white', px: 1, py: 1.5 },

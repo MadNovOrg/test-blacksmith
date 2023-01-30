@@ -183,7 +183,7 @@ export const AvailableCourses: React.FC = () => {
                   <Stack gap={1}>
                     <TextField
                       select
-                      variant="standard"
+                      variant="filled"
                       value={id}
                       label={t('common.organization')}
                       error={id === ALL_ORGS && sortByDistance}
@@ -212,7 +212,7 @@ export const AvailableCourses: React.FC = () => {
                           {...params}
                           data-testid="DateFrom"
                           label={t('common.from')}
-                          variant="standard"
+                          variant="filled"
                           fullWidth
                         />
                       )}
@@ -225,7 +225,7 @@ export const AvailableCourses: React.FC = () => {
                         <TextField
                           {...params}
                           label={t('common.to')}
-                          variant="standard"
+                          variant="filled"
                           fullWidth
                         />
                       )}
@@ -245,7 +245,7 @@ export const AvailableCourses: React.FC = () => {
                 {courses.length > 0 ? (
                   <TextField
                     select
-                    variant="standard"
+                    variant="filled"
                     value={sortBy}
                     onChange={event =>
                       setSortBy(

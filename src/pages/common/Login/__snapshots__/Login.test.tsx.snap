@@ -38,7 +38,7 @@ exports[`Login matches snapshot 1`] = `
               title="Email Address"
             >
               <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-colorPrimary Mui-focused MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard css-1ewrvon-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-filled MuiFormLabel-colorPrimary Mui-focused MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-filled css-17nnhg6-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="true"
                 for="email"
                 id="email-label"
@@ -46,11 +46,11 @@ exports[`Login matches snapshot 1`] = `
                 Email Address
               </label>
               <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-19jstjz-MuiInputBase-root-MuiInput-root"
+                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-yj5aqx-MuiInputBase-root-MuiFilledInput-root"
               >
                 <input
                   aria-invalid="false"
-                  class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  class="MuiInputBase-input MuiFilledInput-input css-1yc0u6m-MuiInputBase-input-MuiFilledInput-input"
                   data-testid="input-email"
                   id="email"
                   name="email"
@@ -69,7 +69,7 @@ exports[`Login matches snapshot 1`] = `
               title="Password"
             >
               <label
-                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard css-to3gao-MuiFormLabel-root-MuiInputLabel-root"
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-filled MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-filled css-1yvrs0x-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
                 for="password"
                 id="password-label"
@@ -77,11 +77,11 @@ exports[`Login matches snapshot 1`] = `
                 Password
               </label>
               <div
-                class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-19jstjz-MuiInputBase-root-MuiInput-root"
+                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-yj5aqx-MuiInputBase-root-MuiFilledInput-root"
               >
                 <input
                   aria-invalid="false"
-                  class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  class="MuiInputBase-input MuiFilledInput-input css-1yc0u6m-MuiInputBase-input-MuiFilledInput-input"
                   data-testid="input-password"
                   id="password"
                   name="password"

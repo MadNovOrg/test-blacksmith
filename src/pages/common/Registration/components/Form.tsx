@@ -130,7 +130,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             <TextField
               id="firstName"
               label={t('first-name')}
-              variant="standard"
+              variant="filled"
               placeholder={t('first-name-placeholder')}
               error={!!errors.firstName}
               helperText={errors.firstName?.message}
@@ -146,7 +146,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             <TextField
               id="surname"
               label={t('surname')}
-              variant="standard"
+              variant="filled"
               placeholder={t('surname-placeholder')}
               error={!!errors.surname}
               helperText={errors.surname?.message}
@@ -163,7 +163,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
           <TextField
             id="email"
             label={t('email')}
-            variant="standard"
+            variant="filled"
             placeholder={t('email-placeholder')}
             error={!!errors.email}
             helperText={errors.email?.message}
@@ -189,7 +189,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
         <Box mb={3}>
           <TextField
             id="signup-pass"
-            variant="standard"
+            variant="filled"
             type={showPassword ? 'text' : 'password'}
             label={t('pages.signup.pass-label')}
             placeholder={t('pages.signup.pass-placeholder')}
@@ -221,7 +221,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
             label={t('phone')}
             onlyCountries={onlyCountries}
             defaultCountry="gb"
-            variant="standard"
+            variant="filled"
             sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             countryCodeEditable={false}
@@ -251,7 +251,7 @@ export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
                   renderInput={params => (
                     <TextField
                       {...params}
-                      variant="standard"
+                      variant="filled"
                       fullWidth
                       sx={{ bgcolor: 'grey.100' }}
                       error={!!errors.dob}

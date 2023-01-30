@@ -130,7 +130,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
         <TextField
           id="interest"
           label={t('components.course-enquiry-form.interest-label')}
-          variant="standard"
+          variant="filled"
           error={!!errors.interest}
           helperText={errors.interest?.message}
           {...register('interest')}
@@ -146,7 +146,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
           <TextField
             id="firstName"
             label={t('first-name')}
-            variant="standard"
+            variant="filled"
             placeholder={t('first-name-placeholder')}
             error={!!errors.firstName}
             helperText={errors.firstName?.message}
@@ -162,7 +162,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
           <TextField
             id="lastname"
             label={t('last-name')}
-            variant="standard"
+            variant="filled"
             placeholder={t('last-name-placeholder')}
             error={!!errors.lastName}
             helperText={errors.lastName?.message}
@@ -177,7 +177,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
       <TextField
         id="email"
         label={t('components.course-enquiry-form.email-label')}
-        variant="standard"
+        variant="filled"
         error={!!errors.email}
         helperText={errors.email?.message}
         {...register('email')}
@@ -192,7 +192,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
           label={t('phone')}
           onlyCountries={['au', 'gb']}
           defaultCountry="gb"
-          variant="standard"
+          variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
           countryCodeEditable={false}
@@ -210,7 +210,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
       <TextField
         id="orgName"
         label={t('org-name')}
-        variant="standard"
+        variant="filled"
         error={!!errors.orgName}
         helperText={errors.orgName?.message}
         {...register('orgName')}
@@ -224,7 +224,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
           select
           value={values.sector}
           {...register('sector')}
-          variant="standard"
+          variant="filled"
           fullWidth
           label={t('sector')}
           error={!!errors.sector}
@@ -252,7 +252,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
         <TextField
           id="numParticipants"
           label={t('components.course-enquiry-form.participants-label')}
-          variant="standard"
+          variant="filled"
           type="number"
           min="0"
           error={!!errors.numParticipants}
@@ -267,7 +267,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
         id="source"
         select
         label={t('components.course-enquiry-form.source-label')}
-        variant="standard"
+        variant="filled"
         error={!!errors.source}
         helperText={errors.source?.message}
         value={values.source}
@@ -290,7 +290,7 @@ export const CourseEnquiryForm: React.FC<Props> = ({
       <TextField
         id="message"
         label={t('components.course-enquiry-form.message-label')}
-        variant="standard"
+        variant="filled"
         error={!!errors.message}
         helperText={errors.message?.message}
         {...register('message')}

@@ -164,7 +164,7 @@ export const InviteUserToOrganization = () => {
                     <TextField
                       {...params}
                       required
-                      variant="standard"
+                      variant="filled"
                       label={t('organization')}
                       inputProps={{ ...params.inputProps, sx: { height: 40 } }}
                       sx={{ bgcolor: 'grey.100' }}
@@ -205,7 +205,7 @@ export const InviteUserToOrganization = () => {
                     <TextField
                       {...params}
                       required
-                      variant="standard"
+                      variant="filled"
                       label={t('pages.invite-to-org.work-email')}
                       inputProps={{ ...params.inputProps, sx: { height: 40 } }}
                       sx={{ bgcolor: 'grey.100' }}

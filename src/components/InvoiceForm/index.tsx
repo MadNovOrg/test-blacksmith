@@ -92,7 +92,7 @@ export const InvoiceForm: React.FC = () => {
           <TextField
             id="firstName"
             label={t('first-name')}
-            variant="standard"
+            variant="filled"
             placeholder={t('first-name-placeholder')}
             error={!!errors.invoiceDetails?.firstName}
             helperText={errors.invoiceDetails?.firstName?.message}
@@ -107,7 +107,7 @@ export const InvoiceForm: React.FC = () => {
           <TextField
             id="surname"
             label={t('surname')}
-            variant="standard"
+            variant="filled"
             placeholder={t('surname-placeholder')}
             error={!!errors.invoiceDetails?.surname}
             helperText={errors.invoiceDetails?.surname?.message}
@@ -124,7 +124,7 @@ export const InvoiceForm: React.FC = () => {
         <TextField
           id="email"
           label={t('email')}
-          variant="standard"
+          variant="filled"
           placeholder={t('email-placeholder')}
           error={!!errors.invoiceDetails?.email}
           helperText={errors.invoiceDetails?.email?.message}
@@ -142,7 +142,7 @@ export const InvoiceForm: React.FC = () => {
           enableLongNumbers={true}
           onlyCountries={onlyCountries}
           defaultCountry="gb"
-          variant="standard"
+          variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{
             sx: { height: 40 },
@@ -166,7 +166,7 @@ export const InvoiceForm: React.FC = () => {
         <TextField
           id="purchaseOrder"
           label={t('po')}
-          variant="standard"
+          variant="filled"
           placeholder={t('po-placeholder')}
           error={!!errors.invoiceDetails?.purchaseOrder}
           helperText={errors.invoiceDetails?.purchaseOrder?.message}

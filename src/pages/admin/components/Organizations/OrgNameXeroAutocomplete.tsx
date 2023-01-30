@@ -83,7 +83,7 @@ export const OrgNameXeroAutocomplete: React.FC<
           onFocus={() => setHasFocus(true)}
           onBlur={() => setHasFocus(false)}
           label={t('pages.create-organization.fields.organization-name')}
-          variant="standard"
+          variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           required
           fullWidth

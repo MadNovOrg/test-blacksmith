@@ -204,7 +204,7 @@ export const ResetPasswordPage = () => {
                 onFocus={() => setShowPasswordReqs(true)}
                 id="password"
                 type="password"
-                variant="standard"
+                variant="filled"
                 label={t('pages.login.pass-label')}
                 placeholder={t('pages.login.pass-placeholder')}
                 title={t('pages.login.pass-title')}
@@ -229,7 +229,7 @@ export const ResetPasswordPage = () => {
               <TextField
                 id="confirmPassword"
                 type="password"
-                variant="standard"
+                variant="filled"
                 label={t('pages.login.pass-label')}
                 placeholder={t('pages.login.pass-placeholder')}
                 title={t('pages.login.pass-title')}

@@ -73,7 +73,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
             <TextField
               sx={{ bgcolor: 'common.white', mt: 1 }}
               onChange={event => onChange(value, event.target.value)}
-              variant="standard"
+              variant="filled"
               placeholder={infoText}
               error={false}
               fullWidth
@@ -90,7 +90,7 @@ export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
             <TextField
               sx={{ bgcolor: 'common.white', mt: 1 }}
               onChange={event => onChange(value, event.target.value)}
-              variant="standard"
+              variant="filled"
               placeholder={infoText}
               error={false}
               fullWidth

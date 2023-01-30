@@ -90,7 +90,7 @@ export const ForgotPasswordPage = () => {
           <Box mb={4}>
             <TextField
               id="email"
-              variant="standard"
+              variant="filled"
               label={t('pages.forgot-password.email-address')}
               placeholder={t('pages.forgot-password.email-placeholder')}
               error={!!errors.email}

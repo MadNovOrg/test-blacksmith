@@ -138,7 +138,7 @@ export const LoginPage = () => {
           <Box mb={4}>
             <TextField
               id="email"
-              variant="standard"
+              variant="filled"
               label={t('pages.login.email-label')}
               placeholder={t('pages.login.email-placeholder')}
               title={t('pages.login.email-title')}
@@ -154,7 +154,7 @@ export const LoginPage = () => {
             <TextField
               id="password"
               type="password"
-              variant="standard"
+              variant="filled"
               label={t('pages.login.pass-label')}
               placeholder={t('pages.login.pass-placeholder')}
               title={t('pages.login.pass-title')}

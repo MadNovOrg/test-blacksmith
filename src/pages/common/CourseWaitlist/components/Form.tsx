@@ -67,7 +67,7 @@ export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
             <TextField
               id="firstName"
               label={t('first-name')}
-              variant="standard"
+              variant="filled"
               placeholder={t('first-name-placeholder')}
               error={!!errors.firstName}
               helperText={errors.firstName?.message}
@@ -83,7 +83,7 @@ export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
             <TextField
               id="surname"
               label={t('last-name')}
-              variant="standard"
+              variant="filled"
               placeholder={t('surname-placeholder')}
               error={!!errors.surname}
               helperText={errors.surname?.message}
@@ -100,7 +100,7 @@ export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
           <TextField
             id="email"
             label={t('work-email')}
-            variant="standard"
+            variant="filled"
             placeholder={t('email-placeholder')}
             error={!!errors.email}
             helperText={errors.email?.message}
@@ -117,7 +117,7 @@ export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
             label={t('phone')}
             onlyCountries={onlyCountries}
             defaultCountry="gb"
-            variant="standard"
+            variant="filled"
             sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             countryCodeEditable={false}
@@ -136,7 +136,7 @@ export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
           <TextField
             id="orgName"
             label={t('org-name')}
-            variant="standard"
+            variant="filled"
             placeholder={t('orgName-placeholder')}
             error={!!errors.orgName}
             helperText={errors.orgName?.message}

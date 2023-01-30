@@ -132,7 +132,7 @@ export const CourseInvites = ({ course }: Props) => {
     params => (
       <TextField
         {...params}
-        variant="standard"
+        variant="filled"
         placeholder={t('pages.course-participants.invite-input-placeholder')}
         sx={{
           '.MuiAutocomplete-inputRoot': {

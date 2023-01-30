@@ -83,7 +83,7 @@ const VenueForm: React.FC<VenueFormProps> = function ({
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
-                  variant="standard"
+                  variant="filled"
                   required
                   color="secondary"
                   error={fieldState.invalid}
@@ -102,7 +102,7 @@ const VenueForm: React.FC<VenueFormProps> = function ({
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
-                  variant="standard"
+                  variant="filled"
                   required
                   error={fieldState.invalid}
                   label={t(
@@ -121,7 +121,7 @@ const VenueForm: React.FC<VenueFormProps> = function ({
               render={({ field }) => (
                 <TextField
                   fullWidth
-                  variant="standard"
+                  variant="filled"
                   label={t(
                     'components.venue-selector.modal.fields.addressLineTwo'
                   )}
@@ -139,7 +139,7 @@ const VenueForm: React.FC<VenueFormProps> = function ({
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
-                  variant="standard"
+                  variant="filled"
                   required
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.city')}
@@ -157,7 +157,7 @@ const VenueForm: React.FC<VenueFormProps> = function ({
               render={({ field, fieldState }) => (
                 <TextField
                   fullWidth
-                  variant="standard"
+                  variant="filled"
                   required
                   error={fieldState.invalid}
                   label={t('components.venue-selector.modal.fields.postCode')}

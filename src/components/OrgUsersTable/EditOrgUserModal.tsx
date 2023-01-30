@@ -90,7 +90,7 @@ export const EditOrgUserModal: React.FC<EditOrgUserModalProps> = function ({
           <TextField
             {...params}
             fullWidth
-            variant="standard"
+            variant="filled"
             label={t('common.position')}
             inputProps={{ ...params.inputProps, sx: { height: 40 } }}
             sx={{ bgcolor: 'grey.100', my: 2 }}

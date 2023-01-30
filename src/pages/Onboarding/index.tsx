@@ -143,7 +143,7 @@ export const Onboarding: React.FC = () => {
             label={_t('phone')}
             onlyCountries={onlyCountries}
             defaultCountry="gb"
-            variant="standard"
+            variant="filled"
             sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             countryCodeEditable={false}
@@ -173,7 +173,7 @@ export const Onboarding: React.FC = () => {
                   renderInput={params => (
                     <TextField
                       {...params}
-                      variant="standard"
+                      variant="filled"
                       fullWidth
                       sx={{ bgcolor: 'grey.100' }}
                       error={Boolean(errors.dob)}

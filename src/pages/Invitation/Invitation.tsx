@@ -303,7 +303,7 @@ export const InvitationPage = () => {
                 <Box width="80%" mt={2}>
                   <TextField
                     id="note"
-                    variant="standard"
+                    variant="filled"
                     label={t('invitation.leave-note-op')}
                     placeholder={t('invitation.leave-note-op')}
                     fullWidth

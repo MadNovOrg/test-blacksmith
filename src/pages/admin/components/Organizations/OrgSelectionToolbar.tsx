@@ -128,7 +128,7 @@ export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
                 type="text"
                 placeholder={t('common.search')}
                 value={query}
-                variant="standard"
+                variant="filled"
                 onChange={e => setQuery(e.target.value)}
                 fullWidth
                 autoFocus
