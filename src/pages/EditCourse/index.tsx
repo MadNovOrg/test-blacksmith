@@ -114,9 +114,7 @@ export const EditCourse: React.FC<unknown> = () => {
         setCourseData(data)
       }
 
-      if (isValid) {
-        setCourseDataValid(isValid)
-      }
+      setCourseDataValid(Boolean(isValid))
     },
     []
   )

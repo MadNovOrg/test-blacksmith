@@ -197,9 +197,7 @@ export const CreateCourseForm = () => {
         setCourseData(data as unknown as ValidCourseInput)
       }
 
-      if (isValid) {
-        setCourseDataValid(isValid)
-      }
+      setCourseDataValid(Boolean(isValid))
     },
     [setCourseData]
   )

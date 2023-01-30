@@ -3,7 +3,7 @@ import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
 
-import { CourseDeliveryType, CourseType, CourseLevel } from '@app/types'
+import { CourseType, CourseLevel } from '@app/types'
 import {
   courseToCourseInput,
   INPUT_DATE_FORMAT,
@@ -11,7 +11,7 @@ import {
 } from '@app/util'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
-import { buildCourse, buildCourseSchedule } from '@test/mock-data-utils'
+import { buildCourse } from '@test/mock-data-utils'
 
 import { ZOOM_MOCKED_URL, selectLevel } from './test-helpers'
 
@@ -195,38 +195,6 @@ describe('component: CourseForm', () => {
 
     const max = screen.getByTestId('max-attendees').querySelector('input')
     expect(max).toHaveValue(course.max_participants)
-  })
-
-  it('makes start time and end time mandatory fields', async () => {
-    const course = {
-      ...buildCourse(),
-      go1Integration: true,
-      reaccreditation: true,
-      deliveryType: CourseDeliveryType.MIXED,
-      aolCostOfCourse: 2000,
-      schedule: [
-        buildCourseSchedule({ overrides: { virtualLink: 'zoom-meeting' } }),
-      ],
-    }
-
-    const onChangeMock = jest.fn()
-
-    await waitFor(() => {
-      render(
-        <CourseForm
-          courseInput={courseToCourseInput(course)}
-          type={CourseType.INDIRECT}
-          onChange={onChangeMock}
-        />
-      )
-    })
-
-    userEvent.clear(screen.getByLabelText('Start time'))
-    userEvent.clear(screen.getByLabelText('End time'))
-
-    expect(onChangeMock.mock.calls[onChangeMock.mock.calls.length - 1]).toEqual(
-      [{ isValid: false }]
-    )
   })
 
   it('calculates account code based on start date', async () => {

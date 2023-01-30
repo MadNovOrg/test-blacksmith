@@ -232,6 +232,14 @@ export const profileToInput = (course: Course, type: CourseTrainerType) => {
   })
 }
 
+export function extractTime(date: Date | string | null) {
+  try {
+    return format(new Date(date || Date.now()), 'HH:mm')
+  } catch (e) {
+    return ''
+  }
+}
+
 export const courseToCourseInput = (course: Course): CourseInput => {
   return {
     type: course.type,
@@ -246,7 +254,9 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     minParticipants: course.min_participants,
     maxParticipants: course.max_participants,
     startDateTime: new Date(course.schedule[0].start),
+    startTime: extractTime(course.schedule[0].start),
     endDateTime: new Date(course.schedule[0].end),
+    endTime: extractTime(course.schedule[0].end),
     courseCost: course.aolCostOfCourse ?? null,
     usesAOL: Boolean(course.aolCostOfCourse),
     aolCountry: course.aolCountry ?? null,

@@ -18,7 +18,7 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
-import React, { memo, useEffect, useMemo, useState } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
@@ -33,7 +33,12 @@ import {
   CourseLevel,
   CourseType,
 } from '@app/types'
-import { DATE_MASK, INPUT_DATE_FORMAT, LoadingStatus } from '@app/util'
+import {
+  DATE_MASK,
+  INPUT_DATE_FORMAT,
+  LoadingStatus,
+  extractTime,
+} from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -49,7 +54,6 @@ import {
   canBeMixed,
   canBeReacc,
   canBeVirtual,
-  extractTime,
   getAccountCode,
   makeDate,
 } from './helpers'
@@ -72,17 +76,6 @@ const CourseForm: React.FC<Props> = ({
   disabledFields = new Set(),
 }) => {
   const { t } = useTranslation()
-
-  const [startTime, setStartTime] = useState<Date | string>(
-    courseInput?.startDateTime
-      ? extractTime(courseInput.startDateTime)
-      : extractTime(makeDate(null, '08:00'))
-  )
-  const [endTime, setEndTime] = useState<Date | string>(
-    courseInput?.endDateTime
-      ? extractTime(courseInput.endDateTime)
-      : extractTime(makeDate(null, '08:00'))
-  )
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
@@ -120,7 +113,9 @@ const CourseForm: React.FC<Props> = ({
           .object()
           .nullable()
           .when('deliveryType', {
-            is: CourseDeliveryType.F2F || CourseDeliveryType.MIXED,
+            is: (val: CourseDeliveryType) =>
+              val === CourseDeliveryType.F2F ||
+              val === CourseDeliveryType.MIXED,
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
@@ -141,6 +136,7 @@ const CourseForm: React.FC<Props> = ({
           .typeError(t('components.course-form.start-date-format'))
           .nullable()
           .required(t('components.course-form.start-date-required')),
+        startTime: yup.string().required(),
         endDateTime: yup
           .date()
           .typeError(t('components.course-form.end-date-format'))
@@ -150,6 +146,7 @@ const CourseForm: React.FC<Props> = ({
             yup.ref('startDateTime'),
             t('components.course-form.end-date-before-start-date')
           ),
+        endTime: yup.string().required(),
         ...(hasMinParticipants
           ? {
               minParticipants: yup
@@ -213,9 +210,15 @@ const CourseForm: React.FC<Props> = ({
       startDateTime: courseInput?.startDateTime
         ? new Date(courseInput.startDateTime)
         : null,
+      startTime: courseInput?.startDateTime
+        ? extractTime(courseInput.startDateTime)
+        : extractTime(makeDate(null, '08:00')),
       endDateTime: courseInput?.endDateTime
         ? new Date(courseInput.endDateTime)
         : null,
+      endTime: courseInput?.endDateTime
+        ? extractTime(courseInput.endDateTime)
+        : extractTime(makeDate(null, '08:00')),
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
@@ -260,18 +263,22 @@ const CourseForm: React.FC<Props> = ({
   )
   const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
   const aolCountry = values.aolCountry
-  const isValid = formState.isValid && Boolean(startTime) && Boolean(endTime)
 
   useEffect(() => {
     const s = watch(data => {
-      onChange({ data: data as CourseInput })
+      onChange({
+        data: data as CourseInput,
+        isValid: formState.isValid,
+      })
     })
     return () => s.unsubscribe()
-  }, [onChange, watch])
+  }, [formState.isValid, onChange, watch])
 
   useEffect(() => {
-    onChange({ isValid })
-  }, [onChange, isValid])
+    onChange({
+      isValid: formState.isValid,
+    })
+  }, [formState.isValid, onChange])
 
   useEffect(() => {
     const mustChange = !canBlended && values.blendedLearning
@@ -296,28 +303,29 @@ const CourseForm: React.FC<Props> = ({
   }, [canMixed, setValue, values.deliveryType])
 
   useEffect(() => {
+    const startTime = getValues('startTime')
     const startDate = getValues('startDateTime')
-    const endDate = getValues('endDateTime')
     if (startTime && startDate) {
       const startDateWithTime = makeDate(startDate, startTime)
 
       setValue('startDateTime', startDateWithTime)
 
+      const endDate = getValues('endDateTime')
       if (endDate) {
         trigger('endDateTime')
       }
     }
-  }, [startTime, getValues, setValue, trigger])
+  }, [getValues, setValue, trigger])
 
   useEffect(() => {
+    const endTime = getValues('endTime')
     const endDate = getValues('endDateTime')
     if (endTime && endDate) {
       const endDateWithTime = makeDate(endDate, endTime)
 
-      setValue('endDateTime', endDateWithTime)
-      trigger('endDateTime')
+      setValue('endDateTime', endDateWithTime, { shouldValidate: true })
     }
-  }, [endTime, getValues, setValue, trigger])
+  }, [getValues, setValue])
 
   useEffect(() => {
     if (
@@ -332,6 +340,7 @@ const CourseForm: React.FC<Props> = ({
   const handleStartDateTimeChange = (date: Date | null) => {
     let dateToSet = date
     const endDate = getValues('endDateTime')
+    const startTime = getValues('startTime')
 
     if (startTime && date) {
       dateToSet = makeDate(date, startTime)
@@ -347,6 +356,7 @@ const CourseForm: React.FC<Props> = ({
   const handleEndDateTimeChange = (date: Date | null) => {
     let dateToSet = date
 
+    const endTime = getValues('endTime')
     if (endTime && date) {
       dateToSet = makeDate(date, endTime)
     }
@@ -514,8 +524,13 @@ const CourseForm: React.FC<Props> = ({
             name="row-radio-buttons-group"
             value={deliveryType}
             onChange={e => {
-              setValue('deliveryType', e.target.value as CourseDeliveryType)
-              resetField('venue')
+              const deliveryType = e.target.value as CourseDeliveryType
+              setValue('deliveryType', deliveryType)
+
+              if (deliveryType === CourseDeliveryType.VIRTUAL) {
+                setValue('venue', null)
+              }
+              trigger(['venue', 'zoomMeetingUrl'])
             }}
           >
             <FormControlLabel
@@ -553,7 +568,9 @@ const CourseForm: React.FC<Props> = ({
 
         {hasVenue ? (
           <VenueSelector
-            onChange={venue => setValue('venue', venue ?? null)}
+            onChange={venue => {
+              return setValue('venue', venue ?? null, { shouldValidate: true })
+            }}
             value={values.venue ?? undefined}
             textFieldProps={{ variant: 'filled' }}
           />
@@ -622,12 +639,18 @@ const CourseForm: React.FC<Props> = ({
             </Grid>
 
             <Grid item xs={6}>
-              <CourseTimePicker
-                error={Boolean(errors.startDateTime)}
-                id="start"
-                label={t('components.course-form.start-time-placeholder')}
-                onChange={setStartTime}
-                value={startTime}
+              <Controller
+                name="startTime"
+                control={control}
+                render={({ field }) => (
+                  <CourseTimePicker
+                    error={Boolean(formState.errors?.startTime)}
+                    id="start"
+                    label={t('components.course-form.start-time-placeholder')}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
               />
             </Grid>
           </Grid>
@@ -665,12 +688,18 @@ const CourseForm: React.FC<Props> = ({
             </Grid>
 
             <Grid item xs={6}>
-              <CourseTimePicker
-                error={Boolean(errors.endDateTime)}
-                id="end"
-                label={t('components.course-form.end-time-placeholder')}
-                onChange={setEndTime}
-                value={endTime}
+              <Controller
+                name="endTime"
+                control={control}
+                render={({ field }) => (
+                  <CourseTimePicker
+                    error={Boolean(formState.errors?.endTime)}
+                    id="end"
+                    label={t('components.course-form.end-time-placeholder')}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
               />
             </Grid>
           </Grid>

@@ -13,14 +13,6 @@ export function makeDate(date: Date | string | null, time: Date | string) {
   }
 }
 
-export function extractTime(date: Date | string | null) {
-  try {
-    return format(new Date(date || Date.now()), 'HH:mm')
-  } catch (e) {
-    return ''
-  }
-}
-
 export function getLevels(courseType: CourseType) {
   const types = {
     [CourseType.OPEN]: () => {

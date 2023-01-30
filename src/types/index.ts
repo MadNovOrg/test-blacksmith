@@ -517,7 +517,9 @@ export type CourseInput = {
   reaccreditation: boolean
   deliveryType: CourseDeliveryType
   startDateTime: Date | null
+  startTime: string
   endDateTime: Date | null
+  endTime: string
   minParticipants: number | null
   maxParticipants: number | null
   venue: Venue | null
