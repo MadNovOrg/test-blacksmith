@@ -120,7 +120,7 @@
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.47.1",
     "@vitejs/plugin-react": "^3.0.1",
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.13",
     "babel-loader": "^9.1.2",
     "babel-preset-vite": "1.1.0",
     "env-cmd": "^10.1.0",
