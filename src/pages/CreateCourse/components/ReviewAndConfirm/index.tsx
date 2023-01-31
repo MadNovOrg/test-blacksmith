@@ -80,7 +80,7 @@ export const ReviewAndConfirm = () => {
           {t('pages.create-course.review-and-confirm.back-btn')}
         </Button>
 
-        <Box>
+        <Box paddingBottom={5}>
           <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
             {t('pages.create-course.save-as-draft')}
           </Button>

@@ -212,7 +212,7 @@ export const AvailableCourses: React.FC = () => {
                           {...params}
                           data-testid="DateFrom"
                           label={t('common.from')}
-                          variant="filled"
+                          variant="standard"
                           fullWidth
                         />
                       )}
@@ -225,7 +225,7 @@ export const AvailableCourses: React.FC = () => {
                         <TextField
                           {...params}
                           label={t('common.to')}
-                          variant="filled"
+                          variant="standard"
                           fullWidth
                         />
                       )}
