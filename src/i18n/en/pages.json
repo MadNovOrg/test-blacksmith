@@ -400,7 +400,7 @@
       "cannot-be-undone-confirmation": "I understand this cannot be undone."
     },
     "registrants-cancellation-modal": {
-      "description": "Proceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
+      "description": "There are still registrants on this course. Have you transferred all registered attendees first?\n\nProceeding to cancel will cancel attendees off this course. If you would like to transfer registered attendees to another course instead, please change this per attendee in course details.",
       "proceed-with-cancellation": "Proceed with cancellation",
       "transfer-attendees-first": "Transfer attendees first"
     },
