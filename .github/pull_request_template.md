@@ -6,7 +6,7 @@
 
 <!-- Replace TODO with the Jira number -->
 
-Closes [TTHP-TODO](hhttps://behaviourhub.atlassian.net/browse/TTHP-TODO)
+Closes [TTHP-TODO](https://behaviourhub.atlassian.net/browse/TTHP-TODO)
 
 ### QA Steps
 
