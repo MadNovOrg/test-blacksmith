@@ -8,7 +8,14 @@ import {
   OnboardUserMutationVariables,
 } from '@app/generated/graphql'
 
-import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import {
+  chance,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  VALID_PHONE_NUMBER,
+} from '@test/index'
 
 import { Onboarding } from '.'
 
@@ -35,6 +42,9 @@ describe('page: Onboarding', () => {
       expect(
         screen.getByText(/accepting our T&C is required/i)
       ).toBeInTheDocument()
+      expect(
+        screen.getByText(/please enter your date of birth/i)
+      ).toBeInTheDocument()
     })
   })
 
@@ -57,9 +67,11 @@ describe('page: Onboarding', () => {
       { auth: { reloadCurrentProfile: reloadProfileMock } }
     )
 
-    userEvent.type(screen.getByText(/first name/i), 'John')
-    userEvent.type(screen.getByText(/surname/i), 'Doe')
-    userEvent.type(screen.getByText(/phone/i), '1111111')
+    userEvent.type(screen.getByLabelText(/first name/i), 'John')
+    userEvent.type(screen.getByLabelText(/surname/i), 'Doe')
+    userEvent.type(screen.getByLabelText(/phone/i), VALID_PHONE_NUMBER)
+    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+
     userEvent.click(screen.getByLabelText(/i accept/i))
 
     userEvent.click(screen.getByText(/update/i))
@@ -75,7 +87,7 @@ describe('page: Onboarding', () => {
   it('updates profile and redirects on success', async () => {
     const firstName = 'John'
     const lastName = 'Doe'
-    const phone = '1111111'
+    const phone = VALID_PHONE_NUMBER
     const profileId = chance.guid()
 
     const reloadProfileMock = jest.fn().mockResolvedValue(undefined)
@@ -117,9 +129,10 @@ describe('page: Onboarding', () => {
       }
     )
 
-    userEvent.type(screen.getByText(/first name/i), firstName)
-    userEvent.type(screen.getByText(/surname/i), lastName)
-    userEvent.type(screen.getByText(/phone/i), phone)
+    userEvent.type(screen.getByLabelText(/first name/i), firstName)
+    userEvent.type(screen.getByLabelText(/surname/i), lastName)
+    userEvent.type(screen.getByLabelText(/phone/i), phone)
+    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
     userEvent.click(screen.getByLabelText(/i accept/i))
 
     userEvent.click(screen.getByText(/update/i))

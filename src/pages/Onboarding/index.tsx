@@ -24,12 +24,12 @@ import {
   OnboardUserMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
-import { yup } from '@app/schemas'
+import { schemas, yup } from '@app/schemas'
 import { requiredMsg, DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
 
 import { ONBOARD_USER } from './queries'
 
-const onlyCountries = ['au', 'gb']
+const onlyCountries = ['gb']
 
 export const Onboarding: React.FC = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
@@ -39,11 +39,11 @@ export const Onboarding: React.FC = () => {
   const schema = yup.object({
     givenName: yup.string().required(requiredMsg(_t, 'first-name')),
     familyName: yup.string().required(requiredMsg(_t, 'surname')),
-    phone: yup.string().required(requiredMsg(_t, 'phone')),
+    phone: schemas.phone(_t),
     dob: yup
-      .date()
+      .mixed()
       .typeError(t('validation-errors.invalid-date-optional'))
-      .nullable(),
+      .required(_t('validation-errors.date-required')),
     tcs: yup.boolean().oneOf([true], t('tcs-required')),
   })
 
@@ -109,13 +109,12 @@ export const Onboarding: React.FC = () => {
             <TextField
               id="firstName"
               label={_t('first-name')}
-              variant="standard"
+              variant="filled"
               placeholder={_t('first-name-placeholder')}
               error={Boolean(errors.givenName)}
               helperText={errors.givenName?.message}
               {...register('givenName')}
               inputProps={{ 'data-testid': 'input-first-name' }}
-              sx={{ bgcolor: 'grey.100' }}
               autoFocus
               fullWidth
               required
@@ -125,13 +124,12 @@ export const Onboarding: React.FC = () => {
             <TextField
               id="surname"
               label={_t('surname')}
-              variant="standard"
+              variant="filled"
               placeholder={_t('surname-placeholder')}
               error={Boolean(errors.familyName)}
               helperText={errors.familyName?.message}
               {...register('familyName')}
               inputProps={{ 'data-testid': 'input-surname' }}
-              sx={{ bgcolor: 'grey.100' }}
               fullWidth
               required
             />
@@ -144,7 +142,6 @@ export const Onboarding: React.FC = () => {
             onlyCountries={onlyCountries}
             defaultCountry="gb"
             variant="filled"
-            sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
             countryCodeEditable={false}
             error={Boolean(errors.phone)}
@@ -168,14 +165,15 @@ export const Onboarding: React.FC = () => {
                   label={_t('dob')}
                   mask={DATE_MASK}
                   inputFormat={INPUT_DATE_FORMAT}
-                  value={field.value}
-                  onChange={(d: Date | null) => setValue('dob', d)}
+                  value={field.value ?? null}
+                  onChange={(d: Date | null) => {
+                    setValue('dob', d, { shouldValidate: true })
+                  }}
                   renderInput={params => (
                     <TextField
                       {...params}
                       variant="filled"
                       fullWidth
-                      sx={{ bgcolor: 'grey.100' }}
                       error={Boolean(errors.dob)}
                       helperText={errors.dob?.message}
                       required

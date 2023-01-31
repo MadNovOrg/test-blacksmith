@@ -2,6 +2,9 @@ import { TFunction } from 'i18next'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
 
+import 'yup-phone'
+import { requiredMsg } from './util'
+
 YupPassword(yup)
 
 const SIGNUP_VERIFY_LENGTH = 6
@@ -37,6 +40,12 @@ const schemas = {
         [yup.ref(passRef), null],
         t('validation-errors.confirm-password-invalid')
       )
+  },
+  phone: (t: TFunction, countryCode = 'GB') => {
+    return yup
+      .string()
+      .required(requiredMsg(t, 'phone'))
+      .phone(countryCode, true, t('validation-errors.invalid-phone'))
   },
 }
 

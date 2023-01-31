@@ -280,6 +280,7 @@
   "validation-errors": {
     "invalid-date": "Please enter a valid date",
     "invalid-date-optional": "Please enter a valid date or keep it empty",
+    "invalid-phone": "Please enter a valid phone number",
     "date-gte": "Must be {{date}} or after",
     "date-gte-field": "Must be greater or equal to '{{field}}'",
     "date-required": "Please enter your date of birth",

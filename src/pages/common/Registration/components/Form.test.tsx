@@ -3,7 +3,7 @@ import React from 'react'
 
 import { gqlRequest } from '@app/lib/gql-request'
 
-import { render, screen, waitFor, userEvent, fireEvent } from '@test/index'
+import { render, screen, waitFor, userEvent } from '@test/index'
 
 import { Form } from './Form'
 
@@ -146,9 +146,7 @@ describe('Form', () => {
     userEvent.type(screen.getByTestId('input-phone'), '0000000000')
 
     // Selects your default value of the date field
-    fireEvent.click(screen.getByText('Date of Birth'))
-    fireEvent.click(screen.getByText('25'))
-    fireEvent.click(screen.getByText('OK'))
+    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
 
     userEvent.click(screen.getByLabelText('T&Cs'))
     await waitFor(() => userEvent.click(screen.getByTestId('signup-form-btn')))
@@ -179,9 +177,7 @@ describe('Form', () => {
     userEvent.type(screen.getByTestId('input-phone'), '0000000000')
 
     // Selects your default value of the date field
-    fireEvent.click(screen.getByText('Date of Birth'))
-    fireEvent.click(screen.getByText('25'))
-    fireEvent.click(screen.getByText('OK'))
+    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
 
     userEvent.click(screen.getByLabelText('T&Cs'))
     await waitFor(() => userEvent.click(screen.getByTestId('signup-form-btn')))

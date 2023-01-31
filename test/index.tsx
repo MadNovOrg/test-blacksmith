@@ -15,6 +15,8 @@ import { defaultProviders, Providers } from './providers'
 
 const chance = new Chance()
 
+export const VALID_PHONE_NUMBER = '2011111111'
+
 function render(
   ui: React.ReactElement,
   providers: DeepPartial<Providers> = {}
