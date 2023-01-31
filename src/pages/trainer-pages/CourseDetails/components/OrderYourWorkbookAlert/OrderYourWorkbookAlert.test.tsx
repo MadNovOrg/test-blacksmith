@@ -28,7 +28,7 @@ const buildCustomCourse = ({
     },
   })
 
-const ALERT_MESSAGE = 'Please click here if you have not ordered your workbooks'
+const ALERT_MESSAGE = 'Please click if you have not ordered your workbooks'
 
 describe('OrderYourWorkbookAlert', () => {
   it('shows the alert if the current user is a trainer, the course is scheduled and starts in more than a week', async () => {
@@ -41,7 +41,11 @@ describe('OrderYourWorkbookAlert', () => {
       auth: { activeRole: RoleName.TRAINER },
     })
 
-    expect(screen.queryByText(ALERT_MESSAGE)).toBeInTheDocument()
+    const alertMessage = screen.queryByText(
+      content => content === ALERT_MESSAGE
+    )
+
+    expect(alertMessage).toBeInTheDocument()
   })
 
   it('hides the alert if the course starts exactly a week from now', async () => {

@@ -41,6 +41,7 @@ export const OrderYourWorkbookAlert: React.FC<OrderYourWorkbookAlertProps> = ({
             href="https://www.teamteachpublishing.co.uk/"
             target="_blank"
             component={'a'}
+            underline="always"
           />
         </Trans>
       </Alert>
