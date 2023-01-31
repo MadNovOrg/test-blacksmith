@@ -48,6 +48,7 @@ describe('context: Auth', () => {
       'allowedRoles',
       'activeRole',
       'verified',
+      'loggedOut',
       ...expectedKeys,
     ])
   })
@@ -158,6 +159,7 @@ describe('context: Auth', () => {
 
       expect(Auth.signIn).toHaveBeenCalledWith(email, pass)
       expect(result.current.profile?.email).toBe(email)
+      expect(result.current.loggedOut).toBe(false)
     })
 
     it('returns error if Auth.signIn fails', async () => {
@@ -217,6 +219,7 @@ describe('context: Auth', () => {
       expect(Auth.signOut).toHaveBeenCalledWith()
       expect(result.current.profile).toBeUndefined()
       expect(result.current.activeRole).toBeUndefined()
+      expect(result.current.loggedOut).toBe(true)
 
       // ActiveRole is kept so that re-login picks up last role before logout
       expect(localStorage.getItem(key)).toBe(RoleName.USER)

@@ -60,7 +60,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   const logout = useCallback(async () => {
     await Auth.signOut()
-    setState({})
+    setState({ loggedOut: true })
   }, [])
 
   const getJWT = useCallback(async () => {

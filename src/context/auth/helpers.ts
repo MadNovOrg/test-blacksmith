@@ -49,6 +49,7 @@ export async function fetchUserProfile(
       allowedRoles,
       activeRole,
       verified: emailVerified ?? false,
+      loggedOut: false,
     }
   } catch (err) {
     console.error(err)

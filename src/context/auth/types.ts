@@ -17,6 +17,7 @@ export type AuthState = {
   allowedRoles?: Set<RoleName> // roles allowed e.g. assigned + inherited
   activeRole?: RoleName
   verified?: boolean
+  loggedOut?: boolean
 }
 
 export interface AuthContextType extends AuthState {

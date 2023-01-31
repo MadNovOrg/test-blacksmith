@@ -189,7 +189,15 @@ function LoggedInRoutes() {
 
 function RedirectToLogin() {
   const { pathname, search } = useLocation()
-  return <Navigate replace to="login" state={{ from: { pathname, search } }} />
+  const auth = useAuth()
+
+  return (
+    <Navigate
+      replace
+      to="login"
+      state={auth.loggedOut ? undefined : { from: { pathname, search } }}
+    />
+  )
 }
 
 function AppShell({ children }: { children: ReactNode }) {
