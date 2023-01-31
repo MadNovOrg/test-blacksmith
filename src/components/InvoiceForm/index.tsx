@@ -23,7 +23,7 @@ export function formSchema(t: TFunction) {
     billingAddress: yup.string(),
 
     firstName: yup.string().required(requiredMsg(t, 'first-name')),
-    surname: yup.string().required(requiredMsg(t, 'last-name')),
+    surname: yup.string().required(requiredMsg(t, 'surname')),
 
     email: yup
       .string()
