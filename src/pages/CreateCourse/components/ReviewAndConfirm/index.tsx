@@ -75,12 +75,17 @@ export const ReviewAndConfirm = () => {
     <Stack spacing={5}>
       <PageContent />
 
-      <Box display="flex" justifyContent="space-between" sx={{ marginTop: 4 }}>
+      <Box
+        display="flex"
+        paddingBottom={5}
+        justifyContent="space-between"
+        sx={{ marginTop: 4 }}
+      >
         <Button onClick={() => navigate(-1)} startIcon={<ArrowBackIcon />}>
           {t('pages.create-course.review-and-confirm.back-btn')}
         </Button>
 
-        <Box paddingBottom={5}>
+        <Box>
           <Button variant="text" sx={{ marginRight: 4 }} onClick={saveDraft}>
             {t('pages.create-course.save-as-draft')}
           </Button>
