@@ -28,7 +28,8 @@ const buildCustomCourse = ({
     },
   })
 
-const ALERT_MESSAGE = 'Please click if you have not ordered your workbooks'
+const ALERT_MESSAGE =
+  'Please click if you have not ordered your workbooks for this course'
 
 describe('OrderYourWorkbookAlert', () => {
   it('shows the alert if the current user is a trainer, the course is scheduled and starts in more than a week', async () => {

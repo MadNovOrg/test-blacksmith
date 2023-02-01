@@ -346,7 +346,7 @@
     },
     "save-as-draft": "Save as draft",
     "submitted-course": "{{code}} has been created.",
-    "order-your-workbooks": "Please click <0>here</0> if you have not ordered your workbooks",
+    "order-your-workbooks": "Please click <0>here</0> if you have not ordered your workbooks for this course",
     "exceptions": {
       "course-contain-exceptions": "Course contains exceptions",
       "course-approval-required": "Course approval required",
