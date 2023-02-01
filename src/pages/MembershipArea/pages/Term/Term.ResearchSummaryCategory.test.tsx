@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -24,12 +24,12 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/term/research-summaries-category-id']}>
-          <Routes>
-            <Route path="/term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/term/research-summaries-category-id'] }
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -61,12 +61,12 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${category.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${category.id}`] }
     )
 
     researchSummaries.forEach(item => {
@@ -121,12 +121,12 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${category.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${category.id}`] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search summaries'), SEARCH_TERM)
@@ -169,12 +169,12 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${category.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${category.id}`] }
     )
 
     expect(
@@ -251,12 +251,12 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${category.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${category.id}`] }
     )
 
     userEvent.click(screen.getByTestId('term-next-page'))

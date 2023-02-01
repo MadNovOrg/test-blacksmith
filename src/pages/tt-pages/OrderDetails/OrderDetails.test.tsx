@@ -1,7 +1,6 @@
 import { addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider, CombinedError } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -51,11 +50,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
@@ -72,11 +69,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(
@@ -125,11 +120,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(
@@ -203,11 +196,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     const user1Row = screen.getByTestId(`order-registrant-${user1Email}`)
@@ -271,11 +262,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(
@@ -342,11 +331,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     const promoCodeRow = screen.getByTestId('order-promo-code')
@@ -403,11 +390,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     const subTotalRow = screen.getByTestId('order-subtotal')
@@ -466,11 +451,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(screen.getByText(/pay by credit card/i)).toBeInTheDocument()
@@ -516,11 +499,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     expect(screen.getByText(/sales person/i)).toBeInTheDocument()
@@ -586,11 +567,9 @@ describe('page: OrderDetails', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter>
-        <Provider value={client}>
-          <OrderDetails />
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
     )
 
     const invoicedToRow = screen.getByTestId('order-invoiced-to')

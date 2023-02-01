@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -20,12 +20,12 @@ describe('page: Webinar', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/webinars/${WEBINAR_ID}`]}>
-          <Routes>
-            <Route path="/webinars/:id" element={<Webinar />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars/:id" element={<Webinar />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -53,12 +53,12 @@ describe('page: Webinar', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/webinars/${WEBINAR_ID}`]}>
-          <Routes>
-            <Route path="/webinars/:id" element={<Webinar />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars/:id" element={<Webinar />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
     )
 
     expect(screen.getByText('Webinar not found')).toBeInTheDocument()
@@ -84,12 +84,12 @@ describe('page: Webinar', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/webinars/${WEBINAR_ID}`]}>
-          <Routes>
-            <Route path="/webinars/:id" element={<Webinar />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars/:id" element={<Webinar />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
     )
 
     expect(screen.getByTestId('webinar-title')).toHaveTextContent(
@@ -122,12 +122,12 @@ describe('page: Webinar', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/webinars/${WEBINAR_ID}`]}>
-          <Routes>
-            <Route path="/webinars/:id" element={<Webinar />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars/:id" element={<Webinar />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/webinars/${WEBINAR_ID}`] }
     )
 
     recentWebinars.forEach(relatedItem => {

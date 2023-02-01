@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { Course } from '@app/types'
@@ -55,11 +55,11 @@ describe('page: CourseDetails', () => {
     registerMocks(course)
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -71,15 +71,15 @@ describe('page: CourseDetails', () => {
     registerMocks(course)
 
     render(
-      <MemoryRouter
-        initialEntries={[
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      {
+        initialEntries: [
           `/courses/${course.id}/details?success=invite_accepted`,
-        ]}
-      >
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+        ],
+      }
     )
 
     expect(screen.getByTestId('success-alert')).toBeInTheDocument()
@@ -90,11 +90,11 @@ describe('page: CourseDetails', () => {
     registerMocks(course)
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     expect(screen.getByLabelText('Course participant tabs')).toBeInTheDocument()
@@ -107,11 +107,11 @@ describe('page: CourseDetails', () => {
     registerMocks(course)
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
@@ -152,11 +152,11 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     expect(screen.getByTestId('evaluate-course-cta')).toBeEnabled()
@@ -197,11 +197,11 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     expect(screen.getByTestId('evaluate-course-cta')).toBeDisabled()
@@ -250,22 +250,21 @@ describe('page: CourseDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route path={`/courses/:id/details`} element={<CourseDetails />} />
-          <Route
-            path={`/manage-courses/:orgId/:id/details`}
-            element={<p>Manage course page</p>}
-          />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path={`/courses/:id/details`} element={<CourseDetails />} />
+        <Route
+          path={`/manage-courses/:orgId/:id/details`}
+          element={<p>Manage course page</p>}
+        />
+      </Routes>,
       {
         auth: {
           profile: {
             id: PROFILE_ID,
           },
         },
-      }
+      },
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
 
     userEvent.click(screen.getByText(/manage course/i))

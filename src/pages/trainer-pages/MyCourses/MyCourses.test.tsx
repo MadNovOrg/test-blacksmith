@@ -1,7 +1,6 @@
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
-import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
@@ -32,7 +31,7 @@ const _render = (
   ui: React.ReactElement,
   providers: DeepPartial<Providers> = {}
 ) => {
-  return render(<MemoryRouter>{ui}</MemoryRouter>, providers)
+  return render(<>{ui}</>, providers)
 }
 
 describe('trainers-pages/MyCourses', () => {

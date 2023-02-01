@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
 
@@ -38,13 +38,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.getByTestId('edit-course-fetching')).toBeInTheDocument()
@@ -62,14 +62,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.queryByTestId('edit-course-fetching')).not.toBeInTheDocument()
@@ -88,14 +87,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.queryByTestId('edit-course-fetching')).not.toBeInTheDocument()
@@ -122,14 +120,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TRAINER } }
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TRAINER } },
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -153,14 +150,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TRAINER } }
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TRAINER } },
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -184,14 +180,13 @@ describe('page: EditCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/courses/edit/1']}>
-        <Provider value={client}>
-          <Routes>
-            <Route path="/courses/edit/:id" element={<EditCourse />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TT_OPS } }
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.TT_OPS } },
+      { initialEntries: ['/courses/edit/1'] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()

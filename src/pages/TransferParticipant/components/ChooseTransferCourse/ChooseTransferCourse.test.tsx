@@ -1,6 +1,6 @@
 import { addDays } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -49,20 +49,20 @@ describe('page: ChooseTransferCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            initialValue={{
-              fromCourse,
-              participant,
-            }}
-            participantId={participant.id}
-            courseId={fromCourse.id}
-          >
-            <ChooseTransferCourse />
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          initialValue={{
+            fromCourse,
+            participant,
+          }}
+          participantId={participant.id}
+          courseId={fromCourse.id}
+        >
+          <ChooseTransferCourse />
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
@@ -121,23 +121,23 @@ describe('page: ChooseTransferCourse', () => {
     } as unknown as Client
 
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            initialValue={{
-              fromCourse,
-              participant,
-            }}
-            participantId={participant.id}
-            courseId={fromCourse.id}
-          >
-            <Routes>
-              <Route index element={<ChooseTransferCourse />} />
-              <Route path="details" element={<MockTransferDetails />} />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          initialValue={{
+            fromCourse,
+            participant,
+          }}
+          participantId={participant.id}
+          courseId={fromCourse.id}
+        >
+          <Routes>
+            <Route index element={<ChooseTransferCourse />} />
+            <Route path="details" element={<MockTransferDetails />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByLabelText(TO_COURSE_ID))

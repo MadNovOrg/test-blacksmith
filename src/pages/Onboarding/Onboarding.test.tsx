@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -27,10 +27,10 @@ describe('page: Onboarding', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Onboarding />
-        </MemoryRouter>
-      </Provider>
+        <Onboarding />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText(/update/i))
@@ -60,11 +60,10 @@ describe('page: Onboarding', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Onboarding />
-        </MemoryRouter>
+        <Onboarding />
       </Provider>,
-      { auth: { reloadCurrentProfile: reloadProfileMock } }
+      { auth: { reloadCurrentProfile: reloadProfileMock } },
+      { initialEntries: ['/'] }
     )
 
     userEvent.type(screen.getByLabelText(/first name/i), 'John')
@@ -114,19 +113,18 @@ describe('page: Onboarding', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter initialEntries={['/onboarding']}>
-          <Routes>
-            <Route path="/" element={<p>home</p>} />
-            <Route path="/onboarding" element={<Onboarding />} />
-          </Routes>
-        </MemoryRouter>
+        <Routes>
+          <Route path="/" element={<p>home</p>} />
+          <Route path="/onboarding" element={<Onboarding />} />
+        </Routes>
       </Provider>,
       {
         auth: {
           reloadCurrentProfile: reloadProfileMock,
           profile: { id: profileId },
         },
-      }
+      },
+      { initialEntries: ['/onboarding'] }
     )
 
     userEvent.type(screen.getByLabelText(/first name/i), firstName)

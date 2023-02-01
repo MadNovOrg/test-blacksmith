@@ -12,9 +12,15 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import {
+  ArrayParam,
+  StringParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import { BackButton } from '@app/components/BackButton'
 import { FilterOrgSector } from '@app/components/FilterOrgSector'
@@ -73,8 +79,11 @@ export const Organizations: React.FC<OrganizationsProps> = () => {
     ],
     [t]
   )
-  const [query, setQuery] = useState('')
-  const [filterSector, setFilterSector] = useState<string[]>([])
+  const [query, setQuery] = useQueryParam('query', withDefault(StringParam, ''))
+  const [filterSector, setFilterSector] = useQueryParam(
+    'sectors',
+    withDefault(ArrayParam, [])
+  )
 
   const [where, filtered] = useMemo(() => {
     let isFiltered = false

@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
-import { createSearchParams, MemoryRouter } from 'react-router-dom'
+import { createSearchParams } from 'react-router-dom'
 
 import { gqlRequest } from '@app/lib/gql-request'
 
@@ -29,11 +29,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('page: ForgotPassword', () => {
   it('renders as expected', async () => {
-    render(
-      <MemoryRouter>
-        <ForgotPasswordPage />
-      </MemoryRouter>
-    )
+    render(<ForgotPasswordPage />)
 
     expect(screen.getByTestId('forgot-pass-submit')).toBeInTheDocument()
     expect(Auth.forgotPassword).not.toHaveBeenCalled()
@@ -41,11 +37,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('does not submit if email is empty', async () => {
-    render(
-      <MemoryRouter>
-        <ForgotPasswordPage />
-      </MemoryRouter>
-    )
+    render(<ForgotPasswordPage />)
 
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
@@ -59,11 +51,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('does not submit if email is invalid', async () => {
-    render(
-      <MemoryRouter>
-        <ForgotPasswordPage />
-      </MemoryRouter>
-    )
+    render(<ForgotPasswordPage />)
 
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
@@ -78,11 +66,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('submits when email is valid', async () => {
-    render(
-      <MemoryRouter>
-        <ForgotPasswordPage />
-      </MemoryRouter>
-    )
+    render(<ForgotPasswordPage />)
 
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
@@ -101,11 +85,7 @@ describe('page: ForgotPassword', () => {
   })
 
   it('should call backend API for temporary password reset', async () => {
-    render(
-      <MemoryRouter>
-        <ForgotPasswordPage />
-      </MemoryRouter>
-    )
+    render(<ForgotPasswordPage />)
 
     AuthMock.forgotPassword.mockImplementation(() => {
       throw new Error()

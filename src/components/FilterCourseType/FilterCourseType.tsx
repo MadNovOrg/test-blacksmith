@@ -1,6 +1,11 @@
 import { SxProps } from '@mui/material'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import { Course_Type_Enum } from '@app/generated/graphql'
 import { noop } from '@app/util'
@@ -14,25 +19,37 @@ type Props = {
 
 const types = Object.values(Course_Type_Enum)
 
+const CourseTypeParam = withDefault(
+  createEnumArrayParam<Course_Type_Enum>(types),
+  [] as Course_Type_Enum[]
+)
+
 export const FilterCourseType: React.FC<Props> = ({ onChange = noop, sx }) => {
   const { t } = useTranslation()
 
-  const [options, setOptions] = useState<FilterOption<Course_Type_Enum>[]>(
-    () => {
-      return types.map(type => ({
-        id: type,
-        title: t(`course-types.${type}`),
-        selected: false,
-      }))
-    }
-  )
+  const typeOptions = useMemo(() => {
+    return types.map(type => ({
+      id: type,
+      title: t(`course-types.${type}`),
+    }))
+  }, [t])
+
+  const [selected, setSelected] = useQueryParam('type', CourseTypeParam)
+
+  const options = useMemo(() => {
+    return typeOptions.map(o => ({
+      ...o,
+      selected: selected.includes(o.id),
+    }))
+  }, [selected, typeOptions])
 
   const _onChange = useCallback(
     (opts: FilterOption<Course_Type_Enum>[]) => {
-      setOptions(opts)
-      onChange(opts.flatMap(o => (o.selected ? o.id : [])))
+      const sel = opts.flatMap(o => (o.selected ? o.id : []))
+      setSelected(sel)
+      onChange(sel)
     },
-    [onChange]
+    [onChange, setSelected]
   )
 
   return (

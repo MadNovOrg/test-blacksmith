@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -51,13 +51,11 @@ describe('component: LicenseOrderDetails', () => {
     }
 
     render(
-      <MemoryRouter>
-        <Provider value={client as unknown as Client}>
-          <CreateCourseProvider courseType={CourseType.INDIRECT}>
-            <LicenseOrderDetails />
-          </CreateCourseProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client as unknown as Client}>
+        <CreateCourseProvider courseType={CourseType.INDIRECT}>
+          <LicenseOrderDetails />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(
@@ -76,20 +74,18 @@ describe('component: LicenseOrderDetails', () => {
     }
 
     render(
-      <MemoryRouter>
-        <Provider value={client as unknown as Client}>
-          <CreateCourseProvider
-            courseType={CourseType.INDIRECT}
-            initialValue={{
-              courseData: {
-                organization: { id: 'org-id' },
-              } as unknown as ValidCourseInput,
-            }}
-          >
-            <LicenseOrderDetails />
-          </CreateCourseProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client as unknown as Client}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{
+            courseData: {
+              organization: { id: 'org-id' },
+            } as unknown as ValidCourseInput,
+          }}
+        >
+          <LicenseOrderDetails />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(
@@ -110,21 +106,19 @@ describe('component: LicenseOrderDetails', () => {
     }
 
     render(
-      <MemoryRouter>
-        <Provider value={client as unknown as Client}>
-          <CreateCourseProvider
-            courseType={CourseType.INDIRECT}
-            initialValue={{
-              courseData: {
-                maxParticipants: 10,
-                organization: { id: 'org-id' },
-              } as unknown as ValidCourseInput,
-            }}
-          >
-            <LicenseOrderDetails />
-          </CreateCourseProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client as unknown as Client}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{
+            courseData: {
+              maxParticipants: 10,
+              organization: { id: 'org-id' },
+            } as unknown as ValidCourseInput,
+          }}
+        >
+          <LicenseOrderDetails />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(screen.getByTestId('amount-due')).toBeInTheDocument()
@@ -143,21 +137,19 @@ describe('component: LicenseOrderDetails', () => {
     }
 
     render(
-      <MemoryRouter>
-        <Provider value={client as unknown as Client}>
-          <CreateCourseProvider
-            courseType={CourseType.INDIRECT}
-            initialValue={{
-              courseData: {
-                maxParticipants: 10,
-                organization: { id: 'org-id' },
-              } as unknown as ValidCourseInput,
-            }}
-          >
-            <LicenseOrderDetails />
-          </CreateCourseProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client as unknown as Client}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{
+            courseData: {
+              maxParticipants: 10,
+              organization: { id: 'org-id' },
+            } as unknown as ValidCourseInput,
+          }}
+        >
+          <LicenseOrderDetails />
+        </CreateCourseProvider>
+      </Provider>
     )
 
     expect(screen.getByText('Review & confirm')).toBeDisabled()
@@ -186,30 +178,30 @@ describe('component: LicenseOrderDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/license-order-details']}>
-        <Provider value={client as unknown as Client}>
-          <CreateCourseProvider
-            courseType={CourseType.INDIRECT}
-            initialValue={{
-              courseData: {
-                maxParticipants: 10,
-                organization: { id: 'org-id' },
-              } as unknown as ValidCourseInput,
-            }}
-          >
-            <Routes>
-              <Route
-                path="/license-order-details"
-                element={<LicenseOrderDetails />}
-              />
-              <Route
-                path="/review-license-order"
-                element={<CreateCourseContextConsumer />}
-              />
-            </Routes>
-          </CreateCourseProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client as unknown as Client}>
+        <CreateCourseProvider
+          courseType={CourseType.INDIRECT}
+          initialValue={{
+            courseData: {
+              maxParticipants: 10,
+              organization: { id: 'org-id' },
+            } as unknown as ValidCourseInput,
+          }}
+        >
+          <Routes>
+            <Route
+              path="/license-order-details"
+              element={<LicenseOrderDetails />}
+            />
+            <Route
+              path="/review-license-order"
+              element={<CreateCourseContextConsumer />}
+            />
+          </Routes>
+        </CreateCourseProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/license-order-details'] }
     )
 
     userEvent.type(screen.getByTestId('org-selector'), 'Organization')

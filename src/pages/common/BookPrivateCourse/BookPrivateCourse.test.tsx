@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import insertBookPrivateCourse from '@app/queries/booking/insert-book-private-course'
@@ -68,13 +68,11 @@ describe('page: BookPrivateCourse', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
-      >
-        <Routes>
-          <Route path="/book-private-course" element={<BookPrivateCourse />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/book-private-course" element={<BookPrivateCourse />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/book-private-course?course_id=${openCourse.id}`] }
     )
 
     fillForm()
@@ -92,11 +90,11 @@ describe('page: BookPrivateCourse', () => {
 
   it('displays not found page if there is no query param for course id', () => {
     render(
-      <MemoryRouter initialEntries={['/book-private-course']}>
-        <Routes>
-          <Route path="/book-private-course" element={<BookPrivateCourse />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/book-private-course" element={<BookPrivateCourse />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/book-private-course'] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -110,13 +108,11 @@ describe('page: BookPrivateCourse', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
-      >
-        <Routes>
-          <Route path="/book-private-course" element={<BookPrivateCourse />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/book-private-course" element={<BookPrivateCourse />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/book-private-course?course_id=${openCourse.id}`] }
     )
 
     userEvent.type(screen.getByLabelText('Work email *'), 'test.com')
@@ -146,13 +142,11 @@ describe('page: BookPrivateCourse', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/book-private-course?course_id=${openCourse.id}`]}
-      >
-        <Routes>
-          <Route path="/book-private-course" element={<BookPrivateCourse />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/book-private-course" element={<BookPrivateCourse />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/book-private-course?course_id=${openCourse.id}`] }
     )
 
     fillForm()

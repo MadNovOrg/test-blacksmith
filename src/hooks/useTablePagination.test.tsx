@@ -1,8 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
 import React, { useState } from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
-import { render, screen, userEvent } from '@test/index'
+import { render, screen, TestMemoryRouter, userEvent } from '@test/index'
 
 import { useTablePagination } from './useTablePagination'
 
@@ -40,7 +39,7 @@ const clickPrev = () => {
 describe('useTablePagination', () => {
   it('returns expected shape and defaults', async () => {
     const { result } = renderHook(() => useTablePagination(), {
-      wrapper: MemoryRouter,
+      wrapper: TestMemoryRouter,
     })
 
     const keys = Object.keys(result.current)
@@ -59,11 +58,7 @@ describe('useTablePagination', () => {
   })
 
   it('updates correctly on next page', async () => {
-    render(
-      <MemoryRouter>
-        <Wrapper />
-      </MemoryRouter>
-    )
+    render(<Wrapper />)
 
     const displayed = screen.getByText('1–12 of 36')
     expect(displayed).toBeInTheDocument()
@@ -96,11 +91,7 @@ describe('useTablePagination', () => {
   })
 
   it('updates correctly on prev page', async () => {
-    render(
-      <MemoryRouter>
-        <Wrapper />
-      </MemoryRouter>
-    )
+    render(<Wrapper />)
 
     const displayed = screen.getByText('1–12 of 36')
     expect(displayed).toBeInTheDocument()
@@ -135,11 +126,7 @@ describe('useTablePagination', () => {
   })
 
   it('resets the current page if the total changes', async () => {
-    render(
-      <MemoryRouter>
-        <Wrapper total={48} />
-      </MemoryRouter>
-    )
+    render(<Wrapper total={48} />)
 
     // Go to last page
     clickNext()

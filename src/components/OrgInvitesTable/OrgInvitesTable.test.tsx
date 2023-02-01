@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { OrgInvitesTable } from '@app/components/OrgInvitesTable/index'
 import { useOrgInvites } from '@app/hooks/useOrgInvites'
@@ -51,11 +51,11 @@ describe('OrgInvitesTable', () => {
 
   it('matches snapshot', async () => {
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<OrgInvitesTable orgId="1" />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<OrgInvitesTable orgId="1" />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(view).toMatchSnapshot()

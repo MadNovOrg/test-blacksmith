@@ -6,6 +6,8 @@ import { Amplify } from 'aws-amplify'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
+import { QueryParamProvider } from 'use-query-params'
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
 
 import { AuthProvider } from '@app/context/auth'
 
@@ -35,18 +37,25 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Sentry.ErrorBoundary
-          fallback={errorData => (
-            <ErrorPage
-              errorData={errorData}
-              debug={import.meta.env.VITE_SENTRY_ENVIRONMENT === 'development'}
-            />
-          )}
+        <QueryParamProvider
+          adapter={ReactRouter6Adapter}
+          options={{ updateType: 'replaceIn' }}
         >
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </Sentry.ErrorBoundary>
+          <Sentry.ErrorBoundary
+            fallback={errorData => (
+              <ErrorPage
+                errorData={errorData}
+                debug={
+                  import.meta.env.VITE_SENTRY_ENVIRONMENT === 'development'
+                }
+              />
+            )}
+          >
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </Sentry.ErrorBoundary>
+        </QueryParamProvider>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,

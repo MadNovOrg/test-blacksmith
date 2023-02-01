@@ -3,10 +3,12 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { isValid } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getI18n } from 'react-i18next'
+import { DateParam, useQueryParam, withDefault } from 'use-query-params'
 
 const { t } = getI18n()
 
@@ -25,8 +27,11 @@ type Props = {
 export const FilterDates: React.FC<Props> = ({ onChange }) => {
   const { t } = useTranslation()
 
-  const [from, setFrom] = useState<Date | null>(null)
-  const [to, setTo] = useState<Date | null>(null)
+  const [from, setFrom] = useQueryParam(
+    'dateFrom',
+    withDefault(DateParam, null)
+  )
+  const [to, setTo] = useQueryParam('dateTo', withDefault(DateParam, null))
 
   const [fromError, setFromError] = useState<string>('')
   const [toError, setToError] = useState<string>('')
@@ -46,7 +51,10 @@ export const FilterDates: React.FC<Props> = ({ onChange }) => {
 
         <DatePicker
           value={from}
-          onChange={setFrom}
+          onChange={d => {
+            if (isValid(d)) setFrom(d)
+            else setFromError('invalidDate')
+          }}
           maxDate={to || undefined}
           onError={reason => setFromError(reason?.toString() || '')}
           renderInput={params => (
@@ -64,7 +72,10 @@ export const FilterDates: React.FC<Props> = ({ onChange }) => {
 
         <DatePicker
           value={to}
-          onChange={setTo}
+          onChange={d => {
+            if (isValid(d)) setTo(d)
+            else setToError('invalidDate')
+          }}
           minDate={from || undefined}
           onError={reason => setToError(reason?.toString() || '')}
           renderInput={params => (

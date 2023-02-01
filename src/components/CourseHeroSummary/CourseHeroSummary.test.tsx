@@ -1,6 +1,5 @@
 import { add, sub } from 'date-fns'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { render, screen } from '@test/index'
 import {
@@ -16,11 +15,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays basic course information', () => {
     const course = buildCourse()
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
     expect(screen.getByText(course.course_code)).toBeInTheDocument()
@@ -37,11 +32,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Course has begun.')).toBeInTheDocument()
   })
@@ -57,11 +48,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Course begins today.')).toBeInTheDocument()
   })
@@ -77,11 +64,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('1 day until course begins')).toBeInTheDocument()
   })
@@ -97,11 +80,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('2 days until course begins')).toBeInTheDocument()
   })
@@ -117,11 +96,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Course has ended.')).toBeInTheDocument()
   })
@@ -140,11 +115,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('12 May 2022, 06:30 AM')).toBeInTheDocument()
     expect(screen.getByText('15 May 2022, 07:30 AM')).toBeInTheDocument()
@@ -161,11 +132,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Duration 30 minutes')).toBeInTheDocument()
   })
@@ -181,11 +148,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Duration 1 hour')).toBeInTheDocument()
   })
@@ -201,11 +164,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Duration 2 hours')).toBeInTheDocument()
   })
@@ -221,11 +180,7 @@ describe('component: CourseHeroSummary', () => {
       overrides: { schedule: [courseSchedule] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Duration 2 days')).toBeInTheDocument()
   })
@@ -245,14 +200,9 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>,
-      {
-        auth: { profile: { id: LOGGED_IN_USER_ID } },
-      }
-    )
+    render(<CourseHeroSummary course={course} />, {
+      auth: { profile: { id: LOGGED_IN_USER_ID } },
+    })
 
     expect(screen.getByText('John Doe')).toBeInTheDocument()
     expect(screen.getByText('(Lead)')).toBeInTheDocument()
@@ -267,14 +217,9 @@ describe('component: CourseHeroSummary', () => {
       overrides: { trainers: [buildCourseTrainer({ overrides: { profile } })] },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />{' '}
-      </MemoryRouter>,
-      {
-        auth: { profile: { id: LOGGED_IN_USER_ID } },
-      }
-    )
+    render(<CourseHeroSummary course={course} />, {
+      auth: { profile: { id: LOGGED_IN_USER_ID } },
+    })
 
     expect(screen.getByText('You are the trainer')).toBeInTheDocument()
   })
@@ -282,11 +227,7 @@ describe('component: CourseHeroSummary', () => {
   it('displays course venue information', () => {
     const course = buildCourse()
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(
       screen.getByText(
@@ -310,11 +251,7 @@ describe('component: CourseHeroSummary', () => {
       },
     })
 
-    render(
-      <MemoryRouter>
-        <CourseHeroSummary course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Join via Zoom')).toBeInTheDocument()
   })

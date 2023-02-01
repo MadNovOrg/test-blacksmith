@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import { PaymentMethod } from '@app/generated/graphql'
 import { CourseType, Currency, CourseLevel } from '@app/types'
@@ -116,11 +116,11 @@ describe('CourseBookingReview', () => {
     useBookingMock.mockReturnValueOnce(getMockData(CourseType.OPEN, 3))
 
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CourseBookingReview />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<CourseBookingReview />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(view).toMatchSnapshot()
@@ -132,11 +132,11 @@ describe('CourseBookingReview', () => {
     )
 
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CourseBookingReview />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<CourseBookingReview />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(view).toMatchSnapshot()

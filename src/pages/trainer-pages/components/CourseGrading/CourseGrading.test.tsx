@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { Grade } from '@app/types'
@@ -22,11 +22,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(
-      <MemoryRouter>
-        <CourseGrading course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseGrading course={course} />)
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
   })
@@ -45,11 +41,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(
-      <MemoryRouter>
-        <CourseGrading course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseGrading course={course} />)
 
     const gradeCells = screen.getAllByTestId(`grade-cell`)
 
@@ -82,18 +74,18 @@ describe('component: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/courses/${course.id}/details`]}>
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<CourseGrading course={course} />}
-          />
-          <Route
-            path="/courses/:id/grading-details"
-            element={<h1>Grading clearance</h1>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/courses/:id/details"
+          element={<CourseGrading course={course} />}
+        />
+        <Route
+          path="/courses/:id/grading-details"
+          element={<h1>Grading clearance</h1>}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/${course.id}/details`] }
     )
     const button = screen.getByRole('button', {
       name: 'Modify grading details',
@@ -120,11 +112,7 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(
-      <MemoryRouter>
-        <CourseGrading course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseGrading course={course} />)
     const button = screen.getByRole('button', {
       name: 'Modify grading details',
     })

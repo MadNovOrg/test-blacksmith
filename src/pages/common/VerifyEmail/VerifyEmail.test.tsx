@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { useAuth } from '@app/context/auth'
 import { AuthContextType } from '@app/context/auth/types'
@@ -34,11 +34,12 @@ const useAuthMock = jest.mocked(useAuth)
 describe('page: VerifyEmailPage', () => {
   const setup = () => {
     return render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<VerifyEmailPage />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<VerifyEmailPage />} />
+        <Route path="/profile" element={<div />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
   }
 
@@ -48,11 +49,7 @@ describe('page: VerifyEmailPage', () => {
   })
 
   it('sends verification email when verify now is clicked', async () => {
-    render(
-      <MemoryRouter>
-        <VerifyEmailPage />
-      </MemoryRouter>
-    )
+    render(<VerifyEmailPage />)
 
     expect(screen.queryByTestId('signup-verify-btn')).not.toBeInTheDocument()
     userEvent.click(screen.getByTestId('signup-verify-now-btn'))
@@ -64,11 +61,7 @@ describe('page: VerifyEmailPage', () => {
   })
 
   it('does not submit when code is empty', async () => {
-    render(
-      <MemoryRouter>
-        <VerifyEmailPage />
-      </MemoryRouter>
-    )
+    render(<VerifyEmailPage />)
 
     userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>

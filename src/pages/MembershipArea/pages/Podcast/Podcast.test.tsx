@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -21,12 +21,12 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${PODCAST_ID}`]}>
-          <Routes>
-            <Route path="/:id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/:id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] }
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -51,12 +51,12 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${PODCAST_ID}`]}>
-          <Routes>
-            <Route path="/:id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/:id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] }
     )
 
     expect(screen.getByText('Podcast not found')).toBeInTheDocument()
@@ -74,13 +74,13 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/not-found`]}>
-          <Routes>
-            <Route path="/" element={<>Podcasts page</>} />
-            <Route path=":id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/not-found`] }
     )
 
     expect(
@@ -105,13 +105,13 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${PODCAST_ID}`]}>
-          <Routes>
-            <Route path="/" element={<>Podcasts page</>} />
-            <Route path=":id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] }
     )
 
     expect(screen.getByText(podcast.name)).toBeInTheDocument()
@@ -138,13 +138,13 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${PODCAST_ID}`]}>
-          <Routes>
-            <Route path="/" element={<>Podcasts page</>} />
-            <Route path=":id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] }
     )
 
     userEvent.click(screen.getByText('Podcasts'))
@@ -173,13 +173,13 @@ describe('page: Podcast', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${PODCAST_ID}`]}>
-          <Routes>
-            <Route path="/" element={<>Podcasts page</>} />
-            <Route path=":id" element={<Podcast />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<>Podcasts page</>} />
+          <Route path=":id" element={<Podcast />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${PODCAST_ID}`] }
     )
 
     recentPodcasts.forEach(podcast => {

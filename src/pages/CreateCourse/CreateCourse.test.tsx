@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import { CourseType, RoleName } from '@app/types'
@@ -25,18 +25,17 @@ describe('page: CreateCourse', () => {
 
   it("doesn't mark any step as done if on course details page", () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route index element={<h1>Create course form page</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route index element={<h1>Create course form page</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new`] }
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -49,18 +48,17 @@ describe('page: CreateCourse', () => {
 
   it("doesn't mark course details page as done if on assign trainers page but course details page wasn't marked as complete", () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new/assign-trainers`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new/assign-trainers`] }
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -73,27 +71,26 @@ describe('page: CreateCourse', () => {
 
   it('marks course details page as done if on assign trainers page and details page was marked as complete', () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new/assign-trainers`]}>
-        <Routes>
-          <Route
-            path="/courses/new"
-            element={
-              <CreateCourse
-                initialContextValue={{
-                  completedSteps: [StepsEnum.COURSE_DETAILS],
-                }}
-              />
-            }
-          >
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route
+          path="/courses/new"
+          element={
+            <CreateCourse
+              initialContextValue={{
+                completedSteps: [StepsEnum.COURSE_DETAILS],
+              }}
+            />
+          }
+        >
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new/assign-trainers`] }
     )
 
     const subnav = screen.getByTestId('create-course-nav')
@@ -108,18 +105,17 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating open course', () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.OPEN}`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
     )
 
     expect(screen.getByText('Open course creation')).toBeInTheDocument()
@@ -127,18 +123,17 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating closed course', () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.CLOSED}`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
     )
 
     expect(screen.getByText('Closed course creation')).toBeInTheDocument()
@@ -146,20 +141,17 @@ describe('page: CreateCourse', () => {
 
   it('renders correct title when creating indirect course', () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}
-      >
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
     )
 
     expect(screen.getByText('Course creation')).toBeInTheDocument()
@@ -167,20 +159,17 @@ describe('page: CreateCourse', () => {
 
   it('displays correct steps for the indirect course', () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}
-      >
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
     )
 
     const nav = screen.getByTestId('create-course-nav')
@@ -190,18 +179,17 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow non-authorized users to create open course", () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.OPEN}`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TRAINER,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -209,18 +197,17 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow non-authorized users to create closed course", () => {
     render(
-      <MemoryRouter initialEntries={[`/courses/new?type=${CourseType.CLOSED}`]}>
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TRAINER,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -228,20 +215,17 @@ describe('page: CreateCourse', () => {
 
   it("doesn't allow non-authorized users to create indirect course", () => {
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/new?type=${CourseType.INDIRECT}`]}
-      >
-        <Routes>
-          <Route path="/courses/new" element={<CreateCourse />}>
-            <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()

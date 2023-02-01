@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { RoleName } from '@app/types'
 
@@ -21,11 +20,7 @@ describe('component: CourseTrainersInfo', () => {
       buildCourseAssistant(),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
 
     expect(screen.getByText('Show more')).toBeInTheDocument()
   })
@@ -37,11 +32,7 @@ describe('component: CourseTrainersInfo', () => {
       buildCourseAssistant(),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
 
     expect(screen.queryByText('Show more')).toBe(null)
   })
@@ -62,11 +53,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
 
@@ -99,11 +86,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
 
     providers.auth.activeRole = providers.auth.defaultRole
 
@@ -129,11 +112,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
     expect(screen.getByText('You are the trainer')).toBeInTheDocument()
   })
 
@@ -154,11 +133,7 @@ describe('component: CourseTrainersInfo', () => {
       }),
     ]
 
-    render(
-      <MemoryRouter>
-        <CourseTrainersInfo trainers={trainers} />
-      </MemoryRouter>
-    )
+    render(<CourseTrainersInfo trainers={trainers} />)
     expect(screen.getByText('You are the assistant')).toBeInTheDocument()
   })
 })

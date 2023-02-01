@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { render, screen, userEvent, waitFor, fireEvent } from '@test/index'
 
@@ -7,11 +6,7 @@ import { DrawerMenu } from './DrawerMenu'
 
 describe('component: DrawerMenu', () => {
   it('toggles menu', async () => {
-    render(
-      <MemoryRouter>
-        <DrawerMenu />
-      </MemoryRouter>
-    )
+    render(<DrawerMenu />)
 
     const openButton = screen.getByLabelText('Open menu')
     expect(openButton).toBeInTheDocument()

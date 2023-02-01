@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -47,10 +46,10 @@ describe('page: ResourcesList', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <ResourceAreas />
-        </MemoryRouter>
-      </Provider>
+        <ResourceAreas />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     for (const item of resourceList) {

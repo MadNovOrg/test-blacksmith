@@ -1,6 +1,5 @@
 import { build, perBuild } from '@jackfranklin/test-data-bot'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import {
   GetProfilesQuery,
@@ -61,11 +60,7 @@ describe('page: Users', () => {
       error: undefined,
     })
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     expect(screen.getByTestId('users-fetching')).toBeInTheDocument()
   })
@@ -78,11 +73,7 @@ describe('page: Users', () => {
       error: undefined,
     })
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     expect(screen.getByText('No users at this time')).toBeInTheDocument()
   })
@@ -96,11 +87,7 @@ describe('page: Users', () => {
       error: undefined,
     })
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     const table = screen.getByRole('table')
     const tableHead = within(table).getByTestId('table-head')
@@ -153,11 +140,7 @@ describe('page: Users', () => {
       }
     )
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     const search = screen.getByTestId('FilterSearch-Input')
     userEvent.type(search, keyword)
@@ -191,11 +174,7 @@ describe('page: Users', () => {
       }
     )
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
@@ -232,11 +211,7 @@ describe('page: Users', () => {
       }
     )
 
-    render(
-      <MemoryRouter>
-        <Users />
-      </MemoryRouter>
-    )
+    render(<Users />)
 
     userEvent.click(screen.getByLabelText('Moderator'))
 

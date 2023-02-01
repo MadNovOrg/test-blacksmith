@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
@@ -33,11 +33,11 @@ describe('CourseBookingDone', () => {
     })
 
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CourseBookingDone />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<CourseBookingDone />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(fetcherMock).toHaveReturnedTimes(1)

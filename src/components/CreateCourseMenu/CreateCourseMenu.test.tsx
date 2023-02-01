@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material'
 import React from 'react'
-import { MemoryRouter, Routes, Route, useSearchParams } from 'react-router-dom'
+import { Routes, Route, useSearchParams } from 'react-router-dom'
 
 import { RoleName } from '@app/types'
 
@@ -18,17 +18,16 @@ const CourseTypeMock = () => {
 describe('components: CreateCourseMenu', () => {
   it('given the user is TT admin, it redirects to the course creation page for the open course', async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/courses/new" element={<CourseTypeMock />} />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Create course'))
@@ -46,17 +45,17 @@ describe('components: CreateCourseMenu', () => {
 
   it('given the user is TT admin, it redirects to the course creation page for the closed course', async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/courses/new" element={<CourseTypeMock />} />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Create course'))
@@ -74,17 +73,16 @@ describe('components: CreateCourseMenu', () => {
 
   it('given the user is TT admin, it redirects to the course creation page for the indirect course', async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/courses/new" element={<CourseTypeMock />} />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_ADMIN,
         },
-      }
+      },
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Create course'))
@@ -102,17 +100,16 @@ describe('components: CreateCourseMenu', () => {
 
   it("given the user is TT ops, it doesn't display the indirect course creation option", async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/courses/new" element={<CourseTypeMock />} />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TT_OPS,
         },
-      }
+      },
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Create course'))
@@ -126,18 +123,17 @@ describe('components: CreateCourseMenu', () => {
 
   it("given the user is a trainer it doesn't display options and navigates to the create course page for indirect course", async () => {
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<CreateCourseMenu />} />
-          <Route path="/courses/new" element={<CourseTypeMock />} />
-        </Routes>
-      </MemoryRouter>,
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
       {
         auth: {
           activeRole: RoleName.TRAINER,
           allowedRoles: generateRolesUpTo(RoleName.TRAINER),
         },
-      }
+      },
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Create course'))

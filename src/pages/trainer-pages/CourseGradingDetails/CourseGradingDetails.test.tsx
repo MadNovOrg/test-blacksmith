@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
@@ -25,14 +25,11 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
@@ -48,14 +45,11 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     expect(
@@ -73,14 +67,11 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -96,18 +87,15 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-          <Route
-            path={`/courses/${course.id}/details`}
-            element={<p>Course participants page</p>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+        <Route
+          path={`/courses/${course.id}/details`}
+          element={<p>Course participants page</p>}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     userEvent.click(screen.getByText('Back to course details'))
@@ -125,14 +113,11 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')
@@ -153,14 +138,11 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseGradingDetails />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')
@@ -181,13 +163,13 @@ describe('page: CourseGradingDetails', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${course.id}/grading-details/modules`]}>
-        <Routes>
-          <Route path="/:id/grading-details" element={<CourseGradingDetails />}>
-            <Route path="modules" element={<h1>Modules</h1>} />
-          </Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />}>
+          <Route path="modules" element={<h1>Modules</h1>} />
+        </Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details/modules`] }
     )
 
     const subnav = screen.getByTestId('course-grading-details-nav')

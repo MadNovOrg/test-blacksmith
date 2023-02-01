@@ -1,6 +1,6 @@
 import { t } from 'i18next'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -24,9 +24,7 @@ describe('page: Waitlist', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter>
-          <CourseWaitlist />
-        </MemoryRouter>
+        <CourseWaitlist />
       </Provider>
     )
 
@@ -45,9 +43,7 @@ describe('page: Waitlist', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter>
-          <CourseWaitlist />
-        </MemoryRouter>
+        <CourseWaitlist />
       </Provider>
     )
 
@@ -76,12 +72,12 @@ describe('page: Waitlist', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter initialEntries={[`/waitlist?course_id=${courseId}`]}>
-          <Routes>
-            <Route path="/waitlist" element={<CourseWaitlist />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/waitlist" element={<CourseWaitlist />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/waitlist?course_id=${courseId}`] }
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -138,12 +134,12 @@ describe('page: Waitlist', () => {
 
     render(
       <Provider value={client}>
-        <MemoryRouter initialEntries={[`/waitlist?course_id=${courseId}`]}>
-          <Routes>
-            <Route path="/waitlist" element={<CourseWaitlist />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/waitlist" element={<CourseWaitlist />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/waitlist?course_id=${courseId}`] }
     )
 
     userEvent.type(screen.getByLabelText(/first name/i), 'John')

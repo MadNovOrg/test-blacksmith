@@ -1,6 +1,5 @@
 import { addHours } from 'date-fns/esm'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -36,10 +35,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -87,10 +86,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -136,10 +135,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -186,10 +185,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -236,10 +235,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -292,10 +291,10 @@ describe('user-pages/MyCourses - displaying statuses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(

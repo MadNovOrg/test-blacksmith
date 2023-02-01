@@ -1,6 +1,6 @@
 import { addDays } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -51,20 +51,20 @@ describe('page: TransferDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/details']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            initialValue={{ fromCourse, participant }}
-            participantId={participant.id}
-            courseId={fromCourse.id}
-          >
-            <Routes>
-              <Route path="/details" element={<TransferDetails />} />
-              <Route path="/" element={<p>First step</p>} />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          initialValue={{ fromCourse, participant }}
+          participantId={participant.id}
+          courseId={fromCourse.id}
+        >
+          <Routes>
+            <Route path="/details" element={<TransferDetails />} />
+            <Route path="/" element={<p>First step</p>} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/details'] }
     )
 
     await waitFor(() => {
@@ -106,26 +106,26 @@ describe('page: TransferDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            initialValue={{ fromCourse, participant, toCourse }}
-            participantId={participant.id}
-            courseId={fromCourse.id}
-          >
-            <Routes>
-              <Route
-                path="/transfer/:participantId/details"
-                element={<TransferDetails />}
-              />
-              <Route
-                path="/transfer/:participantId"
-                element={<p>First step</p>}
-              />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          initialValue={{ fromCourse, participant, toCourse }}
+          participantId={participant.id}
+          courseId={fromCourse.id}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route
+              path="/transfer/:participantId"
+              element={<p>First step</p>}
+            />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
     )
 
     userEvent.click(screen.getByText(/Back to selection/i))
@@ -180,23 +180,23 @@ describe('page: TransferDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            participantId={participant.id}
-            courseId={fromCourse.id}
-            initialValue={{ fromCourse, participant, toCourse }}
-          >
-            <Routes>
-              <Route
-                path="/transfer/:participantId/details"
-                element={<TransferDetails />}
-              />
-              <Route path="/review" element={<ReviewMock />} />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          participantId={participant.id}
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
     )
 
     userEvent.click(screen.getByLabelText(/apply transfer terms/i))
@@ -257,23 +257,23 @@ describe('page: TransferDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            participantId={participant.id}
-            courseId={fromCourse.id}
-            initialValue={{ fromCourse, participant, toCourse }}
-          >
-            <Routes>
-              <Route
-                path="/transfer/:participantId/details"
-                element={<TransferDetails />}
-              />
-              <Route path="/review" element={<ReviewMock />} />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          participantId={participant.id}
+          courseId={fromCourse.id}
+          initialValue={{ fromCourse, participant, toCourse }}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+            <Route path="/review" element={<ReviewMock />} />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
     )
 
     userEvent.click(screen.getByLabelText(/custom fee/i))
@@ -325,27 +325,27 @@ describe('page: TransferDetails', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/transfer/participant-id/details']}>
-        <Provider value={client}>
-          <TransferParticipantProvider
-            participantId={participant.id}
-            courseId={fromCourse.id}
-            initialValue={{
-              fromCourse,
-              participant,
-              toCourse,
-            }}
-            mode={TransferModeEnum.ORG_ADMIN_TRANSFERS}
-          >
-            <Routes>
-              <Route
-                path="/transfer/:participantId/details"
-                element={<TransferDetails />}
-              />
-            </Routes>
-          </TransferParticipantProvider>
-        </Provider>
-      </MemoryRouter>
+      <Provider value={client}>
+        <TransferParticipantProvider
+          participantId={participant.id}
+          courseId={fromCourse.id}
+          initialValue={{
+            fromCourse,
+            participant,
+            toCourse,
+          }}
+          mode={TransferModeEnum.ORG_ADMIN_TRANSFERS}
+        >
+          <Routes>
+            <Route
+              path="/transfer/:participantId/details"
+              element={<TransferDetails />}
+            />
+          </Routes>
+        </TransferParticipantProvider>
+      </Provider>,
+      {},
+      { initialEntries: ['/transfer/participant-id/details'] }
     )
 
     await waitFor(() => {

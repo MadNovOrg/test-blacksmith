@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 import { Client, Provider } from 'urql'
 import { never } from 'wonka'
@@ -55,17 +55,17 @@ describe('component: CourseBuilder', () => {
       } as unknown as Client
 
       render(
-        <MemoryRouter
-          initialEntries={[
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+          </Routes>
+        </Provider>,
+        {},
+        {
+          initialEntries: [
             `/courses/${levelOneCourseAndGroups.data.course.id}/modules`,
-          ]}
-        >
-          <Provider value={client}>
-            <Routes>
-              <Route path="/courses/:id/modules" element={<CourseBuilder />} />
-            </Routes>
-          </Provider>
-        </MemoryRouter>
+          ],
+        }
       )
 
       await waitFor(() => {
@@ -84,17 +84,17 @@ describe('component: CourseBuilder', () => {
       } as unknown as Client
 
       render(
-        <MemoryRouter
-          initialEntries={[
+        <Provider value={client}>
+          <Routes>
+            <Route path="/courses/:id/modules" element={<CourseBuilder />} />
+          </Routes>
+        </Provider>,
+        {},
+        {
+          initialEntries: [
             `/courses/${levelTwoCourseAndGroups.data.course.id}/modules`,
-          ]}
-        >
-          <Provider value={client}>
-            <Routes>
-              <Route path="/courses/:id/modules" element={<CourseBuilder />} />
-            </Routes>
-          </Provider>
-        </MemoryRouter>
+          ],
+        }
       )
 
       expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()

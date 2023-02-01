@@ -1,6 +1,5 @@
 import { setMedia } from 'mock-match-media'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
@@ -49,10 +48,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search'), KEYWORD)
@@ -99,10 +98,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -154,10 +153,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.queryByTestId('FilterCourseType')).not.toBeInTheDocument()
@@ -195,10 +194,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -250,10 +249,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -325,10 +324,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -381,10 +380,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -441,10 +440,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -499,10 +498,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -575,10 +574,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -685,10 +684,10 @@ describe('user-pages/MyCourses', () => {
 
       render(
         <Provider value={client as unknown as Client}>
-          <MemoryRouter initialEntries={['/']}>
-            <AttendeeCourses />
-          </MemoryRouter>
-        </Provider>
+          <AttendeeCourses />
+        </Provider>,
+        {},
+        { initialEntries: ['/'] }
       )
 
       await waitFor(() => {
@@ -765,10 +764,10 @@ describe('user-pages/MyCourses', () => {
 
       render(
         <Provider value={client as unknown as Client}>
-          <MemoryRouter initialEntries={['/']}>
-            <AttendeeCourses />
-          </MemoryRouter>
-        </Provider>
+          <AttendeeCourses />
+        </Provider>,
+        {},
+        { initialEntries: ['/'] }
       )
       await waitFor(() => {
         expect(
@@ -841,10 +840,10 @@ describe('user-pages/MyCourses', () => {
 
       render(
         <Provider value={client as unknown as Client}>
-          <MemoryRouter initialEntries={['/']}>
-            <AttendeeCourses />
-          </MemoryRouter>
-        </Provider>
+          <AttendeeCourses />
+        </Provider>,
+        {},
+        { initialEntries: ['/'] }
       )
 
       await waitFor(() => {

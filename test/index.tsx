@@ -3,9 +3,12 @@ import { waitFor, render as _render, screen } from '@testing-library/react'
 import Chance from 'chance'
 import { deepmerge } from 'deepmerge-ts'
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
-
+import { QueryParamProvider } from 'use-query-params'
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6'
 import '@app/i18n/config'
+
 import { AuthContext } from '@app/context/auth'
 import { injectACL } from '@app/context/auth/permissions'
 import { SnackbarProvider } from '@app/context/snackbar'
@@ -17,19 +20,40 @@ const chance = new Chance()
 
 export const VALID_PHONE_NUMBER = '2011111111'
 
+type TestRouterProps = { initialEntries?: string[] }
+
+export const TestMemoryRouter: React.FC<TestRouterProps> = ({
+  children,
+  initialEntries,
+}) => {
+  return (
+    <MemoryRouter initialEntries={initialEntries}>
+      <QueryParamProvider
+        adapter={ReactRouter6Adapter}
+        options={{ updateType: 'replaceIn' }}
+      >
+        {children}
+      </QueryParamProvider>
+    </MemoryRouter>
+  )
+}
+
 function render(
   ui: React.ReactElement,
-  providers: DeepPartial<Providers> = {}
+  providers: DeepPartial<Providers> = {},
+  router: TestRouterProps = {}
 ) {
   const context = deepmerge(defaultProviders, providers) as Providers
 
   const wrapper: React.FC = ({ children }) => {
     return (
-      <AuthContext.Provider value={injectACL(context.auth)}>
-        <ThemeProvider theme={theme}>
-          <SnackbarProvider>{children}</SnackbarProvider>
-        </ThemeProvider>
-      </AuthContext.Provider>
+      <TestMemoryRouter {...router}>
+        <AuthContext.Provider value={injectACL(context.auth)}>
+          <ThemeProvider theme={theme}>
+            <SnackbarProvider>{children}</SnackbarProvider>
+          </ThemeProvider>
+        </AuthContext.Provider>
+      </TestMemoryRouter>
     )
   }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseModules from '@app/hooks/useCourseModules'
@@ -27,14 +27,14 @@ describe('page: ModulesSelection', () => {
     useCourseModulesMock.mockReturnValue({ status: LoadingStatus.FETCHING })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     expect(screen.getByTestId('modules-fetching')).toBeInTheDocument()
@@ -55,14 +55,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     courseModules.forEach(courseModule => {
@@ -95,14 +95,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     const mandatoryModuleGroup = screen.getByTestId(
@@ -135,14 +135,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -182,14 +182,14 @@ describe('page: ModulesSelection', () => {
     )
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     expect(
@@ -221,15 +221,15 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-          <Route path="/courses/:id/details" element={<h1>Manage page</h1>} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+        <Route path="/courses/:id/details" element={<h1>Manage page</h1>} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     userEvent.click(screen.getByLabelText(courseModules[0].module.name))
@@ -254,18 +254,18 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details/modules`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<ModulesSelection />}
-          />
-          <Route
-            path="/courses/:id/grading-details"
-            element={<h1>Grading clearance page</h1>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<ModulesSelection />}
+        />
+        <Route
+          path="/courses/:id/grading-details"
+          element={<h1>Grading clearance page</h1>}
+        />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
     userEvent.click(screen.getByText('Back to grading clearance'))

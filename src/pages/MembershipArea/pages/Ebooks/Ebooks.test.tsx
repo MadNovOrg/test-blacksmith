@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,12 +23,12 @@ describe('page: Ebooks', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/ebooks']}>
-          <Routes>
-            <Route path="/ebooks" element={<Ebooks />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/ebooks" element={<Ebooks />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/ebooks'] }
     )
 
     expect(screen.getByTestId('featured-ebook-skeleton')).toBeInTheDocument()
@@ -53,12 +53,12 @@ describe('page: Ebooks', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/ebooks']}>
-          <Routes>
-            <Route path="/ebooks" element={<Ebooks />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/ebooks" element={<Ebooks />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/ebooks'] }
     )
 
     expect(
@@ -101,12 +101,12 @@ describe('page: Ebooks', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/ebooks']}>
-          <Routes>
-            <Route path="/ebooks" element={<Ebooks />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/ebooks" element={<Ebooks />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/ebooks'] }
     )
 
     ebooks.forEach(item => {
@@ -154,12 +154,12 @@ describe('page: Ebooks', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/ebooks']}>
-          <Routes>
-            <Route path="/ebooks" element={<Ebooks />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/ebooks" element={<Ebooks />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/ebooks'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search ebooks'), SEARCH_TERM)
@@ -209,12 +209,12 @@ describe('page: Ebooks', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/ebooks']}>
-          <Routes>
-            <Route path="/ebooks" element={<Ebooks />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/ebooks" element={<Ebooks />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/ebooks'] }
     )
 
     userEvent.click(screen.getByTestId('ebooks-next-page'))

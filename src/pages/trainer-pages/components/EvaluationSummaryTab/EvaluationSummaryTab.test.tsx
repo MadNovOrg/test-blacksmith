@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { render, screen, userEvent } from '@test/index'
@@ -35,14 +35,11 @@ describe('component: EvaluationSummaryTab', () => {
     useSWRMock.mockReturnValue(baseSWRMockData)
 
     render(
-      <MemoryRouter initialEntries={['/courses/1/details']}>
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/courses/:id/details" element={<EvaluationSummaryTab />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/courses/1/details'] }
     )
 
     expect(screen.queryByTestId('evaluations-fetching')).toBeInTheDocument()
@@ -61,15 +58,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[0].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -83,15 +79,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[1].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[1].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -113,15 +108,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[0].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -135,15 +129,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[1].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[1].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
     })
@@ -164,15 +157,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[0].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(screen.queryByText('Complete my evaluation')).toBeInTheDocument()
     })
@@ -184,15 +176,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[1].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[1].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -216,15 +207,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[0].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -238,15 +228,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[1].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[1].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
       expect(
         screen.queryByText('Complete my evaluation')
@@ -270,15 +259,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[0].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[0].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
 
       for (const evaluation of evaluations) {
@@ -303,15 +291,14 @@ describe('component: EvaluationSummaryTab', () => {
       })
 
       render(
-        <MemoryRouter initialEntries={['/courses/1/details']}>
-          <Routes>
-            <Route
-              path="/courses/:id/details"
-              element={<EvaluationSummaryTab />}
-            />
-          </Routes>
-        </MemoryRouter>,
-        { auth: { profile: { id: trainers[1].profile.id } } }
+        <Routes>
+          <Route
+            path="/courses/:id/details"
+            element={<EvaluationSummaryTab />}
+          />
+        </Routes>,
+        { auth: { profile: { id: trainers[1].profile.id } } },
+        { initialEntries: ['/courses/1/details'] }
       )
 
       for (const evaluation of evaluations) {
@@ -344,16 +331,12 @@ describe('component: EvaluationSummaryTab', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={['/courses/1/details']}>
-        <Routes>
-          <Route
-            path="/courses/:id/details"
-            element={<EvaluationSummaryTab />}
-          />
-          <Route path="/evaluation/submit" element={<p>Evaluation submit</p>} />
-        </Routes>
-      </MemoryRouter>,
-      { auth: { profile: { id: trainers[0].profile.id } } }
+      <Routes>
+        <Route path="/courses/:id/details" element={<EvaluationSummaryTab />} />
+        <Route path="/evaluation/submit" element={<p>Evaluation submit</p>} />
+      </Routes>,
+      { auth: { profile: { id: trainers[0].profile.id } } },
+      { initialEntries: ['/courses/1/details'] }
     )
 
     userEvent.click(screen.getByText('Complete my evaluation'))

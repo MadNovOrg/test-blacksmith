@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -18,12 +18,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog/post-id']}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog/post-id'] }
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -49,13 +49,13 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/${post.id}`]}>
-          <Routes>
-            <Route index element={<p>Blog page</p>} />
-            <Route path=":id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route index element={<p>Blog page</p>} />
+          <Route path=":id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/${post.id}`] }
     )
 
     userEvent.click(screen.getByText('Blog'))
@@ -77,12 +77,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/not-found`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/not-found`] }
     )
 
     expect(screen.getByText('Post not found')).toBeInTheDocument()
@@ -112,12 +112,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] }
     )
 
     expect(screen.getByTestId('post-title')).toHaveTextContent(post.title ?? '')
@@ -156,12 +156,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] }
     )
 
     recentPosts.forEach(post => {
@@ -205,12 +205,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] }
     )
 
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument()
@@ -244,12 +244,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] }
     )
 
     expect(screen.getByText('by John Doe')).toBeInTheDocument()
@@ -284,12 +284,12 @@ describe('page: Post', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/blog/${post.id}`]}>
-          <Routes>
-            <Route path="blog/:id" element={<Post />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="blog/:id" element={<Post />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/blog/${post.id}`] }
     )
 
     expect(screen.getByText('by Kirk Douglas')).toBeInTheDocument()

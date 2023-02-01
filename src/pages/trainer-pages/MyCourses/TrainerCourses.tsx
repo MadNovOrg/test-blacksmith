@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { BooleanParam, useQueryParam, withDefault } from 'use-query-params'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
@@ -80,8 +81,10 @@ export const TrainerCourses: React.FC<Props> = ({
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [filterStatus, setFilterStatus] = useState<Course_Status_Enum[]>([])
-  const [filterBlendedLearning, setFilterBlendedLearning] =
-    useState<boolean>(false)
+  const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
+    'bl',
+    withDefault(BooleanParam, false)
+  )
   const [filterStartDate, setFilterStartDate] = useState<Date>()
   const [filterEndDate, setFilterEndDate] = useState<Date>()
 

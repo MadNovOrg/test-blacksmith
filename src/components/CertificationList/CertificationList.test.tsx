@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
+import {} from 'react-router-dom'
 
 import { Grade, SortOrder } from '@app/types'
 
@@ -20,11 +20,7 @@ describe('component: CertificationList', () => {
       onSort: jest.fn(),
     }
 
-    render(
-      <MemoryRouter>
-        <CertificationList participants={participants} sorting={sorting} />
-      </MemoryRouter>
-    )
+    render(<CertificationList participants={participants} sorting={sorting} />)
 
     const table = screen.getByRole('table')
     expect(table).toBeInTheDocument()
@@ -58,13 +54,11 @@ describe('component: CertificationList', () => {
     ] as CertificationListColumns
 
     render(
-      <MemoryRouter>
-        <CertificationList
-          participants={participants}
-          sorting={sorting}
-          columns={columns}
-        />
-      </MemoryRouter>
+      <CertificationList
+        participants={participants}
+        sorting={sorting}
+        columns={columns}
+      />
     )
 
     const table = screen.getByRole('table')

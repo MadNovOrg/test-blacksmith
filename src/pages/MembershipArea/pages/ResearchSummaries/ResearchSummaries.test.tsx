@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,12 +23,12 @@ describe('page: ResearchSummaries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/research-summaries']}>
-          <Routes>
-            <Route path="/research-summaries" element={<ResearchSummaries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/research-summaries" element={<ResearchSummaries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/research-summaries'] }
     )
 
     expect(
@@ -57,12 +57,12 @@ describe('page: ResearchSummaries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/research-summaries']}>
-          <Routes>
-            <Route path="/research-summaries" element={<ResearchSummaries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/research-summaries" element={<ResearchSummaries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/research-summaries'] }
     )
 
     expect(
@@ -121,12 +121,12 @@ describe('page: ResearchSummaries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/research-summaries']}>
-          <Routes>
-            <Route path="/research-summaries" element={<ResearchSummaries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/research-summaries" element={<ResearchSummaries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/research-summaries'] }
     )
 
     researchSummaries.forEach(item => {
@@ -181,12 +181,12 @@ describe('page: ResearchSummaries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/research-summaries']}>
-          <Routes>
-            <Route path="/research-summaries" element={<ResearchSummaries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/research-summaries" element={<ResearchSummaries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/research-summaries'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search summaries'), SEARCH_TERM)
@@ -240,12 +240,12 @@ describe('page: ResearchSummaries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/research-summaries']}>
-          <Routes>
-            <Route path="/research-summaries" element={<ResearchSummaries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/research-summaries" element={<ResearchSummaries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/research-summaries'] }
     )
 
     userEvent.click(screen.getByTestId('research-summaries-next-page'))

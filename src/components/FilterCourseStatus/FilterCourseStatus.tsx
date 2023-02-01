@@ -1,5 +1,10 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { noop } from '@app/util'
@@ -13,34 +18,47 @@ type Props = {
 
 const statuses = Object.values(Course_Status_Enum)
 
+const CourseStatusParam = withDefault(
+  createEnumArrayParam<Course_Status_Enum>(statuses),
+  [] as Course_Status_Enum[]
+)
+
 export const FilterCourseStatus: React.FC<Props> = ({
   onChange = noop,
   excludedStatuses = new Set(),
 }) => {
   const { t } = useTranslation()
 
-  const [options, setOptions] = useState<FilterOption<Course_Status_Enum>[]>(
-    () => {
-      return statuses
-        .map(status =>
-          excludedStatuses.has(status)
-            ? null
-            : {
-                id: status,
-                title: t(`course-statuses.${status}`),
-                selected: false,
-              }
-        )
-        .filter(Boolean)
-    }
-  )
+  const statusOptions = useMemo(() => {
+    return statuses
+      .map(status =>
+        excludedStatuses.has(status)
+          ? null
+          : {
+              id: status,
+              title: t(`course-statuses.${status}`),
+              selected: false,
+            }
+      )
+      .filter(Boolean)
+  }, [t, excludedStatuses])
+
+  const [selected, setSelected] = useQueryParam('status', CourseStatusParam)
+
+  const options = useMemo(() => {
+    return statusOptions.map(o => ({
+      ...o,
+      selected: selected.includes(o.id),
+    }))
+  }, [selected, statusOptions])
 
   const _onChange = useCallback(
     (opts: FilterOption<Course_Status_Enum>[]) => {
-      setOptions(opts)
-      onChange(opts.flatMap(o => (o.selected ? o.id : [])))
+      const sel = opts.flatMap(o => (o.selected ? o.id : []))
+      setSelected(sel)
+      onChange(sel)
     },
-    [onChange]
+    [onChange, setSelected]
   )
 
   return (

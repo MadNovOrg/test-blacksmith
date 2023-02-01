@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION } from '@app/queries/grading/save-course-grading'
@@ -43,11 +43,11 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
@@ -76,11 +76,11 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -136,11 +136,11 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     expect(screen.getByText(course.name)).toBeInTheDocument()
@@ -197,15 +197,15 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      {
+        initialEntries: [
           `/${COURSE_ID}/grading?participants=${courseParticipants[0].id},${courseParticipants[1].id}`,
-        ]}
-      >
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+        ],
+      }
     )
 
     const selectedParticipants = [courseParticipants[0], courseParticipants[1]]
@@ -247,11 +247,11 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     selectGradingOption('Pass')
@@ -286,11 +286,11 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path="/:id/grading" element={<CourseGrading />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/:id/grading" element={<CourseGrading />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     selectGradingOption('Pass')
@@ -326,15 +326,12 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path=":id/grading" element={<CourseGrading />} />
-          <Route
-            path="/courses/:id/details"
-            element={<h1>Course details</h1>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path=":id/grading" element={<CourseGrading />} />
+        <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     expect(screen.getByText('Submit final grade')).toBeDisabled()
@@ -371,15 +368,12 @@ describe('page: CourseGrading', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading`]}>
-        <Routes>
-          <Route path=":id/grading" element={<CourseGrading />} />
-          <Route
-            path="/courses/:id/details"
-            element={<h1>Course details</h1>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path=":id/grading" element={<CourseGrading />} />
+        <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
     userEvent.type(

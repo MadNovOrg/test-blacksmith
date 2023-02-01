@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { render, screen, chance, waitForCalls } from '@test/index'
 
@@ -17,7 +16,7 @@ jest.mock('@app/hooks/use-fetcher', () => ({
 }))
 
 const _render = (ui: React.ReactElement) => {
-  return render(<MemoryRouter>{ui}</MemoryRouter>)
+  return render(<>{ui}</>)
 }
 
 const savedLocation = window.location

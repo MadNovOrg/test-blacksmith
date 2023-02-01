@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from 'react'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 import { SortOrder } from '@app/types'
-
-import { useMergeSearchParams } from './useMergeSearchParams'
 
 export type Sorting = ReturnType<typeof useTableSort>
 
@@ -14,28 +13,25 @@ export const useTableSort = (
   defaultSortDir: SortOrder = 'asc',
   id = 'tbl'
 ) => {
-  const [searchParams, mergeSearchParams] = useMergeSearchParams({
-    by: defaultSortBy,
-    dir: defaultSortDir,
-  })
-
-  const currentBy = searchParams.get(`${id}-by`) ?? defaultSortBy
-  const currentDir = (searchParams.get(`${id}-dir`) ??
-    defaultSortDir) as SortOrder
+  const [by, setSortBy] = useQueryParam(
+    `${id}-by`,
+    withDefault(StringParam, defaultSortBy)
+  )
+  const [dir, setSortDir] = useQueryParam(
+    `${id}-dir`,
+    withDefault(StringParam, defaultSortDir)
+  )
 
   const onSort = useCallback(
     (col: string) => {
-      mergeSearchParams({
-        [`${id}-by`]: col,
-        [`${id}-dir`]:
-          col !== currentBy ? 'asc' : currentDir === 'asc' ? 'desc' : 'asc',
-      })
+      setSortDir(dir => (col !== by ? 'asc' : dir === 'asc' ? 'desc' : 'asc'))
+      setSortBy(col)
     },
-    [mergeSearchParams, currentBy, currentDir, id]
+    [setSortBy, setSortDir, by]
   )
 
   return useMemo(
-    () => ({ by: currentBy, dir: currentDir, onSort }),
-    [currentBy, currentDir, onSort]
+    () => ({ by, dir: dir as SortOrder, onSort }),
+    [by, dir, onSort]
   )
 }

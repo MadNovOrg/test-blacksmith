@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -24,12 +24,12 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog/category/category-id']}>
-          <Routes>
-            <Route path="/blog/category/:id" element={<Category />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog/category/:id" element={<Category />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog/category/category-id'] }
     )
 
     expect(screen.getByTestId('posts-items-grid-skeleton')).toBeInTheDocument()
@@ -57,13 +57,13 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/category/${category.id}`]}>
-          <Routes>
-            <Route path="category/:id" element={<Category />} />
-            <Route path=":id" element={<p>Post page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="category/:id" element={<Category />} />
+          <Route path=":id" element={<p>Post page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/category/${category.id}`] }
     )
 
     const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
@@ -94,12 +94,12 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/category/${category.id}`]}>
-          <Routes>
-            <Route path="category/:id" element={<Category />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="category/:id" element={<Category />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/category/${category.id}`] }
     )
 
     posts.forEach(item => {
@@ -147,12 +147,12 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/category/${category.id}`]}>
-          <Routes>
-            <Route path="category/:id" element={<Category />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="category/:id" element={<Category />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/category/${category.id}`] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search posts'), SEARCH_TERM)
@@ -191,12 +191,12 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/category/${category.id}`]}>
-          <Routes>
-            <Route path="category/:id" element={<Category />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="category/:id" element={<Category />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/category/${category.id}`] }
     )
 
     expect(
@@ -261,12 +261,12 @@ describe('page: Category', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/category/${category.id}`]}>
-          <Routes>
-            <Route path="category/:id" element={<Category />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="category/:id" element={<Category />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/category/${category.id}`] }
     )
 
     userEvent.click(screen.getByTestId('posts-next-page'))

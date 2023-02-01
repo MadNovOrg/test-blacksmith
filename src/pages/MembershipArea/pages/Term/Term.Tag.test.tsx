@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -24,12 +24,12 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/term/tag-id']}>
-          <Routes>
-            <Route path="/term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/term/tag-id'] }
     )
 
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
@@ -58,13 +58,13 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${tag.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-            <Route path="blog/:id" element={<p>Post page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+          <Route path="blog/:id" element={<p>Post page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${tag.id}`] }
     )
 
     const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
@@ -96,12 +96,12 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${tag.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${tag.id}`] }
     )
 
     posts.forEach(item => {
@@ -150,12 +150,12 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${tag.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${tag.id}`] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search posts'), SEARCH_TERM)
@@ -195,12 +195,12 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${tag.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${tag.id}`] }
     )
 
     expect(
@@ -266,12 +266,12 @@ describe('page: Term - Tag', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/term/${tag.id}`]}>
-          <Routes>
-            <Route path="term/:id" element={<Term />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="term/:id" element={<Term />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/term/${tag.id}`] }
     )
 
     userEvent.click(screen.getByTestId('term-next-page'))

@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Routes, Route, useParams } from 'react-router-dom'
+import { Routes, Route, useParams } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { InviteStatus } from '@app/types'
@@ -36,17 +36,12 @@ describe('page: AcceptInvite', () => {
     const COURSE_ID = 'course-id'
 
     render(
-      <MemoryRouter
-        initialEntries={[`/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`]}
-      >
-        <Routes>
-          <Route path="/accept-invite/:id" element={<AcceptInvite />} />
-          <Route
-            path="/courses/:id/details"
-            element={<DummyParticipantPage />}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/accept-invite/:id" element={<AcceptInvite />} />
+        <Route path="/courses/:id/details" element={<DummyParticipantPage />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/accept-invite/${INVITE_ID}?courseId=${COURSE_ID}`] }
     )
 
     await waitForText(COURSE_ID)
@@ -59,15 +54,12 @@ describe('page: AcceptInvite', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/accept-invite/course-id`]}>
-        <Routes>
-          <Route path="/accept-invite/:id" element={<AcceptInvite />} />
-          <Route
-            path="/courses/:id/details"
-            element={<p>Participant page</p>}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/accept-invite/:id" element={<AcceptInvite />} />
+        <Route path="/courses/:id/details" element={<p>Participant page</p>} />
+      </Routes>,
+      {},
+      { initialEntries: [`/accept-invite/course-id`] }
     )
 
     await waitForText(

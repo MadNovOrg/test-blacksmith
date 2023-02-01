@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { RoleName } from '@app/types'
 
@@ -11,11 +10,7 @@ import { ProfileMenu } from './ProfileMenu'
 describe('component: ProfileMenu', () => {
   it('shows menu items on click', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>
-    )
+    render(<ProfileMenu profile={profile} />)
 
     const button = screen.getByRole('button', { name: profile.fullName })
     expect(button).toBeInTheDocument()
@@ -26,18 +21,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified USER role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.USER,
-          allowedRoles: new Set([RoleName.USER]),
-          verified: true,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.USER,
+        allowedRoles: new Set([RoleName.USER]),
+        verified: true,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -50,18 +40,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified USER role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.USER,
-          allowedRoles: new Set([RoleName.USER]),
-          verified: false,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.USER,
+        allowedRoles: new Set([RoleName.USER]),
+        verified: false,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -75,18 +60,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TT ADMIN role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-          allowedRoles: new Set([RoleName.TT_ADMIN]),
-          verified: true,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+        allowedRoles: new Set([RoleName.TT_ADMIN]),
+        verified: true,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -100,18 +80,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TT ADMIN role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TT_ADMIN,
-          allowedRoles: new Set([RoleName.TT_ADMIN]),
-          verified: false,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TT_ADMIN,
+        allowedRoles: new Set([RoleName.TT_ADMIN]),
+        verified: false,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -126,18 +101,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TT OPS role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TT_OPS,
-          allowedRoles: new Set([RoleName.TT_OPS]),
-          verified: true,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TT_OPS,
+        allowedRoles: new Set([RoleName.TT_OPS]),
+        verified: true,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -151,18 +121,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TT OPS role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TT_OPS,
-          allowedRoles: new Set([RoleName.TT_OPS]),
-          verified: false,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TT_OPS,
+        allowedRoles: new Set([RoleName.TT_OPS]),
+        verified: false,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -177,18 +142,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified TRAINER role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TRAINER,
-          allowedRoles: new Set([RoleName.TRAINER]),
-          verified: true,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        allowedRoles: new Set([RoleName.TRAINER]),
+        verified: true,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -201,18 +161,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified TRAINER role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.TRAINER,
-          allowedRoles: new Set([RoleName.TRAINER]),
-          verified: false,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.TRAINER,
+        allowedRoles: new Set([RoleName.TRAINER]),
+        verified: false,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -226,18 +181,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders verified SALES REPRESENTATIVE role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.SALES_REPRESENTATIVE,
-          allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),
-          verified: true,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.SALES_REPRESENTATIVE,
+        allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),
+        verified: true,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))
@@ -250,18 +200,13 @@ describe('component: ProfileMenu', () => {
 
   it('renders unverified SALES REPRESENTATIVE role items', async () => {
     const profile = buildProfile()
-    render(
-      <MemoryRouter>
-        <ProfileMenu profile={profile} />
-      </MemoryRouter>,
-      {
-        auth: {
-          activeRole: RoleName.SALES_REPRESENTATIVE,
-          allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),
-          verified: false,
-        },
-      }
-    )
+    render(<ProfileMenu profile={profile} />, {
+      auth: {
+        activeRole: RoleName.SALES_REPRESENTATIVE,
+        allowedRoles: new Set([RoleName.SALES_REPRESENTATIVE]),
+        verified: false,
+      },
+    })
 
     const button = screen.getByRole('button', { name: profile.fullName })
     await waitFor(() => userEvent.click(button))

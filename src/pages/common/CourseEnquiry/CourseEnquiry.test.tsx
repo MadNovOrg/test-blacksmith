@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { gqlRequest } from '@app/lib/gql-request'
 import insertEnquiry from '@app/queries/booking/insert-enquiry'
@@ -68,11 +68,11 @@ describe('page: CourseEnquiry', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
-        <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/enquiry" element={<CourseEnquiry />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
     fillForm()
@@ -90,11 +90,11 @@ describe('page: CourseEnquiry', () => {
 
   it('displays not found page if there is no query param for course id', () => {
     render(
-      <MemoryRouter initialEntries={['/enquiry']}>
-        <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/enquiry" element={<CourseEnquiry />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/enquiry'] }
     )
 
     expect(screen.getByText('Page not found')).toBeInTheDocument()
@@ -108,11 +108,11 @@ describe('page: CourseEnquiry', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
-        <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/enquiry" element={<CourseEnquiry />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
     userEvent.type(screen.getByLabelText('Work email *'), 'test.com')
@@ -142,11 +142,11 @@ describe('page: CourseEnquiry', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/enquiry?course_id=${openCourse.id}`]}>
-        <Routes>
-          <Route path="/enquiry" element={<CourseEnquiry />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/enquiry" element={<CourseEnquiry />} />
+      </Routes>,
+      {},
+      { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
     fillForm()

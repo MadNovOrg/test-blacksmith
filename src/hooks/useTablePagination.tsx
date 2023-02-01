@@ -1,7 +1,6 @@
 import { Box, TablePagination } from '@mui/material'
 import React, { useCallback, useEffect } from 'react'
-
-import { useMergeSearchParams } from './useMergeSearchParams'
+import { NumberParam, useQueryParam, withDefault } from 'use-query-params'
 
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
@@ -55,13 +54,6 @@ const PaginationComponent = ({
   )
 }
 
-const getPaginationObj = (id: string, page: number, perPage: number) => {
-  return {
-    [`${id}-page`]: `${page}`,
-    [`${id}-perPage`]: `${perPage}`,
-  }
-}
-
 type Props = {
   /**
    * Needs to be unique per page. Although it's optional, but when you
@@ -76,26 +68,21 @@ export const useTablePagination = ({
   initialPerPage = PER_PAGE,
   id = 'tbl',
 }: Props = {}) => {
-  const [searchParams, mergeSearchParams] = useMergeSearchParams()
-
-  const currentPage = Number(searchParams.get(`${id}-page`) ?? 0)
-  const currentPerPage = Number(
-    searchParams.get(`${id}-perPage`) ?? initialPerPage
+  const [currentPage, setCurrentPage] = useQueryParam(
+    `${id}-page`,
+    withDefault(NumberParam, 0)
   )
-
-  const handlePageChange = useCallback(
-    (page: number) => {
-      mergeSearchParams(getPaginationObj(id, page, currentPerPage))
-    },
-    [mergeSearchParams, id, currentPerPage]
+  const [perPage, setPerPage] = useQueryParam(
+    `${id}-perPage`,
+    withDefault(NumberParam, initialPerPage)
   )
 
   const handlePerPageChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-      const perPage = parseInt(event.target.value, 10)
-      mergeSearchParams(getPaginationObj(id, 0, perPage))
+      setPerPage(parseInt(event.target.value, 10))
+      setCurrentPage(0)
     },
-    [mergeSearchParams, id]
+    [setPerPage, setCurrentPage]
   )
 
   const Pagination = useCallback(
@@ -114,20 +101,20 @@ export const useTablePagination = ({
           rowsPerPage={rowsPerPage}
           testId={testId}
           currentPage={currentPage}
-          perPage={currentPerPage}
+          perPage={perPage}
           handlePerPageChange={handlePerPageChange}
-          setCurrentPage={handlePageChange}
+          setCurrentPage={setCurrentPage}
         />
       )
     },
-    [currentPage, handlePerPageChange, currentPerPage, handlePageChange]
+    [currentPage, handlePerPageChange, perPage, setCurrentPage]
   )
 
   return {
     Pagination,
-    perPage: currentPerPage,
+    perPage,
     currentPage: currentPage + 1, // page 0 doesn't make sense
-    limit: currentPerPage,
-    offset: currentPerPage * currentPage,
+    limit: perPage,
+    offset: perPage * currentPage,
   }
 }

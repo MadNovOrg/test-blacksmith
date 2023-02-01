@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -24,12 +24,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     expect(screen.getByTestId('featured-post-skeleton')).toBeInTheDocument()
@@ -52,12 +52,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     expect(screen.getByText('No results found.')).toBeInTheDocument()
@@ -81,12 +81,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     expect(
@@ -127,13 +127,13 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<p>Post page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<p>Post page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     const featuredPost = screen.getByTestId('featured-post-item')
@@ -161,12 +161,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     posts.forEach(item => {
@@ -210,12 +210,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search posts'), SEARCH_TERM)
@@ -249,12 +249,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     expect(screen.getByTestId('posts-pagination')).toBeInTheDocument()
@@ -283,12 +283,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     expect(
@@ -349,12 +349,12 @@ describe('page: Blog', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/blog']}>
-          <Routes>
-            <Route path="/blog" element={<Blog />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/blog'] }
     )
 
     userEvent.click(screen.getByTestId('posts-next-page'))

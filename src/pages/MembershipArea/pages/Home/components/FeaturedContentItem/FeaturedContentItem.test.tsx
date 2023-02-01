@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildWebinar } from '@test/mock-data-utils'
@@ -23,21 +23,21 @@ describe('component: FeaturedContentItem', () => {
     }
 
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route element={<p>Webinar page</p>} path="webinars/:id" />
-          <Route
-            index
-            element={
-              <FeaturedContentItem
-                data={data}
-                linkTo={`webinars/${webinar.id}`}
-                chipLabel="New webinar"
-              />
-            }
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route element={<p>Webinar page</p>} path="webinars/:id" />
+        <Route
+          index
+          element={
+            <FeaturedContentItem
+              data={data}
+              linkTo={`webinars/${webinar.id}`}
+              chipLabel="New webinar"
+            />
+          }
+        />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByText(webinar.excerpt ?? '')).toBeInTheDocument()

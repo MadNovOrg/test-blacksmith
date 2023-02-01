@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import useOrg, { ProfileType } from '@app/hooks/useOrg'
 import { OrgDetailsTab } from '@app/pages/admin/components/Organizations/tabs/OrgDetailsTab'
@@ -72,11 +72,11 @@ describe('OrgDetailsTab', () => {
 
   it('matches snapshot', async () => {
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<OrgDetailsTab orgId="1" />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<OrgDetailsTab orgId="1" />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(view).toMatchSnapshot()

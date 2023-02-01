@@ -1,5 +1,10 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  createEnumArrayParam,
+  useQueryParam,
+  withDefault,
+} from 'use-query-params'
 
 import { Course_Level_Enum } from '@app/generated/graphql'
 import { noop } from '@app/util'
@@ -12,25 +17,37 @@ type Props = {
 
 const levels = Object.values(Course_Level_Enum)
 
+const CourseLevelParam = withDefault(
+  createEnumArrayParam<Course_Level_Enum>(levels),
+  [] as Course_Level_Enum[]
+)
+
 export const FilterCourseLevel: React.FC<Props> = ({ onChange = noop }) => {
   const { t } = useTranslation()
 
-  const [options, setOptions] = useState<FilterOption<Course_Level_Enum>[]>(
-    () => {
-      return levels.map(level => ({
-        id: level,
-        title: t(`course-levels.${level}`),
-        selected: false,
-      }))
-    }
-  )
+  const levelOptions = useMemo(() => {
+    return levels.map(level => ({
+      id: level,
+      title: t(`course-levels.${level}`),
+    }))
+  }, [t])
+
+  const [selected, setSelected] = useQueryParam('level', CourseLevelParam)
+
+  const options = useMemo(() => {
+    return levelOptions.map(o => ({
+      ...o,
+      selected: selected.includes(o.id),
+    }))
+  }, [selected, levelOptions])
 
   const _onChange = useCallback(
     (opts: FilterOption<Course_Level_Enum>[]) => {
-      setOptions(opts)
-      onChange(opts.flatMap(o => (o.selected ? o.id : [])))
+      const sel = opts.flatMap(o => (o.selected ? o.id : []))
+      setSelected(sel)
+      onChange(sel)
     },
-    [onChange]
+    [onChange, setSelected]
   )
 
   return (

@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,10 +23,10 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Podcasts />
-        </MemoryRouter>
-      </Provider>
+        <Podcasts />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByTestId('featured-podcast-skeleton')).toBeInTheDocument()
@@ -48,10 +48,10 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Podcasts />
-        </MemoryRouter>
-      </Provider>
+        <Podcasts />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByText('There are no podcasts yet.')).toBeInTheDocument()
@@ -74,10 +74,10 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Podcasts />
-        </MemoryRouter>
-      </Provider>
+        <Podcasts />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
@@ -109,13 +109,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
@@ -142,13 +142,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -192,13 +192,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(
@@ -229,13 +229,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByText('1-12 of 20')).toBeInTheDocument()
@@ -280,13 +280,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(
@@ -337,13 +337,13 @@ describe('page: Podcasts', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <Routes>
-            <Route path="/" element={<Podcasts />} />
-            <Route path="/:id" element={<p>Single podcast page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/" element={<Podcasts />} />
+          <Route path="/:id" element={<p>Single podcast page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search podcasts'), SEARCH_TERM)

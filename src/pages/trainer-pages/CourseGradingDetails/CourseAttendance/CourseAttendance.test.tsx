@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -34,14 +34,14 @@ describe('component: CourseAttendance', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     expect(screen.getByTestId('participants-fetching')).toBeInTheDocument()
@@ -62,14 +62,14 @@ describe('component: CourseAttendance', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     expect(
@@ -98,14 +98,14 @@ describe('component: CourseAttendance', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     expect(
@@ -142,14 +142,14 @@ describe('component: CourseAttendance', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     userEvent.click(
@@ -191,14 +191,14 @@ describe('component: CourseAttendance', () => {
     )
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     expect(
@@ -226,18 +226,18 @@ describe('component: CourseAttendance', () => {
     })
 
     render(
-      <MemoryRouter initialEntries={[`/${COURSE_ID}/grading-details`]}>
-        <Routes>
-          <Route
-            path="/:id/grading-details"
-            element={<CourseAttendance />}
-          ></Route>
-          <Route
-            path="/:id/grading-details/modules"
-            element={<h3>Modules page</h3>}
-          ></Route>
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/:id/grading-details"
+          element={<CourseAttendance />}
+        ></Route>
+        <Route
+          path="/:id/grading-details/modules"
+          element={<h3>Modules page</h3>}
+        ></Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
     userEvent.click(

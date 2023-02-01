@@ -2,7 +2,6 @@ import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
-import { MemoryRouter } from 'react-router-dom'
 
 import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
@@ -82,11 +81,7 @@ describe('component: CourseAttendees', () => {
       mutate: jest.fn(),
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseAttendees course={course} />)
 
     expect(
       screen.getByTestId('course-participants-fetching')
@@ -116,11 +111,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseAttendees course={course} />)
 
     participants.forEach(participant => {
       expect(
@@ -166,11 +157,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseAttendees course={course} />)
 
     const noAttendeesMesage = screen.getByTestId(
       'course-participants-zero-message'
@@ -202,11 +189,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseAttendees course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -247,11 +230,7 @@ describe('component: CourseAttendees', () => {
       data: course,
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={course} />
-      </MemoryRouter>
-    )
+    render(<CourseAttendees course={course} />)
 
     useCourseParticipantsMock.mockClear()
 
@@ -309,12 +288,9 @@ describe('component: CourseAttendees', () => {
       data: openCourse,
     })
 
-    render(
-      <MemoryRouter>
-        <CourseAttendees course={openCourse} />
-      </MemoryRouter>,
-      { auth: { activeRole: RoleName.TT_ADMIN } }
-    )
+    render(<CourseAttendees course={openCourse} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
 
     useCourseParticipantsMock.mockClear()
     useWaitlistMock.mockClear()
@@ -380,11 +356,7 @@ describe('component: CourseAttendees', () => {
     })
 
     it('shows no invites pending message if list is empty', async () => {
-      render(
-        <MemoryRouter>
-          <CourseAttendees course={course} />
-        </MemoryRouter>
-      )
+      render(<CourseAttendees course={course} />)
 
       userEvent.click(screen.getByText('Pending (0)', { exact: false }))
 
@@ -412,11 +384,7 @@ describe('component: CourseAttendees', () => {
         total: 3,
       })
 
-      render(
-        <MemoryRouter>
-          <CourseAttendees course={course} />
-        </MemoryRouter>
-      )
+      render(<CourseAttendees course={course} />)
 
       userEvent.click(screen.getByText('Pending (3)', { exact: false }))
 

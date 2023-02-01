@@ -1,9 +1,10 @@
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
 import { IconButton, InputProps, TextField } from '@mui/material'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDebouncedCallback } from 'use-debounce'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 import { noop } from '@app/util'
 
@@ -26,16 +27,16 @@ export const FilterSearch: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation()
 
-  const [_value, setValue] = useState(value)
-  useEffect(() => setValue(value), [value])
+  const [_value, setValue] = useQueryParam('q', withDefault(StringParam, value))
+  useEffect(() => setValue(value), [value, setValue])
 
   const _onChange = useDebouncedCallback(onChange, debounce)
   useEffect(() => {
     if (value !== _value) _onChange(_value)
   }, [_value, _onChange, value])
 
-  const handleChange = useCallback(ev => setValue(ev.target.value), [])
-  const handleClear = useCallback(() => setValue(''), [])
+  const handleChange = useCallback(ev => setValue(ev.target.value), [setValue])
+  const handleClear = useCallback(() => setValue(''), [setValue])
 
   return (
     <TextField

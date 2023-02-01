@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { OrgUsersTable } from '@app/components/OrgUsersTable/index'
 import { useOrgUsers } from '@app/hooks/useOrgUsers'
@@ -97,11 +97,11 @@ describe('OrgUsersTable', () => {
 
   it('matches snapshot', async () => {
     const view = render(
-      <MemoryRouter initialEntries={['/']}>
-        <Routes>
-          <Route path="/" element={<OrgUsersTable orgId="1" />} />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route path="/" element={<OrgUsersTable orgId="1" />} />
+      </Routes>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(view).toMatchSnapshot()

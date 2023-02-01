@@ -1,6 +1,6 @@
 import { addHours, format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import {
   Course_Status_Enum,
@@ -36,11 +36,9 @@ const useFetcherMock = jest.mocked(useFetcher)
 describe('component: ReviewLicenseOrder', () => {
   it('displays an alert if there is no course or pricing data in the context', () => {
     render(
-      <MemoryRouter>
-        <CreateCourseProvider courseType={CourseType.INDIRECT}>
-          <ReviewLicenseOrder />
-        </CreateCourseProvider>
-      </MemoryRouter>
+      <CreateCourseProvider courseType={CourseType.INDIRECT}>
+        <ReviewLicenseOrder />
+      </CreateCourseProvider>
     )
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
@@ -77,14 +75,12 @@ describe('component: ReviewLicenseOrder', () => {
     }
 
     render(
-      <MemoryRouter>
-        <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
-          initialValue={{ courseData, go1Licensing } as Draft}
-        >
-          <ReviewLicenseOrder />
-        </CreateCourseProvider>
-      </MemoryRouter>
+      <CreateCourseProvider
+        courseType={CourseType.INDIRECT}
+        initialValue={{ courseData, go1Licensing } as Draft}
+      >
+        <ReviewLicenseOrder />
+      </CreateCourseProvider>
     )
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
@@ -172,17 +168,15 @@ describe('component: ReviewLicenseOrder', () => {
     useFetcherMock.mockReturnValue(fetcherMock)
 
     render(
-      <MemoryRouter>
-        <CreateCourseProvider
-          courseType={CourseType.INDIRECT}
-          initialValue={{ courseData, go1Licensing } as Draft}
-        >
-          <Routes>
-            <Route path="/" element={<ReviewLicenseOrder />} />
-            <Route path="/courses/:id/modules" element={<p>Modules page</p>} />
-          </Routes>
-        </CreateCourseProvider>
-      </MemoryRouter>
+      <CreateCourseProvider
+        courseType={CourseType.INDIRECT}
+        initialValue={{ courseData, go1Licensing } as Draft}
+      >
+        <Routes>
+          <Route path="/" element={<ReviewLicenseOrder />} />
+          <Route path="/courses/:id/modules" element={<p>Modules page</p>} />
+        </Routes>
+      </CreateCourseProvider>
     )
 
     userEvent.click(screen.getByText(/course builder/i))

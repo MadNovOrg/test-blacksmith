@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
@@ -42,18 +42,18 @@ describe('component: CreateCourseForm', () => {
 
   it('conditionally renders assign assists for indirect course type', async () => {
     render(
-      <MemoryRouter initialEntries={['/?type=INDIRECT']}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <CreateCourseProvider courseType={CourseType.INDIRECT}>
-                <CreateCourseForm />
-              </CreateCourseProvider>
-            }
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider courseType={CourseType.INDIRECT}>
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {},
+      { initialEntries: ['/?type=INDIRECT'] }
     )
 
     expect(screen.queryByTestId('SearchTrainers-input')).not.toBeInTheDocument()

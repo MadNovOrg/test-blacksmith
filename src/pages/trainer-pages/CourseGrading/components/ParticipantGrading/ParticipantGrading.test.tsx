@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes, useSearchParams } from 'react-router-dom'
+import { Route, Routes, useSearchParams } from 'react-router-dom'
 
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
 import { Grade } from '@app/types'
@@ -39,11 +39,9 @@ describe('page: ParticipantGrading', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/course-id/grading/${participant.id}`]}
-      >
-        <ParticipantGrading />
-      </MemoryRouter>
+      <ParticipantGrading />,
+      {},
+      { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
     )
 
     expect(screen.getByText(participant.profile.fullName)).toBeInTheDocument()
@@ -94,11 +92,9 @@ describe('page: ParticipantGrading', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/course-id/grading/${participant.id}`]}
-      >
-        <ParticipantGrading />
-      </MemoryRouter>
+      <ParticipantGrading />,
+      {},
+      { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
     )
 
     const firstModuleGroupElem = screen.getByTestId(
@@ -140,20 +136,15 @@ describe('page: ParticipantGrading', () => {
     })
 
     render(
-      <MemoryRouter
-        initialEntries={[`/courses/course-id/grading/participant-id`]}
-      >
-        <Routes>
-          <Route
-            element={<ParticipantGrading />}
-            path="/courses/:id/grading/:participant-id"
-          />
-          <Route
-            element={<MockCourseDetails />}
-            path={'/courses/:id/details'}
-          />
-        </Routes>
-      </MemoryRouter>
+      <Routes>
+        <Route
+          element={<ParticipantGrading />}
+          path="/courses/:id/grading/:participant-id"
+        />
+        <Route element={<MockCourseDetails />} path={'/courses/:id/details'} />
+      </Routes>,
+      {},
+      { initialEntries: [`/courses/course-id/grading/participant-id`] }
     )
 
     userEvent.click(screen.getByText('Back to course details'))

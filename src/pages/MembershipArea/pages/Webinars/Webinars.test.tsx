@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,12 +23,12 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     expect(screen.getByTestId('featured-webinar-skeleton')).toBeInTheDocument()
@@ -53,12 +53,12 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     expect(
@@ -102,13 +102,13 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-            <Route path="/webinars/:id" element={<p>Webinar page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+          <Route path="/webinars/:id" element={<p>Webinar page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     const featuredWebinar = screen.getByTestId('featured-webinar')
@@ -138,12 +138,12 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     webinars.forEach(item => {
@@ -187,12 +187,12 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search webinars'), SEARCH_TERM)
@@ -242,12 +242,12 @@ describe('page: Webinars', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/webinars']}>
-          <Routes>
-            <Route path="/webinars" element={<Webinars />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/webinars" element={<Webinars />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/webinars'] }
     )
 
     userEvent.click(screen.getByTestId('webinars-next-page'))

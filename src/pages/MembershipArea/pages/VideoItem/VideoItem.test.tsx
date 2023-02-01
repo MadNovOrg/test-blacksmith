@@ -1,5 +1,5 @@
 import React from 'react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -20,12 +20,12 @@ describe('page: VideoItem', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
-          <Routes>
-            <Route path="/video-series/:id" element={<VideoItem />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series/:id" element={<VideoItem />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
     )
 
     expect(screen.getByTestId('back-nav-skeleton')).toBeInTheDocument()
@@ -55,12 +55,12 @@ describe('page: VideoItem', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
-          <Routes>
-            <Route path="/video-series/:id" element={<VideoItem />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series/:id" element={<VideoItem />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
     )
 
     expect(screen.getByText('Video series item not found')).toBeInTheDocument()
@@ -86,12 +86,12 @@ describe('page: VideoItem', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
-          <Routes>
-            <Route path="/video-series/:id" element={<VideoItem />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series/:id" element={<VideoItem />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
     )
 
     expect(screen.getByTestId('video-item-title')).toHaveTextContent(
@@ -124,12 +124,12 @@ describe('page: VideoItem', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
-          <Routes>
-            <Route path="/video-series/:id" element={<VideoItem />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series/:id" element={<VideoItem />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
     )
 
     recentItems.forEach(relatedItem => {
@@ -172,12 +172,12 @@ describe('page: VideoItem', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={[`/video-series/${VIDEO_ITEM_ID}`]}>
-          <Routes>
-            <Route path="/video-series/:id" element={<VideoItem />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series/:id" element={<VideoItem />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: [`/video-series/${VIDEO_ITEM_ID}`] }
     )
 
     const button = screen.getByText('Download resource')

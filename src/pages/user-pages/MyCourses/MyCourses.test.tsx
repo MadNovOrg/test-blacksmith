@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
@@ -24,10 +23,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={fetchingClient as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.getByTestId('fetching-courses')).toBeInTheDocument()
@@ -50,10 +49,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
@@ -77,10 +76,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search'), 'search')
@@ -115,10 +114,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search'), 'search')
@@ -162,10 +161,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     userEvent.click(screen.getByText('Name'))
@@ -206,10 +205,10 @@ describe('user-pages/MyCourses', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/']}>
-          <AttendeeCourses />
-        </MemoryRouter>
-      </Provider>
+        <AttendeeCourses />
+      </Provider>,
+      {},
+      { initialEntries: ['/'] }
     )
 
     expect(

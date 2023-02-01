@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import React from 'react'
-import { MemoryRouter, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Client, Provider } from 'urql'
 import { never, fromValue } from 'wonka'
 
@@ -23,12 +23,12 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     expect(screen.getByTestId('featured-video-skeleton')).toBeInTheDocument()
@@ -53,12 +53,12 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     expect(
@@ -102,13 +102,13 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-            <Route path="/video-series/:id" element={<p>Video item page</p>} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+          <Route path="/video-series/:id" element={<p>Video item page</p>} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     const featuredVideo = screen.getByTestId('featured-video-series-item')
@@ -138,12 +138,12 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     videoItems.forEach(item => {
@@ -194,12 +194,12 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     userEvent.type(screen.getByPlaceholderText('Search videos'), SEARCH_TERM)
@@ -253,12 +253,12 @@ describe('page: VideoSeries', () => {
 
     render(
       <Provider value={client as unknown as Client}>
-        <MemoryRouter initialEntries={['/video-series']}>
-          <Routes>
-            <Route path="/video-series" element={<VideoSeries />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
+        <Routes>
+          <Route path="/video-series" element={<VideoSeries />} />
+        </Routes>
+      </Provider>,
+      {},
+      { initialEntries: ['/video-series'] }
     )
 
     userEvent.click(screen.getByTestId('video-series-next-page'))

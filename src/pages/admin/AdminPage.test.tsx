@@ -1,5 +1,4 @@
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { render, screen } from '@test/index'
 
@@ -7,11 +6,7 @@ import { AdminPage } from './AdminPage'
 
 describe('page: adminPage', () => {
   it('displays settings list', async () => {
-    render(
-      <MemoryRouter>
-        <AdminPage />
-      </MemoryRouter>
-    )
+    render(<AdminPage />)
     expect(screen.getByText('Hub settings')).toBeInTheDocument()
     const links = screen.getAllByRole('link')
     expect(links).toHaveLength(6)
