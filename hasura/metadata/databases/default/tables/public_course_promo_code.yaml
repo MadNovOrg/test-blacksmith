@@ -18,6 +18,13 @@ insert_permissions:
         - promo_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - id
+        - promo_id
+      filter: {}
   - role: tt-ops
     permission:
       columns:

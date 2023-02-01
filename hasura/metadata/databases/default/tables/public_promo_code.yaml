@@ -66,6 +66,27 @@ insert_permissions:
         - valid_to
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - code
+        - description
+        - type
+        - amount
+        - valid_from
+        - valid_to
+        - booker_single_use
+        - uses_max
+        - levels
+        - enabled
+        - approved_by
+        - created_by
+        - created_at
+        - updated_at
+        - denied_by
+      filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
