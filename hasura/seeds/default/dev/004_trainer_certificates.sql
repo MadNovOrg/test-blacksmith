@@ -7,7 +7,7 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 ('892a4028-ee2c-424d-ae6f-062877697d76', 'trainer.and.user@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('7b366ee2-371e-41c8-ba40-e5fc742456b0', 'assistant@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('1ab3cccf-9963-43e7-8523-834c90ff4330', 'assistant.with.org@teamteach.testinator.com', 'ACCEPTED', 10010),
-('c09b3c44-fa56-44ed-bbde-91aa451fc99a', 'admin@teamteach.testinator.com', 'ACCEPTED', 10010),
+('c09b3c44-fa56-44ed-bbde-91aa451fc99a', 'adm@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('45aa5e28-237c-48d1-87fa-db4687963a04', 'moderator@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('fd2804fb-8e1a-41b1-935f-64749f7bb60f', 'trainer01@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('a70db83f-76dc-4705-844a-2df619a74a27', 'trainer02@teamteach.testinator.com', 'ACCEPTED', 10010),

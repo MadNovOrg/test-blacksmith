@@ -8,10 +8,10 @@ INSERT INTO profile (id, given_name, family_name, email) VALUES
 ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', 'Elijah', 'Participant', 'user2@teamteach.testinator.com'),
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'William', 'Participant', 'user1.with.org@teamteach.testinator.com'),
 ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'James', 'Participant', 'user2.with.org@teamteach.testinator.com'),
-('22015a3e-8907-4333-8811-85f782265a63', 'Benjamin', 'Admin', 'admin@teamteach.testinator.com'),
+('22015a3e-8907-4333-8811-85f782265a63', 'Benjamin', 'Admin', 'adm@teamteach.testinator.com'),
 ('48c9c19b-e7bf-4309-9679-52d5619d27dd', 'Lucas', 'Ops', 'ops@teamteach.testinator.com'),
 ('48812860-89a5-41be-95c9-b8889e88bffd', 'Henry', 'Moderator', 'moderator@teamteach.testinator.com'),
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'Alex', 'Admin', 'org.admin@teamteach.testinator.com'),
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'Alex', 'Admin', 'org.adm@teamteach.testinator.com'),
 ('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'Logan', 'Password', 'password@teamteach.testinator.com'),
 ('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'One', 'Trainer', 'trainer01@teamteach.testinator.com'),
 ('30ebb1e1-0491-44f8-b0a2-3087bd454b19', 'Two', 'Trainer', 'trainer02@teamteach.testinator.com'),
@@ -54,8 +54,8 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('fa6d5346-465a-4b34-8294-a4a5e256ee5c', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'cognito'), -- user2.with.org@teamteach.testinator.com
 ('570f4fd2-eb0f-4dbb-9c52-a118e26fdf42', 'a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'cognito'), -- user2.with.org@teamteach.testinator.com staging
 
-('8ca1d482-7e20-4448-8eb6-946550e01b1e', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- admin@teamteach.testinator.com
-('34c565f8-0932-459e-8d2c-dac35d369326', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- admin@teamteach.testinator.com staging
+('8ca1d482-7e20-4448-8eb6-946550e01b1e', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- adm@teamteach.testinator.com
+('34c565f8-0932-459e-8d2c-dac35d369326', '22015a3e-8907-4333-8811-85f782265a63', 'cognito'), -- adm@teamteach.testinator.com staging
 
 ('f04574f6-893f-4ff0-bae5-8cd58ea9e065', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com
 ('2c436c6a-db32-4b91-ba8a-bcabc1a7affa', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com staging
@@ -63,8 +63,8 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('a33cc575-1642-4435-87bf-21edaebb52e9', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
 ('281fbeeb-99a3-46d0-81b6-c3dca984d1af', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com staging
 
-('99ac246d-1b0a-4075-bff6-1550330c5ea8', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com
-('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.admin@teamteach.testinator.com staging
+('99ac246d-1b0a-4075-bff6-1550330c5ea8', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com
+('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com staging
 
 ('9e148a44-ee2f-446d-a188-da5dfdb0f6ac', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com
 ('90f81462-ccbc-44c2-bf46-ceedea2f383f', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com staging
@@ -116,10 +116,10 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('d394a9ff-7517-4e35-91aa-466f9d4c1b77', (SELECT id from role WHERE name = 'user')), -- user2@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', (SELECT id from role WHERE name = 'user')), -- user1.with.org@teamteach.testinator.com
 ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', (SELECT id from role WHERE name = 'user')), -- user2.with.org@teamteach.testinator.com
-('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'tt-admin')), -- admin@teamteach.testinator.com
+('22015a3e-8907-4333-8811-85f782265a63', (SELECT id from role WHERE name = 'tt-admin')), -- adm@teamteach.testinator.com
 ('48c9c19b-e7bf-4309-9679-52d5619d27dd', (SELECT id from role WHERE name = 'tt-ops')), -- ops@teamteach.testinator.com
 ('48812860-89a5-41be-95c9-b8889e88bffd', (SELECT id from role WHERE name = 'tt-ops')), -- moderator@teamteach.testinator.com
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'user')), -- org.admin@teamteach.testinator.com
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', (SELECT id from role WHERE name = 'user')), -- org.adm@teamteach.testinator.com
 ('8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', (SELECT id from role WHERE name = 'trainer')), -- password@teamteach.testinator.com
 ('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', (SELECT id from role WHERE name = 'trainer')), -- trainer01@teamteach.testinator.com
 ('30ebb1e1-0491-44f8-b0a2-3087bd454b19', (SELECT id from role WHERE name = 'trainer')), -- trainer02@teamteach.testinator.com
@@ -143,7 +143,7 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- assistant.with.org@teamteach.testinator.com
 ('fb523ef0-7fd1-42b2-b078-dce29a1713fe', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- user1.with.org@teamteach.testinator.com
 ('a39bb4b3-a07a-4610-8da1-b0ce885cc263', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- user2.with.org@teamteach.testinator.com
-('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- org.admin@teamteach.testinator.com
+('ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'c43b2ba0-8630-43e5-9558-f59ee9a224f0'), -- org.adm@teamteach.testinator.com
 ('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer01@teamteach.testinator.com
 ('30ebb1e1-0491-44f8-b0a2-3087bd454b19', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer02@teamteach.testinator.com
 ('e05cef9b-6b13-4c4c-b7b0-31181b6ad0a9', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- trainer03@teamteach.testinator.com

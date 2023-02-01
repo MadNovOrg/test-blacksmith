@@ -15,7 +15,7 @@ const chance = new Chance()
 const hasuraClient = new GraphQLClient(hasuraEndpoint, {
   headers: {
     'x-hasura-admin-secret': hasuraSecret,
-    'x-hasura-user-id': '22015a3e-8907-4333-8811-85f782265a63', // admin@teamteach.testinator.com
+    'x-hasura-user-id': '22015a3e-8907-4333-8811-85f782265a63', // adm@teamteach.testinator.com
   },
 })
 

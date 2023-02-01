@@ -4,7 +4,7 @@ export const users: { [key: string]: User } = {
   admin: {
     givenName: 'Benjamin',
     familyName: 'Admin',
-    email: 'admin@teamteach.testinator.com',
+    email: 'adm@teamteach.testinator.com',
     password: 'Test12345!',
   },
   ops: {
@@ -16,7 +16,7 @@ export const users: { [key: string]: User } = {
   userOrgAdmin: {
     givenName: 'Alex',
     familyName: 'Admin',
-    email: 'org.admin@teamteach.testinator.com',
+    email: 'org.adm@teamteach.testinator.com',
     password: 'Test12345!',
   },
   trainer: {
