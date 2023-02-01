@@ -8,6 +8,7 @@ import { CreateOrganization } from '@app/pages/admin/components/Organizations/Cr
 import { EditOrgDetails } from '@app/pages/admin/components/Organizations/EditOrgDetails'
 import { InviteUserToOrganization } from '@app/pages/admin/components/Organizations/InviteUserToOrganization'
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
+import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
@@ -117,6 +118,11 @@ const SalesAdminRoutes = () => {
       </Route>
 
       <Route path="certifications" element={<Certifications />} />
+
+      <Route
+        path="certification/:certificateId"
+        element={<CourseCertificationDetails />}
+      />
 
       <Route path="orders">
         <Route index element={<Orders />} />
