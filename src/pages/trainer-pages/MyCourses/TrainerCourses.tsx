@@ -240,13 +240,13 @@ export const TrainerCourses: React.FC<Props> = ({
             <FilterDates
               onChange={onDatesChange}
               title={t('filters.date-range')}
-              testId={'Range'}
+              data-testid={'date-range'}
               queryParam={'Range'}
             />
             <FilterDates
               onChange={onCreateDatesChange}
               title={t('filters.created-range')}
-              testId={'Created'}
+              data-testid={'date-created'}
               queryParam={'Created'}
             />
             <Box>

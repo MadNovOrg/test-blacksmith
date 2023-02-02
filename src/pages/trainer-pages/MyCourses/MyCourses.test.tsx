@@ -334,7 +334,9 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const from = within(screen.getByTestId('Range')).getByLabelText('From')
+      const from = within(screen.getByTestId('date-range')).getByLabelText(
+        'From'
+      )
       userEvent.paste(from, '13/03/2023') // second course's start date
 
       await waitFor(() => {
@@ -412,7 +414,7 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const to = within(screen.getByTestId('Range')).getByLabelText('To')
+      const to = within(screen.getByTestId('date-range')).getByLabelText('To')
       userEvent.paste(to, '25/07/2023') // second course's end date
 
       await waitFor(() => {
@@ -487,10 +489,12 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const from = within(screen.getByTestId('Range')).getByLabelText('From')
+      const from = within(screen.getByTestId('date-range')).getByLabelText(
+        'From'
+      )
       userEvent.paste(from, '13/03/2023') // second course's start date
 
-      const to = within(screen.getByTestId('Range')).getByLabelText('To')
+      const to = within(screen.getByTestId('date-range')).getByLabelText('To')
       userEvent.paste(to, '25/07/2023') // second course's end date
 
       await waitFor(() => {

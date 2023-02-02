@@ -1,4 +1,4 @@
-import Box from '@mui/material/Box'
+import Box, { BoxProps } from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
@@ -22,16 +22,15 @@ const getErrorMessage = (reason: string): string => reasonToError[reason] || ''
 
 type Props = {
   title: string
-  testId?: string
   queryParam?: string
   onChange: (from?: Date, to?: Date) => void
-}
+} & Omit<BoxProps, 'onChange'>
 
 export const FilterDates: React.FC<Props> = ({
   onChange,
   title,
-  testId = '',
   queryParam = '',
+  ...props
 }) => {
   const { t } = useTranslation()
 
@@ -55,7 +54,7 @@ export const FilterDates: React.FC<Props> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
-      <Box display="flex" flexDirection="column" gap={1} data-testid={testId}>
+      <Box display="flex" flexDirection="column" gap={1} {...props}>
         <Typography variant="body2" fontWeight="bold">
           {title}
         </Typography>

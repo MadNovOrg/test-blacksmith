@@ -190,13 +190,13 @@ export const AttendeeCourses: React.FC = () => {
             <FilterDates
               onChange={onDatesChange}
               title={t('filters.date-range')}
-              testId={'Range'}
-              queryParam={'Range'}
+              data-testid={'date-range'}
+              queryParam={'date-range'}
             />
             <FilterDates
               onChange={onCreateDatesChange}
               title={t('filters.created-range')}
-              testId={'Created'}
+              data-testid={'date-created'}
               queryParam={'Created'}
             />
             <Box>
