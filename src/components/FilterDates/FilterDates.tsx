@@ -39,7 +39,10 @@ export const FilterDates: React.FC<Props> = ({
     `dateFrom${queryParam}`,
     withDefault(DateParam, null)
   )
-  const [to, setTo] = useQueryParam('dateTo', withDefault(DateParam, null))
+  const [to, setTo] = useQueryParam(
+    `dateTo${queryParam}`,
+    withDefault(DateParam, null)
+  )
 
   const [fromError, setFromError] = useState<string>('')
   const [toError, setToError] = useState<string>('')
