@@ -88,7 +88,10 @@ export const Certifications: React.FC<CertificationsProps> = () => {
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates onChange={onDatesChange} />
+            <FilterDates
+              onChange={onDatesChange}
+              title={t('filters.date-range')}
+            />
           </Stack>
         </Box>
 

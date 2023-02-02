@@ -27,6 +27,10 @@ type CoursesFilters = {
   statuses?: Course_Status_Enum[]
   excludedCourses?: number[]
   go1Integration?: boolean
+  creation?: {
+    start?: Date
+    end?: Date
+  }
   schedule?: {
     start?: Date
     end?: Date
@@ -82,6 +86,19 @@ export const useCourses = (
 
     if (filters?.go1Integration) {
       obj.go1Integration = { _eq: filters?.go1Integration }
+    }
+
+    if (filters?.creation?.start) {
+      obj.createdAt = {
+        _gte: filters.creation.start,
+      }
+    }
+
+    if (filters?.creation?.end) {
+      obj.createdAt = {
+        ...obj.createdAt,
+        _lte: filters.creation.end,
+      }
     }
 
     if (filters?.schedule?.start || filters?.schedule?.end) {
@@ -160,6 +177,7 @@ function getOrderBy({ by, dir }: Pick<Sorting, 'by' | 'dir'>): Course_Order_By {
   switch (by) {
     case 'name':
     case 'type':
+    case 'createdAt':
       return { [by]: dir }
 
     case 'start':

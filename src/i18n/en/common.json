@@ -372,6 +372,7 @@
   "join-zoom": "Join via Zoom",
   "filters": {
     "date-range": "Filter by Date",
+    "created-range": "Filter by Creation Date",
     "payment-method": "Payment Method",
     "status": "Status",
     "currency": "Currency",

@@ -32,6 +32,7 @@ export const buildUserCourse = build<
     name: perBuild(() => chance.name({ full: true })),
     type: Course_Type_Enum.Open,
     level: Course_Level_Enum.Level_1,
+    createdAt: new Date(),
     status: Course_Status_Enum.Scheduled,
     trainers: [
       {

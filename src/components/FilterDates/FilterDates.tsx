@@ -21,14 +21,22 @@ const reasonToError: Record<string, string> = {
 const getErrorMessage = (reason: string): string => reasonToError[reason] || ''
 
 type Props = {
+  title: string
+  testId?: string
+  queryParam?: string
   onChange: (from?: Date, to?: Date) => void
 }
 
-export const FilterDates: React.FC<Props> = ({ onChange }) => {
+export const FilterDates: React.FC<Props> = ({
+  onChange,
+  title,
+  testId = '',
+  queryParam = '',
+}) => {
   const { t } = useTranslation()
 
   const [from, setFrom] = useQueryParam(
-    'dateFrom',
+    `dateFrom${queryParam}`,
     withDefault(DateParam, null)
   )
   const [to, setTo] = useQueryParam('dateTo', withDefault(DateParam, null))
@@ -44,9 +52,9 @@ export const FilterDates: React.FC<Props> = ({ onChange }) => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
-      <Box display="flex" flexDirection="column" gap={1}>
+      <Box display="flex" flexDirection="column" gap={1} data-testid={testId}>
         <Typography variant="body2" fontWeight="bold">
-          {t('filters.date-range')}
+          {title}
         </Typography>
 
         <DatePicker

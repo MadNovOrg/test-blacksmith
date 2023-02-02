@@ -213,6 +213,7 @@
     "col-venue": "Venue",
     "col-start": "Start",
     "col-end": "End",
+    "col-created": "Created",
     "col-trainers": "Trainer(s)",
     "col-registrants": "Regist.",
     "col-status": "Status",

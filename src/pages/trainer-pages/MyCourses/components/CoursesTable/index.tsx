@@ -51,6 +51,11 @@ export const CoursesTable: React.FC<Props> = ({
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
+        id: 'createdAt',
+        label: t('pages.my-courses.col-created'),
+        sorting: true,
+      },
+      {
         id: 'trainers',
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
@@ -104,6 +109,9 @@ export const CoursesTable: React.FC<Props> = ({
               ) : null}
               {!hiddenColumns.has('end') ? (
                 <DateCell date={c.dates?.aggregate?.end?.date} />
+              ) : null}
+              {!hiddenColumns.has('createdAt') ? (
+                <DateCell date={c.createdAt} />
               ) : null}
               {!hiddenColumns.has('trainers') ? (
                 <TableCell>
@@ -254,6 +262,7 @@ export type Cols =
   | 'type'
   | 'start'
   | 'end'
+  | 'createdAt'
   | 'trainers'
   | 'registrants'
   | 'status'

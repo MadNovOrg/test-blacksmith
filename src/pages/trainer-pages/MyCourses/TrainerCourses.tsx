@@ -55,6 +55,13 @@ export type Props = {
   showAvailableCoursesButton?: boolean
 }
 
+type DateFilters = {
+  filterStartDate?: Date | undefined
+  filterEndDate?: Date | undefined
+  filterCreateStartDate?: Date | undefined
+  filterCreateEndDate?: Date | undefined
+}
+
 export const TrainerCourses: React.FC<Props> = ({
   title,
   orgId,
@@ -81,12 +88,11 @@ export const TrainerCourses: React.FC<Props> = ({
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [filterStatus, setFilterStatus] = useState<Course_Status_Enum[]>([])
+  const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
     withDefault(BooleanParam, false)
   )
-  const [filterStartDate, setFilterStartDate] = useState<Date>()
-  const [filterEndDate, setFilterEndDate] = useState<Date>()
 
   const { Pagination, perPage, currentPage } = useTablePagination({
     id: 'my-courses',
@@ -112,14 +118,26 @@ export const TrainerCourses: React.FC<Props> = ({
   const filters = useMemo(() => {
     let startDate = undefined
     let endDate = undefined
-    if (filterStartDate) {
-      startDate = new Date(filterStartDate)
+    let createStartDate = undefined
+    let createEndDate = undefined
+
+    if (dateFilters?.filterStartDate) {
+      startDate = new Date(dateFilters.filterStartDate)
       startDate.setHours(0, 0, 0)
     }
-    if (filterEndDate) {
-      endDate = new Date(filterEndDate)
+    if (dateFilters?.filterEndDate) {
+      endDate = new Date(dateFilters.filterEndDate)
       endDate.setHours(23, 59, 59)
     }
+    if (dateFilters?.filterCreateStartDate) {
+      createStartDate = new Date(dateFilters.filterCreateStartDate)
+      createStartDate.setHours(0, 0, 0)
+    }
+    if (dateFilters?.filterCreateEndDate) {
+      createEndDate = new Date(dateFilters.filterCreateEndDate)
+      createEndDate.setHours(23, 59, 59)
+    }
+
     return {
       statuses: filterStatus,
       levels: filterLevel,
@@ -127,14 +145,14 @@ export const TrainerCourses: React.FC<Props> = ({
       go1Integration: filterBlendedLearning,
       keyword,
       excludedStatuses: Array.from(actionableStatuses),
+      creation: { start: createStartDate, end: createEndDate },
       schedule: { start: startDate, end: endDate },
     }
   }, [
     actionableStatuses,
+    dateFilters,
     filterBlendedLearning,
-    filterEndDate,
     filterLevel,
-    filterStartDate,
     filterStatus,
     filterType,
     keyword,
@@ -153,8 +171,17 @@ export const TrainerCourses: React.FC<Props> = ({
     }
   )
 
+  const isDateEmpty = Object.values(dateFilters || {}).every(
+    x => x === undefined || x === null
+  )
+
   const filtered = Boolean(
-    keyword || filterStatus.length || filterType.length || filterLevel.length
+    keyword ||
+      filterStatus.length ||
+      filterType.length ||
+      filterLevel.length ||
+      filterBlendedLearning ||
+      !isDateEmpty
   )
 
   useEffect(() => {
@@ -179,10 +206,17 @@ export const TrainerCourses: React.FC<Props> = ({
     [mutate, navigate, refetchActionableCourses]
   )
 
-  const onDatesChange = (from?: Date, to?: Date) => {
-    setFilterStartDate(from)
-    setFilterEndDate(to)
-  }
+  const onDatesChange = useCallback((from?: Date, to?: Date) => {
+    setDateFilters(prev => {
+      return { ...prev, filterStartDate: from, filterEndDate: to }
+    })
+  }, [])
+
+  const onCreateDatesChange = useCallback((from?: Date, to?: Date) => {
+    setDateFilters(prev => {
+      return { ...prev, filterCreateStartDate: from, filterCreateEndDate: to }
+    })
+  }, [])
 
   const fetchingCourses = loading || fetchingActionableCourses
 
@@ -203,8 +237,18 @@ export const TrainerCourses: React.FC<Props> = ({
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates onChange={onDatesChange} />
-
+            <FilterDates
+              onChange={onDatesChange}
+              title={t('filters.date-range')}
+              testId={'Range'}
+              queryParam={'Range'}
+            />
+            <FilterDates
+              onChange={onCreateDatesChange}
+              title={t('filters.created-range')}
+              testId={'Created'}
+              queryParam={'Created'}
+            />
             <Box>
               <Typography variant="body2" fontWeight="bold">
                 {t('filter-by')}
@@ -273,6 +317,7 @@ export const TrainerCourses: React.FC<Props> = ({
                       <TableCell>{t(`course-types.${c.type}`)}</TableCell>
                       <DateCell date={c.dates?.aggregate?.start?.date} />
                       <DateCell date={c.dates?.aggregate?.end?.date} />
+                      <DateCell date={c.createdAt} />
                       <TableCell>
                         <TrainerAvatarGroup trainers={c.trainers} />
                       </TableCell>

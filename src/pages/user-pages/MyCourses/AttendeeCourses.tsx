@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import { isPast } from 'date-fns'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
@@ -30,6 +30,13 @@ import { LoadingStatus } from '@app/util'
 
 import { UserCourseStatus, useUserCourses } from './hooks/useUserCourses'
 
+type DateFilters = {
+  filterStartDate?: Date | undefined
+  filterEndDate?: Date | undefined
+  filterCreateStartDate?: Date | undefined
+  filterCreateEndDate?: Date | undefined
+}
+
 export const AttendeeCourses: React.FC = () => {
   const { t } = useTranslation()
 
@@ -41,6 +48,11 @@ export const AttendeeCourses: React.FC = () => {
       { id: 'start', label: t('pages.my-courses.col-start'), sorting: true },
       { id: 'end', label: t('pages.my-courses.col-end'), sorting: true },
       {
+        id: 'createdAt',
+        label: t('pages.my-courses.col-created'),
+        sorting: true,
+      },
+      {
         id: 'trainers',
         label: t('pages.my-courses.col-trainers'),
         sorting: false,
@@ -51,8 +63,7 @@ export const AttendeeCourses: React.FC = () => {
   )
 
   const [keyword, setKeyword] = useState('')
-  const [filterStartDate, setFilterStartDate] = useState<Date>()
-  const [filterEndDate, setFilterEndDate] = useState<Date>()
+  const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
 
   const [statusOptions, setStatusOptions] = useState<
@@ -101,23 +112,40 @@ export const AttendeeCourses: React.FC = () => {
   const filters = useMemo(() => {
     let startDate = undefined
     let endDate = undefined
-    if (filterStartDate) {
-      startDate = new Date(filterStartDate)
+    let createStartDate = undefined
+    let createEndDate = undefined
+
+    if (dateFilters?.filterStartDate) {
+      startDate = new Date(dateFilters.filterStartDate)
       startDate.setHours(0, 0, 0)
     }
-    if (filterEndDate) {
-      endDate = new Date(filterEndDate)
+    if (dateFilters?.filterEndDate) {
+      endDate = new Date(dateFilters.filterEndDate)
       endDate.setHours(23, 59, 59)
     }
+    if (dateFilters?.filterCreateStartDate) {
+      createStartDate = new Date(dateFilters.filterCreateStartDate)
+      createStartDate.setHours(0, 0, 0)
+    }
+    if (dateFilters?.filterCreateEndDate) {
+      createEndDate = new Date(dateFilters.filterCreateEndDate)
+      createEndDate.setHours(23, 59, 59)
+    }
+
     return {
       statuses: filterStatus,
       levels: filterLevel,
       keyword,
+      creation: { start: createStartDate, end: createEndDate },
       schedule: { start: startDate, end: endDate },
     }
-  }, [filterEndDate, filterLevel, filterStartDate, filterStatus, keyword])
+  }, [dateFilters, filterLevel, filterStatus, keyword])
 
-  const { courses, status, total } = useUserCourses(filters, sorting, {
+  const {
+    courses = [],
+    status,
+    total,
+  } = useUserCourses(filters, sorting, {
     perPage,
     currentPage,
   })
@@ -126,16 +154,27 @@ export const AttendeeCourses: React.FC = () => {
     window.scrollTo(0, 0)
   }, [currentPage])
 
-  const count = courses?.length
-
   const loading = status === LoadingStatus.FETCHING
 
-  const filtered = Boolean(keyword || filterStatus.length || filterLevel.length)
+  const onDatesChange = useCallback((from?: Date, to?: Date) => {
+    setDateFilters(prev => {
+      return { ...prev, filterStartDate: from, filterEndDate: to }
+    })
+  }, [])
 
-  const onDatesChange = (from?: Date, to?: Date) => {
-    setFilterStartDate(from)
-    setFilterEndDate(to)
-  }
+  const onCreateDatesChange = useCallback((from?: Date, to?: Date) => {
+    setDateFilters(prev => {
+      return { ...prev, filterCreateStartDate: from, filterCreateEndDate: to }
+    })
+  }, [])
+
+  const isDateEmpty = Object.values(dateFilters || {}).every(
+    x => x === undefined || x === null
+  )
+
+  const filtered = Boolean(
+    keyword || filterStatus.length || filterLevel.length || !isDateEmpty
+  )
 
   return (
     <Container maxWidth="lg" sx={{ py: 5 }}>
@@ -143,13 +182,23 @@ export const AttendeeCourses: React.FC = () => {
         <Box width={250}>
           <Typography variant="h1">{t('my-courses')}</Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count })}
+            {loading ? <>&nbsp;</> : t('x-items', { count: courses.length })}
           </Typography>
 
           <Stack gap={4} mt={4}>
             <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates onChange={onDatesChange} />
-
+            <FilterDates
+              onChange={onDatesChange}
+              title={t('filters.date-range')}
+              testId={'Range'}
+              queryParam={'Range'}
+            />
+            <FilterDates
+              onChange={onCreateDatesChange}
+              title={t('filters.created-range')}
+              testId={'Created'}
+              queryParam={'Created'}
+            />
             <Box>
               <Typography variant="body2" fontWeight="bold">
                 {t('filter-by')}
@@ -188,7 +237,7 @@ export const AttendeeCourses: React.FC = () => {
               )}
 
               <TableNoRows
-                noRecords={!loading && !count}
+                noRecords={!loading && !courses.length}
                 filtered={filtered}
                 colSpan={cols.length}
                 itemsName={t('courses').toLowerCase()}
@@ -293,6 +342,26 @@ export const AttendeeCourses: React.FC = () => {
                           >
                             {t('dates.time', {
                               date: c.dates.aggregate.end.date,
+                            })}
+                          </Typography>
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {c.createdAt && (
+                        <Box>
+                          <Typography variant="body2" gutterBottom>
+                            {t('dates.defaultShort', {
+                              date: c.createdAt,
+                            })}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="grey.500"
+                            whiteSpace="nowrap"
+                          >
+                            {t('dates.time', {
+                              date: c.createdAt,
                             })}
                           </Typography>
                         </Box>

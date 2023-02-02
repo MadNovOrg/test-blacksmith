@@ -51,6 +51,7 @@ export const AuditFilteringSidebar: React.FC<AuditFilteringSidebarProps> = ({
                 onChange={(from, to) =>
                   onChange({ source: 'dates', value: [from, to] })
                 }
+                title={t('filters.date-range')}
               />
             </Stack>
           </Box>

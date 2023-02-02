@@ -22,6 +22,7 @@ export const QUERY = gql`
     level
     status
     course_code
+    createdAt
     max_participants
     trainers {
       ...CourseTrainerInfo

@@ -35,6 +35,8 @@ const _render = (
 }
 
 describe('trainers-pages/MyCourses', () => {
+  setMedia({ pointer: 'fine' }) // renders MUI datepicker in desktop mode
+
   it('renders loading', async () => {
     const client = {
       executeQuery: () => never,
@@ -332,7 +334,7 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const from = screen.getByLabelText('From')
+      const from = within(screen.getByTestId('Range')).getByLabelText('From')
       userEvent.paste(from, '13/03/2023') // second course's start date
 
       await waitFor(() => {
@@ -410,7 +412,7 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const to = screen.getByLabelText('To')
+      const to = within(screen.getByTestId('Range')).getByLabelText('To')
       userEvent.paste(to, '25/07/2023') // second course's end date
 
       await waitFor(() => {
@@ -485,10 +487,10 @@ describe('trainers-pages/MyCourses', () => {
         ).toBeInTheDocument()
       })
 
-      const from = screen.getByLabelText('From')
+      const from = within(screen.getByTestId('Range')).getByLabelText('From')
       userEvent.paste(from, '13/03/2023') // second course's start date
 
-      const to = screen.getByLabelText('To')
+      const to = within(screen.getByTestId('Range')).getByLabelText('To')
       userEvent.paste(to, '25/07/2023') // second course's end date
 
       await waitFor(() => {

@@ -22,7 +22,7 @@ describe('component: FilterDates', () => {
 
   it('calls onChange as expected when from changes', async () => {
     const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} />)
+    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const from = screen.getByLabelText('From')
 
@@ -37,7 +37,7 @@ describe('component: FilterDates', () => {
 
   it('calls onChange as expected when to changes', async () => {
     const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} />)
+    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const to = screen.getByLabelText('To')
 
@@ -52,7 +52,7 @@ describe('component: FilterDates', () => {
 
   it('shows an error if the "to" date is before the "from" date or vice-versa', async () => {
     const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} />)
+    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const from = screen.getByLabelText('From')
     userEvent.paste(from, '30/07/2024')
@@ -89,7 +89,7 @@ describe('component: FilterDates', () => {
 
   it('shows an error if the "from" date is invalid', async () => {
     const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} />)
+    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const dateFrom = screen.getByTestId('DateFrom')
     expect(
@@ -109,7 +109,7 @@ describe('component: FilterDates', () => {
 
   it('shows an error if the "to" date is invalid', async () => {
     const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} />)
+    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const dateTo = screen.getByTestId('DateTo')
     expect(

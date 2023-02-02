@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterPromoCodeStatus } from '@app/components/FilterPromoCodeStatus'
@@ -8,6 +9,8 @@ import { FilterSearch } from '@app/components/FilterSearch'
 type Props = { onChange: (next: Record<string, unknown>) => void }
 
 export const Filters: React.FC<Props> = ({ onChange }) => {
+  const { t } = useTranslation()
+
   const [search, setSearch] = useState('')
 
   const onSearchChange = useCallback(
@@ -37,7 +40,7 @@ export const Filters: React.FC<Props> = ({ onChange }) => {
     <>
       <FilterSearch value={search} onChange={onSearchChange} />
       <FilterPromoCodeType onChange={onTypeChange} />
-      <FilterDates onChange={onDatesChange} />
+      <FilterDates onChange={onDatesChange} title={t('filters.date-range')} />
       <FilterPromoCodeStatus onChange={onStatusChange} />
     </>
   )

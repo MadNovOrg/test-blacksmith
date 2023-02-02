@@ -33,6 +33,7 @@ type CoursesFilters = {
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
   statuses?: UserCourseStatus[]
+  creation?: { start?: Date; end?: Date }
   schedule?: {
     start?: Date
     end?: Date
@@ -175,6 +176,19 @@ export function useUserCourses(
       obj.type = { _in: filters.types }
     }
 
+    if (filters?.creation?.start) {
+      obj.createdAt = {
+        _gte: filters.creation.start,
+      }
+    }
+
+    if (filters?.creation?.end) {
+      obj.createdAt = {
+        ...obj.createdAt,
+        _lte: filters.creation.end,
+      }
+    }
+
     if (filters?.schedule?.start || filters?.schedule?.end) {
       obj.schedule = {
         _and: [],
@@ -253,7 +267,8 @@ function getOrderBy(sorting?: Sorting): Course_Order_By {
 
   switch (sorting.by) {
     case 'name':
-    case 'type': {
+    case 'type':
+    case 'createdAt': {
       return { [sorting.by]: dir }
     }
 
