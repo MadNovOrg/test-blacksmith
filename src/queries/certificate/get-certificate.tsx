@@ -24,6 +24,10 @@ export const QUERY = gql`
         id
         grade
         dateGraded
+        profile {
+          fullName
+          avatar
+        }
         gradingModules {
           completed
           module {
