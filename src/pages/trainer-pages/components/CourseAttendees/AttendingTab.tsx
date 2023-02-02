@@ -24,7 +24,9 @@ import {
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
+import { useMatchMutate } from '@app/hooks/useMatchMutate'
 import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
+import { Matcher } from '@app/queries/participants/get-course-participants'
 import {
   BlendedLearningStatus,
   Course,
@@ -59,7 +61,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
     data: courseParticipants,
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
-    mutate,
   } = useCourseParticipants(course?.id ?? '', {
     sortBy: sortColumn,
     order,
@@ -68,6 +69,10 @@ export const AttendingTab = ({ course }: TabProperties) => {
       offset: perPage * currentPage,
     },
   })
+
+  const matchMutate = useMatchMutate()
+
+  const invalidateCache = useCallback(() => matchMutate(Matcher), [matchMutate])
 
   const handleRowsPerPageChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -251,7 +256,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
               participant={individual}
               course={course}
               onClose={() => setIndividual(undefined)}
-              onSave={mutate}
+              onSave={invalidateCache}
             />
           ) : null}
 
@@ -263,7 +268,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
                 avatar: participantToReplace.profile.avatar,
               }}
               onClose={() => setParticipantToReplace(undefined)}
-              onSuccess={mutate}
+              onSuccess={invalidateCache}
               mode={isOrgAdmin ? Mode.ORG_ADMIN : Mode.TT_ADMIN}
             />
           ) : null}

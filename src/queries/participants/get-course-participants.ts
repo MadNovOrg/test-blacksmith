@@ -8,6 +8,8 @@ export type ResponseType = {
   courseParticipantsAggregation: { aggregate: { count: number } }
 }
 
+export const Matcher = /query CourseParticipants/i
+
 export type ParamsType = {
   limit?: number
   offset?: number
