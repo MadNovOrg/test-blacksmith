@@ -240,4 +240,26 @@ describe('CourseInvites', () => {
       leftOver,
     ])
   })
+
+  it('should accept emails with whitespace paddings', async () => {
+    useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
+
+    const { getByTestId } = render(<CourseInvites course={course} />)
+    userEvent.click(getByTestId('course-invite-btn'))
+
+    const autocomplete = getByTestId('modal-invites-emails')
+    const input = autocomplete.querySelector('input') as HTMLInputElement
+    expect(input.value).toBe('')
+
+    const emails = [` ${chance.email()}`, `${chance.email()} `]
+    userEvent.type(input, emails.join(' '))
+    userEvent.type(autocomplete, '{enter}')
+
+    userEvent.click(getByTestId('modal-invites-send'))
+    await waitForCalls(useCourseInvitesDefaults.send)
+
+    expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(
+      emails.map(e => e.trim())
+    )
+  })
 })
