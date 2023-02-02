@@ -12,19 +12,21 @@ import { useTranslation } from 'react-i18next'
 import * as yup from 'yup'
 
 import { Dialog } from '@app/components/Dialog'
+import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseType, InviteStatus } from '@app/types'
 import { courseStarted } from '@app/util'
 
 type Props = {
-  course?: Course
+  course: Course
 }
 
 const emailSchema = yup.string().email().required()
 
 export const CourseInvites = ({ course }: Props) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const [showModal, setShowModal] = useState(false)
   const [error, setError] = useState('')
@@ -154,26 +156,29 @@ export const CourseInvites = ({ course }: Props) => {
   return (
     <>
       <Grid container item xs="auto" alignItems="center">
-        {!courseHasStarted && !isOpenCourse && !courseCancelled && (
-          <>
-            <Typography variant="subtitle2" data-testid="invites-left">
-              {t('pages.course-participants.invites-left', {
-                count: invitesLeft - emails.length,
-              })}
-            </Typography>
+        {!courseHasStarted &&
+          !isOpenCourse &&
+          !courseCancelled &&
+          acl.canInviteAttendees(course.type) && (
+            <>
+              <Typography variant="subtitle2" data-testid="invites-left">
+                {t('pages.course-participants.invites-left', {
+                  count: invitesLeft - emails.length,
+                })}
+              </Typography>
 
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ ml: 2 }}
-              onClick={() => setShowModal(true)}
-              disabled={invitesLeft === 0}
-              data-testid="course-invite-btn"
-            >
-              {t('pages.course-participants.invite-btn')}
-            </Button>
-          </>
-        )}
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ ml: 2 }}
+                onClick={() => setShowModal(true)}
+                disabled={invitesLeft === 0}
+                data-testid="course-invite-btn"
+              >
+                {t('pages.course-participants.invite-btn')}
+              </Button>
+            </>
+          )}
       </Grid>
 
       <Dialog

@@ -42,7 +42,7 @@ const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const AttendingTab = ({ course }: TabProperties) => {
-  const { isOrgAdmin } = useAuth()
+  const { isOrgAdmin, acl } = useAuth()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
@@ -183,12 +183,16 @@ export const AttendingTab = ({ course }: TabProperties) => {
                 >
                   <TableCell>{courseParticipant.profile.fullName}</TableCell>
                   <TableCell>
-                    <Link href={`/profile/${courseParticipant.profile.id}`}>
-                      {courseParticipant.profile.email}
-                      {courseParticipant.profile.contactDetails.map(
-                        contact => contact.value
-                      )}
-                    </Link>
+                    {acl.canViewEmailContacts(course.type) ? (
+                      <Link href={`/profile/${courseParticipant.profile.id}`}>
+                        {courseParticipant.profile.email}
+                        {courseParticipant.profile.contactDetails.map(
+                          contact => contact.value
+                        )}
+                      </Link>
+                    ) : (
+                      <Box>***************</Box>
+                    )}
                   </TableCell>
                   <TableCell>
                     {courseParticipant.profile.organizations.map(org => (

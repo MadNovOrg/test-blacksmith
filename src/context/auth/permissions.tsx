@@ -77,16 +77,24 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canViewProfiles: () => {
-      const roles = [
-        RoleName.TT_OPS,
-        RoleName.TT_ADMIN,
-        RoleName.SALES_ADMIN,
-        RoleName.SALES_REPRESENTATIVE,
-        RoleName.FINANCE,
-        RoleName.LD,
-        RoleName.TRAINER,
-      ]
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)
+    },
+
+    canViewEmailContacts: (courseType: CourseType) => {
+      const can =
+        auth.activeRole !== RoleName.TRAINER ||
+        courseType === CourseType.INDIRECT
+
+      return can
+    },
+
+    canInviteAttendees: (courseType: CourseType) => {
+      const can =
+        auth.activeRole !== RoleName.TRAINER ||
+        courseType === CourseType.INDIRECT
+
+      return can
     },
 
     canViewAllOrganizations: () => {
