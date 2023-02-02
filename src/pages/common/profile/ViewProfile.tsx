@@ -95,12 +95,12 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
               size={220}
               sx={{ mb: 4 }}
             />
-            <Typography variant="h1" whiteSpace="nowrap">
-              {profile.fullName}
-            </Typography>
-            <Typography variant="body1" color="grey.700">
-              {profile.email}
-            </Typography>
+            <Box display={'flex'} flexDirection={'column'}>
+              <Typography variant="h1">{profile.fullName}</Typography>
+              <Typography variant="body1" color="grey.700">
+                {profile.email}
+              </Typography>
+            </Box>
 
             {editAllowed ? (
               <Button
