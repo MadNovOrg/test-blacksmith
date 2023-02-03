@@ -1,4 +1,12 @@
-import { Alert, Button, Link, SxProps } from '@mui/material'
+import {
+  Alert,
+  Button,
+  Link,
+  List,
+  ListItem,
+  SxProps,
+  Typography,
+} from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -57,21 +65,35 @@ export const CoursePrerequisitesAlert: React.FC<
             ) : null
           }
         >
-          <div>{t('pages.my-profile.missing-details-header')}</div>
-          <ul>
+          <Typography>
+            {t('pages.my-profile.missing-details-header')}
+          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
             {missingPrefs.map(msg => (
-              <li key={msg}>{msg}</li>
+              <ListItem
+                key={msg}
+                sx={{ display: 'list-item', paddingLeft: 0, paddingY: '0.2em' }}
+              >
+                <Typography>{msg}</Typography>
+              </ListItem>
             ))}
             {missingCertifications && missingCertifications.length > 0 ? (
-              <li>
+              <ListItem>
                 <>{t('certification-details')}</>
-                <ul>
+                <List sx={{ listStyleType: 'disc', pl: 4 }}>
                   {missingCertifications.map(missingCertification => {
                     const levelsPart = missingCertification.requiredCertificate
                       .map(l => t(`course-levels.${l}`))
                       .join(` ${t('or')} `)
                     return (
-                      <li key={missingCertification.courseId}>
+                      <ListItem
+                        key={missingCertification.courseId}
+                        sx={{
+                          display: 'list-item',
+                          paddingLeft: 0,
+                          paddingY: '0.2em',
+                        }}
+                      >
                         <span>{`${levelsPart} ${t(
                           'missing-certification'
                         )} `}</span>
@@ -90,13 +112,13 @@ export const CoursePrerequisitesAlert: React.FC<
                             })}
                           </Link>
                         )}
-                      </li>
+                      </ListItem>
                     )
                   })}
-                </ul>
-              </li>
+                </List>
+              </ListItem>
             ) : null}
-          </ul>
+          </List>
         </Alert>
       ) : null}
     </>
