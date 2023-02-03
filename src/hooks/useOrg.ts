@@ -162,7 +162,12 @@ export default function useOrg(
       },
     }
     data?.orgs.forEach(org => {
-      perOrg[org.id] = crunchStats(profilesByOrg.get(org.id) ?? [])
+      perOrg[org.id] = {
+        ...crunchStats(profilesByOrg.get(org.id) ?? []),
+        pendingInvites: {
+          count: data?.pendingInvitesCount.aggregate?.count ?? 0,
+        },
+      }
     })
     return perOrg
   }, [data, profilesByOrg])
