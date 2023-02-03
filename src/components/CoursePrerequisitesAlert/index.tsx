@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Link,
   List,
@@ -78,44 +79,54 @@ export const CoursePrerequisitesAlert: React.FC<
               </ListItem>
             ))}
             {missingCertifications && missingCertifications.length > 0 ? (
-              <ListItem>
-                <>{t('certification-details')}</>
-                <List sx={{ listStyleType: 'disc', pl: 4 }}>
-                  {missingCertifications.map(missingCertification => {
-                    const levelsPart = missingCertification.requiredCertificate
-                      .map(l => t(`course-levels.${l}`))
-                      .join(` ${t('or')} `)
-                    return (
-                      <ListItem
-                        key={missingCertification.courseId}
-                        sx={{
-                          display: 'list-item',
-                          paddingLeft: 0,
-                          paddingY: '0.2em',
-                        }}
-                      >
-                        <span>{`${levelsPart} ${t(
-                          'missing-certification'
-                        )} `}</span>
-                        {courseId ? (
-                          t('this-course')
-                        ) : (
-                          <Link
-                            href={`/courses/${missingCertification.courseId}/details`}
-                            variant="body2"
-                            fontWeight="600"
-                            color="primary"
-                            underline="always"
-                          >
-                            {t('course-link', {
-                              id: missingCertification.courseId,
-                            })}
-                          </Link>
-                        )}
-                      </ListItem>
-                    )
-                  })}
-                </List>
+              <ListItem
+                sx={{ display: 'list-item', paddingLeft: 0, paddingY: '0.2em' }}
+              >
+                <Box
+                  display={'flex'}
+                  flexDirection={'column'}
+                  alignItems={'flex-start'}
+                >
+                  <Typography>{t('certification-details')}</Typography>
+                  <List sx={{ listStyleType: 'disc', pl: 4 }}>
+                    {missingCertifications.map(missingCertification => {
+                      const levelsPart =
+                        missingCertification.requiredCertificate
+                          .map(l => t(`course-levels.${l}`))
+                          .join(` ${t('or')} `)
+                      return (
+                        <ListItem
+                          key={missingCertification.courseId}
+                          sx={{
+                            display: 'list-item',
+                            paddingLeft: 0,
+                            paddingY: '0.2em',
+                            listStyleType: 'circle',
+                          }}
+                        >
+                          <span>{`${levelsPart} ${t(
+                            'missing-certification'
+                          )} `}</span>
+                          {courseId ? (
+                            t('this-course')
+                          ) : (
+                            <Link
+                              href={`/courses/${missingCertification.courseId}/details`}
+                              variant="body2"
+                              fontWeight="600"
+                              color="primary"
+                              underline="always"
+                            >
+                              {t('course-link', {
+                                id: missingCertification.courseId,
+                              })}
+                            </Link>
+                          )}
+                        </ListItem>
+                      )
+                    })}
+                  </List>
+                </Box>
               </ListItem>
             ) : null}
           </List>
