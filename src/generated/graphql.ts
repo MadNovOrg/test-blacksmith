@@ -10344,7 +10344,7 @@ export type TrainerLevels = {
 
 export type TrainerRoleType = {
   __typename?: 'TrainerRoleType';
-  trainerRoleType?: Maybe<TrainerRoleTypeObj>;
+  trainer_role_type?: Maybe<TrainerRoleTypeObj>;
 };
 
 export type TrainerRoleTypeObj = {
@@ -37915,6 +37915,8 @@ export type ReplaceParticipantMutationVariables = Exact<{
 
 
 export type ReplaceParticipantMutation = { __typename?: 'mutation_root', replaceParticipant?: { __typename?: 'ReplaceParticipantOutput', success: boolean, error?: ReplaceParticipantError | null } | null };
+
+export type SearchTrainerDetailsFragment = { __typename?: 'SearchTrainer', id: any, fullName: string, avatar?: string | null, availability?: SearchTrainerAvailability | null, levels: Array<{ __typename?: 'CourseCertificateLevel', courseLevel: CourseLevel, expiryDate: any }>, trainer_role_types: Array<{ __typename?: 'TrainerRoleType', trainer_role_type?: { __typename?: 'TrainerRoleTypeObj', name: string, id: string } | null }> };
 
 export type SearchTrainersQueryVariables = Exact<{
   input: SearchTrainersInput;

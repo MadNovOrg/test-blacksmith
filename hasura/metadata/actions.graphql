@@ -734,7 +734,7 @@ type TrainerRoleTypeObj {
 }
 
 type TrainerRoleType {
-  trainerRoleType: TrainerRoleTypeObj
+  trainer_role_type: TrainerRoleTypeObj
 }
 
 type CourseCertificateLevel {

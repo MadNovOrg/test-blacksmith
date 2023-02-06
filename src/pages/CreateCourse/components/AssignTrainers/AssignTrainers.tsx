@@ -122,8 +122,8 @@ export const AssignTrainers = () => {
         data.lead.some(lead =>
           lead.trainer_role_types.some(
             ({ trainer_role_type: role }) =>
-              role.name === TrainerRoleTypeName.SENIOR ||
-              role.name === TrainerRoleTypeName.PRINCIPAL
+              role?.name === TrainerRoleTypeName.SENIOR ||
+              role?.name === TrainerRoleTypeName.PRINCIPAL
           )
         )
       )

@@ -16,6 +16,11 @@ import { useNavigate } from 'react-router-dom'
 import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
+import {
+  CourseLevel,
+  CourseTrainerType,
+  SearchTrainer,
+} from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
@@ -24,11 +29,8 @@ import {
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   CourseInput,
-  CourseLevel,
-  CourseTrainerType,
   CourseType,
   InviteStatus,
-  SearchTrainer,
   TrainerInput,
   TrainerRoleTypeName,
   ValidCourseInput,

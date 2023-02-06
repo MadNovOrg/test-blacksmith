@@ -1,14 +1,13 @@
 import { endOfDay, startOfDay } from 'date-fns'
 import { useCallback } from 'react'
 
+import {
+  SearchTrainersQuery,
+  SearchTrainersQueryVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 
-import {
-  Props,
-  SEARCH_TRAINERS,
-  SearchTrainersInput,
-  SearchTrainersResp,
-} from './helpers'
+import { Props, SEARCH_TRAINERS } from './helpers'
 
 export const useQueryTrainers = ({
   trainerType,
@@ -21,7 +20,7 @@ export const useQueryTrainers = ({
   const courseEnd = end ? endOfDay(new Date(end)) : undefined
 
   const search = useCallback(
-    async (query: string): Promise<SearchTrainersResp> => {
+    async (query: string): Promise<SearchTrainersQuery> => {
       try {
         const input = {
           query,
@@ -31,7 +30,7 @@ export const useQueryTrainers = ({
           courseEnd,
         }
 
-        return fetcher<SearchTrainersResp, SearchTrainersInput>(
+        return fetcher<SearchTrainersQuery, SearchTrainersQueryVariables>(
           SEARCH_TRAINERS,
           { input }
         )

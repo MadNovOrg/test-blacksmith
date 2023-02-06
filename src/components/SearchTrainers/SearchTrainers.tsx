@@ -17,14 +17,14 @@ import { useDebouncedCallback } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
 import {
+  CourseLevel,
+  CourseTrainerType,
   SearchTrainer,
   SearchTrainerAvailability,
-  CourseTrainerType,
-  CourseLevel,
-} from '@app/types'
+} from '@app/generated/graphql'
 import { noop } from '@app/util'
 
-import type { SearchTrainersSchedule } from './helpers'
+import { SearchTrainersSchedule } from './helpers'
 import { useQueryTrainers } from './useQueryTrainers'
 
 type Props = {
@@ -95,7 +95,7 @@ export function SearchTrainers({
     _state: AutocompleteRenderOptionState
   ) => {
     const trainerRoles = option.trainer_role_types
-      .map(obj => t(`trainer-role-types.${obj.trainer_role_type.name}`))
+      .map(obj => t(`trainer-role-types.${obj.trainer_role_type?.name}`))
       .join(', ')
     return (
       <Box
@@ -104,12 +104,14 @@ export function SearchTrainers({
         sx={{ display: 'flex', gap: 2 }}
         data-testid="SearchTrainers-option"
       >
-        <Avatar size={32} src={option.avatar} name={option.fullName} />
+        <Avatar size={32} src={option.avatar ?? ''} name={option.fullName} />
         <Box sx={{ flex: 1 }}>
           <Typography variant="body1">{option.fullName}</Typography>
           <Typography variant="body2">{trainerRoles}</Typography>
         </Box>
-        <TrainerAvailabilityStatus availability={option.availability} />
+        <TrainerAvailabilityStatus
+          availability={option.availability ?? undefined}
+        />
       </Box>
     )
   }
@@ -117,7 +119,7 @@ export function SearchTrainers({
   const searchTrainers = useDebouncedCallback(async (query: string) => {
     const { trainers } = await search(query)
     if (!isMounted()) return
-    setMatches(matchesFilter(trainers))
+    setMatches(matchesFilter(trainers ? trainers.filter(Boolean) : []))
     setLoading(false)
   }, 500)
 
@@ -243,7 +245,7 @@ function renderSelected(
   return selected.map((s, index) => (
     <Chip
       {...getTagProps({ index })}
-      avatar={<Avatar src={s.avatar} name={s.fullName} />}
+      avatar={<Avatar src={s.avatar ?? ''} name={s.fullName} />}
       key={s.id}
       label={s.fullName}
       data-testid="SearchTrainers-selected"
@@ -259,10 +261,10 @@ function TrainerAvailabilityStatus({
   const { t } = useTranslation()
 
   const colors = {
-    [SearchTrainerAvailability.AVAILABLE]: 'success',
-    [SearchTrainerAvailability.PENDING]: 'warning',
-    [SearchTrainerAvailability.EXPIRED]: 'error',
-    [SearchTrainerAvailability.UNAVAILABLE]: 'default',
+    [SearchTrainerAvailability.Available]: 'success',
+    [SearchTrainerAvailability.Pending]: 'warning',
+    [SearchTrainerAvailability.Expired]: 'error',
+    [SearchTrainerAvailability.Unavailable]: 'default',
   } as const
 
   return availability ? (

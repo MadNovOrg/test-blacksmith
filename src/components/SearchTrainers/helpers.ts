@@ -28,22 +28,26 @@ export type SearchTrainersResp = {
 }
 
 export const SEARCH_TRAINERS = gql`
+  fragment SearchTrainerDetails on SearchTrainer {
+    id
+    fullName
+    avatar
+    levels {
+      courseLevel
+      expiryDate
+    }
+    availability
+    trainer_role_types {
+      trainer_role_type {
+        name
+        id
+      }
+    }
+  }
+
   query SearchTrainers($input: SearchTrainersInput!) {
     trainers: searchTrainers(input: $input) {
-      id
-      fullName
-      avatar
-      levels {
-        courseLevel
-        expiryDate
-      }
-      availability
-      trainer_role_types {
-        trainer_role_type: trainerRoleType {
-          name
-          id
-        }
-      }
+      ...SearchTrainerDetails
     }
   }
 `

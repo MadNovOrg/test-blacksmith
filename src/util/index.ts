@@ -225,7 +225,7 @@ export const requiredMsg = (t: TFunction, name: string) => {
 }
 
 export const profileToInput = (course: Course, type: CourseTrainerType) => {
-  return (p: SearchTrainer): SetCourseTrainerInput => ({
+  return (p: Pick<SearchTrainer, 'id'>): SetCourseTrainerInput => ({
     course_id: course.id,
     profile_id: p.id,
     type,

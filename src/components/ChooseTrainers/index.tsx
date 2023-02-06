@@ -2,35 +2,26 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, FormHelperText, Stack, Typography } from '@mui/material'
 import { differenceInDays } from 'date-fns'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
-import {
-  Controller,
-  Resolver,
-  UnpackNestedValue,
-  useForm,
-  useWatch,
-} from 'react-hook-form'
+import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import { useAuth } from '@app/context/auth'
-import { yup } from '@app/schemas'
 import {
-  CourseLevel,
-  CourseTrainer,
   CourseTrainerType,
-  CourseType,
   SearchTrainer,
-} from '@app/types'
+  SearchTrainerDetailsFragment,
+} from '@app/generated/graphql'
+import { yup } from '@app/schemas'
+import { CourseLevel, CourseTrainer, CourseType } from '@app/types'
 import { RequiredAssistants } from '@app/util/trainerRatio'
 
 import { SearchTrainers } from '../SearchTrainers'
 
-export type FormValues = UnpackNestedValue<NestedFormValues>
-
-type NestedFormValues = {
-  lead: SearchTrainer[]
-  assist: SearchTrainer[]
-  moderator: SearchTrainer[]
+export type FormValues = {
+  lead: SearchTrainerDetailsFragment[]
+  assist: SearchTrainerDetailsFragment[]
+  moderator: SearchTrainerDetailsFragment[]
 }
 
 type Props = {
@@ -129,10 +120,10 @@ const ChooseTrainers: React.FC<Props> = ({
     [trainers]
   )
 
-  const form = useForm<NestedFormValues>({
+  const form = useForm<FormValues>({
     mode: 'all',
     defaultValues: formTrainers,
-    resolver: yupResolver(schema) as unknown as Resolver<NestedFormValues>, // fixed in v8. See https://github.com/react-hook-form/react-hook-form/issues/7888
+    resolver: yupResolver(schema) as unknown as Resolver<FormValues>,
   })
 
   const formValues = useWatch({
@@ -149,7 +140,7 @@ const ChooseTrainers: React.FC<Props> = ({
         v => v !== value
       )
       const _trainers = possibleValues.flatMap(v =>
-        form.getValues(v as keyof NestedFormValues)
+        form.getValues(v as keyof FormValues)
       )
       const ids = new Set(_trainers.map(t => (t as SearchTrainer).id))
       return matches.filter(m => !ids.has(m.id))
