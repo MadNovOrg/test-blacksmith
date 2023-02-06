@@ -46,7 +46,7 @@ exports[`Login matches snapshot 1`] = `
                 Email Address
               </label>
               <div
-                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-yj5aqx-MuiInputBase-root-MuiFilledInput-root"
+                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-1hww08d-MuiInputBase-root-MuiFilledInput-root"
               >
                 <input
                   aria-invalid="false"
@@ -77,7 +77,7 @@ exports[`Login matches snapshot 1`] = `
                 Password
               </label>
               <div
-                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-yj5aqx-MuiInputBase-root-MuiFilledInput-root"
+                class="MuiInputBase-root MuiFilledInput-root MuiFilledInput-underline MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1hww08d-MuiInputBase-root-MuiFilledInput-root"
               >
                 <input
                   aria-invalid="false"
