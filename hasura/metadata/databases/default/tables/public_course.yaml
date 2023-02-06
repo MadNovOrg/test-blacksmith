@@ -24,6 +24,8 @@ configuration:
       custom_name: status
     sales_representative_id:
       custom_name: salesRepresentativeId
+    created_by_id:
+      custom_name: createdById
     grading_started:
       custom_name: gradingStarted
     grading_confirmed:
@@ -53,6 +55,7 @@ configuration:
     modules_duration: modulesDuration
     course_status: status
     sales_representative_id: salesRepresentativeId
+    created_by_id: createdById
     grading_started: gradingStarted
     grading_confirmed: gradingConfirmed
     course_level: level
@@ -73,6 +76,9 @@ object_relationships:
   - name: contactProfile
     using:
       foreign_key_constraint_on: contact_profile_id
+  - name: createdBy
+    using:
+      foreign_key_constraint_on: created_by_id
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
@@ -165,6 +171,8 @@ insert_permissions:
       check:
         course_type:
           _eq: CLOSED
+      set:
+        created_by_id: x-hasura-User-Id
       columns:
         - account_code
         - aol_cost_of_course
@@ -197,6 +205,8 @@ insert_permissions:
   - role: trainer
     permission:
       check: {}
+      set:
+        created_by_id: x-hasura-User-Id
       columns:
         - aol_cost_of_course
         - aol_country
@@ -224,6 +234,8 @@ insert_permissions:
   - role: tt-ops
     permission:
       check: {}
+      set:
+        created_by_id: x-hasura-User-Id
       columns:
         - account_code
         - aol_cost_of_course
@@ -296,6 +308,7 @@ select_permissions:
         - course_status
         - course_type
         - created_at
+        - created_by_id
         - description
         - free_spaces
         - go1_integration
@@ -332,6 +345,7 @@ select_permissions:
         - course_status
         - course_type
         - created_at
+        - created_by_id
         - description
         - free_spaces
         - go1_integration

@@ -13521,6 +13521,9 @@ export type Course = {
   /** A computed field, executes function "course_code" */
   course_code?: Maybe<Scalars['String']>;
   createdAt: Scalars['timestamptz'];
+  /** An object relationship */
+  createdBy?: Maybe<Profile>;
+  createdById?: Maybe<Scalars['uuid']>;
   deliveryType: Course_Delivery_Type_Enum;
   description?: Maybe<Scalars['String']>;
   /** A computed field, executes function "course_end_date" */
@@ -14232,6 +14235,8 @@ export type Course_Bool_Exp = {
   contactProfileId?: InputMaybe<Uuid_Comparison_Exp>;
   course_code?: InputMaybe<String_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  createdBy?: InputMaybe<Profile_Bool_Exp>;
+  createdById?: InputMaybe<Uuid_Comparison_Exp>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
   end?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -17030,6 +17035,8 @@ export type Course_Insert_Input = {
   contactProfile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdBy?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
+  createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Arr_Rel_Insert_Input>;
@@ -17685,6 +17692,7 @@ export type Course_Max_Fields = {
   cancellationReason?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
@@ -17708,6 +17716,7 @@ export type Course_Max_Order_By = {
   cancellationReason?: InputMaybe<Order_By>;
   contactProfileId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
+  createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -17732,6 +17741,7 @@ export type Course_Min_Fields = {
   cancellationReason?: Maybe<Scalars['String']>;
   contactProfileId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
+  createdById?: Maybe<Scalars['uuid']>;
   description?: Maybe<Scalars['String']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
@@ -17755,6 +17765,7 @@ export type Course_Min_Order_By = {
   cancellationReason?: InputMaybe<Order_By>;
   contactProfileId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
+  createdById?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
@@ -18110,6 +18121,8 @@ export type Course_Order_By = {
   contactProfileId?: InputMaybe<Order_By>;
   course_code?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
+  createdBy?: InputMaybe<Profile_Order_By>;
+  createdById?: InputMaybe<Order_By>;
   deliveryType?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
   end?: InputMaybe<Order_By>;
@@ -20476,6 +20489,8 @@ export enum Course_Select_Column {
   /** column name */
   CreatedAt = 'createdAt',
   /** column name */
+  CreatedById = 'createdById',
+  /** column name */
   DeliveryType = 'deliveryType',
   /** column name */
   Description = 'description',
@@ -20525,6 +20540,7 @@ export type Course_Set_Input = {
   cancellationReason?: InputMaybe<Scalars['String']>;
   contactProfileId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
+  createdById?: InputMaybe<Scalars['uuid']>;
   deliveryType?: InputMaybe<Course_Delivery_Type_Enum>;
   description?: InputMaybe<Scalars['String']>;
   freeSpaces?: InputMaybe<Scalars['Int']>;
@@ -21438,6 +21454,8 @@ export enum Course_Update_Column {
   ContactProfileId = 'contactProfileId',
   /** column name */
   CreatedAt = 'createdAt',
+  /** column name */
+  CreatedById = 'createdById',
   /** column name */
   DeliveryType = 'deliveryType',
   /** column name */
@@ -38113,7 +38131,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   id: Scalars['uuid'];
