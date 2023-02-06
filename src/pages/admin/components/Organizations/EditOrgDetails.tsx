@@ -131,7 +131,7 @@ export const EditOrgDetails: React.FC = () => {
   useEffect(() => {
     if (org) {
       setValue('orgName', org.name)
-      setValue('trustType', org.trustType || TrustType.NOT_APPLICABLE)
+      setValue('trustType', org.trustType || TrustType.NotApplicable)
       setValue('trustName', org.trustName || '')
       setValue('orgEmail', org.attributes.email)
       setValue('orgPhone', org.attributes.phone)

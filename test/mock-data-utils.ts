@@ -82,7 +82,7 @@ export const buildOrganization = build<Organization>({
     region: perBuild(() => chance.word()),
     sector: perBuild(() => chance.word()),
     trustName: perBuild(() => chance.word()),
-    trustType: TrustType.NOT_APPLICABLE,
+    trustType: TrustType.NotApplicable,
     preferences: {},
     go1Licenses: 0,
   },

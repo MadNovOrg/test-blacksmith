@@ -79,7 +79,20 @@ insert_permissions:
       check: {}
       columns:
         - address
+        - attributes
         - name
+        - trust_name
+        - trust_type
+      backend_only: false
+  - role: user
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - name
+        - trust_name
+        - trust_type
       backend_only: false
 select_permissions:
   - role: sales-admin

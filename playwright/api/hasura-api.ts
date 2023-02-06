@@ -1,36 +1,37 @@
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 
 import {
   BlogQuery,
   BlogQueryVariables,
+  CategoryQuery,
+  CategoryQueryVariables,
+  EbooksQuery,
+  EbooksQueryVariables,
+  Go1_Licenses_Insert_Input,
+  Organization_Bool_Exp,
+  Organization_Insert_Input,
+  Organization_Member_Insert_Input,
   Podcast,
   PodcastQuery,
   PodcastQueryVariables,
   PodcastsQuery,
   PodcastsQueryVariables,
-  VideoSeriesQuery,
-  VideoItemSummaryFragment,
-  VideoItemQuery,
-  VideoItemQueryVariables,
-  VideoSeriesQueryVariables,
-  PostSummaryFragment,
   PostQuery,
   PostQueryVariables,
-  TagQuery,
-  TagQueryVariables,
-  CategoryQuery,
-  CategoryQueryVariables,
-  EbooksQuery,
-  EbooksQueryVariables,
+  PostSummaryFragment,
   ResearchSummariesQuery,
   ResearchSummariesQueryVariables,
-  WebinarsQuery,
-  WebinarsQueryVariables,
+  TagQuery,
+  TagQueryVariables,
+  VideoItemQuery,
+  VideoItemQueryVariables,
+  VideoItemSummaryFragment,
+  VideoSeriesQuery,
+  VideoSeriesQueryVariables,
   WebinarQuery,
   WebinarQueryVariables,
-  Organization_Insert_Input,
-  Organization_Member_Insert_Input,
-  Go1_Licenses_Insert_Input,
+  WebinarsQuery,
+  WebinarsQueryVariables,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
@@ -625,6 +626,23 @@ export async function deleteOrganization(id: string): Promise<boolean> {
   const response = await client.request(mutation, { id })
 
   return response?.delete_organization_by_pk?.id
+}
+
+export async function deleteOrganizationsWhere(
+  where: Organization_Bool_Exp
+): Promise<boolean> {
+  const client = getClient()
+  const mutation = gql`
+    mutation DeleteOrganizations($where: organization_bool_exp!) {
+      delete_organization(where: $where) {
+        affected_rows
+      }
+    }
+  `
+
+  const response = await client.request(mutation, { where })
+
+  return response?.delete_organization?.affected_rows
 }
 
 export async function insertOrganizationMember(

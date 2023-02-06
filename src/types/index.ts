@@ -258,10 +258,10 @@ export enum Color {
 }
 
 export enum TrustType {
-  SINGLE_ACADEMY_TRUST = 'SINGLE_ACADEMY_TRUST',
-  SUPPORTED_BY_A_TRUST = 'SUPPORTED_BY_A_TRUST',
-  NOT_APPLICABLE = 'NOT_APPLICABLE',
-  MULTI_ACADEMY_TRUST = 'MULTI_ACADEMY_TRUST',
+  SingleAcademyTrust = 'SINGLE_ACADEMY_TRUST',
+  SupportedByATrust = 'SUPPORTED_BY_A_TRUST',
+  NotApplicable = 'NOT_APPLICABLE',
+  MultiAcademyTrust = 'MULTI_ACADEMY_TRUST',
 }
 
 export enum OfstedRating {

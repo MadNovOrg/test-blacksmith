@@ -38827,6 +38827,17 @@ export type GetOrganizationsQueryVariables = Exact<{
 
 export type GetOrganizationsQuery = { __typename?: 'query_root', orgs: Array<{ __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null, members: Array<{ __typename?: 'organization_member', profile: { __typename?: 'profile', lastActivity: any } }> }> };
 
+export type InsertOrgLeadMutationVariables = Exact<{
+  name: Scalars['String'];
+  trustName: Scalars['String'];
+  trustType: Trust_Type_Enum;
+  address: Scalars['jsonb'];
+  attributes?: InputMaybe<Scalars['jsonb']>;
+}>;
+
+
+export type InsertOrgLeadMutation = { __typename?: 'mutation_root', org?: { __typename?: 'organization', id: any, name: string, tags?: any | null, contactDetails: any, attributes: any, address: any, preferences: any, createdAt: any, updatedAt: any, xeroContactId?: string | null, sector?: string | null, trustName?: string | null, trustType?: Trust_Type_Enum | null, geoCoordinates?: any | null } | null };
+
 export type InsertOrgMutationVariables = Exact<{
   name: Scalars['String'];
   trustName: Scalars['String'];

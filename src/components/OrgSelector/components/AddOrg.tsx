@@ -7,18 +7,18 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
 import {
-  InsertOrgMutation,
-  InsertOrgMutationVariables,
+  InsertOrgLeadMutation,
+  InsertOrgLeadMutationVariables,
   Trust_Type_Enum,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import { MUTATION } from '@app/queries/organization/insert-org'
+import { MUTATION } from '@app/queries/organization/insert-org-lead'
 import { yup } from '@app/schemas'
 import { Address, Establishment, TrustType } from '@app/types'
 import { requiredMsg } from '@app/util'
 
 type Props = {
-  onSuccess: (org: InsertOrgMutation['org']) => void
+  onSuccess: (org: InsertOrgLeadMutation['org']) => void
   onClose: VoidFunction
   option: Establishment | { name: string }
 }
@@ -36,13 +36,13 @@ type FormInput = {
 
 function getTrustType(dfeValue?: string) {
   if (dfeValue === 'Supported by a multi-academy trust') {
-    return TrustType.MULTI_ACADEMY_TRUST
+    return TrustType.MultiAcademyTrust
   } else if (dfeValue === 'Supported by a single-academy trust') {
-    return TrustType.SINGLE_ACADEMY_TRUST
+    return TrustType.SingleAcademyTrust
   } else if (dfeValue === 'Supported by a trust') {
-    return TrustType.SUPPORTED_BY_A_TRUST
+    return TrustType.SupportedByATrust
   } else {
-    return TrustType.NOT_APPLICABLE
+    return TrustType.NotApplicable
   }
 }
 
@@ -136,8 +136,8 @@ export const AddOrg: React.FC<Props> = function ({
             : {},
       }
       const { org } = await fetcher<
-        InsertOrgMutation,
-        InsertOrgMutationVariables
+        InsertOrgLeadMutation,
+        InsertOrgLeadMutationVariables
       >(MUTATION, vars)
       setLoading(false)
 

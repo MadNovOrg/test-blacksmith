@@ -161,7 +161,8 @@
     },
     "dfe-suggestions": "Suggestions from Department for Education",
     "existing-organizations": "Found in Team Teach Hub",
-    "add-manually": "Create new organisation"
+    "add-manually": "Create new organisation",
+    "my-organizations": "My organisations"
   },
   "certification-list": {
     "title": "Certifications",

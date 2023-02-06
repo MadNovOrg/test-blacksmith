@@ -14,6 +14,7 @@ import { debounce } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import {
   FindEstablishmentQuery,
   FindEstablishmentQueryVariables,
@@ -56,11 +57,14 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
 }) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const { profile } = useAuth()
   const [open, setOpen] = useState(false)
   const [adding, setAdding] = useState<OptionToAdd | null>()
   const [options, setOptions] = useState<Option[]>([])
   const [loading, setLoading] = useState(false)
   const [q, setQ] = useState('')
+
+  const myOrgIds = profile?.organizations.map(org => org.organization.id)
 
   const refreshOptions = useCallback(
     async query => {
@@ -176,13 +180,18 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
             return t('components.org-selector.dfe-suggestions')
           }
           if ('id' in value) {
-            return t('components.org-selector.existing-organizations')
+            return myOrgIds?.includes(value.id)
+              ? t('components.org-selector.my-organizations')
+              : t('components.org-selector.existing-organizations')
           } else {
             return t('components.org-selector.add-manually')
           }
         }}
         renderGroup={params => (
-          <li key={params.key}>
+          <li
+            key={params.key}
+            data-testid={`org-selector-result-group-${params.group}`}
+          >
             <Grid container justifyContent="space-between" px={2} py={1}>
               <Typography display="inline" variant="body2">
                 {params.group}
@@ -231,6 +240,9 @@ export const OrgSelector: React.FC<OrgSelectorProps> = function ({
                   }
                 : {})}
               key={'id' in option ? option.id : 'NEW_ORG'}
+              data-testid={`org-selector-result-${
+                'id' in option ? option.id : 'NEW_ORG'
+              }`}
             >
               <Typography
                 flex={1}

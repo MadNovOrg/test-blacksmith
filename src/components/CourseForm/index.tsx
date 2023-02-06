@@ -414,6 +414,7 @@ const CourseForm: React.FC<Props> = ({
               {t('components.course-form.organization-label')}
             </Typography>
             <OrgSelector
+              allowAdding
               value={values.organization ?? undefined}
               onChange={org => {
                 setValue('organization', org, { shouldValidate: true })
