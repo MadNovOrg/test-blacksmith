@@ -12,25 +12,23 @@ import { noop } from '@app/util'
 import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
-  onChange: (selected: Course_Status_Enum[]) => void
-  excludedStatuses?: Set<Course_Status_Enum>
+  onChange: (selected: string[]) => void
+  excludedStatuses?: Set<string>
+  customStatuses?: Set<string>
 }
 
-const statuses = Object.values(Course_Status_Enum)
-
-const CourseStatusParam = withDefault(
-  createEnumArrayParam<Course_Status_Enum>(statuses),
-  [] as Course_Status_Enum[]
-)
+const statuses = Object.values(Course_Status_Enum) as string[]
 
 export const FilterCourseStatus: React.FC<Props> = ({
   onChange = noop,
   excludedStatuses = new Set(),
+  customStatuses = new Set(),
 }) => {
   const { t } = useTranslation()
 
+  const allStatuses = [...statuses, ...customStatuses]
   const statusOptions = useMemo(() => {
-    return statuses
+    return allStatuses
       .map(status =>
         excludedStatuses.has(status)
           ? null
@@ -41,9 +39,12 @@ export const FilterCourseStatus: React.FC<Props> = ({
             }
       )
       .filter(Boolean)
-  }, [t, excludedStatuses])
+  }, [customStatuses, excludedStatuses, t])
 
-  const [selected, setSelected] = useQueryParam('status', CourseStatusParam)
+  const [selected, setSelected] = useQueryParam(
+    'status',
+    withDefault(createEnumArrayParam<string>(allStatuses), [] as string[])
+  )
 
   const options = useMemo(() => {
     return statusOptions.map(o => ({
@@ -53,7 +54,7 @@ export const FilterCourseStatus: React.FC<Props> = ({
   }, [selected, statusOptions])
 
   const _onChange = useCallback(
-    (opts: FilterOption<Course_Status_Enum>[]) => {
+    (opts: FilterOption[]) => {
       const sel = opts.flatMap(o => (o.selected ? o.id : []))
       setSelected(sel)
       onChange(sel)

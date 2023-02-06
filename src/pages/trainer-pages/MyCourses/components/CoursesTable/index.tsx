@@ -2,8 +2,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody/TableBody'
-import TableCell from '@mui/material/TableCell'
-import { TableCellProps } from '@mui/material/TableCell'
+import TableCell, { TableCellProps } from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
 import React, { useMemo } from 'react'
@@ -21,6 +20,7 @@ import {
   TrainerCoursesQuery,
 } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { AdminOnlyCourseStatus } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 type Props = {
@@ -251,7 +251,15 @@ export function DateCell({ date }: { date: Date }) {
 export function StatusCell({ course }: { course: TableCourse }) {
   return (
     <TableCell>
-      {course.status ? <CourseStatusChip status={course.status} /> : null}
+      {course.status ? (
+        <CourseStatusChip
+          status={
+            course.cancellationRequest
+              ? AdminOnlyCourseStatus.CancellationRequested
+              : course.status
+          }
+        />
+      ) : null}
     </TableCell>
   )
 }

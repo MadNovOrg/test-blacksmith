@@ -15,7 +15,7 @@ import {
 } from '@app/generated/graphql'
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
-import { RoleName } from '@app/types'
+import { AdminOnlyCourseStatus, RoleName } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
@@ -24,7 +24,7 @@ type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
-  statuses?: Course_Status_Enum[]
+  statuses?: string[]
   excludedCourses?: number[]
   go1Integration?: boolean
   creation?: {
@@ -74,8 +74,19 @@ export const useCourses = (
       obj.type = { _in: filters.types }
     }
 
-    if (filters?.statuses?.length) {
-      obj.status = { _in: filters.statuses }
+    const regularStatuses = filters?.statuses?.filter(s =>
+      Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
+    ) as Course_Status_Enum[]
+    if (regularStatuses.length) {
+      obj.status = {
+        _in: regularStatuses,
+      }
+    }
+
+    if (
+      filters?.statuses?.includes(AdminOnlyCourseStatus.CancellationRequested)
+    ) {
+      obj.cancellationRequest = { id: { _is_null: false } }
     }
 
     if (filters?.excludedCourses?.length) {

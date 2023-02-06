@@ -37,7 +37,7 @@ import { useCourses } from '@app/hooks/useCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { AcceptDeclineCourse } from '@app/pages/trainer-pages/MyCourses/AcceptDeclineCourse'
-import { RoleName } from '@app/types'
+import { AdminOnlyCourseStatus, RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 import {
@@ -71,7 +71,7 @@ export const TrainerCourses: React.FC<Props> = ({
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 
-  const { activeRole, profile, acl } = useAuth()
+  const { activeRole, profile, acl, isOrgAdmin } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
   const sorting = useTableSort('start', 'desc')
@@ -87,7 +87,7 @@ export const TrainerCourses: React.FC<Props> = ({
   const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
-  const [filterStatus, setFilterStatus] = useState<Course_Status_Enum[]>([])
+  const [filterStatus, setFilterStatus] = useState<string[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
@@ -263,6 +263,11 @@ export const TrainerCourses: React.FC<Props> = ({
                 <FilterCourseStatus
                   onChange={setFilterStatus}
                   excludedStatuses={new Set(actionableStatuses)}
+                  customStatuses={
+                    acl.isTTAdmin() || isOrgAdmin
+                      ? new Set([AdminOnlyCourseStatus.CancellationRequested])
+                      : undefined
+                  }
                 />
               </Stack>
             </Box>

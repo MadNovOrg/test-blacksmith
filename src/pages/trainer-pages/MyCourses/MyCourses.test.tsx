@@ -735,6 +735,63 @@ describe('trainers-pages/MyCourses', () => {
     })
   })
 
+  it('filters by cancellation requested status', async () => {
+    const course = buildTrainerCourse()
+    const filteredCourse = buildTrainerCourse()
+
+    const client = {
+      executeQuery: ({
+        variables,
+      }: {
+        variables: TrainerCoursesQueryVariables
+      }) => {
+        const courses =
+          variables.where?.cancellationRequest?.id &&
+          variables.where?.cancellationRequest?.id._is_null === false
+            ? [filteredCourse]
+            : [course]
+
+        return fromValue<{ data: TrainerCoursesQuery }>({
+          data: {
+            courses,
+            course_aggregate: {
+              aggregate: {
+                count: courses.length,
+              },
+            },
+          },
+        })
+      },
+    }
+
+    _render(
+      <Provider value={client as unknown as Client}>
+        <TrainerCourses />
+      </Provider>,
+      {
+        auth: {
+          isOrgAdmin: true,
+        },
+      }
+    )
+
+    userEvent.click(
+      within(screen.getByTestId('FilterCourseStatus')).getByText(
+        'Cancellation requested'
+      )
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId(`course-row-${course.id}`)
+      ).not.toBeInTheDocument()
+
+      expect(
+        screen.getByTestId(`course-row-${filteredCourse.id}`)
+      ).toBeInTheDocument()
+    })
+  })
+
   it('sorts courses by name', async () => {
     const courses = buildEntities(2, buildTrainerCourse)
     const reversedCourses = courses.slice().reverse()
