@@ -44,7 +44,7 @@
     "@mui/utils": "^5.11.2",
     "@mui/x-date-pickers": "^5.0.17",
     "@react-pdf/renderer": "^3.0.2",
-    "@sentry/integrations": "^7.35.0",
+    "@sentry/integrations": "^7.36.0",
     "@sentry/react": "^7.35.0",
     "@sentry/tracing": "^7.35.0",
     "@stripe/react-stripe-js": "^1.16.1",
