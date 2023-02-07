@@ -136,10 +136,12 @@ export const CreateCourseForm = () => {
   }, [consentFlags, courseDataValid, courseType])
 
   useEffect(() => {
-    if (requiredAssistants?.min === 0) {
-      setAssistants([])
+    if (requiredAssistants) {
+      if (assistants.length > requiredAssistants.max) {
+        setAssistants(assistants.slice(0, requiredAssistants.max))
+      }
     }
-  }, [requiredAssistants])
+  }, [requiredAssistants, assistants])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return
@@ -226,7 +228,7 @@ export const CreateCourseForm = () => {
 
       {courseType === CourseType.INDIRECT ? (
         <>
-          {requiredAssistants && requiredAssistants.min > 0 ? (
+          {requiredAssistants && requiredAssistants.max > 0 ? (
             <>
               <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
                 {t('pages.create-course.assign-trainers-title')}
@@ -242,7 +244,7 @@ export const CreateCourseForm = () => {
                 matchesFilter={matches =>
                   matches.filter(t => t.id !== profile?.id)
                 }
-                max={3}
+                max={requiredAssistants.max}
                 value={assistants}
                 onChange={event => {
                   setAssistants(event.target.value)

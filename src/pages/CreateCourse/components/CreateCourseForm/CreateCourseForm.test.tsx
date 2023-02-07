@@ -1,13 +1,22 @@
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { VenueSelector } from '@app/components/VenueSelector'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
-import { CourseType } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { CourseType, ValidCourseInput } from '@app/types'
+import { courseToCourseInput, LoadingStatus } from '@app/util'
 
-import { render, userEvent, screen, waitFor } from '@test/index'
+import {
+  chance,
+  render,
+  screen,
+  userEvent,
+  waitFor,
+  waitForCalls,
+} from '@test/index'
+import { buildCourse } from '@test/mock-data-utils'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
@@ -24,6 +33,11 @@ jest.mock('@app/hooks/useCourseDraft')
 const VenueSelectorMocked = jest.mocked(VenueSelector)
 const useZoomMeetingUrlMocked = jest.mocked(useZoomMeetingLink)
 const useCourseDraftMocked = jest.mocked(useCourseDraft)
+
+const mockTrainerSearch = jest.fn().mockResolvedValue({ trainers: [] })
+jest.mock('@app/components/SearchTrainers/useQueryTrainers', () => ({
+  useQueryTrainers: () => ({ search: mockTrainerSearch }),
+}))
 
 describe('component: CreateCourseForm', () => {
   beforeAll(() => {
@@ -63,5 +77,81 @@ describe('component: CreateCourseForm', () => {
     })
 
     expect(screen.getByTestId('SearchTrainers-input')).toBeInTheDocument()
+  })
+
+  it('update max allowed trainers according to number of attendees', async () => {
+    const overrides = {
+      max_participants: 80,
+    }
+    const course = buildCourse({ overrides })
+    const availableTrainers = [
+      {
+        id: chance.guid(),
+        fullName: `Trainer ${chance.name()}`,
+        trainer_role_types: [],
+      },
+      {
+        id: chance.guid(),
+        fullName: `Trainer ${chance.name()}`,
+        trainer_role_types: [],
+      },
+      {
+        id: chance.guid(),
+        fullName: `Trainer ${chance.name()}`,
+        trainer_role_types: [],
+      },
+    ]
+    mockTrainerSearch.mockResolvedValue({ trainers: availableTrainers })
+
+    render(
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <CreateCourseProvider
+              initialValue={{
+                courseData: courseToCourseInput(course) as ValidCourseInput,
+              }}
+              courseType={CourseType.INDIRECT}
+            >
+              <CreateCourseForm />
+            </CreateCourseProvider>
+          }
+        />
+      </Routes>,
+      {},
+      { initialEntries: ['/?type=INDIRECT'] }
+    )
+
+    const searchTrainersInput = screen.getByTestId('SearchTrainers-input')
+    expect(searchTrainersInput).toBeInTheDocument()
+    expect(searchTrainersInput).toHaveAttribute(
+      'placeholder',
+      'Search eligible trainers...'
+    )
+
+    userEvent.type(searchTrainersInput, 'Trainer')
+    await waitForCalls(mockTrainerSearch)
+    const options = screen.getAllByTestId('SearchTrainers-option')
+    expect(options).toHaveLength(3)
+    userEvent.click(options[0])
+
+    expect(searchTrainersInput).toHaveAttribute(
+      'placeholder',
+      'Search eligible trainers...'
+    )
+
+    await waitFor(() => {
+      fireEvent.change(screen.getByLabelText('Number of attendees'), {
+        target: { value: '12' },
+      })
+    })
+
+    await waitFor(() =>
+      expect(screen.getByTestId('SearchTrainers-input')).toHaveAttribute(
+        'placeholder',
+        '(max allowed reached)'
+      )
+    )
   })
 })
