@@ -43,9 +43,6 @@ jobs:
       - name: Test
         run: npm run test  -- --maxWorkers=2 --changedSince=${{ github.event.pull_request.base.sha }}
 
-      - name: Build web
-        run: npm run build -- --mode development
-
   dev-cd:
     name: DEV
     needs: build
