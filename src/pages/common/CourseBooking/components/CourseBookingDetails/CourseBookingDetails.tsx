@@ -191,8 +191,8 @@ export const CourseBookingDetails: React.FC = () => {
 
       orgName: yup.string(),
 
-      sector: yup.string().required(),
-      position: yup.string().required(),
+      sector: yup.string().required(requiredMsg(t, 'sector')),
+      position: yup.string().required(requiredMsg(t, 'position')),
       otherPosition: yup.string().when('position', {
         is: 'other',
         then: yup
@@ -453,7 +453,7 @@ export const CourseBookingDetails: React.FC = () => {
               ))}
             </TextField>
             {errors.sector ? (
-              <FormHelperText>{errors.sector?.message}</FormHelperText>
+              <FormHelperText error>{errors.sector?.message}</FormHelperText>
             ) : null}
           </Box>
 
@@ -479,8 +479,8 @@ export const CourseBookingDetails: React.FC = () => {
                 <MenuItem value="other">{t('other')}</MenuItem>
               ) : null}
             </TextField>
-            {errors.sector ? (
-              <FormHelperText>{errors.sector?.message}</FormHelperText>
+            {errors.position ? (
+              <FormHelperText error>{errors.position?.message}</FormHelperText>
             ) : null}
 
             <Box mt={1}>
