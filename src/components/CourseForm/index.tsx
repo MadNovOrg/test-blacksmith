@@ -15,7 +15,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
 import React, { memo, useEffect, useMemo } from 'react'
@@ -33,12 +33,7 @@ import {
   CourseLevel,
   CourseType,
 } from '@app/types'
-import {
-  DATE_MASK,
-  INPUT_DATE_FORMAT,
-  LoadingStatus,
-  extractTime,
-} from '@app/util'
+import { LoadingStatus, extractTime } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -46,8 +41,8 @@ import { VenueSelector } from '../VenueSelector'
 
 import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
 import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
+import { CourseDateTimePicker } from './components/CourseDateTimePicker'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
-import { CourseTimePicker } from './components/CourseTimePicker'
 import {
   canBeBlended,
   canBeF2F,
@@ -136,7 +131,6 @@ const CourseForm: React.FC<Props> = ({
           .typeError(t('components.course-form.start-date-format'))
           .nullable()
           .required(t('components.course-form.start-date-required')),
-        startTime: yup.string().required(),
         endDateTime: yup
           .date()
           .typeError(t('components.course-form.end-date-format'))
@@ -146,7 +140,6 @@ const CourseForm: React.FC<Props> = ({
             yup.ref('startDateTime'),
             t('components.course-form.end-date-before-start-date')
           ),
-        endTime: yup.string().required(),
         ...(hasMinParticipants
           ? {
               minParticipants: yup
@@ -210,15 +203,9 @@ const CourseForm: React.FC<Props> = ({
       startDateTime: courseInput?.startDateTime
         ? new Date(courseInput.startDateTime)
         : null,
-      startTime: courseInput?.startDateTime
-        ? extractTime(courseInput.startDateTime)
-        : extractTime(makeDate(null, '08:00')),
       endDateTime: courseInput?.endDateTime
         ? new Date(courseInput.endDateTime)
         : null,
-      endTime: courseInput?.endDateTime
-        ? extractTime(courseInput.endDateTime)
-        : extractTime(makeDate(null, '08:00')),
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
@@ -303,31 +290,6 @@ const CourseForm: React.FC<Props> = ({
   }, [canMixed, setValue, values.deliveryType])
 
   useEffect(() => {
-    const startTime = getValues('startTime')
-    const startDate = getValues('startDateTime')
-    if (startTime && startDate) {
-      const startDateWithTime = makeDate(startDate, startTime)
-
-      setValue('startDateTime', startDateWithTime)
-
-      const endDate = getValues('endDateTime')
-      if (endDate) {
-        trigger('endDateTime')
-      }
-    }
-  }, [getValues, setValue, trigger])
-
-  useEffect(() => {
-    const endTime = getValues('endTime')
-    const endDate = getValues('endDateTime')
-    if (endTime && endDate) {
-      const endDateWithTime = makeDate(endDate, endTime)
-
-      setValue('endDateTime', endDateWithTime, { shouldValidate: true })
-    }
-  }, [getValues, setValue])
-
-  useEffect(() => {
     if (
       values.startDateTime &&
       isDate(values.startDateTime) &&
@@ -336,33 +298,6 @@ const CourseForm: React.FC<Props> = ({
       setValue('accountCode', getAccountCode(values.startDateTime))
     }
   }, [values.startDateTime, setValue])
-
-  const handleStartDateTimeChange = (date: Date | null) => {
-    let dateToSet = date
-    const endDate = getValues('endDateTime')
-    const startTime = getValues('startTime')
-
-    if (startTime && date) {
-      dateToSet = makeDate(date, startTime)
-    }
-
-    setValue('startDateTime', dateToSet, { shouldValidate: true })
-
-    if (endDate) {
-      trigger('endDateTime')
-    }
-  }
-
-  const handleEndDateTimeChange = (date: Date | null) => {
-    let dateToSet = date
-
-    const endTime = getValues('endTime')
-    if (endTime && date) {
-      dateToSet = makeDate(date, endTime)
-    }
-
-    setValue('endDateTime', dateToSet, { shouldValidate: true })
-  }
 
   const hasZoomMeetingUrl = [
     CourseDeliveryType.VIRTUAL,
@@ -610,100 +545,56 @@ const CourseForm: React.FC<Props> = ({
           <Typography mb={2} mt={2} fontWeight={600}>
             {t('components.course-form.start-datepicker-section-title')}
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Controller
-                name="startDateTime"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    mask={DATE_MASK}
-                    label={t('components.course-form.start-date-placeholder')}
-                    inputFormat={INPUT_DATE_FORMAT}
-                    value={field.value}
-                    onChange={handleStartDateTimeChange}
-                    minDate={new Date()}
-                    renderInput={params => (
-                      <TextField
-                        variant="filled"
-                        {...params}
-                        fullWidth
-                        error={Boolean(errors.startDateTime)}
-                        helperText={errors.startDateTime?.message}
-                        onBlur={field.onBlur}
-                        data-testid="start-date"
-                      />
-                    )}
-                  />
-                )}
+          <Controller
+            name="startDateTime"
+            control={control}
+            render={({ field, fieldState }) => (
+              <CourseDateTimePicker
+                dateValue={field.value}
+                timeValue={
+                  courseInput?.startDateTime
+                    ? extractTime(courseInput.startDateTime)
+                    : extractTime(makeDate(null, '08:00'))
+                }
+                minDate={new Date()}
+                maxDate={values.endDateTime || undefined}
+                onChange={val => {
+                  field.onChange(val)
+                  trigger('endDateTime')
+                }}
+                onBlur={field.onBlur}
+                error={fieldState.error}
+                timeId="start"
+                dateLabel={t('components.course-form.start-date-placeholder')}
+                timeLabel={t('components.course-form.start-time-placeholder')}
               />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Controller
-                name="startTime"
-                control={control}
-                render={({ field }) => (
-                  <CourseTimePicker
-                    error={Boolean(formState.errors?.startTime)}
-                    id="start"
-                    label={t('components.course-form.start-time-placeholder')}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
+            )}
+          />
 
           <Typography mb={2} mt={2} fontWeight={600}>
             {t('components.course-form.end-datepicker-section-title')}
           </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Controller
-                name="endDateTime"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    label={t('components.course-form.end-date-placeholder')}
-                    mask={DATE_MASK}
-                    inputFormat={INPUT_DATE_FORMAT}
-                    value={field.value}
-                    onChange={handleEndDateTimeChange}
-                    minDate={values.startDateTime ?? new Date()}
-                    renderInput={params => (
-                      <TextField
-                        variant="filled"
-                        {...params}
-                        fullWidth
-                        error={Boolean(errors.endDateTime)}
-                        helperText={errors.endDateTime?.message}
-                        onBlur={field.onBlur}
-                        data-testid="end-date"
-                      />
-                    )}
-                  />
-                )}
+          <Controller
+            name="endDateTime"
+            control={control}
+            render={({ field, fieldState }) => (
+              <CourseDateTimePicker
+                dateValue={field.value}
+                timeValue={
+                  courseInput?.endDateTime
+                    ? extractTime(courseInput.endDateTime)
+                    : extractTime(makeDate(null, '08:00'))
+                }
+                minDate={values.startDateTime ?? new Date()}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                error={fieldState.error}
+                timeId="end"
+                dateLabel={t('components.course-form.end-date-placeholder')}
+                timeLabel={t('components.course-form.end-time-placeholder')}
               />
-            </Grid>
-
-            <Grid item xs={6}>
-              <Controller
-                name="endTime"
-                control={control}
-                render={({ field }) => (
-                  <CourseTimePicker
-                    error={Boolean(formState.errors?.endTime)}
-                    id="end"
-                    label={t('components.course-form.end-time-placeholder')}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
+            )}
+          />
         </LocalizationProvider>
 
         {courseType === CourseType.INDIRECT ? (
