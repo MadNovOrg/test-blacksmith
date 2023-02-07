@@ -277,18 +277,18 @@ export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
             })}
           </TableBody>
         </Table>
-        {orgProfiles ? (
-          <TablePagination
-            component="div"
-            count={orgProfiles.length}
-            page={currentPage}
-            onPageChange={(_, page) => setCurrentPage(page)}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            rowsPerPage={perPage}
-            rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
-          />
-        ) : null}
       </TableContainer>
+      {orgProfiles ? (
+        <TablePagination
+          component="div"
+          count={orgProfiles.length}
+          page={currentPage}
+          onPageChange={(_, page) => setCurrentPage(page)}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          rowsPerPage={perPage}
+          rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+        />
+      ) : null}
       {editedUser ? (
         <Dialog
           maxWidth={800}

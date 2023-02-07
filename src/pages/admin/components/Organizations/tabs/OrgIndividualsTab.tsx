@@ -96,7 +96,7 @@ export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
 
               <TabPanel
                 value={OrgIndividualsSubtabs.USERS}
-                sx={{ px: 0, pt: 0, bgcolor: 'common.white' }}
+                sx={{ px: 0, pt: 0 }}
               >
                 <OrgUsersTable
                   orgId={orgId}
