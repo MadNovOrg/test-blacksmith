@@ -21,6 +21,10 @@ const { t } = getI18n()
 
 const levelOneInfoMessage = t(`components.course-form.course-level-one-info`)
 
+const blendedLearningInfoMessage = t(
+  `components.course-form.blended-learning-price-label`
+)
+
 describe('component: CourseForm', () => {
   it('displays venue selector if F2F delivery type', async () => {
     await waitFor(() => {
@@ -129,6 +133,20 @@ describe('component: CourseForm', () => {
       screen.getByText(
         'Minimum number of attendees must be less than the maximum number of attendees'
       )
+    ).toBeInTheDocument()
+  })
+
+  it('validates that minimum participants has to be positive number', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.OPEN} />)
+    })
+
+    await waitFor(() => {
+      userEvent.type(screen.getByLabelText('Minimum'), '0')
+    })
+
+    expect(
+      screen.getByText('Minimum participants must be positive number')
     ).toBeInTheDocument()
   })
 
@@ -246,5 +264,19 @@ describe('component: CourseForm', () => {
     await selectLevel(CourseLevel.AdvancedTrainer)
 
     expect(screen.queryByText(levelOneInfoMessage)).not.toBeInTheDocument()
+  })
+
+  it('shows an info alert for blended learning for indirect courses', async () => {
+    await waitFor(() => {
+      render(<CourseForm type={CourseType.INDIRECT} />)
+    })
+
+    await waitFor(() => {
+      userEvent.click(screen.getByLabelText('Blended learning'))
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText(blendedLearningInfoMessage)).toBeInTheDocument()
+    })
   })
 })
