@@ -125,8 +125,31 @@ describe('CourseInvites', () => {
     const { getByTestId } = render(<CourseInvites course={course} />)
     userEvent.click(getByTestId('course-invite-btn'))
 
-    const invitesNotDeclined = 2
-    const invitesLeft = course.max_participants - invitesNotDeclined
+    const invitesPending = 1
+    const invitesLeft = course.max_participants - invitesPending
+    const expectedMsg = `${invitesLeft} invites left`
+    expect(getByTestId('invites-left')).toHaveTextContent(expectedMsg)
+    expect(getByTestId('modal-invites-left')).toHaveTextContent(expectedMsg)
+  })
+
+  it('shows take participants into account when showing invites left count', async () => {
+    useCourseInvitesMock.mockReturnValue({
+      ...useCourseInvitesDefaults,
+      data: [
+        buildInvite(),
+        buildInvite({ overrides: { status: InviteStatus.ACCEPTED } }),
+        buildInvite({ overrides: { status: InviteStatus.DECLINED } }),
+      ],
+    })
+
+    const participants = chance.integer({ min: 1, max: 3 })
+    const { getByTestId } = render(
+      <CourseInvites course={course} attendeesCount={participants} />
+    )
+    userEvent.click(getByTestId('course-invite-btn'))
+
+    const invitesPending = 1
+    const invitesLeft = course.max_participants - invitesPending - participants
     const expectedMsg = `${invitesLeft} invites left`
     expect(getByTestId('invites-left')).toHaveTextContent(expectedMsg)
     expect(getByTestId('modal-invites-left')).toHaveTextContent(expectedMsg)

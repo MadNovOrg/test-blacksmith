@@ -20,11 +20,12 @@ import { courseStarted } from '@app/util'
 
 type Props = {
   course: Course
+  attendeesCount?: number
 }
 
 const emailSchema = yup.string().email().required()
 
-export const CourseInvites = ({ course }: Props) => {
+export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
 
@@ -35,11 +36,11 @@ export const CourseInvites = ({ course }: Props) => {
   const [emails, setEmails] = useState<string[]>([])
 
   const invites = useCourseInvites(course?.id)
-  const invitesNotDeclined = invites.data.filter(
-    i => i.status !== InviteStatus.DECLINED
+  const pendingInvites = invites.data.filter(
+    i => i.status === InviteStatus.PENDING
   )
   const invitesLeft = course
-    ? course.max_participants - invitesNotDeclined.length
+    ? course.max_participants - pendingInvites.length - attendeesCount
     : 0
 
   const courseCancelled =

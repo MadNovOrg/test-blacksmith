@@ -90,7 +90,10 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
               })}
             </Typography>
 
-            <CourseInvites course={course} />
+            <CourseInvites
+              course={course}
+              attendeesCount={courseParticipantsTotal ?? 0}
+            />
           </Grid>
 
           <TabContext value={selectedTab}>
