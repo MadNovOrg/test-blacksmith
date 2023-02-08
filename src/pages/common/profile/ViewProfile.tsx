@@ -26,10 +26,7 @@ import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAle
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
-import {
-  Course_Participant_Audit_Type_Enum,
-  Course_Status_Enum,
-} from '@app/generated/graphql'
+import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 
 import { UserGo1License } from './components/UserGo1License'
@@ -287,11 +284,6 @@ export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
               </TableHead>
               <TableBody>
                 {profile.participantAudits?.map(row => {
-                  if (
-                    row.type === Course_Participant_Audit_Type_Enum.Replacement
-                  )
-                    return
-
                   return (
                     <TableRow
                       key={row.id}
