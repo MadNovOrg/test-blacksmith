@@ -580,3 +580,7 @@ export const getCourseStatus = (courseData: {
   }
   return courseStatus
 }
+
+export function isNotNullish<T>(arg: T): arg is Exclude<T, null | undefined> {
+  return arg !== null && arg !== undefined
+}

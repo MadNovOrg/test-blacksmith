@@ -440,7 +440,8 @@
   "course-details": {
     "tabs": {
       "attendees": {
-        "title": "Attendees"
+        "title": "Attendees",
+        "view-documents": "View"
       },
       "grading": {
         "title": "Grading",

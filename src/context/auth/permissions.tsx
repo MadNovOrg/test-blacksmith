@@ -2,12 +2,12 @@ import { MarkOptional } from 'ts-essentials'
 
 import { CourseType, RoleName } from '@app/types'
 
-import type { ACL, AuthContextType } from './types'
+import type { AuthContextType } from './types'
 
-export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
   const allowedRoles = auth.allowedRoles ?? new Set()
 
-  const acl: ACL = Object.freeze({
+  const acl = Object.freeze({
     isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
 
     isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
@@ -228,7 +228,48 @@ export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [RoleName.USER, RoleName.TRAINER]
       return roles.some(r => r === auth.activeRole)
     },
+    canTransferParticipant: () => {
+      if (auth.isOrgAdmin) {
+        return true
+      }
+
+      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
+        r => r === auth.activeRole
+      )
+    },
+    canReplaceParticipant: () => {
+      if (auth.isOrgAdmin) {
+        return true
+      }
+
+      return [
+        RoleName.TT_ADMIN,
+        RoleName.TT_OPS,
+        RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+      ].some(r => r === auth.activeRole)
+    },
+    canRemoveParticipant: () => {
+      if (auth.isOrgAdmin) {
+        return true
+      }
+
+      return [RoleName.TT_ADMIN, RoleName.TT_OPS].some(
+        r => r === auth.activeRole
+      )
+    },
+    canManageParticipantAttendandance: () => {
+      return (
+        acl.canTransferParticipant() ||
+        acl.canReplaceParticipant() ||
+        acl.canRemoveParticipant()
+      )
+    },
   })
 
-  return { ...auth, acl }
+  return acl
+}
+
+export function injectACL(auth: MarkOptional<AuthContextType, 'acl'>) {
+  return { ...auth, acl: getACL(auth) }
 }

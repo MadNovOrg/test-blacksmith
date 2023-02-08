@@ -1,6 +1,8 @@
 import { CognitoUser } from 'amazon-cognito-identity-js'
 
-import { CourseType, Profile, RoleName } from '@app/types'
+import { Profile, RoleName } from '@app/types'
+
+import { getACL } from './permissions'
 
 export type { Profile } from '@app/types'
 
@@ -28,7 +30,7 @@ export interface AuthContextType extends AuthState {
   changeRole: (role: RoleName) => void
   loadProfile: (user: CognitoUser) => Promise<void>
   reloadCurrentProfile: () => Promise<void>
-  acl: ACL
+  acl: ReturnType<typeof getACL>
 }
 
 export type Claims = {
@@ -37,38 +39,4 @@ export type Claims = {
   'x-hasura-allowed-roles': RoleName[]
   'x-hasura-default-role': RoleName
   'x-hasura-tt-organizations': string
-}
-
-export type ACL = {
-  isAdmin: () => boolean
-  isTTAdmin: () => boolean
-  isTTOps: () => boolean
-  isTrainer: () => boolean
-  isLD: () => boolean
-  canViewMyOrganization: () => boolean
-  canViewMembership: () => boolean
-  canViewAdmin: () => boolean
-  canCreateCourse: (type: CourseType) => boolean
-  canCreateCourses: () => boolean
-  canAssignLeadTrainer: () => boolean
-  canApproveCourseExceptions: () => boolean
-  canViewContacts: () => boolean
-  canViewAllOrganizations: () => boolean
-  canViewOrganizations: () => boolean
-  canViewCertifications: () => boolean
-  canViewOrders: () => boolean
-  canViewProfiles: () => boolean
-  canViewEmailContacts: (courseTypes: CourseType) => boolean
-  canInviteAttendees: (courseTypes: CourseType) => boolean
-  canOverrideGrades: () => boolean
-  canViewXeroConnect: () => boolean
-  canCreateOrgs: () => boolean
-  canCancelCourses: () => boolean
-  canManageOrgCourses: () => boolean
-  canSeeWaitingLists: () => boolean
-  canRescheduleWithoutWarning: () => boolean
-  canEditWithoutRestrictions: (courseType: CourseType) => boolean
-  canViewResources: () => boolean
-  canParticipateInCourses: () => boolean
-  canViewCourseHistory: () => boolean
 }

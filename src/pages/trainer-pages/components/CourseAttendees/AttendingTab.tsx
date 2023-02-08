@@ -1,6 +1,3 @@
-import MoveDownIcon from '@mui/icons-material/MoveDown'
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import {
   Box,
   Chip,
@@ -16,7 +13,6 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { ActionsMenu } from '@app/components/ActionsMenu'
 import {
   Mode,
   ReplaceParticipantDialog,
@@ -35,6 +31,8 @@ import {
   SortOrder,
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
+
+import { CourseActionsMenu } from './CourseActionsMenu'
 
 type TabProperties = {
   course: Course
@@ -124,7 +122,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        isOpenCourse
+        isOpenCourse && acl.canManageParticipantAttendandance()
           ? {
               id: 'actions',
               label: '',
@@ -132,7 +130,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse, isOpenCourse]
+    [t, isBlendedCourse, isOpenCourse, acl]
   )
 
   const handleTransfer = useCallback(
@@ -141,32 +139,6 @@ export const AttendingTab = ({ course }: TabProperties) => {
     },
     [navigate]
   )
-
-  const actions = useMemo(() => {
-    return [
-      {
-        label: t('common.replace'),
-        icon: <MoveDownIcon color="primary" />,
-        onClick: (participant: CourseParticipant) => {
-          setParticipantToReplace(participant)
-        },
-      },
-      {
-        label: t('common.transfer'),
-        icon: <SwapHorizIcon color="primary" />,
-        onClick: (p: CourseParticipant) => {
-          handleTransfer(p.id)
-        },
-      },
-      {
-        label: t('common.remove'),
-        icon: <PersonRemoveIcon color="primary" />,
-        onClick: (participant: CourseParticipant) => {
-          setIndividual(participant)
-        },
-      },
-    ]
-  }, [t, handleTransfer])
 
   return (
     <>
@@ -223,13 +195,22 @@ export const AttendingTab = ({ course }: TabProperties) => {
                       )}
                     </TableCell>
                   )}
-                  <TableCell>View</TableCell>
-                  {isOpenCourse ? (
+                  <TableCell>
+                    {t('pages.course-details.tabs.attendees.view-documents')}
+                  </TableCell>
+                  {isOpenCourse && acl.canManageParticipantAttendandance() ? (
                     <TableCell>
-                      <ActionsMenu
+                      <CourseActionsMenu
                         item={courseParticipant}
-                        label={t('pages.course-participants.manage-attendance')}
-                        actions={actions}
+                        onReplaceClick={participant => {
+                          setParticipantToReplace(participant)
+                        }}
+                        onRemoveClick={participant => {
+                          setIndividual(participant)
+                        }}
+                        onTransferClick={participant => {
+                          handleTransfer(participant.id)
+                        }}
                       />
                     </TableCell>
                   ) : null}
