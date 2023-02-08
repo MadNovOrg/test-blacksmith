@@ -4,7 +4,7 @@ import { render, screen, waitFor, userEvent } from '@test/index'
 
 import { FilterCurrencies } from './index'
 
-describe('component: FilterPaymentMethods', () => {
+describe('component: FilterCurrencies', () => {
   it('triggers onChange when currency = GBP is selected', async () => {
     const onChange = jest.fn()
     render(<FilterCurrencies onChange={onChange} />)

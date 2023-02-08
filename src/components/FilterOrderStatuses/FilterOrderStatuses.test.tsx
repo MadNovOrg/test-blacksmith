@@ -4,7 +4,7 @@ import { render, screen, waitFor, userEvent } from '@test/index'
 
 import { FilterOrderStatuses } from './index'
 
-describe('component: FilterPaymentMethods', () => {
+describe('component: FilterOrderStatuses', () => {
   it('triggers onChange when status=paid is selected', async () => {
     const onChange = jest.fn()
     render(<FilterOrderStatuses onChange={onChange} />)

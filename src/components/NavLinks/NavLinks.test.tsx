@@ -23,6 +23,29 @@ describe('component: NavLinks', () => {
     expect(resourcesLink).toBeInTheDocument()
   })
 
+  it('renders SALES ADMIN role links', async () => {
+    render(<NavLinks />, {
+      auth: {
+        activeRole: RoleName.SALES_ADMIN,
+        allowedRoles: new Set([RoleName.SALES_ADMIN]),
+      },
+    })
+
+    const coursesLink = screen.getByRole('link', { name: 'Manage Courses' })
+    expect(coursesLink).toBeInTheDocument()
+    expect(coursesLink).toBeInTheDocument()
+    const organisationsLink = screen.getByRole('link', {
+      name: 'Organisations',
+    })
+    expect(organisationsLink).toBeInTheDocument()
+    const certificationsLink = screen.getByRole('link', {
+      name: 'Certifications',
+    })
+    expect(certificationsLink).toBeInTheDocument()
+    const ordersLink = screen.getByRole('link', { name: 'Orders' })
+    expect(ordersLink).toBeInTheDocument()
+  })
+
   it('renders TT ADMIN role links', async () => {
     render(<NavLinks />, {
       auth: {
