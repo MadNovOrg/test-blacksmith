@@ -237,7 +237,7 @@ export function DateCell({ date }: { date: Date }) {
               date: date,
             })}
           </Typography>
-          <Typography variant="body2" color="grey.500" whiteSpace="nowrap">
+          <Typography variant="body2" whiteSpace="nowrap">
             {t('dates.time', {
               date: date,
             })}

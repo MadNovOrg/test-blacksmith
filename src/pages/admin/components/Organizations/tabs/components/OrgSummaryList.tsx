@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { Avatar } from '@app/components/Avatar'
 import { useAuth } from '@app/context/auth'
 import useOrg from '@app/hooks/useOrg'
+import theme from '@app/theme'
 
 type OrgSummaryListParams = {
   orgId: string
@@ -41,8 +42,7 @@ export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
               '&& .MuiTableCell-root': {
                 px: 2,
                 py: 1,
-                color: 'grey.700',
-                fontWeight: '600',
+                color: theme.palette.secondaryGrey.main,
               },
             }}
           >

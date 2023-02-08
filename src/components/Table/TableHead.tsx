@@ -7,6 +7,7 @@ import TableSortLabel from '@mui/material/TableSortLabel'
 import { visuallyHidden } from '@mui/utils'
 import React, { useCallback } from 'react'
 
+import theme from '@app/theme'
 import { SortOrder } from '@app/types'
 import { noop } from '@app/util'
 
@@ -25,6 +26,7 @@ export type TableHeadProps = {
   orderBy?: string
   onRequestSort?: (_: string) => void
   sx?: SxProps
+  darker?: boolean
 }
 
 export const TableHead: React.FC<TableHeadProps> = ({
@@ -32,6 +34,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
   order = 'asc',
   orderBy = '',
   onRequestSort = noop,
+  darker = false,
   sx,
 }) => {
   const createSortHandler = useCallback(
@@ -40,7 +43,20 @@ export const TableHead: React.FC<TableHeadProps> = ({
   )
 
   return (
-    <MuiTableHead sx={sx} data-testid={'table-head'}>
+    <MuiTableHead
+      sx={{
+        ...sx,
+        ...(darker && {
+          '.MuiTableRow-root': {
+            backgroundColor: 'grey.300',
+          },
+          '&& .MuiTableCell-root': {
+            color: theme.palette.secondaryGrey.main,
+          },
+        }),
+      }}
+      data-testid={'table-head'}
+    >
       <TableRow>
         {cols.map(col => {
           const isCheckbox = col.id === 'selection'

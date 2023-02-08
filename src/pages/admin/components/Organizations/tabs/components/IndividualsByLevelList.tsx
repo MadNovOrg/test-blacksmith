@@ -120,11 +120,7 @@ export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
     <>
       <Table>
         <TableHead
-          sx={{
-            '.MuiTableRow-root': {
-              backgroundColor: 'grey.300',
-            },
-          }}
+          darker
           cols={cols}
           orderBy={sorting.by}
           order={sorting.dir}

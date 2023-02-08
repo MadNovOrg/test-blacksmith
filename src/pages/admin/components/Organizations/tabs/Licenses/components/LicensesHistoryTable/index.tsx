@@ -42,14 +42,7 @@ export const LicensesHistoryTable: React.FC<Props> = ({ items, children }) => {
   return (
     <Box>
       <Table>
-        <TableHead
-          cols={cols}
-          sx={{
-            '.MuiTableRow-root': {
-              backgroundColor: 'grey.300',
-            },
-          }}
-        />
+        <TableHead darker cols={cols} />
         <TableBody>
           {items.map((historyItem, index) => (
             <TableRow

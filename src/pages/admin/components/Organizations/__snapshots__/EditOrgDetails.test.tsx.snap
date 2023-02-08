@@ -30,7 +30,7 @@ Object {
               novalidate=""
             >
               <h6
-                class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+                class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
               >
                 Organisation Details
               </h6>
@@ -380,7 +380,7 @@ Object {
                 </div>
               </div>
               <h6
-                class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+                class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
               >
                 Organisation address
               </h6>
@@ -534,7 +534,7 @@ Object {
                 </div>
               </div>
               <h6
-                class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+                class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
               >
                 Additional details (optional)
               </h6>
@@ -748,7 +748,7 @@ Object {
             novalidate=""
           >
             <h6
-              class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
             >
               Organisation Details
             </h6>
@@ -1098,7 +1098,7 @@ Object {
               </div>
             </div>
             <h6
-              class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
             >
               Organisation address
             </h6>
@@ -1252,7 +1252,7 @@ Object {
               </div>
             </div>
             <h6
-              class="MuiTypography-root MuiTypography-subtitle2 css-1acxqn0-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-subtitle2 css-8s2ld8-MuiTypography-root"
             >
               Additional details (optional)
             </h6>

@@ -45,6 +45,7 @@ declare module '@mui/material/styles' {
   interface Palette {
     green: Palette['primary']
     dimGrey: Palette['primary']
+    secondaryGrey: Palette['primary']
   }
 
   interface PaletteOptions {
@@ -55,6 +56,7 @@ declare module '@mui/material/styles' {
     teal: PaletteOptions['primary']
     gray: PaletteOptions['primary']
     dimGrey: PaletteOptions['primary']
+    secondaryGrey: PaletteOptions['primary']
   }
 }
 
@@ -190,6 +192,9 @@ const theme = createTheme({
     dimGrey: {
       main: '#6C6A6F',
     },
+    secondaryGrey: {
+      main: '#344054',
+    },
   },
 })
 
@@ -248,7 +253,7 @@ export default createTheme({
     },
 
     subtitle2: {
-      fontSize: '1.25rem',
+      fontSize: '1.125rem',
       fontWeight: '500',
     },
 
@@ -354,7 +359,7 @@ export default createTheme({
           '.MuiTableRow-root': {
             backgroundColor: theme.palette.grey[100],
           },
-          '.MuiTableCell-root:not(.MuiTableCell-paddingCheckbox)': {
+          '.MuiTableCell-root': {
             fontSize: 13,
             fontWeight: '500',
             color: theme.palette.dimGrey.main,

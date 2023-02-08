@@ -172,7 +172,11 @@ const CertificateInfo: React.FC<CertificateInfoProps> = ({
 
   return (
     <Box>
-      <Typography color="grey.500" variant="subtitle2" sx={{ mb: 2 }}>
+      <Typography
+        color={theme.palette.dimGrey.main}
+        variant="subtitle2"
+        sx={{ mb: 2 }}
+      >
         {t('common.course-certificate.certified-message')}
       </Typography>
 
