@@ -21,6 +21,7 @@ import { BackButton } from '@app/components/BackButton'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import ProgressBar from '@app/components/ProgressBar'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
@@ -100,6 +101,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleGroupSlot[]>(
     []
   )
+
+  const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
+
+  const courseCreated = Boolean(getSnackbarMessage('course-created'))
 
   const {
     data: courseData,
@@ -351,19 +356,32 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
             ? Course_Status_Enum.ExceptionsApprovalPending
             : Course_Status_Enum.Scheduled,
         })
-        navigate(hasExceptions ? '/' : '../details?success=course_submitted')
+
+        if (!courseCreated) {
+          addSnackbarMessage('course-submitted', {
+            label: t(
+              'pages.trainer-base.create-course.new-course.submitted-course',
+              { code: courseData.course.course_code }
+            ),
+          })
+        }
+
+        navigate(hasExceptions ? '/' : '../details')
       } catch (e: unknown) {
         setSubmitError((e as Error).message)
       }
     }
   }, [
-    courseData,
-    courseExceptions,
+    addSnackbarMessage,
+    courseCreated,
+    courseData?.course,
+    courseExceptions.length,
     estimatedCourseDuration,
     fetcher,
     modulesData,
     navigate,
     saveModules,
+    t,
   ])
 
   const onCourseSubmit = useCallback(async () => {

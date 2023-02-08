@@ -15,8 +15,8 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { CourseHeroSummary } from '@app/components/CourseHeroSummary'
-import { Expire } from '@app/components/Expire'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
+import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Status_Enum,
@@ -49,13 +49,6 @@ export enum CourseDetailsTabs {
   CERTIFICATIONS = 'CERTIFICATIONS',
 }
 
-const successAlerts = {
-  course_submitted:
-    'pages.trainer-base.create-course.new-course.submitted-course',
-  course_evaluated: 'course-evaluation.saved',
-  participant_transferred: 'pages.transfer-participant.success-message',
-} as const
-
 export const CourseDetails = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -63,10 +56,6 @@ export const CourseDetails = () => {
   const { acl, isOrgAdmin } = useAuth()
   const [searchParams] = useSearchParams()
   const fetcher = useFetcher()
-
-  const showCancelledAlert = searchParams.get('cancelled')
-  const alertType = searchParams.get('success') as keyof typeof successAlerts
-  const alertMessage = alertType ? successAlerts[alertType] : null
 
   const initialTab = searchParams.get('tab') as CourseDetailsTabs | null
   const [selectedTab, setSelectedTab] = useState(
@@ -204,70 +193,71 @@ export const CourseDetails = () => {
                 <BackButton label={t('back')} />
               </CourseHeroSummary>
 
-              <CourseCancellationRequestFeature
-                course={course}
-                open={showCancellationRequestModal}
-                onClose={() => setShowCancellationRequestModal(false)}
-                onChange={mutate}
-              />
+              <Container>
+                <CourseCancellationRequestFeature
+                  course={course}
+                  open={showCancellationRequestModal}
+                  onClose={() => setShowCancellationRequestModal(false)}
+                  onChange={mutate}
+                />
 
-              {exceptionsApprovalPending ? (
-                <Alert
-                  severity="warning"
-                  variant="outlined"
-                  sx={{
-                    mx: 3,
-                    my: 2,
-                    '&& .MuiAlert-message': {
-                      width: '100%',
-                    },
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="stretch"
-                    gap={1}
+                {exceptionsApprovalPending ? (
+                  <Alert
+                    severity="warning"
+                    variant="outlined"
+                    sx={{
+                      my: 2,
+                      '&& .MuiAlert-message': {
+                        width: '100%',
+                      },
+                    }}
                   >
-                    <Box>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="stretch"
+                      gap={1}
+                    >
+                      <Box>
+                        {acl.canApproveCourseExceptions() ? (
+                          <Typography variant="body1" fontWeight={600}>
+                            {t('pages.create-course.exceptions.admin-header')}
+                          </Typography>
+                        ) : (
+                          <Typography variant="body1" fontWeight={600}>
+                            {t('pages.create-course.exceptions.warning-header')}
+                          </Typography>
+                        )}
+                        <ul>
+                          {courseExceptions.map(exception => (
+                            <li key={exception}>
+                              {t(
+                                `pages.create-course.exceptions.type_${exception}`
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                        {approvalError ? (
+                          <Typography variant="caption" color="error">
+                            {approvalError}
+                          </Typography>
+                        ) : null}
+                      </Box>
                       {acl.canApproveCourseExceptions() ? (
-                        <Typography variant="body1" fontWeight={600}>
-                          {t('pages.create-course.exceptions.admin-header')}
-                        </Typography>
-                      ) : (
-                        <Typography variant="body1" fontWeight={600}>
-                          {t('pages.create-course.exceptions.warning-header')}
-                        </Typography>
-                      )}
-                      <ul>
-                        {courseExceptions.map(exception => (
-                          <li key={exception}>
-                            {t(
-                              `pages.create-course.exceptions.type_${exception}`
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                      {approvalError ? (
-                        <Typography variant="caption" color="error">
-                          {approvalError}
-                        </Typography>
+                        <Box>
+                          <Button variant="text" onClick={onExceptionsReject}>
+                            {t('common.reject')}
+                          </Button>
+                          <Button variant="text" onClick={onExceptionsApprove}>
+                            {t('common.approve')}
+                          </Button>
+                        </Box>
                       ) : null}
                     </Box>
-                    {acl.canApproveCourseExceptions() ? (
-                      <Box>
-                        <Button variant="text" onClick={onExceptionsReject}>
-                          {t('common.reject')}
-                        </Button>
-                        <Button variant="text" onClick={onExceptionsApprove}>
-                          {t('common.approve')}
-                        </Button>
-                      </Box>
-                    ) : null}
-                  </Box>
-                </Alert>
-              ) : null}
-              <OrderYourWorkbookAlert course={course} />
+                  </Alert>
+                ) : null}
+                <OrderYourWorkbookAlert course={course} />
+              </Container>
 
               <TabContext value={selectedTab}>
                 <Box borderBottom={1} borderColor="divider">
@@ -327,46 +317,24 @@ export const CourseDetails = () => {
                   </Container>
                 </Box>
 
-                <Container sx={{ pb: 2 }}>
-                  {alertMessage ? (
-                    <Expire delay={3000}>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        mt={2}
-                      >
-                        <Alert
-                          variant="outlined"
-                          color="success"
-                          data-testid="success-message"
-                        >
-                          {t(alertMessage, { id: course?.id })}
-                        </Alert>
-                      </Box>
-                    </Expire>
-                  ) : null}
-
-                  {showCancelledAlert ? (
-                    <Expire delay={3000}>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        alignItems="center"
-                        mt={2}
-                      >
-                        <Alert
-                          variant="filled"
-                          color="info"
-                          data-testid="cancelled-message"
-                        >
-                          {t('pages.course-details.course-has-been-cancelled', {
-                            code: course.course_code,
-                          })}
-                        </Alert>
-                      </Box>
-                    </Expire>
-                  ) : null}
+                <Container sx={{ pb: 2, position: 'relative' }}>
+                  <SnackbarMessage
+                    messageKey="course-created"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="course-canceled"
+                    severity="info"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="course-submitted"
+                    sx={{ position: 'absolute' }}
+                  />
+                  <SnackbarMessage
+                    messageKey="participant-transferred"
+                    sx={{ position: 'absolute' }}
+                  />
 
                   <TabPanel sx={{ px: 0 }} value={CourseDetailsTabs.ATTENDEES}>
                     <CourseAttendees course={course} />

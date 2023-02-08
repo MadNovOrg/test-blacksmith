@@ -197,7 +197,7 @@
         "mandatory-modules": "Mandatory modules",
         "estimated-duration": "Estimated duration",
         "submit-course": "Submit Course",
-        "submitted-course": "You have successfully created your {{id}} Course",
+        "submitted-course": "You have successfully submitted course {{code}}",
         "organization": "Organisation",
         "time-commitment-title": "Time commitment",
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",

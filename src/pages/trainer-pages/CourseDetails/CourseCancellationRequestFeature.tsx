@@ -57,7 +57,6 @@ export const CourseCancellationRequestFeature: React.FC<
           severity="warning"
           variant="outlined"
           sx={{
-            mx: 3,
             my: 2,
             alignItems: 'center',
             '&& .MuiAlert-message': {

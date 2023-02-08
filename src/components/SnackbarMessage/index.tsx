@@ -1,4 +1,4 @@
-import { Alert, Snackbar, SnackbarProps } from '@mui/material'
+import { Alert, AlertProps, Snackbar, SnackbarProps } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 
 import { SnackbarMessageKey, useSnackbar } from '@app/context/snackbar'
@@ -6,8 +6,9 @@ import { SnackbarMessageKey, useSnackbar } from '@app/context/snackbar'
 export const SnackbarMessage: React.FC<
   {
     messageKey: SnackbarMessageKey
-  } & SnackbarProps
-> = ({ messageKey, ...props }) => {
+  } & SnackbarProps &
+    Pick<AlertProps, 'variant' | 'severity'>
+> = ({ messageKey, variant = 'outlined', severity = 'success', ...props }) => {
   const { getSnackbarMessage, removeSnackbarMessage } = useSnackbar()
   const message = getSnackbarMessage(messageKey)
 
@@ -37,7 +38,7 @@ export const SnackbarMessage: React.FC<
       {...props}
       onClose={handleClose}
     >
-      <Alert severity="success" variant="outlined">
+      <Alert severity={severity} variant={variant}>
         {message?.label}
       </Alert>
     </Snackbar>

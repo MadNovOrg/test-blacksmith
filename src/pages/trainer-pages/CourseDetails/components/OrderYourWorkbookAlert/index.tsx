@@ -32,7 +32,6 @@ export const OrderYourWorkbookAlert: React.FC<OrderYourWorkbookAlertProps> = ({
         severity="info"
         variant="outlined"
         sx={{
-          mx: 3,
           my: 2,
         }}
       >

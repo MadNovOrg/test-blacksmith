@@ -11,6 +11,7 @@ import { useMutation } from 'urql'
 
 import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { useSnackbar } from '@app/context/snackbar'
 import {
   TransferFeeType,
   TransferParticipantMutation,
@@ -44,6 +45,8 @@ export const TransferReview: React.FC = () => {
     cancel,
   } = useTransferParticipantContext()
 
+  const { addSnackbarMessage } = useSnackbar()
+
   const [{ error: networkError, fetching }, transferParticipant] = useMutation<
     TransferParticipantMutation,
     TransferParticipantMutationVariables
@@ -69,7 +72,11 @@ export const TransferReview: React.FC = () => {
           transferSuccessfull &&
           mode !== TransferModeEnum.ATTENDEE_TRANSFERS
         ) {
-          navigate('../../details?success=participant_transferred')
+          addSnackbarMessage('participant-transferred', {
+            label: _t('pages.transfer-participant.success-message'),
+          })
+
+          navigate('../../details')
         } else if (transferSuccessfull) {
           completeStep(TransferStepsEnum.REVIEW)
           setSuccess(true)

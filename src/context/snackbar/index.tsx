@@ -7,7 +7,12 @@ import React, {
   useState,
 } from 'react'
 
-export type SnackbarMessageKey = 'course-created'
+export type SnackbarMessageKey =
+  | 'course-created'
+  | 'course-canceled'
+  | 'course-evaluated'
+  | 'participant-transferred'
+  | 'course-submitted'
 export type SnackbarMessage = { label: string }
 
 export type SnackbarState = {

@@ -1,10 +1,11 @@
 import { addDays } from 'date-fns'
 import matches from 'lodash-es/matches'
 import React from 'react'
-import { Route, Routes, useSearchParams } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Client, Provider, TypedDocumentNode } from 'urql'
 import { fromValue } from 'wonka'
 
+import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Level_Enum,
   Course_Type_Enum,
@@ -408,9 +409,11 @@ describe('page: TransferReview', () => {
     }
 
     const CourseDetailsMock = () => {
-      const [params] = useSearchParams()
+      const { getSnackbarMessage } = useSnackbar()
 
-      return <p>{params.get('success')}</p>
+      const message = getSnackbarMessage('participant-transferred')
+
+      return <p>{message?.label}</p>
     }
 
     render(
@@ -433,7 +436,7 @@ describe('page: TransferReview', () => {
     userEvent.click(screen.getByText(/confirm transfer/i))
 
     await waitFor(() => {
-      expect(screen.getByText('participant_transferred')).toBeInTheDocument()
+      expect(screen.getByText(/participant transferred/i)).toBeInTheDocument()
     })
   })
 })

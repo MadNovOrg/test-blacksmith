@@ -25,6 +25,7 @@ import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { useSnackbar } from '@app/context/snackbar'
 import {
   Course_Audit_Type_Enum,
   Course_Level_Enum,
@@ -90,6 +91,8 @@ export const EditCourse: React.FC<unknown> = () => {
     setShowRegistrantsCancellationModal,
   ] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+
+  const { addSnackbarMessage } = useSnackbar()
 
   const [{ error: updatingError, fetching: updatingCourse }, updateCourse] =
     useMutation<ResponseType, ParamsType>(UPDATE_COURSE_MUTATION)
@@ -540,7 +543,14 @@ export const EditCourse: React.FC<unknown> = () => {
               onClose={() => setShowCancellationModal(false)}
               onSubmit={async () => {
                 await mutateCourse()
-                navigate(`/courses/${course.id}/details?cancelled=true`)
+
+                addSnackbarMessage('course-canceled', {
+                  label: t('pages.course-details.course-has-been-cancelled', {
+                    code: course.course_code,
+                  }),
+                })
+
+                navigate(`/courses/${course.id}`)
               }}
             />
           </Dialog>
