@@ -21,6 +21,9 @@ jobs:
     env:
       CI: 'true'
       DEFAULT_TARGET: 'DEV'
+    strategy:
+      matrix:
+        browsers: ['chromium', 'firefox']
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
@@ -41,11 +44,11 @@ jobs:
         run: npm set-script prepare "" && npm ci
 
       - name: Playwright setup
-        run: npx playwright install chromium
+        run: npx playwright install
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e
+        run: npm run test:e2e:${{ matrix.browsers }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
