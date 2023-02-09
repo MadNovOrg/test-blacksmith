@@ -211,7 +211,7 @@ describe('ManageLicensesDialog', () => {
     })
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"There was an error removing licenses, please try again later."`
+      `"There was an error removing licences, please try again later."`
     )
   })
 
@@ -284,7 +284,7 @@ describe('ManageLicensesDialog', () => {
     })
 
     expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"Invoice must be authorized in Xero before issuing a refund."`
+      `"Invoice must be authorised in Xero before issuing a refund."`
     )
   })
 })

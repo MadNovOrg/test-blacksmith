@@ -42,7 +42,7 @@ test('licenses can be removed', async ({ page, orgId }) => {
   await page.click('button:has-text("Manage")')
 
   await page.locator('label:has-text("Remove")').check()
-  await page.locator('text=Number of licenses *').fill('5')
+  await page.locator('text=Number of licences *').fill('5')
   await page.locator('text=Add a note (optional)').fill('This is a note')
 
   await page.locator('button:has-text("Save details")').click()

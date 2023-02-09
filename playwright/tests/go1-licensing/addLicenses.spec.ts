@@ -38,7 +38,7 @@ test('licenses can be added', async ({ page, orgId }) => {
 
   await page.click('button:has-text("Manage")')
 
-  await page.locator('text=Number of licenses *').fill('20')
+  await page.locator('text=Number of licences *').fill('20')
   await page.locator('text=Invoice number *').fill('INV.123-test')
   await page.locator('text=Add a note (optional)').fill('This is a note')
 

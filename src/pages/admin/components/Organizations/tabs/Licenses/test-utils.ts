@@ -13,7 +13,7 @@ export function fillForm(data: Partial<FormData>) {
 
   if (data.amount) {
     userEvent.type(
-      screen.getByLabelText('Number of licenses *'),
+      screen.getByLabelText('Number of licences *'),
       String(data.amount)
     )
   }
@@ -28,7 +28,7 @@ export function fillForm(data: Partial<FormData>) {
 
   if (data.licensePrice) {
     userEvent.type(
-      screen.getByLabelText('Price per license *'),
+      screen.getByLabelText('Price per licence *'),
       String(data.licensePrice)
     )
   }

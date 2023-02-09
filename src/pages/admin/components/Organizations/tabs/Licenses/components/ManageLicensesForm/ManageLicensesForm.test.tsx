@@ -6,7 +6,7 @@ import { fillForm } from '../../test-utils'
 
 import { ManageLicensesForm, Type } from '.'
 
-describe('component: ManageLicensesForm', () => {
+describe('component: ManageLicencesForm', () => {
   it('validates amount field to be a positive number', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
@@ -19,14 +19,14 @@ describe('component: ManageLicensesForm', () => {
     })
   })
 
-  it('displays number of remaining licenses', async () => {
+  it('displays number of remaining licences', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
     fillForm({ amount: 50, type: Type.ADD })
 
     await waitFor(() => {
       expect(
-        screen.getByText('Total remaining licenses 150')
+        screen.getByText('Total remaining licences 150')
       ).toBeInTheDocument()
     })
   })
@@ -106,7 +106,7 @@ describe('component: ManageLicensesForm', () => {
     })
 
     await waitFor(() => {
-      userEvent.clear(screen.getByLabelText('Price per license *'))
+      userEvent.clear(screen.getByLabelText('Price per licence *'))
 
       expect(screen.getByText('Save details')).toBeDisabled()
     })
@@ -174,14 +174,14 @@ describe('component: ManageLicensesForm', () => {
     })
   })
 
-  it('constrains number of licenses field to the number of organization licenses when removing', async () => {
+  it('constrains number of licences field to the number of organization licences when removing', async () => {
     render(<ManageLicensesForm currentBalance={1} />)
 
     fillForm({ amount: 2, type: Type.REMOVE })
 
     await waitFor(() => {
       expect(
-        screen.getByText(/maximum number of licenses to remove is 1/i)
+        screen.getByText(/maximum number of licences to remove is 1/i)
       ).toBeInTheDocument()
     })
   })

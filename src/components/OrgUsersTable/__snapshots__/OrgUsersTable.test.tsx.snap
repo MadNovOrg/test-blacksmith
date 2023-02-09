@@ -57,7 +57,7 @@ Object {
                 class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
                 scope="col"
               >
-                Blended learning license
+                Blended learning licence
               </th>
               <th
                 class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
@@ -212,7 +212,7 @@ Object {
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"
               scope="col"
             >
-              Blended learning license
+              Blended learning licence
             </th>
             <th
               class="MuiTableCell-root MuiTableCell-head MuiTableCell-alignLeft MuiTableCell-sizeMedium css-s9dfu1-MuiTableCell-root"

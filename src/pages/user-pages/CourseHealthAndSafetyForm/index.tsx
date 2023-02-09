@@ -172,6 +172,7 @@ export const CourseHealthAndSafetyForm = () => {
                 type="submit"
                 variant="contained"
                 disabled={!valid}
+                data-testid="submit-button"
                 onClick={() => handleSubmit()}
               >
                 {t('common.submit-form')}

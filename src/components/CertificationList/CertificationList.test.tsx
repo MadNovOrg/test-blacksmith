@@ -3,7 +3,7 @@ import {} from 'react-router-dom'
 
 import { Grade, SortOrder } from '@app/types'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, userEvent } from '@test/index'
 import { buildCertificate, buildParticipant } from '@test/mock-data-utils'
 
 import {
@@ -91,5 +91,25 @@ describe('component: CertificationList', () => {
       within(tableBody).getByText(participant.course.course_code)
     ).toBeInTheDocument()
     expect(within(tableBody).getByText('Active')).toBeInTheDocument()
+  })
+
+  it('checks the download selected certificates is disabled without selecting certificates', async () => {
+    const participants = [buildParticipant()]
+    const sorting = {
+      by: 'name',
+      dir: 'asc' as SortOrder,
+      onSort: jest.fn(),
+    }
+
+    render(<CertificationList participants={participants} sorting={sorting} />)
+
+    expect(
+      screen.getByTestId('download-all-certifications')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('download-selected-certifications')
+    ).toBeDisabled()
+    userEvent.click(screen.getByTestId('TableChecks-Head'))
+    expect(screen.getByTestId('download-selected-certifications')).toBeEnabled()
   })
 })

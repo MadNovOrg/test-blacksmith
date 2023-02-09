@@ -132,6 +132,7 @@ export const CertificationList: React.FC<CertificationListProps> = ({
           <Button
             variant="outlined"
             color="primary"
+            data-testid="download-selected-certifications"
             disabled={selected.size === 0}
             onClick={() => downloadCertificates(selectedParticipants)}
           >
@@ -142,6 +143,7 @@ export const CertificationList: React.FC<CertificationListProps> = ({
 
           <Button
             variant="contained"
+            data-testid="download-all-certifications"
             color="primary"
             onClick={() => downloadCertificates(participants ?? [])}
           >
