@@ -142,9 +142,7 @@ export const CourseBookingReview: React.FC = () => {
 
             <Typography color="grey.700">
               {t('pages.book-course.venue')}:{' '}
-              {course.schedule[0].venue
-                ? formatCourseVenue(course.schedule[0].venue)
-                : t('common.course-delivery-type.VIRTUAL')}
+              {formatCourseVenue(course.deliveryType, course.schedule[0].venue)}
             </Typography>
           </Box>
           <Stack alignItems="flex-end">

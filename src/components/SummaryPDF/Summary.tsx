@@ -389,9 +389,10 @@ export const SummaryDocument: React.FC<SummaryDocumentProps> = props => {
 
               <Text style={styles.text}>
                 {t('course-evaluation.pdf-export.venue')}:{' '}
-                {course.schedule[0].venue
-                  ? formatCourseVenue(course.schedule[0].venue)
-                  : t('common.course-delivery-type.VIRTUAL')}
+                {formatCourseVenue(
+                  course.deliveryType,
+                  course.schedule[0].venue
+                )}
               </Text>
             </View>
 

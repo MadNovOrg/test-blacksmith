@@ -2,7 +2,12 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import { PaymentMethod } from '@app/generated/graphql'
-import { CourseType, Currency, CourseLevel } from '@app/types'
+import {
+  CourseType,
+  Currency,
+  CourseLevel,
+  CourseDeliveryType,
+} from '@app/types'
 
 import { render } from '@test/index'
 import { buildVenue } from '@test/mock-data-utils'
@@ -44,6 +49,7 @@ const getMockData = (
       id: 11,
       name: 'My Course 1',
       level: CourseLevel.Level_1,
+      deliveryType: CourseDeliveryType.F2F,
       dates: {
         aggregate: {
           start: { date: new Date('2022-04-10T10:00:00').toISOString() },

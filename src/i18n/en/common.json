@@ -217,7 +217,8 @@
     "INFO_REQUIRED": "Info required",
     "NOT_ATTENDED": "Unattended",
     "CANCELLATION_REQUESTED": "Cancellation requested",
-    "TRAINER_MISSING": "Trainer missing"
+    "TRAINER_MISSING": "Trainer missing",
+    "VENUE_MISSING": "Venue missing"
   },
   "participant-audit-types": {
     "ATTENDED": "Attended",
@@ -532,5 +533,6 @@
     "special_measures": "Special measures"
   },
   "more": "More",
-  "cancellation-requested": "Cancellation requested"
+  "cancellation-requested": "Cancellation requested",
+  "tbc": "TBC"
 }

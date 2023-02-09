@@ -1,0 +1,2 @@
+CREATE TABLE "public"."venue_check_jobs" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "course_id" integer NOT NULL, "job_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("course_id") REFERENCES "public"."course"("id") ON UPDATE cascade ON DELETE cascade, UNIQUE ("id"), UNIQUE ("course_id", "job_id"));COMMENT ON TABLE "public"."venue_check_jobs" IS E'Stores scheduled jobs ids for the venue existence check in the courses.';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

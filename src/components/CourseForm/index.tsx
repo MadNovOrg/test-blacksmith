@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import { FormPanel } from '@app/components/FormPanel'
+import { useAuth } from '@app/context/auth'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -32,6 +33,7 @@ import {
   CourseInput,
   CourseLevel,
   CourseType,
+  RoleName,
 } from '@app/types'
 import { LoadingStatus, extractTime } from '@app/util'
 
@@ -71,6 +73,7 @@ const CourseForm: React.FC<Props> = ({
   disabledFields = new Set(),
 }) => {
   const { t } = useTranslation()
+  const { activeRole } = useAuth()
 
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
@@ -108,9 +111,10 @@ const CourseForm: React.FC<Props> = ({
           .object()
           .nullable()
           .when('deliveryType', {
-            is: (val: CourseDeliveryType) =>
-              val === CourseDeliveryType.F2F ||
-              val === CourseDeliveryType.MIXED,
+            is: (deliveryType: CourseDeliveryType) =>
+              activeRole !== RoleName.TT_ADMIN &&
+              (deliveryType === CourseDeliveryType.F2F ||
+                deliveryType === CourseDeliveryType.MIXED),
             then: schema =>
               schema.required(t('components.course-form.venue-required')),
           }),
@@ -186,7 +190,7 @@ const CourseForm: React.FC<Props> = ({
         notes: yup.string().nullable(),
       }),
 
-    [t, hasOrg, isClosedCourse, hasMinParticipants]
+    [t, hasOrg, isClosedCourse, hasMinParticipants, activeRole]
   )
 
   const defaultValues = useMemo<CourseInput>(

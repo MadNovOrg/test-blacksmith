@@ -201,6 +201,17 @@ export const EditCourse: React.FC<unknown> = () => {
           )
         }
 
+        const newVenueId =
+          [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
+            courseData.deliveryType
+          ) && courseData.venue
+            ? courseData.venue.id
+            : null
+        const newVirtualLink =
+          courseData.deliveryType === CourseDeliveryType.F2F
+            ? ''
+            : courseData.zoomMeetingUrl
+
         const editResponse = await updateCourse({
           courseId: course.id,
           courseInput: {
@@ -241,11 +252,8 @@ export const EditCourse: React.FC<unknown> = () => {
           trainers,
           scheduleId: course?.schedule[0].id,
           scheduleInput: {
-            venue_id: courseData.venue ? courseData.venue.id : undefined,
-            virtualLink:
-              courseData.deliveryType === CourseDeliveryType.F2F
-                ? ''
-                : courseData.zoomMeetingUrl,
+            venue_id: newVenueId,
+            virtualLink: newVirtualLink,
             start: courseData.startDateTime,
             end: courseData.endDateTime,
           },

@@ -6,6 +6,7 @@ import {
   CourseType,
   Venue,
   CourseLevel,
+  CourseDeliveryType,
 } from '@app/types'
 
 import { COURSE_DATES, VENUE } from '../fragments'
@@ -16,6 +17,7 @@ export type ResponseType = {
       id: number
       name: string
       dates: Course['dates']
+      deliveryType: CourseDeliveryType
       level: CourseLevel
       maxParticipants: number
       participants: {
@@ -59,6 +61,7 @@ export const QUERY = gql`
           }
         }
         type
+        deliveryType
         level
         freeSpaces
         expenses {

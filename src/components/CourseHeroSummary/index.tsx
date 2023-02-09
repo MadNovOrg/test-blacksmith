@@ -173,7 +173,10 @@ export const CourseHeroSummary: React.FC<Props> = ({
                   <PinDropIcon />
                 </StyledListIcon>
                 <ListItemText>
-                  {formatCourseVenue(course.schedule[0].venue)}
+                  {formatCourseVenue(
+                    course.deliveryType,
+                    course.schedule[0].venue
+                  )}
                 </ListItemText>
               </ListItem>
               {course.schedule[0].virtualLink ? (

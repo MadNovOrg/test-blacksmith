@@ -1,0 +1,3 @@
+table:
+  schema: public
+  name: venue_check_jobs

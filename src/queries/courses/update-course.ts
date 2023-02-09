@@ -26,7 +26,7 @@ export type ParamsType = {
   scheduleInput: {
     start: Date
     end: Date
-    venue_id?: string
+    venue_id?: string | null
     virtualLink?: string
   }
   trainers: Array<{

@@ -65,5 +65,6 @@
 - "!include public_trust_type.yaml"
 - "!include public_upcoming_enrollments.yaml"
 - "!include public_venue.yaml"
+- "!include public_venue_check_jobs.yaml"
 - "!include public_waitlist.yaml"
 - "!include public_xero_credential.yaml"

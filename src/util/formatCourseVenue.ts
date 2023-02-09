@@ -1,5 +1,24 @@
+import { t } from 'i18next'
+
+import { CourseDeliveryType } from '@app/types'
+
 export function formatCourseVenue(
-  venue: { name?: string; city?: string } | undefined
+  deliveryType: CourseDeliveryType,
+  venue?: {
+    name?: string
+    city?: string
+  }
 ): string {
-  return [venue?.name, venue?.city].filter(Boolean).join(', ')
+  if (
+    [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(deliveryType)
+  ) {
+    if (venue?.name || venue?.city) {
+      return [venue?.name, venue?.city].filter(Boolean).join(', ')
+    } else {
+      return t('common.tbc')
+    }
+  } else if (deliveryType === CourseDeliveryType.VIRTUAL) {
+    return t('common.course-delivery-type.VIRTUAL')
+  }
+  return ''
 }

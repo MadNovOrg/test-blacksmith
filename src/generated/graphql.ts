@@ -20617,7 +20617,8 @@ export enum Course_Status_Enum {
   Scheduled = 'SCHEDULED',
   TrainerMissing = 'TRAINER_MISSING',
   TrainerPending = 'TRAINER_PENDING',
-  TrainerUnavailable = 'TRAINER_UNAVAILABLE'
+  TrainerUnavailable = 'TRAINER_UNAVAILABLE',
+  VenueMissing = 'VENUE_MISSING'
 }
 
 /** Boolean expression to compare columns of type "course_status_enum". All fields are combined with logical 'AND'. */
@@ -24680,6 +24681,10 @@ export type Mutation_Root = {
   delete_venue?: Maybe<Venue_Mutation_Response>;
   /** delete single row from the table: "venue" */
   delete_venue_by_pk?: Maybe<Venue>;
+  /** delete data from the table: "venue_check_jobs" */
+  delete_venue_check_jobs?: Maybe<Venue_Check_Jobs_Mutation_Response>;
+  /** delete single row from the table: "venue_check_jobs" */
+  delete_venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
   /** delete data from the table: "waitlist" */
   delete_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** delete single row from the table: "waitlist" */
@@ -24952,6 +24957,10 @@ export type Mutation_Root = {
   insert_trust_type_one?: Maybe<Trust_Type>;
   /** insert data into the table: "venue" */
   insert_venue?: Maybe<Venue_Mutation_Response>;
+  /** insert data into the table: "venue_check_jobs" */
+  insert_venue_check_jobs?: Maybe<Venue_Check_Jobs_Mutation_Response>;
+  /** insert a single row into the table: "venue_check_jobs" */
+  insert_venue_check_jobs_one?: Maybe<Venue_Check_Jobs>;
   /** insert a single row into the table: "venue" */
   insert_venue_one?: Maybe<Venue>;
   /** insert data into the table: "waitlist" */
@@ -25235,6 +25244,10 @@ export type Mutation_Root = {
   update_venue?: Maybe<Venue_Mutation_Response>;
   /** update single row of the table: "venue" */
   update_venue_by_pk?: Maybe<Venue>;
+  /** update data of the table: "venue_check_jobs" */
+  update_venue_check_jobs?: Maybe<Venue_Check_Jobs_Mutation_Response>;
+  /** update single row of the table: "venue_check_jobs" */
+  update_venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
   /** update data of the table: "waitlist" */
   update_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** update single row of the table: "waitlist" */
@@ -26091,6 +26104,18 @@ export type Mutation_RootDelete_VenueArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Venue_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Venue_Check_JobsArgs = {
+  where: Venue_Check_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Venue_Check_Jobs_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -27039,6 +27064,20 @@ export type Mutation_RootInsert_Trust_Type_OneArgs = {
 export type Mutation_RootInsert_VenueArgs = {
   objects: Array<Venue_Insert_Input>;
   on_conflict?: InputMaybe<Venue_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Venue_Check_JobsArgs = {
+  objects: Array<Venue_Check_Jobs_Insert_Input>;
+  on_conflict?: InputMaybe<Venue_Check_Jobs_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Venue_Check_Jobs_OneArgs = {
+  object: Venue_Check_Jobs_Insert_Input;
+  on_conflict?: InputMaybe<Venue_Check_Jobs_On_Conflict>;
 };
 
 
@@ -28200,6 +28239,22 @@ export type Mutation_RootUpdate_VenueArgs = {
 export type Mutation_RootUpdate_Venue_By_PkArgs = {
   _set?: InputMaybe<Venue_Set_Input>;
   pk_columns: Venue_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Venue_Check_JobsArgs = {
+  _inc?: InputMaybe<Venue_Check_Jobs_Inc_Input>;
+  _set?: InputMaybe<Venue_Check_Jobs_Set_Input>;
+  where: Venue_Check_Jobs_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Venue_Check_Jobs_By_PkArgs = {
+  _inc?: InputMaybe<Venue_Check_Jobs_Inc_Input>;
+  _set?: InputMaybe<Venue_Check_Jobs_Set_Input>;
+  pk_columns: Venue_Check_Jobs_Pk_Columns_Input;
 };
 
 
@@ -32757,6 +32812,12 @@ export type Query_Root = {
   venue_aggregate: Venue_Aggregate;
   /** fetch data from the table: "venue" using primary key columns */
   venue_by_pk?: Maybe<Venue>;
+  /** fetch data from the table: "venue_check_jobs" */
+  venue_check_jobs: Array<Venue_Check_Jobs>;
+  /** fetch aggregated fields from the table: "venue_check_jobs" */
+  venue_check_jobs_aggregate: Venue_Check_Jobs_Aggregate;
+  /** fetch data from the table: "venue_check_jobs" using primary key columns */
+  venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
   /** fetch data from the table: "waitlist" */
   waitlist: Array<Waitlist>;
   /** fetch aggregated fields from the table: "waitlist" */
@@ -34356,6 +34417,29 @@ export type Query_RootVenue_By_PkArgs = {
 };
 
 
+export type Query_RootVenue_Check_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Venue_Check_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Venue_Check_Jobs_Order_By>>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootVenue_Check_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Venue_Check_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Venue_Check_Jobs_Order_By>>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+
+export type Query_RootVenue_Check_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootWaitlistArgs = {
   distinct_on?: InputMaybe<Array<Waitlist_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -35074,6 +35158,12 @@ export type Subscription_Root = {
   venue_aggregate: Venue_Aggregate;
   /** fetch data from the table: "venue" using primary key columns */
   venue_by_pk?: Maybe<Venue>;
+  /** fetch data from the table: "venue_check_jobs" */
+  venue_check_jobs: Array<Venue_Check_Jobs>;
+  /** fetch aggregated fields from the table: "venue_check_jobs" */
+  venue_check_jobs_aggregate: Venue_Check_Jobs_Aggregate;
+  /** fetch data from the table: "venue_check_jobs" using primary key columns */
+  venue_check_jobs_by_pk?: Maybe<Venue_Check_Jobs>;
   /** fetch data from the table: "waitlist" */
   waitlist: Array<Waitlist>;
   /** fetch aggregated fields from the table: "waitlist" */
@@ -36625,6 +36715,29 @@ export type Subscription_RootVenue_By_PkArgs = {
 };
 
 
+export type Subscription_RootVenue_Check_JobsArgs = {
+  distinct_on?: InputMaybe<Array<Venue_Check_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Venue_Check_Jobs_Order_By>>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootVenue_Check_Jobs_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Venue_Check_Jobs_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Venue_Check_Jobs_Order_By>>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+
+export type Subscription_RootVenue_Check_Jobs_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootWaitlistArgs = {
   distinct_on?: InputMaybe<Array<Waitlist_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -37298,6 +37411,191 @@ export type Venue_Bool_Exp = {
   postCode?: InputMaybe<String_Comparison_Exp>;
   schedule?: InputMaybe<Course_Schedule_Bool_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** Stores scheduled jobs ids for the venue existence check in the courses. */
+export type Venue_Check_Jobs = {
+  __typename?: 'venue_check_jobs';
+  course_id: Scalars['Int'];
+  id: Scalars['uuid'];
+  job_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "venue_check_jobs" */
+export type Venue_Check_Jobs_Aggregate = {
+  __typename?: 'venue_check_jobs_aggregate';
+  aggregate?: Maybe<Venue_Check_Jobs_Aggregate_Fields>;
+  nodes: Array<Venue_Check_Jobs>;
+};
+
+/** aggregate fields of "venue_check_jobs" */
+export type Venue_Check_Jobs_Aggregate_Fields = {
+  __typename?: 'venue_check_jobs_aggregate_fields';
+  avg?: Maybe<Venue_Check_Jobs_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Venue_Check_Jobs_Max_Fields>;
+  min?: Maybe<Venue_Check_Jobs_Min_Fields>;
+  stddev?: Maybe<Venue_Check_Jobs_Stddev_Fields>;
+  stddev_pop?: Maybe<Venue_Check_Jobs_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Venue_Check_Jobs_Stddev_Samp_Fields>;
+  sum?: Maybe<Venue_Check_Jobs_Sum_Fields>;
+  var_pop?: Maybe<Venue_Check_Jobs_Var_Pop_Fields>;
+  var_samp?: Maybe<Venue_Check_Jobs_Var_Samp_Fields>;
+  variance?: Maybe<Venue_Check_Jobs_Variance_Fields>;
+};
+
+
+/** aggregate fields of "venue_check_jobs" */
+export type Venue_Check_Jobs_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Venue_Check_Jobs_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Venue_Check_Jobs_Avg_Fields = {
+  __typename?: 'venue_check_jobs_avg_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "venue_check_jobs". All fields are combined with a logical 'AND'. */
+export type Venue_Check_Jobs_Bool_Exp = {
+  _and?: InputMaybe<Array<Venue_Check_Jobs_Bool_Exp>>;
+  _not?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+  _or?: InputMaybe<Array<Venue_Check_Jobs_Bool_Exp>>;
+  course_id?: InputMaybe<Int_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  job_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "venue_check_jobs" */
+export enum Venue_Check_Jobs_Constraint {
+  /** unique or primary key constraint */
+  VenueCheckJobsPkey = 'venue_check_jobs_pkey'
+}
+
+/** input type for incrementing numeric columns in table "venue_check_jobs" */
+export type Venue_Check_Jobs_Inc_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+};
+
+/** input type for inserting data into table "venue_check_jobs" */
+export type Venue_Check_Jobs_Insert_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Venue_Check_Jobs_Max_Fields = {
+  __typename?: 'venue_check_jobs_max_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Venue_Check_Jobs_Min_Fields = {
+  __typename?: 'venue_check_jobs_min_fields';
+  course_id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['uuid']>;
+  job_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "venue_check_jobs" */
+export type Venue_Check_Jobs_Mutation_Response = {
+  __typename?: 'venue_check_jobs_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Venue_Check_Jobs>;
+};
+
+/** on_conflict condition type for table "venue_check_jobs" */
+export type Venue_Check_Jobs_On_Conflict = {
+  constraint: Venue_Check_Jobs_Constraint;
+  update_columns?: Array<Venue_Check_Jobs_Update_Column>;
+  where?: InputMaybe<Venue_Check_Jobs_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "venue_check_jobs". */
+export type Venue_Check_Jobs_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  job_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: venue_check_jobs */
+export type Venue_Check_Jobs_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "venue_check_jobs" */
+export enum Venue_Check_Jobs_Select_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+/** input type for updating data in table "venue_check_jobs" */
+export type Venue_Check_Jobs_Set_Input = {
+  course_id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  job_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Venue_Check_Jobs_Stddev_Fields = {
+  __typename?: 'venue_check_jobs_stddev_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Venue_Check_Jobs_Stddev_Pop_Fields = {
+  __typename?: 'venue_check_jobs_stddev_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Venue_Check_Jobs_Stddev_Samp_Fields = {
+  __typename?: 'venue_check_jobs_stddev_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Venue_Check_Jobs_Sum_Fields = {
+  __typename?: 'venue_check_jobs_sum_fields';
+  course_id?: Maybe<Scalars['Int']>;
+};
+
+/** update columns of table "venue_check_jobs" */
+export enum Venue_Check_Jobs_Update_Column {
+  /** column name */
+  CourseId = 'course_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  JobId = 'job_id'
+}
+
+/** aggregate var_pop on columns */
+export type Venue_Check_Jobs_Var_Pop_Fields = {
+  __typename?: 'venue_check_jobs_var_pop_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Venue_Check_Jobs_Var_Samp_Fields = {
+  __typename?: 'venue_check_jobs_var_samp_fields';
+  course_id?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Venue_Check_Jobs_Variance_Fields = {
+  __typename?: 'venue_check_jobs_variance_fields';
+  course_id?: Maybe<Scalars['Float']>;
 };
 
 /** unique or primary key constraints on table "venue" */
@@ -38947,7 +39245,7 @@ export type GetProfilesQuery = { __typename?: 'query_root', profiles: Array<{ __
 export type GetTempProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
+export type GetTempProfileQuery = { __typename?: 'query_root', tempProfiles: Array<{ __typename?: 'profile_temp', quantity?: number | null, course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, level: Course_Level_Enum, freeSpaces?: number | null, maxParticipants: number, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, participants: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, expenses: Array<{ __typename?: 'course_expenses', id: any, data: any, trainer: { __typename?: 'profile', id: any, fullName?: string | null } }>, schedule: Array<{ __typename?: 'course_schedule', venue?: { __typename?: 'venue', id: any, createdAt: any, updatedAt: any, name: string, city: string, addressLineOne: string, addressLineTwo?: string | null, postCode: string, geoCoordinates?: any | null, googlePlacesId?: string | null } | null }> } | null }> };
 
 export type InsertProfileTempMutationVariables = Exact<{
   input: Profile_Temp_Insert_Input;
