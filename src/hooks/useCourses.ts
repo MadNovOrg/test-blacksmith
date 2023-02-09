@@ -57,8 +57,54 @@ export const useCourses = (
     // if orgId is defined then provide all available courses within that org
     if (orgId) {
       const allAvailableOrgs = {}
-      const onlyUserOrgs = { organization: { id: { _in: organizationIds } } }
-      const specificOrg = { organization: { id: { _eq: orgId } } }
+      const onlyUserOrgs: Course_Bool_Exp = {
+        _or: [
+          {
+            organization: { id: { _in: organizationIds } },
+            type: { _in: [Course_Type_Enum.Closed, Course_Type_Enum.Indirect] },
+          },
+          {
+            type: { _eq: Course_Type_Enum.Open },
+            participants: {
+              profile: {
+                organizations: {
+                  organization: {
+                    id: { _in: organizationIds },
+                    members: {
+                      isAdmin: { _eq: true },
+                      profile_id: { _eq: profile?.id },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      }
+      const specificOrg: Course_Bool_Exp = {
+        _or: [
+          {
+            organization: { id: { _eq: orgId } },
+            type: { _in: [Course_Type_Enum.Closed, Course_Type_Enum.Indirect] },
+          },
+          {
+            type: { _eq: Course_Type_Enum.Open },
+            participants: {
+              profile: {
+                organizations: {
+                  organization: {
+                    id: { _eq: orgId },
+                    members: {
+                      isAdmin: { _eq: true },
+                      profile_id: { _eq: profile?.id },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      }
       if (orgId === ALL_ORGS) {
         obj = acl.canViewAllOrganizations() ? allAvailableOrgs : onlyUserOrgs
       } else {
@@ -76,10 +122,10 @@ export const useCourses = (
 
     const regularStatuses = filters?.statuses?.filter(s =>
       Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
-    ) as Course_Status_Enum[]
-    if (regularStatuses.length) {
+    )
+    if (regularStatuses?.length) {
       obj.status = {
-        _in: regularStatuses,
+        _in: regularStatuses as Course_Status_Enum[],
       }
     }
 
