@@ -38,6 +38,7 @@ export const LicenseOrderDetails = () => {
   const {
     setCurrentStepKey,
     courseData,
+    go1Licensing,
     setGo1Licensing,
     completeStep,
     saveDraft,
@@ -70,6 +71,9 @@ export const LicenseOrderDetails = () => {
   const methods = useForm<Inputs>({
     resolver: yupResolver(schema),
     mode: 'all',
+    defaultValues: {
+      invoiceDetails: go1Licensing?.invoiceDetails,
+    },
   })
 
   const prices = calculateGo1LicenseCost(
