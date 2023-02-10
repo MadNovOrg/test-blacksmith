@@ -30,7 +30,7 @@ export const SnackbarMessage: React.FC<
     removeSnackbarMessage(messageKey)
   }
 
-  return (
+  return message ? (
     <Snackbar
       open={isOpen}
       autoHideDuration={15000}
@@ -42,5 +42,5 @@ export const SnackbarMessage: React.FC<
         {message?.label}
       </Alert>
     </Snackbar>
-  )
+  ) : null
 }
