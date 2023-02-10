@@ -10358,6 +10358,7 @@ export type TransferCourse = {
   courseCode: Scalars['String'];
   endDate: Scalars['String'];
   id: Scalars['Int'];
+  level?: Maybe<CourseLevel>;
   startDate: Scalars['String'];
   venue?: Maybe<Scalars['String']>;
   venueCity?: Maybe<Scalars['String']>;
@@ -37470,6 +37471,8 @@ export type Venue_Check_Jobs_Bool_Exp = {
 /** unique or primary key constraints on table "venue_check_jobs" */
 export enum Venue_Check_Jobs_Constraint {
   /** unique or primary key constraint */
+  VenueCheckJobsCourseIdJobIdKey = 'venue_check_jobs_course_id_job_id_key',
+  /** unique or primary key constraint */
   VenueCheckJobsPkey = 'venue_check_jobs_pkey'
 }
 
@@ -38305,7 +38308,7 @@ export type TransferEligibleCoursesQueryVariables = Exact<{
 }>;
 
 
-export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null }> };
+export type TransferEligibleCoursesQuery = { __typename?: 'query_root', eligibleTransferCourses: Array<{ __typename?: 'TransferCourse', id: number, courseCode: string, startDate: string, endDate: string, virtualLink?: string | null, venue?: string | null, venueName?: string | null, venueCity?: string | null, level?: CourseLevel | null }> };
 
 export type TransferParticipantMutationVariables = Exact<{
   input: TransferInput;

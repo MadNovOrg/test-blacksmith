@@ -1,38 +1,38 @@
 import { Typography } from '@mui/material'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
+import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { InfoPanel } from '@app/components/InfoPanel'
-import { Course_Schedule } from '@app/generated/graphql'
+import { Course_Schedule, CourseLevel } from '@app/generated/graphql'
 import theme from '@app/theme'
 
-type Props = {
+export type CourseInfoPanelProps = {
   course: {
+    id: number
     courseCode: string
+    level?: CourseLevel | null
     startDate: Course_Schedule['start']
     endDate: Course_Schedule['end']
     venue?: string
   }
 }
 
-export const CourseInfoPanel: React.FC<Props> = ({ course }) => {
-  const { t } = useTranslation()
+export const CourseInfoPanel: React.FC<CourseInfoPanelProps> = ({ course }) => (
+  <InfoPanel>
+    <CourseTitleAndDuration
+      course={{
+        id: course.id,
+        course_code: course.courseCode,
+        level: course.level,
+        start: course.startDate,
+        end: course.endDate,
+      }}
+    />
 
-  return (
-    <InfoPanel title={course.courseCode}>
-      <Typography color={theme.palette.dimGrey.main} mb={1}>
-        {`${t('dates.longWithTime', {
-          date: course.startDate,
-        })} - ${t('dates.longWithTime', {
-          date: course.endDate,
-        })}`}
+    {course.venue ? (
+      <Typography mt={1} color={theme.palette.dimGrey.main}>
+        {course.venue}
       </Typography>
-
-      {course.venue ? (
-        <Typography color={theme.palette.dimGrey.main}>
-          {course.venue}
-        </Typography>
-      ) : null}
-    </InfoPanel>
-  )
-}
+    ) : null}
+  </InfoPanel>
+)

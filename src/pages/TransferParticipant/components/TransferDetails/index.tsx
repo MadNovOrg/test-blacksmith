@@ -59,7 +59,9 @@ export const TransferDetails: React.FC = () => {
       <Box mb={2}>
         <CourseInfoPanel
           course={{
+            id: toCourse.id,
             courseCode: toCourse.courseCode,
+            level: toCourse.level,
             startDate: toCourse.startDate,
             endDate: toCourse.endDate,
             venue: toCourse.venue ?? '',

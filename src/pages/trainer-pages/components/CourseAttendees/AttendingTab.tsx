@@ -243,6 +243,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
 
           {participantToReplace ? (
             <ReplaceParticipantDialog
+              course={course}
               participant={{
                 id: participantToReplace.id,
                 fullName: participantToReplace.profile.fullName,

@@ -126,7 +126,9 @@ export const TransferReview: React.FC = () => {
           <Stack spacing="2px">
             <CourseInfoPanel
               course={{
+                id: toCourse.id,
                 courseCode: toCourse.courseCode,
+                level: toCourse.level,
                 startDate: toCourse.startDate,
                 endDate: toCourse.endDate,
                 venue: toCourse.venue ?? '',

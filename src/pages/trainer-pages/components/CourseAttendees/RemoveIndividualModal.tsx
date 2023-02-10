@@ -18,6 +18,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { Dialog } from '@app/components/Dialog'
 import { useAuth } from '@app/context/auth'
 import {
@@ -161,10 +162,20 @@ export const RemoveIndividualModal = ({
         maxWidth={800}
       >
         <Container>
-          <Typography variant="body1" color="grey.600">
+          <Typography sx={{ mb: 2 }} variant="body1" color="grey.600">
             {t('pages.individual-cancellation.description')}
           </Typography>
-
+          {course && (
+            <CourseTitleAndDuration
+              course={{
+                id: course.id,
+                course_code: course.course_code,
+                start: course.dates.aggregate.start.date,
+                end: course.dates.aggregate.end.date,
+                level: course.level,
+              }}
+            />
+          )}
           {acl.isTTAdmin() ? (
             <>
               <Typography variant="h4" fontWeight={600} mt={4}>

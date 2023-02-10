@@ -716,6 +716,7 @@ type TransferCourse {
   venue: String
   venueName: String
   venueCity: String
+  level: CourseLevel
 }
 
 type TransferParticipantOutput {

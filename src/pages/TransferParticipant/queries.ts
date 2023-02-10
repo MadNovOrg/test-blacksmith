@@ -52,6 +52,7 @@ export const TRANSFER_ELIGIBLE_COURSES = gql`
       venue
       venueName
       venueCity
+      level
     }
   }
 `

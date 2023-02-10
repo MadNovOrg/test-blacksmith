@@ -2,14 +2,26 @@ import { Link, Typography, TypographyProps } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Course } from '@app/generated/graphql'
+import { Course, CourseLevel } from '@app/generated/graphql'
 import { getTimeDifferenceAndContext } from '@app/util'
 
-type Props = {
-  course: Pick<Course, 'id' | 'course_code' | 'level' | 'start' | 'end'>
+export type CourseSubset = Pick<
+  Course,
+  'id' | 'course_code' | 'start' | 'end'
+> & {
+  level?: CourseLevel | null
+}
+
+type CourseTitleProps = {
+  course: CourseSubset
+  showCourseLink?: boolean
 } & TypographyProps
 
-export const CourseTitle: React.FC<Props> = ({ course, ...props }) => {
+export const CourseTitle: React.FC<CourseTitleProps> = ({
+  course,
+  showCourseLink = false,
+  ...props
+}) => {
   const { t } = useTranslation()
 
   const difference = getTimeDifferenceAndContext(
@@ -28,11 +40,15 @@ export const CourseTitle: React.FC<Props> = ({ course, ...props }) => {
       {difference.context === 'hours'
         ? ` - ${difference.count} ${t('hours')} `
         : ''}
-      {course?.course_code && (
-        <Link href={`/courses/${course.id}/details`} color="primary">
-          ({course?.course_code})
-        </Link>
-      )}
+      {course?.course_code ? (
+        showCourseLink ? (
+          <Link href={`/courses/${course.id}/details`} color="primary">
+            ({course.course_code})
+          </Link>
+        ) : (
+          <>({course.course_code})</>
+        )
+      ) : null}
     </Typography>
   )
 }

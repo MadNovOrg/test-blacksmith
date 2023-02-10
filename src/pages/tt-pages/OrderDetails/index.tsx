@@ -11,6 +11,7 @@ import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
+import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
@@ -18,6 +19,7 @@ import {
   XeroInvoiceStatus,
   Payment_Methods_Enum,
   XeroPhoneType,
+  CourseLevel,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -25,9 +27,6 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR } from '@app/util'
-
-import { CourseDuration } from './components/CourseDuration'
-import { CourseTitle } from './components/CourseTitle'
 
 export const OrderDetails: React.FC<unknown> = () => {
   const { id } = useParams()
@@ -158,14 +157,18 @@ export const OrderDetails: React.FC<unknown> = () => {
                     alignItems="center"
                   >
                     <Stack spacing={2}>
-                      <Box>
-                        {course ? <CourseTitle course={course} mb={1} /> : null}
-                        <CourseDuration
-                          start={new Date(course?.start)}
-                          end={new Date(course?.end)}
+                      {course && (
+                        <CourseTitleAndDuration
+                          showCourseLink
+                          course={{
+                            id: course.id,
+                            course_code: course.course_code,
+                            start: course.start,
+                            end: course.end,
+                            level: course.level as unknown as CourseLevel,
+                          }}
                         />
-                      </Box>
-
+                      )}
                       {go1LicensesLineItem ? (
                         <Typography color="grey.700">
                           {_t('currency', {
