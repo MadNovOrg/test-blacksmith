@@ -1,12 +1,15 @@
 import { add, sub } from 'date-fns'
 import React from 'react'
 
+import { CourseDeliveryType } from '@app/types'
+
 import { render, screen } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
   buildCourseTrainer,
   buildProfile,
+  buildOrganization,
 } from '@test/mock-data-utils'
 
 import { CourseHeroSummary } from '.'
@@ -236,6 +239,24 @@ describe('component: CourseHeroSummary', () => {
     ).toBeInTheDocument()
   })
 
+  it('displays org information', () => {
+    const course = buildCourse({
+      overrides: {
+        organization: buildOrganization({
+          overrides: {
+            name: 'London First School',
+          },
+        }),
+      },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(
+      screen.getByText('Hosted by London First School')
+    ).toBeInTheDocument()
+  })
+
   it('displays zoom link if a course has virtual element', () => {
     const ZOOM_MEETING = 'https://zoom.us/j/123456789'
 
@@ -254,5 +275,17 @@ describe('component: CourseHeroSummary', () => {
     render(<CourseHeroSummary course={course} />)
 
     expect(screen.getByText('Join via Zoom')).toBeInTheDocument()
+  })
+
+  it('displays Virtual if course is online', () => {
+    const course = buildCourse({
+      overrides: {
+        deliveryType: CourseDeliveryType.VIRTUAL,
+      },
+    })
+
+    render(<CourseHeroSummary course={course} />)
+
+    expect(screen.getByText('Virtual')).toBeInTheDocument()
   })
 })

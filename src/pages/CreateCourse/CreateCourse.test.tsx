@@ -177,7 +177,7 @@ describe('page: CreateCourse', () => {
     expect(within(nav).queryByText('Assign trainer(s)')).not.toBeInTheDocument()
   })
 
-  it("doesn't allow non-authorized users to create open course", () => {
+  it("doesn't allow trainer to create open course", () => {
     render(
       <Routes>
         <Route path="/courses/new" element={<CreateCourse />}>
@@ -195,7 +195,25 @@ describe('page: CreateCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow non-authorized users to create closed course", () => {
+  it("doesn't allow attendee user to create open course", () => {
+    render(
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.USER,
+        },
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.OPEN}`] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow trainer to create closed course", () => {
     render(
       <Routes>
         <Route path="/courses/new" element={<CreateCourse />}>
@@ -213,7 +231,25 @@ describe('page: CreateCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow non-authorized users to create indirect course", () => {
+  it("doesn't allow attendee user to create closed course", () => {
+    render(
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.USER,
+        },
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.CLOSED}`] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow Ops role to create indirect course", () => {
     render(
       <Routes>
         <Route path="/courses/new" element={<CreateCourse />}>
@@ -223,6 +259,42 @@ describe('page: CreateCourse', () => {
       {
         auth: {
           activeRole: RoleName.TT_OPS,
+        },
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow sales admin role to create indirect course", () => {
+    render(
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.SALES_ADMIN,
+        },
+      },
+      { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow attendee user to create indirect course", () => {
+    render(
+      <Routes>
+        <Route path="/courses/new" element={<CreateCourse />}>
+          <Route path="assign-trainers" element={<h1>Assign trainers</h1>} />
+        </Route>
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.USER,
         },
       },
       { initialEntries: [`/courses/new?type=${CourseType.INDIRECT}`] }

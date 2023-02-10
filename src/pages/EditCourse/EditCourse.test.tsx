@@ -102,7 +102,7 @@ describe('page: EditCourse', () => {
     ).toBeInTheDocument()
   })
 
-  it("doesn't allow unauthorized users to edit open course", () => {
+  it("doesn't allow trainer to edit open course", () => {
     const openCourse = buildCourse({
       overrides: {
         type: CourseType.OPEN,
@@ -132,7 +132,37 @@ describe('page: EditCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow unauthorized users to edit closed course", () => {
+  it("doesn't allow attendee user to edit open course", () => {
+    const openCourse = buildCourse({
+      overrides: {
+        type: CourseType.OPEN,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: openCourse,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.USER } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow trainer to edit closed course", () => {
     const openCourse = buildCourse({
       overrides: {
         type: CourseType.CLOSED,
@@ -162,7 +192,37 @@ describe('page: EditCourse', () => {
     expect(screen.getByText('Page not found')).toBeInTheDocument()
   })
 
-  it("doesn't allow unauthorized users to edit indirect course", () => {
+  it("doesn't allow attendee user to edit closed course", () => {
+    const openCourse = buildCourse({
+      overrides: {
+        type: CourseType.CLOSED,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: openCourse,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.USER } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow Ops role to edit indirect course", () => {
     const openCourse = buildCourse({
       overrides: {
         type: CourseType.INDIRECT,
@@ -186,6 +246,66 @@ describe('page: EditCourse', () => {
         </Routes>
       </Provider>,
       { auth: { activeRole: RoleName.TT_OPS } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow Sales admin role to edit indirect course", () => {
+    const openCourse = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: openCourse,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.SALES_ADMIN } },
+      { initialEntries: ['/courses/edit/1'] }
+    )
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument()
+  })
+
+  it("doesn't allow attendee user to edit indirect course", () => {
+    const openCourse = buildCourse({
+      overrides: {
+        type: CourseType.INDIRECT,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: openCourse,
+      mutate: jest.fn(),
+    })
+
+    const client = {
+      executeQuery: () => never,
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <Routes>
+          <Route path="/courses/edit/:id" element={<EditCourse />} />
+        </Routes>
+      </Provider>,
+      { auth: { activeRole: RoleName.USER } },
       { initialEntries: ['/courses/edit/1'] }
     )
 
