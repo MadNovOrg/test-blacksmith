@@ -10,13 +10,13 @@ import { CourseBookingReview } from './components/CourseBookingReview'
 import { CourseFull } from './components/CourseFull'
 
 const BookingRoutes: React.FC = () => {
-  const { booking, availableSeats, course, error } = useBooking()
+  const { booking, availableSeats, course, error, isBooked } = useBooking()
 
   if (error) {
     return <Typography>{error}</Typography>
   }
 
-  if (!availableSeats) {
+  if (!isBooked && !availableSeats) {
     return <CourseFull courseId={course.id} />
   }
 

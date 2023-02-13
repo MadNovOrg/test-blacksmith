@@ -73,6 +73,7 @@ const getMockData = (
     },
     addPromo: jest.fn(),
     removePromo: jest.fn(),
+    isBooked: false,
     booking: {
       emails: [],
       price,

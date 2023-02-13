@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { useMount } from 'react-use'
 
 import {
@@ -79,6 +80,7 @@ export type ContextType = {
   course: CourseDetails
   booking: State
   ready: boolean
+  isBooked: boolean
   availableSeats: number
   amounts: {
     courseCost: number
@@ -114,6 +116,7 @@ type Props = unknown
 
 export const BookingProvider: React.FC<Props> = ({ children }) => {
   const { t } = useTranslation()
+  const location = useLocation()
   const fetcher = useFetcher()
   const [orderId, setOrderId] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
@@ -122,6 +125,8 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
   const [course, setCourse] = useState<CourseDetails>({} as CourseDetails) // safe
   const [booking, setBooking] = useState<State>(initialState)
   const [promoCodes, setPromoCodes] = useState<PromoCodeOutput[]>([])
+
+  const isBooked = location.pathname.startsWith('/booking/payment/')
 
   useMount(async () => {
     const data = await fetcher<GetTempProfileResponseType>(GET_TEMP_PROFILE)
@@ -313,6 +318,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       course,
       ready,
       booking,
+      isBooked,
       availableSeats,
       positions,
       sectors,
@@ -326,6 +332,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
       orderId,
       ready,
       booking,
+      isBooked,
       course,
       addPromo,
       removePromo,
@@ -343,7 +350,7 @@ export const BookingProvider: React.FC<Props> = ({ children }) => {
     )
   }
 
-  if (availableSeats < booking.quantity) {
+  if (!isBooked && availableSeats < booking.quantity) {
     return (
       <Alert severity="error" variant="outlined">
         {t('pages.book-course.not-enough-spaces')}

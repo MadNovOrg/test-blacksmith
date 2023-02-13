@@ -87,6 +87,7 @@ const getMockData = (
       freeSpaces,
       trainerExpenses,
     },
+    isBooked: false,
     positions,
     sectors,
     availableSeats: quantity,
