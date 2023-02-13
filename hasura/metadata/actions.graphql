@@ -328,6 +328,12 @@ enum XeroAddressType {
   STREET
 }
 
+enum CourseDeliveryType {
+  F2F
+  MIXED
+  VIRTUAL
+}
+
 input PlansCreateInput {
   name: String!
   currency: String!
@@ -504,6 +510,7 @@ type CourseInvite {
   trainerName: String!
   startDate: String!
   endDate: String!
+  deliveryType: CourseDeliveryType
   venueName: String!
   venueAddress: Address
   venueCoordinates: String

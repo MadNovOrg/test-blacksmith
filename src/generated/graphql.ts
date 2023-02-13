@@ -1215,10 +1215,17 @@ export type CourseCertificateLevel = {
   expiryDate: Scalars['date'];
 };
 
+export enum CourseDeliveryType {
+  F2F = 'F2F',
+  Mixed = 'MIXED',
+  Virtual = 'VIRTUAL'
+}
+
 export type CourseInvite = {
   __typename?: 'CourseInvite';
   courseId: Scalars['String'];
   courseName: Scalars['String'];
+  deliveryType?: Maybe<CourseDeliveryType>;
   description?: Maybe<Scalars['String']>;
   endDate: Scalars['String'];
   id: Scalars['String'];
@@ -38861,7 +38868,7 @@ export type GetCourseInvitesQuery = { __typename?: 'query_root', courseInvites: 
 export type GetInviteQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'CourseInvite', id: string, status: InviteStatus, courseId: string, courseName: string, description?: string | null, trainerName: string, startDate: string, endDate: string, venueName: string, venueCoordinates?: string | null, venueAddress?: { __typename?: 'Address', addressLineOne?: string | null, addressLineTwo?: string | null, city?: string | null, postCode?: string | null } | null } | null };
+export type GetInviteQuery = { __typename?: 'query_root', invite?: { __typename?: 'CourseInvite', id: string, status: InviteStatus, courseId: string, courseName: string, description?: string | null, trainerName: string, startDate: string, endDate: string, deliveryType?: CourseDeliveryType | null, venueName: string, venueCoordinates?: string | null, venueAddress?: { __typename?: 'Address', addressLineOne?: string | null, addressLineTwo?: string | null, city?: string | null, postCode?: string | null } | null } | null };
 
 export type GetOrgInviteQueryVariables = Exact<{ [key: string]: never; }>;
 

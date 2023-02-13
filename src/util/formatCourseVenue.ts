@@ -22,3 +22,17 @@ export function formatCourseVenue(
   }
   return ''
 }
+
+export function formatCourseVenueName(
+  deliveryType: CourseDeliveryType,
+  venueName?: string
+): string {
+  if (
+    [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(deliveryType)
+  ) {
+    return venueName || t('common.tbc')
+  } else if (deliveryType === CourseDeliveryType.VIRTUAL) {
+    return t('common.course-delivery-type.VIRTUAL')
+  }
+  return ''
+}

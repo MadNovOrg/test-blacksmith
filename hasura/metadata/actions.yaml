@@ -489,6 +489,17 @@ custom_types:
         - value: STREET
           is_deprecated: null
           description: null
+    - name: CourseDeliveryType
+      values:
+        - value: F2F
+          is_deprecated: null
+          description: null
+        - value: MIXED
+          is_deprecated: null
+          description: null
+        - value: VIRTUAL
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput

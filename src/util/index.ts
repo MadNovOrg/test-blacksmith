@@ -37,7 +37,7 @@ import {
   TimeDifferenceAndContext,
 } from '@app/types'
 
-export { formatCourseVenue } from './formatCourseVenue'
+export { formatCourseVenue, formatCourseVenueName } from './formatCourseVenue'
 export { getOrderDueDate, isOrderDueDateImmediate } from './orderDueDate'
 
 export const INPUT_DATE_FORMAT = 'dd/MM/yyyy'

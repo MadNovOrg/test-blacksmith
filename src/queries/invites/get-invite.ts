@@ -1,5 +1,7 @@
 import { gql } from 'graphql-request'
 
+import { CourseDeliveryType } from '@app/generated/graphql'
+
 export type ResponseType = {
   invite: {
     id: string
@@ -10,6 +12,7 @@ export type ResponseType = {
     trainerName: string
     startDate: string
     endDate: string
+    deliveryType: CourseDeliveryType
     venueName: string
     venueAddress: {
       addressLineOne: string
@@ -34,6 +37,7 @@ export const QUERY = gql`
       trainerName
       startDate
       endDate
+      deliveryType
       venueName
       venueAddress {
         addressLineOne

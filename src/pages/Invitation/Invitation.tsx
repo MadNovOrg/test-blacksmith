@@ -35,11 +35,17 @@ import {
   QUERY as GET_INVITE_QUERY,
   ResponseType as GetInviteResponseType,
 } from '@app/queries/invites/get-invite'
-import { GqlError, InviteStatus, TimeDifferenceAndContext } from '@app/types'
+import {
+  GqlError,
+  InviteStatus,
+  TimeDifferenceAndContext,
+  CourseDeliveryType,
+} from '@app/types'
 import {
   getTimeDifferenceAndContext,
   now,
   userExistsInCognito,
+  formatCourseVenueName,
 } from '@app/util'
 
 export const InvitationPage = () => {
@@ -227,7 +233,10 @@ export const InvitationPage = () => {
             </Box>
             <Box>
               <Typography variant="body2" fontWeight="600">
-                {invite.venueName}
+                {formatCourseVenueName(
+                  invite.deliveryType as unknown as CourseDeliveryType,
+                  invite.venueName
+                )}
               </Typography>
               <Typography variant="body2">
                 {address?.addressLineOne || ''}
