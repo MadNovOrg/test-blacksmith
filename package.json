@@ -111,7 +111,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/autosuggest-highlight": "^3.2.0",
     "@types/file-saver": "^2.0.5",
-    "@types/google.maps": "^3.48.7",
+    "@types/google.maps": "^3.51.1",
     "@types/jest": "^29.2.6",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^18.11.19",
