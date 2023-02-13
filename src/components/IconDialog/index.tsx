@@ -10,7 +10,6 @@ import {
   useTheme,
 } from '@mui/material'
 import React, { useState } from 'react'
-import { noop } from 'ts-essentials'
 
 type IconDialogProps = {
   icon: React.ReactNode
@@ -84,14 +83,7 @@ export const IconDialog: React.FC<IconDialogProps> = ({
         {icon}
       </IconButton>
       {!isMobile && (
-        <Popper
-          open={open || hover}
-          anchorEl={anchorEl}
-          placement="bottom"
-          nonce="_"
-          onResize={noop}
-          onResizeCapture={noop}
-        >
+        <Popper open={open || hover} anchorEl={anchorEl} placement="bottom">
           <ClickAwayListener
             onClickAway={() => setOpen(false)}
             mouseEvent="onMouseUp"
