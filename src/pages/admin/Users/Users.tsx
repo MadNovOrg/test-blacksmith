@@ -101,6 +101,12 @@ export const Users = () => {
             organization: { name: { _ilike: `%${keywordDebounced}%` } },
           },
         },
+        {
+          fullName: { _ilike: `%${keywordDebounced}%` },
+        },
+        {
+          email: { _ilike: `%${keywordDebounced}%` },
+        },
       ]
       isFiltered = true
     }
@@ -173,9 +179,7 @@ export const Users = () => {
             <FilterSearch
               value={keyword}
               onChange={setKeyword}
-              placeholder={`${t('common.search')} ${t(
-                'common.organization'
-              ).toLowerCase()}`}
+              placeholder={t('common.search')}
             />
             <FilterAccordion
               options={roleFilter}
