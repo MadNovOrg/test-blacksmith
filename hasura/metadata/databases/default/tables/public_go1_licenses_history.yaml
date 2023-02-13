@@ -20,6 +20,19 @@ insert_permissions:
         - payload
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - balance
+        - change
+        - reserved_balance
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
@@ -31,5 +44,18 @@ select_permissions:
         - org_id
         - payload
         - reserved_balance
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - balance
+        - change
+        - reserved_balance
+        - payload
+        - event
+        - captured_at
+        - id
+        - org_id
       filter: {}
       allow_aggregations: true

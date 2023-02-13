@@ -265,6 +265,16 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canRemoveParticipant()
       )
     },
+
+    canManageBlendedLicenses: () => {
+      const roles = [
+        RoleName.TT_ADMIN,
+        RoleName.FINANCE,
+        RoleName.SALES_ADMIN,
+        RoleName.TT_OPS,
+      ]
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return acl

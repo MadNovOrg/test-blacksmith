@@ -11,6 +11,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'urql'
 
 import { Tile } from '@app/components/Tile'
+import { useAuth } from '@app/context/auth'
 import {
   OrgLicensesWithHistoryQuery,
   OrgLicensesWithHistoryQueryVariables,
@@ -28,6 +29,7 @@ type Props = {
 }
 
 export const LicensesTab: React.FC<Props> = ({ orgId }) => {
+  const { acl } = useAuth()
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses')
 
   const [manageModalOpened, setManageModalOpened] = useState(false)
@@ -97,9 +99,11 @@ export const LicensesTab: React.FC<Props> = ({ orgId }) => {
                     {t('remaining-licenses')}
                   </Typography>
                 </Box>
-                <Button variant="contained" size="small" onClick={openModal}>
-                  {t('manage-button-label')}
-                </Button>
+                {acl.canManageBlendedLicenses() ? (
+                  <Button variant="contained" size="small" onClick={openModal}>
+                    {t('manage-button-label')}
+                  </Button>
+                ) : null}
               </Tile>
             </Grid>
             <Grid item xs={6}>

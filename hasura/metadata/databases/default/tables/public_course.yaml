@@ -722,3 +722,13 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/go1-licensing/release-licenses'
+  - name: reserve_go1_licenses
+    definition:
+      enable_manual: true
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/go1-licensing/reserve-licenses'
