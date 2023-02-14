@@ -187,9 +187,10 @@ export const AvailableCourses: React.FC = () => {
                       value={id}
                       label={t('common.organization')}
                       error={id === ALL_ORGS && sortByDistance}
-                      helperText={t(
-                        'pages.available-courses.select-organization'
-                      )}
+                      helperText={
+                        id === ALL_ORGS &&
+                        t('pages.available-courses.select-organization')
+                      }
                       onChange={event =>
                         navigate(`/organisations/${event.target.value}/courses`)
                       }
