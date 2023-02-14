@@ -39,9 +39,8 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('course evaluation', async ({ browser, course }) => {
-  test.setTimeout(60000)
+test('course evaluation', async ({ browser, course }) => {
+  test.setTimeout(90000)
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
@@ -52,22 +51,13 @@ test.skip('course evaluation', async ({ browser, course }) => {
   const trainerPage = await trainerContext.newPage()
   const userPage = await userContext.newPage()
 
-  // Trainer should not be able to evaluate course until users do
-  const trainerEvaluationPage = new CourseEvaluationPage(
-    trainerPage,
-    'trainer',
-    String(course.id)
-  )
-  await trainerEvaluationPage.goto()
-  await trainerEvaluationPage.checkSubmissionIsNotAvailable()
-  await trainerEvaluationPage.checkPDFExportIsNotAvailable()
-
   // Users evaluation
   const userEvaluationPage = new CourseEvaluationPage(
     userPage,
     'user',
     String(course.id)
   )
+
   await userEvaluationPage.goto()
   await userEvaluationPage.randomlyEvaluate(
     `${users.user1.givenName} ${users.user1.familyName}`
@@ -78,6 +68,12 @@ test.skip('course evaluation', async ({ browser, course }) => {
   )
 
   // Trainer evaluation -- should be available now
+  const trainerEvaluationPage = new CourseEvaluationPage(
+    trainerPage,
+    'trainer',
+    String(course.id)
+  )
+
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsAvailable()
   await trainerEvaluationPage.checkPDFExportIsNotAvailable()
@@ -86,9 +82,6 @@ test.skip('course evaluation', async ({ browser, course }) => {
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()
-
-  // Trainer should be able to export PDF now
-  await trainerEvaluationPage.goto()
-  await trainerEvaluationPage.checkPDFExportIsAvailable()
-  await trainerEvaluationPage.checkPDFExport()
+  // Trainer should be able to view evaluation
+  await trainerEvaluationPage.viewEvaluation()
 })

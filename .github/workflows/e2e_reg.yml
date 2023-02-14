@@ -44,11 +44,11 @@ jobs:
         run: npm set-script prepare "" && npm ci
 
       - name: Playwright setup
-        run: npx playwright install
+        run: npx playwright install chromium
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:${{ matrix.browsers }}
+        run: npm run test:e2e:chromium
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

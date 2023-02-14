@@ -86,6 +86,13 @@ class TrainerEvaluationPage extends BasePage {
       this.pageLoadedIndicator
     )
   }
+  async checkSubmissionIsAvailable() {
+    await expect(await this.startEvaluationButton.count()).toBe(1)
+  }
+
+  async checkPDFExportIsNotAvailable() {
+    await expect(this.PDFExportButton).toBeDisabled()
+  }
 
   async randomlyEvaluate(questions: Questions, signature: string) {
     await super.goto(
@@ -111,30 +118,10 @@ class TrainerEvaluationPage extends BasePage {
     await expect(await this.startEvaluationButton.count()).toBe(0)
   }
 
-  async checkSubmissionIsAvailable() {
-    await expect(await this.startEvaluationButton.count()).toBe(1)
-  }
-
-  async checkPDFExportIsNotAvailable() {
-    await expect(this.PDFExportButton).toBeDisabled()
-  }
-
-  async checkPDFExportIsAvailable() {
-    await expect(this.PDFExportButton).toBeEnabled()
-  }
-
-  async checkPDFExport() {
-    await this.PDFExportButton.click()
-
-    await expect(this.page.locator('text=Generating summary...')).toBeEnabled()
-    await expect(this.page.locator('text=Download Summary')).toBeEnabled()
-
-    const [download] = await Promise.all([
-      this.page.waitForEvent('download'),
-      this.PDFExportButton.click(),
-    ])
-
-    expect(await download.path()).toBeTruthy()
+  async viewEvaluation() {
+    await expect(this.viewSummaryEvaluationButton).toBeEnabled()
+    await this.page.locator('text=View Summary Evaluation').click()
+    await expect(this.page.locator('text=Rating of training')).toBeVisible()
   }
 }
 
@@ -260,15 +247,9 @@ export class CourseEvaluationPage {
     }
   }
 
-  checkPDFExportIsAvailable() {
+  viewEvaluation() {
     if (this.userType === 'trainer') {
-      return (this.page as TrainerEvaluationPage).checkPDFExportIsAvailable()
-    }
-  }
-
-  checkPDFExport() {
-    if (this.userType === 'trainer') {
-      return (this.page as TrainerEvaluationPage).checkPDFExport()
+      return (this.page as TrainerEvaluationPage).viewEvaluation()
     }
   }
 }
