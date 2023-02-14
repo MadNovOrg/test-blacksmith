@@ -185,11 +185,7 @@ export const generateCourseName = (
   courseData: Pick<Course, 'level' | 'reaccreditation'>,
   t: TFunction
 ) => {
-  let courseLevelLabel = t(`common.course-levels.${courseData.level}`)
-
-  if (courseData.level === CourseLevel.Advanced) {
-    courseLevelLabel = `${courseLevelLabel} ${t('common.modules')}`
-  }
+  const courseLevelLabel = t(`common.course-levels.${courseData.level}`)
 
   return `${t('common.course-name-prefix')}: ${courseLevelLabel} ${
     courseData.reaccreditation ? t('common.reaccreditation') : ''
