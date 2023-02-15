@@ -8,7 +8,7 @@ actions:
       - role: anonymous
   - name: canApplyPromoCode
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/promocode/can-apply'
     permissions:
       - role: unverified
@@ -74,19 +74,19 @@ actions:
       - role: anonymous
   - name: eligibleTransferCourses
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/transfer/eligible-courses'
     permissions:
       - role: user
     comment: eligibleTransferCourses
   - name: fetchPlans
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/prices/list'
     comment: Fetches membership plans
   - name: getCoursePricing
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/course/price'
     permissions:
       - role: user
@@ -94,27 +94,27 @@ actions:
     comment: getCoursePricing
   - name: getInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getOrgInvite
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/organization/invite/get'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: getTrainersLevels
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/trainers/levels'
     permissions:
       - role: trainer
   - name: getXeroInvoicesForOrders
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices'
     permissions:
       - role: sales-admin
@@ -129,14 +129,14 @@ actions:
     comment: go1LicensesChange
   - name: initAuth
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/user/auth'
       forward_client_headers: true
     permissions:
       - role: anonymous
   - name: isUserSubscribedToMembership
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
     comment: Checks whether user is subscribed to membership
   - name: plansCreate
@@ -146,14 +146,14 @@ actions:
     comment: Creates a membership plan
   - name: podcast
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts/single'
     permissions:
       - role: user
     comment: Podcast
   - name: podcasts
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/podcasts'
     permissions:
       - role: user
@@ -173,7 +173,7 @@ actions:
       - role: anonymous
   - name: searchTrainers
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/trainers/search'
     permissions:
       - role: sales-admin
@@ -227,13 +227,13 @@ actions:
       - role: tt-admin
   - name: xeroConnect
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/setup'
     permissions:
       - role: tt-admin
   - name: xeroContactSearch
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/contacts/search'
     permissions:
       - role: tt-ops
@@ -243,7 +243,7 @@ actions:
       handler: '{{ACTIONS_HOST}}/xero/disconnect'
   - name: xeroInvoicesStatus
     definition:
-      kind: ""
+      kind: ''
       handler: '{{ACTIONS_HOST}}/xero/invoices/status'
     permissions:
       - role: sales-admin
@@ -487,6 +487,29 @@ custom_types:
           is_deprecated: null
           description: null
         - value: STREET
+          is_deprecated: null
+          description: null
+    - name: TransferParticipantError
+      values:
+        - value: GENERAL_ERROR
+          is_deprecated: null
+          description: null
+        - value: WRONG_COURSE_TYPE
+          is_deprecated: null
+          description: null
+        - value: PARTICIPANT_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: COURSE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: NOT_ELIGIBLE_FOR_TRANSFER
+          is_deprecated: null
+          description: null
+        - value: TRANSFER_NOT_ALLOWED
+          is_deprecated: null
+          description: null
+        - value: NOT_ENOUGH_SPACES
           is_deprecated: null
           description: null
     - name: CourseDeliveryType

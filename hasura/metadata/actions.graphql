@@ -1,13 +1,9 @@
 type Mutation {
-  acceptOrgInvite(
-    profileId: String!
-  ): AcceptOrgInviteOutput
+  acceptOrgInvite(profileId: String!): AcceptOrgInviteOutput
 }
 
 type Query {
-  canApplyPromoCode(
-    input: CanApplyPromoCodeInput!
-  ): CanApplyPromoCodeOutput!
+  canApplyPromoCode(input: CanApplyPromoCodeInput!): CanApplyPromoCodeOutput!
 }
 
 type Mutation {
@@ -20,21 +16,15 @@ type Mutation {
 }
 
 type Mutation {
-  cancelMyselfFromCourse(
-    courseId: Int!
-  ): Boolean
+  cancelMyselfFromCourse(courseId: Int!): Boolean
 }
 
 type Mutation {
-  confirmCreditCardPayment(
-    orderId: uuid!
-  ): ConfirmCreditCardPaymentOutput
+  confirmCreditCardPayment(orderId: uuid!): ConfirmCreditCardPaymentOutput
 }
 
 type Mutation {
-  createOrder(
-    input: CreateOrderInput!
-  ): CreateOrderOutput
+  createOrder(input: CreateOrderInput!): CreateOrderOutput
 }
 
 type Mutation {
@@ -45,15 +35,11 @@ type Mutation {
 }
 
 type Mutation {
-  createUser(
-    input: CreateAppUserInput!
-  ): CreateUserOutput!
+  createUser(input: CreateAppUserInput!): CreateUserOutput!
 }
 
 type Mutation {
-  declineInvite(
-    note: String
-  ): DeclineInviteOutput
+  declineInvite(note: String): DeclineInviteOutput
 }
 
 type Mutation {
@@ -61,9 +47,7 @@ type Mutation {
 }
 
 type Query {
-  eligibleTransferCourses(
-    fromCourseId: Int!
-  ): [TransferCourse!]!
+  eligibleTransferCourses(fromCourseId: Int!): [TransferCourse!]!
 }
 
 type Query {
@@ -71,9 +55,7 @@ type Query {
 }
 
 type Query {
-  getCoursePricing(
-    input: GetCoursePricingInput!
-  ): GetCoursePricingOutput
+  getCoursePricing(input: GetCoursePricingInput!): GetCoursePricingOutput
 }
 
 type Query {
@@ -85,21 +67,15 @@ type Query {
 }
 
 type Query {
-  getTrainersLevels(
-    input: GetTrainersLevelsInput!
-  ): [TrainerLevels]
+  getTrainersLevels(input: GetTrainersLevelsInput!): [TrainerLevels]
 }
 
 type Query {
-  getXeroInvoicesForOrders(
-    invoiceNumbers: [String!]!
-  ): [XeroInvoice]!
+  getXeroInvoicesForOrders(invoiceNumbers: [String!]!): [XeroInvoice]!
 }
 
 type Mutation {
-  go1LicensesChange(
-    input: Go1LicensesChangeInput!
-  ): Go1LicensesChangeOutput
+  go1LicensesChange(input: Go1LicensesChangeInput!): Go1LicensesChangeOutput
 }
 
 type Query {
@@ -113,39 +89,27 @@ type Query {
 }
 
 type Mutation {
-  plansCreate(
-    data: PlansCreateInput!
-  ): PlansCreateResult
+  plansCreate(data: PlansCreateInput!): PlansCreateResult
 }
 
 type Query {
-  podcast(
-    id: ID!
-  ): PodcastPayload
+  podcast(id: ID!): PodcastPayload
 }
 
 type Query {
-  podcasts(
-    input: PodcastsInput
-  ): PodcastsPayload
+  podcasts(input: PodcastsInput): PodcastsPayload
 }
 
 type Mutation {
-  replaceParticipant(
-    input: ReplaceParticipantInput!
-  ): ReplaceParticipantOutput
+  replaceParticipant(input: ReplaceParticipantInput!): ReplaceParticipantOutput
 }
 
 type Mutation {
-  resendPassword(
-    email: String!
-  ): Boolean
+  resendPassword(email: String!): Boolean
 }
 
 type Query {
-  searchTrainers(
-    input: SearchTrainersInput!
-  ): [SearchTrainer]
+  searchTrainers(input: SearchTrainersInput!): [SearchTrainer]
 }
 
 type Mutation {
@@ -155,33 +119,23 @@ type Mutation {
 }
 
 type Mutation {
-  transferParticipant(
-    input: TransferInput!
-  ): TransferParticipantOutput
+  transferParticipant(input: TransferInput!): TransferParticipantOutput
 }
 
 type Mutation {
-  updateAvatar(
-    avatar: bytea!
-  ): UpdateAvatarResponse
+  updateAvatar(avatar: bytea!): UpdateAvatarResponse
 }
 
 type Mutation {
-  upsertZoomMeeting(
-    input: UpsertZoomMeetingInput
-  ): UpsertZoomMeetingPayload
+  upsertZoomMeeting(input: UpsertZoomMeetingInput): UpsertZoomMeetingPayload
 }
 
 type Mutation {
-  verifyUser(
-    inviteId: uuid!
-  ): Boolean
+  verifyUser(inviteId: uuid!): Boolean
 }
 
 type Mutation {
-  xeroCallback(
-    input: XeroCallbackInput!
-  ): XeroCallbackOutput
+  xeroCallback(input: XeroCallbackInput!): XeroCallbackOutput
 }
 
 type Query {
@@ -189,9 +143,7 @@ type Query {
 }
 
 type Query {
-  xeroContactSearch(
-    input: XeroContactSearchInput!
-  ): XeroContactSearchOutput
+  xeroContactSearch(input: XeroContactSearchInput!): XeroContactSearchOutput
 }
 
 type Mutation {
@@ -199,9 +151,7 @@ type Mutation {
 }
 
 type Query {
-  xeroInvoicesStatus(
-    input: XeroInvoicesStatusInput!
-  ): XeroInvoicesStatusOutput
+  xeroInvoicesStatus(input: XeroInvoicesStatusInput!): XeroInvoicesStatusOutput
 }
 
 enum BillingInterval {
@@ -328,6 +278,16 @@ enum XeroAddressType {
   STREET
 }
 
+enum TransferParticipantError {
+  GENERAL_ERROR
+  WRONG_COURSE_TYPE
+  PARTICIPANT_NOT_FOUND
+  COURSE_NOT_FOUND
+  NOT_ELIGIBLE_FOR_TRANSFER
+  TRANSFER_NOT_ALLOWED
+  NOT_ENOUGH_SPACES
+}
+
 enum CourseDeliveryType {
   F2F
   MIXED
@@ -346,8 +306,14 @@ input PlansCreateInput {
 
 input UpsertZoomMeetingInput {
   id: Float
-  """ ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z' """ startTime: String
-  """ Timezone string, e.g. Europe/London """ timezone: String
+  """
+  ISO 8601 date string, e.g. '2022-04-18T16:48:04.836Z'
+  """
+  startTime: String
+  """
+  Timezone string, e.g. Europe/London
+  """
+  timezone: String
 }
 
 input GetTrainersLevelsInput {
@@ -728,7 +694,7 @@ type TransferCourse {
 
 type TransferParticipantOutput {
   success: Boolean!
-  error: String
+  error: TransferParticipantError
 }
 
 type ReplaceParticipantOutput {
@@ -766,4 +732,3 @@ type XeroTrackingCategory {
   name: String!
   option: String!
 }
-
