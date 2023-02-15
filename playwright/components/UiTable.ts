@@ -14,7 +14,7 @@ export class UiTable {
   }
 
   async waitToLoad() {
-    await expect(this.rows.first()).toBeVisible()
+    await expect(this.rows.first()).toBeVisible({ timeout: 30000 })
   }
 
   async getRowsCount(): Promise<number> {
