@@ -11,6 +11,8 @@ import {
   TrainerCourseFragment,
 } from '@app/generated/graphql'
 
+import { waitFor, within } from '@test/index'
+
 const chance = new Chance()
 
 export const buildTrainerCourse = build<TrainerCourseFragment>({
@@ -76,3 +78,112 @@ export const buildTrainerCourse = build<TrainerCourseFragment>({
     },
   },
 })
+
+export const buildTrainerCourseWithDates = (
+  start: Date,
+  end: Date
+): TrainerCourseFragment =>
+  buildTrainerCourse({
+    overrides: {
+      dates: {
+        aggregate: {
+          start: {
+            date: start.toISOString(),
+          },
+          end: {
+            date: end.toISOString(),
+          },
+        },
+      },
+    },
+  })
+
+export const buildActionableTrainerCourse = (
+  trainerProfileId: string,
+  overrides?: Partial<TrainerCourseFragment>
+) =>
+  buildTrainerCourse({
+    overrides: {
+      status: Course_Status_Enum.TrainerPending,
+      trainers: [
+        {
+          id: chance.guid(),
+          profile: { id: trainerProfileId },
+          type: Course_Trainer_Type_Enum.Leader,
+        },
+      ],
+      ...overrides,
+    },
+  })
+
+export const buildActionableTrainerCourseWithDates = (
+  trainerProfileId: string,
+  start: Date,
+  end: Date
+): TrainerCourseFragment =>
+  buildActionableTrainerCourse(trainerProfileId, {
+    dates: {
+      aggregate: {
+        start: {
+          date: start.toISOString(),
+        },
+        end: {
+          date: end.toISOString(),
+        },
+      },
+    },
+  })
+
+type ExpectTableToContainArgs = {
+  table: HTMLElement
+  rowIdPrefix: string
+  include?: TrainerCourseFragment[]
+  exclude?: TrainerCourseFragment[]
+}
+
+const expectTableTo = async ({
+  table,
+  rowIdPrefix,
+  include = [],
+  exclude = [],
+}: ExpectTableToContainArgs) => {
+  await waitFor(() => {
+    expect(table.querySelectorAll('.MyCoursesRow')).toHaveLength(include.length)
+
+    include.forEach(course => {
+      expect(
+        within(table).getByTestId(`${rowIdPrefix}${course.id}`)
+      ).toBeInTheDocument()
+    })
+
+    exclude.forEach(course => {
+      expect(
+        within(table).queryByTestId(`${rowIdPrefix}${course.id}`)
+      ).not.toBeInTheDocument()
+    })
+  })
+}
+
+export const expectCourseTableTo = async ({
+  table,
+  include,
+  exclude,
+}: Omit<ExpectTableToContainArgs, 'rowIdPrefix'>) =>
+  expectTableTo({
+    table,
+    rowIdPrefix: 'course-row-',
+    include,
+    exclude,
+  })
+
+export const expectActionableTableTo = async ({
+  table,
+  include,
+  exclude,
+}: Omit<ExpectTableToContainArgs, 'rowIdPrefix'>) =>
+  expectTableTo({
+    table,
+    rowIdPrefix: 'actionable-course-',
+    include,
+    exclude,
+  })

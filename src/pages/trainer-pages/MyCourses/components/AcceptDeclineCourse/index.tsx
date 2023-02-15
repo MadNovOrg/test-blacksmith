@@ -16,7 +16,7 @@ enum Action {
   DECLINE = 'DECLINE',
 }
 
-type Trainer = Pick<CourseTrainerInfoFragment, 'id' | 'type' | 'status'>
+export type Trainer = Pick<CourseTrainerInfoFragment, 'id' | 'type' | 'status'>
 
 const actionToStatus = {
   [Action.ACCEPT]: Course_Invite_Status_Enum.Accepted,

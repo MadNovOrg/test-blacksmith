@@ -15,7 +15,7 @@ import {
 } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
-import { AcceptDeclineCourse } from './AcceptDeclineCourse'
+import { AcceptDeclineCourse } from '.'
 
 const mockFetcher = jest.fn()
 jest.mock('@app/hooks/use-fetcher', () => ({ useFetcher: () => mockFetcher }))

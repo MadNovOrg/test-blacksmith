@@ -1,4 +1,5 @@
 import { addDays } from 'date-fns'
+import { intersection } from 'lodash-es'
 import { useMemo } from 'react'
 import { useQuery } from 'urql'
 
@@ -10,19 +11,24 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
+import { CoursesFilters, filtersToWhereClause } from '@app/hooks/useCourses'
 import { ALL_ORGS } from '@app/hooks/useOrg'
 import { QUERY } from '@app/queries/courses/get-trainer-courses'
 import { RoleName } from '@app/types'
+
+type Props = {
+  statuses: Course_Status_Enum[]
+  pagination: { perPage: number; currentPage: number }
+  orgId?: string
+  filters?: CoursesFilters
+}
 
 export default function useActionableCourses({
   statuses,
   pagination,
   orgId,
-}: {
-  statuses: Course_Status_Enum[]
-  pagination: { perPage: number; currentPage: number }
-  orgId?: string
-}) {
+  filters,
+}: Props) {
   const { activeRole, profile, acl, organizationIds } = useAuth()
 
   const where = useMemo(() => {
@@ -42,13 +48,22 @@ export default function useActionableCourses({
       }
     }
 
+    const commonStatuses: Course_Status_Enum[] = intersection(
+      statuses,
+      filters?.statuses as unknown as Course_Status_Enum[]
+    )
+    const allStatuses =
+      filters?.statuses?.length && commonStatuses.length
+        ? commonStatuses
+        : statuses
+
     let statusCondition: Course_Bool_Exp = {
       status: {
-        _in: statuses.filter(s => s !== Course_Status_Enum.TrainerMissing),
+        _in: allStatuses.filter(s => s !== Course_Status_Enum.TrainerMissing),
       },
     }
 
-    if (statuses.indexOf(Course_Status_Enum.TrainerMissing) !== -1) {
+    if (allStatuses.indexOf(Course_Status_Enum.TrainerMissing) !== -1) {
       statusCondition = {
         _or: [
           statusCondition,
@@ -75,7 +90,11 @@ export default function useActionableCourses({
       })
     }
 
-    const where = { _and: conditions }
+    let where: Course_Bool_Exp = {
+      _and: conditions,
+    }
+
+    where = filtersToWhereClause(where, filters)
 
     const cancellationPendingCondition = {
       cancellationRequest: {
@@ -86,7 +105,7 @@ export default function useActionableCourses({
     return acl.isTTAdmin()
       ? { _or: [where, cancellationPendingCondition] }
       : where
-  }, [acl, activeRole, orgId, organizationIds, profile, statuses])
+  }, [acl, activeRole, orgId, organizationIds, profile, statuses, filters])
 
   return useQuery<TrainerCoursesQuery, TrainerCoursesQueryVariables>({
     query: QUERY,

@@ -20,7 +20,7 @@ import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 import { Sorting } from './useTableSort'
 
-type CoursesFilters = {
+export type CoursesFilters = {
   keyword?: string
   levels?: Course_Level_Enum[]
   types?: Course_Type_Enum[]
@@ -42,6 +42,72 @@ type Props = {
   filters?: CoursesFilters
   pagination?: { perPage: number; currentPage: number }
   orgId?: string
+}
+
+export const filtersToWhereClause = (
+  where: Course_Bool_Exp,
+  filters?: CoursesFilters
+) => {
+  if (filters?.levels?.length) {
+    where.level = { _in: filters.levels }
+  }
+
+  if (filters?.types?.length) {
+    where.type = { _in: filters.types }
+  }
+
+  if (filters?.excludedCourses?.length) {
+    where.id = {
+      _nin: filters.excludedCourses,
+    }
+  }
+
+  if (filters?.go1Integration) {
+    where.go1Integration = { _eq: filters?.go1Integration }
+  }
+
+  if (filters?.creation?.start) {
+    where.createdAt = {
+      _gte: filters.creation.start,
+    }
+  }
+
+  if (filters?.creation?.end) {
+    where.createdAt = {
+      ...where.createdAt,
+      _lte: filters.creation.end,
+    }
+  }
+
+  if (filters?.schedule?.start || filters?.schedule?.end) {
+    where.schedule = {
+      _and: [],
+    }
+    if (filters?.schedule?.start) {
+      where.schedule._and?.push({ start: { _gte: filters.schedule.start } })
+    }
+    if (filters?.schedule?.end) {
+      where.schedule._and?.push({ end: { _lte: filters.schedule.end } })
+    }
+  }
+
+  const query = filters?.keyword?.trim()
+  const onlyDigits = /^\d+$/.test(query || '')
+
+  if (query?.length) {
+    const orClauses = [
+      onlyDigits ? { id: { _eq: Number(query) } } : null,
+      { name: { _ilike: `%${query}%` } },
+      { organization: { name: { _ilike: `%${query}%` } } },
+      { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
+      { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
+      { course_code: { _ilike: `%${query}%` } },
+    ]
+
+    where._or = orClauses.filter(Boolean)
+  }
+
+  return where
 }
 
 export const useCourses = (
@@ -112,13 +178,7 @@ export const useCourses = (
       }
     }
 
-    if (filters?.levels?.length) {
-      obj.level = { _in: filters.levels }
-    }
-
-    if (filters?.types?.length) {
-      obj.type = { _in: filters.types }
-    }
+    obj = filtersToWhereClause(obj, filters)
 
     const regularStatuses = filters?.statuses?.filter(s =>
       Object.values(Course_Status_Enum).includes(s as Course_Status_Enum)
@@ -135,63 +195,11 @@ export const useCourses = (
       obj.cancellationRequest = { id: { _is_null: false } }
     }
 
-    if (filters?.excludedCourses?.length) {
-      obj.id = {
-        _nin: filters.excludedCourses,
-      }
-    }
-
-    if (filters?.go1Integration) {
-      obj.go1Integration = { _eq: filters?.go1Integration }
-    }
-
-    if (filters?.creation?.start) {
-      obj.createdAt = {
-        _gte: filters.creation.start,
-      }
-    }
-
-    if (filters?.creation?.end) {
-      obj.createdAt = {
-        ...obj.createdAt,
-        _lte: filters.creation.end,
-      }
-    }
-
-    if (filters?.schedule?.start || filters?.schedule?.end) {
-      obj.schedule = {
-        _and: [],
-      }
-      if (filters?.schedule?.start) {
-        obj.schedule._and?.push({ start: { _gte: filters.schedule.start } })
-      }
-      if (filters?.schedule?.end) {
-        obj.schedule._and?.push({ end: { _lte: filters.schedule.end } })
-      }
-    }
-
     if (role === RoleName.TRAINER) {
       obj.trainers = {
         status: { _neq: Course_Invite_Status_Enum.Pending },
         profile_id: { _eq: profile?.id },
       }
-    }
-
-    const query = filters?.keyword?.trim()
-
-    const onlyDigits = /^\d+$/.test(query || '')
-
-    if (query?.length) {
-      const orClauses = [
-        onlyDigits ? { id: { _eq: Number(query) } } : null,
-        { name: { _ilike: `%${query}%` } },
-        { organization: { name: { _ilike: `%${query}%` } } },
-        { schedule: { venue: { name: { _ilike: `%${query}%` } } } },
-        { trainers: { profile: { fullName: { _ilike: `%${query}%` } } } },
-        { course_code: { _ilike: `%${query}%` } },
-      ]
-
-      obj._or = orClauses.filter(Boolean)
     }
 
     return obj
