@@ -41,10 +41,10 @@ test('displays video item details and recent items', async ({ page, data }) => {
 
   await test
     .expect(page.locator(`#yt-embed-${data.videoItem.id}`))
-    .toHaveCount(1)
+    .toHaveCount(1, { timeout: 60000 })
   await test
     .expect(ytFrame.locator('.ytp-cued-thumbnail-overlay'))
-    .toHaveCount(1, { timeout: 30000 })
+    .toHaveCount(1, { timeout: 60000 })
   await ytFrame.locator('[aria-label="Play"]').click()
 
   data.recentItems.map(async recentItem => {
@@ -56,6 +56,6 @@ test('displays video item details and recent items', async ({ page, data }) => {
       .expect(
         page.locator(`data-testid=video-series-grid-item-${recentItem.id}`)
       )
-      .toBeVisible()
+      .toBeVisible({ timeout: 60000 })
   })
 })

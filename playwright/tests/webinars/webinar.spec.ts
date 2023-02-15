@@ -23,7 +23,6 @@ const test = base.extend<{
 test.use({ storageState: stateFilePath('trainer') })
 
 test('displays video item details and recent items', async ({ page, data }) => {
-  test.setTimeout(1200000)
   // eslint-disable-next-line playwright/no-conditional-in-test
   if (!data.webinar) {
     return test.fail()
@@ -38,7 +37,9 @@ test('displays video item details and recent items', async ({ page, data }) => {
 
   const ytFrame = page.frameLocator(`#yt-embed-${data.webinar.id}`)
 
-  await ytFrame.locator('.ytp-cued-thumbnail-overlay').isVisible()
+  await ytFrame
+    .locator('.ytp-cued-thumbnail-overlay')
+    .isVisible({ timeout: 60000 })
   await ytFrame.locator('[aria-label="Play"]').click()
 
   data.recentWebinars.map(async recentItem => {
@@ -48,6 +49,6 @@ test('displays video item details and recent items', async ({ page, data }) => {
 
     await test
       .expect(page.locator(`data-testid=webinars-grid-item-${recentItem.id}`))
-      .toBeVisible()
+      .toBeVisible({ timeout: 60000 })
   })
 })

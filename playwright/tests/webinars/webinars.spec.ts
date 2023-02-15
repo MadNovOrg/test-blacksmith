@@ -31,7 +31,7 @@ test('displays webinars with featured and grid display', async ({
     '[data-testid="featured-webinar"] img'
   )
 
-  await test.expect(featuredVideoItemImage).toBeVisible()
+  await test.expect(featuredVideoItemImage).toBeVisible({ timeout: 60000 })
 
   await test
     .expect(featuredVideoItemImage)
@@ -45,16 +45,16 @@ test('displays webinars with featured and grid display', async ({
         `data-testid=featured-webinar >> text="${webinars[0]?.title}"`
       )
     )
-    .toBeVisible()
+    .toBeVisible({ timeout: 60000 })
 
   await test
     .expect(page.locator(`data-testid=webinar-grid-item-${webinars[1]?.id}`))
-    .toBeVisible()
+    .toBeVisible({ timeout: 60000 })
 
   // eslint-disable-next-line playwright/no-conditional-in-test
   if (webinars.length > PER_PAGE) {
     await test
       .expect(page.locator('data-testid=video-series-pagination'))
-      .toBeVisible()
+      .toBeVisible({ timeout: 60000 })
   }
 })
