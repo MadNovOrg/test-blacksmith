@@ -26,6 +26,9 @@
       "invite-accept-error": "Unable to accept invitation"
     }
   },
+  "info": {
+    "workbook-check": "Please ensure you order the correct amount of workbooks you require ahead of your course hyperlink to workbook page"
+  },
   "home": "Home",
   "add": "Add",
   "create": "Create",

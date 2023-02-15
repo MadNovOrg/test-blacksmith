@@ -34,7 +34,8 @@ for (const data of MODULES_SETUP) {
     await courseBuilderPage.checkEstimatedDuration(data.durationBefore)
     await courseBuilderPage.dragModulesToRight(data.modulesToMove)
     await courseBuilderPage.checkEstimatedDuration(data.durationAfter)
-    const courseDetailsPage = await courseBuilderPage.clickSubmitButton()
+    const courseDetailsPage =
+      await courseBuilderPage.clickConfirmWarningSubmitButton()
     await courseDetailsPage.checkSuccessMessage(
       `You have successfully created your ${course.id} Course`
     )

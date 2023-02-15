@@ -72,12 +72,13 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
           {courseParticipantsError ? (
             <Alert severity="error">{t('errors.loading-participants')}</Alert>
           ) : null}
+          <Alert severity="info">{t('info.workbook-check')}</Alert>
 
           <Grid
             container
             justifyContent="space-between"
             alignItems="center"
-            sx={{ mb: 2 }}
+            sx={{ my: 2 }}
           >
             <Typography
               variant="subtitle2"
@@ -95,7 +96,6 @@ export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
               attendeesCount={courseParticipantsTotal ?? 0}
             />
           </Grid>
-
           <TabContext value={selectedTab}>
             <TabList
               onChange={(_, selectedTab: React.SetStateAction<string>) =>

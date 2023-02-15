@@ -18,6 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { BackButton } from '@app/components/BackButton'
+import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import ProgressBar from '@app/components/ProgressBar'
 import { useAuth } from '@app/context/auth'
@@ -87,6 +88,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
   const fetcher = useFetcher()
   const navigate = useNavigate()
   const theme = useTheme()
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
 
   const { acl } = useAuth()
 
@@ -421,8 +423,8 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return
     }
-    await submitCourse()
-  }, [acl, courseData, estimatedCourseDuration, submitCourse])
+    setIsConfirmationModalOpen(true)
+  }, [acl, courseData, estimatedCourseDuration])
 
   function getModuleCardColor(
     module: AvailableModule | ModuleGroup,
@@ -740,6 +742,20 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
         onCancel={() => setCourseExceptions([])}
         onSubmit={submitCourse}
         exceptions={courseExceptions}
+      />
+      <ConfirmDialog
+        open={isConfirmationModalOpen}
+        message={t(
+          'pages.trainer-base.create-course.new-course.warning-dialog'
+        )}
+        onOk={submitCourse}
+        title={t(
+          'pages.trainer-base.create-course.new-course.warning-dialog-title'
+        )}
+        onCancel={() => setIsConfirmationModalOpen(false)}
+        okLabel={t('common.confirm')}
+        cancelLabel={t('common.never-mind')}
+        data-testid={'confirm-warning'}
       />
     </>
   )

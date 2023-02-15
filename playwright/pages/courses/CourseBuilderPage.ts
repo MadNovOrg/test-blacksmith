@@ -21,6 +21,7 @@ export class CourseBuilderPage extends BasePage {
   readonly submitButton: Locator
   readonly clearButton: Locator
   readonly confirmDialog: Locator
+  readonly confirmWarningDialog: Locator
 
   constructor(page: Page) {
     super(page)
@@ -46,6 +47,7 @@ export class CourseBuilderPage extends BasePage {
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
     this.confirmDialog = this.page.locator('[role=dialog]')
+    this.confirmWarningDialog = this.page.locator('data-testid=confirm-warning')
   }
 
   async goto(courseId: string) {
@@ -103,6 +105,20 @@ export class CourseBuilderPage extends BasePage {
 
     if (confirmModalVisible) {
       await this.confirmDialog.locator('button:has-text("Proceed")').click()
+    }
+
+    return new CourseDetailsPage(this.page)
+  }
+
+  async clickConfirmWarningSubmitButton(): Promise<CourseDetailsPage> {
+    await this.submitButton.click()
+
+    const confirmModalVisible = await this.confirmWarningDialog.isVisible()
+
+    if (confirmModalVisible) {
+      await this.confirmWarningDialog
+        .locator('button:has-text("Confirm")')
+        .click()
     }
 
     return new CourseDetailsPage(this.page)
