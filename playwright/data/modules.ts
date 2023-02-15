@@ -76,9 +76,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Separations'],
+    modulesToMove: [],
     durationBefore: '4hrs 45mins',
-    durationAfter: '5hrs 35mins',
+    durationAfter: '4hrs 45mins',
   },
   {
     name: 'level 1 f2f reaccred',
@@ -864,7 +864,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
     durationAfter: '1hr 45mins',
   },
   {
-    name: 'advanced f2f',
+    name: 'advanced f2f @smoke',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Advanced
