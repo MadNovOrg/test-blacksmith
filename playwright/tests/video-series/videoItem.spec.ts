@@ -44,7 +44,7 @@ test('displays video item details and recent items', async ({ page, data }) => {
     .toHaveCount(1)
   await test
     .expect(ytFrame.locator('.ytp-cued-thumbnail-overlay'))
-    .toHaveCount(1)
+    .toHaveCount(1, { timeout: 30000 })
   await ytFrame.locator('[aria-label="Play"]').click()
 
   data.recentItems.map(async recentItem => {

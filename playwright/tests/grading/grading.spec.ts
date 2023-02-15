@@ -115,9 +115,8 @@ test('trainer can grade single participant', async ({
 
   await page.click('data-testid=grading-tab')
   await page.click(
-    `data-testid=attending-participant-row-${participants[0].id} >> button:has-text("Grade")`
+    `data-testid=attending-participant-row-${participants[0].id} >> a:has-text("Grade")`
   )
-
   await test
     .expect(page.locator(`text=${participants[0].profile.fullName}`))
     .toBeVisible()
@@ -148,7 +147,7 @@ test('trainer can grade single participant', async ({
   await test
     .expect(
       page.locator(
-        `data-testid=attending-participant-row-${participants[1].id} >> button:has-text("Grade")`
+        `data-testid=attending-participant-row-${participants[1].id} >> a:has-text("Grade")`
       )
     )
     .toBeVisible()
