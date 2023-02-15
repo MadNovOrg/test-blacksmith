@@ -12,6 +12,17 @@ configuration:
     display_order: displayOrder
     question_key: questionKey
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - required
+        - display_order
+        - group
+        - question
+        - question_key
+        - type
+        - id
+      filter: {}
   - role: trainer
     permission:
       columns:

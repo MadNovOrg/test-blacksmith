@@ -170,7 +170,9 @@ insert_permissions:
     permission:
       check:
         course_type:
-          _eq: CLOSED
+          _in:
+            - CLOSED
+            - OPEN
       set:
         created_by_id: x-hasura-User-Id
       columns:
@@ -330,7 +332,9 @@ select_permissions:
         - start
       filter:
         course_type:
-          _eq: CLOSED
+          _in:
+            - CLOSED
+            - OPEN
       allow_aggregations: true
   - role: trainer
     permission:
@@ -578,7 +582,9 @@ update_permissions:
         - updated_at
       filter:
         course_type:
-          _eq: CLOSED
+          _in:
+            - OPEN
+            - CLOSED
       check: null
   - role: trainer
     permission:

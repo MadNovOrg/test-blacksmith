@@ -27,7 +27,9 @@ insert_permissions:
       check:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       columns:
         - course_id
         - virtual_link
@@ -103,7 +105,9 @@ select_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       allow_aggregations: true
   - role: trainer
     permission:
@@ -175,7 +179,9 @@ update_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       check: null
   - role: trainer
     permission:

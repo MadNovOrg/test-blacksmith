@@ -125,7 +125,9 @@ select_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       allow_aggregations: true
   - role: trainer
     permission:

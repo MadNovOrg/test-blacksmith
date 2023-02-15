@@ -66,6 +66,20 @@ insert_permissions:
         - question_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - answer
+        - course_id
+        - id
+        - profile_id
+        - question_id
+      filter:
+        course:
+          course_type:
+            _in:
+              - OPEN
+              - CLOSED
   - role: trainer
     permission:
       columns:

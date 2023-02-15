@@ -14,7 +14,9 @@ insert_permissions:
       check:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       columns:
         - course_id
         - status
@@ -54,7 +56,9 @@ select_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
   - role: trainer
     permission:
       columns:
@@ -94,7 +98,9 @@ update_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       check: null
   - role: trainer
     permission:
@@ -117,7 +123,9 @@ delete_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
   - role: trainer
     permission:
       filter: {}

@@ -142,4 +142,33 @@ describe('components: CreateCourseMenu', () => {
       expect(screen.getByText('INDIRECT form')).toBeInTheDocument()
     })
   })
+
+  it('given a user is sales admin, it displays correct options', () => {
+    render(
+      <Routes>
+        <Route path="/" element={<CreateCourseMenu />} />
+        <Route path="/courses/new" element={<CourseTypeMock />} />
+      </Routes>,
+      {
+        auth: {
+          activeRole: RoleName.SALES_ADMIN,
+          allowedRoles: generateRolesUpTo(RoleName.SALES_ADMIN),
+        },
+      },
+      { initialEntries: ['/'] }
+    )
+
+    userEvent.click(screen.getByText('Create course'))
+
+    expect(
+      within(screen.getByTestId('create-course-options')).getByText(
+        /open course/i
+      )
+    ).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId('create-course-options')).getByText(
+        /closed course/i
+      )
+    ).toBeInTheDocument()
+  })
 })

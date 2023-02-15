@@ -14,7 +14,9 @@ insert_permissions:
       check:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
       columns:
         - course_id
         - payload

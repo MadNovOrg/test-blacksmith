@@ -10,9 +10,12 @@ import { InviteUserToOrganization } from '@app/pages/admin/components/Organizati
 import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashboard'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import { ParticipantGrading } from '@app/pages/trainer-pages/CourseGrading/components/ParticipantGrading'
+import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { Certifications } from '@app/pages/tt-pages/Certifications'
 import { OrderDetails } from '@app/pages/tt-pages/OrderDetails'
 import { Orders } from '@app/pages/tt-pages/Orders'
+import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 
 const NotFound = React.lazy(() =>
   import('@app/pages/common/NotFound').then(module => ({
@@ -83,6 +86,10 @@ const SalesAdminRoutes = () => {
           <Route index element={<ManageCourses />} />
           <Route path=":id">
             <Route path="details" element={<TrainerCourseDetails />} />
+            <Route path="evaluation">
+              <Route path="view" element={<CourseEvaluation />} />
+              <Route path="summary" element={<EvaluationSummary />} />
+            </Route>
           </Route>
         </Route>
       </Route>
@@ -102,6 +109,10 @@ const SalesAdminRoutes = () => {
         <Route path=":id">
           <Route index element={<Navigate replace to="details" />} />
           <Route path="details" element={<CourseDetails />} />
+          <Route
+            path="grading/:participantId"
+            element={<ParticipantGrading />}
+          />
         </Route>
       </Route>
 

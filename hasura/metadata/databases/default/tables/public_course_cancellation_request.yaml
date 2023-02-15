@@ -44,7 +44,9 @@ select_permissions:
       filter:
         course:
           course_type:
-            _eq: CLOSED
+            _in:
+              - CLOSED
+              - OPEN
   - role: tt-admin
     permission:
       columns:

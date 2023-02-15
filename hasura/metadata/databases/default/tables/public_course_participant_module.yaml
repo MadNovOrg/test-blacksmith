@@ -23,6 +23,14 @@ insert_permissions:
         - module_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - completed
+        - course_participant_id
+        - id
+        - module_id
+      filter: {}
   - role: trainer
     permission:
       columns:

@@ -156,20 +156,21 @@ export function CourseTitle({
 }
 
 export function CourseTitleCell({ course }: { course: TableCourse }) {
+  const { profile, acl } = useAuth()
+
   const handleNavigation = (course: {
     id: number
     status?: Course_Status_Enum | null
   }) => {
     if (
-      course.status === Course_Status_Enum.Draft ||
-      course.status === Course_Status_Enum.ConfirmModules
+      (course.status === Course_Status_Enum.Draft ||
+        course.status === Course_Status_Enum.ConfirmModules) &&
+      acl.canBuildCourse()
     ) {
       return `${course.id}/modules`
     }
     return `${course.id}/details`
   }
-
-  const { profile } = useAuth()
 
   const courseTrainer = profile
     ? findCourseTrainer(course?.trainers, profile.id)

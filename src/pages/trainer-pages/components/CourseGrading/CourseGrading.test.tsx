@@ -2,10 +2,10 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { Grade } from '@app/types'
+import { Grade, RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, userEvent, waitFor } from '@test/index'
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 import { buildCourse, buildParticipant } from '@test/mock-data-utils'
 
 import { CourseGrading } from './CourseGrading'
@@ -84,7 +84,7 @@ describe('component: CourseGrading', () => {
           element={<h1>Grading clearance</h1>}
         />
       </Routes>,
-      {},
+      { auth: { activeRole: RoleName.TT_ADMIN } },
       { initialEntries: [`/courses/${course.id}/details`] }
     )
     const button = screen.getByRole('button', {
@@ -112,11 +112,92 @@ describe('component: CourseGrading', () => {
       mutate: jest.fn(),
     })
 
-    render(<CourseGrading course={course} />)
+    render(<CourseGrading course={course} />, {
+      auth: { activeRole: RoleName.TT_ADMIN },
+    })
     const button = screen.getByRole('button', {
       name: 'Modify grading details',
     })
     expect(button).toBeInTheDocument()
     expect(button).toBeDisabled()
+  })
+
+  it("doesn't display grading button if a user doesn't have a permission to grade participants", () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    course.gradingStarted = true
+    const participants = [
+      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: jest.fn(),
+    })
+
+    render(<CourseGrading course={course} />, {
+      auth: { activeRole: RoleName.SALES_ADMIN },
+    })
+
+    expect(screen.queryByText(/grade selected/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/grade all attendees/i)).not.toBeInTheDocument()
+  })
+
+  it("disables individual grade button if a user doesn't have a permission to grade participants", () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    course.gradingStarted = true
+    const participants = [
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: jest.fn(),
+    })
+
+    render(<CourseGrading course={course} />, {
+      auth: { activeRole: RoleName.SALES_ADMIN },
+    })
+
+    participants.forEach(participant => {
+      const row = screen.getByTestId(
+        `attending-participant-row-${participant.id}`
+      )
+
+      expect(within(row).getByText(/grade/i)).toHaveAttribute(
+        'aria-disabled',
+        'true'
+      )
+    })
+  })
+
+  it("hides modify grade details button if a user doesn't have permission to grade participants", () => {
+    const course = buildCourse()
+    course.gradingConfirmed = true
+    course.gradingStarted = true
+    const participants = [
+      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: true },
+      { ...buildParticipant(), attended: true },
+    ]
+    useCourseParticipantsMocked.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: participants,
+      mutate: jest.fn(),
+    })
+
+    render(<CourseGrading course={course} />, {
+      auth: { activeRole: RoleName.SALES_ADMIN },
+    })
+
+    expect(
+      screen.queryByRole('button', {
+        name: 'Modify grading details',
+      })
+    ).not.toBeInTheDocument()
   })
 })

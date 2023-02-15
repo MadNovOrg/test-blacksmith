@@ -1,6 +1,6 @@
 import { MarkOptional } from 'ts-essentials'
 
-import { CourseType, RoleName } from '@app/types'
+import { CourseTrainerType, CourseType, RoleName } from '@app/types'
 
 import type { AuthContextType } from './types'
 
@@ -136,7 +136,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         case RoleName.TT_OPS:
           return [CourseType.OPEN, CourseType.CLOSED].includes(type)
         case RoleName.SALES_ADMIN: {
-          return [CourseType.CLOSED].includes(type)
+          return [CourseType.CLOSED, CourseType.OPEN].includes(type)
         }
         case RoleName.TRAINER:
           return [CourseType.INDIRECT].includes(type)
@@ -254,7 +254,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         return true
       }
 
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS].some(
+      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
         r => r === auth.activeRole
       )
     },
@@ -263,6 +263,29 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canTransferParticipant() ||
         acl.canReplaceParticipant() ||
         acl.canRemoveParticipant()
+      )
+    },
+    canGradeParticipants: (
+      trainers: { profile: { id: string }; type: CourseTrainerType }[]
+    ) => {
+      if (
+        auth.activeRole === RoleName.TRAINER &&
+        trainers.find(
+          t =>
+            t.profile.id === auth.profile?.id &&
+            t.type !== CourseTrainerType.Moderator
+        )
+      ) {
+        return true
+      }
+
+      return [RoleName.TT_ADMIN, RoleName.TT_OPS].some(
+        role => role === auth.activeRole
+      )
+    },
+    canBuildCourse: () => {
+      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.TRAINER].some(
+        role => role === auth.activeRole
       )
     },
 

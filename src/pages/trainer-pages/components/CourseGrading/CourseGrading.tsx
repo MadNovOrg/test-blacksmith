@@ -21,7 +21,9 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { Grade } from '@app/components/Grade'
+import { LinkBehavior } from '@app/components/LinkBehavior'
 import { TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { Course, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -44,6 +46,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigate = useNavigate()
+  const { acl } = useAuth()
 
   const [order, setOrder] = useState<SortOrder>('asc')
   const [sortColumn, setSortColumn] = useState<string>('name')
@@ -63,30 +66,35 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
   )
 
   const canEditGradingDetails = !course.gradingStarted
+  const canGradeParticipants = acl.canGradeParticipants(course.trainers ?? [])
 
   const cols = useMemo(() => {
     return [
-      {
-        id: 'selection',
-        label: '',
-        sorting: false,
-        component: (
-          <Checkbox
-            checked={
-              selectedParticipants.length ===
-                participantsWithoutGrades.length &&
-              selectedParticipants.length > 0
-            }
-            onChange={event => {
-              setSelectedParticipants(() =>
-                event.target.checked
-                  ? participantsWithoutGrades.map(participant => participant.id)
-                  : []
-              )
-            }}
-          />
-        ),
-      },
+      canGradeParticipants
+        ? {
+            id: 'selection',
+            label: '',
+            sorting: false,
+            component: (
+              <Checkbox
+                checked={
+                  selectedParticipants.length ===
+                    participantsWithoutGrades.length &&
+                  selectedParticipants.length > 0
+                }
+                onChange={event => {
+                  setSelectedParticipants(() =>
+                    event.target.checked
+                      ? participantsWithoutGrades.map(
+                          participant => participant.id
+                        )
+                      : []
+                  )
+                }}
+              />
+            ),
+          }
+        : null,
       {
         id: 'name',
         label: t('pages.course-participants.name'),
@@ -108,7 +116,12 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
         sorting: false,
       },
     ].filter(Boolean)
-  }, [selectedParticipants.length, participantsWithoutGrades, t])
+  }, [
+    canGradeParticipants,
+    selectedParticipants.length,
+    participantsWithoutGrades,
+    t,
+  ])
 
   const handleSortChange = useCallback(
     columnName => {
@@ -154,17 +167,19 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                   <Typography variant="subtitle1" color="grey.800" mr={3}>
                     {t('pages.course-details.tabs.grading.title')}
                   </Typography>
-                  <Button
-                    disabled={!canEditGradingDetails}
-                    onClick={() => {
-                      navigate(`/courses/${course.id}/grading-details`)
-                    }}
-                    startIcon={<Edit fontSize="small" />}
-                  >
-                    {t(
-                      'pages.course-details.tabs.grading.modify-grading-details'
-                    )}
-                  </Button>
+                  {canGradeParticipants ? (
+                    <Button
+                      disabled={!canEditGradingDetails}
+                      onClick={() => {
+                        navigate(`/courses/${course.id}/grading-details`)
+                      }}
+                      startIcon={<Edit fontSize="small" />}
+                    >
+                      {t(
+                        'pages.course-details.tabs.grading.modify-grading-details'
+                      )}
+                    </Button>
+                  ) : null}
                 </Box>
 
                 <Typography variant="body1" color="grey.800" sx={{ my: 2 }}>
@@ -183,36 +198,40 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                     })}
                   </Typography>
 
-                  <Box>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      disabled={selectedParticipants.length === 0}
-                      onClick={() =>
-                        navigate(
-                          `/courses/${
-                            course.id
-                          }/grading?participants=${selectedParticipants.join(
-                            ','
-                          )}`
-                        )
-                      }
-                    >
-                      {t('pages.course-details.tabs.grading.grade-selected', {
-                        number: selectedParticipants.length,
-                      })}
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ ml: 2 }}
-                      onClick={() => navigate(`/courses/${course.id}/grading`)}
-                    >
-                      {t(
-                        'pages.course-details.tabs.grading.grade-all-attendees'
-                      )}
-                    </Button>
-                  </Box>
+                  {canGradeParticipants ? (
+                    <Box>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        disabled={selectedParticipants.length === 0}
+                        onClick={() =>
+                          navigate(
+                            `/courses/${
+                              course.id
+                            }/grading?participants=${selectedParticipants.join(
+                              ','
+                            )}`
+                          )
+                        }
+                      >
+                        {t('pages.course-details.tabs.grading.grade-selected', {
+                          number: selectedParticipants.length,
+                        })}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ ml: 2 }}
+                        onClick={() =>
+                          navigate(`/courses/${course.id}/grading`)
+                        }
+                      >
+                        {t(
+                          'pages.course-details.tabs.grading.grade-all-attendees'
+                        )}
+                      </Button>
+                    </Box>
+                  ) : null}
                 </Grid>
 
                 <Table>
@@ -228,20 +247,22 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                         key={courseParticipant.id}
                         data-testid={`attending-participant-row-${courseParticipant.id}`}
                       >
-                        <TableCell>
-                          <Checkbox
-                            checked={selectedParticipants.includes(
-                              courseParticipant.id
-                            )}
-                            onChange={event =>
-                              handleParticipantSelection(
-                                courseParticipant.id,
-                                event.target.checked
-                              )
-                            }
-                            disabled={Boolean(courseParticipant.grade)}
-                          />
-                        </TableCell>
+                        {canGradeParticipants ? (
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedParticipants.includes(
+                                courseParticipant.id
+                              )}
+                              onChange={event =>
+                                handleParticipantSelection(
+                                  courseParticipant.id,
+                                  event.target.checked
+                                )
+                              }
+                              disabled={Boolean(courseParticipant.grade)}
+                            />
+                          </TableCell>
+                        ) : null}
                         <TableCell>
                           {courseParticipant.profile.fullName}
                         </TableCell>
@@ -279,11 +300,9 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                               variant="contained"
                               color="primary"
                               size="small"
-                              onClick={() =>
-                                navigate(
-                                  `/courses/${course.id}/grading?participants=${courseParticipant.id}`
-                                )
-                              }
+                              href={`/courses/${course.id}/grading?participants=${courseParticipant.id}`}
+                              LinkComponent={LinkBehavior}
+                              disabled={!canGradeParticipants}
                             >
                               {t('pages.course-details.tabs.grading.grade')}
                             </Button>
@@ -367,23 +386,25 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
                   </StyledText>
                 </li>
               </StyledList>
-              <Box display="flex" justifyContent={'flex-end'}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="medium"
-                  onClick={() =>
-                    navigate(`/courses/${course.id}/grading-details`)
-                  }
-                  sx={{ py: 1 }}
-                >
-                  <Typography variant="body1" fontWeight={600}>
-                    {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
-                    )}
-                  </Typography>
-                </Button>
-              </Box>
+              {canGradeParticipants ? (
+                <Box display="flex" justifyContent={'flex-end'}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    onClick={() =>
+                      navigate(`/courses/${course.id}/grading-details`)
+                    }
+                    sx={{ py: 1 }}
+                  >
+                    <Typography variant="body1" fontWeight={600}>
+                      {t(
+                        'pages.course-details.tabs.grading.grading-details-confirmation.confirm-grading-details'
+                      )}
+                    </Typography>
+                  </Button>
+                </Box>
+              ) : null}
             </Box>
           </Box>
         )}

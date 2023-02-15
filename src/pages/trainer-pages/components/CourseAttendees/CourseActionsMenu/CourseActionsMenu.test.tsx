@@ -68,7 +68,7 @@ describe('component: CourseActionsMenu', () => {
 
     userEvent.click(screen.getByText(/manage attendance/i))
 
-    expect(screen.queryByText(/remove/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
   })
@@ -83,7 +83,7 @@ describe('component: CourseActionsMenu', () => {
       />,
       {
         auth: {
-          activeRole: RoleName.SALES_ADMIN,
+          activeRole: RoleName.SALES_REPRESENTATIVE,
         },
       }
     )
@@ -92,7 +92,7 @@ describe('component: CourseActionsMenu', () => {
 
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
-    expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
   })
 
   it('renders correct options for an org admin user', () => {
