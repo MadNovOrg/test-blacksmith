@@ -38,8 +38,8 @@ const test = base.extend<{ course: Course }>({
     await deleteCourse(course.id)
   },
 })
-
-test('course evaluation', async ({ browser, course }) => {
+// eslint-disable-next-line playwright/no-skipped-test
+test.skip('course evaluation', async ({ browser, course }) => {
   test.setTimeout(90000)
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),

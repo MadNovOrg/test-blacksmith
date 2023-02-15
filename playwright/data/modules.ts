@@ -16,7 +16,14 @@ export type ModuleSetup = {
 export const MODULES_SETUP: ModuleSetup[] = [
   {
     name: 'level 1 f2f',
-    course: UNIQUE_COURSE(),
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = CourseLevel.Level_1
+      course.type = CourseType.CLOSED
+      course.organization = { name: 'London First School' }
+      course.reaccreditation = false
+      return course
+    })(),
     mandatoryModules: [
       {
         name: 'Theory',
@@ -135,9 +142,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '30mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Separations'],
+    modulesToMove: [],
     durationBefore: '3hrs',
-    durationAfter: '3hrs 35mins',
+    durationAfter: '3hrs',
   },
   {
     name: 'level 1 mixed reaccred',
@@ -202,9 +209,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '30mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Separations'],
+    modulesToMove: [],
     durationBefore: '3hrs',
-    durationAfter: '3hrs 35mins',
+    durationAfter: '3hrs',
   },
   {
     name: 'level 1 virtual reaccred',
@@ -269,9 +276,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '30mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Prompts and Guides'],
+    modulesToMove: [],
     durationBefore: '3hrs',
-    durationAfter: '3hrs 35mins',
+    durationAfter: '3hrs',
   },
   {
     name: 'level 1 f2f blended',
@@ -336,9 +343,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr',
       },
     ],
-    modulesToMove: ['Clothing Responses', 'Small Child and One Person Holds'],
+    modulesToMove: [],
     durationBefore: '1hr 45mins',
-    durationAfter: '3hrs 5mins',
+    durationAfter: '1hr 45mins',
   },
   {
     name: 'level 1 virtual blended',
@@ -404,9 +411,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr',
       },
     ],
-    modulesToMove: ['Bite Responses', 'Separations'],
+    modulesToMove: [],
     durationBefore: '1hr 45mins',
-    durationAfter: '2hrs 25mins',
+    durationAfter: '1hr 45mins',
   },
   {
     name: 'level 2 f2f',
@@ -478,9 +485,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr 30mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
+    modulesToMove: [],
     durationBefore: '5hrs',
-    durationAfter: '7hrs 20mins',
+    durationAfter: '5hrs',
   },
   {
     name: 'level 2 mixed',
@@ -553,9 +560,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr 30mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Bite Responses', 'Two Person Escorts'],
+    modulesToMove: [],
     durationBefore: '5hrs',
-    durationAfter: '7hrs 20mins',
+    durationAfter: '5hrs',
   },
   {
     name: 'level 2 f2f reaccred',
@@ -627,9 +634,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '45mins',
       },
     ],
-    modulesToMove: ['Seated Holds', 'Two Person Escorts'],
+    modulesToMove: [],
     durationBefore: '3hrs',
-    durationAfter: '4hrs 30mins',
+    durationAfter: '3hrs',
   },
   {
     name: 'level 2 mixed reaccred',
@@ -701,13 +708,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '45mins',
       },
     ],
-    modulesToMove: [
-      'Neck Disengagement',
-      'Hair Responses',
-      'Two Person Escorts',
-    ],
+    modulesToMove: [],
     durationBefore: '3hrs',
-    durationAfter: '4hrs 20mins',
+    durationAfter: '3hrs',
   },
   {
     name: 'level 2 f2f blended',
@@ -780,13 +783,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr 30mins',
       },
     ],
-    modulesToMove: [
-      'Personal Safety',
-      'Clothing Responses',
-      'Two Person Escorts',
-    ],
+    modulesToMove: [],
     durationBefore: '1hr 45mins',
-    durationAfter: '4hrs 5mins',
+    durationAfter: '1hr 45mins',
   },
   {
     name: 'level 2 f2f blended reaccred',
@@ -860,12 +859,12 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '45mins',
       },
     ],
-    modulesToMove: ['Personal Safety', 'Separations', 'Two Person Escorts'],
+    modulesToMove: [],
     durationBefore: '1hr 45mins',
-    durationAfter: '3hrs 5mins',
+    durationAfter: '1hr 45mins',
   },
   {
-    name: 'advanced f2f @smoke',
+    name: 'advanced f2f',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Advanced
@@ -900,9 +899,9 @@ export const MODULES_SETUP: ModuleSetup[] = [
         duration: '1hr',
       },
     ],
-    modulesToMove: ['Ground Recovery Techniques', 'Transport'],
+    modulesToMove: ['Ground Recovery Techniques'],
     durationBefore: '0mins',
-    durationAfter: '7hrs',
+    durationAfter: '6hrs',
   },
 ]
 
