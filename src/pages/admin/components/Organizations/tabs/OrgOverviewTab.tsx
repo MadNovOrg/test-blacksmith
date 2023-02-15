@@ -126,6 +126,7 @@ export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
             <TabList
               onChange={(_, value) => setUserByLevelSelectedTab(value)}
               sx={{ mt: 2 }}
+              variant="scrollable"
             >
               {LEVELS_IN_ORDER.filter(level => profilesByLevel.get(level)).map(
                 courseLevel => (
