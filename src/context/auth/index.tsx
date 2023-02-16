@@ -12,7 +12,9 @@ import type { AuthContextType, AuthState, CognitoUser, E } from './types'
 export const AuthContext = React.createContext({} as AuthContextType)
 export const useAuth = () => React.useContext(AuthContext)
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const [loading, setLoading] = useState(true)
   const [state, setState] = useState<AuthState>({})
 
@@ -46,7 +48,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, [loadProfile])
 
   const login = useCallback(
-    async (email, password) => {
+    async (email: string, password: string) => {
       try {
         const user = await Auth.signIn(email, password)
         await loadProfile(user)

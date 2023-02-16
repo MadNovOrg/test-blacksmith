@@ -46,7 +46,9 @@ type CertificationListProps = {
   columns?: CertificationListColumns
 }
 
-export const CertificationList: React.FC<CertificationListProps> = ({
+export const CertificationList: React.FC<
+  React.PropsWithChildren<CertificationListProps>
+> = ({
   participants,
   filtered = false,
   sorting,

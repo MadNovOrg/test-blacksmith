@@ -42,7 +42,7 @@ describe('page: ForgotPassword', () => {
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
 
-    userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForText('Please enter your email')
 
@@ -56,8 +56,8 @@ describe('page: ForgotPassword', () => {
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
 
-    userEvent.type(emailInput, 'not a valid email')
-    userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await userEvent.type(emailInput, 'not a valid email')
+    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForText('Please enter a valid email address')
 
@@ -72,8 +72,8 @@ describe('page: ForgotPassword', () => {
     expect(emailInput).toHaveValue('')
 
     const email = chance.email()
-    userEvent.type(emailInput, email)
-    userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await userEvent.type(emailInput, email)
+    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForCalls(AuthMock.forgotPassword)
     expect(AuthMock.forgotPassword).toHaveBeenCalledWith(email)
@@ -96,8 +96,8 @@ describe('page: ForgotPassword', () => {
 
     const emailInput = screen.getByTestId('forgot-email-input')
     const email = chance.email()
-    userEvent.type(emailInput, email)
-    userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await userEvent.type(emailInput, email)
+    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForCalls(AuthMock.forgotPassword)
     await waitForCalls(gqlRequestMocked)

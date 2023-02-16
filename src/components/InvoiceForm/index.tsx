@@ -43,7 +43,7 @@ type FieldValues = {
   invoiceDetails?: InferType<ReturnType<typeof formSchema>>
 }
 
-export const InvoiceForm: React.FC = () => {
+export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   const {
     register,
     formState: { errors },

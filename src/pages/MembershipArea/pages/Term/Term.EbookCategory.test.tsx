@@ -126,7 +126,10 @@ describe('page: Term - EbookCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search ebooks'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search ebooks'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -135,7 +138,7 @@ describe('page: Term - EbookCategory', () => {
     })
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const ebooks = buildEntities(20, buildEbook)
     const ebooksPosts = ebooks.slice().reverse()
     const category = {
@@ -182,8 +185,8 @@ describe('page: Term - EbookCategory', () => {
       screen.queryByTestId(`ebook-grid-item-${ebooksPosts[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       screen.queryByTestId(`ebook-grid-item-${ebooks[0].id}`)
@@ -248,7 +251,7 @@ describe('page: Term - EbookCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.click(screen.getByTestId('term-next-page'))
+    await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
       screen.queryByTestId(`ebook-grid-item-${firstBatch[0].id}`)
@@ -260,7 +263,7 @@ describe('page: Term - EbookCategory', () => {
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('term-previous-page'))
+    await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
       screen.getByTestId(`ebook-grid-item-${firstBatch[0].id}`)

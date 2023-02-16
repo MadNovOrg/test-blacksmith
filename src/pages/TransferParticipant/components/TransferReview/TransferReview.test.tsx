@@ -319,7 +319,7 @@ describe('page: TransferReview', () => {
       { initialEntries: ['/transfer/review'] }
     )
 
-    userEvent.click(screen.getByText(/confirm transfer/i))
+    await userEvent.click(screen.getByText(/confirm transfer/i))
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
@@ -433,7 +433,7 @@ describe('page: TransferReview', () => {
       { initialEntries: ['/transfer/review'] }
     )
 
-    userEvent.click(screen.getByText(/confirm transfer/i))
+    await userEvent.click(screen.getByText(/confirm transfer/i))
 
     await waitFor(() => {
       expect(screen.getByText(/participant transferred/i)).toBeInTheDocument()

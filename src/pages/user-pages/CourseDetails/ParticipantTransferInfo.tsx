@@ -9,10 +9,12 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TransferTermsTable } from '@app/pages/TransferParticipant/components/TransferTermsTable'
 
-export const ParticipantTransferInfo: React.FC<{
-  startDate: Date
-  onCancel: () => void
-}> = ({ startDate, onCancel }) => {
+export const ParticipantTransferInfo: React.FC<
+  React.PropsWithChildren<{
+    startDate: Date
+    onCancel: () => void
+  }>
+> = ({ startDate, onCancel }) => {
   const { t } = useScopedTranslation(
     'pages.course-details.modify-my-attendance.transfer-info'
   )

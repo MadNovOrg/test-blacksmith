@@ -22,7 +22,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-const Blog: React.FC = () => {
+const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [featuredPost, setFeaturedPost] = useState<PostSummaryFragment | null>(
     null

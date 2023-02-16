@@ -12,7 +12,9 @@ type Props = {
   item: Omit<Go1_Licenses_History, 'org_id'>
 }
 
-export const EventTypeCol: React.FC<Props> = ({ item }) => {
+export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
+  item,
+}) => {
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses.table')
 
   switch (item.event) {

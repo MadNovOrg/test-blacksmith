@@ -56,7 +56,7 @@ type EvaluationSummaryPDFDownloadLinkProps = {
 }
 
 export const EvaluationSummaryPDFDownloadLink: React.FC<
-  EvaluationSummaryPDFDownloadLinkProps
+  React.PropsWithChildren<EvaluationSummaryPDFDownloadLinkProps>
 > = ({ courseId, profileId }) => {
   const { t } = useTranslation()
 

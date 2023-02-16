@@ -32,7 +32,7 @@ type Props = {
   filtered: boolean
 }
 
-export const List: React.FC<Props> = ({
+export const List: React.FC<React.PropsWithChildren<Props>> = ({
   orders = [],
   sorting,
   loading,
@@ -59,7 +59,7 @@ export const List: React.FC<Props> = ({
     ] as Col[]
   }, [t, orders, checkbox])
 
-  const getOrderInfo = useCallback(order => {
+  const getOrderInfo = useCallback((order: OrderType) => {
     const { start } = order?.course?.schedule
       ? order.course.schedule[0]
       : { start: null }
@@ -79,7 +79,7 @@ export const List: React.FC<Props> = ({
   )
 
   const exportOrders = useCallback(
-    async (orders = []) => {
+    async (orders: OrderType[] = []) => {
       const _t = (col: string) => t(`pages.orders.cols-${col}`)
       const ordersData = [
         [

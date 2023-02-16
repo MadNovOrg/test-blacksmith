@@ -57,7 +57,9 @@ const TextField = styled(MuiTextField)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
 }))
 
-export const EditOrgDetails: React.FC = () => {
+export const EditOrgDetails: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const fetcher = useFetcher()

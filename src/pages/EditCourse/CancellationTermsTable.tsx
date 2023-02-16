@@ -24,10 +24,9 @@ export type CancellationTermsTableProps = {
   sx?: SxProps
 }
 
-export const CancellationTermsTable: React.FC<CancellationTermsTableProps> = ({
-  courseStartDate,
-  sx,
-}) => {
+export const CancellationTermsTable: React.FC<
+  React.PropsWithChildren<CancellationTermsTableProps>
+> = ({ courseStartDate, sx }) => {
   const { t } = useTranslation()
 
   const applicableFee = getCancellationTermsFee(courseStartDate)

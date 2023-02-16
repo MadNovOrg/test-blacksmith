@@ -114,7 +114,9 @@ const Context = React.createContext<ContextType>(initialContext as ContextType)
 
 type Props = unknown
 
-export const BookingProvider: React.FC<Props> = ({ children }) => {
+export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+}) => {
   const { t } = useTranslation()
   const location = useLocation()
   const fetcher = useFetcher()

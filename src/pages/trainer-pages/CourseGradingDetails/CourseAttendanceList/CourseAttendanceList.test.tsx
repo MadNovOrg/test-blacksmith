@@ -6,7 +6,7 @@ import { render, screen, chance, within } from '@test/index'
 import { CourseAttendanceList } from './index'
 
 describe('component: CourseAttendanceList', () => {
-  it('selects single participant as attended and mark them as clear for grading', () => {
+  it('selects single participant as attended and mark them as clear for grading', async () => {
     const participants = [
       { id: chance.guid(), attending: false, name: chance.name() },
     ]
@@ -20,7 +20,7 @@ describe('component: CourseAttendanceList', () => {
       />
     )
 
-    userEvent.click(
+    await userEvent.click(
       screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
     )
 
@@ -34,7 +34,7 @@ describe('component: CourseAttendanceList', () => {
     ).toBeInTheDocument()
   })
 
-  it('selects single participant as did not attend and mark them as automatic fail', () => {
+  it('selects single participant as did not attend and mark them as automatic fail', async () => {
     const participants = [
       { id: chance.guid(), attending: true, name: chance.name() },
     ]
@@ -48,7 +48,7 @@ describe('component: CourseAttendanceList', () => {
       />
     )
 
-    userEvent.click(
+    await userEvent.click(
       screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
     )
 
@@ -62,7 +62,7 @@ describe('component: CourseAttendanceList', () => {
     ).toBeInTheDocument()
   })
 
-  it('selects all participants when master checkbox is checked', () => {
+  it('selects all participants when master checkbox is checked', async () => {
     const participants = [
       { id: chance.guid(), attending: false, name: chance.name() },
       { id: chance.guid(), attending: false, name: chance.name() },
@@ -77,7 +77,7 @@ describe('component: CourseAttendanceList', () => {
       />
     )
 
-    userEvent.click(screen.getByLabelText('Select all'))
+    await userEvent.click(screen.getByLabelText('Select all'))
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
     expect(onChangeMock).toHaveBeenCalledWith({
@@ -89,7 +89,7 @@ describe('component: CourseAttendanceList', () => {
     expect(screen.getByText('2 selected')).toBeInTheDocument()
   })
 
-  it('deselects all participants when master checkbox is unchecked', () => {
+  it('deselects all participants when master checkbox is unchecked', async () => {
     const participants = [
       { id: chance.guid(), attending: true, name: chance.name() },
       { id: chance.guid(), attending: true, name: chance.name() },
@@ -104,7 +104,7 @@ describe('component: CourseAttendanceList', () => {
       />
     )
 
-    userEvent.click(screen.getByLabelText('Deselect all'))
+    await userEvent.click(screen.getByLabelText('Deselect all'))
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
     expect(onChangeMock).toHaveBeenCalledWith({

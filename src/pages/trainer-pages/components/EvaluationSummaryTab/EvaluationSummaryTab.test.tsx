@@ -317,7 +317,7 @@ describe('component: EvaluationSummaryTab', () => {
     })
   })
 
-  it("navigates to trainer's evaluation submit page when submit evaluation button is clicked", () => {
+  it("navigates to trainer's evaluation submit page when submit evaluation button is clicked", async () => {
     const evaluations = [
       { id: '1', profile: attendees[0].profile },
       { id: '2', profile: attendees[1].profile },
@@ -339,7 +339,7 @@ describe('component: EvaluationSummaryTab', () => {
       { initialEntries: ['/courses/1/details'] }
     )
 
-    userEvent.click(screen.getByText('Complete my evaluation'))
+    await userEvent.click(screen.getByText('Complete my evaluation'))
 
     expect(screen.queryByText('Evaluation submit')).toBeInTheDocument()
   })

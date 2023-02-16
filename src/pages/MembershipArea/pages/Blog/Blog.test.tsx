@@ -109,7 +109,7 @@ describe('page: Blog', () => {
     ).toHaveAttribute('src', posts[0].featuredImage?.node?.mediaItemUrl ?? '')
   })
 
-  it('navigates to single blog post page when clicked on featured image', () => {
+  it('navigates to single blog post page when clicked on featured image', async () => {
     const posts = buildEntities(2, buildPost)
 
     const client = {
@@ -138,7 +138,9 @@ describe('page: Blog', () => {
 
     const featuredPost = screen.getByTestId('featured-post-item')
 
-    userEvent.click(within(featuredPost).getByAltText(posts[0].title ?? ''))
+    await userEvent.click(
+      within(featuredPost).getByAltText(posts[0].title ?? '')
+    )
 
     expect(screen.getByText('Post page')).toBeInTheDocument()
   })
@@ -218,7 +220,10 @@ describe('page: Blog', () => {
       { initialEntries: ['/blog'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search posts'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search posts'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -260,7 +265,7 @@ describe('page: Blog', () => {
     expect(screen.getByTestId('posts-pagination')).toBeInTheDocument()
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const posts = buildEntities(20, buildPost)
     const reversedPosts = posts.slice().reverse()
 
@@ -299,8 +304,8 @@ describe('page: Blog', () => {
       screen.queryByTestId(`post-grid-item-${reversedPosts[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       screen.queryByTestId(`post-grid-item-${posts[0].id}`)
@@ -357,7 +362,7 @@ describe('page: Blog', () => {
       { initialEntries: ['/blog'] }
     )
 
-    userEvent.click(screen.getByTestId('posts-next-page'))
+    await userEvent.click(screen.getByTestId('posts-next-page'))
 
     expect(
       within(screen.getByTestId('featured-post-item')).getByText(
@@ -375,7 +380,7 @@ describe('page: Blog', () => {
 
     expect(screen.getByTestId('posts-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('posts-previous-page'))
+    await userEvent.click(screen.getByTestId('posts-previous-page'))
 
     expect(
       within(screen.getByTestId('featured-post-item')).getByText(

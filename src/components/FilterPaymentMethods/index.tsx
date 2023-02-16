@@ -10,7 +10,9 @@ type Props = {
 
 const possiblePaymentMethods = Object.values(Payment_Methods_Enum)
 
-export const FilterPaymentMethods: React.FC<Props> = ({ onChange }) => {
+export const FilterPaymentMethods: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange,
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() =>

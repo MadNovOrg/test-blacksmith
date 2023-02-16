@@ -9,7 +9,7 @@ interface Props {
   value: Date | string
 }
 
-export const CourseTimePicker: React.FC<Props> = ({
+export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
   error,
   id,
   label,

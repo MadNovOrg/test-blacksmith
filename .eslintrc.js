@@ -21,46 +21,7 @@ module.exports = {
         ecmaVersion: 12,
       },
       rules: {
-        'jest/no-large-snapshots': [
-          'error',
-          {
-            allowedSnapshots: {
-              [path.resolve(
-                'src/components/OrgInvitesTable/__snapshots__/OrgInvitesTable.test.tsx.snap'
-              )]: ['OrgInvitesTable matches snapshot 1'],
-              [path.resolve(
-                'src/components/OrgUsersTable/__snapshots__/OrgUsersTable.test.tsx.snap'
-              )]: ['OrgUsersTable matches snapshot 1'],
-              [path.resolve(
-                'src/pages/admin/components/Organizations/__snapshots__/EditOrgDetails.test.tsx.snap'
-              )]: ['EditOrgDetails matches snapshot 1'],
-              [path.resolve(
-                'src/pages/admin/components/Organizations/tabs/__snapshots__/OrgDetailsTab.test.tsx.snap'
-              )]: ['OrgDetailsTab matches snapshot 1'],
-              [path.resolve(
-                'src/pages/common/CourseBooking/components/CourseBookingDetails/__snapshots__/CourseBookingDetails.test.tsx.snap'
-              )]: [
-                'CourseBookingDetails matches snapshot for CLOSED course 1',
-                'CourseBookingDetails matches snapshot for OPEN course 1',
-              ],
-              [path.resolve(
-                'src/pages/common/CourseBooking/components/CourseBookingDone/__snapshots__/CourseBookingDone.test.tsx.snap'
-              )]: ['CourseBookingDone matches snapshot 1'],
-              [path.resolve(
-                'src/pages/common/CourseBooking/components/CourseBookingReview/__snapshots__/CourseBookingReview.test.tsx.snap'
-              )]: [
-                'CourseBookingReview matches snapshot for CLOSED course 1',
-                'CourseBookingReview matches snapshot for OPEN course 1',
-              ],
-              [path.resolve(
-                'src/pages/common/Login/__snapshots__/Login.test.tsx.snap'
-              )]: ['Login matches snapshot 1'],
-              [path.resolve(
-                'src/pages/common/VerifyEmail/__snapshots__/VerifyEmail.test.tsx.snap'
-              )]: ['page: VerifyEmailPage matchs snapshot 1'],
-            },
-          },
-        ],
+        'jest/no-large-snapshots': ['error'],
         'jest/expect-expect': [
           'error',
           {
@@ -107,6 +68,7 @@ module.exports = {
     ],
     '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/no-explicit-any': 'error',
     'no-shadow': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],

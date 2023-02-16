@@ -29,7 +29,7 @@ export type Props = {
   chipLabel?: string
 } & BoxProps
 
-export const FeaturedContentItem: React.FC<Props> = ({
+export const FeaturedContentItem: React.FC<React.PropsWithChildren<Props>> = ({
   data,
   linkTo,
   chipLabel,

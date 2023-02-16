@@ -129,7 +129,10 @@ describe('page: Term - ResearchSummaryCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search summaries'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search summaries'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -138,7 +141,7 @@ describe('page: Term - ResearchSummaryCategory', () => {
     })
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const researchSummaries = buildEntities(20, buildResearchSummary)
     const reversedResearchSummaries = researchSummaries.slice().reverse()
     const category = {
@@ -189,8 +192,8 @@ describe('page: Term - ResearchSummaryCategory', () => {
       )
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       screen.queryByTestId(
@@ -259,7 +262,7 @@ describe('page: Term - ResearchSummaryCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.click(screen.getByTestId('term-next-page'))
+    await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
       screen.queryByTestId(`research-summary-grid-item-${firstBatch[0].id}`)
@@ -271,7 +274,7 @@ describe('page: Term - ResearchSummaryCategory', () => {
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('term-previous-page'))
+    await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
       screen.getByTestId(`research-summary-grid-item-${firstBatch[0].id}`)

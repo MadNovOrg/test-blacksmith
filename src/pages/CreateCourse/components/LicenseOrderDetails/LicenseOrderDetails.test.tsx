@@ -31,7 +31,9 @@ jest.mock('@app/hooks/useCourseDraft', () => ({
     .mockReturnValue({ removeDraft: jest.fn(), setDraft: jest.fn() }),
 }))
 
-const CreateCourseContextConsumer: React.FC = () => {
+const CreateCourseContextConsumer: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { go1Licensing } = useCreateCourse()
 
   return (
@@ -154,11 +156,14 @@ describe('component: LicenseOrderDetails', () => {
 
     expect(screen.getByText('Review & confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByTestId('org-selector'), 'Organization')
-    userEvent.type(screen.getByLabelText('First Name *'), 'John')
-    userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
-    userEvent.type(screen.getByLabelText('Email *'), 'john.doe@example.com')
-    userEvent.type(screen.getByLabelText('Phone *'), '11111111')
+    await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
+    await userEvent.type(screen.getByLabelText('First Name *'), 'John')
+    await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
+    await userEvent.type(
+      screen.getByLabelText('Email *'),
+      'john.doe@example.com'
+    )
+    await userEvent.type(screen.getByLabelText('Phone *'), '11111111')
 
     await waitFor(() => {
       expect(screen.getByText('Review & confirm')).toBeEnabled()
@@ -204,15 +209,16 @@ describe('component: LicenseOrderDetails', () => {
       { initialEntries: ['/license-order-details'] }
     )
 
-    userEvent.type(screen.getByTestId('org-selector'), 'Organization')
-    userEvent.type(screen.getByLabelText('First Name *'), 'John')
-    userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
-    userEvent.type(screen.getByLabelText('Email *'), 'john.doe@example.com')
-    userEvent.type(screen.getByLabelText('Phone *'), '11111111')
+    await userEvent.type(screen.getByTestId('org-selector'), 'Organization')
+    await userEvent.type(screen.getByLabelText('First Name *'), 'John')
+    await userEvent.type(screen.getByLabelText('Surname *'), 'Doe')
+    await userEvent.type(
+      screen.getByLabelText('Email *'),
+      'john.doe@example.com'
+    )
+    await userEvent.type(screen.getByLabelText('Phone *'), '11111111')
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Review & confirm'))
-    })
+    await userEvent.click(screen.getByText('Review & confirm'))
 
     await waitFor(() => {
       expect(screen.getByText('Prices are saved!')).toBeInTheDocument()

@@ -23,10 +23,10 @@ jest.mock('@app/hooks/use-fetcher')
 const useFetcherMock = jest.mocked(useFetcher)
 const useCourseGradingDataMock = jest.mocked(useCourseGradingData)
 
-function selectGradingOption(grade: string) {
-  userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+async function selectGradingOption(grade: string) {
+  await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
   const menu = screen.getByTestId('course-grading-options')
-  userEvent.click(within(menu).getByText(grade))
+  await userEvent.click(within(menu).getByText(grade))
 }
 
 describe('page: CourseGrading', () => {
@@ -224,7 +224,7 @@ describe('page: CourseGrading', () => {
     expect(screen.getByText('2 attendee(s)')).toBeInTheDocument()
   })
 
-  it('displays confirmation modal when clicked on submit button', () => {
+  it('displays confirmation modal when clicked on submit button', async () => {
     const COURSE_ID = 'course-id'
 
     const course = buildCourse()
@@ -254,16 +254,16 @@ describe('page: CourseGrading', () => {
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
-    selectGradingOption('Pass')
+    await selectGradingOption('Pass')
 
-    userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Submit final grade'))
 
     expect(screen.getByText('Grading confirmation')).toBeVisible()
     expect(screen.getByText('Cancel')).toBeVisible()
     expect(screen.getByText('Confirm')).toBeVisible()
   })
 
-  it('closes modal when saving is not confirmed', () => {
+  it('closes modal when saving is not confirmed', async () => {
     const COURSE_ID = 'course-id'
 
     const course = buildCourse()
@@ -293,11 +293,11 @@ describe('page: CourseGrading', () => {
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
-    selectGradingOption('Pass')
+    await selectGradingOption('Pass')
 
-    userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Submit final grade'))
 
-    userEvent.click(screen.getByText('Cancel'))
+    await userEvent.click(screen.getByText('Cancel'))
 
     expect(screen.queryByText('Grading confirmation')).not.toBeVisible()
   })
@@ -376,17 +376,17 @@ describe('page: CourseGrading', () => {
       { initialEntries: [`/${COURSE_ID}/grading`] }
     )
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText('Any notes attendee(s) (optional)'),
       'Feedback'
     )
 
-    userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+    await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
-    selectGradingOption('Observe only')
+    await selectGradingOption('Observe only')
 
-    userEvent.click(screen.getByText('Submit final grade'))
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Submit final grade'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {

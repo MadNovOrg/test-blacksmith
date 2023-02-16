@@ -26,7 +26,7 @@ type Props = {
   onChange: (from?: Date, to?: Date) => void
 } & Omit<BoxProps, 'onChange'>
 
-export const FilterDates: React.FC<Props> = ({
+export const FilterDates: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
   title,
   queryParam = '',

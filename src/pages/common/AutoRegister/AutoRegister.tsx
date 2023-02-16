@@ -9,7 +9,9 @@ import { useAuth } from '@app/context/auth'
 
 import { Form } from './components/Form'
 
-export const AutoRegisterPage: React.FC = () => {
+export const AutoRegisterPage: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { profile } = useAuth()
   const { t } = useTranslation()
 

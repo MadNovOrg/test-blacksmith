@@ -58,7 +58,7 @@ describe('page: Post', () => {
       { initialEntries: [`/${post.id}`] }
     )
 
-    userEvent.click(screen.getByText('Blog'))
+    await userEvent.click(screen.getByText('Blog'))
 
     await waitForText('Blog page')
   })

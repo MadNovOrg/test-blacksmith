@@ -21,7 +21,9 @@ type LocationState = { from: { pathname: string; search: string } }
 
 const bookingState = { pathname: '/booking' }
 
-export const RegistrationPage: React.FC = () => {
+export const RegistrationPage: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { login, profile } = useAuth()
   const fetcher = useFetcher()
   const { t } = useTranslation()

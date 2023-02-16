@@ -30,7 +30,7 @@ import {
   ContentGridItem,
 } from './components/layout'
 
-const Home: React.FC = () => {
+const Home: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
 
   const [{ data, fetching, error }] = useQuery<MembershipHomeQuery>({

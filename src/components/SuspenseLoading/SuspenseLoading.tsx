@@ -2,7 +2,9 @@ import { Box, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const SuspenseLoading: React.FC = () => {
+export const SuspenseLoading: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
 
   return (

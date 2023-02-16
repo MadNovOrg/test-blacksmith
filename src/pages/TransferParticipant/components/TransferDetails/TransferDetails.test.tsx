@@ -128,7 +128,7 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    userEvent.click(screen.getByText(/Back to selection/i))
+    await userEvent.click(screen.getByText(/Back to selection/i))
 
     await waitFor(() => {
       expect(screen.getByText('First step')).toBeInTheDocument()
@@ -168,7 +168,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    const ReviewMock: React.FC = () => {
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
       const { fees } = useTransferParticipantContext()
 
       return (
@@ -199,13 +199,11 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    userEvent.click(screen.getByLabelText(/apply transfer terms/i))
+    await userEvent.click(screen.getByLabelText(/apply transfer terms/i))
 
     expect(screen.getByTestId('transfer-terms-table')).toBeInTheDocument()
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText(/review & confirm/i))
-    })
+    await userEvent.click(screen.getByText(/review & confirm/i))
 
     await waitFor(() => {
       expect(screen.getByText('APPLY_TERMS')).toBeInTheDocument()
@@ -245,7 +243,7 @@ describe('page: TransferDetails', () => {
       },
     }
 
-    const ReviewMock: React.FC = () => {
+    const ReviewMock: React.FC<React.PropsWithChildren<unknown>> = () => {
       const { fees } = useTransferParticipantContext()
 
       return (
@@ -276,14 +274,12 @@ describe('page: TransferDetails', () => {
       { initialEntries: ['/transfer/participant-id/details'] }
     )
 
-    userEvent.click(screen.getByLabelText(/custom fee/i))
-    userEvent.type(screen.getByLabelText(/amount/i), '50')
+    await userEvent.click(screen.getByLabelText(/custom fee/i))
+    await userEvent.type(screen.getByLabelText(/amount/i), '50')
 
     expect(screen.queryByTestId('transfer-terms-table')).not.toBeInTheDocument()
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText(/review & confirm/i))
-    })
+    await userEvent.click(screen.getByText(/review & confirm/i))
 
     await waitFor(() => {
       expect(screen.getByText(TransferFeeType.CustomFee)).toBeInTheDocument()

@@ -17,7 +17,9 @@ export type CourseInfoPanelProps = {
   }
 }
 
-export const CourseInfoPanel: React.FC<CourseInfoPanelProps> = ({ course }) => (
+export const CourseInfoPanel: React.FC<
+  React.PropsWithChildren<CourseInfoPanelProps>
+> = ({ course }) => (
   <InfoPanel>
     <CourseTitleAndDuration
       course={{

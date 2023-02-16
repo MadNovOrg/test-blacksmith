@@ -20,7 +20,7 @@ describe('component: ReviewChangesModal', () => {
 
     expect(confirmButton).toBeDisabled()
 
-    userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
+    await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
 
     await waitFor(() => {
       expect(confirmButton).toBeEnabled()
@@ -51,8 +51,8 @@ describe('component: ReviewChangesModal', () => {
 
     expect(confirmButton).toBeDisabled()
 
-    userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
-    userEvent.click(screen.getByLabelText(/apply rescheduling terms/i))
+    await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
+    await userEvent.click(screen.getByLabelText(/apply rescheduling terms/i))
 
     await waitFor(() => {
       expect(screen.getByTestId('rescheduling-terms-table')).toBeInTheDocument()
@@ -82,14 +82,14 @@ describe('component: ReviewChangesModal', () => {
 
     expect(confirmButton).toBeDisabled()
 
-    userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
-    userEvent.click(screen.getByLabelText(/custom fee/i))
+    await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
+    await userEvent.click(screen.getByLabelText(/custom fee/i))
 
     await waitFor(() => {
       expect(confirmButton).toBeDisabled()
     })
 
-    userEvent.type(screen.getByLabelText(/amount/i), '50')
+    await userEvent.type(screen.getByLabelText(/amount/i), '50')
 
     await waitFor(() => {
       expect(confirmButton).toBeEnabled()
@@ -118,15 +118,15 @@ describe('component: ReviewChangesModal', () => {
 
     expect(confirmButton).toBeDisabled()
 
-    userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
-    userEvent.click(screen.getByLabelText(/No fee/i))
+    await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
+    await userEvent.click(screen.getByLabelText(/No fee/i))
 
     await waitFor(() => {
       expect(confirmButton).toBeEnabled()
     })
   })
 
-  it('cancels review when clicked on cancel button', () => {
+  it('cancels review when clicked on cancel button', async () => {
     const onCancelMock = jest.fn()
 
     render(
@@ -138,7 +138,7 @@ describe('component: ReviewChangesModal', () => {
       />
     )
 
-    userEvent.click(screen.getByText(/never mind/i))
+    await userEvent.click(screen.getByText(/never mind/i))
 
     expect(onCancelMock).toHaveBeenCalledTimes(1)
   })
@@ -162,14 +162,12 @@ describe('component: ReviewChangesModal', () => {
       />
     )
 
-    userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
-    userEvent.click(screen.getByLabelText(/apply rescheduling terms/i))
+    await userEvent.type(screen.getByPlaceholderText(/reason/i), 'reason')
+    await userEvent.click(screen.getByLabelText(/apply rescheduling terms/i))
 
-    await waitFor(() => {
-      userEvent.click(
-        screen.getByText(/confirm changes/i, { selector: 'button' })
-      )
-    })
+    await userEvent.click(
+      screen.getByText(/confirm changes/i, { selector: 'button' })
+    )
 
     await waitFor(() => {
       expect(onConfirmMock).toHaveBeenCalledTimes(1)

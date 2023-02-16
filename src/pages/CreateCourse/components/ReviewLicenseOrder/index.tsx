@@ -14,7 +14,9 @@ import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
 import { useCreateCourse } from '../CreateCourseProvider'
 
-export const ReviewLicenseOrder: React.FC = () => {
+export const ReviewLicenseOrder: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { go1Licensing, courseData, setCurrentStepKey } = useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
 

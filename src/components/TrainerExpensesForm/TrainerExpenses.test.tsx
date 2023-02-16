@@ -1,10 +1,9 @@
 import Chance from 'chance'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 
 import { CourseTrainerType, TrainerInput, TransportMethod } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, waitFor, within, act } from '@test/index'
 
 import TrainerExpensesForm from '.'
 
@@ -47,10 +46,10 @@ const selectTransportMethod = async (
   const s = screen.getByTestId(`trainer-${pid}`)
 
   const select = within(s).getByTestId(`trip-${index}-dropdown`)
-  userEvent.click(within(select).getByRole('button'))
-  await waitFor(() => {
+  await userEvent.click(within(select).getByRole('button'))
+  await waitFor(async () => {
     const opt = screen.getByTestId(`dropdown-menu-option-${option}`)
-    userEvent.click(opt)
+    await userEvent.click(opt)
   })
 }
 
@@ -121,9 +120,8 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
     )
   ).toBeVisible()
 
-  await act(async () => {
-    await selectTransportMethod(pid, 0, TransportMethod.CAR)
-  })
+  await selectTransportMethod(pid, 0, TransportMethod.CAR)
+
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByLabelText(
       'Total mileage',
@@ -155,11 +153,10 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
     })
   ).toBeVisible()
 
-  await act(async () => {
-    await selectTransportMethod(pid, 1, TransportMethod.FLIGHTS)
-    await fillValueForTrip(pid, 1, '123.53')
-    await fillFlightDaysForTrip(pid, 1, '3')
-  })
+  await selectTransportMethod(pid, 1, TransportMethod.FLIGHTS)
+  await fillValueForTrip(pid, 1, '123.53')
+  await fillFlightDaysForTrip(pid, 1, '3')
+
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId('trip-1-input')
   ).toHaveValue(123.53)
@@ -169,13 +166,12 @@ const runTestsForTrainer = async (trainer: TrainerInput) => {
     )
   ).toHaveValue(3)
 
-  await act(async () => {
-    await addNewTrip(pid)
-    await selectTransportMethod(pid, 2, TransportMethod.PRIVATE)
-    await fillValueForTrip(pid, 2, '0.99')
-    await toggleAccommodation(pid, 2)
-    await fillAccommodationNightsForTrip(pid, 2, '2')
-  })
+  await addNewTrip(pid)
+  await selectTransportMethod(pid, 2, TransportMethod.PRIVATE)
+  await fillValueForTrip(pid, 2, '0.99')
+  await toggleAccommodation(pid, 2)
+  await fillAccommodationNightsForTrip(pid, 2, '2')
+
   expect(
     within(screen.getByTestId(`trainer-${pid}`)).getByTestId(
       'accommodation-2-switch'
@@ -229,7 +225,9 @@ describe('component: TrainerExpensesForm', () => {
     await runTestsForTrainer(trainers[1])
     await runTestsForTrainer(trainers[2])
 
-    expect(screen.getAllByTestId('trip-0-dropdown')).toHaveLength(3)
+    await waitFor(() => {
+      expect(screen.getAllByTestId('trip-0-dropdown')).toHaveLength(3)
+    })
   }, 60000)
   // Was timing out on CI ^
 })

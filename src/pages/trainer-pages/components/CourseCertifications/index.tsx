@@ -11,9 +11,9 @@ type CourseCertificationsProps = {
   course: Course
 }
 
-export const CourseCertifications: React.FC<CourseCertificationsProps> = ({
-  course,
-}) => {
+export const CourseCertifications: React.FC<
+  React.PropsWithChildren<CourseCertificationsProps>
+> = ({ course }) => {
   const sorting = useTableSort('name', 'asc')
 
   const { data: certifiedParticipants, status } = useCourseParticipants(

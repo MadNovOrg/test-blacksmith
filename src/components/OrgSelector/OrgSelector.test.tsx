@@ -11,9 +11,16 @@ import { OrgSelector } from '.'
 jest.mock('@app/hooks/use-fetcher')
 const useFetcherMock = jest.mocked(useFetcher)
 
-jest.useFakeTimers()
-
 describe('component: OrgSelector', () => {
+  beforeEach(() => {
+    jest.useFakeTimers({ advanceTimers: true })
+  })
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers()
+    jest.useRealTimers()
+  })
+
   const profile = buildProfile({
     overrides: {
       organizations: [
@@ -30,10 +37,10 @@ describe('component: OrgSelector', () => {
     },
   })
 
-  it("doesn't display options initially", () => {
+  it("doesn't display options initially", async () => {
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
-    userEvent.click(screen.getByPlaceholderText('Organisation name'))
+    await userEvent.click(screen.getByPlaceholderText('Organisation name'))
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
@@ -55,12 +62,13 @@ describe('component: OrgSelector', () => {
 
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText('Organisation name'),
       ORG_SEARCH_NAME
     )
 
     jest.runAllTimers()
+
     await waitFor(() =>
       expect(
         within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
@@ -89,9 +97,13 @@ describe('component: OrgSelector', () => {
 
     render(<OrgSelector onChange={noop} />, { auth: { profile } })
 
-    userEvent.type(screen.getByPlaceholderText('Organisation name'), 'Org')
+    await userEvent.type(
+      screen.getByPlaceholderText('Organisation name'),
+      'Org'
+    )
 
     jest.runAllTimers()
+
     await waitFor(() => {
       const myOrgsGroup = screen.getByTestId(
         'org-selector-result-group-My organisations'
@@ -123,23 +135,26 @@ describe('component: OrgSelector', () => {
 
     render(<OrgSelector onChange={onChangeMock} />, { auth: { profile } })
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText('Organisation name'),
       ORG_SEARCH_NAME
     )
 
     jest.runAllTimers()
+
     await waitFor(() => {
       expect(
         within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
       ).toBeInTheDocument()
     })
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByRole('listbox')).getByText(ORG_SEARCH_NAME)
     )
 
-    expect(onChangeMock).toHaveBeenCalledTimes(1)
-    expect(onChangeMock).toHaveBeenCalledWith(organization)
+    await waitFor(() => {
+      expect(onChangeMock).toHaveBeenCalledTimes(1)
+      expect(onChangeMock).toHaveBeenCalledWith(organization)
+    })
   })
 })

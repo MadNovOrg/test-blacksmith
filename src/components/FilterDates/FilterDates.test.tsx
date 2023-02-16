@@ -2,7 +2,7 @@ import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { getI18n } from 'react-i18next'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { act, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { FilterDates } from './FilterDates'
 
@@ -26,7 +26,12 @@ describe('component: FilterDates', () => {
 
     const from = screen.getByLabelText('From')
 
-    userEvent.paste(from, '30/05/2022')
+    act(() => {
+      from.focus()
+    })
+
+    await userEvent.paste('30/05/2022')
+
     expect(from).toHaveValue('30/05/2022')
 
     expect(onChange).toHaveBeenCalledWith(
@@ -41,7 +46,12 @@ describe('component: FilterDates', () => {
 
     const to = screen.getByLabelText('To')
 
-    userEvent.paste(to, '30/05/2022')
+    act(() => {
+      to.focus()
+    })
+
+    await userEvent.paste('30/05/2022')
+
     expect(to).toHaveValue('30/05/2022')
 
     expect(onChange).toHaveBeenCalledWith(
@@ -55,7 +65,13 @@ describe('component: FilterDates', () => {
     render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
 
     const from = screen.getByLabelText('From')
-    userEvent.paste(from, '30/07/2024')
+
+    act(() => {
+      from.focus()
+    })
+
+    await userEvent.paste('30/07/2024')
+
     expect(from).toHaveValue('30/07/2024')
 
     const dateFrom = screen.getByTestId('DateFrom')
@@ -69,7 +85,13 @@ describe('component: FilterDates', () => {
     ).not.toBeInTheDocument()
 
     const to = screen.getByLabelText('To')
-    userEvent.paste(to, '15/05/2022')
+
+    act(() => {
+      to.focus()
+    })
+
+    await userEvent.paste('15/05/2022')
+
     expect(to).toHaveValue('15/05/2022')
 
     await waitFor(() => {
@@ -97,7 +119,13 @@ describe('component: FilterDates', () => {
     ).not.toBeInTheDocument()
 
     const from = screen.getByLabelText('From')
-    userEvent.paste(from, '45/62/')
+
+    act(() => {
+      from.focus()
+    })
+
+    await userEvent.paste('45/62/')
+
     expect(from).toHaveValue('45/62/')
 
     await waitFor(() => {
@@ -117,7 +145,13 @@ describe('component: FilterDates', () => {
     ).not.toBeInTheDocument()
 
     const to = screen.getByLabelText('To')
-    userEvent.paste(to, '88/')
+
+    act(() => {
+      to.focus()
+    })
+
+    await userEvent.paste('88/')
+
     expect(to).toHaveValue('88/')
 
     await waitFor(() => {

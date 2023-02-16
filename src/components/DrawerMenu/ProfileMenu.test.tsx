@@ -2,7 +2,7 @@ import React from 'react'
 
 import { RoleName } from '@app/types'
 
-import { render, screen, userEvent, waitFor, within } from '@test/index'
+import { render, screen, userEvent, within } from '@test/index'
 import { buildProfile } from '@test/mock-data-utils'
 
 import { ProfileMenu } from './ProfileMenu'
@@ -15,7 +15,7 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     expect(button).toBeInTheDocument()
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     expect(screen.queryByRole('list')).toBeInTheDocument()
   })
 
@@ -30,7 +30,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -49,7 +49,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -69,7 +69,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -89,7 +89,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(5)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -110,7 +110,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -130,7 +130,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(5)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -151,7 +151,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -170,7 +170,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -190,7 +190,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
@@ -209,7 +209,7 @@ describe('component: ProfileMenu', () => {
     })
 
     const button = screen.getByRole('button', { name: profile.fullName })
-    await waitFor(() => userEvent.click(button))
+    await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
     expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')

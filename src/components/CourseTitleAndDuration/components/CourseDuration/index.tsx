@@ -9,7 +9,11 @@ type Props = {
   end: Date
 } & TypographyProps
 
-export const CourseDuration: React.FC<Props> = ({ start, end, ...props }) => {
+export const CourseDuration: React.FC<React.PropsWithChildren<Props>> = ({
+  start,
+  end,
+  ...props
+}) => {
   const { t } = useTranslation()
 
   const difference = getTimeDifferenceAndContext(end, start)

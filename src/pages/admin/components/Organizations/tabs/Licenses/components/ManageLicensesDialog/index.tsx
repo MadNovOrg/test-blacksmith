@@ -29,7 +29,7 @@ const formTypeEventMap = {
   [Type.REMOVE]: Go1ChangeType.LicensesRemoved,
 }
 
-export const ManageLicensesDialog: React.FC<Props> = ({
+export const ManageLicensesDialog: React.FC<React.PropsWithChildren<Props>> = ({
   opened,
   onClose,
   onSave,

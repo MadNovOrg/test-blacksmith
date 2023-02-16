@@ -54,7 +54,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search'), KEYWORD)
+    await userEvent.type(screen.getByPlaceholderText('Search'), KEYWORD)
 
     await waitFor(() => {
       expect(
@@ -104,10 +104,10 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseLevel')).getByText('Level One')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseLevel')).getByText('Level Two')
     )
 
@@ -200,7 +200,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Unattended')
     )
 
@@ -255,7 +255,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText(
         'Info required'
       )
@@ -330,7 +330,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText(
         'Missing evaluation'
       )
@@ -386,7 +386,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText(
         'Missing grade'
       )
@@ -446,7 +446,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Scheduled')
     )
 
@@ -504,7 +504,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Completed')
     )
 
@@ -580,10 +580,10 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Unattended')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText(
         'Info required'
       )
@@ -711,7 +711,8 @@ describe('user-pages/MyCourses', () => {
       const from = within(screen.getByTestId('date-range')).getByLabelText(
         'From'
       )
-      userEvent.paste(from, '13/03/2023') // second course's start date
+      from.focus()
+      await userEvent.paste('13/03/2023') // second course's start date
 
       await waitFor(() => {
         expect(
@@ -790,7 +791,8 @@ describe('user-pages/MyCourses', () => {
       })
 
       const to = screen.queryAllByLabelText('To')
-      userEvent.paste(to[0], '25/07/2023') // second course's end date
+      to[0].focus()
+      await userEvent.paste('25/07/2023') // second course's end date
 
       await waitFor(() => {
         expect(
@@ -869,10 +871,12 @@ describe('user-pages/MyCourses', () => {
       const from = within(screen.getByTestId('date-range')).getByLabelText(
         'From'
       )
-      userEvent.paste(from, '13/03/2023') // second course's start date
+      from.focus()
+      await userEvent.paste('13/03/2023') // second course's start date
 
       const to = within(screen.getByTestId('date-range')).getByLabelText('To')
-      userEvent.paste(to, '25/07/2023') // second course's end date
+      to.focus()
+      await userEvent.paste('25/07/2023') // second course's end date
 
       await waitFor(() => {
         expect(

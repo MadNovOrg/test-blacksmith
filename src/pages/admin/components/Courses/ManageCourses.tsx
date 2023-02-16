@@ -10,7 +10,7 @@ import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/O
 import { TrainerCourses } from '@app/pages/trainer-pages/MyCourses'
 import { LoadingStatus } from '@app/util'
 
-export const ManageCourses: React.FC = () => {
+export const ManageCourses: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { orgId: id } = useParams()
   const { profile, acl } = useAuth()
   const { t } = useTranslation()

@@ -9,7 +9,7 @@ import { CourseBookingPayment } from './components/CourseBookingPayment'
 import { CourseBookingReview } from './components/CourseBookingReview'
 import { CourseFull } from './components/CourseFull'
 
-const BookingRoutes: React.FC = () => {
+const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { booking, availableSeats, course, error, isBooked } = useBooking()
 
   if (error) {
@@ -37,7 +37,9 @@ const BookingRoutes: React.FC = () => {
   )
 }
 
-export const CourseBookingPage: React.FC = () => {
+export const CourseBookingPage: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   return (
     <Box bgcolor="grey.100">
       <Container maxWidth="lg" sx={{ py: 3 }}>

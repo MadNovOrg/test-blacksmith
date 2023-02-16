@@ -23,7 +23,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-const Ebooks: React.FC = () => {
+const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [featuredItem, setFeaturedItem] = useState<EbookSummaryFragment | null>(
     null

@@ -8,6 +8,7 @@ import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
+  Course_Bool_Exp,
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Type_Enum,
@@ -227,7 +228,7 @@ describe('trainers-pages/MyCourses', () => {
     )
 
     const search = screen.getByTestId('FilterSearch-Input')
-    userEvent.type(search, keyword)
+    await userEvent.type(search, keyword)
 
     const table = screen.getByTestId('courses-table')
     await expectCourseTableTo({
@@ -319,7 +320,9 @@ describe('trainers-pages/MyCourses', () => {
       const from = within(screen.getByTestId('date-range')).getByLabelText(
         'From'
       )
-      userEvent.paste(from, '13/03/2023') // second course's start date
+
+      from.focus()
+      await userEvent.paste('13/03/2023') // second course's start date
 
       await expectCourseTableTo({
         table,
@@ -380,7 +383,8 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       const to = within(screen.getByTestId('date-range')).getByLabelText('To')
-      userEvent.paste(to, '25/07/2023') // second course's end date
+      to.focus()
+      await userEvent.paste('25/07/2023') // second course's end date
 
       await expectCourseTableTo({
         table,
@@ -440,10 +444,12 @@ describe('trainers-pages/MyCourses', () => {
       const from = within(screen.getByTestId('date-range')).getByLabelText(
         'From'
       )
-      userEvent.paste(from, '13/03/2023') // second course's start date
+      from.focus()
+      await userEvent.paste('13/03/2023') // second course's start date
 
       const to = within(screen.getByTestId('date-range')).getByLabelText('To')
-      userEvent.paste(to, '25/07/2023') // second course's end date
+      to.focus()
+      await userEvent.paste('25/07/2023') // second course's end date
 
       await expectCourseTableTo({
         table,
@@ -499,7 +505,7 @@ describe('trainers-pages/MyCourses', () => {
     })
 
     const blendedLearningFilter = screen.getByLabelText(blendedLearningLabel)
-    userEvent.click(blendedLearningFilter)
+    await userEvent.click(blendedLearningFilter)
 
     await await expectCourseTableTo({
       table,
@@ -543,10 +549,10 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseLevel')).getByText('Level One')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseLevel')).getByText('Level Two')
     )
 
@@ -593,10 +599,10 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseType')).getByText('Open')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseType')).getByText('Closed')
     )
 
@@ -644,10 +650,10 @@ describe('trainers-pages/MyCourses', () => {
       </Provider>
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Scheduled')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText('Completed')
     )
 
@@ -699,7 +705,7 @@ describe('trainers-pages/MyCourses', () => {
       }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterCourseStatus')).getByText(
         'Cancellation requested'
       )
@@ -748,7 +754,7 @@ describe('trainers-pages/MyCourses', () => {
 
     const table = screen.getByTestId('courses-table')
 
-    userEvent.click(within(table).getByText('Name'))
+    await userEvent.click(within(table).getByText('Name'))
 
     await waitFor(() => {
       expect(screen.getByTestId(`course-row-${courses[0].id}`)).toHaveAttribute(
@@ -803,7 +809,9 @@ describe('trainers-pages/MyCourses', () => {
       screen.queryByTestId(`course-row-${secondBatch[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(within(coursesPagination).getByLabelText('Go to next page'))
+    await userEvent.click(
+      within(coursesPagination).getByLabelText('Go to next page')
+    )
 
     await waitFor(() => {
       expect(
@@ -1020,8 +1028,8 @@ describe('trainers-pages/MyCourses', () => {
         }: {
           variables: TrainerCoursesQueryVariables
         }) => {
-          const conditions: any = variables.where?._or ?? []
-          const courseCodeCondition = conditions.find((c: any) =>
+          const conditions: Course_Bool_Exp['_or'] = variables.where?._or ?? []
+          const courseCodeCondition = conditions.find(c =>
             Object.keys(c).includes('course_code')
           )
           const courses =
@@ -1055,7 +1063,7 @@ describe('trainers-pages/MyCourses', () => {
       })
 
       const search = screen.getByTestId('FilterSearch-Input')
-      userEvent.type(search, keyword)
+      await userEvent.type(search, keyword)
 
       await expectActionableTableTo({
         table: actionableTbl,
@@ -1152,7 +1160,10 @@ describe('trainers-pages/MyCourses', () => {
         const from = within(screen.getByTestId('date-range')).getByLabelText(
           'From'
         )
-        userEvent.paste(from, '13/03/2023') // second course's start date
+
+        from.focus()
+
+        userEvent.paste('13/03/2023') // second course's start date
 
         await expectActionableTableTo({
           table: actionableTbl,
@@ -1213,7 +1224,9 @@ describe('trainers-pages/MyCourses', () => {
         })
 
         const to = within(screen.getByTestId('date-range')).getByLabelText('To')
-        userEvent.paste(to, '25/07/2023') // second course's end date
+
+        to.focus()
+        userEvent.paste('25/07/2023') // second course's end date
 
         await expectActionableTableTo({
           table: actionableTbl,
@@ -1272,10 +1285,14 @@ describe('trainers-pages/MyCourses', () => {
         const from = within(screen.getByTestId('date-range')).getByLabelText(
           'From'
         )
-        userEvent.paste(from, '13/03/2023') // second course's start date
+
+        from.focus()
+        userEvent.paste('13/03/2023') // second course's start date
 
         const to = within(screen.getByTestId('date-range')).getByLabelText('To')
-        userEvent.paste(to, '25/07/2023') // second course's end date
+
+        to.focus()
+        userEvent.paste('25/07/2023') // second course's end date
 
         await expectActionableTableTo({
           table: actionableTbl,

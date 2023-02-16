@@ -14,10 +14,12 @@ describe('component: EditRoles', () => {
     roles: RolesFields
   }
 
-  const FormWrapper: React.FC<{
-    children: React.ReactNode
-    mockRoles: FormValues
-  }> = ({ children, mockRoles }) => {
+  const FormWrapper: React.FC<
+    React.PropsWithChildren<{
+      children: React.ReactNode
+      mockRoles: FormValues
+    }>
+  > = ({ children, mockRoles }) => {
     const formMethods = useForm<FormValues>({
       defaultValues: mockRoles,
     })
@@ -187,13 +189,15 @@ describe('component: EditRoles', () => {
     expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
       'Individual'
     )
-    await waitFor(() =>
-      userEvent.click(screen.getAllByRole('button', { name: 'Remove' })[0])
-    )
-    expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
-    expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
-      'Administrator'
-    )
+
+    await userEvent.click(screen.getAllByRole('button', { name: 'Remove' })[0])
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
+      expect(screen.getAllByTestId('user-role-select')[0]).toHaveTextContent(
+        'Administrator'
+      )
+    })
   })
 
   it('allows adding roles', async () => {
@@ -218,9 +222,13 @@ describe('component: EditRoles', () => {
     )
 
     expect(screen.getAllByTestId('user-role-select')).toHaveLength(1)
-    await waitFor(() =>
-      userEvent.click(screen.getByRole('button', { name: 'Additional role' }))
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Additional role' })
     )
-    expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
+
+    await waitFor(() =>
+      expect(screen.getAllByTestId('user-role-select')).toHaveLength(2)
+    )
   })
 })

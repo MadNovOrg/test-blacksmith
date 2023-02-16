@@ -51,12 +51,9 @@ export type AttendeeValidCertificateProps = {
   totalAttendees: number
 }
 
-const AttendeeValidCertificate: React.FC<AttendeeValidCertificateProps> = ({
-  control,
-  courseLevel,
-  totalAttendees,
-  errors,
-}) => {
+const AttendeeValidCertificate: React.FC<
+  React.PropsWithChildren<AttendeeValidCertificateProps>
+> = ({ control, courseLevel, totalAttendees, errors }) => {
   const { t } = useTranslation()
   const showAttendeeTranslationOptions = useCallback(
     (courseLevel: CourseLevel, attendees: number) => {
@@ -112,7 +109,7 @@ const AttendeeValidCertificate: React.FC<AttendeeValidCertificateProps> = ({
           />
           {errors.attendeeValidCertificate?.message && (
             <FormHelperText error>
-              {errors.attendeeValidCertificate?.message}
+              {errors.attendeeValidCertificate.message as string}
             </FormHelperText>
           )}
         </Box>
@@ -144,7 +141,9 @@ type FormInputs = {
   attendeeValidCertificate?: boolean
 }
 
-export const CourseBookingDetails: React.FC = () => {
+export const CourseBookingDetails: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const {

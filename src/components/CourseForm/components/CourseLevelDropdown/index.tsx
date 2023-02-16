@@ -15,7 +15,7 @@ interface Props {
   disabled?: boolean
 }
 
-export const CourseLevelDropdown: React.FC<Props> = ({
+export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   onChange,
   courseType,

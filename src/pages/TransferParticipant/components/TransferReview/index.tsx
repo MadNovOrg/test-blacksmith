@@ -28,7 +28,9 @@ import {
   useTransferParticipantContext,
 } from '../TransferParticipantProvider'
 
-export const TransferReview: React.FC = () => {
+export const TransferReview: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t, _t } = useScopedTranslation('pages.transfer-participant')
   const navigate = useNavigate()
   const [success, setSuccess] = useState<boolean | undefined>()

@@ -13,7 +13,7 @@ import { TFunction } from 'i18next'
 import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import CodeInput from 'react-otp-input-rc-17'
+import CodeInput from 'react18-input-otp'
 
 import { EMAIL_VERIFY_LEN, schemas, yup } from '@app/schemas'
 import { requiredMsg } from '@app/util'
@@ -33,7 +33,10 @@ export const getVerifySchema = (t: TFunction) => {
   })
 }
 
-export const Form: React.FC<Props> = ({ onVerifyLater, onSuccess }) => {
+export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  onVerifyLater,
+  onSuccess,
+}) => {
   const { t } = useTranslation()
   const [verifyError, setVerifyError] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)

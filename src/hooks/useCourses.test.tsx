@@ -1,5 +1,4 @@
 import { deepmerge } from '@mui/utils'
-import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 import { Provider, Client } from 'urql'
 import { never } from 'wonka'
@@ -9,6 +8,7 @@ import { injectACL } from '@app/context/auth/permissions'
 import { TrainerCoursesQueryVariables } from '@app/generated/graphql'
 import { RoleName } from '@app/types'
 
+import { renderHook } from '@test/index'
 import { defaultProviders } from '@test/providers'
 
 import { useCourses } from './useCourses'
@@ -30,7 +30,9 @@ describe('hook: useCourses', () => {
       },
     } as unknown as Client
 
-    const Wrapper: React.FC = ({ children }) => {
+    const Wrapper: React.FC<React.PropsWithChildren<unknown>> = ({
+      children,
+    }) => {
       const auth = deepmerge(defaultProviders.auth, {
         activeRole: RoleName.USER,
         isOrgAdmin: true,
@@ -116,7 +118,9 @@ describe('hook: useCourses', () => {
       },
     } as unknown as Client
 
-    const Wrapper: React.FC = ({ children }) => {
+    const Wrapper: React.FC<React.PropsWithChildren<unknown>> = ({
+      children,
+    }) => {
       const auth = deepmerge(defaultProviders.auth, {
         activeRole: RoleName.USER,
         isOrgAdmin: true,

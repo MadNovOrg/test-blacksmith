@@ -8,9 +8,11 @@ import {
   Props as FeaturedContentItemProps,
 } from '../FeaturedContentItem'
 
-export const FeaturedWebinar: React.FC<{
-  webinar: WebinarSummaryFragment | null
-}> = ({ webinar }) => {
+export const FeaturedWebinar: React.FC<
+  React.PropsWithChildren<{
+    webinar: WebinarSummaryFragment | null
+  }>
+> = ({ webinar }) => {
   const { t } = useTranslation()
 
   if (!webinar) {

@@ -13,7 +13,9 @@ type Props = {
   diff: CourseDiff[]
 }
 
-export const CourseDiffTable: React.FC<Props> = ({ diff }) => {
+export const CourseDiffTable: React.FC<React.PropsWithChildren<Props>> = ({
+  diff,
+}) => {
   const { t, _t } = useScopedTranslation(
     'pages.edit-course.review-changes-modal'
   )

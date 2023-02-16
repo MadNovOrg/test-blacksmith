@@ -89,7 +89,7 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const expectedMsg = `${course.max_participants} invites left`
     expect(getByTestId('modal-invites-left')).toHaveTextContent(expectedMsg)
@@ -123,7 +123,7 @@ describe('CourseInvites', () => {
     })
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const invitesPending = 1
     const invitesLeft = course.max_participants - invitesPending
@@ -146,7 +146,7 @@ describe('CourseInvites', () => {
     const { getByTestId } = render(
       <CourseInvites course={course} attendeesCount={participants} />
     )
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const invitesPending = 1
     const invitesLeft = course.max_participants - invitesPending - participants
@@ -159,19 +159,19 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
     expect(input.value).toBe('')
 
     const emails = ['not a valid email']
-    userEvent.type(input, emails[0])
-    userEvent.type(autocomplete, '{enter}')
+    await userEvent.type(input, emails[0])
+    await userEvent.type(autocomplete, '{enter}')
 
     expect(input.value).toBe(emails[0]) // chip not created
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     expect(useCourseInvitesDefaults.send).not.toHaveBeenCalled()
   })
 
@@ -179,17 +179,17 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
     expect(input.value).toBe('')
 
     const emails = [chance.email()]
-    userEvent.type(input, emails[0])
-    userEvent.type(autocomplete, '{enter}')
+    await userEvent.type(input, emails[0])
+    await userEvent.type(autocomplete, '{enter}')
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
@@ -199,17 +199,17 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
     expect(input.value).toBe('')
 
     const emails = [chance.email(), chance.email(), chance.email()]
-    userEvent.type(input, emails.join(', '))
-    userEvent.type(autocomplete, '{enter}')
+    await userEvent.type(input, emails.join(', '))
+    await userEvent.type(autocomplete, '{enter}')
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
@@ -219,7 +219,7 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
@@ -227,12 +227,12 @@ describe('CourseInvites', () => {
 
     const emails = [chance.email(), chance.email(), chance.email()]
     for (const email of emails) {
-      userEvent.type(input, email)
-      userEvent.type(autocomplete, '{enter}')
+      await userEvent.type(input, email)
+      await userEvent.type(autocomplete, '{enter}')
       expect(input.value).toBe('')
     }
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(emails)
@@ -242,20 +242,20 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
     expect(input.value).toBe('')
 
     const [email, leftOver] = [chance.email(), chance.email()]
-    userEvent.type(input, email)
-    userEvent.type(autocomplete, '{enter}')
+    await userEvent.type(input, email)
+    await userEvent.type(autocomplete, '{enter}')
 
     expect(input.value).toBe('')
-    userEvent.type(input, leftOver)
+    await userEvent.type(input, leftOver)
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith([
@@ -268,17 +268,17 @@ describe('CourseInvites', () => {
     useCourseInvitesMock.mockReturnValue(useCourseInvitesDefaults)
 
     const { getByTestId } = render(<CourseInvites course={course} />)
-    userEvent.click(getByTestId('course-invite-btn'))
+    await userEvent.click(getByTestId('course-invite-btn'))
 
     const autocomplete = getByTestId('modal-invites-emails')
     const input = autocomplete.querySelector('input') as HTMLInputElement
     expect(input.value).toBe('')
 
     const emails = [` ${chance.email()}`, `${chance.email()} `]
-    userEvent.type(input, emails.join(' '))
-    userEvent.type(autocomplete, '{enter}')
+    await userEvent.type(input, emails.join(' '))
+    await userEvent.type(autocomplete, '{enter}')
 
-    userEvent.click(getByTestId('modal-invites-send'))
+    await userEvent.click(getByTestId('modal-invites-send'))
     await waitForCalls(useCourseInvitesDefaults.send)
 
     expect(useCourseInvitesDefaults.send).toHaveBeenCalledWith(

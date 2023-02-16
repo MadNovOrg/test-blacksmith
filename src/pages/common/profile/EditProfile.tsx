@@ -162,7 +162,9 @@ export const BILDRolesNames: TrainerRoleTypeName[] = [
   TrainerRoleTypeName.BILD_CERTIFIED,
 ]
 
-export const EditProfilePage: React.FC<EditProfilePageProps> = () => {
+export const EditProfilePage: React.FC<
+  React.PropsWithChildren<EditProfilePageProps>
+> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [loading, setLoading] = useState(false)

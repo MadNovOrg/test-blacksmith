@@ -34,7 +34,9 @@ import { getRoleColor } from './utils'
 
 type ViewProfilePageProps = unknown
 
-export const ViewProfilePage: React.FC<ViewProfilePageProps> = () => {
+export const ViewProfilePage: React.FC<
+  React.PropsWithChildren<ViewProfilePageProps>
+> = () => {
   const { t } = useTranslation()
   const { profile: currentUserProfile, verified, acl } = useAuth()
   const navigate = useNavigate()

@@ -79,11 +79,9 @@ export type SmileyFaceRatingProps = {
   readOnly?: boolean
 }
 
-export const SmileyFaceRating: React.FC<SmileyFaceRatingProps> = ({
-  value,
-  onChange,
-  readOnly = false,
-}) => {
+export const SmileyFaceRating: React.FC<
+  React.PropsWithChildren<SmileyFaceRatingProps>
+> = ({ value, onChange, readOnly = false }) => {
   const { t } = useTranslation()
   const [activeIcon, setActiveIcon] = useState(+value)
 

@@ -10,7 +10,7 @@ describe('component: ManageLicencesForm', () => {
   it('validates amount field to be a positive number', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    fillForm({ amount: -1 })
+    await fillForm({ amount: -1 })
 
     await waitFor(() => {
       expect(
@@ -22,7 +22,7 @@ describe('component: ManageLicencesForm', () => {
   it('displays number of remaining licences', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    fillForm({ amount: 50, type: Type.ADD })
+    await fillForm({ amount: 50, type: Type.ADD })
 
     await waitFor(() => {
       expect(
@@ -36,8 +36,8 @@ describe('component: ManageLicencesForm', () => {
 
     const invoiceField = screen.getByLabelText('Invoice number *')
 
-    fillForm({ invoiceId: 'INV.1234' })
-    userEvent.clear(invoiceField)
+    await fillForm({ invoiceId: 'INV.1234' })
+    await userEvent.clear(invoiceField)
 
     await waitFor(() => {
       expect(
@@ -53,13 +53,13 @@ describe('component: ManageLicencesForm', () => {
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
-    fillForm({ amount: 50, invoiceId, note, type: Type.ADD })
+    await fillForm({ amount: 50, invoiceId, note, type: Type.ADD })
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeEnabled()
-
-      userEvent.click(screen.getByText('Save details'))
     })
+
+    await userEvent.click(screen.getByText('Save details'))
 
     await waitFor(() => {
       expect(onSaveMock).toHaveBeenCalledTimes(1)
@@ -77,16 +77,16 @@ describe('component: ManageLicencesForm', () => {
   it('makes an invoice id a required field when issue refund is checked and type is REMOVE', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    const invoiceField = screen.getByLabelText('Invoice number *')
-
-    fillForm({
+    await fillForm({
       type: Type.REMOVE,
       issueRefund: true,
       amount: 20,
       invoiceId: 'INV',
     })
 
-    userEvent.clear(invoiceField)
+    const invoiceField = screen.getByLabelText('Invoice number *')
+
+    await userEvent.clear(invoiceField)
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeDisabled()
@@ -97,7 +97,7 @@ describe('component: ManageLicencesForm', () => {
   it('makes a license price a required field when issue refund is checked and type is REMOVE', async () => {
     render(<ManageLicensesForm currentBalance={100} />)
 
-    fillForm({
+    await fillForm({
       type: Type.REMOVE,
       issueRefund: true,
       amount: 20,
@@ -105,9 +105,9 @@ describe('component: ManageLicencesForm', () => {
       licensePrice: 125.5,
     })
 
-    await waitFor(() => {
-      userEvent.clear(screen.getByLabelText('Price per licence *'))
+    await userEvent.clear(screen.getByLabelText('Price per licence *'))
 
+    await waitFor(() => {
       expect(screen.getByText('Save details')).toBeDisabled()
     })
   })
@@ -118,13 +118,13 @@ describe('component: ManageLicencesForm', () => {
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
-    fillForm({ type: Type.REMOVE, amount: 50, note })
+    await fillForm({ type: Type.REMOVE, amount: 50, note })
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeEnabled()
-
-      userEvent.click(screen.getByText('Save details'))
     })
+
+    await userEvent.click(screen.getByText('Save details'))
 
     await waitFor(() => {
       expect(onSaveMock).toHaveBeenCalledTimes(1)
@@ -146,7 +146,7 @@ describe('component: ManageLicencesForm', () => {
 
     render(<ManageLicensesForm currentBalance={100} onSave={onSaveMock} />)
 
-    fillForm({
+    await fillForm({
       type: Type.REMOVE,
       amount: 5,
       issueRefund: true,
@@ -157,9 +157,9 @@ describe('component: ManageLicencesForm', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Save details')).toBeEnabled()
-
-      userEvent.click(screen.getByText('Save details'))
     })
+
+    await userEvent.click(screen.getByText('Save details'))
 
     await waitFor(() => {
       expect(onSaveMock).toHaveBeenCalledTimes(1)
@@ -177,7 +177,7 @@ describe('component: ManageLicencesForm', () => {
   it('constrains number of licences field to the number of organization licences when removing', async () => {
     render(<ManageLicensesForm currentBalance={1} />)
 
-    fillForm({ amount: 2, type: Type.REMOVE })
+    await fillForm({ amount: 2, type: Type.REMOVE })
 
     await waitFor(() => {
       expect(
@@ -189,18 +189,18 @@ describe('component: ManageLicencesForm', () => {
   it('enables save button when issue refund is toggled', async () => {
     render(<ManageLicensesForm currentBalance={10} />)
 
-    fillForm({ amount: 2, type: Type.REMOVE })
+    await fillForm({ amount: 2, type: Type.REMOVE })
+
+    await userEvent.click(screen.getByTestId('issue-refund-checkbox'))
 
     await waitFor(() => {
-      userEvent.click(screen.getByTestId('issue-refund-checkbox'))
+      expect(screen.getByText(/save details/i)).toBeDisabled()
     })
 
-    expect(screen.getByText(/save details/i)).toBeDisabled()
+    await userEvent.click(screen.getByTestId('issue-refund-checkbox'))
 
     await waitFor(() => {
-      userEvent.click(screen.getByTestId('issue-refund-checkbox'))
+      expect(screen.getByText(/save details/i)).toBeEnabled()
     })
-
-    expect(screen.getByText(/save details/i)).toBeEnabled()
   })
 })

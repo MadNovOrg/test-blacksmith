@@ -41,7 +41,9 @@ const sorts: Record<string, object> = {
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
-export const Contacts: React.FC<ContactsProps> = () => {
+export const Contacts: React.FC<
+  React.PropsWithChildren<ContactsProps>
+> = () => {
   const { t } = useTranslation()
   const { acl } = useAuth()
   const tabs = [

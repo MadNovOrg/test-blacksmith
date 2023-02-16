@@ -33,7 +33,7 @@ const Webinars = React.lazy(
 )
 const Term = React.lazy(() => import('@app/pages/MembershipArea/pages/Term'))
 
-const MembershipRoutes: React.FC = () => (
+const MembershipRoutes: React.FC<React.PropsWithChildren<unknown>> = () => (
   <Routes>
     <Route path="" element={<MembershipAreaPage />}>
       <Route index element={<Home />} />

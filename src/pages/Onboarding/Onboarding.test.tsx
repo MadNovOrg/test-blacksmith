@@ -33,7 +33,7 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(screen.getByText(/update/i))
 
     await waitFor(() => {
       expect(screen.getByText(/first name is required/i)).toBeInTheDocument()
@@ -66,14 +66,14 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.type(screen.getByLabelText(/first name/i), 'John')
-    userEvent.type(screen.getByLabelText(/surname/i), 'Doe')
-    userEvent.type(screen.getByLabelText(/phone/i), VALID_PHONE_NUMBER)
-    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+    await userEvent.type(screen.getByLabelText(/first name/i), 'John')
+    await userEvent.type(screen.getByLabelText(/surname/i), 'Doe')
+    await userEvent.type(screen.getByLabelText(/phone/i), VALID_PHONE_NUMBER)
+    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
 
-    userEvent.click(screen.getByLabelText(/i accept/i))
+    await userEvent.click(screen.getByLabelText(/i accept/i))
 
-    userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(screen.getByText(/update/i))
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
@@ -127,13 +127,13 @@ describe('page: Onboarding', () => {
       { initialEntries: ['/onboarding'] }
     )
 
-    userEvent.type(screen.getByLabelText(/first name/i), firstName)
-    userEvent.type(screen.getByLabelText(/surname/i), lastName)
-    userEvent.type(screen.getByLabelText(/phone/i), phone)
-    userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
-    userEvent.click(screen.getByLabelText(/i accept/i))
+    await userEvent.type(screen.getByLabelText(/first name/i), firstName)
+    await userEvent.type(screen.getByLabelText(/surname/i), lastName)
+    await userEvent.type(screen.getByLabelText(/phone/i), phone)
+    await userEvent.type(screen.getByLabelText(/date of birth/i), '20/03/1990')
+    await userEvent.click(screen.getByLabelText(/i accept/i))
 
-    userEvent.click(screen.getByText(/update/i))
+    await userEvent.click(screen.getByText(/update/i))
 
     await waitFor(() => {
       expect(screen.getByText(/home/i)).toBeInTheDocument()

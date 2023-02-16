@@ -1,6 +1,6 @@
-import { renderHook, act } from '@testing-library/react-hooks'
 import React from 'react'
 
+import { renderHook, act } from '@test/index'
 import { render, screen, userEvent, chance } from '@test/index'
 
 import { useTableChecks } from './useTableChecks'
@@ -109,7 +109,7 @@ describe('useTableChecks', () => {
     expect(headCheck).not.toBeChecked()
     rowChecks.forEach(rc => expect(rc).not.toBeChecked())
 
-    userEvent.click(rowChecks[1])
+    await userEvent.click(rowChecks[1])
 
     expect(headCheck).not.toBeChecked()
     expect(headCheck).toHaveAttribute('data-indeterminate', 'true')
@@ -128,11 +128,11 @@ describe('useTableChecks', () => {
     expect(headCheck).not.toBeChecked()
     rowChecks.forEach(rc => expect(rc).not.toBeChecked())
 
-    userEvent.click(headCheck)
+    await userEvent.click(headCheck)
     expect(headCheck).toBeChecked()
     rowChecks.forEach(rc => expect(rc).toBeChecked())
 
-    userEvent.click(headCheck)
+    await userEvent.click(headCheck)
     expect(headCheck).not.toBeChecked()
     rowChecks.forEach(rc => expect(rc).not.toBeChecked())
   })

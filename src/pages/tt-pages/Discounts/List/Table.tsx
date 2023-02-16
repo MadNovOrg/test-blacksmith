@@ -24,7 +24,7 @@ type Props = {
   filtered: boolean
 }
 
-export const DiscountsTable: React.FC<Props> = ({
+export const DiscountsTable: React.FC<React.PropsWithChildren<Props>> = ({
   promoCodes,
   sorting,
   loading,

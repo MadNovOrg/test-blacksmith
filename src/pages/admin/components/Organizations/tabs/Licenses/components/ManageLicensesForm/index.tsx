@@ -67,7 +67,7 @@ type Props = {
   saving?: boolean
 }
 
-export const ManageLicensesForm: React.FC<Props> = ({
+export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   onSave,
   onCancel,
   currentBalance,

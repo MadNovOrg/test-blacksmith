@@ -12,7 +12,7 @@ const getOption = (level: CourseLevel) => {
 }
 
 describe('component: CourseLevelDropdown', () => {
-  it('renders correctly when type is OPEN', () => {
+  it('renders correctly when type is OPEN', async () => {
     render(
       <CourseLevelDropdown
         value=""
@@ -21,7 +21,7 @@ describe('component: CourseLevelDropdown', () => {
       />
     )
 
-    userEvent.click(screen.getByRole('button'))
+    await userEvent.click(screen.getByRole('button'))
 
     expect(screen.queryAllByRole('option').length).toBe(4)
 
@@ -30,7 +30,7 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(CourseLevel.AdvancedTrainer)).toBeInTheDocument()
   })
 
-  it('renders correctly when type is CLOSED', () => {
+  it('renders correctly when type is CLOSED', async () => {
     render(
       <CourseLevelDropdown
         value=""
@@ -39,7 +39,7 @@ describe('component: CourseLevelDropdown', () => {
       />
     )
 
-    userEvent.click(screen.getByRole('button'))
+    await userEvent.click(screen.getByRole('button'))
 
     expect(screen.queryAllByRole('option').length).toBe(5)
 
@@ -50,7 +50,7 @@ describe('component: CourseLevelDropdown', () => {
     expect(getOption(CourseLevel.AdvancedTrainer)).toBeInTheDocument()
   })
 
-  it('renders correctly when type is INDIRECT', () => {
+  it('renders correctly when type is INDIRECT', async () => {
     render(
       <CourseLevelDropdown
         value=""
@@ -59,7 +59,7 @@ describe('component: CourseLevelDropdown', () => {
       />
     )
 
-    userEvent.click(screen.getByRole('button'))
+    await userEvent.click(screen.getByRole('button'))
 
     expect(screen.queryAllByRole('option').length).toBe(3)
 

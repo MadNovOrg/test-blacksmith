@@ -21,7 +21,7 @@ type Props = {
   optionLabels?: Record<TransferFeeType, string>
 }
 
-const FeesPanel: React.FC<Props> = ({
+const FeesPanel: React.FC<React.PropsWithChildren<Props>> = ({
   courseStartDate,
   onChange,
   mode = TransferModeEnum.ADMIN_TRANSFERS,
@@ -47,9 +47,9 @@ const FeesPanel: React.FC<Props> = ({
 
   useEffect(() => {
     if (typeof onChange === 'function') {
-      onChange(formValues, formState.isValid)
+      onChange(formValues, Object.keys(formState.errors).length === 0)
     }
-  }, [formValues, formState.isValid, onChange])
+  }, [formValues, formState.errors, onChange])
 
   return (
     <Box>

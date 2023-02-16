@@ -6,7 +6,10 @@ type Props = {
   duration?: number
 } & TypographyProps
 
-export const Duration: React.FC<Props> = ({ duration, ...rest }) => (
+export const Duration: React.FC<React.PropsWithChildren<Props>> = ({
+  duration,
+  ...rest
+}) => (
   <Typography {...rest}>
     {typeof duration === 'number' ? format(duration * 1000, 'mm:ss') : '--:--'}
   </Typography>

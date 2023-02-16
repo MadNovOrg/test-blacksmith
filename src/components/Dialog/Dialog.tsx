@@ -18,7 +18,7 @@ type Props = {
   'data-testid'?: string
 }
 
-export const Dialog: React.FC<Props> = ({
+export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
   id,
   open,
   title,

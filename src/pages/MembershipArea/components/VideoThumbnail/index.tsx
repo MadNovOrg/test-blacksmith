@@ -16,7 +16,7 @@ type Props = {
   image?: React.ReactElement
 }
 
-export const VideoThumbnail: React.FC<Props> = ({
+export const VideoThumbnail: React.FC<React.PropsWithChildren<Props>> = ({
   duration,
   imageUrl,
   imageSrcSet,

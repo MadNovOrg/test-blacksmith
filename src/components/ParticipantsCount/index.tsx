@@ -10,11 +10,9 @@ export type ParticipantsCountProps = {
   waitlist?: number
 }
 
-export const ParticipantsCount: React.FC<ParticipantsCountProps> = ({
-  participating,
-  waitlist,
-  capacity,
-}) => {
+export const ParticipantsCount: React.FC<
+  React.PropsWithChildren<ParticipantsCountProps>
+> = ({ participating, waitlist, capacity }) => {
   const { acl } = useAuth()
   const showWaitlist = acl.canSeeWaitingLists() && waitlist
 

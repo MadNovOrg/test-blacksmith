@@ -17,11 +17,9 @@ type CourseTitleProps = {
   showCourseLink?: boolean
 } & TypographyProps
 
-export const CourseTitle: React.FC<CourseTitleProps> = ({
-  course,
-  showCourseLink = false,
-  ...props
-}) => {
+export const CourseTitle: React.FC<
+  React.PropsWithChildren<CourseTitleProps>
+> = ({ course, showCourseLink = false, ...props }) => {
   const { t } = useTranslation()
 
   const difference = getTimeDifferenceAndContext(

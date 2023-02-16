@@ -17,7 +17,7 @@ type Props = {
   fullWidth?: boolean
 }
 
-export const FilterSearch: React.FC<Props> = ({
+export const FilterSearch: React.FC<React.PropsWithChildren<Props>> = ({
   value = '',
   onChange = noop,
   debounce = 300,
@@ -35,7 +35,11 @@ export const FilterSearch: React.FC<Props> = ({
     if (value !== _value) _onChange(_value)
   }, [_value, _onChange, value])
 
-  const handleChange = useCallback(ev => setValue(ev.target.value), [setValue])
+  const handleChange = useCallback(
+    (ev: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+      setValue(ev.target.value),
+    [setValue]
+  )
   const handleClear = useCallback(() => setValue(''), [setValue])
 
   return (

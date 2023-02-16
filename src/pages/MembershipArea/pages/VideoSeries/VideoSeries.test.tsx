@@ -84,7 +84,7 @@ describe('page: VideoSeries', () => {
     )
   })
 
-  it('navigates to single video page when clicked on featured image', () => {
+  it('navigates to single video page when clicked on featured image', async () => {
     const videoItems = buildEntities(2, buildVideoItem)
 
     const client = {
@@ -113,7 +113,7 @@ describe('page: VideoSeries', () => {
 
     const featuredVideo = screen.getByTestId('featured-video-series-item')
 
-    userEvent.click(
+    await userEvent.click(
       within(featuredVideo).getByAltText(videoItems[0].title ?? '')
     )
 
@@ -202,7 +202,10 @@ describe('page: VideoSeries', () => {
       { initialEntries: ['/video-series'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search videos'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search videos'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -261,7 +264,7 @@ describe('page: VideoSeries', () => {
       { initialEntries: ['/video-series'] }
     )
 
-    userEvent.click(screen.getByTestId('video-series-next-page'))
+    await userEvent.click(screen.getByTestId('video-series-next-page'))
 
     expect(
       within(screen.getByTestId('featured-video-series-item')).getByText(
@@ -279,7 +282,7 @@ describe('page: VideoSeries', () => {
 
     expect(screen.getByTestId('video-series-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('video-series-previous-page'))
+    await userEvent.click(screen.getByTestId('video-series-previous-page'))
 
     expect(
       within(screen.getByTestId('featured-video-series-item')).getByText(

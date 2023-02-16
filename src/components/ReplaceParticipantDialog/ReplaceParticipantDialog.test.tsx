@@ -50,7 +50,7 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    userEvent.type(screen.getByPlaceholderText(/email/i), 'invalid email')
+    await userEvent.type(screen.getByPlaceholderText(/email/i), 'invalid email')
 
     await waitFor(() => {
       expect(
@@ -59,7 +59,7 @@ describe('component: ReplaceParticipantDialog', () => {
     })
   })
 
-  it('calls cancel prop when closing dialog', () => {
+  it('calls cancel prop when closing dialog', async () => {
     const client = {
       executeMutation: () => never,
     } as unknown as Client
@@ -81,7 +81,7 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    userEvent.click(screen.getByText(/never mind/i))
+    await userEvent.click(screen.getByText(/never mind/i))
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
   })
@@ -129,15 +129,18 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
-    userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
+    await userEvent.type(
+      screen.getByPlaceholderText(/email/i),
+      'example@example.com'
+    )
+
+    await userEvent.click(screen.getByText(/replace attendee/i))
 
     await waitFor(() => {
-      userEvent.click(screen.getByText(/replace attendee/i))
+      expect(onSuccessMock).toHaveBeenCalledTimes(1)
     })
-
-    expect(onSuccessMock).toHaveBeenCalledTimes(1)
   })
 
   it('displays an alert if there is an error replacing the participant', async () => {
@@ -170,18 +173,23 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
-    userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
+    await userEvent.type(
+      screen.getByPlaceholderText(/email/i),
+      'example@example.com'
+    )
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText(/replace attendee/i))
+    await waitFor(async () => {
+      await userEvent.click(screen.getByText(/replace attendee/i))
     })
 
-    expect(onSuccessMock).toHaveBeenCalledTimes(0)
-    expect(screen.getByTestId('error-alert').textContent).toMatchInlineSnapshot(
-      `"There was an error replacing the participant."`
-    )
+    await waitFor(() => {
+      expect(onSuccessMock).toHaveBeenCalledTimes(0)
+      expect(
+        screen.getByTestId('error-alert').textContent
+      ).toMatchInlineSnapshot(`"There was an error replacing the participant."`)
+    })
   })
 
   it('requires accepting the terms if an org admin is doing the replacement', async () => {
@@ -204,15 +212,18 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
-    userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
-    userEvent.type(screen.getByPlaceholderText(/email/i), 'example@example.com')
+    await userEvent.type(screen.getByPlaceholderText(/first name/i), 'John')
+    await userEvent.type(screen.getByPlaceholderText(/surname/i), 'Doe')
+    await userEvent.type(
+      screen.getByPlaceholderText(/email/i),
+      'example@example.com'
+    )
 
     await waitFor(() => {
       expect(screen.getByText(/replace attendee/i)).toBeDisabled()
     })
 
-    userEvent.click(screen.getByTestId('terms-checkbox'))
+    await userEvent.click(screen.getByTestId('terms-checkbox'))
 
     await waitFor(() => {
       expect(screen.getByText(/replace attendee/i)).toBeEnabled()

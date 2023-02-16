@@ -34,7 +34,10 @@ type Props = {
   answers: Answers[]
 }
 
-export const RatingSummary: React.FC<Props> = ({ answers, questionKey }) => {
+export const RatingSummary: React.FC<React.PropsWithChildren<Props>> = ({
+  answers,
+  questionKey,
+}) => {
   const { t } = useTranslation()
 
   const values = useMemo(() => {

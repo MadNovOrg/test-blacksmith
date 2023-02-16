@@ -27,7 +27,10 @@ type Props = {
   showApprove?: boolean
 }
 
-export const Row: React.FC<Props> = ({ promo, showApprove = false }) => {
+export const Row: React.FC<React.PropsWithChildren<Props>> = ({
+  promo,
+  showApprove = false,
+}) => {
   const { t } = useTranslation()
 
   const typeSuffix = useMemo(() => {

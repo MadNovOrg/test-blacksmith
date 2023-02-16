@@ -31,7 +31,7 @@ type Props = {
   where: object
 }
 
-export const SelectCourses: React.FC<Props> = ({
+export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   onChange,
   titleHint,

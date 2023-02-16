@@ -16,7 +16,9 @@ import { LoadingStatus } from '@app/util'
 
 type CertificationsProps = unknown
 
-export const Certifications: React.FC<CertificationsProps> = () => {
+export const Certifications: React.FC<
+  React.PropsWithChildren<CertificationsProps>
+> = () => {
   const { t } = useTranslation()
 
   const sorting = useTableSort('name', 'asc')

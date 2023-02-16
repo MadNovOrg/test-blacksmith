@@ -33,7 +33,9 @@ import { EvaluationSummaryPDFDownloadLink } from './EvaluationSummaryPDFDownload
 
 type Evaluation = GetEvaluationsQuery['evaluations'][number]
 
-export const EvaluationSummaryTab: React.FC<unknown> = () => {
+export const EvaluationSummaryTab: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const navigate = useNavigate()
   const params = useParams()
   const { profile } = useAuth()

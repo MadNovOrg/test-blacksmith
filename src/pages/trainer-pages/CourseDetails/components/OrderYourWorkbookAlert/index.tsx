@@ -12,9 +12,9 @@ type OrderYourWorkbookAlertProps = {
   course?: ResponseType['course']
 }
 
-export const OrderYourWorkbookAlert: React.FC<OrderYourWorkbookAlertProps> = ({
-  course,
-}) => {
+export const OrderYourWorkbookAlert: React.FC<
+  React.PropsWithChildren<OrderYourWorkbookAlertProps>
+> = ({ course }) => {
   const { t } = useTranslation()
   const { activeRole } = useAuth()
 

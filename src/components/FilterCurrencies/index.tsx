@@ -10,7 +10,9 @@ type Props = {
 
 const possibleCurrencies = Object.values(Currency)
 
-export const FilterCurrencies: React.FC<Props> = ({ onChange }) => {
+export const FilterCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange,
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() =>

@@ -35,7 +35,7 @@ describe('page: Term - WebinarsCategory', () => {
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
   })
 
-  it('navigates to single video item page when clicked on grid item image', () => {
+  it('navigates to single video item page when clicked on grid item image', async () => {
     const videoItems = buildEntities(2, buildVideoItem)
     const category = {
       id: 'category-id',
@@ -73,7 +73,9 @@ describe('page: Term - WebinarsCategory', () => {
     const firstPost = screen.getByTestId(
       `video-series-grid-item-${videoItems[0].id}`
     )
-    userEvent.click(within(firstPost).getByAltText(videoItems[0].title ?? ''))
+    await userEvent.click(
+      within(firstPost).getByAltText(videoItems[0].title ?? '')
+    )
 
     expect(screen.getByText('Video page')).toBeInTheDocument()
   })
@@ -172,7 +174,10 @@ describe('page: Term - WebinarsCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search videos'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search videos'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -181,7 +186,7 @@ describe('page: Term - WebinarsCategory', () => {
     })
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const videoItems = buildEntities(20, buildVideoItem)
     const reversedVideoItems = videoItems.slice().reverse()
     const category = {
@@ -228,8 +233,8 @@ describe('page: Term - WebinarsCategory', () => {
       screen.queryByTestId(`video-series-grid-item-${reversedVideoItems[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       screen.queryByTestId(`video-series-grid-item-${videoItems[0].id}`)
@@ -294,7 +299,7 @@ describe('page: Term - WebinarsCategory', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.click(screen.getByTestId('term-next-page'))
+    await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
       screen.queryByTestId(`video-series-grid-item-${firstBatch[0].id}`)
@@ -306,7 +311,7 @@ describe('page: Term - WebinarsCategory', () => {
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('term-previous-page'))
+    await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
       screen.getByTestId(`video-series-grid-item-${firstBatch[0].id}`)

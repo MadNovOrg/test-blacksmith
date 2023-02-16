@@ -7,7 +7,9 @@ type Props = {
   role: RoleName
 }
 
-export const ChangeRole: React.FC<Props> = ({ role }) => {
+export const ChangeRole: React.FC<React.PropsWithChildren<Props>> = ({
+  role,
+}) => {
   const { changeRole } = useAuth()
 
   useEffect(() => {

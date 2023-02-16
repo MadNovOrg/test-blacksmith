@@ -51,7 +51,9 @@ export type Props = {
   course?: Course
 }
 
-export const ReplaceParticipantDialog: React.FC<Props> = ({
+export const ReplaceParticipantDialog: React.FC<
+  React.PropsWithChildren<Props>
+> = ({
   onClose = noop,
   onSuccess = noop,
   mode = Mode.TT_ADMIN,
@@ -64,7 +66,7 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
     email: schemas.email(_t, true).required(),
     firstName: yup.string().required(requiredMsg(_t, 'first-name')),
     surname: yup.string().required(requiredMsg(_t, 'surname')),
-    termsAccepted: yup.bool().required(),
+    termsAccepted: yup.bool().required().isTrue(),
   })
 
   const { register, formState, handleSubmit } = useForm<
@@ -73,7 +75,7 @@ export const ReplaceParticipantDialog: React.FC<Props> = ({
     resolver: yupResolver(schema),
     mode: 'all',
     defaultValues: {
-      termsAccepted: mode === Mode.TT_ADMIN,
+      termsAccepted: mode !== Mode.TT_ADMIN ? undefined : true,
     },
   })
 

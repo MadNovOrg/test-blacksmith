@@ -22,7 +22,9 @@ const CourseLevelParam = withDefault(
   [] as Course_Level_Enum[]
 )
 
-export const FilterCourseLevel: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange = noop,
+}) => {
   const { t } = useTranslation()
 
   const levelOptions = useMemo(() => {

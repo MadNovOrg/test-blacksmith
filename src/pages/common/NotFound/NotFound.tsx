@@ -10,7 +10,7 @@ type Props = {
   description?: string
 }
 
-export const NotFound: React.FC<Props> = ({
+export const NotFound: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   description,
   showTitle = true,

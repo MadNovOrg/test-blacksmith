@@ -26,9 +26,11 @@ const SnackbarContext = React.createContext<SnackbarState | undefined>(
   undefined
 )
 
-export const SnackbarProvider: React.FC<{
-  initialMessages?: SnackbarState['messages']
-}> = ({ children, initialMessages }) => {
+export const SnackbarProvider: React.FC<
+  React.PropsWithChildren<{
+    initialMessages?: SnackbarState['messages']
+  }>
+> = ({ children, initialMessages }) => {
   const [messages, setMessages] = useState<SnackbarState['messages']>(
     initialMessages ?? new Map()
   )

@@ -33,11 +33,9 @@ export type EditOrgUserModalProps = {
   onChange?: () => void
 }
 
-export const EditOrgUserModal: React.FC<EditOrgUserModalProps> = function ({
-  orgMember,
-  onClose,
-  onChange,
-}) {
+export const EditOrgUserModal: React.FC<
+  React.PropsWithChildren<EditOrgUserModalProps>
+> = function ({ orgMember, onClose, onChange }) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [error, setError] = useState<string>()

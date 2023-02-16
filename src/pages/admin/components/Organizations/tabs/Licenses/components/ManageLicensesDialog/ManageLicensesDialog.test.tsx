@@ -52,11 +52,9 @@ describe('ManageLicensesDialog', () => {
       }
     )
 
-    fillForm({ amount, type: Type.ADD, invoiceId })
+    await fillForm({ amount, type: Type.ADD, invoiceId })
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Save details'))
-    })
+    await userEvent.click(screen.getByText('Save details'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(onSaveMock).toHaveBeenCalledTimes(1)
@@ -113,7 +111,7 @@ describe('ManageLicensesDialog', () => {
       }
     )
 
-    fillForm({
+    await fillForm({
       amount,
       type: Type.REMOVE,
       invoiceId,
@@ -121,9 +119,7 @@ describe('ManageLicensesDialog', () => {
       issueRefund: true,
     })
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Save details'))
-    })
+    await userEvent.click(screen.getByText('Save details'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(onSaveMock).toHaveBeenCalledTimes(1)
@@ -181,7 +177,7 @@ describe('ManageLicensesDialog', () => {
       }
     )
 
-    fillForm({
+    await fillForm({
       amount,
       type: Type.REMOVE,
       invoiceId,
@@ -189,30 +185,30 @@ describe('ManageLicensesDialog', () => {
       issueRefund: true,
     })
 
+    await userEvent.click(screen.getByText('Save details'))
+
     await waitFor(() => {
-      userEvent.click(screen.getByText('Save details'))
-    })
-
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(onSaveMock).not.toHaveBeenCalled()
-    expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-      input: {
-        type: Go1ChangeType.LicensesRemoved,
-        amount,
-        orgId,
-        payload: {
-          invoiceId,
-          invokedBy: fullName,
-          invokedById: profileId,
-          note: expect.any(String),
-          licensePrice,
+      expect(fetcherMock).toHaveBeenCalledTimes(1)
+      expect(onSaveMock).not.toHaveBeenCalled()
+      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
+        input: {
+          type: Go1ChangeType.LicensesRemoved,
+          amount,
+          orgId,
+          payload: {
+            invoiceId,
+            invokedBy: fullName,
+            invokedById: profileId,
+            note: expect.any(String),
+            licensePrice,
+          },
         },
-      },
-    })
+      })
 
-    expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"There was an error removing licences, please try again later."`
-    )
+      expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+        `"There was an error removing licences, please try again later."`
+      )
+    })
   })
 
   it('handles invoice not authorized error', async () => {
@@ -254,7 +250,7 @@ describe('ManageLicensesDialog', () => {
       }
     )
 
-    fillForm({
+    await fillForm({
       amount,
       type: Type.REMOVE,
       invoiceId,
@@ -262,29 +258,29 @@ describe('ManageLicensesDialog', () => {
       issueRefund: true,
     })
 
+    await userEvent.click(screen.getByText('Save details'))
+
     await waitFor(() => {
-      userEvent.click(screen.getByText('Save details'))
-    })
-
-    expect(fetcherMock).toHaveBeenCalledTimes(1)
-    expect(onSaveMock).not.toHaveBeenCalled()
-    expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
-      input: {
-        type: Go1ChangeType.LicensesRemoved,
-        amount,
-        orgId,
-        payload: {
-          invoiceId,
-          invokedBy: fullName,
-          invokedById: profileId,
-          note: expect.any(String),
-          licensePrice,
+      expect(fetcherMock).toHaveBeenCalledTimes(1)
+      expect(onSaveMock).not.toHaveBeenCalled()
+      expect(fetcherMock).toHaveBeenCalledWith(go1LicensesHistoryChange, {
+        input: {
+          type: Go1ChangeType.LicensesRemoved,
+          amount,
+          orgId,
+          payload: {
+            invoiceId,
+            invokedBy: fullName,
+            invokedById: profileId,
+            note: expect.any(String),
+            licensePrice,
+          },
         },
-      },
-    })
+      })
 
-    expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
-      `"Invoice must be authorised in Xero before issuing a refund."`
-    )
+      expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+        `"Invoice must be authorised in Xero before issuing a refund."`
+      )
+    })
   })
 })

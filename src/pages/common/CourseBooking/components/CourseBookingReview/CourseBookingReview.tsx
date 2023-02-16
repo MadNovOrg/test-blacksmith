@@ -24,16 +24,17 @@ import {
 
 import { useBooking } from '../BookingContext'
 
-const InfoRow: React.FC<{ label: React.ReactNode; value: React.ReactNode }> = ({
-  label,
-  value = '',
-}) => (
+const InfoRow: React.FC<
+  React.PropsWithChildren<{ label: React.ReactNode; value: React.ReactNode }>
+> = ({ label, value = '' }) => (
   <Box display="flex" justifyContent="space-between" mb={1}>
     <Typography color="grey.700">{label}</Typography>
     <Typography>{value}</Typography>
   </Box>
 )
-export const CourseBookingReview: React.FC = () => {
+export const CourseBookingReview: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile } = useAuth()

@@ -81,7 +81,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
   )
 
   const handleSortChange = useCallback(
-    columnName => {
+    (columnName: string) => {
       if (sortColumn === columnName) {
         setOrder(prevState => (prevState === 'asc' ? 'desc' : 'asc'))
       } else {

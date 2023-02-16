@@ -162,7 +162,10 @@ describe('page: Ebooks', () => {
       { initialEntries: ['/ebooks'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search ebooks'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search ebooks'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -217,7 +220,7 @@ describe('page: Ebooks', () => {
       { initialEntries: ['/ebooks'] }
     )
 
-    userEvent.click(screen.getByTestId('ebooks-next-page'))
+    await userEvent.click(screen.getByTestId('ebooks-next-page'))
 
     expect(
       within(screen.getByTestId('featured-ebook')).getByText(
@@ -235,7 +238,7 @@ describe('page: Ebooks', () => {
 
     expect(screen.getByTestId('ebooks-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('ebooks-previous-page'))
+    await userEvent.click(screen.getByTestId('ebooks-previous-page'))
 
     expect(
       within(screen.getByTestId('featured-ebook')).getByText(

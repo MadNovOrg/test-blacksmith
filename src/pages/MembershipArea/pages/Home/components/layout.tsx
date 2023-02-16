@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next'
 
 import theme from '@app/theme'
 
-export const ContentGrid: React.FC<GridProps> = ({ children, ...rest }) => (
+export const ContentGrid: React.FC<React.PropsWithChildren<GridProps>> = ({
+  children,
+  ...rest
+}) => (
   <Grid
     {...rest}
     container
@@ -22,15 +25,19 @@ export const ContentGrid: React.FC<GridProps> = ({ children, ...rest }) => (
   </Grid>
 )
 
-export const ContentGridItem: React.FC<{
-  [x: string | number | symbol]: unknown
-}> = ({ children, ...rest }) => (
+export const ContentGridItem: React.FC<
+  React.PropsWithChildren<{
+    [x: string | number | symbol]: unknown
+  }>
+> = ({ children, ...rest }) => (
   <Grid item lg={3} md={6} sm={12} {...rest}>
     {children}
   </Grid>
 )
 
-export const GridHeader: React.FC<GridProps> = ({ children }) => {
+export const GridHeader: React.FC<React.PropsWithChildren<GridProps>> = ({
+  children,
+}) => {
   return (
     <Box
       justifyContent="space-between"
@@ -42,7 +49,9 @@ export const GridHeader: React.FC<GridProps> = ({ children }) => {
 }
 
 export const GridTitle: React.FC<
-  { icon: React.ReactElement; linkTo: string } & TypographyProps
+  React.PropsWithChildren<
+    { icon: React.ReactElement; linkTo: string } & TypographyProps
+  >
 > = ({ children, icon, linkTo, ...rest }) => {
   return (
     <Typography
@@ -70,7 +79,9 @@ export const GridTitle: React.FC<
   )
 }
 
-export const GridShowAll: React.FC<{ linkTo: string }> = ({ linkTo }) => {
+export const GridShowAll: React.FC<
+  React.PropsWithChildren<{ linkTo: string }>
+> = ({ linkTo }) => {
   const { t } = useTranslation()
 
   return (

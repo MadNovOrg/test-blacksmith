@@ -18,7 +18,9 @@ const ItemRow = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(1),
 }))
 
-export const InvoiceDetails: React.FC<Props> = ({ details }) => {
+export const InvoiceDetails: React.FC<React.PropsWithChildren<Props>> = ({
+  details,
+}) => {
   const { t, _t } = useScopedTranslation('components.invoice-details')
 
   const infoRows: Record<string, string> = {

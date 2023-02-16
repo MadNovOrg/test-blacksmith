@@ -21,7 +21,7 @@ enum PageTab {
   COURSE_RESCHEDULING = 'course-rescheduling',
 }
 
-export const AuditsPage: React.FC = () => {
+export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
 

@@ -10,7 +10,9 @@ export type OrgStatsTilesParams = {
   orgId: string
 }
 
-export const OrgStatsTiles: React.FC<OrgStatsTilesParams> = ({ orgId }) => {
+export const OrgStatsTiles: React.FC<
+  React.PropsWithChildren<OrgStatsTilesParams>
+> = ({ orgId }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 

@@ -77,7 +77,7 @@ describe('page: CourseGradingDetails', () => {
     expect(screen.getByText(course.name)).toBeInTheDocument()
   })
 
-  it('links back to the course manage page', () => {
+  it('links back to the course manage page', async () => {
     const course = buildCourse()
 
     useCourseMocked.mockReturnValue({
@@ -98,7 +98,7 @@ describe('page: CourseGradingDetails', () => {
       { initialEntries: [`/${course.id}/grading-details`] }
     )
 
-    userEvent.click(screen.getByText('Back to course details'))
+    await userEvent.click(screen.getByText('Back to course details'))
 
     expect(screen.getByText('Course participants page')).toBeInTheDocument()
   })

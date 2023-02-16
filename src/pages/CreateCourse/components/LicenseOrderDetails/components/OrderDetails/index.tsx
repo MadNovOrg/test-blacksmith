@@ -16,7 +16,7 @@ type Props = {
   allowancePrice: number
 }
 
-export const OrderDetails: React.FC<Props> = ({
+export const OrderDetails: React.FC<React.PropsWithChildren<Props>> = ({
   numberOfLicenses,
   licensesBalance,
   vat,

@@ -21,7 +21,7 @@ import {
 
 const initialState = { loading: true, consentUrl: '', error: false }
 
-export const XeroConnect: React.FC = () => {
+export const XeroConnect: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const navigate = useNavigate()

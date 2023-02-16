@@ -39,7 +39,7 @@ const YTContainer = styled(Box)({
   },
 })
 
-const VideoItem: React.FC = () => {
+const VideoItem: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 

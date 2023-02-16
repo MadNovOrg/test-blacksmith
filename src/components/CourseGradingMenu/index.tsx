@@ -19,7 +19,7 @@ interface Props {
 
 type GradeOption = { key: Grade; label: string; icon: React.ReactNode }
 
-export const CourseGradingMenu: React.FC<Props> = ({
+export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   courseDeliveryType,
   courseLevel,

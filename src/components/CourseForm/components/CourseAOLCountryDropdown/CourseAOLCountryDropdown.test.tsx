@@ -18,10 +18,10 @@ describe('component: CourseAOLCountryDropdown', () => {
     expect(countries).toEqual(['England', 'Scotland', 'Wales'])
   })
 
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
     render(<CourseAOLCountryDropdown value="" onChange={noop} usesAOL={true} />)
 
-    userEvent.click(screen.getByRole('button'))
+    await userEvent.click(screen.getByRole('button'))
 
     expect(screen.queryAllByRole('option').length).toBe(4)
 

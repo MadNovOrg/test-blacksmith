@@ -36,7 +36,7 @@ type Props = {
   optionLabels?: Partial<Record<TransferFeeType, string>>
 }
 
-export const FeesForm: React.FC<Props> = ({
+export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
   mode = TransferModeEnum.ADMIN_TRANSFERS,
   children,
   optionLabels,

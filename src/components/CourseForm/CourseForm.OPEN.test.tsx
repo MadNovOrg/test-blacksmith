@@ -120,7 +120,7 @@ describe('component: CourseForm - OPEN', () => {
     expect(reacc).toBeEnabled()
     expect(reacc).not.toBeChecked()
 
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
@@ -134,7 +134,7 @@ describe('component: CourseForm - OPEN', () => {
     expect(reacc).toBeEnabled()
     expect(reacc).not.toBeChecked()
 
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 })

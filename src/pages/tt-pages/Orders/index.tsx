@@ -12,7 +12,7 @@ import { useTableSort } from '@app/hooks/useTableSort'
 
 import { List } from './List'
 
-export const Orders: React.FC = () => {
+export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
 
   const { Pagination, limit, offset } = useTablePagination()

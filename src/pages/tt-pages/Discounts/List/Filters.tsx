@@ -8,7 +8,9 @@ import { FilterSearch } from '@app/components/FilterSearch'
 
 type Props = { onChange: (next: Record<string, unknown>) => void }
 
-export const Filters: React.FC<Props> = ({ onChange }) => {
+export const Filters: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange,
+}) => {
   const { t } = useTranslation()
 
   const [search, setSearch] = useState('')

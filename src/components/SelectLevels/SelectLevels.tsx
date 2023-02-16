@@ -15,7 +15,10 @@ type Props = {
   onChange: (ev: { target: { value: CourseLevel[] } }) => void
 }
 
-export const SelectLevels: React.FC<Props> = ({ value, onChange }) => {
+export const SelectLevels: React.FC<React.PropsWithChildren<Props>> = ({
+  value,
+  onChange,
+}) => {
   const { t } = useTranslation()
   const placeholder = value.length
     ? ''

@@ -267,7 +267,7 @@ describe('page: CourseDetails', () => {
       { initialEntries: [`/courses/${course.id}/details`] }
     )
 
-    userEvent.click(screen.getByText(/manage course/i))
+    await userEvent.click(screen.getByText(/manage course/i))
 
     await waitFor(() => {
       expect(screen.getByText(/manage course page/i)).toBeInTheDocument()

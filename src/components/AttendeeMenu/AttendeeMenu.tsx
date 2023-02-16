@@ -17,12 +17,9 @@ type AttendeeMenuProps = {
   onSelect?: (_: string) => void
 }
 
-export const AttendeeMenu: React.FC<AttendeeMenuProps> = ({
-  options,
-  value,
-  placeholder = '',
-  onSelect = noop,
-}) => {
+export const AttendeeMenu: React.FC<
+  React.PropsWithChildren<AttendeeMenuProps>
+> = ({ options, value, placeholder = '', onSelect = noop }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
 

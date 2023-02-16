@@ -7,7 +7,10 @@ type ExpireProps = {
   delay: number
 }
 
-export const Expire: React.FC<ExpireProps> = ({ children, delay }) => {
+export const Expire: React.FC<React.PropsWithChildren<ExpireProps>> = ({
+  children,
+  delay,
+}) => {
   const isMounted = useMountedState()
   const [visible, setVisible] = useState(true)
 

@@ -21,9 +21,9 @@ type OrgIndividualsTabParams = {
   orgId: string
 }
 
-export const OrgIndividualsTab: React.FC<OrgIndividualsTabParams> = ({
-  orgId,
-}) => {
+export const OrgIndividualsTab: React.FC<
+  React.PropsWithChildren<OrgIndividualsTabParams>
+> = ({ orgId }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const navigate = useNavigate()

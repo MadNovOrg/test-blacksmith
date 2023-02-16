@@ -35,7 +35,7 @@ describe('page: Term - Category', () => {
     expect(screen.getByTestId('items-grid-skeleton')).toBeInTheDocument()
   })
 
-  it('navigates to single blog post page when clicked on grid item image', () => {
+  it('navigates to single blog post page when clicked on grid item image', async () => {
     const posts = buildEntities(2, buildPost)
     const category = buildCategory()
 
@@ -68,7 +68,7 @@ describe('page: Term - Category', () => {
     )
 
     const firstPost = screen.getByTestId(`post-grid-item-${posts[0].id}`)
-    userEvent.click(within(firstPost).getByAltText(posts[0].title ?? ''))
+    await userEvent.click(within(firstPost).getByAltText(posts[0].title ?? ''))
 
     expect(screen.getByText('Post page')).toBeInTheDocument()
   })
@@ -158,7 +158,10 @@ describe('page: Term - Category', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search posts'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search posts'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -167,7 +170,7 @@ describe('page: Term - Category', () => {
     })
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const posts = buildEntities(20, buildPost)
     const reversedPosts = posts.slice().reverse()
     const category = buildCategory()
@@ -211,8 +214,8 @@ describe('page: Term - Category', () => {
       screen.queryByTestId(`post-grid-item-${reversedPosts[0].id}`)
     ).not.toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       screen.queryByTestId(`post-grid-item-${posts[0].id}`)
@@ -274,7 +277,7 @@ describe('page: Term - Category', () => {
       { initialEntries: [`/term/${category.id}`] }
     )
 
-    userEvent.click(screen.getByTestId('term-next-page'))
+    await userEvent.click(screen.getByTestId('term-next-page'))
 
     expect(
       screen.queryByTestId(`post-grid-item-${firstBatch[0].id}`)
@@ -286,7 +289,7 @@ describe('page: Term - Category', () => {
 
     expect(screen.getByTestId('term-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('term-previous-page'))
+    await userEvent.click(screen.getByTestId('term-previous-page'))
 
     expect(
       screen.getByTestId(`post-grid-item-${firstBatch[0].id}`)

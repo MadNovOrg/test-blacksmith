@@ -66,9 +66,9 @@ type UncompletedListProps = {
   uncompletedModules: ModuleObject[]
 }
 
-const UncompletedList: React.FC<UncompletedListProps> = ({
-  uncompletedModules,
-}) => {
+const UncompletedList: React.FC<
+  React.PropsWithChildren<UncompletedListProps>
+> = ({ uncompletedModules }) => {
   const { t } = useTranslation()
   return (
     <Box>
@@ -97,11 +97,9 @@ type ModuleGroupAccordionProps = {
   uncompletedModules: ModuleObject[]
 }
 
-const ModuleGroupAccordion: React.FC<ModuleGroupAccordionProps> = ({
-  moduleGroupName,
-  completedModules,
-  uncompletedModules,
-}) => {
+const ModuleGroupAccordion: React.FC<
+  React.PropsWithChildren<ModuleGroupAccordionProps>
+> = ({ moduleGroupName, completedModules, uncompletedModules }) => {
   const [expanded, setExpanded] = React.useState<string | false>(false)
 
   const totalModules = completedModules.length + uncompletedModules.length
@@ -156,7 +154,9 @@ type CertificateInfoProps = {
   dateIssued: string
 }
 
-const CertificateInfo: React.FC<CertificateInfoProps> = ({
+const CertificateInfo: React.FC<
+  React.PropsWithChildren<CertificateInfoProps>
+> = ({
   courseParticipant,
   grade,
   expiryDate,
@@ -293,9 +293,9 @@ type CourseCertificationProps = {
   certificateId: string
 }
 
-export const CourseCertification: React.FC<CourseCertificationProps> = ({
-  certificateId,
-}) => {
+export const CourseCertification: React.FC<
+  React.PropsWithChildren<CourseCertificationProps>
+> = ({ certificateId }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)

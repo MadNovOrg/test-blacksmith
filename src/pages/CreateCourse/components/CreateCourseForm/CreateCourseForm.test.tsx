@@ -72,11 +72,11 @@ describe('component: CreateCourseForm', () => {
 
     expect(screen.queryByTestId('SearchTrainers-input')).not.toBeInTheDocument()
 
-    await waitFor(() => {
-      userEvent.type(screen.getByLabelText('Number of attendees'), '24')
-    })
+    await userEvent.type(screen.getByLabelText('Number of attendees'), '24')
 
-    expect(screen.getByTestId('SearchTrainers-input')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.getByTestId('SearchTrainers-input')).toBeInTheDocument()
+    })
   })
 
   it('update max allowed trainers according to number of attendees', async () => {
@@ -130,11 +130,14 @@ describe('component: CreateCourseForm', () => {
       'Search eligible trainers...'
     )
 
-    userEvent.type(searchTrainersInput, 'Trainer')
+    await userEvent.type(searchTrainersInput, 'Trainer')
     await waitForCalls(mockTrainerSearch)
-    const options = screen.getAllByTestId('SearchTrainers-option')
-    expect(options).toHaveLength(3)
-    userEvent.click(options[0])
+
+    await waitFor(async () => {
+      const options = screen.getAllByTestId('SearchTrainers-option')
+      expect(options).toHaveLength(3)
+      await userEvent.click(options[0])
+    })
 
     expect(searchTrainersInput).toHaveAttribute(
       'placeholder',

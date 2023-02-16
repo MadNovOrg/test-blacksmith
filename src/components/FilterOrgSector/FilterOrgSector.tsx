@@ -15,7 +15,9 @@ const sectors = [
   'childrens-health-and-social-care',
 ]
 
-export const FilterOrgSector: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterOrgSector: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange = noop,
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() => {

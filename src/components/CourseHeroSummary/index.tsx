@@ -43,7 +43,7 @@ interface Props {
   renderButton?: () => React.ReactNode
 }
 
-export const CourseHeroSummary: React.FC<Props> = ({
+export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   course,
   children,
   renderButton,

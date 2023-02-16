@@ -8,7 +8,10 @@ type Props = {
   onSubmit: React.FormEventHandler<HTMLFormElement>
 }
 
-export const Wrapper: React.FC<Props> = ({ children, onSubmit }) => {
+export const Wrapper: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  onSubmit,
+}) => {
   const { t } = useTranslation()
   return (
     <FullHeightPage bgcolor="grey.100">

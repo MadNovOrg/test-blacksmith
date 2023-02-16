@@ -38,7 +38,7 @@ describe('component: RoleSwitcher', () => {
     expect(screen.queryByTestId('RoleSwitcher-list')).toBeNull() // list not shown
 
     const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
-    userEvent.click(roleSwitcherBtn)
+    await userEvent.click(roleSwitcherBtn)
 
     const roleSwitcherRoles = screen.getAllByTestId('RoleSwitcher-otherRole')
     expect(roleSwitcherRoles).toHaveLength(1)
@@ -53,10 +53,10 @@ describe('component: RoleSwitcher', () => {
       auth: { allowedRoles, activeRole },
     })
     const roleSwitcherBtn = screen.getByTestId('RoleSwitcher-btn')
-    userEvent.click(roleSwitcherBtn)
+    await userEvent.click(roleSwitcherBtn)
 
     const roleSwitcherRoles = screen.getAllByTestId('RoleSwitcher-otherRole')
-    userEvent.click(roleSwitcherRoles[0])
+    await userEvent.click(roleSwitcherRoles[0])
 
     expect(context.auth.changeRole).toHaveBeenCalledWith(RoleName.USER)
 

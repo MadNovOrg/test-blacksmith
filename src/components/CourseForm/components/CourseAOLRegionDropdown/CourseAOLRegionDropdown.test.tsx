@@ -28,10 +28,12 @@ describe('component: CourseAOLRegionDropdown', () => {
   })
 
   it('renders correctly for each country', async () => {
-    await countries.forEach(async (country: string) => {
+    countries.forEach(async (country: string) => {
       const regions = getAOLRegions(country)
 
-      userEvent.click(screen.getByTestId(`course-aol-region-select-${country}`))
+      await userEvent.click(
+        screen.getByTestId(`course-aol-region-select-${country}`)
+      )
 
       await waitFor(() => {
         expect(screen.queryAllByTestId('course-aol-region-option').length).toBe(

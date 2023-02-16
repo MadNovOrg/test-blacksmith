@@ -28,7 +28,9 @@ type CourseAttendeesProps = {
   course: Course
 }
 
-export const CourseAttendees: React.FC<CourseAttendeesProps> = ({ course }) => {
+export const CourseAttendees: React.FC<
+  React.PropsWithChildren<CourseAttendeesProps>
+> = ({ course }) => {
   const { id } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
   const { acl } = useAuth()

@@ -16,12 +16,9 @@ type CourseForBookingTileParams = {
   distance?: number | null
 }
 
-export const CourseForBookingTile: React.FC<CourseForBookingTileParams> = ({
-  course,
-  variant = 'default',
-  showDistance,
-  distance,
-}) => {
+export const CourseForBookingTile: React.FC<
+  React.PropsWithChildren<CourseForBookingTileParams>
+> = ({ course, variant = 'default', showDistance, distance }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const isRow = variant === 'row'

@@ -13,11 +13,9 @@ export type ProfileWithAvatarProps = {
   useLink?: boolean
 }
 
-export const ProfileWithAvatar: React.FC<ProfileWithAvatarProps> = ({
-  profile,
-  typographySx,
-  useLink,
-}) => {
+export const ProfileWithAvatar: React.FC<
+  React.PropsWithChildren<ProfileWithAvatarProps>
+> = ({ profile, typographySx, useLink }) => {
   const avatar = (
     <Avatar src={profile.avatar ?? ''} name={profile.fullName ?? ''} />
   )

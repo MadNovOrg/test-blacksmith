@@ -12,11 +12,9 @@ type Props = {
   mode: TransferModeEnum
 }
 
-export const TransferParticipantSteps: React.FC<Props> = ({
-  completedSteps,
-  currentStepKey,
-  mode,
-}) => {
+export const TransferParticipantSteps: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ completedSteps, currentStepKey, mode }) => {
   const { t } = useScopedTranslation('pages.transfer-participant.steps')
 
   const steps: { key: TransferStepsEnum; label: string }[] = [

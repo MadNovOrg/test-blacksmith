@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const FlexGroup: React.FC<FlexGroupProps> = ({
+const FlexGroup: React.FC<React.PropsWithChildren<FlexGroupProps>> = ({
   data,
   type = 'row',
   groupSize = MAX_FLEX_ELEMENTS,
@@ -220,11 +220,9 @@ const FlexGroup: React.FC<FlexGroupProps> = ({
   return <Fragment>{result}</Fragment>
 }
 
-const PDFRatingAnswer: React.FC<PDFRatingAnswerProps> = ({
-  label,
-  value,
-  backgroundColor,
-}) => {
+const PDFRatingAnswer: React.FC<
+  React.PropsWithChildren<PDFRatingAnswerProps>
+> = ({ label, value, backgroundColor }) => {
   const { t } = useTranslation()
 
   return (
@@ -244,10 +242,9 @@ const PDFRatingAnswer: React.FC<PDFRatingAnswerProps> = ({
   )
 }
 
-const PDFRatingSummary: React.FC<PDFRatingSummaryProps> = ({
-  answers,
-  questionKey,
-}) => {
+const PDFRatingSummary: React.FC<
+  React.PropsWithChildren<PDFRatingSummaryProps>
+> = ({ answers, questionKey }) => {
   const { t } = useTranslation()
 
   const groups = groupBy(answers, a => a.answer)
@@ -292,7 +289,9 @@ const PDFRatingSummary: React.FC<PDFRatingSummaryProps> = ({
   )
 }
 
-export const SummaryDocument: React.FC<SummaryDocumentProps> = props => {
+export const SummaryDocument: React.FC<
+  React.PropsWithChildren<SummaryDocumentProps>
+> = props => {
   const { t } = useTranslation()
   const {
     course,

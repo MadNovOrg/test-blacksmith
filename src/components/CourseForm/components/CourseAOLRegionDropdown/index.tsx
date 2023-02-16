@@ -12,13 +12,9 @@ interface Props {
   disabled?: boolean
 }
 
-export const CourseAOLRegionDropdown: React.FC<Props> = ({
-  value,
-  onChange,
-  usesAOL,
-  aolCountry,
-  disabled,
-}) => {
+export const CourseAOLRegionDropdown: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ value, onChange, usesAOL, aolCountry, disabled }) => {
   const { t } = useTranslation()
 
   const regions = useMemo(

@@ -127,7 +127,7 @@ describe('component: CourseAttendance', () => {
     ).toBeInTheDocument()
   })
 
-  it('saves to local storage when attendance changes', () => {
+  it('saves to local storage when attendance changes', async () => {
     const COURSE_ID = 'course-id'
     const participants = [
       buildParticipant(),
@@ -152,7 +152,7 @@ describe('component: CourseAttendance', () => {
       { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
     )
 
@@ -240,11 +240,13 @@ describe('component: CourseAttendance', () => {
       { initialEntries: [`/${COURSE_ID}/grading-details`] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       screen.getByTestId(`${participants[0].id}-attendance-checkbox`)
     )
 
-    userEvent.click(screen.getByText('Confirm modules and physical techniques'))
+    await userEvent.click(
+      screen.getByText('Confirm modules and physical techniques')
+    )
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock.mock.calls[0]).toEqual([

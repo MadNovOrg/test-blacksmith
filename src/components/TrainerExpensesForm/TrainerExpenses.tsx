@@ -151,7 +151,7 @@ export const makeSchema = (t: TFunction) =>
     ),
   })
 
-export const TrainerExpenses: React.FC<Props> = ({
+export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
   trainer,
   value = undefined,
   onChange = noop,

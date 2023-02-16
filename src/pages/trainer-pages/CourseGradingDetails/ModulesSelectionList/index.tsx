@@ -29,7 +29,7 @@ export interface Props {
   onChange?: (holds: HoldsRecord) => void
 }
 
-export const ModulesSelectionList: React.FC<Props> = ({
+export const ModulesSelectionList: React.FC<React.PropsWithChildren<Props>> = ({
   moduleGroups,
   onChange = noop,
 }) => {

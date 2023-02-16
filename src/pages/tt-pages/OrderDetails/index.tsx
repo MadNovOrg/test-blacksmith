@@ -28,7 +28,7 @@ import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR } from '@app/util'
 
-export const OrderDetails: React.FC<unknown> = () => {
+export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { t, _t } = useScopedTranslation('pages.order-details')
 

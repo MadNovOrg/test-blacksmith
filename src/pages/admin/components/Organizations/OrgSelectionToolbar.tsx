@@ -16,9 +16,9 @@ export type OrgSelectionToolbarProps = {
   prefix: string
 }
 
-export const OrgSelectionToolbar: React.FC<OrgSelectionToolbarProps> = ({
-  prefix,
-}) => {
+export const OrgSelectionToolbar: React.FC<
+  React.PropsWithChildren<OrgSelectionToolbarProps>
+> = ({ prefix }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())

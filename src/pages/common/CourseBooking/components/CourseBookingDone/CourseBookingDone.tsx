@@ -22,7 +22,9 @@ import {
 
 const completedSteps = ['details', 'review', 'payment']
 
-export const CourseBookingDone: React.FC = () => {
+export const CourseBookingDone: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const { profile } = useAuth()
   const fetcher = useFetcher()

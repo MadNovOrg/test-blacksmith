@@ -57,7 +57,7 @@ const courseTrainerToFormValues = (
   }
 }
 
-const ChooseTrainers: React.FC<Props> = ({
+const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   maxParticipants,
   courseType,
   courseLevel,

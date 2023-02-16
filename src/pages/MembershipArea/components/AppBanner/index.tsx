@@ -24,7 +24,7 @@ const BannerBox = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const AppBanner: React.FC = () => {
+export const AppBanner: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const hidden = useMediaQuery(theme.breakpoints.down('lg'))
 

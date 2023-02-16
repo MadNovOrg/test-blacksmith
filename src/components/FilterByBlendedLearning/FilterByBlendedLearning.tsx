@@ -13,10 +13,9 @@ type Props = {
   onChange: (selected: boolean) => void
 }
 
-export const FilterByBlendedLearning: React.FC<Props> = ({
-  selected = false,
-  onChange = noop,
-}) => {
+export const FilterByBlendedLearning: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ selected = false, onChange = noop }) => {
   const { t } = useTranslation()
   return (
     <Box

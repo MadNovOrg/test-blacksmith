@@ -39,10 +39,9 @@ const certificationStatusColor = {
   [CertificateStatus.ACTIVE]: 'success',
 } as const
 
-export const IndividualsByLevelList: React.FC<IndividualsByLevelListParams> = ({
-  orgId,
-  courseLevel,
-}) => {
+export const IndividualsByLevelList: React.FC<
+  React.PropsWithChildren<IndividualsByLevelListParams>
+> = ({ orgId, courseLevel }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 

@@ -12,7 +12,7 @@ type ModuleSlotProps = {
   draggableId: string
 }
 
-export const ModuleSlot: React.FC<ModuleSlotProps> = ({
+export const ModuleSlot: React.FC<React.PropsWithChildren<ModuleSlotProps>> = ({
   droppableId,
   draggableId,
   module,

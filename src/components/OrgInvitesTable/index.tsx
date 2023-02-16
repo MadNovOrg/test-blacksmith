@@ -28,7 +28,9 @@ type OrgInvitesTableParams = {
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
-export const OrgInvitesTable: React.FC<OrgInvitesTableParams> = ({ orgId }) => {
+export const OrgInvitesTable: React.FC<
+  React.PropsWithChildren<OrgInvitesTableParams>
+> = ({ orgId }) => {
   const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState(0)

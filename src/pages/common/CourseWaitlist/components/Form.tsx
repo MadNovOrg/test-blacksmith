@@ -24,7 +24,10 @@ type Props = {
   saving: boolean
 }
 
-export const Form: React.FC<Props> = ({ onSuccess, saving }) => {
+export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  onSuccess,
+  saving,
+}) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => getFormSchema(t), [t])

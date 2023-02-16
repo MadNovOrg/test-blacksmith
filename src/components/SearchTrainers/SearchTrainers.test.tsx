@@ -14,6 +14,7 @@ import {
   userEvent,
   waitForCalls,
   within,
+  waitFor,
 } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
@@ -82,14 +83,14 @@ describe('component: SearchTrainers', () => {
     expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
 
     const shortQuery = chance.last().slice(0, 3)
-    userEvent.type(input, shortQuery)
+    await userEvent.type(input, shortQuery)
     expect(input).toHaveValue(shortQuery)
     expect(mockSearch).not.toHaveBeenCalled()
 
-    userEvent.clear(input)
+    await userEvent.clear(input)
 
     const enoughQuery = chance.last().slice(0, 4)
-    userEvent.type(input, enoughQuery)
+    await userEvent.type(input, enoughQuery)
 
     expect(loadingIcon).toHaveClass('MuiCircularProgress-indeterminate') // loading
 
@@ -144,20 +145,23 @@ describe('component: SearchTrainers', () => {
     )
     const input = screen.getByTestId('SearchTrainers-input')
 
-    userEvent.type(input, lastName.slice(0, 4))
+    await userEvent.type(input, lastName.slice(0, 4))
 
-    await waitForCalls(mockSearch)
-    expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(3)
-    expect(
-      within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
-        'John McSmith'
-      )
-    ).toBeInTheDocument()
-    expect(
-      within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
-        'Principal'
-      )
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(mockSearch).toHaveBeenCalledTimes(1)
+
+      expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(3)
+      expect(
+        within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
+          'John McSmith'
+        )
+      ).toBeInTheDocument()
+      expect(
+        within(screen.getAllByTestId('SearchTrainers-option')[0]).getByText(
+          'Principal'
+        )
+      ).toBeInTheDocument()
+    })
   })
 
   it('calls matchesFilter to further filter options', async () => {
@@ -177,7 +181,7 @@ describe('component: SearchTrainers', () => {
     )
     const input = screen.getByTestId('SearchTrainers-input')
 
-    userEvent.type(input, trainers[2].fullName.slice(0, 4))
+    await userEvent.type(input, trainers[2].fullName.slice(0, 4))
 
     await waitForCalls(mockSearch)
 
@@ -229,12 +233,12 @@ describe('component: SearchTrainers', () => {
     )
     const input = screen.getByTestId('SearchTrainers-input')
 
-    userEvent.type(input, lastName.slice(0, 4))
+    await userEvent.type(input, lastName.slice(0, 4))
 
     await waitForCalls(mockSearch)
     const matches = screen.getAllByTestId('SearchTrainers-option')
     expect(matches).toHaveLength(3)
-    userEvent.click(matches[0])
+    await userEvent.click(matches[0])
 
     expect(input).toBeDisabled()
     expect(screen.getByPlaceholderText('(max allowed reached)')).toBe(input)
@@ -257,12 +261,12 @@ describe('component: SearchTrainers', () => {
     )
     const input = screen.getByTestId('SearchTrainers-input')
 
-    userEvent.type(input, trainers[2].fullName.slice(0, 4))
+    await userEvent.type(input, trainers[2].fullName.slice(0, 4))
 
     await waitForCalls(mockSearch)
     const matches = screen.getAllByTestId('SearchTrainers-option')
     expect(matches).toHaveLength(1)
-    userEvent.click(matches[0])
+    await userEvent.click(matches[0])
 
     expect(onChange).toHaveBeenCalledWith({ target: { value: [trainers[2]] } })
   })
@@ -281,7 +285,7 @@ describe('component: SearchTrainers', () => {
     )
     const input = screen.getByTestId('SearchTrainers-input')
 
-    userEvent.type(input, chance.last().slice(0, 4))
+    await userEvent.type(input, chance.last().slice(0, 4))
 
     await waitForCalls(mockSearch)
 

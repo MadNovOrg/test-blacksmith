@@ -61,8 +61,8 @@ describe('AcceptDeclineCourse', () => {
     const onUpdate = jest.fn()
     const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
-    userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
 
     await waitForCalls(onUpdate)
 
@@ -83,8 +83,8 @@ describe('AcceptDeclineCourse', () => {
     const onUpdate = jest.fn()
     const { trainer } = _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
-    userEvent.click(screen.getByTestId(tid('declineBtn')))
-    userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    await userEvent.click(screen.getByTestId(tid('declineBtn')))
+    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
 
     await waitForCalls(onUpdate)
 
@@ -105,8 +105,8 @@ describe('AcceptDeclineCourse', () => {
     const onUpdate = jest.fn()
     _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
-    userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    userEvent.click(screen.getByTestId(tid('modalCancel')))
+    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+    await userEvent.click(screen.getByTestId(tid('modalCancel')))
 
     await waitForElementToBeRemoved(() =>
       screen.queryByTestId(tid('modalCancel'))
@@ -123,8 +123,8 @@ describe('AcceptDeclineCourse', () => {
     const onUpdate = jest.fn()
     _render(Course_Invite_Status_Enum.Pending, onUpdate)
 
-    userEvent.click(screen.getByTestId(tid('acceptBtn')))
-    userEvent.click(screen.getByTestId(tid('modalSubmit')))
+    await userEvent.click(screen.getByTestId(tid('acceptBtn')))
+    await userEvent.click(screen.getByTestId(tid('modalSubmit')))
 
     await waitForCalls(mockFetcher)
 

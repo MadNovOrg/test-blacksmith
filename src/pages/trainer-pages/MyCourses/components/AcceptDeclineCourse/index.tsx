@@ -28,10 +28,9 @@ export type AcceptDeclineProps = {
   onUpdate: (trainer: Trainer, status: Course_Invite_Status_Enum) => void
 }
 
-export const AcceptDeclineCourse: React.FC<AcceptDeclineProps> = ({
-  trainer,
-  onUpdate,
-}) => {
+export const AcceptDeclineCourse: React.FC<
+  React.PropsWithChildren<AcceptDeclineProps>
+> = ({ trainer, onUpdate }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
 

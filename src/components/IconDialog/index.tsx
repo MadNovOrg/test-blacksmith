@@ -15,7 +15,7 @@ type IconDialogProps = {
   icon: React.ReactNode
 }
 
-export const IconDialog: React.FC<IconDialogProps> = ({
+export const IconDialog: React.FC<React.PropsWithChildren<IconDialogProps>> = ({
   icon,
   children,
   ...props

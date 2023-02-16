@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, userEvent } from '@test/index'
 
 import { FilterPaymentMethods } from './index'
 
@@ -9,10 +9,8 @@ describe('component: FilterPaymentMethods', () => {
     const onChange = jest.fn()
     render(<FilterPaymentMethods onChange={onChange} />)
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Payment Method'))
-      userEvent.click(screen.getByText('Credit card'))
-    })
+    await userEvent.click(screen.getByText('Payment Method'))
+    await userEvent.click(screen.getByText('Credit card'))
 
     expect(onChange).toHaveBeenCalledWith({ paymentMethods: ['CC'] })
   })

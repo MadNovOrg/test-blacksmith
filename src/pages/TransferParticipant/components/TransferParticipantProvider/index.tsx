@@ -69,7 +69,9 @@ type Props = {
   mode?: ContextValue['mode']
 }
 
-export const TransferParticipantProvider: React.FC<Props> = ({
+export const TransferParticipantProvider: React.FC<
+  React.PropsWithChildren<Props>
+> = ({
   children,
   initialValue,
   courseId,

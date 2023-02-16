@@ -49,7 +49,9 @@ function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
     : 0
 }
 
-export const TrainerAvatarGroup: React.FC<Props> = ({ trainers }) => {
+export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
+  trainers,
+}) => {
   const { t } = useTranslation()
 
   function trainerAvatar(trainer: TrainerAvatar, index: number) {

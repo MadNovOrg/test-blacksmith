@@ -21,7 +21,9 @@ import {
 } from './components/TransferParticipantProvider'
 import { TransferParticipantSteps } from './components/TransferParticipantSteps'
 
-export const TransferParticipant: React.FC = () => {
+export const TransferParticipant: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useScopedTranslation('pages.transfer-participant')
 
   const { participant, completedSteps, currentStepKey, mode } =

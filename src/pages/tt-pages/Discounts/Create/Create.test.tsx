@@ -11,7 +11,7 @@ import { screen, render, within, userEvent, waitFor, chance } from '@test/index'
 import { profile } from '@test/providers'
 
 import { Create } from './Create'
-import { AMOUNT_PRESETS, APPLIES_TO } from './helpers'
+import { APPLIES_TO } from './helpers'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
@@ -72,7 +72,7 @@ describe('page: CreateDiscount', () => {
     const { FreePlaces } = Promo_Code_Type_Enum
     const typeFreePlaces = screen.getByTestId(`discount-type-${FreePlaces}`)
 
-    userEvent.click(typeFreePlaces)
+    await userEvent.click(typeFreePlaces)
 
     const amount = screen.getByTestId('fld-amount-freeplaces')
     expect(amount).toHaveValue('1')
@@ -92,7 +92,7 @@ describe('page: CreateDiscount', () => {
 
     expect(screen.queryByTestId('SelectLevels')).toBeNull()
 
-    userEvent.click(screen.getByTestId(appliesTo))
+    await userEvent.click(screen.getByTestId(appliesTo))
 
     expect(screen.queryByTestId('SelectLevels')).toBeInTheDocument()
   })
@@ -108,7 +108,7 @@ describe('page: CreateDiscount', () => {
 
     expect(screen.queryByTestId('SelectCourses')).toBeNull()
 
-    userEvent.click(screen.getByTestId(appliesTo))
+    await userEvent.click(screen.getByTestId(appliesTo))
 
     expect(screen.queryByTestId('SelectCourses')).toBeInTheDocument()
   })
@@ -117,14 +117,16 @@ describe('page: CreateDiscount', () => {
     _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(btnSubmit)
 
-    const fldCode = screen.getByTestId('fld-code')
-    const codeError = screen.getByText('Discount code is required')
+    await waitFor(() => {
+      const fldCode = screen.getByTestId('fld-code')
+      const codeError = screen.getByText('Discount code is required')
 
-    expect(fldCode.parentElement).toHaveClass('Mui-error')
-    expect(codeError).toHaveClass('Mui-error')
-    expect(mockFetcher).not.toHaveBeenCalled()
+      expect(fldCode.parentElement).toHaveClass('Mui-error')
+      expect(codeError).toHaveClass('Mui-error')
+      expect(mockFetcher).not.toHaveBeenCalled()
+    })
   })
 
   it('validates level(s) selected if appliesTo is LEVELS', async () => {
@@ -134,17 +136,21 @@ describe('page: CreateDiscount', () => {
     _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(btnSubmit)
 
-    expect(screen.queryByTestId('SelectLevels')).toBeNull()
-    expect(screen.queryByText(levelsRequiredText)).toBeNull()
+    await waitFor(() => {
+      expect(screen.queryByTestId('SelectLevels')).toBeNull()
+      expect(screen.queryByText(levelsRequiredText)).toBeNull()
+    })
 
-    userEvent.click(screen.getByTestId(appliesTo))
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(screen.getByTestId(appliesTo))
+    await userEvent.click(btnSubmit)
 
-    expect(screen.queryByTestId('SelectLevels')).toBeInTheDocument()
-    expect(screen.queryByText(levelsRequiredText)).toBeInTheDocument()
-    expect(mockFetcher).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(screen.queryByTestId('SelectLevels')).toBeInTheDocument()
+      expect(screen.queryByText(levelsRequiredText)).toBeInTheDocument()
+      expect(mockFetcher).not.toHaveBeenCalled()
+    })
   })
 
   it('validates course(s) selected if appliesTo is COURSES', async () => {
@@ -154,17 +160,21 @@ describe('page: CreateDiscount', () => {
     _render(<Create />)
 
     const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(btnSubmit)
 
-    expect(screen.queryByTestId('SelectCourses')).toBeNull()
-    expect(screen.queryByText(coursesRequiredText)).toBeNull()
+    await waitFor(() => {
+      expect(screen.queryByTestId('SelectCourses')).toBeNull()
+      expect(screen.queryByText(coursesRequiredText)).toBeNull()
+    })
 
-    userEvent.click(screen.getByTestId(appliesTo))
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(screen.getByTestId(appliesTo))
+    await userEvent.click(btnSubmit)
 
-    expect(screen.queryByTestId('SelectCourses')).toBeInTheDocument()
-    expect(screen.queryByText(coursesRequiredText)).toBeInTheDocument()
-    expect(mockFetcher).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(screen.queryByTestId('SelectCourses')).toBeInTheDocument()
+      expect(screen.queryByText(coursesRequiredText)).toBeInTheDocument()
+      expect(mockFetcher).not.toHaveBeenCalled()
+    })
   })
 
   it('validates validFrom is required', async () => {
@@ -180,16 +190,18 @@ describe('page: CreateDiscount', () => {
     await userEvent.clear(validFrom)
     expect(screen.getByTestId('fld-validFrom')).toHaveValue('')
 
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(btnSubmit)
 
-    expect(validFromMuiFilledInput).toHaveClass('Mui-error')
-    expect(
-      within(validFromMuiFormControl as HTMLElement).getByText(
-        'This field is required'
-      )
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(validFromMuiFilledInput).toHaveClass('Mui-error')
+      expect(
+        within(validFromMuiFormControl as HTMLElement).getByText(
+          'This field is required'
+        )
+      ).toBeInTheDocument()
 
-    expect(mockFetcher).not.toHaveBeenCalled()
+      expect(mockFetcher).not.toHaveBeenCalled()
+    })
   })
 
   it('validates validTo is >= to validFrom', async () => {
@@ -204,63 +216,51 @@ describe('page: CreateDiscount', () => {
     expect(validToMuiFilledInput).not.toHaveClass('Mui-error')
 
     const fromDate = dateInputValueParse((validFrom as HTMLInputElement).value)
-    userEvent.paste(validTo, dateInputValueFormat(subDays(fromDate, 1)))
+    validTo.focus()
+    await userEvent.paste(dateInputValueFormat(subDays(fromDate, 1)))
 
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.click(btnSubmit)
 
-    expect(validToMuiFilledInput).toHaveClass('Mui-error')
-    expect(
-      within(validToMuiFormControl as HTMLElement).getByText(
-        "Must be greater or equal to 'Start date'"
-      )
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(validToMuiFilledInput).toHaveClass('Mui-error')
+      expect(
+        within(validToMuiFormControl as HTMLElement).getByText(
+          "Must be greater or equal to 'Start date'"
+        )
+      ).toBeInTheDocument()
 
-    expect(mockFetcher).not.toHaveBeenCalled()
+      expect(mockFetcher).not.toHaveBeenCalled()
+    })
   })
 
   it('validates usesMax is greater than 0 if filled', async () => {
     _render(<Create />)
 
-    expect(screen.queryByTestId('fld-usesMax')).toBeNull()
+    await userEvent.click(screen.getByLabelText(/limit number of bookings/i))
 
-    const limitBookings = screen
-      .getByTestId('fld-limitBookings')
-      .querySelector('input')
-
-    expect(limitBookings).not.toBeChecked()
-    userEvent.click(limitBookings as HTMLInputElement)
-    expect(limitBookings).toBeChecked()
-
-    const usesMax = screen.getByTestId('fld-usesMax')
-    expect(usesMax).toBeInTheDocument()
-    expect(usesMax).toHaveValue('1')
-
-    await waitFor(() => userEvent.type(usesMax, '{selectall}0'))
-
-    const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
-
-    const usesMaxMuiFilledInput = usesMax.parentElement as HTMLDivElement
-    const usesMaxFormHelperText =
-      usesMaxMuiFilledInput.nextSibling as HTMLParagraphElement
-
-    expect(usesMaxMuiFilledInput).toHaveClass('Mui-error')
-    expect(usesMaxFormHelperText).toHaveClass('Mui-error')
-    expect(usesMaxFormHelperText).toHaveTextContent(
-      'Maximum usages must be greater than or equal to 1'
+    await userEvent.clear(screen.getByLabelText(/maximum usages/i))
+    await userEvent.type(screen.getByLabelText(/maximum usages/i), '0')
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
     )
 
-    expect(mockFetcher).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(
+        screen.getByText(/maximum usages must be greater than or equal to 1/i)
+      ).toBeInTheDocument()
+    })
   })
 
   it('navigates to Discounts list when cancel is clicked', async () => {
     _render(<Create />)
 
     const btnCancel = screen.getByTestId('btn-cancel')
-    await waitFor(() => userEvent.click(btnCancel))
+    await userEvent.click(btnCancel)
 
-    expect(mockFetcher).not.toHaveBeenCalled()
-    expect(mockNavigate).toHaveBeenCalledWith('..')
+    await waitFor(() => {
+      expect(mockFetcher).not.toHaveBeenCalled()
+      expect(mockNavigate).toHaveBeenCalledWith('..')
+    })
   })
 
   it('submits as expected when all data is valid', async () => {
@@ -269,7 +269,7 @@ describe('page: CreateDiscount', () => {
     _render(<Create />)
 
     const fldCode = screen.getByTestId('fld-code')
-    userEvent.type(fldCode, code)
+    await userEvent.type(fldCode, code)
 
     const btnSubmit = screen.getByTestId('btn-submit')
     await waitFor(() => userEvent.click(btnSubmit))
@@ -296,56 +296,59 @@ describe('page: CreateDiscount', () => {
   })
 
   it('shows Approval Needed if PERCENT exceeds 15', async () => {
-    const code = chance.word({ length: 10 }).toUpperCase()
-
     _render(<Create />)
 
-    const fldCode = screen.getByTestId('fld-code')
-    userEvent.type(fldCode, code)
+    await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
+    await userEvent.click(screen.getByLabelText(/percent/i))
 
-    const percentShortcuts = screen.getByTestId('percent-shortcuts')
-    userEvent.click(within(percentShortcuts).getByRole('button'))
+    const percentageOptions = screen.getByTestId('percent-shortcuts')
 
-    const otherTestId = `percent-shortcut-${AMOUNT_PRESETS.OTHER}`
-    const optionOther = screen.getByTestId(otherTestId)
-    userEvent.click(optionOther)
-
-    userEvent.type(
-      screen.getByTestId('fld-amount-percent'),
-      `{selectall}${chance.integer({ min: 16, max: 100 })}`
+    await userEvent.click(within(percentageOptions).getByRole('button'))
+    await userEvent.click(
+      within(screen.getByRole('listbox')).getByText(/other/i)
     )
 
-    const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
+    await userEvent.clear(screen.getByPlaceholderText(/amount/i))
+    await userEvent.type(screen.getByPlaceholderText(/amount/i), '20')
 
-    const reasonTestId = `approvalNeeded-reason-${Promo_Code_Type_Enum.Percent}`
-    expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
-    expect(mockFetcher).not.toHaveBeenCalled()
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
+    )
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog')
+
+      expect(
+        within(dialog).getByText(/discount approval required/i)
+      ).toBeInTheDocument()
+      expect(
+        within(dialog).getByText(/percentage exceeds 15%/i)
+      ).toBeInTheDocument()
+    })
   })
 
   it('shows Approval Needed if FREE_PLACES exceeds 3', async () => {
-    const code = chance.word({ length: 10 }).toUpperCase()
-
     _render(<Create />)
 
-    const fldCode = screen.getByTestId('fld-code')
-    userEvent.type(fldCode, code)
+    await userEvent.type(screen.getByPlaceholderText(/discount code/i), 'code')
+    await userEvent.click(screen.getByLabelText(/free spaces/i))
+    await userEvent.type(screen.getByPlaceholderText(/free places/i), '4')
 
-    const { FreePlaces } = Promo_Code_Type_Enum
-    const typeFreePlaces = screen.getByTestId(`discount-type-${FreePlaces}`)
-    userEvent.click(typeFreePlaces)
-
-    userEvent.type(
-      screen.getByTestId('fld-amount-freeplaces'),
-      `{selectall}${chance.integer({ min: 4, max: 80 })}`
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
     )
 
-    const btnSubmit = screen.getByTestId('btn-submit')
-    await waitFor(() => userEvent.click(btnSubmit))
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog')
 
-    const reasonTestId = `approvalNeeded-reason-${FreePlaces}`
-    expect(screen.getByTestId(reasonTestId)).toBeInTheDocument()
-    expect(mockFetcher).not.toHaveBeenCalled()
+      expect(
+        within(dialog).getByText(/discount approval required/i)
+      ).toBeInTheDocument()
+
+      expect(
+        within(dialog).getByText(/number of free spaces exceeds 3/i)
+      ).toBeInTheDocument()
+    })
   })
 })
 

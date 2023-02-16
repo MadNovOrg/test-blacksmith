@@ -7,7 +7,7 @@ type Props = {
   component?: BoxProps['component']
 }
 
-export const Ellipsize: React.FC<Props> = ({
+export const Ellipsize: React.FC<React.PropsWithChildren<Props>> = ({
   text = '',
   len = 50,
   component = 'span',

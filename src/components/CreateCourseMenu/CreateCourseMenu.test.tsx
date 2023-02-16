@@ -30,9 +30,9 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
         'Open course'
       )
@@ -58,9 +58,9 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
         'Closed course'
       )
@@ -85,9 +85,9 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('create-course-options')).getByText(
         'Indirect course'
       )
@@ -112,7 +112,7 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
     expect(
       within(screen.getByTestId('create-course-options')).queryByText(
@@ -136,14 +136,14 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
     await waitFor(() => {
       expect(screen.getByText('INDIRECT form')).toBeInTheDocument()
     })
   })
 
-  it('given a user is sales admin, it displays correct options', () => {
+  it('given a user is sales admin, it displays correct options', async () => {
     render(
       <Routes>
         <Route path="/" element={<CreateCourseMenu />} />
@@ -158,7 +158,7 @@ describe('components: CreateCourseMenu', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByText('Create course'))
+    await userEvent.click(screen.getByText('Create course'))
 
     expect(
       within(screen.getByTestId('create-course-options')).getByText(

@@ -19,14 +19,17 @@ type Props = {
 
 const statuses = Object.values(Course_Status_Enum) as string[]
 
-export const FilterCourseStatus: React.FC<Props> = ({
+export const FilterCourseStatus: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   excludedStatuses = new Set(),
   customStatuses = new Set(),
 }) => {
   const { t } = useTranslation()
 
-  const allStatuses = [...statuses, ...customStatuses]
+  const allStatuses = useMemo(
+    () => [...statuses, ...customStatuses],
+    [customStatuses]
+  )
   const statusOptions = useMemo(() => {
     return allStatuses
       .map(status =>
@@ -39,7 +42,7 @@ export const FilterCourseStatus: React.FC<Props> = ({
             }
       )
       .filter(Boolean)
-  }, [customStatuses, excludedStatuses, t])
+  }, [allStatuses, excludedStatuses, t])
 
   const [selected, setSelected] = useQueryParam(
     'status',

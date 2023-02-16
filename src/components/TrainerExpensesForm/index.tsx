@@ -23,7 +23,7 @@ type Props = {
   onChange?: (data: FormValues, isValid: boolean) => void
 }
 
-const TrainerExpensesForm: React.FC<Props> = ({
+const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   trainers = [],
   onChange = noop,
   initialValues = undefined,

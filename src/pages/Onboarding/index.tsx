@@ -31,7 +31,7 @@ import { ONBOARD_USER } from './queries'
 
 const onlyCountries = ['gb']
 
-export const Onboarding: React.FC = () => {
+export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
   const { profile, reloadCurrentProfile } = useAuth()
   const navigate = useNavigate()
@@ -175,7 +175,7 @@ export const Onboarding: React.FC = () => {
                       variant="filled"
                       fullWidth
                       error={Boolean(errors.dob)}
-                      helperText={errors.dob?.message}
+                      helperText={errors.dob?.message as string}
                       required
                     />
                   )}

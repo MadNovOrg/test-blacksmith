@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react-hooks'
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
+import { renderHook } from '@test/index'
 import { act } from '@test/index'
 
 import { useSnackbar, SnackbarProvider } from '.'
@@ -8,7 +8,7 @@ import { useSnackbar, SnackbarProvider } from '.'
 describe('hook: useSnackbar', () => {
   it('manages snackbar messages', () => {
     const { result } = renderHook(() => useSnackbar(), {
-      wrapper: ({ children }) => (
+      wrapper: ({ children }: PropsWithChildren) => (
         <SnackbarProvider>{children}</SnackbarProvider>
       ),
     })

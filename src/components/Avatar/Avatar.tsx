@@ -12,34 +12,32 @@ type AvatarProps = {
   imgProps?: AvatarTypeMap['props']['imgProps']
 }
 
-export const Avatar: React.FC<AvatarProps> = React.forwardRef<
-  HTMLDivElement,
-  AvatarProps
->(function AvatarInner(
-  { name, src, size = 32, sx, className, imgProps, ...rest },
-  ref
-) {
-  const props = {
-    src,
-    className,
-    imgProps,
-    sx: {
-      ...(name && { bgcolor: stringToColor(name) }),
-      ...sx,
-      height: size,
-      width: size,
-    },
-  }
+export const Avatar: React.FC<React.PropsWithChildren<AvatarProps>> =
+  React.forwardRef<HTMLDivElement, AvatarProps>(function AvatarInner(
+    { name, src, size = 32, sx, className, imgProps, ...rest },
+    ref
+  ) {
+    const props = {
+      src,
+      className,
+      imgProps,
+      sx: {
+        ...(name && { bgcolor: stringToColor(name) }),
+        ...sx,
+        height: size,
+        width: size,
+      },
+    }
 
-  return (
-    <MuiAvatar
-      role="img"
-      {...props}
-      {...rest}
-      ref={ref}
-      style={{ fontSize: size / 2 }}
-    >
-      {name ? getInitialsFromName(name) : null}
-    </MuiAvatar>
-  )
-})
+    return (
+      <MuiAvatar
+        role="img"
+        {...props}
+        {...rest}
+        ref={ref}
+        style={{ fontSize: size / 2 }}
+      >
+        {name ? getInitialsFromName(name) : null}
+      </MuiAvatar>
+    )
+  })

@@ -71,7 +71,9 @@ type CertificateDocumentProps = {
   expiryDate: string
 }
 
-export const CertificateDocument: React.FC<CertificateDocumentProps> = ({
+export const CertificateDocument: React.FC<
+  React.PropsWithChildren<CertificateDocumentProps>
+> = ({
   participantName,
   courseName,
   courseLevel,

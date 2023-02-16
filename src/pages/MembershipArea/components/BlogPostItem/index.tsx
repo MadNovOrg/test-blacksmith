@@ -25,7 +25,7 @@ export type Props = {
   afterDescription?: React.ReactElement
 } & BoxProps
 
-export const BlogPostItem: React.FC<Props> = ({
+export const BlogPostItem: React.FC<React.PropsWithChildren<Props>> = ({
   imageUrl,
   imageSrcSet,
   title,
@@ -106,7 +106,9 @@ export const BlogPostItem: React.FC<Props> = ({
   )
 }
 
-export const BlogPostItemSkeleton: React.FC = () => (
+export const BlogPostItemSkeleton: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => (
   <>
     <Skeleton variant="rectangular" height={170} sx={{ marginBottom: 2 }} />
     <Skeleton />

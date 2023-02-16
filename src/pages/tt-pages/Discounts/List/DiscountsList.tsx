@@ -19,7 +19,7 @@ type Filters = {
   status?: string[]
 }
 
-export const DiscountsList: React.FC = () => {
+export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 

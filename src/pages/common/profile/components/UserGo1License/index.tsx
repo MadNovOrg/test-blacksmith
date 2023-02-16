@@ -24,7 +24,7 @@ type Props = {
   onDeleted?: () => void
 }
 
-export const UserGo1License: React.FC<Props> = ({
+export const UserGo1License: React.FC<React.PropsWithChildren<Props>> = ({
   license,
   editable,
   onDeleted,

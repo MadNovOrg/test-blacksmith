@@ -37,100 +37,101 @@ function parseCourseLevel(number: string) {
   }
 }
 
-const ImportCertificateModal: React.FC<ImportCertificateModalProps> =
-  function ({ onCancel, onSubmit }) {
-    const { t } = useTranslation()
-    const fetcher = useFetcher()
-    const { profile } = useAuth()
+const ImportCertificateModal: React.FC<
+  React.PropsWithChildren<ImportCertificateModalProps>
+> = function ({ onCancel, onSubmit }) {
+  const { t } = useTranslation()
+  const fetcher = useFetcher()
+  const { profile } = useAuth()
 
-    const [code, setCode] = useState('')
-    const [error, setError] = useState<string>()
+  const [code, setCode] = useState('')
+  const [error, setError] = useState<string>()
 
-    const submitHandler = useCallback(async () => {
-      const errorMessage = t(
-        'common.course-certificate.certification-code-incorrect'
-      )
-      if (!profile || !code) {
-        return
-      }
-      setError(undefined)
-      try {
-        const { results } = await fetcher<
-          FindLegacyCertificateResponseType,
-          FindLegacyCertificateParamsType
-        >(FindLegacyCertificateQuery, {
-          code: code,
-          firstName: profile.givenName,
-          lastName: profile.familyName,
-        })
-        if (results.length !== 1) {
-          setError(errorMessage)
-        } else {
-          const certificate = results[0]
-          const mappedLevel = parseCourseLevel(certificate.number)
-          if (!mappedLevel) {
-            setError(errorMessage)
-            return
-          }
-          await fetcher<null, ImportLegacyCertificateParamsType>(
-            ImportLegacyCertificateMutation,
-            {
-              id: uuidv4(),
-              number: certificate.number,
-              expiryDate: certificate.expiryDate,
-              certificationDate: certificate.certificationDate,
-              profileId: profile.id,
-              courseName: certificate.courseName,
-              courseLevel: mappedLevel,
-            }
-          )
-          onSubmit()
-        }
-      } catch (e) {
-        setError(errorMessage)
-      }
-    }, [code, t, fetcher, onSubmit, profile])
-
-    return (
-      <Box>
-        <Typography variant="body1" color="grey.700">
-          {t('common.course-certificate.import-certificate-description')}
-        </Typography>
-
-        <TextField
-          sx={{ my: 3 }}
-          onChange={event => setCode(event.target.value)}
-          variant="filled"
-          label={t('common.course-certificate.enter-valid-certification-code')}
-          error={Boolean(error)}
-          helperText={error}
-          fullWidth
-          value={code}
-        />
-
-        <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button
-            type="button"
-            variant="outlined"
-            color="secondary"
-            size="large"
-            onClick={onCancel}
-          >
-            {t('common.cancel')}
-          </Button>
-          <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={submitHandler}
-            disabled={!code}
-          >
-            {t('common.course-certificate.update-certification')}
-          </Button>
-        </Box>
-      </Box>
+  const submitHandler = useCallback(async () => {
+    const errorMessage = t(
+      'common.course-certificate.certification-code-incorrect'
     )
-  }
+    if (!profile || !code) {
+      return
+    }
+    setError(undefined)
+    try {
+      const { results } = await fetcher<
+        FindLegacyCertificateResponseType,
+        FindLegacyCertificateParamsType
+      >(FindLegacyCertificateQuery, {
+        code: code,
+        firstName: profile.givenName,
+        lastName: profile.familyName,
+      })
+      if (results.length !== 1) {
+        setError(errorMessage)
+      } else {
+        const certificate = results[0]
+        const mappedLevel = parseCourseLevel(certificate.number)
+        if (!mappedLevel) {
+          setError(errorMessage)
+          return
+        }
+        await fetcher<null, ImportLegacyCertificateParamsType>(
+          ImportLegacyCertificateMutation,
+          {
+            id: uuidv4(),
+            number: certificate.number,
+            expiryDate: certificate.expiryDate,
+            certificationDate: certificate.certificationDate,
+            profileId: profile.id,
+            courseName: certificate.courseName,
+            courseLevel: mappedLevel,
+          }
+        )
+        onSubmit()
+      }
+    } catch (e) {
+      setError(errorMessage)
+    }
+  }, [code, t, fetcher, onSubmit, profile])
+
+  return (
+    <Box>
+      <Typography variant="body1" color="grey.700">
+        {t('common.course-certificate.import-certificate-description')}
+      </Typography>
+
+      <TextField
+        sx={{ my: 3 }}
+        onChange={event => setCode(event.target.value)}
+        variant="filled"
+        label={t('common.course-certificate.enter-valid-certification-code')}
+        error={Boolean(error)}
+        helperText={error}
+        fullWidth
+        value={code}
+      />
+
+      <Box display="flex" justifyContent="flex-end" gap={2}>
+        <Button
+          type="button"
+          variant="outlined"
+          color="secondary"
+          size="large"
+          onClick={onCancel}
+        >
+          {t('common.cancel')}
+        </Button>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={submitHandler}
+          disabled={!code}
+        >
+          {t('common.course-certificate.update-certification')}
+        </Button>
+      </Box>
+    </Box>
+  )
+}
 
 export default ImportCertificateModal

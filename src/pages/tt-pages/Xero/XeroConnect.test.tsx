@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, chance, waitForCalls } from '@test/index'
+import { render, screen, chance, waitFor } from '@test/index'
 
 import { XeroConnect } from './XeroConnect'
 
@@ -45,14 +45,18 @@ describe('page: XeroConnect', () => {
 
     expect(screen.queryByTestId('XeroConnect-loading')).toBeInTheDocument()
 
-    await waitForCalls(mockFetcher)
+    await waitFor(() => {
+      expect(mockFetcher).toHaveBeenCalledTimes(1)
 
-    expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('query XeroConnect')
-    )
+      expect(mockFetcher).toHaveBeenCalledWith(
+        expect.stringContaining('query XeroConnect')
+      )
 
-    expect(screen.queryByTestId('XeroConnect-loading')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('XeroConnect-connect')).toBeInTheDocument()
+      expect(
+        screen.queryByTestId('XeroConnect-loading')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByTestId('XeroConnect-connect')).toBeInTheDocument()
+    })
   })
 
   it('renders loading and calls XeroCallback', async () => {
@@ -65,14 +69,18 @@ describe('page: XeroConnect', () => {
 
     expect(screen.queryByTestId('XeroConnect-loading')).toBeInTheDocument()
 
-    await waitForCalls(mockFetcher)
+    await waitFor(() => {
+      expect(mockFetcher).toHaveBeenCalledTimes(1)
 
-    expect(mockFetcher).toHaveBeenCalledWith(
-      expect.stringContaining('mutation XeroCallback'),
-      { input: { url } }
-    )
+      expect(mockFetcher).toHaveBeenCalledWith(
+        expect.stringContaining('mutation XeroCallback'),
+        { input: { url } }
+      )
 
-    expect(screen.queryByTestId('XeroConnect-loading')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('XeroConnect-connected')).toBeInTheDocument()
+      expect(
+        screen.queryByTestId('XeroConnect-loading')
+      ).not.toBeInTheDocument()
+      expect(screen.queryByTestId('XeroConnect-connected')).toBeInTheDocument()
+    })
   })
 })

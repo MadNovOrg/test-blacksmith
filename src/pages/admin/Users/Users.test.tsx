@@ -143,7 +143,7 @@ describe('page: Users', () => {
     render(<Users />)
 
     const search = screen.getByTestId('FilterSearch-Input')
-    userEvent.type(search, keyword)
+    await userEvent.type(search, keyword)
     await waitFor(() => {
       expect(
         screen.getByText(`${filteredProfile.fullName}`)
@@ -176,10 +176,10 @@ describe('page: Users', () => {
 
     render(<Users />)
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterUserRole')).getByText('Trainer')
     )
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('FilterTrainerType')).getByText('Principal')
     )
 
@@ -213,7 +213,7 @@ describe('page: Users', () => {
 
     render(<Users />)
 
-    userEvent.click(screen.getByLabelText('Moderator'))
+    await userEvent.click(screen.getByLabelText('Moderator'))
 
     await waitFor(() => {
       expect(

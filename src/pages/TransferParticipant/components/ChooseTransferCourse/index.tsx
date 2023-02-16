@@ -22,7 +22,9 @@ import {
   useTransferParticipantContext,
 } from '../TransferParticipantProvider'
 
-export const ChooseTransferCourse: React.FC = () => {
+export const ChooseTransferCourse: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t, _t } = useScopedTranslation('pages.transfer-participant')
 
   const { courseChosen, mode, cancel } = useTransferParticipantContext()

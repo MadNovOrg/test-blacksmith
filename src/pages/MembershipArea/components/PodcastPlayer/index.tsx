@@ -36,7 +36,7 @@ type Props = {
   mediaUrl: string
 }
 
-export const PodcastPlayer: React.FC<Props> = ({
+export const PodcastPlayer: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   author,
   thumbnailUrl,

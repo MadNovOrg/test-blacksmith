@@ -9,7 +9,7 @@ interface Props {
   organization: Organization
 }
 
-export const CourseHostInfo: React.FC<Props> = ({
+export const CourseHostInfo: React.FC<React.PropsWithChildren<Props>> = ({
   courseType,
   organization,
 }) => {

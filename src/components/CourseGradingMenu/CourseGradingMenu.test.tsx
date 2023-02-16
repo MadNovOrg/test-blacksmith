@@ -7,7 +7,7 @@ import { render, screen, userEvent, within } from '@test/index'
 import { CourseGradingMenu } from '.'
 
 describe('component: CourseGradingMenu', () => {
-  it('displays correct option for virtual L1 course', () => {
+  it('displays correct option for virtual L1 course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.Level_1}
@@ -15,7 +15,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 
@@ -25,7 +25,7 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for F2F L1 course', () => {
+  it('displays correct options for F2F L1 course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.Level_1}
@@ -33,7 +33,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 
@@ -43,7 +43,7 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for F2F L2 course', () => {
+  it('displays correct options for F2F L2 course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.Level_2}
@@ -51,7 +51,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 
@@ -61,7 +61,7 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for advanced trainer F2F course', () => {
+  it('displays correct options for advanced trainer F2F course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.AdvancedTrainer}
@@ -69,7 +69,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 
@@ -79,7 +79,7 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for intermediate trainer F2F course', () => {
+  it('displays correct options for intermediate trainer F2F course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.IntermediateTrainer}
@@ -87,7 +87,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 
@@ -97,7 +97,7 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
   })
 
-  it('displays correct options for blended course', () => {
+  it('displays correct options for blended course', async () => {
     render(
       <CourseGradingMenu
         courseLevel={CourseLevel.Level_1}
@@ -105,7 +105,7 @@ describe('component: CourseGradingMenu', () => {
       />
     )
 
-    userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
 
     const menu = screen.getByTestId('course-grading-options')
 

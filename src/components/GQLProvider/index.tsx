@@ -12,7 +12,9 @@ import {
 
 import { useAuth } from '@app/context/auth'
 
-export const GQLProvider: React.FC = ({ children }) => {
+export const GQLProvider: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => {
   const { getJWT, activeRole } = useAuth()
 
   const client = useMemo(() => {

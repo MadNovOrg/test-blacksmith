@@ -1,11 +1,13 @@
-import { renderHook } from '@testing-library/react-hooks'
 import React, { useState } from 'react'
 
+import { renderHook } from '@test/index'
 import { render, screen, TestMemoryRouter, userEvent } from '@test/index'
 
 import { useTablePagination } from './useTablePagination'
 
-const Wrapper: React.FC<{ total?: number }> = ({ total = 36 }) => {
+const Wrapper: React.FC<React.PropsWithChildren<{ total?: number }>> = ({
+  total = 36,
+}) => {
   const [halveTotal, setHalveTotal] = useState(false)
   const { Pagination, perPage, currentPage, limit, offset } =
     useTablePagination()
@@ -28,12 +30,12 @@ const Wrapper: React.FC<{ total?: number }> = ({ total = 36 }) => {
   )
 }
 
-const clickNext = () => {
-  userEvent.click(screen.getByLabelText('Go to next page'))
+const clickNext = async () => {
+  await userEvent.click(screen.getByLabelText('Go to next page'))
 }
 
-const clickPrev = () => {
-  userEvent.click(screen.getByLabelText('Go to previous page'))
+const clickPrev = async () => {
+  await userEvent.click(screen.getByLabelText('Go to previous page'))
 }
 
 describe('useTablePagination', () => {
@@ -71,7 +73,7 @@ describe('useTablePagination', () => {
     const prev = screen.getByLabelText('Go to previous page')
     expect(prev).toBeDisabled()
 
-    clickNext()
+    await clickNext()
 
     expect(screen.getByText('13–24 of 36')).toBeInTheDocument()
     expect(screen.getByTestId('perPage')).toHaveTextContent('12')
@@ -79,7 +81,7 @@ describe('useTablePagination', () => {
     expect(screen.getByTestId('limit')).toHaveTextContent('12')
     expect(screen.getByTestId('offset')).toHaveTextContent('12')
 
-    clickNext()
+    await clickNext()
 
     expect(screen.getByText('25–36 of 36')).toBeInTheDocument()
     expect(screen.getByTestId('perPage')).toHaveTextContent('12')
@@ -97,8 +99,8 @@ describe('useTablePagination', () => {
     expect(displayed).toBeInTheDocument()
 
     // Go to last page
-    clickNext()
-    clickNext()
+    await clickNext()
+    await clickNext()
 
     expect(screen.getByText('25–36 of 36')).toBeInTheDocument()
     expect(screen.getByTestId('perPage')).toHaveTextContent('12')
@@ -106,7 +108,7 @@ describe('useTablePagination', () => {
     expect(screen.getByTestId('limit')).toHaveTextContent('12')
     expect(screen.getByTestId('offset')).toHaveTextContent('24')
 
-    clickPrev()
+    await clickPrev()
 
     expect(screen.getByText('13–24 of 36')).toBeInTheDocument()
     expect(screen.getByTestId('perPage')).toHaveTextContent('12')
@@ -114,7 +116,7 @@ describe('useTablePagination', () => {
     expect(screen.getByTestId('limit')).toHaveTextContent('12')
     expect(screen.getByTestId('offset')).toHaveTextContent('12')
 
-    clickPrev()
+    await clickPrev()
 
     expect(screen.getByText('1–12 of 36')).toBeInTheDocument()
     expect(screen.getByTestId('perPage')).toHaveTextContent('12')
@@ -129,13 +131,13 @@ describe('useTablePagination', () => {
     render(<Wrapper total={48} />)
 
     // Go to last page
-    clickNext()
-    clickNext()
-    clickNext()
+    await clickNext()
+    await clickNext()
+    await clickNext()
     expect(screen.getByText('37–48 of 48')).toBeInTheDocument()
 
     // Reduce the total number of items to 24
-    userEvent.click(screen.getByText('Halve total'))
+    await userEvent.click(screen.getByText('Halve total'))
 
     expect(screen.getByText('1–12 of 24')).toBeInTheDocument()
   })

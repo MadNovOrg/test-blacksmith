@@ -10,7 +10,9 @@ type Props = {
 
 const possibleStatuses = Object.values(XeroInvoiceStatus)
 
-export const FilterOrderStatuses: React.FC<Props> = ({ onChange }) => {
+export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange,
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() => {

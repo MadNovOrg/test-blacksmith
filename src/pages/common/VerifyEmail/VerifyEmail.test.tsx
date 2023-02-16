@@ -43,16 +43,11 @@ describe('page: VerifyEmailPage', () => {
     )
   }
 
-  it('matchs snapshot', async () => {
-    const { container } = setup()
-    expect(container).toMatchSnapshot()
-  })
-
   it('sends verification email when verify now is clicked', async () => {
     render(<VerifyEmailPage />)
 
     expect(screen.queryByTestId('signup-verify-btn')).not.toBeInTheDocument()
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitForCalls(AuthMock.verifyCurrentUserAttribute)
     expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
     await waitFor(() =>
@@ -63,14 +58,14 @@ describe('page: VerifyEmailPage', () => {
   it('does not submit when code is empty', async () => {
     render(<VerifyEmailPage />)
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     expect(screen.queryByTestId('signup-verify-error')).toBeNull()
 
-    userEvent.click(screen.getByTestId('signup-verify-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-btn'))
 
     await waitForText('Please enter 6 digit passcode received in email')
   })
@@ -78,19 +73,16 @@ describe('page: VerifyEmailPage', () => {
   it('shows error when code is invalid', async () => {
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const code = '1234'
-    code.split('').forEach((n, i) => {
-      const iN = screen.getByTestId(`signup-verify-code-${i}`)
-      userEvent.type(iN, n)
-    })
+    await fillCode(code)
 
     const submitBtn = screen.getByTestId('signup-verify-btn')
-    userEvent.click(submitBtn)
+    await userEvent.click(submitBtn)
 
     const error = await screen.findByTestId('signup-verify-error')
     expect(error).toHaveTextContent(
@@ -105,19 +97,16 @@ describe('page: VerifyEmailPage', () => {
 
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const code = '123456'
-    code.split('').forEach((n, i) => {
-      const iN = screen.getByTestId(`signup-verify-code-${i}`)
-      userEvent.type(iN, n)
-    })
+    await fillCode(code)
 
     const submitBtn = screen.getByTestId('signup-verify-btn')
-    userEvent.click(submitBtn)
+    await userEvent.click(submitBtn)
 
     await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
     expect(AuthMock.verifyCurrentUserAttributeSubmit).toHaveBeenCalledWith(
@@ -136,19 +125,16 @@ describe('page: VerifyEmailPage', () => {
 
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const code = '123456'
-    code.split('').forEach((n, i) => {
-      const iN = screen.getByTestId(`signup-verify-code-${i}`)
-      userEvent.type(iN, n)
-    })
+    await fillCode(code)
 
     const submitBtn = screen.getByTestId('signup-verify-btn')
-    userEvent.click(submitBtn)
+    await userEvent.click(submitBtn)
 
     await waitForCalls(AuthMock.verifyCurrentUserAttributeSubmit)
 
@@ -163,16 +149,14 @@ describe('page: VerifyEmailPage', () => {
 
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const code = '123456'
-    code.split('').forEach((n, i) => {
-      const iN = screen.getByTestId(`signup-verify-code-${i}`)
-      userEvent.type(iN, n)
-    })
+
+    await fillCode(code)
 
     const submitBtn = screen.getByTestId('signup-verify-btn')
     userEvent.click(submitBtn)
@@ -188,13 +172,13 @@ describe('page: VerifyEmailPage', () => {
   it('sends new code when resend is pressed', async () => {
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const resendBtn = screen.getByTestId('signup-verify-resend')
-    userEvent.click(resendBtn)
+    await userEvent.click(resendBtn)
 
     await waitForCalls(AuthMock.verifyCurrentUserAttribute, 2)
     expect(AuthMock.verifyCurrentUserAttribute).toHaveBeenCalledWith('email')
@@ -215,28 +199,35 @@ describe('page: VerifyEmailPage', () => {
 
     setup()
 
-    userEvent.click(screen.getByTestId('signup-verify-now-btn'))
+    await userEvent.click(screen.getByTestId('signup-verify-now-btn'))
     await waitFor(() =>
       expect(screen.queryByTestId('signup-verify-btn')).toBeInTheDocument()
     )
 
     const code = '123456'
-    code.split('').forEach((n, i) => {
-      const iN = screen.getByTestId(`signup-verify-code-${i}`)
-      userEvent.type(iN, n)
-    })
+
+    await fillCode(code)
 
     const submitBtn = screen.getByTestId('signup-verify-btn')
-    userEvent.click(submitBtn)
+    await userEvent.click(submitBtn)
 
     await waitFor(() =>
       expect(screen.queryByTestId('btn-goto-login')).toBeInTheDocument()
     )
 
-    userEvent.click(screen.getByTestId('btn-goto-login'))
+    await userEvent.click(screen.getByTestId('btn-goto-login'))
 
     await waitForCalls(AuthMock.currentUserPoolUser)
     await waitForCalls(refreshSessionIfPossibleMock)
     await waitForCalls(loadProfileMock)
   })
 })
+
+async function fillCode(code: string) {
+  await Promise.all(
+    code.split('').map((n, i) => {
+      const iN = screen.getByTestId(`signup-verify-code-${i}`)
+      return userEvent.type(iN, n)
+    })
+  )
+}

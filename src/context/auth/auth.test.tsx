@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react-hooks'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { Auth } from 'aws-amplify'
 
 import { RoleName } from '@app/types'
@@ -21,7 +21,7 @@ const lsKey = (id: string) => lsActiveRoleClient({ id }).key
 
 describe('context: Auth', () => {
   it('returns expected shape', async () => {
-    const { result, waitForNextUpdate } = render()
+    const { result } = render()
 
     const expectedKeys = [
       'loading',
@@ -37,65 +37,70 @@ describe('context: Auth', () => {
     // On first render we haven't loaded the user yet
     expect(Object.keys(result.current)).toStrictEqual(expectedKeys)
 
-    await waitForNextUpdate()
-
-    // After auto-signin we should have the user data
-    expect(Object.keys(result.current)).toStrictEqual([
-      'profile',
-      'isOrgAdmin',
-      'organizationIds',
-      'defaultRole',
-      'allowedRoles',
-      'activeRole',
-      'verified',
-      'loggedOut',
-      ...expectedKeys,
-    ])
+    await waitFor(() => {
+      // After auto-signin we should have the user data
+      expect(Object.keys(result.current)).toStrictEqual([
+        'profile',
+        'isOrgAdmin',
+        'organizationIds',
+        'defaultRole',
+        'allowedRoles',
+        'activeRole',
+        'verified',
+        'loggedOut',
+        ...expectedKeys,
+      ])
+    })
   })
 
   it('stops loading if user is not logged in', async () => {
     const currentUserMock = jest.mocked(Auth.currentAuthenticatedUser)
     currentUserMock.mockRejectedValueOnce(undefined)
 
-    const { result, waitForNextUpdate } = render()
+    const { result } = render()
     expect(result.current.loading).toBe(true)
     expect(result.current.profile).toBeUndefined()
 
-    await waitForNextUpdate()
-    expect(result.current.loading).toBe(false)
-    expect(result.current.profile).toBeUndefined()
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false)
+      expect(result.current.profile).toBeUndefined()
+    })
   })
 
   it('sets user and profile data as expected', async () => {
     const { profile, claims } = defaultCognitoProfile
     const roles = claims ? claims['x-hasura-allowed-roles'] : []
 
-    const { result, waitForNextUpdate } = render()
+    const { result } = render()
 
     expect(result.current.profile).toBeUndefined()
     expect(result.current.profile).toBeUndefined()
 
-    await waitForNextUpdate()
-
-    expect(result.current.profile).toStrictEqual(profile)
-    expect(result.current.defaultRole).toBe(RoleName.USER)
-    expect(result.current.activeRole).toBe(RoleName.USER)
-    expect(result.current.allowedRoles).toStrictEqual(new Set(roles))
+    await waitFor(() => {
+      expect(result.current.profile).toStrictEqual(profile)
+      expect(result.current.defaultRole).toBe(RoleName.USER)
+      expect(result.current.activeRole).toBe(RoleName.USER)
+      expect(result.current.allowedRoles).toStrictEqual(new Set(roles))
+    })
   })
 
   it('maps allowed roles as expected', async () => {
     // Without roles
     mockCognitoToProfile({ claims: { 'x-hasura-allowed-roles': [] } })
     const render1 = render()
-    await render1.waitForNextUpdate()
-    expect(render1.result.current.allowedRoles).toStrictEqual(new Set())
+
+    await waitFor(() => {
+      expect(render1.result.current.allowedRoles).toStrictEqual(new Set())
+    })
 
     // With roles
     const roles = chance.pickset([...ActiveRoles], 3)
     mockCognitoToProfile({ claims: { 'x-hasura-allowed-roles': roles } })
     const render2 = render()
-    await render2.waitForNextUpdate()
-    expect(render2.result.current.allowedRoles).toStrictEqual(new Set(roles))
+
+    await waitFor(() => {
+      expect(render2.result.current.allowedRoles).toStrictEqual(new Set(roles))
+    })
   })
 
   it('stores activeRole in localStorage', async () => {
@@ -105,11 +110,12 @@ describe('context: Auth', () => {
     const roles = [RoleName.USER, RoleName.TRAINER]
     mockCognitoToProfile({ claims: { 'x-hasura-allowed-roles': roles } })
 
-    const { result, waitForNextUpdate } = render()
-    await waitForNextUpdate()
+    const { result } = render()
 
-    expect(result.current.activeRole).toBe(RoleName.USER)
-    expect(localStorage.getItem(key)).toBe(result.current.activeRole)
+    await waitFor(() => {
+      expect(result.current.activeRole).toBe(RoleName.USER)
+      expect(localStorage.getItem(key)).toBe(result.current.activeRole)
+    })
   })
 
   it('gets activeRole from localStorage', async () => {
@@ -124,11 +130,12 @@ describe('context: Auth', () => {
       },
     })
 
-    const { result, waitForNextUpdate } = render()
-    await waitForNextUpdate()
+    const { result } = render()
 
-    expect(result.current.activeRole).toBe(RoleName.TRAINER)
-    expect(localStorage.getItem(key)).toBe(result.current.activeRole)
+    await waitFor(() => {
+      expect(result.current.activeRole).toBe(RoleName.TRAINER)
+      expect(localStorage.getItem(key)).toBe(result.current.activeRole)
+    })
   })
 
   it('parses organization ids as expected', async () => {
@@ -137,29 +144,32 @@ describe('context: Auth', () => {
       claims: { 'x-hasura-tt-organizations': `{"${id1}", "${id2}"}` },
     })
 
-    const { result, waitForNextUpdate } = render()
-    await waitForNextUpdate()
+    const { result } = render()
 
-    expect(result.current.organizationIds).toStrictEqual([id1, id2])
+    await waitFor(() => {
+      expect(result.current.organizationIds).toStrictEqual([id1, id2])
+    })
   })
 
   describe('login', () => {
     it('logs in when inputs are valid', async () => {
       const [email, pass] = [chance.email(), chance.string()]
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
-      await act(result.current.logout)
-      expect(result.current.profile).toBeUndefined()
+      const { result } = render()
 
-      mockCognitoToProfile({ profile: { email } })
-      await act(async () => {
-        await result.current.login(email, pass)
+      await waitFor(async () => {
+        await act(result.current.logout)
+        expect(result.current.profile).toBeUndefined()
+
+        mockCognitoToProfile({ profile: { email } })
+        await act(async () => {
+          await result.current.login(email, pass)
+        })
+
+        expect(Auth.signIn).toHaveBeenCalledWith(email, pass)
+        expect(result.current.profile?.email).toBe(email)
+        expect(result.current.loggedOut).toBe(false)
       })
-
-      expect(Auth.signIn).toHaveBeenCalledWith(email, pass)
-      expect(result.current.profile?.email).toBe(email)
-      expect(result.current.loggedOut).toBe(false)
     })
 
     it('returns error if Auth.signIn fails', async () => {
@@ -168,8 +178,7 @@ describe('context: Auth', () => {
       signInMock.mockRejectedValueOnce(Error('Failed for tests'))
       const cognitoToProfileMock = mockCognitoToProfile({})
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
       await act(result.current.logout)
 
       expect(cognitoToProfileMock).toHaveBeenCalledTimes(1)
@@ -185,8 +194,8 @@ describe('context: Auth', () => {
       const [email, pass] = [chance.email(), chance.string()]
       const cognitoToProfileMock = mockCognitoToProfile({})
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
+
       await act(result.current.logout)
 
       expect(cognitoToProfileMock).toHaveBeenCalledTimes(1)
@@ -207,38 +216,40 @@ describe('context: Auth', () => {
     it('logs out of Cognito and erases state', async () => {
       const key = lsKey(defaultCognitoProfile.profile?.id ?? '')
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
 
-      expect(result.current.profile?.id).toBeTruthy()
-      expect(result.current.activeRole).toBe(RoleName.USER)
-      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+      await waitFor(async () => {
+        expect(result.current.profile?.id).toBeTruthy()
+        expect(result.current.activeRole).toBe(RoleName.USER)
+        expect(localStorage.getItem(key)).toBe(RoleName.USER)
 
-      await act(result.current.logout)
+        await act(result.current.logout)
 
-      expect(Auth.signOut).toHaveBeenCalledWith()
-      expect(result.current.profile).toBeUndefined()
-      expect(result.current.activeRole).toBeUndefined()
-      expect(result.current.loggedOut).toBe(true)
+        expect(Auth.signOut).toHaveBeenCalledWith()
+        expect(result.current.profile).toBeUndefined()
+        expect(result.current.activeRole).toBeUndefined()
+        expect(result.current.loggedOut).toBe(true)
 
-      // ActiveRole is kept so that re-login picks up last role before logout
-      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+        // ActiveRole is kept so that re-login picks up last role before logout
+        expect(localStorage.getItem(key)).toBe(RoleName.USER)
+      })
     })
   })
 
   describe('changeRole', () => {
     it('does nothing if not logged in', async () => {
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
 
-      await act(result.current.logout)
+      await waitFor(async () => {
+        await act(result.current.logout)
 
-      expect(result.current.profile).toBeUndefined()
-      expect(result.current.activeRole).toBeUndefined()
+        expect(result.current.profile).toBeUndefined()
+        expect(result.current.activeRole).toBeUndefined()
 
-      const newRole = result.current.changeRole(RoleName.TRAINER)
-      expect(newRole).toBeUndefined()
-      expect(result.current.activeRole).toBeUndefined()
+        const newRole = result.current.changeRole(RoleName.TRAINER)
+        expect(newRole).toBeUndefined()
+        expect(result.current.activeRole).toBeUndefined()
+      })
     })
 
     it('does nothing if role not in allowedRoles', async () => {
@@ -250,16 +261,17 @@ describe('context: Auth', () => {
         },
       })
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
 
-      const oldRole = result.current.activeRole
-      expect(oldRole).toBe(RoleName.USER)
+      await waitFor(() => {
+        const oldRole = result.current.activeRole
+        expect(oldRole).toBe(RoleName.USER)
 
-      const newRole = result.current.changeRole(RoleName.TT_ADMIN)
+        const newRole = result.current.changeRole(RoleName.TT_ADMIN)
 
-      expect(newRole).toBe(oldRole)
-      expect(result.current.activeRole).toBe(oldRole)
+        expect(newRole).toBe(oldRole)
+        expect(result.current.activeRole).toBe(oldRole)
+      })
     })
 
     it('updates activeRole when valid', async () => {
@@ -272,11 +284,12 @@ describe('context: Auth', () => {
         },
       })
 
-      const { result, waitForNextUpdate } = render()
-      await waitForNextUpdate()
+      const { result } = render()
 
-      expect(result.current.activeRole).toBe(RoleName.USER)
-      expect(localStorage.getItem(key)).toBe(RoleName.USER)
+      await waitFor(() => {
+        expect(result.current.activeRole).toBe(RoleName.USER)
+        expect(localStorage.getItem(key)).toBe(RoleName.USER)
+      })
 
       act(() => {
         const newRole = result.current.changeRole(RoleName.TRAINER)

@@ -16,7 +16,9 @@ export default {
   decorators: [withMuiThemeProvider],
 } as ComponentMeta<typeof CourseStatusChip>
 
-const ChipContainer: React.FC = ({ children }) => <Box mb={2}>{children}</Box>
+const ChipContainer: React.FC<React.PropsWithChildren<unknown>> = ({
+  children,
+}) => <Box mb={2}>{children}</Box>
 
 export const AllStatuses = () => (
   <>

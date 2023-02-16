@@ -19,7 +19,10 @@ type Props = {
   items: Omit<Go1_Licenses_History, 'org_id'>[]
 }
 
-export const LicensesHistoryTable: React.FC<Props> = ({ items, children }) => {
+export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({
+  items,
+  children,
+}) => {
   const { t, _t } = useScopedTranslation(
     'pages.org-details.tabs.licenses.table'
   )

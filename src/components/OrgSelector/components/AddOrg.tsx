@@ -46,7 +46,7 @@ function getTrustType(dfeValue?: string) {
   }
 }
 
-export const AddOrg: React.FC<Props> = function ({
+export const AddOrg: React.FC<React.PropsWithChildren<Props>> = function ({
   option,
   onSuccess,
   onClose,

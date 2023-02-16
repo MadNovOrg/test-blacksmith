@@ -11,7 +11,7 @@ describe('component: DrawerMenu', () => {
     const openButton = screen.getByLabelText('Open menu')
     expect(openButton).toBeInTheDocument()
     expect(screen.queryByTestId('drawer-menu')).not.toBeInTheDocument()
-    await waitFor(() => userEvent.click(openButton))
+    await userEvent.click(openButton)
     expect(screen.queryByTestId('drawer-menu')).toBeInTheDocument()
     const closeButton = screen.getByLabelText('Close menu')
     expect(closeButton).toBeInTheDocument()

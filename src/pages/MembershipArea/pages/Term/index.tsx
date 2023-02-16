@@ -22,12 +22,14 @@ import { OrderMenu } from '../../components/OrderMenu'
 
 export const PER_PAGE = 12
 
-const Pagination: React.FC<{
-  onPrevClick: () => void
-  onNextClick: () => void
-  hasNextPage: boolean
-  hasPreviousPage: boolean
-}> = ({ onPrevClick, onNextClick, hasPreviousPage, hasNextPage }) => {
+const Pagination: React.FC<
+  React.PropsWithChildren<{
+    onPrevClick: () => void
+    onNextClick: () => void
+    hasNextPage: boolean
+    hasPreviousPage: boolean
+  }>
+> = ({ onPrevClick, onNextClick, hasPreviousPage, hasNextPage }) => {
   if (!hasNextPage && !hasPreviousPage) {
     return null
   }
@@ -74,7 +76,7 @@ type TermType =
   | 'ResearchSummariesCategory'
   | 'VideoSeriesCategory'
 
-const Term: React.FC = () => {
+const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 

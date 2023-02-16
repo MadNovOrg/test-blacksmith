@@ -24,7 +24,7 @@ export type CourseCancellationRequestFeatureProps = {
 }
 
 export const CourseCancellationRequestFeature: React.FC<
-  CourseCancellationRequestFeatureProps
+  React.PropsWithChildren<CourseCancellationRequestFeatureProps>
 > = ({ course, open, onClose, onChange }) => {
   const fetcher = useFetcher()
   const { acl } = useAuth()

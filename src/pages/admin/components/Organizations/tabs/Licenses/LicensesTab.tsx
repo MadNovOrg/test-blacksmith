@@ -28,7 +28,9 @@ type Props = {
   orgId: string
 }
 
-export const LicensesTab: React.FC<Props> = ({ orgId }) => {
+export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
+  orgId,
+}) => {
   const { acl } = useAuth()
   const { t } = useScopedTranslation('pages.org-details.tabs.licenses')
 

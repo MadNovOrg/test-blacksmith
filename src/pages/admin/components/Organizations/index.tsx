@@ -34,7 +34,9 @@ import { useTableSort } from '@app/hooks/useTableSort'
 
 type OrganizationsProps = unknown
 
-export const Organizations: React.FC<OrganizationsProps> = () => {
+export const Organizations: React.FC<
+  React.PropsWithChildren<OrganizationsProps>
+> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl, profile } = useAuth()

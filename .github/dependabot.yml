@@ -5,25 +5,6 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: react
-        versions:
-          - '18.x'
-      - dependency-name: react-dom
-        versions:
-          - '18.x'
-      - dependency-name: '@testing-library/react'
-        versions:
-          - '13.x'
-      - dependency-name: '@testing-library/user-event'
-        versions:
-          - '13.x'
-      - dependency-name: '@types/react'
-        versions:
-          - '18.x'
-      - dependency-name: '@types/react-dom'
-        versions:
-          - '18.x'
   - package-ecosystem: github-actions
     directory: '/'
     schedule:

@@ -9,14 +9,16 @@ import {
 } from '@mui/material'
 import React, { useCallback } from 'react'
 
+type Action<T> = {
+  icon: React.ReactNode
+  label: string
+  onClick: (item: T) => void
+}
+
 type ActionsMenuProperties<T> = {
   item: T
   label: string
-  actions: {
-    icon: React.ReactNode
-    label: string
-    onClick: (item: T) => void
-  }[]
+  actions: Action<T>[]
 }
 
 export const ActionsMenu = <T,>({
@@ -38,7 +40,7 @@ export const ActionsMenu = <T,>({
   }, [])
 
   const onClick = useCallback(
-    action => {
+    (action: Action<T>) => {
       setAnchorEl(null)
       action.onClick(item)
     },

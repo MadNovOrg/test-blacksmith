@@ -8,10 +8,12 @@ import { InfoRow } from './InfoRow'
 
 export { InfoRow }
 
-export const InfoPanel: React.FC<{
-  title?: string
-  titlePosition?: 'inside' | 'outside'
-}> = ({ title, children, titlePosition = 'inside', ...rest }) => (
+export const InfoPanel: React.FC<
+  React.PropsWithChildren<{
+    title?: string
+    titlePosition?: 'inside' | 'outside'
+  }>
+> = ({ title, children, titlePosition = 'inside', ...rest }) => (
   <Box {...rest}>
     {titlePosition === 'outside' && title ? (
       <Typography variant="h4" mb={2}>

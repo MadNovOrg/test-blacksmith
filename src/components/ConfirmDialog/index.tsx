@@ -15,7 +15,9 @@ export type ConfirmDialogProps = {
   'data-testid'?: string
 }
 
-export const ConfirmDialog: React.FC<ConfirmDialogProps> = function ({
+export const ConfirmDialog: React.FC<
+  React.PropsWithChildren<ConfirmDialogProps>
+> = function ({
   open,
   title,
   message,

@@ -46,10 +46,9 @@ const certificationStatusColor = {
   [CertificateStatus.ACTIVE]: 'success',
 } as const
 
-export const OrgUsersTable: React.FC<OrgUsersTableParams> = ({
-  orgId,
-  onChange,
-}) => {
+export const OrgUsersTable: React.FC<
+  React.PropsWithChildren<OrgUsersTableParams>
+> = ({ orgId, onChange }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 

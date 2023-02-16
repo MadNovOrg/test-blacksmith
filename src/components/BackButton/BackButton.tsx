@@ -9,7 +9,10 @@ type BackButtonProps = {
   to?: string
 }
 
-export const BackButton: React.FC<BackButtonProps> = ({ label, to }) => {
+export const BackButton: React.FC<React.PropsWithChildren<BackButtonProps>> = ({
+  label,
+  to,
+}) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
 

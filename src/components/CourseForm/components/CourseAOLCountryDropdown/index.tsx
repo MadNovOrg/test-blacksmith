@@ -14,11 +14,9 @@ interface Props {
 
 const countries = ['placeholder', ...getAOLCountries()]
 
-export const CourseAOLCountryDropdown: React.FC<Props> = ({
-  value,
-  onChange,
-  usesAOL,
-}) => {
+export const CourseAOLCountryDropdown: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ value, onChange, usesAOL }) => {
   const { t } = useTranslation()
 
   const selected = value || countries[0]

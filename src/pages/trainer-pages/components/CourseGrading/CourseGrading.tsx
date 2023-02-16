@@ -42,7 +42,9 @@ const StyledText = styled(Typography)(({ theme }) => ({
   color: theme.palette.secondary.main,
 }))
 
-export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
+export const CourseGrading: React.FC<
+  React.PropsWithChildren<CourseGradingProps>
+> = ({ course }) => {
   const { t } = useTranslation()
   const theme = useTheme()
   const navigate = useNavigate()
@@ -124,7 +126,7 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
   ])
 
   const handleSortChange = useCallback(
-    columnName => {
+    (columnName: string) => {
       if (sortColumn === columnName) {
         setOrder(prevState => (prevState === 'asc' ? 'desc' : 'asc'))
       } else {
@@ -135,13 +137,16 @@ export const CourseGrading: React.FC<CourseGradingProps> = ({ course }) => {
     [sortColumn]
   )
 
-  const handleParticipantSelection = useCallback((participantId, checked) => {
-    setSelectedParticipants(prevState =>
-      checked
-        ? [...prevState, participantId]
-        : prevState.filter(id => id !== participantId)
-    )
-  }, [])
+  const handleParticipantSelection = useCallback(
+    (participantId: string, checked: boolean) => {
+      setSelectedParticipants(prevState =>
+        checked
+          ? [...prevState, participantId]
+          : prevState.filter(id => id !== participantId)
+      )
+    },
+    []
+  )
 
   return (
     <>

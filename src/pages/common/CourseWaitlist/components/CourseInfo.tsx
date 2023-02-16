@@ -22,7 +22,9 @@ const StyledListIcon = styled(ListItemIcon)(({ theme }) => ({
   color: theme.palette.secondary.main,
 }))
 
-const VenueAddressField: React.FC<{ field: string }> = ({ field }) => (
+const VenueAddressField: React.FC<
+  React.PropsWithChildren<{ field: string }>
+> = ({ field }) => (
   <ListItem disableGutters disablePadding>
     <ListItemText sx={{ paddingLeft: 4 }}>
       {' '}
@@ -35,7 +37,9 @@ type Props = {
   course: WaitlistCourseQuery['courses'][0]
 }
 
-export const CourseInfo: React.FC<Props> = ({ course }) => {
+export const CourseInfo: React.FC<React.PropsWithChildren<Props>> = ({
+  course,
+}) => {
   const { t } = useTranslation()
 
   if (!course) {

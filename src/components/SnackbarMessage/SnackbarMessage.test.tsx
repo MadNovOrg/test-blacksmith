@@ -46,13 +46,13 @@ describe('component: SnackbarMessage', () => {
       label: 'course created',
     })
 
-    act(() => {
-      render(
-        <SnackbarProvider initialMessages={initialMessages}>
-          <SnackbarMessage messageKey="course-created" />
-        </SnackbarProvider>
-      )
+    render(
+      <SnackbarProvider initialMessages={initialMessages}>
+        <SnackbarMessage messageKey="course-created" />
+      </SnackbarProvider>
+    )
 
+    act(() => {
       jest.runAllTimers()
     })
 

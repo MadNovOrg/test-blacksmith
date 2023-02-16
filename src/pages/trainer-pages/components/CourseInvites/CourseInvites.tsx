@@ -5,6 +5,7 @@ import {
   FormHelperText,
   Grid,
   TextField,
+  TextFieldProps,
   Typography,
 } from '@mui/material'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -135,7 +136,7 @@ export const CourseInvites = ({ course, attendeesCount = 0 }: Props) => {
   const isOpenCourse = course && course.type === CourseType.OPEN
 
   const renderInput = useCallback(
-    params => (
+    (params: TextFieldProps) => (
       <TextField
         {...params}
         variant="filled"

@@ -17,7 +17,9 @@ const hubSettings = [
   { name: 'cancellations-transfers-replacements', link: '/admin/audit' },
 ]
 
-export const AdminPage: React.FC<AdminPageProps> = () => {
+export const AdminPage: React.FC<
+  React.PropsWithChildren<AdminPageProps>
+> = () => {
   const { t } = useTranslation()
   return (
     <FullHeightPage

@@ -31,14 +31,9 @@ const style = {
   '& + &': { ml: 2 },
 }
 
-export const BooleanQuestion: React.FC<BooleanQuestionProps> = ({
-  type,
-  value,
-  reason,
-  onChange = noop,
-  infoText,
-  disabled = false,
-}) => {
+export const BooleanQuestion: React.FC<
+  React.PropsWithChildren<BooleanQuestionProps>
+> = ({ type, value, reason, onChange = noop, infoText, disabled = false }) => {
   const { t } = useTranslation()
 
   return (

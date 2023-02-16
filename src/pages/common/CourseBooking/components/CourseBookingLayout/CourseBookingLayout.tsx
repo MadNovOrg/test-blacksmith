@@ -16,7 +16,9 @@ const completedMap = {
   done: ['details', 'review', 'payment'],
 }
 
-export const CourseBookingLayout: React.FC = () => {
+export const CourseBookingLayout: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const location = useLocation()
   const { error, booking } = useBooking()

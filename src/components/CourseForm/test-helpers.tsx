@@ -35,18 +35,18 @@ beforeEach(() => {
 
 export async function selectLevel(lvl: CourseLevel) {
   const select = screen.getByTestId('course-level-select')
-  userEvent.click(within(select).getByRole('button'))
+  await userEvent.click(within(select).getByRole('button'))
 
-  await waitFor(() => {
+  await waitFor(async () => {
     const opt = screen.getByTestId(`course-level-option-${lvl}`)
-    userEvent.click(opt)
+    await userEvent.click(opt)
   })
 }
 
 export async function selectDelivery(del: CourseDeliveryType) {
   const radio = screen.getByTestId(`delivery-${del}`)
 
-  await waitFor(() => {
-    userEvent.click(radio)
+  await waitFor(async () => {
+    await userEvent.click(radio)
   })
 }

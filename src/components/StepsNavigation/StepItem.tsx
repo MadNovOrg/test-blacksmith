@@ -41,7 +41,7 @@ interface StepItemProps {
   line?: boolean
 }
 
-export const StepItem: React.FC<StepItemProps> = ({
+export const StepItem: React.FC<React.PropsWithChildren<StepItemProps>> = ({
   completed,
   index,
   children,

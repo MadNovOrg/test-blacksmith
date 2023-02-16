@@ -28,90 +28,91 @@ enum ACTION_TYPE {
   TRANSFER = 'TRANSFER',
 }
 
-export const ModifyAttendanceModal: React.FC<ModifyAttendanceModalProps> =
-  function ({ course, onClose }) {
-    const { t } = useTranslation()
-    const navigate = useNavigate()
-    const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>(
-      ACTION_TYPE.CANCEL
-    )
+export const ModifyAttendanceModal: React.FC<
+  React.PropsWithChildren<ModifyAttendanceModalProps>
+> = function ({ course, onClose }) {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const [selectedAction, setSelectedAction] = useState<ACTION_TYPE>(
+    ACTION_TYPE.CANCEL
+  )
 
-    return (
-      <Container>
-        <Dialog
-          open={true}
-          onClose={onClose}
-          title={
-            <Typography variant="h3">
-              {t('pages.course-details.modify-my-attendance.title')}
-            </Typography>
-          }
-          maxWidth={800}
-        >
-          <Typography variant="body1" color="grey.600" mt={1}>
-            {t('pages.course-details.modify-my-attendance.description')}
+  return (
+    <Container>
+      <Dialog
+        open={true}
+        onClose={onClose}
+        title={
+          <Typography variant="h3">
+            {t('pages.course-details.modify-my-attendance.title')}
           </Typography>
+        }
+        maxWidth={800}
+      >
+        <Typography variant="body1" color="grey.600" mt={1}>
+          {t('pages.course-details.modify-my-attendance.description')}
+        </Typography>
 
-          <Box
-            display="flex"
-            justifyContent="stretch"
-            mt={2}
-            borderBottom={1}
-            borderColor="divider"
-          >
-            <FormControl fullWidth>
-              <RadioGroup
-                row
-                name="modify-attendance-action-type"
-                onChange={e =>
-                  setSelectedAction(e.currentTarget.value as ACTION_TYPE)
-                }
-                value={selectedAction}
-              >
-                <FormControlLabel
-                  value={ACTION_TYPE.CANCEL}
-                  label={t(
-                    'pages.course-details.modify-my-attendance.cancel-my-attendance'
-                  )}
-                  control={<Radio />}
-                />
-                <FormControlLabel
-                  value={ACTION_TYPE.TRANSFER}
-                  label={t(
-                    'pages.course-details.modify-my-attendance.transfer-to-another-course'
-                  )}
-                  control={<Radio />}
-                />
-              </RadioGroup>
-            </FormControl>
+        <Box
+          display="flex"
+          justifyContent="stretch"
+          mt={2}
+          borderBottom={1}
+          borderColor="divider"
+        >
+          <FormControl fullWidth>
+            <RadioGroup
+              row
+              name="modify-attendance-action-type"
+              onChange={e =>
+                setSelectedAction(e.currentTarget.value as ACTION_TYPE)
+              }
+              value={selectedAction}
+            >
+              <FormControlLabel
+                value={ACTION_TYPE.CANCEL}
+                label={t(
+                  'pages.course-details.modify-my-attendance.cancel-my-attendance'
+                )}
+                control={<Radio />}
+              />
+              <FormControlLabel
+                value={ACTION_TYPE.TRANSFER}
+                label={t(
+                  'pages.course-details.modify-my-attendance.transfer-to-another-course'
+                )}
+                control={<Radio />}
+              />
+            </RadioGroup>
+          </FormControl>
+        </Box>
+
+        {selectedAction === ACTION_TYPE.CANCEL ? (
+          <CancelAttendanceForm
+            course={course}
+            onClose={onClose}
+            onSubmit={() => navigate('/courses')}
+          />
+        ) : null}
+        {selectedAction === ACTION_TYPE.TRANSFER ? (
+          <ParticipantTransferInfo
+            startDate={new Date(course.schedule[0].start)}
+            onCancel={onClose}
+          />
+        ) : null}
+        {!selectedAction ? (
+          <Box display="flex" mt={4}>
+            <Button
+              type="button"
+              variant="text"
+              color="primary"
+              onClick={onClose}
+            >
+              {t('common.never-mind')}
+            </Button>
           </Box>
-
-          {selectedAction === ACTION_TYPE.CANCEL ? (
-            <CancelAttendanceForm
-              course={course}
-              onClose={onClose}
-              onSubmit={() => navigate('/courses')}
-            />
-          ) : null}
-          {selectedAction === ACTION_TYPE.TRANSFER ? (
-            <ParticipantTransferInfo
-              startDate={new Date(course.schedule[0].start)}
-              onCancel={onClose}
-            />
-          ) : null}
-          {!selectedAction ? (
-            <Box display="flex" mt={4}>
-              <Button
-                type="button"
-                variant="text"
-                color="primary"
-                onClick={onClose}
-              >
-                {t('common.never-mind')}
-              </Button>
-            </Box>
-          ) : null}
-        </Dialog>
-      </Container>
-    )
-  }
+        ) : null}
+      </Dialog>
+    </Container>
+  )
+}

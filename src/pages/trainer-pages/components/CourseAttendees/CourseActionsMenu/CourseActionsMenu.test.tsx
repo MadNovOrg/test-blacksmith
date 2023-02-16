@@ -7,7 +7,7 @@ import { render, chance, screen, userEvent } from '@test/index'
 import { CourseActionsMenu } from '.'
 
 describe('component: CourseActionsMenu', () => {
-  it('displays correct options for an admin user', () => {
+  it('displays correct options for an admin user', async () => {
     render(
       <CourseActionsMenu
         item={{ id: chance.guid() }}
@@ -22,14 +22,14 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
   })
 
-  it('renders correct options for an ops user', () => {
+  it('renders correct options for an ops user', async () => {
     render(
       <CourseActionsMenu
         item={{ id: chance.guid() }}
@@ -44,14 +44,14 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
   })
 
-  it('renders correct options for a sales admin user', () => {
+  it('renders correct options for a sales admin user', async () => {
     render(
       <CourseActionsMenu
         item={{ id: chance.guid() }}
@@ -66,14 +66,14 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
   })
 
-  it('renders correct options for a sales representative user', () => {
+  it('renders correct options for a sales representative user', async () => {
     render(
       <CourseActionsMenu
         item={{ id: chance.guid() }}
@@ -88,14 +88,14 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
   })
 
-  it('renders correct options for an org admin user', () => {
+  it('renders correct options for an org admin user', async () => {
     render(
       <CourseActionsMenu
         item={{ id: chance.guid() }}
@@ -111,14 +111,14 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
   })
 
-  it('calls correct callbacks when clicked on an option', () => {
+  it('calls correct callbacks when clicked on an option', async () => {
     const actionableItem = { id: chance.guid() }
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()
@@ -138,17 +138,21 @@ describe('component: CourseActionsMenu', () => {
       }
     )
 
-    userEvent.click(screen.getByText(/manage attendance/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
 
-    userEvent.click(screen.getByText(/remove/i))
+    await userEvent.click(screen.getByText(/remove/i))
     expect(onRemoveMock).toHaveBeenCalledTimes(1)
     expect(onRemoveMock).toHaveBeenCalledWith(actionableItem)
 
-    userEvent.click(screen.getByText(/replace/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
+
+    await userEvent.click(screen.getByText(/replace/i))
     expect(onReplaceMock).toHaveBeenCalledTimes(1)
     expect(onReplaceMock).toHaveBeenCalledWith(actionableItem)
 
-    userEvent.click(screen.getByText(/transfer/i))
+    await userEvent.click(screen.getByText(/manage attendance/i))
+
+    await userEvent.click(screen.getByText(/transfer/i))
     expect(onTransferMock).toHaveBeenCalledTimes(1)
     expect(onTransferMock).toHaveBeenCalledWith(actionableItem)
   })

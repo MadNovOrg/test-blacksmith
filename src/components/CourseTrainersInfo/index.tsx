@@ -16,7 +16,10 @@ interface ItemProps {
   fullName: string
 }
 
-const ListItemTranslated: React.FC<ItemProps> = ({ i18nKey, fullName }) => {
+const ListItemTranslated: React.FC<React.PropsWithChildren<ItemProps>> = ({
+  i18nKey,
+  fullName,
+}) => {
   return (
     <Typography>
       <Trans i18nKey={i18nKey} values={{ trainer: fullName }} />
@@ -29,10 +32,9 @@ interface ListItemWrapperProps {
   enableLinks: boolean | undefined
 }
 
-const ListItemWrapper: React.FC<ListItemWrapperProps> = ({
-  courseTrainer,
-  enableLinks,
-}) => {
+const ListItemWrapper: React.FC<
+  React.PropsWithChildren<ListItemWrapperProps>
+> = ({ courseTrainer, enableLinks }) => {
   const i18nKey = useMemo(() => {
     switch (courseTrainer.type) {
       case CourseTrainerType.Leader:
@@ -71,7 +73,9 @@ interface Props {
 
 const MAX_ASSISTANT_TO_SHOW = 2
 
-export const CourseTrainersInfo: React.FC<Props> = ({ trainers }) => {
+export const CourseTrainersInfo: React.FC<React.PropsWithChildren<Props>> = ({
+  trainers,
+}) => {
   const { profile, acl } = useAuth()
   const { t } = useTranslation()
   const [showMore, setShowMore] = useState(false)

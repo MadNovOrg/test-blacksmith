@@ -9,7 +9,10 @@ type Props = {
   renderData: () => string[][]
 }
 
-export const ExportAuditsButton: React.FC<Props> = ({ prefix, renderData }) => {
+export const ExportAuditsButton: React.FC<React.PropsWithChildren<Props>> = ({
+  prefix,
+  renderData,
+}) => {
   const { t } = useTranslation()
 
   const exportAudits = useCallback(() => {

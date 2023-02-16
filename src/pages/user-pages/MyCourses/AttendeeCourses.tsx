@@ -37,7 +37,9 @@ type DateFilters = {
   filterCreateEndDate?: Date | undefined
 }
 
-export const AttendeeCourses: React.FC = () => {
+export const AttendeeCourses: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
 
   const sorting = useTableSort('start', 'desc')

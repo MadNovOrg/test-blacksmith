@@ -20,7 +20,9 @@ type OrgSummaryListParams = {
   orgId: string
 }
 
-export const OrgSummaryList: React.FC<OrgSummaryListParams> = ({ orgId }) => {
+export const OrgSummaryList: React.FC<
+  React.PropsWithChildren<OrgSummaryListParams>
+> = ({ orgId }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
 

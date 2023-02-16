@@ -30,7 +30,7 @@ export const getVerifySchema = (t: TFunction) => {
 
 const defaultNextPath = { pathname: '/profile', search: '' }
 
-export const VerifyEmailPage: React.FC<Props> = () => {
+export const VerifyEmailPage: React.FC<React.PropsWithChildren<Props>> = () => {
   const { t } = useTranslation()
   const location = useLocation()
   const { loadProfile } = useAuth()

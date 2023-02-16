@@ -28,7 +28,7 @@ type Props = {
   onRemove: (_: string) => void
 }
 
-export const PromoCode: React.FC<Props> = ({
+export const PromoCode: React.FC<React.PropsWithChildren<Props>> = ({
   codes,
   discounts,
   courseId,
@@ -42,7 +42,7 @@ export const PromoCode: React.FC<Props> = ({
   const fetcher = useFetcher()
 
   const onChange = useCallback(
-    e => {
+    (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       setValue(e.target.value)
 
       if (applyError !== '') {

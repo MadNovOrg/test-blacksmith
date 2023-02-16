@@ -5,6 +5,7 @@ type Props = {
   top?: number
 }
 
-export const Sticky: React.FC<Props> = ({ children, top = 0 }) => (
-  <Box sx={{ position: 'sticky', top: `${top}px` }}>{children}</Box>
-)
+export const Sticky: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  top = 0,
+}) => <Box sx={{ position: 'sticky', top: `${top}px` }}>{children}</Box>

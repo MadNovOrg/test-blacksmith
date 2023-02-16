@@ -11,7 +11,11 @@ type Props = {
   error?: string
 } & SmileyFaceRatingProps
 
-export const RatingQuestion: React.FC<Props> = ({ title, error, ...rest }) => {
+export const RatingQuestion: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
+  error,
+  ...rest
+}) => {
   return (
     <Box
       display="flex"

@@ -18,11 +18,13 @@ const iconStyles = {
   verticalAlign: 'middle',
 } as const
 
-const MediaType: React.FC<{
-  icon: (styles: typeof iconStyles) => React.ReactNode
-  label: string
-  linkTo: string
-}> = ({ icon, label, linkTo }) => {
+const MediaType: React.FC<
+  React.PropsWithChildren<{
+    icon: (styles: typeof iconStyles) => React.ReactNode
+    label: string
+    linkTo: string
+  }>
+> = ({ icon, label, linkTo }) => {
   return (
     <Typography mr={4} mb={3} sx={{ verticalAlign: 'middle' }}>
       <Link href={linkTo}>
@@ -33,7 +35,7 @@ const MediaType: React.FC<{
   )
 }
 
-export const BrowseByMedia: React.FC = () => {
+export const BrowseByMedia: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   return (
     <Box pl={2} pr={2}>

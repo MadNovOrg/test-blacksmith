@@ -22,10 +22,9 @@ export type AuditFilteringSidebarProps = {
   onChange: (e: FilterChangeEvent) => void
 }
 
-export const AuditFilteringSidebar: React.FC<AuditFilteringSidebarProps> = ({
-  count,
-  onChange,
-}) => {
+export const AuditFilteringSidebar: React.FC<
+  React.PropsWithChildren<AuditFilteringSidebarProps>
+> = ({ count, onChange }) => {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
 

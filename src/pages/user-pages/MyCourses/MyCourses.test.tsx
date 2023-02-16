@@ -82,7 +82,7 @@ describe('user-pages/MyCourses', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search'), 'search')
+    await userEvent.type(screen.getByPlaceholderText('Search'), 'search')
 
     expect(screen.queryByTestId('fetching-courses')).not.toBeInTheDocument()
 

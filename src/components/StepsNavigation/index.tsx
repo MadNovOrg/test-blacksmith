@@ -10,7 +10,7 @@ interface Props {
   steps: Array<{ key: string; label: string }>
 }
 
-export const StepsNavigation: React.FC<Props> = ({
+export const StepsNavigation: React.FC<React.PropsWithChildren<Props>> = ({
   completedSteps,
   currentStepKey,
   steps,

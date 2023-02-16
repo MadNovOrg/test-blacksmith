@@ -9,7 +9,7 @@ type Props = {
   colSpan?: number
 }
 
-export const TableNoRows: React.FC<Props> = ({
+export const TableNoRows: React.FC<React.PropsWithChildren<Props>> = ({
   noRecords,
   filtered = false,
   itemsName,

@@ -14,7 +14,10 @@ type Props = {
   debug: boolean
 }
 
-export const ErrorPage: React.FC<Props> = ({ errorData, debug }) => {
+export const ErrorPage: React.FC<React.PropsWithChildren<Props>> = ({
+  errorData,
+  debug,
+}) => {
   const { t } = useScopedTranslation('components.error-page')
   const navigate = useNavigate()
 

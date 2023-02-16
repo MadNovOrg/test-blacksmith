@@ -8,9 +8,11 @@ import {
   Props as FeaturedContentItemProps,
 } from '../FeaturedContentItem'
 
-export const FeaturedVideoItem: React.FC<{
-  videoItem: VideoItemSummaryFragment | null
-}> = ({ videoItem }) => {
+export const FeaturedVideoItem: React.FC<
+  React.PropsWithChildren<{
+    videoItem: VideoItemSummaryFragment | null
+  }>
+> = ({ videoItem }) => {
   const { t } = useTranslation()
 
   if (!videoItem) {

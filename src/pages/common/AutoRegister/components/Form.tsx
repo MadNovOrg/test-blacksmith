@@ -46,7 +46,10 @@ type Props = {
   token: string
 }
 
-export const Form: React.FC<Props> = ({ onSuccess, token }) => {
+export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  onSuccess,
+  token,
+}) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [loading, setLoading] = useState(false)

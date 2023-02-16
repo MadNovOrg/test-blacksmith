@@ -9,10 +9,10 @@ describe('FilterOrgSector', () => {
     const onChange = jest.fn()
     render(<FilterOrgSector onChange={onChange} />)
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Adults Health and Social Care'))
-    })
+    await userEvent.click(screen.getByText('Adults Health and Social Care'))
 
-    expect(onChange).toHaveBeenCalledWith(['adults-health-and-social-care'])
+    await waitFor(() => {
+      expect(onChange).toHaveBeenCalledWith(['adults-health-and-social-care'])
+    })
   })
 })

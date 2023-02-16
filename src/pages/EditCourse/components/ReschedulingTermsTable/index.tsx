@@ -40,10 +40,9 @@ const LEVEL_TERMS: Record<
   [Course_Level_Enum.BildActTrainer]: TERMS,
 }
 
-export const ReschedulingTermsTable: React.FC<Props> = ({
-  startDate,
-  level,
-}) => {
+export const ReschedulingTermsTable: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ startDate, level }) => {
   const { t } = useScopedTranslation('pages.edit-course.review-changes-modal')
 
   const applicableFee = getReschedulingTermsFee(startDate, level)

@@ -12,7 +12,9 @@ type Props = {
 
 const statuses = Object.values(PromoCodeStatus)
 
-export const FilterPromoCodeStatus: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterPromoCodeStatus: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ onChange = noop }) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() => {

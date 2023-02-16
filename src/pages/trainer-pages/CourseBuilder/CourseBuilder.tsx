@@ -82,7 +82,9 @@ const MAX_COURSE_DURATION_MAP = {
   },
 }
 
-export const CourseBuilder: React.FC<CourseBuilderProps> = () => {
+export const CourseBuilder: React.FC<
+  React.PropsWithChildren<CourseBuilderProps>
+> = () => {
   const { t } = useTranslation()
   const { id: courseId } = useParams()
   const fetcher = useFetcher()

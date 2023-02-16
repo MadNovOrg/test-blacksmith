@@ -14,10 +14,19 @@ jest.mock('@app/hooks/use-fetcher')
 const useFetcherMock = jest.mocked(useFetcher)
 
 describe('component: ProfileSelector', () => {
-  it("doesn't display options initially", () => {
+  beforeEach(() => {
+    jest.useFakeTimers({ advanceTimers: true })
+  })
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers()
+    jest.useRealTimers()
+  })
+
+  it("doesn't display options initially", async () => {
     render(<ProfileSelector onChange={noop} />)
 
-    userEvent.click(screen.getByPlaceholderText('Search for a profile'))
+    await userEvent.click(screen.getByPlaceholderText('Search for a profile'))
 
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
     expect(screen.queryByText('Loading…')).not.toBeInTheDocument()
@@ -43,10 +52,12 @@ describe('component: ProfileSelector', () => {
 
     render(<ProfileSelector onChange={noop} orgId={ORG_ID} />)
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
       SEARCH_NAME
     )
+
+    jest.runAllTimers()
 
     await waitFor(() => {
       expect(fetcherMock).toHaveBeenCalledTimes(1)
@@ -82,10 +93,12 @@ describe('component: ProfileSelector', () => {
 
     render(<ProfileSelector onChange={onChangeMock} orgId={ORG_ID} />)
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText('Search for a profile'),
       SEARCH_NAME
     )
+
+    jest.runAllTimers()
 
     await waitFor(() => {
       expect(
@@ -93,7 +106,9 @@ describe('component: ProfileSelector', () => {
       ).toBeInTheDocument()
     })
 
-    userEvent.click(within(screen.getByRole('listbox')).getByText(SEARCH_NAME))
+    await userEvent.click(
+      within(screen.getByRole('listbox')).getByText(SEARCH_NAME)
+    )
 
     expect(onChangeMock).toHaveBeenCalledTimes(1)
     expect(onChangeMock).toHaveBeenCalledWith(profile)

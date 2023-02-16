@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { SnackbarMessageKey, useSnackbar } from '@app/context/snackbar'
 
 export const SnackbarMessage: React.FC<
-  {
-    messageKey: SnackbarMessageKey
-  } & SnackbarProps &
-    Pick<AlertProps, 'variant' | 'severity'>
+  React.PropsWithChildren<
+    {
+      messageKey: SnackbarMessageKey
+    } & SnackbarProps &
+      Pick<AlertProps, 'variant' | 'severity'>
+  >
 > = ({ messageKey, variant = 'outlined', severity = 'success', ...props }) => {
   const { getSnackbarMessage, removeSnackbarMessage } = useSnackbar()
   const message = getSnackbarMessage(messageKey)

@@ -28,7 +28,9 @@ type ProfileMenuProps = {
   profile: Profile
 }
 
-export const ProfileMenu: React.FC<ProfileMenuProps> = ({ profile }) => {
+export const ProfileMenu: React.FC<
+  React.PropsWithChildren<ProfileMenuProps>
+> = ({ profile }) => {
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
   const { acl, verified, logout } = useAuth()

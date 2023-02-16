@@ -13,7 +13,7 @@ interface Props {
   blendedLearning?: boolean
 }
 
-export const CreateCourseSteps: React.FC<Props> = ({
+export const CreateCourseSteps: React.FC<React.PropsWithChildren<Props>> = ({
   completedSteps,
   type,
   currentStepKey,

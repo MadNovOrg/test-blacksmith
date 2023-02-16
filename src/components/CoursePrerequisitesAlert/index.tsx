@@ -22,7 +22,7 @@ type CoursePrerequisitesAlertProps = {
 }
 
 export const CoursePrerequisitesAlert: React.FC<
-  CoursePrerequisitesAlertProps
+  React.PropsWithChildren<CoursePrerequisitesAlertProps>
 > = ({ courseId, sx, showAction }) => {
   const { t } = useTranslation()
   const { profile } = useAuth()

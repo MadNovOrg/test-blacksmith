@@ -13,12 +13,12 @@ import { Auth } from 'aws-amplify'
 import React, { useState, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import CodeInput from 'react-otp-input-rc-17'
 import {
   createSearchParams,
   useSearchParams,
   useNavigate,
 } from 'react-router-dom'
+import CodeInput from 'react18-input-otp'
 import * as yup from 'yup'
 
 import { Logo } from '@app/components/Logo'

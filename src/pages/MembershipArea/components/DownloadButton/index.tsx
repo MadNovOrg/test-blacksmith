@@ -4,7 +4,7 @@ import React from 'react'
 
 type Props = { downloadLink: string } & ButtonProps<'a'>
 
-export const DownloadButton: React.FC<Props> = ({
+export const DownloadButton: React.FC<React.PropsWithChildren<Props>> = ({
   downloadLink,
   children,
   ...rest

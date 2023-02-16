@@ -63,7 +63,7 @@ export type Props = {
   fluidImageWidth?: boolean
 } & BoxProps
 
-export const SplitPost: React.FC<Props> = ({
+export const SplitPost: React.FC<React.PropsWithChildren<Props>> = ({
   id,
   title,
   label,
@@ -159,7 +159,7 @@ export const SplitPost: React.FC<Props> = ({
 }
 
 export const SplitPostSkeleton: React.FC<
-  BoxProps & { orientation?: ImageOrientation }
+  React.PropsWithChildren<BoxProps & { orientation?: ImageOrientation }>
 > = ({ orientation = 'left', ...props }) => (
   <SplitPostBox
     {...props}

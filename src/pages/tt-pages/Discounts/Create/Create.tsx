@@ -52,7 +52,7 @@ import {
 } from './helpers'
 import { Wrapper } from './Wrapper'
 
-export const Create: React.FC = () => {
+export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const fetcher = useFetcher()
@@ -334,6 +334,7 @@ export const Create: React.FC = () => {
                 <TextField
                   inputRef={input => (amountInputRef.current = input)}
                   hiddenLabel
+                  placeholder="Amount"
                   variant="filled"
                   inputProps={{
                     inputMode: 'numeric',
@@ -368,6 +369,7 @@ export const Create: React.FC = () => {
               <TextField
                 inputRef={input => (amountInputRef.current = input)}
                 hiddenLabel
+                placeholder="Free places"
                 variant="filled"
                 inputProps={{
                   inputMode: 'numeric',

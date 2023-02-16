@@ -147,7 +147,7 @@ describe('page: Podcast', () => {
       { initialEntries: [`/${PODCAST_ID}`] }
     )
 
-    userEvent.click(screen.getByText('Podcasts'))
+    await userEvent.click(screen.getByText('Podcasts'))
 
     await waitForText('Podcasts page')
   })

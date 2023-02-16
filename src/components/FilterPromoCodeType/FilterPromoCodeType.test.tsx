@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, userEvent } from '@test/index'
 
 import { FilterPromoCodeType } from './index'
 
@@ -9,10 +9,8 @@ describe('component: FilterPromoCodeType', () => {
     const onChange = jest.fn()
     render(<FilterPromoCodeType onChange={onChange} />)
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Type'))
-      userEvent.click(screen.getByText('Percentage'))
-    })
+    await userEvent.click(screen.getByText('Type'))
+    await userEvent.click(screen.getByText('Percentage'))
 
     expect(onChange).toHaveBeenCalledWith(['PERCENT'])
   })

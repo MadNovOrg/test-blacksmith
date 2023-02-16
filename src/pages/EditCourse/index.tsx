@@ -76,7 +76,7 @@ function assertCourseDataValid(
   }
 }
 
-export const EditCourse: React.FC<unknown> = () => {
+export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { t } = useTranslation()
   const { profile, acl } = useAuth()

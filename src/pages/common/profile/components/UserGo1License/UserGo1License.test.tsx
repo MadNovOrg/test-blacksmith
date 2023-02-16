@@ -73,7 +73,7 @@ describe('component: UserGo1License', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Remove'))
+    await userEvent.click(screen.getByText('Remove'))
 
     await waitFor(() => {
       expect(handleDeletedMock).toHaveBeenCalledTimes(1)
@@ -98,7 +98,7 @@ describe('component: UserGo1License', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Remove'))
+    await userEvent.click(screen.getByText('Remove'))
 
     await waitFor(() => {
       expect(handleDeletedMock).not.toHaveBeenCalled()

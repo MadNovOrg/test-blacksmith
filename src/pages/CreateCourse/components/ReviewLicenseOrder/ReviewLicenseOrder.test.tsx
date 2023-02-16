@@ -179,7 +179,7 @@ describe('component: ReviewLicenseOrder', () => {
       </CreateCourseProvider>
     )
 
-    userEvent.click(screen.getByText(/course builder/i))
+    await userEvent.click(screen.getByText(/course builder/i))
 
     await waitFor(() => {
       expect(screen.getByText(/modules page/i)).toBeInTheDocument()

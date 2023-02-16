@@ -24,7 +24,10 @@ const CourseTypeParam = withDefault(
   [] as Course_Type_Enum[]
 )
 
-export const FilterCourseType: React.FC<Props> = ({ onChange = noop, sx }) => {
+export const FilterCourseType: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange = noop,
+  sx,
+}) => {
   const { t } = useTranslation()
 
   const typeOptions = useMemo(() => {

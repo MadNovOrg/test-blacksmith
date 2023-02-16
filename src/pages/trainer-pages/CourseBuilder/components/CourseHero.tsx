@@ -8,7 +8,9 @@ type CourseHeroProps = {
   data: NonNullable<GetCourseByIdQuery['course']>
 }
 
-export const CourseHero: React.FC<CourseHeroProps> = ({ data }) => {
+export const CourseHero: React.FC<React.PropsWithChildren<CourseHeroProps>> = ({
+  data,
+}) => {
   const { t } = useTranslation()
 
   let location = ''

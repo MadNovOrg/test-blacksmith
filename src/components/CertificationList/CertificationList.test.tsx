@@ -109,7 +109,7 @@ describe('component: CertificationList', () => {
     expect(
       screen.getByTestId('download-selected-certifications')
     ).toBeDisabled()
-    userEvent.click(screen.getByTestId('TableChecks-Head'))
+    await userEvent.click(screen.getByTestId('TableChecks-Head'))
     expect(screen.getByTestId('download-selected-certifications')).toBeEnabled()
   })
 })

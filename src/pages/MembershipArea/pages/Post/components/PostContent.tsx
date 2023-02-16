@@ -3,7 +3,9 @@ import React, { useLayoutEffect } from 'react'
 
 import theme from '@app/theme'
 
-export const PostContent: React.FC<{ content: string }> = ({ content }) => {
+export const PostContent: React.FC<
+  React.PropsWithChildren<{ content: string }>
+> = ({ content }) => {
   useLayoutEffect(() => {
     const lazyImages =
       document.querySelectorAll<HTMLImageElement>('img.lazyload')

@@ -18,7 +18,10 @@ const gradeToIconMap = {
   INCOMPLETE: <CancelIcon color="tertiary" />,
 }
 
-export const Grade: React.FC<Props> = ({ grade, ...props }) => {
+export const Grade: React.FC<React.PropsWithChildren<Props>> = ({
+  grade,
+  ...props
+}) => {
   const { t } = useTranslation()
 
   return (

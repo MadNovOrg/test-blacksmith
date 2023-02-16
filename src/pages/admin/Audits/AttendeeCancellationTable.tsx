@@ -30,7 +30,9 @@ import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
 
 type LogType = GetAttendeeAuditLogsQuery['logs'][0]
 
-export const AttendeeCancellationTable: React.FC = () => {
+export const AttendeeCancellationTable: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const { Pagination, limit, offset } = useTablePagination()
   const sort = useTableSort('created_at', 'desc')

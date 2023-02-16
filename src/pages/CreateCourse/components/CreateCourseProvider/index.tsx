@@ -42,11 +42,9 @@ export type CreateCourseProviderProps = {
   courseType: CourseType
 }
 
-export const CreateCourseProvider: React.FC<CreateCourseProviderProps> = ({
-  children,
-  initialValue,
-  courseType,
-}) => {
+export const CreateCourseProvider: React.FC<
+  React.PropsWithChildren<CreateCourseProviderProps>
+> = ({ children, initialValue, courseType }) => {
   const { profile } = useAuth()
   const { setDraft } = useCourseDraft(profile?.id ?? '', courseType)
 

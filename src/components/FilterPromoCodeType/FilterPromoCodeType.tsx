@@ -12,7 +12,9 @@ type Props = {
 
 const types = Object.values(Promo_Code_Type_Enum)
 
-export const FilterPromoCodeType: React.FC<Props> = ({ onChange = noop }) => {
+export const FilterPromoCodeType: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange = noop,
+}) => {
   const { t } = useTranslation()
 
   const [options, setOptions] = useState<FilterOption[]>(() => {

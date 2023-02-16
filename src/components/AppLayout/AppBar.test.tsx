@@ -38,7 +38,7 @@ describe('component: AppBar', () => {
       { auth: { verified: true, activeRole: RoleName.TRAINER } }
     )
 
-    userEvent.click(screen.getByText('Membership'))
+    await userEvent.click(screen.getByText('Membership'))
     expect(screen.getByText('Membership page')).toBeInTheDocument()
   })
 })

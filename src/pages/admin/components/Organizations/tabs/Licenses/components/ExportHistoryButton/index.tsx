@@ -16,7 +16,10 @@ type Props = {
   orgId: string
 }
 
-export const ExportHistoryButton: React.FC<Props> = ({ orgId, disabled }) => {
+export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
+  orgId,
+  disabled,
+}) => {
   const { t, _t } = useScopedTranslation(
     'pages.org-details.tabs.licenses.export'
   )

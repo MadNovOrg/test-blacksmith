@@ -66,7 +66,7 @@ interface Props {
 
 const accountCodeValue = getAccountCode()
 
-const CourseForm: React.FC<Props> = ({
+const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = CourseType.OPEN,
   courseInput,

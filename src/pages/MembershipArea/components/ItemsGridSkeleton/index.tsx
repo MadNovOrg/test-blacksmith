@@ -3,7 +3,9 @@ import React from 'react'
 
 import { BlogPostItemSkeleton } from '../BlogPostItem'
 
-export const ItemsGridSkeleton: React.FC<GridProps> = ({ ...rest }) => (
+export const ItemsGridSkeleton: React.FC<
+  React.PropsWithChildren<GridProps>
+> = ({ ...rest }) => (
   <Grid
     {...rest}
     container

@@ -37,7 +37,9 @@ const LEVELS_IN_ORDER = [
   null,
 ]
 
-export const OrgOverviewTab: React.FC<OrgOverviewTabParams> = ({ orgId }) => {
+export const OrgOverviewTab: React.FC<
+  React.PropsWithChildren<OrgOverviewTabParams>
+> = ({ orgId }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, acl } = useAuth()

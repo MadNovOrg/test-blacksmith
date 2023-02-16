@@ -12,7 +12,9 @@ type Props = {
   promoCode: GetPromoCodesQuery['promoCodes'][number]
 }
 
-export const ApproveDeny: React.FC<Props> = ({ promoCode }) => {
+export const ApproveDeny: React.FC<React.PropsWithChildren<Props>> = ({
+  promoCode,
+}) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { profile } = useAuth()

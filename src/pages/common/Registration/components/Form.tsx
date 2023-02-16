@@ -48,7 +48,11 @@ type Props = {
   quantity: number | null
 }
 
-export const Form: React.FC<Props> = ({ onSignUp, courseId, quantity }) => {
+export const Form: React.FC<React.PropsWithChildren<Props>> = ({
+  onSignUp,
+  courseId,
+  quantity,
+}) => {
   const { t } = useTranslation()
   const [showPassword, toggleShowPassword] = useToggle(false)
   const [loading, setLoading] = useState(false)

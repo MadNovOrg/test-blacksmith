@@ -18,11 +18,9 @@ type CancelAttendanceFormProps = {
   onSubmit: () => void
 }
 
-export const CancelAttendanceForm: React.FC<CancelAttendanceFormProps> = ({
-  course,
-  onClose,
-  onSubmit,
-}) => {
+export const CancelAttendanceForm: React.FC<
+  React.PropsWithChildren<CancelAttendanceFormProps>
+> = ({ course, onClose, onSubmit }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()
 

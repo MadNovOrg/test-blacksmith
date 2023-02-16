@@ -10,7 +10,10 @@ type Props = {
   }
 } & ChipProps
 
-export const TagChip: React.FC<Props> = ({ tag, ...rest }) => (
+export const TagChip: React.FC<React.PropsWithChildren<Props>> = ({
+  tag,
+  ...rest
+}) => (
   <Chip
     key={tag.id}
     label={<Link href={getTagLink(tag.id)}>{tag.name}</Link>}
@@ -19,6 +22,8 @@ export const TagChip: React.FC<Props> = ({ tag, ...rest }) => (
   />
 )
 
-export const TagChipSkeleton: React.FC<SkeletonProps> = ({ sx, ...rest }) => (
+export const TagChipSkeleton: React.FC<
+  React.PropsWithChildren<SkeletonProps>
+> = ({ sx, ...rest }) => (
   <Skeleton width={50} sx={{ ...sx, display: 'inline-block' }} {...rest} />
 )

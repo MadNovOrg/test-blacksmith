@@ -51,7 +51,7 @@ type Props = {
   level: Course_Level_Enum
 }
 
-export const ReviewChangesModal: React.FC<Props> = ({
+export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
   onCancel = noop,
   onConfirm = noop,
   diff,

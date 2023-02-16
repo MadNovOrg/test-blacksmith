@@ -8,7 +8,7 @@ interface Props {
   currentStepKey: string | null
 }
 
-export const CourseGradingSteps: React.FC<Props> = ({
+export const CourseGradingSteps: React.FC<React.PropsWithChildren<Props>> = ({
   completedSteps,
   currentStepKey,
 }) => {

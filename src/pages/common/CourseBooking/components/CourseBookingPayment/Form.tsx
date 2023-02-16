@@ -19,7 +19,9 @@ type State = {
 
 const initialState = { formLoaded: false, submitting: false, error: undefined }
 
-export const PaymentForm: React.FC<Props> = ({ amount }) => {
+export const PaymentForm: React.FC<React.PropsWithChildren<Props>> = ({
+  amount,
+}) => {
   const stripe = useStripe()
   const elements = useElements()
   const { t } = useTranslation()

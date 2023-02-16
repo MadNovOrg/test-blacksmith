@@ -27,7 +27,9 @@ const StyledMailToLink = styled('a')(({ theme }) => ({
   },
 }))
 
-export const CourseWaitlist: React.FC = () => {
+export const CourseWaitlist: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
   const courseId = searchParams.get('course_id')

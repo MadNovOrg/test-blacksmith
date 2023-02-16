@@ -22,7 +22,7 @@ type XeroContact = {
 }
 
 export const OrgNameXeroAutocomplete: React.FC<
-  OrgNameXeroAutocompleteProps
+  React.PropsWithChildren<OrgNameXeroAutocompleteProps>
 > = ({ value, onChange, error }) => {
   const { t } = useTranslation()
   const fetcher = useFetcher()

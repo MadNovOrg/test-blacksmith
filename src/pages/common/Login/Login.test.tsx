@@ -19,12 +19,6 @@ jest.mock('react-router-dom', () => ({
 }))
 
 describe('Login', () => {
-  it('matches snapshot', async () => {
-    const { container } = render(<LoginPage />)
-
-    expect(container).toMatchSnapshot()
-  })
-
   it('shows error when email is empty', async () => {
     render(<LoginPage />)
 

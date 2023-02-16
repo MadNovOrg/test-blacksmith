@@ -48,7 +48,7 @@ describe('component: ModulesSelectionList', () => {
     })
   })
 
-  it('toggles module selection within module group when module item is clicked', () => {
+  it('toggles module selection within module group when module item is clicked', async () => {
     const moduleGroups: Props['moduleGroups'] = [
       {
         id: chance.guid(),
@@ -79,7 +79,9 @@ describe('component: ModulesSelectionList', () => {
       />
     )
 
-    userEvent.click(screen.getByLabelText(moduleGroups[0].modules[0].name))
+    await userEvent.click(
+      screen.getByLabelText(moduleGroups[0].modules[0].name)
+    )
 
     expect(
       screen.getByLabelText(moduleGroups[0].modules[0].name)
@@ -92,7 +94,9 @@ describe('component: ModulesSelectionList', () => {
       [moduleGroups[1].modules[1].id]: true,
     })
 
-    userEvent.click(screen.getByLabelText(moduleGroups[0].modules[0].name))
+    await userEvent.click(
+      screen.getByLabelText(moduleGroups[0].modules[0].name)
+    )
 
     expect(screen.getByLabelText(moduleGroups[0].modules[0].name)).toBeChecked()
 
@@ -106,7 +110,7 @@ describe('component: ModulesSelectionList', () => {
     expect(onChangeMock).toHaveBeenCalledTimes(2)
   })
 
-  it('toggles whole module group when module group item is clicked', () => {
+  it('toggles whole module group when module group item is clicked', async () => {
     const moduleGroups: Props['moduleGroups'] = [
       {
         id: chance.guid(),
@@ -137,7 +141,7 @@ describe('component: ModulesSelectionList', () => {
       />
     )
 
-    userEvent.click(screen.getByLabelText(moduleGroups[1].name))
+    await userEvent.click(screen.getByLabelText(moduleGroups[1].name))
 
     expect(screen.getByLabelText(moduleGroups[1].name)).not.toBeChecked()
 
@@ -148,7 +152,7 @@ describe('component: ModulesSelectionList', () => {
       [moduleGroups[1].modules[1].id]: false,
     })
 
-    userEvent.click(screen.getByLabelText(moduleGroups[1].name))
+    await userEvent.click(screen.getByLabelText(moduleGroups[1].name))
 
     expect(screen.getByLabelText(moduleGroups[1].name)).toBeChecked()
 

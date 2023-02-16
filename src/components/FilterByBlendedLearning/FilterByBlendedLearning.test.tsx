@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, userEvent } from '@test/index'
 
 import { FilterByBlendedLearning } from './index'
 
@@ -9,9 +9,7 @@ describe('component: FilterByBlendedLearning', () => {
     const onChange = jest.fn()
     render(<FilterByBlendedLearning onChange={onChange} selected />)
 
-    await waitFor(() => {
-      userEvent.click(screen.getByLabelText('Blended Learning'))
-    })
+    await userEvent.click(screen.getByLabelText('Blended Learning'))
 
     expect(onChange).toHaveBeenCalled()
   })

@@ -9,7 +9,9 @@ import { QUERY } from '@app/queries/promo-codes/get-pending-approval'
 
 import { Row } from './Row'
 
-export const PendingApproval: React.FC = () => {
+export const PendingApproval: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
 
   const [pending] = useQuery({ query: QUERY })

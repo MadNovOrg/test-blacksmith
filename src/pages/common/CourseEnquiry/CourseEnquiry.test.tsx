@@ -5,7 +5,7 @@ import { gqlRequest } from '@app/lib/gql-request'
 import insertEnquiry from '@app/queries/booking/insert-enquiry'
 import { CourseType } from '@app/types'
 
-import { screen, render, userEvent, waitFor, waitForCalls } from '@test/index'
+import { screen, render, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { sectors } from '../CourseBooking/components/org-data'
@@ -17,7 +17,7 @@ jest.mock('@app/lib/gql-request')
 
 const gqlRequestMocked = jest.mocked(gqlRequest)
 
-function fillForm() {
+async function fillForm() {
   const data = {
     interest: 'Course',
     firstName: 'John',
@@ -30,25 +30,31 @@ function fillForm() {
     message: 'Message',
   }
 
-  userEvent.type(
+  await userEvent.type(
     screen.getByLabelText('What is your interest? *'),
     data.interest
   )
-  userEvent.type(screen.getByLabelText('First Name *'), data.firstName)
-  userEvent.type(screen.getByLabelText('Last Name *'), data.lastName)
-  userEvent.type(screen.getByLabelText('Work email *'), data.email)
-  userEvent.type(screen.getByLabelText('Organisation Name *'), data.orgName)
-  userEvent.type(screen.getByLabelText('Phone *'), data.phone)
+  await userEvent.type(screen.getByLabelText('First Name *'), data.firstName)
+  await userEvent.type(screen.getByLabelText('Last Name *'), data.lastName)
+  await userEvent.type(screen.getByLabelText('Work email *'), data.email)
+  await userEvent.type(
+    screen.getByLabelText('Organisation Name *'),
+    data.orgName
+  )
+  await userEvent.type(screen.getByLabelText('Phone *'), data.phone)
 
-  userEvent.click(screen.getByLabelText('Sector'))
-  userEvent.click(screen.getByText(data.sector))
+  await userEvent.click(screen.getByLabelText('Sector'))
+  await userEvent.click(screen.getByText(data.sector))
 
-  userEvent.click(
+  await userEvent.click(
     screen.getByLabelText('How did you hear about us? (optional)')
   )
-  userEvent.click(screen.getByText(data.source))
+  await userEvent.click(screen.getByText(data.source))
 
-  userEvent.type(screen.getByLabelText('Message (optional)'), data.message)
+  await userEvent.type(
+    screen.getByLabelText('Message (optional)'),
+    data.message
+  )
 
   return data
 }
@@ -75,17 +81,18 @@ describe('page: CourseEnquiry', () => {
       { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
-    fillForm()
+    await fillForm()
 
-    userEvent.click(screen.getByTestId('btn-submit'))
+    await userEvent.click(screen.getByTestId('btn-submit'))
 
-    await waitForCalls(gqlRequestMocked, 1)
+    await waitFor(() => {
+      expect(gqlRequestMocked).toHaveBeenCalledTimes(1)
+      expect(gqlRequestMocked).toHaveBeenCalledWith(insertEnquiry, {
+        enquiry: expect.objectContaining({ courseId: Number(openCourse.id) }),
+      })
 
-    expect(gqlRequestMocked).toHaveBeenCalledWith(insertEnquiry, {
-      enquiry: expect.objectContaining({ courseId: Number(openCourse.id) }),
+      expect(screen.getByText('Thank you for your enquiry')).toBeInTheDocument()
     })
-
-    expect(screen.getByText('Thank you for your enquiry')).toBeInTheDocument()
   })
 
   it('displays not found page if there is no query param for course id', () => {
@@ -115,8 +122,8 @@ describe('page: CourseEnquiry', () => {
       { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
-    userEvent.type(screen.getByLabelText('Work email *'), 'test.com')
-    userEvent.click(screen.getByTestId('btn-submit'))
+    await userEvent.type(screen.getByLabelText('Work email *'), 'test.com')
+    await userEvent.click(screen.getByTestId('btn-submit'))
 
     await waitFor(() => {
       expect(screen.getByText('First name is required')).toBeInTheDocument()
@@ -149,14 +156,15 @@ describe('page: CourseEnquiry', () => {
       { initialEntries: [`/enquiry?course_id=${openCourse.id}`] }
     )
 
-    fillForm()
+    await fillForm()
 
-    userEvent.click(screen.getByTestId('btn-submit'))
+    await userEvent.click(screen.getByTestId('btn-submit'))
 
-    await waitForCalls(gqlRequestMocked, 1)
-
-    expect(
-      screen.getByText('There was an error saving the enquiry')
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(gqlRequestMocked).toHaveReturnedTimes(1)
+      expect(
+        screen.getByText('There was an error saving the enquiry')
+      ).toBeInTheDocument()
+    })
   })
 })

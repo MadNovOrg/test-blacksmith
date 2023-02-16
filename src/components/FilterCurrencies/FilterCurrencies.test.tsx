@@ -9,11 +9,10 @@ describe('component: FilterCurrencies', () => {
     const onChange = jest.fn()
     render(<FilterCurrencies onChange={onChange} />)
 
+    await userEvent.click(screen.getByText('Currency'))
+    await userEvent.click(screen.getByText('GBP'))
     await waitFor(() => {
-      userEvent.click(screen.getByText('Currency'))
-      userEvent.click(screen.getByText('GBP'))
+      expect(onChange).toHaveBeenCalledWith({ currencies: ['GBP'] })
     })
-
-    expect(onChange).toHaveBeenCalledWith({ currencies: ['GBP'] })
   })
 })

@@ -1,7 +1,6 @@
 import { getByTestId } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 
 import useCourse from '@app/hooks/useCourse'
 import useCourseInvites from '@app/hooks/useCourseInvites'
@@ -16,7 +15,7 @@ import {
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within } from '@test/index'
+import { render, screen, within, act } from '@test/index'
 import {
   buildCourse,
   buildInvite,
@@ -168,7 +167,7 @@ describe('component: CourseAttendees', () => {
     ).toBeInTheDocument()
   })
 
-  it('paginates course participants', () => {
+  it('paginates course participants', async () => {
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -193,7 +192,7 @@ describe('component: CourseAttendees', () => {
 
     useCourseParticipantsMock.mockClear()
 
-    userEvent.click(screen.getByTitle('Go to next page'))
+    await userEvent.click(screen.getByTitle('Go to next page'))
 
     expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
@@ -209,7 +208,7 @@ describe('component: CourseAttendees', () => {
     ])
   })
 
-  it('sorts descending by participants name', () => {
+  it('sorts descending by participants name', async () => {
     const PER_PAGE = 12
 
     const participants = new Array(PER_PAGE).map(() => buildParticipant())
@@ -234,7 +233,7 @@ describe('component: CourseAttendees', () => {
 
     useCourseParticipantsMock.mockClear()
 
-    userEvent.click(screen.getByText('Name'))
+    await userEvent.click(screen.getByText('Name'))
 
     expect(useCourseParticipantsMock).toHaveBeenCalledTimes(1)
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
@@ -250,7 +249,7 @@ describe('component: CourseAttendees', () => {
     ])
   })
 
-  it('displays course waitlist', () => {
+  it('displays course waitlist', async () => {
     const waitlist = [
       buildWaitlistEntry(),
       buildWaitlistEntry(),
@@ -295,7 +294,7 @@ describe('component: CourseAttendees', () => {
     useCourseParticipantsMock.mockClear()
     useWaitlistMock.mockClear()
 
-    userEvent.click(screen.getByText('Waitlist (3)'))
+    await userEvent.click(screen.getByText('Waitlist (3)'))
 
     expect(useWaitlistMock).toHaveBeenCalledTimes(2)
     expect(useWaitlistMock.mock.calls[0]).toMatchObject([
@@ -358,7 +357,7 @@ describe('component: CourseAttendees', () => {
     it('shows no invites pending message if list is empty', async () => {
       render(<CourseAttendees course={course} />)
 
-      userEvent.click(screen.getByText('Pending (0)', { exact: false }))
+      await userEvent.click(screen.getByText('Pending (0)', { exact: false }))
 
       expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([
@@ -386,7 +385,7 @@ describe('component: CourseAttendees', () => {
 
       render(<CourseAttendees course={course} />)
 
-      userEvent.click(screen.getByText('Pending (3)', { exact: false }))
+      await userEvent.click(screen.getByText('Pending (3)', { exact: false }))
 
       expect(useCourseInvitesMock).toHaveBeenCalledTimes(7)
       expect(useCourseInvitesMock.mock.calls[6]).toMatchObject([

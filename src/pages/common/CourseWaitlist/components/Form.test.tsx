@@ -8,7 +8,7 @@ describe('component: Waitlist/Form', () => {
   it('validates form', async () => {
     render(<Form onSuccess={jest.fn} saving={false} />)
 
-    userEvent.click(screen.getByText(/join waiting list/i))
+    await userEvent.click(screen.getByText(/join waiting list/i))
 
     await waitFor(() => {
       expect(screen.getByText(/first name is required/i)).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe('component: Waitlist/Form', () => {
       ).toBeInTheDocument()
     })
 
-    userEvent.type(screen.getByLabelText(/work email/i), 'invalid-email')
+    await userEvent.type(screen.getByLabelText(/work email/i), 'invalid-email')
 
     await waitFor(() => {
       expect(
@@ -41,19 +41,25 @@ describe('component: Waitlist/Form', () => {
 
     render(<Form onSuccess={onSuccessMock} saving={false} />)
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByLabelText(/first name/i),
       submittedData.firstName
     )
-    userEvent.type(screen.getByLabelText(/last name/i), submittedData.surname)
-    userEvent.type(screen.getByLabelText(/email/i), submittedData.email ?? '')
-    userEvent.type(screen.getByLabelText(/phone/i), submittedData.phone)
-    userEvent.type(
+    await userEvent.type(
+      screen.getByLabelText(/last name/i),
+      submittedData.surname
+    )
+    await userEvent.type(
+      screen.getByLabelText(/email/i),
+      submittedData.email ?? ''
+    )
+    await userEvent.type(screen.getByLabelText(/phone/i), submittedData.phone)
+    await userEvent.type(
       screen.getByLabelText(/organisation name/i),
       submittedData.orgName
     )
 
-    userEvent.click(screen.getByText(/join waiting list/i))
+    await userEvent.click(screen.getByText(/join waiting list/i))
 
     await waitFor(() => {
       expect(onSuccessMock).toHaveBeenCalledTimes(1)

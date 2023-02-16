@@ -2,7 +2,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { waitFor, render as _render, screen } from '@testing-library/react'
 import Chance from 'chance'
 import { deepmerge } from 'deepmerge-ts'
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { DeepPartial } from 'ts-essentials'
 import { QueryParamProvider } from 'use-query-params'
@@ -22,7 +22,7 @@ export const VALID_PHONE_NUMBER = '2011111111'
 
 type TestRouterProps = { initialEntries?: string[] }
 
-export const TestMemoryRouter: React.FC<TestRouterProps> = ({
+export const TestMemoryRouter: React.FC<PropsWithChildren<TestRouterProps>> = ({
   children,
   initialEntries,
 }) => {
@@ -45,7 +45,7 @@ function render(
 ) {
   const context = deepmerge(defaultProviders, providers) as Providers
 
-  const wrapper: React.FC = ({ children }) => {
+  const wrapper: React.FC<PropsWithChildren> = ({ children }) => {
     return (
       <TestMemoryRouter {...router}>
         <AuthContext.Provider value={injectACL(context.auth)}>

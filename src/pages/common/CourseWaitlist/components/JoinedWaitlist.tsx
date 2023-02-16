@@ -8,7 +8,9 @@ import { useTranslation } from 'react-i18next'
 import { AppLayoutMinimal } from '@app/components/AppLayoutMinimal'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 
-export const JoinedWaitlist: React.FC<{ email: string }> = ({ email }) => {
+export const JoinedWaitlist: React.FC<
+  React.PropsWithChildren<{ email: string }>
+> = ({ email }) => {
   const { t } = useTranslation()
 
   return (

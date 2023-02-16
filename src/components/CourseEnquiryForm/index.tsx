@@ -47,7 +47,7 @@ type Props = {
   courseType?: CourseType.Closed | CourseType.Open
 }
 
-export const CourseEnquiryForm: React.FC<Props> = ({
+export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
   onSubmit = noop,
   saving,
   courseType = CourseType.Open,

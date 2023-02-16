@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, screen, waitFor, userEvent } from '@test/index'
+import { render, screen, userEvent } from '@test/index'
 
 import { FilterPromoCodeStatus } from './index'
 
@@ -9,10 +9,8 @@ describe('component: FilterPromoCodeStatus', () => {
     const onChange = jest.fn()
     render(<FilterPromoCodeStatus onChange={onChange} />)
 
-    await waitFor(() => {
-      userEvent.click(screen.getByText('Status'))
-      userEvent.click(screen.getByText('Approval pending'))
-    })
+    await userEvent.click(screen.getByText('Status'))
+    await userEvent.click(screen.getByText('Approval pending'))
 
     expect(onChange).toHaveBeenCalledWith(['APPROVAL_PENDING'])
   })

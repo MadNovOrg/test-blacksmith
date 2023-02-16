@@ -21,7 +21,7 @@ import { ContentDetailsBox } from '../../components/ContentDetailsBox'
 import { ItemsGridSkeleton } from '../../components/ItemsGridSkeleton'
 import { PodcastPlayer } from '../../components/PodcastPlayer'
 
-const Podcast: React.FC = () => {
+const Podcast: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 

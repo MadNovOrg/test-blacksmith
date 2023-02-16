@@ -17,7 +17,9 @@ import {
 } from './components/TransferParticipantProvider'
 import { TransferParticipant } from './TransferParticipant'
 
-export const UserTransferParticipant: React.FC = () => {
+export const UserTransferParticipant: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { profile } = useAuth()
 
   // useQuery was updating for some reason

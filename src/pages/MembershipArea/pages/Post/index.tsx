@@ -28,7 +28,7 @@ import {
 } from './components/layout'
 import { PostContent } from './components/PostContent'
 
-const Post: React.FC = () => {
+const Post: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams() as { id: string }
   const { t } = useTranslation()
   const [{ data, fetching, error }] = useQuery<PostQuery, PostQueryVariables>({

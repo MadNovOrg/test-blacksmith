@@ -19,7 +19,9 @@ const TERMS = {
   '25-fee': 25,
 }
 
-export const TransferTermsTable: React.FC<Props> = ({ startDate }) => {
+export const TransferTermsTable: React.FC<React.PropsWithChildren<Props>> = ({
+  startDate,
+}) => {
   const { t } = useScopedTranslation(
     'pages.transfer-participant.transfer-details'
   )

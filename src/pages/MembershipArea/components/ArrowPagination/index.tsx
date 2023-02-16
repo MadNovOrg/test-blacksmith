@@ -13,7 +13,7 @@ type Props = {
   onPageChange?: (page: number) => void
 } & BoxProps
 
-export const ArrowPagination: React.FC<Props> = ({
+export const ArrowPagination: React.FC<React.PropsWithChildren<Props>> = ({
   total,
   onPageChange = noop,
   ...rest

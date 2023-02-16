@@ -31,7 +31,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    userEvent.click(screen.getByLabelText('Face to face'))
+    await userEvent.click(screen.getByLabelText('Face to face'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
     expect(
@@ -44,9 +44,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    await waitFor(() => {
-      userEvent.click(screen.getByLabelText('Virtual'))
-    })
+    await userEvent.click(screen.getByLabelText('Virtual'))
 
     expect(screen.queryByText('Venue Selector')).not.toBeInTheDocument()
     expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
@@ -57,7 +55,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    userEvent.click(screen.getByLabelText('Both'))
+    await userEvent.click(screen.getByLabelText('Both'))
 
     expect(screen.getByText('Venue Selector')).toBeInTheDocument()
     expect(screen.getByLabelText('Online meeting link')).toBeInTheDocument()
@@ -75,9 +73,7 @@ describe('component: CourseForm', () => {
         render(<CourseForm type={type} />)
       })
 
-      await waitFor(() => {
-        userEvent.click(screen.getByLabelText('Virtual'))
-      })
+      await userEvent.click(screen.getByLabelText('Virtual'))
 
       let input
       try {
@@ -107,12 +103,17 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.OPEN} />)
     })
 
-    await waitFor(() => {
-      userEvent.paste(screen.getByLabelText('Start date'), '12/05/2022')
-      userEvent.paste(screen.getByLabelText('Start time'), '09:00 AM')
-      userEvent.paste(screen.getByLabelText('End date'), '12/04/2022')
-      userEvent.paste(screen.getByLabelText('End time'), '08:00 AM')
-    })
+    screen.getByLabelText('Start date').focus()
+    await userEvent.paste('12/05/2022')
+
+    screen.getByLabelText('Start time').focus()
+    await userEvent.paste('09:00 AM')
+
+    screen.getByLabelText('End date').focus()
+    await userEvent.paste('12/04/2022')
+
+    screen.getByLabelText('End time').focus()
+    await userEvent.paste('08:00 AM')
 
     expect(
       screen.getByText('End date must be after the start date')
@@ -124,9 +125,9 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.OPEN} />)
     })
 
-    await waitFor(() => {
-      userEvent.type(screen.getByLabelText('Minimum'), '6')
-      userEvent.type(screen.getByLabelText('Maximum'), '5')
+    await waitFor(async () => {
+      await userEvent.type(screen.getByLabelText('Minimum'), '6')
+      await userEvent.type(screen.getByLabelText('Maximum'), '5')
     })
 
     expect(
@@ -141,13 +142,13 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.OPEN} />)
     })
 
-    await waitFor(() => {
-      userEvent.type(screen.getByLabelText('Minimum'), '0')
-    })
+    await userEvent.type(screen.getByLabelText('Minimum'), '0')
 
-    expect(
-      screen.getByText('Minimum participants must be positive number')
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(
+        screen.getByText('Minimum participants must be positive number')
+      ).toBeInTheDocument()
+    })
   })
 
   it('displays organisation selector and contact profile selector if course type is closed', async () => {
@@ -222,10 +223,11 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.CLOSED} />)
     })
 
-    await waitFor(() => {
-      userEvent.paste(screen.getByLabelText('Start date'), '12/05/2022')
-      userEvent.paste(screen.getByLabelText('Start time'), '09:00 AM')
-    })
+    screen.getByLabelText('Start date').focus()
+    await userEvent.paste('12/05/2022')
+
+    screen.getByLabelText('Start time').focus()
+    await userEvent.paste('09:00 AM')
 
     await waitFor(() => {
       expect(screen.getByText('810A May22')).toBeInTheDocument()
@@ -271,9 +273,7 @@ describe('component: CourseForm', () => {
       render(<CourseForm type={CourseType.INDIRECT} />)
     })
 
-    await waitFor(() => {
-      userEvent.click(screen.getByLabelText('Blended learning'))
-    })
+    await userEvent.click(screen.getByLabelText('Blended learning'))
 
     await waitFor(() => {
       expect(screen.getByText(blendedLearningInfoMessage)).toBeInTheDocument()

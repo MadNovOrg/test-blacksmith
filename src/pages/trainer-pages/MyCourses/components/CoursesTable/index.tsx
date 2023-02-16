@@ -32,7 +32,7 @@ type Props = {
   renderRow?: (course: TableCourse) => React.ReactElement
 }
 
-export const CoursesTable: React.FC<Props> = ({
+export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
   courses,
   sorting,
   isFiltered = false,

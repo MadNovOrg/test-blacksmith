@@ -45,7 +45,7 @@ describe('component: FeaturedContentItem', () => {
     expect(screen.getByAltText(webinar.title ?? '')).toBeInTheDocument()
     expect(screen.getByText('New webinar')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText(webinar.title ?? ''))
+    await userEvent.click(screen.getByText(webinar.title ?? ''))
 
     await waitFor(() => {
       expect(screen.getByText('Webinar page')).toBeInTheDocument()

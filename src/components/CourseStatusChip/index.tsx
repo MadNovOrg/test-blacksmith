@@ -36,7 +36,7 @@ type Props = {
   color?: ChipProps['color']
 } & ChipProps
 
-export const CourseStatusChip: React.FC<Props> = ({
+export const CourseStatusChip: React.FC<React.PropsWithChildren<Props>> = ({
   status,
   hideIcon = false,
   color,

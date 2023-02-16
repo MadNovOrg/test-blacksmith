@@ -15,13 +15,9 @@ type Props = {
   submitLabel?: string
 }
 
-export const CourseExceptionsConfirmation: React.FC<Props> = ({
-  open,
-  onCancel,
-  onSubmit,
-  exceptions,
-  submitLabel,
-}) => {
+export const CourseExceptionsConfirmation: React.FC<
+  React.PropsWithChildren<Props>
+> = ({ open, onCancel, onSubmit, exceptions, submitLabel }) => {
   const { t } = useTranslation()
   const { activeRole } = useAuth()
   const isAdmin = activeRole === RoleName.TT_ADMIN

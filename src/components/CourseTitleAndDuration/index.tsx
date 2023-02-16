@@ -10,11 +10,9 @@ export type CourseTitleAndDurationProps = {
   showCourseLink?: boolean
 } & TypographyProps
 
-export const CourseTitleAndDuration: React.FC<CourseTitleAndDurationProps> = ({
-  course,
-  showCourseLink,
-  ...props
-}) => {
+export const CourseTitleAndDuration: React.FC<
+  React.PropsWithChildren<CourseTitleAndDurationProps>
+> = ({ course, showCourseLink, ...props }) => {
   return (
     <Box {...props}>
       <CourseTitle course={course} showCourseLink={showCourseLink} mb={1} />

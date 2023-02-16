@@ -34,7 +34,9 @@ export type ProfileSelectorProps = {
   testId?: string
 }
 
-export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
+export const ProfileSelector: React.FC<
+  React.PropsWithChildren<ProfileSelectorProps>
+> = function ({
   value,
   onChange,
   orgId,
@@ -74,7 +76,7 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
         if (results.profiles) {
           setOptions(results.profiles)
         }
-      }),
+      }, 1000),
     [fetcher, orgId, roleName]
   )
 
@@ -82,7 +84,6 @@ export const ProfileSelector: React.FC<ProfileSelectorProps> = function ({
     if (reason === 'input' && value && value.length >= 2) {
       setLoading(true)
       setOptions([])
-
       debouncedQuery(`%${value}%`)
     }
 

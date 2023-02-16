@@ -13,7 +13,7 @@ describe('ErrorPage page', () => {
   it('renders ErrorPage', async () => {
     render(<ErrorPage debug={true} />)
     expect(screen.getByText('Error message:')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Home'))
+    await userEvent.click(screen.getByText('Home'))
     expect(mockNavigate).toHaveBeenCalledWith('/')
   })
 })

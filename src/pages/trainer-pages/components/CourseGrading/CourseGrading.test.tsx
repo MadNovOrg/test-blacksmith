@@ -91,7 +91,7 @@ describe('component: CourseGrading', () => {
       name: 'Modify grading details',
     })
     expect(button).toBeInTheDocument()
-    userEvent.click(button)
+    await userEvent.click(button)
     await waitFor(() =>
       expect(screen.getByText('Grading clearance')).toBeInTheDocument()
     )

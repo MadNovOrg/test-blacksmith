@@ -39,7 +39,7 @@ type PageRowProps = {
   testId?: string
 }
 
-const PageRow: React.FC<PageRowProps> = ({
+const PageRow: React.FC<React.PropsWithChildren<PageRowProps>> = ({
   caption,
   isBold,
   label,
@@ -78,10 +78,9 @@ type ExpensesDetailsProps = {
   trainerName: string
 }
 
-const ExpensesDetails: React.FC<ExpensesDetailsProps> = ({
-  expenses,
-  trainerName,
-}) => {
+const ExpensesDetails: React.FC<
+  React.PropsWithChildren<ExpensesDetailsProps>
+> = ({ expenses, trainerName }) => {
   const { t } = useTranslation()
 
   const getRowForTransportExpense = useCallback(

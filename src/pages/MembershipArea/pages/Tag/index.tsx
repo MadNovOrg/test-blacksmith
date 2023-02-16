@@ -23,7 +23,7 @@ import { OrderMenu } from '../../components/OrderMenu'
 
 export const PER_PAGE = 12
 
-const Tag: React.FC = () => {
+const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 

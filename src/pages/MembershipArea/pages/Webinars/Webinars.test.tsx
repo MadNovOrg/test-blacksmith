@@ -84,7 +84,7 @@ describe('page: Webinars', () => {
     )
   })
 
-  it('navigates to single webinar page when clicked on featured image', () => {
+  it('navigates to single webinar page when clicked on featured image', async () => {
     const webinars = buildEntities(2, buildWebinar)
 
     const client = {
@@ -113,7 +113,7 @@ describe('page: Webinars', () => {
 
     const featuredWebinar = screen.getByTestId('featured-webinar')
 
-    userEvent.click(
+    await userEvent.click(
       within(featuredWebinar).getByAltText(webinars[0].title ?? '')
     )
 
@@ -195,7 +195,10 @@ describe('page: Webinars', () => {
       { initialEntries: ['/webinars'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search webinars'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search webinars'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -250,7 +253,7 @@ describe('page: Webinars', () => {
       { initialEntries: ['/webinars'] }
     )
 
-    userEvent.click(screen.getByTestId('webinars-next-page'))
+    await userEvent.click(screen.getByTestId('webinars-next-page'))
 
     expect(
       within(screen.getByTestId('featured-webinar')).getByText(
@@ -268,7 +271,7 @@ describe('page: Webinars', () => {
 
     expect(screen.getByTestId('webinars-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('webinars-previous-page'))
+    await userEvent.click(screen.getByTestId('webinars-previous-page'))
 
     expect(
       within(screen.getByTestId('featured-webinar')).getByText(

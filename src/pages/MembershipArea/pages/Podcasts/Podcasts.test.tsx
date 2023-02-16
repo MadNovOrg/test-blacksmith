@@ -92,7 +92,7 @@ describe('page: Podcasts', () => {
     ).toHaveAttribute('src', podcasts[0].thumbnail)
   })
 
-  it('links to podcast single page when clicked on the featured podcast', () => {
+  it('links to podcast single page when clicked on the featured podcast', async () => {
     const podcasts = buildEntities(2, buildPodcast)
 
     const client = {
@@ -120,7 +120,7 @@ describe('page: Podcasts', () => {
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
 
-    userEvent.click(within(featuredPodcast).getByText(podcasts[0].name))
+    await userEvent.click(within(featuredPodcast).getByText(podcasts[0].name))
 
     expect(screen.getByText('Single podcast page')).toBeInTheDocument()
   })
@@ -175,7 +175,7 @@ describe('page: Podcasts', () => {
     })
   })
 
-  it('links to podcast single page when clicked on a podcast in the list', () => {
+  it('links to podcast single page when clicked on a podcast in the list', async () => {
     const podcasts = buildEntities(13, buildPodcast)
 
     const client = {
@@ -201,13 +201,13 @@ describe('page: Podcasts', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(
+    await userEvent.click(
       within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
     )
     expect(screen.getByText('Single podcast page')).toBeInTheDocument()
   })
 
-  it('paginates podcasts', () => {
+  it('paginates podcasts', async () => {
     const firstPodcastBatch = buildEntities(PER_PAGE + 1, buildPodcast)
     const secondPodcastBatch = buildEntities(PER_PAGE, buildPodcast)
 
@@ -240,7 +240,7 @@ describe('page: Podcasts', () => {
 
     expect(screen.getByText('1-12 of 20')).toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('pagination-next-page'))
+    await userEvent.click(screen.getByTestId('pagination-next-page'))
 
     const featuredPodcast = screen.getByTestId('featured-podcast')
 
@@ -258,7 +258,7 @@ describe('page: Podcasts', () => {
     expect(screen.getByText('13-20 of 20')).toBeInTheDocument()
   })
 
-  it('sorts by published date', () => {
+  it('sorts by published date', async () => {
     const podcasts = buildEntities(20, buildPodcast)
     const reversedPodcasts = podcasts.slice().reverse()
 
@@ -297,8 +297,8 @@ describe('page: Podcasts', () => {
       screen.getByTestId(`podcast-grid-item-${podcasts[1].id}`)
     ).toBeInTheDocument()
 
-    userEvent.click(screen.getByTestId('order-menu-button'))
-    userEvent.click(screen.getByText('Oldest'))
+    await userEvent.click(screen.getByTestId('order-menu-button'))
+    await userEvent.click(screen.getByText('Oldest'))
 
     expect(
       within(screen.getByTestId('featured-podcast')).getByText(podcasts[0].name)
@@ -346,7 +346,10 @@ describe('page: Podcasts', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search podcasts'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search podcasts'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(

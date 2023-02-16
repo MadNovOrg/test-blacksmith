@@ -89,7 +89,9 @@ describe('page: ChooseTransferCourse', () => {
       },
     }
 
-    const MockTransferDetails: React.FC = () => {
+    const MockTransferDetails: React.FC<
+      React.PropsWithChildren<unknown>
+    > = () => {
       const { toCourse } = useTransferParticipantContext()
 
       return <p>choosen course for transfer is {toCourse?.id}</p>
@@ -140,8 +142,8 @@ describe('page: ChooseTransferCourse', () => {
       { initialEntries: ['/'] }
     )
 
-    userEvent.click(screen.getByLabelText(TO_COURSE_ID))
-    userEvent.click(screen.getByText(/transfer details/i))
+    await userEvent.click(screen.getByLabelText(TO_COURSE_ID))
+    await userEvent.click(screen.getByText(/transfer details/i))
 
     await waitFor(() => {
       expect(

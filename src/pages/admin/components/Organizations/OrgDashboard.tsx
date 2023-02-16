@@ -38,7 +38,7 @@ export enum CertificationStatus {
   EXPIRED,
 }
 
-export const OrgDashboard: React.FC = () => {
+export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { profile, acl } = useAuth()
   const [searchParams] = useSearchParams()

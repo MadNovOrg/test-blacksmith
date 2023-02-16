@@ -120,7 +120,7 @@ describe('page: ModulesSelection', () => {
     expect(useCourseModulesMock).toHaveBeenCalledWith(COURSE_ID)
   })
 
-  it('saves to local storage when selection is changed', () => {
+  it('saves to local storage when selection is changed', async () => {
     const COURSE_ID = 'course-id'
 
     const courseModules = [
@@ -145,7 +145,7 @@ describe('page: ModulesSelection', () => {
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
-    userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+    await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
     const storedSelection = localStorage.getItem(
       `modules-selection-${COURSE_ID}`
@@ -232,8 +232,8 @@ describe('page: ModulesSelection', () => {
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
-    userEvent.click(screen.getByLabelText(courseModules[0].module.name))
-    userEvent.click(screen.getByText('Continue to grading attendees'))
+    await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
+    await userEvent.click(screen.getByText('Continue to grading attendees'))
 
     expect(fetcherMock).toHaveBeenCalledTimes(1)
     expect(fetcherMock).toHaveBeenCalledWith(MUTATION, {
@@ -268,7 +268,7 @@ describe('page: ModulesSelection', () => {
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
 
-    userEvent.click(screen.getByText('Back to grading clearance'))
+    await userEvent.click(screen.getByText('Back to grading clearance'))
 
     await waitForText('Grading clearance page')
   })

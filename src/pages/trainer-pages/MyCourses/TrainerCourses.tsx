@@ -45,7 +45,7 @@ type DateFilters = {
   filterCreateEndDate?: Date | undefined
 }
 
-export const TrainerCourses: React.FC<Props> = ({
+export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   orgId,
   showAvailableCoursesButton,
@@ -175,7 +175,11 @@ export const TrainerCourses: React.FC<Props> = ({
   const count = courses.length
 
   const onAcceptedOrDeclined = useCallback(
-    (course, trainer, status) => {
+    (
+      course: { id: number },
+      trainer: { type: Course_Trainer_Type_Enum },
+      status: Course_Invite_Status_Enum
+    ) => {
       const isLead = trainer.type === Course_Trainer_Type_Enum.Leader
       const isAccepted = status === Course_Invite_Status_Enum.Accepted
       setKeyword('')

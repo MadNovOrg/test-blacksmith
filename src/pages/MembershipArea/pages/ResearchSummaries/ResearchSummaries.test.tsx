@@ -189,7 +189,10 @@ describe('page: ResearchSummaries', () => {
       { initialEntries: ['/research-summaries'] }
     )
 
-    userEvent.type(screen.getByPlaceholderText('Search summaries'), SEARCH_TERM)
+    await userEvent.type(
+      screen.getByPlaceholderText('Search summaries'),
+      SEARCH_TERM
+    )
 
     await waitFor(() => {
       expect(
@@ -248,7 +251,7 @@ describe('page: ResearchSummaries', () => {
       { initialEntries: ['/research-summaries'] }
     )
 
-    userEvent.click(screen.getByTestId('research-summaries-next-page'))
+    await userEvent.click(screen.getByTestId('research-summaries-next-page'))
 
     expect(
       within(screen.getByTestId('featured-research-summary')).getByText(
@@ -266,7 +269,9 @@ describe('page: ResearchSummaries', () => {
 
     expect(screen.getByTestId('research-summaries-next-page')).toBeDisabled()
 
-    userEvent.click(screen.getByTestId('research-summaries-previous-page'))
+    await userEvent.click(
+      screen.getByTestId('research-summaries-previous-page')
+    )
 
     expect(
       within(screen.getByTestId('featured-research-summary')).getByText(

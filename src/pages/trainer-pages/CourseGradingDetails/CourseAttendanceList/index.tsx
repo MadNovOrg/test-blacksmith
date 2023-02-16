@@ -24,7 +24,7 @@ interface Props {
   onChange?: (attendance: Record<string, boolean>) => void
 }
 
-export const CourseAttendanceList: React.FC<Props> = ({
+export const CourseAttendanceList: React.FC<React.PropsWithChildren<Props>> = ({
   participants,
   onChange = noop,
 }) => {

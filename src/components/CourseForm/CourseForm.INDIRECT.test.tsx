@@ -53,7 +53,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
   })
 
@@ -78,7 +78,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
   })
 
@@ -92,7 +92,7 @@ describe('component: CourseForm - INDIRECT', () => {
     expect(blended).toBeEnabled()
     expect(blended).not.toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
   })
 
@@ -130,10 +130,10 @@ describe('component: CourseForm - INDIRECT', () => {
 
     expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
     expect(reacc).toBeDisabled()
     expect(reacc).not.toBeChecked()
@@ -150,7 +150,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
     expect(blended).toBeDisabled()
     expect(reacc).toBeEnabled()
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 
@@ -165,10 +165,10 @@ describe('component: CourseForm - INDIRECT', () => {
 
     expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
     expect(reacc).toBeDisabled()
     expect(reacc).not.toBeChecked()
@@ -185,10 +185,10 @@ describe('component: CourseForm - INDIRECT', () => {
 
     expect(blended).not.toBeChecked()
     expect(reacc).toBeEnabled()
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
 
-    await waitFor(() => userEvent.click(blended))
+    await userEvent.click(blended)
     expect(blended).toBeChecked()
     expect(reacc).toBeEnabled()
     expect(reacc).toBeChecked()
@@ -205,7 +205,7 @@ describe('component: CourseForm - INDIRECT', () => {
 
     expect(blended).toBeDisabled()
     expect(reacc).toBeEnabled()
-    await waitFor(() => userEvent.click(reacc))
+    await userEvent.click(reacc)
     expect(reacc).toBeChecked()
   })
 })

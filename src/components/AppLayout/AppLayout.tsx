@@ -9,7 +9,9 @@ type LayoutProps = {
   children: React.ReactNode
 }
 
-export const AppLayout: React.FC<LayoutProps> = ({ children }) => {
+export const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
+  children,
+}) => {
   return (
     <Box display="flex" flexDirection="column" flex={1}>
       <AppBar />

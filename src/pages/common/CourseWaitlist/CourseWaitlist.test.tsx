@@ -142,13 +142,16 @@ describe('page: Waitlist', () => {
       { initialEntries: [`/waitlist?course_id=${courseId}`] }
     )
 
-    userEvent.type(screen.getByLabelText(/first name/i), 'John')
-    userEvent.type(screen.getByLabelText(/last name/i), 'Doe')
-    userEvent.type(screen.getByLabelText(/email/i), 'john.doe@example.com')
-    userEvent.type(screen.getByLabelText(/phone/i), '11111')
-    userEvent.type(screen.getByLabelText(/organisation name/i), 'Org')
+    await userEvent.type(screen.getByLabelText(/first name/i), 'John')
+    await userEvent.type(screen.getByLabelText(/last name/i), 'Doe')
+    await userEvent.type(
+      screen.getByLabelText(/email/i),
+      'john.doe@example.com'
+    )
+    await userEvent.type(screen.getByLabelText(/phone/i), '11111')
+    await userEvent.type(screen.getByLabelText(/organisation name/i), 'Org')
 
-    userEvent.click(screen.getByText(/join waiting list/i))
+    await userEvent.click(screen.getByText(/join waiting list/i))
 
     await waitFor(() => {
       expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(

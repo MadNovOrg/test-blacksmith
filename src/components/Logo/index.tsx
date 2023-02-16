@@ -17,7 +17,7 @@ type LogoProps = {
   height?: number
 }
 
-export const Logo: React.FC<LogoProps> = ({
+export const Logo: React.FC<React.PropsWithChildren<LogoProps>> = ({
   variant = 'partial',
   width = 40,
   height = 40,

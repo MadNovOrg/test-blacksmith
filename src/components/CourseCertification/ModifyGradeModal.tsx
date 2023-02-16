@@ -22,11 +22,9 @@ export type ModifyGradeModalProps = {
   onClose: () => void
 }
 
-const ModifyGradeModal: React.FC<ModifyGradeModalProps> = function ({
-  certificateId,
-  participant,
-  onClose,
-}) {
+const ModifyGradeModal: React.FC<
+  React.PropsWithChildren<ModifyGradeModalProps>
+> = function ({ certificateId, participant, onClose }) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const { profile } = useAuth()

@@ -57,13 +57,9 @@ function getAddressPart(placeDetails: PlaceResult, partName: string): string {
   return addressPart?.long_name || ''
 }
 
-export const VenueSelector: React.FC<VenueSelectorProps> = function ({
-  value,
-  onChange,
-  sx,
-  textFieldProps,
-  ...props
-}) {
+export const VenueSelector: React.FC<
+  React.PropsWithChildren<VenueSelectorProps>
+> = function ({ value, onChange, sx, textFieldProps, ...props }) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const theme = useTheme()

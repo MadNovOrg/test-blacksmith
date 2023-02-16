@@ -11,7 +11,7 @@ import { NavLinks } from '../NavLinks'
 
 import { ProfileMenu } from './ProfileMenu'
 
-export const DrawerMenu: React.FC = () => {
+export const DrawerMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { verified, profile } = useAuth()
   const [open, toggle] = useToggle(false)
   const location = useLocation()

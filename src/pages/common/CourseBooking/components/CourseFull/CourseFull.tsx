@@ -8,7 +8,9 @@ type Props = {
   courseId: number
 }
 
-export const CourseFull: React.FC<Props> = ({ courseId }) => {
+export const CourseFull: React.FC<React.PropsWithChildren<Props>> = ({
+  courseId,
+}) => {
   const { t } = useTranslation()
 
   return (

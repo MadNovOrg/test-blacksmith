@@ -29,7 +29,7 @@ export type TableHeadProps = {
   darker?: boolean
 }
 
-export const TableHead: React.FC<TableHeadProps> = ({
+export const TableHead: React.FC<React.PropsWithChildren<TableHeadProps>> = ({
   cols,
   order = 'asc',
   orderBy = '',

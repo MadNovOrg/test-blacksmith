@@ -7,7 +7,7 @@ type Props = {
   error?: string
 }
 
-export const QuestionGroup: React.FC<Props> = ({
+export const QuestionGroup: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   description,
   error,

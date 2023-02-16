@@ -34,7 +34,9 @@ import { geoDistance } from '@app/util/geo'
 
 type CourseType = GetOrgCoursesQuery['courses'][0]
 
-export const AvailableCourses: React.FC = () => {
+export const AvailableCourses: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { t } = useTranslation()
   const { id } = useParams()
   const { profile, acl } = useAuth()

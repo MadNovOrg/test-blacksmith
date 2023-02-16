@@ -11,7 +11,9 @@ type Props = {
   onChange?: (order: OrderDirection) => void
 }
 
-export const OrderMenu: React.FC<Props> = ({ onChange = noop }) => {
+export const OrderMenu: React.FC<React.PropsWithChildren<Props>> = ({
+  onChange = noop,
+}) => {
   const { t } = useTranslation()
 
   const options = [

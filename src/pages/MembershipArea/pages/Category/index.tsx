@@ -27,7 +27,7 @@ import { OrderMenu } from '../../components/OrderMenu'
 
 export const PER_PAGE = 12
 
-const Category: React.FC = () => {
+const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 

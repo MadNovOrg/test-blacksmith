@@ -18,7 +18,7 @@ import { useAuth } from '@app/context/auth'
 
 import { Avatar } from '../Avatar'
 
-export const UserMenu: React.FC = () => {
+export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, logout, acl, verified } = useAuth()

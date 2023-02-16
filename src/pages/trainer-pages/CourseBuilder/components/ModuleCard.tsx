@@ -12,7 +12,7 @@ type ModuleCardProps = {
   hide?: boolean
 }
 
-export const ModuleCard: React.FC<ModuleCardProps> = ({
+export const ModuleCard: React.FC<React.PropsWithChildren<ModuleCardProps>> = ({
   data,
   bgColor,
   hide,

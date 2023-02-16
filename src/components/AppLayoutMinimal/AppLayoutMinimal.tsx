@@ -9,7 +9,7 @@ type Props = {
   footer?: React.ReactElement
 }
 
-export const AppLayoutMinimal: React.FC<Props> = ({
+export const AppLayoutMinimal: React.FC<React.PropsWithChildren<Props>> = ({
   width = 500,
   contentBoxStyles,
   children,

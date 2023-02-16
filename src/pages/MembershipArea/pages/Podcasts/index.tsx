@@ -21,7 +21,7 @@ import { SplitPost, SplitPostSkeleton } from '../../components/SplitPost'
 
 export const PER_PAGE = 12
 
-const Podcasts: React.FC = () => {
+const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState(1)

@@ -13,7 +13,7 @@ describe('BackButton component', () => {
   it('renders BackButton', async () => {
     const label = 'Go back'
     render(<BackButton label={label} />)
-    userEvent.click(screen.getByText('Go back'))
+    await userEvent.click(screen.getByText('Go back'))
     expect(mockNavigate).toHaveBeenCalledWith(-1)
   })
 })

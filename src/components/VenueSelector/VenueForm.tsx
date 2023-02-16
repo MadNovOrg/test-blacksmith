@@ -17,7 +17,7 @@ export type VenueFormProps = {
   onCancel: () => void
 }
 
-const VenueForm: React.FC<VenueFormProps> = function ({
+const VenueForm: React.FC<React.PropsWithChildren<VenueFormProps>> = function ({
   data,
   onSubmit,
   onCancel,

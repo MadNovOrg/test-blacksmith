@@ -21,11 +21,9 @@ export type CountPanelParams = {
   }
 }
 
-export const CountPanel: React.FC<CountPanelParams> = ({
-  count,
-  label,
-  chip,
-}) => {
+export const CountPanel: React.FC<
+  React.PropsWithChildren<CountPanelParams>
+> = ({ count, label, chip }) => {
   return (
     <Tile flexDirection="row" gap={2}>
       <Typography variant="h2" mx={2}>

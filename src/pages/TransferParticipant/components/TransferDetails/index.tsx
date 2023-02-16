@@ -14,7 +14,9 @@ import { CourseInfoPanel } from '../CourseInfoPanel'
 import FeesPanel, { FormValues } from '../FeesPanel'
 import { useTransferParticipantContext } from '../TransferParticipantProvider'
 
-export const TransferDetails: React.FC = () => {
+export const TransferDetails: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const { toCourse, backFrom, feesChosen, fromCourse, mode } =
     useTransferParticipantContext()
   const { t } = useScopedTranslation(
