@@ -8,6 +8,7 @@ import { TrainerAvatarGroup } from '@app/components/TrainerAvatarGroup'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, TrainerCoursesQuery } from '@app/generated/graphql'
 import { Course_Invite_Status_Enum } from '@app/generated/graphql'
+import { useTableSort } from '@app/hooks/useTableSort'
 import { findCourseTrainer } from '@app/util'
 
 import { AcceptDeclineCourse, Trainer } from '../AcceptDeclineCourse'
@@ -27,12 +28,14 @@ type ActionableCoursesTableProps = {
     trainer: Trainer,
     status: Course_Invite_Status_Enum
   ) => void
+  sorting?: ReturnType<typeof useTableSort>
 }
 
 export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
   actionableCourses,
   fetchingActionableCourses,
   onAcceptedOrDeclined,
+  sorting,
 }) => {
   const { t } = useTranslation()
   const { profile } = useAuth()
@@ -43,11 +46,13 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
       hiddenColumns={new Set(['status'])}
       data-testid="actionable-courses-table"
       loading={fetchingActionableCourses}
-      renderRow={(course: TableCourse) => (
+      sorting={sorting}
+      renderRow={(course: TableCourse, index?: number) => (
         <TableRow
           key={course.id}
           className="MyCoursesRow"
           data-testid={`actionable-course-${course.id}`}
+          data-index={index}
         >
           <CourseTitleCell course={course} />
           <VenueCell course={course} />

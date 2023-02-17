@@ -1010,6 +1010,55 @@ describe('trainers-pages/MyCourses', () => {
       ).toBeInTheDocument()
     })
 
+    it('sorts courses by name', async () => {
+      const courses = [
+        buildActionableTrainerCourse(TRAINER_PROFILE_ID),
+        buildActionableTrainerCourse(TRAINER_PROFILE_ID),
+      ]
+      const reversedCourses = courses.slice().reverse()
+
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const orderBy = Array.isArray(variables.orderBy)
+            ? variables.orderBy[0]
+            : variables.orderBy ?? {}
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses:
+                orderBy.name === Order_By.Asc ? courses : reversedCourses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      const actionableTbl = screen.getByTestId('actionable-courses-table')
+      userEvent.click(within(actionableTbl).getByText('Name'))
+
+      await waitFor(() => {
+        expect(
+          within(actionableTbl).getByTestId(
+            `actionable-course-${courses[0].id}`
+          )
+        ).toHaveAttribute('data-index', '0')
+      })
+    })
+
     it('filters by search', async () => {
       const keyword = '20123'
       const TRAINER_PROFILE_ID = chance.guid()
@@ -1029,8 +1078,8 @@ describe('trainers-pages/MyCourses', () => {
           variables: TrainerCoursesQueryVariables
         }) => {
           const conditions: Course_Bool_Exp['_or'] = variables.where?._or ?? []
-          const courseCodeCondition = conditions.find(c =>
-            Object.keys(c).includes('course_code')
+          const courseCodeCondition = conditions.find(cond =>
+            Object.keys(cond).includes('course_code')
           )
           const courses =
             courseCodeCondition?.course_code?._ilike === `%${keyword}%`

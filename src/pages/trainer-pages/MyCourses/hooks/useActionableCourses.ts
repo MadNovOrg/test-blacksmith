@@ -11,13 +11,19 @@ import {
   TrainerCoursesQuery,
   TrainerCoursesQueryVariables,
 } from '@app/generated/graphql'
-import { CoursesFilters, filtersToWhereClause } from '@app/hooks/useCourses'
+import {
+  CoursesFilters,
+  filtersToWhereClause,
+  getOrderBy,
+} from '@app/hooks/useCourses'
 import { ALL_ORGS } from '@app/hooks/useOrg'
+import { Sorting } from '@app/hooks/useTableSort'
 import { QUERY } from '@app/queries/courses/get-trainer-courses'
 import { RoleName } from '@app/types'
 
 type Props = {
   statuses: Course_Status_Enum[]
+  sorting: Sorting
   pagination: { perPage: number; currentPage: number }
   orgId?: string
   filters?: CoursesFilters
@@ -25,11 +31,13 @@ type Props = {
 
 export default function useActionableCourses({
   statuses,
+  sorting,
   pagination,
   orgId,
   filters,
 }: Props) {
   const { activeRole, profile, acl, organizationIds } = useAuth()
+  const orderBy = getOrderBy(sorting)
 
   const where = useMemo(() => {
     const conditions: Course_Bool_Exp[] = []
@@ -112,6 +120,7 @@ export default function useActionableCourses({
     requestPolicy: 'cache-and-network',
     variables: {
       where,
+      orderBy,
       limit: pagination.perPage,
       offset: pagination.perPage * (pagination?.currentPage - 1),
     },

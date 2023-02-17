@@ -238,7 +238,10 @@ export const useCourses = (
   )
 }
 
-function getOrderBy({ by, dir }: Pick<Sorting, 'by' | 'dir'>): Course_Order_By {
+export function getOrderBy({
+  by,
+  dir,
+}: Pick<Sorting, 'by' | 'dir'>): Course_Order_By {
   switch (by) {
     case 'name':
     case 'type':

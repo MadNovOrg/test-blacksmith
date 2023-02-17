@@ -58,6 +58,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   const isTrainer = activeRole === RoleName.TRAINER
 
   const sorting = useTableSort('start', 'desc')
+  const actionableSorting = useTableSort('start', 'desc', 'act-tbl')
 
   const actionableStatuses = useMemo(() => {
     if (activeRole) {
@@ -134,6 +135,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     refetchActionableCourses,
   ] = useActionableCourses({
     statuses: actionableStatuses,
+    sorting: actionableSorting,
     pagination: {
       perPage: actionablePerPage,
       currentPage: actionableCurrentPage,
@@ -301,6 +303,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
                   actionableCourses={actionableCourses}
                   fetchingActionableCourses={fetchingActionableCourses}
                   onAcceptedOrDeclined={onAcceptedOrDeclined}
+                  sorting={actionableSorting}
                 />
                 {actionableCourses?.course_aggregate?.aggregate?.count ? (
                   <ActionablePagination

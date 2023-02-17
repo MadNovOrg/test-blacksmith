@@ -29,7 +29,7 @@ type Props = {
   isFiltered?: boolean
   loading?: boolean
   hiddenColumns?: Set<Cols>
-  renderRow?: (course: TableCourse) => React.ReactElement
+  renderRow?: (course: TableCourse, index?: number) => React.ReactElement
 }
 
 export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
@@ -91,7 +91,7 @@ export const CoursesTable: React.FC<React.PropsWithChildren<Props>> = ({
 
         {courses.map((c, index) => {
           return typeof renderRow === 'function' ? (
-            renderRow(c)
+            renderRow(c, index)
           ) : (
             <TableRow
               key={c.id}
