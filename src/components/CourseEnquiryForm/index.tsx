@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
+import { NumericTextField } from '@app/components/NumericTextField'
 import { CourseType } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 
@@ -249,11 +250,10 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
         ) : null}
       </Box>
       {courseType === CourseType.Closed ? (
-        <TextField
+        <NumericTextField
           id="numParticipants"
           label={t('components.course-enquiry-form.participants-label')}
           variant="filled"
-          type="number"
           min="0"
           error={!!errors.numParticipants}
           helperText={errors.numParticipants?.message}

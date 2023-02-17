@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { Dialog } from '@app/components/Dialog'
+import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
 import {
   CancelIndividualFromCourseMutation,
@@ -228,10 +229,9 @@ export const RemoveIndividualModal = ({
             />
           ) : null}
           {feeType === FeesRadioValue.CUSTOM_FEE ? (
-            <TextField
+            <NumericTextField
               required
               label={t('pages.edit-course.cancellation-modal.fee')}
-              type="number"
               {...register('cancellationFeePercent', { valueAsNumber: true })}
               error={Boolean(errors.cancellationFeePercent)}
               helperText={

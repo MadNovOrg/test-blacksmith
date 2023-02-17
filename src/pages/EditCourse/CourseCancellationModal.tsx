@@ -19,6 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { NumericTextField } from '@app/components/NumericTextField'
 import {
   CancelCourseMutation,
   CancelCourseMutationVariables,
@@ -236,10 +237,9 @@ export const CourseCancellationModal: React.FC<
           ) : null}
 
           {feeType === FeesRadioValue.CUSTOM_FEE ? (
-            <TextField
+            <NumericTextField
               required
               label={t('pages.edit-course.cancellation-modal.fee')}
-              type="number"
               {...register('cancellationFeePercent', { valueAsNumber: true })}
               error={Boolean(errors.cancellationFeePercent)}
               helperText={

@@ -19,6 +19,7 @@ import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { DropdownMenu } from '@app/components/DropdownMenu'
+import { NumericTextField } from '@app/components/NumericTextField'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import { ExpensesInput, TrainerInput, TransportMethod } from '@app/types'
@@ -237,7 +238,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
 
               {entry.method !== TransportMethod.NONE ? (
                 <Grid item xs={5}>
-                  <TextField
+                  <NumericTextField
                     label={t(
                       `pages.create-course.trainer-expenses.value-label.${entry.method}`
                     )}
@@ -246,7 +247,6 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
-                    type="number"
                     inputProps={{
                       min: 0,
                       step: 0.01,
@@ -297,7 +297,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
             {entry.method === TransportMethod.FLIGHTS ? (
               <Grid container mt={2}>
                 <Grid item xs={2}>
-                  <TextField
+                  <NumericTextField
                     label={t(
                       `pages.create-course.trainer-expenses.value-label.${entry.method}-days`
                     )}
@@ -306,7 +306,6 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
-                    type="number"
                     inputProps={{
                       min: 1,
                       step: 1,
@@ -365,7 +364,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
             displayAccommodation[idx] ? (
               <Grid container spacing={2} mt={0}>
                 <Grid item xs={6}>
-                  <TextField
+                  <NumericTextField
                     label={t(
                       'pages.create-course.trainer-expenses.accommodation-nights'
                     )}
@@ -374,7 +373,6 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
-                    type="number"
                     inputProps={{
                       min: 1,
                       step: 1,
@@ -392,7 +390,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                 </Grid>
 
                 <Grid item xs={5}>
-                  <TextField
+                  <NumericTextField
                     label={t(
                       'pages.create-course.trainer-expenses.accommodation-cost'
                     )}
@@ -401,7 +399,6 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
                     })}
                     variant="filled"
                     fullWidth
-                    type="number"
                     inputProps={{
                       min: 0,
                       step: 0.01,
@@ -466,14 +463,13 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
             </Grid>
 
             <Grid item xs={5}>
-              <TextField
+              <NumericTextField
                 label={t('pages.create-course.trainer-expenses.misc-item-cost')}
                 {...register(`miscellaneous.${idx}.value`, {
                   valueAsNumber: true,
                 })}
                 variant="filled"
                 fullWidth
-                type="number"
                 inputProps={{
                   min: 0,
                   step: 0.01,

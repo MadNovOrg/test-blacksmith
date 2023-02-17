@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import { FormPanel } from '@app/components/FormPanel'
+import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
@@ -710,11 +711,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         <Grid container spacing={2}>
           {hasMinParticipants ? (
             <Grid item xs={6}>
-              <TextField
+              <NumericTextField
                 label={t('components.course-form.min-attendees-placeholder')}
                 variant="filled"
                 fullWidth
-                type="number"
                 {...register('minParticipants', { valueAsNumber: true })}
                 error={Boolean(errors.minParticipants)}
                 helperText={errors.minParticipants?.message}
@@ -726,7 +726,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           ) : null}
 
           <Grid item xs={6}>
-            <TextField
+            <NumericTextField
               id="filled-basic"
               label={t(
                 courseType === CourseType.OPEN
@@ -735,7 +735,6 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               )}
               variant="filled"
               fullWidth
-              type="number"
               {...register('maxParticipants', {
                 deps: ['minParticipants'],
                 valueAsNumber: true,
@@ -783,11 +782,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
+                <NumericTextField
                   label={t('components.course-form.free-spaces-placeholder')}
                   variant="filled"
                   fullWidth
-                  type="number"
                   {...register('freeSpaces', { valueAsNumber: true })}
                   error={Boolean(errors.freeSpaces)}
                   helperText={errors.freeSpaces?.message}
