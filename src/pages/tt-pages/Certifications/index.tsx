@@ -5,8 +5,10 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CertificationList } from '@app/components/CertificationList'
+import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { Course_Type_Enum } from '@app/generated/graphql'
 import useCourseParticipants, {
   CourseParticipantCriteria,
 } from '@app/hooks/useCourseParticipants'
@@ -31,6 +33,7 @@ export const Certifications: React.FC<
     setDateFrom(from)
     setDateTo(to)
   }, [])
+  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
 
   const where = useMemo(() => {
     const conditions: CourseParticipantCriteria[] = [
@@ -41,6 +44,12 @@ export const Certifications: React.FC<
       const ilike = { _ilike: `${keyword}%` }
       conditions.push({
         profile: { _or: [{ fullName: ilike }, { familyName: ilike }] },
+      })
+    }
+
+    if (filterType.length) {
+      conditions.push({
+        course: { type: { _in: filterType } },
       })
     }
 
@@ -57,7 +66,7 @@ export const Certifications: React.FC<
     }
 
     return { _and: conditions }
-  }, [keyword, dateFrom, dateTo])
+  }, [keyword, filterType, dateFrom, dateTo])
 
   const { Pagination, limit, offset } = useTablePagination()
 
@@ -94,6 +103,7 @@ export const Certifications: React.FC<
               onChange={onDatesChange}
               title={t('filters.date-range')}
             />
+            <FilterCourseType onChange={setFilterType} />
           </Stack>
         </Box>
 

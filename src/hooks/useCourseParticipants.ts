@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import { KeyedMutator } from 'swr'
 
+import { Course_Type_Enum } from '@app/generated/graphql'
 import {
   ParamsType,
   QUERY,
@@ -32,6 +33,9 @@ export type CourseParticipantCriteria =
     }
   | {
       certificate: { expiryDate: { _lte: Date } }
+    }
+  | {
+      course: { type: { _in: Course_Type_Enum[] } }
     }
   | {
       _and: CourseParticipantCriteria[]
