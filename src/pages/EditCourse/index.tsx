@@ -482,6 +482,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 <Box display="flex" justifyContent="space-between" mt={4}>
                   {cancellableCourse && canCancelCourse ? (
                     <Button
+                      data-testid="cancel-course-button"
                       variant="outlined"
                       onClick={() => {
                         if (
@@ -505,6 +506,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     variant="contained"
                     onClick={editCourse}
                     loading={fetching}
+                    data-testid="save-button"
                   >
                     {t('pages.edit-course.save-button-text')}
                   </LoadingButton>

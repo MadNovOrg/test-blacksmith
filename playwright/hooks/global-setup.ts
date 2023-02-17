@@ -48,6 +48,7 @@ async function globalSetup() {
     await login(browser, 'trainerWithOrg', 'Trainer')
     await login(browser, 'user1', 'User')
     await login(browser, 'userOrgAdmin', 'User')
+    await login(browser, 'salesAdmin', 'Sales administrator')
     await browser.close()
   }
 }

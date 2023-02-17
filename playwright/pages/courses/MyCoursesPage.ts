@@ -42,6 +42,11 @@ export class MyCoursesPage extends BasePage {
     await this.coursesTable.waitToLoad()
   }
 
+  async gotoManageCourses() {
+    await super.goto(`${BASE_URL}/manage-courses`, this.tableRoot)
+    await this.coursesTable.waitToLoad()
+  }
+
   async tryToOpen() {
     await this.page.goto(BASE_URL)
   }

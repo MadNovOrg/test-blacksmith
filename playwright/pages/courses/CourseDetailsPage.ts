@@ -43,6 +43,11 @@ export class CourseDetailsPage extends BasePage {
   readonly declinedTab: Locator
   readonly invitePopUp: InviteAttendeesPopUp
   readonly attendeesTable: UiTable
+  readonly editCourseButton: Locator
+  readonly saveButton: Locator
+  readonly cancelCourseButton: Locator
+  readonly cancelCourseCheckbox: Locator
+  readonly cancelEntireCourseButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -59,6 +64,17 @@ export class CourseDetailsPage extends BasePage {
     this.invitePopUp = new InviteAttendeesPopUp(this.page)
     this.attendeesTable = new UiTable(
       this.page.locator('data-testid=attending-table')
+    )
+    this.editCourseButton = this.page.getByText('Edit course details')
+    this.saveButton = this.page.locator('[data-testid="save-button"]')
+    this.cancelCourseButton = this.page.locator(
+      '[data-testid="cancel-course-button"]'
+    )
+    this.cancelCourseCheckbox = this.page.locator(
+      '[data-testid="cancel-entire-course-checkbox"]'
+    )
+    this.cancelEntireCourseButton = this.page.locator(
+      '[data-testid="cancel-entire-course-button"]'
     )
   }
 
@@ -105,5 +121,48 @@ export class CourseDetailsPage extends BasePage {
     const expectedRows = users.map(toAttendeesTableRow)
     const actualRows = await this.attendeesTable.getRows()
     expect(actualRows).toEqual(expectedRows)
+  }
+  async clickEditCourseButton() {
+    await this.editCourseButton.click()
+  }
+
+  async fillNotes() {
+    await this.page
+      .locator('[data-testid="notes-input"] >> input')
+      .fill('notes3')
+  }
+
+  async clickSaveButton() {
+    await this.saveButton.click()
+  }
+
+  async fillSalesRepresentative() {
+    await this.page.getByPlaceholder('Sales representative').fill('sales')
+    await this.page
+      .locator('.MuiAutocomplete-popper .MuiAutocomplete-option')
+      .click()
+  }
+
+  async checkNotesOnCoursePage() {
+    await this.page.locator('[data-testid="InfoIcon"]')
+    await this.page.locator('aria-label=notes3')
+  }
+
+  async clickCancelCourseButton() {
+    await this.cancelCourseButton.click()
+  }
+
+  async clickCancelCourseDropdown() {
+    await this.page.locator('[data-testid="cancel-course-dropdown"]').click()
+    await this.page.getByText('Trainer availability').click()
+  }
+
+  async checkCancelCourseCheckbox() {
+    await this.page
+      .locator('[data-testid="cancel-entire-course-checkbox"]')
+      .check()
+  }
+  async clickCancelEntireCourseButton() {
+    await this.cancelEntireCourseButton.click()
   }
 }

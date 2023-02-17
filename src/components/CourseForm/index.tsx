@@ -776,7 +776,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           error={Boolean(errors.notes)}
           helperText={errors.notes?.message}
           inputProps={{ min: 0 }}
-          data-testid="notes"
+          data-testid="notes-input"
           disabled={disabledFields.has('notes')}
         />
       </FormPanel>

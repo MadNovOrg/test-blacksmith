@@ -180,6 +180,7 @@ export const CourseDetails = () => {
                   !courseCancelled ? (
                     <Button
                       variant="contained"
+                      data-testid="edit-course-button"
                       color="secondary"
                       size="large"
                       sx={{ mt: 3 }}
@@ -306,6 +307,7 @@ export const CourseDetails = () => {
                       isOrgAdmin &&
                       !acl.canCancelCourses() ? (
                         <Button
+                          data-testid="request-cancellation-button"
                           variant="text"
                           startIcon={<Cancel />}
                           onClick={() => setShowCancellationRequestModal(true)}

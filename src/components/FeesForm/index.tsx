@@ -82,6 +82,7 @@ export const FeesForm: React.FC<React.PropsWithChildren<Props>> = ({
                   control={<Radio />}
                   label={resolvedLabels[TransferFeeType.ApplyTerms]}
                   sx={{ color: theme.palette.dimGrey.main }}
+                  data-testid="no-fees-radio-button"
                 />
                 <FormControlLabel
                   value={TransferFeeType.CustomFee}

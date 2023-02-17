@@ -24,6 +24,10 @@ export type Email = {
 export type Course = {
   id: number
   name: string
+  cancellationRequest?: {
+    id: string
+    reason: string
+  }
   course_code?: string
   description: string
   organization?: Organization
@@ -38,6 +42,7 @@ export type Course = {
   max_participants: number
   contactProfile?: User
   gradingConfirmed: boolean
+  salesRepresentative?: User
   trainers?: CourseTrainer[]
   participants_aggregate?: {
     aggregate?: {

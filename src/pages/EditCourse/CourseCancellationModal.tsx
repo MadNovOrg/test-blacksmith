@@ -266,6 +266,7 @@ export const CourseCancellationModal: React.FC<
         <TextField
           select
           required
+          data-testid="cancel-course-dropdown"
           label={t(
             'pages.edit-course.cancellation-modal.reason-for-cancellation'
           )}
@@ -329,6 +330,7 @@ export const CourseCancellationModal: React.FC<
             )}
             control={<Checkbox />}
             checked={confirmed}
+            data-testid="cancel-entire-course-checkbox"
             onChange={(_, v) => setConfirmed(v)}
             sx={{ userSelect: 'none' }}
           />
@@ -346,6 +348,7 @@ export const CourseCancellationModal: React.FC<
           disabled={course.type === CourseType.OPEN && !confirmed}
           onClick={handleSubmit(onFormSubmit)}
           type="button"
+          data-testid="cancel-entire-course-button"
           variant="contained"
           color="primary"
           sx={{ ml: 1 }}
