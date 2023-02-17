@@ -203,11 +203,7 @@ export const IndividualsByLevelList: React.FC<
                   </TableCell>
                 ) : null}
                 <TableCell>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
+                  <Box display="flex" flexDirection="column" alignItems="left">
                     {profile.upcomingEnrollments.map(enrollment => (
                       <Link
                         key={enrollment.courseId}
