@@ -18,7 +18,6 @@ import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
   Course_Level_Enum,
-  Course_Status_Enum,
   Course_Trainer_Type_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
@@ -252,9 +251,6 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
                 <FilterCourseType onChange={setFilterType} />
                 <FilterCourseStatus
                   onChange={setFilterStatus}
-                  excludedStatuses={
-                    new Set([Course_Status_Enum.TrainerMissing])
-                  }
                   customStatuses={
                     acl.isTTAdmin() || isOrgAdmin
                       ? new Set([AdminOnlyCourseStatus.CancellationRequested])

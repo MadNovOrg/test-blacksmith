@@ -39,9 +39,37 @@ export default function useActionableCourses({
   const { activeRole, profile, acl, organizationIds } = useAuth()
   const orderBy = getOrderBy(sorting)
 
+  // The "statuses" property contains the list of actionable statuses.
+  // The user can filter by selecting some statuses. These values are contained in the "filters.statuses" property.
+  // The "commonStatuses" variable contains the intersection of the two.
+  // So it includes a subset of the actionable statuses that have been selected in
+  // the status filter by the user.
+  // If "commonStatuses" is empty it means that:
+  // - no status filter has been selected OR
+  // - all the statuses in the filters are not actionable ones
+  const commonStatuses: Course_Status_Enum[] = useMemo(
+    () =>
+      intersection(
+        statuses,
+        filters?.statuses as unknown as Course_Status_Enum[]
+      ),
+    [filters, statuses]
+  )
+
+  // If the user wants to filter by status ("filters.statuses.length > 0")
+  // but none of them is an actionable status ("commonStatuses.length === 0"),
+  // then we do not fetch actionable courses ("fetchNoCourses" is true)
+  const fetchNoCourses = useMemo(
+    () =>
+      filters?.statuses &&
+      filters.statuses.length > 0 &&
+      commonStatuses.length === 0,
+    [commonStatuses.length, filters]
+  )
+
   const where = useMemo(() => {
     const conditions: Course_Bool_Exp[] = []
-    if (!activeRole) {
+    if (!activeRole || fetchNoCourses) {
       return {}
     }
 
@@ -56,22 +84,21 @@ export default function useActionableCourses({
       }
     }
 
-    const commonStatuses: Course_Status_Enum[] = intersection(
-      statuses,
-      filters?.statuses as unknown as Course_Status_Enum[]
-    )
-    const allStatuses =
-      filters?.statuses?.length && commonStatuses.length
-        ? commonStatuses
-        : statuses
+    // The list of allowed statuses is as follows:
+    // - the list of actionable statuses selected by the user in the status filter ("commonStatuses.length > 0") OR
+    // - the complete list of actionable statuses ("statuses")
+    const allowedStatuses =
+      commonStatuses.length > 0 ? commonStatuses : statuses
 
     let statusCondition: Course_Bool_Exp = {
       status: {
-        _in: allStatuses.filter(s => s !== Course_Status_Enum.TrainerMissing),
+        _in: allowedStatuses.filter(
+          s => s !== Course_Status_Enum.TrainerMissing
+        ),
       },
     }
 
-    if (allStatuses.indexOf(Course_Status_Enum.TrainerMissing) !== -1) {
+    if (allowedStatuses.indexOf(Course_Status_Enum.TrainerMissing) !== -1) {
       statusCondition = {
         _or: [
           statusCondition,
@@ -87,6 +114,16 @@ export default function useActionableCourses({
       }
     }
 
+    if (acl.isTTAdmin()) {
+      const cancellationPendingCondition = {
+        cancellationRequest: {
+          id: { _is_null: false },
+        },
+      }
+      statusCondition = {
+        _or: [statusCondition, cancellationPendingCondition],
+      }
+    }
     conditions.push(statusCondition)
 
     if (RoleName.TRAINER === activeRole) {
@@ -103,17 +140,18 @@ export default function useActionableCourses({
     }
 
     where = filtersToWhereClause(where, filters)
-
-    const cancellationPendingCondition = {
-      cancellationRequest: {
-        id: { _is_null: false },
-      },
-    }
-
-    return acl.isTTAdmin()
-      ? { _or: [where, cancellationPendingCondition] }
-      : where
-  }, [acl, activeRole, orgId, organizationIds, profile, statuses, filters])
+    return where
+  }, [
+    acl,
+    activeRole,
+    orgId,
+    organizationIds,
+    profile,
+    statuses,
+    filters,
+    commonStatuses,
+    fetchNoCourses,
+  ])
 
   return useQuery<TrainerCoursesQuery, TrainerCoursesQueryVariables>({
     query: QUERY,
@@ -121,8 +159,10 @@ export default function useActionableCourses({
     variables: {
       where,
       orderBy,
-      limit: pagination.perPage,
-      offset: pagination.perPage * (pagination?.currentPage - 1),
+      limit: fetchNoCourses ? 0 : pagination.perPage,
+      offset: fetchNoCourses
+        ? 0
+        : pagination.perPage * (pagination?.currentPage - 1),
     },
   })
 }
