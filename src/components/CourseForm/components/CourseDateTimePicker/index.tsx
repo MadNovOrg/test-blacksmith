@@ -61,7 +61,6 @@ export const CourseDateTimePicker = ({
 
     if (date) {
       const newDateAndTime = makeDate(date, newTime)
-      console.log('handleTimeChange, newDateAndTime', newDateAndTime)
 
       setDate(newDateAndTime)
       onChange(newDateAndTime)
