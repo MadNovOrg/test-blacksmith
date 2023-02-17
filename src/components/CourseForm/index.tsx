@@ -58,6 +58,8 @@ import {
 
 export type DisabledFields = Partial<keyof CourseInput>
 
+const MIN_COURSE_TIME = 60000
+
 interface Props {
   type?: CourseType
   courseInput?: CourseInput
@@ -140,11 +142,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           .date()
           .typeError(t('components.course-form.end-date-format'))
           .nullable()
-          .required(t('components.course-form.end-date-required'))
-          .min(
-            yup.ref('startDateTime'),
-            t('components.course-form.end-date-before-start-date')
-          ),
+          .when('startDateTime', (startDateTime, schema) => {
+            if (startDateTime) {
+              const minAfter = new Date(
+                startDateTime.getTime() + MIN_COURSE_TIME
+              )
+              return schema.min(
+                minAfter,
+                t('components.course-form.end-date-before-start-date')
+              )
+            }
+            return schema.required(
+              t('components.course-form.end-date-required')
+            )
+          }),
         ...(hasMinParticipants
           ? {
               minParticipants: yup
@@ -559,7 +570,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 timeValue={
                   courseInput?.startDateTime
                     ? extractTime(courseInput.startDateTime)
-                    : extractTime(makeDate(null, '08:00'))
+                    : extractTime(makeDate(null, '09:00'))
                 }
                 minDate={new Date()}
                 maxDate={values.endDateTime || undefined}
@@ -588,7 +599,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 timeValue={
                   courseInput?.endDateTime
                     ? extractTime(courseInput.endDateTime)
-                    : extractTime(makeDate(null, '08:00'))
+                    : extractTime(makeDate(null, '17:00'))
                 }
                 minDate={values.startDateTime ?? new Date()}
                 onChange={field.onChange}
