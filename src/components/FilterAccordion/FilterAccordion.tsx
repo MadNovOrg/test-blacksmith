@@ -41,9 +41,12 @@ export const FilterAccordion = <T,>({
       item
     )
 
+  const shouldExpand =
+    Object.values(options).some(val => val.selected === true) || defaultExpanded
+
   return (
     <StyledAccordion
-      defaultExpanded={defaultExpanded}
+      defaultExpanded={shouldExpand}
       data-testid={testId}
       sx={sx}
     >
