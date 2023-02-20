@@ -16,18 +16,13 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
-
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.type = CourseType.CLOSED
-    course.organization = { name: 'London First School' }
-    course.contactProfile = users.user1WithOrg
-    //this isn't being set, need to investigate why
-    course.salesRepresentative = users.user2WithOrg
+    course.type = CourseType.OPEN
     course.schedule[0].start = new Date('2024-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2024-03-15T16:00:00Z')
-    course.status = Course_Status_Enum.Scheduled
+    course.status = Course_Status_Enum.TrainerPending
     const moduleIds = await getModuleIds(
       getModulesByLevel(course.level),
       course.level
@@ -35,31 +30,24 @@ const test = base.extend<{ course: Course }>({
     course.id = await insertCourse(
       course,
       users.trainer.email,
-      InviteStatus.ACCEPTED
+      InviteStatus.PENDING
     )
     await insertCourseModules(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)
   },
 })
-
-test.use({ storageState: stateFilePath('salesAdmin') })
-
-test('edit course notes and sales rep for closed course as sales', async ({
-  page,
-  course,
-}) => {
+test.use({ storageState: stateFilePath('trainer') })
+test('accept open course as trainer @smoke', async ({ page, course }) => {
   test.setTimeout(60000)
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)
-  const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-    course.id
-  )
-  await courseDetailsPage.clickEditCourseButton()
-  await courseDetailsPage.fillNotes('notes3')
-  //workaround to not having sales rep set in course creation, have to set it now to save edit course
-  await courseDetailsPage.fillSalesRepresentative()
-  await courseDetailsPage.clickSaveButton()
-  await courseDetailsPage.checkNotesOnCoursePage('notes3')
+  await myCoursesPage.acceptCourse()
+  await myCoursesPage.goToCourseBuilder()
+  await myCoursesPage.submitDefaultModules()
+  await myCoursesPage.confirmModules()
+  await myCoursesPage.goto()
+  await myCoursesPage.searchCourse(`${course.id}`)
+  await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
 })

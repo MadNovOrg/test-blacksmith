@@ -202,7 +202,10 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   </StyledListIcon>
                   <ListItemText>
                     <Tooltip title={course.notes}>
-                      <Typography component="span">
+                      <Typography
+                        component="span"
+                        data-testid="additional-notes-label"
+                      >
                         {t('components.course-hero-summary.notes-label')}
                       </Typography>
                     </Tooltip>

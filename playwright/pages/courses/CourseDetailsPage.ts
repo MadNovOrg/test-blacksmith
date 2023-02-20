@@ -48,6 +48,7 @@ export class CourseDetailsPage extends BasePage {
   readonly cancelCourseButton: Locator
   readonly cancelCourseCheckbox: Locator
   readonly cancelEntireCourseButton: Locator
+  readonly additionalNotes: Locator
 
   constructor(page: Page) {
     super(page)
@@ -75,6 +76,9 @@ export class CourseDetailsPage extends BasePage {
     )
     this.cancelEntireCourseButton = this.page.locator(
       '[data-testid="cancel-entire-course-button"]'
+    )
+    this.additionalNotes = this.page.locator(
+      '[data-testid="additional-notes-label"]'
     )
   }
 
@@ -126,10 +130,10 @@ export class CourseDetailsPage extends BasePage {
     await this.editCourseButton.click()
   }
 
-  async fillNotes() {
+  async fillNotes(inputtedNote: string) {
     await this.page
       .locator('[data-testid="notes-input"] >> input')
-      .fill('notes3')
+      .fill(`${inputtedNote}`)
   }
 
   async clickSaveButton() {
@@ -143,9 +147,13 @@ export class CourseDetailsPage extends BasePage {
       .click()
   }
 
-  async checkNotesOnCoursePage() {
-    await this.page.locator('[data-testid="InfoIcon"]')
-    await this.page.locator('aria-label=notes3')
+  async checkNotesOnCoursePage(inputtedNote: string) {
+    const infoIcon = await this.page.locator('[data-testid="InfoIcon"]')
+    await expect(infoIcon).toBeVisible()
+    await expect(this.additionalNotes).toHaveAttribute(
+      'aria-label',
+      `${inputtedNote}`
+    )
   }
 
   async clickCancelCourseButton() {
