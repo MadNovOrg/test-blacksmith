@@ -1,4 +1,5 @@
 import { TFunction } from 'i18next'
+import { matchIsValidTel } from 'mui-tel-input'
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
 
@@ -8,6 +9,14 @@ import { requiredMsg } from './util'
 YupPassword(yup)
 
 const SIGNUP_VERIFY_LENGTH = 6
+
+yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
+  return this.test(
+    'phoneNumber',
+    t('validation-errors.invalid-phone'),
+    (value?: string) => matchIsValidTel(value ?? '')
+  )
+})
 
 const schemas = {
   email: (t: TFunction, required = true) => {
@@ -41,11 +50,8 @@ const schemas = {
         t('validation-errors.confirm-password-invalid')
       )
   },
-  phone: (t: TFunction, countryCode = 'GB') => {
-    return yup
-      .string()
-      .required(requiredMsg(t, 'phone'))
-      .phone(countryCode, true, t('validation-errors.invalid-phone'))
+  phone: (t: TFunction) => {
+    return yup.string().required(requiredMsg(t, 'phone')).phoneNumber(t)
   },
 }
 

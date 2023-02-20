@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, Provider } from 'urql'
-import { never, fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import { OrgLicensesWithHistoryQuery } from '@app/generated/graphql'
 import { CourseType, ValidCourseInput } from '@app/types'
@@ -163,7 +163,9 @@ describe('component: LicenseOrderDetails', () => {
       screen.getByLabelText('Email *'),
       'john.doe@example.com'
     )
-    await userEvent.type(screen.getByLabelText('Phone *'), '11111111')
+    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
+      delay: 100,
+    })
 
     await waitFor(() => {
       expect(screen.getByText('Review & confirm')).toBeEnabled()
@@ -216,7 +218,9 @@ describe('component: LicenseOrderDetails', () => {
       screen.getByLabelText('Email *'),
       'john.doe@example.com'
     )
-    await userEvent.type(screen.getByLabelText('Phone *'), '11111111')
+    await userEvent.type(screen.getByLabelText('Phone *'), '1234567890', {
+      delay: 100,
+    })
 
     await userEvent.click(screen.getByText('Review & confirm'))
 

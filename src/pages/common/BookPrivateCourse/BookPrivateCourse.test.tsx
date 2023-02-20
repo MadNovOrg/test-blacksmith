@@ -5,7 +5,7 @@ import { gqlRequest } from '@app/lib/gql-request'
 import insertBookPrivateCourse from '@app/queries/booking/insert-book-private-course'
 import { CourseType } from '@app/types'
 
-import { screen, render, userEvent, waitFor } from '@test/index'
+import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
 import { sectors } from '../CourseBooking/components/org-data'
@@ -24,7 +24,7 @@ async function fillForm() {
     lastName: 'Doe',
     email: 'example@example.com',
     orgName: 'Org example',
-    phone: '1111111111',
+    phone: '1234567890',
     sector: sectors.edu,
     source: 'Facebook',
     message: 'Message',

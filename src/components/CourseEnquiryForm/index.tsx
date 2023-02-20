@@ -2,13 +2,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { LoadingButton } from '@mui/lab'
 import { Box, FormHelperText, Grid, MenuItem, TextField } from '@mui/material'
 import map from 'lodash-es/map'
-import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
 import { NumericTextField } from '@app/components/NumericTextField'
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { CourseType } from '@app/generated/graphql'
 import { schemas, yup } from '@app/schemas'
 
@@ -87,9 +87,7 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
       sector: yup
         .string()
         .required(t('components.course-enquiry-form.required-sector')),
-      phone: yup
-        .string()
-        .required(t('components.course-enquiry-form.required-phone')),
+      phone: schemas.phone(t),
     })
   }, [t, courseType])
 
@@ -189,14 +187,11 @@ export const CourseEnquiryForm: React.FC<React.PropsWithChildren<Props>> = ({
       />
 
       <Box mb={3}>
-        <MuiPhoneNumber
+        <PhoneNumberInput
           label={t('phone')}
-          onlyCountries={['au', 'gb']}
-          defaultCountry="gb"
           variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-          countryCodeEditable={false}
           error={!!errors.phone}
           helperText={errors.phone?.message}
           value={values.phone}

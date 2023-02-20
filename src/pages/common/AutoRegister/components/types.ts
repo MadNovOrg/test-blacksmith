@@ -19,7 +19,7 @@ export const getFormSchema = (t: TFunction) => {
     surname: yup.string().required(requiredMsg(t, 'surname')),
     password: schemas.password(t),
 
-    phone: yup.string().required(requiredMsg(t, 'phone')),
+    phone: schemas.phone(t),
     dob: yup
       .date()
       .typeError(t('validation-errors.invalid-date'))

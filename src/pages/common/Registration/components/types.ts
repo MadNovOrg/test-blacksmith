@@ -23,7 +23,7 @@ export const getFormSchema = (t: TFunction) => {
     email: schemas.email(t),
     marketing: yup.boolean(),
 
-    phone: yup.string().required(requiredMsg(t, 'phone')),
+    phone: schemas.phone(t),
     password: schemas.password(t),
 
     dob: yup

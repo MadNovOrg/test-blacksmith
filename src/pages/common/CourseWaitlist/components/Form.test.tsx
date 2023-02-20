@@ -65,7 +65,7 @@ describe('component: Waitlist/Form', () => {
       expect(onSuccessMock).toHaveBeenCalledTimes(1)
       expect(onSuccessMock).toHaveBeenCalledWith({
         ...submittedData,
-        phone: '+44 1111 111',
+        phone: '+44 111 111 1',
       })
     })
   })

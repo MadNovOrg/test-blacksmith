@@ -10,7 +10,6 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Trans } from 'react-i18next'
@@ -18,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation } from 'urql'
 import { InferType } from 'yup'
 
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
   OnboardUserMutation,
@@ -25,11 +25,9 @@ import {
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { schemas, yup } from '@app/schemas'
-import { requiredMsg, DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
+import { DATE_MASK, INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 import { ONBOARD_USER } from './queries'
-
-const onlyCountries = ['gb']
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
@@ -137,16 +135,13 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Grid>
 
         <Box mb={3}>
-          <MuiPhoneNumber
+          <PhoneNumberInput
             label={_t('phone')}
-            onlyCountries={onlyCountries}
-            defaultCountry="gb"
             variant="filled"
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-            countryCodeEditable={false}
             error={Boolean(errors.phone)}
             helperText={errors.phone?.message}
-            value={values.phone}
+            value={values.phone ?? ''}
             onChange={p =>
               setValue('phone', p as string, { shouldValidate: true })
             }

@@ -1,15 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, Grid, styled, TextField as MuiTextField } from '@mui/material'
-import MuiPhoneNumber from 'material-ui-phone-number'
 import React, { useMemo } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { InferType } from 'yup'
 
-import { getFormSchema } from './types'
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 
-const onlyCountries = ['au', 'gb']
+import { getFormSchema } from './types'
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -116,14 +115,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         </Box>
 
         <Box mb={5}>
-          <MuiPhoneNumber
+          <PhoneNumberInput
             label={t('phone')}
-            onlyCountries={onlyCountries}
-            defaultCountry="gb"
             variant="filled"
             sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-            countryCodeEditable={false}
             error={!!errors.phone}
             helperText={errors.phone?.message}
             value={values.phone}

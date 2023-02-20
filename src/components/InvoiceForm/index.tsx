@@ -1,16 +1,14 @@
 import { Box, Grid, TextField } from '@mui/material'
 import { t, TFunction } from 'i18next'
-import MuiPhoneNumber from 'material-ui-phone-number'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { InferType } from 'yup'
 
-import { yup } from '@app/schemas'
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
+import { schemas, yup } from '@app/schemas'
 import { normalizeAddr, requiredMsg } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
-
-const onlyCountries = ['au', 'gb']
 
 export function formSchema(t: TFunction) {
   return yup.object({
@@ -30,10 +28,7 @@ export function formSchema(t: TFunction) {
       .email(t('validation-errors.email-invalid'))
       .required(requiredMsg(t, 'email')),
 
-    phone: yup
-      .string()
-      .required(requiredMsg(t, 'phone'))
-      .min(10, t('validation-errors.phone-invalid')),
+    phone: schemas.phone(t),
 
     purchaseOrder: yup.string(),
   })
@@ -137,18 +132,14 @@ export const InvoiceForm: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Box>
 
       <Box mb={3}>
-        <MuiPhoneNumber
+        <PhoneNumberInput
           label={t('phone')}
-          enableLongNumbers={true}
-          onlyCountries={onlyCountries}
-          defaultCountry="gb"
           variant="filled"
           sx={{ bgcolor: 'grey.100' }}
           inputProps={{
             sx: { height: 40 },
             'data-testid': 'input-phone',
           }}
-          countryCodeEditable={false}
           error={!!errors.invoiceDetails?.phone}
           helperText={errors.invoiceDetails?.phone?.message}
           value={values.invoiceDetails?.phone || ''}

@@ -4,37 +4,35 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
   Box,
-  TextField as MuiTextField,
-  FormHelperText,
   Checkbox,
-  Typography,
-  Grid,
-  styled,
-  InputAdornment,
-  IconButton,
   FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  styled,
+  TextField as MuiTextField,
+  Typography,
 } from '@mui/material'
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { Auth } from 'aws-amplify'
 import { zonedTimeToUtc } from 'date-fns-tz'
-import MuiPhoneNumber from 'material-ui-phone-number'
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { useToggle } from 'react-use'
 
+import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { gqlRequest } from '@app/lib/gql-request'
 import {
   MUTATION,
-  ResponseType,
   ParamsType,
+  ResponseType,
 } from '@app/queries/profile/insert-profile-temp'
 import { DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
-
-const onlyCountries = ['au', 'gb']
 
 const TextField = styled(MuiTextField)(() => ({
   '& .MuiInput-root': {
@@ -221,14 +219,11 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
         </Box>
 
         <Box mb={3}>
-          <MuiPhoneNumber
+          <PhoneNumberInput
             label={t('phone')}
-            onlyCountries={onlyCountries}
-            defaultCountry="gb"
             variant="filled"
             sx={{ bgcolor: 'grey.100' }}
             inputProps={{ sx: { height: 40 }, 'data-testid': 'input-phone' }}
-            countryCodeEditable={false}
             error={!!errors.phone}
             helperText={errors.phone?.message}
             value={values.phone}
