@@ -182,8 +182,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   go1Integration: false,
   schedule: [
     {
-      start: setNextMonth(new Date('2022-07-10T09:00:00Z')),
-      end: setNextMonth(new Date('2022-07-10T17:00:00Z')),
+      start: setNextMonth(new Date()),
+      end: setNextMonth(new Date(new Date().getTime() + 86400000)),
       venue: buildVenue({
         overrides: { name: 'Queen Elizabeth II Centre' },
       }),

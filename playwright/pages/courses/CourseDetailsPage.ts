@@ -126,6 +126,7 @@ export class CourseDetailsPage extends BasePage {
     const actualRows = await this.attendeesTable.getRows()
     expect(actualRows).toEqual(expectedRows)
   }
+
   async clickEditCourseButton() {
     await this.editCourseButton.click()
   }

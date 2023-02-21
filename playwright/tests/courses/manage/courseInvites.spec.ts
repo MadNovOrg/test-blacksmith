@@ -24,7 +24,7 @@ import { EmailPage } from '../../../pages/EmailPage'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.type = CourseType.CLOSED
+    course.type = CourseType.INDIRECT
     course.status = Course_Status_Enum.Scheduled
     const moduleIds = await getModuleIds(
       getModulesByLevel(course.level),
@@ -41,8 +41,7 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('course invites', async ({ browser, course }) => {
+test('course invites', async ({ browser, course }) => {
   // eslint-disable-next-line playwright/no-skipped-test
   test.skip(TARGET_ENV === 'local')
   test.setTimeout(60000)
@@ -52,6 +51,7 @@ test.skip('course invites', async ({ browser, course }) => {
   const page = await trainerContext.newPage()
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
+  await myCoursesPage.searchCourse(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )
@@ -74,7 +74,6 @@ test.skip('course invites', async ({ browser, course }) => {
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()
   const loginPage = await invitationPage.acceptInvitation()
-  await loginPage.logIn(users.user1WithOrg.email, users.user1WithOrg.password)
   const participantPage = new CourseParticipantPage(loginPage.page)
   await participantPage.checkSuccessMessage(
     'You are now attending this course. Please complete the checklist.'

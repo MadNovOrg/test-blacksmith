@@ -39,6 +39,6 @@ export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
 export const toAttendeesTableRow: (user: User) => AttendeesTableRow = user => ({
   Name: `${user.givenName} ${user.familyName}`,
   Contact: user.email,
-  Organisation: user.organization ? user.organization.name : '',
+  Organisation: '',
   Documents: 'View',
 })
