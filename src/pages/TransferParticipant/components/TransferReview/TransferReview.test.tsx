@@ -10,6 +10,7 @@ import {
   Course_Level_Enum,
   Course_Type_Enum,
   TransferFeeType,
+  TransferParticipantError,
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
@@ -270,7 +271,7 @@ describe('page: TransferReview', () => {
           data: {
             transferParticipant: {
               success: false,
-              error: 'Error',
+              error: TransferParticipantError.GeneralError,
             },
           },
         })
@@ -374,7 +375,7 @@ describe('page: TransferReview', () => {
             data: {
               transferParticipant: {
                 success: false,
-                error: 'Error message',
+                error: TransferParticipantError.GeneralError,
               },
             },
           })

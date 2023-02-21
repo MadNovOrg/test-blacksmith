@@ -4,6 +4,8 @@ table:
 configuration:
   custom_root_fields: {}
   column_config:
+    order_id:
+      custom_name: orderId
     booking_date:
       custom_name: bookingDate
     go1_enrolment_status:
@@ -17,6 +19,7 @@ configuration:
     invoice_id:
       custom_name: invoiceID
   custom_column_names:
+    order_id: orderId
     booking_date: bookingDate
     go1_enrolment_status: go1EnrolmentStatus
     go1_enrolment_id: go1EnrolmentId
@@ -39,6 +42,9 @@ object_relationships:
   - name: invite
     using:
       foreign_key_constraint_on: invite_id
+  - name: order
+    using:
+      foreign_key_constraint_on: order_id
   - name: profile
     using:
       foreign_key_constraint_on: profile_id
@@ -69,6 +75,7 @@ insert_permissions:
         - grade
         - grading_feedback
         - invite_id
+        - order_id
         - profile_id
       backend_only: false
   - role: user
@@ -106,22 +113,23 @@ select_permissions:
     permission:
       columns:
         - attended
-        - hs_consent
+        - booking_date
+        - certificate_id
         - course_id
+        - created_at
+        - date_graded
         - go1_enrolment_id
         - go1_enrolment_status
         - grade
         - grading_feedback
-        - booking_date
-        - created_at
-        - date_graded
-        - updated_at
-        - certificate_id
+        - hs_consent
         - id
         - invite_id
         - invoice_id
+        - order_id
         - profile_id
         - registration_id
+        - updated_at
       filter:
         course:
           course_type:
@@ -182,6 +190,7 @@ select_permissions:
         - id
         - invite_id
         - invoice_id
+        - order_id
         - profile_id
         - registration_id
         - updated_at

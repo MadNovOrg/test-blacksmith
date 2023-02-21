@@ -10390,9 +10390,19 @@ export type TransferInput = {
   toCourseId: Scalars['Int'];
 };
 
+export enum TransferParticipantError {
+  CourseNotFound = 'COURSE_NOT_FOUND',
+  GeneralError = 'GENERAL_ERROR',
+  NotEligibleForTransfer = 'NOT_ELIGIBLE_FOR_TRANSFER',
+  NotEnoughSpaces = 'NOT_ENOUGH_SPACES',
+  ParticipantNotFound = 'PARTICIPANT_NOT_FOUND',
+  TransferNotAllowed = 'TRANSFER_NOT_ALLOWED',
+  WrongCourseType = 'WRONG_COURSE_TYPE'
+}
+
 export type TransferParticipantOutput = {
   __typename?: 'TransferParticipantOutput';
-  error?: Maybe<Scalars['String']>;
+  error?: Maybe<TransferParticipantError>;
   success: Scalars['Boolean'];
 };
 
@@ -18197,6 +18207,9 @@ export type Course_Participant = {
   invite_id?: Maybe<Scalars['uuid']>;
   invoiceID?: Maybe<Scalars['uuid']>;
   /** An object relationship */
+  order?: Maybe<Order>;
+  orderId?: Maybe<Scalars['uuid']>;
+  /** An object relationship */
   profile: Profile;
   profile_id: Scalars['uuid'];
   registration_id?: Maybe<Scalars['uuid']>;
@@ -18847,6 +18860,8 @@ export type Course_Participant_Bool_Exp = {
   invite?: InputMaybe<Course_Invites_Bool_Exp>;
   invite_id?: InputMaybe<Uuid_Comparison_Exp>;
   invoiceID?: InputMaybe<Uuid_Comparison_Exp>;
+  order?: InputMaybe<Order_Bool_Exp>;
+  orderId?: InputMaybe<Uuid_Comparison_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
   profile_id?: InputMaybe<Uuid_Comparison_Exp>;
   registration_id?: InputMaybe<Uuid_Comparison_Exp>;
@@ -19126,6 +19141,8 @@ export type Course_Participant_Insert_Input = {
   invite?: InputMaybe<Course_Invites_Obj_Rel_Insert_Input>;
   invite_id?: InputMaybe<Scalars['uuid']>;
   invoiceID?: InputMaybe<Scalars['uuid']>;
+  order?: InputMaybe<Order_Obj_Rel_Insert_Input>;
+  orderId?: InputMaybe<Scalars['uuid']>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   profile_id?: InputMaybe<Scalars['uuid']>;
   registration_id?: InputMaybe<Scalars['uuid']>;
@@ -19145,6 +19162,7 @@ export type Course_Participant_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
   invite_id?: Maybe<Scalars['uuid']>;
   invoiceID?: Maybe<Scalars['uuid']>;
+  orderId?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
   registration_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -19162,6 +19180,7 @@ export type Course_Participant_Max_Order_By = {
   id?: InputMaybe<Order_By>;
   invite_id?: InputMaybe<Order_By>;
   invoiceID?: InputMaybe<Order_By>;
+  orderId?: InputMaybe<Order_By>;
   profile_id?: InputMaybe<Order_By>;
   registration_id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -19180,6 +19199,7 @@ export type Course_Participant_Min_Fields = {
   id?: Maybe<Scalars['uuid']>;
   invite_id?: Maybe<Scalars['uuid']>;
   invoiceID?: Maybe<Scalars['uuid']>;
+  orderId?: Maybe<Scalars['uuid']>;
   profile_id?: Maybe<Scalars['uuid']>;
   registration_id?: Maybe<Scalars['uuid']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -19197,6 +19217,7 @@ export type Course_Participant_Min_Order_By = {
   id?: InputMaybe<Order_By>;
   invite_id?: InputMaybe<Order_By>;
   invoiceID?: InputMaybe<Order_By>;
+  orderId?: InputMaybe<Order_By>;
   profile_id?: InputMaybe<Order_By>;
   registration_id?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -19419,6 +19440,8 @@ export type Course_Participant_Order_By = {
   invite?: InputMaybe<Course_Invites_Order_By>;
   invite_id?: InputMaybe<Order_By>;
   invoiceID?: InputMaybe<Order_By>;
+  order?: InputMaybe<Order_Order_By>;
+  orderId?: InputMaybe<Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
   profile_id?: InputMaybe<Order_By>;
   registration_id?: InputMaybe<Order_By>;
@@ -19461,6 +19484,8 @@ export enum Course_Participant_Select_Column {
   /** column name */
   InvoiceId = 'invoiceID',
   /** column name */
+  OrderId = 'orderId',
+  /** column name */
   ProfileId = 'profile_id',
   /** column name */
   RegistrationId = 'registration_id',
@@ -19484,6 +19509,7 @@ export type Course_Participant_Set_Input = {
   id?: InputMaybe<Scalars['uuid']>;
   invite_id?: InputMaybe<Scalars['uuid']>;
   invoiceID?: InputMaybe<Scalars['uuid']>;
+  orderId?: InputMaybe<Scalars['uuid']>;
   profile_id?: InputMaybe<Scalars['uuid']>;
   registration_id?: InputMaybe<Scalars['uuid']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -19571,6 +19597,8 @@ export enum Course_Participant_Update_Column {
   InviteId = 'invite_id',
   /** column name */
   InvoiceId = 'invoiceID',
+  /** column name */
+  OrderId = 'orderId',
   /** column name */
   ProfileId = 'profile_id',
   /** column name */
@@ -28658,6 +28686,13 @@ export type Order_Mutation_Response = {
   affected_rows: Scalars['Int'];
   /** data from the rows affected by the mutation */
   returning: Array<Order>;
+};
+
+/** input type for inserting object relation for remote table "order" */
+export type Order_Obj_Rel_Insert_Input = {
+  data: Order_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Order_On_Conflict>;
 };
 
 /** on_conflict condition type for table "order" */
@@ -38322,7 +38357,7 @@ export type TransferParticipantMutationVariables = Exact<{
 }>;
 
 
-export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: string | null } | null };
+export type TransferParticipantMutation = { __typename?: 'mutation_root', transferParticipant?: { __typename?: 'TransferParticipantOutput', success: boolean, error?: TransferParticipantError | null } | null };
 
 export type WaitlistCourseQueryVariables = Exact<{
   id: Scalars['Int'];
