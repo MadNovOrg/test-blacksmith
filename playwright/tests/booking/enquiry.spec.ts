@@ -34,7 +34,7 @@ test('saves course enquiry', async ({ page, course }) => {
   await page.locator('text=Last Name *').type('Doe')
   await page.locator('text=Work email *').type('example@example.com')
   await page.locator('text=Organisation Name *').type('Org example')
-  await page.locator('text=Phone *').type('1111111111')
+  await page.locator('text=Phone *').type('7947492321')
   await page.locator('text=Message (optional)').type('Message')
 
   await page.locator('data-testid=sector-select').click()
