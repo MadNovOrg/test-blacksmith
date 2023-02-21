@@ -16,7 +16,7 @@ import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
-import { CourseEvaluationPage } from '../../../pages/courses/CourseEvaluationPage'
+import { CourseEvaluationPage } from '../../../pages/courses/evaluation-page/CourseEvaluationPage'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
@@ -38,17 +38,13 @@ const test = base.extend<{ course: Course }>({
     await deleteCourse(course.id)
   },
 })
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('course evaluation', async ({ browser, course }) => {
+
+test('course evaluation', async ({ browser, course }) => {
   test.setTimeout(90000)
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
-  const trainerContext = await browser.newContext({
-    storageState: stateFilePath('trainer'),
-  })
 
-  const trainerPage = await trainerContext.newPage()
   const userPage = await userContext.newPage()
 
   // Users evaluation
@@ -68,6 +64,12 @@ test.skip('course evaluation', async ({ browser, course }) => {
   )
 
   // Trainer evaluation -- should be available now
+  const trainerContext = await browser.newContext({
+    storageState: stateFilePath('trainer'),
+  })
+
+  const trainerPage = await trainerContext.newPage()
+
   const trainerEvaluationPage = new CourseEvaluationPage(
     trainerPage,
     'trainer',
@@ -82,6 +84,7 @@ test.skip('course evaluation', async ({ browser, course }) => {
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()
+
   // Trainer should be able to view evaluation
   await trainerEvaluationPage.viewEvaluation()
 })
