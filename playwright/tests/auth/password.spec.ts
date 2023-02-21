@@ -24,9 +24,8 @@ test('forgot password page @smoke', async ({ page }) => {
   await forgotPasswordPage.clickCancelLink()
   await loginPage.checkLoginPageOpened()
 })
-// skipped until this bug is fixed https://behaviourhub.atlassian.net/browse/TTHP-1113 which fails the test
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('reset password', async ({ page }) => {
+
+test('reset password @smoke', async ({ page }) => {
   // eslint-disable-next-line playwright/no-skipped-test
   test.skip(TARGET_ENV === 'local')
   const newPassword = `$qweRTY${new Date().getMilliseconds()}`

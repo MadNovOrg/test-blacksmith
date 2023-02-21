@@ -43,7 +43,7 @@ test('accept open course as trainer @smoke', async ({ page, course }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.acceptCourse()
+  await myCoursesPage.acceptCourse(course.id)
   await myCoursesPage.goToCourseBuilder()
   await myCoursesPage.submitDefaultModules()
   await myCoursesPage.confirmModules()

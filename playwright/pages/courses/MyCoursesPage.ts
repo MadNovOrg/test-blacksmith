@@ -103,9 +103,14 @@ export class MyCoursesPage extends BasePage {
 
     await expect(courseStatusChip).toHaveText(status)
   }
-  async acceptCourse() {
-    await this.page.getByText('Accept').click()
+  async acceptCourse(courseId: number) {
+    await this.page
+      .locator(
+        `[data-testid=actionable-course-${courseId}] [data-testid=AcceptDeclineCourse-acceptBtn]`
+      )
+      .click()
   }
+
   async goToCourseBuilder() {
     await this.page
       .locator('[data-testid="AcceptDeclineCourse-modalSubmit"]')
