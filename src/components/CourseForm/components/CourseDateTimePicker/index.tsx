@@ -80,6 +80,7 @@ export const CourseDateTimePicker = ({
           maxDate={maxDate}
           renderInput={params => (
             <TextField
+              data-test={`${dateLabel}-datePicker-textField`}
               variant="filled"
               {...params}
               fullWidth

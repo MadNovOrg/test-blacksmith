@@ -66,7 +66,7 @@ for (const data of dataSet) {
   test.use({ storageState: stateFilePath(data.user) })
 
   test.fixme(
-    `create course: ${data.name}, fails because of Material UI datepicker masked input`,
+    `create course: ${data.name} @smoke, fails because of TTHP-1128`,
     async ({ page, course }) => {
       const coursesListPage = new MyCoursesPage(page)
       await coursesListPage.goto()
