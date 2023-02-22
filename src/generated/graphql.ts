@@ -22152,6 +22152,7 @@ export enum Go1_History_Events_Constraint {
 export enum Go1_History_Events_Enum {
   LicensesAdded = 'LICENSES_ADDED',
   LicensesCancelled = 'LICENSES_CANCELLED',
+  LicensesDeclined = 'LICENSES_DECLINED',
   LicensesPurchased = 'LICENSES_PURCHASED',
   LicensesReleased = 'LICENSES_RELEASED',
   LicensesRemoved = 'LICENSES_REMOVED',

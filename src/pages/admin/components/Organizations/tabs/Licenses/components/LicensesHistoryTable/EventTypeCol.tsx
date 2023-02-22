@@ -141,6 +141,19 @@ export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({
       )
     }
 
+    case Go1_History_Events_Enum.LicensesDeclined: {
+      return (
+        <>
+          <Typography sx={{ mb: 1 }}>
+            <Link href={`/courses/${item.payload?.courseId}/details`}>
+              {item.payload?.courseCode}
+            </Link>
+          </Typography>
+          <Typography variant="body2">{t('licenses-declined')}</Typography>
+        </>
+      )
+    }
+
     default: {
       return null
     }
