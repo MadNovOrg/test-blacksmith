@@ -10,6 +10,7 @@ import {
   GetOrderQuery,
   GetXeroInvoicesForOrdersQuery,
   Payment_Methods_Enum,
+  XeroAddressType,
   XeroInvoiceStatus,
   XeroPhoneType,
 } from '@app/generated/graphql'
@@ -518,6 +519,17 @@ describe('page: OrderDetails', () => {
     })
     const invoice = buildInvoice()
 
+    invoice.contact.addresses = [
+      {
+        addressType: XeroAddressType.Pobox,
+        addressLine1: 'Tankfield',
+        addressLine2: 'Convent Hill',
+        city: 'Tramore',
+        postalCode: 'X91 PV08',
+        country: 'UK',
+      },
+    ]
+
     const salesPerson = chance.name({ full: true })
 
     const client = {
@@ -589,5 +601,8 @@ describe('page: OrderDetails', () => {
     ).toBeInTheDocument()
 
     expect(within(invoicedToRow).getByText(invoicePhone)).toBeInTheDocument()
+    expect(
+      within(invoicedToRow).getByTestId('contact-address').textContent
+    ).toMatchInlineSnapshot(`"Tankfield, Convent Hill, Tramore, X91 PV08, UK"`)
   })
 })

@@ -6,6 +6,7 @@ import {
   Button,
   Typography,
   Chip,
+  Link,
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
@@ -14,12 +15,16 @@ import { BackButton } from '@app/components/BackButton'
 import { CourseTitleAndDuration } from '@app/components/CourseTitleAndDuration'
 import { DetailsItemBox, ItemRow } from '@app/components/DetailsItemRow'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { LinkBehavior } from '@app/components/LinkBehavior'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
 import {
   XeroInvoiceStatus,
   Payment_Methods_Enum,
   XeroPhoneType,
   CourseLevel,
+  XeroAddressType,
+  XeroAddress,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -31,6 +36,7 @@ import { INVOICE_STATUS_COLOR } from '@app/util'
 export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { t, _t } = useScopedTranslation('pages.order-details')
+  const { acl } = useAuth()
 
   const { order, invoice, isLoading } = useOrder(id ?? '')
 
@@ -58,6 +64,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const promoCode = promoCodes.length ? promoCodes[0] : null
   const phone = invoice?.contact.phones?.find(
     p => p?.phoneType === XeroPhoneType.Default
+  )
+
+  const address = invoice?.contact.addresses?.find(
+    address => address?.addressType === XeroAddressType.Pobox
   )
 
   const discountAmount = useMemo(() => {
@@ -92,6 +102,24 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
     return null
   }, [invoice])
+
+  const invoicedToInfo = useMemo(() => {
+    return [
+      <Typography component="span" key="contact-name">
+        {invoice?.contact.name}
+      </Typography>,
+      address ? ', ' : null,
+      address ? (
+        <Typography
+          component="span"
+          key="contact-address"
+          data-testid="contact-address"
+        >
+          {formatContactAddress(address)}
+        </Typography>
+      ) : null,
+    ].filter(Boolean)
+  }, [address, invoice?.contact.name])
 
   const status = invoice?.status ?? XeroInvoiceStatus.Unknown
   const statusColor = INVOICE_STATUS_COLOR[status]
@@ -370,7 +398,17 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           {t('invoiced-to')}
                         </Typography>
                         <Typography color="grey.700">
-                          {invoice?.contact.name}
+                          {acl.canViewOrganizations() ? (
+                            <Link
+                              href={`/organisations/${order.organizationId}`}
+                              component={LinkBehavior}
+                              underline="always"
+                            >
+                              {invoicedToInfo}
+                            </Link>
+                          ) : (
+                            invoicedToInfo
+                          )}
                         </Typography>
                         <Typography color="grey.700">
                           {invoice?.contact.firstName}{' '}
@@ -434,4 +472,16 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Container>
     </FullHeightPage>
   )
+}
+
+export function formatContactAddress(address: XeroAddress) {
+  return [
+    address.addressLine1,
+    address.addressLine2,
+    address.city,
+    address.postalCode,
+    address.country,
+  ]
+    .filter(Boolean)
+    .join(', ')
 }

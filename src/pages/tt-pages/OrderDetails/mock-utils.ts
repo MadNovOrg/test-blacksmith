@@ -32,6 +32,7 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
     promoCodes: [],
     xeroInvoiceNumber: 'INV-001',
     currency: 'GBP',
+    organizationId: chance.guid(),
     course: {
       id: chance.integer(),
       course_code: 'course-code',

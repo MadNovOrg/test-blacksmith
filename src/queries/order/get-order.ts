@@ -15,6 +15,7 @@ export const QUERY = gql`
       stripePaymentId
       promoCodes
       xeroInvoiceNumber
+      organizationId
       profile {
         fullName
         email
