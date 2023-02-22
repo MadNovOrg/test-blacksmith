@@ -40,7 +40,7 @@
     "@googlemaps/react-wrapper": "^1.1.35",
     "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.11.0",
-    "@mui/lab": "^5.0.0-alpha.114",
+    "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.8",
     "@mui/utils": "^5.11.2",
     "@mui/x-date-pickers": "^5.0.17",
