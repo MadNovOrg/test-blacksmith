@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useEffectOnce } from 'react-use'
 import {
   createEnumArrayParam,
   useQueryParam,
@@ -54,6 +55,10 @@ export const FilterCourseType: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [onChange, setSelected]
   )
+
+  useEffectOnce(() => {
+    onChange(selected)
+  })
 
   return (
     <FilterAccordion

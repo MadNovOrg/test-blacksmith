@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useEffectOnce } from 'react-use'
 import {
   createEnumArrayParam,
   useQueryParam,
@@ -41,7 +42,7 @@ export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
       ...o,
       selected: selected.includes(o.id),
     }))
-  }, [selected, levelOptions])
+  }, [levelOptions, selected])
 
   const _onChange = useCallback(
     (opts: FilterOption<Course_Level_Enum>[]) => {
@@ -51,6 +52,10 @@ export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [onChange, setSelected]
   )
+
+  useEffectOnce(() => {
+    onChange(selected)
+  })
 
   return (
     <FilterAccordion
