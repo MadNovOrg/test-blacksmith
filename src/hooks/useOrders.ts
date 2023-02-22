@@ -26,8 +26,8 @@ export type FiltersType = {
 export type UseOrdersProps = {
   sort: { by: string; dir: SortOrder }
   filters: FiltersType
-  limit?: number
-  offset?: number
+  limit: number
+  offset: number
 }
 
 type GenericOrderType = {
@@ -111,8 +111,8 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       input: {
         orderBy: [getOrdersOrderBy],
         where: getOrdersWhere,
-        limit: limit || 20,
-        offset: offset || 0,
+        limit,
+        offset,
         invoiceStatus: filters.statuses || [],
       },
     },
@@ -120,12 +120,11 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
 
   const { orders, count } = getOrdersData?.getOrders || { orders: [], count: 0 }
 
-  const total = count ?? 0
   const getOrdersStatus = getSWRLoadingStatus(getOrdersData, getOrdersError)
 
   return {
     orders: orders as OrderInfo[],
-    total,
+    total: count,
     error: getOrdersError,
     isLoading: getOrdersStatus === LoadingStatus.FETCHING,
   }

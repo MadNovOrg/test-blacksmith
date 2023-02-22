@@ -36,8 +36,6 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
     setFilters(prev => ({ ...prev, searchParam: newSearchParam }))
   }, [])
 
-  const loading = isLoading
-  const count = orders?.length ?? 0
   const filtered = Object.values(filters).reduce(
     (acc, filter) => acc || filter.length > 0,
     false
@@ -51,7 +49,7 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
             {t('common.orders')}
           </Typography>
           <Typography variant="body2" color="grey.500" mt={1}>
-            {loading ? <>&nbsp;</> : t('x-items', { count })}
+            {isLoading ? <>&nbsp;</> : t('x-items', { total })}
           </Typography>
 
           <Stack gap={4} mt={4}>
@@ -83,8 +81,7 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
               filtered={filtered}
             />
           )}
-
-          <Pagination total={total} />
+          {total ? <Pagination total={total} /> : null}
         </Box>
       </Box>
     </Container>
