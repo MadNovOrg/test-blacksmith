@@ -41,7 +41,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.120",
-    "@mui/material": "^5.11.8",
+    "@mui/material": "^5.11.10",
     "@mui/utils": "^5.11.2",
     "@mui/x-date-pickers": "^5.0.17",
     "@react-pdf/renderer": "^3.1.3",
