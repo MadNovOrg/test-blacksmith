@@ -1,20 +1,20 @@
 import React from 'react'
 
 import {
-  SearchTrainer,
-  CourseTrainerType,
   CourseLevel,
+  CourseTrainerType,
+  SearchTrainer,
   TrainerRoleTypeName,
 } from '@app/types'
 
 import {
+  chance,
   render,
   screen,
-  chance,
   userEvent,
+  waitFor,
   waitForCalls,
   within,
-  waitFor,
 } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
@@ -97,7 +97,9 @@ describe('component: SearchTrainers', () => {
     await waitForCalls(mockSearch)
     expect(mockSearch).toHaveBeenCalledWith(enoughQuery)
 
-    expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
+    await waitFor(async () => {
+      expect(loadingIcon).toHaveClass('MuiCircularProgress-determinate') // paused
+    })
   })
 
   it('shows options matching search term', async () => {
@@ -187,7 +189,9 @@ describe('component: SearchTrainers', () => {
 
     expect(matchesFilter).toHaveBeenCalledWith(trainers)
 
-    expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(1)
+    await waitFor(async () => {
+      expect(screen.getAllByTestId('SearchTrainers-option')).toHaveLength(1)
+    })
   })
 
   it('enforces max selected items when max is set', async () => {
@@ -236,12 +240,14 @@ describe('component: SearchTrainers', () => {
     await userEvent.type(input, lastName.slice(0, 4))
 
     await waitForCalls(mockSearch)
-    const matches = screen.getAllByTestId('SearchTrainers-option')
-    expect(matches).toHaveLength(3)
-    await userEvent.click(matches[0])
+    await waitFor(async () => {
+      const matches = screen.getAllByTestId('SearchTrainers-option')
+      expect(matches).toHaveLength(3)
+      await userEvent.click(matches[0])
 
-    expect(input).toBeDisabled()
-    expect(screen.getByPlaceholderText('(max allowed reached)')).toBe(input)
+      expect(input).toBeDisabled()
+      expect(screen.getByPlaceholderText('(max allowed reached)')).toBe(input)
+    })
   })
 
   it('calls onChange when a trainer is selected', async () => {
@@ -264,11 +270,15 @@ describe('component: SearchTrainers', () => {
     await userEvent.type(input, trainers[2].fullName.slice(0, 4))
 
     await waitForCalls(mockSearch)
-    const matches = screen.getAllByTestId('SearchTrainers-option')
-    expect(matches).toHaveLength(1)
-    await userEvent.click(matches[0])
+    await waitFor(async () => {
+      const matches = screen.getAllByTestId('SearchTrainers-option')
+      expect(matches).toHaveLength(1)
+      await userEvent.click(matches[0])
 
-    expect(onChange).toHaveBeenCalledWith({ target: { value: [trainers[2]] } })
+      expect(onChange).toHaveBeenCalledWith({
+        target: { value: [trainers[2]] },
+      })
+    })
   })
 
   it('shows info message when no matches are found', async () => {
@@ -289,8 +299,10 @@ describe('component: SearchTrainers', () => {
 
     await waitForCalls(mockSearch)
 
-    const noMatchTxt = 'No trainers found. Try another search term.'
-    expect(screen.getByText(noMatchTxt)).toBeInTheDocument()
+    await waitFor(async () => {
+      const noMatchTxt = 'No trainers found. Try another search term.'
+      expect(screen.getByText(noMatchTxt)).toBeInTheDocument()
+    })
   })
 })
 
