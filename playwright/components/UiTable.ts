@@ -40,7 +40,7 @@ export class UiTable {
       ignoreEmpty: options.ignoreEmptyHeaders,
     })
     const rowsCount = await this.getRowsCount()
-    if (rowsCount != 0) {
+    if (rowsCount != 1) {
       for (let i = 0; i < rowsCount; i++) {
         const resultRow: { [k: string]: string } = {}
         for (let j = 0; j < headers.length; j++) {
