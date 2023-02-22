@@ -194,7 +194,7 @@ export const TransferParticipantProvider: React.FC<
   )
 
   const cancel: ContextValue['cancel'] = useCallback(() => {
-    navigate(`/courses/${fromCourse?.id}/details`)
+    navigate(`/courses/${fromCourse?.id}/details`, { replace: true })
   }, [navigate, fromCourse])
 
   const value = useMemo(

@@ -39,7 +39,11 @@ export const TransferParticipant: React.FC<
             <Sticky top={20}>
               {!attendeeTranfserring ? (
                 <Box mb={2}>
-                  <BackButton label={t('back-btn-text')} to={'../details'} />
+                  <BackButton
+                    label={t('back-btn-text')}
+                    to={'../details'}
+                    replace
+                  />
                 </Box>
               ) : null}
 

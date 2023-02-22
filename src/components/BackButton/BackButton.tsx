@@ -7,18 +7,20 @@ import { To, useNavigate } from 'react-router-dom'
 type BackButtonProps = {
   label?: string
   to?: string
+  replace?: boolean
 }
 
-export const BackButton: React.FC<React.PropsWithChildren<BackButtonProps>> = ({
+export const BackButton: React.FC<BackButtonProps> = ({
   label,
   to,
+  replace = false,
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   return (
     <Button
-      onClick={() => navigate(to ?? (-1 as To))}
+      onClick={() => navigate(to ?? (-1 as To), { replace })}
       variant="text"
       startIcon={<ArrowBackIcon />}
     >

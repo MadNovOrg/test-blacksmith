@@ -135,7 +135,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
 
   const handleTransfer = useCallback(
     (id: string) => {
-      navigate(`../transfer/${id}`)
+      navigate(`../transfer/${id}`, { replace: true })
     },
     [navigate]
   )
