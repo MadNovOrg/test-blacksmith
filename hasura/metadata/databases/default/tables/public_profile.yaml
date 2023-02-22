@@ -6,12 +6,8 @@ configuration:
   column_config:
     job_title:
       custom_name: jobTitle
-    given_name:
-      custom_name: givenName
     dietary_restrictions:
       custom_name: dietaryRestrictions
-    family_name:
-      custom_name: familyName
     updated_at:
       custom_name: updatedAt
     created_at:
@@ -24,9 +20,7 @@ configuration:
       custom_name: go1Id
   custom_column_names:
     job_title: jobTitle
-    given_name: givenName
     dietary_restrictions: dietaryRestrictions
-    family_name: familyName
     updated_at: updatedAt
     created_at: createdAt
     contact_details: contactDetails
@@ -108,18 +102,38 @@ array_relationships:
         column_mapping:
           id: profile_id
 computed_fields:
+  - name: email
+    definition:
+      function:
+        schema: public
+        name: profile_email
+      session_argument: hasura_session
+  - name: familyName
+    definition:
+      function:
+        schema: public
+        name: profile_family_name
   - name: fullName
     definition:
       function:
         schema: public
         name: profile_full_name
     comment: ""
+  - name: givenName
+    definition:
+      function:
+        schema: public
+        name: profile_given_name
+  - name: phone
+    definition:
+      function:
+        schema: public
+        name: profile_phone
+      session_argument: hasura_session
 select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - family_name
-        - given_name
         - stripe_customer_id
         - title
         - dob
@@ -135,9 +149,7 @@ select_permissions:
         - dbs
         - dietary_restrictions
         - disabilities
-        - email
         - job_title
-        - phone
         - created_at
         - last_activity
         - updated_at
@@ -158,23 +170,23 @@ select_permissions:
         - dietary_restrictions
         - disabilities
         - dob
-        - email
-        - family_name
-        - given_name
         - go1_id
         - go1_profile
         - id
         - job_title
         - last_activity
         - original_record
-        - phone
         - preferences
         - stripe_customer_id
         - tags
         - title
         - updated_at
       computed_fields:
+        - email
+        - familyName
         - fullName
+        - givenName
+        - phone
       filter: {}
       allow_aggregations: true
   - role: tt-ops
@@ -189,23 +201,23 @@ select_permissions:
         - dietary_restrictions
         - disabilities
         - dob
-        - email
-        - family_name
-        - given_name
         - go1_id
         - go1_profile
         - id
         - job_title
         - last_activity
         - original_record
-        - phone
         - preferences
         - stripe_customer_id
         - tags
         - title
         - updated_at
       computed_fields:
+        - email
+        - familyName
         - fullName
+        - givenName
+        - phone
       filter: {}
       allow_aggregations: true
   - role: unverified
@@ -220,23 +232,23 @@ select_permissions:
         - dietary_restrictions
         - disabilities
         - dob
-        - email
-        - family_name
-        - given_name
         - go1_id
         - go1_profile
         - id
         - job_title
         - last_activity
         - original_record
-        - phone
         - preferences
         - stripe_customer_id
         - tags
         - title
         - updated_at
       computed_fields:
+        - email
+        - familyName
         - fullName
+        - givenName
+        - phone
       filter:
         id:
           _eq: X-Hasura-User-Id
@@ -252,100 +264,27 @@ select_permissions:
         - dietary_restrictions
         - disabilities
         - dob
-        - email
-        - family_name
-        - given_name
         - id
         - job_title
         - last_activity
         - original_record
-        - phone
         - preferences
         - tags
         - title
         - updated_at
       computed_fields:
+        - email
+        - familyName
         - fullName
+        - givenName
+        - phone
       filter: {}
       allow_aggregations: true
 update_permissions:
-  - role: tt-admin
-    permission:
-      columns:
-        - addresses
-        - attributes
-        - avatar
-        - contact_details
-        - created_at
-        - dbs
-        - dietary_restrictions
-        - disabilities
-        - dob
-        - email
-        - family_name
-        - given_name
-        - go1_id
-        - go1_profile
-        - id
-        - job_title
-        - last_activity
-        - original_record
-        - phone
-        - preferences
-        - stripe_customer_id
-        - tags
-        - title
-        - updated_at
-      filter: {}
-      check: {}
-  - role: tt-ops
-    permission:
-      columns:
-        - addresses
-        - attributes
-        - avatar
-        - contact_details
-        - created_at
-        - dbs
-        - dietary_restrictions
-        - disabilities
-        - dob
-        - email
-        - family_name
-        - given_name
-        - go1_id
-        - go1_profile
-        - id
-        - job_title
-        - last_activity
-        - original_record
-        - phone
-        - preferences
-        - stripe_customer_id
-        - tags
-        - title
-        - updated_at
-      filter: {}
-      check: null
   - role: unverified
     permission:
       columns:
-        - addresses
-        - attributes
-        - avatar
-        - contact_details
-        - dbs
-        - dietary_restrictions
-        - disabilities
-        - dob
-        - family_name
-        - given_name
-        - job_title
         - last_activity
-        - phone
-        - preferences
-        - tags
-        - title
       filter:
         id:
           _eq: X-Hasura-User-Id
@@ -353,32 +292,8 @@ update_permissions:
   - role: user
     permission:
       columns:
-        - addresses
-        - attributes
-        - avatar
-        - contact_details
-        - dbs
-        - dietary_restrictions
-        - disabilities
-        - dob
-        - family_name
-        - given_name
-        - job_title
         - last_activity
-        - phone
-        - preferences
-        - tags
-        - title
       filter:
-        _or:
-          - id:
-              _eq: X-Hasura-User-Id
-          - organizations:
-              organization:
-                members:
-                  _and:
-                    - is_admin:
-                        _eq: true
-                    - profile_id:
-                        _eq: X-Hasura-User-Id
+        id:
+          _eq: X-Hasura-User-Id
       check: null

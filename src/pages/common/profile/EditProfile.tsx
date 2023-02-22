@@ -307,8 +307,8 @@ export const EditProfilePage: React.FC<
   useEffect(() => {
     if (profile) {
       setValue('avatar', profile.avatar as string)
-      setValue('firstName', profile.givenName)
-      setValue('surname', profile.familyName)
+      setValue('firstName', profile.givenName ?? '')
+      setValue('surname', profile.familyName ?? '')
       setValue('phone', profile.phone ?? '')
       setValue('dob', profile.dob ? new Date(profile.dob) : null)
       setValue('jobTitle', profile.jobTitle ?? '')
@@ -427,15 +427,13 @@ export const EditProfilePage: React.FC<
       await fetcher<UpdateProfileMutation, UpdateProfileMutationVariables>(
         UPDATE_PROFILE_MUTATION,
         {
-          // have to supply a required field `where` hence passing profileId, we still
-          // have perm check on the backend that does not allow updaing someone else's profile
-          profileId: profile.id,
           input: {
+            profileId: profile.id,
             avatar: data.avatar,
             givenName: data.firstName,
             familyName: data.surname,
             phone: data.phone,
-            dob: data.dob,
+            dob: data.dob?.toISOString(),
             jobTitle: data.jobTitle,
             dbs: data.dbs,
             disabilities: data.disabilities,

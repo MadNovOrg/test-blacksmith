@@ -3,7 +3,7 @@
 UPDATE course SET max_participants = 25 WHERE id = 10000;
 
 -- insert participants to profile table
-INSERT INTO profile (id, given_name, family_name, email) VALUES
+INSERT INTO profile (id, _given_name, _family_name, _email) VALUES
 ('fdedead5-1218-4332-8199-8b2bdce414a7', 'John', 'Doe', 'john.doe@teamteach.testinator.com'),
 ('11935252-570f-42ef-a141-5cdf8f78270d', 'Apolonija', 'Deo', 'apolonija.deo@teamteach.testinator.com'),
 ('41e9fa1d-0712-43cd-8571-bbf219ab016b', 'Zaman', 'Wilt', 'zaman.wilt@teamteach.testinator.com'),

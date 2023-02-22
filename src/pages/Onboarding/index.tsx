@@ -20,14 +20,13 @@ import { InferType } from 'yup'
 import PhoneNumberInput from '@app/components/PhoneNumberInput'
 import { useAuth } from '@app/context/auth'
 import {
-  OnboardUserMutation,
-  OnboardUserMutationVariables,
+  UpdateProfileMutation,
+  UpdateProfileMutationVariables,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { schemas, yup } from '@app/schemas'
 import { DATE_MASK, INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
-
-import { ONBOARD_USER } from './queries'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
@@ -50,23 +49,23 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
       resolver: yupResolver(schema),
     })
 
-  const [{ data: onboardedUser, fetching, error }, onboardUser] = useMutation<
-    OnboardUserMutation,
-    OnboardUserMutationVariables
-  >(ONBOARD_USER)
+  const [{ data: updateResult, fetching, error }, updateProfile] = useMutation<
+    UpdateProfileMutation,
+    UpdateProfileMutationVariables
+  >(UPDATE_PROFILE_MUTATION)
 
   useEffect(() => {
-    if (onboardedUser?.update_profile_by_pk?.id) {
+    if (updateResult?.updateUserProfile) {
       reloadCurrentProfile().then(() => {
         navigate('/')
       })
     }
-  }, [onboardedUser, reloadCurrentProfile, navigate])
+  }, [updateResult, reloadCurrentProfile, navigate])
 
   const submitHandler: SubmitHandler<InferType<typeof schema>> = async data => {
-    onboardUser({
-      id: profile?.id,
+    await updateProfile({
       input: {
+        profileId: profile?.id,
         familyName: data.familyName,
         givenName: data.givenName,
         dob: data.dob,

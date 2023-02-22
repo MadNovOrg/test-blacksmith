@@ -3,7 +3,7 @@ VALUES ('a24397aa-b059-46b9-a728-955580823ce4', 'Team Teach',
         '{"city": "London", "line1": "Second Floor, Longbow House", "line2": "20 Chiswell Street", "country": "United Kingdom", "postCode": "EC1Y 4TW"}',
         'NOT_APPLICABLE', '-');
 
-INSERT INTO public.profile (id, given_name, family_name, email) VALUES
+INSERT INTO public.profile (id, _given_name, _family_name, _email) VALUES
 ('467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'TeamTeach', 'Org-Admin', 'tt.org.adm@teamteach.testinator.com'),
 ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'TeamTeach', 'Advanced-Trainer', 'tt.adv.trainer@teamteach.testinator.com'),
 ('749791ef-e4c4-4a5f-881a-461e4724138d', 'TeamTeach', 'Intermediate-Trainer', 'tt.int.trainer@teamteach.testinator.com'),

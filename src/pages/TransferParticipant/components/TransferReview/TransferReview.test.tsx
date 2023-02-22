@@ -15,7 +15,7 @@ import {
   TransferParticipantMutationVariables,
 } from '@app/generated/graphql'
 
-import { render, waitFor, screen, within, userEvent } from '@test/index'
+import { render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
 import { EligibleCourse } from '../../types'

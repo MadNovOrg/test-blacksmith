@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Client, CombinedError, Provider } from 'urql'
-import { never, fromValue } from 'wonka'
+import { fromValue, never } from 'wonka'
 
 import {
-  OnboardUserMutation,
-  OnboardUserMutationVariables,
+  UpdateProfileMutation,
+  UpdateProfileMutationVariables,
 } from '@app/generated/graphql'
 
 import {
@@ -13,8 +13,8 @@ import {
   render,
   screen,
   userEvent,
-  waitFor,
   VALID_PHONE_NUMBER,
+  waitFor,
 } from '@test/index'
 
 import { Onboarding } from '.'
@@ -95,17 +95,17 @@ describe('page: Onboarding', () => {
       executeMutation: ({
         variables,
       }: {
-        variables: OnboardUserMutationVariables
+        variables: UpdateProfileMutationVariables
       }) => {
         const success =
-          variables.id === profileId &&
+          variables.input.profileId === profileId &&
           variables.input.givenName === firstName &&
           variables.input.familyName === lastName &&
           variables.input.phone
 
-        return fromValue<{ data: OnboardUserMutation }>({
+        return fromValue<{ data: UpdateProfileMutation }>({
           data: {
-            update_profile_by_pk: success ? { id: profileId } : null,
+            updateUserProfile: Boolean(success),
           },
         })
       },

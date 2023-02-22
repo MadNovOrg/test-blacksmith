@@ -1,4 +1,4 @@
-INSERT INTO profile (id, given_name, family_name, email) VALUES
+INSERT INTO profile (id, _given_name, _family_name, _email) VALUES
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 'John', 'Trainer', 'trainer@teamteach.testinator.com'),
 ('5c6434fd-d4ee-47f5-8200-0d7b767e2e95', 'Mark', 'Trainer', 'trainer.with.org@teamteach.testinator.com'),
 ('bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'Steven', 'Trainer', 'trainer.and.user@teamteach.testinator.com'),

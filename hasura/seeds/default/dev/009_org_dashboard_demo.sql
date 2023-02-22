@@ -1,4 +1,4 @@
-insert into "profile" (id, given_name, family_name, email)
+insert into "profile" (id, _given_name, _family_name, _email)
 values ('117c12fc-d7c6-4987-9841-a499765ade4b', 'Krista', 'Kuhn', 'krista.kuhn@somethingwhatever.com'),
        ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'Curtis', 'Ondricka', 'curtis.ondricka@somethingwhatever.com'),
        ('b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'Tim', 'Hintz', 'tim.hintz@somethingwhatever.com'),
