@@ -228,7 +228,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
             <FilterSearch value={keyword} onChange={setKeyword} />
             <FilterDates
               onChange={onDatesChange}
-              title={t('filters.date-range')}
+              title={t('filters.course-date-range')}
               data-testid={'date-range'}
               queryParam={'Range'}
             />
