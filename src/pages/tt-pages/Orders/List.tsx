@@ -19,14 +19,13 @@ import * as XLSX from 'xlsx'
 
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { XeroInvoiceStatus } from '@app/generated/graphql'
-import { OrderType } from '@app/hooks/useOrders'
+import { OrderInfo, XeroInvoiceStatus } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { getOrderDueDate, INVOICE_STATUS_COLOR } from '@app/util'
 
 type Props = {
-  orders: OrderType[]
+  orders: OrderInfo[]
   sorting: Sorting
   loading: boolean
   filtered: boolean
@@ -59,12 +58,16 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
     ] as Col[]
   }, [t, orders, checkbox])
 
-  const getOrderInfo = useCallback((order: OrderType) => {
+  const getOrderInfo = useCallback((order: OrderInfo) => {
     const { start } = order?.course?.schedule
       ? order.course.schedule[0]
       : { start: null }
     const { orderDue, status, createdAt } = order
-    const dueDate = getOrderDueDate(createdAt, start, order.paymentMethod)
+    const dueDate = getOrderDueDate(
+      createdAt,
+      start,
+      order.paymentMethod || undefined
+    )
 
     return {
       due: orderDue,
@@ -79,7 +82,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const exportOrders = useCallback(
-    async (orders: OrderType[] = []) => {
+    async (orders: OrderInfo[] = []) => {
       const _t = (col: string) => t(`pages.orders.cols-${col}`)
       const ordersData = [
         [
@@ -91,7 +94,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           _t('dueDate'),
           _t('status'),
         ],
-        ...orders.map((o: OrderType) => {
+        ...orders.map((o: OrderInfo) => {
           const { due, status, dueDate } = getOrderInfo(o)
 
           return [

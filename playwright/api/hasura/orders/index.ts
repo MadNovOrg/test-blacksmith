@@ -1,17 +1,27 @@
-import { GetOrdersQuery, GetOrdersQueryVariables } from '@app/generated/graphql'
-import { QUERY as ORDERS_QUERY } from '@app/queries/order/get-orders'
+import {
+  GetOrdersInput,
+  GetOrdersQuery,
+  OrderInfo,
+} from '@app/generated/graphql'
+import { GET_ORDERS as ORDERS_QUERY } from '@app/pages/tt-pages/Orders/query'
 
 import { getClient } from '../../hasura-api'
 
 export async function getOrders(
-  variables: GetOrdersQueryVariables
-): Promise<GetOrdersQuery['orders']> {
+  variables: GetOrdersInput
+): Promise<Array<OrderInfo>> {
   const client = getClient()
 
-  const response = await client.request<
-    GetOrdersQuery,
-    GetOrdersQueryVariables
-  >(ORDERS_QUERY, variables)
+  const response = await client.request<GetOrdersQuery, GetOrdersInput>(
+    ORDERS_QUERY,
+    variables
+  )
+  if (
+    response.getOrders?.orders !== null ||
+    response.getOrders?.orders !== undefined
+  ) {
+    return [{ id: 'error' }]
+  }
 
-  return response.orders
+  return response.getOrders.orders
 }

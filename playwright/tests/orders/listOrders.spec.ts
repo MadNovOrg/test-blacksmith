@@ -15,7 +15,7 @@ const test = base.extend<{
 }>({
   unfilteredOrders: async ({}, use) => {
     const orders = await getOrders({
-      orderBy: { createdAt: Order_By.Asc },
+      orderBy: [{ createdAt: Order_By.Asc }],
       offset: 0,
       limit: 12,
     })
@@ -24,7 +24,7 @@ const test = base.extend<{
   },
   invoiceOrders: async ({}, use) => {
     const orders = await getOrders({
-      orderBy: { createdAt: Order_By.Asc },
+      orderBy: [{ createdAt: Order_By.Asc }],
       where: { paymentMethod: { _eq: Payment_Methods_Enum.Invoice } },
       offset: 0,
       limit: 12,
@@ -34,7 +34,7 @@ const test = base.extend<{
   },
   ccOrders: async ({}, use) => {
     const orders = await getOrders({
-      orderBy: { createdAt: Order_By.Asc },
+      orderBy: [{ createdAt: Order_By.Asc }],
       where: { paymentMethod: { _eq: Payment_Methods_Enum.Cc } },
       offset: 0,
       limit: 12,

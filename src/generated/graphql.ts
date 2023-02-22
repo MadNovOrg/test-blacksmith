@@ -10,6 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
   bytea: any;
   date: any;
   float8: any;
@@ -2904,6 +2905,20 @@ export type GetCoursePricingOutput = {
   xeroCode: Scalars['String'];
 };
 
+export type GetOrdersInput = {
+  invoiceStatus?: InputMaybe<Array<InputMaybe<XeroInvoiceStatus>>>;
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+  orderBy?: InputMaybe<Array<InputMaybe<Scalars['jsonb']>>>;
+  where?: InputMaybe<Scalars['jsonb']>;
+};
+
+export type GetOrdersOutput = {
+  __typename?: 'GetOrdersOutput';
+  count?: Maybe<Scalars['Int']>;
+  orders?: Maybe<Array<Maybe<OrderInfo>>>;
+};
+
 export type GetTrainersLevelsInput = {
   courseEnd: Scalars['date'];
   courseLevel: CourseLevel;
@@ -4152,6 +4167,12 @@ export type NodeWithTrackbacks = {
   toPing?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type OrderCourseInfo = {
+  __typename?: 'OrderCourseInfo';
+  name?: Maybe<Scalars['String']>;
+  schedule?: Maybe<Array<Maybe<Scalars['Date']>>>;
+};
+
 export enum OrderDirection {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -4165,6 +4186,24 @@ export enum OrderEnum {
   Desc = 'DESC'
 }
 
+export type OrderInfo = {
+  __typename?: 'OrderInfo';
+  course?: Maybe<OrderCourseInfo>;
+  createdAt?: Maybe<Scalars['Date']>;
+  currency?: Maybe<Scalars['String']>;
+  id: Scalars['uuid'];
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  organization?: Maybe<OrganizationInfo>;
+  paymentMethod?: Maybe<PaymentMethod>;
+  profileId?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+  registrants?: Maybe<Scalars['jsonb']>;
+  status?: Maybe<XeroInvoiceStatus>;
+  stripePaymentId?: Maybe<Scalars['uuid']>;
+  xeroInvoiceNumber?: Maybe<Scalars['Int']>;
+};
+
 export type Ordering = {
   direction?: InputMaybe<OrderDirection>;
 };
@@ -4173,6 +4212,12 @@ export type OrgInvite = {
   __typename?: 'OrgInvite';
   id: Scalars['String'];
   orgName: Scalars['String'];
+};
+
+export type OrganizationInfo = {
+  __typename?: 'OrganizationInfo';
+  id?: Maybe<Scalars['uuid']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 /** The page type */
@@ -32678,6 +32723,8 @@ export type Query_Root = {
   /** getCoursePricing */
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
+  /** Get Orders with Xero Data */
+  getOrders?: Maybe<GetOrdersOutput>;
   getOrgInvite?: Maybe<OrgInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
@@ -33788,6 +33835,11 @@ export type Query_RootExpire_Go1_License_Jobs_By_PkArgs = {
 
 export type Query_RootGetCoursePricingArgs = {
   input: GetCoursePricingInput;
+};
+
+
+export type Query_RootGetOrdersArgs = {
+  input: GetOrdersInput;
 };
 
 
@@ -38380,6 +38432,13 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
 
+export type GetOrdersQueryVariables = Exact<{
+  input?: InputMaybe<GetOrdersInput>;
+}>;
+
+
+export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, status?: XeroInvoiceStatus | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null } | null } | null> | null } | null };
+
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -39129,16 +39188,6 @@ export type GetOrderQueryVariables = Exact<{
 
 
 export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, profile: { __typename?: 'profile', fullName?: string | null, email?: string | null, phone?: string | null }, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, start?: any | null, end?: any | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null } | null } } | null };
-
-export type GetOrdersQueryVariables = Exact<{
-  orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
-  where?: InputMaybe<Order_Bool_Exp>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type GetOrdersQuery = { __typename?: 'query_root', orders: Array<{ __typename?: 'order', id: any, createdAt: any, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, xeroInvoiceNumber?: string | null, promoCodes?: any | null, course: { __typename?: 'course', name: string, schedule: Array<{ __typename?: 'course_schedule', start: any }> }, organization: { __typename?: 'organization', name: string, id: any } }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

@@ -63,6 +63,12 @@ type Query {
 }
 
 type Query {
+  getOrders(
+    input: GetOrdersInput!
+  ): GetOrdersOutput
+}
+
+type Query {
   getOrgInvite: OrgInvite
 }
 
@@ -212,14 +218,14 @@ enum CourseType {
 }
 
 enum XeroInvoiceStatus {
-  DRAFT
-  SUBMITTED
-  DELETED
   AUTHORISED
-  PAID
-  VOIDED
-  UNKNOWN
+  DELETED
+  DRAFT
   OVERDUE
+  PAID
+  SUBMITTED
+  UNKNOWN
+  VOIDED
 }
 
 enum Go1ChangeType {
@@ -422,6 +428,14 @@ input TransferInput {
   participantId: uuid!
   toCourseId: Int!
   fee: TransferFee!
+}
+
+input GetOrdersInput {
+  where: jsonb
+  orderBy: [jsonb]
+  limit: Int!
+  offset: Int!
+  invoiceStatus: [XeroInvoiceStatus]
 }
 
 type LinkProfileResult {
@@ -732,3 +746,41 @@ type XeroTrackingCategory {
   name: String!
   option: String!
 }
+
+type GetOrdersOutput {
+  orders: [OrderInfo]
+  count: Int
+}
+
+type Order {
+  order_id: String!
+}
+
+type OrderInfo {
+  id: uuid!
+  createdAt: Date
+  profileId: uuid
+  quantity: Int
+  registrants: jsonb
+  paymentMethod: PaymentMethod
+  orderDue: Float
+  orderTotal: Float
+  currency: String
+  stripePaymentId: uuid
+  xeroInvoiceNumber: Int
+  organization: OrganizationInfo
+  status: XeroInvoiceStatus
+  course: OrderCourseInfo
+}
+
+type OrderCourseInfo {
+  name: String
+  schedule: [Date]
+}
+
+type OrganizationInfo {
+  name: String
+  id: uuid
+}
+
+scalar Date

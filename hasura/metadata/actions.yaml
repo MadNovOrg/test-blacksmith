@@ -99,6 +99,16 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: getOrders
+    definition:
+      kind: ""
+      handler: '{{ACTIONS_HOST}}/orders'
+      forward_client_headers: true
+    permissions:
+      - role: sales-admin
+      - role: tt-ops
+      - role: tt-admin
+    comment: Get Orders with Xero Data
   - name: getOrgInvite
     definition:
       kind: ''
@@ -360,28 +370,28 @@ custom_types:
           description: null
     - name: XeroInvoiceStatus
       values:
-        - value: DRAFT
-          is_deprecated: null
-          description: null
-        - value: SUBMITTED
+        - value: AUTHORISED
           is_deprecated: null
           description: null
         - value: DELETED
           is_deprecated: null
           description: null
-        - value: AUTHORISED
+        - value: DRAFT
+          is_deprecated: null
+          description: null
+        - value: OVERDUE
           is_deprecated: null
           description: null
         - value: PAID
           is_deprecated: null
           description: null
-        - value: VOIDED
+        - value: SUBMITTED
           is_deprecated: null
           description: null
         - value: UNKNOWN
           is_deprecated: null
           description: null
-        - value: OVERDUE
+        - value: VOIDED
           is_deprecated: null
           description: null
     - name: Go1ChangeType
@@ -543,6 +553,7 @@ custom_types:
     - name: ReplaceParticipantInput
     - name: TransferFee
     - name: TransferInput
+    - name: GetOrdersInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -593,4 +604,9 @@ custom_types:
     - name: PromoCodeOutput
     - name: ConfirmCreditCardPaymentOutput
     - name: XeroTrackingCategory
-  scalars: []
+    - name: GetOrdersOutput
+    - name: Order
+    - name: OrderInfo
+    - name: OrganizationInfo
+  scalars:
+    - name: Date

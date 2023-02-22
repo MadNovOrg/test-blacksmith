@@ -2,7 +2,11 @@
 import { Download, test as base } from '@playwright/test'
 import { readFile } from 'xlsx'
 
-import { Order_By, Payment_Methods_Enum } from '@app/generated/graphql'
+import {
+  OrderInfo,
+  Order_By,
+  Payment_Methods_Enum,
+} from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
 import { waitForPageLoad } from '../../commands'
@@ -16,7 +20,7 @@ const test = base.extend<{
 }>({
   orders: async ({}, use) => {
     const orders = await getOrders({
-      orderBy: { createdAt: Order_By.Asc },
+      orderBy: [{ createdAt: Order_By.Asc }],
       offset: 0,
       limit: 12,
     })
@@ -32,7 +36,7 @@ const PAYMENT_METHODS: Record<Payment_Methods_Enum, string> = {
   [Payment_Methods_Enum.Invoice]: 'Invoice',
 }
 
-async function assertDownloadedCSV(download: Download, data: Orders) {
+async function assertDownloadedCSV(download: Download, data: OrderInfo[]) {
   const downloadPath = (await download.path()) as string
 
   const workbook = readFile(downloadPath)
@@ -46,18 +50,24 @@ async function assertDownloadedCSV(download: Download, data: Orders) {
   test.expect(sheet['F1'].v).toMatch('Due Date')
   test.expect(sheet['G1'].v).toMatch('Status')
 
-  data.forEach((order, index) => {
+  test.expect(data).not.toBe(null)
+  test.expect(data).not.toBe(undefined)
+
+  data?.forEach((order, index) => {
     const cellIndex = index + 2
 
-    test.expect(sheet[`A${cellIndex}`].v).toBe(order.xeroInvoiceNumber)
-    test.expect(sheet[`B${cellIndex}`].v).toBe(order.organization.name)
-    test
-      .expect(sheet[`C${cellIndex}`].v)
-      .toMatch(PAYMENT_METHODS[order.paymentMethod])
-    test.expect(sheet[`D${cellIndex}`].v).toBe(Number(order.orderTotal))
+    test.expect(sheet[`A${cellIndex}`].v).toBe(order?.xeroInvoiceNumber)
+    test.expect(sheet[`B${cellIndex}`].v).toBe(order?.organization?.name)
 
-    if (order.orderDue) {
-      test.expect(sheet[`E${cellIndex}`].v).toBe(order.orderDue ?? '')
+    const paymentMethod = order?.paymentMethod
+      ? PAYMENT_METHODS[order.paymentMethod]
+      : 'error'
+
+    test.expect(sheet[`C${cellIndex}`].v).toMatch(paymentMethod)
+    test.expect(sheet[`D${cellIndex}`].v).toBe(Number(order?.orderTotal))
+
+    if (order?.orderDue) {
+      test.expect(sheet[`E${cellIndex}`].v).toBe(order?.orderDue ?? '')
     }
   })
 }
@@ -87,5 +97,5 @@ test('exports selected orders', async ({ page, orders }) => {
     page.click('button:has-text("Export selected")'),
   ])
 
-  await assertDownloadedCSV(download, [orders[0]])
+  await assertDownloadedCSV(download, orders)
 })

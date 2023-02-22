@@ -75,12 +75,14 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Box>
 
         <Box flex={1}>
-          <List
-            orders={orders}
-            sorting={sorting}
-            loading={isLoading}
-            filtered={filtered}
-          />
+          {orders && (
+            <List
+              orders={orders}
+              sorting={sorting}
+              loading={isLoading}
+              filtered={filtered}
+            />
+          )}
 
           <Pagination total={total} />
         </Box>
