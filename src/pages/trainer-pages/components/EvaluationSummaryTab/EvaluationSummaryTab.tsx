@@ -217,7 +217,11 @@ export const EvaluationSummaryTab: React.FC<
                 e.profile.id === profileId ? null : (
                   <TableRow key={e.id}>
                     <TableCell>{e.profile.fullName}</TableCell>
-                    <TableCell>{e.profile.email}</TableCell>
+                    <TableCell>
+                      <Link href={`/profile/${e.profile.id}`}>
+                        {e.profile.email}
+                      </Link>
+                    </TableCell>
                     <TableCell>
                       {e.profile.organizations
                         ?.map(o => o.organization.name)

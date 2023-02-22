@@ -190,8 +190,10 @@ export const CertificationList: React.FC<
 
                 {showCol('contact') ? (
                   <TableCell>
-                    {p.profile.email}
-                    {p.profile.contactDetails.map(contact => contact.value)}
+                    <Link href={`/profile/${p.profile.id}`}>
+                      {p.profile.email}
+                      {p.profile.contactDetails.map(contact => contact.value)}
+                    </Link>
                   </TableCell>
                 ) : null}
 

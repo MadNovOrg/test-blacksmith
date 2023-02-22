@@ -272,10 +272,14 @@ export const CourseGrading: React.FC<
                           {courseParticipant.profile.fullName}
                         </TableCell>
                         <TableCell>
-                          {courseParticipant.profile.email}
-                          {courseParticipant.profile.contactDetails.map(
-                            contact => contact.value
-                          )}
+                          <Link
+                            href={`/profile/${courseParticipant.profile.id}`}
+                          >
+                            {courseParticipant.profile.email}
+                            {courseParticipant.profile.contactDetails.map(
+                              contact => contact.value
+                            )}
+                          </Link>
                         </TableCell>
                         <TableCell>
                           {courseParticipant.profile.organizations.map(org => (
