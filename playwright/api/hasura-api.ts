@@ -250,6 +250,7 @@ export const deleteCourse = async (id?: number) => {
       delete_course_certificate(where: {courseId: {_eq: ${id} }}) { affected_rows }
       delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id} }}}) { affected_rows }
       delete_course_participant(where: { course_id: { _eq: ${id} } }) { affected_rows }
+      delete_course_participant_audit(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
       delete_course_enquiry(where: { courseId: { _eq: ${id} } }) { affected_rows }
       delete_course_audit(where: { course_id: { _eq: ${id} } }) { affected_rows }
