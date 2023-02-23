@@ -33,9 +33,10 @@ export const sortCoursesByAllFields = (
   return 0
 }
 
-// changes the month to the next month from now, ignoring the one in the provided date
-export const setNextMonth = (date: Date) => {
-  const nextMonth = new Date().getMonth() + 1
+// Set the date to be in 'X' months time, if not provided, defaults to next month
+export const inXMonths = (months?: number) => {
+  const date = new Date()
+  const nextMonth = new Date().getMonth() + (months ?? 1)
   if (nextMonth === 12) {
     const nextYear = new Date().getFullYear() + 1
     const result = new Date(date.setFullYear(nextYear))

@@ -22,6 +22,7 @@ export class MyCoursesPage extends BasePage {
   readonly createCourseMenu: CreateCourseMenu
   readonly userMenu: UserMenu
   readonly roleSwitcher: RoleSwitcher
+  readonly submitButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -35,6 +36,7 @@ export class MyCoursesPage extends BasePage {
     this.tableRoot = this.page.locator('table[data-testid="courses-table"]')
     this.coursesTable = new UiTable(this.tableRoot)
     this.createCourseMenu = new CreateCourseMenu(this.page)
+    this.submitButton = this.page.locator('[data-testid="submit-button"]')
   }
 
   async goto() {
@@ -118,7 +120,7 @@ export class MyCoursesPage extends BasePage {
   }
 
   async submitDefaultModules() {
-    await this.page.locator('[data-testid="submit-button"]').click()
+    await this.submitButton.click()
   }
 
   async confirmModules() {

@@ -5,7 +5,7 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { buildVenue } from '@test/mock-data-utils'
 
-import { setNextMonth } from '../util'
+import { inXMonths } from '../util'
 
 import { Course } from './types'
 
@@ -21,8 +21,8 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        start: setNextMonth(new Date('2022-07-10T09:00:00Z')),
-        end: setNextMonth(new Date('2022-07-10T17:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         virtualLink: 'https://zoom.us/dummy.link',
       },
     ],
@@ -41,8 +41,8 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
-        end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -64,8 +64,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: setNextMonth(new Date('2022-06-10T09:00:00Z')),
-        end: setNextMonth(new Date('2022-06-10T17:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -87,8 +87,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
-        end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -110,8 +110,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
-        end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -134,8 +134,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: setNextMonth(new Date('2022-07-15T09:00:00Z')),
-        end: setNextMonth(new Date('2022-07-16T16:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -157,8 +157,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: setNextMonth(new Date('2022-07-18T09:00:00Z')),
-        end: setNextMonth(new Date('2022-07-19T16:00:00Z')),
+        start: inXMonths(),
+        end: inXMonths(),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -182,8 +182,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   go1Integration: false,
   schedule: [
     {
-      start: setNextMonth(new Date()),
-      end: setNextMonth(new Date(new Date().getTime() + 86400000)),
+      start: inXMonths(),
+      end: inXMonths(),
       venue: buildVenue({
         overrides: { name: 'Queen Elizabeth II Centre' },
       }),

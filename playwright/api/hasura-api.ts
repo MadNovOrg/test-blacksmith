@@ -260,7 +260,7 @@ export const deleteCourse = async (id?: number) => {
   try {
     await getClient().request(query)
   } catch (e) {
-    console.error(e)
+    console.error(`ERROR: ${e}`)
   }
 }
 
@@ -316,13 +316,10 @@ export const insertCourseModules = async (
     const response = await getClient().request<{
       insert_course_module: { returning: CourseModule[] }
     }>(query, { objects: modules })
-
     return response.insert_course_module.returning
   } catch (e) {
-    console.error(e)
+    throw new Error(`Failed to insert course modules: ${e}`)
   }
-
-  return []
 }
 
 export const insertCourseParticipants = async (
@@ -369,12 +366,10 @@ export const insertCourseParticipants = async (
     const response = await getClient().request<{
       insert_course_participant: { returning: CourseParticipant[] }
     }>(query, { objects: participants })
-
     return response.insert_course_participant.returning
   } catch (e) {
     console.error(e)
   }
-
   return []
 }
 
