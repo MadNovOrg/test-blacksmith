@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-import { differenceInDays } from 'date-fns'
+import { differenceInCalendarDays } from 'date-fns'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -366,7 +366,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const alignedWithProtocol =
     (courseData?.startDateTime &&
-      differenceInDays(courseData.startDateTime, new Date()) > 14) ||
+      differenceInCalendarDays(courseData.startDateTime, new Date()) > 14) ||
     acl.canRescheduleWithoutWarning()
 
   const hasError = updatingError || auditError
