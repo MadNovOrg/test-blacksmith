@@ -12,7 +12,7 @@ export class EmailPage {
 
   constructor(page: Page) {
     this.page = page
-    this.resetPasswordLink = this.page.locator('text="Sign in to My Profile"')
+    this.resetPasswordLink = this.page.locator('text="Reset Your Password"')
     this.registerNowButton = this.page.locator('text="Register Now"')
   }
 
