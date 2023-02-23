@@ -3,7 +3,7 @@ import { gql, GraphQLClient } from 'graphql-request'
 
 const hasuraSecret = process.env.SECRET ?? 'tth-hasura-key'
 const hasuraEndpoint =
-  process.env.ENDPOINT ?? 'http://localhost:8080/v1/graphql'
+  `${process.env.ENDPOINT}/v1/graphql` ?? 'http://localhost:8080/v1/graphql'
 
 if (!hasuraSecret || !hasuraEndpoint) {
   console.log('Hasura secret and endpoint is needed for seeding orders')
