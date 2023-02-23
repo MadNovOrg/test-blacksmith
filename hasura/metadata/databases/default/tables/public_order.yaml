@@ -72,6 +72,7 @@ insert_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - client_purchase_order
         - course_id
         - created_at
         - currency
@@ -93,6 +94,7 @@ insert_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - client_purchase_order
         - course_id
         - created_at
         - currency
@@ -115,6 +117,7 @@ insert_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - client_purchase_order
         - course_id
         - created_at
         - currency
@@ -137,6 +140,7 @@ insert_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - client_purchase_order
         - course_id
         - id
         - organization_id
@@ -156,6 +160,7 @@ insert_permissions:
         - billing_family_name
         - billing_given_name
         - billing_phone
+        - client_purchase_order
         - course_id
         - id
         - organization_id

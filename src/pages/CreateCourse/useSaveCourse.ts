@@ -215,6 +215,8 @@ export function useSaveCourse(): {
                         organizationId: go1Licensing.invoiceDetails.orgId,
                         billingAddress:
                           go1Licensing.invoiceDetails.billingAddress,
+                        clientPurchaseOrder:
+                          go1Licensing.invoiceDetails.purchaseOrder,
                         paymentMethod: Payment_Methods_Enum.Invoice,
                         quantity: 0, // it will be updated on the backend with the correct number of licenses depending on the org's allowance
                         currency: Currency.GBP,

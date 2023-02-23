@@ -847,7 +847,3 @@ type OrganizationInfo {
 }
 
 scalar Date
-<<<<<<< HEAD
-=======
-
->>>>>>> main

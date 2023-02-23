@@ -156,7 +156,7 @@ describe('component: ReviewLicenseOrder', () => {
         surname: 'Doe',
         phone: 'phone',
         email: 'email',
-        purchaseOrder: '',
+        purchaseOrder: '1234',
       },
     }
 
@@ -223,6 +223,7 @@ describe('component: ReviewLicenseOrder', () => {
                 paymentMethod: Payment_Methods_Enum.Invoice,
                 quantity: 0,
                 currency: Currency.Gbp,
+                clientPurchaseOrder: go1Licensing.invoiceDetails.purchaseOrder,
               },
             ],
           },
