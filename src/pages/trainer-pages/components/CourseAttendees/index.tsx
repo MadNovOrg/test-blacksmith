@@ -74,8 +74,6 @@ export const CourseAttendees: React.FC<
           {courseParticipantsError ? (
             <Alert severity="error">{t('errors.loading-participants')}</Alert>
           ) : null}
-          <Alert severity="info">{t('info.workbook-check')}</Alert>
-
           <Grid
             container
             justifyContent="space-between"
