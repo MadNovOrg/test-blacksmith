@@ -121,10 +121,14 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async checkAttendeesTableRows(users: User[]) {
-    await expect(this.attendeesTable.rows).toHaveCount(users.length)
+    await this.checkAttendeesTableNumberOfRows(users)
     const expectedRows = users.map(toAttendeesTableRow)
     const actualRows = await this.attendeesTable.getRows()
     expect(actualRows).toEqual(expectedRows)
+  }
+
+  async checkAttendeesTableNumberOfRows(users: User[]) {
+    await expect(this.attendeesTable.rows).toHaveCount(users.length)
   }
 
   async clickEditCourseButton() {
@@ -171,6 +175,7 @@ export class CourseDetailsPage extends BasePage {
       .locator('[data-testid="cancel-entire-course-checkbox"]')
       .check()
   }
+
   async clickCancelEntireCourseButton() {
     await this.cancelEntireCourseButton.click()
   }

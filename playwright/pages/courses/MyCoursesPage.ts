@@ -105,6 +105,7 @@ export class MyCoursesPage extends BasePage {
 
     await expect(courseStatusChip).toHaveText(status)
   }
+
   async acceptCourse(courseId: number) {
     await this.page
       .locator(

@@ -5,11 +5,13 @@ export class UiTable {
   readonly headers: Locator
   readonly rows: Locator
   readonly firstRowCells: Locator
+  readonly emptyTable: Locator
 
   constructor(root: Locator) {
     this.root = root
     this.headers = this.root.locator('th')
     this.rows = this.root.locator('tbody tr')
+    this.emptyTable = this.root.locator('tbody tr[data-testid="TableNoRows"]')
     this.firstRowCells = this.root.locator('tbody tr >> nth=0 >> td')
   }
 
@@ -40,7 +42,8 @@ export class UiTable {
       ignoreEmpty: options.ignoreEmptyHeaders,
     })
     const rowsCount = await this.getRowsCount()
-    if (rowsCount != 1) {
+
+    if (!(await this.emptyTable.isVisible())) {
       for (let i = 0; i < rowsCount; i++) {
         const resultRow: { [k: string]: string } = {}
         for (let j = 0; j < headers.length; j++) {
@@ -53,6 +56,7 @@ export class UiTable {
         result.push(resultRow)
       }
     }
+
     return result
   }
 
