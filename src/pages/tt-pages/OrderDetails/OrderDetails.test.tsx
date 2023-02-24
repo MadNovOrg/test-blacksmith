@@ -12,6 +12,7 @@ import {
   Payment_Methods_Enum,
   XeroAddressType,
   XeroInvoiceStatus,
+  XeroLineItemSummaryFragment,
   XeroPhoneType,
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -604,5 +605,151 @@ describe('page: OrderDetails', () => {
     expect(
       within(invoicedToRow).getByTestId('contact-address').textContent
     ).toMatchInlineSnapshot(`"Tankfield, Convent Hill, Tramore, X91 PV08, UK"`)
+  })
+
+  it('displays free spaces if applied for the closed course', () => {
+    const discountAmount = -25
+
+    const order = buildOrder({})
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              lineAmount: discountAmount,
+              description: 'Discount',
+            },
+          }),
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_ORDER_QUERY) {
+          return fromValue<
+            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
+          >({
+            data: {
+              order: {
+                ...order,
+                course: {
+                  ...order.course,
+                  type: Course_Type_Enum.Closed,
+                  freeSpaces: 2,
+                },
+              },
+            },
+          })
+        }
+
+        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
+          return fromValue<
+            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
+          >({
+            data: {
+              invoices: [invoice],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
+    )
+
+    const freeSpacesRow = screen.getByTestId('free-spaces-row')
+
+    expect(
+      within(freeSpacesRow).getByText(/free spaces \(2\)/i)
+    ).toBeInTheDocument()
+    expect(
+      within(freeSpacesRow).getByText(formatCurrency(discountAmount))
+    ).toBeInTheDocument()
+    expect(screen.queryByTestId('order-promo-code')).not.toBeInTheDocument()
+  })
+
+  it('renders trainer expenses if found in the invoice line items', () => {
+    const expensesLineItems: XeroLineItemSummaryFragment[] = [
+      buildLineItem({
+        overrides: {
+          description: 'Mileage for trainer',
+          lineAmount: 50,
+        },
+      }),
+      buildLineItem({
+        overrides: {
+          description: 'Flight',
+          lineAmount: 200,
+        },
+      }),
+    ]
+
+    const order = buildOrder()
+    const invoice = buildInvoice({
+      overrides: {
+        lineItems: [
+          buildLineItem({
+            overrides: {
+              quantity: 1,
+              unitAmount: 150,
+              description: 'Level One',
+            },
+          }),
+          ...expensesLineItems,
+        ],
+      },
+    })
+
+    const client = {
+      executeQuery: ({ query }: { query: DocumentNode }) => {
+        if (query === GET_ORDER_QUERY) {
+          return fromValue<
+            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
+          >({
+            data: {
+              order: {
+                ...order,
+                course: {
+                  ...order.course,
+                  level: Course_Level_Enum.Level_1,
+                },
+              },
+            },
+          })
+        }
+
+        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
+          return fromValue<
+            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
+          >({
+            data: {
+              invoices: [invoice],
+            },
+          })
+        }
+      },
+    } as unknown as Client
+
+    render(
+      <Provider value={client}>
+        <OrderDetails />
+      </Provider>
+    )
+
+    const expensesRow = screen.getByTestId('expenses-row')
+
+    expensesLineItems.forEach(expense => {
+      expect(
+        within(expensesRow).getByText(expense.description ?? '')
+      ).toBeInTheDocument()
+
+      expect(
+        within(expensesRow).getByText(formatCurrency(expense.lineAmount))
+      ).toBeInTheDocument()
+    })
   })
 })

@@ -746,6 +746,7 @@
     "subtotal": "Sub total",
     "vat": "VAT (20%)",
     "promo-code": "Promo code: {{code}}",
+    "free-spaces": "Free spaces ({{amount}})",
     "total": "Total",
     "paid-on": "Paid on {{date, date_default}}",
     "amount-due": "Amount due ({{currency}})",

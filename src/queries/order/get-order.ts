@@ -32,6 +32,7 @@ export const QUERY = gql`
         }
         start
         end
+        freeSpaces
       }
     }
   }

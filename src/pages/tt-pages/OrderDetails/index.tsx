@@ -23,15 +23,24 @@ import {
   Payment_Methods_Enum,
   XeroPhoneType,
   CourseLevel,
+  Course_Type_Enum,
   XeroAddressType,
-  XeroAddress,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { NotFound } from '@app/pages/common/NotFound'
 import theme from '@app/theme'
-import { INVOICE_STATUS_COLOR } from '@app/util'
+import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
+
+import {
+  formatContactAddress,
+  getTrainerExpensesLineItems,
+  isDiscountLineItem,
+  isGo1LicensesItem,
+  isProcessingFeeLineItem,
+  isRegistrantLineItem,
+} from './utils'
 
 export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
@@ -51,14 +60,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
 
   const lineItemForRegistrants = useMemo(() => {
     return course?.name
-      ? invoice?.lineItems?.find(li =>
-          li?.description?.includes(_t(`course-levels.${course.level}`))
-        )
+      ? invoice?.lineItems?.find(li => isRegistrantLineItem(li, course.level))
       : null
-  }, [invoice, course, _t])
+  }, [invoice, course])
 
   const go1LicensesLineItem = useMemo(() => {
-    return invoice?.lineItems.find(li => li?.description?.includes('Go1'))
+    return invoice?.lineItems.find(li => isGo1LicensesItem(li))
   }, [invoice])
 
   const promoCode = promoCodes.length ? promoCodes[0] : null
@@ -70,12 +77,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     address => address?.addressType === XeroAddressType.Pobox
   )
 
-  const discountAmount = useMemo(() => {
+  const [discountAmount, discountLineItem] = useMemo(() => {
     const discountLineItem = invoice?.lineItems?.find(li =>
-      li?.description?.includes('Discount')
+      isDiscountLineItem(li)
     )
 
-    return discountLineItem?.lineAmount ?? 0
+    return [discountLineItem?.lineAmount ?? 0, discountLineItem]
   }, [invoice?.lineItems])
 
   const processingFee = useMemo(() => {
@@ -83,9 +90,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       return 0
     }
 
-    const processingFeeLineItem = invoice?.lineItems?.find(
-      li => li?.itemCode === 'CREDIT CARD FEE'
+    const processingFeeLineItem = invoice?.lineItems?.find(li =>
+      isProcessingFeeLineItem(li)
     )
+
     if (!processingFeeLineItem) {
       return 0
     }
@@ -130,6 +138,11 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   const loadingData = isLoading || isUsePromoCodesLoading
+
+  const expensesLineItems =
+    isNotNullish(invoice) && isNotNullish(course)
+      ? getTrainerExpensesLineItems(invoice.lineItems, course.level)
+      : []
 
   if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
     return <NotFound title={t('error')} description="" />
@@ -232,6 +245,25 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
+                  {expensesLineItems.length ? (
+                    <DetailsItemBox data-testid="expenses-row">
+                      <Stack spacing={2}>
+                        {expensesLineItems.map(expenseLineItem => (
+                          <ItemRow key={expenseLineItem?.description}>
+                            <Typography color="grey.700">
+                              {expenseLineItem?.description}
+                            </Typography>
+                            <Typography color="grey.700">
+                              {_t('common.currency', {
+                                amount: expenseLineItem?.lineAmount,
+                              })}
+                            </Typography>
+                          </ItemRow>
+                        ))}
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
+
                   <DetailsItemBox>
                     <Stack spacing={2}>
                       {promoCode ? (
@@ -242,6 +274,21 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                           <Typography color="grey.700">
                             {_t('common.currency', {
                               amount: discountAmount,
+                            })}
+                          </Typography>
+                        </ItemRow>
+                      ) : discountAmount &&
+                        course?.type === Course_Type_Enum.Closed ? (
+                        <ItemRow data-testid="free-spaces-row">
+                          <Typography color="grey.700">
+                            {t('free-spaces', { amount: course.freeSpaces })}
+                          </Typography>
+                          <Typography
+                            color="grey.700"
+                            data-testid="free-spaces-discount"
+                          >
+                            {_t('common.currency', {
+                              amount: discountLineItem?.lineAmount,
                             })}
                           </Typography>
                         </ItemRow>
@@ -426,7 +473,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
-                  {course?.type === 'CLOSED' &&
+                  {course?.type === Course_Type_Enum.Closed &&
                   course?.salesRepresentative?.fullName ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
@@ -472,16 +519,4 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Container>
     </FullHeightPage>
   )
-}
-
-export function formatContactAddress(address: XeroAddress) {
-  return [
-    address.addressLine1,
-    address.addressLine2,
-    address.city,
-    address.postalCode,
-    address.country,
-  ]
-    .filter(Boolean)
-    .join(', ')
 }
