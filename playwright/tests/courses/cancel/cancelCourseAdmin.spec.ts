@@ -21,7 +21,6 @@ import { inXMonths } from '../../../util'
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-
     course.type = CourseType.OPEN
     course.schedule[0].start = inXMonths(2)
     course.schedule[0].end = inXMonths(2)

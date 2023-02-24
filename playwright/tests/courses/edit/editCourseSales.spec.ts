@@ -16,6 +16,7 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
+import { inXMonths } from '../../../util'
 
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
@@ -23,10 +24,9 @@ const test = base.extend<{ course: Course }>({
     course.type = CourseType.CLOSED
     course.organization = { name: 'London First School' }
     course.contactProfile = users.user1WithOrg
-    //this isn't being set, need to investigate why
     course.salesRepresentative = users.user2WithOrg
-    course.schedule[0].start = new Date('2024-03-15T09:00:00Z')
-    course.schedule[0].end = new Date('2024-03-15T16:00:00Z')
+    course.schedule[0].start = inXMonths(2)
+    course.schedule[0].end = inXMonths(2)
     course.status = Course_Status_Enum.Scheduled
     const moduleIds = await getModuleIds(
       getModulesByLevel(course.level),
@@ -45,7 +45,7 @@ const test = base.extend<{ course: Course }>({
 
 test.use({ storageState: stateFilePath('salesAdmin') })
 
-test('edit course notes and sales rep for closed course as sales', async ({
+test('edit course notes as a sales rep for closed course', async ({
   page,
   course,
 }) => {

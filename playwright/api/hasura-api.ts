@@ -178,6 +178,11 @@ export const insertCourse = async (
     : ''
 
   const trainerId = await getProfileId(email)
+  const salesRepresentative = course.salesRepresentative
+    ? `, salesRepresentativeId: "${await getProfileId(
+        course.salesRepresentative.email
+      )}"`
+    : ''
 
   const query = gql`
     mutation MyMutation {
@@ -208,6 +213,7 @@ export const insertCourse = async (
         gradingConfirmed: ${course.gradingConfirmed}
         ${organization}
         ${contactProfile}
+        ${salesRepresentative}
       }) {
         returning {
           id
