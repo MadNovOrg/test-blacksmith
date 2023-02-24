@@ -612,7 +612,6 @@ custom_types:
     - name: GetOrdersOutput
     - name: Order
     - name: OrderInfo
-    - name: OrderCourseInfo
     - name: OrganizationInfo
   scalars:
     - name: Date

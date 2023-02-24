@@ -23,6 +23,7 @@ export const GET_ORDERS = gql`
         registrants
         stripePaymentId
         xeroInvoiceNumber
+        course
         organization {
           name
           id

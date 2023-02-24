@@ -59,13 +59,12 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
   }, [t, orders, checkbox])
 
   const getOrderInfo = useCallback((order: OrderInfo) => {
-    const { start } = order?.course?.schedule
-      ? order.course.schedule[0]
-      : { start: null }
-    const { orderDue, status, createdAt } = order
+    const { orderDue, status, course, createdAt } = order
+    const { date: startDate } = course.dates.aggregate.start
+
     const dueDate = getOrderDueDate(
       createdAt,
-      start,
+      startDate,
       order.paymentMethod || undefined
     )
 

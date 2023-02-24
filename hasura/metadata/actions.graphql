@@ -833,12 +833,7 @@ type OrderInfo {
   xeroInvoiceNumber: Int
   organization: OrganizationInfo
   status: XeroInvoiceStatus
-  course: OrderCourseInfo
-}
-
-type OrderCourseInfo {
-  name: String
-  schedule: [Date]
+  course: jsonb
 }
 
 type OrganizationInfo {
