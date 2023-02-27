@@ -203,6 +203,7 @@ export const ResetPasswordPage = () => {
               <TextField
                 onFocus={() => setShowPasswordReqs(true)}
                 id="password"
+                data-testid="first-passsword-input"
                 type="password"
                 variant="filled"
                 label={t('pages.login.pass-label')}
@@ -228,6 +229,7 @@ export const ResetPasswordPage = () => {
             <Box mb={4}>
               <TextField
                 id="confirmPassword"
+                data-testid="second-passsword-input"
                 type="password"
                 variant="filled"
                 label={t('pages.login.pass-label')}
@@ -263,7 +265,12 @@ export const ResetPasswordPage = () => {
                 }}
               />
               {!!errors.code && (
-                <FormHelperText error>{errors.code.message}</FormHelperText>
+                <FormHelperText
+                  error
+                  data-testid="reset-password-passcode-error"
+                >
+                  {errors.code.message}
+                </FormHelperText>
               )}
             </Box>
           </Box>

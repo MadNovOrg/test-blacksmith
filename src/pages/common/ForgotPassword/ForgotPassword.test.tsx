@@ -50,13 +50,13 @@ describe('page: ForgotPassword', () => {
     expect(mockNavigate).not.toHaveBeenCalled()
   })
 
-  it('does not submit if email is invalid', async () => {
+  it('does not submit if email is invalid format', async () => {
     render(<ForgotPasswordPage />)
 
     const emailInput = screen.getByTestId('forgot-email-input')
     expect(emailInput).toHaveValue('')
 
-    await userEvent.type(emailInput, 'not a valid email')
+    await userEvent.type(emailInput, 'ge@vedvho')
     await userEvent.click(screen.getByTestId('forgot-pass-submit'))
 
     await waitForText('Please enter a valid email address')
