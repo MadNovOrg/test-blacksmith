@@ -80,7 +80,7 @@ export class TrainerEvaluationPage extends BasePage {
 
   async viewEvaluation() {
     await expect(this.viewSummaryEvaluationButton).toBeEnabled()
-    await this.page.locator('text=View Summary Evaluation').click()
+    await this.viewSummaryEvaluationButton.click()
     await expect(this.page.locator('text=Rating of training')).toBeVisible()
   }
 }

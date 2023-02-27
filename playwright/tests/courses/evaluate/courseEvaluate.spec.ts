@@ -9,7 +9,6 @@ import {
   insertCourse,
   insertCourseModules,
   insertCourseParticipants,
-  makeSureTrainerHasCourses,
 } from '../../../api/hasura-api'
 import { FINISHED_COURSE } from '../../../data/courses'
 import { getModulesByLevel } from '../../../data/modules'
@@ -33,14 +32,12 @@ const test = base.extend<{ course: Course }>({
     )
     await insertCourseParticipants(course.id, [users.user1], new Date())
     await insertCourseModules(course.id, moduleIds)
-    await makeSureTrainerHasCourses([course], users.trainer.email)
     await use(course)
     await deleteCourse(course.id)
   },
 })
 
 test('course evaluation', async ({ browser, course }) => {
-  test.setTimeout(90000)
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
