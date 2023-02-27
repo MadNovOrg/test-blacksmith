@@ -26,13 +26,13 @@ jobs:
       - name: Build
         uses: actions/setup-node@v3
         with:
-          node-version: '16.3.0'
+          node-version: '18.14.2'
           cache: 'npm'
 
       - run: echo 'NODE_OPTIONS="--max-old-space-size=4096"' >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: npm set-script prepare "" && npm ci
+        run: npm pkg delete scripts.prepare && npm ci
 
       - name: Lint
         run: npm run lint
