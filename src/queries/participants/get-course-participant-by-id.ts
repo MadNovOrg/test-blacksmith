@@ -21,6 +21,8 @@ export const QUERY = gql`
       }
       profile {
         fullName
+        avatar
+        archived
         email
         contactDetails
         organizations {

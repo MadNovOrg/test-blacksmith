@@ -19,9 +19,9 @@ import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Avatar } from '@app/components/Avatar'
 import { Dialog } from '@app/components/Dialog'
 import { EditOrgUserModal } from '@app/components/OrgUsersTable/EditOrgUserModal'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { useAuth } from '@app/context/auth'
@@ -184,26 +184,30 @@ export const OrgUsersTable: React.FC<
                 <TableRow key={profile.id}>
                   <TableCell>
                     <Box display="flex" alignItems="center">
-                      <Avatar
-                        size={32}
-                        src={profile.avatar ?? undefined}
-                        name={profile.fullName ?? undefined}
+                      <ProfileAvatar
+                        profile={profile}
+                        renderLabel={name => (
+                          <Box display="flex" flexDirection="column">
+                            <Link
+                              variant="body2"
+                              color={theme.palette.grey[900]}
+                              ml={1}
+                              href={`/profile/${profile.id}?orgId=${orgId}`}
+                            >
+                              {name}
+                            </Link>
+                            {orgMember?.position ? (
+                              <Typography
+                                variant="body2"
+                                color="grey.600"
+                                ml={1}
+                              >
+                                {orgMember?.position}
+                              </Typography>
+                            ) : null}
+                          </Box>
+                        )}
                       />
-                      <Box display="flex" flexDirection="column" ml={1}>
-                        <Link
-                          variant="body2"
-                          color={theme.palette.grey[900]}
-                          ml={1}
-                          href={`/profile/${profile.id}?orgId=${orgId}`}
-                        >
-                          {profile.fullName}
-                        </Link>
-                        {orgMember?.position ? (
-                          <Typography variant="body2" color="grey.600" ml={1}>
-                            {orgMember?.position}
-                          </Typography>
-                        ) : null}
-                      </Box>
                     </Box>
                   </TableCell>
                   <TableCell>

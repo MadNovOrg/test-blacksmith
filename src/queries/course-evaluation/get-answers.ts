@@ -27,6 +27,8 @@ export const QUERY = gql`
       }
       profile {
         fullName
+        avatar
+        archived
       }
       answer
     }

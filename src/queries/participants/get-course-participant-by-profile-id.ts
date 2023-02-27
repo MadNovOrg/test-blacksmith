@@ -10,6 +10,8 @@ export const GetParticipant = gql`
     ) {
       profile {
         fullName
+        avatar
+        archived
       }
       id
       grade

@@ -12,8 +12,8 @@ import {
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Avatar } from '@app/components/Avatar'
 import { Grade } from '@app/components/Grade'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { CourseCertificateChangelog } from '@app/types'
 
 export type ChangelogModalProps = {
@@ -61,13 +61,7 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
             <TableRow key={changelog.id}>
               <TableCell sx={{ verticalAlign: 'top' }}>
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Avatar
-                    src={changelog.author.avatar}
-                    name={changelog.author.fullName}
-                  />
-                  <Typography variant="body2">
-                    {changelog.author.fullName}
-                  </Typography>
+                  <ProfileAvatar profile={changelog.author} />
                 </Box>
               </TableCell>
               <TableCell sx={{ verticalAlign: 'top' }}>

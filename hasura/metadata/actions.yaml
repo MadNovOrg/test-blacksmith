@@ -225,6 +225,10 @@ actions:
     definition:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/user/update'
+    permissions:
+      - role: unverified
+      - role: anonymous
+      - role: user
   - name: upsertZoomMeeting
     definition:
       kind: synchronous

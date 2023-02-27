@@ -77,6 +77,7 @@
   "job-title-placeholder": "Your job title",
   "job-title": "Job Title",
   "edit-profile": "Edit Profile",
+  "archive-profile": "Archive Profile",
   "personal-details": "Personal Details",
   "org-details": "Organisation Details",
   "course-history-log": "Course History Log",
@@ -536,5 +537,6 @@
   },
   "more": "More",
   "cancellation-requested": "Cancellation requested",
-  "tbc": "TBC"
+  "tbc": "TBC",
+  "archived-profile": "Archived user"
 }

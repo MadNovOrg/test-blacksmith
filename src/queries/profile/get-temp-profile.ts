@@ -2,11 +2,11 @@ import { gql } from 'graphql-request'
 
 import {
   Course,
+  CourseDeliveryType,
   CourseExpenseData,
+  CourseLevel,
   CourseType,
   Venue,
-  CourseLevel,
-  CourseDeliveryType,
 } from '@app/types'
 
 import { COURSE_DATES, VENUE } from '../fragments'
@@ -70,6 +70,8 @@ export const QUERY = gql`
           trainer {
             id
             fullName
+            avatar
+            archived
           }
         }
         schedule {

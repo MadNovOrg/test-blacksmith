@@ -2,7 +2,7 @@ import { gql } from 'graphql-request'
 
 import { Course } from '@app/types'
 
-import { COURSE_SCHEDULE, VENUE, ORGANIZATION } from '../fragments'
+import { COURSE_SCHEDULE, ORGANIZATION, VENUE } from '../fragments'
 
 // TODO: can't share types as user queries select different columns
 export type ResponseType = { course: Course }
@@ -42,6 +42,8 @@ export const QUERY = gql`
           givenName
           familyName
           fullName
+          avatar
+          archived
         }
       }
       schedule {

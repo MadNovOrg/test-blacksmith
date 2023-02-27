@@ -34,6 +34,7 @@ export const QUERY = gql`
         id
         fullName
         avatar
+        archived
       }
       answer
       question {

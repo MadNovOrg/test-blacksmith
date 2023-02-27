@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
   AvatarGroup,
   Chip,
@@ -91,8 +92,12 @@ export const OrgSummaryList: React.FC<
                     <Avatar
                       key={profile.id}
                       src={profile.avatar ?? ''}
-                      name={profile.fullName ?? ''}
-                    />
+                      name={
+                        profile.archived ? undefined : profile.fullName ?? ''
+                      }
+                    >
+                      {profile.archived ? <CloseIcon /> : null}
+                    </Avatar>
                   ))}
                 </AvatarGroup>
               </TableCell>

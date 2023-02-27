@@ -20,12 +20,14 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
         id
         avatar
         fullName
+        archived
       }
       profile {
         id
         avatar
         fullName
         email
+        archived
       }
       course {
         id

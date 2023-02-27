@@ -20,6 +20,7 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
         id
         avatar
         fullName
+        archived
       }
       course {
         id

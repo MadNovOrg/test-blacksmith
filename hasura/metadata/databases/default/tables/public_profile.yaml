@@ -134,26 +134,27 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - stripe_customer_id
-        - title
-        - dob
-        - go1_id
         - addresses
+        - archived
         - attributes
-        - contact_details
-        - go1_profile
-        - original_record
-        - preferences
-        - tags
         - avatar
+        - contact_details
+        - created_at
         - dbs
         - dietary_restrictions
         - disabilities
-        - job_title
-        - created_at
-        - last_activity
-        - updated_at
+        - dob
+        - go1_id
+        - go1_profile
         - id
+        - job_title
+        - last_activity
+        - original_record
+        - preferences
+        - stripe_customer_id
+        - tags
+        - title
+        - updated_at
       computed_fields:
         - fullName
       filter: {}
@@ -162,6 +163,7 @@ select_permissions:
     permission:
       columns:
         - addresses
+        - archived
         - attributes
         - avatar
         - contact_details
@@ -193,6 +195,7 @@ select_permissions:
     permission:
       columns:
         - addresses
+        - archived
         - attributes
         - avatar
         - contact_details
@@ -224,6 +227,7 @@ select_permissions:
     permission:
       columns:
         - addresses
+        - archived
         - attributes
         - avatar
         - contact_details
@@ -256,6 +260,7 @@ select_permissions:
     permission:
       columns:
         - addresses
+        - archived
         - attributes
         - avatar
         - contact_details
@@ -281,6 +286,13 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - archived
+        - last_activity
+      filter: {}
+      check: null
   - role: unverified
     permission:
       columns:

@@ -166,6 +166,7 @@ export type Profile = {
   trainer_role_types: Array<{ trainer_role_type: TrainerRoleType }>
   lastActivity: Date
   certificates?: Omit<CourseCertificate, 'profile' | 'participant'>[] // circular refs
+  archived?: boolean
 } & Base
 
 export type Role = {

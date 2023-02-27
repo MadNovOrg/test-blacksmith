@@ -1,3 +1,5 @@
+import ArchiveIcon from '@mui/icons-material/Archive'
+import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import {
   Alert,
@@ -16,7 +18,7 @@ import {
   Typography,
 } from '@mui/material'
 import { formatDistanceToNow, isPast } from 'date-fns'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -28,6 +30,7 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
+import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
 
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
@@ -43,9 +46,11 @@ export const ViewProfilePage: React.FC<
   const { id } = useParams()
   const [searchParams] = useSearchParams()
 
+  const [showArchiveDialog, setShowArchiveDialog] = useState(false)
+
   const orgId = searchParams.get('orgId')
 
-  const { profile, go1Licenses, certifications } = useProfile(
+  const { profile, go1Licenses, certifications, mutate } = useProfile(
     id ?? currentUserProfile?.id,
     undefined,
     orgId ?? undefined,
@@ -59,15 +64,18 @@ export const ViewProfilePage: React.FC<
   }
 
   const editAllowed =
-    !id ||
-    acl.isTTAdmin() ||
-    currentUserProfile?.organizations.some(orgMember =>
-      profile.organizations.some(
-        profileOrgMember =>
-          profileOrgMember.organization.id === orgMember.organization.id &&
-          orgMember.isAdmin
-      )
-    )
+    !profile.archived &&
+    (!id ||
+      acl.isTTAdmin() ||
+      currentUserProfile?.organizations.some(orgMember =>
+        profile.organizations.some(
+          profileOrgMember =>
+            profileOrgMember.organization.id === orgMember.organization.id &&
+            orgMember.isAdmin
+        )
+      ))
+
+  const archiveAllowed = !profile.archived && acl.isTTAdmin()
 
   const certificateExpired = (expiryDate: string) =>
     isPast(new Date(expiryDate))
@@ -90,15 +98,25 @@ export const ViewProfilePage: React.FC<
           >
             <Avatar
               src={profile.avatar ?? ''}
-              name={profile.fullName ?? ''}
+              name={profile.archived ? undefined : profile.fullName ?? ''}
               size={220}
               sx={{ mb: 4 }}
-            />
+            >
+              {profile.archived ? (
+                <CloseIcon sx={{ transform: 'scale(5)' }} />
+              ) : null}
+            </Avatar>
             <Box display={'flex'} flexDirection={'column'}>
-              <Typography variant="h1">{profile.fullName}</Typography>
-              <Typography variant="body1" color="grey.700">
-                {profile.email}
+              <Typography variant="h1">
+                {profile.archived
+                  ? t('common.archived-profile')
+                  : profile.fullName}
               </Typography>
+              {!profile.archived ? (
+                <Typography variant="body1" color="grey.700">
+                  {profile.email}
+                </Typography>
+              ) : null}
             </Box>
 
             {editAllowed ? (
@@ -110,6 +128,18 @@ export const ViewProfilePage: React.FC<
                 sx={{ mt: 5 }}
               >
                 {t('edit-profile')}
+              </Button>
+            ) : null}
+
+            {archiveAllowed ? (
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={() => setShowArchiveDialog(true)}
+                startIcon={<ArchiveIcon />}
+                sx={{ mt: 2 }}
+              >
+                {t('archive-profile')}
               </Button>
             ) : null}
           </Grid>
@@ -146,29 +176,36 @@ export const ViewProfilePage: React.FC<
             <Typography variant="subtitle2" mb={1}>
               {t('personal-details')}
             </Typography>
-            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-              <DetailsRow label={t('first-name')} value={profile.givenName} />
-              <DetailsRow label={t('surname')} value={profile.familyName} />
-              <DetailsRow label={t('email')} value={profile.email} />
-              <DetailsRow label={t('phone')} value={profile.phone} />
-              <DetailsRow label={t('dob')} value={profile.dob} />
-              <DetailsRow label={t('job-title')} value={profile.jobTitle} />
-              <DetailsRow label={t('dbs')} value={profile.dbs} />
-              <DetailsRow
-                label={t('dietary-restrictions')}
-                value={
-                  profile.dietaryRestrictions === ''
-                    ? '--'
-                    : profile.dietaryRestrictions
-                }
-              />
-              <DetailsRow
-                label={t('disabilities')}
-                value={
-                  profile.disabilities === '' ? '--' : profile.disabilities
-                }
-              />
-            </Box>
+
+            {profile.archived ? (
+              <Alert severity="error" variant="standard">
+                {t('pages.my-profile.this-is-an-archived-user')}
+              </Alert>
+            ) : (
+              <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                <DetailsRow label={t('first-name')} value={profile.givenName} />
+                <DetailsRow label={t('surname')} value={profile.familyName} />
+                <DetailsRow label={t('email')} value={profile.email} />
+                <DetailsRow label={t('phone')} value={profile.phone} />
+                <DetailsRow label={t('dob')} value={profile.dob} />
+                <DetailsRow label={t('job-title')} value={profile.jobTitle} />
+                <DetailsRow label={t('dbs')} value={profile.dbs} />
+                <DetailsRow
+                  label={t('dietary-restrictions')}
+                  value={
+                    profile.dietaryRestrictions === ''
+                      ? '--'
+                      : profile.dietaryRestrictions
+                  }
+                />
+                <DetailsRow
+                  label={t('disabilities')}
+                  value={
+                    profile.disabilities === '' ? '--' : profile.disabilities
+                  }
+                />
+              </Box>
+            )}
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('pages.view-profile.hub-access')}
             </Typography>
@@ -450,6 +487,16 @@ export const ViewProfilePage: React.FC<
           </Grid>
         </Grid>
       </Container>
+
+      {showArchiveDialog && id ? (
+        <ProfileArchiveDialog
+          onClose={async () => {
+            setShowArchiveDialog(false)
+            await mutate()
+          }}
+          profileId={id}
+        />
+      ) : null}
     </Box>
   )
 }

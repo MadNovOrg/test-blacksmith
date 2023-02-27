@@ -21,7 +21,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
-import { TableHead, Col } from '@app/components/Table/TableHead'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
+import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { CourseLevel, CourseParticipant, Grade as GradeEnum } from '@app/types'
@@ -182,9 +183,7 @@ export const CertificationList: React.FC<
 
                 {showCol('name') ? (
                   <TableCell>
-                    <Link href={`/profile/${p.profile.id}`}>
-                      {p.profile.fullName}
-                    </Link>
+                    <ProfileAvatar profile={p.profile} />
                   </TableCell>
                 ) : null}
 

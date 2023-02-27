@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
   AvatarGroup,
   styled,
@@ -19,7 +20,7 @@ import { CourseTrainerType } from '@app/types'
 import { Avatar } from '../Avatar'
 
 export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
-  profile: Pick<Profile, 'fullName' | 'avatar'>
+  profile: Pick<Profile, 'fullName' | 'avatar' | 'archived'>
 }
 type Props = {
   trainers?: TrainerAvatar[]
@@ -55,19 +56,29 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   function trainerAvatar(trainer: TrainerAvatar, index: number) {
+    const name = trainer.profile.archived
+      ? t('common.archived-profile')
+      : trainer.profile.fullName
     return (
       <LightTooltip
         key={trainer.id}
         title={`${t(
           `components.trainer-avatar-group.${trainerTypeLabelMap[trainer.type]}`
-        )}: ${trainer.profile.fullName}`}
+        )}: ${name}`}
         placement="top"
       >
         <Avatar
-          src={trainer.profile.avatar ?? ''}
-          name={trainer.profile.fullName ?? ''}
+          src={
+            trainer.profile.archived ? undefined : trainer.profile.avatar ?? ''
+          }
+          name={
+            trainer.profile.archived
+              ? undefined
+              : trainer.profile.fullName ?? ''
+          }
           size={32}
           sx={{
+            ...(trainer.profile.archived ? { bgcolor: 'grey' } : {}),
             opacity:
               trainer.status !== Course_Invite_Status_Enum.Accepted
                 ? '0.5'
@@ -75,7 +86,9 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           data-testid={`trainer-avatar-${trainer.id}`}
           data-index={index}
-        />
+        >
+          {trainer.profile.archived ? <CloseIcon /> : null}
+        </Avatar>
       </LightTooltip>
     )
   }

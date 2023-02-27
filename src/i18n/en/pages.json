@@ -910,7 +910,8 @@
     "bl-license-expires-in_other": "Active until {{date}} (expires in {{months}} months).",
     "bl-license-expires-in_one": "Active until {{date}} (expires in {{months}} month).",
     "bl-license-remove": "Remove",
-    "bl-license-deleting-error": "There was an error deleting the licence. Please try again later"
+    "bl-license-deleting-error": "There was an error deleting the licence. Please try again later",
+    "this-is-an-archived-user": "This is an archived user."
   },
   "orders": {
     "cols-invoiceNumber": "Invoice no.",

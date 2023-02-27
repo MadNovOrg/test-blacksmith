@@ -14,6 +14,7 @@ export const QUERY = gql`
       id
       fullName
       avatar
+      archived
       lastActivity
       createdAt
       certificates(where: { status: { _neq: "EXPIRED" } }) {
@@ -38,6 +39,8 @@ export const QUERY = gql`
         isAdmin
         profile {
           fullName
+          avatar
+          archived
         }
         organization {
           id

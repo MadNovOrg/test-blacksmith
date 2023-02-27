@@ -3,8 +3,8 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
-import { Avatar } from '@app/components/Avatar'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
@@ -86,13 +86,7 @@ const ModifyGradeModal: React.FC<
           </Grid>
           <Grid item xs={6}>
             <Box display="flex" flexDirection="row" alignItems="center" gap={1}>
-              <Avatar
-                src={participant.profile.avatar}
-                name={participant.profile.fullName}
-              />
-              <Typography variant="body1">
-                {participant.profile.fullName}
-              </Typography>
+              <ProfileAvatar profile={participant.profile} />
             </Box>
           </Grid>
           <Grid item xs={6} container alignItems="center">

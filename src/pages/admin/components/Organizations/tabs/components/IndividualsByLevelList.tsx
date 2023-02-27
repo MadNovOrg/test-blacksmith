@@ -16,7 +16,7 @@ import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Avatar } from '@app/components/Avatar'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
@@ -135,23 +135,12 @@ export const IndividualsByLevelList: React.FC<
             return (
               <TableRow key={profile.id} sx={{ backgroundColor: 'white' }}>
                 <TableCell>
-                  <Box display="flex" flexDirection="row" alignItems="center">
-                    <Avatar
-                      size={32}
-                      src={profile.avatar ?? ''}
-                      name={profile.fullName ?? ''}
-                    />
-                    <Link
-                      variant="body2"
-                      color={theme.palette.grey[900]}
-                      ml={1}
-                      href={`/profile/${profile.id}${
-                        orgId !== ALL_ORGS ? `?orgId=${orgId}` : ''
-                      }`}
-                    >
-                      {profile.fullName}
-                    </Link>
-                  </Box>
+                  <ProfileAvatar
+                    profile={profile}
+                    link={`/profile/${profile.id}${
+                      orgId !== ALL_ORGS ? `?orgId=${orgId}` : ''
+                    }`}
+                  />
                 </TableCell>
                 <TableCell>
                   <Box display="flex" flexDirection="column" alignItems="left">

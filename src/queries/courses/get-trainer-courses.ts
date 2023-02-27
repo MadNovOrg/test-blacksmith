@@ -30,6 +30,7 @@ export const QUERY = gql`
         id
         fullName
         avatar
+        archived
       }
     }
     max_participants

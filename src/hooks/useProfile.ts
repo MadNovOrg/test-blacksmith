@@ -3,12 +3,15 @@ import { useCallback, useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
+  ArchiveProfileMutation,
+  ArchiveProfileMutationVariables,
   GetProfileDetailsQuery,
   GetProfileDetailsQueryVariables,
   UpdateAvatarMutation,
   UpdateAvatarMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
+import { MUTATION as ARCHIVE_PROFILE_MUTATION } from '@app/queries/profile/archive-profile'
 import { QUERY } from '@app/queries/profile/get-profile-details'
 import { MUTATION as UPDATE_AVATAR_MUTATION } from '@app/queries/profile/update-profile-avatar'
 import { CourseLevel } from '@app/types'
@@ -103,6 +106,16 @@ export default function useProfile(
     [fetcher, profileId]
   )
 
+  const archive = useCallback(async () => {
+    if (!profileId) {
+      return
+    }
+    await fetcher<ArchiveProfileMutation, ArchiveProfileMutationVariables>(
+      ARCHIVE_PROFILE_MUTATION,
+      { profileId }
+    )
+  }, [fetcher, profileId])
+
   return {
     profile: data?.profile,
     certifications: data?.certificates,
@@ -112,5 +125,6 @@ export default function useProfile(
     error,
     status: getSWRLoadingStatus(data, error),
     updateAvatar,
+    archive,
   }
 }

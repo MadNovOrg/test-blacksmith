@@ -19,6 +19,7 @@ export const QUERY = gql`
         fullName
         id
         avatar
+        archived
       }
       participant {
         id
@@ -27,6 +28,7 @@ export const QUERY = gql`
         profile {
           fullName
           avatar
+          archived
         }
         gradingModules {
           completed
@@ -49,6 +51,7 @@ export const QUERY = gql`
           author {
             fullName
             avatar
+            archived
           }
         }
       }

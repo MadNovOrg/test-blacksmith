@@ -7,13 +7,13 @@ import {
   SxProps,
   TextField,
   TextFieldProps,
-  Typography,
 } from '@mui/material'
 import { debounce } from 'lodash-es'
 import React, { HTMLAttributes, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Avatar } from '@app/components/Avatar'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import {
   ParamsType,
@@ -102,10 +102,7 @@ export const ProfileSelector: React.FC<
   ) => {
     return (
       <Box {...props} component="li" sx={{ display: 'flex', gap: 2 }}>
-        <Avatar size={32} src={option.avatar} name={option.fullName} />
-        <Typography variant="body1" sx={{ flex: 1 }}>
-          {option.fullName}
-        </Typography>
+        <ProfileAvatar profile={option} disableLink={true} />
       </Box>
     )
   }

@@ -1,3 +1,4 @@
+import PersonIcon from '@mui/icons-material/Person'
 import { Avatar as MuiAvatar, AvatarTypeMap, SxProps } from '@mui/material'
 import React from 'react'
 
@@ -13,31 +14,34 @@ type AvatarProps = {
 }
 
 export const Avatar: React.FC<React.PropsWithChildren<AvatarProps>> =
-  React.forwardRef<HTMLDivElement, AvatarProps>(function AvatarInner(
-    { name, src, size = 32, sx, className, imgProps, ...rest },
-    ref
-  ) {
-    const props = {
-      src,
-      className,
-      imgProps,
-      sx: {
-        ...(name && { bgcolor: stringToColor(name) }),
-        ...sx,
-        height: size,
-        width: size,
-      },
-    }
+  React.forwardRef<HTMLDivElement, React.PropsWithChildren<AvatarProps>>(
+    function AvatarInner(
+      { name, src, size = 32, sx, className, imgProps, children, ...rest },
+      ref
+    ) {
+      const props = {
+        src,
+        className,
+        imgProps,
+        sx: {
+          ...(name && { bgcolor: stringToColor(name) }),
+          ...sx,
+          height: size,
+          width: size,
+        },
+      }
 
-    return (
-      <MuiAvatar
-        role="img"
-        {...props}
-        {...rest}
-        ref={ref}
-        style={{ fontSize: size / 2 }}
-      >
-        {name ? getInitialsFromName(name) : null}
-      </MuiAvatar>
-    )
-  })
+      return (
+        <MuiAvatar
+          role="img"
+          {...props}
+          {...rest}
+          ref={ref}
+          style={{ fontSize: size / 2 }}
+        >
+          {name ? getInitialsFromName(name) : null}
+          {children ? children : name ? null : <PersonIcon />}
+        </MuiAvatar>
+      )
+    }
+  )

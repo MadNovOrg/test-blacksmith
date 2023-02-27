@@ -34,6 +34,7 @@ export const PROFILE = gql`
     contactDetails
     dietaryRestrictions
     disabilities
+    archived
     organizations {
       id
       isAdmin
@@ -371,6 +372,8 @@ export const CourseTrainerInfo = gql`
     profile {
       id
       fullName
+      avatar
+      archived
     }
   }
 `

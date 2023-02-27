@@ -32,6 +32,8 @@ export const QUERY = gql`
           givenName
           familyName
           fullName
+          avatar
+          archived
           certificates {
             courseLevel
             expiryDate
@@ -56,10 +58,14 @@ export const QUERY = gql`
       contactProfile {
         id
         fullName
+        avatar
+        archived
       }
       salesRepresentative {
         id
         fullName
+        avatar
+        archived
       }
       dates: schedule_aggregate {
         aggregate {

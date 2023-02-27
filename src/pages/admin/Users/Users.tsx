@@ -11,7 +11,6 @@ import {
   TableContainer,
   TableRow,
   Chip,
-  styled,
   Checkbox,
   FormControlLabel,
   Button,
@@ -21,10 +20,10 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 
-import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterSearch } from '@app/components/FilterSearch'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import useProfiles from '@app/hooks/useProfiles'
@@ -32,15 +31,6 @@ import { useTablePagination } from '@app/hooks/useTablePagination'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { MergeUsersDialog } from './components/MergeUsersDialog'
-
-const StyledLink = styled('a')(() => ({
-  '&:hover, &:active': {
-    textDecoration: 'none',
-  },
-  '&:hover p, &:active p': {
-    textDecoration: 'underline',
-  },
-}))
 
 export const Users = () => {
   const { t } = useTranslation()
@@ -298,23 +288,7 @@ export const Users = () => {
                           )}
                         </TableCell>
                         <TableCell>
-                          <StyledLink href={`/profile/${user.id}`}>
-                            <Box
-                              pt={1}
-                              display="flex"
-                              flexDirection="row"
-                              alignItems="center"
-                              gap={1}
-                            >
-                              <Avatar
-                                src={user.avatar || undefined}
-                                name={user.fullName || undefined}
-                              />
-                              <Typography variant="body2" color="secondary">
-                                {user.fullName}
-                              </Typography>
-                            </Box>
-                          </StyledLink>
+                          <ProfileAvatar profile={user} />
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" color="secondary">

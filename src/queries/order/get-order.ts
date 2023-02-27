@@ -18,6 +18,8 @@ export const QUERY = gql`
       organizationId
       profile {
         fullName
+        avatar
+        archived
         email
         phone
       }
@@ -29,6 +31,8 @@ export const QUERY = gql`
         type
         salesRepresentative {
           fullName
+          avatar
+          archived
         }
         start
         end

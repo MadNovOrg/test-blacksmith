@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Container,
   Grid,
-  Link,
   Stack,
   Typography,
 } from '@mui/material'
@@ -28,11 +27,11 @@ import {
   icmImage,
   ntaImage,
 } from '@app/assets'
-import { Avatar } from '@app/components/Avatar'
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
 import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
 import { Dialog } from '@app/components/Dialog'
+import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
   ParamsType as GetCertificateParamsType,
@@ -366,24 +365,7 @@ export const CourseCertification: React.FC<
                   <Typography color={theme.palette.grey[700]} fontWeight={600}>
                     {t('common.attendee')}
                   </Typography>
-
-                  <Box
-                    pt={1}
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <Avatar
-                      src={certificate.profile.avatar}
-                      name={certificate.profile.fullName}
-                    />
-                    <Link href={`/profile/${certificate.profile.id}`}>
-                      <Typography variant="body1">
-                        {certificate.profile.fullName}
-                      </Typography>
-                    </Link>
-                  </Box>
+                  <ProfileAvatar profile={certificate.profile} sx={{ pt: 1 }} />
                 </Box>
               ) : null}
 

@@ -6,6 +6,7 @@ export const getProfiles = gql`
       id
       fullName
       avatar
+      archived
       email
       organizations {
         organization {
