@@ -119,6 +119,13 @@ type Query {
 }
 
 type Mutation {
+  mergeUser(
+    primaryUser: uuid!
+    mergeWith: uuid!
+  ): MergeUserOutput!
+}
+
+type Mutation {
   plansCreate(
     data: PlansCreateInput!
   ): PlansCreateResult
@@ -354,6 +361,10 @@ enum CourseDeliveryType {
   F2F
   MIXED
   VIRTUAL
+}
+
+enum MergeUserError {
+  GENERAL_ERROR
 }
 
 input PlansCreateInput {
@@ -841,4 +852,10 @@ type OrganizationInfo {
   id: uuid
 }
 
+type MergeUserOutput {
+  success: Boolean!
+  error: MergeUserError
+}
+
 scalar Date
+

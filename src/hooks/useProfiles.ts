@@ -12,7 +12,7 @@ export default function useProfiles({
   limit,
   offset,
 }: GetProfilesQueryVariables) {
-  const { data, error } = useSWR<
+  const { data, error, mutate } = useSWR<
     GetProfilesQuery,
     Error,
     [string, GetProfilesQueryVariables] | null
@@ -21,6 +21,7 @@ export default function useProfiles({
   const status = getSWRLoadingStatus(data, error)
 
   return {
+    mutate,
     profiles: data?.profiles ?? [],
     count: data?.profile_aggregate.aggregate?.count,
     error,

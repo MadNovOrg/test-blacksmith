@@ -14,9 +14,11 @@ import {
   styled,
   Checkbox,
   FormControlLabel,
+  Button,
 } from '@mui/material'
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
 
 import { Avatar } from '@app/components/Avatar'
@@ -29,6 +31,8 @@ import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { RoleName, TrainerRoleTypeName } from '@app/types'
 
+import { MergeUsersDialog } from './components/MergeUsersDialog'
+
 const StyledLink = styled('a')(() => ({
   '&:hover, &:active': {
     textDecoration: 'none',
@@ -40,6 +44,9 @@ const StyledLink = styled('a')(() => ({
 
 export const Users = () => {
   const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [showMergeDialog, setShowMergeDialog] = useState(false)
 
   const roleOptions = useMemo<FilterOption[]>(() => {
     return Object.values(RoleName).map<FilterOption>(role => ({
@@ -57,12 +64,15 @@ export const Users = () => {
     }))
   }, [t])
 
+  const [selected, setSelected] = useState<string[]>([])
   const [keyword, setKeyword] = useState('')
   const [keywordDebounced] = useDebounce(keyword, 300)
   const [roleFilter, setRoleFilter] = useState<FilterOption[]>(roleOptions)
   const [filterByModerator, setFilterByModerator] = useState(false)
   const [trainerTypeFilter, setTrainerTypeFilter] =
     useState<FilterOption[]>(trainerTypeOptions)
+
+  const merging = location.pathname.includes('/merge')
 
   const [where, filtered] = useMemo(() => {
     let isFiltered = false
@@ -129,6 +139,7 @@ export const Users = () => {
     profiles: users,
     isLoading,
     count: usersTotalCount,
+    mutate,
   } = useProfiles({
     where,
     limit: perPage,
@@ -138,6 +149,11 @@ export const Users = () => {
   const cols = useMemo(() => {
     const _t = (col: string) => t(`common.${col}`)
     return [
+      {
+        id: ' ',
+        label: ' ',
+        sorting: false,
+      },
       {
         id: 'name',
         label: _t('name'),
@@ -164,10 +180,41 @@ export const Users = () => {
   const isExternalRole = (role: string) =>
     [RoleName.TRAINER, RoleName.USER].some(r => r === role)
 
+  const handleCloseMergeDialog = () => {
+    setShowMergeDialog(false)
+    setSelected([])
+    mutate()
+  }
+
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
-      <Box mb={4}>
-        <BackButton label={t('pages.admin.back-to-settings')} />
+      <Box mb={4} justifyContent="space-between" display="flex">
+        <BackButton
+          label={
+            merging
+              ? t('pages.admin.back-to-user-mgmt')
+              : t('pages.admin.back-to-settings')
+          }
+        />
+
+        {merging ? (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setShowMergeDialog(true)}
+            disabled={selected.length !== 2}
+          >
+            {t('pages.admin.users.merge-selected')}
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('./merge')}
+          >
+            {t('pages.admin.users.merge-users')}
+          </Button>
+        )}
       </Box>
       <Box display="flex" gap={4}>
         <Box width={250}>
@@ -232,7 +279,24 @@ export const Users = () => {
 
                   {users?.map(user => {
                     return (
-                      <TableRow key={user.id}>
+                      <TableRow key={user.id} data-testid={`row-${user.id}`}>
+                        <TableCell>
+                          {merging && (
+                            <Checkbox
+                              value={user.id}
+                              onChange={e => {
+                                setSelected(s => {
+                                  if (e.target.checked) {
+                                    return [...s, e.target.value]
+                                  } else {
+                                    return s.filter(id => id !== e.target.value)
+                                  }
+                                })
+                              }}
+                              checked={selected.includes(user.id)}
+                            />
+                          )}
+                        </TableCell>
                         <TableCell>
                           <StyledLink href={`/profile/${user.id}`}>
                             <Box
@@ -321,6 +385,13 @@ export const Users = () => {
           )}
         </Box>
       </Box>
+      {showMergeDialog && (
+        <MergeUsersDialog
+          onClose={handleCloseMergeDialog}
+          profileId1={selected[0]}
+          profileId2={selected[1]}
+        />
+      )}
     </Container>
   )
 }

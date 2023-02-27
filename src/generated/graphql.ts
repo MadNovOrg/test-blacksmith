@@ -3792,6 +3792,16 @@ export type MenuToMenuItemConnectionWhereArgs = {
   parentId?: InputMaybe<Scalars['ID']>;
 };
 
+export enum MergeUserError {
+  GeneralError = 'GENERAL_ERROR'
+}
+
+export type MergeUserOutput = {
+  __typename?: 'MergeUserOutput';
+  error?: Maybe<MergeUserError>;
+  success: Scalars['Boolean'];
+};
+
 /** The MimeType of the object */
 export enum MimeTypeEnum {
   /** MimeType application/java */
@@ -25060,6 +25070,8 @@ export type Mutation_Root = {
   insert_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** insert a single row into the table: "xero_credential" */
   insert_xero_credential_one?: Maybe<Xero_Credential>;
+  /** Merge users */
+  mergeUser: MergeUserOutput;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
   /** replaceParticipant */
@@ -27203,6 +27215,13 @@ export type Mutation_RootInsert_Xero_CredentialArgs = {
 export type Mutation_RootInsert_Xero_Credential_OneArgs = {
   object: Xero_Credential_Insert_Input;
   on_conflict?: InputMaybe<Xero_Credential_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootMergeUserArgs = {
+  mergeWith: Scalars['uuid'];
+  primaryUser: Scalars['uuid'];
 };
 
 
@@ -39500,6 +39519,14 @@ export type SaveHealthSafetyConsentMutationVariables = Exact<{
 
 
 export type SaveHealthSafetyConsentMutation = { __typename?: 'mutation_root', update_course_participant?: { __typename?: 'course_participant_mutation_response', returning: Array<{ __typename?: 'course_participant', id: any }> } | null };
+
+export type MergeUserMutationVariables = Exact<{
+  primaryUser: Scalars['uuid'];
+  mergeWith: Scalars['uuid'];
+}>;
+
+
+export type MergeUserMutation = { __typename?: 'mutation_root', mergeUser: { __typename?: 'MergeUserOutput', success: boolean, error?: MergeUserError | null } };
 
 export type GetRolesQueryVariables = Exact<{ [key: string]: never; }>;
 

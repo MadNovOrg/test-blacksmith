@@ -21,7 +21,15 @@ INSERT INTO profile (id, _given_name, _family_name, _email) VALUES
 ('f858c22c-3996-4137-a205-099e4521491f', 'Deacon', 'Hope', 'deacon.hope@teamteach.testinator.com'),
 ('ab528bc4-0d66-417f-8a34-eed6b949ea27', 'Coby', 'Bert', 'coby.bert@teamteach.testinator.com'),
 ('1054214f-1f5b-4d94-a381-ab6fba404f41', 'Khloe', 'Izzy', 'khloe.izzy@teamteach.testinator.com'),
-('5a7f3010-cd40-454a-88d9-c93935c039ec', 'Bryan', 'Chuckie', 'bryan.chuckie@teamteach.testinator.com');
+('5a7f3010-cd40-454a-88d9-c93935c039ec', 'Bryan', 'Chuckie', 'bryan.chuckie@teamteach.testinator.com'),
+('5ef68528-fb02-4462-8261-689930075d15', 'Merge 1', 'User', 'merge1.user@teamteach.testinator.com'),
+('8e80fda2-ed5a-4284-b95a-cbec399303f5', 'Merge 2', 'User', 'merge2.user@teamteach.testinator.com'),
+('720fce28-3c62-4ca9-ac28-10012bc07663', 'Merge 3', 'User', 'merge3.user@teamteach.testinator.com'),
+('e19d8f15-f7e6-477f-8080-dcb3ca20ba1b', 'Merge 4', 'User', 'merge4.user@teamteach.testinator.com'),
+('3df19e95-4410-49a5-bdb1-fc56e1548317', 'Merge 5', 'User', 'merge5.user@teamteach.testinator.com'),
+('5ca8978e-bac6-436c-8cee-4ad107180f45', 'Merge 6', 'User', 'merge6.user@teamteach.testinator.com'),
+('2f848f4d-436f-45db-95e4-77daa2d25e37', 'Merge 7', 'User', 'merge7.user@teamteach.testinator.com'),
+('d1a9f1bb-b927-4498-9649-42bd2965ca5b', 'Merge 8', 'User', 'merge8.user@teamteach.testinator.com');
 
 INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('061c2cbb-81ba-4c8f-8ae2-a5bda2092df4', '11935252-570f-42ef-a141-5cdf8f78270d', 'cognito'),
@@ -41,7 +49,15 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('6d12ea23-423a-4fe5-a343-38153fb7db68', 'f858c22c-3996-4137-a205-099e4521491f', 'cognito'),
 ('146987aa-2607-44eb-8f16-fef57c60c80e', 'ab528bc4-0d66-417f-8a34-eed6b949ea27', 'cognito'),
 ('98f6551e-6207-4d32-8719-fea2242ad85b', '1054214f-1f5b-4d94-a381-ab6fba404f41', 'cognito'),
-('136bae8d-005e-4031-840a-74ca69fe54ac', '5a7f3010-cd40-454a-88d9-c93935c039ec', 'cognito');
+('136bae8d-005e-4031-840a-74ca69fe54ac', '5a7f3010-cd40-454a-88d9-c93935c039ec', 'cognito'),
+('a0b22ba8-83cb-4522-acef-fdd21c54f7af', '5ef68528-fb02-4462-8261-689930075d15', 'cognito'), -- merge1.user@teamteach.testinator.com
+('1a0c58a1-f6f0-4409-9390-286c4f13d8be', '8e80fda2-ed5a-4284-b95a-cbec399303f5', 'cognito'), -- merge2.user@teamteach.testinator.com
+('4d6f25a6-60da-4179-b0e6-ad186b18e4f4', '720fce28-3c62-4ca9-ac28-10012bc07663', 'cognito'), -- merge3.user@teamteach.testinator.com
+('5d06c636-8019-4c26-9083-42277b074ee8', 'e19d8f15-f7e6-477f-8080-dcb3ca20ba1b', 'cognito'), -- merge4.user@teamteach.testinator.com
+('31f336d3-d890-40a3-999d-f5969cc35234', '3df19e95-4410-49a5-bdb1-fc56e1548317', 'cognito'), -- merge5.user@teamteach.testinator.com
+('dff92ac1-071e-4aa3-98cc-f621fb80c73b', '5ca8978e-bac6-436c-8cee-4ad107180f45', 'cognito'), -- merge6.user@teamteach.testinator.com
+('2a87bbc4-b2da-42c9-b721-355511189057', '2f848f4d-436f-45db-95e4-77daa2d25e37', 'cognito'), -- merge7.user@teamteach.testinator.com
+('77e4959c-d73e-41a1-ab58-4f691044437d', 'd1a9f1bb-b927-4498-9649-42bd2965ca5b', 'cognito'); -- merge8.user@teamteach.testinator.com
 
 -- Adding participant role to all participants
 INSERT INTO profile_role (profile_id, role_id) VALUES
@@ -62,7 +78,15 @@ INSERT INTO profile_role (profile_id, role_id) VALUES
 ('f858c22c-3996-4137-a205-099e4521491f', '151f0884-a8c8-48e2-a619-c4434864ea67'),
 ('ab528bc4-0d66-417f-8a34-eed6b949ea27', '151f0884-a8c8-48e2-a619-c4434864ea67'),
 ('1054214f-1f5b-4d94-a381-ab6fba404f41', '151f0884-a8c8-48e2-a619-c4434864ea67'),
-('5a7f3010-cd40-454a-88d9-c93935c039ec', '151f0884-a8c8-48e2-a619-c4434864ea67');
+('5a7f3010-cd40-454a-88d9-c93935c039ec', '151f0884-a8c8-48e2-a619-c4434864ea67'),
+('5ef68528-fb02-4462-8261-689930075d15', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge1.user@teamteach.testinator.com
+('8e80fda2-ed5a-4284-b95a-cbec399303f5', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge2.user@teamteach.testinator.com
+('720fce28-3c62-4ca9-ac28-10012bc07663', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge3.user@teamteach.testinator.com
+('e19d8f15-f7e6-477f-8080-dcb3ca20ba1b', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge4.user@teamteach.testinator.com
+('3df19e95-4410-49a5-bdb1-fc56e1548317', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge5.user@teamteach.testinator.com
+('5ca8978e-bac6-436c-8cee-4ad107180f45', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge6.user@teamteach.testinator.com
+('2f848f4d-436f-45db-95e4-77daa2d25e37', '151f0884-a8c8-48e2-a619-c4434864ea67'), -- merge7.user@teamteach.testinator.com
+('d1a9f1bb-b927-4498-9649-42bd2965ca5b', '151f0884-a8c8-48e2-a619-c4434864ea67'); -- merge8.user@teamteach.testinator.com
 
 INSERT INTO organization (id, name, original_record) VALUES
 ('46c34024-ea2f-4146-962d-c3e0fc3b923b', 'Example organization', '{}');
@@ -86,7 +110,9 @@ INSERT INTO organization_member (profile_id, organization_id) VALUES
 ('f858c22c-3996-4137-a205-099e4521491f', '46c34024-ea2f-4146-962d-c3e0fc3b923b'),
 ('ab528bc4-0d66-417f-8a34-eed6b949ea27', '46c34024-ea2f-4146-962d-c3e0fc3b923b'),
 ('1054214f-1f5b-4d94-a381-ab6fba404f41', '46c34024-ea2f-4146-962d-c3e0fc3b923b'),
-('5a7f3010-cd40-454a-88d9-c93935c039ec', '46c34024-ea2f-4146-962d-c3e0fc3b923b');
+('5a7f3010-cd40-454a-88d9-c93935c039ec', '46c34024-ea2f-4146-962d-c3e0fc3b923b'),
+('5ef68528-fb02-4462-8261-689930075d15', '55320dc6-cfb0-41fb-9000-ca7eb9d2894d'), -- merge1.user@teamteach.testinator.com
+('8e80fda2-ed5a-4284-b95a-cbec399303f5', '46c34024-ea2f-4146-962d-c3e0fc3b923b'); -- merge2.user@teamteach.testinator.com
 
 INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 ('d1d9a569-6f96-42ee-ac83-1ecb3f849001', 'john.doe@teamteach.testinator.com', 'ACCEPTED', 10000),
@@ -112,6 +138,8 @@ INSERT INTO public.course_invites (id, email, status, course_id) VALUES
 ('b36d524e-577e-45c6-a652-09d981435218', 'charles.scanlon@teamteach.testinator.com', 'PENDING', 10000),
 ('e2f6c2c7-c19a-41f3-b405-e92ed5dd9305', 'timothy.murphy@teamteach.testinator.com', 'DECLINED', 10000),
 ('2c562361-efb2-4683-aab0-f2d3ebc86d3b', 'marquis.pappas@teamteach.testinator.com', 'DECLINED', 10000),
+('5ef68528-fb02-4462-8261-689930075d15', 'merge1.user@teamteach.testinator.com', 'ACCEPTED', 10000),
+('8e80fda2-ed5a-4284-b95a-cbec399303f5', 'merge2.user@teamteach.testinator.com', 'ACCEPTED', 10000),
 
 ('d1d9a569-6f96-42ee-ac83-1ecb3f849019', 'john.doe@teamteach.testinator.com', 'ACCEPTED', 10010),
 ('d1d9a569-6f96-42ee-ac83-1ecb3f849020', 'apolonija.deo@teamteach.testinator.com', 'ACCEPTED', 10010),
@@ -137,4 +165,6 @@ INSERT INTO public.course_participant (registration_id, course_id, profile_id, i
 ('15408e55-79ef-41d0-915e-1c81513d3e39', 10006, '43ead544-671c-46fb-ba8f-b5858c83a2d8', '25478835-6d99-4d99-b0f7-3957fd8a7241', 'd1d9a569-6f96-42ee-ac83-1ecb3f849008', true, false, 'PASS'),
 ('15408e55-79ef-41d0-915e-1c81513d3e40', 10006, 'ae8f617c-2411-42aa-9501-f2f08b16a76e', '25478835-6d99-4d99-b0f7-3957fd8a7242', 'd1d9a569-6f96-42ee-ac83-1ecb3f849009', true, false, 'PASS'),
 ('af9e4740-9e8e-4465-adab-4a5ebbb73e4b', 10006, '6896b053-0d36-45b4-889c-9472d846c4a1', '5e7c2158-92a8-4c70-a506-f3b205b4ccad', 'd1d9a569-6f96-42ee-ac83-1ecb3f849010', true, false, 'PASS'),
-('3c665955-9ae8-47bc-84b6-9c103fea3b06', 10006, 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'c90c93de-24a5-47cb-816d-d1a379543d86', 'd1d9a569-6f96-42ee-ac83-1ecb3f849011', true, false, 'PASS');
+('3c665955-9ae8-47bc-84b6-9c103fea3b05', 10006, 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'c90c93de-24a5-47cb-816d-d1a379543d86', 'd1d9a569-6f96-42ee-ac83-1ecb3f849011', true, false, 'PASS'),
+('3c665955-9ae8-47bc-84b6-9c103fea3b07', 10006, '5ef68528-fb02-4462-8261-689930075d15', 'ed8bf937-41e0-4644-a13b-ed31f2ccb05b', '5ef68528-fb02-4462-8261-689930075d15', true, false, 'PASS'),
+('3c665955-9ae8-47bc-84b6-9c103fea3b08', 10006, '8e80fda2-ed5a-4284-b95a-cbec399303f5', '99f985c2-9740-4208-9ba1-56db9c770423', '8e80fda2-ed5a-4284-b95a-cbec399303f5', true, false, 'PASS');

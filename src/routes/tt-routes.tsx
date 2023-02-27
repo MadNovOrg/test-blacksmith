@@ -158,7 +158,9 @@ const TTAdminRoutes = () => {
           <Route path="admin">
             <Route index element={<AdminPage />} />
             <Route path="contacts" element={<Contacts />} />
-            <Route path="users" element={<Users />} />
+            <Route path="users" element={<Users />}>
+              <Route path="merge" />
+            </Route>
             <Route path="discounts">
               <Route index element={<DiscountsList />} />
               <Route path="new" element={<DiscountCreate />} />

@@ -9,5 +9,6 @@
   "timeFromTo": "{{from, date_onlyTime}} - {{to, date_onlyTime}}",
   "dateFromTo": "{{from, date_short}} - {{to, date_short}}",
   "dateTimeFromTo": "{{from, date_withTime}} - {{to, date_withTime}}",
-  "fullDateTime": "{{date, date_full}}"
+  "fullDateTime": "{{date, date_full}}",
+  "fullDateInSentence": "{{date, date_fullInSentence}}"
 }

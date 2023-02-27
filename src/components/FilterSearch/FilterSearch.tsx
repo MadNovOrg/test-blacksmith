@@ -26,9 +26,7 @@ export const FilterSearch: React.FC<React.PropsWithChildren<Props>> = ({
   ...rest
 }) => {
   const { t } = useTranslation()
-
   const [_value, setValue] = useQueryParam('q', withDefault(StringParam, value))
-  useEffect(() => setValue(value), [value, setValue])
 
   const _onChange = useDebouncedCallback(onChange, debounce)
   useEffect(() => {

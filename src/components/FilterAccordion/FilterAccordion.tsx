@@ -6,7 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { StyledAccordion } from './styled'
 
@@ -41,8 +41,15 @@ export const FilterAccordion = <T,>({
       item
     )
 
-  const shouldExpand =
-    Object.values(options).some(val => val.selected === true) || defaultExpanded
+  // When options change, shouldExpand changes between true <-> false, and MUI doesn’t like
+  // when defaultExpanded prop changes after mount.
+  // useMemo is used here just to preserve the original/first value. Not for performance.
+  const shouldExpand = useMemo(
+    () =>
+      Object.values(options).some(val => val.selected === true) ||
+      defaultExpanded,
+    [] // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   return (
     <StyledAccordion

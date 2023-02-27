@@ -58,6 +58,7 @@ describe('page: Users', () => {
       isLoading: true,
       count: 0,
       error: undefined,
+      mutate: jest.fn(),
     })
 
     render(<Users />)
@@ -71,6 +72,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
+      mutate: jest.fn(),
     })
 
     render(<Users />)
@@ -85,6 +87,7 @@ describe('page: Users', () => {
       isLoading: false,
       count: 0,
       error: undefined,
+      mutate: jest.fn(),
     })
 
     render(<Users />)
@@ -92,15 +95,15 @@ describe('page: Users', () => {
     const table = screen.getByRole('table')
     const tableHead = within(table).getByTestId('table-head')
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
-    expect(columnHeaders).toHaveLength(5)
-    expect(within(columnHeaders[0]).getByText('Name')).toBeInTheDocument()
-    expect(within(columnHeaders[1]).getByText('Email')).toBeInTheDocument()
+    expect(columnHeaders).toHaveLength(6)
+    expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
+    expect(within(columnHeaders[2]).getByText('Email')).toBeInTheDocument()
     expect(
-      within(columnHeaders[2]).getByText('Organisation')
+      within(columnHeaders[3]).getByText('Organisation')
     ).toBeInTheDocument()
-    expect(within(columnHeaders[3]).getByText('Role')).toBeInTheDocument()
+    expect(within(columnHeaders[4]).getByText('Role')).toBeInTheDocument()
     expect(
-      within(columnHeaders[4]).getByText('Trainer type')
+      within(columnHeaders[5]).getByText('Trainer type')
     ).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody.children).toHaveLength(1)
@@ -136,6 +139,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
+          mutate: jest.fn(),
         }
       }
     )
@@ -170,6 +174,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
+          mutate: jest.fn(),
         }
       }
     )
@@ -207,6 +212,7 @@ describe('page: Users', () => {
           isLoading: false,
           count: 0,
           error: undefined,
+          mutate: jest.fn(),
         }
       }
     )
@@ -220,6 +226,86 @@ describe('page: Users', () => {
         screen.getByText(`${filteredProfile.fullName}`)
       ).toBeInTheDocument()
       expect(screen.queryByText(`${profile.fullName}`)).not.toBeInTheDocument()
+    })
+  })
+
+  it('navigates to merge page with checkboxes enabled', async () => {
+    const profile = mockProfile()
+    useProfilesMocked.mockReturnValue({
+      profiles: [profile],
+      isLoading: false,
+      count: 0,
+      error: undefined,
+      mutate: jest.fn(),
+    })
+
+    render(<Users />)
+
+    await userEvent.click(screen.getByText('Merge Users'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Merge Selected')).toBeInTheDocument()
+    })
+    expect(screen.getByText('Merge Selected')).toBeDisabled()
+  })
+
+  it('renders merge user page with merge selected button disabled', async () => {
+    const profile = mockProfile()
+    useProfilesMocked.mockReturnValue({
+      profiles: [profile],
+      isLoading: false,
+      count: 0,
+      error: undefined,
+      mutate: jest.fn(),
+    })
+
+    render(<Users />, {}, { initialEntries: ['/users/merge'] })
+
+    await waitFor(() => {
+      expect(screen.getByText('Merge Selected')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText('Merge Selected')).toBeDisabled()
+
+    const table = screen.getByRole('table')
+    const tableBody = within(table).getByTestId('table-body')
+    const tableRow = within(tableBody).getByTestId(`row-${profile.id}`)
+    const checkbox = within(tableRow).getByRole('checkbox')
+    expect(checkbox).toBeInTheDocument()
+  })
+
+  it('enables merge selected button when exactly 2 users are selected', async () => {
+    const profile1 = mockProfile()
+    const profile2 = mockProfile()
+
+    useProfilesMocked.mockReturnValue({
+      profiles: [profile1, profile2],
+      isLoading: false,
+      count: 0,
+      error: undefined,
+      mutate: jest.fn(),
+    })
+
+    render(<Users />, {}, { initialEntries: ['/users/merge'] })
+
+    const table = screen.getByRole('table')
+    const tableBody = within(table).getByTestId('table-body')
+    const row1 = within(tableBody).getByTestId(`row-${profile1.id}`)
+    const row2 = within(tableBody).getByTestId(`row-${profile2.id}`)
+
+    expect(screen.getByText('Merge Selected')).toBeDisabled()
+
+    await userEvent.click(within(row1).getByRole('checkbox'))
+    expect(screen.getByText('Merge Selected')).toBeDisabled()
+    await userEvent.click(within(row2).getByRole('checkbox'))
+    expect(screen.getByText('Merge Selected')).toBeEnabled()
+
+    await userEvent.click(screen.getByText('Merge Selected'))
+
+    await waitFor(() => {
+      const dialog = screen.getByRole('dialog')
+
+      expect(within(dialog).getByText(/compare users/i)).toBeInTheDocument()
     })
   })
 })

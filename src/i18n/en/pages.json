@@ -852,6 +852,7 @@
       "add-new-organization": "Add new organisation"
     },
     "back-to-settings": "Back to settings",
+    "back-to-user-mgmt": "Back to user management",
     "hub-settings": {
       "title": "Hub settings",
       "users": {
@@ -880,7 +881,20 @@
       }
     },
     "users": {
-      "title": "User management"
+      "title": "User management",
+      "merge-users": "Merge Users",
+      "merge-selected": "Merge Selected",
+      "merge-users-dialog": {
+        "compare-users": "Compare Users",
+        "merge-warning": "This action is irreversible. The duplicate user (s) information will be merged into the Primary users record. Once the merge is complete the duplicate user(s) will be deleted.",
+        "confirm-merge": "I Confirm that I would like to merge these users",
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "primary-user": "Primary user",
+        "last-updated": "Last updated on",
+        "no-profiles": "Unable to fetch user profile",
+        "merge-error": "Unable to merge users, please check logs"
+      }
     }
   },
   "my-profile": {

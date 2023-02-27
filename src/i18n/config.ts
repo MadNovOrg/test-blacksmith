@@ -42,6 +42,7 @@ export const dateFormats = {
   date_long_withTime: 'EEE, dd MMM yyyy, hh:mm aa',
   date_full: 'PPpp',
   date_onlyTime: 'hh:mm aa',
+  date_fullInSentence: "do 'of' MMMM yyyy",
 }
 
 Object.entries(dateFormats).forEach(([name, format]) => {

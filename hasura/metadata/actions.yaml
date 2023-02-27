@@ -149,6 +149,15 @@ actions:
       kind: ""
       handler: '{{ACTIONS_HOST}}/stripe/subscriptions/check'
     comment: Checks whether user is subscribed to membership
+  - name: mergeUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/merge'
+      forward_client_headers: true
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
+    comment: Merge users
   - name: plansCreate
     definition:
       kind: synchronous
@@ -537,6 +546,11 @@ custom_types:
         - value: VIRTUAL
           is_deprecated: null
           description: null
+    - name: MergeUserError
+      values:
+        - value: GENERAL_ERROR
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -613,5 +627,6 @@ custom_types:
     - name: Order
     - name: OrderInfo
     - name: OrganizationInfo
+    - name: MergeUserOutput
   scalars:
     - name: Date
