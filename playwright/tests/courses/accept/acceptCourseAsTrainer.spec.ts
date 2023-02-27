@@ -16,38 +16,94 @@ import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
-const test = base.extend<{ course: Course }>({
-  course: async ({}, use) => {
-    const course = UNIQUE_COURSE()
-    course.type = CourseType.OPEN
-    course.schedule[0].start = new Date('2024-03-15T09:00:00Z')
-    course.schedule[0].end = new Date('2024-03-15T16:00:00Z')
-    course.status = Course_Status_Enum.TrainerPending
-    const moduleIds = await getModuleIds(
-      getModulesByLevel(course.level),
-      course.level
-    )
-    course.id = await insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.PENDING
-    )
-    await insertCourseModules(course.id, moduleIds)
-    await use(course)
-    await deleteCourse(course.id)
+import { inXMonths } from '../../../util'
+
+const testData = [
+  {
+    name: 'accept open course as trainer @smoke',
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.OPEN
+      course.status = Course_Status_Enum.TrainerPending
+      course.schedule[0].start = inXMonths(3)
+      course.schedule[0].end = inXMonths(3)
+      const moduleIds = await getModuleIds(
+        getModulesByLevel(course.level),
+        course.level
+      )
+      course.id = await insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.PENDING
+      )
+      await insertCourseModules(course.id, moduleIds)
+      return course
+    },
   },
-})
-test.use({ storageState: stateFilePath('trainer') })
-test('accept open course as trainer @smoke', async ({ page, course }) => {
-  test.setTimeout(60000)
-  const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.acceptCourse(course.id)
-  await myCoursesPage.goToCourseBuilder()
-  await myCoursesPage.submitDefaultModules()
-  await myCoursesPage.confirmModules()
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
-  await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
-})
+  // TODO uncomment after implementing https://behaviourhub.atlassian.net/browse/TTHP-575
+  // {
+  //   name: 'accept indirect course as trainer',
+  //   course: async () => {
+  //     const course = UNIQUE_COURSE()
+  //     course.type = CourseType.INDIRECT
+  //     course.schedule[0].start = inXMonths(3)
+  //     course.schedule[0].end = inXMonths(3)
+  //     const moduleIds = await getModuleIds(
+  //       getModulesByLevel(course.level),
+  //       course.level
+  //     )
+  //     course.id = await insertCourse(
+  //       course,
+  //       users.trainer.email,
+  //       InviteStatus.PENDING
+  //     )
+  //     await insertCourseModules(course.id, moduleIds)
+  //     return course
+  //   },
+  // },
+  // {
+  //   name: 'accept closed course as trainer @smoke',
+  //   course: async () => {
+  //     const course = UNIQUE_COURSE()
+  //     course.type = CourseType.CLOSED
+  //     course.schedule[0].start = inXMonths(3)
+  //     course.schedule[0].end = inXMonths(3)
+  //     const moduleIds = await getModuleIds(
+  //       getModulesByLevel(course.level),
+  //       course.level
+  //     )
+  //     course.id = await insertCourse(
+  //       course,
+  //       users.trainer.email,
+  //       InviteStatus.PENDING
+  //     )
+  //     await insertCourseModules(course.id, moduleIds)
+  //     return course
+  //   },
+  // },
+]
+
+for (const data of testData) {
+  const test = base.extend<{ course: Course }>({
+    course: async ({}, use) => {
+      const course = await data.course()
+      await use(course)
+      await deleteCourse(course.id)
+    },
+  })
+
+  test.use({ storageState: stateFilePath('trainer') })
+  test(data.name, async ({ page, course }) => {
+    test.setTimeout(60000)
+    const myCoursesPage = new MyCoursesPage(page)
+    await myCoursesPage.goto()
+    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.acceptCourse(course.id)
+    await myCoursesPage.goToCourseBuilder()
+    await myCoursesPage.submitDefaultModules()
+    await myCoursesPage.confirmModules()
+    await myCoursesPage.goto()
+    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
+  })
+}
