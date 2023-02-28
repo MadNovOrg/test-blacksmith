@@ -5,7 +5,7 @@ import useProfile from '@app/hooks/useProfile'
 import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { chance, render, screen, userEvent, within } from '@test/index'
+import { chance, render, screen, userEvent, waitFor, within } from '@test/index'
 
 import { MergeUsersDialog } from './MergeUsersDialog'
 
@@ -23,6 +23,7 @@ describe('ManageUsersDialog', () => {
   const profileId2 = chance.guid()
   const fetcherMock = jest.fn()
   const onCloseMock = jest.fn()
+  const onSuccessMock = jest.fn()
 
   const setup = () => {
     useFetcherMock.mockReturnValue(fetcherMock)
@@ -97,6 +98,7 @@ describe('ManageUsersDialog', () => {
     return render(
       <MergeUsersDialog
         onClose={onCloseMock}
+        onSuccess={onSuccessMock}
         profileId1={profileId1}
         profileId2={profileId2}
       />
@@ -113,6 +115,7 @@ describe('ManageUsersDialog', () => {
   })
 
   it('merge user', async () => {
+    fetcherMock.mockResolvedValueOnce({ mergeUser: { success: true } })
     setup()
 
     await userEvent.click(screen.getByDisplayValue(profileId2))
@@ -124,5 +127,36 @@ describe('ManageUsersDialog', () => {
       primaryUser: profileId2,
       mergeWith: profileId1,
     })
+    expect(onSuccessMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('merge error', async () => {
+    fetcherMock.mockResolvedValueOnce({ mergeUser: { error: 'some error' } })
+    setup()
+
+    await userEvent.click(screen.getByDisplayValue(profileId2))
+    await userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('button', { name: 'Continue' }))
+
+    expect(fetcherMock).toHaveBeenCalledTimes(1)
+    expect(fetcherMock).toHaveBeenCalledWith('merge-query', {
+      primaryUser: profileId2,
+      mergeWith: profileId1,
+    })
+    expect(onSuccessMock).toHaveBeenCalledTimes(0)
+
+    waitFor(() => {
+      expect(screen.getByText(/Unable to merge users/i)).toBeInTheDocument()
+    })
+  })
+
+  it('cancel merge', async () => {
+    setup()
+
+    await userEvent.click(screen.getByDisplayValue(profileId2))
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+
+    expect(onCloseMock).toHaveBeenCalledTimes(1)
+    expect(fetcherMock).toHaveBeenCalledTimes(0)
   })
 })

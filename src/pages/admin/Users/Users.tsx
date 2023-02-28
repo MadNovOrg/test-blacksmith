@@ -170,7 +170,13 @@ export const Users = () => {
   const isExternalRole = (role: string) =>
     [RoleName.TRAINER, RoleName.USER].some(r => r === role)
 
-  const handleCloseMergeDialog = () => {
+  const handleMergeCancel = () => {
+    setShowMergeDialog(false)
+    setSelected([])
+    mutate()
+  }
+
+  const handleMergeSuccess = () => {
     setShowMergeDialog(false)
     setSelected([])
     mutate()
@@ -361,7 +367,8 @@ export const Users = () => {
       </Box>
       {showMergeDialog && (
         <MergeUsersDialog
-          onClose={handleCloseMergeDialog}
+          onClose={handleMergeCancel}
+          onSuccess={handleMergeSuccess}
           profileId1={selected[0]}
           profileId2={selected[1]}
         />

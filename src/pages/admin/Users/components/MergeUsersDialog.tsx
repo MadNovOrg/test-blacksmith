@@ -27,6 +27,7 @@ import { LoadingStatus } from '@app/util'
 
 type Props = {
   onClose: () => void
+  onSuccess: () => void
   profileId1: string
   profileId2: string
 }
@@ -74,6 +75,7 @@ const UserSummary: React.FC<{ profile: GetProfileDetailsQuery['profile'] }> = ({
 
 export const MergeUsersDialog: React.FC<Props> = ({
   onClose,
+  onSuccess,
   profileId1,
   profileId2,
 }) => {
@@ -109,7 +111,7 @@ export const MergeUsersDialog: React.FC<Props> = ({
         return setError('merge-error')
       }
 
-      onClose()
+      onSuccess()
     } catch (e: unknown) {
       setSaving(false)
       setError('merge-error')
@@ -259,7 +261,9 @@ export const MergeUsersDialog: React.FC<Props> = ({
               }
             />
             <Box>
-              <Button variant="text"> {t('cancel')}</Button>
+              <Button variant="text" onClick={onClose}>
+                {t('cancel')}
+              </Button>
               <Button
                 variant="contained"
                 color="primary"
