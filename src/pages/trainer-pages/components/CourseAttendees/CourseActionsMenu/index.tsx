@@ -55,6 +55,7 @@ export const CourseActionsMenu = <T,>({
       item={item}
       label={t('pages.course-participants.manage-attendance')}
       actions={actions}
+      data-testid="manage-attendance"
     />
   ) : null
 }
