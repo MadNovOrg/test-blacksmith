@@ -73,6 +73,7 @@ export const CourseExceptionsConfirmation: React.FC<
             variant="contained"
             color="primary"
             sx={{ ml: 1 }}
+            data-testid="proceed-button"
           >
             {submitLabel ?? t('pages.create-course.exceptions.proceed')}
           </Button>

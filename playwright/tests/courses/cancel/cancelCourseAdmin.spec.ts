@@ -18,61 +18,99 @@ import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 import { inXMonths } from '../../../util'
 
-const test = base.extend<{ course: Course }>({
-  course: async ({}, use) => {
-    const course = UNIQUE_COURSE()
-    course.type = CourseType.OPEN
-    course.schedule[0].start = inXMonths(2)
-    course.schedule[0].end = inXMonths(2)
-    course.status = Course_Status_Enum.TrainerPending
-    const moduleIds = await getModuleIds(
-      getModulesByLevel(course.level),
-      course.level
-    )
-    course.id = await insertCourse(
-      course,
-      users.trainer.email,
-      InviteStatus.PENDING
-    )
-    await insertCourseModules(course.id, moduleIds)
-    await use(course)
-    await deleteCourse(course.id)
+const testData = [
+  {
+    name: 'open course',
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.OPEN
+      course.status = Course_Status_Enum.TrainerPending
+      course.schedule[0].start = inXMonths(3)
+      course.schedule[0].end = inXMonths(3)
+      const moduleIds = await getModuleIds(
+        getModulesByLevel(course.level),
+        course.level
+      )
+      course.id = await insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.PENDING
+      )
+      await insertCourseModules(course.id, moduleIds)
+      return course
+    },
   },
-})
+  // TODO uncomment after implementing https://behaviourhub.atlassian.net/browse/TTHP-575
+  // {
+  //   name: 'closed course',
+  //   course: async () => {
+  //     const course = UNIQUE_COURSE()
+  //     course.type = CourseType.CLOSED
+  //     course.status = Course_Status_Enum.TrainerPending
+  //     course.organization = { name: 'London First School' }
+  //     course.schedule[0].start = inXMonths(3)
+  //     course.schedule[0].end = inXMonths(3)
+  //     const moduleIds = await getModuleIds(
+  //       getModulesByLevel(course.level),
+  //       course.level
+  //     )
+  //     course.id = await insertCourse(
+  //       course,
+  //       users.trainer.email,
+  //       InviteStatus.PENDING
+  //     )
+  //     await insertCourseModules(course.id, moduleIds)
+  //     return course
+  //   },
+  // },
+]
 
-test('cancel open course as admin @smoke', async ({ browser, course }) => {
-  test.setTimeout(60000)
-
-  // Create the course and modules as a trainer
-  const trainerContext = await browser.newContext({
-    storageState: stateFilePath('trainer'),
+for (const data of testData) {
+  const test = base.extend<{ course: Course }>({
+    course: async ({}, use) => {
+      const course = await data.course()
+      await use(course)
+      await deleteCourse(course.id)
+    },
   })
-  const page = await trainerContext.newPage()
-  const trainerCoursesPage = new MyCoursesPage(page)
-  await trainerCoursesPage.goto()
-  await trainerCoursesPage.searchCourse(`${course.id}`)
-  await trainerCoursesPage.acceptCourse(course.id)
-  await trainerCoursesPage.goToCourseBuilder()
-  await trainerCoursesPage.submitDefaultModules()
-  await trainerCoursesPage.confirmModules()
 
-  // Complete the rest of the journey as admin
-  const adminContext = await browser.newContext({
-    storageState: stateFilePath('admin'),
+  test(`cancel course as admin: ${data.name} @smoke`, async ({
+    browser,
+    course,
+  }) => {
+    test.setTimeout(60000)
+
+    // Create the course and modules as a trainer
+    const trainerContext = await browser.newContext({
+      storageState: stateFilePath('trainer'),
+    })
+    const page = await trainerContext.newPage()
+    const trainerCoursesPage = new MyCoursesPage(page)
+    await trainerCoursesPage.goto()
+    await trainerCoursesPage.searchCourse(`${course.id}`)
+    await trainerCoursesPage.acceptCourse(course.id)
+    await trainerCoursesPage.goToCourseBuilder()
+    await trainerCoursesPage.submitDefaultModules()
+    await trainerCoursesPage.confirmModules()
+
+    // Complete the rest of the journey as admin
+    const adminContext = await browser.newContext({
+      storageState: stateFilePath('admin'),
+    })
+    const adminPage = await adminContext.newPage()
+    const adminCoursesPage = new MyCoursesPage(adminPage)
+    await adminCoursesPage.goto()
+    await adminCoursesPage.searchCourse(`${course.id}`)
+    const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
+      course.id
+    )
+    await courseDetailsPage.clickEditCourseButton()
+    await courseDetailsPage.clickCancelCourseButton()
+    await courseDetailsPage.clickCancelCourseDropdown()
+    await courseDetailsPage.checkCancelCourseCheckbox()
+    await courseDetailsPage.clickCancelEntireCourseButton()
+    await adminCoursesPage.goto()
+    await adminCoursesPage.searchCourse(`${course.id}`)
+    await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
   })
-  const adminPage = await adminContext.newPage()
-  const adminCoursesPage = new MyCoursesPage(adminPage)
-  await adminCoursesPage.goto()
-  await adminCoursesPage.searchCourse(`${course.id}`)
-  const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
-    course.id
-  )
-  await courseDetailsPage.clickEditCourseButton()
-  await courseDetailsPage.clickCancelCourseButton()
-  await courseDetailsPage.clickCancelCourseDropdown()
-  await courseDetailsPage.checkCancelCourseCheckbox()
-  await courseDetailsPage.clickCancelEntireCourseButton()
-  await adminCoursesPage.goto()
-  await adminCoursesPage.searchCourse(`${course.id}`)
-  await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
-})
+}

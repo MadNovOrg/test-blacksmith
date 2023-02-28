@@ -127,4 +127,8 @@ export class MyCoursesPage extends BasePage {
   async confirmModules() {
     await this.page.getByText('Confirm').click()
   }
+
+  async confirmCourseException() {
+    await this.page.locator('[data-testid="proceed-button"]').click()
+  }
 }
