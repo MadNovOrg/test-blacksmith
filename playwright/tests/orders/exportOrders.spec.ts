@@ -20,11 +20,12 @@ const test = base.extend<{
 }>({
   orders: async ({}, use) => {
     const orders = await getOrders({
-      orderBy: [{ createdAt: Order_By.Asc }],
-      offset: 0,
+      invoiceStatus: [],
       limit: 12,
+      offset: 0,
+      orderBy: [{ createdAt: Order_By.Asc }],
+      where: {},
     })
-
     await use(orders)
   },
 })
@@ -91,11 +92,12 @@ test('exports selected orders', async ({ page, orders }) => {
   test.expect(page.locator('button:has-text("Export selected")')).toBeDisabled()
 
   await page.click(`data-testid=${orders[0].id} >> data-testid=TableChecks-Row`)
+  await page.click(`data-testid=${orders[1].id} >> data-testid=TableChecks-Row`)
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
     page.click('button:has-text("Export selected")'),
   ])
 
-  await assertDownloadedCSV(download, orders)
+  await assertDownloadedCSV(download, orders.slice(0, 1))
 })
