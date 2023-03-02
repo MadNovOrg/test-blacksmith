@@ -309,3 +309,15 @@ update_permissions:
         id:
           _eq: X-Hasura-User-Id
       check: null
+event_triggers:
+  - name: profile_archived
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - archived
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/user/archived'
