@@ -156,7 +156,11 @@ select_permissions:
         - title
         - updated_at
       computed_fields:
+        - email
+        - givenName
+        - familyName
         - fullName
+        - phone
       filter: {}
       allow_aggregations: true
   - role: tt-admin
