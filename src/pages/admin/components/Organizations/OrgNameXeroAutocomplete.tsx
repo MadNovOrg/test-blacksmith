@@ -80,6 +80,7 @@ export const OrgNameXeroAutocomplete: React.FC<
           {...params}
           helperText={err}
           error={!!err}
+          data-testid="org-name"
           onFocus={() => setHasFocus(true)}
           onBlur={() => setHasFocus(false)}
           label={t('pages.create-organization.fields.organization-name')}

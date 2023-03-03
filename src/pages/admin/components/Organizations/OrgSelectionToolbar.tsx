@@ -87,6 +87,7 @@ export const OrgSelectionToolbar: React.FC<
           {showMoreButton ? (
             <Button
               color="gray"
+              data-testid="org-more-button"
               sx={{
                 boxShadow: 'none',
               }}
@@ -126,6 +127,7 @@ export const OrgSelectionToolbar: React.FC<
                   pt: 1,
                 }}
                 type="text"
+                data-testid="org-search"
                 placeholder={t('common.search')}
                 value={query}
                 variant="filled"

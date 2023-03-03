@@ -174,6 +174,7 @@ export const OrgOverviewTab: React.FC<
               <Button
                 variant="outlined"
                 onClick={() => navigate('/organisations/list')}
+                data-testid="see-all-organisations"
               >
                 {t('pages.org-details.tabs.overview.see-all-organizations')}
               </Button>

@@ -35,7 +35,7 @@ export const OrgSummaryList: React.FC<
 
   return (
     <>
-      <Table>
+      <Table data-testid="organisation-summary-table">
         <TableHead>
           <TableRow
             sx={{

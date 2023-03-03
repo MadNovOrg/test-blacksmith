@@ -175,6 +175,7 @@ export const Organizations: React.FC<
               {acl.canCreateOrgs() ? (
                 <Button
                   variant="contained"
+                  data-testid="add-new-org-button"
                   onClick={() => navigate('/organisations/new')}
                 >
                   {t('pages.admin.organizations.add-new-organization')}

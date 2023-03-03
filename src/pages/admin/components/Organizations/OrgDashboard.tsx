@@ -103,7 +103,7 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <Box display="flex" paddingBottom={5}>
                     <Box width="100%" pr={4}>
                       <Sticky top={20}>
-                        <Typography variant="h2" my={2}>
+                        <Typography variant="h2" my={2} data-testid="org-title">
                           {id !== ALL_ORGS
                             ? org?.name
                             : t('pages.org-details.all-organizations')}
