@@ -58,6 +58,7 @@ export const CoursePrerequisitesAlert: React.FC<
               <Button
                 variant="contained"
                 color="primary"
+                data-testid="go-to-profile-preferences-button"
                 size="small"
                 onClick={() => navigate('/profile')}
               >

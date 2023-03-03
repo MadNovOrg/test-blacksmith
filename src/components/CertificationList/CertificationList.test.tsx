@@ -51,6 +51,8 @@ describe('component: CertificationList', () => {
       'certificate',
       'course-code',
       'status',
+      'organization',
+      'contact',
     ] as CertificationListColumns
 
     render(
@@ -66,15 +68,19 @@ describe('component: CertificationList', () => {
     const tableHead = within(table).getByTestId('table-head')
     expect(tableHead).toBeInTheDocument()
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
-    expect(columnHeaders).toHaveLength(6)
+    expect(columnHeaders).toHaveLength(8)
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
+    expect(within(columnHeaders[2]).getByText('Contact')).toBeInTheDocument()
     expect(
-      within(columnHeaders[2]).getByText('Certificate')
+      within(columnHeaders[3]).getByText('Organisation')
     ).toBeInTheDocument()
     expect(
-      within(columnHeaders[3]).getByText('Course code')
+      within(columnHeaders[4]).getByText('Certificate')
     ).toBeInTheDocument()
-    expect(within(columnHeaders[4]).getByText('Status')).toBeInTheDocument()
+    expect(
+      within(columnHeaders[5]).getByText('Course code')
+    ).toBeInTheDocument()
+    expect(within(columnHeaders[6]).getByText('Status')).toBeInTheDocument()
     const tableBody = within(table).getByTestId('table-body')
     expect(tableBody).toBeInTheDocument()
     expect(
