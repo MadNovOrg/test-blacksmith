@@ -1,0 +1,92 @@
+name: E2E Tests by Folder
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        default: 'DEV'
+        description: 'Environment - "DEV/STG"'
+        required: true
+        type: choice
+        options:
+          - DEV
+          - STG
+      folder:
+        default: courses
+        description: 'The folder used to run selected tests'
+        required: true
+        type: choice
+        options:
+          - auth
+          - blog
+          - booking
+          - courses
+          - ebooks
+          - go1-licensing
+          - grading
+          - membership-home
+          - orders
+          - organisations
+          - permissions
+          - podcasts
+          - post-category
+          - post-tag
+          - queries
+          - research-summaries
+          - video-series
+          - webinars
+
+jobs:
+  tests:
+    name: E2E regression tests
+    runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+      DEFAULT_TARGET: 'DEV'
+    strategy:
+      matrix:
+        browsers: ['chromium', 'firefox']
+    steps:
+      - name: Set the Target
+        run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+
+      - name: Set Hasura secret
+        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_TARGET)] }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.14.2'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm pkg delete scripts.prepare && npm ci
+
+      - name: Playwright setup
+        run: npx playwright install
+
+      - name: Playwright tests
+        id: playwright
+        run: npm run test:e2e:${{ matrix.browsers }} -- playwright/tests/${{ github.event.inputs.folder }}
+
+      - name: Playwright report
+        uses: actions/upload-artifact@v3
+        if: failure() && steps.playwright.outcome == 'failure'
+        with:
+          name: test-artifacts
+          path: |
+            playwright-report
+            test-results
+
+      - name: Notify Job Status to Slack
+        if: failure()
+        env:
+          GH_JOB_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          chmod +x ./.github/scripts/slack_notify.sh
+          ./.github/scripts/slack_notify.sh "${{ job.status }}" "${{ env.GH_JOB_URL }}" "${{ env.SLACK_WEBHOOK_URL }}"
+        shell: bash
