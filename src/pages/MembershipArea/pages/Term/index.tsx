@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Box, Container, IconButton, Skeleton, Typography } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import sanitize from 'sanitize-html'
@@ -12,6 +12,7 @@ import {
   TermQuery,
   TermQueryVariables,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import term from '@app/queries/membership/term'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -80,6 +81,9 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
 
+  const scrollToContainer = useRef<HTMLDivElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
+
   const termSearchMap: Record<TermType, string> = useMemo(
     () => ({
       Category: t('pages.membership.blog.search-placeholder'),
@@ -123,7 +127,11 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 5 }}>
+    <Container
+      maxWidth="lg"
+      sx={{ paddingBottom: 5, paddingTop: 5 }}
+      ref={scrollToContainer}
+    >
       <Typography mb={3} variant="h3" color="primary">
         {fetching && !data?.content?.termNode?.name ? (
           <Skeleton width={200} />
@@ -174,7 +182,7 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
       </Box>
 
       {fetching ? (
-        <ItemsGridSkeleton data-testid="items-grid-skeleton" />
+        <ItemsGridSkeleton data-testid="items-grid-skeleton" num={PER_PAGE} />
       ) : null}
 
       {!fetching &&
@@ -225,7 +233,8 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
             hasPreviousPage={Boolean(
               data.content.termNode.posts.pageInfo?.hasPreviousPage
             )}
-            onPrevClick={() =>
+            onPrevClick={() => {
+              scrollTo()
               setPagination({
                 ...pagination,
                 first: null,
@@ -237,8 +246,9 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                     : '',
                 last: PER_PAGE,
               })
-            }
-            onNextClick={() =>
+            }}
+            onNextClick={() => {
+              scrollTo()
               setPagination({
                 ...pagination,
                 first: PER_PAGE,
@@ -250,7 +260,7 @@ const Term: React.FC<React.PropsWithChildren<unknown>> = () => {
                 before: null,
                 last: null,
               })
-            }
+            }}
           />
         </>
       ) : null}

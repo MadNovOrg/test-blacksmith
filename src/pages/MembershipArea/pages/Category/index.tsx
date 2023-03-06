@@ -7,7 +7,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import sanitize from 'sanitize-html'
@@ -19,6 +19,7 @@ import {
   CategoryQueryVariables,
   OrderEnum,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import CATEGORY_QUERY from '@app/queries/membership/category'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -30,6 +31,9 @@ export const PER_PAGE = 12
 const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const { id } = useParams() as { id: string }
+
+  const scrollToContainer = useRef<HTMLDivElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [searchTerm, setSearchTerm] = useState('')
   const [orderDirection, setOrderDirection] = useState(OrderEnum.Desc)
@@ -59,7 +63,11 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
   const hasPagination = hasNextPage || hasPreviousPage
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 5 }}>
+    <Container
+      maxWidth="lg"
+      sx={{ paddingBottom: 5, paddingTop: 5 }}
+      ref={scrollToContainer}
+    >
       <Typography mb={3} variant="h3" color="primary">
         {fetching && !data?.content?.category?.name ? (
           <Skeleton width={200} />
@@ -158,7 +166,8 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-previous-page"
                 disabled={!hasPreviousPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -167,7 +176,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
                       data?.content?.category?.posts?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -175,7 +184,8 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-next-page"
                 disabled={!hasNextPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -183,7 +193,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>
@@ -192,7 +202,7 @@ const Category: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="posts-items-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       )}
     </Container>

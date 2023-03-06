@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Box, Container, Grid, IconButton, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -12,6 +12,7 @@ import {
   EbookSummaryFragment,
   OrderEnum,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import EBOOKS_QUERY from '@app/queries/membership/ebooks'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -38,6 +39,9 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
     first: PER_PAGE,
     last: null,
   })
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<EbooksQuery, EbooksQueryVariables>({
     query: EBOOKS_QUERY,
@@ -100,7 +104,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.ebooks.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -195,7 +199,8 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 disabled={!hasPreviousPage}
                 data-testid="ebooks-previous-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -203,7 +208,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: data?.content?.ebooks?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -211,7 +216,8 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 disabled={!hasNextPage}
                 data-testid="ebooks-next-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -219,7 +225,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>
@@ -228,7 +234,7 @@ const Ebooks: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="ebooks-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       )}
     </Container>

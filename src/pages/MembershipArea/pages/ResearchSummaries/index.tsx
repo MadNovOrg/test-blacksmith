@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Box, Container, Grid, IconButton, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -12,6 +12,7 @@ import {
   ResearchSummariesQueryVariables,
   ResearchSummaryDetailsFragment,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import RESEARCH_SUMMARIES_QUERY from '@app/queries/membership/research-summaries'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -37,6 +38,9 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
     first: PER_PAGE,
     last: null,
   })
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<
     ResearchSummariesQuery,
@@ -107,7 +111,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.research-summaries.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -211,7 +215,8 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 disabled={!hasPreviousPage}
                 data-testid="research-summaries-previous-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -220,7 +225,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
                       data?.content?.researchSummaries?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -228,7 +233,8 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 disabled={!hasNextPage}
                 data-testid="research-summaries-next-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -237,7 +243,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>
@@ -246,7 +252,7 @@ const ResearchSummaries: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : (
         <Box data-testid="research-summaries-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       )}
     </Container>

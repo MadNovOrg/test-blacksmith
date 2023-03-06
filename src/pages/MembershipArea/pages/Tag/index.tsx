@@ -7,7 +7,7 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import sanitize from 'sanitize-html'
@@ -15,6 +15,7 @@ import { useQuery } from 'urql'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import { OrderEnum, TagQuery, TagQueryVariables } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import TAG_QUERY from '@app/queries/membership/tag'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -38,6 +39,9 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
     last: null,
   })
 
+  const scrollToContainer = useRef<HTMLDivElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
+
   const [{ data, fetching }] = useQuery<TagQuery, TagQueryVariables>({
     query: TAG_QUERY,
     variables: {
@@ -54,7 +58,11 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
   const hasPagination = hasNextPage || hasPreviousPage
 
   return (
-    <Container maxWidth="lg" sx={{ paddingBottom: 5, paddingTop: 5 }}>
+    <Container
+      maxWidth="lg"
+      sx={{ paddingBottom: 5, paddingTop: 5 }}
+      ref={scrollToContainer}
+    >
       <Typography mb={3} variant="h3" color="primary">
         {fetching && !data?.content?.tag?.name ? (
           <Skeleton width={200} />
@@ -153,7 +161,8 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-previous-page"
                 disabled={!hasPreviousPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -161,7 +170,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: data?.content?.tag?.posts?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -169,7 +178,8 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-next-page"
                 disabled={!hasNextPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -177,7 +187,7 @@ const Tag: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>

@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Typography } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'urql'
 
@@ -10,6 +10,7 @@ import {
   PodcastsQuery,
   PodcastsQueryVariables,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import PODCASTS_QUERY from '@app/queries/membership/podcasts'
 
 import { ArrowPagination } from '../../components/ArrowPagination'
@@ -30,6 +31,9 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
   const [featuredPodcast, setFeaturedPodcast] = React.useState<Podcast | null>(
     null
   )
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<PodcastsQuery, PodcastsQueryVariables>({
     query: PODCASTS_QUERY,
@@ -108,7 +112,7 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.podcasts.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -156,13 +160,16 @@ const Podcasts: React.FC<React.PropsWithChildren<unknown>> = () => {
             <ArrowPagination
               total={data.podcasts.total}
               data-testid="podcasts-pagination"
-              onPageChange={page => setCurrentPage(page)}
+              onPageChange={page => {
+                scrollTo()
+                setCurrentPage(page)
+              }}
             />
           ) : null}
         </>
       ) : (
         <Box data-testid="podcasts-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       )}
     </Container>

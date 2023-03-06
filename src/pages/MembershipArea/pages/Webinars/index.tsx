@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Container, Typography, Box, Grid, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -12,6 +12,7 @@ import {
   WebinarsQueryVariables,
   WebinarSummaryFragment,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import WEBINARS_QUERY from '@app/queries/membership/webinars'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -36,6 +37,9 @@ const Webinars = () => {
     first: PER_PAGE,
     last: null,
   })
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<WebinarsQuery, WebinarsQueryVariables>({
     query: WEBINARS_QUERY,
@@ -92,7 +96,7 @@ const Webinars = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.webinar.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -182,7 +186,8 @@ const Webinars = () => {
               <IconButton
                 disabled={!hasPreviousPage}
                 data-testid="webinars-previous-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -190,7 +195,7 @@ const Webinars = () => {
                     before: data?.content?.webinars?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -198,7 +203,8 @@ const Webinars = () => {
               <IconButton
                 disabled={!hasNextPage}
                 data-testid="webinars-next-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -206,7 +212,7 @@ const Webinars = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>

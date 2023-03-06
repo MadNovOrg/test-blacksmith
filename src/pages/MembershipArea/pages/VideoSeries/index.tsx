@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Container, Typography, Box, Grid, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -12,6 +12,7 @@ import {
   VideoSeriesQueryVariables,
   VideoItemSummaryFragment,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -36,6 +37,9 @@ const VideoSeries = () => {
     first: PER_PAGE,
     last: null,
   })
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<
     VideoSeriesQuery,
@@ -97,7 +101,7 @@ const VideoSeries = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.video-series.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -188,7 +192,8 @@ const VideoSeries = () => {
               <IconButton
                 disabled={!hasPreviousPage}
                 data-testid="video-series-previous-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -197,7 +202,7 @@ const VideoSeries = () => {
                       data?.content?.videoSeriesItems?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -205,7 +210,8 @@ const VideoSeries = () => {
               <IconButton
                 disabled={!hasNextPage}
                 data-testid="video-series-next-page"
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -213,7 +219,7 @@ const VideoSeries = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>
@@ -222,7 +228,7 @@ const VideoSeries = () => {
         </>
       ) : (
         <Box data-testid="video-items-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       )}
     </Container>

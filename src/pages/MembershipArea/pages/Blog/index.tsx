@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { Box, Container, Grid, IconButton, Typography } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import sanitize from 'sanitize-html'
 import { useQuery } from 'urql'
@@ -12,6 +12,7 @@ import {
   OrderEnum,
   PostSummaryFragment,
 } from '@app/generated/graphql'
+import { useScrollToElement } from '@app/hooks/useScrollToElement'
 import BLOG_QUERY from '@app/queries/membership/blog'
 
 import { BlogPostItem } from '../../components/BlogPostItem'
@@ -37,6 +38,9 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
     first: PER_PAGE,
     last: null,
   })
+
+  const scrollToContainer = useRef<HTMLElement>(null)
+  const { scrollTo } = useScrollToElement(scrollToContainer)
 
   const [{ data, fetching }] = useQuery<BlogQuery, BlogQueryVariables>({
     query: BLOG_QUERY,
@@ -87,7 +91,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
         ) : null}
       </Box>
 
-      <Typography mb={3} variant="h3" color="primary">
+      <Typography mb={3} variant="h3" color="primary" ref={scrollToContainer}>
         {t('pages.membership.blog.list-title')}
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={5}>
@@ -179,7 +183,8 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-previous-page"
                 disabled={!hasPreviousPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: null,
@@ -187,7 +192,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: data?.content?.posts?.pageInfo?.startCursor,
                     last: PER_PAGE,
                   })
-                }
+                }}
               >
                 <ChevronLeft />
               </IconButton>
@@ -195,7 +200,8 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
               <IconButton
                 data-testid="posts-next-page"
                 disabled={!hasNextPage}
-                onClick={() =>
+                onClick={() => {
+                  scrollTo()
                   setPagination({
                     ...pagination,
                     first: PER_PAGE,
@@ -203,7 +209,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
                     before: null,
                     last: null,
                   })
-                }
+                }}
               >
                 <ChevronRight />
               </IconButton>
@@ -212,7 +218,7 @@ const Blog: React.FC<React.PropsWithChildren<unknown>> = () => {
         </>
       ) : fetching ? (
         <Box data-testid="posts-items-grid-skeleton">
-          <ItemsGridSkeleton />
+          <ItemsGridSkeleton num={PER_PAGE} />
         </Box>
       ) : (
         <Typography variant="body2">

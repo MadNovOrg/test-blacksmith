@@ -30,7 +30,9 @@ const SplitPostBox = styled(Box)<{ orientation: ImageOrientation }>(
   })
 )
 
-const ThumbnailBox = styled(Box, { shouldForwardProp: () => true })<{
+const ThumbnailBox = styled(Box, {
+  shouldForwardProp: prop => prop !== 'fluidImageWidth',
+})<{
   orientation?: ImageOrientation
   fluidImageWidth?: boolean
 }>(({ theme, orientation, fluidImageWidth }) => ({
