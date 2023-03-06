@@ -202,6 +202,7 @@ export const TransferReview: React.FC<
                 variant="contained"
                 loading={fetching}
                 onClick={handleTransfer}
+                data-testid="confirm-transfer"
               >
                 {t('review-transfer.submit-btn-text')}
               </LoadingButton>

@@ -31,6 +31,7 @@ export const CourseActionsMenu = <T,>({
             label: t('common.replace'),
             icon: <MoveDownIcon color="primary" />,
             onClick: onReplaceClick,
+            testId: 'attendee-replace',
           }
         : null,
       acl.canTransferParticipant()
@@ -38,6 +39,7 @@ export const CourseActionsMenu = <T,>({
             label: t('common.transfer'),
             icon: <SwapHorizIcon color="primary" />,
             onClick: onTransferClick,
+            testId: 'attendee-transfer',
           }
         : null,
       acl.canRemoveParticipant()
@@ -45,6 +47,7 @@ export const CourseActionsMenu = <T,>({
             label: t('common.remove'),
             icon: <PersonRemoveIcon color="primary" />,
             onClick: onRemoveClick,
+            testId: 'attendee-remove',
           }
         : null,
     ].filter(isNotNullish)
@@ -55,7 +58,7 @@ export const CourseActionsMenu = <T,>({
       item={item}
       label={t('pages.course-participants.manage-attendance')}
       actions={actions}
-      data-testid="manage-attendance"
+      testId="manage-attendance"
     />
   ) : null
 }

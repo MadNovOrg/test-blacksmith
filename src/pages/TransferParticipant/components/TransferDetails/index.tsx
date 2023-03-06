@@ -100,6 +100,7 @@ export const TransferDetails: React.FC<
                 : Number(formData.customFee)
             )
           }
+          data-testid="review-and-confirm"
         >
           {t('next-btn-label')}
         </Button>

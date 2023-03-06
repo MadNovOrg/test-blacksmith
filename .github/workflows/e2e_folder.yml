@@ -20,7 +20,14 @@ on:
           - auth
           - blog
           - booking
-          - courses
+          - courses/accept
+          - courses/build
+          - courses/cancel
+          - courses/create
+          - courses/edit
+          - courses/evaluate
+          - courses/manage
+          - courses/view
           - ebooks
           - go1-licensing
           - grading

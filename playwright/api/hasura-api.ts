@@ -372,6 +372,9 @@ export const insertCourseParticipants = async (
     const response = await getClient().request<{
       insert_course_participant: { returning: CourseParticipant[] }
     }>(query, { objects: participants })
+    users.forEach(user => {
+      console.log(`Adding ${user.email} to ${courseId}`)
+    })
     return response.insert_course_participant.returning
   } catch (e) {
     console.error(e)

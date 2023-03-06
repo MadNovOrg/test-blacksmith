@@ -83,6 +83,7 @@ export const ChooseTransferCourse: React.FC<
                       onClick={() => setChoosenCourse(course)}
                       value={course?.id}
                       inputProps={{ 'aria-label': String(course?.id) }}
+                      data-testid={`change-course-${course?.id}`}
                     />
                   </TableCell>
                   <TableCell>
@@ -137,6 +138,7 @@ export const ChooseTransferCourse: React.FC<
                 endIcon={<ArrowForward />}
                 disabled={!chosenCourse}
                 onClick={() => handleCourseChosen()}
+                data-testid="transfer-details"
               >
                 {t(`choose-course.next-btn-text_${mode}`)}
               </Button>

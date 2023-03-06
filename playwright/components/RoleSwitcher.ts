@@ -15,7 +15,10 @@ export class RoleSwitcher {
   }
 
   async selectRole(role: string) {
-    if ((await this.button.textContent()) !== role) {
+    if (
+      (await this.button.count()) != 0 &&
+      (await this.button.textContent()) !== role
+    ) {
       await this.button.click()
       await this.option(role).click()
       await this.page.waitForLoadState()

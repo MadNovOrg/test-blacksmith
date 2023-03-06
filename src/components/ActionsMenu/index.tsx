@@ -13,18 +13,21 @@ type Action<T> = {
   icon: React.ReactNode
   label: string
   onClick: (item: T) => void
+  testId?: string
 }
 
 type ActionsMenuProperties<T> = {
   item: T
   label: string
   actions: Action<T>[]
+  testId?: string
 }
 
 export const ActionsMenu = <T,>({
   label,
   actions,
   item,
+  testId,
 }: ActionsMenuProperties<T>) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
@@ -49,12 +52,16 @@ export const ActionsMenu = <T,>({
 
   return (
     <Container>
-      <Button onClick={onActionsClick} variant="text">
+      <Button onClick={onActionsClick} variant="text" data-testid={testId}>
         {label}
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
         {actions.map(action => (
-          <MenuItem key={action.label} onClick={() => onClick(action)}>
+          <MenuItem
+            key={action.label}
+            onClick={() => onClick(action)}
+            data-testid={action.testId}
+          >
             <ListItemIcon>{action.icon}</ListItemIcon>
             <ListItemText>
               <Typography variant="body1" color="primary" fontWeight={500}>

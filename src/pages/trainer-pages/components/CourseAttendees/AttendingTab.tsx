@@ -202,6 +202,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
                     <TableCell>
                       <CourseActionsMenu
                         item={courseParticipant}
+                        data-testid="manage-attendance"
                         onReplaceClick={participant => {
                           setParticipantToReplace(participant)
                         }}

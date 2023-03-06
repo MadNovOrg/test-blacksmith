@@ -1,11 +1,13 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { getProfileId } from '../../api/hasura-api'
 import { CourseHeader } from '../../components/CourseHeader'
 import { UiTable } from '../../components/UiTable'
 import { BASE_URL } from '../../constants'
 import { toAttendeesTableRow } from '../../data/mappings'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
+import { CourseTransferPage } from '../courses/CourseTransferPage'
 
 class InviteAttendeesPopUp {
   readonly page: Page
@@ -178,5 +180,23 @@ export class CourseDetailsPage extends BasePage {
 
   async clickCancelEntireCourseButton() {
     await this.cancelEntireCourseButton.click()
+  }
+
+  async clickManageAttendance() {
+    await this.page.locator('[data-testid=manage-attendance]').click()
+  }
+
+  async clickAttendeeTransfer() {
+    await this.page.locator('[data-testid=attendee-transfer]').click()
+    return new CourseTransferPage(this.page)
+  }
+
+  async checkAttendeeExists(user: User) {
+    const attendee = await this.page.locator('tr', {
+      has: this.page.locator(
+        `a[href="/profile/${await getProfileId(user.email)}"]`
+      ),
+    })
+    await expect(attendee).toContainText(`${user.givenName} ${user.familyName}`)
   }
 }

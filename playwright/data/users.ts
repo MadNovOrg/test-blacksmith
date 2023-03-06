@@ -18,6 +18,7 @@ export const users: { [key: string]: User } = {
     familyName: 'Admin',
     email: 'org.adm@teamteach.testinator.com',
     password: 'Test12345!',
+    organization: { name: 'London First School' },
   },
   trainer: {
     givenName: 'John',
