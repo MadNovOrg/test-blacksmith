@@ -124,7 +124,6 @@ export default function useActionableCourses({
         _or: [statusCondition, cancellationPendingCondition],
       }
     }
-    conditions.push(statusCondition)
 
     if (RoleName.TRAINER === activeRole) {
       conditions.push({
@@ -133,6 +132,8 @@ export default function useActionableCourses({
           profile_id: { _eq: profile?.id },
         },
       })
+    } else {
+      conditions.push(statusCondition)
     }
 
     let where: Course_Bool_Exp = {

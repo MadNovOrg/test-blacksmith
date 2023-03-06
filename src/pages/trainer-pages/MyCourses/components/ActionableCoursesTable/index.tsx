@@ -9,6 +9,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, TrainerCoursesQuery } from '@app/generated/graphql'
 import { Course_Invite_Status_Enum } from '@app/generated/graphql'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { RoleName } from '@app/types'
 import { findCourseTrainer } from '@app/util'
 
 import { AcceptDeclineCourse, Trainer } from '../AcceptDeclineCourse'
@@ -38,7 +39,7 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
   sorting,
 }) => {
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, activeRole } = useAuth()
 
   return (
     <CoursesTable
@@ -71,7 +72,7 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
             />
           </TableCell>
           <TableCell>
-            {course.status === Course_Status_Enum.TrainerPending ? (
+            {activeRole === RoleName.TRAINER ? (
               <AcceptDeclineCourse
                 trainer={
                   profile
@@ -82,24 +83,27 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
                   onAcceptedOrDeclined(course, trainer, status)
                 }
               />
-            ) : null}
-            {course.status &&
-            [
-              Course_Status_Enum.ApprovalPending,
-              Course_Status_Enum.ExceptionsApprovalPending,
-            ].indexOf(course.status) !== -1 ? (
-              <CourseStatusChip status={course.status} hideIcon={true} />
-            ) : null}
-            {course.status === Course_Status_Enum.TrainerMissing ? (
-              <CourseStatusChip status={course.status} />
-            ) : null}
-            {course.cancellationRequest ? (
-              <Chip
-                size="small"
-                color="warning"
-                label={t('common.cancellation-requested')}
-              />
-            ) : null}
+            ) : (
+              <>
+                {course.status &&
+                [
+                  Course_Status_Enum.ApprovalPending,
+                  Course_Status_Enum.ExceptionsApprovalPending,
+                ].indexOf(course.status) !== -1 ? (
+                  <CourseStatusChip status={course.status} hideIcon={true} />
+                ) : null}
+                {course.status === Course_Status_Enum.TrainerMissing ? (
+                  <CourseStatusChip status={course.status} />
+                ) : null}
+                {course.cancellationRequest ? (
+                  <Chip
+                    size="small"
+                    color="warning"
+                    label={t('common.cancellation-requested')}
+                  />
+                ) : null}
+              </>
+            )}
           </TableCell>
         </TableRow>
       )}

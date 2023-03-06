@@ -28,6 +28,8 @@ import {
   Course_Level_Enum,
   Course_Status_Enum,
   Course_Trainer_Type_Enum,
+  FinalizeCourseBuilderMutation,
+  FinalizeCourseBuilderMutationVariables,
   GetCourseByIdQuery,
   GetCourseByIdQueryVariables,
   ModuleGroupsQuery,
@@ -353,12 +355,15 @@ export const CourseBuilder: React.FC<
       setSubmitError(undefined)
       const hasExceptions = courseExceptions.length > 0
       try {
-        await fetcher(FINALIZE_COURSE_BUILDER_MUTATION, {
+        await fetcher<
+          FinalizeCourseBuilderMutation,
+          FinalizeCourseBuilderMutationVariables
+        >(FINALIZE_COURSE_BUILDER_MUTATION, {
           id: courseData.course.id,
           duration: estimatedCourseDuration,
           status: hasExceptions
             ? Course_Status_Enum.ExceptionsApprovalPending
-            : Course_Status_Enum.Scheduled,
+            : null,
         })
 
         if (!courseCreated) {

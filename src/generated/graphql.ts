@@ -38674,7 +38674,7 @@ export type DeleteCourseCancellationRequestMutation = { __typename?: 'mutation_r
 export type FinalizeCourseBuilderMutationVariables = Exact<{
   id: Scalars['Int'];
   duration: Scalars['Int'];
-  status: Course_Status_Enum;
+  status?: InputMaybe<Course_Status_Enum>;
 }>;
 
 

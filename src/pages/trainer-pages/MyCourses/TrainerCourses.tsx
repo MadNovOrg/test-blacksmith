@@ -181,11 +181,10 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       trainer: { type: Course_Trainer_Type_Enum },
       status: Course_Invite_Status_Enum
     ) => {
-      const isLead = trainer.type === Course_Trainer_Type_Enum.Leader
       const isAccepted = status === Course_Invite_Status_Enum.Accepted
       setKeyword('')
 
-      if (isLead && isAccepted) {
+      if (isAccepted) {
         navigate(`./${course.id}/modules`)
       } else {
         mutate()
