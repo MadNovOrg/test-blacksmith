@@ -10,7 +10,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "typecheck": "tsc --noEmit",
-    "test": "jest --collectCoverage",
+    "test": "jest",
     "test:update-snapshot": "jest --updateSnapshot",
     "test:watch": "jest --watch",
     "test:e2e": "playwright test --config=playwright/playwright.config.ts --project=chromium",

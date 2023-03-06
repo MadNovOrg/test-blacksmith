@@ -1,6 +1,7 @@
 process.env.TZ = 'Europe/London'
 
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   testTimeout: 10000,
   testEnvironment: 'jsdom',
   coverageReporters: ['lcov', 'text', 'text-summary'],
@@ -26,4 +27,8 @@ module.exports = {
     escapeString: true,
     printBasicPrototype: true,
   },
+  workerIdleMemoryLimit: '1GB',
+  logHeapUsage: true,
 }
+
+module.exports = config
