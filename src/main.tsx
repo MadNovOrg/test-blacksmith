@@ -17,6 +17,10 @@ import App from './App'
 import { ErrorPage } from './components/ErrorPage'
 import theme from './theme'
 
+import.meta.env.VITE_APP_VERSION
+  ? console.info(`App version is ${import.meta.env.VITE_APP_VERSION}`)
+  : null
+
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [new BrowserTracing(), new ExtraErrorDataIntegration()],

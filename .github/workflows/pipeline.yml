@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: 'production'
+      version:
+        type: string
+        required: false
+        default: $GITHUB_SHA
     secrets:
       cognito_user_pool_id:
         required: true
@@ -64,6 +68,7 @@ jobs:
           VITE_BASE_WORDPRESS_URL: '${{ secrets.wp_host }}/wp-json/wp/v2'
           VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
+          VITE_APP_VERSION: ${{ inputs.version }}
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete
