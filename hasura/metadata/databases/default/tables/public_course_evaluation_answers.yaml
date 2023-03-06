@@ -128,3 +128,13 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'
+  - name: course_evaluation_answers_added
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-evaluation-answer-added'
