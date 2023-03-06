@@ -32,6 +32,7 @@ import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
 
+import { CourseAsTrainer } from './components/CourseAsTrainer'
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
@@ -241,7 +242,6 @@ export const ViewProfilePage: React.FC<
                       backgroundColor: 'grey.300',
                     },
                     '&& .MuiTableCell-root': {
-                      px: 2,
                       py: 1,
                       color: 'grey.700',
                       fontWeight: '600',
@@ -299,7 +299,7 @@ export const ViewProfilePage: React.FC<
               </TableBody>
             </Table>
             <Typography variant="subtitle2" mb={1} mt={3}>
-              {t('course-history-log')}
+              {t('course-as-attendee')}
             </Typography>
             <Table sx={{ mt: 1 }}>
               <TableHead>
@@ -309,7 +309,6 @@ export const ViewProfilePage: React.FC<
                       backgroundColor: 'grey.300',
                     },
                     '&& .MuiTableCell-root': {
-                      px: 2,
                       py: 1,
                       color: 'grey.700',
                       fontWeight: '600',
@@ -386,6 +385,14 @@ export const ViewProfilePage: React.FC<
                 ) : null}
               </TableBody>
             </Table>
+            {acl.canViewCourseHistory() && (
+              <>
+                <Typography variant="subtitle2" mb={1} mt={3}>
+                  {t('course-as-trainer')}
+                </Typography>
+                <CourseAsTrainer profile={profile} />
+              </>
+            )}
             {verified && (
               <>
                 <Typography variant="subtitle2" mt={3}>
@@ -400,7 +407,6 @@ export const ViewProfilePage: React.FC<
                           backgroundColor: 'grey.300',
                         },
                         '&& .MuiTableCell-root': {
-                          px: 2,
                           py: 1,
                           color: 'grey.700',
                           fontWeight: '600',

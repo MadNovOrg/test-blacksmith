@@ -56,6 +56,7 @@ export default function useProfile(
             withGo1Licenses: Boolean(orgId),
             orgId,
             withCourseHistory,
+            withCourseTrainerHistory: withCourseHistory,
           },
         ]
       : null

@@ -10,6 +10,7 @@ export const QUERY = gql`
     $withGo1Licenses: Boolean = false
     $orgId: uuid
     $withCourseHistory: Boolean = false
+    $withCourseTrainerHistory: Boolean = false
   ) {
     profile: profile_by_pk(id: $profileId) {
       ...Profile
@@ -21,6 +22,29 @@ export const QUERY = gql`
         course {
           name
           status
+          dates: schedule_aggregate {
+            aggregate {
+              start: min {
+                date: start
+              }
+              end: max {
+                date: end
+              }
+            }
+          }
+        }
+      }
+
+      courseAsTrainer: course_trainer @include(if: $withCourseTrainerHistory) {
+        id
+        course_id
+        type
+        course {
+          id
+          name
+          status
+          level
+          course_code
           dates: schedule_aggregate {
             aggregate {
               start: min {
