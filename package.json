@@ -126,7 +126,7 @@
     "babel-loader": "^9.1.2",
     "babel-preset-vite": "1.1.0",
     "env-cmd": "^10.1.0",
-    "eslint": "^8.31.0",
+    "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "^2.26.0",
