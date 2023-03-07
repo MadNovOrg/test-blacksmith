@@ -2,19 +2,21 @@ import { TextField } from '@mui/material'
 import React from 'react'
 
 interface Props {
-  error?: boolean
   id: 'start' | 'end'
   label: string
-  onChange: React.Dispatch<React.SetStateAction<Date | string>>
-  value: Date | string
+  value: string
+  onChange: React.Dispatch<string>
+  error?: {
+    message?: string
+  }
 }
 
 export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
-  error,
   id,
   label,
-  onChange,
   value,
+  onChange,
+  error,
 }) => {
   return (
     <TextField
@@ -24,11 +26,13 @@ export const CourseTimePicker: React.FC<React.PropsWithChildren<Props>> = ({
       inputProps={{
         step: 300, // 5 min
       }}
+      InputLabelProps={{ shrink: true }}
       fullWidth
-      error={error}
+      error={Boolean(error)}
+      helperText={error?.message}
       data-testid={`${id}-time`}
       variant="filled"
-      value={value === '' ? '08:00' : value}
+      value={value}
       onChange={({ target: { value } }) => onChange(value)}
     />
   )

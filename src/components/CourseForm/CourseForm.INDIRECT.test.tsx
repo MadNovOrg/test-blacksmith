@@ -4,7 +4,7 @@ import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { selectDelivery, selectLevel } from './test-helpers'
+import { selectDelivery, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 

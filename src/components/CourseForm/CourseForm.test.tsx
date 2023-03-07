@@ -13,7 +13,7 @@ import {
 import { render, screen, userEvent, waitFor } from '@test/index'
 import { buildCourse } from '@test/mock-data-utils'
 
-import { ZOOM_MOCKED_URL, selectLevel } from './test-helpers'
+import { ZOOM_MOCKED_URL, selectLevel } from './test-utils'
 
 import CourseForm from '.'
 

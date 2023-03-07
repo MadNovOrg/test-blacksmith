@@ -1,15 +1,48 @@
-import { format } from 'date-fns'
+import { format, isValid, isBefore, isEqual } from 'date-fns'
 
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import aolRegionsByCountry from './aolRegions'
 
-export function makeDate(date: Date | string | null, time: Date | string) {
+function parseTime(time: string) {
+  let hours = 0
+  let minutes = 0
+  const hoursAndMinutes = time.split(':')
+
+  if (hoursAndMinutes.length === 2) {
+    hours = Number(hoursAndMinutes[0])
+    minutes = Number(hoursAndMinutes[1])
+  }
+
+  return { hours, minutes }
+}
+
+export function makeDate(date: Date | string | null, time: string) {
   try {
     const _date = new Date(date || Date.now())
-    return new Date(`${format(_date, 'yyyy-MM-dd')} ${time}`)
+    const { hours, minutes } = parseTime(time)
+
+    return new Date(new Date(_date).setHours(hours, minutes, 0, 0))
   } catch (e) {
     return null
+  }
+}
+
+export function isEndDateTimeBeforeStartDateTime(
+  startDate: Date | null,
+  startTime: string,
+  endDate: Date | null,
+  endTime: string
+) {
+  if (isValid(startDate) && startTime && isValid(endDate) && endTime) {
+    const startDateTime = makeDate(startDate, startTime)
+    const endDateTime = makeDate(endDate, endTime)
+    return (
+      startDateTime &&
+      endDateTime &&
+      (isEqual(endDateTime, startDateTime) ||
+        isBefore(endDateTime, startDateTime))
+    )
   }
 }
 

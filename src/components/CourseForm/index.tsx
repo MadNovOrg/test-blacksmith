@@ -19,7 +19,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
 import React, { memo, useEffect, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -44,8 +44,9 @@ import { VenueSelector } from '../VenueSelector'
 
 import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
 import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
-import { CourseDateTimePicker } from './components/CourseDateTimePicker'
+import { CourseDatePicker } from './components/CourseDatePicker'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
+import { CourseTimePicker } from './components/CourseTimePicker'
 import {
   canBeBlended,
   canBeF2F,
@@ -54,11 +55,10 @@ import {
   canBeVirtual,
   getAccountCode,
   makeDate,
+  isEndDateTimeBeforeStartDateTime,
 } from './helpers'
 
 export type DisabledFields = Partial<keyof CourseInput>
-
-const MIN_COURSE_TIME = 60000
 
 interface Props {
   type?: CourseType
@@ -133,29 +133,22 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 t('components.course-form.online-meeting-link-required')
               ),
           }),
-        startDateTime: yup
+        startDate: yup
           .date()
+          .nullable()
           .typeError(t('components.course-form.start-date-format'))
-          .nullable()
           .required(t('components.course-form.start-date-required')),
-        endDateTime: yup
+        startTime: yup
+          .string()
+          .required(t('components.course-form.start-time-required')),
+        endDate: yup
           .date()
-          .typeError(t('components.course-form.end-date-format'))
           .nullable()
-          .when('startDateTime', (startDateTime, schema) => {
-            if (startDateTime) {
-              const minAfter = new Date(
-                startDateTime.getTime() + MIN_COURSE_TIME
-              )
-              return schema.min(
-                minAfter,
-                t('components.course-form.end-date-before-start-date')
-              )
-            }
-            return schema.required(
-              t('components.course-form.end-date-required')
-            )
-          }),
+          .typeError(t('components.course-form.end-date-format'))
+          .required(t('components.course-form.end-date-required')),
+        endTime: yup
+          .string()
+          .required(t('components.course-form.end-time-required')),
         ...(hasMinParticipants
           ? {
               minParticipants: yup
@@ -219,9 +212,21 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       startDateTime: courseInput?.startDateTime
         ? new Date(courseInput.startDateTime)
         : null,
+      startDate: courseInput?.startDateTime
+        ? new Date(courseInput.startDateTime)
+        : null,
+      startTime: courseInput?.startDateTime
+        ? extractTime(courseInput.startDateTime)
+        : '09:00',
       endDateTime: courseInput?.endDateTime
         ? new Date(courseInput.endDateTime)
         : null,
+      endDate: courseInput?.endDateTime
+        ? new Date(courseInput.endDateTime)
+        : null,
+      endTime: courseInput?.endDateTime
+        ? extractTime(courseInput?.endDateTime)
+        : '17:00',
       minParticipants: courseInput?.minParticipants ?? null,
       maxParticipants: courseInput?.maxParticipants ?? null,
       freeSpaces: courseInput?.freeSpaces ?? null,
@@ -245,6 +250,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
     control,
     trigger,
     resetField,
+    setError,
+    clearErrors,
   } = useForm<CourseInput>({
     resolver: yupResolver(schema),
     mode: 'all',
@@ -266,6 +273,22 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   )
   const usesAOL = courseType === CourseType.INDIRECT ? values.usesAOL : false
   const aolCountry = values.aolCountry
+  const startDate = useWatch({ control, name: 'startDate' })
+  const startTime = useWatch({ control, name: 'startTime' })
+  const endDate = useWatch({ control, name: 'endDate' })
+  const endTime = useWatch({ control, name: 'endTime' })
+
+  useEffect(() => {
+    if (
+      isEndDateTimeBeforeStartDateTime(startDate, startTime, endDate, endTime)
+    ) {
+      setError('endDateTime', {
+        message: t('components.course-form.end-date-before-start-date'),
+      })
+    } else {
+      clearErrors('endDateTime')
+    }
+  }, [clearErrors, endDate, endTime, setError, startDate, startTime, t])
 
   useEffect(() => {
     const s = watch(data => {
@@ -561,56 +584,100 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           <Typography mb={2} mt={2} fontWeight={600}>
             {t('components.course-form.start-datepicker-section-title')}
           </Typography>
-          <Controller
-            name="startDateTime"
-            control={control}
-            render={({ field, fieldState }) => (
-              <CourseDateTimePicker
-                dateValue={field.value}
-                timeValue={
-                  courseInput?.startDateTime
-                    ? extractTime(courseInput.startDateTime)
-                    : extractTime(makeDate(null, '09:00'))
-                }
-                minDate={new Date()}
-                maxDate={values.endDateTime || undefined}
-                onChange={val => {
-                  field.onChange(val)
-                  trigger('endDateTime')
-                }}
-                onBlur={field.onBlur}
-                error={fieldState.error}
-                timeId="start"
-                dateLabel={t('components.course-form.start-date-placeholder')}
-                timeLabel={t('components.course-form.start-time-placeholder')}
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <CourseDatePicker
+                    label={t('components.course-form.start-date-placeholder')}
+                    value={field.value}
+                    minDate={new Date()}
+                    maxDate={values.endDate || undefined}
+                    onChange={newStartDate => {
+                      field.onChange(newStartDate)
+                      setValue(
+                        'startDateTime',
+                        makeDate(newStartDate, startTime)
+                      )
+                      trigger('endDate')
+                    }}
+                    onBlur={field.onBlur}
+                    error={fieldState.error}
+                  />
+                )}
               />
-            )}
-          />
+            </Grid>
+            <Grid item xs={6}>
+              <Controller
+                name="startTime"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <CourseTimePicker
+                    id="start"
+                    label={t('components.course-form.start-time-placeholder')}
+                    value={field.value}
+                    onChange={newStartTime => {
+                      field.onChange(newStartTime)
+                      setValue(
+                        'startDateTime',
+                        makeDate(startDate, newStartTime)
+                      )
+                    }}
+                    error={fieldState.error}
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
 
           <Typography mb={2} mt={2} fontWeight={600}>
             {t('components.course-form.end-datepicker-section-title')}
           </Typography>
-          <Controller
-            name="endDateTime"
-            control={control}
-            render={({ field, fieldState }) => (
-              <CourseDateTimePicker
-                dateValue={field.value}
-                timeValue={
-                  courseInput?.endDateTime
-                    ? extractTime(courseInput.endDateTime)
-                    : extractTime(makeDate(null, '17:00'))
-                }
-                minDate={values.startDateTime ?? new Date()}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                error={fieldState.error}
-                timeId="end"
-                dateLabel={t('components.course-form.end-date-placeholder')}
-                timeLabel={t('components.course-form.end-time-placeholder')}
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <CourseDatePicker
+                    label={t('components.course-form.end-date-placeholder')}
+                    value={field.value}
+                    minDate={values.startDate ?? new Date()}
+                    onChange={newEndDate => {
+                      field.onChange(newEndDate)
+                      setValue('endDateTime', makeDate(newEndDate, endTime))
+                    }}
+                    onBlur={field.onBlur}
+                    error={
+                      fieldState.error || errors.endDateTime
+                        ? { ...fieldState.error, ...errors.endDateTime }
+                        : undefined
+                    }
+                  />
+                )}
               />
-            )}
-          />
+            </Grid>
+            <Grid item xs={6}>
+              <Controller
+                name="endTime"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <CourseTimePicker
+                    id="end"
+                    label={t('components.course-form.end-time-placeholder')}
+                    value={field.value}
+                    onChange={newEndTime => {
+                      field.onChange(newEndTime)
+                      setValue('endDateTime', makeDate(endDate, newEndTime))
+                    }}
+                    error={fieldState.error}
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
         </LocalizationProvider>
 
         {courseType === CourseType.INDIRECT ? (
