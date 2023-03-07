@@ -108,7 +108,7 @@ export const ModifyAttendanceModal: React.FC<
               color="primary"
               onClick={onClose}
             >
-              {t('common.never-mind')}
+              {t('common.close-modal')}
             </Button>
           </Box>
         ) : null}

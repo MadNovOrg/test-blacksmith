@@ -146,7 +146,7 @@ export const CourseCancellationRequestModal: React.FC<
 
       <Box display="flex" justifyContent="space-between" mt={4}>
         <Button type="button" variant="text" color="primary" onClick={onClose}>
-          {t('pages.edit-course.cancellation-modal.never-mind')}
+          {t('pages.edit-course.cancellation-modal.close-modal')}
         </Button>
         <LoadingButton
           loading={loading}

@@ -23,7 +23,7 @@
     "first-name-placeholder": "First name *",
     "surname-placeholder": "Surname *",
     "alert-message": "<strong>Important:</strong> Please make sure email is entered correctly. Course details will be sent to email address.",
-    "cancel-btn-text": "Never mind",
+    "cancel-btn-text": "Close",
     "submit-btn-text": "Replace attendee",
     "replacement-error": "There was an error replacing the participant.",
     "replacement-error-INVALID_EMAIL": "Invite email is already registered on the course.",

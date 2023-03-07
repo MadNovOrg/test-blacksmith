@@ -138,7 +138,7 @@ describe('component: ReviewChangesModal', () => {
       />
     )
 
-    await userEvent.click(screen.getByText(/never mind/i))
+    await userEvent.click(screen.getByText(/close/i))
 
     expect(onCancelMock).toHaveBeenCalledTimes(1)
   })

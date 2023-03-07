@@ -81,7 +81,7 @@ describe('component: ReplaceParticipantDialog', () => {
       </Provider>
     )
 
-    await userEvent.click(screen.getByText(/never mind/i))
+    await userEvent.click(screen.getByText(/close/i))
 
     expect(onCloseMock).toHaveBeenCalledTimes(1)
   })

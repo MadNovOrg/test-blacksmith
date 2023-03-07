@@ -291,7 +291,7 @@ export const RemoveIndividualModal = ({
               color="primary"
               onClick={onClose}
             >
-              {t('pages.edit-course.cancellation-modal.never-mind')}
+              {t('pages.edit-course.cancellation-modal.close-modal')}
             </Button>
             <LoadingButton
               loading={loading}

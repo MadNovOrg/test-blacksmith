@@ -388,7 +388,7 @@
         "other": "Other"
       },
       "specify-reason": "Specify reason",
-      "never-mind": "Never mind",
+      "close-modal": "Close",
       "cancel-entire-course": "Cancel entire course",
       "fee": "Fee",
       "before-course-start-date": "Before course start date",
@@ -418,7 +418,7 @@
       "col-venue-type": "Venue",
       "reason-field-placeholder": "Reason for change *",
       "error-reason-required-field": "Reason is a required field",
-      "cancel-btn-text": "Never mind",
+      "cancel-btn-text": "Close",
       "confirm-btn-text": "Confirm changes",
       "col-start-date": "Before course start date",
       "col-fee": "Rescheduling fee",
@@ -508,7 +508,7 @@
         "alert-message": "Transfer terms apply based on the course start date.",
         "terms-notice": "I understand the terms and conditions.",
         "transfer-btn-text": "Transfer to another course",
-        "cancel-btn-text": "Never mind"
+        "cancel-btn-text": "Close"
       }
     }
   },
@@ -1260,7 +1260,7 @@
     "title-ATTENDEE_TRANSFERS": "Transfer to another course",
     "title-ORG_ADMIN_TRANSFERS": "Transfer attendee",
     "back-btn-text": "Course details",
-    "cancel-btn-text": "Never mind",
+    "cancel-btn-text": "Close",
     "attendee-label": "Attendee",
     "success-message": "Participant transferred",
     "no-data-error": "Invalid course or participant for the transfer.",
