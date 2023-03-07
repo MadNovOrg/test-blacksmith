@@ -17,6 +17,7 @@ const buildTrainerAvatar = build<TrainerAvatar>({
     status: Course_Invite_Status_Enum.Accepted,
     profile: {
       fullName: perBuild(() => chance.name({ full: true })),
+      id: chance.guid(),
     },
   },
 })
@@ -28,6 +29,7 @@ describe('component: TrainerAvatarGroup', () => {
         type: Course_Trainer_Type_Enum.Leader,
         profile: {
           fullName: 'John Doe',
+          id: chance.guid(),
         },
       },
     })
@@ -37,13 +39,16 @@ describe('component: TrainerAvatarGroup', () => {
         type: Course_Trainer_Type_Enum.Assistant,
         profile: {
           fullName: 'Kevin Spacey',
+          id: chance.guid(),
         },
       },
     })
 
     const trainers: TrainerAvatar[] = [assistTrainer, leadTrainer]
 
-    render(<TrainerAvatarGroup trainers={trainers} />)
+    render(
+      <TrainerAvatarGroup trainers={trainers} courseId={chance.integer()} />
+    )
 
     const leadTrainerNode = screen.getByTestId(
       `trainer-avatar-${leadTrainer.id}`

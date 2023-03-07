@@ -370,7 +370,10 @@ export const AttendeeCourses: React.FC<
                       )}
                     </TableCell>
                     <TableCell>
-                      <TrainerAvatarGroup trainers={c.trainers ?? []} />
+                      <TrainerAvatarGroup
+                        trainers={c.trainers ?? []}
+                        courseId={c.id}
+                      />
                     </TableCell>
                     <TableCell>
                       <CourseStatusChip status={courseStatus} />

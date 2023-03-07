@@ -77,29 +77,43 @@ export const OrgSummaryList: React.FC<
               </TableCell>
               <TableCell>{org.address?.city}</TableCell>
               <TableCell>
-                <AvatarGroup
-                  max={4}
-                  sx={{
-                    justifyContent: 'center',
-                    '& .MuiAvatar-root': {
-                      width: 32,
-                      height: 32,
-                      fontSize: 15,
-                    },
-                  }}
+                <Link
+                  href={`/organisations/${org?.id}`}
+                  underline="none"
+                  ml={-1}
                 >
-                  {profilesByOrg.get(org.id)?.map(profile => (
-                    <Avatar
-                      key={profile.id}
-                      src={profile.avatar ?? ''}
-                      name={
-                        profile.archived ? undefined : profile.fullName ?? ''
-                      }
-                    >
-                      {profile.archived ? <CloseIcon /> : null}
-                    </Avatar>
-                  ))}
-                </AvatarGroup>
+                  <AvatarGroup
+                    max={4}
+                    sx={{
+                      justifyContent: 'center',
+                      '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        fontSize: 15,
+                      },
+                    }}
+                  >
+                    {profilesByOrg.get(org.id)?.map(profile => (
+                      <Link
+                        href={`/profile/${profile.id}`}
+                        key={profile.id}
+                        underline="none"
+                        ml={-1}
+                      >
+                        <Avatar
+                          src={profile.avatar ?? ''}
+                          name={
+                            profile.archived
+                              ? undefined
+                              : profile.fullName ?? ''
+                          }
+                        >
+                          {profile.archived ? <CloseIcon /> : null}
+                        </Avatar>
+                      </Link>
+                    ))}
+                  </AvatarGroup>
+                </Link>
               </TableCell>
               <TableCell align="center">
                 <Chip

@@ -62,7 +62,10 @@ export const ActionableCoursesTable: React.FC<ActionableCoursesTableProps> = ({
           <DateCell date={course.dates?.aggregate?.end?.date} />
           <DateCell date={course.createdAt} />
           <TableCell>
-            <TrainerAvatarGroup trainers={course.trainers} />
+            <TrainerAvatarGroup
+              trainers={course.trainers}
+              courseId={course.id}
+            />
           </TableCell>
           <TableCell data-testid="participants-cell">
             <ParticipantsCount

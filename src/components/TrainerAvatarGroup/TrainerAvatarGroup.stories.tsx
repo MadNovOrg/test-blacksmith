@@ -27,7 +27,7 @@ WithOnlyLead.args = {
       id: '1',
       type: Course_Trainer_Type_Enum.Leader,
       status: Course_Invite_Status_Enum.Accepted,
-      profile: { fullName: 'John Doe' },
+      profile: { fullName: 'John Doe', id: 'Not implemented' },
     },
   ],
 }
@@ -39,19 +39,19 @@ WithMultipleAssists.args = {
       id: '1',
       type: Course_Trainer_Type_Enum.Assistant,
       status: Course_Invite_Status_Enum.Accepted,
-      profile: { fullName: 'John Doe' },
+      profile: { fullName: 'John Doe', id: 'Not implemented' },
     },
     {
       id: '2',
       type: Course_Trainer_Type_Enum.Leader,
       status: Course_Invite_Status_Enum.Accepted,
-      profile: { fullName: 'Mark Doe' },
+      profile: { fullName: 'Mark Doe', id: 'Not implemented' },
     },
     {
       id: '3',
       type: Course_Trainer_Type_Enum.Assistant,
       status: Course_Invite_Status_Enum.Pending,
-      profile: { fullName: 'John Doe' },
+      profile: { fullName: 'John Doe', id: 'Not implemented' },
     },
   ],
 }

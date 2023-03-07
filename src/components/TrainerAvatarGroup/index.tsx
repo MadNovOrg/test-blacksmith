@@ -5,10 +5,12 @@ import {
   Tooltip,
   tooltipClasses,
   TooltipProps,
+  Link,
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
   Course_Trainer,
@@ -20,10 +22,16 @@ import { CourseTrainerType } from '@app/types'
 import { Avatar } from '../Avatar'
 
 export type TrainerAvatar = Pick<Course_Trainer, 'id' | 'status' | 'type'> & {
-  profile: Pick<Profile, 'fullName' | 'avatar' | 'archived'>
+  profile: Pick<Profile, 'fullName' | 'avatar' | 'archived' | 'id'>
 }
 type Props = {
   trainers?: TrainerAvatar[]
+  courseId: number
+}
+
+type ProfileAvatarProp = {
+  trainer: TrainerAvatar
+  index: number
 }
 
 const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
@@ -42,6 +50,30 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
+const ProfileAvatar: React.FC<React.PropsWithChildren<ProfileAvatarProp>> = ({
+  trainer,
+  index,
+}) => {
+  return (
+    <Avatar
+      src={trainer.profile.archived ? undefined : trainer.profile.avatar ?? ''}
+      name={
+        trainer.profile.archived ? undefined : trainer.profile.fullName ?? ''
+      }
+      size={32}
+      sx={{
+        ...(trainer.profile.archived ? { bgcolor: 'grey' } : {}),
+        opacity:
+          trainer.status !== Course_Invite_Status_Enum.Accepted ? '0.5' : '1',
+      }}
+      data-testid={`trainer-avatar-${trainer.id}`}
+      data-index={index}
+    >
+      {trainer.profile.archived ? <CloseIcon /> : null}
+    </Avatar>
+  )
+}
+
 function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
   return a.type === Course_Trainer_Type_Enum.Leader
     ? -1
@@ -52,8 +84,10 @@ function sortTrainers(a: TrainerAvatar, b: TrainerAvatar): 1 | -1 | 0 {
 
 export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
   trainers,
+  courseId,
 }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   function trainerAvatar(trainer: TrainerAvatar, index: number) {
     const name = trainer.profile.archived
@@ -67,28 +101,17 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
         )}: ${name}`}
         placement="top"
       >
-        <Avatar
-          src={
-            trainer.profile.archived ? undefined : trainer.profile.avatar ?? ''
-          }
-          name={
-            trainer.profile.archived
-              ? undefined
-              : trainer.profile.fullName ?? ''
-          }
-          size={32}
-          sx={{
-            ...(trainer.profile.archived ? { bgcolor: 'grey' } : {}),
-            opacity:
-              trainer.status !== Course_Invite_Status_Enum.Accepted
-                ? '0.5'
-                : '1',
-          }}
-          data-testid={`trainer-avatar-${trainer.id}`}
-          data-index={index}
-        >
-          {trainer.profile.archived ? <CloseIcon /> : null}
-        </Avatar>
+        {acl.canViewProfiles() ? (
+          <Link
+            href={`/profile/${trainer.profile.id}`}
+            underline="none"
+            ml={-1}
+          >
+            <ProfileAvatar trainer={trainer} index={index} />
+          </Link>
+        ) : (
+          <ProfileAvatar trainer={trainer} index={index} />
+        )}
       </LightTooltip>
     )
   }
@@ -99,7 +122,17 @@ export const TrainerAvatarGroup: React.FC<React.PropsWithChildren<Props>> = ({
 
   const sortedTrainers = trainers.slice().sort(sortTrainers)
 
-  return (
+  return acl.canViewProfiles() ? (
+    <Link
+      href={`/manage-courses/all/${courseId}/details`}
+      underline="none"
+      ml={-1}
+    >
+      <AvatarGroup sx={{ justifyContent: 'center' }}>
+        {sortedTrainers.map(trainerAvatar)}
+      </AvatarGroup>
+    </Link>
+  ) : (
     <AvatarGroup sx={{ justifyContent: 'center' }}>
       {sortedTrainers.map(trainerAvatar)}
     </AvatarGroup>
