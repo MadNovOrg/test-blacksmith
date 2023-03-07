@@ -10,7 +10,7 @@ on:
       version:
         type: string
         required: false
-        default: $GITHUB_SHA
+        default: ${{ github.sha }}
     secrets:
       cognito_user_pool_id:
         required: true
