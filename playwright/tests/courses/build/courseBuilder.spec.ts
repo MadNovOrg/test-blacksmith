@@ -22,6 +22,7 @@ for (const data of MODULES_SETUP) {
       await deleteCourse(data.course.id)
     },
   })
+
   test.use({ storageState: stateFilePath('trainer') })
 
   test(`build course: ${data.name}`, async ({ page, course }) => {

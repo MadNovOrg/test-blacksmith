@@ -41,12 +41,12 @@ export class MyCoursesPage extends BasePage {
 
   async goto() {
     await super.goto(`${BASE_URL}/courses`, this.tableRoot)
-    await this.coursesTable.waitToLoad()
+    await this.coursesTable.checkIsVisible()
   }
 
   async gotoManageCourses() {
     await super.goto(`${BASE_URL}/manage-courses`, this.tableRoot)
-    await this.coursesTable.waitToLoad()
+    await this.coursesTable.checkIsVisible()
   }
 
   async tryToOpen() {
@@ -102,7 +102,6 @@ export class MyCoursesPage extends BasePage {
     const courseStatusChip = this.page.locator(
       `[data-testid="course-row-${courseId}"] [data-testid="course-status-chip"] span`
     )
-
     await expect(courseStatusChip).toHaveText(status)
   }
 
@@ -126,6 +125,7 @@ export class MyCoursesPage extends BasePage {
 
   async confirmModules() {
     await this.page.getByText('Confirm').click()
+    return new CourseDetailsPage(this.page)
   }
 
   async confirmCourseException() {

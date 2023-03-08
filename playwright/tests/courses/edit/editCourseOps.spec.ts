@@ -43,7 +43,6 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('ops') })
 
 test('edit course notes for open course as ops', async ({ page, course }) => {
-  test.setTimeout(60000)
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)

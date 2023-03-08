@@ -40,15 +40,14 @@ const test = base.extend<{ course: Course }>({
     await deleteCourse(course.id)
   },
 })
-//test is skipped due to https://behaviourhub.atlassian.net/browse/TTHP-575 causing course exception
-// eslint-disable-next-line playwright/no-skipped-test
-test.skip('cancel indirect course as trainer', async ({ browser, course }) => {
-  test.setTimeout(60000)
 
-  const trainerContext = await browser.newContext({
-    storageState: stateFilePath('trainer'),
-  })
-  const page = await trainerContext.newPage()
+test.use({ storageState: stateFilePath('trainer') })
+
+test('cancel indirect course as trainer', async ({ page, course }) => {
+  test.fail(
+    true,
+    'https://behaviourhub.atlassian.net/browse/TTHP-575 causing course exception'
+  )
   const trainerCoursesPage = new MyCoursesPage(page)
   await trainerCoursesPage.goto()
   await trainerCoursesPage.searchCourse(`${course.id}`)
@@ -56,6 +55,7 @@ test.skip('cancel indirect course as trainer', async ({ browser, course }) => {
   await trainerCoursesPage.goToCourseBuilder()
   await trainerCoursesPage.submitDefaultModules()
   await trainerCoursesPage.confirmModules()
+  await trainerCoursesPage.goto()
   await trainerCoursesPage.searchCourse(`${course.id}`)
   const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
     course.id

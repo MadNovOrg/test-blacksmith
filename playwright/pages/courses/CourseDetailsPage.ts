@@ -89,6 +89,11 @@ export class CourseDetailsPage extends BasePage {
       `${BASE_URL}/courses/${courseId}/details`,
       this.header.courseName
     )
+    await this.waitForLoad()
+  }
+
+  async waitForLoad() {
+    await expect(this.attendingText).toBeVisible()
   }
 
   async checkSuccessMessage(text: string) {

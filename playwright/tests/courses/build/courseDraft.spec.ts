@@ -23,6 +23,7 @@ const test = base.extend<{ course: Course }>({
     await deleteCourse(course.id)
   },
 })
+
 test.use({ storageState: stateFilePath('trainer') })
 
 test('course draft', async ({ page, course }) => {

@@ -6,9 +6,8 @@ import { Go1_History_Events_Enum } from '@app/generated/graphql'
 
 import { deleteOrganization, insertOrganization } from '../../api/hasura-api'
 import { insertGo1HistoryEvent } from '../../api/hasura/go1-licensing'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
+import { AllOrganisations } from '../../pages/org/AllOrganisations'
 
 const test = base.extend<{ orgId: string }>({
   orgId: async ({}, use) => {
@@ -33,8 +32,8 @@ const test = base.extend<{ orgId: string }>({
 test.use({ storageState: stateFilePath('admin') })
 
 test('export licenses as CSV', async ({ page, orgId }) => {
-  await page.goto(`${BASE_URL}/organisations/${orgId}`)
-  await waitForPageLoad(page)
+  const orgPage = new AllOrganisations(page)
+  await orgPage.gotoOrganisation(orgId)
 
   await page.click('button:has-text("Blended learning licences")')
 

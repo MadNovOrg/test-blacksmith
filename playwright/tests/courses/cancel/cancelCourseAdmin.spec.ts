@@ -24,7 +24,7 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.OPEN
-      course.status = Course_Status_Enum.TrainerPending
+      course.status = Course_Status_Enum.Scheduled
       course.schedule[0].start = inXMonths(3)
       course.schedule[0].end = inXMonths(3)
       const moduleIds = await getModuleIds(
@@ -34,7 +34,7 @@ const testData = [
       course.id = await insertCourse(
         course,
         users.trainer.email,
-        InviteStatus.PENDING
+        InviteStatus.ACCEPTED
       )
       await insertCourseModules(course.id, moduleIds)
       return course
@@ -74,31 +74,13 @@ for (const data of testData) {
     },
   })
 
+  test.use({ storageState: stateFilePath('admin') })
+
   test(`cancel course as admin: ${data.name} @smoke`, async ({
-    browser,
+    page,
     course,
   }) => {
-    test.setTimeout(60000)
-
-    // Create the course and modules as a trainer
-    const trainerContext = await browser.newContext({
-      storageState: stateFilePath('trainer'),
-    })
-    const page = await trainerContext.newPage()
-    const trainerCoursesPage = new MyCoursesPage(page)
-    await trainerCoursesPage.goto()
-    await trainerCoursesPage.searchCourse(`${course.id}`)
-    await trainerCoursesPage.acceptCourse(course.id)
-    await trainerCoursesPage.goToCourseBuilder()
-    await trainerCoursesPage.submitDefaultModules()
-    await trainerCoursesPage.confirmModules()
-
-    // Complete the rest of the journey as admin
-    const adminContext = await browser.newContext({
-      storageState: stateFilePath('admin'),
-    })
-    const adminPage = await adminContext.newPage()
-    const adminCoursesPage = new MyCoursesPage(adminPage)
+    const adminCoursesPage = new MyCoursesPage(page)
     await adminCoursesPage.goto()
     await adminCoursesPage.searchCourse(`${course.id}`)
     const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(

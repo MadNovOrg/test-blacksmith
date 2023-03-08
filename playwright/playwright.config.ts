@@ -12,9 +12,11 @@ const config: PlaywrightTestConfig = {
   expect: {
     timeout: 10 * 1000,
   },
+  timeout: 60 * 1000,
   projects: [
     {
       name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'firefox',

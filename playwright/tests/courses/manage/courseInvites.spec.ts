@@ -77,7 +77,6 @@ for (const data of testData) {
     browser,
     course,
   }) => {
-    test.setTimeout(60000)
     const trainerContext = await browser.newContext({
       storageState: stateFilePath(data.user),
     })
@@ -118,9 +117,9 @@ for (const data of testData) {
     )
     await courseDetailsPage.checkAttendingTabText('Attending (1)')
     await courseDetailsPage.checkPendingTabText('Pending (0)')
-    // eslint-disable-next-line playwright/no-conditional-in-test
     // For trainer we're masking the personal data
     // TODO change the validation after we'll get the information which personal data we should present to the Trainer
+    // eslint-disable-next-line playwright/no-conditional-in-test
     data.user === 'admin'
       ? await courseDetailsPage.checkAttendeesTableRows([users.user1WithOrg])
       : await courseDetailsPage.checkAttendeesTableNumberOfRows([

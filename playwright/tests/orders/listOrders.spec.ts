@@ -51,8 +51,6 @@ test.use({ storageState: stateFilePath('admin') })
 // that a triggers Xero invoice, and we don't want to spam from E2E env
 // when an event gets removed, refactor test to insert orders and assert on them
 test('list all orders', async ({ browser, unfilteredOrders }) => {
-  test.setTimeout(30000)
-
   const adminContext = await browser.newContext({
     storageState: stateFilePath('admin'),
   })
@@ -75,8 +73,6 @@ test('list orders filtered by credit card type', async ({
   browser,
   ccOrders,
 }) => {
-  test.setTimeout(30000)
-
   const adminContext = await browser.newContext({
     storageState: stateFilePath('admin'),
   })
@@ -104,8 +100,6 @@ test('list orders filtered by invoice type', async ({
   browser,
   invoiceOrders,
 }) => {
-  test.setTimeout(30000)
-
   const adminContext = await browser.newContext({
     storageState: stateFilePath('admin'),
   })

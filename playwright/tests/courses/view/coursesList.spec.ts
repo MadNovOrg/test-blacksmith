@@ -44,6 +44,7 @@ const test = base.extend<{
     )
   },
 })
+
 test.use({ storageState: stateFilePath('trainerWithOrg') })
 
 test('my courses view @smoke', async ({ page, coursesToView }) => {

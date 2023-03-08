@@ -47,7 +47,6 @@ test('edit course notes for indirect course as a trainer', async ({
   page,
   course,
 }) => {
-  test.setTimeout(60000)
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.searchCourse(`${course.id}`)

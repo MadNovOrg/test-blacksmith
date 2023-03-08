@@ -63,6 +63,7 @@ for (const data of dataSet) {
       await deleteCourse(data.course.id)
     },
   })
+
   test.use({ storageState: stateFilePath(data.user) })
 
   test.fixme(

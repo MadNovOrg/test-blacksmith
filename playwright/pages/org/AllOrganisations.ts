@@ -1,8 +1,10 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { Chance } from 'chance'
 
+import { waitForPageLoad } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
+
 export class AllOrganisations extends BasePage {
   readonly seeAllOrgs: Locator
   readonly addNewOrganisation: Locator
@@ -41,6 +43,11 @@ export class AllOrganisations extends BasePage {
 
   async goto() {
     await this.page.goto(`${BASE_URL}/organisations/all`)
+  }
+
+  async gotoOrganisation(id: string) {
+    await this.page.goto(`${BASE_URL}/organisations/${id}`)
+    await waitForPageLoad(this.page)
   }
 
   async clickSeeAllOrganisations() {

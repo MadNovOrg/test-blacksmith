@@ -57,14 +57,9 @@ const test = base.extend<{ courses: Course[] }>({
   },
 })
 
-test(`transfer an attendee to another course `, async ({
-  browser,
-  courses,
-}) => {
-  const orgAdminContext = await browser.newContext({
-    storageState: stateFilePath('userOrgAdmin'),
-  })
-  const page = await orgAdminContext.newPage()
+test.use({ storageState: stateFilePath('userOrgAdmin') })
+
+test(`transfer an attendee to another course `, async ({ page, courses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.gotoManageCourses()
   await myCoursesPage.searchCourse(`${courses[0].id}`)

@@ -4,9 +4,8 @@ import { setTimeout } from 'timers/promises'
 import { test as base } from '@playwright/test'
 
 import { deleteOrganization, insertOrganization } from '../..//api/hasura-api'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
+import { AllOrganisations } from '../../pages/org/AllOrganisations'
 
 const test = base.extend<{
   orgId: string
@@ -30,8 +29,8 @@ const test = base.extend<{
 test.use({ storageState: stateFilePath('admin') })
 
 test('licenses can be removed', async ({ page, orgId }) => {
-  await page.goto(`${BASE_URL}/organisations/${orgId}`)
-  await waitForPageLoad(page)
+  const orgPage = new AllOrganisations(page)
+  await orgPage.gotoOrganisation(orgId)
 
   await page.click('button:has-text("Blended learning licences")')
 

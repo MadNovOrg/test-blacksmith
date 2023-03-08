@@ -15,12 +15,8 @@ export class UiTable {
     this.firstRowCells = this.root.locator('tbody tr >> nth=0 >> td')
   }
 
-  async waitToLoad() {
-    await expect(this.rows.first()).toBeVisible({ timeout: 30000 })
-  }
-
   async getRowsCount(): Promise<number> {
-    await this.waitToLoad()
+    await this.checkIsVisible()
     return this.rows.count()
   }
 

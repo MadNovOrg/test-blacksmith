@@ -70,7 +70,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: TARGET_ENV=local npm run test:e2e:smoke
+        run: npm run test:e2e:smoke
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
