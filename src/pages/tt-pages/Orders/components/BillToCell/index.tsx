@@ -16,12 +16,20 @@ export const BillToCell: React.FC<Props> = ({ organization }) => {
       .filter(Boolean)
       .join(', ')
 
-    return (
-      <span>
-        {formattedAddress},{' '}
-        <span style={{ whiteSpace: 'nowrap' }}>{postCode}</span>
-      </span>
-    )
+    if (formattedAddress) {
+      return (
+        <span>
+          {formattedAddress}
+          {postCode ? (
+            <>
+              , <span style={{ whiteSpace: 'nowrap' }}>{postCode}</span>
+            </>
+          ) : null}
+        </span>
+      )
+    } else {
+      return null
+    }
   }
 
   return (
