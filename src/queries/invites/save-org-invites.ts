@@ -7,7 +7,7 @@ export const MUTATION = gql`
       on_conflict: {
         constraint: organization_invites_org_id_email_key
         update_columns: [updatedAt, isAdmin, status]
-        where: { status: { _neq: ACCEPTED } }
+        where: { status: { _neq: "ACCEPTED" } }
       }
     ) {
       returning {
