@@ -9,7 +9,7 @@ import {
   QUERY as GET_ORG_INVITES_QUERY,
   ResponseType as GetOrgInvitesResponseType,
 } from '@app/queries/invites/get-org-invites'
-import { MUTATION as RECREATE_ORG_INVITE_QUERY } from '@app/queries/invites/recreate-org-invite'
+import { MUTATION as RESEND_ORG_INVITE_QUERY } from '@app/queries/invites/resend-org-invite'
 import { Matcher } from '@app/queries/organization/get-org-details'
 import { OrganizationInvite } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
@@ -44,11 +44,8 @@ export const useOrgInvites = (
 
   const resend = useCallback(
     async (invite: OrganizationInvite) => {
-      await fetcher(RECREATE_ORG_INVITE_QUERY, {
+      await fetcher(RESEND_ORG_INVITE_QUERY, {
         inviteId: invite.id,
-        orgId: invite.organization.id,
-        isAdmin: invite.isAdmin,
-        email: invite.email,
       })
       await invalidateCache()
     },

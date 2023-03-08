@@ -39048,13 +39048,10 @@ export type RecreateCourseInviteMutation = { __typename?: 'mutation_root', delet
 
 export type RecreateOrgInviteMutationVariables = Exact<{
   inviteId: Scalars['uuid'];
-  orgId: Scalars['uuid'];
-  email: Scalars['String'];
-  isAdmin: Scalars['Boolean'];
 }>;
 
 
-export type RecreateOrgInviteMutation = { __typename?: 'mutation_root', delete_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null, insert_organization_invites_one?: { __typename?: 'organization_invites', id: any } | null };
+export type RecreateOrgInviteMutation = { __typename?: 'mutation_root', update_organization_invites_by_pk?: { __typename?: 'organization_invites', id: any } | null };
 
 export type SaveCourseInvitesMutationVariables = Exact<{
   invites: Array<Course_Invites_Insert_Input> | Course_Invites_Insert_Input;
