@@ -1,0 +1,71 @@
+import { test as base } from '@playwright/test'
+
+import { Course_Status_Enum } from '@app/generated/graphql'
+import { CourseType, InviteStatus } from '@app/types'
+
+import { getLatestEmail } from '../../../api/email-api'
+import {
+  deleteCourse,
+  getModuleIds,
+  insertCourse,
+  insertCourseModules,
+  insertCourseParticipants,
+} from '../../../api/hasura-api'
+import { UNIQUE_COURSE } from '../../../data/courses'
+import { getModulesByLevel } from '../../../data/modules'
+import { Course } from '../../../data/types'
+import { users } from '../../../data/users'
+import { stateFilePath } from '../../../hooks/global-setup'
+import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
+import { EmailPage } from '../../../pages/EmailPage'
+import { inXMonths } from '../../../util'
+
+const test = base.extend<{ course: Course }>({
+  course: async ({}, use) => {
+    const course = UNIQUE_COURSE()
+    course.type = CourseType.OPEN
+    course.schedule[0].start = inXMonths(2)
+    course.schedule[0].end = inXMonths(2)
+    course.organization = { name: 'London First School' }
+    course.status = Course_Status_Enum.Scheduled
+    const moduleIds = await getModuleIds(
+      getModulesByLevel(course.level),
+      course.level
+    )
+    course.id = await insertCourse(
+      course,
+      users.trainer.email,
+      InviteStatus.ACCEPTED
+    )
+    await insertCourseModules(course.id, moduleIds)
+    await insertCourseParticipants(course.id, [users.user1WithOrg], new Date())
+    await use(course)
+    await deleteCourse(course.id)
+  },
+})
+
+test(`transfer an attendee to another course `, async ({ browser, course }) => {
+  const orgAdminContext = await browser.newContext({
+    storageState: stateFilePath('userOrgAdmin'),
+  })
+  const page = await orgAdminContext.newPage()
+  const myCoursesPage = new MyCoursesPage(page)
+  await myCoursesPage.gotoManageCourses()
+  await myCoursesPage.searchCourse(`${course.id}`)
+  const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
+    course.id
+  )
+  await courseDetailsPage.clickManageAttendance()
+  await courseDetailsPage.clickAttendeeReplace()
+  await courseDetailsPage.replaceAttendee(users.user2WithOrg)
+
+  // Accept the invitation to the course as the new attendee
+  const otherPage = await browser.newPage()
+  const email = await getLatestEmail(users.user2WithOrg.email)
+  const emailPage = new EmailPage(otherPage)
+  await emailPage.renderContent(email.html)
+  const invitationPage = await emailPage.clickRegisterNowButton()
+  await invitationPage.acceptInvitation()
+
+  await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
+})

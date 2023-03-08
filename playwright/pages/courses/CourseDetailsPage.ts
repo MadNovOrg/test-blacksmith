@@ -34,6 +34,42 @@ class InviteAttendeesPopUp {
   }
 }
 
+class ReplaceAttendeePopUp {
+  readonly page: Page
+  readonly firstNameInput: Locator
+  readonly surnameInput: Locator
+  readonly emailInput: Locator
+  readonly termsAcceptedCheckbox: Locator
+  readonly cancelButton: Locator
+  readonly submitButton: Locator
+
+  constructor(page: Page) {
+    this.page = page
+    this.firstNameInput = this.page.locator('input[name=firstName]')
+    this.surnameInput = this.page.locator('input[name=surname]')
+    this.emailInput = this.page.locator('input[name=email]')
+    this.termsAcceptedCheckbox = this.page.locator('input[name=termsAccepted]')
+    this.cancelButton = this.page.locator('[data-testid=replace-cancel]')
+    this.submitButton = this.page.locator('[data-testid=replace-submit]')
+  }
+
+  async enterDetails(
+    firstName: string,
+    surname: string,
+    email: string,
+    termsAccepted = true
+  ) {
+    await this.firstNameInput.fill(firstName)
+    await this.surnameInput.fill(surname)
+    await this.emailInput.fill(email)
+    await this.termsAcceptedCheckbox.setChecked(termsAccepted)
+  }
+
+  async clickSubmitButton() {
+    await this.submitButton.click()
+  }
+}
+
 export class CourseDetailsPage extends BasePage {
   readonly header: CourseHeader
   readonly successMessage: Locator
@@ -44,6 +80,7 @@ export class CourseDetailsPage extends BasePage {
   readonly pendingTab: Locator
   readonly declinedTab: Locator
   readonly invitePopUp: InviteAttendeesPopUp
+  readonly replacePopUp: ReplaceAttendeePopUp
   readonly attendeesTable: UiTable
   readonly editCourseButton: Locator
   readonly saveButton: Locator
@@ -65,6 +102,7 @@ export class CourseDetailsPage extends BasePage {
     this.pendingTab = this.page.locator('data-testid=tabPending')
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
     this.invitePopUp = new InviteAttendeesPopUp(this.page)
+    this.replacePopUp = new ReplaceAttendeePopUp(this.page)
     this.attendeesTable = new UiTable(
       this.page.locator('data-testid=attending-table')
     )
@@ -194,6 +232,19 @@ export class CourseDetailsPage extends BasePage {
   async clickAttendeeTransfer() {
     await this.page.locator('[data-testid=attendee-transfer]').click()
     return new CourseTransferPage(this.page)
+  }
+
+  async clickAttendeeReplace() {
+    await this.page.locator('[data-testid=attendee-replace]').click()
+  }
+
+  async replaceAttendee(user: User) {
+    await this.replacePopUp.enterDetails(
+      user.givenName,
+      user.familyName,
+      user.email
+    )
+    await this.replacePopUp.clickSubmitButton()
   }
 
   async checkAttendeeExists(user: User) {

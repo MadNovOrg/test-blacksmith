@@ -209,12 +209,15 @@ export const ReplaceParticipantDialog: React.FC<
           ) : null}
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Button onClick={onClose}>{t('cancel-btn-text')}</Button>
+          <Button onClick={onClose} data-testId="replace-cancel">
+            {t('cancel-btn-text')}
+          </Button>
           <LoadingButton
             type="submit"
             variant="contained"
             disabled={!formState.isValid}
             loading={fetching}
+            data-testId="replace-submit"
           >
             {t('submit-btn-text')}
           </LoadingButton>
