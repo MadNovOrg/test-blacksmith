@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import DeleteIcon from '@mui/icons-material/Delete'
 import {
   Alert,
   Autocomplete,
@@ -9,7 +8,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Link,
   InputLabel,
   MenuItem,
   NativeSelect,
@@ -317,7 +315,7 @@ export const CourseBookingDetails: React.FC<
                 })}
               </Typography>
             </Box>
-            <Box minWidth={100} display="flex" alignItems="center" mr={-2}>
+            <Box minWidth={100} display="flex" alignItems="center">
               <FormControl fullWidth sx={{ bgcolor: 'grey.200' }}>
                 <InputLabel variant="standard" htmlFor="qty-select">
                   {t('qty')}
@@ -334,9 +332,6 @@ export const CourseBookingDetails: React.FC<
                   ))}
                 </NativeSelect>
               </FormControl>
-              <Link underline="none" href="/" variant="h5">
-                <DeleteIcon />
-              </Link>
             </Box>
           </Box>
 
@@ -636,7 +631,7 @@ export const CourseBookingDetails: React.FC<
         </Box>
 
         <Box display="flex" justifyContent="space-between">
-          <Button variant="text" color="primary">
+          <Button variant="text" color="primary" href="/">
             {t('cancel')}
           </Button>
           <Button variant="contained" color="primary" type="submit">
