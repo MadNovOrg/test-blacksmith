@@ -7,6 +7,8 @@ INSERT INTO course_pricing (
   xero_code
 ) VALUES
 ('OPEN', 'LEVEL_1', false, false, 130, 'LEVEL1.OP'),
+('OPEN', 'LEVEL_2', false, false, 230, 'LEVEL2.OP'),
+('OPEN', 'LEVEL_2', false, true, 230, 'LEVEL2.OP'),
 ('OPEN', 'INTERMEDIATE_TRAINER', false, false, 1600, 'INT.OP'),
 ('OPEN', 'INTERMEDIATE_TRAINER', false, true, 600, 'INT.RE.OP'),
 ('OPEN', 'ADVANCED_TRAINER', false, false, 1570, 'INT.RE.OP'),
