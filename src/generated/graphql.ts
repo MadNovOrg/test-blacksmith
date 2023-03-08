@@ -4162,6 +4162,7 @@ export type OrderInfo = {
   status?: Maybe<XeroInvoiceStatus>;
   stripePaymentId?: Maybe<Scalars['uuid']>;
   xeroInvoiceNumber?: Maybe<Scalars['Int']>;
+  xeroReference?: Maybe<Scalars['String']>;
 };
 
 export type Ordering = {
@@ -4176,6 +4177,7 @@ export type OrgInvite = {
 
 export type OrganizationInfo = {
   __typename?: 'OrganizationInfo';
+  address?: Maybe<Scalars['jsonb']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
 };
@@ -38488,7 +38490,7 @@ export type GetOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, course?: any | null, status?: XeroInvoiceStatus | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null } | null } | null> | null } | null };
+export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, course?: any | null, status?: XeroInvoiceStatus | null, xeroReference?: string | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null, address?: any | null } | null } | null> | null } | null };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 

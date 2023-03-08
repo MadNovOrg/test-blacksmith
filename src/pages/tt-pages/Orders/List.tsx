@@ -13,6 +13,7 @@ import {
   Chip,
 } from '@mui/material'
 import { saveAs } from 'file-saver'
+import { t } from 'i18next'
 import React, { useMemo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import * as XLSX from 'xlsx'
@@ -20,9 +21,28 @@ import * as XLSX from 'xlsx'
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { OrderInfo, XeroInvoiceStatus } from '@app/generated/graphql'
+import { Maybe, OrganizationInfo } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { getOrderDueDate, INVOICE_STATUS_COLOR } from '@app/util'
+
+import { BillToCell } from './components/BillToCell'
+
+const formatBillToForExcel = (organization?: Maybe<OrganizationInfo>) => {
+  if (organization && organization.name) {
+    let address
+    if (organization.address) {
+      const { line1, line2, city, country, postCode } = organization.address
+
+      address = [line1, line2, city, country, postCode]
+        .filter(Boolean)
+        .join(', ')
+    }
+    return `${organization?.name}${address ? ', ' + address : ''}`
+  } else {
+    return t('pages.orders.no-organisation')
+  }
+}
 
 type Props = {
   orders: OrderInfo[]
@@ -45,6 +65,11 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
     return [
       checkbox.headCol(orders.map(o => o.id)),
       { id: 'xeroInvoiceNumber', label: _t('invoiceNumber'), sorting: true },
+      {
+        id: 'xeroReference',
+        label: _t('xeroReference'),
+        sorting: true,
+      },
       { id: 'organization.name', label: _t('billTo'), sorting: true },
       { id: 'paymentMethod', label: _t('paymentMethod'), sorting: true },
       { id: 'orderTotal', label: _t('amount'), sorting: true },
@@ -54,7 +79,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
         label: _t('dueDate'),
         sorting: true,
       },
-      { id: 'status', label: _t('status') }, // TODO - add support for sorting when Xero is integrated with order creation
+      { id: 'status', label: _t('status'), sorting: true },
     ] as Col[]
   }, [t, orders, checkbox])
 
@@ -86,6 +111,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
       const ordersData = [
         [
           _t('invoiceNumber'),
+          _t('xeroReference'),
           _t('billTo'),
           _t('paymentMethod'),
           _t('amount'),
@@ -98,7 +124,8 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
           return [
             o.xeroInvoiceNumber,
-            o.organization?.name ?? '-NA-',
+            o.xeroReference,
+            formatBillToForExcel(o.organization),
             t(`pages.orders.paymentMethod-${o.paymentMethod}`),
             o.orderTotal,
             due,
@@ -192,12 +219,13 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                 </TableCell>
 
                 <TableCell>
-                  {order.organization && (
-                    <Link href={`/organisations/${order.organization.id}`}>
-                      {order.organization.name}
-                    </Link>
-                  )}
+                  <span style={{ whiteSpace: 'nowrap' }}>
+                    {order.xeroReference}
+                  </span>
                 </TableCell>
+
+                <BillToCell organization={order.organization} />
+
                 <TableCell>
                   {t(`pages.orders.paymentMethod-${order.paymentMethod}`)}
                 </TableCell>

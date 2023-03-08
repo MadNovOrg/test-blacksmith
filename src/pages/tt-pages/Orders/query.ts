@@ -27,8 +27,10 @@ export const GET_ORDERS = gql`
         organization {
           name
           id
+          address
         }
         status
+        xeroReference
       }
       count
     }

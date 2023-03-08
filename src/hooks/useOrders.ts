@@ -63,6 +63,13 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       where._or.push({
         xeroInvoiceNumber: { _ilike: `%${filters.searchParam}%` },
       })
+      where._or.push({
+        organization: {
+          address: {
+            _cast: { String: { _ilike: `%${filters.searchParam}%` } },
+          },
+        },
+      })
 
       const onlyDigits = /^\d+$/.test(filters.searchParam || '')
 

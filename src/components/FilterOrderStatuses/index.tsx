@@ -31,7 +31,11 @@ export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
           ) as FilterOption
           previousEntry.id += `,${entry.id}`
         } else {
-          res.push(entry)
+          res.push({
+            ...entry,
+            highlight: entry.id === XeroInvoiceStatus.Overdue,
+          })
+
           usedTitles.push(entry.title)
         }
 

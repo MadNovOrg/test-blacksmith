@@ -915,7 +915,8 @@
   },
   "orders": {
     "cols-invoiceNumber": "Invoice no.",
-    "cols-billTo": "Organisation",
+    "cols-xeroReference": "Reference no.",
+    "cols-billTo": "Bill to",
     "cols-paymentMethod": "Payment Method",
     "cols-amount": "Amount",
     "cols-due": "Due",
@@ -925,7 +926,8 @@
     "paymentMethod-CC": "Credit Card",
     "qty": "Participants",
     "export-selected": "Export selected",
-    "export-whole-page": "Export whole page"
+    "export-whole-page": "Export whole page",
+    "no-organisation": "-NA-"
   },
   "hs-form": {
     "back-to-checklist": "Back to checklist",

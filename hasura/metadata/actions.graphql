@@ -845,11 +845,13 @@ type OrderInfo {
   organization: OrganizationInfo
   status: XeroInvoiceStatus
   course: jsonb
+  xeroReference: String
 }
 
 type OrganizationInfo {
   name: String
   id: uuid
+  address: jsonb
 }
 
 type MergeUserOutput {

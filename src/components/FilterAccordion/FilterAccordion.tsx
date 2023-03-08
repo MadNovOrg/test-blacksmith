@@ -8,12 +8,15 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import React, { useMemo } from 'react'
 
+import theme from '@app/theme'
+
 import { StyledAccordion } from './styled'
 
 export type FilterOption<T = string> = {
   id: T
   title: string
   selected: boolean
+  highlight?: boolean
 }
 
 type FilterAccordionProps<T = string> = {
@@ -69,7 +72,10 @@ export const FilterAccordion = <T,>({
             data-testid={`${testId}-option`}
             data-id={o.id}
           >
-            <ListItemText primary={o.title} />
+            <ListItemText
+              primary={o.title}
+              sx={o.highlight ? { color: theme.palette.error.dark } : {}}
+            />
             <ListItemIcon>
               <Check />
             </ListItemIcon>
