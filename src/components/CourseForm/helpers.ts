@@ -88,18 +88,6 @@ export function canBeBlended(
     [CourseType.OPEN]: () => {
       if (!courseLevel) return false
 
-      if (isF2F) {
-        const levels = [CourseLevel.Level_2]
-        return levels.includes(courseLevel)
-        // OPEN + F2F can only be Level 2
-      }
-
-      if (isMixed) {
-        const levels = [CourseLevel.Level_2]
-        return levels.includes(courseLevel)
-        // OPEN + Mixed can only be Level 2
-      }
-
       if (isVirtual) {
         // OPEN + Virtual can never be blended
       }
