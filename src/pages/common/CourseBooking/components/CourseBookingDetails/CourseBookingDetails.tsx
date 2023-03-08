@@ -9,7 +9,7 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
+  Link,
   InputLabel,
   MenuItem,
   NativeSelect,
@@ -334,12 +334,9 @@ export const CourseBookingDetails: React.FC<
                   ))}
                 </NativeSelect>
               </FormControl>
-              <IconButton
-                aria-label="delete"
-                onClick={() => console.log('TBD')}
-              >
+              <Link underline="none" href="/" variant="h5">
                 <DeleteIcon />
-              </IconButton>
+              </Link>
             </Box>
           </Box>
 
