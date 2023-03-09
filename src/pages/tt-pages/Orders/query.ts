@@ -31,6 +31,7 @@ export const GET_ORDERS = gql`
         }
         status
         xeroReference
+        dueDate
       }
       count
     }

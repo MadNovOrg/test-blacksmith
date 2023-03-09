@@ -853,6 +853,7 @@ type OrderInfo {
   status: XeroInvoiceStatus
   course: jsonb
   xeroReference: String
+  dueDate: String
 }
 
 type OrganizationInfo {

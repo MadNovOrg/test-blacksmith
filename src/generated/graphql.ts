@@ -4151,6 +4151,7 @@ export type OrderInfo = {
   course?: Maybe<Scalars['jsonb']>;
   createdAt?: Maybe<Scalars['Date']>;
   currency?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
   orderDue?: Maybe<Scalars['Float']>;
   orderTotal?: Maybe<Scalars['Float']>;
@@ -5193,14 +5194,10 @@ export enum PostStatusEnum {
   AutoDraft = 'AUTO_DRAFT',
   /** Objects with the draft status */
   Draft = 'DRAFT',
-  /** Objects with the failed status */
-  Failed = 'FAILED',
   /** Objects with the future status */
   Future = 'FUTURE',
   /** Objects with the inherit status */
   Inherit = 'INHERIT',
-  /** Objects with the in-progress status */
-  InProgress = 'IN_PROGRESS',
   /** Objects with the pending status */
   Pending = 'PENDING',
   /** Objects with the private status */
@@ -29452,8 +29449,6 @@ export enum Organization_Invites_Constraint {
   /** unique or primary key constraint */
   OrganizationInvitesOrgIdEmailKey = 'organization_invites_org_id_email_key',
   /** unique or primary key constraint */
-  OrganizationInvitesOrgIdProfileIdKey = 'organization_invites_org_id_profile_id_key',
-  /** unique or primary key constraint */
   OrganizationInvitesPkey = 'organization_invites_pkey'
 }
 
@@ -38503,7 +38498,7 @@ export type GetOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, course?: any | null, status?: XeroInvoiceStatus | null, xeroReference?: string | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null, address?: any | null } | null } | null> | null } | null };
+export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, course?: any | null, status?: XeroInvoiceStatus | null, xeroReference?: string | null, dueDate?: string | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null, address?: any | null } | null } | null> | null } | null };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 

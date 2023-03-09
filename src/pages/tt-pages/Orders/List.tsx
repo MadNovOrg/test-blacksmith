@@ -24,7 +24,7 @@ import { OrderInfo, XeroInvoiceStatus } from '@app/generated/graphql'
 import { Maybe, OrganizationInfo } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { getOrderDueDate, INVOICE_STATUS_COLOR } from '@app/util'
+import { INVOICE_STATUS_COLOR } from '@app/util'
 
 import { BillToCell } from './components/BillToCell'
 
@@ -75,30 +75,13 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
       { id: 'orderTotal', label: _t('amount'), sorting: true },
       { id: 'orderDue', label: _t('due'), sorting: true },
       {
-        id: 'course.schedule_aggregate.min.start',
+        id: 'dueDate',
         label: _t('dueDate'),
         sorting: true,
       },
       { id: 'status', label: _t('status'), sorting: true },
     ] as Col[]
   }, [t, orders, checkbox])
-
-  const getOrderInfo = useCallback((order: OrderInfo) => {
-    const { orderDue, status, course, createdAt } = order
-    const { date: startDate } = course.dates.aggregate.start
-
-    const dueDate = getOrderDueDate(
-      createdAt,
-      startDate,
-      order.paymentMethod || undefined
-    )
-
-    return {
-      due: orderDue,
-      status,
-      dueDate,
-    }
-  }, [])
 
   const selectedOrders = useMemo(
     () => orders.filter(o => isSelected(o.id)),
@@ -120,7 +103,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           _t('status'),
         ],
         ...orders.map((o: OrderInfo) => {
-          const { due, status, dueDate } = getOrderInfo(o)
+          const { orderDue, status, dueDate } = o
 
           return [
             o.xeroInvoiceNumber,
@@ -128,7 +111,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
             formatBillToForExcel(o.organization),
             t(`pages.orders.paymentMethod-${o.paymentMethod}`),
             o.orderTotal,
-            due,
+            orderDue,
             dueDate,
             t(`filters.${status}`),
           ]
@@ -143,7 +126,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
       saveAs(new Blob([buffer]), 'orders.xlsx')
     },
-    [t, getOrderInfo]
+    [t]
   )
 
   return (
@@ -200,7 +183,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {orders.map(order => {
-            const { due, status, dueDate } = getOrderInfo(order)
+            const { orderDue, status, dueDate } = order
 
             return (
               <TableRow
@@ -239,19 +222,21 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
                 <TableCell>
                   {t('currency', {
-                    amount: due,
+                    amount: orderDue,
                     currency: order.currency ?? 'GBP',
                   })}
                 </TableCell>
 
                 <TableCell>
-                  <Typography
-                    fontWeight="inherit"
-                    fontSize="inherit"
-                    color={status === 'OVERDUE' ? 'error.main' : ''}
-                  >
-                    {t('dates.default', { date: dueDate })}
-                  </Typography>
+                  {dueDate && (
+                    <Typography
+                      fontWeight="inherit"
+                      fontSize="inherit"
+                      color={status === 'OVERDUE' ? 'error.main' : ''}
+                    >
+                      {t('dates.default', { date: dueDate })}
+                    </Typography>
+                  )}
                 </TableCell>
 
                 <TableCell>
