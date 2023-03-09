@@ -34,6 +34,49 @@ class InviteAttendeesPopUp {
   }
 }
 
+class RemoveAttendeePopUp {
+  readonly page: Page
+  readonly applyCancellationTermsRadioButton: Locator
+  readonly customFeeRadioButton: Locator
+  readonly noFeesRadioButton: Locator
+  readonly removeAttendeeButton: Locator
+  readonly closeButton: Locator
+  readonly reasonForCancellationInput: Locator
+  readonly confirmationCheckbox: Locator
+
+  constructor(page: Page) {
+    this.page = page
+    this.applyCancellationTermsRadioButton = this.page.locator(
+      '[data-testid="apply-cancellation-terms-radioButton"]'
+    )
+    this.customFeeRadioButton = this.page.locator(
+      '[data-testid="custom-fee-radioButton"]'
+    )
+    this.noFeesRadioButton = this.page.locator(
+      '[data-testid="no-fees-radioButton"]'
+    )
+    this.removeAttendeeButton = this.page.locator(
+      '[data-testid="removeAttendee-button"]'
+    )
+    this.closeButton = this.page.locator('[data-testid="close-button"]')
+    this.reasonForCancellationInput = this.page.locator(
+      '[data-testid="reasonForCancellation-input"] input'
+    )
+    this.confirmationCheckbox = this.page.locator(
+      '[data-testid="confirmation-checkbox"]'
+    )
+  }
+
+  async removeAttendeeWithNoteUsingUser(
+    userRole = 'admin',
+    note = 'Reason of removing the attendee'
+  ) {
+    await this.reasonForCancellationInput.type(note)
+    userRole !== 'admin' && (await this.confirmationCheckbox.click())
+    await this.removeAttendeeButton.click()
+  }
+}
+
 class ReplaceAttendeePopUp {
   readonly page: Page
   readonly firstNameInput: Locator
@@ -88,6 +131,8 @@ export class CourseDetailsPage extends BasePage {
   readonly cancelCourseCheckbox: Locator
   readonly cancelEntireCourseButton: Locator
   readonly additionalNotes: Locator
+  readonly attendeeRemoveButton: Locator
+  readonly manageAttendanceButtonSelector: string
 
   constructor(page: Page) {
     super(page)
@@ -120,6 +165,10 @@ export class CourseDetailsPage extends BasePage {
     this.additionalNotes = this.page.locator(
       '[data-testid="additional-notes-label"]'
     )
+    this.attendeeRemoveButton = this.page.locator(
+      '[data-testid="attendee-remove"]'
+    )
+    this.manageAttendanceButtonSelector = '[data-testid=manage-attendance]'
   }
 
   async goto(courseId: string) {
@@ -226,9 +275,23 @@ export class CourseDetailsPage extends BasePage {
     await this.page.locator('[data-testid=manage-attendance]').click()
   }
 
+  async clickManageAttendanceByAttendeeData(attendeeData: string) {
+    await this.page
+      .locator(
+        `[data-testid*="course-participant"]:has-text("${attendeeData}")`
+      )
+      .locator(this.manageAttendanceButtonSelector)
+      .click()
+  }
+
   async clickAttendeeTransfer() {
     await this.page.locator('[data-testid=attendee-transfer]').click()
     return new CourseTransferPage(this.page)
+  }
+
+  async clickAttendeeRemove() {
+    await this.attendeeRemoveButton.click()
+    return new RemoveAttendeePopUp(this.page)
   }
 
   async clickAttendeeReplace() {

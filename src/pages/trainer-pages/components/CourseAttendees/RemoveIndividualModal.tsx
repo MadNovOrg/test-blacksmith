@@ -190,6 +190,7 @@ export const RemoveIndividualModal = ({
               >
                 {Object.values(FeesRadioValue).map(value => (
                   <FormControlLabel
+                    data-testid={`${value}-radioButton`}
                     key={value}
                     value={value}
                     control={
@@ -253,6 +254,7 @@ export const RemoveIndividualModal = ({
           ) : null}
 
           <TextField
+            data-testid="reasonForCancellation-input"
             fullWidth
             required
             variant="filled"
@@ -271,6 +273,7 @@ export const RemoveIndividualModal = ({
           {!acl.isTTAdmin() ? (
             <Box mt={4}>
               <FormControlLabel
+                data-testid="confirmation-checkbox"
                 label={t(
                   'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
                 )}
@@ -286,6 +289,7 @@ export const RemoveIndividualModal = ({
 
           <Box display="flex" justifyContent="space-between" mt={4}>
             <Button
+              data-testid="close-button"
               type="button"
               variant="text"
               color="primary"
@@ -294,6 +298,7 @@ export const RemoveIndividualModal = ({
               {t('pages.edit-course.cancellation-modal.close-modal')}
             </Button>
             <LoadingButton
+              data-testid="removeAttendee-button"
               loading={loading}
               disabled={!confirmed && !acl.isTTAdmin()}
               onClick={handleSubmit(onFormSubmit)}
