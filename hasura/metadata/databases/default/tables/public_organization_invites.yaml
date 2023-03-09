@@ -111,7 +111,10 @@ update_permissions:
       check: {}
   - role: user
     permission:
-      columns: []
+      columns:
+        - is_admin
+        - status
+        - updated_at
       filter:
         organization:
           members:
