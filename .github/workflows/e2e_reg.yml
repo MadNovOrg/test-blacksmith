@@ -24,6 +24,8 @@ jobs:
     strategy:
       matrix:
         browsers: ['chromium', 'firefox']
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
@@ -48,7 +50,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:${{ matrix.browsers }}
+        run: npm run test:e2e:${{ matrix.browsers }} -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
