@@ -12,12 +12,19 @@ import { useTranslation } from 'react-i18next'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import {
   Course_Status_Enum,
+  Course_Trainer_Type_Enum,
   GetProfileDetailsQuery,
 } from '@app/generated/graphql'
-import { NonNullish } from '@app/types'
+import { CourseTrainerType, NonNullish } from '@app/types'
 
 type Props = {
   profile: NonNullish<GetProfileDetailsQuery['profile']>
+}
+
+const trainerTypeLabelMap: Record<CourseTrainerType, string> = {
+  [Course_Trainer_Type_Enum.Assistant]: 'assist-trainer',
+  [Course_Trainer_Type_Enum.Leader]: 'lead-trainer',
+  [Course_Trainer_Type_Enum.Moderator]: 'moderator',
 }
 
 export const CourseAsTrainer: React.FC<React.PropsWithChildren<Props>> = ({
@@ -67,7 +74,13 @@ export const CourseAsTrainer: React.FC<React.PropsWithChildren<Props>> = ({
                   date: row.course.dates.aggregate?.end?.date,
                 })}
               </TableCell>
-              <TableCell>{row.type}</TableCell>
+              <TableCell>
+                {t(
+                  `components.trainer-avatar-group.${
+                    trainerTypeLabelMap[row.type]
+                  }`
+                )}
+              </TableCell>
               <TableCell>
                 <CourseStatusChip
                   status={row.course.status as Course_Status_Enum}
