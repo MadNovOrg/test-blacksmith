@@ -15,7 +15,7 @@ export class CourseParticipantPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}`, this.header.courseName)
+    await super.goto(`${BASE_URL}/courses/${courseId}`)
   }
 
   async checkSuccessMessage(text: string) {

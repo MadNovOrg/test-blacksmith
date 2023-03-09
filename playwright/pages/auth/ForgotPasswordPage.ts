@@ -23,7 +23,7 @@ export class ForgotPasswordPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/forgot-password`, this.emailInput)
+    await super.goto(`${BASE_URL}/forgot-password`)
   }
 
   async submitEmail(email: string): Promise<ResetPasswordPage> {

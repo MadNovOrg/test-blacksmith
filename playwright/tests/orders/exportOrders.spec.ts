@@ -1,5 +1,4 @@
-/* eslint-disable no-empty-pattern */
-import { Download, test as base } from '@playwright/test'
+import { Download, expect, test as base } from '@playwright/test'
 import { readFile } from 'xlsx'
 
 import {
@@ -9,9 +8,8 @@ import {
 } from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
+import { OrderPage } from '../../pages/orders/OrderPage'
 
 type Orders = Awaited<ReturnType<typeof getOrders>>
 
@@ -43,39 +41,49 @@ async function assertDownloadedCSV(download: Download, data: OrderInfo[]) {
   const workbook = readFile(downloadPath)
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
 
-  test.expect(sheet['A1'].v).toMatch('Invoice no.')
-  test.expect(sheet['B1'].v).toMatch('Organisation')
-  test.expect(sheet['C1'].v).toMatch('Payment Method')
-  test.expect(sheet['D1'].v).toMatch('Amount')
-  test.expect(sheet['E1'].v).toMatch('Due')
-  test.expect(sheet['F1'].v).toMatch('Due Date')
-  test.expect(sheet['G1'].v).toMatch('Status')
+  expect(sheet['A1'].v).toMatch('Invoice no.')
+  expect(sheet['B1'].v).toMatch('Reference no.')
+  expect(sheet['C1'].v).toMatch('Bill to')
+  expect(sheet['D1'].v).toMatch('Payment Method')
+  expect(sheet['E1'].v).toMatch('Amount')
+  expect(sheet['F1'].v).toMatch('Due')
+  expect(sheet['G1'].v).toMatch('Due Date')
+  expect(sheet['H1'].v).toMatch('Status')
 
-  test.expect(data).not.toBe(null)
-  test.expect(data).not.toBe(undefined)
+  expect(data).not.toBe(null)
+  expect(data).not.toBe(undefined)
 
   data?.forEach((order, index) => {
     const cellIndex = index + 2
 
-    test.expect(sheet[`A${cellIndex}`].v).toBe(order?.xeroInvoiceNumber)
-    test.expect(sheet[`B${cellIndex}`].v).toBe(order?.organization?.name)
+    expect(sheet[`A${cellIndex}`].v).toBe(order?.xeroInvoiceNumber)
+    expect(sheet[`C${cellIndex}`].v).toContain(order?.organization?.name)
+    expect(sheet[`C${cellIndex}`].v).toContain(
+      order?.organization?.address?.line1
+    )
+    expect(sheet[`C${cellIndex}`].v).toContain(
+      order?.organization?.address?.city
+    )
+    expect(sheet[`C${cellIndex}`].v).toContain(
+      order?.organization?.address?.postCode
+    )
 
     const paymentMethod = order?.paymentMethod
       ? PAYMENT_METHODS[order.paymentMethod]
       : 'error'
 
-    test.expect(sheet[`C${cellIndex}`].v).toMatch(paymentMethod)
-    test.expect(sheet[`D${cellIndex}`].v).toBe(Number(order?.orderTotal))
+    expect(sheet[`D${cellIndex}`].v).toMatch(paymentMethod)
+    expect(sheet[`E${cellIndex}`].v).toBe(Number(order?.orderTotal))
 
     if (order?.orderDue) {
-      test.expect(sheet[`E${cellIndex}`].v).toBe(order?.orderDue ?? '')
+      expect(sheet[`F${cellIndex}`].v).toBe(order?.orderDue ?? '')
     }
   })
 }
 
 test('exports all orders from the page', async ({ page, orders }) => {
-  await page.goto(`${BASE_URL}/orders`)
-  await waitForPageLoad(page)
+  const orderPage = new OrderPage(page)
+  await orderPage.goto()
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
@@ -86,10 +94,12 @@ test('exports all orders from the page', async ({ page, orders }) => {
 })
 
 test('exports selected orders', async ({ page, orders }) => {
-  await page.goto(`${BASE_URL}/orders`)
-  await waitForPageLoad(page)
+  const orderPage = new OrderPage(page)
+  await orderPage.goto()
 
-  test.expect(page.locator('button:has-text("Export selected")')).toBeDisabled()
+  await expect(
+    page.locator('button:has-text("Export selected")')
+  ).toBeDisabled()
 
   await page.click(`data-testid=${orders[0].id} >> data-testid=TableChecks-Row`)
   await page.click(`data-testid=${orders[1].id} >> data-testid=TableChecks-Row`)

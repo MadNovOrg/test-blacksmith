@@ -36,8 +36,7 @@ export class ResetPasswordPage extends BasePage {
 
   async goto() {
     await super.goto(
-      `${BASE_URL}/reset-password?email=abc@def.ghi&confirmation_code=123456`,
-      this.newPasswordInput
+      `${BASE_URL}/reset-password?email=abc@def.ghi&confirmation_code=123456`
     )
   }
 

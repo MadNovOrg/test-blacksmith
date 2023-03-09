@@ -35,10 +35,7 @@ export class UserEvaluationPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(
-      `${BASE_URL}/courses/${this.courseId}/evaluation`,
-      this.pageLoadedIndicator
-    )
+    await super.goto(`${BASE_URL}/courses/${this.courseId}/evaluation`)
   }
 
   async randomlyEvaluate(questions: Questions, signature: string) {

@@ -51,7 +51,7 @@ export class CourseBuilderPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}/modules`, this.courseInfo)
+    await super.goto(`${BASE_URL}/courses/${courseId}/modules`)
   }
 
   async dragModulesToRight(modules: string[]) {

@@ -76,10 +76,7 @@ export class CreateCoursePage extends BasePage {
   }
 
   async goto(courseType: string) {
-    await super.goto(
-      `${BASE_URL}/courses/new?type=${courseType}`,
-      this.creationSteps
-    )
+    await super.goto(`${BASE_URL}/courses/new?type=${courseType}`)
   }
 
   async selectCourseLevel(level: CourseLevel) {

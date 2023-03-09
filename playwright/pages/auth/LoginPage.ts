@@ -29,7 +29,7 @@ export class LoginPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(BASE_URL, this.emailInput)
+    await super.goto(BASE_URL)
   }
 
   async checkLoginPageOpened() {

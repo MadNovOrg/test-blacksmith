@@ -40,12 +40,12 @@ export class MyCoursesPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/courses`, this.tableRoot)
+    await super.goto(`${BASE_URL}/courses`)
     await this.coursesTable.checkIsVisible()
   }
 
   async gotoManageCourses() {
-    await super.goto(`${BASE_URL}/manage-courses`, this.tableRoot)
+    await super.goto(`${BASE_URL}/manage-courses`)
     await this.coursesTable.checkIsVisible()
   }
 

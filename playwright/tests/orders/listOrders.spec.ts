@@ -1,12 +1,10 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Order_By, Payment_Methods_Enum } from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
+import { OrderPage } from '../../pages/orders/OrderPage'
 
 const test = base.extend<{
   unfilteredOrders: Awaited<ReturnType<typeof getOrders>>
@@ -50,75 +48,38 @@ test.use({ storageState: stateFilePath('admin') })
 // not creating fixtures as there is an event for every new order
 // that a triggers Xero invoice, and we don't want to spam from E2E env
 // when an event gets removed, refactor test to insert orders and assert on them
-test('list all orders', async ({ browser, unfilteredOrders }) => {
-  const adminContext = await browser.newContext({
-    storageState: stateFilePath('admin'),
-  })
+test('list all orders', async ({ page, unfilteredOrders }) => {
+  const orderPage = new OrderPage(page)
+  await orderPage.goto()
 
-  const adminPage = await adminContext.newPage()
-
-  await adminPage.goto(`${BASE_URL}/orders`)
-  await waitForPageLoad(adminPage)
-
-  unfilteredOrders.forEach(async order => {
-    await test
-      .expect(
-        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
-      )
-      .toBeVisible()
-  })
+  unfilteredOrders.forEach(async order =>
+    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
+  )
 })
 
-test('list orders filtered by credit card type', async ({
-  browser,
-  ccOrders,
-}) => {
-  const adminContext = await browser.newContext({
-    storageState: stateFilePath('admin'),
-  })
-
-  const adminPage = await adminContext.newPage()
-
-  await adminPage.goto(`${BASE_URL}/orders`)
-  await waitForPageLoad(adminPage)
+test('list orders filtered by credit card type', async ({ page, ccOrders }) => {
+  const orderPage = new OrderPage(page)
+  await orderPage.goto()
 
   // filter by credit card payment methods
-  await adminPage.click('text="Payment Method"')
-  await adminPage.click('text="Credit card"')
-  await waitForPageLoad(adminPage)
+  await orderPage.selectPaymentMethod('Credit card')
 
-  ccOrders.forEach(async order => {
-    await test
-      .expect(
-        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
-      )
-      .toBeVisible()
-  })
+  ccOrders.forEach(async order =>
+    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
+  )
 })
 
 test('list orders filtered by invoice type', async ({
-  browser,
+  page,
   invoiceOrders,
 }) => {
-  const adminContext = await browser.newContext({
-    storageState: stateFilePath('admin'),
-  })
-
-  const adminPage = await adminContext.newPage()
-
-  await adminPage.goto(`${BASE_URL}/orders`)
-  await waitForPageLoad(adminPage)
+  const orderPage = new OrderPage(page)
+  await orderPage.goto()
 
   // filter by invoice payment method
-  await adminPage.click('text="Payment Method"')
-  await adminPage.click('text="Invoice"')
-  await waitForPageLoad(adminPage)
+  await orderPage.selectPaymentMethod('Invoice')
 
-  invoiceOrders.forEach(async order => {
-    await test
-      .expect(
-        adminPage.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
-      )
-      .toBeVisible()
-  })
+  invoiceOrders.forEach(async order =>
+    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
+  )
 })

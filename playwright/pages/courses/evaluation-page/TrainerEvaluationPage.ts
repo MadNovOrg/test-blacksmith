@@ -42,8 +42,7 @@ export class TrainerEvaluationPage extends BasePage {
 
   async goto() {
     await super.goto(
-      `${BASE_URL}/courses/${this.courseId}/details?tab=EVALUATION`,
-      this.pageLoadedIndicator
+      `${BASE_URL}/courses/${this.courseId}/details?tab=EVALUATION`
     )
   }
   async checkSubmissionIsAvailable() {
@@ -55,10 +54,7 @@ export class TrainerEvaluationPage extends BasePage {
   }
 
   async randomlyEvaluate(questions: Questions, signature: string) {
-    await super.goto(
-      `${BASE_URL}/courses/${this.courseId}/evaluation/submit`,
-      this.evaluationPageLoadedIndicator
-    )
+    await super.goto(`${BASE_URL}/courses/${this.courseId}/evaluation/submit`)
     await fillEvaluationForm(this.page, questions)
     await this.signatureField.locator('input').fill(signature)
   }

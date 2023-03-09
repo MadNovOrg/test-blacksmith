@@ -250,17 +250,17 @@ export const deleteCourse = async (id?: number) => {
   console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {
-      delete_course_trainer(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course_schedule(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course_module(where: { courseId: { _eq: ${id} } }) { affected_rows }
-      delete_course_certificate(where: {courseId: {_eq: ${id} }}) { affected_rows }
-      delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id} }}}) { affected_rows }
-      delete_course_participant(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course_participant_audit(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course_invites(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course_enquiry(where: { courseId: { _eq: ${id} } }) { affected_rows }
-      delete_course_audit(where: { course_id: { _eq: ${id} } }) { affected_rows }
-      delete_course(where: { id: { _eq: ${id} } }) { affected_rows }
+      delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id}}}}) { affected_rows }
+      delete_course_participant(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course_participant_audit(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course_trainer(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course_schedule(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course_module(where: {courseId: {_eq: ${id}}}) { affected_rows }
+      delete_course_certificate(where: {courseId: {_eq: ${id}}}) { affected_rows }
+      delete_course_enquiry(where: {courseId: {_eq: ${id}}}) { affected_rows }
+      delete_course_audit(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course_invites(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_course(where: {id: {_eq: ${id}}}) { affected_rows }
     }
   `
   try {

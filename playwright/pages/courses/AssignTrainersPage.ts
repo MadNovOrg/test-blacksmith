@@ -33,10 +33,7 @@ export class AssignTrainersPage extends BasePage {
   }
 
   async goto(courseType: string) {
-    await super.goto(
-      `${BASE_URL}/courses/new?type=${courseType}`,
-      this.trainerInput
-    )
+    await super.goto(`${BASE_URL}/courses/new?type=${courseType}`)
   }
 
   async removeTrainerIfAny() {
