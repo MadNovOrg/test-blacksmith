@@ -103,7 +103,9 @@ describe('page: ChooseTransferCourse', () => {
       }: {
         variables: TransferEligibleCoursesQueryVariables
       }) => {
-        const variablesMatch = variables.fromCourseId === fromCourse.id
+        const variablesMatch =
+          variables.fromCourseId === fromCourse.id &&
+          variables.participantId === participant.id
 
         return fromValue<{ data: TransferEligibleCoursesQuery }>({
           data: {

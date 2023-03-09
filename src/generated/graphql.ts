@@ -33868,6 +33868,7 @@ export type Query_RootDfe_Establishment_By_PkArgs = {
 
 export type Query_RootEligibleTransferCoursesArgs = {
   fromCourseId: Scalars['Int'];
+  participantId: Scalars['uuid'];
 };
 
 
@@ -38452,6 +38453,7 @@ export type TransferParticipantDetailsQuery = { __typename?: 'query_root', cours
 
 export type TransferEligibleCoursesQueryVariables = Exact<{
   fromCourseId: Scalars['Int'];
+  participantId: Scalars['uuid'];
 }>;
 
 

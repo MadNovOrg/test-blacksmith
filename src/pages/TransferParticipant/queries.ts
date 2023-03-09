@@ -42,8 +42,11 @@ export const TRANSFER_PARTICIPANT_DETAILS = gql`
 `
 
 export const TRANSFER_ELIGIBLE_COURSES = gql`
-  query TransferEligibleCourses($fromCourseId: Int!) {
-    eligibleTransferCourses(fromCourseId: $fromCourseId) {
+  query TransferEligibleCourses($fromCourseId: Int!, $participantId: uuid!) {
+    eligibleTransferCourses(
+      fromCourseId: $fromCourseId
+      participantId: $participantId
+    ) {
       id
       courseCode
       startDate

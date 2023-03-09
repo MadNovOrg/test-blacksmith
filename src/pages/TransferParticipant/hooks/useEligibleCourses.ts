@@ -9,7 +9,7 @@ import { useTransferParticipantContext } from '../components/TransferParticipant
 import { TRANSFER_ELIGIBLE_COURSES } from '../queries'
 
 export function useEligibleCourses() {
-  const { fromCourse } = useTransferParticipantContext()
+  const { fromCourse, participant } = useTransferParticipantContext()
 
   if (!fromCourse) {
     throw new Error('From course needed')
@@ -20,7 +20,7 @@ export function useEligibleCourses() {
     TransferEligibleCoursesQueryVariables
   >({
     query: TRANSFER_ELIGIBLE_COURSES,
-    variables: { fromCourseId: fromCourse.id },
+    variables: { fromCourseId: fromCourse.id, participantId: participant?.id },
   })
 
   return {
