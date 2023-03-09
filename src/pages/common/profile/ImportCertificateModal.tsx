@@ -1,40 +1,18 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { v4 as uuidv4 } from 'uuid'
 
 import { useAuth } from '@app/context/auth'
+import {
+  ImportLegacyCertificateMutation,
+  ImportLegacyCertificateMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
-import {
-  ParamsType as FindLegacyCertificateParamsType,
-  QUERY as FindLegacyCertificateQuery,
-  ResponseType as FindLegacyCertificateResponseType,
-} from '@app/queries/certificate/find-legacy-certificate'
-import {
-  MUTATION as ImportLegacyCertificateMutation,
-  ParamsType as ImportLegacyCertificateParamsType,
-} from '@app/queries/certificate/import-legacy-certificate'
-import { CourseLevel } from '@app/types'
+import { MUTATION as ImportLegacyCertificateMutationQuery } from '@app/queries/certificate/import-legacy-certificate'
 
 export type ImportCertificateModalProps = {
   onCancel: () => void
   onSubmit: () => void
-}
-
-const COURSE_PREFIX_TO_LEVEL = {
-  LEVEL1: CourseLevel.Level_1,
-  LEVEL2: CourseLevel.Level_2,
-}
-
-function parseCourseLevel(number: string) {
-  const [levelPrefix] = number.split('.')
-  if (levelPrefix in COURSE_PREFIX_TO_LEVEL) {
-    return COURSE_PREFIX_TO_LEVEL[
-      levelPrefix as keyof typeof COURSE_PREFIX_TO_LEVEL
-    ]
-  } else {
-    return null
-  }
 }
 
 const ImportCertificateModal: React.FC<
@@ -56,37 +34,13 @@ const ImportCertificateModal: React.FC<
     }
     setError(undefined)
     try {
-      const { results } = await fetcher<
-        FindLegacyCertificateResponseType,
-        FindLegacyCertificateParamsType
-      >(FindLegacyCertificateQuery, {
-        code: code,
-        firstName: profile.givenName,
-        lastName: profile.familyName,
+      await fetcher<
+        ImportLegacyCertificateMutation,
+        ImportLegacyCertificateMutationVariables
+      >(ImportLegacyCertificateMutationQuery, {
+        code,
       })
-      if (results.length !== 1) {
-        setError(errorMessage)
-      } else {
-        const certificate = results[0]
-        const mappedLevel = parseCourseLevel(certificate.number)
-        if (!mappedLevel) {
-          setError(errorMessage)
-          return
-        }
-        await fetcher<null, ImportLegacyCertificateParamsType>(
-          ImportLegacyCertificateMutation,
-          {
-            id: uuidv4(),
-            number: certificate.number,
-            expiryDate: certificate.expiryDate,
-            certificationDate: certificate.certificationDate,
-            profileId: profile.id,
-            courseName: certificate.courseName,
-            courseLevel: mappedLevel,
-          }
-        )
-        onSubmit()
-      }
+      onSubmit()
     } catch (e) {
       setError(errorMessage)
     }

@@ -5193,10 +5193,14 @@ export enum PostStatusEnum {
   AutoDraft = 'AUTO_DRAFT',
   /** Objects with the draft status */
   Draft = 'DRAFT',
+  /** Objects with the failed status */
+  Failed = 'FAILED',
   /** Objects with the future status */
   Future = 'FUTURE',
   /** Objects with the inherit status */
   Inherit = 'INHERIT',
+  /** Objects with the in-progress status */
+  InProgress = 'IN_PROGRESS',
   /** Objects with the pending status */
   Pending = 'PENDING',
   /** Objects with the private status */
@@ -24798,6 +24802,7 @@ export type Mutation_Root = {
   delete_xero_credential_by_pk?: Maybe<Xero_Credential>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
+  importLegacyCertificate: Scalars['Boolean'];
   /** insert data into the table: "availability" */
   insert_availability?: Maybe<Availability_Mutation_Response>;
   /** insert a single row into the table: "availability" */
@@ -26253,6 +26258,12 @@ export type Mutation_RootDelete_Xero_Credential_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootGo1LicensesChangeArgs = {
   input: Go1LicensesChangeInput;
+};
+
+
+/** mutation root */
+export type Mutation_RootImportLegacyCertificateArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -38576,15 +38587,6 @@ export type InsertWaitlistMutationVariables = Exact<{
 
 export type InsertWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affectedRows: number } | null };
 
-export type FindLegacyCertificateQueryVariables = Exact<{
-  code: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-}>;
-
-
-export type FindLegacyCertificateQuery = { __typename?: 'query_root', results: Array<{ __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any }> };
-
 export type GetCertificateQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;
@@ -38593,17 +38595,11 @@ export type GetCertificateQueryVariables = Exact<{
 export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
-  id: Scalars['uuid'];
-  number: Scalars['String'];
-  expiryDate: Scalars['date'];
-  certificationDate: Scalars['date'];
-  courseName: Scalars['String'];
-  courseLevel: Scalars['String'];
-  profileId: Scalars['uuid'];
+  code: Scalars['String'];
 }>;
 
 
-export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', insert_course_certificate_one?: { __typename?: 'course_certificate', id: any } | null, update_legacy_certificate?: { __typename?: 'legacy_certificate_mutation_response', returning: Array<{ __typename?: 'legacy_certificate', id: any }> } | null };
+export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate: boolean };
 
 export type GetEvaluationQueryVariables = Exact<{
   courseId: Scalars['Int'];

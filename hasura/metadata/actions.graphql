@@ -109,6 +109,12 @@ type Mutation {
   ): Go1LicensesChangeOutput
 }
 
+type Mutation {
+  importLegacyCertificate(
+    code: String!
+  ): Boolean
+}
+
 type Query {
   initAuth: InitAuthOutput!
 }

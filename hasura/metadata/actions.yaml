@@ -137,6 +137,12 @@ actions:
     permissions:
       - role: tt-admin
     comment: go1LicensesChange
+  - name: importLegacyCertificate
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/certificate/import-legacy'
+    permissions:
+      - role: user
   - name: initAuth
     definition:
       kind: ""
