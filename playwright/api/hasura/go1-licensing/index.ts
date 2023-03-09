@@ -7,8 +7,6 @@ import { getClient } from '../../hasura-api'
 export async function insertGo1HistoryEvent(
   event: Go1_Licenses_History_Set_Input
 ): Promise<{ id: string }> {
-  const client = getClient()
-
   const mutation = gql`
     mutation InsertLicenseHistoryEvent(
       $input: go1_licenses_history_insert_input!
@@ -18,8 +16,7 @@ export async function insertGo1HistoryEvent(
       }
     }
   `
-
-  const response = await client.request(mutation, { input: event })
+  const response = await getClient().request(mutation, { input: event })
 
   return response?.insert_go1_licenses_history_one?.id
 }

@@ -3,10 +3,8 @@ import { test as base } from '@playwright/test'
 
 import { getWebinars } from '../../api/hasura-api'
 import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
+import { BASE_URL, PER_PAGE } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
-
-const PER_PAGE = 12
 
 const test = base.extend<{
   webinars: Awaited<ReturnType<typeof getWebinars>>

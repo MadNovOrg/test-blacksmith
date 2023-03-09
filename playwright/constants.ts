@@ -25,4 +25,13 @@ switch (TARGET_ENV) {
 
 const TEMP_DIR = './tmp'
 
-export { TARGET_ENV, BASE_URL, TEMP_DIR, HASURA_BASE_URL, HASURA_SECRET }
+const PER_PAGE = 12
+
+export {
+  TARGET_ENV,
+  BASE_URL,
+  TEMP_DIR,
+  HASURA_BASE_URL,
+  HASURA_SECRET,
+  PER_PAGE,
+}
