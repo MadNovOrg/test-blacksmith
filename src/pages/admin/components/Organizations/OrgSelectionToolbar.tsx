@@ -12,13 +12,38 @@ import { StyledSubNavLink } from '@app/components/StyledSubNavLink'
 import { useAuth } from '@app/context/auth'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
 
+const OrgNavLink: React.FC<React.PropsWithChildren<{ to: string }>> = ({
+  to,
+  children,
+}) => {
+  const intersectionRef = useRef(null)
+  const observer = useIntersection(intersectionRef, {
+    threshold: 1,
+  })
+  const hidden = !observer?.isIntersecting
+
+  return (
+    <Link
+      ref={intersectionRef}
+      flex={1}
+      component={StyledSubNavLink}
+      to={to}
+      whiteSpace="nowrap"
+      sx={{ ...(hidden ? { visibility: 'hidden' } : {}) }}
+    >
+      {children}
+    </Link>
+  )
+}
+
 export type OrgSelectionToolbarProps = {
   prefix: string
+  postfix?: string
 }
 
 export const OrgSelectionToolbar: React.FC<
   React.PropsWithChildren<OrgSelectionToolbarProps>
-> = ({ prefix }) => {
+> = ({ prefix, postfix = '' }) => {
   const { t } = useTranslation()
   const { profile, acl } = useAuth()
   const { data } = useOrg(ALL_ORGS, profile?.id, acl.canViewAllOrganizations())
@@ -61,25 +86,14 @@ export const OrgSelectionToolbar: React.FC<
           color="secondary.dark"
           overflow="hidden"
         >
-          <Box ref={intersectionRef} display="flex">
-            <Link
-              flex={1}
-              component={StyledSubNavLink}
-              to={`${prefix}/all`}
-              whiteSpace="nowrap"
-            >
+          <Box ref={intersectionRef} display="flex" pr={3}>
+            <OrgNavLink to={`${prefix}/all${postfix}`}>
               {t('pages.org-details.all-organizations')}
-            </Link>
+            </OrgNavLink>
             {sorted.map(org => (
-              <Link
-                key={org.id}
-                flex={1}
-                component={StyledSubNavLink}
-                to={`${prefix}/${org.id}`}
-                whiteSpace="nowrap"
-              >
+              <OrgNavLink key={org.id} to={`${prefix}/${org.id}${postfix}`}>
                 {org.name}
-              </Link>
+              </OrgNavLink>
             ))}
           </Box>
         </Box>
@@ -146,7 +160,7 @@ export const OrgSelectionToolbar: React.FC<
                 <Link
                   key={org.id}
                   component={StyledSubNavLink}
-                  to={`${prefix}/${org.id}`}
+                  to={`${prefix}/${org.id}${postfix}`}
                 >
                   {org.name}
                 </Link>

@@ -1,5 +1,4 @@
 import {
-  Alert,
   CircularProgress,
   Container,
   MenuItem,
@@ -13,9 +12,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import { isNumber } from 'lodash-es'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
@@ -28,6 +27,7 @@ import {
 import useOrg from '@app/hooks/useOrg'
 import useOrgCourses, { ALL_ORGS } from '@app/hooks/useOrgCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import theme from '@app/theme'
 import { geoDistance } from '@app/util/geo'
@@ -40,7 +40,6 @@ export const AvailableCourses: React.FC<
   const { t } = useTranslation()
   const { id } = useParams()
   const { profile, acl } = useAuth()
-  const navigate = useNavigate()
 
   const [keyword, setKeyword] = useState('')
   const [dateFrom, setDateFrom] = useState<Date | null>(null)
@@ -59,9 +58,9 @@ export const AvailableCourses: React.FC<
 
   const { Pagination, perPage, offset } = useTablePagination()
   const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
-    id ?? ALL_ORGS,
+    ALL_ORGS,
     profile?.id,
-    acl.isTTAdmin(),
+    true,
     {
       _and: [
         { type: { _eq: Course_Type_Enum.Open } },
@@ -96,17 +95,7 @@ export const AvailableCourses: React.FC<
   }, [coursesForBooking, id, orgs])
 
   const sortFunctions = useMemo(() => {
-    return {
-      'date-ascending': (a: CourseType, b: CourseType) => {
-        if (a.schedules[0].start < b.schedules[0].start) return -1
-        if (a.schedules[0].start > b.schedules[0].start) return 1
-        return 0
-      },
-      'date-descending': (a: CourseType, b: CourseType) => {
-        if (a.schedules[0].start < b.schedules[0].start) return 1
-        if (a.schedules[0].start > b.schedules[0].start) return -1
-        return 0
-      },
+    const sortByDistance = {
       'distance-to-org': (a: CourseType, b: CourseType) => {
         if (!distances) return 0
         const aDistance = distances.get(a.id)
@@ -118,7 +107,28 @@ export const AvailableCourses: React.FC<
         return 0
       },
     }
-  }, [distances])
+    return {
+      'date-ascending': (a: CourseType, b: CourseType) => {
+        if (a.schedules[0].start < b.schedules[0].start) return -1
+        if (a.schedules[0].start > b.schedules[0].start) return 1
+        return 0
+      },
+      'date-descending': (a: CourseType, b: CourseType) => {
+        if (a.schedules[0].start < b.schedules[0].start) return 1
+        if (a.schedules[0].start > b.schedules[0].start) return -1
+        return 0
+      },
+      ...(id !== ALL_ORGS ? sortByDistance : {}),
+    }
+  }, [distances, id])
+
+  const sortModes = useMemo(() => Object.keys(sortFunctions), [sortFunctions])
+
+  useEffect(() => {
+    if (!sortModes.includes(sortBy)) {
+      setSortBy('date-ascending')
+    }
+  }, [sortBy, sortModes])
 
   const courses = useMemo(() => {
     const values = coursesForBooking.filter(c => {
@@ -171,6 +181,10 @@ export const AvailableCourses: React.FC<
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enLocale}>
       <FullHeightPage bgcolor={theme.palette.grey[100]} pb={3}>
+        {orgs && orgs.length > 1 ? (
+          <OrgSelectionToolbar prefix="/organisations" postfix="/courses" />
+        ) : null}
+
         <Container maxWidth="lg" sx={{ py: 5 }}>
           <Box display="flex" gap={4}>
             <Box width={250}>
@@ -183,30 +197,6 @@ export const AvailableCourses: React.FC<
 
                 <Box>
                   <Stack gap={1}>
-                    <TextField
-                      select
-                      variant="filled"
-                      value={id}
-                      label={t('common.organization')}
-                      error={id === ALL_ORGS && sortByDistance}
-                      helperText={
-                        id === ALL_ORGS &&
-                        t('pages.available-courses.select-organization')
-                      }
-                      onChange={event =>
-                        navigate(`/organisations/${event.target.value}/courses`)
-                      }
-                    >
-                      <MenuItem value={ALL_ORGS}>
-                        {t('common.all-organizations')}
-                      </MenuItem>
-                      {orgs?.map(org => (
-                        <MenuItem key={org.id} value={org.id}>
-                          {org.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-
                     <DatePicker
                       value={dateFrom}
                       onChange={setDateFrom}
@@ -257,7 +247,7 @@ export const AvailableCourses: React.FC<
                     }
                     sx={{ minWidth: 130 }}
                   >
-                    {Object.keys(sortFunctions).map(mode => (
+                    {sortModes.map(mode => (
                       <MenuItem key={mode} value={mode}>
                         {t(`pages.available-courses.sorting.${mode}`)}
                       </MenuItem>
@@ -265,12 +255,6 @@ export const AvailableCourses: React.FC<
                   </TextField>
                 ) : null}
               </Box>
-
-              {sortBy === 'distance-to-org' && id === ALL_ORGS ? (
-                <Alert variant="outlined" color="warning" severity="warning">
-                  {t('pages.available-courses.please-select-organization')}
-                </Alert>
-              ) : null}
 
               {courses.length > 0 ? (
                 <>
