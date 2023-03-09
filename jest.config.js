@@ -27,8 +27,6 @@ const config = {
     escapeString: true,
     printBasicPrototype: true,
   },
-  workerIdleMemoryLimit: '1GB',
-  logHeapUsage: true,
 }
 
 module.exports = config
