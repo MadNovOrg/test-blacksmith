@@ -54,7 +54,7 @@
     "order-success-info": "Your order has been successfully submitted.",
     "order-success-msg": "Each attendee will receive an email with the necessary course instructions once this order has been processed and approved.",
     "payment-cc-title": "Pay by Credit Card (Corporate Card only)",
-    "payment-cc-subtitle": "Enter your card details below and press Pay finalise your order",
+    "payment-cc-subtitle": "Enter your card details below and press pay now to finalise your order",
     "payment-cc-chargeInfo": "Your card will be charged:",
     "payment-cc-submit": "Pay now",
     "payment-cc-error-ORDER_NOT_FOUND": "Order not found",
