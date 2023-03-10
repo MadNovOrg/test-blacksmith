@@ -435,7 +435,7 @@
       "50-fee-trainer": "50% of payment due",
       "50-fee-trainer-label": "0-1 week",
       "apply-terms-option": "Apply rescheduling terms",
-      "protocol-not-met": "This change does not meet Team Teach protocols, if you need to discuss this further please contact Team Teach at",
+      "protocol-not-met": "Courses can only be rescheduled to begin later than 2 weeks from today’s date. If you need the course rescheduled to a sooner date, please contact Team Teach at <0>{{email}}</0> for review.",
       "protocol-not-met-sales-admin": "This change does not meet Team Teach protocols, only TT Admin can action this change"
     }
   },

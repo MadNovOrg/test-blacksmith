@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography'
 import { TFunction } from 'i18next'
 import React from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { Trans } from 'react-i18next'
 import { noop } from 'ts-essentials'
 import { InferType } from 'yup'
 
@@ -142,12 +143,13 @@ export const ReviewChangesModal: React.FC<React.PropsWithChildren<Props>> = ({
             {roleProtocolNotMet ? (
               roleProtocolNotMet
             ) : (
-              <>
-                {t('protocol-not-met')}{' '}
-                <Link href={`mailto:${TRAINING_EMAIL}`} component="a">
-                  {TRAINING_EMAIL}
-                </Link>
-              </>
+              <Trans
+                i18nKey="protocol-not-met"
+                t={t}
+                values={{ email: TRAINING_EMAIL }}
+              >
+                <Link href={`mailto:${TRAINING_EMAIL}`} component="a" />
+              </Trans>
             )}
           </Typography>
 
