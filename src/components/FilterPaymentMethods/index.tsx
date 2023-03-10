@@ -40,6 +40,7 @@ export const FilterPaymentMethods: React.FC<React.PropsWithChildren<Props>> = ({
       options={options}
       title={t('filters.payment-method')}
       onChange={localOnChange}
+      data-testid="payment-method"
     />
   )
 }

@@ -1,15 +1,19 @@
 import { test as base } from '@playwright/test'
 
-import { Order_By, Payment_Methods_Enum } from '@app/generated/graphql'
+import {
+  OrderInfo,
+  Order_By,
+  Payment_Methods_Enum,
+} from '@app/generated/graphql'
 
 import { getOrders } from '../../api/hasura/orders'
 import { stateFilePath } from '../../hooks/global-setup'
 import { OrderPage } from '../../pages/orders/OrderPage'
 
 const test = base.extend<{
-  unfilteredOrders: Awaited<ReturnType<typeof getOrders>>
-  invoiceOrders: Awaited<ReturnType<typeof getOrders>>
-  ccOrders: Awaited<ReturnType<typeof getOrders>>
+  unfilteredOrders: OrderInfo[]
+  invoiceOrders: OrderInfo[]
+  ccOrders: OrderInfo[]
 }>({
   unfilteredOrders: async ({}, use) => {
     const orders = await getOrders({
@@ -51,22 +55,14 @@ test.use({ storageState: stateFilePath('admin') })
 test('list all orders', async ({ page, unfilteredOrders }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-
-  unfilteredOrders.forEach(async order =>
-    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
-  )
+  await orderPage.checkInvoiceVisible(unfilteredOrders)
 })
 
 test('list orders filtered by credit card type', async ({ page, ccOrders }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-
-  // filter by credit card payment methods
-  await orderPage.selectPaymentMethod('Credit card')
-
-  ccOrders.forEach(async order =>
-    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
-  )
+  await orderPage.selectPaymentMethod('CC')
+  orderPage.checkInvoiceVisible(ccOrders)
 })
 
 test('list orders filtered by invoice type', async ({
@@ -75,11 +71,6 @@ test('list orders filtered by invoice type', async ({
 }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-
-  // filter by invoice payment method
-  await orderPage.selectPaymentMethod('Invoice')
-
-  invoiceOrders.forEach(async order =>
-    orderPage.checkInvoiceVisible(`${order.xeroInvoiceNumber}`)
-  )
+  await orderPage.selectPaymentMethod('INVOICE')
+  orderPage.checkInvoiceVisible(invoiceOrders)
 })

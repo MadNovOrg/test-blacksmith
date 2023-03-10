@@ -69,7 +69,7 @@ export const FilterAccordion = <T,>({
             key={String(o.id)}
             className={o.selected ? 'selected' : ''}
             onClick={() => handleChange(o)}
-            data-testid={`${testId}-option`}
+            data-testid={`${testId}-option-${o.id}`}
             data-id={o.id}
           >
             <ListItemText
