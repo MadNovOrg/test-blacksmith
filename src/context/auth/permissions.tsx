@@ -5,18 +5,18 @@ import { CourseTrainerType, CourseType, RoleName } from '@app/types'
 import type { AuthContextType } from './types'
 
 export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
-  const allowedRoles = auth.allowedRoles ?? new Set()
+  const activeRole = auth.activeRole
 
   const acl = Object.freeze({
     isAdmin: () => acl.isTTOps() || acl.isTTAdmin() || acl.isLD(),
 
-    isTTOps: () => allowedRoles.has(RoleName.TT_OPS),
+    isTTOps: () => activeRole === RoleName.TT_OPS,
 
-    isTTAdmin: () => allowedRoles.has(RoleName.TT_ADMIN),
+    isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
 
-    isTrainer: () => allowedRoles.has(RoleName.TRAINER),
+    isTrainer: () => activeRole === RoleName.TRAINER,
 
-    isLD: () => allowedRoles.has(RoleName.LD),
+    isLD: () => activeRole === RoleName.LD,
 
     isOrgAdmin: () => auth.isOrgAdmin,
 

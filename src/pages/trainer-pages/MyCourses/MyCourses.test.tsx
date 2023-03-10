@@ -1547,7 +1547,8 @@ describe('trainers-pages/MyCourses', () => {
           variables: TrainerCoursesQueryVariables
         }) => {
           const courses = variables.where?._and
-            ?.find(el => Object.keys(el).includes('status'))
+            ?.at(0)
+            ?._or?.find(el => Object.keys(el).includes('status'))
             ?.status?._in?.includes(Course_Status_Enum.ApprovalPending)
             ? [filteredCourse]
             : [filteredCourse, course]
