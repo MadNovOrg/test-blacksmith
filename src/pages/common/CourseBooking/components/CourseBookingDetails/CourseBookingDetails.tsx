@@ -29,6 +29,7 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { CourseDuration } from '@app/components/CourseTitleAndDuration/components/CourseDuration'
 import {
   formSchema as invoiceDetailsFormSchema,
   InvoiceForm,
@@ -303,17 +304,10 @@ export const CourseBookingDetails: React.FC<
               <Typography gutterBottom fontWeight="600">
                 {course.name}
               </Typography>
-              <Typography gutterBottom color="grey.700">
-                {t('dates.long', {
-                  date: course.dates.aggregate.start.date,
-                })}
-              </Typography>
-              <Typography gutterBottom color="grey.700">
-                {t('dates.timeFromTo', {
-                  from: course.dates.aggregate.start.date,
-                  to: course.dates.aggregate.end.date,
-                })}
-              </Typography>
+              <CourseDuration
+                start={new Date(course.dates.aggregate.start.date)}
+                end={new Date(course.dates.aggregate.end.date)}
+              />
             </Box>
             <Box minWidth={100} display="flex" alignItems="center">
               <FormControl fullWidth sx={{ bgcolor: 'grey.200' }}>
