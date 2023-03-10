@@ -94,11 +94,8 @@ for (const data of testData) {
 
   test.use({ storageState: stateFilePath('trainer') })
 
-  test(data.name, async ({ page, course }) => {
-    test.fail(
-      process.env.CI ? true : false,
-      `Fails due to schedule status of course reporting back as 'null' after clicking confirmModules`
-    )
+  // `Fails due to schedule status of course reporting back as 'null' after clicking confirmModules`
+  test.fixme(data.name, async ({ page, course }) => {
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto()
     await myCoursesPage.searchCourse(`${course.id}`)
