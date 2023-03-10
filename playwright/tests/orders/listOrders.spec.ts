@@ -55,14 +55,14 @@ test.use({ storageState: stateFilePath('admin') })
 test('list all orders', async ({ page, unfilteredOrders }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-  await orderPage.checkInvoiceVisible(unfilteredOrders)
+  await orderPage.checkOrderVisiblity(unfilteredOrders)
 })
 
 test('list orders filtered by credit card type', async ({ page, ccOrders }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-  await orderPage.selectPaymentMethod('CC')
-  orderPage.checkInvoiceVisible(ccOrders)
+  await orderPage.selectPaymentMethod('Credit card')
+  await orderPage.checkOrderVisiblity(ccOrders)
 })
 
 test('list orders filtered by invoice type', async ({
@@ -71,6 +71,6 @@ test('list orders filtered by invoice type', async ({
 }) => {
   const orderPage = new OrderPage(page)
   await orderPage.goto()
-  await orderPage.selectPaymentMethod('INVOICE')
-  orderPage.checkInvoiceVisible(invoiceOrders)
+  await orderPage.selectPaymentMethod('Invoice')
+  await orderPage.checkOrderVisiblity(invoiceOrders)
 })
