@@ -24,7 +24,11 @@ export class PodcastPage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(`${BASE_URL}/membership/podcasts/${id}`)
+    await super.goto(
+      id
+        ? `${BASE_URL}/membership/podcasts/${id}`
+        : `${BASE_URL}/membership/podcasts`
+    )
   }
 
   async checkTitle(title?: string) {

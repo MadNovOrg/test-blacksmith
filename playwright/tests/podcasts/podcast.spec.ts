@@ -18,7 +18,7 @@ test.use({ storageState: stateFilePath('trainer') })
 
 test('displays single podcast with the player', async ({ podcast, page }) => {
   const podcastPage = new PodcastPage(page)
-  await podcastPage.goto()
+  await podcastPage.goto(podcast?.id)
   await podcastPage.checkTitle(podcast?.name)
   await podcastPage.clickPlayIcon()
   await podcastPage.checkPauseIconVisible()
