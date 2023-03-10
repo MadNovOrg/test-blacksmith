@@ -32,6 +32,7 @@ import {
   WebinarQueryVariables,
   WebinarsQuery,
   WebinarsQueryVariables,
+  WebinarSummaryFragment,
 } from '@app/generated/graphql'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
@@ -532,7 +533,9 @@ export async function getResearchSummaries(first = 1000) {
   return []
 }
 
-export async function getWebinars(first = 1000) {
+export async function getWebinars(
+  first = 1000
+): Promise<Array<WebinarSummaryFragment | null>> {
   const response = await getClient().request<
     WebinarsQuery,
     WebinarsQueryVariables
@@ -543,7 +546,9 @@ export async function getWebinars(first = 1000) {
   return []
 }
 
-export async function getWebinarById(id: string) {
+export async function getWebinarById(
+  id: string
+): Promise<WebinarSummaryFragment | null> {
   const response = await getClient().request<
     WebinarQuery,
     WebinarQueryVariables
