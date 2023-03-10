@@ -181,7 +181,9 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       trainer: { type: Course_Trainer_Type_Enum },
       status: Course_Invite_Status_Enum
     ) => {
-      const isAccepted = status === Course_Invite_Status_Enum.Accepted
+      const isAccepted =
+        status === Course_Invite_Status_Enum.Accepted &&
+        trainer.type === Course_Trainer_Type_Enum.Leader
       setKeyword('')
 
       if (isAccepted) {

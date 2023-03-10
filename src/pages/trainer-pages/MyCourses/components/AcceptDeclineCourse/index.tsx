@@ -31,7 +31,10 @@ export type AcceptDeclineProps = {
 export const AcceptDeclineCourse: React.FC<
   React.PropsWithChildren<AcceptDeclineProps>
 > = ({ trainer, onUpdate }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('components', {
+    keyPrefix: 'accept-decline-course',
+  })
+
   const fetcher = useFetcher()
 
   const [action, setAction] = useState<Action>()
@@ -62,13 +65,6 @@ export const AcceptDeclineCourse: React.FC<
     }
   }, [closeModal, trainer, action, fetcher, onUpdate])
 
-  const modalText = useCallback(
-    (path: string) => {
-      return t(`components.accept-decline-course.modal_${action}.${path}`)
-    },
-    [t, action]
-  )
-
   if (!trainer || trainer?.status === Course_Invite_Status_Enum.Accepted) {
     return null
   }
@@ -93,7 +89,7 @@ export const AcceptDeclineCourse: React.FC<
           onClick={openModal(Action.ACCEPT)}
           data-testid="AcceptDeclineCourse-acceptBtn"
         >
-          {t('components.accept-decline-course.accept')}
+          {t('accept')}
         </Button>
         <Button
           size="small"
@@ -101,12 +97,21 @@ export const AcceptDeclineCourse: React.FC<
           onClick={openModal(Action.DECLINE)}
           data-testid="AcceptDeclineCourse-declineBtn"
         >
-          {t('components.accept-decline-course.decline')}
+          {t('decline')}
         </Button>
       </Stack>
 
-      <Dialog open={!!action} onClose={closeModal} title={modalText('title')}>
-        <Typography variant="body2">{modalText('msg')}</Typography>
+      <Dialog
+        open={!!action}
+        onClose={closeModal}
+        title={t([
+          `modal_${action}.title-${trainer.type}`,
+          `modal_${action}.title`,
+        ])}
+      >
+        <Typography variant="body2">
+          {t([`modal_${action}.msg-assist`, `modal_${action}.msg`])}
+        </Typography>
         <Stack
           direction="row"
           justifyContent="flex-end"
@@ -120,7 +125,7 @@ export const AcceptDeclineCourse: React.FC<
             disabled={saving}
             data-testid="AcceptDeclineCourse-modalCancel"
           >
-            {modalText('cancel')}
+            {t(`modal_${action}.cancel`)}
           </Button>
           <LoadingButton
             variant="contained"
@@ -128,7 +133,10 @@ export const AcceptDeclineCourse: React.FC<
             loading={saving}
             data-testid="AcceptDeclineCourse-modalSubmit"
           >
-            {modalText('submit')}
+            {t([
+              `modal_${action}.submit-${trainer.type}`,
+              `modal_${action}.submit`,
+            ])}
           </LoadingButton>
         </Stack>
       </Dialog>
