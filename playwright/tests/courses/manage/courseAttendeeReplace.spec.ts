@@ -11,7 +11,6 @@ import {
   insertCourseModules,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
-import { delay } from '../../../commands'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
@@ -49,8 +48,8 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
   const orgAdminContext = await browser.newContext({
     storageState: stateFilePath('userOrgAdmin'),
   })
-  const page = await orgAdminContext.newPage()
-  const myCoursesPage = new MyCoursesPage(page)
+  const orgAdminPage = await orgAdminContext.newPage()
+  const myCoursesPage = new MyCoursesPage(orgAdminPage)
   await myCoursesPage.gotoManageCourses()
   await myCoursesPage.searchCourse(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
@@ -61,20 +60,16 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
   await courseDetailsPage.replaceAttendee(users.user2WithOrg)
 
   // Accept the invitation to the course as the new attendee
-  const otherPage = await browser.newPage()
+  const attendeePage = await browser.newPage()
   const email = await getLatestEmail(users.user2WithOrg.email)
-  const emailPage = new EmailPage(otherPage)
+  const emailPage = new EmailPage(attendeePage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()
   const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
   await attendeeCourseDetailsPage.checkSuccessMessage(
     'You are now attending this course. Please complete the checklist.'
   )
-  // Wait 10 seconds to ensure the api request has completed
-  // Need to look at how to do this more consistently by
-  // checking out the /v1/graphql requests
-  await delay(10000)
-  await page.reload()
+  await orgAdminPage.reload()
 
   await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
 })
