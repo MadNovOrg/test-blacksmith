@@ -101,7 +101,7 @@
     "@jackfranklin/test-data-bot": "^2.0.0",
     "@playwright/test": "^1.30.0",
     "@storybook/addon-actions": "^7.0.0-beta.54",
-    "@storybook/addon-essentials": "^7.0.0-beta.61",
+    "@storybook/addon-essentials": "^7.0.0-rc.1",
     "@storybook/addon-links": "^7.0.0-beta.54",
     "@storybook/react": "^7.0.0-beta.61",
     "@storybook/react-vite": "^7.0.0-beta.46",
