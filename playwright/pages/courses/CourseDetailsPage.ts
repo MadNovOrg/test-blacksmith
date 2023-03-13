@@ -7,6 +7,7 @@ import { BASE_URL } from '../../constants'
 import { toAttendeesTableRow } from '../../data/mappings'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
+import { CourseGradingPage } from '../courses/CourseGradingPage'
 import { CourseTransferPage } from '../courses/CourseTransferPage'
 
 class InviteAttendeesPopUp {
@@ -114,25 +115,27 @@ class ReplaceAttendeePopUp {
 }
 
 export class CourseDetailsPage extends BasePage {
-  readonly header: CourseHeader
-  readonly successMessage: Locator
-  readonly inviteAttendeesButton: Locator
-  readonly invitesLeftText: Locator
-  readonly attendingText: Locator
-  readonly attendingTab: Locator
-  readonly pendingTab: Locator
-  readonly declinedTab: Locator
-  readonly invitePopUp: InviteAttendeesPopUp
-  readonly replacePopUp: ReplaceAttendeePopUp
+  readonly additionalNotes: Locator
+  readonly attendeeRemoveButton: Locator
   readonly attendeesTable: UiTable
-  readonly editCourseButton: Locator
-  readonly saveButton: Locator
+  readonly attendingTab: Locator
+  readonly attendingText: Locator
   readonly cancelCourseButton: Locator
   readonly cancelCourseCheckbox: Locator
   readonly cancelEntireCourseButton: Locator
-  readonly additionalNotes: Locator
-  readonly attendeeRemoveButton: Locator
+  readonly courseGradingNav: Locator
+  readonly declinedTab: Locator
+  readonly editCourseButton: Locator
+  readonly gradingTab: Locator
+  readonly header: CourseHeader
+  readonly inviteAttendeesButton: Locator
+  readonly invitePopUp: InviteAttendeesPopUp
+  readonly invitesLeftText: Locator
   readonly manageAttendanceButtonSelector: string
+  readonly pendingTab: Locator
+  readonly replacePopUp: ReplaceAttendeePopUp
+  readonly saveButton: Locator
+  readonly successMessage: Locator
 
   constructor(page: Page) {
     super(page)
@@ -169,6 +172,11 @@ export class CourseDetailsPage extends BasePage {
       '[data-testid="attendee-remove"]'
     )
     this.manageAttendanceButtonSelector = '[data-testid=manage-attendance]'
+    this.gradingTab = this.page.locator('data-testid=grading-tab')
+
+    this.courseGradingNav = this.page.locator(
+      'data-testid="course-grading-details-nav"'
+    )
   }
 
   async goto(courseId: string) {
@@ -284,12 +292,12 @@ export class CourseDetailsPage extends BasePage {
       .click()
   }
 
-  async clickAttendeeTransfer() {
+  async clickAttendeeTransfer(): Promise<CourseTransferPage> {
     await this.page.locator('[data-testid=attendee-transfer]').click()
     return new CourseTransferPage(this.page)
   }
 
-  async clickAttendeeRemove() {
+  async clickAttendeeRemove(): Promise<RemoveAttendeePopUp> {
     await this.attendeeRemoveButton.click()
     return new RemoveAttendeePopUp(this.page)
   }
@@ -314,5 +322,21 @@ export class CourseDetailsPage extends BasePage {
       ),
     })
     await expect(attendee).toContainText(`${user.givenName} ${user.familyName}`)
+  }
+
+  async clickGradingTab() {
+    await this.gradingTab.click()
+  }
+
+  async clickGradeAllAttendees(): Promise<CourseGradingPage> {
+    await this.page.click('text=Grade all attendees')
+    return new CourseGradingPage(this.page)
+  }
+
+  async clickParticipantByGrade(id: string): Promise<CourseGradingPage> {
+    await this.page.click(
+      `data-testid=attending-participant-row-${id} >> a:has-text("Grade")`
+    )
+    return new CourseGradingPage(this.page)
   }
 }

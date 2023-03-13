@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -11,13 +10,12 @@ import {
   insertCourseModules,
   insertCourseParticipants,
 } from '../../api/hasura-api'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { FINISHED_COURSE } from '../../data/courses'
 import { getModulesByLevel } from '../../data/modules'
 import { Course } from '../../data/types'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
+import { CourseDetailsPage } from '../../pages/courses/CourseDetailsPage'
 
 const test = base.extend<{
   course: Course
@@ -67,39 +65,18 @@ test('trainer can grade all participants', async ({
   participants,
   modules,
 }) => {
-  await page.goto(`${BASE_URL}/courses/${course.id}/details`)
-  await waitForPageLoad(page)
-
-  await page.click('data-testid=grading-tab')
-  await page.click('text=Grade all attendees')
-
-  for (const participant of participants) {
-    await test
-      .expect(page.locator(`text=${participant.profile.fullName}`))
-      .toBeVisible()
-  }
-
-  await page.click('data-testid=course-grading-menu-selected')
-  await page.click('[role=listbox] >> text=Pass')
-  await page.click(`text=${modules[0].module.moduleGroup.name}`)
-  await page.fill('data-testid=feedback-input >> input', 'Feedback')
-  await page.click('text=Submit final grade')
-  await page.click('button:has-text("Confirm")')
-
-  await page.waitForNavigation()
-
-  // swr is not refetching in the E2E env, need to reload the page to see results
-  await page.reload({ waitUntil: 'networkidle' })
-
-  for (const participant of participants) {
-    await test
-      .expect(
-        page.locator(
-          `data-testid=attending-participant-row-${participant.id} >> text=Pass`
-        )
-      )
-      .toBeVisible()
-  }
+  const courseDetailsPage = new CourseDetailsPage(page)
+  await courseDetailsPage.goto(`${course.id}`)
+  await courseDetailsPage.clickGradingTab()
+  const courseGradingPage = await courseDetailsPage.clickGradeAllAttendees()
+  await courseGradingPage.expectParticipantsToBeVisible(participants)
+  await courseGradingPage.clickCourseGradingMenu()
+  await courseGradingPage.clickPass()
+  await courseGradingPage.clickModules(modules[0].module.moduleGroup.name)
+  await courseGradingPage.fillInFeedback('Feedback')
+  await courseGradingPage.submitFinalGrade()
+  await courseGradingPage.clickConfirm()
+  await courseGradingPage.expectParticipantsToHaveGrade(participants, 'Pass')
 })
 
 test('trainer can grade single participant', async ({
@@ -108,47 +85,21 @@ test('trainer can grade single participant', async ({
   participants,
   modules,
 }) => {
-  await page.goto(`${BASE_URL}/courses/${course.id}/details`)
-  await page.waitForLoadState('domcontentloaded')
-  await test.expect(page.locator('role=progressbar')).toHaveCount(0)
-  await test.expect(page.locator('.MuiSkeleton-pulse')).toHaveCount(0)
-
-  await page.click('data-testid=grading-tab')
-  await page.click(
-    `data-testid=attending-participant-row-${participants[0].id} >> a:has-text("Grade")`
+  const courseDetailsPage = new CourseDetailsPage(page)
+  await courseDetailsPage.goto(`${course.id}`)
+  await courseDetailsPage.clickGradingTab()
+  const courseGradingPage = await courseDetailsPage.clickParticipantByGrade(
+    participants[0].id
   )
-  await test
-    .expect(page.locator(`text=${participants[0].profile.fullName}`))
-    .toBeVisible()
-  await test
-    .expect(page.locator(`text=${participants[1].profile.fullName}`))
-    .not.toBeVisible()
-
-  await page.click('data-testid=course-grading-menu-selected')
-  await page.click('[role=listbox] >> text=Pass')
-  await page.click(`text=${modules[0].module.moduleGroup.name}`)
-  await page.fill('data-testid=feedback-input >> input', 'Feedback')
-  await page.click('text=Submit final grade')
-  await page.click('button:has-text("Confirm")')
-
-  await page.waitForNavigation()
-
-  // swr is not refetching in the E2E env, need to reload the page to see results
-  await page.reload({ waitUntil: 'networkidle' })
-
-  await test
-    .expect(
-      page.locator(
-        `data-testid=attending-participant-row-${participants[0].id} >> text=Pass`
-      )
-    )
-    .toBeVisible()
-
-  await test
-    .expect(
-      page.locator(
-        `data-testid=attending-participant-row-${participants[1].id} >> a:has-text("Grade")`
-      )
-    )
-    .toBeVisible()
+  await courseGradingPage.expectParticipantsToBeVisible([participants[0]])
+  await courseGradingPage.clickCourseGradingMenu()
+  await courseGradingPage.clickPass()
+  await courseGradingPage.clickModules(modules[0].module.moduleGroup.name)
+  await courseGradingPage.fillInFeedback('Feedback')
+  await courseGradingPage.submitFinalGrade()
+  await courseGradingPage.clickConfirm()
+  await courseGradingPage.expectParticipantsToHaveGrade(
+    [participants[0]],
+    'Pass'
+  )
 })
