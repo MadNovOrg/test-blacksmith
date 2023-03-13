@@ -54,6 +54,7 @@ export const LoginPage = () => {
         .object({
           email: yup
             .string()
+            .transform(currentValue => currentValue.trim())
             .email(t('validation-errors.email-invalid'))
             .required(t('validation-errors.email-required')),
           password: yup
