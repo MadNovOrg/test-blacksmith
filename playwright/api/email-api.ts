@@ -74,6 +74,6 @@ export const getLatestEmail = async (email: string): Promise<Email> => {
     triesLeft--
   } while (triesLeft)
   throw console.error(
-    `[API] inbox for ${email} is empty or don't have recent emails`
+    `[API] inbox for ${email} is empty or doesn't have any recent emails`
   )
 }

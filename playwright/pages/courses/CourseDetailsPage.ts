@@ -215,8 +215,9 @@ export class CourseDetailsPage extends BasePage {
     await expect(this.declinedTab).toHaveText(text)
   }
 
-  async clickInviteAttendeesButton() {
+  async clickInviteAttendeesButton(): Promise<InviteAttendeesPopUp> {
     await this.inviteAttendeesButton.click()
+    return new InviteAttendeesPopUp(this.page)
   }
 
   async checkAttendeesTableRows(users: User[]) {

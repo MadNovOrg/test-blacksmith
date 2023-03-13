@@ -12,13 +12,15 @@ export class MembershipPage extends BasePage {
     await super.goto(`${BASE_URL}/membership`)
   }
 
-  async checkGridItem(type: string) {
-    await expect(
-      this.page.locator(`data-testid=${type}-grid-title`)
-    ).toBeVisible()
+  async checkGridItem(contentTypes: string[]) {
+    for (const type of contentTypes) {
+      await expect(
+        this.page.locator(`data-testid=${type}-grid-title`)
+      ).toBeVisible()
 
-    await expect(
-      this.page.locator(`data-testid=${type}-grid >> [data-grid-item="0"]`)
-    ).toBeVisible()
+      await expect(
+        this.page.locator(`data-testid=${type}-grid >> [data-grid-item="0"]`)
+      ).toBeVisible()
+    }
   }
 }

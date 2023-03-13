@@ -17,8 +17,5 @@ const contentTypes = [
 test('displays grid for all content types', async ({ page }) => {
   const membershipPage = new MembershipPage(page)
   await membershipPage.goto()
-
-  contentTypes.forEach(async type => {
-    await membershipPage.checkGridItem(type)
-  })
+  await membershipPage.checkGridItem(contentTypes)
 })

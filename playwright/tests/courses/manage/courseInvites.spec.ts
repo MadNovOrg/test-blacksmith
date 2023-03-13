@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -16,7 +15,6 @@ import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
-import { CourseParticipantPage } from '../../../pages/courses/CourseParticipantPage'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 import { EmailPage } from '../../../pages/EmailPage'
 
@@ -91,9 +89,9 @@ for (const data of testData) {
     await courseDetailsPage.checkInvitesLeftText(
       `${course.max_participants} invites left`
     )
-    await courseDetailsPage.clickInviteAttendeesButton()
-    await courseDetailsPage.invitePopUp.enterEmails([users.user1WithOrg.email])
-    await courseDetailsPage.invitePopUp.clickSendButton()
+    const invitePopUp = await courseDetailsPage.clickInviteAttendeesButton()
+    await invitePopUp.enterEmails([users.user1WithOrg.email])
+    await invitePopUp.clickSendButton()
     await courseDetailsPage.checkInvitesLeftText(
       `${course.max_participants - 1} invites left`
     )
@@ -106,9 +104,8 @@ for (const data of testData) {
     const emailPage = new EmailPage(otherPage)
     await emailPage.renderContent(email.html)
     const invitationPage = await emailPage.clickRegisterNowButton()
-    const loginPage = await invitationPage.acceptInvitation()
-    const participantPage = new CourseParticipantPage(loginPage.page)
-    await participantPage.checkSuccessMessage(
+    const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
+    await attendeeCourseDetailsPage.checkSuccessMessage(
       'You are now attending this course. Please complete the checklist.'
     )
     await courseDetailsPage.page.reload()

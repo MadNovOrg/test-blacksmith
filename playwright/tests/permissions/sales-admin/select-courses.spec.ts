@@ -26,9 +26,7 @@ const test = base.extend<{ courseIds: number[] }>({
         'trainer@teamteach.testinator.com'
       ),
     ])
-
     await use(ids)
-
     await Promise.all(ids.map(id => deleteCourse(id)))
   },
 })
@@ -41,8 +39,7 @@ test('@query sales admin can select open and closed courses', async ({
     { offset: 0, limit: 10, orderBy: { createdAt: 'desc' } },
     RoleName.SALES_ADMIN
   )
-
-  courseIds.forEach(id => {
-    test.expect(coursesResponse.courses.find(c => c.id === id))
-  })
+  for (const id of courseIds) {
+    await test.expect(coursesResponse.courses.find(c => c.id === id))
+  }
 })
