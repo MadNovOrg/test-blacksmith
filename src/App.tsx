@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { SWRConfig } from 'swr'
 
 import { GQLProvider } from './components/GQLProvider'
+import { ScrollToTop } from './components/ScrollToTop'
 import { SnackbarProvider } from './context/snackbar'
 import { useSWRFetcher } from './hooks/use-fetcher'
 import { AppRoutes } from './routes'
@@ -27,6 +28,7 @@ function App() {
       <SWRConfig value={config}>
         <CssBaseline />
         <SnackbarProvider>
+          <ScrollToTop />
           <AppRoutes />
         </SnackbarProvider>
       </SWRConfig>
