@@ -5,3 +5,6 @@ export async function waitForPageLoad(page: Page) {
   await expect(page.locator('role=progressbar')).toHaveCount(0)
   await expect(page.locator('.MuiSkeleton-pulse')).toHaveCount(0)
 }
+
+export const delay = (ms: number) =>
+  new Promise(resolve => setTimeout(resolve, ms))

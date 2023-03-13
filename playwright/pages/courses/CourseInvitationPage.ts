@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
-import { LoginPage } from '../auth/LoginPage'
+import { CourseDetailsPage } from '../../pages/courses/CourseDetailsPage'
 import { BasePage } from '../BasePage'
 
 export class CourseInvitationPage extends BasePage {
@@ -17,10 +17,10 @@ export class CourseInvitationPage extends BasePage {
     this.continueButton = this.page.locator('data-testid=login-submit')
   }
 
-  async acceptInvitation(): Promise<LoginPage> {
+  async acceptInvitation(): Promise<CourseDetailsPage> {
     await this.willAttendOption.click()
     await this.continueButton.click()
-    return new LoginPage(this.page)
+    return new CourseDetailsPage(this.page)
   }
 
   async declineInvitation(note: string) {

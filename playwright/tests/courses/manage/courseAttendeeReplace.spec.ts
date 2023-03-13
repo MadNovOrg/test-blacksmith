@@ -11,6 +11,7 @@ import {
   insertCourseModules,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
+import { delay } from '../../../commands'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
@@ -65,7 +66,15 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
   const emailPage = new EmailPage(otherPage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()
-  await invitationPage.acceptInvitation()
+  const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
+  await attendeeCourseDetailsPage.checkSuccessMessage(
+    'You are now attending this course. Please complete the checklist.'
+  )
+  // Wait 10 seconds to ensure the api request has completed
+  // Need to look at how to do this more consistently by
+  // checking out the /v1/graphql requests
+  await delay(10000)
+  await page.reload()
 
   await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
 })
