@@ -119,18 +119,22 @@ export const OrgDashboard: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <Tab
                         label={t('pages.org-details.tabs.overview.title')}
                         value={OrgDashboardTabs.OVERVIEW}
+                        data-testid="org-overview"
                       />
                       <Tab
                         label={t('pages.org-details.tabs.details.title')}
                         value={OrgDashboardTabs.DETAILS}
+                        data-testid="org-details"
                       />
                       <Tab
                         label={t('pages.org-details.tabs.users.title')}
                         value={OrgDashboardTabs.INDIVIDUALS}
+                        data-testid="org-individuals"
                       />
                       <Tab
                         label={t('pages.org-details.tabs.licenses.title')}
                         value={OrgDashboardTabs.LICENSES}
+                        data-testid="org-blended-licences"
                       />
                     </TabList>
 

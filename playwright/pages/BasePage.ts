@@ -13,6 +13,10 @@ export class BasePage {
 
   async goto(url: string) {
     await this.page.goto(url)
+    await this.waitForPageLoad()
+  }
+
+  async waitForPageLoad() {
     await this.page.waitForLoadState('domcontentloaded')
     await expect(this.muiProgressCircle).toHaveCount(0)
     await expect(this.muiSkeletonPulse).toHaveCount(0)

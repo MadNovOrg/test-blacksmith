@@ -86,6 +86,7 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
       onClick={exportHistory}
       disabled={disabled}
       loading={fetching}
+      data-testid="export-history"
     >
       {fetching ? t('exporting-button-text') : t('button-text')}
     </LoadingButton>

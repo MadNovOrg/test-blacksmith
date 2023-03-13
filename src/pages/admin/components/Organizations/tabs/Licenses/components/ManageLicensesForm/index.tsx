@@ -137,11 +137,13 @@ export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
               value="ADD"
               control={<Radio />}
               label={t('add-radio-button-label')}
+              data-testid="licence-add-checkbox"
             />
             <FormControlLabel
               value="REMOVE"
               control={<Radio />}
               label={t('remove-radio-button-label')}
+              data-testid="licence-remove-checkbox"
             />
           </RadioGroup>
         )}
@@ -234,6 +236,7 @@ export const ManageLicensesForm: React.FC<React.PropsWithChildren<Props>> = ({
           variant="contained"
           type="submit"
           disabled={!isValid}
+          data-testid="licence-save-details"
         >
           {t('save-button-label')}
         </LoadingButton>

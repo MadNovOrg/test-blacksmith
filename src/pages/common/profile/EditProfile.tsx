@@ -1118,6 +1118,7 @@ export const EditProfilePage: React.FC<
                   sx={{ ml: 1 }}
                   type="submit"
                   loading={loading}
+                  data-testid="profile-save-changes"
                 >
                   {t('save-changes')}
                 </LoadingButton>

@@ -102,7 +102,12 @@ export const LicensesTab: React.FC<React.PropsWithChildren<Props>> = ({
                   </Typography>
                 </Box>
                 {acl.canManageBlendedLicenses() ? (
-                  <Button variant="contained" size="small" onClick={openModal}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={openModal}
+                    data-testid="manage-remaining-licences"
+                  >
                     {t('manage-button-label')}
                   </Button>
                 ) : null}

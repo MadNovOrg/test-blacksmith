@@ -127,6 +127,7 @@ export const ViewProfilePage: React.FC<
                 onClick={() => navigate(editProFilePath, { replace: true })}
                 startIcon={<EditIcon />}
                 sx={{ mt: 5 }}
+                data-testid="edit-profile"
               >
                 {t('edit-profile')}
               </Button>

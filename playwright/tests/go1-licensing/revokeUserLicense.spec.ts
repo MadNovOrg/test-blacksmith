@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 import { addYears } from 'date-fns'
 
@@ -11,9 +10,8 @@ import {
   insertOrganization,
   insertOrganizationMember,
 } from '../../api/hasura-api'
-import { waitForPageLoad } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { stateFilePath } from '../../hooks/global-setup'
+import { ProfilePage } from '../../pages/membership/ProfilePage'
 
 type Go1LicenseContext = {
   orgId: string
@@ -39,9 +37,7 @@ const test = base.extend<{ licenseContext: Go1LicenseContext }>({
         expireDate: addYears(new Date(), 1),
       }),
     ])
-
     await use({ licenseId, orgId, profileId })
-
     await Promise.all([
       deleteGo1License(licenseId),
       deleteOrganizationMember(memberId),
@@ -56,24 +52,11 @@ test("removes a license for an organisation's user", async ({
   page,
   licenseContext,
 }) => {
-  await page.goto(
-    `${BASE_URL}/profile/${licenseContext.profileId}?orgId=${licenseContext.orgId}`
-  )
-  await waitForPageLoad(page)
-
-  await test
-    .expect(page.locator(`data-testid=go1-license-${licenseContext.licenseId}`))
-    .toBeVisible()
-
-  await page.click('button:has-text("Edit Profile")')
-  await page.click(
-    `data-testid=go1-license-${licenseContext.licenseId} >> button:has-text("Remove")`
-  )
-
-  await page.click('button:has-text("Save Changes")')
-  await page.waitForLoadState('domcontentloaded')
-
-  await test
-    .expect(page.locator(`data-testid=go1-license-${licenseContext.licenseId}`))
-    .not.toBeVisible()
+  const profilePage = new ProfilePage(page)
+  await profilePage.goto(licenseContext.profileId, licenseContext.orgId)
+  await profilePage.checkLicenceIdExists(licenseContext.licenseId, true)
+  await profilePage.clickEditProfile()
+  await profilePage.clickRemoveLicenceById(licenseContext.licenseId)
+  await profilePage.clickSaveChanges()
+  await profilePage.checkLicenceIdExists(licenseContext.licenseId, false)
 })
