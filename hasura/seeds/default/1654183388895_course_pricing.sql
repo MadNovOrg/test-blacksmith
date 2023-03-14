@@ -13,6 +13,7 @@ INSERT INTO course_pricing (
 ('OPEN', 'INTERMEDIATE_TRAINER', false, true, 600, 'INT.RE.OP'),
 ('OPEN', 'ADVANCED_TRAINER', false, false, 1570, 'INT.RE.OP'),
 ('OPEN', 'ADVANCED_TRAINER', false, true, 710, 'INT.RE.OP'),
+('OPEN', 'ADVANCED', false, false, 1730, ''),
 ('CLOSED', 'LEVEL_1', true, false, 101, 'LEVEL1.CL'), -- 9
 ('CLOSED', 'LEVEL_1', false, false, 101, 'LEVEL1.CL'), -- 10
 ('CLOSED', 'LEVEL_1', false, true, 101, 'LEVEL1.RE.CL'), -- 11
