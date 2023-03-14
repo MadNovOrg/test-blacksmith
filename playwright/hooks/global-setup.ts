@@ -34,29 +34,33 @@ const login = async (browser: Browser, userKey: string, role: string) => {
 }
 
 async function globalSetup() {
-  if (!process.env.KEEP_TMP_DIR) {
+  if (process.env.REMOVE_TMP_DIR) {
     rm(TEMP_DIR, { recursive: true, force: true }, () => {
       console.log('Removed temp directory')
     })
-    if (!fs.existsSync(TEMP_DIR)) {
-      fs.mkdirSync(TEMP_DIR)
-    }
-    const browser = await chromium.launch()
-    const credentials = [
-      { name: 'admin', role: 'Admin' },
-      { name: 'ops', role: 'Ops' },
-      { name: 'trainer', role: 'Trainer' },
-      { name: 'trainerWithOrg', role: 'Trainer' },
-      { name: 'user1', role: 'User' },
-      { name: 'userOrgAdmin', role: 'User' },
-      { name: 'salesAdmin', role: 'Sales administrator' },
-    ]
-    for (const cred of credentials) {
-      const { name, role } = cred
-      await login(browser, name, role)
-    }
-    await browser.close()
   }
+  if (!fs.existsSync(TEMP_DIR)) {
+    fs.mkdirSync(TEMP_DIR)
+  }
+  const browser = await chromium.launch()
+  const credentials = [
+    { name: 'admin', role: 'Admin' },
+    { name: 'ops', role: 'Ops' },
+    { name: 'trainer', role: 'Trainer' },
+    { name: 'trainerWithOrg', role: 'Trainer' },
+    { name: 'user1', role: 'User' },
+    { name: 'userOrgAdmin', role: 'User' },
+    { name: 'salesAdmin', role: 'Sales administrator' },
+  ]
+  await Promise.all(
+    credentials.map(async cred => {
+      const { name, role } = cred
+      if (!fs.existsSync(`${TEMP_DIR}/storage-${role}.json`)) {
+        await login(browser, name, role)
+      }
+    })
+  )
+  await browser.close()
 }
 
 export default globalSetup

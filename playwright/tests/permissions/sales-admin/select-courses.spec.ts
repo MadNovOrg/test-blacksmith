@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test'
+import { expect, test as base } from '@playwright/test'
 
 import { TrainerCoursesQuery } from '@app/generated/graphql'
 import { QUERY as GetTrainerCourses } from '@app/queries/courses/get-trainer-courses'
@@ -6,6 +6,7 @@ import { CourseType, RoleName } from '@app/types'
 
 import { deleteCourse, insertCourse } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
+import { users } from '../../../data/users'
 import { runQueryAsRole } from '../../queries/gql-query'
 
 const test = base.extend<{ courseIds: number[] }>({
@@ -16,14 +17,14 @@ const test = base.extend<{ courseIds: number[] }>({
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
         },
-        'trainer@teamteach.testinator.com'
+        users.trainer.email
       ),
       insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.CLOSED,
         },
-        'trainer@teamteach.testinator.com'
+        users.trainer.email
       ),
     ])
     await use(ids)
@@ -40,6 +41,6 @@ test('@query sales admin can select open and closed courses', async ({
     RoleName.SALES_ADMIN
   )
   for (const id of courseIds) {
-    await test.expect(coursesResponse.courses.find(c => c.id === id))
+    expect(coursesResponse.courses.find(c => c.id === id)).not.toBeUndefined()
   }
 })
