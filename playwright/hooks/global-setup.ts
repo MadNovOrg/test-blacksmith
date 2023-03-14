@@ -2,14 +2,14 @@ import fs, { rm } from 'fs'
 
 import { Browser, chromium } from '@playwright/test'
 
-import { TEMP_DIR } from '../constants'
+import { TARGET_ENV, TEMP_DIR } from '../constants'
 import { users } from '../data/users'
 import { LoginPage } from '../pages/auth/LoginPage'
 
 const publicRoutes = ['/enquiry', '/waitlist']
 
 export const stateFilePath = (userKey: string) =>
-  `${TEMP_DIR}/storage-${userKey}.json`
+  `${TEMP_DIR}/storage-${userKey}-${TARGET_ENV}.json`
 
 const login = async (browser: Browser, userKey: string, role: string) => {
   const page = await browser.newPage()
@@ -55,7 +55,7 @@ async function globalSetup() {
   await Promise.all(
     credentials.map(async cred => {
       const { name, role } = cred
-      if (!fs.existsSync(`${TEMP_DIR}/storage-${role}.json`)) {
+      if (!fs.existsSync(`${TEMP_DIR}/storage-${role}-${TARGET_ENV}.json`)) {
         await login(browser, name, role)
       }
     })

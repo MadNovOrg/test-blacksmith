@@ -74,7 +74,7 @@ export class MyCoursesPage extends BasePage {
     await this.filterBy(filterTestId).click()
     for (const item of items) {
       await this.page
-        .locator(`[data-testid="FilterCourseLevel-option"]:has-text("${item}")`)
+        .locator(`[data-testid="FilterCourseLevel-option-${item}"]`)
         .click()
     }
   }

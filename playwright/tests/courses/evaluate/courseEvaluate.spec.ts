@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { CourseType, InviteStatus } from '@app/types'
@@ -37,20 +36,16 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-test('course evaluation', async ({ browser, course }) => {
+test('course evaluation as user', async ({ browser, course }) => {
   const userContext = await browser.newContext({
     storageState: stateFilePath('user1'),
   })
-
   const userPage = await userContext.newPage()
-
-  // Users evaluation
   const userEvaluationPage = new CourseEvaluationPage(
     userPage,
     'user',
     String(course.id)
   )
-
   await userEvaluationPage.goto()
   await userEvaluationPage.randomlyEvaluate(
     `${users.user1.givenName} ${users.user1.familyName}`
@@ -60,19 +55,15 @@ test('course evaluation', async ({ browser, course }) => {
     'Your course evaluation feedback has been submitted'
   )
 
-  // Trainer evaluation -- should be available now
   const trainerContext = await browser.newContext({
     storageState: stateFilePath('trainer'),
   })
-
   const trainerPage = await trainerContext.newPage()
-
   const trainerEvaluationPage = new CourseEvaluationPage(
     trainerPage,
     'trainer',
     String(course.id)
   )
-
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsAvailable()
   await trainerEvaluationPage.checkPDFExportIsNotAvailable()

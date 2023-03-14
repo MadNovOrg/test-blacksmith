@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { CourseLevel } from '@app/types'
@@ -63,9 +62,6 @@ test('my courses search', async ({ page, courseSearchText, searchResults }) => {
 test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  await myCoursesPage.filterCourses('FilterCourseLevel', [
-    'Level One',
-    'Level Two',
-  ])
+  await myCoursesPage.filterCourses('FilterCourseLevel', ['LEVEL_1', 'LEVEL_2'])
   await myCoursesPage.checkRows(oneTwoLevelCourses)
 })
