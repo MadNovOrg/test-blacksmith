@@ -168,9 +168,11 @@
   },
   "certification-list": {
     "title": "Certifications",
-    "organization": "Organisation",
+    "organisation": "Organisation",
     "download-selected": "Download selected ({{ number }})",
     "download-all-certifications": "Download all certifications",
+    "date-obtained": "Date obtained",
+    "date-expired": "Date Expired",
     "grade": "Grade",
     "certificate": "Certificate",
     "view-certificate": "View certificate",

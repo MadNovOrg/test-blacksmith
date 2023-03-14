@@ -5,6 +5,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CertificationList } from '@app/components/CertificationList'
+import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
@@ -14,6 +15,7 @@ import useCourseParticipants, {
 } from '@app/hooks/useCourseParticipants'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
+import { CertificateStatus } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 type CertificationsProps = unknown
@@ -34,6 +36,9 @@ export const Certifications: React.FC<
     setDateTo(to)
   }, [])
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
+  const [certificateStatus, setCertificateStatus] = useState<
+    CertificateStatus[]
+  >([])
 
   const where = useMemo(() => {
     const conditions: CourseParticipantCriteria[] = [
@@ -43,7 +48,10 @@ export const Certifications: React.FC<
     if (keyword) {
       const ilike = { _ilike: `${keyword}%` }
       conditions.push({
-        profile: { _or: [{ fullName: ilike }, { familyName: ilike }] },
+        _or: [
+          { profile: { _or: [{ fullName: ilike }, { familyName: ilike }] } },
+          { course: { _or: [{ course_code: ilike }] } },
+        ],
       })
     }
 
@@ -65,8 +73,14 @@ export const Certifications: React.FC<
       conditions.push({ certificate: { expiryDate: { _lte: to } } })
     }
 
-    return { _and: conditions }
-  }, [keyword, filterType, dateFrom, dateTo])
+    if (certificateStatus.length) {
+      conditions.push({ certificate: { status: { _in: certificateStatus } } })
+    }
+
+    return {
+      _and: conditions,
+    }
+  }, [keyword, filterType, dateFrom, dateTo, certificateStatus])
 
   const { Pagination, limit, offset } = useTablePagination()
 
@@ -85,7 +99,7 @@ export const Certifications: React.FC<
   })
 
   const loading = status === LoadingStatus.FETCHING
-  const filtered = !!keyword || !!dateFrom || !!dateTo
+  const filtered = !!keyword || !!dateFrom || !!dateTo || !!certificateStatus
   const count = participants?.length ?? 0
 
   return (
@@ -101,9 +115,10 @@ export const Certifications: React.FC<
             <FilterSearch value={keyword} onChange={setKeyword} />
             <FilterDates
               onChange={onDatesChange}
-              title={t('filters.date-range')}
+              title={t('filters.date-obtained')}
             />
             <FilterCourseType onChange={setFilterType} />
+            <FilterCertificateValidity onChange={setCertificateStatus} />
           </Stack>
         </Box>
 
@@ -119,7 +134,15 @@ export const Certifications: React.FC<
           ) : (
             <>
               <CertificationList
-                columns={['name', 'certificate', 'course-code', 'status']}
+                columns={[
+                  'name',
+                  'certificate',
+                  'course-code',
+                  'status',
+                  'date-expired',
+                  'date-obtained',
+                  'organisation',
+                ]}
                 hideTitle={true}
                 participants={participants ?? []}
                 sorting={sorting}

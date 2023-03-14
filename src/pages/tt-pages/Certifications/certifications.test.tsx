@@ -14,7 +14,7 @@ describe('page: Certifications', () => {
   it('renders empty page with filters', async () => {
     render(<Certifications />)
     expect(screen.getByText('Certifications')).toBeInTheDocument()
-    expect(screen.getByText('Filter by Date')).toBeInTheDocument()
+    expect(screen.getByText('Filter by date obtained')).toBeInTheDocument()
     expect(screen.getByTestId('FilterSearch-Input')).toBeInTheDocument()
   })
 })

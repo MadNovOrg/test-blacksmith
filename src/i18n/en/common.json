@@ -71,6 +71,7 @@
   "view-cert": "View Certificate",
   "certificate": "Certificate",
   "certifications": "Certifications",
+  "certifications-status": "Certifications status",
   "certification-details": "Certification details",
   "certification-warning": "Attending a course without appropriate certification will effect accreditation.",
   "phone-placeholder": "Mobile/work phone",
@@ -378,6 +379,7 @@
     "date-range": "Filter by Date",
     "course-date-range": "Filter by Course Date",
     "created-range": "Filter by Creation Date",
+    "date-obtained": "Filter by date obtained",
     "payment-method": "Payment Method",
     "status": "Status",
     "currency": "Currency",
@@ -418,7 +420,7 @@
   "enrolled": "Enrolled",
   "certification-status": {
     "expired": "Expired",
-    "expired_recently": "Expired",
+    "expired_recently": "Expired Recently",
     "expiring_soon": "Expiring soon",
     "active": "Active"
   },

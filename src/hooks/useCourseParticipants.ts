@@ -7,7 +7,7 @@ import {
   QUERY,
   ResponseType,
 } from '@app/queries/participants/get-course-participants'
-import { SortOrder } from '@app/types'
+import { CertificateStatus, SortOrder } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type CourseParticipantCriteria =
@@ -35,10 +35,21 @@ export type CourseParticipantCriteria =
       certificate: { expiryDate: { _lte: Date } }
     }
   | {
+      certificate: { status: { _in: CertificateStatus[] } }
+    }
+  | {
       course: { type: { _in: Course_Type_Enum[] } }
     }
   | {
+      course: {
+        _or: [{ course_code: { _ilike: string } }]
+      }
+    }
+  | {
       _and: CourseParticipantCriteria[]
+    }
+  | {
+      _or: CourseParticipantCriteria[]
     }
 
 export default function useCourseParticipants(

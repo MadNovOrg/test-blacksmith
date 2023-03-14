@@ -14,6 +14,8 @@ import { FilterAccordion, FilterOption } from '../FilterAccordion'
 
 type Props = {
   onChange: (selected: Course_Level_Enum[]) => void
+  excludedStatuses?: Set<Course_Level_Enum>
+  customStatuses?: Set<Course_Level_Enum>
 }
 
 const levels = Object.values(Course_Level_Enum)
@@ -25,15 +27,28 @@ const CourseLevelParam = withDefault(
 
 export const FilterCourseLevel: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
+  excludedStatuses = new Set(),
+  customStatuses = new Set(),
 }) => {
   const { t } = useTranslation()
 
+  const allStatuses = useMemo(
+    () => [...levels, ...customStatuses],
+    [customStatuses]
+  )
+
   const levelOptions = useMemo(() => {
-    return levels.map(level => ({
-      id: level,
-      title: t(`course-levels.${level}`),
-    }))
-  }, [t])
+    return allStatuses
+      .map(level =>
+        excludedStatuses.has(level)
+          ? null
+          : {
+              id: level,
+              title: t(`course-levels.${level}`),
+            }
+      )
+      .filter(Boolean)
+  }, [allStatuses, excludedStatuses, t])
 
   const [selected, setSelected] = useQueryParam('level', CourseLevelParam)
 

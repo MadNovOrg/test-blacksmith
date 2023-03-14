@@ -60,6 +60,10 @@ export const QUERY = gql`
       }
       course {
         ...Course
+        organization {
+          name
+          id
+        }
       }
     }
     courseParticipantsAggregation: course_participant_aggregate(where: $where) {

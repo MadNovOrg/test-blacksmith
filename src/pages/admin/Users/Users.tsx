@@ -22,13 +22,16 @@ import { useDebounce } from 'use-debounce'
 
 import { BackButton } from '@app/components/BackButton'
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
+import { FilterCertificateValidity } from '@app/components/FilterCertificateValidity'
+import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import useProfiles from '@app/hooks/useProfiles'
 import { useTablePagination } from '@app/hooks/useTablePagination'
-import { RoleName, TrainerRoleTypeName } from '@app/types'
+import { CertificateStatus, RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { MergeUsersDialog } from './components/MergeUsersDialog'
 
@@ -61,6 +64,12 @@ export const Users = () => {
   const [filterByModerator, setFilterByModerator] = useState(false)
   const [trainerTypeFilter, setTrainerTypeFilter] =
     useState<FilterOption[]>(trainerTypeOptions)
+  const [filterByCertificateLevel, setFilteredByCertificateLEvel] = useState<
+    Course_Level_Enum[]
+  >([])
+  const [certificateStatus, setCertificateStatus] = useState<
+    CertificateStatus[]
+  >([])
 
   const merging = location.pathname.includes('/merge')
 
@@ -83,6 +92,29 @@ export const Users = () => {
         },
       }
       isFiltered = true
+    }
+
+    if (filterByCertificateLevel.length || certificateStatus.length) {
+      const courseLevel =
+        filterByCertificateLevel.length > 0
+          ? { _in: filterByCertificateLevel }
+          : undefined
+
+      const status =
+        certificateStatus.length > 0
+          ? {
+              _in: certificateStatus,
+            }
+          : undefined
+
+      obj.certificates = {
+        _and: [
+          { courseLevel },
+          {
+            status,
+          },
+        ],
+      }
     }
 
     if (selectedTrainerTypes.length) {
@@ -121,7 +153,14 @@ export const Users = () => {
     }
 
     return [obj, isFiltered]
-  }, [roleFilter, trainerTypeFilter, keywordDebounced, filterByModerator])
+  }, [
+    roleFilter,
+    trainerTypeFilter,
+    filterByCertificateLevel,
+    keywordDebounced,
+    filterByModerator,
+    certificateStatus,
+  ])
 
   const { Pagination, perPage, currentPage } = useTablePagination()
 
@@ -238,6 +277,19 @@ export const Users = () => {
               defaultExpanded={false}
               data-testid="FilterTrainerType"
             />
+            <FilterCourseLevel
+              onChange={setFilteredByCertificateLEvel}
+              excludedStatuses={
+                new Set([
+                  Course_Level_Enum.Advanced,
+                  Course_Level_Enum.BildAct,
+                  Course_Level_Enum.BildActTrainer,
+                  Course_Level_Enum.Level_1,
+                  Course_Level_Enum.Level_2,
+                ])
+              }
+            />
+            <FilterCertificateValidity onChange={setCertificateStatus} />
             <FormControlLabel
               control={
                 <Checkbox

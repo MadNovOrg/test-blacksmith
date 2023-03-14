@@ -26,6 +26,7 @@ type FilterAccordionProps<T = string> = {
   defaultExpanded?: boolean
   'data-testid'?: string
   sx?: SxProps
+  disabled?: boolean
 }
 
 export const FilterAccordion = <T,>({

@@ -48,12 +48,6 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
-    ],
     'import/order': [
       'error',
       {

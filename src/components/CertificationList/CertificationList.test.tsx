@@ -51,7 +51,9 @@ describe('component: CertificationList', () => {
       'certificate',
       'course-code',
       'status',
-      'organization',
+      'date-obtained',
+      'date-expired',
+      'organisation',
       'contact',
     ] as CertificationListColumns
 
@@ -68,7 +70,7 @@ describe('component: CertificationList', () => {
     const tableHead = within(table).getByTestId('table-head')
     expect(tableHead).toBeInTheDocument()
     const columnHeaders = within(tableHead).getAllByRole('columnheader')
-    expect(columnHeaders).toHaveLength(8)
+    expect(columnHeaders).toHaveLength(10)
     expect(within(columnHeaders[1]).getByText('Name')).toBeInTheDocument()
     expect(within(columnHeaders[2]).getByText('Contact')).toBeInTheDocument()
     expect(

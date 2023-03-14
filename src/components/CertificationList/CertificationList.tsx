@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
-import { formatDistanceToNow, isPast } from 'date-fns'
+import { isPast } from 'date-fns'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import React, { useCallback, useMemo } from 'react'
@@ -32,9 +32,11 @@ import { TableNoRows } from '../Table/TableNoRows'
 export type CertificationListColumns = (
   | 'name'
   | 'contact'
-  | 'organization'
+  | 'organisation'
   | 'grade'
   | 'status'
+  | 'date-obtained'
+  | 'date-expired'
   | 'certificate'
   | 'course-code'
 )[]
@@ -54,7 +56,7 @@ export const CertificationList: React.FC<
   filtered = false,
   sorting,
   hideTitle,
-  columns = ['name', 'contact', 'organization', 'grade'],
+  columns = ['name', 'contact', 'organisation', 'grade'],
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -78,11 +80,13 @@ export const CertificationList: React.FC<
       checkbox.headCol(participants.map(p => p.id)),
       ...col('name', { sorting: true }),
       ...col('contact', { sorting: true }),
-      ...col('organization'),
+      ...col('organisation'),
       ...col('grade'),
       ...col('certificate'),
       ...col('course-code'),
       ...col('status'),
+      ...col('date-obtained'),
+      ...col('date-expired'),
       ...col('actions', {}, false),
     ] as Col[]
   }, [participants, t, checkbox, showCol])
@@ -198,11 +202,9 @@ export const CertificationList: React.FC<
 
                 {showCol('organisation') ? (
                   <TableCell>
-                    {p.profile.organizations.map(org => (
-                      <Typography key={org.organization.id}>
-                        {org.organization.name}
-                      </Typography>
-                    ))}
+                    <Link href={`/organisations/${p.course.organization?.id}`}>
+                      {p.course.organization?.name}
+                    </Link>
                   </TableCell>
                 ) : null}
 
@@ -242,12 +244,25 @@ export const CertificationList: React.FC<
                       color={expired ? 'error' : 'success'}
                       size="small"
                     />
-                    <Typography mt={1} variant="body2" color="grey.700">
-                      {expired
-                        ? `${formatDistanceToNow(expiryDate)} ${t(
-                            'common.ago'
-                          )}`
-                        : t('dates.default', { date: expiryDate })}
+                  </TableCell>
+                ) : null}
+
+                {showCol('date-obtained') ? (
+                  <TableCell>
+                    <Typography variant="body2" color="grey.700">
+                      {t('dates.default', {
+                        date: p.certificate.certificationDate,
+                      })}
+                    </Typography>
+                  </TableCell>
+                ) : null}
+
+                {showCol('date-expired') ? (
+                  <TableCell>
+                    <Typography variant="body2" color="grey.700">
+                      {t('dates.default', {
+                        date: p.certificate.expiryDate,
+                      })}
                     </Typography>
                   </TableCell>
                 ) : null}
