@@ -208,30 +208,39 @@ export const ViewProfilePage: React.FC<
                 />
               </Box>
             )}
-            <Typography variant="subtitle2" mb={1} mt={3}>
-              {t('pages.view-profile.hub-access')}
-            </Typography>
-            <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
-              <DetailsRow label={t('pages.view-profile.user-role')}>
-                <Box flex={1}>
-                  {profile.roles.map(({ role }) => (
-                    <Chip
-                      key={role.name}
-                      label={t(`pages.view-profile.roles.${role?.name}`)}
-                      color={getRoleColor(role.name)}
-                      sx={{ marginRight: 1, marginBottom: 0.5 }}
-                    />
-                  ))}
-                  {profile.trainer_role_types.map(({ trainer_role_type }) => (
-                    <Chip
-                      key={trainer_role_type.name}
-                      label={t(`trainer-role-types.${trainer_role_type?.name}`)}
-                      sx={{ marginRight: 1, marginBottom: 0.5 }}
-                    />
-                  ))}
+            {acl.canSeeProfileRoles() && (
+              <>
+                <Typography variant="subtitle2" mb={1} mt={3}>
+                  {t('pages.view-profile.hub-access')}
+                </Typography>
+
+                <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+                  <DetailsRow label={t('pages.view-profile.user-role')}>
+                    <Box flex={1}>
+                      {profile.roles.map(({ role }) => (
+                        <Chip
+                          key={role.name}
+                          label={t(`pages.view-profile.roles.${role?.name}`)}
+                          color={getRoleColor(role.name)}
+                          sx={{ marginRight: 1, marginBottom: 0.5 }}
+                        />
+                      ))}
+                      {profile.trainer_role_types.map(
+                        ({ trainer_role_type }) => (
+                          <Chip
+                            key={trainer_role_type.name}
+                            label={t(
+                              `trainer-role-types.${trainer_role_type?.name}`
+                            )}
+                            sx={{ marginRight: 1, marginBottom: 0.5 }}
+                          />
+                        )
+                      )}
+                    </Box>
+                  </DetailsRow>
                 </Box>
-              </DetailsRow>
-            </Box>
+              </>
+            )}
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('org-details')}
             </Typography>
@@ -485,7 +494,6 @@ export const ViewProfilePage: React.FC<
                 </Table>
               </>
             )}
-
             {go1Licenses?.length ? (
               <Box mt={3}>
                 <UserGo1License license={go1Licenses[0]} editable={false} />
