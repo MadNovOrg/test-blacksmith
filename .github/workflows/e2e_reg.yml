@@ -65,8 +65,8 @@ jobs:
       fail-fast: false
       matrix:
         browsers: ['chromium', 'firefox']
-        shardIndex: [1, 2, 3, 4]
-        shardTotal: [4]
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
     steps:
       - name: Set the Target
         run: echo "TARGET=${{ github.event.inputs.environment || env.DEFAULT_TARGET }}" >> $GITHUB_ENV

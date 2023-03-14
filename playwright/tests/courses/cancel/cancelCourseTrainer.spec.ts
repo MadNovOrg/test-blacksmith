@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -25,7 +24,7 @@ const test = base.extend<{ course: Course }>({
     course.organization = { name: 'London First School' }
     course.schedule[0].start = inXMonths(2)
     course.schedule[0].end = inXMonths(2)
-    course.status = Course_Status_Enum.TrainerPending
+    course.status = Course_Status_Enum.Scheduled
     const moduleIds = await getModuleIds(
       getModulesByLevel(course.level),
       course.level
@@ -33,7 +32,7 @@ const test = base.extend<{ course: Course }>({
     course.id = await insertCourse(
       course,
       users.trainer.email,
-      InviteStatus.PENDING
+      InviteStatus.ACCEPTED
     )
     await insertCourseModules(course.id, moduleIds)
     await use(course)
@@ -44,17 +43,7 @@ const test = base.extend<{ course: Course }>({
 test.use({ storageState: stateFilePath('trainer') })
 
 test('cancel indirect course as trainer', async ({ page, course }) => {
-  test.fail(
-    true,
-    'https://behaviourhub.atlassian.net/browse/TTHP-575 causing course exception'
-  )
   const trainerCoursesPage = new MyCoursesPage(page)
-  await trainerCoursesPage.goto()
-  await trainerCoursesPage.searchCourse(`${course.id}`)
-  await trainerCoursesPage.acceptCourse(course.id)
-  await trainerCoursesPage.goToCourseBuilder()
-  await trainerCoursesPage.submitDefaultModules()
-  await trainerCoursesPage.confirmModules()
   await trainerCoursesPage.goto()
   await trainerCoursesPage.searchCourse(`${course.id}`)
   const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
@@ -62,8 +51,7 @@ test('cancel indirect course as trainer', async ({ page, course }) => {
   )
   await courseDetailsPage.clickEditCourseButton()
   await courseDetailsPage.clickCancelCourseButton()
-  await courseDetailsPage.clickCancelCourseDropdown()
-  await courseDetailsPage.checkCancelCourseCheckbox()
+  await courseDetailsPage.enterCancellationReason()
   await courseDetailsPage.clickCancelEntireCourseButton()
   await trainerCoursesPage.goto()
   await trainerCoursesPage.searchCourse(`${course.id}`)

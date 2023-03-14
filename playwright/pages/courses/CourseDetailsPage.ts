@@ -270,6 +270,10 @@ export class CourseDetailsPage extends BasePage {
     await this.page.getByText('Trainer availability').click()
   }
 
+  async enterCancellationReason(reason = 'Some reason for cancelling') {
+    await this.page.locator('input[name=cancellationReason]').type(reason)
+  }
+
   async checkCancelCourseCheckbox() {
     await this.page
       .locator('[data-testid="cancel-entire-course-checkbox"]')
