@@ -8,7 +8,7 @@ describe('component: CoursePrerequisitesAlert', () => {
   it('renders component as expected', async () => {
     render(<CoursePrerequisitesAlert />)
     expect(screen.getByText('Disabilities')).toBeVisible()
-    expect(screen.getByText('Dietary restrictions')).toBeVisible()
+    expect(screen.getByText('Dietary Requirements')).toBeVisible()
   })
 
   it('renders component as expected when showaction is true', async () => {
