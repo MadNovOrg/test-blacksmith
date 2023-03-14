@@ -26,13 +26,11 @@ const test = base.extend<{
     const course = FINISHED_COURSE()
     course.gradingConfirmed = true
     course.status = Course_Status_Enum.GradeMissing
-
     course.id = await insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-
     await use(course)
     await deleteCourse(course.id)
   },
@@ -42,7 +40,6 @@ const test = base.extend<{
       [users.user1WithOrg, users.user2WithOrg],
       new Date('2022-03-14T00:00:00Z')
     )
-
     await use(participants)
   },
   modules: async ({ course }, use) => {
@@ -50,9 +47,7 @@ const test = base.extend<{
       getModulesByLevel(course.level),
       course.level
     )
-
     const modules = await insertCourseModules(course.id, moduleIds, true)
-
     await use(modules)
   },
 })
