@@ -15,13 +15,54 @@ on:
     - cron: '30 21 * * 1-5'
 
 jobs:
+  install:
+    timeout-minutes: 60
+    name: Setup Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.14.2'
+          cache: 'npm'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache Playwright binaries
+        uses: actions/cache@v3
+        id: cache-playwright
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        if: steps.cache-playwright.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
   tests:
     name: E2E regression tests
+    needs: install
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      CI: 'true'
+      CI: true
       DEFAULT_TARGET: 'DEV'
     strategy:
+      fail-fast: false
       matrix:
         browsers: ['chromium', 'firefox']
         shardIndex: [1, 2, 3, 4]
@@ -42,11 +83,19 @@ jobs:
           node-version: '18.14.2'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm pkg delete scripts.prepare && npm ci
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
 
-      - name: Playwright setup
-        run: npx playwright install
+      - name: Cache Playwright
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: playwright-${{ hashFiles('package-lock.json') }}
 
       - name: Playwright tests
         id: playwright

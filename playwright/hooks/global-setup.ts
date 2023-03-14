@@ -42,13 +42,19 @@ async function globalSetup() {
       fs.mkdirSync(TEMP_DIR)
     }
     const browser = await chromium.launch()
-    await login(browser, 'admin', 'Admin')
-    await login(browser, 'ops', 'Ops')
-    await login(browser, 'trainer', 'Trainer')
-    await login(browser, 'trainerWithOrg', 'Trainer')
-    await login(browser, 'user1', 'User')
-    await login(browser, 'userOrgAdmin', 'User')
-    await login(browser, 'salesAdmin', 'Sales administrator')
+    const credentials = [
+      { name: 'admin', role: 'Admin' },
+      { name: 'ops', role: 'Ops' },
+      { name: 'trainer', role: 'Trainer' },
+      { name: 'trainerWithOrg', role: 'Trainer' },
+      { name: 'user1', role: 'User' },
+      { name: 'userOrgAdmin', role: 'User' },
+      { name: 'salesAdmin', role: 'Sales administrator' },
+    ]
+    for (const cred of credentials) {
+      const { name, role } = cred
+      await login(browser, name, role)
+    }
     await browser.close()
   }
 }
