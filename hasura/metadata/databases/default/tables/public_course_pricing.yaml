@@ -15,6 +15,15 @@ configuration:
     price_currency: priceCurrency
     price_amount: priceAmount
 select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - price_currency
+        - price_amount
+      filter:
+        _and:
+          - type:
+              _eq: OPEN
   - role: sales-admin
     permission:
       columns:
