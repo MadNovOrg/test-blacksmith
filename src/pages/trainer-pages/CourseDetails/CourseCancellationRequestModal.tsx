@@ -110,6 +110,7 @@ export const CourseCancellationRequestModal: React.FC<
         fullWidth
         required
         variant="filled"
+        data-testid="cancel-course-reason"
         error={!!errors.cancellationReason}
         helperText={
           !!errors.cancellationReason &&
@@ -136,6 +137,7 @@ export const CourseCancellationRequestModal: React.FC<
             'pages.edit-course.cancellation-modal.cannot-be-undone-confirmation'
           )}
           control={<Checkbox />}
+          data-testid="request-cancel-checkbox"
           checked={confirmed}
           onChange={(_, v) => setConfirmed(v)}
           sx={{ userSelect: 'none' }}
@@ -152,6 +154,7 @@ export const CourseCancellationRequestModal: React.FC<
           loading={loading}
           disabled={!confirmed}
           onClick={handleSubmit(onFormSubmit)}
+          data-testid="request-cancel-submit-button"
           type="button"
           variant="contained"
           color="primary"

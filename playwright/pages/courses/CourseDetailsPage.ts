@@ -35,6 +35,59 @@ class InviteAttendeesPopUp {
   }
 }
 
+class RequestCancellationPopup {
+  readonly page: Page
+  readonly reasonForCancellationInput: Locator
+  readonly confirmCheckbox: Locator
+  readonly confirmButton: Locator
+
+  constructor(page: Page) {
+    this.page = page
+    this.reasonForCancellationInput = this.page.locator(
+      '[data-testid="cancel-course-reason"] input'
+    )
+    this.confirmCheckbox = this.page.locator(
+      'data-testid=request-cancel-checkbox'
+    )
+    this.confirmButton = this.page.locator(
+      'data-testid=request-cancel-submit-button'
+    )
+  }
+
+  async addReasonForCancellation(text: string) {
+    await this.reasonForCancellationInput.type(text)
+  }
+
+  async checkConfirmCheckbox() {
+    await this.confirmCheckbox.check()
+  }
+
+  async clickConfirmButton() {
+    await this.confirmButton.click()
+  }
+}
+class CancelEntireCoursePopUp {
+  readonly page: Page
+  readonly feeRadioButton: Locator
+  readonly cancelEntireCourseButton: Locator
+
+  constructor(page: Page) {
+    this.page = page
+    this.feeRadioButton = this.page.locator('text=Apply cancellation terms')
+    this.cancelEntireCourseButton = this.page.locator(
+      'data-testid=cancel-entire-course-button'
+    )
+  }
+
+  async checkFeeRadioButton() {
+    await this.feeRadioButton.check()
+  }
+
+  async clickCancelEntireCourseButton() {
+    await this.cancelEntireCourseButton.click()
+  }
+}
+
 class RemoveAttendeePopUp {
   readonly page: Page
   readonly applyCancellationTermsRadioButton: Locator
@@ -136,6 +189,11 @@ export class CourseDetailsPage extends BasePage {
   readonly replacePopUp: ReplaceAttendeePopUp
   readonly saveButton: Locator
   readonly successMessage: Locator
+  readonly requestCancellationButton: Locator
+  readonly requestCancellationPopUp: RequestCancellationPopup
+  readonly cancellationRequestAlert: Locator
+  readonly approveCancellationButton: Locator
+  readonly cancelEntireCoursePopUp: CancelEntireCoursePopUp
 
   constructor(page: Page) {
     super(page)
@@ -151,6 +209,8 @@ export class CourseDetailsPage extends BasePage {
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
     this.invitePopUp = new InviteAttendeesPopUp(this.page)
     this.replacePopUp = new ReplaceAttendeePopUp(this.page)
+    this.requestCancellationPopUp = new RequestCancellationPopup(this.page)
+    this.cancelEntireCoursePopUp = new CancelEntireCoursePopUp(this.page)
     this.attendeesTable = new UiTable(
       this.page.locator('data-testid=attending-table')
     )
@@ -176,6 +236,15 @@ export class CourseDetailsPage extends BasePage {
 
     this.courseGradingNav = this.page.locator(
       'data-testid="course-grading-details-nav"'
+    )
+    this.requestCancellationButton = this.page.locator(
+      'data-testid="request-cancellation-button"'
+    )
+    this.cancellationRequestAlert = this.page.locator(
+      'data-testid="cancellation-alert"'
+    )
+    this.approveCancellationButton = this.page.locator(
+      'data-testid="approve-cancellation-button"'
     )
   }
 
@@ -343,5 +412,17 @@ export class CourseDetailsPage extends BasePage {
       `data-testid=attending-participant-row-${id} >> a:has-text("Grade")`
     )
     return new CourseGradingPage(this.page)
+  }
+  async clickRequestCancellation(): Promise<RequestCancellationPopup> {
+    await this.requestCancellationButton.click()
+    return new RequestCancellationPopup(this.page)
+  }
+  async cancellationRequestIsVisible() {
+    await this.cancellationRequestAlert.isVisible()
+  }
+
+  async approveCancellation(): Promise<CancelEntireCoursePopUp> {
+    await this.approveCancellationButton.click()
+    return new CancelEntireCoursePopUp(this.page)
   }
 }

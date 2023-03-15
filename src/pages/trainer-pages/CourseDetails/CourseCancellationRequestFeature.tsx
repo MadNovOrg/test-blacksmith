@@ -69,7 +69,11 @@ export const CourseCancellationRequestFeature: React.FC<
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="body2" color="grey.900">
+            <Typography
+              variant="body2"
+              color="grey.900"
+              data-testid="cancellation-alert"
+            >
               {t('pages.course-details.cancellation-request-alert')}
             </Typography>
             <Box display="flex" gap={2}>
@@ -85,6 +89,7 @@ export const CourseCancellationRequestFeature: React.FC<
                   variant="contained"
                   startIcon={<CheckCircleIcon />}
                   onClick={() => setShowCancellationModal(true)}
+                  data-testid="approve-cancellation-button"
                 >
                   {t('pages.course-details.approve-cancellation')}
                 </Button>
