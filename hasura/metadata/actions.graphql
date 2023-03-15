@@ -60,6 +60,12 @@ type Mutation {
   declineOrgInvite: DeclineOrgInviteOutput
 }
 
+type Mutation {
+  deleteUser(
+    profileId: uuid!
+  ): DeleteUserOutput!
+}
+
 type Query {
   eligibleTransferCourses(
     fromCourseId: Int!
@@ -372,6 +378,12 @@ enum CourseDeliveryType {
 
 enum MergeUserError {
   GENERAL_ERROR
+}
+
+enum DeleteUserError {
+  GENERAL_ERROR
+  CERT_EXIST
+  SELF_DELETE
 }
 
 input PlansCreateInput {
@@ -865,6 +877,11 @@ type OrganizationInfo {
 type MergeUserOutput {
   success: Boolean!
   error: MergeUserError
+}
+
+type DeleteUserOutput {
+  success: Boolean!
+  error: DeleteUserError
 }
 
 scalar Date

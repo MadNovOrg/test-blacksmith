@@ -16,13 +16,7 @@ export const QUERY = gql`
       promoCodes
       xeroInvoiceNumber
       organizationId
-      profile {
-        fullName
-        avatar
-        archived
-        email
-        phone
-      }
+      user
       course {
         id
         course_code

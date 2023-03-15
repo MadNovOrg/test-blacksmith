@@ -57,9 +57,6 @@ object_relationships:
   - name: organization
     using:
       foreign_key_constraint_on: organization_id
-  - name: profile
-    using:
-      foreign_key_constraint_on: profile_id
 insert_permissions:
   - role: trainer
     permission:
@@ -173,28 +170,29 @@ select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - order_due
-        - order_total
-        - price
-        - vat
-        - course_id
-        - quantity
-        - registrants
-        - promo_codes
         - billing_address
         - billing_email
         - billing_family_name
         - billing_given_name
         - billing_phone
         - client_purchase_order
-        - currency
-        - payment_method
-        - stripePaymentId
-        - xero_invoice_number
+        - course_id
         - created_at
+        - currency
         - id
+        - order_due
+        - order_total
         - organization_id
+        - payment_method
+        - price
         - profile_id
+        - promo_codes
+        - quantity
+        - registrants
+        - stripePaymentId
+        - user
+        - vat
+        - xero_invoice_number
       filter: {}
       allow_aggregations: true
   - role: tt-admin
@@ -219,6 +217,7 @@ select_permissions:
         - quantity
         - registrants
         - stripePaymentId
+        - user
         - vat
         - xero_invoice_number
       filter: {}
@@ -245,6 +244,7 @@ select_permissions:
         - quantity
         - registrants
         - stripePaymentId
+        - user
         - vat
         - xero_invoice_number
       filter: {}
@@ -271,6 +271,7 @@ select_permissions:
         - quantity
         - registrants
         - stripePaymentId
+        - user
         - vat
         - xero_invoice_number
       filter:
@@ -298,6 +299,7 @@ select_permissions:
         - quantity
         - registrants
         - stripePaymentId
+        - user
         - vat
         - xero_invoice_number
       filter:

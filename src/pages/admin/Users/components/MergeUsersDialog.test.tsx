@@ -18,7 +18,7 @@ jest.mock('@app/queries/user/merge-users', () => ({
 const useFetcherMock = jest.mocked(useFetcher)
 const useProfileMock = jest.mocked(useProfile)
 
-describe('ManageUsersDialog', () => {
+describe('MergeUsersDialog', () => {
   const profileId1 = chance.guid()
   const profileId2 = chance.guid()
   const fetcherMock = jest.fn()

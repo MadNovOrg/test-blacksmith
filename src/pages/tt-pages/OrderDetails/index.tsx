@@ -425,14 +425,14 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         {t('ordered-by')}
                       </Typography>
                       <Typography color="grey.700">
-                        {order.profile.fullName}
+                        {order.user.fullName}
                       </Typography>
                       <Typography color="grey.700">
-                        {order.profile.email}
+                        {order.user.email}
                       </Typography>
-                      {order.profile.phone ? (
+                      {order.user.phone ? (
                         <Typography color="grey.700">
-                          {order.profile.phone}
+                          {order.user.phone}
                         </Typography>
                       ) : null}
                     </Stack>

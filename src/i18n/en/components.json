@@ -276,7 +276,13 @@
   },
   "profile-archive-dialog": {
     "title": "Archive profile",
-    "confirmation-message": "Are you sure you want to archive user {{firstName}}, {{lastName}} with the email {{email}}? Archiving a user will remove them from view from within the Hub and make them unable to log in to their account. The archived user will not be visible to organisation admins and all non-admin Team Teach employees. This action can not be undone.",
+    "confirmation-message": "Are you sure you want to archive user {{firstName}} {{lastName}} with the email {{email}}? Archiving a user will remove them from view from within the Hub and make them unable to log in to their account. The archived user will not be visible to organisation admins and all non-admin Team Teach employees. This action can not be undone.",
     "archive": "Archive"
+  },
+  "profile-delete-dialog": {
+    "title": "Delete profile",
+    "confirmation-message": "Are you sure you want to delete user {{firstName}} {{lastName}} with the email {{email}}? Deleting a user will remove them completely from the Hub and make them unable to log in to their account. This action can not be undone.",
+    "delete": "Delete",
+    "delete-error": "An error occurred while deleting the user."
   }
 }

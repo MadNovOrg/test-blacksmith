@@ -43,7 +43,7 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     },
-    profile: {
+    user: {
       fullName: chance.name({ full: true }),
       email: chance.email(),
       phone: chance.phone(),

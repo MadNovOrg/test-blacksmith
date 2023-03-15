@@ -72,6 +72,13 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: deleteUser
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/user/delete'
+    permissions:
+      - role: tt-admin
+    comment: Delete users
   - name: eligibleTransferCourses
     definition:
       kind: ""
@@ -561,6 +568,17 @@ custom_types:
         - value: GENERAL_ERROR
           is_deprecated: null
           description: null
+    - name: DeleteUserError
+      values:
+        - value: GENERAL_ERROR
+          is_deprecated: null
+          description: null
+        - value: CERT_EXIST
+          is_deprecated: null
+          description: null
+        - value: SELF_DELETE
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -638,5 +656,6 @@ custom_types:
     - name: OrderInfo
     - name: OrganizationInfo
     - name: MergeUserOutput
+    - name: DeleteUserOutput
   scalars:
     - name: Date

@@ -1,5 +1,6 @@
 import ArchiveIcon from '@mui/icons-material/Archive'
 import CloseIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
   Alert,
@@ -33,6 +34,7 @@ import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
 
 import { CourseAsTrainer } from './components/CourseAsTrainer'
+import { ProfileDeleteDialog } from './components/ProfileDeleteDialog'
 import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
@@ -48,6 +50,7 @@ export const ViewProfilePage: React.FC<
   const [searchParams] = useSearchParams()
 
   const [showArchiveDialog, setShowArchiveDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const orgId = searchParams.get('orgId')
 
@@ -77,6 +80,11 @@ export const ViewProfilePage: React.FC<
       ))
 
   const archiveAllowed = !profile.archived && acl.isTTAdmin()
+
+  const deleteAllowed =
+    currentUserProfile?.id !== profile.id && // can't delete yourself
+    certifications?.length === 0 && // can't delete if you have certifications
+    (acl.isTTAdmin() || acl.isTTOps()) // only TT Admins and TT Ops can delete
 
   const certificateExpired = (expiryDate: string) =>
     isPast(new Date(expiryDate))
@@ -142,6 +150,18 @@ export const ViewProfilePage: React.FC<
                 sx={{ mt: 2 }}
               >
                 {t('archive-profile')}
+              </Button>
+            ) : null}
+
+            {deleteAllowed ? (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setShowDeleteDialog(true)}
+                startIcon={<DeleteIcon />}
+                sx={{ mt: 2 }}
+              >
+                {t('delete-profile')}
               </Button>
             ) : null}
           </Grid>
@@ -508,6 +528,19 @@ export const ViewProfilePage: React.FC<
           onClose={async () => {
             setShowArchiveDialog(false)
             await mutate()
+          }}
+          profileId={id}
+        />
+      ) : null}
+
+      {showDeleteDialog && id ? (
+        <ProfileDeleteDialog
+          onClose={() => {
+            setShowDeleteDialog(false)
+          }}
+          onSuccess={() => {
+            navigate(-1)
+            setShowDeleteDialog(false)
           }}
           profileId={id}
         />

@@ -7,7 +7,7 @@ INSERT INTO public.course_schedule (start, "end", course_id, venue_id) VALUES
 INSERT INTO public.course_trainer (profile_id, course_id, type, status) VALUES
 ('13a223a8-2184-42f1-ba37-b49e115e59a2', 10030, 'LEADER', 'ACCEPTED');
 
-INSERT INTO public.order (course_id, profile_id, quantity, payment_method, billing_address, billing_given_name, billing_family_name, billing_email, billing_phone, registrants, organization_id) VALUES
-(10030, '13a223a8-2184-42f1-ba37-b49e115e59a2', 0, 'INVOICE', 'Minerva Centre Thornthwaite close', 'Doe', 'John', 'seed.bl.booking@teamteach.testinator.com', '+441111111', '[]'::jsonb, 'c43b2ba0-8630-43e5-9558-f59ee9a224f0');
+INSERT INTO public.order (course_id, profile_id, quantity, payment_method, billing_address, billing_given_name, billing_family_name, billing_email, billing_phone, registrants, organization_id, "user") VALUES
+(10030, '13a223a8-2184-42f1-ba37-b49e115e59a2', 0, 'INVOICE', 'Minerva Centre Thornthwaite close', 'Doe', 'John', 'seed.bl.booking@teamteach.testinator.com', '+441111111', '[]'::jsonb, 'c43b2ba0-8630-43e5-9558-f59ee9a224f0', '{"firstName": "John", "lastName": "Trainer", "email": "trainer@teamteach.testinator.com"}'::jsonb);
 
 SELECT setval('course_id_seq', 10030);
