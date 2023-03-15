@@ -325,3 +325,18 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/user/archived'
+  - name: user-added-modified
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - dob
+          - _family_name
+          - _given_name
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/user-added-modified'
