@@ -6,7 +6,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../api/hasura-api'
 import { FINISHED_COURSE } from '../../data/courses'
@@ -40,7 +40,7 @@ const test = base.extend<{
       getModulesByLevel(course.level),
       course.level
     )
-    const modules = await insertCourseModules(course.id, moduleIds)
+    const modules = await insertCourseModulesPromise(course.id, moduleIds)
     await use(modules)
   },
 })

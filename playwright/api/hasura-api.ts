@@ -329,6 +329,24 @@ export const insertCourseModules = async (
   }
 }
 
+export const insertCourseModulesPromise = async (
+  courseId: number,
+  moduleIds: string[],
+  covered?: boolean
+): Promise<CourseModule[]> => {
+  return Promise.all([
+    (request: {
+      url: () => string | string[]
+      method: () => string
+      postData: () => string[]
+    }) =>
+      request.url().includes('v1/graphql') &&
+      request.method() === 'POST' &&
+      (request.postData() ?? '').includes('insert_course_modules'),
+    insertCourseModules(courseId, moduleIds, covered),
+  ]).then(results => results[1])
+}
+
 export const insertCourseParticipants = async (
   courseId: number,
   users: User[],

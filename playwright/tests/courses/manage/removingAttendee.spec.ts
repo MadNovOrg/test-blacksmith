@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -8,7 +7,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -35,7 +34,7 @@ const testData = [
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModules(course.id, moduleIds)
+      await insertCourseModulesPromise(course.id, moduleIds)
       await insertCourseParticipants(
         course.id,
         [users.user1WithOrg, users.user2WithOrg, users.user1, users.user2],
@@ -61,7 +60,7 @@ const testData = [
   //       users.trainer.email,
   //       InviteStatus.ACCEPTED
   //     )
-  //     await insertCourseModules(course.id, moduleIds)
+  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },

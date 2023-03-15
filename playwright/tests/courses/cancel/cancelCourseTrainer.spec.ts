@@ -6,7 +6,7 @@ import { InviteStatus, CourseType } from '@app/types'
 import {
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   deleteCourse,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -34,7 +34,7 @@ const test = base.extend<{ course: Course }>({
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseModules(course.id, moduleIds)
+    await insertCourseModulesPromise(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)
   },

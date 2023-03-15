@@ -8,7 +8,7 @@ import {
   getTrainerCourses,
   insertCourse,
   deleteCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   getModuleIds,
   insertCourseParticipants,
   makeSureTrainerHasCourses,
@@ -47,7 +47,7 @@ test('insert test @data', async () => {
       getModulesByLevel(course.level),
       course.level
     )
-    await insertCourseModules(course.id, moduleIds)
+    await insertCourseModulesPromise(course.id, moduleIds)
     await insertCourseParticipants(
       course.id,
       [users.user1WithOrg, users.user2WithOrg],

@@ -8,7 +8,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -37,7 +37,7 @@ const test = base.extend<{ course: Course }>({
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseModules(course.id, moduleIds)
+    await insertCourseModulesPromise(course.id, moduleIds)
     await insertCourseParticipants(course.id, [users.user1WithOrg], new Date())
     await use(course)
     await deleteCourse(course.id)

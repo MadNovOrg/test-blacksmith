@@ -7,7 +7,7 @@ import { InviteStatus, CourseType } from '@app/types'
 import {
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   deleteCourse,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -36,7 +36,7 @@ const testData = [
         users.trainer.email,
         InviteStatus.PENDING
       )
-      await insertCourseModules(course.id, moduleIds)
+      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },
@@ -57,7 +57,7 @@ const testData = [
   //       users.trainer.email,
   //       InviteStatus.PENDING
   //     )
-  //     await insertCourseModules(course.id, moduleIds)
+  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },
@@ -77,7 +77,7 @@ const testData = [
   //       users.trainer.email,
   //       InviteStatus.PENDING
   //     )
-  //     await insertCourseModules(course.id, moduleIds)
+  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },

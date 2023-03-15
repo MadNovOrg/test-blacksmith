@@ -7,7 +7,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
@@ -36,7 +36,7 @@ const createCourses = async (): Promise<Course[]> => {
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseModules(course.id, moduleIds)
+    await insertCourseModulesPromise(course.id, moduleIds)
     courses.push(course)
   }
   return courses

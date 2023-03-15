@@ -8,7 +8,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { getModulesByLevel } from '../../../data/modules'
@@ -35,7 +35,7 @@ const testData = [
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModules(course.id, moduleIds)
+      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },
@@ -56,7 +56,7 @@ const testData = [
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModules(course.id, moduleIds)
+      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },

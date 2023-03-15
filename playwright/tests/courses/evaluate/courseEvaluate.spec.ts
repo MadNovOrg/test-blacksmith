@@ -6,7 +6,7 @@ import {
   deleteCourse,
   getModuleIds,
   insertCourse,
-  insertCourseModules,
+  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { FINISHED_COURSE } from '../../../data/courses'
@@ -30,7 +30,7 @@ const test = base.extend<{ course: Course }>({
       InviteStatus.ACCEPTED
     )
     await insertCourseParticipants(course.id, [users.user1], new Date())
-    await insertCourseModules(course.id, moduleIds)
+    await insertCourseModulesPromise(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)
   },
