@@ -18,8 +18,11 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - price_currency
+        - blended
+        - level
         - price_amount
+        - price_currency
+        - reaccreditation
       filter:
         _and:
           - type:
