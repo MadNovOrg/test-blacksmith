@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { waitForGraphQLRequest } from '../../commands'
 import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
@@ -41,12 +42,12 @@ export class MyCoursesPage extends BasePage {
 
   async goto() {
     await super.goto(`${BASE_URL}/courses`)
-    await this.coursesTable.checkIsVisible()
+    await this.waitForPageLoad()
   }
 
   async gotoManageCourses() {
     await super.goto(`${BASE_URL}/manage-courses`)
-    await this.coursesTable.checkIsVisible()
+    await this.waitForPageLoad()
   }
 
   async tryToOpen() {
@@ -124,7 +125,10 @@ export class MyCoursesPage extends BasePage {
   }
 
   async confirmModules() {
-    await this.page.getByText('Confirm').click()
+    await Promise.all([
+      waitForGraphQLRequest(this.page, 'FinalizeCourseBuilder'),
+      this.page.getByText('Confirm').click(),
+    ])
     return new CourseDetailsPage(this.page)
   }
 

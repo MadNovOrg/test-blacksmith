@@ -905,18 +905,28 @@ export const MODULES_SETUP: ModuleSetup[] = [
   },
 ]
 
-const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map([
-  [
-    CourseLevel.Level_1,
-    [
-      'Theory',
-      'Personal Space & Body Language',
-      'Elevated Risks',
-      'Physical Warm Up',
-      'Personal Safety',
-    ],
-  ],
-])
+const MODULES_BY_LEVEL: Map<CourseLevel, string[]> = new Map()
+  .set(CourseLevel.Level_1, [
+    'Theory',
+    'Personal Space & Body Language',
+    'Elevated Risks',
+    'Physical Warm Up',
+    'Personal Safety',
+  ])
+  .set(CourseLevel.Level_2, [
+    'Theory',
+    'Personal Space & Body Language',
+    'Elevated Risks',
+    'Physical Warm Up',
+    'Personal Safety',
+  ])
+  .set(CourseLevel.Advanced, [
+    'Theory',
+    'Personal Space & Body Language',
+    'Elevated Risks',
+    'Physical Warm Up',
+    'Personal Safety',
+  ])
 
 export const getModulesByLevel: (level: CourseLevel) => string[] = (
   level: CourseLevel

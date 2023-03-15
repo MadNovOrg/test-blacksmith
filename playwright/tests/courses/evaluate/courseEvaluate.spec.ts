@@ -4,13 +4,10 @@ import { CourseType, InviteStatus } from '@app/types'
 
 import {
   deleteCourse,
-  getModuleIds,
   insertCourse,
-  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { FINISHED_COURSE } from '../../../data/courses'
-import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
@@ -20,17 +17,12 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED
-    const moduleIds = await getModuleIds(
-      getModulesByLevel(course.level),
-      course.level
-    )
     course.id = await insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
     await insertCourseParticipants(course.id, [users.user1], new Date())
-    await insertCourseModulesPromise(course.id, moduleIds)
     await use(course)
     await deleteCourse(course.id)
   },

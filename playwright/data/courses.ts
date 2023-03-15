@@ -1,11 +1,9 @@
-import { subDays } from 'date-fns'
+import { addMonths, subDays } from 'date-fns'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { buildVenue } from '@test/mock-data-utils'
-
-import { inXMonths } from '../util'
 
 import { Course } from './types'
 
@@ -21,8 +19,8 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         virtualLink: 'https://zoom.us/dummy.link',
       },
     ],
@@ -41,8 +39,8 @@ export const COURSES_TO_VIEW: Course[] = [
     reaccreditation: false,
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -64,8 +62,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -87,8 +85,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -110,8 +108,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -134,8 +132,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -157,8 +155,8 @@ export const COURSES_TO_VIEW: Course[] = [
     organization: { name: 'London First School' },
     schedule: [
       {
-        start: inXMonths(),
-        end: inXMonths(),
+        start: addMonths(new Date(), 2),
+        end: addMonths(new Date(), 2),
         venue: buildVenue({
           overrides: { name: 'Queen Elizabeth II Centre' },
         }),
@@ -182,8 +180,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   go1Integration: false,
   schedule: [
     {
-      start: inXMonths(),
-      end: inXMonths(),
+      start: addMonths(new Date(), 2),
+      end: addMonths(new Date(), 2),
       venue: buildVenue({
         overrides: { name: 'Queen Elizabeth II Centre' },
       }),

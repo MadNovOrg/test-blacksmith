@@ -1,16 +1,13 @@
 import { test as base } from '@playwright/test'
 
-import { CourseModule, CourseParticipant } from '@app/types'
+import { CourseParticipant } from '@app/types'
 
 import {
   deleteCourse,
-  getModuleIds,
   insertCourse,
-  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../api/hasura-api'
 import { FINISHED_COURSE } from '../../data/courses'
-import { getModulesByLevel } from '../../data/modules'
 import { Course } from '../../data/types'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
@@ -19,7 +16,6 @@ import { CourseGradingDetailsPage } from '../../pages/courses/CourseGradingDetai
 const test = base.extend<{
   course: Course
   participants: CourseParticipant[]
-  modules: CourseModule[]
 }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
@@ -35,14 +31,6 @@ const test = base.extend<{
     )
     await use(participants)
   },
-  modules: async ({ course }, use) => {
-    const moduleIds = await getModuleIds(
-      getModulesByLevel(course.level),
-      course.level
-    )
-    const modules = await insertCourseModulesPromise(course.id, moduleIds)
-    await use(modules)
-  },
 })
 
 test.use({ storageState: stateFilePath('trainer') })
@@ -51,7 +39,6 @@ test('marks participants as attended and enables grading', async ({
   page,
   course,
   participants,
-  modules,
 }) => {
   const gradingDetailsPage = new CourseGradingDetailsPage(page)
   await gradingDetailsPage.goto(`${course.id}`)
@@ -60,6 +47,5 @@ test('marks participants as attended and enables grading', async ({
   )
   await gradingDetailsPage.checkSelected(participants.length)
   await gradingDetailsPage.clickConfirmModules()
-  await gradingDetailsPage.clickModules(modules[0].module.moduleGroup.name)
   await gradingDetailsPage.clickContinueToAttendees()
 })

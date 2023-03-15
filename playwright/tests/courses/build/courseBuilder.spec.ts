@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { InviteStatus } from '@app/types'
@@ -16,13 +15,13 @@ for (const data of MODULES_SETUP) {
       data.course.id = await insertCourse(
         data.course,
         users.trainer.email,
-        InviteStatus.ACCEPTED
+        InviteStatus.ACCEPTED,
+        false
       )
       await use(data.course)
       await deleteCourse(data.course.id)
     },
   })
-
   test.use({ storageState: stateFilePath('trainer') })
 
   test(`build course: ${data.name}`, async ({ page, course }) => {

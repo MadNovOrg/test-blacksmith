@@ -4,14 +4,8 @@ import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
 import { getLatestEmail } from '../../../api/email-api'
-import {
-  deleteCourse,
-  getModuleIds,
-  insertCourse,
-  insertCourseModulesPromise,
-} from '../../../api/hasura-api'
+import { deleteCourse, insertCourse } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
-import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
@@ -26,16 +20,11 @@ const testData = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.INDIRECT
       course.status = Course_Status_Enum.Scheduled
-      const moduleIds = await getModuleIds(
-        getModulesByLevel(course.level),
-        course.level
-      )
       course.id = await insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },
@@ -47,16 +36,11 @@ const testData = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
       course.status = Course_Status_Enum.Scheduled
-      const moduleIds = await getModuleIds(
-        getModulesByLevel(course.level),
-        course.level
-      )
       course.id = await insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },

@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { InviteStatus } from '@app/types'
@@ -17,7 +16,8 @@ const test = base.extend<{ course: Course }>({
     course.id = await insertCourse(
       course,
       users.trainer.email,
-      InviteStatus.ACCEPTED
+      InviteStatus.ACCEPTED,
+      false
     )
     await use(course)
     await deleteCourse(course.id)

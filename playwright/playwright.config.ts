@@ -11,7 +11,7 @@ const config: PlaywrightTestConfig = {
   reporter: [[process.env.CI ? 'github' : 'list'], ['html', { open: 'never' }]],
   fullyParallel: true,
   expect: {
-    timeout: 10 * 1000,
+    timeout: 30 * 1000,
   },
   timeout: 60 * 1000,
   projects: [

@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
@@ -8,13 +7,10 @@ import {
   getTrainerCourses,
   insertCourse,
   deleteCourse,
-  insertCourseModulesPromise,
-  getModuleIds,
   insertCourseParticipants,
   makeSureTrainerHasCourses,
 } from '../api/hasura-api'
 import { COURSES_TO_VIEW, UNIQUE_COURSE } from '../data/courses'
-import { getModulesByLevel } from '../data/modules'
 import { users } from '../data/users'
 
 test('insert test @data', async () => {
@@ -42,12 +38,6 @@ test('insert test @data', async () => {
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2022-03-15T16:00:00Z')
     course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)
-
-    const moduleIds = await getModuleIds(
-      getModulesByLevel(course.level),
-      course.level
-    )
-    await insertCourseModulesPromise(course.id, moduleIds)
     await insertCourseParticipants(
       course.id,
       [users.user1WithOrg, users.user2WithOrg],

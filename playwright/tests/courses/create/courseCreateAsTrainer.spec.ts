@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base, expect } from '@playwright/test'
 
 import { CourseType } from '@app/types'

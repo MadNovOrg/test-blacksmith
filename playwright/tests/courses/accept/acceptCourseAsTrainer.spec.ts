@@ -1,42 +1,26 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { InviteStatus, CourseType } from '@app/types'
+import { InviteStatus } from '@app/types'
 
-import {
-  getModuleIds,
-  insertCourse,
-  insertCourseModulesPromise,
-  deleteCourse,
-} from '../../../api/hasura-api'
+import { insertCourse, deleteCourse } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
-import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
-import { inXMonths } from '../../../util'
 
 const testData = [
   {
     name: 'accept open course as trainer @smoke',
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.OPEN
       course.status = Course_Status_Enum.TrainerPending
-      course.schedule[0].start = inXMonths(3)
-      course.schedule[0].end = inXMonths(3)
-      const moduleIds = await getModuleIds(
-        getModulesByLevel(course.level),
-        course.level
-      )
       course.id = await insertCourse(
         course,
         users.trainer.email,
         InviteStatus.PENDING
       )
-      await insertCourseModulesPromise(course.id, moduleIds)
       return course
     },
   },
@@ -46,18 +30,11 @@ const testData = [
   //   course: async () => {
   //     const course = UNIQUE_COURSE()
   //     course.type = CourseType.INDIRECT
-  //     course.schedule[0].start = inXMonths(3)
-  //     course.schedule[0].end = inXMonths(3)
-  //     const moduleIds = await getModuleIds(
-  //       getModulesByLevel(course.level),
-  //       course.level
-  //     )
   //     course.id = await insertCourse(
   //       course,
   //       users.trainer.email,
   //       InviteStatus.PENDING
   //     )
-  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },
@@ -66,18 +43,11 @@ const testData = [
   //   course: async () => {
   //     const course = UNIQUE_COURSE()
   //     course.type = CourseType.CLOSED
-  //     course.schedule[0].start = inXMonths(3)
-  //     course.schedule[0].end = inXMonths(3)
-  //     const moduleIds = await getModuleIds(
-  //       getModulesByLevel(course.level),
-  //       course.level
-  //     )
   //     course.id = await insertCourse(
   //       course,
   //       users.trainer.email,
   //       InviteStatus.PENDING
   //     )
-  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },

@@ -100,27 +100,21 @@ export class CourseBuilderPage extends BasePage {
 
   async clickSubmitButton(): Promise<CourseDetailsPage> {
     await this.submitButton.click()
-
     const confirmModalVisible = await this.confirmDialog.isVisible()
-
     if (confirmModalVisible) {
       await this.confirmDialog.locator('button:has-text("Proceed")').click()
     }
-
     return new CourseDetailsPage(this.page)
   }
 
   async clickConfirmWarningSubmitButton(): Promise<CourseDetailsPage> {
     await this.submitButton.click()
-
     const confirmModalVisible = await this.confirmWarningDialog.isVisible()
-
     if (confirmModalVisible) {
       await this.confirmWarningDialog
         .locator('button:has-text("Confirm")')
         .click()
     }
-
     return new CourseDetailsPage(this.page)
   }
 

@@ -54,6 +54,7 @@ import {
 } from '@app/types'
 
 import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
+import { getModulesByLevel } from '../data/modules'
 import { Course, User } from '../data/types'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
@@ -160,10 +161,35 @@ export const setCourseDates = async (
   }
 }
 
+export const getModuleIds = async (
+  moduleGroups: string[],
+  level: CourseLevel
+): Promise<string[]> => {
+  const query = gql`
+    query MyQuery {
+      module_group(
+        where: {
+          name: { _in: ${JSON.stringify(moduleGroups)} }
+          _and: { level: { _eq: ${level} } }
+        }
+      ) {
+        modules {
+          id
+        }
+      }
+    }
+  `
+  const response = await getClient().request(query)
+  return response.module_group.flatMap((m: { modules: { id: string }[] }) =>
+    m.modules.flatMap(i => i.id)
+  )
+}
+
 export const insertCourse = async (
   course: Course,
   email: string,
-  trainerStatus = InviteStatus.PENDING
+  trainerStatus = InviteStatus.PENDING,
+  modules = true
 ): Promise<number> => {
   const organization = course.organization
     ? `, organization_id: "${await getOrganizationId(
@@ -184,7 +210,9 @@ export const insertCourse = async (
         course.salesRepresentative.email
       )}"`
     : ''
-
+  const moduleIds = (
+    await getModuleIds(getModulesByLevel(course.level), course.level)
+  ).map((moduleId: string) => ({ moduleId: moduleId }))
   const query = gql`
     mutation MyMutation {
       insert_course(objects: {
@@ -215,6 +243,13 @@ export const insertCourse = async (
         ${organization}
         ${contactProfile}
         ${salesRepresentative}
+        modules: {
+          data: ${
+            modules
+              ? JSON.stringify(moduleIds).replace(/"([^(")"]+)":/g, '$1:')
+              : `[]`
+          }
+        }
       }) {
         returning {
           id
@@ -229,18 +264,6 @@ export const insertCourse = async (
     return id
   }
   throw Error('Could not insert the course')
-}
-
-export const makeSureTrainerHasCourses = async (
-  courses: Course[],
-  email: string
-) => {
-  const existingCourses = await getTrainerCourses(email)
-  for (const course of courses) {
-    if (!existingCourses.map(c => c.description).includes(course.description)) {
-      course.id = await insertCourse(course, email)
-    }
-  }
 }
 
 export const deleteCourse = async (id?: number) => {
@@ -271,28 +294,16 @@ export const deleteCourse = async (id?: number) => {
   }
 }
 
-export const getModuleIds = async (
-  moduleGroups: string[],
-  level: CourseLevel
-): Promise<string[]> => {
-  const query = gql`
-    query MyQuery {
-      module_group(
-        where: {
-          name: { _in: ${JSON.stringify(moduleGroups)} }
-          _and: { level: { _eq: ${level} } }
-        }
-      ) {
-        modules {
-          id
-        }
-      }
+export const makeSureTrainerHasCourses = async (
+  courses: Course[],
+  email: string
+) => {
+  const existingCourses = await getTrainerCourses(email)
+  for (const course of courses) {
+    if (!existingCourses.map(c => c.description).includes(course.description)) {
+      course.id = await insertCourse(course, email)
     }
-  `
-  const response = await getClient().request(query)
-  return response.module_group.flatMap((m: { modules: { id: string }[] }) =>
-    m.modules.flatMap(i => i.id)
-  )
+  }
 }
 
 export const insertCourseModules = async (
@@ -327,24 +338,6 @@ export const insertCourseModules = async (
   } catch (e) {
     throw new Error(`Failed to insert course modules: ${e}`)
   }
-}
-
-export const insertCourseModulesPromise = async (
-  courseId: number,
-  moduleIds: string[],
-  covered?: boolean
-): Promise<CourseModule[]> => {
-  return Promise.all([
-    (request: {
-      url: () => string | string[]
-      method: () => string
-      postData: () => string[]
-    }) =>
-      request.url().includes('v1/graphql') &&
-      request.method() === 'POST' &&
-      (request.postData() ?? '').includes('insert_course_modules'),
-    insertCourseModules(courseId, moduleIds, covered),
-  ]).then(results => results[1])
 }
 
 export const insertCourseParticipants = async (

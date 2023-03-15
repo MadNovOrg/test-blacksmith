@@ -1,17 +1,14 @@
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { CourseType, InviteStatus } from '@app/types'
+import { InviteStatus } from '@app/types'
 
 import {
   deleteCourse,
-  getModuleIds,
   insertCourse,
-  insertCourseModulesPromise,
   insertCourseParticipants,
 } from '../../../api/hasura-api'
 import { UNIQUE_COURSE } from '../../../data/courses'
-import { getModulesByLevel } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
@@ -23,18 +20,12 @@ const testData = [
     userToRemove: users.user2,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.OPEN
       course.status = Course_Status_Enum.Scheduled
-      const moduleIds = await getModuleIds(
-        getModulesByLevel(course.level),
-        course.level
-      )
       course.id = await insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseModulesPromise(course.id, moduleIds)
       await insertCourseParticipants(
         course.id,
         [users.user1WithOrg, users.user2WithOrg, users.user1, users.user2],
@@ -51,16 +42,11 @@ const testData = [
   //     const course = UNIQUE_COURSE()
   //     course.type = CourseType.OPEN
   //     course.status = Course_Status_Enum.Scheduled
-  //     const moduleIds = await getModuleIds(
-  //       getModulesByLevel(course.level),
-  //       course.level
-  //     )
   //     course.id = await insertCourse(
   //       course,
   //       users.trainer.email,
   //       InviteStatus.ACCEPTED
   //     )
-  //     await insertCourseModulesPromise(course.id, moduleIds)
   //     return course
   //   },
   // },
