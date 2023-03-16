@@ -61,6 +61,8 @@ export class CourseGradingPage extends BasePage {
 
   async clickConfirm() {
     await this.page.click('button:has-text("Confirm")')
+    await super.waitForPageLoad()
+    await this.page.reload()
   }
 
   async expectParticipantsToHaveGrade(

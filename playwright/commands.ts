@@ -1,16 +1,38 @@
-import { expect, Page } from '@playwright/test'
+import { Page } from '@playwright/test'
 
-export async function waitForPageLoad(page: Page) {
-  await page.waitForLoadState('domcontentloaded')
-  await expect(page.locator('role=progressbar')).toHaveCount(0)
-  await expect(page.locator('.MuiSkeleton-pulse')).toHaveCount(0)
+export function waitForGraphQLRequest(
+  page: Page,
+  valueToFind: string
+): Promise<boolean> {
+  return page
+    .waitForRequest(request => {
+      if (
+        request.url().includes('v1/graphql') &&
+        request.postData() &&
+        request.postData()?.includes(valueToFind)
+      ) {
+        return true
+      }
+      return false
+    })
+    .then(() => true)
+    .catch(() => false)
 }
 
-export async function waitForGraphQLRequest(page: Page, data: string) {
-  return await page.waitForRequest(
-    req =>
-      req.url().includes('v1/graphql') &&
-      req.method() === 'POST' &&
-      (req.postData() ?? '').includes(data)
-  )
+export async function waitForGraphQLResponse(
+  page: Page,
+  valueToFind: string
+): Promise<boolean> {
+  const response = await page.waitForResponse(response => {
+    if (response.url().includes('v1/graphql')) {
+      const contentType = response.headers()['content-type']
+      return contentType.includes('application/json')
+    }
+    return false
+  })
+  const jsonResponse = await response.json()
+  if (!JSON.stringify(jsonResponse.data).includes(valueToFind)) {
+    return false
+  }
+  return true
 }

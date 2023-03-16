@@ -42,12 +42,10 @@ export class MyCoursesPage extends BasePage {
 
   async goto() {
     await super.goto(`${BASE_URL}/courses`)
-    await this.waitForPageLoad()
   }
 
   async gotoManageCourses() {
     await super.goto(`${BASE_URL}/manage-courses`)
-    await this.waitForPageLoad()
   }
 
   async tryToOpen() {
