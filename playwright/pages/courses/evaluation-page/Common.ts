@@ -7,11 +7,6 @@ export type Questions = {
 }
 
 export const fillEvaluationForm = async (page: Page, questions: Questions) => {
-  await Promise.all([
-    questions.rating.first().isVisible(),
-    questions.boolean.first().isVisible(),
-    questions.text.first().isVisible(),
-  ])
   const [ratingQuestionsCount, booleanQuestionsCount, textQuestionsCount] =
     await Promise.all([
       questions.rating.count(),

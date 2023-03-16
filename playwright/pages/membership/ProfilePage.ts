@@ -38,6 +38,9 @@ export class ProfilePage extends BasePage {
     await this.page.click(
       `data-testid=go1-license-${licenseId} >> button:has-text("Remove")`
     )
+    await expect(
+      this.page.locator(`data-testid=go1-license-${licenseId}`)
+    ).toHaveCount(0)
   }
 
   async clickSaveChanges() {

@@ -38,45 +38,44 @@ export class CourseEvaluationPage {
     }
   }
 
-  goto() {
-    return this.page.goto()
+  async goto() {
+    await this.page.goto()
+    await this.page.waitForPageLoad()
   }
 
-  randomlyEvaluate(signature: string) {
-    return this.page.randomlyEvaluate(this.questions, signature)
+  async randomlyEvaluate(signature: string) {
+    await this.page.randomlyEvaluate(this.questions, signature)
   }
 
-  submitEvaluation() {
-    return this.page.submitEvaluation()
+  async submitEvaluation() {
+    await this.page.submitEvaluation()
   }
 
-  checkSubmission(text?: string) {
-    return this.page.checkSubmission(text)
+  async checkSubmission(text?: string) {
+    await this.page.checkSubmission(text)
   }
 
-  checkSubmissionIsNotAvailable() {
+  async checkSubmissionIsNotAvailable() {
     if (this.userType === 'trainer') {
-      return (
-        this.page as TrainerEvaluationPage
-      ).checkSubmissionIsNotAvailable()
+      await (this.page as TrainerEvaluationPage).checkSubmissionIsNotAvailable()
     }
   }
 
-  checkSubmissionIsAvailable() {
+  async checkSubmissionIsAvailable() {
     if (this.userType === 'trainer') {
-      return (this.page as TrainerEvaluationPage).checkSubmissionIsAvailable()
+      await (this.page as TrainerEvaluationPage).checkSubmissionIsAvailable()
     }
   }
 
-  checkPDFExportIsNotAvailable() {
+  async checkPDFExportIsNotAvailable() {
     if (this.userType === 'trainer') {
-      return (this.page as TrainerEvaluationPage).checkPDFExportIsNotAvailable()
+      await (this.page as TrainerEvaluationPage).checkPDFExportIsNotAvailable()
     }
   }
 
-  viewEvaluation() {
+  async viewEvaluation() {
     if (this.userType === 'trainer') {
-      return (this.page as TrainerEvaluationPage).viewEvaluation()
+      await (this.page as TrainerEvaluationPage).viewEvaluation()
     }
   }
 }

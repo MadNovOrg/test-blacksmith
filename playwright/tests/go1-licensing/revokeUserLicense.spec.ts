@@ -25,7 +25,6 @@ const test = base.extend<{ licenseContext: Go1LicenseContext }>({
       insertOrganization({ name: 'Test organization' }),
       getProfileId('user1@teamteach.testinator.com'),
     ])
-
     const [memberId, licenseId] = await Promise.all([
       insertOrganizationMember({
         profile_id: profileId,

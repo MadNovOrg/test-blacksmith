@@ -41,14 +41,14 @@ async function assertDownloadedCSV(download: Download, data: OrderInfo[]) {
   const workbook = readFile(downloadPath)
   const sheet = workbook.Sheets[workbook.SheetNames[0]]
 
-  expect(sheet['A1'].v).toMatch('Invoice no.')
-  expect(sheet['B1'].v).toMatch('Reference no.')
-  expect(sheet['C1'].v).toMatch('Bill to')
-  expect(sheet['D1'].v).toMatch('Payment Method')
-  expect(sheet['E1'].v).toMatch('Amount')
-  expect(sheet['F1'].v).toMatch('Due')
-  expect(sheet['G1'].v).toMatch('Due Date')
-  expect(sheet['H1'].v).toMatch('Status')
+  expect(sheet['A1'].v).toMatch(/Invoice no\./)
+  expect(sheet['B1'].v).toMatch(/Reference no\./)
+  expect(sheet['C1'].v).toMatch(/Bill to/)
+  expect(sheet['D1'].v).toMatch(/Payment Method/)
+  expect(sheet['E1'].v).toMatch(/Amount/)
+  expect(sheet['F1'].v).toMatch(/Due/)
+  expect(sheet['G1'].v).toMatch(/Due Date/)
+  expect(sheet['H1'].v).toMatch(/Status/)
 
   expect(data).not.toBe(null)
   expect(data).not.toBe(undefined)
@@ -72,7 +72,7 @@ async function assertDownloadedCSV(download: Download, data: OrderInfo[]) {
       ? PAYMENT_METHODS[order.paymentMethod]
       : 'error'
 
-    expect(sheet[`D${cellIndex}`].v).toMatch(paymentMethod)
+    expect(sheet[`D${cellIndex}`].v).toMatch(new RegExp(paymentMethod))
     expect(sheet[`E${cellIndex}`].v).toBe(Number(order?.orderTotal))
 
     if (order?.orderDue) {

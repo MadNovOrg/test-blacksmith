@@ -36,7 +36,7 @@ test('course evaluation as user', async ({ browser, course }) => {
   const userEvaluationPage = new CourseEvaluationPage(
     userPage,
     'user',
-    String(course.id)
+    `${course.id}`
   )
   await userEvaluationPage.goto()
   await userEvaluationPage.randomlyEvaluate(
@@ -54,7 +54,7 @@ test('course evaluation as user', async ({ browser, course }) => {
   const trainerEvaluationPage = new CourseEvaluationPage(
     trainerPage,
     'trainer',
-    String(course.id)
+    `${course.id}`
   )
   await trainerEvaluationPage.goto()
   await trainerEvaluationPage.checkSubmissionIsAvailable()
@@ -64,7 +64,5 @@ test('course evaluation as user', async ({ browser, course }) => {
   )
   await trainerEvaluationPage.submitEvaluation()
   await trainerEvaluationPage.checkSubmission()
-
-  // Trainer should be able to view evaluation
   await trainerEvaluationPage.viewEvaluation()
 })

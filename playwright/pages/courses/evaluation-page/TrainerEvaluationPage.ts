@@ -65,7 +65,6 @@ export class TrainerEvaluationPage extends BasePage {
 
   async checkSubmission() {
     await expect(this.pageLoadedIndicator.isVisible()).toBeTruthy()
-
     await this.goto()
     await expect(this.viewSummaryEvaluationButton).toBeEnabled()
   }
