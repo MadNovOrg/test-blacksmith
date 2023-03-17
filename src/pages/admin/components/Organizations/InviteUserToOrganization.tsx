@@ -207,7 +207,11 @@ export const InviteUserToOrganization = () => {
                       required
                       variant="filled"
                       label={t('pages.invite-to-org.work-email')}
-                      inputProps={{ ...params.inputProps, sx: { height: 40 } }}
+                      inputProps={{
+                        ...params.inputProps,
+                        sx: { height: 40 },
+                        'data-testid': 'work-email-input',
+                      }}
                       sx={{ bgcolor: 'grey.100' }}
                       error={!!errors.emails}
                       helperText={

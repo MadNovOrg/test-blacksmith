@@ -251,6 +251,7 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
                     <TextField
                       {...params}
                       variant="filled"
+                      data-testid="dob-input"
                       fullWidth
                       sx={{ bgcolor: 'grey.100' }}
                       error={!!errors.dob}
@@ -270,7 +271,10 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               control={
                 <Checkbox
                   {...register('tcs')}
-                  inputProps={{ 'aria-label': `T&Cs` }}
+                  data-testid="register-checkbox"
+                  inputProps={{
+                    'aria-label': `T&Cs`,
+                  }}
                 />
               }
               label={

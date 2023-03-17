@@ -29,6 +29,11 @@ export class AllOrganisations extends BasePage {
   readonly seeAllOrgs: Locator
   readonly trustName: Locator
   readonly workEmail: Locator
+  readonly individualsTab: Locator
+  readonly inviteUserButton: Locator
+  readonly inviteOrgWorkEmail: Locator
+  readonly confirmInviteUsers: Locator
+  readonly orgTable: Locator
 
   constructor(page: Page) {
     super(page)
@@ -63,6 +68,15 @@ export class AllOrganisations extends BasePage {
     this.seeAllOrgs = this.page.locator('[data-testid="see-all-organisations"]')
     this.trustName = this.page.locator('[data-testid="trust-name"]')
     this.workEmail = this.page.locator('[data-testid="input-admin-email"]')
+    this.individualsTab = this.page.locator('[data-testid="org-individuals"]')
+    this.inviteUserButton = this.page.locator(
+      '[data-testid="invite-user-to-org"]'
+    )
+    this.inviteOrgWorkEmail = this.page.locator('text=Work email *')
+    this.confirmInviteUsers = this.page.locator(
+      '[data-testid="invite-user-submit-btn"]'
+    )
+    this.orgTable = this.page.locator('tbody tr >> nth=0')
   }
 
   async goto() {
@@ -184,5 +198,24 @@ export class AllOrganisations extends BasePage {
     expect(sheet['G2'].v).toEqual('+10')
     expect(sheet['H2'].v).toEqual(10)
     expect(sheet['I2'].v).toEqual(0)
+  }
+
+  async clickIndividualsTab() {
+    await this.individualsTab.click()
+  }
+
+  async clickInviteUserToOrg() {
+    await this.inviteUserButton.click()
+  }
+
+  async enterWorkEmail(email: string) {
+    await this.inviteOrgWorkEmail.type(email)
+  }
+
+  async clickButtonToInviteUser() {
+    await this.confirmInviteUsers.click()
+  }
+  async checkUserHasJoinedOrg(name: string) {
+    await expect(this.orgTable).toContainText(name)
   }
 }

@@ -2,6 +2,7 @@ import { Locator, Page } from '@playwright/test'
 
 import { ResetPasswordPage } from './auth/ResetPasswordPage'
 import { CourseInvitationPage } from './courses/CourseInvitationPage'
+import { OrgInvitationPage } from './org/OrgInvitePage'
 
 const url = 'http://email'
 
@@ -9,11 +10,13 @@ export class EmailPage {
   readonly page: Page
   readonly resetPasswordLink: Locator
   readonly registerNowButton: Locator
+  readonly acceptInviteButton: Locator
 
   constructor(page: Page) {
     this.page = page
     this.resetPasswordLink = this.page.locator('text="Reset Your Password"')
     this.registerNowButton = this.page.locator('text="Register Now"')
+    this.acceptInviteButton = this.page.locator('text="Join organisation"')
   }
 
   async renderContent(content: string) {
@@ -39,5 +42,14 @@ export class EmailPage {
     ])
     await newPage.waitForLoadState()
     return new CourseInvitationPage(newPage)
+  }
+
+  async clickJoinOrganisationButton(): Promise<OrgInvitationPage> {
+    const [newPage] = await Promise.all([
+      this.page.context().waitForEvent('page'),
+      this.acceptInviteButton.click(),
+    ])
+    await newPage.waitForLoadState()
+    return new OrgInvitationPage(newPage)
   }
 }

@@ -78,7 +78,7 @@ export const OrgInvitesTable: React.FC<
               <TableCell></TableCell>
             </TableRow>
           </MuiTableHead>
-          <TableBody>
+          <TableBody data-testid="org-users-table">
             {loading ? (
               <TableRow
                 sx={{
