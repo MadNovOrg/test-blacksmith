@@ -227,10 +227,10 @@
   },
   "participant-audit-types": {
     "ATTENDED": "Attended",
-    "CANCELLATION": "Cancellation",
+    "CANCELLATION": "Cancelled attendance",
     "NOT_ATTENDED": "Not Attended",
-    "REPLACEMENT": "Replacement",
-    "TRANSFER": "Transfer"
+    "REPLACEMENT": "Replaced",
+    "TRANSFER": "Transferred"
   },
   "course-invite-status": {
     "PENDING": "Pending",
