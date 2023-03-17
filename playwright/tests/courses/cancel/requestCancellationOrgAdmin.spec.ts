@@ -35,7 +35,7 @@ test('request cancelling a course as org admin', async ({
   })
   const page = await orgAdminContext.newPage()
   const orgAdminCoursesPage = new MyCoursesPage(page)
-  await orgAdminCoursesPage.goto()
+  await orgAdminCoursesPage.gotoManageCourses()
   await orgAdminCoursesPage.searchCourse(`${course.id}`)
   const courseDetailsPage = await orgAdminCoursesPage.clickCourseDetailsPage(
     course.id

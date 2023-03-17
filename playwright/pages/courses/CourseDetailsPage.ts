@@ -235,17 +235,13 @@ export class CourseDetailsPage extends BasePage {
     this.gradingTab = this.page.locator('data-testid=grading-tab')
 
     this.courseGradingNav = this.page.locator(
-      'data-testid="course-grading-details-nav"'
+      '[data-testid="course-grading-details-nav"]'
     )
-    this.requestCancellationButton = this.page.locator(
-      'data-testid="request-cancellation-button"'
-    )
+    this.requestCancellationButton = this.page.getByText('Request cancellation')
     this.cancellationRequestAlert = this.page.locator(
-      'data-testid="cancellation-alert"'
+      '[data-testid="cancellation-alert"]'
     )
-    this.approveCancellationButton = this.page.locator(
-      'data-testid="approve-cancellation-button"'
-    )
+    this.approveCancellationButton = this.page.getByText('Approve cancellation')
   }
 
   async goto(courseId: string) {
