@@ -40,7 +40,7 @@ const getEmail = async (
   let triesLeft = 3
   do {
     if (response.ok) {
-      const body = await response.json()
+      const body = await response.clone().json()
       const htmlPart = (body.parts as Array<EmailPart>).find(part =>
         part.headers['content-type'].startsWith('text/html')
       )
@@ -54,7 +54,9 @@ const getEmail = async (
       }
     } else {
       console.error(
-        `[API] error on reading email with ID ${id}: ${await response.text()}`
+        `[API] error on reading email with ID ${id}: ${await response
+          .clone()
+          .text()}`
       )
     }
     triesLeft--
