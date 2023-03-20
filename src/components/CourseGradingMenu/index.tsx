@@ -45,7 +45,7 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
     const observeOnlyOption: GradeOption = {
       key: Grade.OBSERVE_ONLY,
       icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
-      label: t('pages.course-grading.grade-observe-only'),
+      label: t('pages.course-grading.grade-non-physical'),
     }
 
     const assistOnlyOption: GradeOption = {

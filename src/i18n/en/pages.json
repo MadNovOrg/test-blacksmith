@@ -599,7 +599,7 @@
     "grading-menu-description": "Once grade is submitted, this cannot be modified.",
     "grade-select": "Please select a grade",
     "grade-pass": "Pass",
-    "grade-observe-only": "Observe only",
+    "grade-non-physical": "Non-Physical Pass",
     "grade-assist-only": "Assist only",
     "grade-fail": "Fail",
     "modules-selection-title": "Grade the attendee(s) for each module and hold",

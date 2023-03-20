@@ -21,7 +21,9 @@ describe('component: CourseGradingMenu', () => {
 
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
@@ -39,7 +41,7 @@ describe('component: CourseGradingMenu', () => {
 
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Observe only')).toBeVisible()
+    expect(within(menu).getByText('Non-Physical Pass')).toBeVisible()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
@@ -57,7 +59,7 @@ describe('component: CourseGradingMenu', () => {
 
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Observe only')).toBeVisible()
+    expect(within(menu).getByText('Non-Physical Pass')).toBeVisible()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
@@ -76,7 +78,9 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
     expect(within(menu).getByText('Assist only')).toBeVisible()
-    expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
   })
 
   it('displays correct options for intermediate trainer F2F course', async () => {
@@ -94,7 +98,9 @@ describe('component: CourseGradingMenu', () => {
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
     expect(within(menu).getByText('Assist only')).toBeVisible()
-    expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
   })
 
   it('displays correct options for blended course', async () => {
@@ -111,7 +117,9 @@ describe('component: CourseGradingMenu', () => {
 
     expect(within(menu).getByText('Pass')).toBeVisible()
     expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).queryByText('Observe only')).not.toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 })

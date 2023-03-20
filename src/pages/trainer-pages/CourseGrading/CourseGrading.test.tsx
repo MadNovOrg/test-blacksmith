@@ -383,7 +383,7 @@ describe('page: CourseGrading', () => {
 
     await userEvent.click(screen.getByLabelText(courseModules[0].module.name))
 
-    await selectGradingOption('Observe only')
+    await selectGradingOption('Non-Physical Pass')
 
     await userEvent.click(screen.getByText('Submit final grade'))
     await userEvent.click(screen.getByText('Confirm'))
