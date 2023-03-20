@@ -4,13 +4,16 @@ import { BASE_URL } from '../../constants'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
 
+import { TrainerExpensesPage } from './TrainerExpensesPage'
+
 export class AssignTrainersPage extends BasePage {
   readonly trainerInput: Locator
   readonly assistantInput: Locator
   readonly selectedTrainer: Locator
   readonly selectedAssistants: Locator
   readonly autocompleteOptions: Locator
-  readonly createButton: Locator
+  readonly trainerExpensesButton: Locator
+  readonly createCourseButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -29,7 +32,12 @@ export class AssignTrainersPage extends BasePage {
     this.selectedAssistants = this.page.locator(
       '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-selected"]'
     )
-    this.createButton = this.page.locator('data-testid=AssignTrainers-submit')
+    this.trainerExpensesButton = this.page.locator(
+      '[data-testid="AssignTrainers-submit"]:text("Trainer expenses")'
+    )
+    this.createCourseButton = this.page.locator(
+      '[data-testid="AssignTrainers-submit"]:text("Create course")'
+    )
   }
 
   async goto(courseType: string) {
@@ -48,14 +56,19 @@ export class AssignTrainersPage extends BasePage {
     await this.autocompleteOptions.first().click()
   }
 
-  async clickCreateCourseButton(): Promise<number> {
+  async clickTrainerExpensesButton() {
+    await this.trainerExpensesButton.click()
+    return new TrainerExpensesPage(this.page)
+  }
+
+  async getOrderIdAfterClickingCreateCourseButton(): Promise<number> {
     const responses = await Promise.all([
       this.page.waitForResponse(
         res =>
           res.request().url().includes('/graphql') &&
           (res.request().postData() as string).includes('insert_course')
       ),
-      this.createButton.click(),
+      this.createCourseButton.click(),
     ])
     const data = await responses[0].json()
     return data.data.insertCourse.inserted[0].id

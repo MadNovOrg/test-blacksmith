@@ -19,6 +19,7 @@ export class CreateCoursePage extends BasePage {
   readonly reaccreditationCheckbox: Locator
   readonly deliveryTypeRadioButton: (type: string) => Locator
   readonly venueInput: Locator
+  readonly onlineMeetingLinkInput: Locator
   readonly organisationInput: Locator
   readonly contactInput: Locator
   readonly autocompleteOption: Locator
@@ -30,6 +31,8 @@ export class CreateCoursePage extends BasePage {
   readonly maxAttendeesInput: Locator
   readonly acknowledgeCheckboxes: Locator
   readonly nextPageButton: Locator
+  readonly freeSpacesInput: Locator
+  readonly salesPersonInput: Locator
 
   constructor(page: Page) {
     super(page)
@@ -73,6 +76,15 @@ export class CreateCoursePage extends BasePage {
       '[data-testid="acknowledge-checks"] input'
     )
     this.nextPageButton = this.page.locator('data-testid=next-page-btn')
+    this.onlineMeetingLinkInput = this.page.locator(
+      '[data-testid="onlineMeetingLink-input"] input'
+    )
+    this.freeSpacesInput = this.page.locator(
+      '[data-testid="free-spaces"] input'
+    )
+    this.salesPersonInput = this.page.locator(
+      '[data-testid="profile-selector-sales-representative"] input'
+    )
   }
 
   async goto(courseType: string) {
@@ -98,12 +110,12 @@ export class CreateCoursePage extends BasePage {
 
   async selectVenue(venue: string) {
     await this.venueInput.type(venue)
-    await this.autocompleteOption.first().click()
+    await this.autocompleteOption.locator(`text=${venue}`).first().click()
   }
 
   async selectOrganisation(name: string) {
     await this.organisationInput.type(name)
-    await this.autocompleteOption.first().click()
+    await this.autocompleteOption.locator(`text=${name}`).first().click()
   }
 
   async selectContact(name: string) {
@@ -111,14 +123,21 @@ export class CreateCoursePage extends BasePage {
     await this.autocompleteOption.first().click()
   }
 
+  async selectSalesPerson(name: string) {
+    await this.salesPersonInput.type(name)
+    await this.autocompleteOption.first().click()
+  }
+
   async setStartDateTime(dateTime: Date) {
-    await this.startTimeInput.fill(toUiTime(dateTime))
     await this.startDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
+    const time = toUiTime(dateTime)
+    time !== '08:00' && (await this.startTimeInput.fill(time))
   }
 
   async setEndDateTime(dateTime: Date) {
-    await this.endTimeInput.fill(toUiTime(dateTime))
     await this.endDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
+    const time = toUiTime(dateTime)
+    time !== '17:00' && (await this.endTimeInput.fill(time))
   }
 
   async setMinAttendees(value: number) {
@@ -169,14 +188,34 @@ export class CreateCoursePage extends BasePage {
     if (course.deliveryType !== CourseDeliveryType.VIRTUAL) {
       await this.selectVenue(course.schedule[0].venue?.name as string)
     }
+    // TODO workaroud - remove this if after fixing TTHP-1216
+    if (
+      (course.deliveryType === CourseDeliveryType.VIRTUAL ||
+        course.deliveryType === CourseDeliveryType.MIXED) &&
+      (await this.onlineMeetingLinkInput.innerText()) === ''
+    ) {
+      await this.onlineMeetingLinkInput.type('www.zoom.com/blabla')
+    }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)
     if (course.type === CourseType.OPEN) {
       await this.setMinAttendees(course.min_participants)
     }
+
     await this.setMaxAttendees(course.max_participants)
     if (course.type === CourseType.INDIRECT) {
       await this.checkAcknowledgeCheckboxes()
+    }
+
+    if (
+      course.freeSpaces &&
+      course.salesRepresentative &&
+      course.type === CourseType.CLOSED
+    ) {
+      await this.freeSpacesInput.type(course.freeSpaces.toString())
+      await this.selectSalesPerson(
+        `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`
+      )
     }
   }
 }

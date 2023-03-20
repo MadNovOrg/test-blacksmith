@@ -180,8 +180,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   go1Integration: false,
   schedule: [
     {
-      start: addMonths(new Date(), 2),
-      end: addMonths(new Date(), 2),
+      start: addMonths(new Date(new Date().setHours(8, 0)), 2),
+      end: addMonths(new Date(new Date().setHours(17, 0)), 2),
       venue: buildVenue({
         overrides: { name: 'Queen Elizabeth II Centre' },
       }),

@@ -553,6 +553,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
         {hasZoomMeetingUrl ? (
           <TextField
+            data-testid="onlineMeetingLink-input"
             fullWidth
             variant="filled"
             {...register('zoomMeetingUrl')}

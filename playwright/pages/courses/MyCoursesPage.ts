@@ -104,6 +104,20 @@ export class MyCoursesPage extends BasePage {
     await expect(courseStatusChip).toHaveText(status)
   }
 
+  async checkCourseWaitingApproval(courseId: number) {
+    await expect(
+      this.page.locator(
+        `[data-testid="actionable-course-${courseId}"] [data-testid="AcceptDeclineCourse-acceptBtn"]`
+      )
+    ).toBeVisible()
+
+    await expect(
+      this.page.locator(
+        `[data-testid="actionable-course-${courseId}"] [data-testid="AcceptDeclineCourse-declineBtn"]`
+      )
+    ).toBeVisible()
+  }
+
   async acceptCourse(courseId: number) {
     await this.page
       .locator(

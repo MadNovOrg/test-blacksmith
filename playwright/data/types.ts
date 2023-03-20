@@ -40,6 +40,7 @@ export type Course = {
   go1Integration?: boolean
   min_participants: number
   max_participants: number
+  freeSpaces?: number
   contactProfile?: User
   gradingConfirmed: boolean
   salesRepresentative?: User
