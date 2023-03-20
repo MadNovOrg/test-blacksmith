@@ -29,10 +29,10 @@ export type CourseParticipantCriteria =
       }
     }
   | {
-      certificate: { expiryDate: { _gte: Date } }
+      certificate: { certificationDate: { _gte: Date } }
     }
   | {
-      certificate: { expiryDate: { _lte: Date } }
+      certificate: { certificationDate: { _lte: Date } }
     }
   | {
       certificate: { status: { _in: CertificateStatus[] } }

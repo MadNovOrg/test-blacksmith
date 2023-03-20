@@ -64,13 +64,13 @@ export const Certifications: React.FC<
     if (dateFrom) {
       const from = new Date(dateFrom)
       from.setHours(0, 0, 0)
-      conditions.push({ certificate: { expiryDate: { _gte: from } } })
+      conditions.push({ certificate: { certificationDate: { _gte: from } } })
     }
 
     if (dateTo) {
       const to = new Date(dateTo)
       to.setHours(23, 59, 59)
-      conditions.push({ certificate: { expiryDate: { _lte: to } } })
+      conditions.push({ certificate: { certificationDate: { _lte: to } } })
     }
 
     if (certificateStatus.length) {
