@@ -23,6 +23,7 @@ export class CourseInvitationPage extends BasePage {
       waitForGraphQLResponse(this.page, 'acceptInvite', '"status": "ACCEPTED"'),
       this.willAttendOption.click(),
       this.continueButton.click(),
+      this.waitForPageLoad(),
     ])
     return new CourseDetailsPage(this.page)
   }

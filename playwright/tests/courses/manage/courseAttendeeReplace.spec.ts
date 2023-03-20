@@ -49,7 +49,10 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
 
   // Accept the invitation to the course as the new attendee
   const attendeePage = await browser.newPage()
-  const email = await getLatestEmail(users.user2WithOrg.email)
+  const email = await getLatestEmail(
+    users.user2WithOrg.email,
+    'Register for training course'
+  )
   const emailPage = new EmailPage(attendeePage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()

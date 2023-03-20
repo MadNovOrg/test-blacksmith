@@ -32,7 +32,10 @@ test('reset password @smoke', async ({ page }) => {
   const forgotPasswordPage = new ForgotPasswordPage(page)
   await forgotPasswordPage.goto()
   await forgotPasswordPage.submitEmail(users.resetPassword.email)
-  const email = await getLatestEmail(users.resetPassword.email)
+  const email = await getLatestEmail(
+    users.resetPassword.email,
+    'Forgot Password Confirmation Code'
+  )
   const emailPage = new EmailPage(page)
   await emailPage.renderContent(email.html)
   const resetPasswordPage = await emailPage.clickResetPasswordLink()

@@ -39,8 +39,8 @@ export class EmailPage {
     const [newPage] = await Promise.all([
       this.page.context().waitForEvent('page'),
       this.registerNowButton.click(),
+      this.page.waitForLoadState(),
     ])
-    await newPage.waitForLoadState()
     return new CourseInvitationPage(newPage)
   }
 
