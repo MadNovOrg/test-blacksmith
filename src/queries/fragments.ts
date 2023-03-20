@@ -167,6 +167,7 @@ export const CERTIFICATE = gql`
     certificationDate
     courseName
     courseLevel
+    status
   }
 `
 

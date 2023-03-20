@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
-import { isPast } from 'date-fns'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import React, { useCallback, useMemo } from 'react'
@@ -25,7 +24,12 @@ import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import { CourseLevel, CourseParticipant, Grade as GradeEnum } from '@app/types'
+import {
+  CertificateStatus,
+  CourseLevel,
+  CourseParticipant,
+  Grade as GradeEnum,
+} from '@app/types'
 
 import { TableNoRows } from '../Table/TableNoRows'
 
@@ -48,6 +52,13 @@ type CertificationListProps = {
   hideTitle?: boolean
   columns?: CertificationListColumns
 }
+
+const certificationStatusColor = {
+  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
+  [CertificateStatus.EXPIRED]: 'gray',
+  [CertificateStatus.EXPIRING_SOON]: 'warning',
+  [CertificateStatus.ACTIVE]: 'success',
+} as const
 
 export const CertificationList: React.FC<
   React.PropsWithChildren<CertificationListProps>
@@ -177,9 +188,8 @@ export const CertificationList: React.FC<
           {participants?.map(p => {
             if (!p.certificate) return null
 
-            const expiryDate = new Date(p.certificate.expiryDate)
-            const expired = isPast(expiryDate)
-            const status = expired ? 'status-expired' : 'status-active'
+            const certificationStatus = p.certificate
+              ?.status as CertificateStatus
 
             return (
               <TableRow key={p.id}>
@@ -240,8 +250,10 @@ export const CertificationList: React.FC<
                 {showCol('status') ? (
                   <TableCell>
                     <Chip
-                      label={t(`components.certification-list.${status}`)}
-                      color={expired ? 'error' : 'success'}
+                      label={t(
+                        `common.certification-status.${certificationStatus.toLowerCase()}`
+                      )}
+                      color={certificationStatusColor[certificationStatus]}
                       size="small"
                     />
                   </TableCell>

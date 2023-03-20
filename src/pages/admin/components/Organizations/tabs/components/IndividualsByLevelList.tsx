@@ -34,7 +34,7 @@ const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
 
 const certificationStatusColor = {
   [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRED]: 'error',
+  [CertificateStatus.EXPIRED]: 'gray',
   [CertificateStatus.EXPIRING_SOON]: 'warning',
   [CertificateStatus.ACTIVE]: 'success',
 } as const

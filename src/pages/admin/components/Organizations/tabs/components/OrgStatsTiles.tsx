@@ -57,7 +57,7 @@ export const OrgStatsTiles: React.FC<
           count={stats[orgId]?.certificates.expired.count}
           chip={{
             label: t('pages.org-details.tabs.overview.expired'),
-            color: 'error',
+            color: 'gray',
           }}
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: stats[orgId]?.certificates.expired.enrolled,

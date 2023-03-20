@@ -17,6 +17,7 @@ export type CountPanelParams = {
       | 'info'
       | 'success'
       | 'warning'
+      | 'gray'
     label: string
   }
 }

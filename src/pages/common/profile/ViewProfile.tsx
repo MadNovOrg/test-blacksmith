@@ -32,6 +32,7 @@ import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import useProfile from '@app/hooks/useProfile'
 import { ProfileArchiveDialog } from '@app/pages/common/profile/components/ProfileArchiveDialog'
+import { CertificateStatus } from '@app/types'
 
 import { CourseAsTrainer } from './components/CourseAsTrainer'
 import { ProfileDeleteDialog } from './components/ProfileDeleteDialog'
@@ -39,6 +40,13 @@ import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
 type ViewProfilePageProps = unknown
+
+const certificationStatusColor = {
+  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
+  [CertificateStatus.EXPIRED]: 'gray',
+  [CertificateStatus.EXPIRING_SOON]: 'warning',
+  [CertificateStatus.ACTIVE]: 'success',
+} as const
 
 export const ViewProfilePage: React.FC<
   React.PropsWithChildren<ViewProfilePageProps>
@@ -469,19 +477,14 @@ export const ViewProfilePage: React.FC<
                             alignItems="start"
                           >
                             <Chip
-                              label={
-                                certificateExpired(certificate.expiryDate ?? '')
-                                  ? t(
-                                      `components.certification-list.status-expired`
-                                    )
-                                  : t(
-                                      `components.certification-list.status-active`
-                                    )
-                              }
+                              label={t(
+                                `common.certification-status.${certificate?.status?.toLowerCase()}`
+                              )}
                               color={
-                                certificateExpired(certificate.expiryDate ?? '')
-                                  ? 'error'
-                                  : 'success'
+                                certificationStatusColor[
+                                  (certificate.status as CertificateStatus) ||
+                                    CertificateStatus.EXPIRED
+                                ]
                               }
                               size="small"
                             />
