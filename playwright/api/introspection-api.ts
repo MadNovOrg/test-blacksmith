@@ -1,5 +1,7 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
+import { RoleName } from '@app/types'
+
 import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
@@ -40,17 +42,7 @@ const INTROSPECTION_QUERY = gql`
   }
 `
 
-export async function introspection(
-  role:
-    | 'anonymous'
-    | 'unverified'
-    | 'user'
-    | 'trainer'
-    | 'ld'
-    | 'sales-admin'
-    | 'tt-ops'
-    | 'tt-admin'
-) {
+export async function introspection(role: `${RoleName}` | 'anonymous') {
   return graphQLClient.request<{
     __schema: {
       mutationType: {

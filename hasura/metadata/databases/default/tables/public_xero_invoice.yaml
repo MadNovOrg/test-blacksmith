@@ -1,0 +1,108 @@
+table:
+  schema: public
+  name: xero_invoice
+configuration:
+  custom_root_fields: {}
+  column_config:
+    line_items:
+      custom_name: lineItems
+    amount_due:
+      custom_name: amountDue
+    amount_paid:
+      custom_name: amountPaid
+    due_date:
+      custom_name: dueDate
+    xero_id:
+      custom_name: xeroId
+    currency_code:
+      custom_name: currencyCode
+    total_tax:
+      custom_name: totalTax
+    fully_paid_on_date:
+      custom_name: fullyPaidOnDate
+    xero_contact_id:
+      custom_name: xeroContactId
+    invoice_number:
+      custom_name: invoiceNumber
+    issued_date:
+      custom_name: issuedDate
+  custom_column_names:
+    line_items: lineItems
+    amount_due: amountDue
+    amount_paid: amountPaid
+    due_date: dueDate
+    xero_id: xeroId
+    currency_code: currencyCode
+    total_tax: totalTax
+    fully_paid_on_date: fullyPaidOnDate
+    xero_contact_id: xeroContactId
+    invoice_number: invoiceNumber
+    issued_date: issuedDate
+object_relationships:
+  - name: contact
+    using:
+      foreign_key_constraint_on: xero_contact_id
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - line_items
+        - amount_due
+        - amount_paid
+        - subtotal
+        - total
+        - total_tax
+        - currency_code
+        - invoice_number
+        - reference
+        - status
+        - xero_contact_id
+        - xero_id
+        - due_date
+        - fully_paid_on_date
+        - issued_date
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - line_items
+        - amount_due
+        - amount_paid
+        - subtotal
+        - total
+        - total_tax
+        - currency_code
+        - invoice_number
+        - reference
+        - status
+        - xero_contact_id
+        - xero_id
+        - due_date
+        - fully_paid_on_date
+        - issued_date
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - line_items
+        - amount_due
+        - amount_paid
+        - subtotal
+        - total
+        - total_tax
+        - currency_code
+        - invoice_number
+        - reference
+        - status
+        - xero_contact_id
+        - xero_id
+        - due_date
+        - fully_paid_on_date
+        - issued_date
+        - id
+      filter: {}
+      allow_aggregations: true

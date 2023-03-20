@@ -54,6 +54,13 @@ object_relationships:
   - name: course
     using:
       foreign_key_constraint_on: course_id
+  - name: invoice
+    using:
+      foreign_key_constraint_on:
+        column: invoice_number
+        table:
+          schema: public
+          name: xero_invoice
   - name: organization
     using:
       foreign_key_constraint_on: organization_id

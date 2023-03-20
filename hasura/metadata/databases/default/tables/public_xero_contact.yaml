@@ -1,0 +1,59 @@
+table:
+  schema: public
+  name: xero_contact
+configuration:
+  custom_root_fields: {}
+  column_config:
+    first_name:
+      custom_name: firstName
+    xero_id:
+      custom_name: xeroId
+    last_name:
+      custom_name: lastName
+    email_address:
+      custom_name: emailAddress
+  custom_column_names:
+    first_name: firstName
+    xero_id: xeroId
+    last_name: lastName
+    email_address: emailAddress
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter: {}
+      allow_aggregations: true
