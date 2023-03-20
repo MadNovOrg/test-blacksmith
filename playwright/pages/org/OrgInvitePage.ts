@@ -15,7 +15,7 @@ export class OrgInvitationPage extends BasePage {
   }
   async acceptInvitation(): Promise<AllOrganisations> {
     await Promise.all([
-      waitForGraphQLRequest(this.page, 'invite'),
+      waitForGraphQLRequest(this.page, 'AcceptOrgInvite'),
       await this.continueToOrganisationButton.click(),
     ])
     return new AllOrganisations(this.page)

@@ -79,8 +79,12 @@ export class AllOrganisations extends BasePage {
     this.orgTable = this.page.locator('tbody tr >> nth=0')
   }
 
-  async goto() {
-    await super.goto(`${BASE_URL}/organisations/all`)
+  async goto(orgId?: string) {
+    await super.goto(
+      orgId
+        ? `${BASE_URL}/organisations/${orgId}`
+        : `${BASE_URL}/organisations/all`
+    )
   }
 
   async gotoOrganisation(id: string) {
