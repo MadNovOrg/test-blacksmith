@@ -15,7 +15,7 @@ import {
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
-import { render, screen, within, act } from '@test/index'
+import { render, screen, within } from '@test/index'
 import {
   buildCourse,
   buildInvite,
@@ -333,6 +333,39 @@ describe('component: CourseAttendees', () => {
     }
   })
 
+  it('displays waitlist tab for sales admin user', () => {
+    useCourseInvitesMock.mockReturnValue(emptyPendingInvitesResponse)
+
+    useCourseParticipantsMock.mockReturnValue({
+      status: LoadingStatus.SUCCESS,
+      data: [],
+      total: 0,
+      mutate: jest.fn(),
+    })
+
+    useWaitlistMock.mockReturnValue({
+      data: [],
+      isLoading: false,
+      total: 0,
+      error: undefined,
+    })
+
+    const openCourse = buildCourse()
+    openCourse.type = CourseType.OPEN
+
+    useCourseMock.mockReturnValue({
+      mutate: jest.fn(),
+      status: LoadingStatus.SUCCESS,
+      data: openCourse,
+    })
+
+    render(<CourseAttendees course={openCourse} />, {
+      auth: { activeRole: RoleName.SALES_ADMIN },
+    })
+
+    expect(screen.getByRole('tab', { name: /waitlist/i })).toBeInTheDocument()
+  })
+
   describe('pending invites', () => {
     beforeEach(() => {
       useWaitlistMock.mockReturnValue(emptyWaitlistResponse)
@@ -406,9 +439,8 @@ describe('component: CourseAttendees', () => {
         `course-resend-invite-btn-${invite.id}`
       )
       expect(resendButton).toBeVisible()
-      await act(async () => {
-        await userEvent.click(resendButton)
-      })
+      await userEvent.click(resendButton)
+
       expect(emptyPendingInvitesResponse.resend).toHaveBeenCalledTimes(1)
       expect(emptyPendingInvitesResponse.resend.mock.calls[0]).toMatchObject([
         invite,
@@ -419,9 +451,9 @@ describe('component: CourseAttendees', () => {
         `course-cancel-invite-btn-${invite.id}`
       )
       expect(deleteButton).toBeVisible()
-      await act(async () => {
-        await userEvent.click(deleteButton)
-      })
+
+      await userEvent.click(deleteButton)
+
       expect(emptyPendingInvitesResponse.cancel).toHaveBeenCalledTimes(1)
       expect(emptyPendingInvitesResponse.cancel.mock.calls[0]).toMatchObject([
         invite,

@@ -184,7 +184,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
     },
 
     canSeeWaitingLists: () => {
-      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS]
+      const roles = [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
     canRescheduleWithoutWarning: () => {
