@@ -55,8 +55,11 @@ test('request cancelling a course as org admin', async ({
   const adminCoursesPage = new MyCoursesPage(adminPage)
   await adminCoursesPage.goto()
   await adminCoursesPage.searchCourse(`${course.id}`)
-  await adminCoursesPage.clickCourseDetailsPage(course.id)
-  const cancelEntireCoursePopUp = await courseDetailsPage.approveCancellation()
+  const adminCourseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
+    course.id
+  )
+  const cancelEntireCoursePopUp =
+    await adminCourseDetailsPage.approveCancellation()
   await cancelEntireCoursePopUp.checkFeeRadioButton()
   await cancelEntireCoursePopUp.clickCancelEntireCourseButton()
   await adminCoursesPage.goto()
