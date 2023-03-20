@@ -2,14 +2,14 @@ import { Page } from '@playwright/test'
 
 export function waitForGraphQLRequest(
   page: Page,
-  valueToFind: string
+  operationName: string
 ): Promise<boolean> {
   return page
     .waitForRequest(request => {
       if (
-        request.url().includes('v1/graphql') &&
-        request.postData() &&
-        request.postData()?.includes(valueToFind)
+        request.url().includes('/graphql') &&
+        request.postDataJSON() &&
+        request.postDataJSON().operationName.includes(operationName)
       ) {
         return true
       }
@@ -19,20 +19,27 @@ export function waitForGraphQLRequest(
     .catch(() => false)
 }
 
+/* This function parses the graphQL response, it works using the following structure:
+  { 
+    "data": {
+      "<keyToFind>": {
+        "<valueToFind>"
+      }
+    }
+  }
+*/
 export async function waitForGraphQLResponse(
   page: Page,
+  keyToFind: string,
   valueToFind: string
 ): Promise<boolean> {
-  const response = await page.waitForResponse(response => {
-    if (response.url().includes('v1/graphql')) {
-      const contentType = response.headers()['content-type']
-      return contentType.includes('application/json')
-    }
-    return false
+  const response = await page.waitForResponse(async response => {
+    return (
+      response.url().includes('/graphql') &&
+      response.status() === 200 &&
+      (await response.json()).data[keyToFind]
+    )
   })
-  const jsonResponse = await response.json()
-  if (!JSON.stringify(jsonResponse.data).includes(valueToFind)) {
-    return false
-  }
-  return true
+  const json = await response.json()
+  return JSON.stringify(json.data[keyToFind]).includes(valueToFind)
 }

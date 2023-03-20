@@ -61,14 +61,14 @@ export class CourseGradingPage extends BasePage {
 
   async clickConfirm() {
     await this.page.click('button:has-text("Confirm")')
-    await super.waitForPageLoad()
-    await this.page.reload()
+    await this.waitForPageLoad()
   }
 
   async expectParticipantsToHaveGrade(
     participants: CourseParticipant[],
-    grade: string
+    grade: 'Pass' | 'Fail' | 'Observe only'
   ) {
+    await this.page.reload()
     for (const participant of participants) {
       await expect(
         this.page.locator(

@@ -7,6 +7,7 @@ import { fillEvaluationForm, Questions } from './Common'
 
 export class TrainerEvaluationPage extends BasePage {
   readonly courseId: string
+  readonly attendingTable: Locator
   readonly signatureField: Locator
   readonly PDFExportButton: Locator
   readonly pageLoadedIndicator: Locator
@@ -18,7 +19,7 @@ export class TrainerEvaluationPage extends BasePage {
   constructor(page: Page, courseId: string) {
     super(page)
     this.courseId = courseId
-
+    this.attendingTable = this.page.locator('[data-testid=attending-table]')
     this.pageLoadedIndicator = this.page.locator(
       'data-testid=trainer-evaluation-title'
     )
@@ -46,7 +47,11 @@ export class TrainerEvaluationPage extends BasePage {
     )
   }
   async checkSubmissionIsAvailable() {
-    await expect(await this.startEvaluationButton.count()).toBe(1)
+    await expect(this.startEvaluationButton).toBeEnabled()
+  }
+
+  async checkSubmissionIsNotAvailable() {
+    await expect(this.startEvaluationButton).toBeDisabled()
   }
 
   async checkPDFExportIsNotAvailable() {
@@ -64,13 +69,9 @@ export class TrainerEvaluationPage extends BasePage {
   }
 
   async checkSubmission() {
-    await expect(this.pageLoadedIndicator.isVisible()).toBeTruthy()
+    await expect(this.attendingTable).toBeVisible()
     await this.goto()
     await expect(this.viewSummaryEvaluationButton).toBeEnabled()
-  }
-
-  async checkSubmissionIsNotAvailable() {
-    await expect(await this.startEvaluationButton.count()).toBe(0)
   }
 
   async viewEvaluation() {

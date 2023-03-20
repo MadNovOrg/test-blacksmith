@@ -10,6 +10,7 @@ import {
   insertOrganization,
   insertOrganizationMember,
 } from '../../api/hasura-api'
+import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { ProfilePage } from '../../pages/membership/ProfilePage'
 
@@ -23,7 +24,7 @@ const test = base.extend<{ licenseContext: Go1LicenseContext }>({
   licenseContext: async ({}, use) => {
     const [orgId, profileId] = await Promise.all([
       insertOrganization({ name: 'Test organization' }),
-      getProfileId('user1@teamteach.testinator.com'),
+      getProfileId(users.user1.email),
     ])
     const [memberId, licenseId] = await Promise.all([
       insertOrganizationMember({

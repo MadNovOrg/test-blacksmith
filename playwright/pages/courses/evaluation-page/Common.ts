@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 
 export type Questions = {
   rating: Locator
@@ -6,7 +6,16 @@ export type Questions = {
   text: Locator
 }
 
-export const fillEvaluationForm = async (page: Page, questions: Questions) => {
+export const fillEvaluationForm = async (
+  page: Page,
+  questions: Questions,
+  userType?: string
+) => {
+  if (userType === 'user') {
+    await expect(questions.rating.first()).toBeVisible()
+  }
+  await expect(questions.boolean.first()).toBeVisible()
+  await expect(questions.text.first()).toBeVisible()
   const [ratingQuestionsCount, booleanQuestionsCount, textQuestionsCount] =
     await Promise.all([
       questions.rating.count(),

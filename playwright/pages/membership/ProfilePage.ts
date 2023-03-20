@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { waitForGraphQLRequest } from '../../commands'
 import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
@@ -44,7 +45,10 @@ export class ProfilePage extends BasePage {
   }
 
   async clickSaveChanges() {
-    await this.saveChanges.click()
-    await super.waitForPageLoad()
+    await Promise.all([
+      waitForGraphQLRequest(this.page, 'UpdateProfile'),
+      this.saveChanges.click(),
+      super.waitForPageLoad(),
+    ])
   }
 }

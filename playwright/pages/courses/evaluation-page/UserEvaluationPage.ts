@@ -39,7 +39,7 @@ export class UserEvaluationPage extends BasePage {
   }
 
   async randomlyEvaluate(questions: Questions, signature: string) {
-    await fillEvaluationForm(this.page, questions)
+    await fillEvaluationForm(this.page, questions, 'user')
     await this.signatureField.locator('input').fill(signature)
   }
 

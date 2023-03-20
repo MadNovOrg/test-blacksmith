@@ -198,7 +198,7 @@ export class CourseDetailsPage extends BasePage {
   constructor(page: Page) {
     super(page)
     this.header = new CourseHeader(this.page)
-    this.successMessage = this.page.locator('data-testid=success-message')
+    this.successMessage = this.page.locator('data-testid=success-alert')
     this.inviteAttendeesButton = this.page.locator(
       'data-testid=course-invite-btn'
     )
@@ -265,6 +265,7 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async checkAttendingText(text: string) {
+    await this.page.reload()
     await expect(this.attendingText).toHaveText(text)
   }
 

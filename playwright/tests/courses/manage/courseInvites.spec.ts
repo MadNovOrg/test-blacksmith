@@ -16,6 +16,7 @@ const testData = [
   {
     name: 'indirect course',
     user: 'trainer',
+    attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.INDIRECT
@@ -31,7 +32,7 @@ const testData = [
   {
     name: 'closed course',
     user: 'admin',
-    isSmoke: true,
+    attendee: users.userWithInvite,
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.CLOSED
@@ -62,19 +63,18 @@ for (const data of testData) {
     const trainerContext = await browser.newContext({
       storageState: stateFilePath(data.user),
     })
-    const page = await trainerContext.newPage()
-    const myCoursesPage = new MyCoursesPage(page)
+    const trainerPage = await trainerContext.newPage()
+    const myCoursesPage = new MyCoursesPage(trainerPage)
     await myCoursesPage.goto()
     await myCoursesPage.searchCourse(`${course.id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
       course.id
     )
-
     await courseDetailsPage.checkInvitesLeftText(
       `${course.max_participants} invites left`
     )
     const invitePopUp = await courseDetailsPage.clickInviteAttendeesButton()
-    await invitePopUp.enterEmails([users.user1WithOrg.email])
+    await invitePopUp.enterEmails([data.attendee.email])
     await invitePopUp.clickSendButton()
     await courseDetailsPage.checkInvitesLeftText(
       `${course.max_participants - 1} invites left`
@@ -83,16 +83,19 @@ for (const data of testData) {
       `0 of ${course.max_participants} attending`
     )
 
-    const otherPage = await browser.newPage()
-    const email = await getLatestEmail(users.user1WithOrg.email)
-    const emailPage = new EmailPage(otherPage)
+    const attendeePage = await browser.newPage()
+    const email = await getLatestEmail(
+      data.attendee.email,
+      'Register for training course'
+    )
+    const emailPage = new EmailPage(attendeePage)
     await emailPage.renderContent(email.html)
     const invitationPage = await emailPage.clickRegisterNowButton()
     const attendeeCourseDetailsPage = await invitationPage.acceptInvitation()
     await attendeeCourseDetailsPage.checkSuccessMessage(
       'You are now attending this course. Please complete the checklist.'
     )
-    await courseDetailsPage.page.reload()
+
     await courseDetailsPage.checkAttendingText(
       `1 of ${course.max_participants} attending`
     )
@@ -102,9 +105,7 @@ for (const data of testData) {
     // TODO change the validation after we'll get the information which personal data we should present to the Trainer
     // eslint-disable-next-line playwright/no-conditional-in-test
     data.user === 'admin'
-      ? await courseDetailsPage.checkAttendeesTableRows([users.user1WithOrg])
-      : await courseDetailsPage.checkAttendeesTableNumberOfRows([
-          users.user1WithOrg,
-        ])
+      ? await courseDetailsPage.checkAttendeesTableRows([data.attendee])
+      : await courseDetailsPage.checkAttendeesTableNumberOfRows([data.attendee])
   })
 }

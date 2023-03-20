@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLRequest } from '../../commands'
+import { waitForGraphQLResponse } from '../../commands'
 import { CourseDetailsPage } from '../../pages/courses/CourseDetailsPage'
 import { BasePage } from '../BasePage'
 
@@ -20,7 +20,7 @@ export class CourseInvitationPage extends BasePage {
 
   async acceptInvitation(): Promise<CourseDetailsPage> {
     await Promise.all([
-      waitForGraphQLRequest(this.page, 'acceptInvite'),
+      waitForGraphQLResponse(this.page, 'acceptInvite', '"status": "ACCEPTED"'),
       this.willAttendOption.click(),
       this.continueButton.click(),
     ])
