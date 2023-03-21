@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { ModuleGroup } from '../../data/types'
 import { delay, sortModulesByName } from '../../util'
 import { BasePage } from '../BasePage'
@@ -51,7 +50,7 @@ export class CourseBuilderPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}/modules`)
+    await super.goto(`courses/${courseId}/modules`)
   }
 
   async dragModulesToRight(modules: string[]) {

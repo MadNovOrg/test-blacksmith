@@ -2,7 +2,7 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { WebinarSummaryFragment } from '@app/generated/graphql'
 
-import { BASE_URL, PER_PAGE } from '../../constants'
+import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class WebinarPage extends BasePage {
@@ -24,11 +24,7 @@ export class WebinarPage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(
-      id
-        ? `${BASE_URL}/membership/webinars/${id}`
-        : `${BASE_URL}/membership/webinars`
-    )
+    await super.goto(`membership/webinars/${id ?? ''}`)
   }
 
   async checkTitle(title: string) {

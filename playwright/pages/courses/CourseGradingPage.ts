@@ -2,7 +2,6 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { CourseParticipant } from '@app/types'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class CourseGradingPage extends BasePage {
@@ -28,7 +27,7 @@ export class CourseGradingPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}/grading-details`)
+    await super.goto(`courses/${courseId}/grading-details`)
   }
 
   async expectParticipantsToBeVisible(participants: CourseParticipant[]) {

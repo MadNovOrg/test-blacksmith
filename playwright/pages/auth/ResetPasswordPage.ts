@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 import { ContactUsPage } from '../contact/ContactUsPage'
 
@@ -36,7 +35,7 @@ export class ResetPasswordPage extends BasePage {
 
   async goto() {
     await super.goto(
-      `${BASE_URL}/reset-password?email=abc@def.ghi&confirmation_code=123456`
+      `reset-password?email=abc@def.ghi&confirmation_code=123456`
     )
   }
 

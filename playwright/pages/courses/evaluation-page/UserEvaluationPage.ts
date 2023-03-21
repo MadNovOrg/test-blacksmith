@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../../constants'
 import { BasePage } from '../../BasePage'
 
 import { fillEvaluationForm, Questions } from './Common'
@@ -35,7 +34,7 @@ export class UserEvaluationPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/courses/${this.courseId}/evaluation`)
+    await super.goto(`courses/${this.courseId}/evaluation`)
   }
 
   async randomlyEvaluate(questions: Questions, signature: string) {

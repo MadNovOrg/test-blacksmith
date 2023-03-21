@@ -3,7 +3,6 @@ import { expect, Locator, Page } from '@playwright/test'
 import { getProfileId } from '../../api/hasura-api'
 import { CourseHeader } from '../../components/CourseHeader'
 import { UiTable } from '../../components/UiTable'
-import { BASE_URL } from '../../constants'
 import { toAttendeesTableRow } from '../../data/mappings'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
@@ -249,7 +248,7 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}/details`)
+    await super.goto(`courses/${courseId}/details`)
     await this.waitForLoad()
   }
 

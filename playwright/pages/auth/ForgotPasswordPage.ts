@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 import { LoginPage } from './LoginPage'
@@ -23,7 +22,7 @@ export class ForgotPasswordPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/forgot-password`)
+    await super.goto(`forgot-password`)
   }
 
   async submitEmail(email: string): Promise<ResetPasswordPage> {

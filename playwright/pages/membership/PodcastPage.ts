@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class PodcastPage extends BasePage {
@@ -24,11 +23,7 @@ export class PodcastPage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(
-      id
-        ? `${BASE_URL}/membership/podcasts/${id}`
-        : `${BASE_URL}/membership/podcasts`
-    )
+    await super.goto(`membership/podcasts/${id ?? ''}`)
   }
 
   async checkTitle(title?: string) {

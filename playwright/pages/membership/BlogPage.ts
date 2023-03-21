@@ -2,7 +2,7 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { PostSummaryFragment } from '@app/generated/graphql'
 
-import { BASE_URL, PER_PAGE } from '../../constants'
+import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class BlogPage extends BasePage {
@@ -18,9 +18,7 @@ export class BlogPage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(
-      id ? `${BASE_URL}/membership/blog/${id}` : `${BASE_URL}/membership/blog`
-    )
+    await super.goto(`membership/blog/${id ?? ''}`)
   }
 
   async checkFeaturedImage(source: string) {

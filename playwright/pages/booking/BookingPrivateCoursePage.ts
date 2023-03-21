@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class BookingPrivateCoursePage extends BasePage {
@@ -38,11 +37,7 @@ export class BookingPrivateCoursePage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(
-      id
-        ? `${BASE_URL}/book-private-course?course_id=${id}`
-        : `${BASE_URL}/book-private-course`
-    )
+    await super.goto(`book-private-course${id ? `?course_id=${id}` : ''}`)
   }
 
   async setNumberOfParticipants(number: string) {

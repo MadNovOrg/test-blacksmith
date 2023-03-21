@@ -5,7 +5,6 @@ import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
 import { UserMenu } from '../../components/UserMenu'
-import { BASE_URL } from '../../constants'
 import { toCourseTableRow } from '../../data/mappings'
 import { Course, CourseTableRow } from '../../data/types'
 import { sortCoursesByAllFields as rowsByAllFields } from '../../util'
@@ -41,15 +40,11 @@ export class MyCoursesPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/courses`)
+    await super.goto(`courses`)
   }
 
   async gotoManageCourses() {
-    await super.goto(`${BASE_URL}/manage-courses`)
-  }
-
-  async tryToOpen() {
-    await this.page.goto(BASE_URL)
+    await super.goto(`manage-courses`)
   }
 
   // compares the courses table rows ignoring the order

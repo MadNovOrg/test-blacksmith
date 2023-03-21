@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL, PER_PAGE } from '../../constants'
+import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class ResearchSummariesPage extends BasePage {
@@ -22,7 +22,7 @@ export class ResearchSummariesPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/membership/research-summaries`)
+    await super.goto(`membership/research-summaries`)
   }
 
   async checkFeaturedImage(source: string) {

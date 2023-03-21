@@ -2,7 +2,6 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { OrderInfo } from '@app/generated/graphql'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class OrderPage extends BasePage {
@@ -16,7 +15,7 @@ export class OrderPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/orders`)
+    await super.goto(`orders`)
   }
 
   async checkOrderVisiblity(orders: OrderInfo[]) {

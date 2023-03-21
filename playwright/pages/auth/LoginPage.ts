@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 import { MyCoursesPage } from '../courses/MyCoursesPage'
 
@@ -29,7 +28,7 @@ export class LoginPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(BASE_URL)
+    await super.goto()
   }
 
   async checkLoginPageOpened() {

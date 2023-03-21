@@ -1,6 +1,5 @@
 import { expect, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class MembershipPage extends BasePage {
@@ -9,7 +8,7 @@ export class MembershipPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(`${BASE_URL}/membership`)
+    await super.goto(`membership`)
   }
 
   async checkGridItem(contentTypes: string[]) {

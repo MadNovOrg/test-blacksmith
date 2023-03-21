@@ -1,7 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
 import { CourseHeader } from '../../components/CourseHeader'
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class CourseParticipantPage extends BasePage {
@@ -15,7 +14,7 @@ export class CourseParticipantPage extends BasePage {
   }
 
   async goto(courseId: string) {
-    await super.goto(`${BASE_URL}/courses/${courseId}`)
+    await super.goto(`courses/${courseId}`)
   }
 
   async checkSuccessMessage(text: string) {

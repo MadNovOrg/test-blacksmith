@@ -1,7 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
 import { waitForGraphQLRequest } from '../../commands'
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class ProfilePage extends BasePage {
@@ -15,11 +14,7 @@ export class ProfilePage extends BasePage {
   }
 
   async goto(profileId: string, orgId?: string) {
-    await super.goto(
-      orgId
-        ? `${BASE_URL}/profile/${profileId}?orgId=${orgId}`
-        : `${BASE_URL}/profile/${profileId}`
-    )
+    await super.goto(`profile/${profileId}${orgId ? `?orgId=${orgId}` : ''}`)
   }
 
   async checkLicenceIdExists(licenseId: string, exists: boolean) {

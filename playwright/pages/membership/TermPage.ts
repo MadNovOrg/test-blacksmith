@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
 import { getCategoryById, getTagById } from '../../api/hasura-api'
-import { BASE_URL, PER_PAGE } from '../../constants'
+import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class TermPage extends BasePage {
@@ -19,11 +19,7 @@ export class TermPage extends BasePage {
   }
 
   async goto(term: string) {
-    await super.goto(
-      term
-        ? `${BASE_URL}/membership/term/${term}`
-        : `${BASE_URL}/membership/term/`
-    )
+    await super.goto(`membership/term/${term ?? ''}`)
   }
 
   async checkGridItems(

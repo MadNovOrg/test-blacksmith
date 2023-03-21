@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../constants'
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
 
@@ -41,7 +40,7 @@ export class AssignTrainersPage extends BasePage {
   }
 
   async goto(courseType: string) {
-    await super.goto(`${BASE_URL}/courses/new?type=${courseType}`)
+    await super.goto(`courses/new?type=${courseType}`)
   }
 
   async removeTrainerIfAny() {

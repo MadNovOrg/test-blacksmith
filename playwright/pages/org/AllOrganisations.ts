@@ -4,7 +4,6 @@ import { readFile } from 'xlsx'
 
 import { Go1_History_Events_Enum } from '@app/generated/graphql'
 
-import { BASE_URL } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class AllOrganisations extends BasePage {
@@ -80,15 +79,11 @@ export class AllOrganisations extends BasePage {
   }
 
   async goto(orgId?: string) {
-    await super.goto(
-      orgId
-        ? `${BASE_URL}/organisations/${orgId}`
-        : `${BASE_URL}/organisations/all`
-    )
+    await super.goto(`organisations/${orgId ? orgId : 'all'}`)
   }
 
   async gotoOrganisation(id: string) {
-    await super.goto(`${BASE_URL}/organisations/${id}`)
+    await super.goto(`organisations/${id}`)
   }
 
   async clickSeeAllOrganisations() {

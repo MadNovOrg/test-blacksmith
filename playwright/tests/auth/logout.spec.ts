@@ -13,6 +13,6 @@ test('logout @smoke', async ({ page }) => {
   await myCoursesPage.userMenu.selectOption(Option.Logout)
   const loginPage = new LoginPage(page)
   await loginPage.checkLoginPageOpened()
-  await myCoursesPage.tryToOpen()
+  await myCoursesPage.goto()
   await loginPage.checkLoginPageOpened()
 })

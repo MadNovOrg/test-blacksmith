@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { BASE_URL } from '../../../constants'
 import { BasePage } from '../../BasePage'
 
 import { fillEvaluationForm, Questions } from './Common'
@@ -42,10 +41,13 @@ export class TrainerEvaluationPage extends BasePage {
   }
 
   async goto() {
-    await super.goto(
-      `${BASE_URL}/courses/${this.courseId}/details?tab=EVALUATION`
-    )
+    await super.goto(`courses/${this.courseId}/details?tab=EVALUATION`)
   }
+
+  async gotoSubmit() {
+    await super.goto(`courses/${this.courseId}/evaluation/submit`)
+  }
+
   async checkSubmissionIsAvailable() {
     await expect(this.startEvaluationButton).toBeEnabled()
   }
@@ -59,7 +61,7 @@ export class TrainerEvaluationPage extends BasePage {
   }
 
   async randomlyEvaluate(questions: Questions, signature: string) {
-    await super.goto(`${BASE_URL}/courses/${this.courseId}/evaluation/submit`)
+    await this.gotoSubmit()
     await fillEvaluationForm(this.page, questions)
     await this.signatureField.locator('input').fill(signature)
   }

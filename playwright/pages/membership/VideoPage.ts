@@ -2,7 +2,7 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
-import { BASE_URL, PER_PAGE } from '../../constants'
+import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
 export class VideoPage extends BasePage {
@@ -24,11 +24,7 @@ export class VideoPage extends BasePage {
   }
 
   async goto(id?: string) {
-    await super.goto(
-      id
-        ? `${BASE_URL}/membership/video-series/${id}`
-        : `${BASE_URL}/membership/video-series`
-    )
+    await super.goto(`membership/video-series/${id ?? ''}`)
   }
 
   async checkVideoTitle(text: string) {

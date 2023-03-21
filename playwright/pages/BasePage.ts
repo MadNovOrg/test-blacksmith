@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { BASE_URL } from '../constants'
+
 export class BasePage {
   readonly page: Page
   readonly muiSkeletonPulse: Locator
@@ -11,8 +13,8 @@ export class BasePage {
     this.muiProgressCircle = this.page.locator('.MuiCircularProgress-circle')
   }
 
-  async goto(url: string) {
-    await this.page.goto(url)
+  async goto(url?: string) {
+    await this.page.goto(`${BASE_URL}/${url}`)
     await this.waitForPageLoad()
   }
 

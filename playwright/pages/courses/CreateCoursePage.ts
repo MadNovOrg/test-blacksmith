@@ -4,7 +4,6 @@ import { format } from 'date-fns'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
-import { BASE_URL } from '../../constants'
 import { Course } from '../../data/types'
 import { toUiTime } from '../../util'
 import { BasePage } from '../BasePage'
@@ -88,7 +87,7 @@ export class CreateCoursePage extends BasePage {
   }
 
   async goto(courseType: string) {
-    await super.goto(`${BASE_URL}/courses/new?type=${courseType}`)
+    await super.goto(`courses/new?type=${courseType}`)
   }
 
   async selectCourseLevel(level: CourseLevel) {
