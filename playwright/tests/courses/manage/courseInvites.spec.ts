@@ -29,7 +29,8 @@ const testData = [
       return course
     },
   },
-  {
+  // Cannot invite closed course as admin, see https://behaviourhub.atlassian.net/browse/TTHP-1249
+  /*{
     name: 'closed course',
     user: 'admin',
     attendee: users.userWithInvite,
@@ -44,7 +45,7 @@ const testData = [
       )
       return course
     },
-  },
+  },*/
 ]
 
 for (const data of testData) {
