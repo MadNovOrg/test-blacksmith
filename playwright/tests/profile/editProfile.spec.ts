@@ -11,5 +11,6 @@ test('edit user profile as an attendee user', async ({ page }) => {
   await myProfilePage.clickEditButton()
   await myProfilePage.enterPhoneNumber()
   await myProfilePage.clickSaveChanges()
+  await myProfilePage.goto()
   await myProfilePage.checkProfileChanges()
 })

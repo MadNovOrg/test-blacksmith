@@ -14,7 +14,7 @@ export class MyProfilePage extends BasePage {
     this.editButton = this.page.locator('[data-testid="edit-profile"]')
     this.phoneNumberField = this.page.locator('[data-testid="phone"]')
     this.saveChangesButton = this.page.locator(
-      '[data-testid="save-changes-button"]'
+      '[data-testid="profile-save-changes"]'
     )
     this.inputtedPhoneNumber = `${Date.now()}`
     this.viewPhoneNumber = this.page
@@ -36,11 +36,6 @@ export class MyProfilePage extends BasePage {
 
   async clickSaveChanges() {
     await this.saveChangesButton.click()
-    await this.waitForLoad()
-  }
-
-  async waitForLoad() {
-    await this.editButton.isVisible()
   }
 
   async checkProfileChanges() {
