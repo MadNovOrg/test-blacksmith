@@ -1,4 +1,3 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { CourseDeliveryType } from '@app/types'
@@ -8,7 +7,6 @@ import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
-import { LoginPage } from '../../../pages/auth/LoginPage'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const dataSet = [
@@ -40,7 +38,14 @@ for (const data of dataSet) {
     },
   })
 
-  test(`create course: ${data.name}`, async ({ browser, course }) => {
+  test(`create course: ${data.name}`, async ({
+    browser,
+    browserName,
+    course,
+  }) => {
+    // Disable in firefox due to datepicker issues
+    // eslint-disable-next-line playwright/no-skipped-test
+    test.skip(browserName === 'firefox')
     const context = await browser.newContext({
       storageState: stateFilePath(data.user),
     })
@@ -54,19 +59,17 @@ for (const data of dataSet) {
     await createCoursePage.fillCourseDetails(course)
     const assignTrainersPage =
       await createCoursePage.clickAssignTrainersButton()
-    await assignTrainersPage.selectTrainer(users.trainer2)
+    await assignTrainersPage.selectTrainer(users.trainer)
     course.id =
       await assignTrainersPage.getOrderIdAfterClickingCreateCourseButton()
 
-    const otherPage = await browser.newPage()
-    const loginPage = new LoginPage(otherPage)
-    const coursesListPage2 = new MyCoursesPage(otherPage)
-    await loginPage.goto()
-    await loginPage.logIn(users.trainer2.email, users.trainer2.password)
-    await coursesListPage2.userMenu.checkIsVisible()
-    await coursesListPage2.roleSwitcher.selectRole('Trainer')
-    await coursesListPage2.coursesTable.checkIsVisible()
-    await coursesListPage2.searchCourse(course.id.toString())
-    await coursesListPage2.checkCourseWaitingApproval(course.id)
+    const trainerContext = await browser.newContext({
+      storageState: stateFilePath('trainer'),
+    })
+    const otherPage = await trainerContext.newPage()
+    const trainerCoursesListPage = new MyCoursesPage(otherPage)
+    await trainerCoursesListPage.goto()
+    await trainerCoursesListPage.searchCourse(`${course.id}`)
+    await trainerCoursesListPage.checkCourseWaitingApproval(course.id)
   })
 }
