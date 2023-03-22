@@ -14,7 +14,6 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
-import { useAuth } from '@app/context/auth'
 import useCourseInvites from '@app/hooks/useCourseInvites'
 import { Course, CourseInvite, InviteStatus, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
@@ -29,7 +28,6 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
 export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
 
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
@@ -108,13 +106,7 @@ export const InvitesTab = ({ course, inviteStatus }: TabProperties) => {
                   key={invite.id}
                   data-testid={`course-invite-row-${invite.id}`}
                 >
-                  <TableCell>
-                    {acl.canViewEmailContacts(course.type) ? (
-                      invite.email
-                    ) : (
-                      <Box>***************</Box>
-                    )}
-                  </TableCell>
+                  <TableCell>{invite.email}</TableCell>
                   <TableCell>
                     {t('dates.default', { date: invite.createdAt })}
                   </TableCell>

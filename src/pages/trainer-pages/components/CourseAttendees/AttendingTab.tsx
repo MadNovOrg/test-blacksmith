@@ -101,8 +101,8 @@ export const AttendingTab = ({ course }: TabProperties) => {
           sorting: true,
         },
         {
-          id: 'contact',
-          label: t('pages.course-participants.contact'),
+          id: 'email',
+          label: t('common.email'),
           sorting: true,
         },
         {
@@ -160,16 +160,12 @@ export const AttendingTab = ({ course }: TabProperties) => {
                 >
                   <TableCell>{courseParticipant.profile.fullName}</TableCell>
                   <TableCell>
-                    {acl.canViewEmailContacts(course.type) ? (
-                      <Link href={`/profile/${courseParticipant.profile.id}`}>
-                        {courseParticipant.profile.email}
-                        {courseParticipant.profile.contactDetails.map(
-                          contact => contact.value
-                        )}
-                      </Link>
-                    ) : (
-                      <Box>***************</Box>
-                    )}
+                    <Link href={`/profile/${courseParticipant.profile.id}`}>
+                      {courseParticipant.profile.email}
+                      {courseParticipant.profile.contactDetails.map(
+                        contact => contact.value
+                      )}
+                    </Link>
                   </TableCell>
                   <TableCell>
                     {courseParticipant.profile.organizations.map(org => (

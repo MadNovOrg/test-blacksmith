@@ -1,5 +1,4 @@
 import {
-  Box,
   CircularProgress,
   Stack,
   Table,
@@ -13,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { useAuth } from '@app/context/auth'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { useWaitlist } from '@app/hooks/useWaitlist'
@@ -23,7 +21,6 @@ type TabProperties = { course: Course }
 
 export const WaitlistTab = ({ course }: TabProperties) => {
   const { t } = useTranslation()
-  const { acl } = useAuth()
 
   const { Pagination, limit, offset } = useTablePagination()
   const sort = useTableSort('createdAt', 'asc')
@@ -80,14 +77,8 @@ export const WaitlistTab = ({ course }: TabProperties) => {
               <TableCell>{`${entry.givenName} ${entry.familyName}`}</TableCell>
               <TableCell>
                 <Stack direction="column" alignItems="left">
-                  {acl.canViewEmailContacts(course.type) ? (
-                    <>
-                      <Typography variant="body1">{entry.email}</Typography>
-                      <Typography variant="body2">{entry.phone}</Typography>
-                    </>
-                  ) : (
-                    <Box>***************</Box>
-                  )}
+                  <Typography variant="body1">{entry.email}</Typography>
+                  <Typography variant="body2">{entry.phone}</Typography>
                 </Stack>
               </TableCell>
               <TableCell>
