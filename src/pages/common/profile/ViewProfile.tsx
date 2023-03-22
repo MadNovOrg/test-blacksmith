@@ -212,7 +212,13 @@ export const ViewProfilePage: React.FC<
                 {t('pages.my-profile.this-is-an-archived-user')}
               </Alert>
             ) : (
-              <Box bgcolor="common.white" p={3} pb={1} borderRadius={1}>
+              <Box
+                data-testid="personal-details-container"
+                bgcolor="common.white"
+                p={3}
+                pb={1}
+                borderRadius={1}
+              >
                 <DetailsRow label={t('first-name')} value={profile.givenName} />
                 <DetailsRow label={t('surname')} value={profile.familyName} />
                 <DetailsRow label={t('email')} value={profile.email} />

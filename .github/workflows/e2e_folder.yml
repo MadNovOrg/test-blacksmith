@@ -38,6 +38,7 @@ on:
           - podcasts
           - post-category
           - post-tag
+          - profile
           - queries
           - research-summaries
           - video-series
