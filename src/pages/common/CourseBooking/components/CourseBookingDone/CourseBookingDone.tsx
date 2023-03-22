@@ -1,4 +1,4 @@
-import { Alert, Box, Container, Stack, Typography } from '@mui/material'
+import { Alert, Box, Container, Link, Stack, Typography } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
@@ -99,6 +99,9 @@ export const CourseBookingDone: React.FC<
                 ) : (
                   <Alert variant="outlined" color="success" sx={{ mb: 4 }}>
                     {t('pages.book-course.order-success-info')}
+                    <Link href={`/orders/${order?.id}`}>
+                      {order?.xeroInvoiceNumber}
+                    </Link>
                   </Alert>
                 )}
 
