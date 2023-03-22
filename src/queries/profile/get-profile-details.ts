@@ -96,6 +96,8 @@ export const QUERY = gql`
     ) {
       id
       level
+      name
+      status
     }
   }
 `

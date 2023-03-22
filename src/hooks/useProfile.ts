@@ -127,5 +127,6 @@ export default function useProfile(
     status: getSWRLoadingStatus(data, error),
     updateAvatar,
     archive,
+    upcomingCourses: data?.upcomingCourses,
   }
 }
