@@ -4,6 +4,7 @@ import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
 import { insertCourse, deleteCourse } from '../../../api/hasura-api'
+import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -64,16 +65,17 @@ for (const data of testData) {
 
   test.use({ storageState: stateFilePath('trainer') })
 
-  // `Fails due to schedule status of course reporting back as 'null' after clicking confirmModules`
-  test.fixme(data.name, async ({ page, course }) => {
+  test(data.name, async ({ page, course }) => {
+    // We skip this test when running as a smoke test as there is no backend
+    // eslint-disable-next-line playwright/no-skipped-test
+    test.skip(Boolean(process.env.CI) && TARGET_ENV === 'local')
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto()
     await myCoursesPage.searchCourse(`${course.id}`)
     await myCoursesPage.acceptCourse(course.id)
     await myCoursesPage.goToCourseBuilder()
     await myCoursesPage.submitDefaultModules()
-    const courseDetails = await myCoursesPage.confirmModules()
-    await courseDetails.waitForLoad()
+    await myCoursesPage.confirmModules()
     await myCoursesPage.goto()
     await myCoursesPage.searchCourse(`${course.id}`)
     await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')

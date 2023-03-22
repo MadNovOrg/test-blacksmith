@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLRequest } from '../../commands'
+import { waitForGraphQLResponse } from '../../commands'
 import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
@@ -133,7 +133,7 @@ export class MyCoursesPage extends BasePage {
 
   async confirmModules() {
     await Promise.all([
-      waitForGraphQLRequest(this.page, 'FinalizeCourseBuilder'),
+      waitForGraphQLResponse(this.page, 'course', 'createdAt'),
       this.page.getByText('Confirm').click(),
     ])
     return new CourseDetailsPage(this.page)
