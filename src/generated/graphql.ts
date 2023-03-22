@@ -19734,6 +19734,7 @@ export type Course_Pk_Columns_Input = {
 export type Course_Pricing = {
   __typename?: 'course_pricing';
   blended: Scalars['Boolean'];
+  created_at?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
   level: Course_Level_Enum;
   /** Price per participant without any discounts */
@@ -19741,6 +19742,7 @@ export type Course_Pricing = {
   priceCurrency: Scalars['String'];
   reaccreditation: Scalars['Boolean'];
   type: Course_Type_Enum;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode: Scalars['String'];
 };
 
@@ -19787,12 +19789,14 @@ export type Course_Pricing_Bool_Exp = {
   _not?: InputMaybe<Course_Pricing_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Pricing_Bool_Exp>>;
   blended?: InputMaybe<Boolean_Comparison_Exp>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
   priceCurrency?: InputMaybe<String_Comparison_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   xeroCode?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -19813,6 +19817,7 @@ export type Course_Pricing_Inc_Input = {
 /** input type for inserting data into table "course_pricing" */
 export type Course_Pricing_Insert_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -19820,26 +19825,31 @@ export type Course_Pricing_Insert_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Course_Pricing_Max_Fields = {
   __typename?: 'course_pricing_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
 export type Course_Pricing_Min_Fields = {
   __typename?: 'course_pricing_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
+  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
@@ -19862,12 +19872,14 @@ export type Course_Pricing_On_Conflict = {
 /** Ordering options when selecting data from "course_pricing". */
 export type Course_Pricing_Order_By = {
   blended?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
   priceAmount?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
   xeroCode?: InputMaybe<Order_By>;
 };
 
@@ -19881,6 +19893,8 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -19893,12 +19907,15 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Type = 'type',
   /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
   XeroCode = 'xeroCode'
 }
 
 /** input type for updating data in table "course_pricing" */
 export type Course_Pricing_Set_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
+  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -19906,6 +19923,7 @@ export type Course_Pricing_Set_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
@@ -19942,6 +19960,8 @@ export enum Course_Pricing_Update_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -19953,6 +19973,8 @@ export enum Course_Pricing_Update_Column {
   Reaccreditation = 'reaccreditation',
   /** column name */
   Type = 'type',
+  /** column name */
+  UpdatedAt = 'updated_at',
   /** column name */
   XeroCode = 'xeroCode'
 }
@@ -24807,10 +24829,22 @@ export type Mutation_Root = {
   delete_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** delete single row from the table: "waitlist" */
   delete_waitlist_by_pk?: Maybe<Waitlist>;
+  /** delete data from the table: "xero_contact" */
+  delete_xero_contact?: Maybe<Xero_Contact_Mutation_Response>;
+  /** delete single row from the table: "xero_contact" */
+  delete_xero_contact_by_pk?: Maybe<Xero_Contact>;
   /** delete data from the table: "xero_credential" */
   delete_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** delete single row from the table: "xero_credential" */
   delete_xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** delete data from the table: "xero_invoice" */
+  delete_xero_invoice?: Maybe<Xero_Invoice_Mutation_Response>;
+  /** delete single row from the table: "xero_invoice" */
+  delete_xero_invoice_by_pk?: Maybe<Xero_Invoice>;
+  /** delete data from the table: "xero_invoice_status" */
+  delete_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
+  /** delete single row from the table: "xero_invoice_status" */
+  delete_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** go1LicensesChange */
   go1LicensesChange?: Maybe<Go1LicensesChangeOutput>;
   importLegacyCertificate: Scalars['Boolean'];
@@ -25086,10 +25120,22 @@ export type Mutation_Root = {
   insert_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** insert a single row into the table: "waitlist" */
   insert_waitlist_one?: Maybe<Waitlist>;
+  /** insert data into the table: "xero_contact" */
+  insert_xero_contact?: Maybe<Xero_Contact_Mutation_Response>;
+  /** insert a single row into the table: "xero_contact" */
+  insert_xero_contact_one?: Maybe<Xero_Contact>;
   /** insert data into the table: "xero_credential" */
   insert_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** insert a single row into the table: "xero_credential" */
   insert_xero_credential_one?: Maybe<Xero_Credential>;
+  /** insert data into the table: "xero_invoice" */
+  insert_xero_invoice?: Maybe<Xero_Invoice_Mutation_Response>;
+  /** insert a single row into the table: "xero_invoice" */
+  insert_xero_invoice_one?: Maybe<Xero_Invoice>;
+  /** insert data into the table: "xero_invoice_status" */
+  insert_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
+  /** insert a single row into the table: "xero_invoice_status" */
+  insert_xero_invoice_status_one?: Maybe<Xero_Invoice_Status>;
   /** Merge users */
   mergeUser: MergeUserOutput;
   /** Creates a membership plan */
@@ -25374,10 +25420,22 @@ export type Mutation_Root = {
   update_waitlist?: Maybe<Waitlist_Mutation_Response>;
   /** update single row of the table: "waitlist" */
   update_waitlist_by_pk?: Maybe<Waitlist>;
+  /** update data of the table: "xero_contact" */
+  update_xero_contact?: Maybe<Xero_Contact_Mutation_Response>;
+  /** update single row of the table: "xero_contact" */
+  update_xero_contact_by_pk?: Maybe<Xero_Contact>;
   /** update data of the table: "xero_credential" */
   update_xero_credential?: Maybe<Xero_Credential_Mutation_Response>;
   /** update single row of the table: "xero_credential" */
   update_xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** update data of the table: "xero_invoice" */
+  update_xero_invoice?: Maybe<Xero_Invoice_Mutation_Response>;
+  /** update single row of the table: "xero_invoice" */
+  update_xero_invoice_by_pk?: Maybe<Xero_Invoice>;
+  /** update data of the table: "xero_invoice_status" */
+  update_xero_invoice_status?: Maybe<Xero_Invoice_Status_Mutation_Response>;
+  /** update single row of the table: "xero_invoice_status" */
+  update_xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
   /** Creates or updates Zoom meeting with start date */
   upsertZoomMeeting?: Maybe<UpsertZoomMeetingPayload>;
   verifyUser: Scalars['Boolean'];
@@ -26261,6 +26319,18 @@ export type Mutation_RootDelete_Waitlist_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Xero_ContactArgs = {
+  where: Xero_Contact_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Xero_Contact_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Xero_CredentialArgs = {
   where: Xero_Credential_Bool_Exp;
 };
@@ -26269,6 +26339,30 @@ export type Mutation_RootDelete_Xero_CredentialArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Xero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Xero_InvoiceArgs = {
+  where: Xero_Invoice_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Xero_Invoice_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Xero_Invoice_StatusArgs = {
+  where: Xero_Invoice_Status_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Xero_Invoice_Status_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -27237,6 +27331,20 @@ export type Mutation_RootInsert_Waitlist_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Xero_ContactArgs = {
+  objects: Array<Xero_Contact_Insert_Input>;
+  on_conflict?: InputMaybe<Xero_Contact_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Xero_Contact_OneArgs = {
+  object: Xero_Contact_Insert_Input;
+  on_conflict?: InputMaybe<Xero_Contact_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Xero_CredentialArgs = {
   objects: Array<Xero_Credential_Insert_Input>;
   on_conflict?: InputMaybe<Xero_Credential_On_Conflict>;
@@ -27247,6 +27355,34 @@ export type Mutation_RootInsert_Xero_CredentialArgs = {
 export type Mutation_RootInsert_Xero_Credential_OneArgs = {
   object: Xero_Credential_Insert_Input;
   on_conflict?: InputMaybe<Xero_Credential_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Xero_InvoiceArgs = {
+  objects: Array<Xero_Invoice_Insert_Input>;
+  on_conflict?: InputMaybe<Xero_Invoice_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Xero_Invoice_OneArgs = {
+  object: Xero_Invoice_Insert_Input;
+  on_conflict?: InputMaybe<Xero_Invoice_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Xero_Invoice_StatusArgs = {
+  objects: Array<Xero_Invoice_Status_Insert_Input>;
+  on_conflict?: InputMaybe<Xero_Invoice_Status_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Xero_Invoice_Status_OneArgs = {
+  object: Xero_Invoice_Status_Insert_Input;
+  on_conflict?: InputMaybe<Xero_Invoice_Status_On_Conflict>;
 };
 
 
@@ -28422,6 +28558,30 @@ export type Mutation_RootUpdate_Waitlist_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Xero_ContactArgs = {
+  _append?: InputMaybe<Xero_Contact_Append_Input>;
+  _delete_at_path?: InputMaybe<Xero_Contact_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Xero_Contact_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Xero_Contact_Delete_Key_Input>;
+  _prepend?: InputMaybe<Xero_Contact_Prepend_Input>;
+  _set?: InputMaybe<Xero_Contact_Set_Input>;
+  where: Xero_Contact_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Contact_By_PkArgs = {
+  _append?: InputMaybe<Xero_Contact_Append_Input>;
+  _delete_at_path?: InputMaybe<Xero_Contact_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Xero_Contact_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Xero_Contact_Delete_Key_Input>;
+  _prepend?: InputMaybe<Xero_Contact_Prepend_Input>;
+  _set?: InputMaybe<Xero_Contact_Set_Input>;
+  pk_columns: Xero_Contact_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Xero_CredentialArgs = {
   _set?: InputMaybe<Xero_Credential_Set_Input>;
   where: Xero_Credential_Bool_Exp;
@@ -28432,6 +28592,46 @@ export type Mutation_RootUpdate_Xero_CredentialArgs = {
 export type Mutation_RootUpdate_Xero_Credential_By_PkArgs = {
   _set?: InputMaybe<Xero_Credential_Set_Input>;
   pk_columns: Xero_Credential_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_InvoiceArgs = {
+  _append?: InputMaybe<Xero_Invoice_Append_Input>;
+  _delete_at_path?: InputMaybe<Xero_Invoice_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Xero_Invoice_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Xero_Invoice_Delete_Key_Input>;
+  _inc?: InputMaybe<Xero_Invoice_Inc_Input>;
+  _prepend?: InputMaybe<Xero_Invoice_Prepend_Input>;
+  _set?: InputMaybe<Xero_Invoice_Set_Input>;
+  where: Xero_Invoice_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Invoice_By_PkArgs = {
+  _append?: InputMaybe<Xero_Invoice_Append_Input>;
+  _delete_at_path?: InputMaybe<Xero_Invoice_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Xero_Invoice_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Xero_Invoice_Delete_Key_Input>;
+  _inc?: InputMaybe<Xero_Invoice_Inc_Input>;
+  _prepend?: InputMaybe<Xero_Invoice_Prepend_Input>;
+  _set?: InputMaybe<Xero_Invoice_Set_Input>;
+  pk_columns: Xero_Invoice_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Invoice_StatusArgs = {
+  _set?: InputMaybe<Xero_Invoice_Status_Set_Input>;
+  where: Xero_Invoice_Status_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Xero_Invoice_Status_By_PkArgs = {
+  _set?: InputMaybe<Xero_Invoice_Status_Set_Input>;
+  pk_columns: Xero_Invoice_Status_Pk_Columns_Input;
 };
 
 
@@ -28480,6 +28680,8 @@ export type Order = {
   createdAt: Scalars['timestamptz'];
   currency?: Maybe<Scalars['String']>;
   id: Scalars['uuid'];
+  /** An object relationship */
+  invoice?: Maybe<Xero_Invoice>;
   orderDue?: Maybe<Scalars['float8']>;
   orderTotal?: Maybe<Scalars['float8']>;
   /** An object relationship */
@@ -28610,6 +28812,7 @@ export type Order_Bool_Exp = {
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   currency?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  invoice?: InputMaybe<Xero_Invoice_Bool_Exp>;
   orderDue?: InputMaybe<Float8_Comparison_Exp>;
   orderTotal?: InputMaybe<Float8_Comparison_Exp>;
   organization?: InputMaybe<Organization_Bool_Exp>;
@@ -28645,7 +28848,9 @@ export enum Order_By {
 /** unique or primary key constraints on table "order" */
 export enum Order_Constraint {
   /** unique or primary key constraint */
-  OrderPkey = 'order_pkey'
+  OrderPkey = 'order_pkey',
+  /** unique or primary key constraint */
+  OrderXeroInvoiceNumberKey = 'order_xero_invoice_number_key'
 }
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
@@ -28689,6 +28894,7 @@ export type Order_Insert_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   currency?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['uuid']>;
+  invoice?: InputMaybe<Xero_Invoice_Obj_Rel_Insert_Input>;
   orderDue?: InputMaybe<Scalars['float8']>;
   orderTotal?: InputMaybe<Scalars['float8']>;
   organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
@@ -28835,6 +29041,7 @@ export type Order_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   currency?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  invoice?: InputMaybe<Xero_Invoice_Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
   organization?: InputMaybe<Organization_Order_By>;
@@ -33019,12 +33226,30 @@ export type Query_Root = {
   xeroConnect?: Maybe<XeroConnectOutput>;
   xeroContactSearch?: Maybe<XeroContactSearchOutput>;
   xeroInvoicesStatus?: Maybe<XeroInvoicesStatusOutput>;
+  /** fetch data from the table: "xero_contact" */
+  xero_contact: Array<Xero_Contact>;
+  /** fetch aggregated fields from the table: "xero_contact" */
+  xero_contact_aggregate: Xero_Contact_Aggregate;
+  /** fetch data from the table: "xero_contact" using primary key columns */
+  xero_contact_by_pk?: Maybe<Xero_Contact>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
   xero_credential_aggregate: Xero_Credential_Aggregate;
   /** fetch data from the table: "xero_credential" using primary key columns */
   xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** fetch data from the table: "xero_invoice" */
+  xero_invoice: Array<Xero_Invoice>;
+  /** fetch aggregated fields from the table: "xero_invoice" */
+  xero_invoice_aggregate: Xero_Invoice_Aggregate;
+  /** fetch data from the table: "xero_invoice" using primary key columns */
+  xero_invoice_by_pk?: Maybe<Xero_Invoice>;
+  /** fetch data from the table: "xero_invoice_status" */
+  xero_invoice_status: Array<Xero_Invoice_Status>;
+  /** fetch aggregated fields from the table: "xero_invoice_status" */
+  xero_invoice_status_aggregate: Xero_Invoice_Status_Aggregate;
+  /** fetch data from the table: "xero_invoice_status" using primary key columns */
+  xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
 };
 
 
@@ -34671,6 +34896,29 @@ export type Query_RootXeroInvoicesStatusArgs = {
 };
 
 
+export type Query_RootXero_ContactArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Contact_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Contact_Order_By>>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Contact_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Contact_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Contact_Order_By>>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Contact_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootXero_CredentialArgs = {
   distinct_on?: InputMaybe<Array<Xero_Credential_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -34691,6 +34939,52 @@ export type Query_RootXero_Credential_AggregateArgs = {
 
 export type Query_RootXero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+
+export type Query_RootXero_InvoiceArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Invoice_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Invoice_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootXero_Invoice_StatusArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Status_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Status_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Invoice_Status_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Status_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Status_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+
+export type Query_RootXero_Invoice_Status_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 /** columns and relationships of "role" */
@@ -35368,12 +35662,30 @@ export type Subscription_Root = {
   waitlist_aggregate: Waitlist_Aggregate;
   /** fetch data from the table: "waitlist" using primary key columns */
   waitlist_by_pk?: Maybe<Waitlist>;
+  /** fetch data from the table: "xero_contact" */
+  xero_contact: Array<Xero_Contact>;
+  /** fetch aggregated fields from the table: "xero_contact" */
+  xero_contact_aggregate: Xero_Contact_Aggregate;
+  /** fetch data from the table: "xero_contact" using primary key columns */
+  xero_contact_by_pk?: Maybe<Xero_Contact>;
   /** fetch data from the table: "xero_credential" */
   xero_credential: Array<Xero_Credential>;
   /** fetch aggregated fields from the table: "xero_credential" */
   xero_credential_aggregate: Xero_Credential_Aggregate;
   /** fetch data from the table: "xero_credential" using primary key columns */
   xero_credential_by_pk?: Maybe<Xero_Credential>;
+  /** fetch data from the table: "xero_invoice" */
+  xero_invoice: Array<Xero_Invoice>;
+  /** fetch aggregated fields from the table: "xero_invoice" */
+  xero_invoice_aggregate: Xero_Invoice_Aggregate;
+  /** fetch data from the table: "xero_invoice" using primary key columns */
+  xero_invoice_by_pk?: Maybe<Xero_Invoice>;
+  /** fetch data from the table: "xero_invoice_status" */
+  xero_invoice_status: Array<Xero_Invoice_Status>;
+  /** fetch aggregated fields from the table: "xero_invoice_status" */
+  xero_invoice_status_aggregate: Xero_Invoice_Status_Aggregate;
+  /** fetch data from the table: "xero_invoice_status" using primary key columns */
+  xero_invoice_status_by_pk?: Maybe<Xero_Invoice_Status>;
 };
 
 
@@ -36959,6 +37271,29 @@ export type Subscription_RootWaitlist_By_PkArgs = {
 };
 
 
+export type Subscription_RootXero_ContactArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Contact_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Contact_Order_By>>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Contact_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Contact_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Contact_Order_By>>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Contact_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Subscription_RootXero_CredentialArgs = {
   distinct_on?: InputMaybe<Array<Xero_Credential_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -36979,6 +37314,52 @@ export type Subscription_RootXero_Credential_AggregateArgs = {
 
 export type Subscription_RootXero_Credential_By_PkArgs = {
   client_id: Scalars['String'];
+};
+
+
+export type Subscription_RootXero_InvoiceArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Invoice_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Invoice_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootXero_Invoice_StatusArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Status_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Status_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Invoice_Status_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Xero_Invoice_Status_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Xero_Invoice_Status_Order_By>>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+
+export type Subscription_RootXero_Invoice_Status_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 /** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
@@ -38294,6 +38675,232 @@ export type Waitlist_Variance_Order_By = {
   courseId?: InputMaybe<Order_By>;
 };
 
+/** Xero contact stored on our end, and synced from Xero */
+export type Xero_Contact = {
+  __typename?: 'xero_contact';
+  addresses?: Maybe<Scalars['jsonb']>;
+  emailAddress?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
+  id: Scalars['uuid'];
+  lastName: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  phones?: Maybe<Scalars['jsonb']>;
+  xeroId: Scalars['String'];
+};
+
+
+/** Xero contact stored on our end, and synced from Xero */
+export type Xero_ContactAddressesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** Xero contact stored on our end, and synced from Xero */
+export type Xero_ContactPhonesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "xero_contact" */
+export type Xero_Contact_Aggregate = {
+  __typename?: 'xero_contact_aggregate';
+  aggregate?: Maybe<Xero_Contact_Aggregate_Fields>;
+  nodes: Array<Xero_Contact>;
+};
+
+/** aggregate fields of "xero_contact" */
+export type Xero_Contact_Aggregate_Fields = {
+  __typename?: 'xero_contact_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Xero_Contact_Max_Fields>;
+  min?: Maybe<Xero_Contact_Min_Fields>;
+};
+
+
+/** aggregate fields of "xero_contact" */
+export type Xero_Contact_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Xero_Contact_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Xero_Contact_Append_Input = {
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  phones?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** Boolean expression to filter rows from the table "xero_contact". All fields are combined with a logical 'AND'. */
+export type Xero_Contact_Bool_Exp = {
+  _and?: InputMaybe<Array<Xero_Contact_Bool_Exp>>;
+  _not?: InputMaybe<Xero_Contact_Bool_Exp>;
+  _or?: InputMaybe<Array<Xero_Contact_Bool_Exp>>;
+  addresses?: InputMaybe<Jsonb_Comparison_Exp>;
+  emailAddress?: InputMaybe<String_Comparison_Exp>;
+  firstName?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  lastName?: InputMaybe<String_Comparison_Exp>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  phones?: InputMaybe<Jsonb_Comparison_Exp>;
+  xeroId?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "xero_contact" */
+export enum Xero_Contact_Constraint {
+  /** unique or primary key constraint */
+  XeroContactPkey = 'xero_contact_pkey',
+  /** unique or primary key constraint */
+  XeroContactXeroIdKey = 'xero_contact_xero_id_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Xero_Contact_Delete_At_Path_Input = {
+  addresses?: InputMaybe<Array<Scalars['String']>>;
+  phones?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Xero_Contact_Delete_Elem_Input = {
+  addresses?: InputMaybe<Scalars['Int']>;
+  phones?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Xero_Contact_Delete_Key_Input = {
+  addresses?: InputMaybe<Scalars['String']>;
+  phones?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "xero_contact" */
+export type Xero_Contact_Insert_Input = {
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  emailAddress?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phones?: InputMaybe<Scalars['jsonb']>;
+  xeroId?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Xero_Contact_Max_Fields = {
+  __typename?: 'xero_contact_max_fields';
+  emailAddress?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  lastName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  xeroId?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Xero_Contact_Min_Fields = {
+  __typename?: 'xero_contact_min_fields';
+  emailAddress?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  lastName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  xeroId?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "xero_contact" */
+export type Xero_Contact_Mutation_Response = {
+  __typename?: 'xero_contact_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Xero_Contact>;
+};
+
+/** input type for inserting object relation for remote table "xero_contact" */
+export type Xero_Contact_Obj_Rel_Insert_Input = {
+  data: Xero_Contact_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Xero_Contact_On_Conflict>;
+};
+
+/** on_conflict condition type for table "xero_contact" */
+export type Xero_Contact_On_Conflict = {
+  constraint: Xero_Contact_Constraint;
+  update_columns?: Array<Xero_Contact_Update_Column>;
+  where?: InputMaybe<Xero_Contact_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "xero_contact". */
+export type Xero_Contact_Order_By = {
+  addresses?: InputMaybe<Order_By>;
+  emailAddress?: InputMaybe<Order_By>;
+  firstName?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  lastName?: InputMaybe<Order_By>;
+  name?: InputMaybe<Order_By>;
+  phones?: InputMaybe<Order_By>;
+  xeroId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: xero_contact */
+export type Xero_Contact_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Xero_Contact_Prepend_Input = {
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  phones?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "xero_contact" */
+export enum Xero_Contact_Select_Column {
+  /** column name */
+  Addresses = 'addresses',
+  /** column name */
+  EmailAddress = 'emailAddress',
+  /** column name */
+  FirstName = 'firstName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LastName = 'lastName',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Phones = 'phones',
+  /** column name */
+  XeroId = 'xeroId'
+}
+
+/** input type for updating data in table "xero_contact" */
+export type Xero_Contact_Set_Input = {
+  addresses?: InputMaybe<Scalars['jsonb']>;
+  emailAddress?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phones?: InputMaybe<Scalars['jsonb']>;
+  xeroId?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "xero_contact" */
+export enum Xero_Contact_Update_Column {
+  /** column name */
+  Addresses = 'addresses',
+  /** column name */
+  EmailAddress = 'emailAddress',
+  /** column name */
+  FirstName = 'firstName',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  LastName = 'lastName',
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Phones = 'phones',
+  /** column name */
+  XeroId = 'xeroId'
+}
+
 /** columns and relationships of "xero_credential" */
 export type Xero_Credential = {
   __typename?: 'xero_credential';
@@ -38406,6 +39013,538 @@ export enum Xero_Credential_Update_Column {
   /** column name */
   Token = 'token'
 }
+
+/** Invoice stored on our end, and synced from Xero */
+export type Xero_Invoice = {
+  __typename?: 'xero_invoice';
+  _status: Xero_Invoice_Status_Enum;
+  amountDue?: Maybe<Scalars['numeric']>;
+  amountPaid?: Maybe<Scalars['numeric']>;
+  /** An object relationship */
+  contact: Xero_Contact;
+  currencyCode: Scalars['String'];
+  dueDate: Scalars['timestamp'];
+  fullyPaidOnDate?: Maybe<Scalars['timestamp']>;
+  id: Scalars['uuid'];
+  invoiceNumber: Scalars['String'];
+  issuedDate: Scalars['timestamp'];
+  lineItems: Scalars['jsonb'];
+  reference: Scalars['String'];
+  /** Calculated invoice status that takes due_date into account */
+  status?: Maybe<Scalars['String']>;
+  subtotal: Scalars['numeric'];
+  total: Scalars['numeric'];
+  totalTax: Scalars['numeric'];
+  xeroContactId: Scalars['String'];
+  xeroId: Scalars['String'];
+};
+
+
+/** Invoice stored on our end, and synced from Xero */
+export type Xero_InvoiceLineItemsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "xero_invoice" */
+export type Xero_Invoice_Aggregate = {
+  __typename?: 'xero_invoice_aggregate';
+  aggregate?: Maybe<Xero_Invoice_Aggregate_Fields>;
+  nodes: Array<Xero_Invoice>;
+};
+
+/** aggregate fields of "xero_invoice" */
+export type Xero_Invoice_Aggregate_Fields = {
+  __typename?: 'xero_invoice_aggregate_fields';
+  avg?: Maybe<Xero_Invoice_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Xero_Invoice_Max_Fields>;
+  min?: Maybe<Xero_Invoice_Min_Fields>;
+  stddev?: Maybe<Xero_Invoice_Stddev_Fields>;
+  stddev_pop?: Maybe<Xero_Invoice_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Xero_Invoice_Stddev_Samp_Fields>;
+  sum?: Maybe<Xero_Invoice_Sum_Fields>;
+  var_pop?: Maybe<Xero_Invoice_Var_Pop_Fields>;
+  var_samp?: Maybe<Xero_Invoice_Var_Samp_Fields>;
+  variance?: Maybe<Xero_Invoice_Variance_Fields>;
+};
+
+
+/** aggregate fields of "xero_invoice" */
+export type Xero_Invoice_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Xero_Invoice_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Xero_Invoice_Append_Input = {
+  lineItems?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** aggregate avg on columns */
+export type Xero_Invoice_Avg_Fields = {
+  __typename?: 'xero_invoice_avg_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "xero_invoice". All fields are combined with a logical 'AND'. */
+export type Xero_Invoice_Bool_Exp = {
+  _and?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
+  _not?: InputMaybe<Xero_Invoice_Bool_Exp>;
+  _or?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
+  _status?: InputMaybe<Xero_Invoice_Status_Enum_Comparison_Exp>;
+  amountDue?: InputMaybe<Numeric_Comparison_Exp>;
+  amountPaid?: InputMaybe<Numeric_Comparison_Exp>;
+  contact?: InputMaybe<Xero_Contact_Bool_Exp>;
+  currencyCode?: InputMaybe<String_Comparison_Exp>;
+  dueDate?: InputMaybe<Timestamp_Comparison_Exp>;
+  fullyPaidOnDate?: InputMaybe<Timestamp_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  invoiceNumber?: InputMaybe<String_Comparison_Exp>;
+  issuedDate?: InputMaybe<Timestamp_Comparison_Exp>;
+  lineItems?: InputMaybe<Jsonb_Comparison_Exp>;
+  reference?: InputMaybe<String_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  subtotal?: InputMaybe<Numeric_Comparison_Exp>;
+  total?: InputMaybe<Numeric_Comparison_Exp>;
+  totalTax?: InputMaybe<Numeric_Comparison_Exp>;
+  xeroContactId?: InputMaybe<String_Comparison_Exp>;
+  xeroId?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "xero_invoice" */
+export enum Xero_Invoice_Constraint {
+  /** unique or primary key constraint */
+  XeroInvoiceInvoiceNumberKey = 'xero_invoice_invoice_number_key',
+  /** unique or primary key constraint */
+  XeroInvoicePkey = 'xero_invoice_pkey',
+  /** unique or primary key constraint */
+  XeroInvoiceXeroIdKey = 'xero_invoice_xero_id_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Xero_Invoice_Delete_At_Path_Input = {
+  lineItems?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Xero_Invoice_Delete_Elem_Input = {
+  lineItems?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Xero_Invoice_Delete_Key_Input = {
+  lineItems?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "xero_invoice" */
+export type Xero_Invoice_Inc_Input = {
+  amountDue?: InputMaybe<Scalars['numeric']>;
+  amountPaid?: InputMaybe<Scalars['numeric']>;
+  subtotal?: InputMaybe<Scalars['numeric']>;
+  total?: InputMaybe<Scalars['numeric']>;
+  totalTax?: InputMaybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "xero_invoice" */
+export type Xero_Invoice_Insert_Input = {
+  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
+  amountDue?: InputMaybe<Scalars['numeric']>;
+  amountPaid?: InputMaybe<Scalars['numeric']>;
+  contact?: InputMaybe<Xero_Contact_Obj_Rel_Insert_Input>;
+  currencyCode?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['timestamp']>;
+  fullyPaidOnDate?: InputMaybe<Scalars['timestamp']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  invoiceNumber?: InputMaybe<Scalars['String']>;
+  issuedDate?: InputMaybe<Scalars['timestamp']>;
+  lineItems?: InputMaybe<Scalars['jsonb']>;
+  reference?: InputMaybe<Scalars['String']>;
+  subtotal?: InputMaybe<Scalars['numeric']>;
+  total?: InputMaybe<Scalars['numeric']>;
+  totalTax?: InputMaybe<Scalars['numeric']>;
+  xeroContactId?: InputMaybe<Scalars['String']>;
+  xeroId?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Xero_Invoice_Max_Fields = {
+  __typename?: 'xero_invoice_max_fields';
+  amountDue?: Maybe<Scalars['numeric']>;
+  amountPaid?: Maybe<Scalars['numeric']>;
+  currencyCode?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['timestamp']>;
+  fullyPaidOnDate?: Maybe<Scalars['timestamp']>;
+  id?: Maybe<Scalars['uuid']>;
+  invoiceNumber?: Maybe<Scalars['String']>;
+  issuedDate?: Maybe<Scalars['timestamp']>;
+  reference?: Maybe<Scalars['String']>;
+  subtotal?: Maybe<Scalars['numeric']>;
+  total?: Maybe<Scalars['numeric']>;
+  totalTax?: Maybe<Scalars['numeric']>;
+  xeroContactId?: Maybe<Scalars['String']>;
+  xeroId?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Xero_Invoice_Min_Fields = {
+  __typename?: 'xero_invoice_min_fields';
+  amountDue?: Maybe<Scalars['numeric']>;
+  amountPaid?: Maybe<Scalars['numeric']>;
+  currencyCode?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['timestamp']>;
+  fullyPaidOnDate?: Maybe<Scalars['timestamp']>;
+  id?: Maybe<Scalars['uuid']>;
+  invoiceNumber?: Maybe<Scalars['String']>;
+  issuedDate?: Maybe<Scalars['timestamp']>;
+  reference?: Maybe<Scalars['String']>;
+  subtotal?: Maybe<Scalars['numeric']>;
+  total?: Maybe<Scalars['numeric']>;
+  totalTax?: Maybe<Scalars['numeric']>;
+  xeroContactId?: Maybe<Scalars['String']>;
+  xeroId?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "xero_invoice" */
+export type Xero_Invoice_Mutation_Response = {
+  __typename?: 'xero_invoice_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Xero_Invoice>;
+};
+
+/** input type for inserting object relation for remote table "xero_invoice" */
+export type Xero_Invoice_Obj_Rel_Insert_Input = {
+  data: Xero_Invoice_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Xero_Invoice_On_Conflict>;
+};
+
+/** on_conflict condition type for table "xero_invoice" */
+export type Xero_Invoice_On_Conflict = {
+  constraint: Xero_Invoice_Constraint;
+  update_columns?: Array<Xero_Invoice_Update_Column>;
+  where?: InputMaybe<Xero_Invoice_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "xero_invoice". */
+export type Xero_Invoice_Order_By = {
+  _status?: InputMaybe<Order_By>;
+  amountDue?: InputMaybe<Order_By>;
+  amountPaid?: InputMaybe<Order_By>;
+  contact?: InputMaybe<Xero_Contact_Order_By>;
+  currencyCode?: InputMaybe<Order_By>;
+  dueDate?: InputMaybe<Order_By>;
+  fullyPaidOnDate?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  invoiceNumber?: InputMaybe<Order_By>;
+  issuedDate?: InputMaybe<Order_By>;
+  lineItems?: InputMaybe<Order_By>;
+  reference?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  subtotal?: InputMaybe<Order_By>;
+  total?: InputMaybe<Order_By>;
+  totalTax?: InputMaybe<Order_By>;
+  xeroContactId?: InputMaybe<Order_By>;
+  xeroId?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: xero_invoice */
+export type Xero_Invoice_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Xero_Invoice_Prepend_Input = {
+  lineItems?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "xero_invoice" */
+export enum Xero_Invoice_Select_Column {
+  /** column name */
+  Status = '_status',
+  /** column name */
+  AmountDue = 'amountDue',
+  /** column name */
+  AmountPaid = 'amountPaid',
+  /** column name */
+  CurrencyCode = 'currencyCode',
+  /** column name */
+  DueDate = 'dueDate',
+  /** column name */
+  FullyPaidOnDate = 'fullyPaidOnDate',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  InvoiceNumber = 'invoiceNumber',
+  /** column name */
+  IssuedDate = 'issuedDate',
+  /** column name */
+  LineItems = 'lineItems',
+  /** column name */
+  Reference = 'reference',
+  /** column name */
+  Subtotal = 'subtotal',
+  /** column name */
+  Total = 'total',
+  /** column name */
+  TotalTax = 'totalTax',
+  /** column name */
+  XeroContactId = 'xeroContactId',
+  /** column name */
+  XeroId = 'xeroId'
+}
+
+/** input type for updating data in table "xero_invoice" */
+export type Xero_Invoice_Set_Input = {
+  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
+  amountDue?: InputMaybe<Scalars['numeric']>;
+  amountPaid?: InputMaybe<Scalars['numeric']>;
+  currencyCode?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['timestamp']>;
+  fullyPaidOnDate?: InputMaybe<Scalars['timestamp']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  invoiceNumber?: InputMaybe<Scalars['String']>;
+  issuedDate?: InputMaybe<Scalars['timestamp']>;
+  lineItems?: InputMaybe<Scalars['jsonb']>;
+  reference?: InputMaybe<Scalars['String']>;
+  subtotal?: InputMaybe<Scalars['numeric']>;
+  total?: InputMaybe<Scalars['numeric']>;
+  totalTax?: InputMaybe<Scalars['numeric']>;
+  xeroContactId?: InputMaybe<Scalars['String']>;
+  xeroId?: InputMaybe<Scalars['String']>;
+};
+
+/** columns and relationships of "xero_invoice_status" */
+export type Xero_Invoice_Status = {
+  __typename?: 'xero_invoice_status';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "xero_invoice_status" */
+export type Xero_Invoice_Status_Aggregate = {
+  __typename?: 'xero_invoice_status_aggregate';
+  aggregate?: Maybe<Xero_Invoice_Status_Aggregate_Fields>;
+  nodes: Array<Xero_Invoice_Status>;
+};
+
+/** aggregate fields of "xero_invoice_status" */
+export type Xero_Invoice_Status_Aggregate_Fields = {
+  __typename?: 'xero_invoice_status_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Xero_Invoice_Status_Max_Fields>;
+  min?: Maybe<Xero_Invoice_Status_Min_Fields>;
+};
+
+
+/** aggregate fields of "xero_invoice_status" */
+export type Xero_Invoice_Status_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Xero_Invoice_Status_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "xero_invoice_status". All fields are combined with a logical 'AND'. */
+export type Xero_Invoice_Status_Bool_Exp = {
+  _and?: InputMaybe<Array<Xero_Invoice_Status_Bool_Exp>>;
+  _not?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+  _or?: InputMaybe<Array<Xero_Invoice_Status_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "xero_invoice_status" */
+export enum Xero_Invoice_Status_Constraint {
+  /** unique or primary key constraint */
+  XeroInvoiceStatusPkey = 'xero_invoice_status_pkey'
+}
+
+export enum Xero_Invoice_Status_Enum {
+  Authorised = 'AUTHORISED',
+  Deleted = 'DELETED',
+  Draft = 'DRAFT',
+  Overdue = 'OVERDUE',
+  Paid = 'PAID',
+  Submitted = 'SUBMITTED',
+  Voided = 'VOIDED'
+}
+
+/** Boolean expression to compare columns of type "xero_invoice_status_enum". All fields are combined with logical 'AND'. */
+export type Xero_Invoice_Status_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Xero_Invoice_Status_Enum>;
+  _in?: InputMaybe<Array<Xero_Invoice_Status_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Xero_Invoice_Status_Enum>;
+  _nin?: InputMaybe<Array<Xero_Invoice_Status_Enum>>;
+};
+
+/** input type for inserting data into table "xero_invoice_status" */
+export type Xero_Invoice_Status_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Xero_Invoice_Status_Max_Fields = {
+  __typename?: 'xero_invoice_status_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Xero_Invoice_Status_Min_Fields = {
+  __typename?: 'xero_invoice_status_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "xero_invoice_status" */
+export type Xero_Invoice_Status_Mutation_Response = {
+  __typename?: 'xero_invoice_status_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Xero_Invoice_Status>;
+};
+
+/** on_conflict condition type for table "xero_invoice_status" */
+export type Xero_Invoice_Status_On_Conflict = {
+  constraint: Xero_Invoice_Status_Constraint;
+  update_columns?: Array<Xero_Invoice_Status_Update_Column>;
+  where?: InputMaybe<Xero_Invoice_Status_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "xero_invoice_status". */
+export type Xero_Invoice_Status_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: xero_invoice_status */
+export type Xero_Invoice_Status_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "xero_invoice_status" */
+export enum Xero_Invoice_Status_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "xero_invoice_status" */
+export type Xero_Invoice_Status_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "xero_invoice_status" */
+export enum Xero_Invoice_Status_Update_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** aggregate stddev on columns */
+export type Xero_Invoice_Stddev_Fields = {
+  __typename?: 'xero_invoice_stddev_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Xero_Invoice_Stddev_Pop_Fields = {
+  __typename?: 'xero_invoice_stddev_pop_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Xero_Invoice_Stddev_Samp_Fields = {
+  __typename?: 'xero_invoice_stddev_samp_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Xero_Invoice_Sum_Fields = {
+  __typename?: 'xero_invoice_sum_fields';
+  amountDue?: Maybe<Scalars['numeric']>;
+  amountPaid?: Maybe<Scalars['numeric']>;
+  subtotal?: Maybe<Scalars['numeric']>;
+  total?: Maybe<Scalars['numeric']>;
+  totalTax?: Maybe<Scalars['numeric']>;
+};
+
+/** update columns of table "xero_invoice" */
+export enum Xero_Invoice_Update_Column {
+  /** column name */
+  Status = '_status',
+  /** column name */
+  AmountDue = 'amountDue',
+  /** column name */
+  AmountPaid = 'amountPaid',
+  /** column name */
+  CurrencyCode = 'currencyCode',
+  /** column name */
+  DueDate = 'dueDate',
+  /** column name */
+  FullyPaidOnDate = 'fullyPaidOnDate',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  InvoiceNumber = 'invoiceNumber',
+  /** column name */
+  IssuedDate = 'issuedDate',
+  /** column name */
+  LineItems = 'lineItems',
+  /** column name */
+  Reference = 'reference',
+  /** column name */
+  Subtotal = 'subtotal',
+  /** column name */
+  Total = 'total',
+  /** column name */
+  TotalTax = 'totalTax',
+  /** column name */
+  XeroContactId = 'xeroContactId',
+  /** column name */
+  XeroId = 'xeroId'
+}
+
+/** aggregate var_pop on columns */
+export type Xero_Invoice_Var_Pop_Fields = {
+  __typename?: 'xero_invoice_var_pop_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Xero_Invoice_Var_Samp_Fields = {
+  __typename?: 'xero_invoice_var_samp_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Xero_Invoice_Variance_Fields = {
+  __typename?: 'xero_invoice_variance_fields';
+  amountDue?: Maybe<Scalars['Float']>;
+  amountPaid?: Maybe<Scalars['Float']>;
+  subtotal?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  totalTax?: Maybe<Scalars['Float']>;
+};
 
 export type ReplaceParticipantMutationVariables = Exact<{
   input: ReplaceParticipantInput;

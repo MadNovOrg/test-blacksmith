@@ -1,0 +1,1 @@
+DROP FUNCTION public.calculate_invoice_status(invoice_row public.xero_invoice);

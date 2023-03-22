@@ -42,67 +42,77 @@ object_relationships:
   - name: contact
     using:
       foreign_key_constraint_on: xero_contact_id
+computed_fields:
+  - name: status
+    definition:
+      function:
+        schema: public
+        name: calculate_invoice_status
+    comment: Calculated invoice status that takes due_date into account
 select_permissions:
   - role: sales-admin
     permission:
       columns:
-        - line_items
         - amount_due
         - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
         - subtotal
         - total
         - total_tax
-        - currency_code
-        - invoice_number
-        - reference
-        - status
         - xero_contact_id
         - xero_id
-        - due_date
-        - fully_paid_on_date
-        - issued_date
-        - id
+      computed_fields:
+        - status
       filter: {}
       allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
-        - line_items
         - amount_due
         - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
         - subtotal
         - total
         - total_tax
-        - currency_code
-        - invoice_number
-        - reference
-        - status
         - xero_contact_id
         - xero_id
-        - due_date
-        - fully_paid_on_date
-        - issued_date
-        - id
+      computed_fields:
+        - status
       filter: {}
       allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
-        - line_items
         - amount_due
         - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
         - subtotal
         - total
         - total_tax
-        - currency_code
-        - invoice_number
-        - reference
-        - status
         - xero_contact_id
         - xero_id
-        - due_date
-        - fully_paid_on_date
-        - issued_date
-        - id
+      computed_fields:
+        - status
       filter: {}
       allow_aggregations: true
