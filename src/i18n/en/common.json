@@ -351,7 +351,25 @@
     "cert-loading": "Loading certificate...",
     "completed-message": "Has successfully completed the following Team teach course:",
     "modify-grade": "Modify grade",
+    "manage-certification": "Manage Certification",
+    "revoke-certificate": "Revoke Certificate",
+    "hold-certificate": "Put on hold",
     "change-log": "Change log",
+    "put-on-hold-modal": {
+      "warning": "Once you put on hold, attendee will no longer have access to the certificate.",
+      "notes": "Notes",
+      "reason": "Reason",
+      "please-add-a-note": "Please add a note (optional)",
+      "select-reason": "Select a reason",
+      "select-reason-error": "Please select a reason",
+      "to-date-greater-error": "To date must be greater than from",
+      "reasons": {
+        "maternity": "Maternity leave",
+        "sickness": "Long Term sickness",
+        "legal": "Legal Reason",
+        "others": "Others"
+      }
+    },
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
       "please-add-a-note": "Please add a note*",

@@ -30,9 +30,12 @@ import {
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
 import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
+import PutOnHoldModal from '@app/components/CourseCertification/PutOnHoldModal'
 import { Dialog } from '@app/components/Dialog'
+import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
+import { Course_Level_Enum } from '@app/generated/graphql'
 import {
   ParamsType as GetCertificateParamsType,
   QUERY as GetCertificateQuery,
@@ -297,8 +300,10 @@ export const CourseCertification: React.FC<
 > = ({ certificateId }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
+
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
+  const [showPutOnHoldModal, setShowPutOnHoldModal] = useState(false)
 
   const { data, error } = useSWR<
     GetCertificateResponseType,
@@ -406,30 +411,14 @@ export const CourseCertification: React.FC<
               ) : null}
 
               {acl.canOverrideGrades() ? (
-                <Box mt={2}>
-                  <Button
-                    fullWidth
-                    data-testid="modify-grade-button"
-                    size="large"
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => setShowModifyGradeModal(true)}
-                  >
-                    {t('common.course-certificate.modify-grade')}
-                  </Button>
-                  {certificate.participant?.certificateChanges?.length ? (
-                    <Button
-                      fullWidth
-                      data-testid="change-log-button"
-                      size="large"
-                      variant="text"
-                      color="primary"
-                      onClick={() => setShowChangelogModal(true)}
-                    >
-                      {t('common.course-certificate.change-log')}
-                    </Button>
-                  ) : null}
-                </Box>
+                <ManageCertificateMenu
+                  certificateChangeLength={
+                    certificate.participant?.certificateChanges?.length
+                  }
+                  onShowModifyGrade={() => setShowModifyGradeModal(true)}
+                  onShowChangelogModal={() => setShowChangelogModal(true)}
+                  onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
+                />
               ) : null}
             </Grid>
           </Grid>
@@ -448,6 +437,20 @@ export const CourseCertification: React.FC<
 
       {courseParticipant ? (
         <>
+          <Dialog
+            open={showPutOnHoldModal}
+            onClose={() => setShowPutOnHoldModal(false)}
+            title={t('common.course-certificate.hold-certificate')}
+            maxWidth={800}
+          >
+            <PutOnHoldModal
+              onClose={() => setShowPutOnHoldModal(false)}
+              courseLevel={
+                certificate.courseLevel as unknown as Course_Level_Enum
+              }
+            />
+          </Dialog>
+
           <Dialog
             open={showModifyGradeModal}
             onClose={() => setShowModifyGradeModal(false)}
