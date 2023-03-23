@@ -25,6 +25,11 @@ export const GET_COURSE_AUDIT_LOGS_QUERY = gql`
       course {
         id
         course_code
+        type
+        orders {
+          id
+          xeroInvoiceNumber
+        }
       }
       payload
     }

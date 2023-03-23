@@ -15,10 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Audit_Type_Enum,
-  GetCourseAuditLogsQuery,
-} from '@app/generated/graphql'
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import useCourseAuditLogs from '@app/hooks/useCourseAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -27,9 +24,11 @@ import {
   FilterChangeEvent,
 } from '@app/pages/admin/Audits/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
-import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
-
-type LogType = GetCourseAuditLogsQuery['logs'][0]
+import {
+  CourseLogType,
+  getCourseInvoice,
+  getExportDataRenderFunction,
+} from '@app/pages/admin/Audits/util'
 
 export const CourseCancellationTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -59,7 +58,7 @@ export const CourseCancellationTable: React.FC<
         id: 'created_at',
         label: t('pages.audits.event-time'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           t('dates.withTime', {
             date: log.created_at,
           }),
@@ -68,20 +67,27 @@ export const CourseCancellationTable: React.FC<
         id: 'course.course_code',
         label: t('pages.audits.course'),
         sorting: true,
-        exportRender: (log: LogType) => log.course.course_code ?? '',
+        exportRender: (log: CourseLogType) => log.course.course_code ?? '',
+      },
+      {
+        id: 'invoice_no',
+        label: t('common.invoice-no'),
+        sorting: false,
+        exportRender: (log: CourseLogType) =>
+          getCourseInvoice(log)?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
-        exportRender: (log: LogType) => log.authorizedBy.fullName ?? '',
+        exportRender: (log: CourseLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
     [t]
   )
 
   const renderExportData = useMemo(
-    () => getExportDataRenderFunction<LogType>(cols, logs),
+    () => getExportDataRenderFunction<CourseLogType>(cols, logs),
     [cols, logs]
   )
 
@@ -141,35 +147,47 @@ export const CourseCancellationTable: React.FC<
                   colSpan={cols.length}
                 />
 
-                {logs.map(log => (
-                  <TableRow
-                    key={log.id}
-                    data-testid={`audit-log-entry-${log.id}`}
-                  >
-                    <TableCell>
-                      {t('dates.withTime', {
-                        date: log.created_at,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/manage-courses/all/${log.course.id}/details`}
-                      >
-                        <Typography variant="body2">
-                          {log.course.course_code}
-                        </Typography>
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {log.authorizedBy ? (
-                        <ProfileWithAvatar
-                          profile={log.authorizedBy}
-                          useLink={true}
-                        />
-                      ) : null}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {logs.map(log => {
+                  const invoice = getCourseInvoice(log)
+                  return (
+                    <TableRow
+                      key={log.id}
+                      data-testid={`audit-log-entry-${log.id}`}
+                    >
+                      <TableCell>
+                        {t('dates.withTime', {
+                          date: log.created_at,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/manage-courses/all/${log.course.id}/details`}
+                        >
+                          <Typography variant="body2">
+                            {log.course.course_code}
+                          </Typography>
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        {invoice ? (
+                          <Link href={`/orders/${invoice.id}`}>
+                            <Typography variant="body2">
+                              {invoice.xeroInvoiceNumber}
+                            </Typography>
+                          </Link>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        {log.authorizedBy ? (
+                          <ProfileWithAvatar
+                            profile={log.authorizedBy}
+                            useLink={true}
+                          />
+                        ) : null}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
 

@@ -561,5 +561,6 @@
   "more": "More",
   "cancellation-requested": "Cancellation requested",
   "tbc": "TBC",
-  "archived-profile": "Archived user"
+  "archived-profile": "Archived user",
+  "invoice-no": "Invoice no."
 }

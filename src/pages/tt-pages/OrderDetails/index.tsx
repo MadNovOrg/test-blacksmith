@@ -1,12 +1,12 @@
 import {
   Box,
+  Button,
+  Chip,
   CircularProgress,
   Container,
-  Stack,
-  Button,
-  Typography,
-  Chip,
   Link,
+  Stack,
+  Typography,
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useParams } from 'react-router-dom'
@@ -19,12 +19,12 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
-  XeroInvoiceStatus,
-  Payment_Methods_Enum,
-  XeroPhoneType,
-  CourseLevel,
   Course_Type_Enum,
+  CourseLevel,
+  Payment_Methods_Enum,
   XeroAddressType,
+  XeroInvoiceStatus,
+  XeroPhoneType,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -166,7 +166,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
             <Box display="flex" flexDirection="column" pr={4}>
               <Sticky top={20}>
                 <Box mb={4}>
-                  <BackButton label={t('back-button-label')} to="/orders" />
+                  <BackButton />
                 </Box>
                 <Typography variant="h2" mb={3}>
                   {t('title')}

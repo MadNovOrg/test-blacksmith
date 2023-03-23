@@ -15,10 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Participant_Audit_Type_Enum,
-  GetAttendeeAuditLogsQuery,
-} from '@app/generated/graphql'
+import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -27,9 +24,11 @@ import {
   FilterChangeEvent,
 } from '@app/pages/admin/Audits/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
-import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
-
-type LogType = GetAttendeeAuditLogsQuery['logs'][0]
+import {
+  AttendeeLogType,
+  getAttendeeInvoice,
+  getExportDataRenderFunction,
+} from '@app/pages/admin/Audits/util'
 
 export const AttendeeTransferTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -59,7 +58,7 @@ export const AttendeeTransferTable: React.FC<
         id: 'created_at',
         label: t('pages.audits.event-time'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: AttendeeLogType) =>
           t('dates.withTime', {
             date: log.created_at,
           }),
@@ -68,40 +67,47 @@ export const AttendeeTransferTable: React.FC<
         id: 'fromCourse.course_code',
         label: t('pages.audits.original-course'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: AttendeeLogType) =>
           log.fromCourse ? log.fromCourse[0].course_code ?? '' : '',
       },
       {
         id: 'toCourse.course_code',
         label: t('pages.audits.new-course'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: AttendeeLogType) =>
           log.toCourse ? log.toCourse[0].course_code ?? '' : '',
       },
       {
         id: 'profile.fullName',
         label: t('common.attendee'),
         sorting: true,
-        exportRender: (log: LogType) => log.profile.fullName ?? '',
+        exportRender: (log: AttendeeLogType) => log.profile.fullName ?? '',
       },
       {
         id: 'profile.email',
         label: t('common.email'),
         sorting: true,
-        exportRender: (log: LogType) => log.profile.email ?? '',
+        exportRender: (log: AttendeeLogType) => log.profile.email ?? '',
+      },
+      {
+        id: 'invoice_no',
+        label: t('common.invoice-no'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          getAttendeeInvoice(log)?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
-        exportRender: (log: LogType) => log.authorizedBy.fullName ?? '',
+        exportRender: (log: AttendeeLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
     [t]
   )
 
   const renderExportData = useMemo(
-    () => getExportDataRenderFunction<LogType>(cols, logs),
+    () => getExportDataRenderFunction<AttendeeLogType>(cols, logs),
     [cols, logs]
   )
 
@@ -164,6 +170,7 @@ export const AttendeeTransferTable: React.FC<
                 {logs.map(log => {
                   const from = log.fromCourse ? log.fromCourse[0] : null
                   const to = log.toCourse ? log.toCourse[0] : null
+                  const invoice = getAttendeeInvoice(log)
                   return (
                     <TableRow
                       key={log.id}
@@ -203,6 +210,15 @@ export const AttendeeTransferTable: React.FC<
                         <Typography variant="body2">
                           {log.profile.email}
                         </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {invoice ? (
+                          <Link href={`/orders/${invoice.id}`}>
+                            <Typography variant="body2">
+                              {invoice.xeroInvoiceNumber}
+                            </Typography>
+                          </Link>
+                        ) : null}
                       </TableCell>
                       <TableCell>
                         {log.authorizedBy ? (

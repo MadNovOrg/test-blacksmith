@@ -1,8 +1,8 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Container, Tab, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
@@ -24,16 +24,21 @@ enum PageTab {
 export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t } = useTranslation()
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   const initialTab =
     (searchParams.get('tab') as PageTab) ?? PageTab.ATTENDEE_CANCELLATION
   const [activeTab, setActiveTab] = useState<PageTab>(initialTab)
 
+  useEffect(() => {
+    if (initialTab) setActiveTab(initialTab)
+  }, [initialTab])
+
   return (
     <FullHeightPage>
       <Box sx={{ bgcolor: theme.palette.grey[100] }}>
         <Container maxWidth="lg" sx={{ py: 2 }}>
-          <BackButton label={t('pages.audits.back-to-settings')} to="/admin" />
+          <BackButton />
 
           <Typography variant="h1" py={2} fontWeight={600}>
             {t(`pages.audits.title`)}
@@ -55,7 +60,11 @@ export const AuditsPage: React.FC<React.PropsWithChildren<unknown>> = () => {
                 justifyContent="space-between"
                 alignItems="end"
               >
-                <TabList onChange={(_, val) => setActiveTab(val as PageTab)}>
+                <TabList
+                  onChange={(_, tab) =>
+                    navigate(`.?tab=${tab}`, { replace: true })
+                  }
+                >
                   <Tab
                     label={t(`pages.audits.${PageTab.ATTENDEE_CANCELLATION}`)}
                     value={PageTab.ATTENDEE_CANCELLATION}

@@ -15,10 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Participant_Audit_Type_Enum,
-  GetAttendeeAuditLogsQuery,
-} from '@app/generated/graphql'
+import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
 import useAttendeeAuditLogs from '@app/hooks/useAttendeeAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -27,9 +24,11 @@ import {
   FilterChangeEvent,
 } from '@app/pages/admin/Audits/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
-import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
-
-type LogType = GetAttendeeAuditLogsQuery['logs'][0]
+import {
+  AttendeeLogType,
+  getAttendeeInvoice,
+  getExportDataRenderFunction,
+} from '@app/pages/admin/Audits/util'
 
 export const AttendeeReplacementTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -59,7 +58,7 @@ export const AttendeeReplacementTable: React.FC<
         id: 'created_at',
         label: t('pages.audits.event-time'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: AttendeeLogType) =>
           t('dates.withTime', {
             date: log.created_at,
           }),
@@ -68,19 +67,19 @@ export const AttendeeReplacementTable: React.FC<
         id: 'profile.fullName',
         label: t('pages.audits.original-attendee'),
         sorting: true,
-        exportRender: (log: LogType) => log.profile.fullName ?? '',
+        exportRender: (log: AttendeeLogType) => log.profile.fullName ?? '',
       },
       {
         id: 'profile.email',
         label: t('common.email'),
         sorting: true,
-        exportRender: (log: LogType) => log.profile.email ?? '',
+        exportRender: (log: AttendeeLogType) => log.profile.email ?? '',
       },
       {
         id: 'newAttendeeEmail',
         label: t('pages.audits.new-attendee'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: AttendeeLogType) =>
           `${log.payload?.inviteeFirstName} ${log.payload?.inviteeLastName} \n${log.newAttendeeEmail}` ??
           '',
       },
@@ -88,20 +87,27 @@ export const AttendeeReplacementTable: React.FC<
         id: 'course.course_code',
         label: t('common.course'),
         sorting: true,
-        exportRender: (log: LogType) => log.course.course_code ?? '',
+        exportRender: (log: AttendeeLogType) => log.course.course_code ?? '',
+      },
+      {
+        id: 'invoice_no',
+        label: t('common.invoice-no'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          getAttendeeInvoice(log)?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
-        exportRender: (log: LogType) => log.authorizedBy.fullName ?? '',
+        exportRender: (log: AttendeeLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
     [t]
   )
 
   const renderExportData = useMemo(
-    () => getExportDataRenderFunction<LogType>(cols, logs),
+    () => getExportDataRenderFunction<AttendeeLogType>(cols, logs),
     [cols, logs]
   )
 
@@ -161,71 +167,83 @@ export const AttendeeReplacementTable: React.FC<
                   colSpan={cols.length}
                 />
 
-                {logs.map(log => (
-                  <TableRow
-                    key={log.id}
-                    data-testid={`audit-log-entry-${log.id}`}
-                  >
-                    <TableCell>
-                      {t('dates.withTime', {
-                        date: log.created_at,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {log.profile ? (
-                        <ProfileWithAvatar
-                          profile={log.profile}
-                          typographySx={{
-                            textDecoration: 'line-through',
-                          }}
-                          useLink={true}
-                        />
-                      ) : null}
-                    </TableCell>
-                    <TableCell>
-                      <Typography
-                        variant="body2"
-                        sx={{ textDecoration: 'line-through' }}
-                      >
-                        {log.profile.email}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      {log.payload?.inviteeFirstName &&
-                      log.payload?.inviteeLastName ? (
-                        <Typography>
-                          {log.payload?.inviteeFirstName}{' '}
-                          {log.payload?.inviteeLastName}
+                {logs.map(log => {
+                  const invoice = getAttendeeInvoice(log)
+                  return (
+                    <TableRow
+                      key={log.id}
+                      data-testid={`audit-log-entry-${log.id}`}
+                    >
+                      <TableCell>
+                        {t('dates.withTime', {
+                          date: log.created_at,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {log.profile ? (
+                          <ProfileWithAvatar
+                            profile={log.profile}
+                            typographySx={{
+                              textDecoration: 'line-through',
+                            }}
+                            useLink={true}
+                          />
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        <Typography
+                          variant="body2"
+                          sx={{ textDecoration: 'line-through' }}
+                        >
+                          {log.profile.email}
                         </Typography>
-                      ) : null}
-                      <Typography
-                        variant={
-                          log.payload?.inviteeFirstName &&
-                          log.payload?.inviteeLastName
-                            ? 'body2'
-                            : 'body1'
-                        }
-                      >
-                        {log.newAttendeeEmail}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/manage-courses/all/${log.course.id}/details`}
-                      >
-                        {log.course.course_code}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {log.authorizedBy ? (
-                        <ProfileWithAvatar
-                          profile={log.authorizedBy}
-                          useLink={true}
-                        />
-                      ) : null}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell>
+                        {log.payload?.inviteeFirstName &&
+                        log.payload?.inviteeLastName ? (
+                          <Typography>
+                            {log.payload?.inviteeFirstName}{' '}
+                            {log.payload?.inviteeLastName}
+                          </Typography>
+                        ) : null}
+                        <Typography
+                          variant={
+                            log.payload?.inviteeFirstName &&
+                            log.payload?.inviteeLastName
+                              ? 'body2'
+                              : 'body1'
+                          }
+                        >
+                          {log.newAttendeeEmail}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/manage-courses/all/${log.course.id}/details`}
+                        >
+                          {log.course.course_code}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        {invoice ? (
+                          <Link href={`/orders/${invoice.id}`}>
+                            <Typography variant="body2">
+                              {invoice.xeroInvoiceNumber}
+                            </Typography>
+                          </Link>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        {log.authorizedBy ? (
+                          <ProfileWithAvatar
+                            profile={log.authorizedBy}
+                            useLink={true}
+                          />
+                        ) : null}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
 

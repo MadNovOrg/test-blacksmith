@@ -32,6 +32,12 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
       course {
         id
         course_code
+        type
+        orders {
+          id
+          registrants
+          xeroInvoiceNumber
+        }
       }
       fromCourse {
         id

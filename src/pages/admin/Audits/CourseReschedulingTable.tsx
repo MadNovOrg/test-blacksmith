@@ -15,10 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { ProfileWithAvatar } from '@app/components/ProfileWithAvatar'
 import { TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import {
-  Course_Audit_Type_Enum,
-  GetCourseAuditLogsQuery,
-} from '@app/generated/graphql'
+import { Course_Audit_Type_Enum } from '@app/generated/graphql'
 import useCourseAuditLogs from '@app/hooks/useCourseAuditLogs'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
@@ -27,9 +24,11 @@ import {
   FilterChangeEvent,
 } from '@app/pages/admin/Audits/AuditFilteringSidebar'
 import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
-import { getExportDataRenderFunction } from '@app/pages/admin/Audits/util'
-
-type LogType = GetCourseAuditLogsQuery['logs'][0]
+import {
+  CourseLogType,
+  getCourseInvoice,
+  getExportDataRenderFunction,
+} from '@app/pages/admin/Audits/util'
 
 export const CourseReschedulingTable: React.FC<
   React.PropsWithChildren<unknown>
@@ -59,7 +58,7 @@ export const CourseReschedulingTable: React.FC<
         id: 'created_at',
         label: t('pages.audits.event-time'),
         sorting: true,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           t('dates.withTime', {
             date: log.created_at,
           }),
@@ -68,41 +67,48 @@ export const CourseReschedulingTable: React.FC<
         id: 'course.course_code',
         label: t('pages.audits.course'),
         sorting: true,
-        exportRender: (log: LogType) => log.course.course_code ?? '',
+        exportRender: (log: CourseLogType) => log.course.course_code ?? '',
       },
       {
         id: 'course.old_start_date',
         label: t('pages.audits.old-start-date'),
         sorting: false,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           new Date(log.payload?.oldStartDate).toString(),
       },
       {
         id: 'course.new_start_date',
         label: t('pages.audits.new-start-date'),
         sorting: false,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           new Date(log.payload?.newStartDate).toString(),
       },
       {
         id: 'course.old_end_date',
         label: t('pages.audits.old-end-date'),
         sorting: false,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           new Date(log.payload?.oldEndDate).toString(),
       },
       {
         id: 'course.new_end_date',
         label: t('pages.audits.new-end-date'),
         sorting: false,
-        exportRender: (log: LogType) =>
+        exportRender: (log: CourseLogType) =>
           new Date(log.payload?.newEndDate).toString(),
+      },
+      {
+        id: 'invoice_no',
+        label: t('common.invoice-no'),
+        sorting: false,
+        exportRender: (log: CourseLogType) =>
+          getCourseInvoice(log)?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
         label: t('pages.audits.authorised-by'),
         sorting: true,
-        exportRender: (log: LogType) => log.authorizedBy.fullName ?? '',
+        exportRender: (log: CourseLogType) => log.authorizedBy.fullName ?? '',
       },
     ],
     [t]
@@ -118,7 +124,7 @@ export const CourseReschedulingTable: React.FC<
   }, [])
 
   const renderExportData = useMemo(
-    () => getExportDataRenderFunction<LogType>(cols, logs),
+    () => getExportDataRenderFunction<CourseLogType>(cols, logs),
     [cols, logs]
   )
 
@@ -169,65 +175,77 @@ export const CourseReschedulingTable: React.FC<
                   colSpan={cols.length}
                 />
 
-                {logs.map(log => (
-                  <TableRow
-                    key={log.id}
-                    data-testid={`audit-log-entry-${log.id}`}
-                  >
-                    <TableCell>
-                      {t('dates.withTime', {
-                        date: log.created_at,
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/manage-courses/all/${log.course.id}/details`}
+                {logs.map(log => {
+                  const invoice = getCourseInvoice(log)
+                  return (
+                    <TableRow
+                      key={log.id}
+                      data-testid={`audit-log-entry-${log.id}`}
+                    >
+                      <TableCell>
+                        {t('dates.withTime', {
+                          date: log.created_at,
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/manage-courses/all/${log.course.id}/details`}
+                        >
+                          <Typography variant="body2">
+                            {log.course.course_code}
+                          </Typography>
+                        </Link>
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textDecoration: 'line-through',
+                          color: 'dimGrey.main',
+                        }}
                       >
-                        <Typography variant="body2">
-                          {log.course.course_code}
-                        </Typography>
-                      </Link>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textDecoration: 'line-through',
-                        color: 'dimGrey.main',
-                      }}
-                    >
-                      {t('dates.defaultShort', {
-                        date: new Date(log.payload?.oldStartDate),
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {t('dates.defaultShort', {
-                        date: new Date(log.payload?.newStartDate),
-                      })}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textDecoration: 'line-through',
-                        color: 'dimGrey.main',
-                      }}
-                    >
-                      {t('dates.defaultShort', {
-                        date: new Date(log.payload?.oldEndDate),
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {t('dates.defaultShort', {
-                        date: new Date(log.payload?.newEndDate),
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      {log.authorizedBy ? (
-                        <ProfileWithAvatar
-                          profile={log.authorizedBy}
-                          useLink={true}
-                        />
-                      ) : null}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                        {t('dates.defaultShort', {
+                          date: new Date(log.payload?.oldStartDate),
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {t('dates.defaultShort', {
+                          date: new Date(log.payload?.newStartDate),
+                        })}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textDecoration: 'line-through',
+                          color: 'dimGrey.main',
+                        }}
+                      >
+                        {t('dates.defaultShort', {
+                          date: new Date(log.payload?.oldEndDate),
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {t('dates.defaultShort', {
+                          date: new Date(log.payload?.newEndDate),
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        {invoice ? (
+                          <Link href={`/orders/${invoice.id}`}>
+                            <Typography variant="body2">
+                              {invoice.xeroInvoiceNumber}
+                            </Typography>
+                          </Link>
+                        ) : null}
+                      </TableCell>
+                      <TableCell>
+                        {log.authorizedBy ? (
+                          <ProfileWithAvatar
+                            profile={log.authorizedBy}
+                            useLink={true}
+                          />
+                        ) : null}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
 
