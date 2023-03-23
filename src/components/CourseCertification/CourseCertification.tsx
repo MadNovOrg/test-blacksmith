@@ -329,7 +329,8 @@ export const CourseCertification: React.FC<
   const gradingChangelogs = useMemo(() => {
     return (
       certificate?.participant?.certificateChanges.filter(
-        change => change.type === Course_Certificate_Changelog_Type_Enum.Grading
+        change =>
+          change.type === Course_Certificate_Changelog_Type_Enum.GradeModified
       ) ?? []
     )
   }, [certificate])

@@ -14728,7 +14728,7 @@ export type Course_Certificate_Changelog = {
   participant: Course_Participant;
   participantId: Scalars['uuid'];
   payload?: Maybe<Scalars['jsonb']>;
-  type?: Maybe<Course_Certificate_Changelog_Type_Enum>;
+  type: Maybe<Course_Certificate_Changelog_Type_Enum>;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -14978,8 +14978,10 @@ export enum Course_Certificate_Changelog_Type_Constraint {
 }
 
 export enum Course_Certificate_Changelog_Type_Enum {
-  Grading = 'GRADING',
-  Hold = 'HOLD'
+  GradeModified = 'GRADE_MODIFIED',
+  PutOnHold = 'PUT_ON_HOLD',
+  Revoked = 'REVOKED',
+  Unrevoked = 'UNREVOKED'
 }
 
 /** Boolean expression to compare columns of type "course_certificate_changelog_type_enum". All fields are combined with logical 'AND'. */
@@ -40014,7 +40016,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type?: Course_Certificate_Changelog_Type_Enum | null, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum | null, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   code: Scalars['String'];
@@ -40297,7 +40299,7 @@ export type VenueFragment = { __typename?: 'venue', id: any, createdAt: any, upd
 
 export type CertificateFragment = { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null };
 
-export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type?: Course_Certificate_Changelog_Type_Enum | null };
+export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum | null };
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
