@@ -3,6 +3,7 @@ import { test as base } from '@playwright/test'
 import { CourseDeliveryType } from '@app/types'
 
 import { deleteCourse } from '../../../api/hasura-api'
+import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -43,9 +44,10 @@ for (const data of dataSet) {
     browserName,
     course,
   }) => {
-    // Disable in firefox due to datepicker issues
+    // Disabled in firefox due to datepicker issues
+    // Disabled locally due to venue setting not populating
     // eslint-disable-next-line playwright/no-skipped-test
-    test.skip(browserName === 'firefox')
+    test.skip(browserName === 'firefox' || TARGET_ENV === 'local')
     const context = await browser.newContext({
       storageState: stateFilePath(data.user),
     })
@@ -60,8 +62,7 @@ for (const data of dataSet) {
     const assignTrainersPage =
       await createCoursePage.clickAssignTrainersButton()
     await assignTrainersPage.selectTrainer(users.trainer)
-    course.id =
-      await assignTrainersPage.getOrderIdAfterClickingCreateCourseButton()
+    course.id = await assignTrainersPage.getCourseIdOnCreation()
 
     const trainerContext = await browser.newContext({
       storageState: stateFilePath('trainer'),

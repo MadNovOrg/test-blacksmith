@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
+import { waitForGraphQLResponse } from '../../commands'
 import { BasePage } from '../BasePage'
 
 export class ReviewAndConfirmPage extends BasePage {
@@ -12,16 +13,11 @@ export class ReviewAndConfirmPage extends BasePage {
     )
   }
 
-  async getOrderIdAfterClickingCreateCourseButton(): Promise<number> {
+  async getCourseIdOnCreation(): Promise<number> {
     const responses = await Promise.all([
-      this.page.waitForResponse(
-        res =>
-          res.request().url().includes('/graphql') &&
-          (res.request().postData() as string).includes('insert_course')
-      ),
+      waitForGraphQLResponse(this.page, 'insertCourse', 'inserted'),
       this.createCourseButton.click(),
     ])
-    const data = await responses[0].json()
-    return data.data.insertCourse.inserted[0].id
+    return responses[0].insertCourse.inserted[0].id
   }
 }

@@ -32,7 +32,8 @@ export async function waitForGraphQLResponse(
   page: Page,
   keyToFind: string,
   valueToFind: string
-): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<{ [key: string]: any }> {
   const response = await page.waitForResponse(async response => {
     return (
       response.url().includes('/graphql') &&
@@ -40,6 +41,9 @@ export async function waitForGraphQLResponse(
       (await response.json()).data[keyToFind]
     )
   })
-  const json = await response.json()
-  return JSON.stringify(json.data[keyToFind]).includes(valueToFind)
+  const { data } = await response.json()
+  if (JSON.stringify(data[keyToFind]).includes(valueToFind)) {
+    return data
+  }
+  return {}
 }
