@@ -1,0 +1,19 @@
+.rte-ltr {
+  text-align: left;
+}
+
+.rte-rtl {
+  text-align: right;
+}
+
+.rte-bold {
+  font-weight: 800;
+}
+
+.rte-italic {
+  font-style: italic;
+}
+
+.rte-underline {
+  text-decoration-line: underline;
+}

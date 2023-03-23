@@ -1,0 +1,1 @@
+ALTER TABLE "public"."course" DROP COLUMN IF EXISTS parking_instructions;

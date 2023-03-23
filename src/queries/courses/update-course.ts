@@ -22,6 +22,8 @@ export type ParamsType = {
     max_participants?: number
     freeSpaces?: number
     notes?: string
+    special_instructions?: string
+    parking_instructions?: string
   }
   scheduleInput: {
     start: Date

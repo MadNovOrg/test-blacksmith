@@ -19,6 +19,8 @@ export const QUERY = gql`
       freeSpaces
       accountCode
       level
+      special_instructions
+      parking_instructions
       cancellationRequest {
         id
         reason

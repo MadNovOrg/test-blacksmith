@@ -263,6 +263,8 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     salesRepresentative: course.salesRepresentative ?? null,
     accountCode: course.accountCode ?? null,
     notes: course.notes ?? null,
+    specialInstructions: course.special_instructions ?? '',
+    parkingInstructions: course.parking_instructions ?? '',
   }
 }
 

@@ -18,7 +18,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { memo, useEffect, useMemo, useCallback } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
@@ -42,6 +42,7 @@ import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
 import { VenueSelector } from '../VenueSelector'
 
+import { InstructionAccordionField } from './components/AccordionTextField'
 import { CourseAOLCountryDropdown } from './components/CourseAOLCountryDropdown'
 import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
 import { CourseDatePicker } from './components/CourseDatePicker'
@@ -56,6 +57,7 @@ import {
   getAccountCode,
   makeDate,
   isEndDateTimeBeforeStartDateTime,
+  getDefaultSpecialInstructions,
 } from './helpers'
 
 export type DisabledFields = Partial<keyof CourseInput>
@@ -193,6 +195,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             then: schema => schema.required('Provide the price of the course'),
           }),
         notes: yup.string().nullable(),
+        specialInstructions: yup.string().nullable().default(''),
+        parkingInstructions: yup.string().nullable().default(''),
       }),
 
     [t, hasOrg, isClosedCourse, hasMinParticipants, activeRole]
@@ -237,6 +241,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
       notes: courseInput?.notes ?? null,
+      specialInstructions: courseInput?.specialInstructions ?? '',
+      parkingInstructions: courseInput?.parkingInstructions ?? '',
     }),
     [courseInput, courseType]
   )
@@ -279,6 +285,25 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const endTime = useWatch({ control, name: 'endTime' })
 
   useEffect(() => {
+    // I want to execute this check only at the first render.
+    // If courseInput does not exist, we are creating a new
+    // course. In this case, I want to set the special
+    // instructions to their default value.
+    if (!courseInput) {
+      const instructions = getDefaultSpecialInstructions(
+        courseType,
+        courseLevel,
+        deliveryType,
+        t
+      )
+
+      setValue('specialInstructions', instructions)
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (
       isEndDateTimeBeforeStartDateTime(startDate, startTime, endDate, endTime)
     ) {
@@ -319,14 +344,36 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   useEffect(() => {
     const isVirtual = values.deliveryType === CourseDeliveryType.VIRTUAL
     const mustChange = !canVirtual && isVirtual
-    mustChange && setValue('deliveryType', CourseDeliveryType.F2F)
-  }, [canVirtual, setValue, values.deliveryType])
+    if (mustChange) {
+      setValue('deliveryType', CourseDeliveryType.F2F)
+      setValue(
+        'specialInstructions',
+        getDefaultSpecialInstructions(
+          courseType,
+          courseLevel,
+          CourseDeliveryType.F2F,
+          t
+        )
+      )
+    }
+  }, [canVirtual, courseLevel, courseType, setValue, t, values.deliveryType])
 
   useEffect(() => {
     const isMixed = values.deliveryType === CourseDeliveryType.MIXED
     const mustChange = !canMixed && isMixed
-    mustChange && setValue('deliveryType', CourseDeliveryType.F2F)
-  }, [canMixed, setValue, values.deliveryType])
+    if (mustChange) {
+      setValue('deliveryType', CourseDeliveryType.F2F)
+      setValue(
+        'specialInstructions',
+        getDefaultSpecialInstructions(
+          courseType,
+          courseLevel,
+          CourseDeliveryType.F2F,
+          t
+        )
+      )
+    }
+  }, [canMixed, courseLevel, courseType, setValue, t, values.deliveryType])
 
   useEffect(() => {
     if (
@@ -337,6 +384,12 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       setValue('accountCode', getAccountCode(values.startDateTime))
     }
   }, [values.startDateTime, setValue])
+
+  const retrieveDefaultSpecialInstructions = useCallback(
+    () =>
+      getDefaultSpecialInstructions(courseType, courseLevel, deliveryType, t),
+    [courseLevel, courseType, deliveryType, t]
+  )
 
   const hasZoomMeetingUrl = [
     CourseDeliveryType.VIRTUAL,
@@ -442,7 +495,18 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             render={({ field }) => (
               <CourseLevelDropdown
                 value={field.value}
-                onChange={field.onChange}
+                onChange={event => {
+                  field.onChange(event)
+                  setValue(
+                    'specialInstructions',
+                    getDefaultSpecialInstructions(
+                      courseType,
+                      event.target.value as CourseLevel,
+                      deliveryType,
+                      t
+                    )
+                  )
+                }}
                 courseType={courseType}
                 disabled={disabledFields.has('courseLevel')}
               />
@@ -506,6 +570,16 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 setValue('venue', null)
               }
               trigger(['venue', 'zoomMeetingUrl'])
+
+              setValue(
+                'specialInstructions',
+                getDefaultSpecialInstructions(
+                  courseType,
+                  courseLevel,
+                  deliveryType,
+                  t
+                )
+              )
             }}
           >
             <FormControlLabel
@@ -581,6 +655,48 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           />
         ) : null}
 
+        <Controller
+          name="specialInstructions"
+          control={control}
+          render={({ field }) => (
+            <InstructionAccordionField
+              title={t('components.course-form.special-instructions.title')}
+              confirmResetTitle={t(
+                'components.course-form.special-instructions.modal-title'
+              )}
+              confirmResetMessage={t(
+                'components.course-form.special-instructions.modal-message'
+              )}
+              defaultValue={retrieveDefaultSpecialInstructions()}
+              value={field.value}
+              onSave={field.onChange}
+              editMode={false}
+              maxLength={2000}
+            />
+          )}
+        />
+        {deliveryType === CourseDeliveryType.F2F ||
+        deliveryType === CourseDeliveryType.MIXED ? (
+          <Controller
+            name="parkingInstructions"
+            control={control}
+            render={({ field }) => (
+              <InstructionAccordionField
+                title={t('components.course-form.parking-instructions.title')}
+                confirmResetTitle={t(
+                  'components.course-form.parking-instructions.modal-title'
+                )}
+                confirmResetMessage={t(
+                  'components.course-form.parking-instructions.modal-message'
+                )}
+                value={field.value}
+                onSave={field.onChange}
+                editMode={false}
+                maxLength={1000}
+              />
+            )}
+          />
+        ) : null}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Typography mb={2} mt={2} fontWeight={600}>
             {t('components.course-form.start-datepicker-section-title')}

@@ -24,6 +24,8 @@ export const QUERY = gql`
       reaccreditation
       min_participants
       max_participants
+      special_instructions
+      parking_instructions
       level
       notes
       organization {

@@ -3,6 +3,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import PinDropIcon from '@mui/icons-material/PinDrop'
 import TodayIcon from '@mui/icons-material/Today'
 import VideocamIcon from '@mui/icons-material/Videocam'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
   Box,
   Button,
@@ -16,9 +17,10 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDialog'
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
@@ -49,6 +51,8 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
   renderButton,
 }) => {
   const { t } = useTranslation()
+  const [isInstructionsDialogOpen, setIsInstructionsDialogOpen] =
+    useState(false)
 
   const courseStartDate = new Date(course.schedule[0].start)
   const courseEndDate = new Date(course.schedule[0].end)
@@ -205,6 +209,7 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                       <Typography
                         component="span"
                         data-testid="additional-notes-label"
+                        variant="body2"
                       >
                         {t('components.course-hero-summary.notes-label')}
                       </Typography>
@@ -212,10 +217,36 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
                   </ListItemText>
                 </ListItem>
               ) : null}
+
+              {course.special_instructions || course.parking_instructions ? (
+                <ListItem>
+                  <StyledListIcon>
+                    <VisibilityIcon />
+                  </StyledListIcon>
+                  <ListItemText>
+                    <Button
+                      variant="text"
+                      sx={{ fontSize: '0.875rem' }}
+                      disableRipple
+                      onClick={() => setIsInstructionsDialogOpen(true)}
+                    >
+                      {t('components.course-hero-summary.instructions-label')}
+                    </Button>
+                  </ListItemText>
+                </ListItem>
+              ) : null}
             </List>
           </Grid>
         </Grid>
       </Container>
+      {isInstructionsDialogOpen ? (
+        <CourseInstructionsDialog
+          open={isInstructionsDialogOpen}
+          onCancel={() => setIsInstructionsDialogOpen(false)}
+          specialInstructions={course.special_instructions}
+          parkingInstructions={course.parking_instructions}
+        />
+      ) : null}
     </Box>
   )
 }

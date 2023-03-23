@@ -1,6 +1,7 @@
 {
   "course-hero-summary": {
-    "notes-label": "Additional notes"
+    "notes-label": "Additional notes",
+    "instructions-label": "See special instructions"
   },
   "error-page": {
     "title": "Sorry! Something went wrong...",
@@ -141,7 +142,132 @@
     "notes-title": "Notes",
     "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
     "notes-placeholder": "Additional notes",
-    "course-level-one-info": "Please be aware some holds may fall under Level Two certification."
+    "course-level-one-info": "Please be aware some holds may fall under Level Two certification.",
+    "reset-instructions-button": "Reset to default",
+    "special-instructions": {
+      "title": "Special Instructions",
+      "modal-title": "Reset to default special instructions",
+      "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?",
+      "instructions": {
+        "CLOSED": {
+          "ADVANCED": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "ADVANCED_TRAINER": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT_TRAINER": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_1": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_1</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_1</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_1</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_2": {
+            "F2F": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_2</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_2</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>CLOSED</u>, level <b>LEVEL_2</b> and delivery type <i>VIRTUAL</i>"
+          }
+        },
+        "INDIRECT": {
+          "ADVANCED": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "ADVANCED_TRAINER": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT_TRAINER": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_1": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_1</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_1</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_1</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_2": {
+            "F2F": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_2</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_2</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>INDIRECT</u>, level <b>LEVEL_2</b> and delivery type <i>VIRTUAL</i>"
+          }
+        },
+        "OPEN": {
+          "ADVANCED": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "ADVANCED_TRAINER": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>ADVANCED_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "BILD_ACT_TRAINER": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>BILD_ACT_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "INTERMEDIATE_TRAINER": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>INTERMEDIATE_TRAINER</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_1": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_1</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_1</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_1</b> and delivery type <i>VIRTUAL</i>"
+          },
+          "LEVEL_2": {
+            "F2F": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_2</b> and delivery type <i>F2F</i>",
+            "MIXED": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_2</b> and delivery type <i>MIXED</i>",
+            "VIRTUAL": "Default special instructions for course <u>OPEN</u>, level <b>LEVEL_2</b> and delivery type <i>VIRTUAL</i>"
+          }
+        }
+      }
+    },
+    "parking-instructions": {
+      "title": "Parking Instructions",
+      "modal-title": "Reset parking instructions to default value",
+      "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?"
+    },
+    "save-button-text": "Save changes"
   },
   "searchTrainers": {
     "loading": "Loading...",
@@ -288,5 +414,9 @@
     "confirmation-message": "Are you sure you want to delete user {{firstName}} {{lastName}} with the email {{email}}? Deleting a user will remove them completely from the Hub and make them unable to log in to their account. This action can not be undone.",
     "delete": "Delete",
     "delete-error": "An error occurred while deleting the user."
+  },
+  "course-instructions-dialog": {
+    "special-title": "Special instructions",
+    "parking-title": "Parking"
   }
 }

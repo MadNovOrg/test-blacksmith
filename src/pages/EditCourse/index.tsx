@@ -227,6 +227,8 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             reaccreditation: courseData.reaccreditation,
             go1Integration: courseData.blendedLearning,
             freeSpaces: courseData.freeSpaces,
+            special_instructions: courseData.specialInstructions,
+            parking_instructions: courseData.parkingInstructions,
             notes: courseData.notes,
             ...(courseData.minParticipants
               ? { min_participants: courseData.minParticipants }

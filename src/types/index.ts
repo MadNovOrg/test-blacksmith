@@ -63,6 +63,8 @@ export type Course = {
     reason: string
   }
   modulesDuration?: number
+  special_instructions?: string
+  parking_instructions?: string
 } & Omit<Base, 'id'>
 
 export type CourseModule = {
@@ -534,6 +536,8 @@ export type CourseInput = {
   aolRegion: string | null
   courseCost: number | null
   notes: string | null
+  specialInstructions: string
+  parkingInstructions: string
 }
 
 export type ValidCourseInput = DeepNonNullable<

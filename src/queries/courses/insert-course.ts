@@ -32,6 +32,8 @@ export type ParamsType = {
     freeSpaces?: number
     accountCode?: string
     notes?: string
+    special_instructions?: string
+    parking_instructions?: string
     status:
       | Course_Status_Enum.ApprovalPending
       | Course_Status_Enum.TrainerPending

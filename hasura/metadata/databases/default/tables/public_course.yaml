@@ -200,8 +200,10 @@ insert_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       backend_only: false
   - role: trainer
@@ -230,7 +232,9 @@ insert_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
+        - special_instructions
         - updated_at
       backend_only: false
   - role: tt-ops
@@ -260,8 +264,10 @@ insert_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       backend_only: false
 select_permissions:
@@ -323,8 +329,10 @@ select_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       computed_fields:
         - course_code
@@ -362,8 +370,10 @@ select_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       computed_fields:
         - course_code
@@ -432,8 +442,10 @@ select_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       computed_fields:
         - course_code
@@ -506,8 +518,10 @@ select_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       computed_fields:
         - course_code
@@ -577,8 +591,10 @@ update_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       filter:
         course_type:
@@ -610,7 +626,9 @@ update_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
+        - special_instructions
         - updated_at
       filter:
         _or:
@@ -652,8 +670,10 @@ update_permissions:
         - name
         - notes
         - organization_id
+        - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - special_instructions
         - updated_at
       filter: {}
       check: {}

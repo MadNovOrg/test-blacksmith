@@ -1,4 +1,5 @@
 import { format, isValid, isBefore, isEqual } from 'date-fns'
+import { TFunction } from 'i18next'
 
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
@@ -350,4 +351,16 @@ export function getAccountCode(d = new Date()): string {
   const year = format(d, 'yy')
 
   return `810A ${month}${year}`
+}
+
+export function getDefaultSpecialInstructions(
+  type: CourseType,
+  level: CourseLevel | '',
+  deliveryType: CourseDeliveryType,
+  t: TFunction
+) {
+  const keyPrefix = 'components.course-form.special-instructions.instructions'
+  const key = `${keyPrefix}.${type}.${level}.${deliveryType}`
+  const translation = t(key)
+  return translation
 }

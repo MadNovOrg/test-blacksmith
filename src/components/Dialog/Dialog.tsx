@@ -15,6 +15,7 @@ type Props = {
   showClose?: boolean
   onClose: () => void
   maxWidth?: number
+  minWidth?: number
   'data-testid'?: string
 }
 
@@ -27,6 +28,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
   onClose,
   children,
   maxWidth = 500,
+  minWidth,
   'data-testid': testId,
 }) => {
   return (
@@ -39,6 +41,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
       <DialogTitle
         sx={{
           maxWidth,
+          minWidth,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -66,7 +69,7 @@ export const Dialog: React.FC<React.PropsWithChildren<Props>> = ({
           </IconButton>
         ) : null}
       </DialogTitle>
-      <DialogContent sx={{ maxWidth }}>{children}</DialogContent>
+      <DialogContent sx={{ maxWidth, minWidth }}>{children}</DialogContent>
     </MUIDialog>
   )
 }
