@@ -2,22 +2,17 @@ import { gql } from 'graphql-request'
 
 import { COURSE } from '@app/queries/fragments'
 
-export const Matcher = /(query GetOrgCourses)/i
+export const Matcher = /(query GetUpcomingCourses)/i
 
 export const QUERY = gql`
   ${COURSE}
-  query GetOrgCourses(
-    $where: organization_bool_exp = {}
+  query GetUpcomingCourses(
     $courseFilter: course_bool_exp = {}
-    $limit: Int = 5
+    $limit: Int = null
   ) {
     courses: course(
       where: {
-        _and: [
-          $courseFilter
-          { organization: $where }
-          { schedule: { start: { _gt: "now()" } } }
-        ]
+        _and: [$courseFilter, { schedule: { start: { _gt: "now()" } } }]
       }
       order_by: { start: asc }
       limit: $limit

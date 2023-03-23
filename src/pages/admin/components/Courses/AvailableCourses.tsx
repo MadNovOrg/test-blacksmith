@@ -1,54 +1,59 @@
 import {
+  Button,
   CircularProgress,
   Container,
   MenuItem,
   Stack,
   TextField,
+  useTheme,
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
-import { isNumber } from 'lodash-es'
-import React, { useEffect, useMemo, useState } from 'react'
+import { isNumber, orderBy } from 'lodash-es'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Bool_Exp,
   Course_Status_Enum,
   Course_Type_Enum,
-  GetOrgCoursesQuery,
+  GetUpcomingCoursesQuery,
 } from '@app/generated/graphql'
 import useOrg from '@app/hooks/useOrg'
-import useOrgCourses, { ALL_ORGS } from '@app/hooks/useOrgCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
+import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { OrgSelectionToolbar } from '@app/pages/admin/components/Organizations/OrgSelectionToolbar'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
-import theme from '@app/theme'
 import { geoDistance } from '@app/util/geo'
 
-type CourseType = GetOrgCoursesQuery['courses'][0]
+type CourseType = GetUpcomingCoursesQuery['courses'][0]
+
+export const ALL_ORGS = 'all'
 
 export const AvailableCourses: React.FC<
   React.PropsWithChildren<unknown>
 > = () => {
+  const theme = useTheme()
   const { t } = useTranslation()
   const { id } = useParams()
   const { profile, acl } = useAuth()
+  const [searchParams] = useSearchParams()
 
-  const [keyword, setKeyword] = useState('')
+  const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
   const [dateFrom, setDateFrom] = useState<Date | null>(null)
   const [dateTo, setDateTo] = useState<Date | null>(null)
-  const [sortBy, setSortBy] = useState<keyof typeof sortFunctions>(
+  const [sortMode, setSortMode] = useState(
     id !== ALL_ORGS ? 'distance-to-org' : 'date-ascending'
   )
 
-  const sortByDistance = sortBy === 'distance-to-org'
+  const sortingByDistance = sortMode === 'distance-to-org'
 
   const { data: orgs, loading: orgsLoading } = useOrg(
     ALL_ORGS,
@@ -57,27 +62,56 @@ export const AvailableCourses: React.FC<
   )
 
   const { Pagination, perPage, offset } = useTablePagination()
-  const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
-    ALL_ORGS,
-    profile?.id,
-    true,
-    {
-      _and: [
-        { type: { _eq: Course_Type_Enum.Open } },
-        {
-          status: {
-            _nin: [
-              Course_Status_Enum.Cancelled,
-              Course_Status_Enum.Completed,
-              Course_Status_Enum.Declined,
-              Course_Status_Enum.EvaluationMissing,
-              Course_Status_Enum.GradeMissing,
-              Course_Status_Enum.Draft,
-            ],
-          },
+  const filters = useMemo(() => {
+    const conditions: Course_Bool_Exp[] = [
+      { type: { _eq: Course_Type_Enum.Open } },
+      {
+        status: {
+          _nin: [
+            Course_Status_Enum.Cancelled,
+            Course_Status_Enum.Completed,
+            Course_Status_Enum.Declined,
+            Course_Status_Enum.EvaluationMissing,
+            Course_Status_Enum.GradeMissing,
+            Course_Status_Enum.Draft,
+          ],
         },
-      ],
+      },
+    ]
+    if (dateFrom) {
+      conditions.push({ start: { _gte: dateFrom } })
     }
+    if (dateTo) {
+      conditions.push({ start: { _lte: dateTo } })
+    }
+    if (keyword) {
+      conditions.push({
+        _or: [
+          {
+            schedule: { venue: { name: { _ilike: `%${keyword}%` } } },
+          },
+          {
+            schedule: { venue: { city: { _ilike: `%${keyword}%` } } },
+          },
+          {
+            schedule: { venue: { addressLineOne: { _ilike: `%${keyword}%` } } },
+          },
+          {
+            schedule: { venue: { addressLineTwo: { _ilike: `%${keyword}%` } } },
+          },
+          {
+            name: { _ilike: `%${keyword}%` },
+          },
+        ],
+      })
+    }
+
+    return { _and: conditions }
+  }, [dateFrom, dateTo, keyword])
+
+  const { coursesForBooking, loading: coursesLoading } = useUpcomingCourses(
+    profile?.id,
+    filters
   )
 
   const distances = useMemo(() => {
@@ -94,71 +128,55 @@ export const AvailableCourses: React.FC<
     return result
   }, [coursesForBooking, id, orgs])
 
-  const sortFunctions = useMemo(() => {
-    const sortByDistance = {
-      'distance-to-org': (a: CourseType, b: CourseType) => {
-        if (!distances) return 0
-        const aDistance = distances.get(a.id)
-        const bDistance = distances.get(b.id)
-        if (!isNumber(aDistance) && !aDistance) return 1
-        if (!isNumber(bDistance) && !bDistance) return -1
-        if (aDistance < bDistance) return -1
-        if (aDistance > bDistance) return 1
-        return 0
-      },
-    }
-    return {
-      'date-ascending': (a: CourseType, b: CourseType) => {
-        if (a.schedules[0].start < b.schedules[0].start) return -1
-        if (a.schedules[0].start > b.schedules[0].start) return 1
-        return 0
-      },
-      'date-descending': (a: CourseType, b: CourseType) => {
-        if (a.schedules[0].start < b.schedules[0].start) return 1
-        if (a.schedules[0].start > b.schedules[0].start) return -1
-        return 0
-      },
-      ...(id !== ALL_ORGS ? sortByDistance : {}),
-    }
-  }, [distances, id])
+  const sortByDistance = useCallback(
+    (a: CourseType, b: CourseType) => {
+      if (!distances) return 0
+      const aDistance = distances.get(a.id)
+      const bDistance = distances.get(b.id)
+      if (!isNumber(aDistance) && !aDistance) return 1
+      if (!isNumber(bDistance) && !bDistance) return -1
+      if (aDistance < bDistance) return -1
+      if (aDistance > bDistance) return 1
+      return 0
+    },
+    [distances]
+  )
 
-  const sortModes = useMemo(() => Object.keys(sortFunctions), [sortFunctions])
+  const sortModes = useMemo(() => {
+    const modes = ['date-ascending', 'date-descending']
+    if (id !== ALL_ORGS) {
+      modes.unshift('distance-to-org')
+    }
+    return modes
+  }, [id])
 
   useEffect(() => {
-    if (!sortModes.includes(sortBy)) {
-      setSortBy('date-ascending')
+    if (!sortModes.includes(sortMode)) {
+      setSortMode('date-ascending')
     }
-  }, [sortBy, sortModes])
+  }, [sortMode, sortModes])
 
   const courses = useMemo(() => {
-    const values = coursesForBooking.filter(c => {
-      const start = new Date(c.schedules[0].start)
-      if (dateFrom && start < dateFrom && differenceInDays(start, dateFrom) > 0)
-        return false
-      if (dateTo && start > dateTo && differenceInDays(start, dateTo) > 0)
-        return false
-      return true
-    })
-    if (sortByDistance) {
-      const knownDistances = values.filter(c => !!distances.get(c.id))
-      const online = values.filter(c => !c.schedules[0].venue)
-      const unknown = values.filter(
+    if (sortingByDistance) {
+      const knownDistances = coursesForBooking.filter(
+        c => !!distances.get(c.id)
+      )
+      const online = coursesForBooking.filter(c => !c.schedules[0].venue)
+      const unknown = coursesForBooking.filter(
         c => c.schedules[0].venue && !distances.get(c.id)
       )
-      return [
-        ...knownDistances.sort(sortFunctions[sortBy]),
-        ...online,
-        ...unknown,
-      ]
+      return [...knownDistances.sort(sortByDistance), ...online, ...unknown]
     }
-    return values.sort(sortFunctions[sortBy])
+    return orderBy(
+      coursesForBooking,
+      'start',
+      sortMode === 'date-ascending' ? 'asc' : 'desc'
+    )
   }, [
+    sortingByDistance,
     coursesForBooking,
+    sortMode,
     sortByDistance,
-    sortFunctions,
-    sortBy,
-    dateFrom,
-    dateTo,
     distances,
   ])
 
@@ -225,6 +243,29 @@ export const AvailableCourses: React.FC<
                     />
                   </Stack>
                 </Box>
+
+                <Box
+                  sx={{
+                    bgcolor: theme.colors.navy[100],
+                    borderRadius: 1,
+                    p: 2,
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="h4">
+                    {t('pages.available-courses.learn-more-about')}
+                  </Typography>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mt: 2 }}
+                    target="_blank"
+                    href={import.meta.env.VITE_REQUEST_QUOTE_URL}
+                  >
+                    {t('pages.available-courses.request-a-quote')}
+                  </Button>
+                </Box>
               </Stack>
             </Box>
 
@@ -235,25 +276,19 @@ export const AvailableCourses: React.FC<
                 justifyContent="flex-end"
                 mb={2}
               >
-                {courses.length > 0 ? (
-                  <TextField
-                    select
-                    variant="filled"
-                    value={sortBy}
-                    onChange={event =>
-                      setSortBy(
-                        event.target.value as keyof typeof sortFunctions
-                      )
-                    }
-                    sx={{ minWidth: 130 }}
-                  >
-                    {sortModes.map(mode => (
-                      <MenuItem key={mode} value={mode}>
-                        {t(`pages.available-courses.sorting.${mode}`)}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                ) : null}
+                <TextField
+                  select
+                  variant="filled"
+                  value={sortMode}
+                  onChange={event => setSortMode(event.target.value)}
+                  sx={{ minWidth: 130 }}
+                >
+                  {sortModes.map(mode => (
+                    <MenuItem key={mode} value={mode}>
+                      {t(`pages.available-courses.sorting.${mode}`)}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Box>
 
               {courses.length > 0 ? (
@@ -262,7 +297,7 @@ export const AvailableCourses: React.FC<
                     <CourseForBookingTile
                       course={course}
                       key={course.id}
-                      showDistance={sortByDistance}
+                      showDistance={sortingByDistance}
                       distance={distances.get(course.id)}
                       variant="row"
                     />

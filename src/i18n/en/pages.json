@@ -1255,7 +1255,9 @@
     },
     "no-results": "No courses found. Try another search.",
     "please-select-organization": "Please select organisation to sort by distance.",
-    "select-organization": "Please select organisation"
+    "select-organization": "Please select organisation",
+    "learn-more-about": "Learn more about our private courses",
+    "request-a-quote": "Request a quote"
   },
   "transfer-participant": {
     "title-ADMIN_TRANSFERS": "Transfer participant",

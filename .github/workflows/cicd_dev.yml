@@ -97,3 +97,4 @@ jobs:
       s3_bucket: ${{ secrets.S3_BUCKET_DEV }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY_DEV }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}

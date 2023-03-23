@@ -23,3 +23,4 @@ jobs:
       hasura_admin_pass: ${{ secrets.HASURA_ADMIN_PASS_STG }}
       gmaps_key: ${{ secrets.GMAPS_KEY }}
       stripe_key: ${{ secrets.STRIPE_KEY_STG }}
+      request_quote_url: ${{ secrets.REQUEST_QUOTE_URL }}

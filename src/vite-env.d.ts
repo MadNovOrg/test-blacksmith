@@ -12,4 +12,5 @@ interface ImportMetaEnv {
   VITE_SENTRY_TRACING_SAMPLE_RATE: string
   VITE_SENTRY_ENVIRONMENT: string
   VITE_APP_VERSION: string
+  VITE_REQUEST_QUOTE_URL: string
 }

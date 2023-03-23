@@ -30,6 +30,8 @@ on:
         required: true
       stripe_key:
         required: true
+      request_quote_url:
+        required: true
 
 jobs:
   build-deploy:
@@ -69,6 +71,7 @@ jobs:
           VITE_GMAPS_KEY: ${{ secrets.gmaps_key }}
           VITE_STRIPE_KEY: ${{ secrets.stripe_key }}
           VITE_APP_VERSION: ${{ inputs.version }}
+          REQUEST_QUOTE_URL: ${{ secrets.request_quote_url }}
 
       - name: Deploy to S3 bucket
         run: aws s3 sync ./dist/ ${{ secrets.s3_bucket }} --delete

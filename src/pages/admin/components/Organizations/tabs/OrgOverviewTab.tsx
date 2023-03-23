@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
-import useOrgCourses from '@app/hooks/useOrgCourses'
+import useUpcomingCourses from '@app/hooks/useUpcomingCourses'
 import { CourseForBookingTile } from '@app/pages/admin/components/Organizations/tabs/components/CourseForBookingTile'
 import { IndividualsByLevelList } from '@app/pages/admin/components/Organizations/tabs/components/IndividualsByLevelList'
 import { OrgStatsTiles } from '@app/pages/admin/components/Organizations/tabs/components/OrgStatsTiles'
@@ -50,10 +50,8 @@ export const OrgOverviewTab: React.FC<
     profilesByLevel,
     loading: orgLoading,
   } = useOrg(orgId, profile?.id, acl.canViewAllOrganizations())
-  const { coursesForBooking, loading: coursesLoading } = useOrgCourses(
-    ALL_ORGS,
+  const { coursesForBooking, loading: coursesLoading } = useUpcomingCourses(
     profile?.id,
-    true,
     {
       _and: [
         { type: { _eq: Course_Type_Enum.Open } },
@@ -70,7 +68,8 @@ export const OrgOverviewTab: React.FC<
           },
         },
       ],
-    }
+    },
+    5
   )
 
   const defaultTab =

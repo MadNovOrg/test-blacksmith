@@ -5,9 +5,9 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { GetOrgCoursesQuery } from '@app/generated/graphql'
+import { GetUpcomingCoursesQuery } from '@app/generated/graphql'
 
-type CourseType = GetOrgCoursesQuery['courses'][0]
+type CourseType = GetUpcomingCoursesQuery['courses'][0]
 
 type CourseForBookingTileParams = {
   course: CourseType
@@ -102,6 +102,9 @@ export const CourseForBookingTile: React.FC<
           <Typography variant={isRow ? 'body1' : 'h4'} fontWeight={600}>
             {t(`common.certificates.${course.level?.toLowerCase()}`)}
           </Typography>
+          {isRow ? (
+            <Typography variant="body1">{course.name}</Typography>
+          ) : null}
           <Typography variant="body2" color="grey.600" mt={1}>
             {addressLabel}
           </Typography>
