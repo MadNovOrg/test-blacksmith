@@ -22,14 +22,10 @@ import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
+import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
-import {
-  CertificateStatus,
-  CourseLevel,
-  CourseParticipant,
-  Grade as GradeEnum,
-} from '@app/types'
+import { CertificateStatus, CourseLevel, CourseParticipant } from '@app/types'
 
 import { TableNoRows } from '../Table/TableNoRows'
 
@@ -111,8 +107,10 @@ export const CertificationList: React.FC<
           participantName={p.profile?.fullName}
           courseName={p.certificate?.courseName ?? ''}
           courseLevel={p.certificate?.courseLevel ?? CourseLevel.Level_1}
-          grade={p.grade ?? GradeEnum.PASS}
-          courseDeliveryType={p.course.deliveryType}
+          grade={p.grade ?? Grade_Enum.Pass}
+          courseDeliveryType={
+            p.course.deliveryType as unknown as Course_Delivery_Type_Enum
+          }
           certificationNumber={p.certificate?.number ?? ''}
           expiryDate={p.certificate?.expiryDate ?? ''}
         />,

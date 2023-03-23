@@ -14,10 +14,21 @@ import { useTranslation } from 'react-i18next'
 
 import { Grade } from '@app/components/Grade'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
-import { CourseCertificateChangelog } from '@app/types'
+import { GetCertificateQuery } from '@app/generated/graphql'
+import { NonNullish } from '@app/types'
+
+type Participant = Pick<
+  NonNullish<GetCertificateQuery['certificate']>,
+  'participant'
+>
+
+type CertificateChangelog = Pick<
+  NonNullish<Participant['participant']>,
+  'certificateChanges'
+>
 
 export type ChangelogModalProps = {
-  changelogs: CourseCertificateChangelog[]
+  changelogs: NonNullish<CertificateChangelog['certificateChanges']>
 }
 
 const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
@@ -69,11 +80,11 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
               </TableCell>
               <TableCell>
                 <Box display="flex" alignItems="center" gap={1}>
-                  <Grade grade={changelog.oldGrade} />
+                  <Grade grade={changelog.payload.oldGrade} />
                   <ArrowForwardIcon
                     style={{ color: theme.palette.grey[700] }}
                   />
-                  <Grade grade={changelog.newGrade} />
+                  <Grade grade={changelog.payload.newGrade} />
                 </Box>
                 <Box
                   display="block"
@@ -81,7 +92,9 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
                   p={2}
                   sx={{ backgroundColor: 'grey.100' }}
                 >
-                  <Typography variant="caption">{changelog.notes}</Typography>
+                  <Typography variant="caption">
+                    {changelog.payload.notes}
+                  </Typography>
                 </Box>
               </TableCell>
             </TableRow>

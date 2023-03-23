@@ -15,7 +15,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
 import MUIImage from 'mui-image'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
@@ -35,14 +35,18 @@ import { Dialog } from '@app/components/Dialog'
 import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
-import { Course_Level_Enum } from '@app/generated/graphql'
 import {
-  ParamsType as GetCertificateParamsType,
-  QUERY as GetCertificateQuery,
-  ResponseType as GetCertificateResponseType,
-} from '@app/queries/certificate/get-certificate'
+  Course_Certificate_Changelog_Type_Enum,
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Course_Participant_Module,
+  GetCertificateQuery,
+  GetCertificateQueryVariables,
+  Grade_Enum,
+} from '@app/generated/graphql'
+import { QUERY } from '@app/queries/certificate/get-certificate'
 import theme from '@app/theme'
-import { CourseDeliveryType, CourseParticipant, Grade } from '@app/types'
+import { CourseLevel, NonNullish } from '@app/types'
 import {
   getSWRLoadingStatus,
   LoadingStatus,
@@ -148,9 +152,14 @@ const ModuleGroupAccordion: React.FC<
   )
 }
 
+type Participant = Pick<
+  NonNullish<GetCertificateQuery['certificate']>,
+  'participant'
+>
+
 type CertificateInfoProps = {
-  courseParticipant?: CourseParticipant
-  grade: Grade
+  courseParticipant?: Participant['participant']
+  grade: Grade_Enum
   expiryDate: string
   certificationNumber: string
   dateIssued: string
@@ -169,7 +178,9 @@ const CertificateInfo: React.FC<
   const { t } = useTranslation()
 
   const moduleGroupsWithModules = courseParticipant
-    ? transformModulesToGroups(courseParticipant.gradingModules)
+    ? transformModulesToGroups(
+        courseParticipant.gradingModules as unknown as Course_Participant_Module[]
+      )
     : null
 
   return (
@@ -190,7 +201,7 @@ const CertificateInfo: React.FC<
         {courseParticipant?.course?.name}
       </Typography>
 
-      {grade !== Grade.FAIL ? (
+      {grade !== Grade_Enum.Fail ? (
         <>
           <Grid container spacing={2} mt={4}>
             <Grid item xs={4} sx={{ color: 'grey.500' }}>
@@ -306,14 +317,22 @@ export const CourseCertification: React.FC<
   const [showPutOnHoldModal, setShowPutOnHoldModal] = useState(false)
 
   const { data, error } = useSWR<
-    GetCertificateResponseType,
+    GetCertificateQuery,
     Error,
-    [string, GetCertificateParamsType]
-  >([GetCertificateQuery, { id: certificateId }])
+    [string, GetCertificateQueryVariables]
+  >([QUERY, { id: certificateId }])
   const certificateLoadingStatus = getSWRLoadingStatus(data, error)
 
   const certificate = data?.certificate
   const courseParticipant = certificate?.participant
+
+  const gradingChangelogs = useMemo(() => {
+    return (
+      certificate?.participant?.certificateChanges.filter(
+        change => change.type === Course_Certificate_Changelog_Type_Enum.Grading
+      ) ?? []
+    )
+  }, [certificate])
 
   if (certificateLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -341,7 +360,7 @@ export const CourseCertification: React.FC<
   }
 
   const certificationNumber = certificate.number ?? ''
-  const grade = courseParticipant?.grade ?? Grade.PASS
+  const grade = courseParticipant?.grade ?? Grade_Enum.Pass
 
   if (courseParticipant && !courseParticipant?.grade) {
     return (
@@ -374,7 +393,7 @@ export const CourseCertification: React.FC<
                 </Box>
               ) : null}
 
-              {grade !== Grade.FAIL ? (
+              {grade !== Grade_Enum.Fail ? (
                 <Button
                   fullWidth
                   data-testid="download-certificate-button"
@@ -386,12 +405,12 @@ export const CourseCertification: React.FC<
                     style={{ color: 'white' }}
                     document={
                       <CertificateDocument
-                        participantName={certificate.profile.fullName}
+                        participantName={certificate.profile.fullName ?? ''}
                         courseName={certificate.courseName}
-                        courseLevel={certificate.courseLevel}
-                        grade={grade as Grade}
+                        courseLevel={certificate.courseLevel as CourseLevel}
+                        grade={grade as Grade_Enum}
                         courseDeliveryType={
-                          courseDeliveryType ?? CourseDeliveryType.F2F
+                          courseDeliveryType ?? Course_Delivery_Type_Enum.F2F
                         }
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}
@@ -425,7 +444,7 @@ export const CourseCertification: React.FC<
 
           <Grid item md={7}>
             <CertificateInfo
-              grade={grade as Grade}
+              grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
               expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
@@ -471,9 +490,7 @@ export const CourseCertification: React.FC<
             maxWidth={800}
           >
             {certificate.participant?.certificateChanges?.length ? (
-              <ChangelogModal
-                changelogs={certificate.participant?.certificateChanges}
-              />
+              <ChangelogModal changelogs={gradingChangelogs} />
             ) : null}
           </Dialog>
         </>

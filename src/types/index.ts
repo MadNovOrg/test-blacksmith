@@ -1,6 +1,6 @@
 import { DeepNonNullable } from 'ts-essentials'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum, Grade_Enum } from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
 
@@ -364,7 +364,7 @@ export type CourseParticipant = {
   profile: Profile
   attended?: boolean
   go1EnrolmentStatus: BlendedLearningStatus
-  grade?: Grade
+  grade?: Grade_Enum
   gradingFeedback?: string
   dateGraded?: string
   gradingModules: CourseParticipantModule[]

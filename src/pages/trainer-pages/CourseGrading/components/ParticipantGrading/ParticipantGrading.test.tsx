@@ -1,8 +1,8 @@
 import React from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
 
+import { Grade_Enum } from '@app/generated/graphql'
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
-import { Grade } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, within, userEvent, waitFor } from '@test/index'
@@ -29,7 +29,7 @@ describe('page: ParticipantGrading', () => {
   it("displays participant's name and final grade", () => {
     const participant = buildParticipant({
       overrides: {
-        grade: Grade.PASS,
+        grade: Grade_Enum.Pass,
       },
     })
 
@@ -81,7 +81,7 @@ describe('page: ParticipantGrading', () => {
 
     const participant = buildParticipant({
       overrides: {
-        grade: Grade.PASS,
+        grade: Grade_Enum.Pass,
         gradingModules,
       },
     })

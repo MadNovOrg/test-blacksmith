@@ -6,19 +6,27 @@ import useSWR from 'swr'
 import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
-import { useFetcher } from '@app/hooks/use-fetcher'
 import {
-  ParamsType as GetCertificateParamsType,
-  QUERY as GetCertificateQuery,
-  ResponseType as GetCertificateResponseType,
-} from '@app/queries/certificate/get-certificate'
-import { MUTATION, ParamsType } from '@app/queries/grading/update-grade'
+  Course_Certificate_Changelog_Type_Enum,
+  GetCertificateQuery,
+  GetCertificateQueryVariables,
+  Grade_Enum,
+  UpdateGradeMutationVariables,
+} from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
+import { QUERY } from '@app/queries/certificate/get-certificate'
+import { MUTATION } from '@app/queries/grading/update-grade'
 import theme from '@app/theme'
-import { CourseParticipant } from '@app/types'
+import { NonNullish } from '@app/types'
+
+type Participant = Pick<
+  NonNullish<GetCertificateQuery['certificate']>,
+  'participant'
+>
 
 export type ModifyGradeModalProps = {
   certificateId: string
-  participant: CourseParticipant
+  participant: NonNullish<Participant['participant']>
   onClose: () => void
 }
 
@@ -34,10 +42,10 @@ const ModifyGradeModal: React.FC<
   const [grade, setGrade] = useState(participant.grade)
 
   const { mutate } = useSWR<
-    GetCertificateResponseType,
+    GetCertificateQuery,
     Error,
-    [string, GetCertificateParamsType]
-  >([GetCertificateQuery, { id: certificateId }])
+    [string, GetCertificateQueryVariables]
+  >([QUERY, { id: certificateId }])
 
   const submitHandler = useCallback(async () => {
     if (grade && participant.grade) {
@@ -47,11 +55,15 @@ const ModifyGradeModal: React.FC<
         setShowNoteError(!note)
         if (profile && note) {
           try {
-            await fetcher<null, ParamsType>(MUTATION, {
+            await fetcher<null, UpdateGradeMutationVariables>(MUTATION, {
               participantId: participant.id,
-              oldGrade: participant.grade,
-              newGrade: grade,
-              note: note,
+              payload: {
+                oldGrade: participant.grade,
+                newGrade: grade,
+                note: note,
+              },
+              newGrade: grade as Grade_Enum,
+              type: Course_Certificate_Changelog_Type_Enum.Grading,
               authorId: profile.id,
             })
           } catch (e: unknown) {

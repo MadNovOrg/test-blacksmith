@@ -1,7 +1,8 @@
 import React from 'react'
 import {} from 'react-router-dom'
 
-import { Grade, SortOrder } from '@app/types'
+import { Grade_Enum } from '@app/generated/graphql'
+import { SortOrder } from '@app/types'
 
 import { render, screen, within, userEvent } from '@test/index'
 import { buildCertificate, buildParticipant } from '@test/mock-data-utils'
@@ -39,7 +40,7 @@ describe('component: CertificationList', () => {
   it('can render admin columns and fields', async () => {
     const participant = buildParticipant()
     participant.certificate = buildCertificate()
-    participant.grade = Grade.PASS
+    participant.grade = Grade_Enum.Pass
     const participants = [participant]
     const sorting = {
       by: 'name',

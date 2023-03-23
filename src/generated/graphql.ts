@@ -14724,13 +14724,18 @@ export type Course_Certificate_Changelog = {
   authorId: Scalars['uuid'];
   createdAt: Scalars['timestamptz'];
   id: Scalars['uuid'];
-  newGrade: Grade_Enum;
-  notes: Scalars['String'];
-  oldGrade: Grade_Enum;
   /** An object relationship */
   participant: Course_Participant;
   participantId: Scalars['uuid'];
+  payload?: Maybe<Scalars['jsonb']>;
+  type?: Maybe<Course_Certificate_Changelog_Type_Enum>;
   updatedAt: Scalars['timestamptz'];
+};
+
+
+/** columns and relationships of "course_certificate_changelog" */
+export type Course_Certificate_ChangelogPayloadArgs = {
+  path?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregated selection of "course_certificate_changelog" */
@@ -14762,6 +14767,11 @@ export type Course_Certificate_Changelog_Aggregate_Order_By = {
   min?: InputMaybe<Course_Certificate_Changelog_Min_Order_By>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Course_Certificate_Changelog_Append_Input = {
+  payload?: InputMaybe<Scalars['jsonb']>;
+};
+
 /** input type for inserting array relation for remote table "course_certificate_changelog" */
 export type Course_Certificate_Changelog_Arr_Rel_Insert_Input = {
   data: Array<Course_Certificate_Changelog_Insert_Input>;
@@ -14778,11 +14788,10 @@ export type Course_Certificate_Changelog_Bool_Exp = {
   authorId?: InputMaybe<Uuid_Comparison_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  newGrade?: InputMaybe<Grade_Enum_Comparison_Exp>;
-  notes?: InputMaybe<String_Comparison_Exp>;
-  oldGrade?: InputMaybe<Grade_Enum_Comparison_Exp>;
   participant?: InputMaybe<Course_Participant_Bool_Exp>;
   participantId?: InputMaybe<Uuid_Comparison_Exp>;
+  payload?: InputMaybe<Jsonb_Comparison_Exp>;
+  type?: InputMaybe<Course_Certificate_Changelog_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -14792,17 +14801,31 @@ export enum Course_Certificate_Changelog_Constraint {
   CourseCertificateChangelogPkey = 'course_certificate_changelog_pkey'
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Course_Certificate_Changelog_Delete_At_Path_Input = {
+  payload?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Course_Certificate_Changelog_Delete_Elem_Input = {
+  payload?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Course_Certificate_Changelog_Delete_Key_Input = {
+  payload?: InputMaybe<Scalars['String']>;
+};
+
 /** input type for inserting data into table "course_certificate_changelog" */
 export type Course_Certificate_Changelog_Insert_Input = {
   author?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
   authorId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  newGrade?: InputMaybe<Grade_Enum>;
-  notes?: InputMaybe<Scalars['String']>;
-  oldGrade?: InputMaybe<Grade_Enum>;
   participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
   participantId?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Course_Certificate_Changelog_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
 
@@ -14812,7 +14835,6 @@ export type Course_Certificate_Changelog_Max_Fields = {
   authorId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  notes?: Maybe<Scalars['String']>;
   participantId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -14822,7 +14844,6 @@ export type Course_Certificate_Changelog_Max_Order_By = {
   authorId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  notes?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -14833,7 +14854,6 @@ export type Course_Certificate_Changelog_Min_Fields = {
   authorId?: Maybe<Scalars['uuid']>;
   createdAt?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
-  notes?: Maybe<Scalars['String']>;
   participantId?: Maybe<Scalars['uuid']>;
   updatedAt?: Maybe<Scalars['timestamptz']>;
 };
@@ -14843,7 +14863,6 @@ export type Course_Certificate_Changelog_Min_Order_By = {
   authorId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  notes?: InputMaybe<Order_By>;
   participantId?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
@@ -14870,17 +14889,21 @@ export type Course_Certificate_Changelog_Order_By = {
   authorId?: InputMaybe<Order_By>;
   createdAt?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  newGrade?: InputMaybe<Order_By>;
-  notes?: InputMaybe<Order_By>;
-  oldGrade?: InputMaybe<Order_By>;
   participant?: InputMaybe<Course_Participant_Order_By>;
   participantId?: InputMaybe<Order_By>;
+  payload?: InputMaybe<Order_By>;
+  type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_certificate_changelog */
 export type Course_Certificate_Changelog_Pk_Columns_Input = {
   id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Course_Certificate_Changelog_Prepend_Input = {
+  payload?: InputMaybe<Scalars['jsonb']>;
 };
 
 /** select columns of table "course_certificate_changelog" */
@@ -14892,13 +14915,11 @@ export enum Course_Certificate_Changelog_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  NewGrade = 'newGrade',
-  /** column name */
-  Notes = 'notes',
-  /** column name */
-  OldGrade = 'oldGrade',
-  /** column name */
   ParticipantId = 'participantId',
+  /** column name */
+  Payload = 'payload',
+  /** column name */
+  Type = 'type',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -14908,12 +14929,127 @@ export type Course_Certificate_Changelog_Set_Input = {
   authorId?: InputMaybe<Scalars['uuid']>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
-  newGrade?: InputMaybe<Grade_Enum>;
-  notes?: InputMaybe<Scalars['String']>;
-  oldGrade?: InputMaybe<Grade_Enum>;
   participantId?: InputMaybe<Scalars['uuid']>;
+  payload?: InputMaybe<Scalars['jsonb']>;
+  type?: InputMaybe<Course_Certificate_Changelog_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
 };
+
+/** columns and relationships of "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type = {
+  __typename?: 'course_certificate_changelog_type';
+  name: Scalars['String'];
+};
+
+/** aggregated selection of "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Aggregate = {
+  __typename?: 'course_certificate_changelog_type_aggregate';
+  aggregate?: Maybe<Course_Certificate_Changelog_Type_Aggregate_Fields>;
+  nodes: Array<Course_Certificate_Changelog_Type>;
+};
+
+/** aggregate fields of "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Aggregate_Fields = {
+  __typename?: 'course_certificate_changelog_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Certificate_Changelog_Type_Max_Fields>;
+  min?: Maybe<Course_Certificate_Changelog_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_certificate_changelog_type". All fields are combined with a logical 'AND'. */
+export type Course_Certificate_Changelog_Type_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Certificate_Changelog_Type_Bool_Exp>>;
+  _not?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Certificate_Changelog_Type_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_certificate_changelog_type" */
+export enum Course_Certificate_Changelog_Type_Constraint {
+  /** unique or primary key constraint */
+  CourseCertificateChangelogTypePkey = 'course_certificate_changelog_type_pkey'
+}
+
+export enum Course_Certificate_Changelog_Type_Enum {
+  Grading = 'GRADING',
+  Hold = 'HOLD'
+}
+
+/** Boolean expression to compare columns of type "course_certificate_changelog_type_enum". All fields are combined with logical 'AND'. */
+export type Course_Certificate_Changelog_Type_Enum_Comparison_Exp = {
+  _eq?: InputMaybe<Course_Certificate_Changelog_Type_Enum>;
+  _in?: InputMaybe<Array<Course_Certificate_Changelog_Type_Enum>>;
+  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _neq?: InputMaybe<Course_Certificate_Changelog_Type_Enum>;
+  _nin?: InputMaybe<Array<Course_Certificate_Changelog_Type_Enum>>;
+};
+
+/** input type for inserting data into table "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Course_Certificate_Changelog_Type_Max_Fields = {
+  __typename?: 'course_certificate_changelog_type_max_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Course_Certificate_Changelog_Type_Min_Fields = {
+  __typename?: 'course_certificate_changelog_type_min_fields';
+  name?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Mutation_Response = {
+  __typename?: 'course_certificate_changelog_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Certificate_Changelog_Type>;
+};
+
+/** on_conflict condition type for table "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_On_Conflict = {
+  constraint: Course_Certificate_Changelog_Type_Constraint;
+  update_columns?: Array<Course_Certificate_Changelog_Type_Update_Column>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_certificate_changelog_type". */
+export type Course_Certificate_Changelog_Type_Order_By = {
+  name?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_certificate_changelog_type */
+export type Course_Certificate_Changelog_Type_Pk_Columns_Input = {
+  name: Scalars['String'];
+};
+
+/** select columns of table "course_certificate_changelog_type" */
+export enum Course_Certificate_Changelog_Type_Select_Column {
+  /** column name */
+  Name = 'name'
+}
+
+/** input type for updating data in table "course_certificate_changelog_type" */
+export type Course_Certificate_Changelog_Type_Set_Input = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+/** update columns of table "course_certificate_changelog_type" */
+export enum Course_Certificate_Changelog_Type_Update_Column {
+  /** column name */
+  Name = 'name'
+}
 
 /** update columns of table "course_certificate_changelog" */
 export enum Course_Certificate_Changelog_Update_Column {
@@ -14924,13 +15060,11 @@ export enum Course_Certificate_Changelog_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  NewGrade = 'newGrade',
-  /** column name */
-  Notes = 'notes',
-  /** column name */
-  OldGrade = 'oldGrade',
-  /** column name */
   ParticipantId = 'participantId',
+  /** column name */
+  Payload = 'payload',
+  /** column name */
+  Type = 'type',
   /** column name */
   UpdatedAt = 'updatedAt'
 }
@@ -19750,7 +19884,6 @@ export type Course_Pk_Columns_Input = {
 export type Course_Pricing = {
   __typename?: 'course_pricing';
   blended: Scalars['Boolean'];
-  created_at?: Maybe<Scalars['timestamptz']>;
   id: Scalars['uuid'];
   level: Course_Level_Enum;
   /** Price per participant without any discounts */
@@ -19758,7 +19891,6 @@ export type Course_Pricing = {
   priceCurrency: Scalars['String'];
   reaccreditation: Scalars['Boolean'];
   type: Course_Type_Enum;
-  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode: Scalars['String'];
 };
 
@@ -19805,14 +19937,12 @@ export type Course_Pricing_Bool_Exp = {
   _not?: InputMaybe<Course_Pricing_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Pricing_Bool_Exp>>;
   blended?: InputMaybe<Boolean_Comparison_Exp>;
-  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   level?: InputMaybe<Course_Level_Enum_Comparison_Exp>;
   priceAmount?: InputMaybe<Numeric_Comparison_Exp>;
   priceCurrency?: InputMaybe<String_Comparison_Exp>;
   reaccreditation?: InputMaybe<Boolean_Comparison_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
-  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   xeroCode?: InputMaybe<String_Comparison_Exp>;
 };
 
@@ -19833,7 +19963,6 @@ export type Course_Pricing_Inc_Input = {
 /** input type for inserting data into table "course_pricing" */
 export type Course_Pricing_Insert_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -19841,31 +19970,26 @@ export type Course_Pricing_Insert_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Course_Pricing_Max_Fields = {
   __typename?: 'course_pricing_max_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
 export type Course_Pricing_Min_Fields = {
   __typename?: 'course_pricing_min_fields';
-  created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   /** Price per participant without any discounts */
   priceAmount?: Maybe<Scalars['numeric']>;
   priceCurrency?: Maybe<Scalars['String']>;
-  updated_at?: Maybe<Scalars['timestamptz']>;
   xeroCode?: Maybe<Scalars['String']>;
 };
 
@@ -19888,14 +20012,12 @@ export type Course_Pricing_On_Conflict = {
 /** Ordering options when selecting data from "course_pricing". */
 export type Course_Pricing_Order_By = {
   blended?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   level?: InputMaybe<Order_By>;
   priceAmount?: InputMaybe<Order_By>;
   priceCurrency?: InputMaybe<Order_By>;
   reaccreditation?: InputMaybe<Order_By>;
   type?: InputMaybe<Order_By>;
-  updated_at?: InputMaybe<Order_By>;
   xeroCode?: InputMaybe<Order_By>;
 };
 
@@ -19909,8 +20031,6 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -19923,15 +20043,12 @@ export enum Course_Pricing_Select_Column {
   /** column name */
   Type = 'type',
   /** column name */
-  UpdatedAt = 'updated_at',
-  /** column name */
   XeroCode = 'xeroCode'
 }
 
 /** input type for updating data in table "course_pricing" */
 export type Course_Pricing_Set_Input = {
   blended?: InputMaybe<Scalars['Boolean']>;
-  created_at?: InputMaybe<Scalars['timestamptz']>;
   id?: InputMaybe<Scalars['uuid']>;
   level?: InputMaybe<Course_Level_Enum>;
   /** Price per participant without any discounts */
@@ -19939,7 +20056,6 @@ export type Course_Pricing_Set_Input = {
   priceCurrency?: InputMaybe<Scalars['String']>;
   reaccreditation?: InputMaybe<Scalars['Boolean']>;
   type?: InputMaybe<Course_Type_Enum>;
-  updated_at?: InputMaybe<Scalars['timestamptz']>;
   xeroCode?: InputMaybe<Scalars['String']>;
 };
 
@@ -19976,8 +20092,6 @@ export enum Course_Pricing_Update_Column {
   /** column name */
   Blended = 'blended',
   /** column name */
-  CreatedAt = 'created_at',
-  /** column name */
   Id = 'id',
   /** column name */
   Level = 'level',
@@ -19989,8 +20103,6 @@ export enum Course_Pricing_Update_Column {
   Reaccreditation = 'reaccreditation',
   /** column name */
   Type = 'type',
-  /** column name */
-  UpdatedAt = 'updated_at',
   /** column name */
   XeroCode = 'xeroCode'
 }
@@ -24623,6 +24735,10 @@ export type Mutation_Root = {
   delete_course_certificate_changelog?: Maybe<Course_Certificate_Changelog_Mutation_Response>;
   /** delete single row from the table: "course_certificate_changelog" */
   delete_course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** delete data from the table: "course_certificate_changelog_type" */
+  delete_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
+  /** delete single row from the table: "course_certificate_changelog_type" */
+  delete_course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
   /** delete data from the table: "course_delivery_type" */
   delete_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** delete single row from the table: "course_delivery_type" */
@@ -24910,6 +25026,10 @@ export type Mutation_Root = {
   insert_course_certificate_changelog?: Maybe<Course_Certificate_Changelog_Mutation_Response>;
   /** insert a single row into the table: "course_certificate_changelog" */
   insert_course_certificate_changelog_one?: Maybe<Course_Certificate_Changelog>;
+  /** insert data into the table: "course_certificate_changelog_type" */
+  insert_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
+  /** insert a single row into the table: "course_certificate_changelog_type" */
+  insert_course_certificate_changelog_type_one?: Maybe<Course_Certificate_Changelog_Type>;
   /** insert a single row into the table: "course_certificate" */
   insert_course_certificate_one?: Maybe<Course_Certificate>;
   /** insert data into the table: "course_delivery_type" */
@@ -25214,6 +25334,10 @@ export type Mutation_Root = {
   update_course_certificate_changelog?: Maybe<Course_Certificate_Changelog_Mutation_Response>;
   /** update single row of the table: "course_certificate_changelog" */
   update_course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** update data of the table: "course_certificate_changelog_type" */
+  update_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
+  /** update single row of the table: "course_certificate_changelog_type" */
+  update_course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
   /** update data of the table: "course_delivery_type" */
   update_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** update single row of the table: "course_delivery_type" */
@@ -25645,6 +25769,18 @@ export type Mutation_RootDelete_Course_Certificate_ChangelogArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Certificate_Changelog_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Certificate_Changelog_TypeArgs = {
+  where: Course_Certificate_Changelog_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Certificate_Changelog_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -26527,6 +26663,20 @@ export type Mutation_RootInsert_Course_Certificate_ChangelogArgs = {
 export type Mutation_RootInsert_Course_Certificate_Changelog_OneArgs = {
   object: Course_Certificate_Changelog_Insert_Input;
   on_conflict?: InputMaybe<Course_Certificate_Changelog_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Certificate_Changelog_TypeArgs = {
+  objects: Array<Course_Certificate_Changelog_Type_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Certificate_Changelog_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Certificate_Changelog_Type_OneArgs = {
+  object: Course_Certificate_Changelog_Type_Insert_Input;
+  on_conflict?: InputMaybe<Course_Certificate_Changelog_Type_On_Conflict>;
 };
 
 
@@ -27607,6 +27757,11 @@ export type Mutation_RootUpdate_Course_Certificate_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Course_Certificate_ChangelogArgs = {
+  _append?: InputMaybe<Course_Certificate_Changelog_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Certificate_Changelog_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Certificate_Changelog_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Certificate_Changelog_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Certificate_Changelog_Prepend_Input>;
   _set?: InputMaybe<Course_Certificate_Changelog_Set_Input>;
   where: Course_Certificate_Changelog_Bool_Exp;
 };
@@ -27614,8 +27769,27 @@ export type Mutation_RootUpdate_Course_Certificate_ChangelogArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Course_Certificate_Changelog_By_PkArgs = {
+  _append?: InputMaybe<Course_Certificate_Changelog_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Certificate_Changelog_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Certificate_Changelog_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Certificate_Changelog_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Certificate_Changelog_Prepend_Input>;
   _set?: InputMaybe<Course_Certificate_Changelog_Set_Input>;
   pk_columns: Course_Certificate_Changelog_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Changelog_TypeArgs = {
+  _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
+  where: Course_Certificate_Changelog_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Changelog_Type_By_PkArgs = {
+  _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
+  pk_columns: Course_Certificate_Changelog_Type_Pk_Columns_Input;
 };
 
 
@@ -32877,6 +33051,12 @@ export type Query_Root = {
   course_certificate_changelog_aggregate: Course_Certificate_Changelog_Aggregate;
   /** fetch data from the table: "course_certificate_changelog" using primary key columns */
   course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** fetch data from the table: "course_certificate_changelog_type" */
+  course_certificate_changelog_type: Array<Course_Certificate_Changelog_Type>;
+  /** fetch aggregated fields from the table: "course_certificate_changelog_type" */
+  course_certificate_changelog_type_aggregate: Course_Certificate_Changelog_Type_Aggregate;
+  /** fetch data from the table: "course_certificate_changelog_type" using primary key columns */
+  course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
   /** fetch data from the table: "course_delivery_type" */
   course_delivery_type: Array<Course_Delivery_Type>;
   /** fetch aggregated fields from the table: "course_delivery_type" */
@@ -33511,6 +33691,29 @@ export type Query_RootCourse_Certificate_Changelog_AggregateArgs = {
 
 export type Query_RootCourse_Certificate_Changelog_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootCourse_Certificate_Changelog_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Changelog_Type_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Certificate_Changelog_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Changelog_Type_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Certificate_Changelog_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -35336,6 +35539,12 @@ export type Subscription_Root = {
   course_certificate_changelog_aggregate: Course_Certificate_Changelog_Aggregate;
   /** fetch data from the table: "course_certificate_changelog" using primary key columns */
   course_certificate_changelog_by_pk?: Maybe<Course_Certificate_Changelog>;
+  /** fetch data from the table: "course_certificate_changelog_type" */
+  course_certificate_changelog_type: Array<Course_Certificate_Changelog_Type>;
+  /** fetch aggregated fields from the table: "course_certificate_changelog_type" */
+  course_certificate_changelog_type_aggregate: Course_Certificate_Changelog_Type_Aggregate;
+  /** fetch data from the table: "course_certificate_changelog_type" using primary key columns */
+  course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
   /** fetch data from the table: "course_delivery_type" */
   course_delivery_type: Array<Course_Delivery_Type>;
   /** fetch aggregated fields from the table: "course_delivery_type" */
@@ -35942,6 +36151,29 @@ export type Subscription_RootCourse_Certificate_Changelog_AggregateArgs = {
 
 export type Subscription_RootCourse_Certificate_Changelog_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootCourse_Certificate_Changelog_TypeArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Changelog_Type_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Certificate_Changelog_Type_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Changelog_Type_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Changelog_Type_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Changelog_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Certificate_Changelog_Type_By_PkArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -39043,7 +39275,6 @@ export enum Xero_Credential_Update_Column {
 /** Invoice stored on our end, and synced from Xero */
 export type Xero_Invoice = {
   __typename?: 'xero_invoice';
-  _status: Xero_Invoice_Status_Enum;
   amountDue?: Maybe<Scalars['numeric']>;
   amountPaid?: Maybe<Scalars['numeric']>;
   /** An object relationship */
@@ -39056,8 +39287,7 @@ export type Xero_Invoice = {
   issuedDate: Scalars['timestamp'];
   lineItems: Scalars['jsonb'];
   reference: Scalars['String'];
-  /** Calculated invoice status that takes due_date into account */
-  status?: Maybe<Scalars['String']>;
+  status: Xero_Invoice_Status_Enum;
   subtotal: Scalars['numeric'];
   total: Scalars['numeric'];
   totalTax: Scalars['numeric'];
@@ -39121,7 +39351,6 @@ export type Xero_Invoice_Bool_Exp = {
   _and?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
   _not?: InputMaybe<Xero_Invoice_Bool_Exp>;
   _or?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
-  _status?: InputMaybe<Xero_Invoice_Status_Enum_Comparison_Exp>;
   amountDue?: InputMaybe<Numeric_Comparison_Exp>;
   amountPaid?: InputMaybe<Numeric_Comparison_Exp>;
   contact?: InputMaybe<Xero_Contact_Bool_Exp>;
@@ -39133,7 +39362,7 @@ export type Xero_Invoice_Bool_Exp = {
   issuedDate?: InputMaybe<Timestamp_Comparison_Exp>;
   lineItems?: InputMaybe<Jsonb_Comparison_Exp>;
   reference?: InputMaybe<String_Comparison_Exp>;
-  status?: InputMaybe<String_Comparison_Exp>;
+  status?: InputMaybe<Xero_Invoice_Status_Enum_Comparison_Exp>;
   subtotal?: InputMaybe<Numeric_Comparison_Exp>;
   total?: InputMaybe<Numeric_Comparison_Exp>;
   totalTax?: InputMaybe<Numeric_Comparison_Exp>;
@@ -39177,7 +39406,6 @@ export type Xero_Invoice_Inc_Input = {
 
 /** input type for inserting data into table "xero_invoice" */
 export type Xero_Invoice_Insert_Input = {
-  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
   amountDue?: InputMaybe<Scalars['numeric']>;
   amountPaid?: InputMaybe<Scalars['numeric']>;
   contact?: InputMaybe<Xero_Contact_Obj_Rel_Insert_Input>;
@@ -39189,6 +39417,7 @@ export type Xero_Invoice_Insert_Input = {
   issuedDate?: InputMaybe<Scalars['timestamp']>;
   lineItems?: InputMaybe<Scalars['jsonb']>;
   reference?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Xero_Invoice_Status_Enum>;
   subtotal?: InputMaybe<Scalars['numeric']>;
   total?: InputMaybe<Scalars['numeric']>;
   totalTax?: InputMaybe<Scalars['numeric']>;
@@ -39259,7 +39488,6 @@ export type Xero_Invoice_On_Conflict = {
 
 /** Ordering options when selecting data from "xero_invoice". */
 export type Xero_Invoice_Order_By = {
-  _status?: InputMaybe<Order_By>;
   amountDue?: InputMaybe<Order_By>;
   amountPaid?: InputMaybe<Order_By>;
   contact?: InputMaybe<Xero_Contact_Order_By>;
@@ -39292,8 +39520,6 @@ export type Xero_Invoice_Prepend_Input = {
 /** select columns of table "xero_invoice" */
 export enum Xero_Invoice_Select_Column {
   /** column name */
-  Status = '_status',
-  /** column name */
   AmountDue = 'amountDue',
   /** column name */
   AmountPaid = 'amountPaid',
@@ -39314,6 +39540,8 @@ export enum Xero_Invoice_Select_Column {
   /** column name */
   Reference = 'reference',
   /** column name */
+  Status = 'status',
+  /** column name */
   Subtotal = 'subtotal',
   /** column name */
   Total = 'total',
@@ -39327,7 +39555,6 @@ export enum Xero_Invoice_Select_Column {
 
 /** input type for updating data in table "xero_invoice" */
 export type Xero_Invoice_Set_Input = {
-  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
   amountDue?: InputMaybe<Scalars['numeric']>;
   amountPaid?: InputMaybe<Scalars['numeric']>;
   currencyCode?: InputMaybe<Scalars['String']>;
@@ -39338,6 +39565,7 @@ export type Xero_Invoice_Set_Input = {
   issuedDate?: InputMaybe<Scalars['timestamp']>;
   lineItems?: InputMaybe<Scalars['jsonb']>;
   reference?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Xero_Invoice_Status_Enum>;
   subtotal?: InputMaybe<Scalars['numeric']>;
   total?: InputMaybe<Scalars['numeric']>;
   totalTax?: InputMaybe<Scalars['numeric']>;
@@ -39391,7 +39619,6 @@ export enum Xero_Invoice_Status_Enum {
   Authorised = 'AUTHORISED',
   Deleted = 'DELETED',
   Draft = 'DRAFT',
-  Overdue = 'OVERDUE',
   Paid = 'PAID',
   Submitted = 'SUBMITTED',
   Voided = 'VOIDED'
@@ -39509,8 +39736,6 @@ export type Xero_Invoice_Sum_Fields = {
 /** update columns of table "xero_invoice" */
 export enum Xero_Invoice_Update_Column {
   /** column name */
-  Status = '_status',
-  /** column name */
   AmountDue = 'amountDue',
   /** column name */
   AmountPaid = 'amountPaid',
@@ -39530,6 +39755,8 @@ export enum Xero_Invoice_Update_Column {
   LineItems = 'lineItems',
   /** column name */
   Reference = 'reference',
+  /** column name */
+  Status = 'status',
   /** column name */
   Subtotal = 'subtotal',
   /** column name */
@@ -39787,7 +40014,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type?: Course_Certificate_Changelog_Type_Enum | null, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   code: Scalars['String'];
@@ -40070,7 +40297,7 @@ export type VenueFragment = { __typename?: 'venue', id: any, createdAt: any, upd
 
 export type CertificateFragment = { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null };
 
-export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, oldGrade: Grade_Enum, newGrade: Grade_Enum, notes: string };
+export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type?: Course_Certificate_Changelog_Type_Enum | null };
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
@@ -40145,10 +40372,10 @@ export type SaveCourseGradingMutation = { __typename?: 'mutation_root', saveModu
 
 export type UpdateGradeMutationVariables = Exact<{
   participantId: Scalars['uuid'];
-  oldGrade: Grade_Enum;
   newGrade: Grade_Enum;
-  note: Scalars['String'];
   authorId: Scalars['uuid'];
+  type: Course_Certificate_Changelog_Type_Enum;
+  payload?: InputMaybe<Scalars['jsonb']>;
 }>;
 
 

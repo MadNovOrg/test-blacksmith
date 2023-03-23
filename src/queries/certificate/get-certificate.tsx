@@ -1,11 +1,6 @@
 import { gql } from 'graphql-request'
 
 import { CERTIFICATE, CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
-import { CourseCertificate } from '@app/types'
-
-export type ResponseType = {
-  certificate: CourseCertificate
-}
 
 export type ParamsType = { id: string }
 
@@ -32,6 +27,7 @@ export const QUERY = gql`
         }
         gradingModules {
           completed
+          id
           module {
             id
             name
@@ -44,6 +40,7 @@ export const QUERY = gql`
         course {
           id
           name
+          level
           deliveryType
         }
         certificateChanges {

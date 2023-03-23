@@ -23,6 +23,11 @@ import { CourseGradingMenu } from '@app/components/CourseGradingMenu'
 import { Dialog } from '@app/components/Dialog'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Sticky } from '@app/components/Sticky'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import {
@@ -31,7 +36,6 @@ import {
   ResponseType,
 } from '@app/queries/grading/save-course-grading'
 import theme from '@app/theme'
-import { Grade } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import {
@@ -50,7 +54,7 @@ export const CourseGrading = () => {
   const [savingGradesStatus, setSavingGradesStatus] = useState(
     LoadingStatus.IDLE
   )
-  const [grade, setGrade] = useState<Grade | undefined>()
+  const [grade, setGrade] = useState<Grade_Enum | undefined>()
   const [feedback, setFeedback] = useState('')
 
   const modulesSelectionRef = useRef<Record<string, boolean> | null>(null)
@@ -276,8 +280,10 @@ export const CourseGrading = () => {
 
                   <CourseGradingMenu
                     onChange={grade => setGrade(grade)}
-                    courseLevel={course.level}
-                    courseDeliveryType={course.deliveryType}
+                    courseLevel={course.level as unknown as Course_Level_Enum}
+                    courseDeliveryType={
+                      course.deliveryType as unknown as Course_Delivery_Type_Enum
+                    }
                   />
                 </Sticky>
               </Box>

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 
 import BILDOutlineImage from '@app/assets/outline_bild.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
-import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
+import { CourseLevel } from '@app/types'
 
 // workaround for using react-pdf with vite
 const { Document, Image, Page, StyleSheet, Text } = pdf
@@ -65,8 +66,8 @@ type CertificateDocumentProps = {
   participantName: string
   courseName: string
   courseLevel: CourseLevel
-  grade: Grade
-  courseDeliveryType: CourseDeliveryType
+  grade: Grade_Enum
+  courseDeliveryType: Course_Delivery_Type_Enum
   certificationNumber: string
   expiryDate: string
 }
@@ -116,8 +117,8 @@ export const CertificateDocument: React.FC<
             {t('common.course-certificate.levels-limitation-message')}
           </Text>
         ) : null}
-        {courseDeliveryType !== CourseDeliveryType.F2F ||
-        grade === Grade.OBSERVE_ONLY ? (
+        {courseDeliveryType !== Course_Delivery_Type_Enum.F2F ||
+        grade === Grade_Enum.ObserveOnly ? (
           <Text style={styles.smallerText}>
             {t('common.course-certificate.physical-limitation-message')}
           </Text>

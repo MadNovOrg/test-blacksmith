@@ -12,17 +12,11 @@ configuration:
       custom_name: updatedAt
     created_at:
       custom_name: createdAt
-    old_grade:
-      custom_name: oldGrade
-    new_grade:
-      custom_name: newGrade
   custom_column_names:
     author_id: authorId
     participant_id: participantId
     updated_at: updatedAt
     created_at: createdAt
-    old_grade: oldGrade
-    new_grade: newGrade
 object_relationships:
   - name: author
     using:
@@ -36,13 +30,10 @@ insert_permissions:
       check: {}
       columns:
         - author_id
-        - created_at
         - id
-        - new_grade
-        - notes
-        - old_grade
         - participant_id
-        - updated_at
+        - payload
+        - type
       backend_only: false
 select_permissions:
   - role: tt-ops
@@ -51,23 +42,21 @@ select_permissions:
         - author_id
         - created_at
         - id
-        - new_grade
-        - notes
-        - old_grade
         - participant_id
+        - payload
+        - type
         - updated_at
       filter: {}
   - role: user
     permission:
       columns:
-        - new_grade
-        - notes
-        - old_grade
-        - created_at
-        - updated_at
         - author_id
+        - created_at
         - id
         - participant_id
+        - payload
+        - type
+        - updated_at
       filter:
         author_id:
           _eq: X-Hasura-User-Id

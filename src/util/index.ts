@@ -13,6 +13,7 @@ import { TFunction } from 'i18next'
 import { FieldError, Merge } from 'react-hook-form'
 
 import {
+  Course_Participant_Module,
   Course_Status_Enum,
   Grade_Enum,
   Profile,
@@ -27,10 +28,10 @@ import {
   Course,
   CourseInput,
   CourseLevel,
-  CourseParticipantModule,
   CourseTrainer,
   CourseTrainerType,
   CourseType,
+  NonNullish,
   SearchTrainer,
   SetCourseTrainerInput,
   SortOrder,
@@ -145,7 +146,7 @@ export const getCourseModerator = (trainers: CourseTrainer[]) => {
 }
 
 export const transformModulesToGroups = (
-  courseModules: CourseParticipantModule[]
+  courseModules: NonNullish<Course_Participant_Module>[]
 ): Array<{
   id: string
   name: string
@@ -161,6 +162,7 @@ export const transformModulesToGroups = (
   > = {}
 
   courseModules.forEach(courseModule => {
+    if (!courseModule.module.moduleGroup) return
     const moduleGroup = groups[courseModule.module.moduleGroup.id]
 
     if (!moduleGroup) {

@@ -1,6 +1,9 @@
 import React from 'react'
 
-import { CourseDeliveryType, CourseLevel } from '@app/types'
+import {
+  Course_Delivery_Type_Enum,
+  Course_Level_Enum,
+} from '@app/generated/graphql'
 
 import { render, screen, userEvent, within } from '@test/index'
 
@@ -10,8 +13,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct option for virtual L1 course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.Level_1}
-        courseDeliveryType={CourseDeliveryType.VIRTUAL}
+        courseLevel={Course_Level_Enum.Level_1}
+        courseDeliveryType={Course_Delivery_Type_Enum.Virtual}
       />
     )
 
@@ -30,8 +33,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for F2F L1 course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.Level_1}
-        courseDeliveryType={CourseDeliveryType.F2F}
+        courseLevel={Course_Level_Enum.Level_1}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
       />
     )
 
@@ -48,8 +51,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for F2F L2 course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.Level_2}
-        courseDeliveryType={CourseDeliveryType.F2F}
+        courseLevel={Course_Level_Enum.Level_2}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
       />
     )
 
@@ -66,8 +69,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for advanced trainer F2F course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.AdvancedTrainer}
-        courseDeliveryType={CourseDeliveryType.F2F}
+        courseLevel={Course_Level_Enum.AdvancedTrainer}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
       />
     )
 
@@ -86,8 +89,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for intermediate trainer F2F course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.IntermediateTrainer}
-        courseDeliveryType={CourseDeliveryType.F2F}
+        courseLevel={Course_Level_Enum.IntermediateTrainer}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
       />
     )
 
@@ -106,8 +109,8 @@ describe('component: CourseGradingMenu', () => {
   it('displays correct options for blended course', async () => {
     render(
       <CourseGradingMenu
-        courseLevel={CourseLevel.Level_1}
-        courseDeliveryType={CourseDeliveryType.MIXED}
+        courseLevel={Course_Level_Enum.Level_1}
+        courseDeliveryType={Course_Delivery_Type_Enum.Mixed}
       />
     )
 

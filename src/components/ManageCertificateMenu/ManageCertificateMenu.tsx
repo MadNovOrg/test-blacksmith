@@ -65,7 +65,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         <MenuItem>{t('common.course-certificate.revoke-certificate')}</MenuItem>
         {certificateChangeLength ? (
           <MenuItem onClick={onShowChangelogModal}>
-            {t('common.course-certificate.revoke-certificate')}
+            {t('common.course-certificate.change-log')}
           </MenuItem>
         ) : null}
       </Menu>

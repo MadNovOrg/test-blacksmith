@@ -22,6 +22,7 @@ import { useParams } from 'react-router-dom'
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Grade } from '@app/components/Grade'
+import { Course_Participant_Module } from '@app/generated/graphql'
 import useCourseParticipant from '@app/hooks/useCourseParticipant'
 import { CourseDetailsTabs } from '@app/pages/trainer-pages/CourseDetails'
 import theme from '@app/theme'
@@ -36,7 +37,9 @@ export const ParticipantGrading = () => {
 
   const moduleGroups = useMemo(() => {
     if (participant?.gradingModules) {
-      return transformModulesToGroups(participant?.gradingModules)
+      return transformModulesToGroups(
+        participant?.gradingModules as unknown as Course_Participant_Module[]
+      )
     }
 
     return []

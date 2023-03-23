@@ -1,0 +1,4 @@
+table:
+  schema: public
+  name: course_certificate_changelog_type
+is_enum: true

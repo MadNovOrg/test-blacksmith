@@ -176,9 +176,8 @@ export const CERTIFICATE_CHANGELOG = gql`
     id
     createdAt
     updatedAt
-    oldGrade
-    newGrade
-    notes
+    payload
+    type
   }
 `
 

@@ -7,17 +7,21 @@ import MenuItem from '@mui/material/MenuItem'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CourseDeliveryType, CourseLevel, Grade } from '@app/types'
+import {
+  Course_Level_Enum,
+  Grade_Enum,
+  Course_Delivery_Type_Enum,
+} from '@app/generated/graphql'
 import { noop } from '@app/util'
 
 interface Props {
-  onChange?: (grade: Grade) => void
-  courseLevel: CourseLevel
-  courseDeliveryType: CourseDeliveryType
-  initialValue?: Grade
+  onChange?: (grade: Grade_Enum) => void
+  courseLevel: Course_Level_Enum
+  courseDeliveryType: Course_Delivery_Type_Enum
+  initialValue?: Grade_Enum | undefined | null
 }
 
-type GradeOption = { key: Grade; label: string; icon: React.ReactNode }
+type GradeOption = { key: Grade_Enum; label: string; icon: React.ReactNode }
 
 export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
@@ -31,42 +35,43 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
 
   const options: GradeOption[] = useMemo(() => {
     const passOption: GradeOption = {
-      key: Grade.PASS,
+      key: Grade_Enum.Pass,
       icon: <CheckCircleIcon color="success" sx={{ mr: 1 }} />,
       label: t('pages.course-grading.grade-pass'),
     }
 
     const failOption: GradeOption = {
-      key: Grade.FAIL,
+      key: Grade_Enum.Fail,
       icon: <CancelIcon color="error" sx={{ mr: 1 }} />,
       label: t('pages.course-grading.grade-fail'),
     }
 
     const observeOnlyOption: GradeOption = {
-      key: Grade.OBSERVE_ONLY,
+      key: Grade_Enum.ObserveOnly,
       icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
       label: t('pages.course-grading.grade-non-physical'),
     }
 
     const assistOnlyOption: GradeOption = {
-      key: Grade.ASSIST_ONLY,
+      key: Grade_Enum.AssistOnly,
       icon: <CheckCircleIcon color="primary" sx={{ mr: 1 }} />,
       label: t('pages.course-grading.grade-assist-only'),
     }
 
     if (
-      (courseDeliveryType === CourseDeliveryType.VIRTUAL &&
-        courseLevel === CourseLevel.Level_1) ||
-      courseDeliveryType === CourseDeliveryType.MIXED
+      (courseDeliveryType === Course_Delivery_Type_Enum.Virtual &&
+        courseLevel === Course_Level_Enum.Level_1) ||
+      courseDeliveryType === Course_Delivery_Type_Enum.Mixed
     ) {
       return [passOption, failOption]
     }
 
     if (
-      courseDeliveryType === CourseDeliveryType.F2F &&
-      [CourseLevel.AdvancedTrainer, CourseLevel.IntermediateTrainer].includes(
-        courseLevel
-      )
+      courseDeliveryType === Course_Delivery_Type_Enum.F2F &&
+      [
+        Course_Level_Enum.AdvancedTrainer,
+        Course_Level_Enum.IntermediateTrainer,
+      ].includes(courseLevel)
     ) {
       return [passOption, assistOnlyOption, failOption]
     }
@@ -81,7 +86,7 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   const handleMenuItemClick = (
     event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     index: React.SetStateAction<number>,
-    key: Grade
+    key: Grade_Enum
   ) => {
     setSelectedIndex(index)
     setAnchorEl(null)

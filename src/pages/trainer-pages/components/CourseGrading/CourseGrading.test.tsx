@@ -1,8 +1,9 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
+import { Grade_Enum } from '@app/generated/graphql'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import { Grade, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { render, screen, userEvent, waitFor, within } from '@test/index'
@@ -31,7 +32,7 @@ describe('component: CourseGrading', () => {
     const course = buildCourse()
     course.gradingConfirmed = true
     const participants = [
-      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
       { ...buildParticipant(), attended: true },
       { ...buildParticipant(), attended: true },
     ]
@@ -63,7 +64,7 @@ describe('component: CourseGrading', () => {
     const course = buildCourse()
     course.gradingConfirmed = true
     const participants = [
-      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
       { ...buildParticipant(), attended: true },
       { ...buildParticipant(), attended: true },
     ]
@@ -102,7 +103,7 @@ describe('component: CourseGrading', () => {
     course.gradingConfirmed = true
     course.gradingStarted = true
     const participants = [
-      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
       { ...buildParticipant(), attended: true },
       { ...buildParticipant(), attended: true },
     ]
@@ -127,7 +128,7 @@ describe('component: CourseGrading', () => {
     course.gradingConfirmed = true
     course.gradingStarted = true
     const participants = [
-      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
       { ...buildParticipant(), attended: true },
       { ...buildParticipant(), attended: true },
     ]
@@ -180,7 +181,7 @@ describe('component: CourseGrading', () => {
     course.gradingConfirmed = true
     course.gradingStarted = true
     const participants = [
-      { ...buildParticipant(), attended: false, grade: Grade.FAIL },
+      { ...buildParticipant(), attended: false, grade: Grade_Enum.Fail },
       { ...buildParticipant(), attended: true },
       { ...buildParticipant(), attended: true },
     ]

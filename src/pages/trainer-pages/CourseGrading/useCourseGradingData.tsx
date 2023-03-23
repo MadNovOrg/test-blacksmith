@@ -1,7 +1,8 @@
 import { gql } from 'graphql-request'
 import useSWR from 'swr'
 
-import { CourseDeliveryType, CourseLevel, CourseType, Grade } from '@app/types'
+import { Grade_Enum } from '@app/generated/graphql'
+import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 type ParamsType = {
@@ -19,7 +20,7 @@ type ResponseType = {
       id: string
       profile: { id: string; fullName: string; avatar: string }
       attended: boolean
-      grade?: Grade
+      grade?: Grade_Enum
     }>
     modules: Array<{
       id: string

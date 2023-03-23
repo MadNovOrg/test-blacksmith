@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
+import { Grade_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION } from '@app/queries/grading/save-course-grading'
 import { Grade } from '@app/types'
@@ -122,7 +123,7 @@ describe('page: CourseGrading', () => {
       { ...buildCourseModule(), covered: false },
     ]
     const courseParticipants = [
-      { ...buildParticipant(), attended: true, grade: Grade.PASS },
+      { ...buildParticipant(), attended: true, grade: Grade_Enum.Pass },
       { ...buildParticipant(), attended: true },
     ]
 

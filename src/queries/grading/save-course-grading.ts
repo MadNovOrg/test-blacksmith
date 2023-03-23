@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { Grade } from '@app/types'
+import { Grade_Enum } from '@app/generated/graphql'
 
 export type ParamsType = {
   modules: Array<{
@@ -9,7 +9,7 @@ export type ParamsType = {
     completed: boolean
   }>
   participantIds: string[]
-  grade: Grade
+  grade: Grade_Enum
   feedback: string
   courseId: number
 }

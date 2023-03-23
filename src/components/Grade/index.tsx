@@ -4,10 +4,10 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Grade as GradeEnum } from '@app/types'
+import { Grade_Enum } from '@app/generated/graphql'
 
 interface Props {
-  grade: GradeEnum
+  grade: Grade_Enum
 }
 
 const gradeToIconMap = {
