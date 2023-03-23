@@ -19,6 +19,7 @@ import {
 } from '@app/types'
 
 import { chance, render, screen, userEvent, waitFor } from '@test/index'
+import { profile } from '@test/providers'
 
 import { CreateCourseProvider } from '../CreateCourseProvider'
 
@@ -224,6 +225,11 @@ describe('component: ReviewLicenseOrder', () => {
                 quantity: 0,
                 currency: Currency.Gbp,
                 clientPurchaseOrder: go1Licensing.invoiceDetails.purchaseOrder,
+                user: {
+                  email: profile?.email,
+                  fullName: profile?.fullName,
+                  phone: profile?.phone,
+                },
               },
             ],
           },

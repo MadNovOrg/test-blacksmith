@@ -220,6 +220,11 @@ export function useSaveCourse(): {
                         paymentMethod: Payment_Methods_Enum.Invoice,
                         quantity: 0, // it will be updated on the backend with the correct number of licenses depending on the org's allowance
                         currency: Currency.GBP,
+                        user: {
+                          fullName: profile?.fullName,
+                          email: profile?.email,
+                          phone: profile?.phone,
+                        },
                       },
                     ],
                   },
