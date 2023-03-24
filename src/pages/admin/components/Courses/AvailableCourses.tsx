@@ -64,6 +64,7 @@ export const AvailableCourses: React.FC<
   const { Pagination, perPage, offset } = useTablePagination()
   const filters = useMemo(() => {
     const conditions: Course_Bool_Exp[] = [
+      { freeSlots: { _neq: '0' } },
       { type: { _eq: Course_Type_Enum.Open } },
       {
         status: {
@@ -109,22 +110,22 @@ export const AvailableCourses: React.FC<
     return { _and: conditions }
   }, [dateFrom, dateTo, keyword])
 
-  const { coursesForBooking, loading: coursesLoading } = useUpcomingCourses(
-    profile?.id,
-    filters
-  )
+  const { courses: coursesForBooking, loading: coursesLoading } =
+    useUpcomingCourses(profile?.id, filters)
 
   const distances = useMemo(() => {
     const result = new Map<number, number | null>()
-    coursesForBooking.forEach(course => {
-      result.set(
-        course.id,
-        geoDistance(
-          orgs?.find(org => org.id === id)?.geoCoordinates,
-          course.schedules[0].venue?.geoCoordinates
+    if (coursesForBooking) {
+      coursesForBooking.forEach(course => {
+        result.set(
+          course.id,
+          geoDistance(
+            orgs?.find(org => org.id === id)?.geoCoordinates,
+            course.schedules[0].venue?.geoCoordinates
+          )
         )
-      )
-    })
+      })
+    }
     return result
   }, [coursesForBooking, id, orgs])
 
@@ -157,7 +158,7 @@ export const AvailableCourses: React.FC<
   }, [sortMode, sortModes])
 
   const courses = useMemo(() => {
-    if (sortingByDistance) {
+    if (coursesForBooking && sortingByDistance) {
       const knownDistances = coursesForBooking.filter(
         c => !!distances.get(c.id)
       )

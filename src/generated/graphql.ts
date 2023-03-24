@@ -13633,6 +13633,8 @@ export type Course = {
   expenses: Array<Course_Expenses>;
   /** An aggregate relationship */
   expenses_aggregate: Course_Expenses_Aggregate;
+  /** A computed field, executes function "course_free_slots" */
+  freeSlots?: Maybe<Scalars['String']>;
   freeSpaces?: Maybe<Scalars['Int']>;
   go1Integration: Scalars['Boolean'];
   gradingConfirmed: Scalars['Boolean'];
@@ -14341,6 +14343,7 @@ export type Course_Bool_Exp = {
   end?: InputMaybe<Timestamptz_Comparison_Exp>;
   evaluation_answers?: InputMaybe<Course_Evaluation_Answers_Bool_Exp>;
   expenses?: InputMaybe<Course_Expenses_Bool_Exp>;
+  freeSlots?: InputMaybe<String_Comparison_Exp>;
   freeSpaces?: InputMaybe<Int_Comparison_Exp>;
   go1Integration?: InputMaybe<Boolean_Comparison_Exp>;
   gradingConfirmed?: InputMaybe<Boolean_Comparison_Exp>;
@@ -18375,6 +18378,7 @@ export type Course_Order_By = {
   end?: InputMaybe<Order_By>;
   evaluation_answers_aggregate?: InputMaybe<Course_Evaluation_Answers_Aggregate_Order_By>;
   expenses_aggregate?: InputMaybe<Course_Expenses_Aggregate_Order_By>;
+  freeSlots?: InputMaybe<Order_By>;
   freeSpaces?: InputMaybe<Order_By>;
   go1Integration?: InputMaybe<Order_By>;
   gradingConfirmed?: InputMaybe<Order_By>;

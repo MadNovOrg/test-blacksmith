@@ -160,6 +160,11 @@ computed_fields:
       function:
         schema: public
         name: course_end_date
+  - name: freeSlots
+    definition:
+      function:
+        schema: public
+        name: course_free_slots
   - name: start
     definition:
       function:
@@ -337,6 +342,7 @@ select_permissions:
       computed_fields:
         - course_code
         - end
+        - freeSlots
         - start
       filter:
         course_type:
@@ -378,6 +384,7 @@ select_permissions:
       computed_fields:
         - course_code
         - end
+        - freeSlots
         - start
       filter:
         _or:
@@ -450,6 +457,7 @@ select_permissions:
       computed_fields:
         - course_code
         - end
+        - freeSlots
         - start
       filter: {}
       allow_aggregations: true
@@ -526,6 +534,7 @@ select_permissions:
       computed_fields:
         - course_code
         - end
+        - freeSlots
         - start
       filter:
         _or:

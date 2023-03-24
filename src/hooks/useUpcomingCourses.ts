@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import useSWR from 'swr'
 
 import {
@@ -22,19 +21,8 @@ export default function useUpcomingCourses(
 
   const status = getSWRLoadingStatus(data, error)
 
-  const coursesForBooking = useMemo(() => {
-    return data?.courses
-      ? data.courses.filter(
-          course =>
-            (course.participantsCount?.aggregate?.count ?? 0) <
-            course.max_participants
-        )
-      : []
-  }, [data])
-
   return {
     courses: data?.courses,
-    coursesForBooking,
     error,
     status,
     loading: status === LoadingStatus.FETCHING,
