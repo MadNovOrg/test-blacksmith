@@ -68,14 +68,14 @@ export const AttendeeTransferTable: React.FC<
         label: t('pages.audits.original-course'),
         sorting: true,
         exportRender: (log: AttendeeLogType) =>
-          log.fromCourse ? log.fromCourse[0].course_code ?? '' : '',
+          log.fromCourse ? log.payload.fromCourse.courseCode ?? '' : '',
       },
       {
         id: 'toCourse.course_code',
         label: t('pages.audits.new-course'),
         sorting: true,
         exportRender: (log: AttendeeLogType) =>
-          log.toCourse ? log.toCourse[0].course_code ?? '' : '',
+          log.toCourse ? log.payload.toCourse.courseCode ?? '' : '',
       },
       {
         id: 'profile.fullName',
@@ -168,8 +168,6 @@ export const AttendeeTransferTable: React.FC<
                 />
 
                 {logs.map(log => {
-                  const from = log.fromCourse ? log.fromCourse[0] : null
-                  const to = log.toCourse ? log.toCourse[0] : null
                   const invoice = getAttendeeInvoice(log)
                   return (
                     <TableRow
@@ -182,19 +180,23 @@ export const AttendeeTransferTable: React.FC<
                         })}
                       </TableCell>
                       <TableCell>
-                        <Link href={`/manage-courses/all/${from?.id}/details`}>
+                        <Link
+                          href={`/manage-courses/all/${log.payload.fromCourse.id}/details`}
+                        >
                           <Typography
                             variant="body2"
                             sx={{ textDecoration: 'line-through' }}
                           >
-                            {from?.course_code ?? ''}
+                            {log.payload.fromCourse.courseCode ?? ''}
                           </Typography>
                         </Link>
                       </TableCell>
                       <TableCell>
-                        <Link href={`/manage-courses/all/${to?.id}/details`}>
+                        <Link
+                          href={`/manage-courses/all/${log.payload.toCourse.id}/details`}
+                        >
                           <Typography variant="body2">
-                            {to?.course_code ?? ''}
+                            {log.payload.toCourse.courseCode ?? ''}
                           </Typography>
                         </Link>
                       </TableCell>
