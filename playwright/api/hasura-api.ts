@@ -74,7 +74,64 @@ export const getClient = () => {
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   const query = gql`
     query MyQuery {
-      course(where: {_and: {trainers: {profile: {email: {_eq: "${email}"}}}, status: {_nin: [CONFIRM_MODULES, TRAINER_PENDING]}}}) {
+      course(
+        where: {
+          _or: [
+            {
+              trainers: {
+                profile: {
+                  email: { _eq: "${email}" }
+                }
+              }
+            }
+            {
+              _and: [
+                { type: { _eq: OPEN } }
+                {
+                  participants: {
+                    profile: {
+                      organizations: {
+                        organization: {
+                          members: {
+                            _and: [
+                              { isAdmin: { _eq: true } }
+                              {
+                                profile: {
+                                  email: {
+                                    _eq: "${email}"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+            {
+              organization: {
+                members: {
+                  _and: [
+                    {
+                      profile: {
+                        email: {
+                          _eq: "${email}"
+                        }
+                      }
+                    }
+                    { isAdmin: { _eq: true } }
+                  ]
+                }
+              }
+            }
+            { _and: [{ type: { _eq: OPEN } }, { status: { _eq: SCHEDULED } }] }
+          ]
+        }
+        order_by: { name: asc }
+      ) {
         id
         deliveryType
         description
@@ -271,7 +328,6 @@ export const deleteCourse = async (id?: number) => {
     console.log(`Cannot delete the course without id`)
     return
   }
-  console.log(`Deleting the course with id "${id}"`)
   const query = gql`
     mutation MyMutation {
       delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id}}}}) { affected_rows }
@@ -284,11 +340,13 @@ export const deleteCourse = async (id?: number) => {
       delete_course_enquiry(where: {courseId: {_eq: ${id}}}) { affected_rows }
       delete_course_audit(where: {course_id: {_eq: ${id}}}) { affected_rows }
       delete_course_invites(where: {course_id: {_eq: ${id}}}) { affected_rows }
+      delete_order(where: {courseId: {_eq: ${id}}}) { affected_rows }
       delete_course(where: {id: {_eq: ${id}}}) { affected_rows }
     }
   `
   try {
     await getClient().request(query)
+    console.log(`Deleted course with the id "${id}"`)
   } catch (e) {
     console.error(`ERROR: ${e}`)
   }
@@ -297,13 +355,18 @@ export const deleteCourse = async (id?: number) => {
 export const makeSureTrainerHasCourses = async (
   courses: Course[],
   email: string
-) => {
+): Promise<Course[]> => {
   const existingCourses = await getTrainerCourses(email)
   for (const course of courses) {
     if (!existingCourses.map(c => c.description).includes(course.description)) {
-      course.id = await insertCourse(course, email)
+      course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)
     }
   }
+  const allCourses = await getTrainerCourses(email)
+  const newCourses = allCourses.filter(
+    course => !existingCourses.map(c => c.id).includes(course.id)
+  )
+  return newCourses
 }
 
 export const insertCourseModules = async (

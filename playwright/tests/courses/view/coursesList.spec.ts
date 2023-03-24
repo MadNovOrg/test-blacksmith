@@ -3,7 +3,7 @@ import { test as base } from '@playwright/test'
 import { CourseLevel } from '@app/types'
 
 import {
-  getTrainerCourses,
+  deleteCourse,
   makeSureTrainerHasCourses,
 } from '../../../api/hasura-api'
 import { COURSES_TO_VIEW } from '../../../data/courses'
@@ -12,6 +12,11 @@ import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
+const deleteCourses = async (courses: Course[]) => {
+  const deletePromises = courses.map(course => deleteCourse(course.id))
+  await Promise.all(deletePromises)
+}
+
 const test = base.extend<{
   coursesToView: Course[]
   courseSearchText: string
@@ -19,28 +24,40 @@ const test = base.extend<{
   oneTwoLevelCourses: Course[]
 }>({
   coursesToView: async ({}, use) => {
-    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
-    const courses = await getTrainerCourses(users.trainerWithOrg.email)
-    await use(courses)
+    const courses = await makeSureTrainerHasCourses(
+      COURSES_TO_VIEW,
+      users.trainerWithOrg.email
+    )
+    console.log(`courses.length: ${courses.length}`)
+    await use(COURSES_TO_VIEW)
+    await deleteCourses(COURSES_TO_VIEW)
   },
   courseSearchText: async ({}, use) => {
     await use(COURSES_TO_VIEW[0].name.slice(1).toLocaleLowerCase())
   },
   searchResults: async ({ courseSearchText }, use) => {
-    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
-    const courses = await getTrainerCourses(users.trainerWithOrg.email)
-    await use(
-      courses.filter(c => c.name.toLocaleLowerCase().includes(courseSearchText))
+    const courses = await makeSureTrainerHasCourses(
+      COURSES_TO_VIEW,
+      users.trainerWithOrg.email
     )
+    const filterCourses = courses.filter(course =>
+      course.name.toLocaleLowerCase().includes(courseSearchText)
+    )
+    await use(filterCourses)
+    await deleteCourses(courses)
   },
   oneTwoLevelCourses: async ({}, use) => {
-    await makeSureTrainerHasCourses(COURSES_TO_VIEW, users.trainerWithOrg.email)
-    const courses = await getTrainerCourses(users.trainerWithOrg.email)
-    await use(
-      courses.filter(
-        c => c.level == CourseLevel.Level_1 || c.level == CourseLevel.Level_2
-      )
+    const courses = await makeSureTrainerHasCourses(
+      COURSES_TO_VIEW,
+      users.trainerWithOrg.email
     )
+    const filterCourses = courses.filter(
+      course =>
+        course.level == CourseLevel.Level_1 ||
+        course.level == CourseLevel.Level_2
+    )
+    await use(filterCourses)
+    await deleteCourses(courses)
   },
 })
 
@@ -62,6 +79,9 @@ test('my courses search', async ({ page, courseSearchText, searchResults }) => {
 test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
-  await myCoursesPage.filterCourses('FilterCourseLevel', ['LEVEL_1', 'LEVEL_2'])
+  await myCoursesPage.filterCourses('FilterCourseLevel', [
+    CourseLevel.Level_1,
+    CourseLevel.Level_2,
+  ])
   await myCoursesPage.checkRows(oneTwoLevelCourses)
 })
