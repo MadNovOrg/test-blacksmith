@@ -45,6 +45,7 @@ export type Course = {
   gradingConfirmed: boolean
   salesRepresentative?: User
   trainers?: CourseTrainer[]
+  invoiceDetails?: InvoiceDetails
   participants_aggregate?: {
     aggregate?: {
       count: number
@@ -86,4 +87,13 @@ export type AttendeesTableRow = {
   Contact: string
   Organisation: string
   Documents: string
+}
+
+export type InvoiceDetails = {
+  organisation: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  purchaseOrder?: string
 }

@@ -138,6 +138,7 @@ export const ReviewLicenseOrder: React.FC<
             endIcon={<ArrowForwardIcon />}
             loading={savingStatus === LoadingStatus.FETCHING}
             onClick={() => handleSubmitButtonClick()}
+            data-testid="courseBuilder-button"
           >
             {_t('pages.create-course.course-builder-button-text')}
           </LoadingButton>

@@ -529,7 +529,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             <FormControlLabel
               sx={{ mr: theme.spacing(5) }}
               disabled={!canBlended || disabledFields.has('blendedLearning')}
-              control={<Switch {...field} checked={values.blendedLearning} />}
+              control={
+                <Switch
+                  {...field}
+                  checked={values.blendedLearning}
+                  data-testid="blendedLearning-switch"
+                />
+              }
               label={t('components.course-form.blended-learning-label')}
             />
           )}
@@ -541,7 +547,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           render={({ field }) => (
             <FormControlLabel
               disabled={!canReacc || disabledFields.has('reaccreditation')}
-              control={<Switch {...field} checked={values.reaccreditation} />}
+              control={
+                <Switch
+                  {...field}
+                  checked={values.reaccreditation}
+                  data-testid="reaccreditation-switch"
+                />
+              }
               label={t('components.course-form.reaccreditation-label')}
             />
           )}

@@ -32,6 +32,7 @@ export class CreateCoursePage extends BasePage {
   readonly nextPageButton: Locator
   readonly freeSpacesInput: Locator
   readonly salesPersonInput: Locator
+  readonly orderDetailsButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -75,6 +76,7 @@ export class CreateCoursePage extends BasePage {
       '[data-testid="acknowledge-checks"] input'
     )
     this.nextPageButton = this.page.locator('data-testid=next-page-btn')
+    this.orderDetailsButton = this.page.locator('[data-testid="next-page-btn"]')
     this.onlineMeetingLinkInput = this.page.locator(
       '[data-testid="onlineMeetingLink-input"] input'
     )
@@ -150,6 +152,10 @@ export class CreateCoursePage extends BasePage {
   async clickAssignTrainersButton(): Promise<AssignTrainersPage> {
     await this.nextPageButton.click()
     return new AssignTrainersPage(this.page)
+  }
+
+  async clickOrderDetailsButton() {
+    await this.nextPageButton.click()
   }
 
   async clickCreateCourseButton(): Promise<number> {
