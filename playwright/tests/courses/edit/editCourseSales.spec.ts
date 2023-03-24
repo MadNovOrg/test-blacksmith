@@ -35,8 +35,7 @@ test('edit course notes as a sales rep for closed course', async ({
   course,
 }) => {
   const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
+  await myCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )

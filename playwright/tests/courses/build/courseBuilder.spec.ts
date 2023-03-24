@@ -26,8 +26,7 @@ for (const data of MODULES_SETUP) {
 
   test(`build course: ${data.name}`, async ({ page, course }) => {
     const myCoursesPage = new MyCoursesPage(page)
-    await myCoursesPage.goto()
-    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.goto(`${course.id}`)
     const courseBuilderPage = await myCoursesPage.clickCourse(course.id)
     await courseBuilderPage.checkMandatoryModules(data.mandatoryModules)
     await courseBuilderPage.checkAvailableModules(data.optionalModules)

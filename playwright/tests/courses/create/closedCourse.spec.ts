@@ -83,8 +83,7 @@ for (const data of dataSet) {
     })
     const otherPage = await trainerContext.newPage()
     const trainerCoursesListPage = new MyCoursesPage(otherPage)
-    await trainerCoursesListPage.goto()
-    await trainerCoursesListPage.searchCourse(`${course.id}`)
+    await trainerCoursesListPage.goto(`${course.id}`)
     await trainerCoursesListPage.checkCourseWaitingApproval(course.id)
   })
 }

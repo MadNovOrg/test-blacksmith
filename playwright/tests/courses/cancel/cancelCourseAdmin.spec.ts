@@ -58,8 +58,7 @@ for (const data of testData) {
     course,
   }) => {
     const adminCoursesPage = new MyCoursesPage(page)
-    await adminCoursesPage.goto()
-    await adminCoursesPage.searchCourse(`${course.id}`)
+    await adminCoursesPage.goto(`${course.id}`)
     const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
       course.id
     )
@@ -68,8 +67,7 @@ for (const data of testData) {
     await courseDetailsPage.clickCancelCourseDropdown()
     await courseDetailsPage.checkCancelCourseCheckbox()
     await courseDetailsPage.clickCancelEntireCourseButton()
-    await adminCoursesPage.goto()
-    await adminCoursesPage.searchCourse(`${course.id}`)
+    await adminCoursesPage.goto(`${course.id}`)
     await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
   })
 }

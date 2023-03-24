@@ -30,8 +30,7 @@ test.use({ storageState: stateFilePath('trainer') })
 
 test('cancel indirect course as trainer', async ({ page, course }) => {
   const trainerCoursesPage = new MyCoursesPage(page)
-  await trainerCoursesPage.goto()
-  await trainerCoursesPage.searchCourse(`${course.id}`)
+  await trainerCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await trainerCoursesPage.clickCourseDetailsPage(
     course.id
   )
@@ -39,7 +38,6 @@ test('cancel indirect course as trainer', async ({ page, course }) => {
   await courseDetailsPage.clickCancelCourseButton()
   await courseDetailsPage.enterCancellationReason()
   await courseDetailsPage.clickCancelEntireCourseButton()
-  await trainerCoursesPage.goto()
-  await trainerCoursesPage.searchCourse(`${course.id}`)
+  await trainerCoursesPage.goto(`${course.id}`)
   await trainerCoursesPage.checkCourseStatus(course.id, 'Cancelled')
 })

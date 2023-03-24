@@ -39,12 +39,12 @@ export class MyCoursesPage extends BasePage {
     this.submitButton = this.page.locator('[data-testid="submit-button"]')
   }
 
-  async goto() {
-    await super.goto(`courses`)
+  async goto(id?: string) {
+    await super.goto(id ? `courses?q=${id}` : `courses`)
   }
 
-  async gotoManageCourses() {
-    await super.goto(`manage-courses`)
+  async gotoManageCourses(id?: string) {
+    await super.goto(id ? `manage-courses/all?q=${id}` : `manage-courses`)
   }
 
   // compares the courses table rows ignoring the order

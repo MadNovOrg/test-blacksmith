@@ -28,8 +28,7 @@ test.use({ storageState: stateFilePath('ops') })
 
 test('edit course notes for open course as ops', async ({ page, course }) => {
   const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
+  await myCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )

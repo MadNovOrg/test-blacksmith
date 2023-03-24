@@ -33,8 +33,7 @@ test('edit course notes for indirect course as a trainer', async ({
   course,
 }) => {
   const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(`${course.id}`)
+  await myCoursesPage.goto(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )

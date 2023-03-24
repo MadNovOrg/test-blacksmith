@@ -38,8 +38,7 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
   })
   const orgAdminPage = await orgAdminContext.newPage()
   const myCoursesPage = new MyCoursesPage(orgAdminPage)
-  await myCoursesPage.gotoManageCourses()
-  await myCoursesPage.searchCourse(`${course.id}`)
+  await myCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )

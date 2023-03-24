@@ -71,8 +71,7 @@ for (const data of testData) {
     })
     const page = await trainerContext.newPage()
     const myCoursesPage = new MyCoursesPage(page)
-    await myCoursesPage.goto()
-    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.goto(`${course.id}`)
     const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
       course.id
     )

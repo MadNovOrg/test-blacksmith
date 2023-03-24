@@ -70,14 +70,12 @@ for (const data of testData) {
     // eslint-disable-next-line playwright/no-skipped-test
     test.skip(Boolean(process.env.CI) && TARGET_ENV === 'local')
     const myCoursesPage = new MyCoursesPage(page)
-    await myCoursesPage.goto()
-    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.goto(`${course.id}`)
     await myCoursesPage.acceptCourse(course.id)
     await myCoursesPage.goToCourseBuilder()
     await myCoursesPage.submitDefaultModules()
     await myCoursesPage.confirmModules()
-    await myCoursesPage.goto()
-    await myCoursesPage.searchCourse(`${course.id}`)
+    await myCoursesPage.goto(`${course.id}`)
     await myCoursesPage.checkCourseStatus(course.id, 'Scheduled')
   })
 }

@@ -35,8 +35,7 @@ test('request cancelling a course as org admin', async ({
   })
   const page = await orgAdminContext.newPage()
   const orgAdminCoursesPage = new MyCoursesPage(page)
-  await orgAdminCoursesPage.gotoManageCourses()
-  await orgAdminCoursesPage.searchCourse(`${course.id}`)
+  await orgAdminCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await orgAdminCoursesPage.clickCourseDetailsPage(
     course.id
   )
@@ -53,8 +52,7 @@ test('request cancelling a course as org admin', async ({
   })
   const adminPage = await adminContext.newPage()
   const adminCoursesPage = new MyCoursesPage(adminPage)
-  await adminCoursesPage.goto()
-  await adminCoursesPage.searchCourse(`${course.id}`)
+  await adminCoursesPage.goto(`${course.id}`)
   const adminCourseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
     course.id
   )
@@ -62,7 +60,6 @@ test('request cancelling a course as org admin', async ({
     await adminCourseDetailsPage.approveCancellation()
   await cancelEntireCoursePopUp.checkFeeRadioButton()
   await cancelEntireCoursePopUp.clickCancelEntireCourseButton()
-  await adminCoursesPage.goto()
-  await adminCoursesPage.searchCourse(`${course.id}`)
+  await adminCoursesPage.goto(`${course.id}`)
   await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
 })

@@ -49,8 +49,7 @@ test.use({ storageState: stateFilePath('userOrgAdmin') })
 
 test(`transfer an attendee to another course `, async ({ page, courses }) => {
   const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.gotoManageCourses()
-  await myCoursesPage.searchCourse(`${courses[0].id}`)
+  await myCoursesPage.gotoManageCourses(`${courses[0].id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     courses[0].id
   )
@@ -62,8 +61,7 @@ test(`transfer an attendee to another course `, async ({ page, courses }) => {
   //await courseTransferPage.applyFeeGroup('FREE')
   await courseTransferPage.clickReviewAndConfirm()
   await courseTransferPage.clickConfirmTransfer()
-  await myCoursesPage.gotoManageCourses()
-  await myCoursesPage.searchCourse(`${courses[1].id}`)
+  await myCoursesPage.gotoManageCourses(`${courses[1].id}`)
   const courseDetailsPage1 = await myCoursesPage.clickCourseDetailsPage(
     courses[1].id
   )
