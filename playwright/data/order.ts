@@ -1,0 +1,30 @@
+import { PaymentMethod } from '@app/types'
+
+import { getProfileId, getOrganizationId } from '../api/hasura-api'
+
+import { Course, OrderCreation, User } from './types'
+
+export const UNIQUE_ORDER: (
+  course: Course,
+  orderOwner: User,
+  registrants: User[]
+) => Promise<OrderCreation> = async (
+  course: Course,
+  orderOwner: User,
+  registrants: User[]
+) => ({
+  courseId: course.id,
+  quantity: 1,
+  paymentMethod: PaymentMethod.INVOICE,
+  billingAddress: 'Tankfield, Convent Hill, Tramore,Waterford, X91 PV08',
+  billingGivenName: orderOwner.givenName,
+  billingFamilyName: orderOwner.familyName,
+  billingEmail: orderOwner.email,
+  billingPhone: '+44 07849 123456',
+  clientPurchaseOrder: '12345',
+  registrants: registrants.map(user => user.email),
+  organizationId: await getOrganizationId(orderOwner.organization?.name ?? ''),
+  promoCodes: [],
+  profileId: await getProfileId(orderOwner.email),
+  user: [],
+})

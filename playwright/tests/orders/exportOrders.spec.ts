@@ -6,8 +6,13 @@ import {
   Order_By,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
+import { InviteStatus } from '@app/types'
 
+import { deleteCourse, insertCourse, insertOrder } from '../../api/hasura-api'
 import { getOrders } from '../../api/hasura/orders'
+import { UNIQUE_COURSE } from '../../data/courses'
+import { UNIQUE_ORDER } from '../../data/order'
+import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { OrderPage } from '../../pages/orders/OrderPage'
 
@@ -17,13 +22,37 @@ const test = base.extend<{
   orders: Orders
 }>({
   orders: async ({}, use) => {
-    const orders = await getOrders({
+    let orders = await getOrders({
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
       where: {},
     })
+    const course = 0
+    // Ensure there is always at least one order
+    if (orders.length < 1) {
+      const newCourse = UNIQUE_COURSE()
+      const courseId = await insertCourse(
+        newCourse,
+        users.trainer.email,
+        InviteStatus.ACCEPTED
+      )
+      newCourse.id = courseId
+      const newOrder = await UNIQUE_ORDER(newCourse, users.userOrgAdmin, [
+        users.user1,
+      ])
+      await insertOrder(newOrder)
+      orders = await getOrders({
+        limit: 12,
+        offset: 0,
+        orderBy: [{ createdAt: Order_By.Asc }],
+        where: {},
+      })
+    }
     await use(orders)
+    if (course) {
+      await deleteCourse(course)
+    }
   },
 })
 
@@ -103,8 +132,14 @@ test('exports selected orders', async ({ page, orders }) => {
     page.locator('button:has-text("Export selected")')
   ).toBeDisabled()
 
-  await page.click(`data-testid=${orders[0].id} >> data-testid=TableChecks-Row`)
-  await page.click(`data-testid=${orders[1].id} >> data-testid=TableChecks-Row`)
+  // Ensure regardless of how many orders there are
+  // We select at least one, if there are more, then we select half
+  const selectOrders = Math.ceil(orders.length / 2)
+  for (let i = 0; i < selectOrders; i++) {
+    await page.click(
+      `data-testid=${orders[i].id} >> data-testid=TableChecks-Row`
+    )
+  }
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),

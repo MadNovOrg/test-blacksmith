@@ -56,7 +56,7 @@ import {
 
 import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
 import { getModulesByLevel } from '../data/modules'
-import { Course, User } from '../data/types'
+import { Course, OrderCreation, User } from '../data/types'
 
 const endpoint = `${HASURA_BASE_URL}/v1/graphql`
 
@@ -734,4 +734,26 @@ export async function deleteGo1License(id: string): Promise<boolean> {
   const response: { delete_go1_licenses_by_pk: { id: boolean } } =
     await getClient().request(mutation, { id })
   return response?.delete_go1_licenses_by_pk?.id
+}
+
+export async function insertOrder(input: OrderCreation): Promise<number> {
+  const mutation = gql`
+    mutation InsertOrder($object: order_insert_input!) {
+      order: insert_order_one(object: $object) {
+        id
+      }
+    }
+  `
+  try {
+    const response = await getClient().request<{ order: { id: number } }>(
+      mutation,
+      { object: input }
+    )
+    console.log(
+      `Inserted order with ID "${response?.order.id}" for course "${input.courseId}"`
+    )
+    return response?.order.id
+  } catch (error) {
+    throw new Error(`Failed to create order: ${error}`)
+  }
 }

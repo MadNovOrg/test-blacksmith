@@ -4,6 +4,7 @@ import {
   CourseLevel,
   CourseTrainer,
   CourseType,
+  PaymentMethod,
   Venue,
 } from '@app/types'
 
@@ -96,4 +97,21 @@ export type InvoiceDetails = {
   email: string
   phone: string
   purchaseOrder?: string
+}
+
+export type OrderCreation = {
+  billingAddress: string
+  billingEmail: string
+  billingFamilyName: string
+  billingGivenName: string
+  billingPhone: string
+  clientPurchaseOrder?: string
+  courseId: number
+  organizationId: string
+  paymentMethod: PaymentMethod
+  promoCodes?: string[]
+  quantity: number
+  registrants: string[]
+  user?: string[]
+  profileId: string
 }
