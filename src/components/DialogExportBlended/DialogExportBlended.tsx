@@ -124,7 +124,11 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
   const onDatesChange = useCallback((from?: Date, to?: Date) => {
     setError(null)
     setDateFilters(prev => {
-      return { ...prev, filterStartDate: from, filterEndDate: to }
+      return {
+        ...prev,
+        filterStartDate: from,
+        filterEndDate: to ? new Date(to?.setHours(23, 59)) : undefined,
+      }
     })
   }, [])
 
