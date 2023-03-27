@@ -849,7 +849,13 @@
         "created-on": "Created on",
         "group": "Group"
       },
-      "add-new-organization": "Add new organisation"
+      "add-new-organization": "Add new organisation",
+      "export": {
+        "filter-by-captured-date": "Filter by captured date",
+        "dates-non-null": "Please insert dates",
+        "date-interval": "The maximum exportable is one year at time",
+        "blended-learning": "Export blended learning license summary"
+      }
     },
     "back-to-settings": "Back to settings",
     "back-to-user-mgmt": "Back to user management",
@@ -866,14 +872,6 @@
       "discounts": {
         "title": "Discounts",
         "description": "Manage discounts."
-      },
-      "waitlist-notifications": {
-        "title": "Waitlist notifications",
-        "description": "Set timing measures on when to notify users of course availability."
-      },
-      "course-renewals": {
-        "title": "Course renewals",
-        "description": "Modify expiration dates for future certifications."
       },
       "cancellations-transfers-replacements": {
         "title": "Cancellations, Transfers & Replacements",
@@ -1109,6 +1107,7 @@
           "exporting-button-text": "Exporting",
           "col-date": "Date",
           "col-event": "Event",
+          "col-organisation": "Organisation",
           "col-action": "Action",
           "col-balance": "Balance",
           "col-reserved-balance": "Reserved balance",

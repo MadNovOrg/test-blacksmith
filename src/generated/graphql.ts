@@ -22495,6 +22495,8 @@ export type Go1_Licenses_History = {
   event: Go1_History_Events_Enum;
   id: Scalars['uuid'];
   org_id: Scalars['uuid'];
+  /** An object relationship */
+  organization: Organization;
   payload?: Maybe<Scalars['jsonb']>;
   reservedBalance: Scalars['Int'];
 };
@@ -22588,6 +22590,7 @@ export type Go1_Licenses_History_Bool_Exp = {
   event?: InputMaybe<Go1_History_Events_Enum_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   org_id?: InputMaybe<Uuid_Comparison_Exp>;
+  organization?: InputMaybe<Organization_Bool_Exp>;
   payload?: InputMaybe<Jsonb_Comparison_Exp>;
   reservedBalance?: InputMaybe<Int_Comparison_Exp>;
 };
@@ -22628,6 +22631,7 @@ export type Go1_Licenses_History_Insert_Input = {
   event?: InputMaybe<Go1_History_Events_Enum>;
   id?: InputMaybe<Scalars['uuid']>;
   org_id?: InputMaybe<Scalars['uuid']>;
+  organization?: InputMaybe<Organization_Obj_Rel_Insert_Input>;
   payload?: InputMaybe<Scalars['jsonb']>;
   reservedBalance?: InputMaybe<Scalars['Int']>;
 };
@@ -22698,6 +22702,7 @@ export type Go1_Licenses_History_Order_By = {
   event?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   org_id?: InputMaybe<Order_By>;
+  organization?: InputMaybe<Organization_Order_By>;
   payload?: InputMaybe<Order_By>;
   reservedBalance?: InputMaybe<Order_By>;
 };
@@ -40340,6 +40345,14 @@ export type XeroLineItemSummaryFragment = { __typename?: 'XeroLineItem', descrip
 export type XeroInvoiceSummaryFragment = { __typename?: 'XeroInvoice', date: string, total: number, status: XeroInvoiceStatus, dueDate?: string | null, subTotal?: number | null, totalTax?: number | null, invoiceID: string, amountDue?: string | null, reference?: string | null, amountPaid?: string | null, currencyCode: Currency, invoiceNumber?: string | null, fullyPaidOnDate?: string | null, contact: { __typename?: 'XeroContact', name: string, firstName?: string | null, lastName?: string | null, emailAddress?: string | null, phones?: Array<{ __typename?: 'XeroPhone', phoneCountryCode?: string | null, phoneAreaCode?: string | null, phoneNumber?: string | null, phoneType: XeroPhoneType } | null> | null, addresses?: Array<{ __typename?: 'XeroAddress', addressType?: XeroAddressType | null, addressLine1?: string | null, addressLine2?: string | null, city?: string | null, region?: string | null, postalCode?: string | null, country?: string | null } | null> | null }, lineItems: Array<{ __typename?: 'XeroLineItem', description?: string | null, quantity: number, unitAmount: number, itemCode: string, accountCode?: string | null, taxType: string, taxAmount: number, lineAmount: number, item?: { __typename?: 'XeroItem', itemID: string, code: string } | null, tracking?: Array<{ __typename?: 'XeroTrackingCategory', name: string, option: string }> | null } | null> };
 
 export type EstablishmentFragment = { __typename?: 'dfe_establishment', id: any, urn: string, name: string, localAuthority: string, trustType?: string | null, trustName?: string | null, addressLineOne?: string | null, addressLineTwo?: string | null, addressLineThree?: string | null, town?: string | null, county?: string | null, postcode?: string | null, headTitle?: string | null, headFirstName?: string | null, headLastName?: string | null, headJobTitle?: string | null, ofstedRating?: string | null, ofstedLastInspection?: string | null };
+
+export type LicensesHistoryBetweenDatesQueryVariables = Exact<{
+  from: Scalars['timestamptz'];
+  to: Scalars['timestamptz'];
+}>;
+
+
+export type LicensesHistoryBetweenDatesQuery = { __typename?: 'query_root', go1LicensesHistory: Array<{ __typename?: 'go1_licenses_history', id: any, captured_at: any, event: Go1_History_Events_Enum, payload?: any | null, balance: number, reservedBalance: number, change: number, organization: { __typename?: 'organization', name: string } }> };
 
 export type DeleteGo1LicenseMutationVariables = Exact<{
   id: Scalars['uuid'];

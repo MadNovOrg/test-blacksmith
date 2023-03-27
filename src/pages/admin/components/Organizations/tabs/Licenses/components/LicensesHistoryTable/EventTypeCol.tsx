@@ -9,7 +9,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 type Props = {
-  item: Omit<Go1_Licenses_History, 'org_id'>
+  item: Omit<Go1_Licenses_History, 'org_id' | 'organization'>
 }
 
 export const EventTypeCol: React.FC<React.PropsWithChildren<Props>> = ({

@@ -12,7 +12,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -23,6 +23,7 @@ import {
 } from 'use-query-params'
 
 import { BackButton } from '@app/components/BackButton'
+import { DialogExportBlended } from '@app/components/DialogExportBlended'
 import { FilterOrgSector } from '@app/components/FilterOrgSector'
 import { FilterSearch } from '@app/components/FilterSearch'
 import { Sticky } from '@app/components/Sticky'
@@ -40,6 +41,7 @@ export const Organizations: React.FC<
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { acl, profile } = useAuth()
+  const [showExportModal, setExportShowModal] = useState(false)
 
   const sorting = useTableSort('name', 'asc')
   const cols = useMemo(
@@ -173,15 +175,29 @@ export const Organizations: React.FC<
               mb={2}
             >
               {acl.canCreateOrgs() ? (
-                <Button
-                  variant="contained"
-                  data-testid="add-new-org-button"
-                  onClick={() => navigate('/organisations/new')}
-                >
-                  {t('pages.admin.organizations.add-new-organization')}
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    data-testid="add-new-org-button"
+                    onClick={() => setExportShowModal(true)}
+                    sx={{ marginRight: '1em' }}
+                  >
+                    {t('pages.admin.organizations.export.blended-learning')}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    data-testid="add-new-org-button"
+                    onClick={() => navigate('/organisations/new')}
+                  >
+                    {t('pages.admin.organizations.add-new-organization')}
+                  </Button>
+                </>
               ) : null}
             </Box>
+            <DialogExportBlended
+              isOpen={showExportModal}
+              closeModal={() => setExportShowModal(false)}
+            />
 
             <Table data-testid="orgs-table">
               <TableHead

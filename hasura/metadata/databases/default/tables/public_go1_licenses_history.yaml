@@ -8,6 +8,10 @@ configuration:
       custom_name: reservedBalance
   custom_column_names:
     reserved_balance: reservedBalance
+object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
 insert_permissions:
   - role: tt-admin
     permission:

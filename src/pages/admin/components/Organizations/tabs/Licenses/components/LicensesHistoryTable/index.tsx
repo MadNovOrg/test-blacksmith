@@ -16,7 +16,7 @@ import theme from '@app/theme'
 import { EventTypeCol } from './EventTypeCol'
 
 type Props = {
-  items: Omit<Go1_Licenses_History, 'org_id'>[]
+  items: Omit<Go1_Licenses_History, 'org_id' | 'organization'>[]
 }
 
 export const LicensesHistoryTable: React.FC<React.PropsWithChildren<Props>> = ({

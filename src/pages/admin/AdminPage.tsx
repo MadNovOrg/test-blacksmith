@@ -10,10 +10,8 @@ type AdminPageProps = unknown
 
 const hubSettings = [
   { name: 'users', link: '/admin/users' },
-  { name: 'organisations', link: '/admin' },
+  { name: 'organisations', link: '/organisations/list' },
   { name: 'discounts', link: '/admin/discounts' },
-  { name: 'waitlist-notifications', link: '/admin' },
-  { name: 'course-renewals', link: '/admin' },
   { name: 'cancellations-transfers-replacements', link: '/admin/audit' },
 ]
 
