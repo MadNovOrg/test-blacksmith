@@ -66,7 +66,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
           t('pages.org-details.tabs.licenses.export.col-action'),
           t('pages.org-details.tabs.licenses.export.col-balance'),
           t('pages.org-details.tabs.licenses.export.col-reserved-balance'),
-          t('pages.org-details.tabs.licenses.export.col-licensePrice'),
+          t('pages.org-details.tabs.licenses.export.col-license-price'),
         ],
         ...data.go1LicensesHistory.map(historyItem => {
           return [
