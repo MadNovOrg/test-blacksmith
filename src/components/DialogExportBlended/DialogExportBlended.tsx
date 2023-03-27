@@ -66,6 +66,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
           t('pages.org-details.tabs.licenses.export.col-action'),
           t('pages.org-details.tabs.licenses.export.col-balance'),
           t('pages.org-details.tabs.licenses.export.col-reserved-balance'),
+          t('pages.org-details.tabs.licenses.export.col-licensePrice'),
         ],
         ...data.go1LicensesHistory.map(historyItem => {
           return [
@@ -82,6 +83,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
             `${historyItem.change > 0 ? '+' : ''}${historyItem.change}`,
             historyItem.balance,
             historyItem.reservedBalance,
+            historyItem.payload.licensePrice ?? '',
           ]
         }),
       ]
@@ -98,7 +100,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
       )
       closeModal()
     }
-  }, [data, t])
+  }, [closeModal, data, dateFilters, t])
 
   const onCancel = useCallback(() => {
     closeModal()

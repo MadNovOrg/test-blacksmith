@@ -1111,6 +1111,7 @@
           "col-action": "Action",
           "col-balance": "Balance",
           "col-reserved-balance": "Reserved balance",
+          "col-reserved-licensePrice": "Cost per licence",
           "col-payload": "Payload",
           "col-invoice-id": "Invoice number",
           "col-course-id": "Course code",

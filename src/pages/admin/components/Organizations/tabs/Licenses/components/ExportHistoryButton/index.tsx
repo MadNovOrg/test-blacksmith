@@ -49,6 +49,7 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
           t('col-action'),
           t('col-balance'),
           t('col-reserved-balance'),
+          t('pages.org-details.tabs.licenses.export.col-licensePrice'),
         ],
         ...data.organization_by_pk.go1LicensesHistory.map(historyItem => {
           return [
@@ -64,6 +65,7 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
             `${historyItem.change > 0 ? '+' : ''}${historyItem.change}`,
             historyItem.balance,
             historyItem.reservedBalance,
+            historyItem.payload.licensePrice ?? '',
           ]
         }),
       ]
