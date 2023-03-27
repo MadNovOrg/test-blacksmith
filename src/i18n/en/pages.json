@@ -1114,6 +1114,7 @@
           "col-payload": "Payload",
           "col-invoice-id": "Invoice number",
           "col-course-id": "Course code",
+          "col-course-start": "Course start date",
           "col-note": "Note",
           "col-invoked-by": "Invoked by"
         }
