@@ -23,7 +23,8 @@ export async function gqlRequest<T, V = Variables>(
   }
 
   return graphqlClient
-    .request(query, variables, requestHeaders)
+    .request(query, variables as Variables, requestHeaders)
+    .then((response: unknown) => response as T)
     .catch((e: ClientError) => {
       console.error(e)
       return Promise.reject(normalizeGqlError(e))

@@ -16,7 +16,7 @@ export async function insertGo1HistoryEvent(
       }
     }
   `
-  const response = await getClient().request(mutation, { input: event })
-
-  return response?.insert_go1_licenses_history_one?.id
+  const response: { insert_go1_licenses_history_one: { id: string } } =
+    await getClient().request(mutation, { input: event })
+  return { id: response?.insert_go1_licenses_history_one?.id }
 }

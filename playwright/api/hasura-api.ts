@@ -51,6 +51,7 @@ import {
   CourseModule,
   CourseParticipant,
   InviteStatus,
+  ModuleGroup,
 } from '@app/types'
 
 import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
@@ -168,7 +169,7 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
       }
     }
   `
-  const response = await getClient().request(query)
+  const response: { course: Course[] } = await getClient().request(query)
   response.course.forEach((course: Course) => {
     course.schedule.forEach(schedule => {
       schedule.start = new Date(schedule.start)
@@ -180,19 +181,22 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
 
 export const getOrganizationId = async (name: string): Promise<string> => {
   const query = gql`query MyQuery { organization(where: {name: {_eq: "${name}"}}) { id }}`
-  const response = await getClient().request(query)
+  const response: { organization: { id: string }[] } =
+    await getClient().request(query)
   return response.organization[0].id
 }
 
 export const getVenueId = async (name: string): Promise<string> => {
   const query = gql`query MyQuery { venue(where: {name: {_eq: "${name}"}}) { id }}`
-  const response = await getClient().request(query)
+  const response: { venue: { id: string }[] } = await getClient().request(query)
   return response.venue[0].id
 }
 
 export const getProfileId = async (email: string): Promise<string> => {
   const query = gql`query MyQuery { profile(where: {email: {_eq: "${email}"}}) { id }}`
-  const response = await getClient().request(query)
+  const response: { profile: { id: string }[] } = await getClient().request(
+    query
+  )
   return response.profile[0].id
 }
 
@@ -236,7 +240,9 @@ export const getModuleIds = async (
       }
     }
   `
-  const response = await getClient().request(query)
+  const response: { module_group: ModuleGroup[] } = await getClient().request(
+    query
+  )
   return response.module_group.flatMap((m: { modules: { id: string }[] }) =>
     m.modules.flatMap(i => i.id)
   )
@@ -314,7 +320,8 @@ export const insertCourse = async (
       }
     }
   `
-  const response = await getClient().request(query)
+  const response: { insert_course: { returning: [{ id: number }] } } =
+    await getClient().request(query)
   const id = response.insert_course.returning[0].id
   if (id) {
     console.log(`Inserted course with ID ${id} for ${email}`)
@@ -640,7 +647,8 @@ export async function insertOrganization(
       }
     }
   `
-  const response = await getClient().request(mutation, { object: input })
+  const response: { insert_organization_one: { id: string } } =
+    await getClient().request(mutation, { object: input })
   return response?.insert_organization_one?.id
 }
 
@@ -652,7 +660,8 @@ export async function deleteOrganization(id: string): Promise<boolean> {
       }
     }
   `
-  const response = await getClient().request(mutation, { id })
+  const response: { delete_organization_by_pk: { id: boolean } } =
+    await getClient().request(mutation, { id })
   return response?.delete_organization_by_pk?.id
 }
 
@@ -666,7 +675,8 @@ export async function deleteOrganizationsWhere(
       }
     }
   `
-  const response = await getClient().request(mutation, { where })
+  const response: { delete_organization: { affected_rows: boolean } } =
+    await getClient().request(mutation, { where })
   return response?.delete_organization?.affected_rows
 }
 
@@ -682,7 +692,8 @@ export async function insertOrganizationMember(
       }
     }
   `
-  const response = await getClient().request(mutation, { input })
+  const response: { insert_organization_member_one: { id: string } } =
+    await getClient().request(mutation, { input })
   return response?.insert_organization_member_one?.id
 }
 
@@ -694,7 +705,8 @@ export async function deleteOrganizationMember(id: string): Promise<boolean> {
       }
     }
   `
-  const response = await getClient().request(mutation, { id })
+  const response: { delete_organization_member_by_pk: { id: boolean } } =
+    await getClient().request(mutation, { id })
   return response?.delete_organization_member_by_pk?.id
 }
 
@@ -706,7 +718,8 @@ export async function insertGo1License(input: Go1_Licenses_Insert_Input) {
       }
     }
   `
-  const response = await getClient().request(mutation, { input })
+  const response: { insert_go1_licenses_one: { id: string } } =
+    await getClient().request(mutation, { input })
   return response?.insert_go1_licenses_one?.id
 }
 
@@ -718,7 +731,7 @@ export async function deleteGo1License(id: string): Promise<boolean> {
       }
     }
   `
-  const response = await getClient().request(mutation, { id })
-
+  const response: { delete_go1_licenses_by_pk: { id: boolean } } =
+    await getClient().request(mutation, { id })
   return response?.delete_go1_licenses_by_pk?.id
 }
