@@ -1,11 +1,11 @@
 import { Box, TableCell, Link } from '@mui/material'
 import React from 'react'
 
-import { OrganizationInfo, Maybe } from '@app/generated/graphql'
+import { OrderOrganizationInfoFragment } from '@app/generated/graphql'
 import { Address } from '@app/types'
 
 type Props = {
-  organization?: Maybe<OrganizationInfo>
+  organization?: OrderOrganizationInfoFragment
 }
 
 export const BillToCell: React.FC<Props> = ({ organization }) => {

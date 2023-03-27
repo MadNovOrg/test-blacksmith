@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test'
 
 import {
-  OrderInfo,
+  OrderInfoFragment,
   Order_By,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
@@ -11,13 +11,12 @@ import { stateFilePath } from '../../hooks/global-setup'
 import { OrderPage } from '../../pages/orders/OrderPage'
 
 const test = base.extend<{
-  unfilteredOrders: OrderInfo[]
-  invoiceOrders: OrderInfo[]
-  ccOrders: OrderInfo[]
+  unfilteredOrders: OrderInfoFragment[]
+  invoiceOrders: OrderInfoFragment[]
+  ccOrders: OrderInfoFragment[]
 }>({
   unfilteredOrders: async ({}, use) => {
     const orders = await getOrders({
-      invoiceStatus: [],
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -27,7 +26,6 @@ const test = base.extend<{
   },
   invoiceOrders: async ({}, use) => {
     const orders = await getOrders({
-      invoiceStatus: [],
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -41,7 +39,6 @@ const test = base.extend<{
       where: { paymentMethod: { _eq: Payment_Methods_Enum.Cc } },
       offset: 0,
       limit: 12,
-      invoiceStatus: [],
     })
     await use(orders)
   },

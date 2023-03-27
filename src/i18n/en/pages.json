@@ -924,7 +924,7 @@
     "paymentMethod-CC": "Credit Card",
     "qty": "Participants",
     "export-selected": "Export selected",
-    "export-whole-page": "Export whole page",
+    "export-whole-page": "Export all orders",
     "no-organisation": "-NA-"
   },
   "hs-form": {

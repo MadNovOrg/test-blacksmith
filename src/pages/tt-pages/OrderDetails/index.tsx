@@ -19,12 +19,15 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
-  Course_Type_Enum,
-  CourseLevel,
   Payment_Methods_Enum,
   XeroAddressType,
-  XeroInvoiceStatus,
+  XeroPhone,
+  XeroLineItem,
+  XeroAddress,
+  Xero_Invoice_Status_Enum,
   XeroPhoneType,
+  CourseLevel,
+  Course_Type_Enum,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -47,7 +50,9 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.order-details')
   const { acl } = useAuth()
 
-  const { order, invoice, isLoading } = useOrder(id ?? '')
+  const [{ data, fetching }] = useOrder(id ?? '')
+
+  const order = data?.order
 
   const { promoCodes, isLoading: isUsePromoCodesLoading } = usePromoCodes({
     sort: { by: 'code', dir: 'asc' },
@@ -57,28 +62,31 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   })
 
   const course = order?.course
+  const invoice = order?.invoice
 
   const lineItemForRegistrants = useMemo(() => {
     return course?.name
-      ? invoice?.lineItems?.find(li => isRegistrantLineItem(li, course.level))
+      ? invoice?.lineItems?.find((li: XeroLineItem) =>
+          isRegistrantLineItem(li, course.level)
+        )
       : null
   }, [invoice, course])
 
   const go1LicensesLineItem = useMemo(() => {
-    return invoice?.lineItems.find(li => isGo1LicensesItem(li))
+    return invoice?.lineItems.find((li: XeroLineItem) => isGo1LicensesItem(li))
   }, [invoice])
 
   const promoCode = promoCodes.length ? promoCodes[0] : null
   const phone = invoice?.contact.phones?.find(
-    p => p?.phoneType === XeroPhoneType.Default
+    (p: XeroPhone) => p?.phoneType === XeroPhoneType.Default
   )
 
   const address = invoice?.contact.addresses?.find(
-    address => address?.addressType === XeroAddressType.Pobox
+    (address: XeroAddress) => address?.addressType === XeroAddressType.Pobox
   )
 
   const [discountAmount, discountLineItem] = useMemo(() => {
-    const discountLineItem = invoice?.lineItems?.find(li =>
+    const discountLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
       isDiscountLineItem(li)
     )
 
@@ -90,7 +98,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
       return 0
     }
 
-    const processingFeeLineItem = invoice?.lineItems?.find(li =>
+    const processingFeeLineItem = invoice?.lineItems?.find((li: XeroLineItem) =>
       isProcessingFeeLineItem(li)
     )
 
@@ -102,10 +110,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [order?.paymentMethod, invoice?.lineItems])
 
   const xeroInvoiceUrl = useMemo(() => {
-    if (invoice?.invoiceID) {
+    if (invoice?.xeroId) {
       return `${
         import.meta.env.VITE_XERO_UI_ENDPOINT
-      }/AccountsReceivable/Edit.aspx?InvoiceID=${invoice.invoiceID}`
+      }/AccountsReceivable/Edit.aspx?InvoiceID=${invoice.xeroId}`
     }
 
     return null
@@ -129,29 +137,30 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     ].filter(Boolean)
   }, [address, invoice?.contact.name])
 
-  const status = invoice?.status ?? XeroInvoiceStatus.Unknown
-  const statusColor = INVOICE_STATUS_COLOR[status]
   const source = lineItemForRegistrants?.tracking?.find(
-    tc => tc.name === 'Sales Person'
+    (tc: { name: string }) => tc.name === 'Sales Person'
   )?.option
 
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
-  const loadingData = isLoading || isUsePromoCodesLoading
+  const loadingData = fetching || isUsePromoCodesLoading
 
   const expensesLineItems =
     isNotNullish(invoice) && isNotNullish(course)
       ? getTrainerExpensesLineItems(invoice.lineItems, course.level)
       : []
 
-  if (!isUsePromoCodesLoading && !isLoading && !(order && invoice)) {
+  if (!isUsePromoCodesLoading && !fetching && !(order && invoice)) {
     return <NotFound title={t('error')} description="" />
   }
+
+  const status = invoice?.status as Xero_Invoice_Status_Enum
+  const statusColor = INVOICE_STATUS_COLOR[status]
 
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
-        {isLoading ? (
+        {fetching ? (
           <Stack
             alignItems="center"
             justifyContent="center"
@@ -309,7 +318,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                         </Typography>
                         <Typography color="grey.700">
                           {_t('common.currency', {
-                            amount: invoice?.subTotal,
+                            amount: invoice?.subtotal,
                           })}
                         </Typography>
                       </ItemRow>
@@ -333,7 +342,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </ItemRow>
                   </DetailsItemBox>
 
-                  {invoice?.status === XeroInvoiceStatus.Paid ? (
+                  {invoice?.status === Xero_Invoice_Status_Enum.Paid ? (
                     <DetailsItemBox>
                       <ItemRow data-testid="order-paid-on">
                         <Typography fontWeight={600}>
@@ -368,7 +377,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       <ItemRow data-testid="order-due-date">
                         <Typography
                           color={
-                            status === XeroInvoiceStatus.Overdue
+                            status === Xero_Invoice_Status_Enum.Overdue
                               ? 'error.dark'
                               : 'grey.700'
                           }
@@ -399,7 +408,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </ItemRow>
                       <ItemRow>
                         <Typography color="grey.700">
-                          {_t('dates.default', { date: invoice?.date })}
+                          {_t('dates.default', { date: invoice?.issuedDate })}
                         </Typography>
                         <Typography color="grey.700">
                           {invoice?.reference}

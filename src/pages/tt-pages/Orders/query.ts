@@ -1,39 +1,53 @@
 import { gql } from 'graphql-request'
 
 export const GET_ORDERS = gql`
-  query GetOrders(
-    $input: GetOrdersInput = {
-      limit: 20
-      offset: 0
-      orderBy: []
-      where: {}
-      invoiceStatus: []
+  fragment ContactInfo on xero_contact {
+    firstName
+  }
+
+  fragment InvoiceInfo on xero_invoice {
+    status
+    dueDate
+    reference
+    contact {
+      ...ContactInfo
     }
+  }
+
+  fragment OrderOrganizationInfo on organization {
+    id
+    name
+    address
+  }
+
+  fragment OrderInfo on order {
+    id
+    orderDue
+    xeroInvoiceNumber
+    paymentMethod
+    orderTotal
+    currency
+    organization {
+      ...OrderOrganizationInfo
+    }
+    invoice {
+      ...InvoiceInfo
+    }
+  }
+
+  query Orders(
+    $where: order_bool_exp
+    $orderBy: [order_order_by!]
+    $offset: Int = 0
+    $limit: Int = 12
   ) {
-    getOrders(input: $input) {
-      orders {
-        createdAt
-        currency
-        id
-        orderDue
-        orderTotal
-        paymentMethod
-        profileId
-        quantity
-        registrants
-        stripePaymentId
-        xeroInvoiceNumber
-        course
-        organization {
-          name
-          id
-          address
-        }
-        status
-        xeroReference
-        dueDate
+    order(where: $where, order_by: $orderBy, limit: $limit, offset: $offset) {
+      ...OrderInfo
+    }
+    order_aggregate(where: $where) {
+      aggregate {
+        count
       }
-      count
     }
   }
 `

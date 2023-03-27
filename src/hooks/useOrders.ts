@@ -1,26 +1,24 @@
 import { useMemo } from 'react'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import {
   Currency,
-  GetOrdersInput,
-  GetOrdersQuery,
-  GetOrdersQueryVariables,
-  OrderInfo,
+  OrdersQuery,
+  OrdersQueryVariables,
+  Order_Bool_Exp,
   Order_By,
   Order_Order_By,
   Payment_Methods_Enum,
-  XeroInvoiceStatus,
+  Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 import { GET_ORDERS } from '@app/pages/tt-pages/Orders/query'
 import { SortOrder } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
 
 export type FiltersType = {
   currencies?: Currency[]
   paymentMethods?: Payment_Methods_Enum[]
   searchParam?: string
-  statuses?: XeroInvoiceStatus[]
+  statuses?: Xero_Invoice_Status_Enum[]
 }
 
 export type UseOrdersProps = {
@@ -30,16 +28,12 @@ export type UseOrdersProps = {
   offset: number
 }
 
-type GenericOrderType = {
-  [key: string]: string | GenericOrderType
-}
-
 const isFilterValid = (filter?: FiltersType[keyof FiltersType] | string) =>
   filter && filter.length && filter.length > 0
 
 export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
-  const getOrdersWhere = useMemo(() => {
-    const where: GetOrdersInput['where'] = {}
+  const where = useMemo(() => {
+    const where: Order_Bool_Exp = {}
 
     if (isFilterValid(filters.currencies)) {
       where.currency = { _in: filters.currencies }
@@ -79,60 +73,105 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
       }
     }
 
+    if (isFilterValid(filters.statuses)) {
+      where._or = where._or ?? []
+
+      where._or.push({ invoice: { status: { _in: filters.statuses } } })
+    }
+
     return where
   }, [filters])
 
-  const getOrdersOrderBy = useMemo(() => {
-    const orderBy: Order_Order_By = {}
+  const orderBy = useMemo(() => {
+    let orderBy: Order_Order_By = {}
+    const dir = sort.dir === 'asc' ? Order_By.Asc : Order_By.Desc
 
-    const parts = sort.by.split('.')
-
-    if (parts.length >= 1) {
-      const tmp: GenericOrderType = {}
-
-      tmp[parts[parts.length - 1]] =
-        sort.dir === 'desc' ? Order_By.Desc : Order_By.Asc
-
-      for (let i = parts.length - 1; i > 0; --i) {
-        const key = parts[i]
-        const outerKey = parts[i - 1]
-        const val = tmp[key]
-
-        delete tmp[key]
-        tmp[outerKey] = { [key]: val }
+    switch (sort.by) {
+      case 'invoice.total': {
+        orderBy = {
+          invoice: {
+            total: dir,
+          },
+        }
+        break
       }
-
-      Object.assign(orderBy, tmp)
+      case 'organization.name': {
+        orderBy = {
+          organization: {
+            name: dir,
+          },
+        }
+        break
+      }
+      case 'invoice.amountDue': {
+        orderBy = {
+          invoice: {
+            amountDue: dir,
+          },
+        }
+        break
+      }
+      case 'invoice.dueDate': {
+        orderBy = {
+          invoice: {
+            dueDate: dir,
+          },
+        }
+        break
+      }
+      case 'xeroInvoiceNumber': {
+        orderBy = {
+          xeroInvoiceNumber: dir,
+        }
+        break
+      }
+      case 'paymentMethod': {
+        orderBy = {
+          paymentMethod: dir,
+        }
+        break
+      }
+      case 'invoice.reference': {
+        orderBy = {
+          invoice: {
+            reference: dir,
+          },
+        }
+        break
+      }
+      case 'invoice.status': {
+        orderBy = {
+          invoice: {
+            status: dir,
+          },
+        }
+        break
+      }
+      default: {
+        orderBy = {}
+      }
     }
 
     return orderBy
   }, [sort])
 
-  const { data: getOrdersData, error: getOrdersError } = useSWR<
-    GetOrdersQuery,
-    Error,
-    [string, GetOrdersQueryVariables]
-  >([
-    GET_ORDERS,
-    {
-      input: {
-        orderBy: [getOrdersOrderBy],
-        where: getOrdersWhere,
-        limit,
-        offset,
-        invoiceStatus: filters.statuses || [],
-      },
+  const [{ data, error, fetching }] = useQuery<
+    OrdersQuery,
+    OrdersQueryVariables
+  >({
+    query: GET_ORDERS,
+    variables: {
+      where,
+      limit,
+      offset,
+      orderBy,
     },
-  ])
-
-  const { orders, count } = getOrdersData?.getOrders || { orders: [], count: 0 }
-
-  const getOrdersStatus = getSWRLoadingStatus(getOrdersData, getOrdersError)
+  })
 
   return {
-    orders: orders as OrderInfo[],
-    total: count,
-    error: getOrdersError,
-    isLoading: getOrdersStatus === LoadingStatus.FETCHING,
+    orders: data?.order,
+    total: data?.order_aggregate.aggregate?.count ?? 0,
+    error,
+    isLoading: fetching,
   }
 }

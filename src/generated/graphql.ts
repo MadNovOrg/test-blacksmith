@@ -10,7 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
   bytea: any;
   date: any;
   float8: any;
@@ -2923,20 +2922,6 @@ export type GetCoursePricingOutput = {
   xeroCode: Scalars['String'];
 };
 
-export type GetOrdersInput = {
-  invoiceStatus?: InputMaybe<Array<InputMaybe<XeroInvoiceStatus>>>;
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-  orderBy?: InputMaybe<Array<InputMaybe<Scalars['jsonb']>>>;
-  where?: InputMaybe<Scalars['jsonb']>;
-};
-
-export type GetOrdersOutput = {
-  __typename?: 'GetOrdersOutput';
-  count?: Maybe<Scalars['Int']>;
-  orders?: Maybe<Array<Maybe<OrderInfo>>>;
-};
-
 export type GetTrainersLevelsInput = {
   courseEnd: Scalars['date'];
   courseLevel: CourseLevel;
@@ -4158,26 +4143,6 @@ export enum OrderEnum {
   Desc = 'DESC'
 }
 
-export type OrderInfo = {
-  __typename?: 'OrderInfo';
-  course?: Maybe<Scalars['jsonb']>;
-  createdAt?: Maybe<Scalars['Date']>;
-  currency?: Maybe<Scalars['String']>;
-  dueDate?: Maybe<Scalars['String']>;
-  id: Scalars['uuid'];
-  orderDue?: Maybe<Scalars['Float']>;
-  orderTotal?: Maybe<Scalars['Float']>;
-  organization?: Maybe<OrganizationInfo>;
-  paymentMethod?: Maybe<PaymentMethod>;
-  profileId?: Maybe<Scalars['uuid']>;
-  quantity?: Maybe<Scalars['Int']>;
-  registrants?: Maybe<Scalars['jsonb']>;
-  status?: Maybe<XeroInvoiceStatus>;
-  stripePaymentId?: Maybe<Scalars['uuid']>;
-  xeroInvoiceNumber?: Maybe<Scalars['Int']>;
-  xeroReference?: Maybe<Scalars['String']>;
-};
-
 export type Ordering = {
   direction?: InputMaybe<OrderDirection>;
 };
@@ -4186,13 +4151,6 @@ export type OrgInvite = {
   __typename?: 'OrgInvite';
   id: Scalars['String'];
   orgName: Scalars['String'];
-};
-
-export type OrganizationInfo = {
-  __typename?: 'OrganizationInfo';
-  address?: Maybe<Scalars['jsonb']>;
-  id?: Maybe<Scalars['uuid']>;
-  name?: Maybe<Scalars['String']>;
 };
 
 /** The page type */
@@ -14731,7 +14689,7 @@ export type Course_Certificate_Changelog = {
   participant: Course_Participant;
   participantId: Scalars['uuid'];
   payload?: Maybe<Scalars['jsonb']>;
-  type: Maybe<Course_Certificate_Changelog_Type_Enum>;
+  type: Course_Certificate_Changelog_Type_Enum;
   updatedAt: Scalars['timestamptz'];
 };
 
@@ -33249,8 +33207,6 @@ export type Query_Root = {
   /** getCoursePricing */
   getCoursePricing?: Maybe<GetCoursePricingOutput>;
   getInvite?: Maybe<CourseInvite>;
-  /** Get Orders with Xero Data */
-  getOrders?: Maybe<GetOrdersOutput>;
   getOrgInvite?: Maybe<OrgInvite>;
   getTrainersLevels?: Maybe<Array<Maybe<TrainerLevels>>>;
   getXeroInvoicesForOrders: Array<Maybe<XeroInvoice>>;
@@ -34403,11 +34359,6 @@ export type Query_RootExpire_Go1_License_Jobs_By_PkArgs = {
 
 export type Query_RootGetCoursePricingArgs = {
   input: GetCoursePricingInput;
-};
-
-
-export type Query_RootGetOrdersArgs = {
-  input: GetOrdersInput;
 };
 
 
@@ -39286,6 +39237,7 @@ export enum Xero_Credential_Update_Column {
 /** Invoice stored on our end, and synced from Xero */
 export type Xero_Invoice = {
   __typename?: 'xero_invoice';
+  _status: Xero_Invoice_Status_Enum;
   amountDue?: Maybe<Scalars['numeric']>;
   amountPaid?: Maybe<Scalars['numeric']>;
   /** An object relationship */
@@ -39298,7 +39250,8 @@ export type Xero_Invoice = {
   issuedDate: Scalars['timestamp'];
   lineItems: Scalars['jsonb'];
   reference: Scalars['String'];
-  status: Xero_Invoice_Status_Enum;
+  /** Calculated invoice status that takes due_date into account */
+  status?: Maybe<Scalars['String']>;
   subtotal: Scalars['numeric'];
   total: Scalars['numeric'];
   totalTax: Scalars['numeric'];
@@ -39362,6 +39315,7 @@ export type Xero_Invoice_Bool_Exp = {
   _and?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
   _not?: InputMaybe<Xero_Invoice_Bool_Exp>;
   _or?: InputMaybe<Array<Xero_Invoice_Bool_Exp>>;
+  _status?: InputMaybe<Xero_Invoice_Status_Enum_Comparison_Exp>;
   amountDue?: InputMaybe<Numeric_Comparison_Exp>;
   amountPaid?: InputMaybe<Numeric_Comparison_Exp>;
   contact?: InputMaybe<Xero_Contact_Bool_Exp>;
@@ -39373,7 +39327,7 @@ export type Xero_Invoice_Bool_Exp = {
   issuedDate?: InputMaybe<Timestamp_Comparison_Exp>;
   lineItems?: InputMaybe<Jsonb_Comparison_Exp>;
   reference?: InputMaybe<String_Comparison_Exp>;
-  status?: InputMaybe<Xero_Invoice_Status_Enum_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
   subtotal?: InputMaybe<Numeric_Comparison_Exp>;
   total?: InputMaybe<Numeric_Comparison_Exp>;
   totalTax?: InputMaybe<Numeric_Comparison_Exp>;
@@ -39417,6 +39371,7 @@ export type Xero_Invoice_Inc_Input = {
 
 /** input type for inserting data into table "xero_invoice" */
 export type Xero_Invoice_Insert_Input = {
+  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
   amountDue?: InputMaybe<Scalars['numeric']>;
   amountPaid?: InputMaybe<Scalars['numeric']>;
   contact?: InputMaybe<Xero_Contact_Obj_Rel_Insert_Input>;
@@ -39428,7 +39383,6 @@ export type Xero_Invoice_Insert_Input = {
   issuedDate?: InputMaybe<Scalars['timestamp']>;
   lineItems?: InputMaybe<Scalars['jsonb']>;
   reference?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Xero_Invoice_Status_Enum>;
   subtotal?: InputMaybe<Scalars['numeric']>;
   total?: InputMaybe<Scalars['numeric']>;
   totalTax?: InputMaybe<Scalars['numeric']>;
@@ -39499,6 +39453,7 @@ export type Xero_Invoice_On_Conflict = {
 
 /** Ordering options when selecting data from "xero_invoice". */
 export type Xero_Invoice_Order_By = {
+  _status?: InputMaybe<Order_By>;
   amountDue?: InputMaybe<Order_By>;
   amountPaid?: InputMaybe<Order_By>;
   contact?: InputMaybe<Xero_Contact_Order_By>;
@@ -39531,6 +39486,8 @@ export type Xero_Invoice_Prepend_Input = {
 /** select columns of table "xero_invoice" */
 export enum Xero_Invoice_Select_Column {
   /** column name */
+  Status = '_status',
+  /** column name */
   AmountDue = 'amountDue',
   /** column name */
   AmountPaid = 'amountPaid',
@@ -39551,8 +39508,6 @@ export enum Xero_Invoice_Select_Column {
   /** column name */
   Reference = 'reference',
   /** column name */
-  Status = 'status',
-  /** column name */
   Subtotal = 'subtotal',
   /** column name */
   Total = 'total',
@@ -39566,6 +39521,7 @@ export enum Xero_Invoice_Select_Column {
 
 /** input type for updating data in table "xero_invoice" */
 export type Xero_Invoice_Set_Input = {
+  _status?: InputMaybe<Xero_Invoice_Status_Enum>;
   amountDue?: InputMaybe<Scalars['numeric']>;
   amountPaid?: InputMaybe<Scalars['numeric']>;
   currencyCode?: InputMaybe<Scalars['String']>;
@@ -39576,7 +39532,6 @@ export type Xero_Invoice_Set_Input = {
   issuedDate?: InputMaybe<Scalars['timestamp']>;
   lineItems?: InputMaybe<Scalars['jsonb']>;
   reference?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Xero_Invoice_Status_Enum>;
   subtotal?: InputMaybe<Scalars['numeric']>;
   total?: InputMaybe<Scalars['numeric']>;
   totalTax?: InputMaybe<Scalars['numeric']>;
@@ -39630,6 +39585,7 @@ export enum Xero_Invoice_Status_Enum {
   Authorised = 'AUTHORISED',
   Deleted = 'DELETED',
   Draft = 'DRAFT',
+  Overdue = 'OVERDUE',
   Paid = 'PAID',
   Submitted = 'SUBMITTED',
   Voided = 'VOIDED'
@@ -39747,6 +39703,8 @@ export type Xero_Invoice_Sum_Fields = {
 /** update columns of table "xero_invoice" */
 export enum Xero_Invoice_Update_Column {
   /** column name */
+  Status = '_status',
+  /** column name */
   AmountDue = 'amountDue',
   /** column name */
   AmountPaid = 'amountPaid',
@@ -39766,8 +39724,6 @@ export enum Xero_Invoice_Update_Column {
   LineItems = 'lineItems',
   /** column name */
   Reference = 'reference',
-  /** column name */
-  Status = 'status',
   /** column name */
   Subtotal = 'subtotal',
   /** column name */
@@ -39931,12 +39887,23 @@ export type CourseGradingDataQueryVariables = Exact<{
 
 export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
 
-export type GetOrdersQueryVariables = Exact<{
-  input?: InputMaybe<GetOrdersInput>;
+export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
+
+export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } };
+
+export type OrderOrganizationInfoFragment = { __typename?: 'organization', id: any, name: string, address: any };
+
+export type OrderInfoFragment = { __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } } | null };
+
+export type OrdersQueryVariables = Exact<{
+  where?: InputMaybe<Order_Bool_Exp>;
+  orderBy?: InputMaybe<Array<Order_Order_By> | Order_Order_By>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'query_root', getOrders?: { __typename?: 'GetOrdersOutput', count?: number | null, orders?: Array<{ __typename?: 'OrderInfo', createdAt?: any | null, currency?: string | null, id: any, orderDue?: number | null, orderTotal?: number | null, paymentMethod?: PaymentMethod | null, profileId?: any | null, quantity?: number | null, registrants?: any | null, stripePaymentId?: any | null, xeroInvoiceNumber?: number | null, course?: any | null, status?: XeroInvoiceStatus | null, xeroReference?: string | null, dueDate?: string | null, organization?: { __typename?: 'OrganizationInfo', name?: string | null, id?: any | null, address?: any | null } | null } | null> | null } | null };
+export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } } | null }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -40025,7 +39992,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum | null, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   code: Scalars['String'];
@@ -40153,15 +40120,6 @@ export type GetCoursePricingQueryVariables = Exact<{
 
 
 export type GetCoursePricingQuery = { __typename?: 'query_root', pricing?: { __typename?: 'GetCoursePricingOutput', priceAmount: number, priceCurrency: Currency, xeroCode: string } | null };
-
-export type GetOrgCoursesQueryVariables = Exact<{
-  where?: InputMaybe<Organization_Bool_Exp>;
-  courseFilter?: InputMaybe<Course_Bool_Exp>;
-  limit?: InputMaybe<Scalars['Int']>;
-}>;
-
-
-export type GetOrgCoursesQuery = { __typename?: 'query_root', courses: Array<{ __typename?: 'course', id: number, createdAt: any, updatedAt: any, name: string, type: Course_Type_Enum, deliveryType: Course_Delivery_Type_Enum, status?: Course_Status_Enum | null, level: Course_Level_Enum, course_code?: string | null, reaccreditation?: boolean | null, min_participants: number, max_participants: number, gradingConfirmed: boolean, gradingStarted: boolean, go1Integration: boolean, aolCostOfCourse?: any | null, aolCountry?: string | null, aolRegion?: string | null, modulesDuration: number, notes?: string | null, start?: any | null, end?: any | null, schedules: Array<{ __typename?: 'course_schedule', start: any, end: any, virtualLink?: string | null, venue?: { __typename?: 'venue', name: string, addressLineOne: string, addressLineTwo?: string | null, city: string, postCode: string, geoCoordinates?: any | null } | null }>, participantsCount: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } }> };
 
 export type TrainerCourseFragment = { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, status?: Course_Status_Enum | null, createdAt: any, course_code?: string | null, go1Integration: boolean, max_participants: number, organization?: { __typename?: 'organization', name: string } | null, trainers: Array<{ __typename?: 'course_trainer', id: any, type: Course_Trainer_Type_Enum, status?: Course_Invite_Status_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }>, participantsAgg: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null }, waitlistAgg: { __typename?: 'waitlist_aggregate', aggregate?: { __typename?: 'waitlist_aggregate_fields', count: number } | null }, dates: { __typename?: 'course_schedule_aggregate', aggregate?: { __typename?: 'course_schedule_aggregate_fields', start?: { __typename?: 'course_schedule_min_fields', date?: any | null } | null, end?: { __typename?: 'course_schedule_max_fields', date?: any | null } | null } | null }, modulesAgg: { __typename?: 'course_module_aggregate', aggregate?: { __typename?: 'course_module_aggregate_fields', count: number } | null }, schedule: Array<{ __typename?: 'course_schedule', id: any, virtualLink?: string | null, venue?: { __typename?: 'venue', id: any, name: string, city: string } | null }>, cancellationRequest?: { __typename?: 'course_cancellation_request', id: any } | null };
 
@@ -40308,7 +40266,7 @@ export type VenueFragment = { __typename?: 'venue', id: any, createdAt: any, upd
 
 export type CertificateFragment = { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null };
 
-export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum | null };
+export type CertificateChangelogFragment = { __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum };
 
 export type LegacyCertificateFragment = { __typename?: 'legacy_certificate', id: any, number: string, courseName: string, expiryDate: any, certificationDate: any };
 
@@ -40684,7 +40642,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null } } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

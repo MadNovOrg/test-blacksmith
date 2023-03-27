@@ -2,13 +2,13 @@ import React, { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
-import { XeroInvoiceStatus } from '@app/generated/graphql'
+import { Xero_Invoice_Status_Enum } from '@app/generated/graphql'
 
 type Props = {
-  onChange: (input: { statuses: XeroInvoiceStatus[] }) => void
+  onChange: (input: { statuses: Xero_Invoice_Status_Enum[] }) => void
 }
 
-const possibleStatuses = Object.values(XeroInvoiceStatus)
+const possibleStatuses = Object.values(Xero_Invoice_Status_Enum)
 
 export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
   onChange,
@@ -33,7 +33,7 @@ export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
         } else {
           res.push({
             ...entry,
-            highlight: entry.id === XeroInvoiceStatus.Overdue,
+            highlight: entry.id === Xero_Invoice_Status_Enum.Overdue,
           })
 
           usedTitles.push(entry.title)
@@ -49,7 +49,7 @@ export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
       onChange({
         statuses: opts.flatMap(o =>
           o.selected ? o.id.split(',') : []
-        ) as XeroInvoiceStatus[],
+        ) as Xero_Invoice_Status_Enum[],
       })
     },
     [onChange]
@@ -60,6 +60,7 @@ export const FilterOrderStatuses: React.FC<React.PropsWithChildren<Props>> = ({
       options={options}
       title={t('filters.status')}
       onChange={localOnChange}
+      data-testid="status-filter"
     />
   )
 }

@@ -17,7 +17,7 @@ import {
   Course_Status_Enum,
   Grade_Enum,
   Profile,
-  XeroInvoiceStatus,
+  Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 import {
   Address,
@@ -361,17 +361,16 @@ export function getFieldError(
 }
 
 export const INVOICE_STATUS_COLOR: Record<
-  XeroInvoiceStatus,
+  Xero_Invoice_Status_Enum,
   'success' | 'default' | 'error' | 'warning'
 > = {
-  [XeroInvoiceStatus.Authorised]: 'warning',
-  [XeroInvoiceStatus.Deleted]: 'default',
-  [XeroInvoiceStatus.Draft]: 'default',
-  [XeroInvoiceStatus.Overdue]: 'error',
-  [XeroInvoiceStatus.Paid]: 'success',
-  [XeroInvoiceStatus.Submitted]: 'warning',
-  [XeroInvoiceStatus.Unknown]: 'default',
-  [XeroInvoiceStatus.Voided]: 'default',
+  [Xero_Invoice_Status_Enum.Authorised]: 'warning',
+  [Xero_Invoice_Status_Enum.Deleted]: 'default',
+  [Xero_Invoice_Status_Enum.Draft]: 'default',
+  [Xero_Invoice_Status_Enum.Overdue]: 'error',
+  [Xero_Invoice_Status_Enum.Paid]: 'success',
+  [Xero_Invoice_Status_Enum.Submitted]: 'warning',
+  [Xero_Invoice_Status_Enum.Voided]: 'default',
 }
 
 // more on this logic [here](https://github.com/TeamTeach/application/wiki/Organisations)

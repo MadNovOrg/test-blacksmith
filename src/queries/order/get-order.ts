@@ -32,6 +32,30 @@ export const QUERY = gql`
         end
         freeSpaces
       }
+      invoice {
+        xeroId
+        invoiceNumber
+        lineItems
+        status
+        fullyPaidOnDate
+        amountDue
+        amountPaid
+        reference
+        currencyCode
+        subtotal
+        totalTax
+        total
+        dueDate
+        issuedDate
+        contact {
+          phones
+          addresses
+          name
+          firstName
+          lastName
+          emailAddress
+        }
+      }
     }
   }
 `

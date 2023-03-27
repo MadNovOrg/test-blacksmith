@@ -1,4 +1,4 @@
-import { alpha, createTheme } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 import { ColorPartial } from '@mui/material/styles/createPalette'
 
 import { LinkBehavior } from './components/LinkBehavior'
@@ -169,9 +169,9 @@ const theme = createTheme({
       main: '#F2A61F',
     },
     error: {
-      main: alpha('#990650', 0.6),
-      light: alpha('#990650', 0.2),
-      dark: alpha('#990650', 1),
+      main: '#D32F2F',
+      light: '#FAE6E6',
+      dark: '#990F0F',
     },
     success: {
       main: '#9EB934',

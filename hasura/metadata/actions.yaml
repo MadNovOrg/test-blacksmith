@@ -106,16 +106,6 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
-  - name: getOrders
-    definition:
-      kind: ""
-      handler: '{{ACTIONS_HOST}}/orders'
-      forward_client_headers: true
-    permissions:
-      - role: sales-admin
-      - role: tt-ops
-      - role: tt-admin
-    comment: Get Orders with Xero Data
   - name: getOrgInvite
     definition:
       kind: ""

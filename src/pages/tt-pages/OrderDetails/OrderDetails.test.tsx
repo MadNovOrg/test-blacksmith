@@ -11,13 +11,12 @@ import {
   GetXeroInvoicesForOrdersQuery,
   Payment_Methods_Enum,
   XeroAddressType,
-  XeroInvoiceStatus,
   XeroLineItemSummaryFragment,
   XeroPhoneType,
+  Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
-import { QUERY as GET_XERO_INVOICES_FOR_ORDERS } from '@app/queries/xero/get-xero-invoices-for-orders'
 import { LoadingStatus } from '@app/util'
 
 import { chance, formatCurrency, render, screen, within } from '@test/index'
@@ -60,7 +59,7 @@ describe('page: OrderDetails', () => {
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
 
-  it('renders not found page if there is an error fetching order or invoice', () => {
+  it('renders not found page if there is an error fetching order', () => {
     const client = {
       executeQuery: () =>
         fromValue({
@@ -92,12 +91,11 @@ describe('page: OrderDetails', () => {
     const client = {
       executeQuery: ({ query }: { query: DocumentNode }) => {
         if (query === GET_ORDER_QUERY) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
+          return fromValue<{ data: GetOrderQuery }>({
             data: {
               order: {
                 ...order,
+                invoice: buildInvoice(),
                 course: {
                   ...order.course,
                   level: Course_Level_Enum.Level_1,
@@ -105,16 +103,6 @@ describe('page: OrderDetails', () => {
                   end: courseEndDate,
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [buildInvoice()],
             },
           })
         }
@@ -176,21 +164,12 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                invoice,
                 course: {
                   ...order.course,
                   level: Course_Level_Enum.Level_1,
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
             },
           })
         }
@@ -242,21 +221,12 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                invoice,
                 course: {
                   ...order.course,
                   level: Course_Level_Enum.Level_1,
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
             },
           })
         }
@@ -315,17 +285,10 @@ describe('page: OrderDetails', () => {
             { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
           >({
             data: {
-              order,
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
+              order: {
+                ...order,
+                invoice,
+              },
             },
           })
         }
@@ -349,7 +312,7 @@ describe('page: OrderDetails', () => {
   })
 
   it('renders prices and taxes', () => {
-    const subTotal = 100
+    const subtotal = 100
     const vat = 25
     const total = 125
     const paidOnDate = new Date('2023-01-25T08:00:00Z').toISOString()
@@ -357,10 +320,10 @@ describe('page: OrderDetails', () => {
     const order = buildOrder()
     const invoice = buildInvoice({
       overrides: {
-        subTotal,
+        subtotal,
         total,
         totalTax: vat,
-        status: XeroInvoiceStatus.Paid,
+        status: Xero_Invoice_Status_Enum.Paid,
         fullyPaidOnDate: paidOnDate,
         amountDue: String(0),
         amountPaid: String(total),
@@ -374,17 +337,10 @@ describe('page: OrderDetails', () => {
             { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
           >({
             data: {
-              order,
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
+              order: {
+                ...order,
+                invoice,
+              },
             },
           })
         }
@@ -405,7 +361,7 @@ describe('page: OrderDetails', () => {
     const amountDueRow = screen.getByTestId('order-amount-due')
 
     expect(
-      within(subTotalRow).getByText(formatCurrency(subTotal))
+      within(subTotalRow).getByText(formatCurrency(subtotal))
     ).toBeInTheDocument()
     expect(within(vatRow).getByText(formatCurrency(vat))).toBeInTheDocument()
     expect(
@@ -435,17 +391,10 @@ describe('page: OrderDetails', () => {
             { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
           >({
             data: {
-              order,
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
+              order: {
+                ...order,
+                invoice,
+              },
             },
           })
         }
@@ -476,6 +425,7 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                invoice,
                 course: {
                   ...order.course,
                   type: Course_Type_Enum.Closed,
@@ -484,16 +434,6 @@ describe('page: OrderDetails', () => {
                   },
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
             },
           })
         }
@@ -542,25 +482,7 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
-                course: {
-                  ...order.course,
-                  type: Course_Type_Enum.Closed,
-                  salesRepresentative: {
-                    fullName: salesPerson,
-                  },
-                },
-              },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [
-                {
+                invoice: {
                   ...invoice,
                   contact: {
                     ...invoice.contact,
@@ -572,7 +494,14 @@ describe('page: OrderDetails', () => {
                     ],
                   },
                 },
-              ],
+                course: {
+                  ...order.course,
+                  type: Course_Type_Enum.Closed,
+                  salesRepresentative: {
+                    fullName: salesPerson,
+                  },
+                },
+              },
             },
           })
         }
@@ -588,7 +517,7 @@ describe('page: OrderDetails', () => {
     const invoicedToRow = screen.getByTestId('order-invoiced-to')
 
     expect(
-      within(invoicedToRow).getByText(invoice.contact.name)
+      within(invoicedToRow).getByText(invoice.contact.name ?? '')
     ).toBeInTheDocument()
 
     expect(
@@ -633,22 +562,13 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                invoice,
                 course: {
                   ...order.course,
                   type: Course_Type_Enum.Closed,
                   freeSpaces: 2,
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
             },
           })
         }
@@ -713,21 +633,12 @@ describe('page: OrderDetails', () => {
             data: {
               order: {
                 ...order,
+                invoice,
                 course: {
                   ...order.course,
                   level: Course_Level_Enum.Level_1,
                 },
               },
-            },
-          })
-        }
-
-        if (query === GET_XERO_INVOICES_FOR_ORDERS) {
-          return fromValue<
-            { data: GetOrderQuery } | { data: GetXeroInvoicesForOrdersQuery }
-          >({
-            data: {
-              invoices: [invoice],
             },
           })
         }

@@ -10,10 +10,11 @@ import {
   GetPromoCodesQuery,
   Payment_Methods_Enum,
   Promo_Code_Type_Enum,
-  XeroInvoiceStatus,
-  XeroInvoiceSummaryFragment,
   XeroLineItemSummaryFragment,
   XeroPhoneType,
+  Xero_Contact,
+  Xero_Invoice,
+  Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
 
@@ -51,33 +52,45 @@ export const buildOrder = build<NonNullish<GetOrderQuery['order']>>({
   },
 })
 
-export const buildInvoice = build<XeroInvoiceSummaryFragment>({
+export const buildInvoiceContact = build<Xero_Contact>({
   fields: {
-    date: chance.date().toISOString(),
+    id: chance.guid(),
+    xeroId: chance.string(),
+    name: chance.name({ full: true }),
+    emailAddress: chance.email(),
+    firstName: chance.name(),
+    lastName: chance.name(),
+    addresses: [],
+    phones: [
+      {
+        phoneCountryCode: '+44',
+        phoneAreaCode: '020',
+        phoneNumber: chance.phone(),
+        phoneType: XeroPhoneType.Default,
+      },
+    ],
+  },
+})
+
+export const buildInvoice = build<Xero_Invoice>({
+  fields: {
+    id: chance.guid(),
+    invoiceNumber: chance.string(),
+    reference: chance.string(),
+    xeroContactId: chance.guid(),
+    issuedDate: chance.date().toISOString(),
     total: chance.integer(),
-    status: XeroInvoiceStatus.Draft,
+    status: Xero_Invoice_Status_Enum.Draft,
+    _status: Xero_Invoice_Status_Enum.Draft,
     dueDate: chance.date().toISOString(),
-    subTotal: chance.integer(),
+    subtotal: chance.integer(),
     totalTax: chance.integer(),
-    invoiceID: chance.guid(),
+    xeroId: chance.guid(),
     amountDue: String(chance.integer()),
     amountPaid: String(0),
     currencyCode: Currency.Gbp,
     lineItems: [],
-    contact: {
-      name: chance.name({ full: true }),
-      emailAddress: chance.email(),
-      firstName: chance.name(),
-      lastName: chance.name(),
-      phones: [
-        {
-          phoneCountryCode: '+44',
-          phoneAreaCode: '020',
-          phoneNumber: chance.phone(),
-          phoneType: XeroPhoneType.Default,
-        },
-      ],
-    },
+    contact: buildInvoiceContact(),
   },
 })
 

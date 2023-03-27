@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Stack } from '@mui/material'
+import { Container, Typography, Box, Stack, Skeleton } from '@mui/material'
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -42,14 +42,18 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
   )
 
   return (
-    <Container maxWidth="lg" sx={{ py: 5 }}>
+    <Container maxWidth="lg" sx={{ py: 7 }}>
       <Box display="flex" gap={4}>
         <Box width={250}>
-          <Typography variant="h1" data-testid="list-orders-heading">
+          <Typography variant="h1" data-testid="list-orders-heading" mb={2}>
             {t('common.orders')}
           </Typography>
-          <Typography variant="body2" color="grey.500" mt={1}>
-            {isLoading ? <>&nbsp;</> : t('x-items', { total })}
+          <Typography variant="body2">
+            {isLoading && !orders ? (
+              <Skeleton width={40} />
+            ) : (
+              t('x-items', { count: total })
+            )}
           </Typography>
 
           <Stack gap={4} mt={4}>
@@ -59,11 +63,7 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
             />
 
             <Box>
-              <Typography variant="body2" fontWeight="bold">
-                {t('filter-by')}
-              </Typography>
-
-              <Stack gap={1}>
+              <Stack gap={4}>
                 <FilterPaymentMethods onChange={onFilterChange} />
                 <FilterCurrencies onChange={onFilterChange} />
                 <FilterOrderStatuses onChange={onFilterChange} />
@@ -73,14 +73,12 @@ export const Orders: React.FC<React.PropsWithChildren<unknown>> = () => {
         </Box>
 
         <Box flex={1}>
-          {orders && (
-            <List
-              orders={orders}
-              sorting={sorting}
-              loading={isLoading}
-              filtered={filtered}
-            />
-          )}
+          <List
+            orders={orders ?? []}
+            sorting={sorting}
+            loading={isLoading}
+            filtered={filtered}
+          />
           {total ? <Pagination total={total} /> : null}
         </Box>
       </Box>

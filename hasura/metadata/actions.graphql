@@ -88,12 +88,6 @@ type Query {
 }
 
 type Query {
-  getOrders(
-    input: GetOrdersInput!
-  ): GetOrdersOutput
-}
-
-type Query {
   getOrgInvite: OrgInvite
 }
 

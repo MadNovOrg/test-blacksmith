@@ -38,6 +38,7 @@ export const FilterCurrencies: React.FC<React.PropsWithChildren<Props>> = ({
       options={options}
       title={t('filters.currency')}
       onChange={localOnChange}
+      data-testid="currency-filter"
     />
   )
 }

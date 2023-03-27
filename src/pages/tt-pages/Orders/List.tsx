@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Grid,
   CircularProgress,
   Link,
   Stack,
@@ -20,15 +19,18 @@ import * as XLSX from 'xlsx'
 
 import { TableHead, Col } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
-import { OrderInfo, XeroInvoiceStatus } from '@app/generated/graphql'
-import { Maybe, OrganizationInfo } from '@app/generated/graphql'
+import {
+  OrderInfoFragment,
+  OrderOrganizationInfoFragment,
+  Xero_Invoice_Status_Enum,
+} from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { INVOICE_STATUS_COLOR } from '@app/util'
 
 import { BillToCell } from './components/BillToCell'
 
-const formatBillToForExcel = (organization?: Maybe<OrganizationInfo>) => {
+const formatBillToForExcel = (organization?: OrderOrganizationInfoFragment) => {
   if (organization && organization.name) {
     let address
     if (organization.address) {
@@ -45,7 +47,7 @@ const formatBillToForExcel = (organization?: Maybe<OrganizationInfo>) => {
 }
 
 type Props = {
-  orders: OrderInfo[]
+  orders: OrderInfoFragment[]
   sorting: Sorting
   loading: boolean
   filtered: boolean
@@ -66,20 +68,20 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
       checkbox.headCol(orders.map(o => o.id)),
       { id: 'xeroInvoiceNumber', label: _t('invoiceNumber'), sorting: true },
       {
-        id: 'xeroReference',
+        id: 'invoice.reference',
         label: _t('xeroReference'),
         sorting: true,
       },
       { id: 'organization.name', label: _t('billTo'), sorting: true },
       { id: 'paymentMethod', label: _t('paymentMethod'), sorting: true },
-      { id: 'orderTotal', label: _t('amount'), sorting: true },
-      { id: 'orderDue', label: _t('due'), sorting: true },
+      { id: 'invoice.total', label: _t('amount'), sorting: true },
+      { id: 'invoice.amountDue', label: _t('due'), sorting: true },
       {
-        id: 'dueDate',
+        id: 'invoice.dueDate',
         label: _t('dueDate'),
         sorting: true,
       },
-      { id: 'status', label: _t('status'), sorting: true },
+      { id: 'invoice.status', label: _t('status'), sorting: true },
     ] as Col[]
   }, [t, orders, checkbox])
 
@@ -89,7 +91,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const exportOrders = useCallback(
-    async (orders: OrderInfo[] = []) => {
+    async (orders: OrderInfoFragment[] = []) => {
       const _t = (col: string) => t(`pages.orders.cols-${col}`)
       const ordersData = [
         [
@@ -102,12 +104,13 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           _t('dueDate'),
           _t('status'),
         ],
-        ...orders.map((o: OrderInfo) => {
-          const { orderDue, status, dueDate } = o
+        ...orders.map(o => {
+          const { orderDue } = o
+          const { status, dueDate, reference } = o.invoice ?? {}
 
           return [
             o.xeroInvoiceNumber,
-            o.xeroReference,
+            reference,
             formatBillToForExcel(o.organization),
             t(`pages.orders.paymentMethod-${o.paymentMethod}`),
             o.orderTotal,
@@ -131,28 +134,32 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
   return (
     <Box>
-      <Grid justifyContent="end" alignItems="center" container sx={{ mb: 2 }}>
-        <Stack direction="row" gap={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            disabled={selected.size === 0}
-            onClick={() => exportOrders(selectedOrders)}
-            data-testid="list-orders-export-selected-button"
-          >
-            {t('pages.orders.export-selected')}
-          </Button>
+      <Stack
+        direction="row"
+        gap={2}
+        mb={3}
+        justifyContent="end"
+        alignItems="center"
+      >
+        <Button
+          variant="outlined"
+          color="primary"
+          disabled={selected.size === 0}
+          onClick={() => exportOrders(selectedOrders)}
+          data-testid="list-orders-export-selected-button"
+        >
+          {t('pages.orders.export-selected')}
+        </Button>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => exportOrders(orders)}
-            data-testid="list-orders-export-all-button"
-          >
-            {t('pages.orders.export-whole-page')}
-          </Button>
-        </Stack>
-      </Grid>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => exportOrders(orders)}
+          data-testid="list-orders-export-all-button"
+        >
+          {t('pages.orders.export-whole-page')}
+        </Button>
+      </Stack>
 
       <Table>
         <TableHead
@@ -183,7 +190,8 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {orders.map(order => {
-            const { orderDue, status, dueDate } = order
+            const { orderDue } = order
+            const { status, dueDate } = order.invoice ?? {}
 
             return (
               <TableRow
@@ -194,7 +202,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                 {checkbox.rowCell(order.id)}
 
                 <TableCell>
-                  {order.status !== XeroInvoiceStatus.Unknown ? (
+                  {order.invoice ? (
                     <Link href={order.id}>{order.xeroInvoiceNumber}</Link>
                   ) : (
                     order.xeroInvoiceNumber
@@ -203,7 +211,7 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
                 <TableCell>
                   <span style={{ whiteSpace: 'nowrap' }}>
-                    {order.xeroReference}
+                    {order.invoice?.reference}
                   </span>
                 </TableCell>
 
@@ -232,7 +240,11 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                     <Typography
                       fontWeight="inherit"
                       fontSize="inherit"
-                      color={status === 'OVERDUE' ? 'error.main' : ''}
+                      color={
+                        status === Xero_Invoice_Status_Enum.Overdue
+                          ? 'error.main'
+                          : ''
+                      }
                     >
                       {t('dates.default', { date: dueDate })}
                     </Typography>
@@ -242,7 +254,10 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
                 <TableCell>
                   <Chip
                     label={t(`filters.${status}`)}
-                    color={INVOICE_STATUS_COLOR[status as XeroInvoiceStatus]}
+                    color={
+                      INVOICE_STATUS_COLOR[status as Xero_Invoice_Status_Enum]
+                    }
+                    size="small"
                   />
                 </TableCell>
               </TableRow>

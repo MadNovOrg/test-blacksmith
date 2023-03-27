@@ -31,3 +31,5 @@ TRUNCATE TABLE public.venue CASCADE;
 TRUNCATE TABLE public.waitlist CASCADE;
 TRUNCATE TABLE public.go1_licenses CASCADE;
 TRUNCATE TABLE public.go1_licenses_history CASCADE;
+TRUNCATE TABLE public.xero_invoice CASCADE;
+TRUNCATE TABLE public.xero_contact CASCADE;

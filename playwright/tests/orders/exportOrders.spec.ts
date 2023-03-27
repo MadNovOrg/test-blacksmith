@@ -2,7 +2,7 @@ import { Download, expect, test as base } from '@playwright/test'
 import { readFile } from 'xlsx'
 
 import {
-  OrderInfo,
+  OrderInfoFragment,
   Order_By,
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
@@ -18,7 +18,6 @@ const test = base.extend<{
 }>({
   orders: async ({}, use) => {
     const orders = await getOrders({
-      invoiceStatus: [],
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -35,7 +34,10 @@ const PAYMENT_METHODS: Record<Payment_Methods_Enum, string> = {
   [Payment_Methods_Enum.Invoice]: 'Invoice',
 }
 
-async function assertDownloadedCSV(download: Download, data: OrderInfo[]) {
+async function assertDownloadedCSV(
+  download: Download,
+  data: OrderInfoFragment[]
+) {
   const downloadPath = (await download.path()) as string
 
   const workbook = readFile(downloadPath)
@@ -87,7 +89,7 @@ test('exports all orders from the page', async ({ page, orders }) => {
 
   const [download] = await Promise.all([
     page.waitForEvent('download'),
-    page.click('button:has-text("Export whole page")'),
+    page.click('button:has-text("Export all orders")'),
   ])
 
   await assertDownloadedCSV(download, orders)

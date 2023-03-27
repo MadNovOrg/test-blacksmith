@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { OrderInfo } from '@app/generated/graphql'
+import { OrderInfoFragment } from '@app/generated/graphql'
 
 import { BasePage } from '../BasePage'
 
@@ -18,7 +18,7 @@ export class OrderPage extends BasePage {
     await super.goto(`orders`)
   }
 
-  async checkOrderVisiblity(orders: OrderInfo[]) {
+  async checkOrderVisiblity(orders: OrderInfoFragment[]) {
     for (const order of orders) {
       await expect(
         this.page.locator(`tbody >> tr >> text="${order.xeroInvoiceNumber}"`)
