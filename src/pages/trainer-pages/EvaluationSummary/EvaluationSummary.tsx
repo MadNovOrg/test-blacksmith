@@ -19,16 +19,17 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { RatingProgress } from '@app/components/RatingProgress'
 import { RatingSummary } from '@app/components/RatingSummary'
 import { Sticky } from '@app/components/Sticky'
+import { useAuth } from '@app/context/auth'
 import useCourse from '@app/hooks/useCourse'
 import {
+  ParamsType as GetEvaluationsSummaryParamsType,
   QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
   ResponseType as GetEvaluationsSummaryResponseType,
-  ParamsType as GetEvaluationsSummaryParamsType,
 } from '@app/queries/course-evaluation/get-evaluations-summary'
 import {
-  CourseEvaluationQuestionType,
-  CourseEvaluationQuestionGroup,
   CourseEvaluationGroupedQuestion,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationQuestionType,
 } from '@app/types'
 
 const groups = [
@@ -92,6 +93,7 @@ const normalizeAnswers = (
 
 export const EvaluationSummary = () => {
   const params = useParams()
+  const { acl } = useAuth()
   const { t } = useTranslation()
   const courseId = params.id as string
 
@@ -117,7 +119,15 @@ export const EvaluationSummary = () => {
     GetEvaluationsSummaryResponseType,
     Error,
     [string, GetEvaluationsSummaryParamsType]
-  >([GET_EVALUATIONS_SUMMARY_QUERY, { courseId }])
+  >([
+    GET_EVALUATIONS_SUMMARY_QUERY,
+    {
+      courseId,
+      profileCondition: acl.canViewArchivedProfileData()
+        ? {}
+        : { archived: { _eq: false } },
+    },
+  ])
   const loading = !data && !error
 
   const { trainerAnswers, attendeeAnswers } = useMemo(() => {
@@ -141,6 +151,7 @@ export const EvaluationSummary = () => {
         id: a.profile.id,
         name: a.profile.fullName,
         avatar: a.profile.avatar,
+        archived: a.profile.archived,
       })) ?? [],
       u => u.id
     )

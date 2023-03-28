@@ -198,6 +198,7 @@ describe('component: CourseAttendees', () => {
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
       {
+        alwaysShowArchived: true,
         order: 'asc',
         pagination: {
           limit: PER_PAGE,
@@ -239,6 +240,7 @@ describe('component: CourseAttendees', () => {
     expect(useCourseParticipantsMock.mock.calls[0]).toEqual([
       course.id,
       {
+        alwaysShowArchived: true,
         order: 'desc',
         pagination: {
           limit: PER_PAGE,

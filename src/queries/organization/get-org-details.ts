@@ -10,7 +10,12 @@ export const QUERY = gql`
     orgs: organization(where: $where) {
       ...Organization
     }
-    profiles: profile(where: { organizations: { organization: $where } }) {
+    profiles: profile(
+      where: {
+        organizations: { organization: $where }
+        archived: { _eq: false }
+      }
+    ) {
       id
       fullName
       avatar

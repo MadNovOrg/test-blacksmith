@@ -43,7 +43,7 @@ export const CourseAttendees: React.FC<
     status: courseParticipantsLoadingStatus,
     total: courseParticipantsTotal,
     error: courseParticipantsError,
-  } = useCourseParticipants(courseId)
+  } = useCourseParticipants(courseId, { alwaysShowArchived: true })
   const { total: pendingTotal } = useCourseInvites(
     courseId,
     InviteStatus.PENDING

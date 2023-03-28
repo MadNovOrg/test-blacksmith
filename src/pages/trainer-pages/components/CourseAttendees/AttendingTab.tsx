@@ -66,6 +66,7 @@ export const AttendingTab = ({ course }: TabProperties) => {
       limit: perPage,
       offset: perPage * currentPage,
     },
+    alwaysShowArchived: true,
   })
 
   const matchMutate = useMatchMutate()
@@ -158,7 +159,11 @@ export const AttendingTab = ({ course }: TabProperties) => {
                   key={courseParticipant.id}
                   data-testid={`course-participant-row-${courseParticipant.id}`}
                 >
-                  <TableCell>{courseParticipant.profile.fullName}</TableCell>
+                  <TableCell>
+                    {courseParticipant.profile.archived
+                      ? t('common.archived-profile')
+                      : courseParticipant.profile.fullName}
+                  </TableCell>
                   <TableCell>
                     <Link href={`/profile/${courseParticipant.profile.id}`}>
                       {courseParticipant.profile.email}

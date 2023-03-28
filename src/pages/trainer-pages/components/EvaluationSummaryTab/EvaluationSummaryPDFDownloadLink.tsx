@@ -6,33 +6,34 @@ import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
 import { SummaryDocument } from '@app/components/SummaryPDF'
+import { useAuth } from '@app/context/auth'
 import {
-  QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
   ParamsType as GetEvaluationsSummaryParamsType,
+  QUERY as GET_EVALUATIONS_SUMMARY_QUERY,
   ResponseType as GetEvaluationsSummaryResponseType,
 } from '@app/queries/course-evaluation/get-evaluations-summary'
 import {
-  QUERY as GET_COURSE_BY_ID_QUERY,
   ParamsType as GetCourseByIdParamsType,
+  QUERY as GET_COURSE_BY_ID_QUERY,
   ResponseType as GetCourseByIdResponseType,
 } from '@app/queries/courses/get-course-by-id'
 import {
-  QUERY as GET_COURSE_MODULES,
   ParamsType as GetCourseModulesParamsType,
+  QUERY as GET_COURSE_MODULES,
   ResponseType as GetCourseModulesResponseType,
 } from '@app/queries/courses/get-course-modules'
 import {
-  QUERY as GET_COURSE_PARTICIPANTS,
   ParamsType as GetCourseParticipantsParamsType,
+  QUERY as GET_COURSE_PARTICIPANTS,
   ResponseType as GetCourseParticipantsResponseType,
 } from '@app/queries/participants/get-course-participants'
 import {
   Course,
+  CourseEvaluationGroupedQuestion,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationQuestionType,
   CourseModule,
   CourseParticipant,
-  CourseEvaluationQuestionType,
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationGroupedQuestion,
 } from '@app/types'
 
 const { PDFDownloadLink } = pdf
@@ -59,6 +60,7 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
   React.PropsWithChildren<EvaluationSummaryPDFDownloadLinkProps>
 > = ({ courseId, profileId }) => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
 
   const loadingComponent = (
     <Fragment>
@@ -78,7 +80,15 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     GetEvaluationsSummaryResponseType,
     Error,
     [string, GetEvaluationsSummaryParamsType]
-  >([GET_EVALUATIONS_SUMMARY_QUERY, { courseId }])
+  >([
+    GET_EVALUATIONS_SUMMARY_QUERY,
+    {
+      courseId,
+      profileCondition: acl.canViewArchivedProfileData()
+        ? {}
+        : { archived: { _eq: false } },
+    },
+  ])
 
   const { data: courseData, error: courseError } = useSWR<
     GetCourseByIdResponseType,
@@ -100,7 +110,12 @@ export const EvaluationSummaryPDFDownloadLink: React.FC<
     GET_COURSE_PARTICIPANTS,
     {
       orderBy: { profile: { fullName: 'asc' } },
-      where: { course: { id: { _eq: courseId } } },
+      where: {
+        course: { id: { _eq: courseId } },
+        profile: acl.canViewArchivedProfileData()
+          ? {}
+          : { archived: { _eq: false } },
+      },
     },
   ])
 

@@ -1,56 +1,14 @@
-import useSWR from 'swr'
-import { KeyedMutator } from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
 
-import { Course_Type_Enum } from '@app/generated/graphql'
+import { useAuth } from '@app/context/auth'
+import { Course_Participant_Bool_Exp } from '@app/generated/graphql'
 import {
   ParamsType,
   QUERY,
   ResponseType,
 } from '@app/queries/participants/get-course-participants'
-import { CertificateStatus, SortOrder } from '@app/types'
+import { SortOrder } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
-
-export type CourseParticipantCriteria =
-  | {
-      course_id: { _eq: number }
-    }
-  | {
-      attended?: { _eq: boolean }
-    }
-  | {
-      certificate: { id: { _is_null: boolean } }
-    }
-  | {
-      profile: {
-        _or: [
-          { fullName: { _ilike: string } },
-          { familyName: { _ilike: string } }
-        ]
-      }
-    }
-  | {
-      certificate: { certificationDate: { _gte: Date } }
-    }
-  | {
-      certificate: { certificationDate: { _lte: Date } }
-    }
-  | {
-      certificate: { status: { _in: CertificateStatus[] } }
-    }
-  | {
-      course: { type: { _in: Course_Type_Enum[] } }
-    }
-  | {
-      course: {
-        _or: [{ course_code: { _ilike: string } }]
-      }
-    }
-  | {
-      _and: CourseParticipantCriteria[]
-    }
-  | {
-      _or: CourseParticipantCriteria[]
-    }
 
 export default function useCourseParticipants(
   courseId?: number,
@@ -58,7 +16,8 @@ export default function useCourseParticipants(
     sortBy?: string
     order?: SortOrder
     pagination?: { limit: number; offset: number }
-    where?: CourseParticipantCriteria
+    where?: Course_Participant_Bool_Exp
+    alwaysShowArchived?: boolean
   }
 ): {
   data?: ResponseType['courseParticipants']
@@ -67,6 +26,7 @@ export default function useCourseParticipants(
   status: LoadingStatus
   mutate: KeyedMutator<ResponseType>
 } {
+  const { acl } = useAuth()
   const sortBy = options?.sortBy ?? 'name'
   const order = options?.order ?? 'asc'
   let orderBy: ParamsType['orderBy'] = {
@@ -79,7 +39,10 @@ export default function useCourseParticipants(
     orderBy = { go1EnrolmentStatus: order }
   }
 
-  const queryConditions: CourseParticipantCriteria[] = []
+  const queryConditions: Course_Participant_Bool_Exp[] = []
+  if (!options?.alwaysShowArchived && !acl.canViewArchivedProfileData()) {
+    queryConditions.push({ profile: { archived: { _eq: false } } })
+  }
   if (courseId) {
     queryConditions.push({ course_id: { _eq: courseId } })
   }

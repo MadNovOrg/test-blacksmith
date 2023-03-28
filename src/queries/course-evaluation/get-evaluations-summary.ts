@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { Profile_Bool_Exp } from '@app/generated/graphql'
 import {
   CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
@@ -12,6 +13,7 @@ export type ResponseType = {
       id: string
       fullName: string
       avatar?: string
+      archived?: boolean
     }
     answer: string
     question: {
@@ -22,12 +24,18 @@ export type ResponseType = {
   }[]
 }
 
-export type ParamsType = { courseId: string }
+export type ParamsType = {
+  courseId: string
+  profileCondition?: Profile_Bool_Exp
+}
 
 export const QUERY = gql`
-  query GetEvaluationsSummary($courseId: Int!) {
+  query GetEvaluationsSummary(
+    $courseId: Int!
+    $profileCondition: profile_bool_exp = {}
+  ) {
     answers: course_evaluation_answers(
-      where: { courseId: { _eq: $courseId } }
+      where: { courseId: { _eq: $courseId }, profile: $profileCondition }
     ) {
       id
       profile {

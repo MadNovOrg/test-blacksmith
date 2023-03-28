@@ -1,6 +1,7 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { Button, Menu, MenuItem } from '@mui/material'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { noop } from '@app/util'
 
@@ -11,6 +12,7 @@ type AttendeeMenuProps = {
     id: string
     name: string
     avatar?: string
+    archived?: boolean
   }[]
   value?: string
   placeholder?: string
@@ -20,6 +22,7 @@ type AttendeeMenuProps = {
 export const AttendeeMenu: React.FC<
   React.PropsWithChildren<AttendeeMenuProps>
 > = ({ options, value, placeholder = '', onSelect = noop }) => {
+  const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
 
@@ -78,7 +81,7 @@ export const AttendeeMenu: React.FC<
             disableRipple
           >
             <Avatar src={u.avatar ?? ''} name={u.name} sx={{ mr: 1 }} />
-            {u.name}
+            {u.archived ? t('common.archived-profile') : u.name}
           </MenuItem>
         ))}
       </Menu>

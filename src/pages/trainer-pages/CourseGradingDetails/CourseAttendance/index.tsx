@@ -1,6 +1,6 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { LoadingButton } from '@mui/lab'
-import { Alert, Box, Typography, CircularProgress, Stack } from '@mui/material'
+import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -40,6 +40,7 @@ export const EvaluationSummaryTab: React.FC<
   const params = useParams()
   const { profile } = useAuth()
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const courseId = Number.parseInt(params.id as string, 10)
   const profileId = profile?.id as string
 
@@ -74,7 +75,15 @@ export const EvaluationSummaryTab: React.FC<
     GetEvaluationsQuery,
     Error,
     [string, GetEvaluationsQueryVariables]
-  >([GET_EVALUATION_QUERY, { courseId }])
+  >([
+    GET_EVALUATION_QUERY,
+    {
+      courseId,
+      profileCondition: acl.canViewArchivedProfileData()
+        ? {}
+        : { archived: { _eq: false } },
+    },
+  ])
   const loading = !data && !error
 
   const findEvaluationForProfileId = useCallback(
@@ -216,7 +225,11 @@ export const EvaluationSummaryTab: React.FC<
               {data?.evaluations?.map(e =>
                 e.profile.id === profileId ? null : (
                   <TableRow key={e.id}>
-                    <TableCell>{e.profile.fullName}</TableCell>
+                    <TableCell>
+                      {e.profile.archived
+                        ? t('common.archived-profile')
+                        : e.profile.fullName}
+                    </TableCell>
                     <TableCell>
                       <Link href={`/profile/${e.profile.id}`}>
                         {e.profile.email}

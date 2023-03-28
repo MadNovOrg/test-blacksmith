@@ -2,7 +2,12 @@ import { gql } from 'graphql-request'
 
 export type ResponseType = {
   users: {
-    profile: { id: string; fullName: string; avatar?: string }
+    profile: {
+      id: string
+      fullName: string
+      avatar?: string
+      archived?: boolean
+    }
   }[]
 }
 

@@ -269,7 +269,9 @@ export const CourseGrading: React.FC<
                           </TableCell>
                         ) : null}
                         <TableCell>
-                          {courseParticipant.profile.fullName}
+                          {courseParticipant.profile.archived
+                            ? t('common.archived-profile')
+                            : courseParticipant.profile.fullName}
                         </TableCell>
                         <TableCell>
                           <Link

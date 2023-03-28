@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 
 import {
   Course,
+  CourseEvaluationGroupedQuestion,
+  CourseEvaluationInjuryQuestion,
+  CourseEvaluationQuestionGroup,
+  CourseEvaluationQuestionType,
+  CourseEvaluationTrainerAnswers,
+  CourseEvaluationUngroupedQuestion,
   CourseModule,
   CourseParticipant,
-  CourseEvaluationQuestionType,
-  CourseEvaluationQuestionGroup,
-  CourseEvaluationTrainerAnswers,
-  CourseEvaluationInjuryQuestion,
-  CourseEvaluationGroupedQuestion,
-  CourseEvaluationUngroupedQuestion,
 } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
@@ -436,7 +436,7 @@ export const SummaryDocument: React.FC<
               <FlexGroup
                 type="column"
                 data={participants.map(
-                  ({ id, profile: { fullName: name }, attended }) => (
+                  ({ id, profile: { fullName: name, archived }, attended }) => (
                     <Text
                       key={id}
                       style={[
@@ -444,7 +444,7 @@ export const SummaryDocument: React.FC<
                         attended ? {} : styles.strikeThrough,
                       ]}
                     >
-                      {name}
+                      {archived ? t('common.archived-profile') : name}
                     </Text>
                   )
                 )}

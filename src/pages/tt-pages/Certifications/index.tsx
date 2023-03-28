@@ -9,10 +9,11 @@ import { FilterCertificateValidity } from '@app/components/FilterCertificateVali
 import { FilterCourseType } from '@app/components/FilterCourseType'
 import { FilterDates } from '@app/components/FilterDates'
 import { FilterSearch } from '@app/components/FilterSearch'
-import { Course_Type_Enum } from '@app/generated/graphql'
-import useCourseParticipants, {
-  CourseParticipantCriteria,
-} from '@app/hooks/useCourseParticipants'
+import {
+  Course_Participant_Bool_Exp,
+  Course_Type_Enum,
+} from '@app/generated/graphql'
+import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
 import { CertificateStatus } from '@app/types'
@@ -41,7 +42,7 @@ export const Certifications: React.FC<
   >([])
 
   const where = useMemo(() => {
-    const conditions: CourseParticipantCriteria[] = [
+    const conditions: Course_Participant_Bool_Exp[] = [
       { certificate: { id: { _is_null: false } } },
     ]
 

@@ -1,9 +1,12 @@
 import { gql } from 'graphql-request'
 
 export const QUERY = gql`
-  query GetEvaluations($courseId: Int!) {
+  query GetEvaluations(
+    $courseId: Int!
+    $profileCondition: profile_bool_exp = {}
+  ) {
     evaluations: course_evaluation_answers(
-      where: { courseId: { _eq: $courseId } }
+      where: { courseId: { _eq: $courseId }, profile: $profileCondition }
       distinct_on: profileId
     ) {
       id
@@ -22,7 +25,11 @@ export const QUERY = gql`
     }
 
     attendees: course_participant(
-      where: { course_id: { _eq: $courseId }, attended: { _eq: true } }
+      where: {
+        course_id: { _eq: $courseId }
+        attended: { _eq: true }
+        profile: $profileCondition
+      }
     ) {
       id
       profile {

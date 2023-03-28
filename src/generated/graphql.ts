@@ -40037,6 +40037,7 @@ export type GetEvaluationQuery = { __typename?: 'query_root', answers: Array<{ _
 
 export type GetEvaluationsSummaryQueryVariables = Exact<{
   courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
 }>;
 
 
@@ -40044,6 +40045,7 @@ export type GetEvaluationsSummaryQuery = { __typename?: 'query_root', answers: A
 
 export type GetEvaluationsQueryVariables = Exact<{
   courseId: Scalars['Int'];
+  profileCondition?: InputMaybe<Profile_Bool_Exp>;
 }>;
 
 

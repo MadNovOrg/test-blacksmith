@@ -1,13 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
+  Box,
   Container,
   FormHelperText,
   Grid,
   TextField,
   Typography,
 } from '@mui/material'
-import { Box } from '@mui/material'
 import { groupBy, map, uniqBy } from 'lodash-es'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -31,14 +31,14 @@ import { useAuth } from '@app/context/auth'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import {
-  QUERY as GET_ANSWERS_QUERY,
   ParamsType as GetAnswersParamsType,
+  QUERY as GET_ANSWERS_QUERY,
   ResponseType as GetAnswersResponseType,
 } from '@app/queries/course-evaluation/get-answers'
 import {
+  ParamsType as GetFeedbackUsersParamsType,
   QUERY as GET_FEEDBACK_USERS_QUERY,
   ResponseType as GetFeedbackUsersResponseType,
-  ParamsType as GetFeedbackUsersParamsType,
 } from '@app/queries/course-evaluation/get-feedback-users'
 import {
   QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
@@ -50,10 +50,10 @@ import {
 } from '@app/queries/course-evaluation/save-evaluation'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
-  CourseParticipant,
   CourseEvaluationQuestion,
   CourseEvaluationQuestionGroup,
   CourseEvaluationQuestionType,
+  CourseParticipant,
 } from '@app/types'
 import { courseStarted, LoadingStatus } from '@app/util'
 
@@ -118,6 +118,7 @@ export const CourseEvaluation = () => {
                 id: a.profile.id,
                 name: a.profile.fullName,
                 avatar: a.profile.avatar,
+                archived: a.profile.archived,
               },
             ]
       ) ?? [],
