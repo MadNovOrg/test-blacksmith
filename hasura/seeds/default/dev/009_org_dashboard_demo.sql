@@ -7,18 +7,18 @@ values ('117c12fc-d7c6-4987-9841-a499765ade4b', 'Krista', 'Kuhn', 'krista.kuhn@s
        ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'Ralph', 'Smith', 'ralph.smith@somethingwhatever.com'),
        ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'Martin', 'Cartwright', 'martin.cartwright@somethingwhatever.com');
 
-insert into "course_certificate" (profile_id, course_level, course_name, number, expiry_date, certification_date)
+insert into "course_certificate" (profile_id, course_level, course_name, number, expiry_date, certification_date, is_revoked)
 values
-    ('117c12fc-d7c6-4987-9841-a499765ade4b', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12345', NOW() + interval '12 months', NOW() - interval '12 months'),
-    ('117c12fc-d7c6-4987-9841-a499765ade4b', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14001', NOW() - interval '5 days', NOW() - interval '24 months'),
-    ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12346', NOW() + interval '12 months', NOW() - interval '12 months'),
-    ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14002', NOW() - interval '5 days', NOW() - interval '24 months'),
-    ('b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'INTERMEDIATE_TRAINER', 'Positive Behaviour Training: Intermediate Trainer', 'CL-INT-12300', NOW() + interval '12 months', NOW() - interval '12 months'),
-    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'INTERMEDIATE_TRAINER', 'Positive Behaviour Training: Intermediate Trainer', 'CL-INT-12301', NOW() - interval '20 days', NOW() - interval '24 months'),
-    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12347', NOW() + interval '5 months', NOW() - interval '17 months'),
-    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14003', NOW() + interval '8 days', NOW() - interval '24 months'),
-    ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'LEVEL_1', 'Positive Behaviour Training: Level One', 'CL-L1-12101', NOW() + interval '6 months', NOW() - interval '18 months'),
-    ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'LEVEL_1', 'Positive Behaviour Training: Level One', 'CL-L1-12102', NOW() + interval '1 day', NOW() - interval '12 months');
+    ('117c12fc-d7c6-4987-9841-a499765ade4b', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12345', NOW() + interval '12 months', NOW() - interval '12 months', false),
+    ('117c12fc-d7c6-4987-9841-a499765ade4b', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14001', NOW() - interval '5 days', NOW() - interval '24 months', false),
+    ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12346', NOW() + interval '12 months', NOW() - interval '12 months', false),
+    ('95e897bf-6d61-43d5-9c5c-efc0d0a5aaed', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14002', NOW() - interval '5 days', NOW() - interval '24 months', false),
+    ('b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'INTERMEDIATE_TRAINER', 'Positive Behaviour Training: Intermediate Trainer', 'CL-INT-12300', NOW() + interval '12 months', NOW() - interval '12 months', false),
+    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'INTERMEDIATE_TRAINER', 'Positive Behaviour Training: Intermediate Trainer', 'CL-INT-12301', NOW() - interval '20 days', NOW() - interval '24 months', false),
+    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'LEVEL_2', 'Positive Behaviour Training: Level Two', 'CL-L2-12347', NOW() + interval '5 months', NOW() - interval '17 months', false),
+    ('38290d3f-7614-44be-ac70-cd0db7b71b1e', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'CL-ADV-14003', NOW() + interval '8 days', NOW() - interval '24 months', false),
+    ('85687c6e-d8a4-4e98-a47e-a66c8059919b', 'LEVEL_1', 'Positive Behaviour Training: Level One', 'CL-L1-12101', NOW() + interval '6 months', NOW() - interval '18 months', false),
+    ('49f34a78-a73d-46c3-a17f-5cee00feb1ca', 'LEVEL_1', 'Positive Behaviour Training: Level One', 'CL-L1-12102', NOW() + interval '1 day', NOW() - interval '12 months', false);
 
 insert into "organization" (id, name, address, attributes, sector, trust_type, trust_name)
 values ('d787defd-481c-414b-95ff-ecbcc12ae500',
@@ -66,4 +66,3 @@ values (20123, 'b9bea8d0-cde4-4c01-94e2-d6bcf56dcd0e', 'LEADER', 'ACCEPTED');
 
 insert into "course_participant" (course_id, profile_id)
 values (20123, '95e897bf-6d61-43d5-9c5c-efc0d0a5aaed');
-

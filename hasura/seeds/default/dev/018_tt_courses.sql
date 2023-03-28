@@ -48,17 +48,17 @@ insert into public.course_cancellation_request (course_id, requested_by, reason)
 values (10026, '467b4ac5-d86e-40ee-b25f-87e4ed2ce618', 'Wrong venue.');
 
 insert into public.course_certificate (id, course_id, number, expiry_date, profile_id, course_name, course_level,
-                                       certification_date)
+                                       certification_date, is_revoked)
 values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'INDR-L1-10019-1', '2025-12-06', '2e06729d-7436-427a-a5cf-ff7c9496b85c',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
        ('1fc58c17-0eae-40ff-81fb-b33daaf474c8', 10019, 'INDR-L1-10019-2', '2025-12-06', 'b5702c04-35a6-4c55-b24a-592dc0a05142',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
        ('c10eee83-dc6d-426d-af21-cf46a6202751', 10019, 'INDR-L1-10019-3', '2025-12-06', 'ae8f617c-2411-42aa-9501-f2f08b16a76e',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
        ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'INDR-L1-10019-4', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06'),
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
        ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'INDR-L1-10019-5', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06');
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false);
 
 insert into public.course_invites (status, email, course_id)
 values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
