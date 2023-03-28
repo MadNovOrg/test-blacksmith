@@ -27,7 +27,7 @@ INSERT INTO public.course_certificate (id, course_id, number, expiry_date, profi
 ('888163f5-2f70-4b2e-ba23-89a888b8427d', 10010, 'CL-ADV-10010-3', '2025-05-05', 'bb5526c7-198c-4be5-a53a-1177f55c1c5b', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('0f634aa6-c0ea-44b7-951a-ef8ccfda917b', 10010, 'CL-ADV-10010-4', '2025-05-05', '4d43e8b0-1143-4cfa-bbb7-bac97e76ddf5', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('bb464dbc-7482-4fb3-a8d3-536376347899', 10010, 'CL-ADV-10010-5', '2025-05-05', 'b9b0eb9f-374c-4d39-9370-a8e8cdc90d25', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
-('704d71f0-b0fd-4341-a67f-5031e7ffb56e', 10010, 'CL-ADV-10010-6', '2025-05-05', '22015a3e-8907-4333-8811-85f782265a63', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', true),
+('704d71f0-b0fd-4341-a67f-5031e7ffb56e', 10010, 'CL-ADV-10010-6', '2025-05-05', '22015a3e-8907-4333-8811-85f782265a63', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('0d643560-d9ee-4d21-b3c7-4a812661ae7f', 10010, 'CL-ADV-10010-7', '2025-05-05', '48812860-89a5-41be-95c9-b8889e88bffd', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('daab6138-ef09-48cf-99b9-15fa5735ed15', 10010, 'CL-ADV-10010-8', '2025-05-05', '921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
 ('66513502-d712-4528-80e8-470fedc172a4', 10010, 'CL-ADV-10010-9', '2025-05-05', '30ebb1e1-0491-44f8-b0a2-3087bd454b19', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', '2022-03-03', false),
