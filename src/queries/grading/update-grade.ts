@@ -4,7 +4,6 @@ export const MUTATION = gql`
   mutation UpdateGrade(
     $participantId: uuid!
     $newGrade: grade_enum!
-    $authorId: uuid!
     $type: course_certificate_changelog_type_enum!
     $payload: jsonb
   ) {
@@ -15,12 +14,7 @@ export const MUTATION = gql`
       id
     }
     insertChangeLog: insert_course_certificate_changelog_one(
-      object: {
-        payload: $payload
-        participantId: $participantId
-        authorId: $authorId
-        type: $type
-      }
+      object: { payload: $payload, participantId: $participantId, type: $type }
     ) {
       id
     }

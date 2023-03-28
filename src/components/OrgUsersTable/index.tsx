@@ -31,6 +31,8 @@ import theme from '@app/theme'
 import { CertificateStatus, CourseLevel } from '@app/types'
 import { getProfileCertificationLevels } from '@app/util'
 
+import { CertificateStatusChip } from '../CertificateStatusChip'
+
 type OrgUsersTableParams = {
   orgId: string
   onChange?: () => void
@@ -38,13 +40,6 @@ type OrgUsersTableParams = {
 
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
-
-const certificationStatusColor = {
-  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRED]: 'gray',
-  [CertificateStatus.EXPIRING_SOON]: 'warning',
-  [CertificateStatus.ACTIVE]: 'success',
-} as const
 
 export const OrgUsersTable: React.FC<
   React.PropsWithChildren<OrgUsersTableParams>
@@ -221,15 +216,7 @@ export const OrgUsersTable: React.FC<
                           alignItems="center"
                           py={1}
                         >
-                          <Chip
-                            label={t(
-                              `common.certification-status.${certificationStatus.toLowerCase()}`
-                            )}
-                            size="small"
-                            color={
-                              certificationStatusColor[certificationStatus]
-                            }
-                          />
+                          <CertificateStatusChip status={certificationStatus} />
                           <Typography variant="body2" ml={1}>
                             {t(
                               `common.certificates.${cert.courseLevel.toLowerCase()}`

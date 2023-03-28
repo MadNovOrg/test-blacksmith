@@ -155,6 +155,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
 
+    canRevokeCert: () => {
+      const roles = [RoleName.TT_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
     canOverrideGrades: () => {
       const roles = [RoleName.TT_ADMIN]
       return roles.some(r => r === auth.activeRole)

@@ -15,7 +15,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
 import MUIImage from 'mui-image'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
@@ -31,12 +31,12 @@ import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
 import ModifyGradeModal from '@app/components/CourseCertification/ModifyGradeModal'
 import PutOnHoldModal from '@app/components/CourseCertification/PutOnHoldModal'
+import RevokeCertModal from '@app/components/CourseCertification/RevokeCertModal'
 import { Dialog } from '@app/components/Dialog'
 import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
-  Course_Certificate_Changelog_Type_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Participant_Module,
@@ -44,14 +44,19 @@ import {
   GetCertificateQueryVariables,
   Grade_Enum,
 } from '@app/generated/graphql'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { QUERY } from '@app/queries/certificate/get-certificate'
 import theme from '@app/theme'
-import { CourseLevel, NonNullish } from '@app/types'
+import { CertificateStatus, CourseLevel, NonNullish } from '@app/types'
 import {
   getSWRLoadingStatus,
   LoadingStatus,
   transformModulesToGroups,
 } from '@app/util'
+
+import { CertificateStatusChip } from '../CertificateStatusChip'
+
+import UndoRevokeModal from './UndoRevokeModal'
 
 // workaround for using recat-pdf with vite
 const { PDFDownloadLink } = pdf
@@ -79,7 +84,7 @@ const UncompletedList: React.FC<
   return (
     <Box>
       <Typography variant="body2" color="grey.500" gutterBottom>
-        {t('common.course-certificate.incomplete')}
+        {t('incomplete')}
       </Typography>
       {uncompletedModules.map(module => {
         return (
@@ -163,6 +168,7 @@ type CertificateInfoProps = {
   expiryDate: string
   certificationNumber: string
   dateIssued: string
+  status: CertificateStatus
 }
 
 const CertificateInfo: React.FC<
@@ -173,9 +179,10 @@ const CertificateInfo: React.FC<
   expiryDate,
   certificationNumber,
   dateIssued,
+  status,
 }) => {
   const imageSize = '10%'
-  const { t } = useTranslation()
+  const { t, _t } = useScopedTranslation('common.course-certificate')
 
   const moduleGroupsWithModules = courseParticipant
     ? transformModulesToGroups(
@@ -183,18 +190,26 @@ const CertificateInfo: React.FC<
       )
     : null
 
+  const isRevoked = status === CertificateStatus.REVOKED
+
   return (
     <Box>
+      {isRevoked ? (
+        <Alert severity="warning" sx={{ mb: 2 }} variant="outlined">
+          {t('revoked-warning')}
+        </Alert>
+      ) : null}
+
       <Typography
         color={theme.palette.dimGrey.main}
         variant="subtitle2"
         sx={{ mb: 2 }}
       >
-        {t('common.course-certificate.certified-message')}
+        {t('certified-message')}
       </Typography>
 
       <Typography variant="h2" gutterBottom>
-        {t(`common.course-certificate.${grade.toLowerCase()}-title`)}
+        {t(`${grade.toLowerCase()}-title`)}
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom>
@@ -204,38 +219,47 @@ const CertificateInfo: React.FC<
       {grade !== Grade_Enum.Fail ? (
         <>
           <Grid container spacing={2} mt={4}>
-            <Grid item xs={4} sx={{ color: 'grey.500' }}>
-              <Typography variant="body2">
-                {t('common.course-certificate.issue-date')}
+            <Grid item xs={3}>
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                {t('issue-date')}
+              </Typography>
+              <Typography variant="body1">
+                {_t('dates.default', { date: dateIssued })}
               </Typography>
             </Grid>
 
-            <Grid item xs={4} sx={{ color: 'grey.500' }}>
-              <Typography variant="body2">
-                {t('common.course-certificate.number')}
+            <Grid item xs={3}>
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                {t('number')}
               </Typography>
+              <Typography variant="body1">{certificationNumber}</Typography>
             </Grid>
 
-            <Grid item xs={4} sx={{ color: 'grey.500' }}>
-              <Typography variant="body2">
-                {t('common.course-certificate.valid-until')}
-              </Typography>
-            </Grid>
+            {isRevoked ? (
+              <Grid item xs={3}>
+                <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                  {t('revoked-on')}
+                </Typography>
+                <Typography variant="body1">
+                  {_t('dates.default', { date: expiryDate })}
+                </Typography>
+              </Grid>
+            ) : (
+              <Grid item xs={3}>
+                <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                  {t('valid-until')}
+                </Typography>
+                <Typography variant="body1">
+                  {_t('dates.default', { date: expiryDate })}
+                </Typography>
+              </Grid>
+            )}
 
-            <Grid item xs={4}>
-              <Typography variant="body2">
-                {t('dates.default', { date: dateIssued })}
+            <Grid item xs={3}>
+              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                {_t('status')}
               </Typography>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Typography variant="caption">{certificationNumber}</Typography>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Typography variant="body2">
-                {t('dates.default', { date: expiryDate })}
-              </Typography>
+              <CertificateStatusChip status={status} />
             </Grid>
           </Grid>
 
@@ -274,7 +298,7 @@ const CertificateInfo: React.FC<
       {moduleGroupsWithModules?.length ? (
         <>
           <Typography variant="h3" gutterBottom>
-            {t('common.course-certificate.modules-list-title')}
+            {t('modules-list-title')}
           </Typography>
           {moduleGroupsWithModules.map(moduleGroupWithModules => {
             return (
@@ -295,7 +319,7 @@ const CertificateInfo: React.FC<
 
       {!courseParticipant ? (
         <Typography variant="body2">
-          {t('common.course-certificate.completed-modules-unavailable')}
+          {t('completed-modules-unavailable')}
         </Typography>
       ) : null}
     </Box>
@@ -309,14 +333,16 @@ type CourseCertificationProps = {
 export const CourseCertification: React.FC<
   React.PropsWithChildren<CourseCertificationProps>
 > = ({ certificateId }) => {
-  const { t } = useTranslation()
+  const { t, _t } = useScopedTranslation('common.course-certificate')
   const { acl } = useAuth()
 
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
   const [showPutOnHoldModal, setShowPutOnHoldModal] = useState(false)
+  const [showRevokeCertModal, setShowRevokeCertModal] = useState(false)
+  const [showUndoRevokeModal, setShowUndoRevokeModal] = useState(false)
 
-  const { data, error } = useSWR<
+  const { data, error, mutate } = useSWR<
     GetCertificateQuery,
     Error,
     [string, GetCertificateQueryVariables]
@@ -326,14 +352,7 @@ export const CourseCertification: React.FC<
   const certificate = data?.certificate
   const courseParticipant = certificate?.participant
 
-  const gradingChangelogs = useMemo(() => {
-    return (
-      certificate?.participant?.certificateChanges.filter(
-        change =>
-          change.type === Course_Certificate_Changelog_Type_Enum.GradeModified
-      ) ?? []
-    )
-  }, [certificate])
+  const gradingChangelogs = certificate?.participant?.certificateChanges ?? []
 
   if (certificateLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -346,15 +365,17 @@ export const CourseCertification: React.FC<
       </Stack>
     )
   }
+
   if (
     !certificate ||
     !certificate.profile ||
+    !certificate.participant ||
     certificateLoadingStatus === LoadingStatus.ERROR
   ) {
     return (
       <Container sx={{ py: 2 }}>
         <Alert severity="error" variant="outlined">
-          {t('internal-error')}
+          {_t('internal-error')}
         </Alert>
       </Container>
     )
@@ -367,13 +388,15 @@ export const CourseCertification: React.FC<
     return (
       <Container sx={{ py: 2 }}>
         <Alert variant="outlined" color="warning">
-          {t('common.course-certificate.not-graded-yet')}
+          {t('not-graded-yet')}
         </Alert>
       </Container>
     )
   }
 
   const courseDeliveryType = courseParticipant?.course.deliveryType
+
+  const isRevoked = certificate.status === CertificateStatus.REVOKED
 
   return (
     <Box>
@@ -388,7 +411,7 @@ export const CourseCertification: React.FC<
               {acl.canOverrideGrades() ? (
                 <Box mb={3}>
                   <Typography color={theme.palette.grey[700]} fontWeight={600}>
-                    {t('common.attendee')}
+                    {_t('common.attendee')}
                   </Typography>
                   <ProfileAvatar profile={certificate.profile} sx={{ pt: 1 }} />
                 </Box>
@@ -401,6 +424,7 @@ export const CourseCertification: React.FC<
                   size="large"
                   variant="contained"
                   color="primary"
+                  disabled={isRevoked}
                 >
                   <PDFDownloadLink
                     style={{ color: 'white' }}
@@ -421,35 +445,37 @@ export const CourseCertification: React.FC<
                   >
                     {({ loading, error }) =>
                       loading
-                        ? t('common.course-certificate.cert-loading')
+                        ? t('cert-loading')
                         : error
-                        ? t('common.course-certificate.cert-error')
-                        : t('common.course-certificate.download-certificate')
+                        ? t('cert-error')
+                        : t('download-certificate')
                     }
                   </PDFDownloadLink>
                 </Button>
               ) : null}
 
-              {acl.canOverrideGrades() ? (
-                <ManageCertificateMenu
-                  certificateChangeLength={
-                    certificate.participant?.certificateChanges?.length
-                  }
-                  onShowModifyGrade={() => setShowModifyGradeModal(true)}
-                  onShowChangelogModal={() => setShowChangelogModal(true)}
-                  onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
-                />
-              ) : null}
+              <ManageCertificateMenu
+                isRevoked={isRevoked}
+                certificateChangeLength={
+                  certificate.participant?.certificateChanges?.length
+                }
+                onShowModifyGrade={() => setShowModifyGradeModal(true)}
+                onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
+                onShowRevokeModal={() => setShowRevokeCertModal(true)}
+                onShowUndoRevokeModal={() => setShowUndoRevokeModal(true)}
+                onShowChangelogModal={() => setShowChangelogModal(true)}
+              />
             </Grid>
           </Grid>
 
-          <Grid item md={7}>
+          <Grid item md={9}>
             <CertificateInfo
               grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
               expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
               dateIssued={certificate.certificationDate}
+              status={certificate.status as CertificateStatus}
             />
           </Grid>
         </Grid>
@@ -474,7 +500,7 @@ export const CourseCertification: React.FC<
           <Dialog
             open={showModifyGradeModal}
             onClose={() => setShowModifyGradeModal(false)}
-            title={t('common.course-certificate.modify-grade')}
+            title={t('modify-grade')}
             maxWidth={800}
           >
             <ModifyGradeModal
@@ -487,7 +513,7 @@ export const CourseCertification: React.FC<
           <Dialog
             open={showChangelogModal}
             onClose={() => setShowChangelogModal(false)}
-            title={t('common.course-certificate.change-log')}
+            title={t('change-log')}
             maxWidth={800}
           >
             {certificate.participant?.certificateChanges?.length ? (
@@ -496,6 +522,44 @@ export const CourseCertification: React.FC<
           </Dialog>
         </>
       ) : null}
+
+      {showRevokeCertModal && (
+        <Dialog
+          open={showRevokeCertModal}
+          onClose={() => setShowRevokeCertModal(false)}
+          title={<Typography variant="h3">{t('revoke-cert')}</Typography>}
+          maxWidth={800}
+        >
+          <RevokeCertModal
+            certificateId={certificateId}
+            participantId={certificate.participant.id}
+            onClose={() => setShowRevokeCertModal(false)}
+            onSuccess={() => {
+              setShowRevokeCertModal(false)
+              mutate()
+            }}
+          />
+        </Dialog>
+      )}
+
+      {showUndoRevokeModal && (
+        <Dialog
+          open={showUndoRevokeModal}
+          onClose={() => setShowUndoRevokeModal(false)}
+          title={<Typography variant="h3">{t('undo-revoke')}</Typography>}
+          maxWidth={600}
+        >
+          <UndoRevokeModal
+            certificateId={certificateId}
+            participantId={certificate.participant.id}
+            onClose={() => setShowUndoRevokeModal(false)}
+            onSuccess={() => {
+              setShowUndoRevokeModal(false)
+              mutate()
+            }}
+          />
+        </Dialog>
+      )}
     </Box>
   )
 }

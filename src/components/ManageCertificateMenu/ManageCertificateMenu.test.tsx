@@ -1,0 +1,113 @@
+import React from 'react'
+
+import { RoleName } from '@app/types'
+
+import { render, screen, userEvent } from '@test/index'
+
+import { ManageCertificateMenu } from './ManageCertificateMenu'
+
+describe('ManageCertificateMenu', () => {
+  const onShowModifyGradeMock = jest.fn()
+  const onShowRevokeModalMock = jest.fn()
+  const onShowUndoRevokeModalMock = jest.fn()
+  const onShowPutOnHoldModalMock = jest.fn()
+  const onShowChangelogModalMock = jest.fn()
+
+  it('when role is admin', async () => {
+    render(
+      <ManageCertificateMenu
+        isRevoked={false}
+        certificateChangeLength={1}
+        onShowModifyGrade={onShowModifyGradeMock}
+        onShowRevokeModal={onShowRevokeModalMock}
+        onShowUndoRevokeModal={onShowUndoRevokeModalMock}
+        onShowPutOnHoldModal={onShowPutOnHoldModalMock}
+        onShowChangelogModal={onShowChangelogModalMock}
+      />,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
+    )
+
+    expect(screen.queryByText('revoke certificate')).not.toBeInTheDocument()
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Manage certification' })
+    )
+
+    expect(screen.queryByText('Modify grade')).toBeInTheDocument()
+    expect(screen.queryByText('Put on hold')).toBeInTheDocument()
+    expect(screen.queryByText('Change log')).toBeInTheDocument()
+    expect(screen.queryByText('Revoke certificate')).toBeInTheDocument()
+
+    expect(screen.queryByText('Undo revoke')).not.toBeInTheDocument()
+  })
+
+  it('when role is not admin', async () => {
+    render(
+      <ManageCertificateMenu
+        isRevoked={false}
+        certificateChangeLength={1}
+        onShowModifyGrade={onShowModifyGradeMock}
+        onShowRevokeModal={onShowRevokeModalMock}
+        onShowUndoRevokeModal={onShowUndoRevokeModalMock}
+        onShowPutOnHoldModal={onShowPutOnHoldModalMock}
+        onShowChangelogModal={onShowChangelogModalMock}
+      />,
+      { auth: { activeRole: RoleName.USER } }
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Manage certification' })
+    )
+
+    expect(screen.queryByText('Modify grade')).not.toBeInTheDocument()
+    expect(screen.queryByText('Put on hold')).not.toBeInTheDocument()
+    expect(screen.queryByText('Change log')).not.toBeInTheDocument()
+    expect(screen.queryByText('Revoke certificate')).not.toBeInTheDocument()
+
+    expect(screen.queryByText('Undo revoke')).not.toBeInTheDocument()
+  })
+
+  it('when cert is revoked', async () => {
+    render(
+      <ManageCertificateMenu
+        isRevoked={true}
+        certificateChangeLength={1}
+        onShowModifyGrade={onShowModifyGradeMock}
+        onShowRevokeModal={onShowRevokeModalMock}
+        onShowUndoRevokeModal={onShowUndoRevokeModalMock}
+        onShowPutOnHoldModal={onShowPutOnHoldModalMock}
+        onShowChangelogModal={onShowChangelogModalMock}
+      />,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Manage certification' })
+    )
+
+    expect(screen.queryByText('Undo revoke')).toBeInTheDocument()
+    expect(screen.queryByText('Modify grade')).toHaveAttribute('aria-disabled')
+    expect(screen.queryByText('Put on hold')).toHaveAttribute('aria-disabled')
+  })
+
+  it('does not render change log menu when not applicable', async () => {
+    render(
+      <ManageCertificateMenu
+        isRevoked={true}
+        certificateChangeLength={0}
+        onShowModifyGrade={onShowModifyGradeMock}
+        onShowRevokeModal={onShowRevokeModalMock}
+        onShowUndoRevokeModal={onShowUndoRevokeModalMock}
+        onShowPutOnHoldModal={onShowPutOnHoldModalMock}
+        onShowChangelogModal={onShowChangelogModalMock}
+      />,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
+    )
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Manage certification' })
+    )
+
+    expect(screen.queryByText('Change log')).not.toBeInTheDocument()
+  })
+})

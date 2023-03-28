@@ -20,6 +20,8 @@ configuration:
       custom_name: createdAt
     profile_id:
       custom_name: profileId
+    is_revoked:
+      custom_name: isRevoked
   custom_column_names:
     course_id: courseId
     course_name: courseName
@@ -29,6 +31,7 @@ configuration:
     updated_at: updatedAt
     created_at: createdAt
     profile_id: profileId
+    is_revoked: isRevoked
 object_relationships:
   - name: course
     using:
@@ -128,15 +131,16 @@ select_permissions:
     permission:
       columns:
         - certification_date
-        - expiry_date
         - course_id
         - course_level
         - course_name
-        - number
         - created_at
-        - updated_at
+        - expiry_date
         - id
+        - is_revoked
+        - number
         - profile_id
+        - updated_at
       computed_fields:
         - status
       filter: {}
@@ -204,6 +208,13 @@ select_permissions:
                       - is_admin:
                           _eq: true
       allow_aggregations: true
+update_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - is_revoked
+      filter: {}
+      check: null
 delete_permissions:
   - role: tt-ops
     permission:

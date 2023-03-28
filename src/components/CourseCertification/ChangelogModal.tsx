@@ -14,7 +14,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Grade } from '@app/components/Grade'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
-import { GetCertificateQuery } from '@app/generated/graphql'
+import {
+  Course_Certificate_Changelog_Type_Enum,
+  GetCertificateQuery,
+} from '@app/generated/graphql'
 import { NonNullish } from '@app/types'
 
 type Participant = Pick<
@@ -79,23 +82,38 @@ const ChangelogModal: React.FC<React.PropsWithChildren<ChangelogModalProps>> =
                 {t('dates.fullDateTime', { date: changelog.createdAt })}
               </TableCell>
               <TableCell>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Grade grade={changelog.payload.oldGrade} />
-                  <ArrowForwardIcon
-                    style={{ color: theme.palette.grey[700] }}
-                  />
-                  <Grade grade={changelog.payload.newGrade} />
-                </Box>
-                <Box
-                  display="block"
-                  mt={2}
-                  p={2}
-                  sx={{ backgroundColor: 'grey.100' }}
-                >
+                {changelog.type ===
+                  Course_Certificate_Changelog_Type_Enum.GradeModified && (
+                  <Box display="flex" alignItems="center" gap={1}>
+                    <Grade grade={changelog.payload?.oldGrade} />
+                    <ArrowForwardIcon
+                      style={{ color: theme.palette.grey[700] }}
+                    />
+                    <Grade grade={changelog.payload?.newGrade} />
+                  </Box>
+                )}
+                {[
+                  Course_Certificate_Changelog_Type_Enum.Revoked,
+                  Course_Certificate_Changelog_Type_Enum.Unrevoked,
+                ].includes(changelog.type) && (
                   <Typography variant="caption">
-                    {changelog.payload.notes}
+                    {t(
+                      `components.changelog-modal.${changelog.type.toLowerCase()}`
+                    )}
                   </Typography>
-                </Box>
+                )}
+                {changelog.payload?.note && (
+                  <Box
+                    display="block"
+                    mt={2}
+                    p={2}
+                    sx={{ backgroundColor: 'grey.100' }}
+                  >
+                    <Typography variant="caption">
+                      {changelog.payload?.note}
+                    </Typography>
+                  </Box>
+                )}
               </TableCell>
             </TableRow>
           ))}

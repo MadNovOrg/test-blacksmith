@@ -1037,6 +1037,7 @@
         "active": "Active",
         "expiring-soon": "Expiring soon",
         "expired": "Expired",
+        "revoked": "Revoked",
         "individuals-by-training-level": "Individuals by training level",
         "no-org-users": "Organisation does not have any members yet.",
         "click-here-to-invite": "Click here to invite new users.",

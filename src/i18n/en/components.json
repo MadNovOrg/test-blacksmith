@@ -307,12 +307,17 @@
     "status": "Status",
     "course-code": "Course code",
     "status-expired": "Expired",
-    "status-active": "Active"
+    "status-active": "Active",
+    "status-expired_recently": "Expired Recently",
+    "status-expiring_soon": "Expiring Soon",
+    "status-revoked": "Revoked"
   },
   "changelog-modal": {
     "administrator": "Administrator",
     "date": "Date",
-    "change": "Change"
+    "change": "Change",
+    "revoked": "Revoked",
+    "unrevoked": "Unrevoked"
   },
   "accept-decline-course": {
     "accept": "Accept",

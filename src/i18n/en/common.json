@@ -347,13 +347,16 @@
     "issue-date": "Issue date",
     "number": "Certification number",
     "valid-until": "Valid until",
+    "revoked-on": "Revoked on",
     "cert-error": "Error generating certificate",
     "cert-loading": "Loading certificate...",
     "completed-message": "Has successfully completed the following Team teach course:",
     "modify-grade": "Modify grade",
-    "manage-certification": "Manage Certification",
+    "manage-certification": "Manage certification",
     "revoke-certificate": "Revoke Certificate",
     "hold-certificate": "Put on hold",
+    "revoke-cert": "Revoke certificate",
+    "undo-revoke": "Undo revoke",
     "change-log": "Change log",
     "put-on-hold-modal": {
       "warning": "Once you put on hold, attendee will no longer have access to the certificate.",
@@ -370,10 +373,25 @@
         "others": "Others"
       }
     },
+    "revoked-warning": "This certification has been revoked. It can no longer be accessed. Learn more.",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
       "please-add-a-note": "Please add a note*",
       "confirm-modification": "Confirm modification"
+    },
+    "revoke-cert-modal": {
+      "description": "You are about to revoke access for this certificate. Please confirm this action.",
+      "reason-for-revoke": "Reason for revoking",
+      "specify-reason": "Specify reason",
+      "confirm-revoke": "Please confirm that you want to proceed with this action",
+      "bad-behaviour": "Bad behaviour",
+      "legal-reason": "Legal reason",
+      "other": "Other",
+      "revoke-error": "Error revoking certificate"
+    },
+    "undo-revoke-modal": {
+      "description": "Are you sure you want to undo the revocation of this certification? This action will immediately restore the attendee's access to their certification, and the \"Revoked\" banner will be removed",
+      "confirm-undo": "Please confirm that you want to proceed with this action"
     },
     "expired-on": "Expired on {{date, date_default}}",
     "active-until": "Active until {{date, date_default}}",
@@ -441,7 +459,8 @@
     "expired": "Expired",
     "expired_recently": "Expired Recently",
     "expiring_soon": "Expiring soon",
-    "active": "Active"
+    "active": "Active",
+    "revoked": "Revoked"
   },
   "expired-ago": "Expired {{ time }} ago",
   "expiring-in": "Expiring in {{ time }}",

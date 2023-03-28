@@ -1,5 +1,4 @@
 import {
-  Chip,
   CircularProgress,
   Stack,
   Table,
@@ -16,6 +15,7 @@ import { sortBy } from 'lodash-es'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
@@ -31,13 +31,6 @@ type IndividualsByLevelListParams = {
 
 const PER_PAGE = 5
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20]
-
-const certificationStatusColor = {
-  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRED]: 'gray',
-  [CertificateStatus.EXPIRING_SOON]: 'warning',
-  [CertificateStatus.ACTIVE]: 'success',
-} as const
 
 export const IndividualsByLevelList: React.FC<
   React.PropsWithChildren<IndividualsByLevelListParams>
@@ -169,25 +162,20 @@ export const IndividualsByLevelList: React.FC<
                 </TableCell>
                 {courseLevel ? (
                   <TableCell>
-                    <Chip
-                      label={t(
-                        `common.certification-status.${certificationStatus.toLowerCase()}`
-                      )}
-                      size="small"
-                      color={certificationStatusColor[certificationStatus]}
-                    />
+                    <CertificateStatusChip status={certificationStatus} />
                     <Typography variant="body2">
-                      {t(
-                        certificationStatus ===
-                          CertificateStatus.EXPIRED_RECENTLY
-                          ? 'common.expired-ago'
-                          : 'common.expiring-in',
-                        {
-                          time: formatDistanceToNow(
-                            new Date(certification?.expiryDate)
-                          ),
-                        }
-                      )}
+                      {certificationStatus !== CertificateStatus.REVOKED &&
+                        t(
+                          certificationStatus ===
+                            CertificateStatus.EXPIRED_RECENTLY
+                            ? 'common.expired-ago'
+                            : 'common.expiring-in',
+                          {
+                            time: formatDistanceToNow(
+                              new Date(certification?.expiryDate)
+                            ),
+                          }
+                        )}
                     </Typography>
                   </TableCell>
                 ) : null}

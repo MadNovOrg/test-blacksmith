@@ -282,7 +282,10 @@ update_permissions:
         - course_id
         - certificate_id
         - hs_consent
-      filter: {}
+      filter:
+        certificate:
+          is_revoked:
+            _eq: false
       check: null
   - role: tt-ops
     permission:

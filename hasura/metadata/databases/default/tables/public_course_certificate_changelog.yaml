@@ -25,9 +25,27 @@ object_relationships:
     using:
       foreign_key_constraint_on: participant_id
 insert_permissions:
+  - role: tt-admin
+    permission:
+      check:
+        participant:
+          certificate:
+            is_revoked:
+              _eq: false
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - id
+        - participant_id
+        - payload
+        - type
+      backend_only: false
   - role: tt-ops
     permission:
       check: {}
+      set:
+        author_id: x-hasura-User-Id
       columns:
         - author_id
         - id

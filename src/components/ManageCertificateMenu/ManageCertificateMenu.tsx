@@ -1,25 +1,35 @@
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { Button, Menu, MenuItem } from '@mui/material'
 import React, { useState, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+
+import { useAuth } from '@app/context/auth'
+import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 type Props = {
+  isRevoked: boolean
   certificateChangeLength: number | undefined
-  onShowModifyGrade: () => void
-  onShowChangelogModal: () => void
-  onShowPutOnHoldModal: () => void
+  onShowModifyGrade: VoidFunction
+  onShowRevokeModal: VoidFunction
+  onShowUndoRevokeModal: VoidFunction
+  onShowPutOnHoldModal: VoidFunction
+  onShowChangelogModal: VoidFunction
 }
 
 export const ManageCertificateMenu: React.FC<Props> = ({
+  isRevoked,
   certificateChangeLength,
   onShowModifyGrade,
-  onShowChangelogModal,
+  onShowRevokeModal,
+  onShowUndoRevokeModal,
   onShowPutOnHoldModal,
+  onShowChangelogModal,
 }) => {
   const ref = useRef<(EventTarget & HTMLButtonElement) | undefined>(undefined)
   const [open, setOpen] = useState(false)
+  const { acl } = useAuth()
 
-  const { t } = useTranslation()
+  const { t } = useScopedTranslation('common.course-certificate')
 
   const handleClose = () => {
     ref.current = undefined
@@ -34,17 +44,21 @@ export const ManageCertificateMenu: React.FC<Props> = ({
   }
 
   return (
-    <div>
+    <>
       <Button
         fullWidth
         data-testid="manage-certification-button"
         size="large"
         variant="outlined"
-        color="primary"
-        endIcon={<ArrowDropDownIcon />}
+        color="secondary"
+        endIcon={open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         onClick={handleMenuButtonClick}
+        sx={{
+          borderColor: theme => theme.colors.navy[100],
+          whiteSpace: 'nowrap',
+        }}
       >
-        {t('common.course-certificate.manage-certification')}
+        {t('manage-certification')}
       </Button>
       <Menu
         id="certificate-action-menu"
@@ -52,23 +66,44 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         open={open}
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
-        data-testid="create-course-options"
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        data-testid="manage-cert-menu"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        elevation={5}
+        sx={{ mt: 2 }}
+        PaperProps={{
+          sx: {
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: theme => theme.colors.navy[100],
+            width: `${ref.current?.getBoundingClientRect()?.width}px`,
+          },
+        }}
       >
-        <MenuItem onClick={onShowModifyGrade}>
-          {t('common.course-certificate.modify-grade')}
-        </MenuItem>
-        <MenuItem onClick={onShowPutOnHoldModal}>
-          {t('common.course-certificate.hold-certificate')}
-        </MenuItem>
-        <MenuItem>{t('common.course-certificate.revoke-certificate')}</MenuItem>
-        {certificateChangeLength ? (
-          <MenuItem onClick={onShowChangelogModal}>
-            {t('common.course-certificate.change-log')}
+        {acl.canOverrideGrades() && (
+          <MenuItem onClick={onShowModifyGrade} disabled={isRevoked}>
+            {t('modify-grade')}
           </MenuItem>
+        )}
+        {acl.canOverrideGrades() && (
+          <MenuItem onClick={onShowPutOnHoldModal} disabled={isRevoked}>
+            {t('hold-certificate')}
+          </MenuItem>
+        )}
+
+        {acl.isTTAdmin() && certificateChangeLength ? (
+          <MenuItem onClick={onShowChangelogModal}>{t('change-log')}</MenuItem>
         ) : null}
+
+        {acl.canRevokeCert() &&
+          (isRevoked ? (
+            <MenuItem onClick={onShowUndoRevokeModal}>
+              {t('undo-revoke')}
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={onShowRevokeModal}>{t('revoke-cert')}</MenuItem>
+          ))}
       </Menu>
-    </div>
+    </>
   )
 }

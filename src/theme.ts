@@ -46,6 +46,8 @@ declare module '@mui/material/styles' {
     green: Palette['primary']
     dimGrey: Palette['primary']
     secondaryGrey: Palette['primary']
+    perfume: Palette['primary']
+    neonBlue: Palette['primary']
   }
 
   interface PaletteOptions {
@@ -57,6 +59,14 @@ declare module '@mui/material/styles' {
     gray: PaletteOptions['primary']
     dimGrey: PaletteOptions['primary']
     secondaryGrey: PaletteOptions['primary']
+    perfume: PaletteOptions['primary']
+    neonBlue: PaletteOptions['primary']
+  }
+}
+
+declare module '@mui/material/SvgIcon' {
+  interface SvgIconPropsColorOverrides {
+    neonBlue: true
   }
 }
 
@@ -64,6 +74,8 @@ declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
     teal: true
     gray: true
+    perfume: true
+    neonBlue: true
   }
 }
 
@@ -194,6 +206,14 @@ const theme = createTheme({
     },
     secondaryGrey: {
       main: '#344054',
+    },
+    perfume: {
+      main: '#C5BCF4',
+      contrastText: '#523FF5',
+    },
+    neonBlue: {
+      main: '#523FF5',
+      contrastText: '#FFFFFF',
     },
   },
 })
@@ -523,6 +543,9 @@ export default createTheme({
         filled: {
           fontWeight: 500,
 
+          '&.MuiChip-colorPerfume': {
+            fontWeight: 600,
+          },
           '&.MuiChip-colorWarning': {
             color: '#7A4E00',
             backgroundColor: '#FEF4E4',

@@ -14582,6 +14582,7 @@ export type Course_Certificate = {
   createdAt: Scalars['timestamptz'];
   expiryDate: Scalars['date'];
   id: Scalars['uuid'];
+  isRevoked: Scalars['Boolean'];
   number: Scalars['String'];
   /** An object relationship */
   participant?: Maybe<Course_Participant>;
@@ -14669,6 +14670,7 @@ export type Course_Certificate_Bool_Exp = {
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   expiryDate?: InputMaybe<Date_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
+  isRevoked?: InputMaybe<Boolean_Comparison_Exp>;
   number?: InputMaybe<String_Comparison_Exp>;
   participant?: InputMaybe<Course_Participant_Bool_Exp>;
   profile?: InputMaybe<Profile_Bool_Exp>;
@@ -15055,6 +15057,7 @@ export type Course_Certificate_Insert_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   expiryDate?: InputMaybe<Scalars['date']>;
   id?: InputMaybe<Scalars['uuid']>;
+  isRevoked?: InputMaybe<Scalars['Boolean']>;
   number?: InputMaybe<Scalars['String']>;
   participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
   profile?: InputMaybe<Profile_Obj_Rel_Insert_Input>;
@@ -15153,6 +15156,7 @@ export type Course_Certificate_Order_By = {
   createdAt?: InputMaybe<Order_By>;
   expiryDate?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  isRevoked?: InputMaybe<Order_By>;
   number?: InputMaybe<Order_By>;
   participant?: InputMaybe<Course_Participant_Order_By>;
   profile?: InputMaybe<Profile_Order_By>;
@@ -15183,6 +15187,8 @@ export enum Course_Certificate_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  IsRevoked = 'isRevoked',
+  /** column name */
   Number = 'number',
   /** column name */
   ProfileId = 'profileId',
@@ -15199,6 +15205,7 @@ export type Course_Certificate_Set_Input = {
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   expiryDate?: InputMaybe<Scalars['date']>;
   id?: InputMaybe<Scalars['uuid']>;
+  isRevoked?: InputMaybe<Scalars['Boolean']>;
   number?: InputMaybe<Scalars['String']>;
   profileId?: InputMaybe<Scalars['uuid']>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -15264,6 +15271,8 @@ export enum Course_Certificate_Update_Column {
   ExpiryDate = 'expiryDate',
   /** column name */
   Id = 'id',
+  /** column name */
+  IsRevoked = 'isRevoked',
   /** column name */
   Number = 'number',
   /** column name */
@@ -40001,6 +40010,23 @@ export type ImportLegacyCertificateMutationVariables = Exact<{
 
 export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate: boolean };
 
+export type RevokeCertMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  participantId: Scalars['uuid'];
+  payload: Scalars['jsonb'];
+}>;
+
+
+export type RevokeCertMutation = { __typename?: 'mutation_root', revoked?: { __typename?: 'course_certificate', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+
+export type UndoRevokeCertMutationVariables = Exact<{
+  id: Scalars['uuid'];
+  participantId: Scalars['uuid'];
+}>;
+
+
+export type UndoRevokeCertMutation = { __typename?: 'mutation_root', undoRevoked?: { __typename?: 'course_certificate', id: any } | null, insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+
 export type GetEvaluationQueryVariables = Exact<{
   courseId: Scalars['Int'];
   profileId: Scalars['uuid'];
@@ -40350,7 +40376,6 @@ export type SaveCourseGradingMutation = { __typename?: 'mutation_root', saveModu
 export type UpdateGradeMutationVariables = Exact<{
   participantId: Scalars['uuid'];
   newGrade: Grade_Enum;
-  authorId: Scalars['uuid'];
   type: Course_Certificate_Changelog_Type_Enum;
   payload?: InputMaybe<Scalars['jsonb']>;
 }>;

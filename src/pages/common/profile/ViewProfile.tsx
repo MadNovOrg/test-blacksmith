@@ -25,6 +25,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { Avatar } from '@app/components/Avatar'
 import { BackButton } from '@app/components/BackButton'
+import { CertificateStatusChip } from '@app/components/CertificateStatusChip'
 import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAlert'
 import { DetailsRow } from '@app/components/DetailsRow'
 import { LinkBehavior } from '@app/components/LinkBehavior'
@@ -40,13 +41,6 @@ import { UserGo1License } from './components/UserGo1License'
 import { getRoleColor } from './utils'
 
 type ViewProfilePageProps = unknown
-
-const certificationStatusColor = {
-  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRED]: 'gray',
-  [CertificateStatus.EXPIRING_SOON]: 'warning',
-  [CertificateStatus.ACTIVE]: 'success',
-} as const
 
 export const ViewProfilePage: React.FC<
   React.PropsWithChildren<ViewProfilePageProps>
@@ -476,31 +470,28 @@ export const ViewProfilePage: React.FC<
                         <TableCell>{certificate.courseName}</TableCell>
                         <TableCell>{certificate.number}</TableCell>
                         <TableCell>
-                          <Grid
-                            container
-                            direction="column"
-                            mb={2}
-                            alignItems="start"
-                          >
-                            <Chip
-                              label={t(
-                                `common.certification-status.${certificate?.status?.toLowerCase()}`
-                              )}
-                              color={
-                                certificationStatusColor[
-                                  (certificate.status as CertificateStatus) ||
-                                    CertificateStatus.EXPIRED
-                                ]
-                              }
-                              size="small"
-                            />
-                            <Typography mt={1} variant="body2" color="grey.700">
-                              {certificateExpired(certificate.expiryDate ?? '')
-                                ? `${formatDistanceToNow(
-                                    new Date(certificate.expiryDate)
-                                  )} ${t('common.ago')}`
-                                : certificate.expiryDate}
-                            </Typography>
+                          <Grid container direction="column" alignItems="start">
+                            {certificate.status ? (
+                              <CertificateStatusChip
+                                status={certificate.status as CertificateStatus}
+                              />
+                            ) : null}
+                            {certificate.status !==
+                              CertificateStatus.REVOKED && (
+                              <Typography
+                                mt={1}
+                                variant="body2"
+                                color="grey.700"
+                              >
+                                {certificateExpired(
+                                  certificate.expiryDate ?? ''
+                                )
+                                  ? `${formatDistanceToNow(
+                                      new Date(certificate.expiryDate)
+                                    )} ${t('common.ago')}`
+                                  : certificate.expiryDate}
+                              </Typography>
+                            )}
                           </Grid>
                         </TableCell>
                         <TableCell>

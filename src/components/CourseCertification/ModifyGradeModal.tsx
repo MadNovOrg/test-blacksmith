@@ -64,7 +64,6 @@ const ModifyGradeModal: React.FC<
               },
               newGrade: grade as Grade_Enum,
               type: Course_Certificate_Changelog_Type_Enum.GradeModified,
-              authorId: profile.id,
             })
           } catch (e: unknown) {
             setError((e as Error).message)

@@ -78,6 +78,7 @@ export enum CertificateStatus {
   EXPIRED_RECENTLY = 'EXPIRED_RECENTLY',
   EXPIRING_SOON = 'EXPIRING_SOON',
   ACTIVE = 'ACTIVE',
+  REVOKED = 'REVOKED',
 }
 
 export type CourseCertificate = {

@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Chip,
   Grid,
   Link,
   Stack,
@@ -27,6 +26,7 @@ import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
 import { CertificateStatus, CourseLevel, CourseParticipant } from '@app/types'
 
+import { CertificateStatusChip } from '../CertificateStatusChip'
 import { TableNoRows } from '../Table/TableNoRows'
 
 export type CertificationListColumns = (
@@ -48,13 +48,6 @@ type CertificationListProps = {
   hideTitle?: boolean
   columns?: CertificationListColumns
 }
-
-const certificationStatusColor = {
-  [CertificateStatus.EXPIRED_RECENTLY]: 'error',
-  [CertificateStatus.EXPIRED]: 'gray',
-  [CertificateStatus.EXPIRING_SOON]: 'warning',
-  [CertificateStatus.ACTIVE]: 'success',
-} as const
 
 export const CertificationList: React.FC<
   React.PropsWithChildren<CertificationListProps>
@@ -186,8 +179,7 @@ export const CertificationList: React.FC<
           {participants?.map(p => {
             if (!p.certificate) return null
 
-            const certificationStatus = p.certificate
-              ?.status as CertificateStatus
+            const status = p.certificate?.status as CertificateStatus
 
             return (
               <TableRow key={p.id}>
@@ -247,13 +239,7 @@ export const CertificationList: React.FC<
 
                 {showCol('status') ? (
                   <TableCell>
-                    <Chip
-                      label={t(
-                        `common.certification-status.${certificationStatus.toLowerCase()}`
-                      )}
-                      color={certificationStatusColor[certificationStatus]}
-                      size="small"
-                    />
+                    <CertificateStatusChip status={status} />
                   </TableCell>
                 ) : null}
 
