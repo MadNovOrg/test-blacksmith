@@ -343,7 +343,7 @@
     "certification-valid-until-message": "Your certification is valid until {{date, date_default}}",
     "title": "CERTIFICATE",
     "levels-limitation-message": "The individual named above is not qualified to teach or cascade to others any part of the Team Teach programme.",
-    "physical-limitation-message": "The individual named above is not qualified to teach or cascade to others any part of the Team Teach programme. Physical techniques are not covered under this certification",
+    "physical-limitation-message": "Physical techniques are not covered under this certification",
     "issue-date": "Issue date",
     "number": "Certification number",
     "valid-until": "Valid until",
