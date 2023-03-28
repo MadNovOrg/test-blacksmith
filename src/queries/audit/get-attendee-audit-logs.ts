@@ -28,6 +28,12 @@ export const GET_ATTENDEE_AUDIT_LOGS_QUERY = gql`
         fullName
         email
         archived
+        organizations {
+          organization {
+            id
+            name
+          }
+        }
       }
       course {
         id

@@ -76,6 +76,16 @@ export const AttendeeCancellationTable: React.FC<
         exportRender: (log: AttendeeLogType) => log.profile.email ?? '',
       },
       {
+        id: 'organization',
+        label: t('common.organization'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          log.profile.organizations.reduce(
+            (acc, orgMember) => `${acc}, ${orgMember.organization.name}`,
+            ''
+          ),
+      },
+      {
         id: 'course.course_code',
         label: t('common.course'),
         sorting: true,
@@ -180,6 +190,18 @@ export const AttendeeCancellationTable: React.FC<
                         ) : null}
                       </TableCell>
                       <TableCell>{log.profile.email}</TableCell>
+                      <TableCell>
+                        <Box display="flex" flexDirection="column" gap={1}>
+                          {log.profile.organizations.map(orgMember => (
+                            <Link
+                              key={orgMember.organization.id}
+                              href={`/organisations/${orgMember.organization.id}`}
+                            >
+                              {orgMember.organization.name}
+                            </Link>
+                          ))}
+                        </Box>
+                      </TableCell>
                       <TableCell>
                         <Link
                           href={`/manage-courses/all/${log.course.id}/details`}

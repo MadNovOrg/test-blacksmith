@@ -84,6 +84,16 @@ export const AttendeeReplacementTable: React.FC<
           '',
       },
       {
+        id: 'organization',
+        label: t('common.organization'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          log.profile.organizations.reduce(
+            (acc, orgMember) => `${acc}, ${orgMember.organization.name}`,
+            ''
+          ),
+      },
+      {
         id: 'course.course_code',
         label: t('common.course'),
         sorting: true,
@@ -216,6 +226,18 @@ export const AttendeeReplacementTable: React.FC<
                         >
                           {log.newAttendeeEmail}
                         </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box display="flex" flexDirection="column" gap={1}>
+                          {log.profile.organizations.map(orgMember => (
+                            <Link
+                              key={orgMember.organization.id}
+                              href={`/organisations/${orgMember.organization.id}`}
+                            >
+                              {orgMember.organization.name}
+                            </Link>
+                          ))}
+                        </Box>
                       </TableCell>
                       <TableCell>
                         <Link

@@ -90,6 +90,16 @@ export const AttendeeTransferTable: React.FC<
         exportRender: (log: AttendeeLogType) => log.profile.email ?? '',
       },
       {
+        id: 'organization',
+        label: t('common.organization'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          log.profile.organizations.reduce(
+            (acc, orgMember) => `${acc}, ${orgMember.organization.name}`,
+            ''
+          ),
+      },
+      {
         id: 'invoice_no',
         label: t('common.invoice-no'),
         sorting: false,
@@ -212,6 +222,18 @@ export const AttendeeTransferTable: React.FC<
                         <Typography variant="body2">
                           {log.profile.email}
                         </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Box display="flex" flexDirection="column" gap={1}>
+                          {log.profile.organizations.map(orgMember => (
+                            <Link
+                              key={orgMember.organization.id}
+                              href={`/organisations/${orgMember.organization.id}`}
+                            >
+                              {orgMember.organization.name}
+                            </Link>
+                          ))}
+                        </Box>
                       </TableCell>
                       <TableCell>
                         {invoice ? (
