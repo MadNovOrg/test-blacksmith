@@ -1045,7 +1045,7 @@
         "click-here-to-invite": "Click here to invite new users.",
         "organization-summary": "Organisation summary",
         "see-all-organizations": "See all organisations",
-        "available-courses-for-booking": "Available courses for booking",
+        "available-courses-for-booking": "Book a course",
         "see-all-courses": "See all courses",
         "certificates": {
           "level-one": "Level One ({{ count }})",
@@ -1251,7 +1251,7 @@
     }
   },
   "available-courses": {
-    "title": "Available courses for booking",
+    "title": "Book a course",
     "sorting": {
       "distance-to-org": "Distance to organisation",
       "date-ascending": "Sort by earliest date",
