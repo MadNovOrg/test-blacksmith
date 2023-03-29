@@ -1,10 +1,12 @@
 import { $generateHtmlFromNodes } from '@lexical/html'
 import { AutoLinkNode } from '@lexical/link'
+import { ListItemNode, ListNode } from '@lexical/list'
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin'
 import { LexicalComposer } from '@lexical/react/LexicalComposer'
 import { ContentEditable } from '@lexical/react/LexicalContentEditable'
 import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary'
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
+import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { Box } from '@mui/material'
@@ -64,7 +66,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     onError,
     editable,
     theme,
-    nodes: [AutoLinkNode],
+    nodes: [ListNode, ListItemNode, AutoLinkNode],
   }
 
   const containerStyle = editable
@@ -96,6 +98,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           <ClearEditorPlugin />
           <AutoUrlAndEmailPlugin />
           <SetHthmlValuePlugin value={value} />
+          <ListPlugin />
           {maxLength && <MaxLengthPlugin maxLength={maxLength} />}
         </Box>
       </Box>

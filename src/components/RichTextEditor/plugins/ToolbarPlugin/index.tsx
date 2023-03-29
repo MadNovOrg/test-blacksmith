@@ -1,7 +1,20 @@
+import {
+  $isListNode,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  ListNode,
+  REMOVE_LIST_COMMAND,
+} from '@lexical/list'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { mergeRegister } from '@lexical/utils'
+import {
+  $findMatchingParent,
+  mergeRegister,
+  $getNearestNodeOfType,
+} from '@lexical/utils'
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered'
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined'
 import RedoIcon from '@mui/icons-material/Redo'
 import UndoIcon from '@mui/icons-material/Undo'
@@ -17,6 +30,7 @@ import {
   CAN_UNDO_COMMAND,
   CAN_REDO_COMMAND,
   COMMAND_PRIORITY_CRITICAL,
+  $isRootOrShadowRoot,
 } from 'lexical'
 import React, { useEffect, useState, useCallback } from 'react'
 
@@ -45,6 +59,8 @@ export const ToobarPlugin: React.FC = () => {
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
 
+  const [isListType, setIsListType] = useState<'bullet' | 'number' | null>(null)
+
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
 
@@ -52,8 +68,39 @@ export const ToobarPlugin: React.FC = () => {
       setIsBold(selection.hasFormat('bold'))
       setIsItalic(selection.hasFormat('italic'))
       setIsUnderline(selection.hasFormat('underline'))
+
+      const anchorNode = selection.anchor.getNode()
+      let element =
+        anchorNode.getKey() === 'root'
+          ? anchorNode
+          : $findMatchingParent(anchorNode, e => {
+              const parent = e.getParent()
+              return parent !== null && $isRootOrShadowRoot(parent)
+            })
+
+      if (element === null) {
+        element = anchorNode.getTopLevelElementOrThrow()
+      }
+
+      const elementKey = element.getKey()
+      const elementDOM = editor.getElementByKey(elementKey)
+      if (elementDOM !== null) {
+        if ($isListNode(element)) {
+          const parentList = $getNearestNodeOfType<ListNode>(
+            anchorNode,
+            ListNode
+          )
+          const type = parentList
+            ? parentList.getListType()
+            : element.getListType()
+
+          setIsListType(type === 'bullet' || type === 'number' ? type : null)
+        } else {
+          setIsListType(null)
+        }
+      }
     }
-  }, [])
+  }, [editor])
 
   useEffect(() => {
     return mergeRegister(
@@ -132,6 +179,40 @@ export const ToobarPlugin: React.FC = () => {
           }
         >
           <FormatUnderlinedIcon />
+        </ToggleButton>
+      </StyledToggleButtonGroup>
+
+      <Divider orientation="vertical" variant="middle" flexItem />
+
+      <StyledToggleButtonGroup size="small">
+        <ToggleButton
+          value="bulletList"
+          aria-label="bullet list"
+          selected={isListType === 'bullet'}
+          onClick={() => {
+            if (isListType !== 'bullet') {
+              editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
+            } else {
+              editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
+            }
+          }}
+        >
+          <FormatListBulletedIcon />
+        </ToggleButton>
+
+        <ToggleButton
+          value="numberList"
+          aria-label="number list"
+          selected={isListType === 'number'}
+          onClick={() => {
+            if (isListType !== 'number') {
+              editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
+            } else {
+              editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
+            }
+          }}
+        >
+          <FormatListNumberedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
     </Box>

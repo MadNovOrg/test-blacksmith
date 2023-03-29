@@ -294,6 +294,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
         courseType,
         courseLevel,
         deliveryType,
+        values.reaccreditation,
         t
       )
 
@@ -352,11 +353,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           courseType,
           courseLevel,
           CourseDeliveryType.F2F,
+          values.reaccreditation,
           t
         )
       )
     }
-  }, [canVirtual, courseLevel, courseType, setValue, t, values.deliveryType])
+  }, [
+    canVirtual,
+    courseLevel,
+    courseType,
+    setValue,
+    t,
+    values.deliveryType,
+    values.reaccreditation,
+  ])
 
   useEffect(() => {
     const isMixed = values.deliveryType === CourseDeliveryType.MIXED
@@ -369,11 +379,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
           courseType,
           courseLevel,
           CourseDeliveryType.F2F,
+          values.reaccreditation,
           t
         )
       )
     }
-  }, [canMixed, courseLevel, courseType, setValue, t, values.deliveryType])
+  }, [
+    canMixed,
+    courseLevel,
+    courseType,
+    setValue,
+    t,
+    values.deliveryType,
+    values.reaccreditation,
+  ])
 
   useEffect(() => {
     if (
@@ -387,8 +406,14 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   const retrieveDefaultSpecialInstructions = useCallback(
     () =>
-      getDefaultSpecialInstructions(courseType, courseLevel, deliveryType, t),
-    [courseLevel, courseType, deliveryType, t]
+      getDefaultSpecialInstructions(
+        courseType,
+        courseLevel,
+        deliveryType,
+        values.reaccreditation,
+        t
+      ),
+    [courseLevel, courseType, deliveryType, t, values.reaccreditation]
   )
 
   const hasZoomMeetingUrl = [
@@ -503,6 +528,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                       courseType,
                       event.target.value as CourseLevel,
                       deliveryType,
+                      values.reaccreditation,
                       t
                     )
                   )
@@ -589,6 +615,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   courseType,
                   courseLevel,
                   deliveryType,
+                  values.reaccreditation,
                   t
                 )
               )

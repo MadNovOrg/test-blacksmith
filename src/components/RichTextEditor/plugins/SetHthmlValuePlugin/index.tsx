@@ -11,7 +11,8 @@ export const SetHthmlValuePlugin: React.FC<Props> = ({ value }) => {
   const [editor] = useLexicalComposerContext()
 
   useEffect(() => {
-    if (value) {
+    // An empty string is a falsy value, but we want to set it anyway
+    if (value || value === '') {
       // Clear the existing text inside the editor
       editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined)
 

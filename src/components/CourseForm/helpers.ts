@@ -357,10 +357,21 @@ export function getDefaultSpecialInstructions(
   type: CourseType,
   level: CourseLevel | '',
   deliveryType: CourseDeliveryType,
+  reaccreditation: boolean,
   t: TFunction
 ) {
-  const keyPrefix = 'components.course-form.special-instructions.instructions'
-  const key = `${keyPrefix}.${type}.${level}.${deliveryType}`
+  const keyPrefixPath =
+    'components.course-form.special-instructions.instructions'
+  let key = `${keyPrefixPath}.${type}.${level}`
+
+  if (level === CourseLevel.Level_1) {
+    key = `${key}.${deliveryType}`
+  } else if (reaccreditation) {
+    key = `${key}.reaccreditation`
+  } else {
+    key = `${key}.default`
+  }
+
   const translation = t(key)
   return translation
 }
