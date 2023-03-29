@@ -1254,8 +1254,8 @@
     "title": "Available courses for booking",
     "sorting": {
       "distance-to-org": "Distance to organisation",
-      "date-ascending": "Date ascending",
-      "date-descending": "Date descending"
+      "date-ascending": "Sort by earliest date",
+      "date-descending": "Sort by furthest date"
     },
     "no-results": "No courses found. Try another search.",
     "please-select-organization": "Please select organisation to sort by distance.",
