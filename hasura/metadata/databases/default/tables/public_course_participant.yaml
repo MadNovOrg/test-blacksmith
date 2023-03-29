@@ -321,17 +321,17 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'
-  - name: course_survey_completed
+  - name: course_completed_evaluation
     definition:
       enable_manual: false
       update:
         columns:
-          - completed_survey
+          - completed_evaluation
     retry_conf:
       num_retries: 0
       interval_sec: 10
       timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/email/course-survey-completed'
+    webhook: '{{EVENTS_HOST}}/email/course-completed-evaluation'
   - name: create_certificate
     definition:
       enable_manual: true
