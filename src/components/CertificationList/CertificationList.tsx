@@ -77,7 +77,11 @@ export const CertificationList: React.FC<
     }
 
     return [
-      checkbox.headCol(participants.map(p => p.id)),
+      checkbox.headCol(
+        participants.flatMap(p =>
+          p.certificate?.status === CertificateStatus.REVOKED ? [] : [p.id]
+        )
+      ),
       ...col('name', { sorting: true }),
       ...col('contact', { sorting: true }),
       ...col('organisation'),
@@ -154,7 +158,13 @@ export const CertificationList: React.FC<
             variant="contained"
             data-testid="download-all-certifications"
             color="primary"
-            onClick={() => downloadCertificates(participants ?? [])}
+            onClick={() => {
+              downloadCertificates(
+                participants.filter(
+                  p => p.certificate?.status !== CertificateStatus.REVOKED
+                ) ?? []
+              )
+            }}
           >
             {t('components.certification-list.download-all-certifications')}
           </Button>
@@ -183,7 +193,10 @@ export const CertificationList: React.FC<
 
             return (
               <TableRow key={p.id}>
-                {checkbox.rowCell(p.id)}
+                {checkbox.rowCell(
+                  p.id,
+                  p.certificate.status === CertificateStatus.REVOKED
+                )}
 
                 {showCol('name') ? (
                   <TableCell>

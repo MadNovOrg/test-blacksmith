@@ -317,6 +317,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       ]
       return roles.some(r => r === auth.activeRole)
     },
+    canManageCert: () => {
+      const roles = [RoleName.TT_OPS, RoleName.TT_ADMIN, RoleName.SALES_ADMIN]
+      return roles.some(r => r === auth.activeRole)
+    },
   })
 
   return acl

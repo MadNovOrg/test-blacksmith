@@ -165,10 +165,12 @@ type Participant = Pick<
 type CertificateInfoProps = {
   courseParticipant?: Participant['participant']
   grade: Grade_Enum
+  revokedDate: string
   expiryDate: string
   certificationNumber: string
   dateIssued: string
   status: CertificateStatus
+  onShowChangelogModal: VoidFunction
 }
 
 const CertificateInfo: React.FC<
@@ -176,10 +178,12 @@ const CertificateInfo: React.FC<
 > = ({
   courseParticipant,
   grade,
+  revokedDate,
   expiryDate,
   certificationNumber,
   dateIssued,
   status,
+  onShowChangelogModal,
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
@@ -197,6 +201,15 @@ const CertificateInfo: React.FC<
       {isRevoked ? (
         <Alert severity="warning" sx={{ mb: 2 }} variant="outlined">
           {t('revoked-warning')}
+          <Button
+            variant="text"
+            color="primary"
+            sx={{ ml: 1, py: 0 }}
+            size="small"
+            onClick={onShowChangelogModal}
+          >
+            {_t('view-details')}
+          </Button>
         </Alert>
       ) : null}
 
@@ -241,7 +254,7 @@ const CertificateInfo: React.FC<
                   {t('revoked-on')}
                 </Typography>
                 <Typography variant="body1">
-                  {_t('dates.default', { date: expiryDate })}
+                  {_t('dates.default', { date: revokedDate })}
                 </Typography>
               </Grid>
             ) : (
@@ -454,17 +467,19 @@ export const CourseCertification: React.FC<
                 </Button>
               ) : null}
 
-              <ManageCertificateMenu
-                isRevoked={isRevoked}
-                certificateChangeLength={
-                  certificate.participant?.certificateChanges?.length
-                }
-                onShowModifyGrade={() => setShowModifyGradeModal(true)}
-                onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
-                onShowRevokeModal={() => setShowRevokeCertModal(true)}
-                onShowUndoRevokeModal={() => setShowUndoRevokeModal(true)}
-                onShowChangelogModal={() => setShowChangelogModal(true)}
-              />
+              {acl.canManageCert() && (
+                <ManageCertificateMenu
+                  isRevoked={isRevoked}
+                  certificateChangeLength={
+                    certificate.participant?.certificateChanges?.length
+                  }
+                  onShowModifyGrade={() => setShowModifyGradeModal(true)}
+                  onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
+                  onShowRevokeModal={() => setShowRevokeCertModal(true)}
+                  onShowUndoRevokeModal={() => setShowUndoRevokeModal(true)}
+                  onShowChangelogModal={() => setShowChangelogModal(true)}
+                />
+              )}
             </Grid>
           </Grid>
 
@@ -472,10 +487,12 @@ export const CourseCertification: React.FC<
             <CertificateInfo
               grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
+              revokedDate={certificate.updatedAt}
               expiryDate={certificate.expiryDate}
               certificationNumber={certificationNumber}
               dateIssued={certificate.certificationDate}
               status={certificate.status as CertificateStatus}
+              onShowChangelogModal={() => setShowChangelogModal(true)}
             />
           </Grid>
         </Grid>

@@ -32,6 +32,7 @@
   "approve": "Approve",
   "reject": "Reject",
   "deny": "Deny",
+  "view-details": "View details",
   "join-waitlist": "Join Waiting List",
   "join-waitlist-title": "Join the course waiting list",
   "join-waitlist-notice": "The course you are interested in is currently full. We will notify you via email if a space becomes available.",
@@ -373,7 +374,7 @@
         "others": "Others"
       }
     },
-    "revoked-warning": "This certification has been revoked. It can no longer be accessed. Learn more.",
+    "revoked-warning": "This certification has been revoked. It can no longer be accessed.",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
       "please-add-a-note": "Please add a note*",

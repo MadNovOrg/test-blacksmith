@@ -47,13 +47,14 @@ export const useTableChecks = <Entry extends ID>() => {
   )
 
   const rowCell = useCallback(
-    (entry: Entry) => {
+    (entry: Entry, disabled = false) => {
       return (
         <TableCell padding="checkbox">
           <Checkbox
             checked={isSelected(entry)}
             onChange={({ target }) => setSelected([entry], target.checked)}
             inputProps={{ 'data-testid': 'TableChecks-Row' } as InputProps}
+            disabled={disabled}
           />
         </TableCell>
       )
