@@ -13,4 +13,6 @@ interface ImportMetaEnv {
   VITE_SENTRY_ENVIRONMENT: string
   VITE_APP_VERSION: string
   VITE_REQUEST_QUOTE_URL: string
+  VITE_MANAGE_ACCOUNT_URL: string
+  VITE_UNSUBSCRIBE_URL: string
 }

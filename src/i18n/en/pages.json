@@ -909,7 +909,9 @@
     "bl-license-expires-in_one": "Active until {{date}} (expires in {{months}} month).",
     "bl-license-remove": "Remove",
     "bl-license-deleting-error": "There was an error deleting the licence. Please try again later",
-    "this-is-an-archived-user": "This is an archived user."
+    "this-is-an-archived-user": "This is an archived user.",
+    "manage-data": "Manage my data",
+    "unsubscribe": "Unsubscribe"
   },
   "orders": {
     "cols-invoiceNumber": "Invoice no.",

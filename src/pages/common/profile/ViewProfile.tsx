@@ -518,6 +518,28 @@ export const ViewProfilePage: React.FC<
                 <UserGo1License license={go1Licenses[0]} editable={false} />
               </Box>
             ) : null}
+
+            <Box mt={5}>
+              <Link
+                href={import.meta.env.VITE_MANAGE_ACCOUNT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="always"
+                sx={{ mr: 2 }}
+                component="a"
+              >
+                {t('pages.my-profile.manage-data')}
+              </Link>
+              <Link
+                href={import.meta.env.VITE_UNSUBSCRIBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                underline="always"
+                component="a"
+              >
+                {t('pages.my-profile.unsubscribe')}
+              </Link>
+            </Box>
           </Grid>
         </Grid>
       </Container>
