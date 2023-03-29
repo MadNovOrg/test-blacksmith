@@ -32,6 +32,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
   const [dateFilters, setDateFilters] = useState<DateFilters>()
   const [error, setError] = useState<string | null>(null)
+  const [needFetch, setNeedFetch] = useState<boolean>(false)
 
   // Memoize variables passed to useQuery
   const queryVariables = useMemo(
@@ -51,15 +52,21 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
     variables: queryVariables,
   })
 
+  const fileName = useMemo(
+    () =>
+      `licenses-history-${dateFilters?.filterEndDate?.toDateString()}-${dateFilters?.filterStartDate?.toDateString()}.xlsx`,
+    [dateFilters]
+  )
+
   useEffect(() => {
-    if (data?.go1LicensesHistory?.length) {
+    if (data?.go1LicensesHistory?.length && needFetch) {
       const historyData: string[][] = [
         [
           t('pages.org-details.tabs.licenses.export.col-date'),
           t('pages.org-details.tabs.licenses.export.col-organisation'),
           t('pages.org-details.tabs.licenses.export.col-event'),
           t('pages.org-details.tabs.licenses.export.col-invoice-id'),
-          t('pages.org-details.tabs.licenses.export.col-course-id'),
+          t('pages.org-details.tabs.licenses.export.col-course-code'),
           t('pages.org-details.tabs.licenses.export.col-course-start'),
           t('pages.org-details.tabs.licenses.export.col-note'),
           t('pages.org-details.tabs.licenses.export.col-invoked-by'),
@@ -76,8 +83,10 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
             historyItem.organization.name,
             historyItem.event,
             historyItem.payload?.invoiceId ?? '',
-            historyItem.payload?.courseId ?? '',
-            historyItem.payload?.courseStartDate ?? '',
+            historyItem.payload?.courseCode ?? '',
+            t('dates.default', {
+              date: historyItem.payload?.courseStartDate ?? '',
+            }),
             historyItem.payload?.note ?? '',
             historyItem.payload?.invokedBy ?? '',
             `${historyItem.change > 0 ? '+' : ''}${historyItem.change}`,
@@ -94,13 +103,11 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
 
       const buffer = write(wb, { type: 'buffer', bookType: 'xlsx' })
 
-      saveAs(
-        new Blob([buffer]),
-        `licenses-history-${dateFilters?.filterEndDate?.toDateString()}-${dateFilters?.filterStartDate?.toDateString()}.xlsx`
-      )
+      saveAs(new Blob([buffer]), fileName)
+      setNeedFetch(false)
       closeModal()
     }
-  }, [closeModal, data, dateFilters, t])
+  }, [closeModal, data, fileName, t])
 
   const onCancel = useCallback(() => {
     closeModal()
@@ -118,6 +125,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
     } else {
       setError(null)
       fetchHistory({ requestPolicy: 'network-only' })
+      setNeedFetch(true)
     }
   }, [dateFilters, fetchHistory, t])
 

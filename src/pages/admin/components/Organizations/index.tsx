@@ -12,7 +12,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { maxBy } from 'lodash-es'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -123,6 +123,9 @@ export const Organizations: React.FC<
   const { orgs, loading } = useOrganizations(sorting, where)
 
   const count = orgs?.length
+  const closeExportModal = useCallback(() => {
+    setExportShowModal(false)
+  }, [])
 
   const lastActivityData = useMemo(() => {
     const data: { [key: string]: Date | undefined } = {}
@@ -196,7 +199,7 @@ export const Organizations: React.FC<
             </Box>
             <DialogExportBlended
               isOpen={showExportModal}
-              closeModal={() => setExportShowModal(false)}
+              closeModal={closeExportModal}
             />
 
             <Table data-testid="orgs-table">
