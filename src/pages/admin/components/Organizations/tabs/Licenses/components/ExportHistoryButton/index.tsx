@@ -59,7 +59,9 @@ export const ExportHistoryButton: React.FC<React.PropsWithChildren<Props>> = ({
             historyItem.event,
             historyItem.payload?.invoiceId ?? '',
             historyItem.payload?.courseCode ?? '',
-            historyItem.payload?.courseStartDate ?? '',
+            t('dates.withTime', {
+              date: historyItem.payload?.courseStartDate ?? '',
+            }),
             historyItem.payload?.note ?? '',
             historyItem.payload?.invokedBy ?? '',
             `${historyItem.change > 0 ? '+' : ''}${historyItem.change}`,

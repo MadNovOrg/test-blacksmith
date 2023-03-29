@@ -84,7 +84,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
             historyItem.event,
             historyItem.payload?.invoiceId ?? '',
             historyItem.payload?.courseCode ?? '',
-            t('dates.default', {
+            t('dates.withTime', {
               date: historyItem.payload?.courseStartDate ?? '',
             }),
             historyItem.payload?.note ?? '',
