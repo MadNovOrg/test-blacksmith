@@ -18389,6 +18389,7 @@ export type Course_Participant = {
   /** An aggregate relationship */
   certificateChanges_aggregate: Course_Certificate_Changelog_Aggregate;
   certificate_id?: Maybe<Scalars['uuid']>;
+  completed_evaluation?: Maybe<Scalars['Boolean']>;
   /** An object relationship */
   course: Course;
   course_id: Scalars['Int'];
@@ -19048,6 +19049,7 @@ export type Course_Participant_Bool_Exp = {
   certificate?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificateChanges?: InputMaybe<Course_Certificate_Changelog_Bool_Exp>;
   certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
+  completed_evaluation?: InputMaybe<Boolean_Comparison_Exp>;
   course?: InputMaybe<Course_Bool_Exp>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -19329,6 +19331,7 @@ export type Course_Participant_Insert_Input = {
   certificate?: InputMaybe<Course_Certificate_Obj_Rel_Insert_Input>;
   certificateChanges?: InputMaybe<Course_Certificate_Changelog_Arr_Rel_Insert_Input>;
   certificate_id?: InputMaybe<Scalars['uuid']>;
+  completed_evaluation?: InputMaybe<Scalars['Boolean']>;
   course?: InputMaybe<Course_Obj_Rel_Insert_Input>;
   course_id?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
@@ -19628,6 +19631,7 @@ export type Course_Participant_Order_By = {
   certificate?: InputMaybe<Course_Certificate_Order_By>;
   certificateChanges_aggregate?: InputMaybe<Course_Certificate_Changelog_Aggregate_Order_By>;
   certificate_id?: InputMaybe<Order_By>;
+  completed_evaluation?: InputMaybe<Order_By>;
   course?: InputMaybe<Course_Order_By>;
   course_id?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
@@ -19663,6 +19667,8 @@ export enum Course_Participant_Select_Column {
   BookingDate = 'bookingDate',
   /** column name */
   CertificateId = 'certificate_id',
+  /** column name */
+  CompletedEvaluation = 'completed_evaluation',
   /** column name */
   CourseId = 'course_id',
   /** column name */
@@ -19700,6 +19706,7 @@ export type Course_Participant_Set_Input = {
   attended?: InputMaybe<Scalars['Boolean']>;
   bookingDate?: InputMaybe<Scalars['timestamptz']>;
   certificate_id?: InputMaybe<Scalars['uuid']>;
+  completed_evaluation?: InputMaybe<Scalars['Boolean']>;
   course_id?: InputMaybe<Scalars['Int']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   dateGraded?: InputMaybe<Scalars['timestamptz']>;
@@ -19777,6 +19784,8 @@ export enum Course_Participant_Update_Column {
   BookingDate = 'bookingDate',
   /** column name */
   CertificateId = 'certificate_id',
+  /** column name */
+  CompletedEvaluation = 'completed_evaluation',
   /** column name */
   CourseId = 'course_id',
   /** column name */
@@ -40065,10 +40074,12 @@ export type GetCourseEvaluationQuestionsQuery = { __typename?: 'query_root', que
 
 export type SaveCourseEvaluationMutationVariables = Exact<{
   answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
+  id: Scalars['uuid'];
+  completedEvaluation?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
-export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
+export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null, update_course_participant_by_pk?: { __typename?: 'course_participant', completed_evaluation?: boolean | null } | null };
 
 export type CancelCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];

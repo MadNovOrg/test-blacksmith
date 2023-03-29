@@ -233,8 +233,11 @@ export const CourseEvaluation = () => {
         SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
         {
           answers,
+          completedEvaluation: true,
+          id: courseParticipant?.id,
         }
       )
+
       setLoading(false)
 
       if (!response.inserted?.rows?.length) {

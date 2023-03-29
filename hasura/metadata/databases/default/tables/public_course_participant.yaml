@@ -87,6 +87,7 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
+        - completed_evaluation
         - course_id
         - invite_id
       backend_only: false
@@ -320,6 +321,17 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'
+  - name: course_survey_completed
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - completed_survey
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-survey-completed'
   - name: create_certificate
     definition:
       enable_manual: true
