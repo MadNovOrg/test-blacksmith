@@ -11,12 +11,64 @@ on:
         options:
           - DEV
           - STG
+      cognito_user_pass:
+        default: 'Test1234!!'
+        description: 'Cognito User Password for creation'
+        required: true
   schedule:
     - cron: '30 21 * * 1-5'
+
+permissions:
+  id-token: write
+  contents: read
+
 env:
   DEFAULT_ENV: 'DEV'
 jobs:
+  users-auth:
+    name: ${{ github.event.inputs.environment }} Cognito Users Recreation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-west-2
+          role-to-assume: ${{ secrets[format('IAM_SERVICE_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}
+          role-duration-seconds: 900
+
+      - name: Set endpoint variable
+        run: echo "HASURA_URL=${{ secrets[format('HASURA_ENDPOINT_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Set Hasura secret
+        run: echo "HASURA_SECRET=${{ secrets[format('HASURA_ADMIN_PASS_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Set Cognito User Pool ID
+        run: echo "COGNITO_POOL_ID=${{ secrets[format('COGNITO_POOL_ID_{0}', github.event.inputs.environment || env.DEFAULT_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Get users to import in Cognito
+        id: cognito-users
+        run: |
+          db_users=( $(curl -s --location --request POST "${HASURA_URL}/v1/graphql" \
+          --header "content-type: application/json" \
+          --header "x-hasura-admin-secret: ${HASURA_SECRET}" \
+          --data-raw '{"query":"query GetProfiles {\r\n profile {\r\n email\r\n}\r\n}\r\n","variables":{}}' \
+          | jq '.data.profile[].email') )
+          echo "db_users=${db_users[@]}" >> $GITHUB_OUTPUT
+
+      - name: Cognito User Re-Creation
+        run: |
+          chmod +x ./.github/scripts/cognito_user_migration.sh
+          user_pool=${COGNITO_POOL_ID}
+          db_users=( ${{ steps.cognito-users.outputs.db_users }} )
+          cognito_user_password=${{ inputs.cognito_user_pass }}
+          ./.github/scripts/cognito_user_migration.sh -c "${user_pool}" -u "${db_users[*]}" -p "${cognito_user_password}"
+        shell: bash
+
   data:
+    needs: users-auth
     name: Seed ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
@@ -54,3 +106,5 @@ jobs:
 
       - name: Seed orders
         run: npm run seed:orders
+
+
