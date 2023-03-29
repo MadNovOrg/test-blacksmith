@@ -2179,7 +2179,8 @@ export type DeleteTagPayload = {
 export enum DeleteUserError {
   CertExist = 'CERT_EXIST',
   GeneralError = 'GENERAL_ERROR',
-  SelfDelete = 'SELF_DELETE'
+  SelfDelete = 'SELF_DELETE',
+  UserTrainer = 'USER_TRAINER'
 }
 
 /** Input for the deleteUser mutation */
@@ -2194,6 +2195,7 @@ export type DeleteUserInput = {
 
 export type DeleteUserOutput = {
   __typename?: 'DeleteUserOutput';
+  courseIds?: Maybe<Scalars['String']>;
   error?: Maybe<DeleteUserError>;
   success: Scalars['Boolean'];
 };
@@ -13871,6 +13873,13 @@ export type Course_Aggregate_Order_By = {
   var_pop?: InputMaybe<Course_Var_Pop_Order_By>;
   var_samp?: InputMaybe<Course_Var_Samp_Order_By>;
   variance?: InputMaybe<Course_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course" */
+export type Course_Arr_Rel_Insert_Input = {
+  data: Array<Course_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_On_Conflict>;
 };
 
 /** columns and relationships of "course_audit" */
@@ -30956,6 +30965,10 @@ export type Profile = {
   course_trainer_aggregate: Course_Trainer_Aggregate;
   /** An array relationship */
   courses: Array<Course_Participant>;
+  /** An array relationship */
+  coursesAsSalesRep: Array<Course>;
+  /** An aggregate relationship */
+  coursesAsSalesRep_aggregate: Course_Aggregate;
   /** An aggregate relationship */
   courses_aggregate: Course_Participant_Aggregate;
   createdAt: Scalars['timestamptz'];
@@ -31079,6 +31092,26 @@ export type ProfileCoursesArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Participant_Order_By>>;
   where?: InputMaybe<Course_Participant_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCoursesAsSalesRepArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
+};
+
+
+/** columns and relationships of "profile" */
+export type ProfileCoursesAsSalesRep_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Order_By>>;
+  where?: InputMaybe<Course_Bool_Exp>;
 };
 
 
@@ -31319,6 +31352,7 @@ export type Profile_Bool_Exp = {
   contactDetails?: InputMaybe<Jsonb_Comparison_Exp>;
   course_trainer?: InputMaybe<Course_Trainer_Bool_Exp>;
   courses?: InputMaybe<Course_Participant_Bool_Exp>;
+  coursesAsSalesRep?: InputMaybe<Course_Bool_Exp>;
   createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
   dbs?: InputMaybe<String_Comparison_Exp>;
   dietaryRestrictions?: InputMaybe<String_Comparison_Exp>;
@@ -31409,6 +31443,7 @@ export type Profile_Insert_Input = {
   contactDetails?: InputMaybe<Scalars['jsonb']>;
   course_trainer?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
   courses?: InputMaybe<Course_Participant_Arr_Rel_Insert_Input>;
+  coursesAsSalesRep?: InputMaybe<Course_Arr_Rel_Insert_Input>;
   createdAt?: InputMaybe<Scalars['timestamptz']>;
   dbs?: InputMaybe<Scalars['String']>;
   dietaryRestrictions?: InputMaybe<Scalars['String']>;
@@ -31514,6 +31549,7 @@ export type Profile_Order_By = {
   certificates_aggregate?: InputMaybe<Course_Certificate_Aggregate_Order_By>;
   contactDetails?: InputMaybe<Order_By>;
   course_trainer_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
+  coursesAsSalesRep_aggregate?: InputMaybe<Course_Aggregate_Order_By>;
   courses_aggregate?: InputMaybe<Course_Participant_Aggregate_Order_By>;
   createdAt?: InputMaybe<Order_By>;
   dbs?: InputMaybe<Order_By>;
@@ -40808,7 +40844,7 @@ export type DeleteProfileMutationVariables = Exact<{
 }>;
 
 
-export type DeleteProfileMutation = { __typename?: 'mutation_root', deleteUser: { __typename?: 'DeleteUserOutput', success: boolean, error?: DeleteUserError | null } };
+export type DeleteProfileMutation = { __typename?: 'mutation_root', deleteUser: { __typename?: 'DeleteUserOutput', success: boolean, error?: DeleteUserError | null, courseIds?: string | null } };
 
 export type DeleteTempProfileMutationVariables = Exact<{
   email: Scalars['String'];

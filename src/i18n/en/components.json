@@ -343,7 +343,8 @@
     "title": "Delete profile",
     "confirmation-message": "Are you sure you want to delete user {{firstName}} {{lastName}} with the email {{email}}? Deleting a user will remove them completely from the Hub and make them unable to log in to their account. This action can not be undone.",
     "delete": "Delete",
-    "delete-error": "An error occurred while deleting the user."
+    "delete-error": "An error occurred while deleting the user.",
+    "no-delete-trainer": "This user is a trainer for course(s): {{courseIds}}."
   },
   "course-instructions-dialog": {
     "special-title": "Special instructions",

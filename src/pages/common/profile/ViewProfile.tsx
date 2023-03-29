@@ -155,17 +155,16 @@ export const ViewProfilePage: React.FC<
               </Button>
             ) : null}
 
-            {deleteAllowed ? (
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => setShowDeleteDialog(true)}
-                startIcon={<DeleteIcon />}
-                sx={{ mt: 2 }}
-              >
-                {t('delete-profile')}
-              </Button>
-            ) : null}
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => setShowDeleteDialog(true)}
+              startIcon={<DeleteIcon />}
+              sx={{ mt: 2 }}
+              disabled={!deleteAllowed}
+            >
+              {t('delete-profile')}
+            </Button>
           </Grid>
           <Grid item md={8}>
             {isMyProfile ? (

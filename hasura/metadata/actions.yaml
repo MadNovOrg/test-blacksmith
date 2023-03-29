@@ -569,6 +569,9 @@ custom_types:
         - value: SELF_DELETE
           is_deprecated: null
           description: null
+        - value: USER_TRAINER
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput

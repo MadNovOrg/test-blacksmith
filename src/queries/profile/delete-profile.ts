@@ -5,6 +5,7 @@ export const MUTATION = gql`
     deleteUser(profileId: $profileId) {
       success
       error
+      courseIds
     }
   }
 `

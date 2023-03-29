@@ -378,6 +378,7 @@ enum DeleteUserError {
   GENERAL_ERROR
   CERT_EXIST
   SELF_DELETE
+  USER_TRAINER
 }
 
 input PlansCreateInput {
@@ -876,6 +877,7 @@ type MergeUserOutput {
 type DeleteUserOutput {
   success: Boolean!
   error: DeleteUserError
+  courseIds: String
 }
 
 scalar Date

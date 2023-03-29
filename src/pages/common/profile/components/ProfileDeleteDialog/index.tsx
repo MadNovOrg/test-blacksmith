@@ -8,6 +8,7 @@ import { Dialog } from '@app/components/Dialog'
 import {
   DeleteProfileMutation,
   DeleteProfileMutationVariables,
+  DeleteUserError,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useProfile from '@app/hooks/useProfile'
@@ -43,7 +44,12 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
       setSaving(false)
 
       if (deleteUser.error) {
-        return setError('delete-error')
+        if (deleteUser.error === DeleteUserError.UserTrainer) {
+          return setError(
+            t('no-delete-trainer', { courseIds: deleteUser.courseIds })
+          )
+        }
+        return setError(t('delete-error'))
       }
 
       onSuccess()

@@ -50,6 +50,13 @@ array_relationships:
         table:
           schema: public
           name: course_participant
+  - name: coursesAsSalesRep
+    using:
+      foreign_key_constraint_on:
+        column: sales_representative_id
+        table:
+          schema: public
+          name: course
   - name: go1Licenses
     using:
       foreign_key_constraint_on:
