@@ -209,7 +209,6 @@ export const AttendeeCancellationTable: React.FC<
                           ))}
                         </Box>
                       </TableCell>
-                      <TableCell>{log.payload.cancellation_reason}</TableCell>
                       <TableCell>
                         <Link
                           href={`/manage-courses/all/${log.course.id}/details`}
@@ -217,6 +216,7 @@ export const AttendeeCancellationTable: React.FC<
                           {log.course.course_code}
                         </Link>
                       </TableCell>
+                      <TableCell>{log.payload.cancellation_reason}</TableCell>
                       <TableCell>
                         {invoice ? (
                           <Link href={`/orders/${invoice.id}`}>
