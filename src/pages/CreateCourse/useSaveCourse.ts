@@ -198,6 +198,7 @@ export function useSaveCourse(): {
                   accountCode: courseData.accountCode,
                   freeSpaces: courseData.freeSpaces,
                   salesRepresentativeId: courseData.salesRepresentative?.id,
+                  source: courseData.source,
                 }
               : null),
             ...(courseData.type === CourseType.CLOSED
@@ -265,13 +266,16 @@ export function useSaveCourse(): {
     }
   }, [
     courseData,
-    expenses,
-    fetcher,
-    go1Licensing,
-    removeDraft,
-    t,
     trainers,
+    fetcher,
+    t,
+    expenses,
+    go1Licensing,
+    profile?.fullName,
+    profile?.email,
+    profile?.phone,
     addSnackbarMessage,
+    removeDraft,
   ])
 
   return {

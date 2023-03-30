@@ -137,10 +137,6 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
     ].filter(Boolean)
   }, [address, invoice?.contact.name])
 
-  const source = lineItemForRegistrants?.tracking?.find(
-    (tc: { name: string }) => tc.name === 'Sales Person'
-  )?.option
-
   const isInvoiceInXero = Boolean(xeroInvoiceUrl)
 
   const loadingData = fetching || isUsePromoCodesLoading
@@ -496,11 +492,13 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </DetailsItemBox>
                   ) : null}
 
-                  {source ? (
+                  {course?.source ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
                         <Typography fontWeight={600}>{t('source')}</Typography>
-                        <Typography>{source}</Typography>
+                        <Typography>
+                          {_t(`course-sources.${course.source}`)}
+                        </Typography>
                       </Stack>
                     </DetailsItemBox>
                   ) : null}

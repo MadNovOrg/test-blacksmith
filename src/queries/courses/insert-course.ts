@@ -2,6 +2,7 @@ import { gql } from 'graphql-request'
 
 import {
   Course_Expenses_Insert_Input,
+  Course_Source_Enum,
   Course_Status_Enum,
   Order_Insert_Input,
 } from '@app/generated/graphql'
@@ -21,6 +22,7 @@ export type ParamsType = {
     organization_id?: string
     contactProfileId?: string
     salesRepresentativeId?: string
+    source?: Course_Source_Enum
     reaccreditation?: boolean
     go1Integration?: boolean
     aolCostOfCourse?: number

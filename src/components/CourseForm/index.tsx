@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Alert,
+  Box,
   Checkbox,
   CircularProgress,
   FormControl,
@@ -26,6 +27,7 @@ import { noop } from 'ts-essentials'
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
+import { Course_Source_Enum } from '@app/generated/graphql'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
@@ -48,6 +50,7 @@ import { CourseAOLRegionDropdown } from './components/CourseAOLRegionDropdown'
 import { CourseDatePicker } from './components/CourseDatePicker'
 import { CourseLevelDropdown } from './components/CourseLevelDropdown'
 import { CourseTimePicker } from './components/CourseTimePicker'
+import { SourceDropdown } from './components/SourceDropdown'
 import {
   canBeBlended,
   canBeF2F,
@@ -97,6 +100,10 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 .min(0, t('components.course-form.free-spaces-required'))
                 .required(t('components.course-form.free-spaces-required')),
               salesRepresentative: yup.object().required(),
+              source: yup
+                .string()
+                .oneOf(Object.values(Course_Source_Enum))
+                .required(),
               accountCode: yup.string().required(),
             }
           : null),
@@ -243,6 +250,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       notes: courseInput?.notes ?? null,
       specialInstructions: courseInput?.specialInstructions ?? '',
       parkingInstructions: courseInput?.parkingInstructions ?? '',
+      source: courseInput?.source ?? '',
     }),
     [courseInput, courseType]
   )
@@ -1035,31 +1043,52 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             {t('components.course-form.finance-section-title')}
           </Typography>
           <FormPanel>
-            <Typography fontWeight={600}>
-              {t('components.course-form.sales-rep-title')}
-            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.sales-rep-title')}
+                </Typography>
 
-            <ProfileSelector
-              value={values.salesRepresentative ?? undefined}
-              onChange={profile => {
-                setValue('salesRepresentative', profile ?? null, {
-                  shouldValidate: true,
-                })
-              }}
-              sx={{ marginBottom: 2 }}
-              textFieldProps={{ variant: 'filled' }}
-              placeholder={t('components.course-form.sales-rep-placeholder')}
-              testId="profile-selector-sales-representative"
-              disabled={disabledFields.has('salesRepresentative')}
-            />
-          </FormPanel>
+                <ProfileSelector
+                  value={values.salesRepresentative ?? undefined}
+                  onChange={profile => {
+                    setValue('salesRepresentative', profile ?? null, {
+                      shouldValidate: true,
+                    })
+                  }}
+                  textFieldProps={{ variant: 'filled' }}
+                  placeholder={t(
+                    'components.course-form.sales-rep-placeholder'
+                  )}
+                  testId="profile-selector-sales-representative"
+                  disabled={disabledFields.has('salesRepresentative')}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography fontWeight={600}>
+                  {t('components.course-form.source-title')}
+                </Typography>
+                <Controller
+                  name="source"
+                  control={control}
+                  render={({ field }) => (
+                    <SourceDropdown
+                      {...field}
+                      data-testid="source-dropdown"
+                      disabled={disabledFields.has('source')}
+                    />
+                  )}
+                />
+              </Grid>
+            </Grid>
 
-          <FormPanel>
-            <Typography fontWeight={600} mb={1}>
-              {t('components.course-form.account-code-title')}
-            </Typography>
+            <Box>
+              <Typography fontWeight={600} mb={1} mt={2}>
+                {t('components.course-form.account-code-title')}
+              </Typography>
 
-            <Typography color="dimGrey.main">{values.accountCode}</Typography>
+              <Typography color="dimGrey.main">{values.accountCode}</Typography>
+            </Box>
           </FormPanel>
         </>
       ) : null}

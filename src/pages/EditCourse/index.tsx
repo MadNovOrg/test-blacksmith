@@ -243,6 +243,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             ...(courseData.salesRepresentative
               ? { salesRepresentativeId: courseData.salesRepresentative.id }
               : null),
+            ...(courseData.source ? { source: courseData.source } : null),
             ...(courseData.usesAOL
               ? {
                   aolCostOfCourse: courseData.courseCost,

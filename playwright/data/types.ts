@@ -1,4 +1,4 @@
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import {
   CourseDeliveryType,
   CourseLevel,
@@ -45,6 +45,7 @@ export type Course = {
   contactProfile?: User
   gradingConfirmed: boolean
   salesRepresentative?: User
+  source?: Course_Source_Enum
   trainers?: CourseTrainer[]
   invoiceDetails?: InvoiceDetails
   participants_aggregate?: {

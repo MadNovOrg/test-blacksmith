@@ -23,6 +23,7 @@ export const QUERY = gql`
         level
         name
         type
+        source
         salesRepresentative {
           fullName
           avatar

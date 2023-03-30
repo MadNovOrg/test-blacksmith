@@ -32,6 +32,7 @@
 - "!include public_course_pricing.yaml"
 - "!include public_course_promo_code.yaml"
 - "!include public_course_schedule.yaml"
+- "!include public_course_source.yaml"
 - "!include public_course_status.yaml"
 - "!include public_course_trainer.yaml"
 - "!include public_course_trainer_type.yaml"

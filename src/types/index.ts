@@ -1,6 +1,10 @@
 import { DeepNonNullable } from 'ts-essentials'
 
-import { Course_Status_Enum, Grade_Enum } from '@app/generated/graphql'
+import {
+  Course_Source_Enum,
+  Course_Status_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import { StepsEnum } from '@app/pages/CreateCourse/types'
 import { ResponseType as GetEvaluationsSummaryResponseType } from '@app/queries/course-evaluation/get-evaluations-summary'
 
@@ -26,6 +30,7 @@ export type Course = {
   organization?: Organization
   contactProfile?: Profile
   salesRepresentative?: Profile
+  source?: Course_Source_Enum
   contactProfileId?: string
   salesRepresentativeId?: string
   schedule: CourseSchedule[]
@@ -540,10 +545,14 @@ export type CourseInput = {
   notes: string | null
   specialInstructions: string
   parkingInstructions: string
+  source: Course_Source_Enum | ''
 }
 
 export type ValidCourseInput = DeepNonNullable<
-  Omit<CourseInput, 'courseLevel'> & { courseLevel: CourseLevel }
+  Omit<CourseInput, 'courseLevel' | 'source'> & {
+    courseLevel: CourseLevel
+    source: Course_Source_Enum
+  }
 >
 
 export type Order = {

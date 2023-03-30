@@ -588,5 +588,17 @@
   "cancellation-requested": "Cancellation requested",
   "tbc": "TBC",
   "archived-profile": "Archived user",
-  "invoice-no": "Invoice no."
+  "invoice-no": "Invoice no.",
+  "course-sources": {
+    "EMAIL_ENQUIRY": "Email enquiry",
+    "EMAIL_ENQUIRY_CENTRAL": "Email enquiry (Central inbox)",
+    "EVENT": "Event",
+    "EXISTING_CLIENT": "Existing client",
+    "MARKETING_CAMPAIGN": "Marketing campaign",
+    "NDIS": "NDIS (ANZ Only)",
+    "SALES_CALL": "Sales call",
+    "SALES_MAILER": "Sales mailer",
+    "TELEPHONE_ENQUIRY": "Telephone enquiry",
+    "TENDER": "Tender"
+  }
 }

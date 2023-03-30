@@ -208,6 +208,7 @@ insert_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       backend_only: false
@@ -272,6 +273,7 @@ insert_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       backend_only: false
@@ -337,6 +339,7 @@ select_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       computed_fields:
@@ -379,6 +382,7 @@ select_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       computed_fields:
@@ -452,6 +456,7 @@ select_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       computed_fields:
@@ -603,6 +608,7 @@ update_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       filter:
@@ -682,6 +688,7 @@ update_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       filter: {}

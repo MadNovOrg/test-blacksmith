@@ -138,6 +138,7 @@
     "finance-section-title": "Finance",
     "sales-rep-title": "Sales",
     "sales-rep-placeholder": "Sales representative",
+    "source-title": "Source",
     "account-code-title": "Account Code",
     "notes-title": "Notes",
     "notes-description": "Additional course notes e.g. twilight session or any additional notes you would like to highlight within this area.",
@@ -349,5 +350,8 @@
   "course-instructions-dialog": {
     "special-title": "Special instructions",
     "parking-title": "Parking"
+  },
+  "course-source-dropdown": {
+    "placeholder": "Select source"
   }
 }

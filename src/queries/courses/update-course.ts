@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request'
 
+import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
 
 export type ParamsType = {
@@ -12,6 +13,7 @@ export type ParamsType = {
     organization_id?: string
     contactProfileId?: string
     salesRepresentativeId?: string
+    source?: Course_Source_Enum
     reaccreditation?: boolean
     go1Integration?: boolean
     aolCostOfCourse?: number

@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test'
 import { format } from 'date-fns'
 
+import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 import { INPUT_DATE_FORMAT } from '@app/util'
 
@@ -32,6 +33,8 @@ export class CreateCoursePage extends BasePage {
   readonly nextPageButton: Locator
   readonly freeSpacesInput: Locator
   readonly salesPersonInput: Locator
+  readonly sourceDropdown: Locator
+  readonly sourceOption: (source: Course_Source_Enum) => Locator
   readonly orderDetailsButton: Locator
 
   constructor(page: Page) {
@@ -86,6 +89,12 @@ export class CreateCoursePage extends BasePage {
     this.salesPersonInput = this.page.locator(
       '[data-testid="profile-selector-sales-representative"] input'
     )
+    this.sourceDropdown = this.page.locator(
+      '[data-testid="source-dropdown"] input'
+    )
+    this.sourceOption = (source: Course_Source_Enum) => {
+      return this.page.locator(`[data-testid="source-option-${source}"]`)
+    }
   }
 
   async goto(courseType: string) {
@@ -127,6 +136,11 @@ export class CreateCoursePage extends BasePage {
   async selectSalesPerson(name: string) {
     await this.salesPersonInput.type(name)
     await this.autocompleteOption.first().click()
+  }
+
+  async selectSource(source: Course_Source_Enum) {
+    await this.sourceDropdown.click()
+    await this.sourceOption(source).click()
   }
 
   async setStartDateTime(dateTime: Date) {
@@ -215,12 +229,14 @@ export class CreateCoursePage extends BasePage {
     if (
       course.freeSpaces &&
       course.salesRepresentative &&
-      course.type === CourseType.CLOSED
+      course.type === CourseType.CLOSED &&
+      course.source
     ) {
       await this.freeSpacesInput.type(course.freeSpaces.toString())
       await this.selectSalesPerson(
         `${course.salesRepresentative.givenName} ${course.salesRepresentative.familyName}`
       )
+      await this.selectSource(course.source)
     }
   }
 }

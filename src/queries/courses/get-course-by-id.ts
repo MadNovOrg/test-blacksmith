@@ -69,6 +69,7 @@ export const QUERY = gql`
         avatar
         archived
       }
+      source
       dates: schedule_aggregate {
         aggregate {
           start: min {
