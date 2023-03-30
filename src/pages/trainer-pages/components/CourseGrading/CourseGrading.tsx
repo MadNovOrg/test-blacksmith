@@ -104,7 +104,7 @@ export const CourseGrading: React.FC<
       },
       {
         id: 'contact',
-        label: t('pages.course-participants.contact'),
+        label: t('pages.course-participants.email'),
         sorting: true,
       },
       {

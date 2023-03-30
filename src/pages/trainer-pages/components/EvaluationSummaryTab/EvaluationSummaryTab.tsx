@@ -47,7 +47,7 @@ export const EvaluationSummaryTab: React.FC<
   const cols = useMemo(
     () => [
       { id: 'name', label: t('name') },
-      { id: 'contact', label: t('contact') },
+      { id: 'contact', label: t('email') },
       { id: 'org', label: t('organization') },
       { id: 'evaluation', label: t('evaluation') },
     ],
