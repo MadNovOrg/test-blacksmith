@@ -20,14 +20,14 @@ export const OrgStatsTiles: React.FC<
 
   return (
     <Grid container>
-      <Grid item xs={6} md={3} p={1} borderRadius={1}>
+      <Grid item xs={12} md={12} p={1} borderRadius={1}>
         <CountPanel
           count={stats[orgId]?.profiles.count}
           label={t('pages.org-details.tabs.overview.total-individuals')}
         />
       </Grid>
 
-      <Grid item xs={6} md={3} p={1} borderRadius={1}>
+      <Grid item xs={3} md={3} p={1} borderRadius={1}>
         <CountPanel
           count={stats[orgId]?.certificates.active.count}
           chip={{
@@ -40,7 +40,19 @@ export const OrgStatsTiles: React.FC<
         />
       </Grid>
 
-      <Grid item xs={6} md={3} p={1} borderRadius={1}>
+      <Grid item xs={3} md={3} p={1} borderRadius={1}>
+        <CountPanel
+          count={stats[orgId]?.certificates.hold.count}
+          chip={{
+            label: t('pages.org-details.tabs.overview.on-hold'),
+            color: 'warning',
+          }}
+          label={t('pages.org-details.tabs.overview.currently-enrolled', {
+            count: stats[orgId]?.certificates.hold.enrolled,
+          })}
+        />
+      </Grid>
+      <Grid item xs={3} md={3} p={1} borderRadius={1}>
         <CountPanel
           count={stats[orgId]?.certificates.expiringSoon.count}
           chip={{
@@ -52,7 +64,7 @@ export const OrgStatsTiles: React.FC<
           })}
         />
       </Grid>
-      <Grid item xs={6} md={3} p={1} borderRadius={1}>
+      <Grid item xs={3} md={3} p={1} borderRadius={1}>
         <CountPanel
           count={stats[orgId]?.certificates.expired.count}
           chip={{

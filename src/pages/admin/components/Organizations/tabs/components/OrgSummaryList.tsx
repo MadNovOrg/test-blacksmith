@@ -59,6 +59,9 @@ export const OrgSummaryList: React.FC<
               {t('common.certification-status.expiring_soon')}
             </TableCell>
             <TableCell align="center">
+              {t('common.certification-status.on_hold')}
+            </TableCell>
+            <TableCell align="center">
               {t('common.certification-status.expired')}
             </TableCell>
           </TableRow>
@@ -127,6 +130,13 @@ export const OrgSummaryList: React.FC<
                   label={stats[org.id].certificates.expiringSoon.count}
                   size="small"
                   color="warning"
+                />
+              </TableCell>
+              <TableCell align="center">
+                <Chip
+                  label={stats[org.id].certificates.hold.count}
+                  size="small"
+                  color="teal"
                 />
               </TableCell>
               <TableCell align="center">

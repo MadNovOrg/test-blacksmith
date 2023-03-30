@@ -8,6 +8,12 @@ export const QUERY = gql`
   ${CERTIFICATE}
   ${CERTIFICATE_CHANGELOG}
   query GetCertificate($id: uuid!) {
+    certificateHoldRequest: course_certificate_hold_request(
+      where: { certificate_id: { _eq: $id } }
+    ) {
+      expiry_date
+      start_date
+    }
     certificate: course_certificate_by_pk(id: $id) {
       ...Certificate
       profile {
@@ -43,7 +49,7 @@ export const QUERY = gql`
           level
           deliveryType
         }
-        certificateChanges {
+        certificateChanges(order_by: { createdAt: desc }) {
           ...CertificateChangelog
           author {
             fullName

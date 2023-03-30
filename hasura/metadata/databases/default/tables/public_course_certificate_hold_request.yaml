@@ -1,0 +1,102 @@
+table:
+  schema: public
+  name: course_certificate_hold_request
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      backend_only: false
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - expiry_date
+        - start_date
+        - certificate_id
+        - changelog_id
+        - id
+      filter: {}
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - id
+        - start_date
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - certificate_id
+        - changelog_id
+        - expiry_date
+        - start_date
+      filter: {}
+      check: null
+event_triggers:
+  - name: course_certificate_hold_request_changed
+    definition:
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns:
+          - expiry_date
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/hold'

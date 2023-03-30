@@ -38,6 +38,17 @@ insert_permissions:
         - type
       backend_only: false
 select_permissions:
+  - role: tt-admin
+    permission:
+      columns:
+        - payload
+        - type
+        - created_at
+        - updated_at
+        - author_id
+        - id
+        - participant_id
+      filter: {}
   - role: tt-ops
     permission:
       columns:

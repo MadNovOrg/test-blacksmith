@@ -1038,6 +1038,7 @@
         "currently-enrolled": "{{count}} currently enrolled",
         "active": "Active",
         "expiring-soon": "Expiring soon",
+        "on-hold": "On hold",
         "expired": "Expired",
         "revoked": "Revoked",
         "individuals-by-training-level": "Individuals by training level",

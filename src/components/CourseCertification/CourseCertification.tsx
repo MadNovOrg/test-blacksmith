@@ -1,4 +1,6 @@
+import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
   Accordion,
   Alert,
@@ -15,7 +17,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import Divider from '@mui/material/Divider'
 import pdf from '@react-pdf/renderer'
 import MUIImage from 'mui-image'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
@@ -37,6 +39,7 @@ import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
+  Course_Certificate_Changelog_Type_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
   Course_Participant_Module,
@@ -170,6 +173,7 @@ type CertificateInfoProps = {
   certificationNumber: string
   dateIssued: string
   status: CertificateStatus
+  expireHoldDate?: string
   onShowChangelogModal: VoidFunction
 }
 
@@ -183,6 +187,7 @@ const CertificateInfo: React.FC<
   certificationNumber,
   dateIssued,
   status,
+  expireHoldDate,
   onShowChangelogModal,
 }) => {
   const imageSize = '10%'
@@ -195,6 +200,7 @@ const CertificateInfo: React.FC<
     : null
 
   const isRevoked = status === CertificateStatus.REVOKED
+  const isOnHold = status === CertificateStatus.ON_HOLD
 
   return (
     <Box>
@@ -268,11 +274,20 @@ const CertificateInfo: React.FC<
               </Grid>
             )}
 
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
                 {_t('status')}
               </Typography>
-              <CertificateStatusChip status={status} />
+              <Box display="flex" alignItems="center">
+                <CertificateStatusChip status={status} />
+                {isOnHold ? (
+                  <Typography variant="body2" sx={{ ml: 1 }}>
+                    {t(`on-hold-until`, {
+                      expireDate: expireHoldDate,
+                    })}
+                  </Typography>
+                ) : null}
+              </Box>
             </Grid>
           </Grid>
 
@@ -351,7 +366,10 @@ export const CourseCertification: React.FC<
 
   const [showModifyGradeModal, setShowModifyGradeModal] = useState(false)
   const [showChangelogModal, setShowChangelogModal] = useState(false)
-  const [showPutOnHoldModal, setShowPutOnHoldModal] = useState(false)
+  const [showPutOnHoldModal, setShowPutOnHoldModal] = useState({
+    edit: false,
+    open: false,
+  })
   const [showRevokeCertModal, setShowRevokeCertModal] = useState(false)
   const [showUndoRevokeModal, setShowUndoRevokeModal] = useState(false)
 
@@ -363,9 +381,19 @@ export const CourseCertification: React.FC<
   const certificateLoadingStatus = getSWRLoadingStatus(data, error)
 
   const certificate = data?.certificate
+  const holdRequest = data?.certificateHoldRequest[0]
   const courseParticipant = certificate?.participant
 
   const gradingChangelogs = certificate?.participant?.certificateChanges ?? []
+
+  const holdChangelogs = useMemo(() => {
+    return (
+      certificate?.participant?.certificateChanges.filter(
+        change =>
+          change.type === Course_Certificate_Changelog_Type_Enum.PutOnHold
+      ) ?? []
+    )
+  }, [certificate])
 
   if (certificateLoadingStatus === LoadingStatus.FETCHING) {
     return (
@@ -437,7 +465,10 @@ export const CourseCertification: React.FC<
                   size="large"
                   variant="contained"
                   color="primary"
-                  disabled={isRevoked}
+                  disabled={
+                    isRevoked ||
+                    certificate.status === CertificateStatus.ON_HOLD
+                  }
                 >
                   <PDFDownloadLink
                     style={{ color: 'white' }}
@@ -466,7 +497,6 @@ export const CourseCertification: React.FC<
                   </PDFDownloadLink>
                 </Button>
               ) : null}
-
               {acl.canManageCert() && (
                 <ManageCertificateMenu
                   isRevoked={isRevoked}
@@ -474,7 +504,12 @@ export const CourseCertification: React.FC<
                     certificate.participant?.certificateChanges?.length
                   }
                   onShowModifyGrade={() => setShowModifyGradeModal(true)}
-                  onShowPutOnHoldModal={() => setShowPutOnHoldModal(true)}
+                  onShowPutOnHoldModal={() =>
+                    setShowPutOnHoldModal({
+                      edit: Boolean(holdRequest) ?? false,
+                      open: true,
+                    })
+                  }
                   onShowRevokeModal={() => setShowRevokeCertModal(true)}
                   onShowUndoRevokeModal={() => setShowUndoRevokeModal(true)}
                   onShowChangelogModal={() => setShowChangelogModal(true)}
@@ -483,7 +518,66 @@ export const CourseCertification: React.FC<
             </Grid>
           </Grid>
 
-          <Grid item md={9}>
+          <Grid item md={7}>
+            {holdRequest ? (
+              <Grid item mb={2}>
+                <Alert
+                  variant="outlined"
+                  color="warning"
+                  sx={{
+                    my: 2,
+                    alignItems: 'center',
+                    '&& .MuiAlert-message': {
+                      width: '100%',
+                    },
+                  }}
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography
+                      variant="body2"
+                      color="grey.900"
+                      data-testid="cancellation-alert"
+                    >
+                      {t(
+                        certificate.status === CertificateStatus.ON_HOLD
+                          ? 'on-hold-warning'
+                          : 'on-hold-planned-warning',
+                        {
+                          startDate: holdRequest.start_date,
+                          expireDate: holdRequest.expiry_date,
+                        }
+                      )}
+                    </Typography>
+
+                    <Box display="flex" justifyContent="flex-end" gap={2}>
+                      <Button
+                        variant="text"
+                        startIcon={<RemoveRedEyeIcon />}
+                        onClick={() =>
+                          setShowPutOnHoldModal({ edit: true, open: true })
+                        }
+                      >
+                        {t('view-details')}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        data-testid="edit-hold-status-button"
+                        onClick={() =>
+                          setShowPutOnHoldModal({ edit: true, open: true })
+                        }
+                      >
+                        {t('edit')}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Alert>
+              </Grid>
+            ) : null}
             <CertificateInfo
               grade={grade as Grade_Enum}
               courseParticipant={courseParticipant}
@@ -492,6 +586,7 @@ export const CourseCertification: React.FC<
               certificationNumber={certificationNumber}
               dateIssued={certificate.certificationDate}
               status={certificate.status as CertificateStatus}
+              expireHoldDate={holdRequest ? holdRequest.expiry_date : undefined}
               onShowChangelogModal={() => setShowChangelogModal(true)}
             />
           </Grid>
@@ -501,16 +596,23 @@ export const CourseCertification: React.FC<
       {courseParticipant ? (
         <>
           <Dialog
-            open={showPutOnHoldModal}
-            onClose={() => setShowPutOnHoldModal(false)}
-            title={t('common.course-certificate.hold-certificate')}
+            open={showPutOnHoldModal.open}
+            onClose={() => setShowPutOnHoldModal({ edit: false, open: false })}
+            title={t('hold-certificate')}
             maxWidth={800}
           >
             <PutOnHoldModal
-              onClose={() => setShowPutOnHoldModal(false)}
+              onClose={() => {
+                setShowPutOnHoldModal({ edit: false, open: false })
+                mutate()
+              }}
+              participantId={courseParticipant.id}
+              certificateId={certificateId}
               courseLevel={
                 certificate.courseLevel as unknown as Course_Level_Enum
               }
+              edit={showPutOnHoldModal.edit}
+              changelogs={holdChangelogs}
             />
           </Dialog>
 

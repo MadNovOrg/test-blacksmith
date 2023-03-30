@@ -25,6 +25,7 @@ type OrgStats = {
     active: { count: number; enrolled: number }
     expiringSoon: { count: number; enrolled: number }
     expired: { count: number; enrolled: number }
+    hold: { count: number; enrolled: number }
     revoked: { count: number; enrolled: number }
   }
   pendingInvites?: {
@@ -47,6 +48,7 @@ function crunchStats(profiles: ProfileType[] | undefined) {
         CertificateStatus.EXPIRED_RECENTLY,
         profiles ?? []
       ),
+      hold: getCountByStatus(CertificateStatus.ON_HOLD, profiles ?? []),
       revoked: getCountByStatus(CertificateStatus.REVOKED, profiles ?? []),
     },
   }

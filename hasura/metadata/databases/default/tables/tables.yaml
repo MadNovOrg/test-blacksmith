@@ -9,6 +9,7 @@
 - "!include public_course_certificate.yaml"
 - "!include public_course_certificate_changelog.yaml"
 - "!include public_course_certificate_changelog_type.yaml"
+- "!include public_course_certificate_hold_request.yaml"
 - "!include public_course_delivery_type.yaml"
 - "!include public_course_draft.yaml"
 - "!include public_course_end_jobs.yaml"

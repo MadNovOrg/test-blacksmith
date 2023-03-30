@@ -15051,6 +15051,156 @@ export enum Course_Certificate_Constraint {
   CourseCertificatePkey = 'course_certificate_pkey'
 }
 
+/** columns and relationships of "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request = {
+  __typename?: 'course_certificate_hold_request';
+  certificate_id: Scalars['uuid'];
+  changelog_id: Scalars['uuid'];
+  expiry_date: Scalars['date'];
+  id: Scalars['uuid'];
+  start_date: Scalars['date'];
+};
+
+/** aggregated selection of "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Aggregate = {
+  __typename?: 'course_certificate_hold_request_aggregate';
+  aggregate?: Maybe<Course_Certificate_Hold_Request_Aggregate_Fields>;
+  nodes: Array<Course_Certificate_Hold_Request>;
+};
+
+/** aggregate fields of "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Aggregate_Fields = {
+  __typename?: 'course_certificate_hold_request_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Certificate_Hold_Request_Max_Fields>;
+  min?: Maybe<Course_Certificate_Hold_Request_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "course_certificate_hold_request". All fields are combined with a logical 'AND'. */
+export type Course_Certificate_Hold_Request_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Certificate_Hold_Request_Bool_Exp>>;
+  _not?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Certificate_Hold_Request_Bool_Exp>>;
+  certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
+  changelog_id?: InputMaybe<Uuid_Comparison_Exp>;
+  expiry_date?: InputMaybe<Date_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  start_date?: InputMaybe<Date_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_certificate_hold_request" */
+export enum Course_Certificate_Hold_Request_Constraint {
+  /** unique or primary key constraint */
+  CourseCertificateHoldRequestCertificateIdKey = 'course_certificate_hold_request_certificate_id_key',
+  /** unique or primary key constraint */
+  CourseCertificateHoldRequestChangelogIdKey = 'course_certificate_hold_request_changelog_id_key',
+  /** unique or primary key constraint */
+  CourseCertificateHoldRequestPkey = 'course_certificate_hold_request_pkey'
+}
+
+/** input type for inserting data into table "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Insert_Input = {
+  certificate_id?: InputMaybe<Scalars['uuid']>;
+  changelog_id?: InputMaybe<Scalars['uuid']>;
+  expiry_date?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  start_date?: InputMaybe<Scalars['date']>;
+};
+
+/** aggregate max on columns */
+export type Course_Certificate_Hold_Request_Max_Fields = {
+  __typename?: 'course_certificate_hold_request_max_fields';
+  certificate_id?: Maybe<Scalars['uuid']>;
+  changelog_id?: Maybe<Scalars['uuid']>;
+  expiry_date?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  start_date?: Maybe<Scalars['date']>;
+};
+
+/** aggregate min on columns */
+export type Course_Certificate_Hold_Request_Min_Fields = {
+  __typename?: 'course_certificate_hold_request_min_fields';
+  certificate_id?: Maybe<Scalars['uuid']>;
+  changelog_id?: Maybe<Scalars['uuid']>;
+  expiry_date?: Maybe<Scalars['date']>;
+  id?: Maybe<Scalars['uuid']>;
+  start_date?: Maybe<Scalars['date']>;
+};
+
+/** response of any mutation on the table "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Mutation_Response = {
+  __typename?: 'course_certificate_hold_request_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Certificate_Hold_Request>;
+};
+
+/** on_conflict condition type for table "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_On_Conflict = {
+  constraint: Course_Certificate_Hold_Request_Constraint;
+  update_columns?: Array<Course_Certificate_Hold_Request_Update_Column>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_certificate_hold_request". */
+export type Course_Certificate_Hold_Request_Order_By = {
+  certificate_id?: InputMaybe<Order_By>;
+  changelog_id?: InputMaybe<Order_By>;
+  expiry_date?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  start_date?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_certificate_hold_request */
+export type Course_Certificate_Hold_Request_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "course_certificate_hold_request" */
+export enum Course_Certificate_Hold_Request_Select_Column {
+  /** column name */
+  CertificateId = 'certificate_id',
+  /** column name */
+  ChangelogId = 'changelog_id',
+  /** column name */
+  ExpiryDate = 'expiry_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  StartDate = 'start_date'
+}
+
+/** input type for updating data in table "course_certificate_hold_request" */
+export type Course_Certificate_Hold_Request_Set_Input = {
+  certificate_id?: InputMaybe<Scalars['uuid']>;
+  changelog_id?: InputMaybe<Scalars['uuid']>;
+  expiry_date?: InputMaybe<Scalars['date']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  start_date?: InputMaybe<Scalars['date']>;
+};
+
+/** update columns of table "course_certificate_hold_request" */
+export enum Course_Certificate_Hold_Request_Update_Column {
+  /** column name */
+  CertificateId = 'certificate_id',
+  /** column name */
+  ChangelogId = 'changelog_id',
+  /** column name */
+  ExpiryDate = 'expiry_date',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  StartDate = 'start_date'
+}
+
 /** input type for incrementing numeric columns in table "course_certificate" */
 export type Course_Certificate_Inc_Input = {
   courseId?: InputMaybe<Scalars['Int']>;
@@ -24735,6 +24885,10 @@ export type Mutation_Root = {
   delete_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
   /** delete single row from the table: "course_certificate_changelog_type" */
   delete_course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** delete data from the table: "course_certificate_hold_request" */
+  delete_course_certificate_hold_request?: Maybe<Course_Certificate_Hold_Request_Mutation_Response>;
+  /** delete single row from the table: "course_certificate_hold_request" */
+  delete_course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
   /** delete data from the table: "course_delivery_type" */
   delete_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** delete single row from the table: "course_delivery_type" */
@@ -25026,6 +25180,10 @@ export type Mutation_Root = {
   insert_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
   /** insert a single row into the table: "course_certificate_changelog_type" */
   insert_course_certificate_changelog_type_one?: Maybe<Course_Certificate_Changelog_Type>;
+  /** insert data into the table: "course_certificate_hold_request" */
+  insert_course_certificate_hold_request?: Maybe<Course_Certificate_Hold_Request_Mutation_Response>;
+  /** insert a single row into the table: "course_certificate_hold_request" */
+  insert_course_certificate_hold_request_one?: Maybe<Course_Certificate_Hold_Request>;
   /** insert a single row into the table: "course_certificate" */
   insert_course_certificate_one?: Maybe<Course_Certificate>;
   /** insert data into the table: "course_delivery_type" */
@@ -25334,6 +25492,10 @@ export type Mutation_Root = {
   update_course_certificate_changelog_type?: Maybe<Course_Certificate_Changelog_Type_Mutation_Response>;
   /** update single row of the table: "course_certificate_changelog_type" */
   update_course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** update data of the table: "course_certificate_hold_request" */
+  update_course_certificate_hold_request?: Maybe<Course_Certificate_Hold_Request_Mutation_Response>;
+  /** update single row of the table: "course_certificate_hold_request" */
+  update_course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
   /** update data of the table: "course_delivery_type" */
   update_course_delivery_type?: Maybe<Course_Delivery_Type_Mutation_Response>;
   /** update single row of the table: "course_delivery_type" */
@@ -25777,6 +25939,18 @@ export type Mutation_RootDelete_Course_Certificate_Changelog_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Certificate_Changelog_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Certificate_Hold_RequestArgs = {
+  where: Course_Certificate_Hold_Request_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Certificate_Hold_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -26673,6 +26847,20 @@ export type Mutation_RootInsert_Course_Certificate_Changelog_TypeArgs = {
 export type Mutation_RootInsert_Course_Certificate_Changelog_Type_OneArgs = {
   object: Course_Certificate_Changelog_Type_Insert_Input;
   on_conflict?: InputMaybe<Course_Certificate_Changelog_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Certificate_Hold_RequestArgs = {
+  objects: Array<Course_Certificate_Hold_Request_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Certificate_Hold_Request_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Certificate_Hold_Request_OneArgs = {
+  object: Course_Certificate_Hold_Request_Insert_Input;
+  on_conflict?: InputMaybe<Course_Certificate_Hold_Request_On_Conflict>;
 };
 
 
@@ -27786,6 +27974,20 @@ export type Mutation_RootUpdate_Course_Certificate_Changelog_TypeArgs = {
 export type Mutation_RootUpdate_Course_Certificate_Changelog_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Certificate_Changelog_Type_Set_Input>;
   pk_columns: Course_Certificate_Changelog_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Hold_RequestArgs = {
+  _set?: InputMaybe<Course_Certificate_Hold_Request_Set_Input>;
+  where: Course_Certificate_Hold_Request_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Certificate_Hold_Request_By_PkArgs = {
+  _set?: InputMaybe<Course_Certificate_Hold_Request_Set_Input>;
+  pk_columns: Course_Certificate_Hold_Request_Pk_Columns_Input;
 };
 
 
@@ -33080,6 +33282,12 @@ export type Query_Root = {
   course_certificate_changelog_type_aggregate: Course_Certificate_Changelog_Type_Aggregate;
   /** fetch data from the table: "course_certificate_changelog_type" using primary key columns */
   course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** fetch data from the table: "course_certificate_hold_request" */
+  course_certificate_hold_request: Array<Course_Certificate_Hold_Request>;
+  /** fetch aggregated fields from the table: "course_certificate_hold_request" */
+  course_certificate_hold_request_aggregate: Course_Certificate_Hold_Request_Aggregate;
+  /** fetch data from the table: "course_certificate_hold_request" using primary key columns */
+  course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
   /** fetch data from the table: "course_delivery_type" */
   course_delivery_type: Array<Course_Delivery_Type>;
   /** fetch aggregated fields from the table: "course_delivery_type" */
@@ -33735,6 +33943,29 @@ export type Query_RootCourse_Certificate_Changelog_Type_AggregateArgs = {
 
 export type Query_RootCourse_Certificate_Changelog_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCourse_Certificate_Hold_RequestArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Hold_Request_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Certificate_Hold_Request_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Hold_Request_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Certificate_Hold_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -35561,6 +35792,12 @@ export type Subscription_Root = {
   course_certificate_changelog_type_aggregate: Course_Certificate_Changelog_Type_Aggregate;
   /** fetch data from the table: "course_certificate_changelog_type" using primary key columns */
   course_certificate_changelog_type_by_pk?: Maybe<Course_Certificate_Changelog_Type>;
+  /** fetch data from the table: "course_certificate_hold_request" */
+  course_certificate_hold_request: Array<Course_Certificate_Hold_Request>;
+  /** fetch aggregated fields from the table: "course_certificate_hold_request" */
+  course_certificate_hold_request_aggregate: Course_Certificate_Hold_Request_Aggregate;
+  /** fetch data from the table: "course_certificate_hold_request" using primary key columns */
+  course_certificate_hold_request_by_pk?: Maybe<Course_Certificate_Hold_Request>;
   /** fetch data from the table: "course_delivery_type" */
   course_delivery_type: Array<Course_Delivery_Type>;
   /** fetch aggregated fields from the table: "course_delivery_type" */
@@ -36190,6 +36427,29 @@ export type Subscription_RootCourse_Certificate_Changelog_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Certificate_Changelog_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Certificate_Hold_RequestArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Hold_Request_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Certificate_Hold_Request_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Certificate_Hold_Request_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Certificate_Hold_Request_Order_By>>;
+  where?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Certificate_Hold_Request_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -40046,7 +40306,7 @@ export type GetCertificateQueryVariables = Exact<{
 }>;
 
 
-export type GetCertificateQuery = { __typename?: 'query_root', certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
+export type GetCertificateQuery = { __typename?: 'query_root', certificateHoldRequest: Array<{ __typename?: 'course_certificate_hold_request', expiry_date: any, start_date: any }>, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null, profile?: { __typename?: 'profile', fullName?: string | null, id: any, avatar?: string | null, archived?: boolean | null } | null, participant?: { __typename?: 'course_participant', id: any, grade?: Grade_Enum | null, dateGraded?: any | null, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null }, gradingModules: Array<{ __typename?: 'course_participant_module', completed: boolean, id: any, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, certificateChanges: Array<{ __typename?: 'course_certificate_changelog', id: any, createdAt: any, updatedAt: any, payload?: any | null, type: Course_Certificate_Changelog_Type_Enum, author: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> } | null } | null };
 
 export type ImportLegacyCertificateMutationVariables = Exact<{
   code: Scalars['String'];
@@ -40054,6 +40314,25 @@ export type ImportLegacyCertificateMutationVariables = Exact<{
 
 
 export type ImportLegacyCertificateMutation = { __typename?: 'mutation_root', importLegacyCertificate: boolean };
+
+export type InsertCourseCertificateChangelogMutationVariables = Exact<{
+  participantId: Scalars['uuid'];
+  type: Course_Certificate_Changelog_Type_Enum;
+  payload: Scalars['jsonb'];
+}>;
+
+
+export type InsertCourseCertificateChangelogMutation = { __typename?: 'mutation_root', insertChangeLog?: { __typename?: 'course_certificate_changelog', id: any } | null };
+
+export type InsertCourseCertificateHoldRequestMutationVariables = Exact<{
+  certificateId: Scalars['uuid'];
+  changelogId: Scalars['uuid'];
+  expireDate: Scalars['date'];
+  startDate: Scalars['date'];
+}>;
+
+
+export type InsertCourseCertificateHoldRequestMutation = { __typename?: 'mutation_root', insert_course_certificate_hold_request_one?: { __typename?: 'course_certificate_hold_request', id: any } | null };
 
 export type RevokeCertMutationVariables = Exact<{
   id: Scalars['uuid'];
