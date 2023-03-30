@@ -151,10 +151,8 @@
       "modal-message": "You are going to reset the existing instructions to the default value. Do you want to proceed?",
       "instructions": {
         "CLOSED": {
-          "ADVANCED": {
-            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
-          },
           "ADVANCED_TRAINER": {
+            "default": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Intermediate Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>",
             "reaccreditation": "<p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">ID Check</strong></b></u></p><p dir=\"ltr\"><span>Please bring a valid form of ID with you to the training course, this must consist of either a valid passport or driving licence.</span></p><p dir=\"ltr\"><u><b><strong class=\"rte-bold rte-underline\">Certification Requirements</strong></b></u></p><ul><li value=\"1\"><span>A valid Team Teach Advanced Trainer Certificate</span></li><li value=\"2\"><span>The equivalent of a One Day Emergency at Work First Aid Certificate</span></li></ul>"
           },
           "INTERMEDIATE_TRAINER": {

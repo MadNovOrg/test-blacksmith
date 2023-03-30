@@ -366,6 +366,8 @@ export function getDefaultSpecialInstructions(
 
   if (level === CourseLevel.Level_1) {
     key = `${key}.${deliveryType}`
+  } else if (level === CourseLevel.Level_2) {
+    key = `${key}.default`
   } else if (reaccreditation) {
     key = `${key}.reaccreditation`
   } else {
