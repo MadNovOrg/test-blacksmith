@@ -15056,6 +15056,8 @@ export enum Course_Certificate_Constraint {
 /** columns and relationships of "course_certificate_hold_request" */
 export type Course_Certificate_Hold_Request = {
   __typename?: 'course_certificate_hold_request';
+  /** An object relationship */
+  certificate: Course_Certificate;
   certificate_id: Scalars['uuid'];
   changelog_id: Scalars['uuid'];
   expiry_date: Scalars['date'];
@@ -15090,6 +15092,7 @@ export type Course_Certificate_Hold_Request_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Certificate_Hold_Request_Bool_Exp>>;
   _not?: InputMaybe<Course_Certificate_Hold_Request_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Certificate_Hold_Request_Bool_Exp>>;
+  certificate?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
   changelog_id?: InputMaybe<Uuid_Comparison_Exp>;
   expiry_date?: InputMaybe<Date_Comparison_Exp>;
@@ -15109,6 +15112,7 @@ export enum Course_Certificate_Hold_Request_Constraint {
 
 /** input type for inserting data into table "course_certificate_hold_request" */
 export type Course_Certificate_Hold_Request_Insert_Input = {
+  certificate?: InputMaybe<Course_Certificate_Obj_Rel_Insert_Input>;
   certificate_id?: InputMaybe<Scalars['uuid']>;
   changelog_id?: InputMaybe<Scalars['uuid']>;
   expiry_date?: InputMaybe<Scalars['date']>;
@@ -15154,6 +15158,7 @@ export type Course_Certificate_Hold_Request_On_Conflict = {
 
 /** Ordering options when selecting data from "course_certificate_hold_request". */
 export type Course_Certificate_Hold_Request_Order_By = {
+  certificate?: InputMaybe<Course_Certificate_Order_By>;
   certificate_id?: InputMaybe<Order_By>;
   changelog_id?: InputMaybe<Order_By>;
   expiry_date?: InputMaybe<Order_By>;
@@ -29272,7 +29277,7 @@ export type Order = {
   organizationId: Scalars['uuid'];
   paymentMethod: Payment_Methods_Enum;
   price?: Maybe<Scalars['float8']>;
-  profileId: Scalars['uuid'];
+  profileId?: Maybe<Scalars['uuid']>;
   promoCodes?: Maybe<Scalars['jsonb']>;
   quantity: Scalars['Int'];
   registrants: Scalars['json'];
@@ -41238,7 +41243,7 @@ export type GetOrderQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId: any, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
+export type GetOrderQuery = { __typename?: 'query_root', order?: { __typename?: 'order', id: any, courseId: number, profileId?: any | null, quantity: number, registrants: any, paymentMethod: Payment_Methods_Enum, orderDue?: any | null, orderTotal?: any | null, currency?: string | null, stripePaymentId?: string | null, promoCodes?: any | null, xeroInvoiceNumber?: string | null, organizationId: any, user: any, course: { __typename?: 'course', id: number, course_code?: string | null, level: Course_Level_Enum, name: string, type: Course_Type_Enum, source?: Course_Source_Enum | null, start?: any | null, end?: any | null, freeSpaces?: number | null, salesRepresentative?: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null } | null }, invoice?: { __typename?: 'xero_invoice', xeroId: string, invoiceNumber: string, lineItems: any, status?: string | null, fullyPaidOnDate?: any | null, amountDue?: any | null, amountPaid?: any | null, reference: string, currencyCode: string, subtotal: any, totalTax: any, total: any, dueDate: any, issuedDate: any, contact: { __typename?: 'xero_contact', phones?: any | null, addresses?: any | null, name?: string | null, firstName: string, lastName: string, emailAddress?: string | null } } | null } | null };
 
 export type GetOrgWithKeyContactsQueryVariables = Exact<{
   id: Scalars['uuid'];

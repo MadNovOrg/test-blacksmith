@@ -380,7 +380,8 @@
         "others": "Others"
       }
     },
-    "revoked-warning": "This certification has been revoked. It can no longer be accessed.",
+    "revoked-warning": "This certification has been revoked. It can no longer be accessed. ",
+    "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
       "please-add-a-note": "Please add a note*",

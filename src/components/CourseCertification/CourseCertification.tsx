@@ -192,6 +192,7 @@ const CertificateInfo: React.FC<
 }) => {
   const imageSize = '10%'
   const { t, _t } = useScopedTranslation('common.course-certificate')
+  const { acl } = useAuth()
 
   const moduleGroupsWithModules = courseParticipant
     ? transformModulesToGroups(
@@ -207,15 +208,19 @@ const CertificateInfo: React.FC<
       {isRevoked ? (
         <Alert severity="warning" sx={{ mb: 2 }} variant="outlined">
           {t('revoked-warning')}
-          <Button
-            variant="text"
-            color="primary"
-            sx={{ ml: 1, py: 0 }}
-            size="small"
-            onClick={onShowChangelogModal}
-          >
-            {_t('view-details')}
-          </Button>
+          {acl.isTTAdmin() ? (
+            <Button
+              variant="text"
+              color="primary"
+              sx={{ ml: 1, py: 0 }}
+              size="small"
+              onClick={onShowChangelogModal}
+            >
+              {_t('view-details')}
+            </Button>
+          ) : (
+            t('revoked-warning-user')
+          )}
         </Alert>
       ) : null}
 
@@ -274,7 +279,7 @@ const CertificateInfo: React.FC<
               </Grid>
             )}
 
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
                 {_t('status')}
               </Typography>
@@ -518,7 +523,7 @@ export const CourseCertification: React.FC<
             </Grid>
           </Grid>
 
-          <Grid item md={7}>
+          <Grid item md={8}>
             {holdRequest ? (
               <Grid item mb={2}>
                 <Alert
@@ -557,6 +562,8 @@ export const CourseCertification: React.FC<
                       <Button
                         variant="text"
                         startIcon={<RemoveRedEyeIcon />}
+                        sx={{ ml: 1, py: 0 }}
+                        size="small"
                         onClick={() =>
                           setShowPutOnHoldModal({ edit: true, open: true })
                         }
@@ -566,6 +573,8 @@ export const CourseCertification: React.FC<
                       <Button
                         variant="contained"
                         startIcon={<EditIcon />}
+                        sx={{ ml: 1, py: 0 }}
+                        size="small"
                         data-testid="edit-hold-status-button"
                         onClick={() =>
                           setShowPutOnHoldModal({ edit: true, open: true })
