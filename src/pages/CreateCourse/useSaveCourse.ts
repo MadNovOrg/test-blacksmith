@@ -197,12 +197,14 @@ export function useSaveCourse(): {
               ? {
                   accountCode: courseData.accountCode,
                   freeSpaces: courseData.freeSpaces,
-                  salesRepresentativeId: courseData.salesRepresentative?.id,
-                  source: courseData.source,
                 }
               : null),
             ...(courseData.type === CourseType.CLOSED
-              ? { expenses: { data: prepareExpensesData(expenses) } }
+              ? {
+                  expenses: { data: prepareExpensesData(expenses) },
+                  source: courseData.source,
+                  salesRepresentativeId: courseData.salesRepresentative?.id,
+                }
               : null),
             ...(courseData.type === CourseType.INDIRECT &&
             go1Licensing?.prices.amountDue
