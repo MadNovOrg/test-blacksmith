@@ -87,7 +87,6 @@ insert_permissions:
       set:
         profile_id: x-hasura-User-Id
       columns:
-        - completed_evaluation
         - course_id
         - invite_id
       backend_only: false
@@ -227,6 +226,7 @@ select_permissions:
         - attended
         - booking_date
         - certificate_id
+        - completed_evaluation
         - course_id
         - date_graded
         - go1_enrolment_status
@@ -266,23 +266,24 @@ update_permissions:
   - role: tt-admin
     permission:
       columns:
-        - id
-        - registration_id
-        - invoice_id
-        - booking_date
-        - profile_id
-        - invite_id
-        - go1_enrolment_id
         - attended
-        - go1_enrolment_status
-        - created_at
-        - updated_at
-        - grading_feedback
-        - grade
-        - date_graded
-        - course_id
+        - booking_date
         - certificate_id
+        - completed_evaluation
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
         - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - profile_id
+        - registration_id
+        - updated_at
       filter:
         certificate:
           is_revoked:
@@ -298,6 +299,7 @@ update_permissions:
   - role: user
     permission:
       columns:
+        - completed_evaluation
         - hs_consent
       filter:
         profile_id:
@@ -308,6 +310,17 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: course_completed_evaluation
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - completed_evaluation
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/email/course-completed-evaluation'
   - name: course_participant_graded
     definition:
       enable_manual: true
@@ -321,17 +334,6 @@ event_triggers:
       interval_sec: 10
       timeout_sec: 60
     webhook: '{{EVENTS_HOST}}/course/status'
-  - name: course_completed_evaluation
-    definition:
-      enable_manual: false
-      update:
-        columns:
-          - completed_evaluation
-    retry_conf:
-      num_retries: 0
-      interval_sec: 10
-      timeout_sec: 60
-    webhook: '{{EVENTS_HOST}}/email/course-completed-evaluation'
   - name: create_certificate
     definition:
       enable_manual: true
