@@ -161,6 +161,15 @@ actions:
       - role: tt-ops
       - role: tt-admin
     comment: Merge users
+  - name: notifyCourseEdit
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/notify-editing'
+    permissions:
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+    comment: Notify course's trainer(s) and attendees about course editing
   - name: plansCreate
     definition:
       kind: synchronous
@@ -594,6 +603,8 @@ custom_types:
     - name: TransferInput
     - name: GetOrdersInput
     - name: UpdateUserProfileInput
+    - name: NotifyCourseInput
+    - name: NotifyCourseTrainerInput
   objects:
     - name: LinkProfileResult
     - name: PlansCreateResult
@@ -650,5 +661,6 @@ custom_types:
     - name: OrganizationInfo
     - name: MergeUserOutput
     - name: DeleteUserOutput
+    - name: NotifyCourseEditOutput
   scalars:
     - name: Date

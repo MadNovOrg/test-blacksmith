@@ -4132,6 +4132,27 @@ export type NodeWithTrackbacks = {
   toPing?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type NotifyCourseEditOutput = {
+  __typename?: 'NotifyCourseEditOutput';
+  status: Scalars['Int'];
+};
+
+export type NotifyCourseInput = {
+  courseId: Scalars['Int'];
+  endDate: Scalars['date'];
+  level: CourseLevel;
+  parkingInstructions: Scalars['String'];
+  specialInstructions: Scalars['String'];
+  startDate: Scalars['date'];
+  venueId?: InputMaybe<Scalars['uuid']>;
+  virtualLink?: InputMaybe<Scalars['String']>;
+};
+
+export type NotifyCourseTrainerInput = {
+  id: Scalars['uuid'];
+  type: CourseTrainerType;
+};
+
 export enum OrderDirection {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -25584,6 +25605,8 @@ export type Mutation_Root = {
   insert_xero_invoice_status_one?: Maybe<Xero_Invoice_Status>;
   /** Merge users */
   mergeUser: MergeUserOutput;
+  /** Notify course's trainer(s) and attendees about course editing */
+  notifyCourseEdit: NotifyCourseEditOutput;
   /** Creates a membership plan */
   plansCreate?: Maybe<PlansCreateResult>;
   /** replaceParticipant */
@@ -27926,6 +27949,13 @@ export type Mutation_RootInsert_Xero_Invoice_Status_OneArgs = {
 export type Mutation_RootMergeUserArgs = {
   mergeWith: Scalars['uuid'];
   primaryUser: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootNotifyCourseEditArgs = {
+  oldCourse: NotifyCourseInput;
+  oldTrainers: Array<InputMaybe<NotifyCourseTrainerInput>>;
 };
 
 
@@ -40756,6 +40786,14 @@ export type InsertCourseMutationVariables = Exact<{
 
 
 export type InsertCourseMutation = { __typename?: 'mutation_root', insertCourse?: { __typename?: 'course_mutation_response', affectedRows: number, inserted: Array<{ __typename?: 'course', id: number, course_code?: string | null, expenses: Array<{ __typename?: 'course_expenses', id: any }> }> } | null };
+
+export type NotifyCourseEditMutationVariables = Exact<{
+  oldCourse: NotifyCourseInput;
+  oldTrainers: Array<InputMaybe<NotifyCourseTrainerInput>> | InputMaybe<NotifyCourseTrainerInput>;
+}>;
+
+
+export type NotifyCourseEditMutation = { __typename?: 'mutation_root', notifyCourseEdit: { __typename?: 'NotifyCourseEditOutput', status: number } };
 
 export type RemoveCourseDraftMutationVariables = Exact<{
   courseType: Scalars['String'];

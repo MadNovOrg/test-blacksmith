@@ -34,10 +34,16 @@ import {
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
 } from '@app/generated/graphql'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
+import {
+  MUTATION as NOTIFY_COURSE_INPUT,
+  ParamsType as NotifyCourseEditParamType,
+  ResponseType as NotifyCourseEditResponseType,
+} from '@app/queries/courses/notify-course-edit'
 import {
   ParamsType,
   ResponseType,
@@ -79,6 +85,7 @@ function assertCourseDataValid(
 export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { id } = useParams()
   const { t } = useTranslation()
+  const fetcher = useFetcher()
   const { profile, acl } = useAuth()
   const navigate = useNavigate()
   const [courseData, setCourseData] = useState<CourseInput>()
@@ -120,6 +127,21 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       setCourseDataValid(Boolean(isValid))
     },
     []
+  )
+
+  const notifyCourseEdit = useCallback(
+    async (
+      oldCourse: NotifyCourseEditParamType['oldCourse'],
+      oldTrainers: NotifyCourseEditParamType['oldTrainers']
+    ) => {
+      const response = await fetcher<
+        NotifyCourseEditResponseType,
+        NotifyCourseEditParamType
+      >(NOTIFY_COURSE_INPUT, { oldCourse, oldTrainers })
+
+      return response
+    },
+    [fetcher]
   )
 
   const [courseDiffs, autoapproved]: [CourseDiff[], boolean] = useMemo(() => {
@@ -294,6 +316,22 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
         }
 
         if (editResponse.data?.updateCourse.id) {
+          notifyCourseEdit(
+            {
+              courseId: course.id,
+              level: course.level,
+              venueId: course.schedule[0].venue?.id || null,
+              virtualLink: course.schedule[0].virtualLink || null,
+              startDate: course.dates.aggregate.start.date,
+              endDate: course.dates.aggregate.end.date,
+              parkingInstructions: course.parking_instructions || '',
+              specialInstructions: course.special_instructions || '',
+            },
+            course.trainers?.map(trainer => ({
+              id: trainer.profile.id,
+              type: trainer.type,
+            })) || []
+          )
           mutateCourse()
           navigate(`/courses/${course.id}/details`)
         } else {

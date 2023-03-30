@@ -133,6 +133,13 @@ type Mutation {
 }
 
 type Mutation {
+  notifyCourseEdit(
+    oldCourse: NotifyCourseInput!
+    oldTrainers: [NotifyCourseTrainerInput]!
+  ): NotifyCourseEditOutput!
+}
+
+type Mutation {
   plansCreate(
     data: PlansCreateInput!
   ): PlansCreateResult
@@ -526,6 +533,22 @@ input UpdateUserProfileInput {
   dbs: String
 }
 
+input NotifyCourseInput {
+  courseId: Int!
+  level: CourseLevel!
+  startDate: date!
+  endDate: date!
+  venueId: uuid
+  virtualLink: String
+  parkingInstructions: String!
+  specialInstructions: String!
+}
+
+input NotifyCourseTrainerInput {
+  id: uuid!
+  type: CourseTrainerType!
+}
+
 type LinkProfileResult {
   status: Boolean!
 }
@@ -878,6 +901,10 @@ type DeleteUserOutput {
   success: Boolean!
   error: DeleteUserError
   courseIds: String
+}
+
+type NotifyCourseEditOutput {
+  status: Int!
 }
 
 scalar Date
