@@ -50,7 +50,7 @@ export const AuditFilteringSidebar: React.FC<
                 onChange={(from, to) =>
                   onChange({ source: 'dates', value: [from, to] })
                 }
-                title={t('filters.date-range')}
+                title={t('pages.audits.filter-by-event-date')}
               />
             </Stack>
           </Box>

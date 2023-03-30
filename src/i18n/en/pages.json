@@ -1344,7 +1344,9 @@
     "old-start-date": "Original start date",
     "old-end-date": "Original end date",
     "new-start-date": "New start date",
-    "new-end-date": "New end date"
+    "new-end-date": "New end date",
+    "reason": "Reason",
+    "filter-by-event-date": "Filter by Event Date"
   },
   "change-password": {
     "title": {

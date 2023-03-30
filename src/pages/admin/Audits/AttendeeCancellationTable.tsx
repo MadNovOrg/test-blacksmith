@@ -92,6 +92,13 @@ export const AttendeeCancellationTable: React.FC<
         exportRender: (log: AttendeeLogType) => log.course.course_code ?? '',
       },
       {
+        id: 'payload.cancellation_reason',
+        label: t('pages.audits.reason'),
+        sorting: false,
+        exportRender: (log: AttendeeLogType) =>
+          log.payload.cancellation_reason ?? '',
+      },
+      {
         id: 'invoice_no',
         label: t('common.invoice-no'),
         sorting: false,
@@ -202,6 +209,7 @@ export const AttendeeCancellationTable: React.FC<
                           ))}
                         </Box>
                       </TableCell>
+                      <TableCell>{log.payload.cancellation_reason}</TableCell>
                       <TableCell>
                         <Link
                           href={`/manage-courses/all/${log.course.id}/details`}
