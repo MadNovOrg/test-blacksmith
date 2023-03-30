@@ -40607,10 +40607,11 @@ export type InsertCourseCertificateHoldRequestMutationVariables = Exact<{
   changelogId: Scalars['uuid'];
   expireDate: Scalars['date'];
   startDate: Scalars['date'];
+  newExpiryDate: Scalars['date'];
 }>;
 
 
-export type InsertCourseCertificateHoldRequestMutation = { __typename?: 'mutation_root', insert_course_certificate_hold_request_one?: { __typename?: 'course_certificate_hold_request', id: any } | null };
+export type InsertCourseCertificateHoldRequestMutation = { __typename?: 'mutation_root', insert_course_certificate_hold_request_one?: { __typename?: 'course_certificate_hold_request', id: any } | null, update_course_certificate_by_pk?: { __typename?: 'course_certificate', expiryDate: any } | null };
 
 export type RevokeCertMutationVariables = Exact<{
   id: Scalars['uuid'];

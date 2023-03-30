@@ -6,6 +6,7 @@ export const INSERT_CERTIFICATE_HOLD_MUTATION = gql`
     $changelogId: uuid!
     $expireDate: date!
     $startDate: date!
+    $newExpiryDate: date!
   ) {
     insert_course_certificate_hold_request_one(
       object: {
@@ -20,6 +21,12 @@ export const INSERT_CERTIFICATE_HOLD_MUTATION = gql`
       }
     ) {
       id
+    }
+    update_course_certificate_by_pk(
+      _set: { expiryDate: $newExpiryDate }
+      pk_columns: { id: $certificateId }
+    ) {
+      expiryDate
     }
   }
 `

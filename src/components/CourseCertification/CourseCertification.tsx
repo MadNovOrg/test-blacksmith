@@ -59,6 +59,7 @@ import {
 
 import { CertificateStatusChip } from '../CertificateStatusChip'
 
+import CertificateHoldHistoryModal from './CertificateHoldHistoryModal'
 import UndoRevokeModal from './UndoRevokeModal'
 
 // workaround for using recat-pdf with vite
@@ -388,6 +389,8 @@ export const CourseCertification: React.FC<
   })
   const [showRevokeCertModal, setShowRevokeCertModal] = useState(false)
   const [showUndoRevokeModal, setShowUndoRevokeModal] = useState(false)
+  const [showCertificateHoldHistoryModal, setShowCertificateHoldHistoryModal] =
+    useState(false)
 
   const { data, error, mutate } = useSWR<
     GetCertificateQuery,
@@ -533,7 +536,6 @@ export const CourseCertification: React.FC<
               )}
             </Grid>
           </Grid>
-
           <Grid item md={8}>
             {holdRequest ? (
               <Grid item mb={2}>
@@ -568,16 +570,13 @@ export const CourseCertification: React.FC<
                         }
                       )}
                     </Typography>
-
                     <Box display="flex" justifyContent="flex-end" gap={2}>
                       <Button
                         variant="text"
                         startIcon={<RemoveRedEyeIcon />}
                         sx={{ ml: 1, py: 0 }}
                         size="small"
-                        onClick={() =>
-                          setShowPutOnHoldModal({ edit: true, open: true })
-                        }
+                        onClick={() => setShowCertificateHoldHistoryModal(true)}
                       >
                         {t('view-details')}
                       </Button>
@@ -628,6 +627,7 @@ export const CourseCertification: React.FC<
               }}
               participantId={courseParticipant.id}
               certificateId={certificateId}
+              certificateExpiryDate={certificate.expiryDate}
               courseLevel={
                 certificate.courseLevel as unknown as Course_Level_Enum
               }
@@ -647,6 +647,17 @@ export const CourseCertification: React.FC<
               participant={courseParticipant}
               onClose={() => setShowModifyGradeModal(false)}
             />
+          </Dialog>
+
+          <Dialog
+            open={showCertificateHoldHistoryModal}
+            onClose={() => setShowCertificateHoldHistoryModal(false)}
+            title={t('certificate-hold-history-log')}
+            minWidth={1000}
+          >
+            {holdChangelogs ? (
+              <CertificateHoldHistoryModal changelogs={holdChangelogs} />
+            ) : null}
           </Dialog>
 
           <Dialog

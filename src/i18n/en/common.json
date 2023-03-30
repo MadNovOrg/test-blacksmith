@@ -286,6 +286,7 @@
   },
   "validation-errors": {
     "invalid-date": "Please enter a valid date",
+    "required-date": "Please enter a date",
     "invalid-date-optional": "Please enter a valid date or keep it empty",
     "invalid-phone": "Please enter a valid phone number",
     "date-gte": "Must be {{date}} or after",
@@ -361,9 +362,12 @@
     "manage-certification": "Manage certification",
     "revoke-certificate": "Revoke Certificate",
     "hold-certificate": "Put on hold",
+    "confirm-dates": "Confirm new dates",
     "revoke-cert": "Revoke certificate",
+    "email-notification": "Users will be notified by email.",
     "undo-revoke": "Undo revoke",
     "change-log": "Change log",
+    "certificate-hold-history-log": "Certificate On Hold History",
     "put-on-hold-modal": {
       "warning": "Once you put on hold, attendee will no longer have access to the certificate.",
       "notes": "Notes",
