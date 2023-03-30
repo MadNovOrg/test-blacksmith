@@ -160,6 +160,7 @@ export const useOrders = ({ sort, filters, limit, offset }: UseOrdersProps) => {
     OrdersQueryVariables
   >({
     query: GET_ORDERS,
+    requestPolicy: 'cache-and-network',
     variables: {
       where,
       limit,

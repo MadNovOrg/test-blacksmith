@@ -190,7 +190,6 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {orders.map(order => {
-            const { orderDue } = order
             const { status, dueDate } = order.invoice ?? {}
 
             return (
@@ -223,14 +222,14 @@ export const List: React.FC<React.PropsWithChildren<Props>> = ({
 
                 <TableCell>
                   {t('currency', {
-                    amount: order.orderTotal,
+                    amount: order.invoice?.total,
                     currency: order.currency ?? 'GBP',
                   })}
                 </TableCell>
 
                 <TableCell>
                   {t('currency', {
-                    amount: orderDue,
+                    amount: order.invoice?.amountDue,
                     currency: order.currency ?? 'GBP',
                   })}
                 </TableCell>

@@ -9,6 +9,8 @@ export const GET_ORDERS = gql`
     status
     dueDate
     reference
+    amountDue
+    total
     contact {
       ...ContactInfo
     }

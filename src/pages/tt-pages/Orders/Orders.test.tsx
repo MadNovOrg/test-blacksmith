@@ -58,10 +58,10 @@ describe('page: Orders', () => {
     ).toBeInTheDocument()
     expect(within(tableRow).getByText(/draft/i)).toBeInTheDocument()
     expect(
-      within(tableRow).getByText(formatCurrency(order.orderDue))
+      within(tableRow).getByText(formatCurrency(order.invoice?.amountDue))
     ).toBeInTheDocument()
     expect(
-      within(tableRow).getByText(formatCurrency(order.orderTotal))
+      within(tableRow).getByText(formatCurrency(order.invoice?.total))
     ).toBeInTheDocument()
     expect(within(tableRow).getByText(/invoice/i)).toBeInTheDocument()
   })

@@ -40203,11 +40203,11 @@ export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __t
 
 export type ContactInfoFragment = { __typename?: 'xero_contact', firstName: string };
 
-export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } };
+export type InvoiceInfoFragment = { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } };
 
 export type OrderOrganizationInfoFragment = { __typename?: 'organization', id: any, name: string, address: any };
 
-export type OrderInfoFragment = { __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } } | null };
+export type OrderInfoFragment = { __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null };
 
 export type OrdersQueryVariables = Exact<{
   where?: InputMaybe<Order_Bool_Exp>;
@@ -40217,7 +40217,7 @@ export type OrdersQueryVariables = Exact<{
 }>;
 
 
-export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, contact: { __typename?: 'xero_contact', firstName: string } } | null }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
+export type OrdersQuery = { __typename?: 'query_root', order: Array<{ __typename?: 'order', id: any, orderDue?: any | null, xeroInvoiceNumber?: string | null, paymentMethod: Payment_Methods_Enum, orderTotal?: any | null, currency?: string | null, organization: { __typename?: 'organization', id: any, name: string, address: any }, invoice?: { __typename?: 'xero_invoice', status?: string | null, dueDate: any, reference: string, amountDue?: any | null, total: any, contact: { __typename?: 'xero_contact', firstName: string } } | null }>, order_aggregate: { __typename?: 'order_aggregate', aggregate?: { __typename?: 'order_aggregate_fields', count: number } | null } };
 
 export type XeroConnectQueryVariables = Exact<{ [key: string]: never; }>;
 
