@@ -39,6 +39,12 @@ export class ProfilePage extends BasePage {
     ).toHaveCount(0)
   }
 
+  async checkCertificate(certificateId: string | null) {
+    await expect(
+      this.page.locator(`data-testid=certificate-${certificateId}`)
+    ).toBeVisible()
+  }
+
   async clickSaveChanges() {
     await Promise.all([
       waitForGraphQLRequest(this.page, 'UpdateProfile'),

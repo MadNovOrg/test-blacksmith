@@ -167,12 +167,14 @@ export const CourseDetails = () => {
                       aria-label="Course participant tabs"
                     >
                       <PillTab
+                        data-testid="participant-course-checklist"
                         label={t(
                           'pages.participant-course.checklist-tab-title'
                         )}
                         value="checklist"
                       />
                       <PillTab
+                        data-testid="participant-course-resources"
                         label={t(
                           'pages.participant-course.resources-tab-title'
                         )}
@@ -180,6 +182,7 @@ export const CourseDetails = () => {
                       />
                       {courseParticipant?.certificate ? (
                         <PillTab
+                          data-testid="participant-course-certification"
                           label={t(
                             'pages.participant-course.certification-tab-title'
                           )}

@@ -232,7 +232,7 @@ const CertificateInfo: React.FC<
         {t('certified-message')}
       </Typography>
 
-      <Typography variant="h2" gutterBottom>
+      <Typography data-testid="certificate-grade" variant="h2" gutterBottom>
         {t(`${grade.toLowerCase()}-title`)}
       </Typography>
 
@@ -244,7 +244,12 @@ const CertificateInfo: React.FC<
         <>
           <Grid container spacing={2} mt={4}>
             <Grid item xs={3}>
-              <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+              <Typography
+                data-testid="certificate-issue-date"
+                variant="body2"
+                sx={{ mb: 1 }}
+                color="grey.500"
+              >
                 {t('issue-date')}
               </Typography>
               <Typography variant="body1">
@@ -256,7 +261,9 @@ const CertificateInfo: React.FC<
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
                 {t('number')}
               </Typography>
-              <Typography variant="body1">{certificationNumber}</Typography>
+              <Typography data-testid="certificate-number" variant="body1">
+                {certificationNumber}
+              </Typography>
             </Grid>
 
             {isRevoked ? (
@@ -270,7 +277,12 @@ const CertificateInfo: React.FC<
               </Grid>
             ) : (
               <Grid item xs={3}>
-                <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
+                <Typography
+                  data-testid="certificate-valid-until"
+                  variant="body2"
+                  sx={{ mb: 1 }}
+                  color="grey.500"
+                >
                   {t('valid-until')}
                 </Typography>
                 <Typography variant="body1">
@@ -278,7 +290,6 @@ const CertificateInfo: React.FC<
                 </Typography>
               </Grid>
             )}
-
             <Grid item xs={3}>
               <Typography variant="body2" sx={{ mb: 1 }} color="grey.500">
                 {_t('status')}

@@ -171,7 +171,7 @@ export const CertificationList: React.FC<
         </Stack>
       </Grid>
 
-      <Table>
+      <Table data-testid="certification-table">
         <TableHead
           cols={cols}
           orderBy={sorting.by}
@@ -199,13 +199,13 @@ export const CertificationList: React.FC<
                 )}
 
                 {showCol('name') ? (
-                  <TableCell>
+                  <TableCell data-testid="name">
                     <ProfileAvatar profile={p.profile} />
                   </TableCell>
                 ) : null}
 
                 {showCol('contact') ? (
-                  <TableCell>
+                  <TableCell data-testid="contact">
                     <Link href={`/profile/${p.profile.id}`}>
                       {p.profile.email}
                       {p.profile.contactDetails.map(contact => contact.value)}
@@ -214,7 +214,7 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('organisation') ? (
-                  <TableCell>
+                  <TableCell data-testid="organisation">
                     <Link href={`/organisations/${p.course.organization?.id}`}>
                       {p.course.organization?.name}
                     </Link>
@@ -222,7 +222,7 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('grade') ? (
-                  <TableCell>
+                  <TableCell data-testid="grade">
                     <Box display="flex" alignItems="center">
                       {p.grade ? <Grade grade={p.grade} /> : null}
                     </Box>
@@ -230,11 +230,15 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('certificate') ? (
-                  <TableCell>
+                  <TableCell data-testid="certificate">
                     {p.grade ? (
                       <>
                         <Grade grade={p.grade} />
-                        <Typography variant="body2" color="grey.700">
+                        <Typography
+                          data-testid="certificate-number"
+                          variant="body2"
+                          color="grey.700"
+                        >
                           {p.certificate.number}
                         </Typography>
                       </>
@@ -243,7 +247,7 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('course-code') ? (
-                  <TableCell>
+                  <TableCell data-testid="course-code">
                     <Typography variant="body2" color="grey.700">
                       {p.course.course_code}
                     </Typography>
@@ -251,13 +255,13 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('status') ? (
-                  <TableCell>
+                  <TableCell data-testid="status">
                     <CertificateStatusChip status={status} />
                   </TableCell>
                 ) : null}
 
                 {showCol('date-obtained') ? (
-                  <TableCell>
+                  <TableCell data-testid="date-obtained">
                     <Typography variant="body2" color="grey.700">
                       {t('dates.default', {
                         date: p.certificate.certificationDate,
@@ -267,7 +271,7 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 {showCol('date-expired') ? (
-                  <TableCell>
+                  <TableCell data-testid="date-expired">
                     <Typography variant="body2" color="grey.700">
                       {t('dates.default', {
                         date: p.certificate.expiryDate,
@@ -285,6 +289,7 @@ export const CertificationList: React.FC<
                     onClick={() =>
                       navigate(`/certification/${p.certificate?.id}`)
                     }
+                    data-testid="view-certificate"
                   >
                     {t('components.certification-list.view-certificate')}
                   </Button>

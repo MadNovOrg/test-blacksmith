@@ -24,11 +24,10 @@ const test = base.extend<{
     await deleteCourse(course.id)
   },
   participants: async ({ course }, use) => {
-    const participants = await insertCourseParticipants(
-      course.id,
-      [users.user1WithOrg, users.user2WithOrg],
-      new Date('2022-03-14T00:00:00Z')
-    )
+    const participants = await insertCourseParticipants(course.id, [
+      users.user1WithOrg,
+      users.user2WithOrg,
+    ])
     await use(participants)
   },
 })

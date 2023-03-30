@@ -22,7 +22,7 @@ const test = base.extend<{ course: Course }>({
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseParticipants(course.id, [users.user1], new Date())
+    await insertCourseParticipants(course.id, [users.user1])
     await use(course)
     await deleteCourse(course.id)
   },

@@ -459,6 +459,7 @@ export const ViewProfilePage: React.FC<
                   <TableBody>
                     {(certifications ?? []).map(certificate => (
                       <TableRow
+                        data-testid={'certificate-' + certificate.number}
                         key={certificate.id}
                         sx={{
                           '&&.MuiTableRow-root': {

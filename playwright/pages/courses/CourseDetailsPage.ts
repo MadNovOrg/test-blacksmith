@@ -193,6 +193,8 @@ export class CourseDetailsPage extends BasePage {
   readonly cancellationRequestAlert: Locator
   readonly approveCancellationButton: Locator
   readonly cancelEntireCoursePopUp: CancelEntireCoursePopUp
+  readonly certificationTab: Locator
+  readonly certificateGrade: Locator
 
   constructor(page: Page) {
     super(page)
@@ -245,6 +247,10 @@ export class CourseDetailsPage extends BasePage {
     this.approveCancellationButton = this.page.locator(
       '[data-testid="approve-cancellation-button"]'
     )
+    this.certificationTab = this.page.locator(
+      '[data-testid=participant-course-certification]'
+    )
+    this.certificateGrade = this.page.locator('[data-testid=certificate-grade]')
   }
 
   async goto(courseId: string) {
@@ -424,5 +430,13 @@ export class CourseDetailsPage extends BasePage {
   async approveCancellation(): Promise<CancelEntireCoursePopUp> {
     await this.approveCancellationButton.click()
     return new CancelEntireCoursePopUp(this.page)
+  }
+
+  async clickCertification() {
+    await this.certificationTab.click()
+  }
+
+  async checkCertification(grade: 'Pass') {
+    await expect(this.certificateGrade).toContainText(grade)
   }
 }

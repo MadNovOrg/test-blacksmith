@@ -8,6 +8,7 @@ import {
   EbooksQuery,
   EbooksQueryVariables,
   Go1_Licenses_Insert_Input,
+  Grade_Enum,
   Organization_Bool_Exp,
   Organization_Insert_Input,
   Organization_Member_Insert_Input,
@@ -413,8 +414,7 @@ export const insertCourseModules = async (
 export const insertCourseParticipants = async (
   courseId: number,
   users: User[],
-  bookingDate: Date,
-  graded = false
+  bookingDate = new Date()
 ): Promise<CourseParticipant[]> => {
   const participants = []
   for (const user of users) {
@@ -431,7 +431,6 @@ export const insertCourseParticipants = async (
         },
       },
       profile_id: profileId,
-      ...(graded ? { grade: 'PASS' } : null),
     })
   }
   const query = gql`
@@ -462,6 +461,69 @@ export const insertCourseParticipants = async (
     console.error(e)
   }
   return []
+}
+
+export async function insertCourseGradingForParticipants(
+  courseId: number,
+  users: User[],
+  grade: Grade_Enum,
+  dateGraded = new Date().toISOString()
+): Promise<void> {
+  const participantIds = await Promise.all(
+    users.map(user => getProfileId(user.email))
+  )
+  const query = gql`
+    mutation SaveCourseGrading(
+      $modules: [course_participant_module_insert_input!]!
+      $participantIds: [uuid!]
+      $grade: grade_enum!
+      $courseId: Int!
+      $dateGraded: timestamptz!
+    ) {
+      saveModules: insert_course_participant_module(objects: $modules) {
+        affectedRows: affected_rows
+      }
+      saveParticipantsGrade: update_course_participant(
+        where: {
+          profile_id: { _in: $participantIds }
+          course_id: { _eq: $courseId }
+        }
+        _set: {
+          healthSafetyConsent: true
+          grade: $grade
+          dateGraded: $dateGraded
+        }
+      ) {
+        affectedRows: affected_rows
+      }
+      gradingStarted: update_course_by_pk(
+        pk_columns: { id: $courseId }
+        _set: { gradingStarted: true }
+      ) {
+        id
+      }
+    }
+  `
+  try {
+    await getClient().request<{
+      update_course_participant: { affected_rows: number }
+    }>(query, {
+      modules: [],
+      participantIds,
+      grade,
+      courseId,
+      dateGraded,
+    })
+    console.log(`
+      Updated the grade to "${grade}" for the following users on course "${courseId}":
+        - ${users
+          .map(user => `${user.givenName} ${user.familyName}`)
+          .join('\n    - ')}
+    `)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
 }
 
 export async function getAllPodcasts(): Promise<Podcast[]> {

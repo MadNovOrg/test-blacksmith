@@ -80,15 +80,12 @@ export class MyCoursesPage extends BasePage {
         `[data-testid=course-row-${courseId}] [data-testid=course-title]`
       )
       .click()
-
     return new CourseBuilderPage(this.page)
   }
 
   async clickCourseDetailsPage(courseId: number): Promise<CourseDetailsPage> {
     await this.tableRoot
-      .locator(
-        `[data-testid=course-row-${courseId}] [data-testid=course-title]`
-      )
+      .locator(`[data-testid=course-row-${courseId}] [data-testid=course-code]`)
       .click()
     return new CourseDetailsPage(this.page)
   }

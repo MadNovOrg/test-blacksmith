@@ -1,9 +1,12 @@
 import { expect, Locator } from '@playwright/test'
 
+type TableRow = Record<string, string>
+
 export class UiTable {
   readonly root: Locator
   readonly headers: Locator
   readonly rows: Locator
+  readonly firstRow: Locator
   readonly firstRowCells: Locator
   readonly emptyTable: Locator
 
@@ -13,6 +16,7 @@ export class UiTable {
     this.rows = this.root.locator('tbody tr')
     this.emptyTable = this.root.locator('tbody tr[data-testid="TableNoRows"]')
     this.firstRowCells = this.root.locator('tbody tr >> nth=0 >> td')
+    this.firstRow = this.root.locator('tbody tr >> nth=0')
   }
 
   async getRowsCount(): Promise<number> {
@@ -31,14 +35,13 @@ export class UiTable {
 
   async getRows(
     options: { ignoreEmptyHeaders?: boolean } = { ignoreEmptyHeaders: false }
-  ): Promise<object> {
-    const result = []
+  ): Promise<TableRow[]> {
+    const result: TableRow[] = []
     await this.root.scrollIntoViewIfNeeded()
     const headers = await this.getHeaders({
       ignoreEmpty: options.ignoreEmptyHeaders,
     })
     const rowsCount = await this.getRowsCount()
-
     if (!(await this.emptyTable.isVisible())) {
       for (let i = 0; i < rowsCount; i++) {
         const resultRow: { [k: string]: string } = {}
@@ -52,7 +55,6 @@ export class UiTable {
         result.push(resultRow)
       }
     }
-
     return result
   }
 

@@ -28,9 +28,8 @@ const test = base.extend<{
       COURSES_TO_VIEW,
       users.trainerWithOrg.email
     )
-    console.log(`courses.length: ${courses.length}`)
-    await use(COURSES_TO_VIEW)
-    await deleteCourses(COURSES_TO_VIEW)
+    await use(courses)
+    await deleteCourses(courses)
   },
   courseSearchText: async ({}, use) => {
     await use(COURSES_TO_VIEW[0].name.slice(1).toLocaleLowerCase())

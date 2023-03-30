@@ -14,7 +14,7 @@ export class BasePage {
   }
 
   async goto(url?: string) {
-    await this.page.goto(`${BASE_URL}/${url}`)
+    await this.page.goto(`${BASE_URL}/${url ?? ''}`)
     await this.waitForPageLoad()
   }
 

@@ -26,11 +26,12 @@ const testData = [
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
-      await insertCourseParticipants(
-        course.id,
-        [users.user1WithOrg, users.user2WithOrg, users.user1, users.user2],
-        new Date()
-      )
+      await insertCourseParticipants(course.id, [
+        users.user1WithOrg,
+        users.user2WithOrg,
+        users.user1,
+        users.user2,
+      ])
       return course
     },
   },

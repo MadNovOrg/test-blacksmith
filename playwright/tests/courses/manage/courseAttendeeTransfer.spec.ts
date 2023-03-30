@@ -33,11 +33,7 @@ const createCourses = async (): Promise<Course[]> => {
 const test = base.extend<{ courses: Course[] }>({
   courses: async ({}, use) => {
     const courses = await createCourses()
-    await insertCourseParticipants(
-      courses[0].id,
-      [users.user1WithOrg],
-      new Date()
-    )
+    await insertCourseParticipants(courses[0].id, [users.user1WithOrg])
     await use(courses)
     for (const course of courses) {
       await deleteCourse(course.id)
