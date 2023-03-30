@@ -181,7 +181,7 @@ export const Organizations: React.FC<
                 <>
                   <Button
                     variant="contained"
-                    data-testid="add-new-org-button"
+                    data-testid="export-blended-learning-licence-summary"
                     onClick={() => setExportShowModal(true)}
                     sx={{ marginRight: '1em' }}
                   >

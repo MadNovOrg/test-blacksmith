@@ -182,21 +182,25 @@ export class AllOrganisations extends BasePage {
     const downloadPath = (await download.path()) as string
     const workbook = readFile(downloadPath)
     const sheet = workbook.Sheets[workbook.SheetNames[0]]
+    // Heading Row
     expect(sheet['A1'].v).toBe('Date')
     expect(sheet['B1'].v).toBe('Event')
     expect(sheet['C1'].v).toBe('Invoice number')
     expect(sheet['D1'].v).toBe('Course code')
-    expect(sheet['E1'].v).toBe('Note')
-    expect(sheet['F1'].v).toBe('Invoked by')
-    expect(sheet['G1'].v).toBe('Action')
-    expect(sheet['H1'].v).toBe('Balance')
-    expect(sheet['I1'].v).toBe('Reserved balance')
+    expect(sheet['E1'].v).toBe('Course start date')
+    expect(sheet['F1'].v).toBe('Note')
+    expect(sheet['G1'].v).toBe('Invoked by')
+    expect(sheet['H1'].v).toBe('Action')
+    expect(sheet['I1'].v).toBe('Balance')
+    expect(sheet['J1'].v).toBe('Reserved balance')
+    expect(sheet['K1'].v).toBe('Cost per licence')
+    // Content
     expect(sheet['B2'].v).toBe(Go1_History_Events_Enum.LicensesAdded)
     expect(sheet['C2'].v).toBe('INV.001')
-    expect(sheet['F2'].v).toBe('John Doe')
-    expect(sheet['G2'].v).toEqual('+10')
-    expect(sheet['H2'].v).toEqual(10)
-    expect(sheet['I2'].v).toEqual(0)
+    expect(sheet['G2'].v).toBe('John Doe')
+    expect(sheet['H2'].v).toEqual('+10')
+    expect(sheet['I2'].v).toEqual(10)
+    expect(sheet['J2'].v).toEqual(0)
   }
 
   async clickIndividualsTab() {

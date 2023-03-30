@@ -10,7 +10,6 @@ import { AllOrganisations } from '../../pages/org/AllOrganisations'
 const test = base.extend<{ orgId: string }>({
   orgId: async ({}, use) => {
     const id = await insertOrganization({ name: 'Test organization' })
-
     await insertGo1HistoryEvent({
       event: Go1_History_Events_Enum.LicensesAdded,
       balance: 10,
