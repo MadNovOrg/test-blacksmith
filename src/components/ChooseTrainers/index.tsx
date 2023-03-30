@@ -185,39 +185,37 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
           ) : null}
         </Box>
       ) : null}
-      {requiredAssistants.min > 0 ? (
-        <Box data-testid="AssignTrainers-assist">
-          <Typography variant="subtitle1">
-            {t('pages.create-course.assign-trainers.assist-title', {
-              count: requiredAssistants.min,
-            })}
-          </Typography>
-          <Controller
-            name="assist"
-            control={form.control}
-            render={({ field }) => (
-              <SearchTrainers
-                trainerType={CourseTrainerType.Assistant}
-                courseLevel={courseLevel}
-                courseSchedule={courseSchedule}
-                value={field.value}
-                onChange={field.onChange}
-                matchesFilter={notUsedElsewhere('assist')}
-                disabled={disabled}
-              />
-            )}
-          />
-          {form.formState.errors.assist ? (
-            <FormHelperText error data-testid="AssignTrainers-assist-error">
-              {form.formState.errors.assist.message}
-            </FormHelperText>
-          ) : (
-            <FormHelperText data-testid="AssignTrainers-assist-hint">
-              {t('pages.create-course.assign-trainers.assist-hint')}
-            </FormHelperText>
+      <Box data-testid="AssignTrainers-assist">
+        <Typography variant="subtitle1">
+          {t('pages.create-course.assign-trainers.assist-title', {
+            count: requiredAssistants.min,
+          })}
+        </Typography>
+        <Controller
+          name="assist"
+          control={form.control}
+          render={({ field }) => (
+            <SearchTrainers
+              trainerType={CourseTrainerType.Assistant}
+              courseLevel={courseLevel}
+              courseSchedule={courseSchedule}
+              value={field.value}
+              onChange={field.onChange}
+              matchesFilter={notUsedElsewhere('assist')}
+              disabled={disabled}
+            />
           )}
-        </Box>
-      ) : null}
+        />
+        {form.formState.errors.assist ? (
+          <FormHelperText error data-testid="AssignTrainers-assist-error">
+            {form.formState.errors.assist.message}
+          </FormHelperText>
+        ) : (
+          <FormHelperText data-testid="AssignTrainers-assist-hint">
+            {t('pages.create-course.assign-trainers.assist-hint')}
+          </FormHelperText>
+        )}
+      </Box>
       {needsModerator ? (
         <Box data-testid="AssignTrainers-moderator">
           <Typography variant="subtitle1">

@@ -168,14 +168,13 @@ export const CreateCourseForm = () => {
 
     if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
-        courseData,
+        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
         assistants.map(assistant => ({
           profile_id: assistant.id,
           type: CourseTrainerType.Assistant,
           fullName: assistant.fullName,
           levels: assistant.levels,
-        })),
-        seniorOrPrincipalLead
+        }))
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return
@@ -228,30 +227,23 @@ export const CreateCourseForm = () => {
 
       {courseType === CourseType.INDIRECT ? (
         <>
-          {requiredAssistants && requiredAssistants.max > 0 ? (
-            <>
-              <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
-                {t('pages.create-course.assign-trainers-title')}
-              </Typography>
+          <Typography mt={2} mb={2} variant="h5" fontWeight={500}>
+            {t('pages.create-course.assign-trainers-title')}
+          </Typography>
 
-              <SearchTrainers
-                trainerType={CourseTrainerType.Assistant}
-                courseLevel={courseData?.courseLevel || CourseLevel.Level_1}
-                courseSchedule={{
-                  start: courseData?.startDateTime ?? undefined,
-                  end: courseData?.endDateTime ?? undefined,
-                }}
-                matchesFilter={matches =>
-                  matches.filter(t => t.id !== profile?.id)
-                }
-                max={requiredAssistants.max}
-                value={assistants}
-                onChange={event => {
-                  setAssistants(event.target.value)
-                }}
-              />
-            </>
-          ) : null}
+          <SearchTrainers
+            trainerType={CourseTrainerType.Assistant}
+            courseLevel={courseData?.courseLevel || CourseLevel.Level_1}
+            courseSchedule={{
+              start: courseData?.startDateTime ?? undefined,
+              end: courseData?.endDateTime ?? undefined,
+            }}
+            matchesFilter={matches => matches.filter(t => t.id !== profile?.id)}
+            value={assistants}
+            onChange={event => {
+              setAssistants(event.target.value)
+            }}
+          />
 
           <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
             <FormControlLabel

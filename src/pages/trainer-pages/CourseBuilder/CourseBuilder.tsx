@@ -411,6 +411,14 @@ export const CourseBuilder: React.FC<
           type: courseData.course.type,
           deliveryType: courseData.course.deliveryType,
           reaccreditation: courseData.course.reaccreditation ?? false,
+          hasSeniorOrPrincipalLeader:
+            (leader &&
+              leader.profile.trainer_role_types.some(
+                ({ trainer_role_type: role }) =>
+                  role.name === TrainerRoleTypeName.SENIOR ||
+                  role.name === TrainerRoleTypeName.PRINCIPAL
+              )) ??
+            false,
         },
         courseData.course.trainers.map(t => ({
           type: t.type,
@@ -418,14 +426,7 @@ export const CourseBuilder: React.FC<
             courseLevel: c.courseLevel as CourseLevel,
             expiryDate: c.expiryDate,
           })),
-        })),
-        (leader &&
-          leader.profile.trainer_role_types.some(
-            ({ trainer_role_type: role }) =>
-              role.name === TrainerRoleTypeName.SENIOR ||
-              role.name === TrainerRoleTypeName.PRINCIPAL
-          )) ??
-          false
+        }))
       )
       setCourseExceptions(exceptions)
       if (exceptions.length > 0) return

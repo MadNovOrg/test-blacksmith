@@ -30,12 +30,18 @@ import {
   Course_Audit_Type_Enum,
   Course_Level_Enum,
   Course_Status_Enum,
+  Course_Type_Enum,
   GetCourseByIdQuery,
   InsertCourseAuditMutation,
   InsertCourseAuditMutationVariables,
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
+import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
+import {
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
 import { INSERT_COURSE_AUDIT } from '@app/queries/courses/insert-course-audit'
@@ -98,6 +104,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     setShowRegistrantsCancellationModal,
   ] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
+    []
+  )
 
   const { addSnackbarMessage } = useSnackbar()
 
@@ -234,9 +243,15 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             ? ''
             : courseData.zoomMeetingUrl
 
+        const shouldGoIntoException =
+          !acl.isTTAdmin() && courseExceptions.length > 0
+
         const editResponse = await updateCourse({
           courseId: course.id,
           courseInput: {
+            status: shouldGoIntoException
+              ? Course_Status_Enum.ExceptionsApprovalPending
+              : null,
             name: generateCourseName(
               {
                 level: courseData.courseLevel,
@@ -343,13 +358,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     }
   }
 
-  const editCourse = () => {
+  const editCourse = useCallback(() => {
     if (!autoapproved) {
       setShowReviewModal(true)
     } else {
       saveChanges()
     }
-  }
+  }, [autoapproved, saveChanges])
 
   const disabledFields = useMemo(() => {
     if (course && !acl.canEditWithoutRestrictions(course.type)) {
@@ -395,6 +410,53 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
       max: 0,
     }
   }, [course])
+
+  const seniorOrPrincipalLead = useMemo(() => {
+    return (
+      profile?.trainer_role_types.some(
+        ({ trainer_role_type: role }) =>
+          role.name === TrainerRoleTypeName.SENIOR ||
+          role.name === TrainerRoleTypeName.PRINCIPAL
+      ) ?? false
+    )
+  }, [profile])
+
+  const submitButtonHandler = useCallback(async () => {
+    if (!courseData || !profile || !trainersData) return
+
+    if (courseData.type === CourseType.INDIRECT && !acl.isTTAdmin()) {
+      const exceptions = checkCourseDetailsForExceptions(
+        {
+          ...courseData,
+          courseLevel: courseData.courseLevel
+            ? courseData.courseLevel
+            : CourseLevel.Level_1,
+          type: Course_Type_Enum.Indirect,
+          maxParticipants: courseData.maxParticipants ?? 0,
+          startDateTime: courseData.startDateTime ?? new Date(),
+          hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+        },
+        trainersData.assist.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.Assistant,
+          fullName: assistant.fullName,
+          levels: assistant.levels,
+        }))
+      )
+      if (!acl.isTTAdmin() && exceptions.length > 0) {
+        setCourseExceptions(exceptions)
+        return
+      }
+    }
+    editCourse()
+  }, [
+    acl,
+    courseData,
+    editCourse,
+    profile,
+    seniorOrPrincipalLead,
+    trainersData,
+  ])
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
@@ -515,7 +577,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     trainers={course.trainers}
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
-                    disabled={!acl.canEditWithoutRestrictions(course.type)}
                     requiredAssistants={requiredAssistants}
                   />
                 ) : null}
@@ -545,7 +606,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   <LoadingButton
                     disabled={!editCourseValid}
                     variant="contained"
-                    onClick={editCourse}
+                    onClick={submitButtonHandler}
                     loading={fetching}
                     data-testid="save-button"
                   >
@@ -616,6 +677,13 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             withFees={course.type === CourseType.CLOSED}
             alignedWithProtocol={alignedWithProtocol}
             level={course.level as unknown as Course_Level_Enum}
+          />
+
+          <CourseExceptionsConfirmation
+            open={courseExceptions.length > 0}
+            onCancel={() => setCourseExceptions([])}
+            onSubmit={editCourse}
+            exceptions={courseExceptions}
           />
         </>
       ) : null}

@@ -54,7 +54,7 @@ describe('component: CreateCourseForm', () => {
     })
   })
 
-  it('conditionally renders assign assists for indirect course type', async () => {
+  it('renders assign assists for indirect course type', async () => {
     render(
       <Routes>
         <Route
@@ -70,7 +70,7 @@ describe('component: CreateCourseForm', () => {
       { initialEntries: ['/?type=INDIRECT'] }
     )
 
-    expect(screen.queryByTestId('SearchTrainers-input')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('SearchTrainers-input')).toBeInTheDocument()
 
     await userEvent.type(screen.getByLabelText('Number of attendees'), '24')
 
@@ -151,7 +151,7 @@ describe('component: CreateCourseForm', () => {
     })
 
     await waitFor(() =>
-      expect(screen.getByTestId('SearchTrainers-input')).toHaveAttribute(
+      expect(screen.getByTestId('SearchTrainers-input')).not.toHaveAttribute(
         'placeholder',
         '(max allowed reached)'
       )

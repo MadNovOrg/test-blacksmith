@@ -171,9 +171,8 @@ export const AssignTrainers = () => {
   const handleSubmitButtonClick = useCallback(async () => {
     if (courseData) {
       const exceptions = checkCourseDetailsForExceptions(
-        courseData,
-        trainers,
-        seniorOrPrincipalLead
+        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        trainers
       )
       if (!acl.isTTAdmin() && exceptions.length > 0) {
         setCourseExceptions(exceptions)

@@ -12,7 +12,10 @@ import {
   CourseTrainerType,
   CourseType,
 } from '@app/types'
-import { getRequiredAssistants } from '@app/util/trainerRatio'
+import {
+  getRequiredAssistants,
+  TrainerRatioCriteria,
+} from '@app/util/trainerRatio'
 
 export enum CourseException {
   ADVISED_TIME_EXCEEDED = 'ADVISED_TIME_EXCEEDED',
@@ -50,6 +53,7 @@ export type CourseData = {
   reaccreditation: boolean
   maxParticipants: number
   modulesDuration?: number
+  hasSeniorOrPrincipalLeader: boolean
 }
 export type TrainerData = {
   type: Course_Trainer_Type_Enum | CourseTrainerType
@@ -82,14 +86,10 @@ export const isLeadTrainerInGracePeriod = (
 }
 
 export const isTrainersRatioNotMet = (
-  courseData: CourseData,
-  trainers: TrainerData,
-  hasSeniorOrPrincipalLeader: boolean
+  courseData: TrainerRatioCriteria,
+  trainers: TrainerData
 ) => {
-  const { min } = getRequiredAssistants({
-    ...courseData,
-    hasSeniorOrPrincipalLeader,
-  })
+  const { min } = getRequiredAssistants(courseData)
   const missingAssistants =
     trainers.filter(t => t.type === Course_Trainer_Type_Enum.Assistant).length <
     min
@@ -105,8 +105,7 @@ export const isAdvisedTimeExceeded = (courseData: CourseData) => {
 
 export function checkCourseDetailsForExceptions(
   courseData: CourseData,
-  trainerData: TrainerData,
-  hasSeniorOrPrincipalLeader: boolean
+  trainerData: TrainerData
 ): CourseException[] {
   const exceptions: CourseException[] = []
 
@@ -118,9 +117,7 @@ export function checkCourseDetailsForExceptions(
     exceptions.push(CourseException.LEAD_TRAINER_IN_GRACE_PERIOD)
   }
 
-  if (
-    isTrainersRatioNotMet(courseData, trainerData, hasSeniorOrPrincipalLeader)
-  ) {
+  if (isTrainersRatioNotMet(courseData, trainerData)) {
     exceptions.push(CourseException.TRAINER_RATIO_NOT_MET)
   }
 

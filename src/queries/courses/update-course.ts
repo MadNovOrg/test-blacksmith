@@ -1,12 +1,13 @@
 import { gql } from 'graphql-request'
 
-import { Course_Source_Enum } from '@app/generated/graphql'
+import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseTrainerType } from '@app/types'
 
 export type ParamsType = {
   courseId: number
   scheduleId: string
   courseInput: {
+    status: Course_Status_Enum | null
     name: string
     deliveryType: CourseDeliveryType
     level?: CourseLevel

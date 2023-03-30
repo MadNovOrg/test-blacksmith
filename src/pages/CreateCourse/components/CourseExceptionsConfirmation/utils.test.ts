@@ -21,6 +21,7 @@ describe('course exception utils', () => {
     courseLevel: CourseLevel.Level_1,
     maxParticipants: 0,
     modulesDuration: 0,
+    hasSeniorOrPrincipalLeader: false,
   }
   const defaultTrainerData = {
     type: CourseTrainerType.Leader,
