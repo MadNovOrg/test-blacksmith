@@ -1,0 +1,83 @@
+table:
+  schema: public
+  name: order_temp
+configuration:
+  custom_root_fields: {}
+  column_config:
+    client_purchase_order:
+      custom_name: clientPurchaseOrder
+    course_id:
+      custom_name: courseId
+    xero_invoice_number:
+      custom_name: xeroInvoiceNumber
+    billing_family_name:
+      custom_name: billingFamilyName
+    payment_method:
+      custom_name: paymentMethod
+    billing_address:
+      custom_name: billingAddress
+    order_due:
+      custom_name: orderDue
+    promo_codes:
+      custom_name: promoCodes
+    organization_id:
+      custom_name: organizationId
+    billing_given_name:
+      custom_name: billingGivenName
+    created_at:
+      custom_name: createdAt
+    billing_phone:
+      custom_name: billingPhone
+    billing_email:
+      custom_name: billingEmail
+    order_total:
+      custom_name: orderTotal
+    profile_id:
+      custom_name: profileId
+  custom_column_names:
+    client_purchase_order: clientPurchaseOrder
+    course_id: courseId
+    xero_invoice_number: xeroInvoiceNumber
+    billing_family_name: billingFamilyName
+    payment_method: paymentMethod
+    billing_address: billingAddress
+    order_due: orderDue
+    promo_codes: promoCodes
+    organization_id: organizationId
+    billing_given_name: billingGivenName
+    created_at: createdAt
+    billing_phone: billingPhone
+    billing_email: billingEmail
+    order_total: orderTotal
+    profile_id: profileId
+insert_permissions:
+  - role: trainer
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - order_due
+        - order_total
+        - price
+        - vat
+        - course_id
+        - quantity
+        - registrants
+        - promo_codes
+        - user
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - currency
+        - payment_method
+        - stripePaymentId
+        - xero_invoice_number
+        - created_at
+        - id
+        - organization_id
+        - profile_id
+      backend_only: false

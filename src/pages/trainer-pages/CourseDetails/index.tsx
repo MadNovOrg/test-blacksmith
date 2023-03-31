@@ -19,6 +19,8 @@ import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
+  ApproveCourseMutation,
+  ApproveCourseMutationVariables,
   Course_Status_Enum,
   SetCourseStatusMutation,
   SetCourseStatusMutationVariables,
@@ -31,6 +33,7 @@ import { CourseCertifications } from '@app/pages/trainer-pages/components/Course
 import { CourseGrading } from '@app/pages/trainer-pages/components/CourseGrading'
 import { EvaluationSummaryTab } from '@app/pages/trainer-pages/components/EvaluationSummaryTab'
 import { CourseCancellationRequestFeature } from '@app/pages/trainer-pages/CourseDetails/CourseCancellationRequestFeature'
+import { MUTATION as APPROVE_COURSE_MUTATION } from '@app/queries/courses/approve-course'
 import { MUTATION as SET_COURSE_STATUS_MUTATION } from '@app/queries/courses/set-course-status'
 import {
   CourseLevel,
@@ -142,12 +145,9 @@ export const CourseDetails = () => {
     if (!course) return
     setApprovalError(undefined)
     try {
-      await fetcher<SetCourseStatusMutation, SetCourseStatusMutationVariables>(
-        SET_COURSE_STATUS_MUTATION,
-        {
-          id: course.id,
-          status: null,
-        }
+      await fetcher<ApproveCourseMutation, ApproveCourseMutationVariables>(
+        APPROVE_COURSE_MUTATION,
+        { courseId: course.id }
       )
       await mutate()
     } catch (e: unknown) {

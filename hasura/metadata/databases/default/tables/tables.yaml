@@ -52,6 +52,7 @@
 - "!include public_module_group.yaml"
 - "!include public_module_group_duration.yaml"
 - "!include public_order.yaml"
+- "!include public_order_temp.yaml"
 - "!include public_organization.yaml"
 - "!include public_organization_invites.yaml"
 - "!include public_organization_member.yaml"

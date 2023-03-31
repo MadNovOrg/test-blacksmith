@@ -4,6 +4,12 @@ type Mutation {
   ): AcceptOrgInviteOutput
 }
 
+type Mutation {
+  approveCourse(
+    courseId: Int!
+  ): ApproveCourseOutput!
+}
+
 type Query {
   canApplyPromoCode(
     input: CanApplyPromoCodeInput!
@@ -905,6 +911,10 @@ type DeleteUserOutput {
 
 type NotifyCourseEditOutput {
   status: Int!
+}
+
+type ApproveCourseOutput {
+  success: Boolean!
 }
 
 scalar Date

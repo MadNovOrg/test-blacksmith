@@ -6,6 +6,14 @@ actions:
       forward_client_headers: true
     permissions:
       - role: anonymous
+  - name: approveCourse
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/course/approve'
+      forward_client_headers: true
+    permissions:
+      - role: tt-ops
+      - role: tt-admin
   - name: canApplyPromoCode
     definition:
       kind: ""
@@ -662,5 +670,6 @@ custom_types:
     - name: MergeUserOutput
     - name: DeleteUserOutput
     - name: NotifyCourseEditOutput
+    - name: ApproveCourseOutput
   scalars:
     - name: Date

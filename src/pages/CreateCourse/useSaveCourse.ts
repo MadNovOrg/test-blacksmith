@@ -109,7 +109,8 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const { courseData, expenses, trainers, go1Licensing } = useCreateCourse()
+  const { courseData, expenses, trainers, go1Licensing, exceptions } =
+    useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -121,7 +122,7 @@ export function useSaveCourse(): {
 
   const { addSnackbarMessage } = useSnackbar()
 
-  const saveCourse = useCallback(async () => {
+  const saveCourse = useCallback<SaveCourse>(async () => {
     try {
       if (courseData) {
         setSavingStatus(LoadingStatus.FETCHING)
@@ -209,7 +210,7 @@ export function useSaveCourse(): {
             ...(courseData.type === CourseType.INDIRECT &&
             go1Licensing?.prices.amountDue
               ? {
-                  orders: {
+                  [exceptions?.length ? 'tempOrders' : 'orders']: {
                     data: [
                       {
                         registrants: [], // we are buying Go1 licenses, not registering participants
@@ -278,6 +279,7 @@ export function useSaveCourse(): {
     profile?.phone,
     addSnackbarMessage,
     removeDraft,
+    exceptions,
   ])
 
   return {

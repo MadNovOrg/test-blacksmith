@@ -1,4 +1,4 @@
-import { addHours, format } from 'date-fns'
+import { addHours, addWeeks, format } from 'date-fns'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
@@ -126,7 +126,7 @@ describe('component: ReviewLicenseOrder', () => {
   })
 
   it('creates a course with the order when clicked on the save button', async () => {
-    const startDate = new Date()
+    const startDate = addWeeks(new Date(), 5)
     const endDate = addHours(startDate, 8)
 
     const courseData: Partial<Draft['courseData']> = {

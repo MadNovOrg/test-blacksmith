@@ -41,6 +41,11 @@ export type Address = {
   postCode?: Maybe<Scalars['String']>;
 };
 
+export type ApproveCourseOutput = {
+  __typename?: 'ApproveCourseOutput';
+  success: Scalars['Boolean'];
+};
+
 /** Avatars are profile images for users. WordPress by default uses the Gravatar service to host and fetch avatars from. */
 export type Avatar = {
   __typename?: 'Avatar';
@@ -13661,6 +13666,10 @@ export type Course = {
   start?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Course_Status_Enum>;
   /** An array relationship */
+  tempOrders: Array<Order_Temp>;
+  /** An aggregate relationship */
+  tempOrders_aggregate: Order_Temp_Aggregate;
+  /** An array relationship */
   trainers: Array<Course_Trainer>;
   /** An aggregate relationship */
   trainers_aggregate: Course_Trainer_Aggregate;
@@ -13810,6 +13819,26 @@ export type CourseSchedule_AggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Course_Schedule_Order_By>>;
   where?: InputMaybe<Course_Schedule_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseTempOrdersArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseTempOrders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
 };
 
 
@@ -14359,6 +14388,7 @@ export type Course_Bool_Exp = {
   special_instructions?: InputMaybe<String_Comparison_Exp>;
   start?: InputMaybe<Timestamptz_Comparison_Exp>;
   status?: InputMaybe<Course_Status_Enum_Comparison_Exp>;
+  tempOrders?: InputMaybe<Order_Temp_Bool_Exp>;
   trainers?: InputMaybe<Course_Trainer_Bool_Exp>;
   type?: InputMaybe<Course_Type_Enum_Comparison_Exp>;
   updatedAt?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -17460,6 +17490,7 @@ export type Course_Insert_Input = {
   source?: InputMaybe<Course_Source_Enum>;
   special_instructions?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Course_Status_Enum>;
+  tempOrders?: InputMaybe<Order_Temp_Arr_Rel_Insert_Input>;
   trainers?: InputMaybe<Course_Trainer_Arr_Rel_Insert_Input>;
   type?: InputMaybe<Course_Type_Enum>;
   updatedAt?: InputMaybe<Scalars['timestamptz']>;
@@ -18560,6 +18591,7 @@ export type Course_Order_By = {
   special_instructions?: InputMaybe<Order_By>;
   start?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
+  tempOrders_aggregate?: InputMaybe<Order_Temp_Aggregate_Order_By>;
   trainers_aggregate?: InputMaybe<Course_Trainer_Aggregate_Order_By>;
   type?: InputMaybe<Order_By>;
   updatedAt?: InputMaybe<Order_By>;
@@ -24986,6 +25018,7 @@ export enum Module_Update_Column {
 export type Mutation_Root = {
   __typename?: 'mutation_root';
   acceptOrgInvite?: Maybe<AcceptOrgInviteOutput>;
+  approveCourse: ApproveCourseOutput;
   cancelIndividualFromCourse: Scalars['Boolean'];
   cancelMyselfFromCourse: Scalars['Boolean'];
   /** confirmCreditCardPayment */
@@ -25216,6 +25249,10 @@ export type Mutation_Root = {
   delete_order?: Maybe<Order_Mutation_Response>;
   /** delete single row from the table: "order" */
   delete_order_by_pk?: Maybe<Order>;
+  /** delete data from the table: "order_temp" */
+  delete_order_temp?: Maybe<Order_Temp_Mutation_Response>;
+  /** delete single row from the table: "order_temp" */
+  delete_order_temp_by_pk?: Maybe<Order_Temp>;
   /** delete data from the table: "organization" */
   delete_organization?: Maybe<Organization_Mutation_Response>;
   /** delete single row from the table: "organization" */
@@ -25519,6 +25556,10 @@ export type Mutation_Root = {
   insert_order?: Maybe<Order_Mutation_Response>;
   /** insert a single row into the table: "order" */
   insert_order_one?: Maybe<Order>;
+  /** insert data into the table: "order_temp" */
+  insert_order_temp?: Maybe<Order_Temp_Mutation_Response>;
+  /** insert a single row into the table: "order_temp" */
+  insert_order_temp_one?: Maybe<Order_Temp>;
   /** insert data into the table: "organization" */
   insert_organization?: Maybe<Organization_Mutation_Response>;
   /** insert data into the table: "organization_invites" */
@@ -25833,6 +25874,10 @@ export type Mutation_Root = {
   update_order?: Maybe<Order_Mutation_Response>;
   /** update single row of the table: "order" */
   update_order_by_pk?: Maybe<Order>;
+  /** update data of the table: "order_temp" */
+  update_order_temp?: Maybe<Order_Temp_Mutation_Response>;
+  /** update single row of the table: "order_temp" */
+  update_order_temp_by_pk?: Maybe<Order_Temp>;
   /** update data of the table: "organization" */
   update_organization?: Maybe<Organization_Mutation_Response>;
   /** update single row of the table: "organization" */
@@ -25928,6 +25973,12 @@ export type Mutation_Root = {
 /** mutation root */
 export type Mutation_RootAcceptOrgInviteArgs = {
   profileId: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootApproveCourseArgs = {
+  courseId: Scalars['Int'];
 };
 
 
@@ -26627,6 +26678,18 @@ export type Mutation_RootDelete_OrderArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Order_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Order_TempArgs = {
+  where: Order_Temp_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Order_Temp_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -27648,6 +27711,20 @@ export type Mutation_RootInsert_OrderArgs = {
 export type Mutation_RootInsert_Order_OneArgs = {
   object: Order_Insert_Input;
   on_conflict?: InputMaybe<Order_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Order_TempArgs = {
+  objects: Array<Order_Temp_Insert_Input>;
+  on_conflict?: InputMaybe<Order_Temp_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Order_Temp_OneArgs = {
+  object: Order_Temp_Insert_Input;
+  on_conflict?: InputMaybe<Order_Temp_On_Conflict>;
 };
 
 
@@ -28882,6 +28959,32 @@ export type Mutation_RootUpdate_Order_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Order_TempArgs = {
+  _append?: InputMaybe<Order_Temp_Append_Input>;
+  _delete_at_path?: InputMaybe<Order_Temp_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Order_Temp_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Order_Temp_Delete_Key_Input>;
+  _inc?: InputMaybe<Order_Temp_Inc_Input>;
+  _prepend?: InputMaybe<Order_Temp_Prepend_Input>;
+  _set?: InputMaybe<Order_Temp_Set_Input>;
+  where: Order_Temp_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Order_Temp_By_PkArgs = {
+  _append?: InputMaybe<Order_Temp_Append_Input>;
+  _delete_at_path?: InputMaybe<Order_Temp_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Order_Temp_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Order_Temp_Delete_Key_Input>;
+  _inc?: InputMaybe<Order_Temp_Inc_Input>;
+  _prepend?: InputMaybe<Order_Temp_Prepend_Input>;
+  _set?: InputMaybe<Order_Temp_Set_Input>;
+  pk_columns: Order_Temp_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_OrganizationArgs = {
   _append?: InputMaybe<Organization_Append_Input>;
   _delete_at_path?: InputMaybe<Organization_Delete_At_Path_Input>;
@@ -29840,6 +29943,646 @@ export type Order_Sum_Fields = {
 
 /** order by sum() on columns of table "order" */
 export type Order_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** columns and relationships of "order_temp" */
+export type Order_Temp = {
+  __typename?: 'order_temp';
+  billingAddress: Scalars['String'];
+  billingEmail: Scalars['String'];
+  billingFamilyName: Scalars['String'];
+  billingGivenName: Scalars['String'];
+  billingPhone: Scalars['String'];
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
+  courseId: Scalars['Int'];
+  createdAt: Scalars['timestamptz'];
+  currency?: Maybe<Scalars['String']>;
+  id: Scalars['uuid'];
+  orderDue?: Maybe<Scalars['float8']>;
+  orderTotal?: Maybe<Scalars['float8']>;
+  organizationId: Scalars['uuid'];
+  paymentMethod: Payment_Methods_Enum;
+  price?: Maybe<Scalars['float8']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  promoCodes?: Maybe<Scalars['jsonb']>;
+  quantity: Scalars['Int'];
+  registrants: Scalars['json'];
+  stripePaymentId?: Maybe<Scalars['String']>;
+  user: Scalars['jsonb'];
+  vat?: Maybe<Scalars['float8']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order_temp" */
+export type Order_TempPromoCodesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order_temp" */
+export type Order_TempRegistrantsArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+
+/** columns and relationships of "order_temp" */
+export type Order_TempUserArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "order_temp" */
+export type Order_Temp_Aggregate = {
+  __typename?: 'order_temp_aggregate';
+  aggregate?: Maybe<Order_Temp_Aggregate_Fields>;
+  nodes: Array<Order_Temp>;
+};
+
+/** aggregate fields of "order_temp" */
+export type Order_Temp_Aggregate_Fields = {
+  __typename?: 'order_temp_aggregate_fields';
+  avg?: Maybe<Order_Temp_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Order_Temp_Max_Fields>;
+  min?: Maybe<Order_Temp_Min_Fields>;
+  stddev?: Maybe<Order_Temp_Stddev_Fields>;
+  stddev_pop?: Maybe<Order_Temp_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Order_Temp_Stddev_Samp_Fields>;
+  sum?: Maybe<Order_Temp_Sum_Fields>;
+  var_pop?: Maybe<Order_Temp_Var_Pop_Fields>;
+  var_samp?: Maybe<Order_Temp_Var_Samp_Fields>;
+  variance?: Maybe<Order_Temp_Variance_Fields>;
+};
+
+
+/** aggregate fields of "order_temp" */
+export type Order_Temp_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "order_temp" */
+export type Order_Temp_Aggregate_Order_By = {
+  avg?: InputMaybe<Order_Temp_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Order_Temp_Max_Order_By>;
+  min?: InputMaybe<Order_Temp_Min_Order_By>;
+  stddev?: InputMaybe<Order_Temp_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Order_Temp_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Order_Temp_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Order_Temp_Sum_Order_By>;
+  var_pop?: InputMaybe<Order_Temp_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Order_Temp_Var_Samp_Order_By>;
+  variance?: InputMaybe<Order_Temp_Variance_Order_By>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Order_Temp_Append_Input = {
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "order_temp" */
+export type Order_Temp_Arr_Rel_Insert_Input = {
+  data: Array<Order_Temp_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Order_Temp_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Order_Temp_Avg_Fields = {
+  __typename?: 'order_temp_avg_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "order_temp" */
+export type Order_Temp_Avg_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "order_temp". All fields are combined with a logical 'AND'. */
+export type Order_Temp_Bool_Exp = {
+  _and?: InputMaybe<Array<Order_Temp_Bool_Exp>>;
+  _not?: InputMaybe<Order_Temp_Bool_Exp>;
+  _or?: InputMaybe<Array<Order_Temp_Bool_Exp>>;
+  billingAddress?: InputMaybe<String_Comparison_Exp>;
+  billingEmail?: InputMaybe<String_Comparison_Exp>;
+  billingFamilyName?: InputMaybe<String_Comparison_Exp>;
+  billingGivenName?: InputMaybe<String_Comparison_Exp>;
+  billingPhone?: InputMaybe<String_Comparison_Exp>;
+  clientPurchaseOrder?: InputMaybe<String_Comparison_Exp>;
+  courseId?: InputMaybe<Int_Comparison_Exp>;
+  createdAt?: InputMaybe<Timestamptz_Comparison_Exp>;
+  currency?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  orderDue?: InputMaybe<Float8_Comparison_Exp>;
+  orderTotal?: InputMaybe<Float8_Comparison_Exp>;
+  organizationId?: InputMaybe<Uuid_Comparison_Exp>;
+  paymentMethod?: InputMaybe<Payment_Methods_Enum_Comparison_Exp>;
+  price?: InputMaybe<Float8_Comparison_Exp>;
+  profileId?: InputMaybe<Uuid_Comparison_Exp>;
+  promoCodes?: InputMaybe<Jsonb_Comparison_Exp>;
+  quantity?: InputMaybe<Int_Comparison_Exp>;
+  registrants?: InputMaybe<Json_Comparison_Exp>;
+  stripePaymentId?: InputMaybe<String_Comparison_Exp>;
+  user?: InputMaybe<Jsonb_Comparison_Exp>;
+  vat?: InputMaybe<Float8_Comparison_Exp>;
+  xeroInvoiceNumber?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "order_temp" */
+export enum Order_Temp_Constraint {
+  /** unique or primary key constraint */
+  OrderTempPkey = 'order_temp_pkey',
+  /** unique or primary key constraint */
+  OrderTempXeroInvoiceNumberKey = 'order_temp_xero_invoice_number_key'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Order_Temp_Delete_At_Path_Input = {
+  promoCodes?: InputMaybe<Array<Scalars['String']>>;
+  user?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Order_Temp_Delete_Elem_Input = {
+  promoCodes?: InputMaybe<Scalars['Int']>;
+  user?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Order_Temp_Delete_Key_Input = {
+  promoCodes?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for incrementing numeric columns in table "order_temp" */
+export type Order_Temp_Inc_Input = {
+  courseId?: InputMaybe<Scalars['Int']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
+  orderTotal?: InputMaybe<Scalars['float8']>;
+  price?: InputMaybe<Scalars['float8']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  vat?: InputMaybe<Scalars['float8']>;
+};
+
+/** input type for inserting data into table "order_temp" */
+export type Order_Temp_Insert_Input = {
+  billingAddress?: InputMaybe<Scalars['String']>;
+  billingEmail?: InputMaybe<Scalars['String']>;
+  billingFamilyName?: InputMaybe<Scalars['String']>;
+  billingGivenName?: InputMaybe<Scalars['String']>;
+  billingPhone?: InputMaybe<Scalars['String']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
+  orderTotal?: InputMaybe<Scalars['float8']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  paymentMethod?: InputMaybe<Payment_Methods_Enum>;
+  price?: InputMaybe<Scalars['float8']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  registrants?: InputMaybe<Scalars['json']>;
+  stripePaymentId?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+  vat?: InputMaybe<Scalars['float8']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Order_Temp_Max_Fields = {
+  __typename?: 'order_temp_max_fields';
+  billingAddress?: Maybe<Scalars['String']>;
+  billingEmail?: Maybe<Scalars['String']>;
+  billingFamilyName?: Maybe<Scalars['String']>;
+  billingGivenName?: Maybe<Scalars['String']>;
+  billingPhone?: Maybe<Scalars['String']>;
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
+  courseId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  currency?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  orderDue?: Maybe<Scalars['float8']>;
+  orderTotal?: Maybe<Scalars['float8']>;
+  organizationId?: Maybe<Scalars['uuid']>;
+  price?: Maybe<Scalars['float8']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+  stripePaymentId?: Maybe<Scalars['String']>;
+  vat?: Maybe<Scalars['float8']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "order_temp" */
+export type Order_Temp_Max_Order_By = {
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Order_Temp_Min_Fields = {
+  __typename?: 'order_temp_min_fields';
+  billingAddress?: Maybe<Scalars['String']>;
+  billingEmail?: Maybe<Scalars['String']>;
+  billingFamilyName?: Maybe<Scalars['String']>;
+  billingGivenName?: Maybe<Scalars['String']>;
+  billingPhone?: Maybe<Scalars['String']>;
+  clientPurchaseOrder?: Maybe<Scalars['String']>;
+  courseId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['timestamptz']>;
+  currency?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['uuid']>;
+  orderDue?: Maybe<Scalars['float8']>;
+  orderTotal?: Maybe<Scalars['float8']>;
+  organizationId?: Maybe<Scalars['uuid']>;
+  price?: Maybe<Scalars['float8']>;
+  profileId?: Maybe<Scalars['uuid']>;
+  quantity?: Maybe<Scalars['Int']>;
+  stripePaymentId?: Maybe<Scalars['String']>;
+  vat?: Maybe<Scalars['float8']>;
+  xeroInvoiceNumber?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "order_temp" */
+export type Order_Temp_Min_Order_By = {
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "order_temp" */
+export type Order_Temp_Mutation_Response = {
+  __typename?: 'order_temp_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Order_Temp>;
+};
+
+/** on_conflict condition type for table "order_temp" */
+export type Order_Temp_On_Conflict = {
+  constraint: Order_Temp_Constraint;
+  update_columns?: Array<Order_Temp_Update_Column>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "order_temp". */
+export type Order_Temp_Order_By = {
+  billingAddress?: InputMaybe<Order_By>;
+  billingEmail?: InputMaybe<Order_By>;
+  billingFamilyName?: InputMaybe<Order_By>;
+  billingGivenName?: InputMaybe<Order_By>;
+  billingPhone?: InputMaybe<Order_By>;
+  clientPurchaseOrder?: InputMaybe<Order_By>;
+  courseId?: InputMaybe<Order_By>;
+  createdAt?: InputMaybe<Order_By>;
+  currency?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  organizationId?: InputMaybe<Order_By>;
+  paymentMethod?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  profileId?: InputMaybe<Order_By>;
+  promoCodes?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  registrants?: InputMaybe<Order_By>;
+  stripePaymentId?: InputMaybe<Order_By>;
+  user?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+  xeroInvoiceNumber?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: order_temp */
+export type Order_Temp_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Order_Temp_Prepend_Input = {
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "order_temp" */
+export enum Order_Temp_Select_Column {
+  /** column name */
+  BillingAddress = 'billingAddress',
+  /** column name */
+  BillingEmail = 'billingEmail',
+  /** column name */
+  BillingFamilyName = 'billingFamilyName',
+  /** column name */
+  BillingGivenName = 'billingGivenName',
+  /** column name */
+  BillingPhone = 'billingPhone',
+  /** column name */
+  ClientPurchaseOrder = 'clientPurchaseOrder',
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Currency = 'currency',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  OrganizationId = 'organizationId',
+  /** column name */
+  PaymentMethod = 'paymentMethod',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  ProfileId = 'profileId',
+  /** column name */
+  PromoCodes = 'promoCodes',
+  /** column name */
+  Quantity = 'quantity',
+  /** column name */
+  Registrants = 'registrants',
+  /** column name */
+  StripePaymentId = 'stripePaymentId',
+  /** column name */
+  User = 'user',
+  /** column name */
+  Vat = 'vat',
+  /** column name */
+  XeroInvoiceNumber = 'xeroInvoiceNumber'
+}
+
+/** input type for updating data in table "order_temp" */
+export type Order_Temp_Set_Input = {
+  billingAddress?: InputMaybe<Scalars['String']>;
+  billingEmail?: InputMaybe<Scalars['String']>;
+  billingFamilyName?: InputMaybe<Scalars['String']>;
+  billingGivenName?: InputMaybe<Scalars['String']>;
+  billingPhone?: InputMaybe<Scalars['String']>;
+  clientPurchaseOrder?: InputMaybe<Scalars['String']>;
+  courseId?: InputMaybe<Scalars['Int']>;
+  createdAt?: InputMaybe<Scalars['timestamptz']>;
+  currency?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['uuid']>;
+  orderDue?: InputMaybe<Scalars['float8']>;
+  orderTotal?: InputMaybe<Scalars['float8']>;
+  organizationId?: InputMaybe<Scalars['uuid']>;
+  paymentMethod?: InputMaybe<Payment_Methods_Enum>;
+  price?: InputMaybe<Scalars['float8']>;
+  profileId?: InputMaybe<Scalars['uuid']>;
+  promoCodes?: InputMaybe<Scalars['jsonb']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  registrants?: InputMaybe<Scalars['json']>;
+  stripePaymentId?: InputMaybe<Scalars['String']>;
+  user?: InputMaybe<Scalars['jsonb']>;
+  vat?: InputMaybe<Scalars['float8']>;
+  xeroInvoiceNumber?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Order_Temp_Stddev_Fields = {
+  __typename?: 'order_temp_stddev_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev() on columns of table "order_temp" */
+export type Order_Temp_Stddev_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Order_Temp_Stddev_Pop_Fields = {
+  __typename?: 'order_temp_stddev_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "order_temp" */
+export type Order_Temp_Stddev_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Order_Temp_Stddev_Samp_Fields = {
+  __typename?: 'order_temp_stddev_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_samp() on columns of table "order_temp" */
+export type Order_Temp_Stddev_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** aggregate sum on columns */
+export type Order_Temp_Sum_Fields = {
+  __typename?: 'order_temp_sum_fields';
+  courseId?: Maybe<Scalars['Int']>;
+  orderDue?: Maybe<Scalars['float8']>;
+  orderTotal?: Maybe<Scalars['float8']>;
+  price?: Maybe<Scalars['float8']>;
+  quantity?: Maybe<Scalars['Int']>;
+  vat?: Maybe<Scalars['float8']>;
+};
+
+/** order by sum() on columns of table "order_temp" */
+export type Order_Temp_Sum_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "order_temp" */
+export enum Order_Temp_Update_Column {
+  /** column name */
+  BillingAddress = 'billingAddress',
+  /** column name */
+  BillingEmail = 'billingEmail',
+  /** column name */
+  BillingFamilyName = 'billingFamilyName',
+  /** column name */
+  BillingGivenName = 'billingGivenName',
+  /** column name */
+  BillingPhone = 'billingPhone',
+  /** column name */
+  ClientPurchaseOrder = 'clientPurchaseOrder',
+  /** column name */
+  CourseId = 'courseId',
+  /** column name */
+  CreatedAt = 'createdAt',
+  /** column name */
+  Currency = 'currency',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderDue = 'orderDue',
+  /** column name */
+  OrderTotal = 'orderTotal',
+  /** column name */
+  OrganizationId = 'organizationId',
+  /** column name */
+  PaymentMethod = 'paymentMethod',
+  /** column name */
+  Price = 'price',
+  /** column name */
+  ProfileId = 'profileId',
+  /** column name */
+  PromoCodes = 'promoCodes',
+  /** column name */
+  Quantity = 'quantity',
+  /** column name */
+  Registrants = 'registrants',
+  /** column name */
+  StripePaymentId = 'stripePaymentId',
+  /** column name */
+  User = 'user',
+  /** column name */
+  Vat = 'vat',
+  /** column name */
+  XeroInvoiceNumber = 'xeroInvoiceNumber'
+}
+
+/** aggregate var_pop on columns */
+export type Order_Temp_Var_Pop_Fields = {
+  __typename?: 'order_temp_var_pop_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_pop() on columns of table "order_temp" */
+export type Order_Temp_Var_Pop_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Order_Temp_Var_Samp_Fields = {
+  __typename?: 'order_temp_var_samp_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by var_samp() on columns of table "order_temp" */
+export type Order_Temp_Var_Samp_Order_By = {
+  courseId?: InputMaybe<Order_By>;
+  orderDue?: InputMaybe<Order_By>;
+  orderTotal?: InputMaybe<Order_By>;
+  price?: InputMaybe<Order_By>;
+  quantity?: InputMaybe<Order_By>;
+  vat?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Order_Temp_Variance_Fields = {
+  __typename?: 'order_temp_variance_fields';
+  courseId?: Maybe<Scalars['Float']>;
+  orderDue?: Maybe<Scalars['Float']>;
+  orderTotal?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  quantity?: Maybe<Scalars['Float']>;
+  vat?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "order_temp" */
+export type Order_Temp_Variance_Order_By = {
   courseId?: InputMaybe<Order_By>;
   orderDue?: InputMaybe<Order_By>;
   orderTotal?: InputMaybe<Order_By>;
@@ -33773,6 +34516,12 @@ export type Query_Root = {
   order_aggregate: Order_Aggregate;
   /** fetch data from the table: "order" using primary key columns */
   order_by_pk?: Maybe<Order>;
+  /** fetch data from the table: "order_temp" */
+  order_temp: Array<Order_Temp>;
+  /** fetch aggregated fields from the table: "order_temp" */
+  order_temp_aggregate: Order_Temp_Aggregate;
+  /** fetch data from the table: "order_temp" using primary key columns */
+  order_temp_by_pk?: Maybe<Order_Temp>;
   /** fetch data from the table: "organization" */
   organization: Array<Organization>;
   /** fetch aggregated fields from the table: "organization" */
@@ -35187,6 +35936,29 @@ export type Query_RootOrder_By_PkArgs = {
 };
 
 
+export type Query_RootOrder_TempArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+export type Query_RootOrder_Temp_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+export type Query_RootOrder_Temp_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootOrganizationArgs = {
   distinct_on?: InputMaybe<Array<Organization_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -36299,6 +37071,12 @@ export type Subscription_Root = {
   order_aggregate: Order_Aggregate;
   /** fetch data from the table: "order" using primary key columns */
   order_by_pk?: Maybe<Order>;
+  /** fetch data from the table: "order_temp" */
+  order_temp: Array<Order_Temp>;
+  /** fetch aggregated fields from the table: "order_temp" */
+  order_temp_aggregate: Order_Temp_Aggregate;
+  /** fetch data from the table: "order_temp" using primary key columns */
+  order_temp_by_pk?: Maybe<Order_Temp>;
   /** fetch data from the table: "organization" */
   organization: Array<Organization>;
   /** fetch aggregated fields from the table: "organization" */
@@ -37670,6 +38448,29 @@ export type Subscription_RootOrder_AggregateArgs = {
 
 
 export type Subscription_RootOrder_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootOrder_TempArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrder_Temp_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Temp_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Order_Temp_Order_By>>;
+  where?: InputMaybe<Order_Temp_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrder_Temp_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -40674,6 +41475,13 @@ export type SaveCourseEvaluationMutationVariables = Exact<{
 
 
 export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null, update_course_participant_by_pk?: { __typename?: 'course_participant', completed_evaluation?: boolean | null } | null };
+
+export type ApproveCourseMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+}>;
+
+
+export type ApproveCourseMutation = { __typename?: 'mutation_root', approveCourse: { __typename?: 'ApproveCourseOutput', success: boolean } };
 
 export type CancelCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];

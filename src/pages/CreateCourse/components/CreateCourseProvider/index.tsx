@@ -7,10 +7,15 @@ import {
   Draft,
   ExpensesInput,
   TrainerInput,
+  TrainerRoleTypeName,
   ValidCourseInput,
 } from '@app/types'
 
 import { StepsEnum } from '../../types'
+import {
+  checkCourseDetailsForExceptions,
+  CourseException,
+} from '../CourseExceptionsConfirmation/utils'
 
 import { getCourseType } from './helpers'
 
@@ -31,6 +36,7 @@ type ContextValue = {
   trainers: TrainerInput[]
   setGo1Licensing: (go1Licensing: Draft['go1Licensing']) => void
   go1Licensing: Draft['go1Licensing']
+  exceptions: CourseException[]
 }
 
 const CreateCourseContext = React.createContext<ContextValue | undefined>(
@@ -66,6 +72,25 @@ export const CreateCourseProvider: React.FC<
   const [go1Licensing, setGo1Licensing] = useState<Draft['go1Licensing']>(
     initialValue?.go1Licensing ?? undefined
   )
+
+  const seniorOrPrincipalLead = useMemo(() => {
+    return (
+      profile?.trainer_role_types.some(
+        ({ trainer_role_type: role }) =>
+          role.name === TrainerRoleTypeName.SENIOR ||
+          role.name === TrainerRoleTypeName.PRINCIPAL
+      ) ?? false
+    )
+  }, [profile])
+
+  const exceptions = useMemo(() => {
+    if (!courseData) return []
+
+    return checkCourseDetailsForExceptions(
+      { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+      trainers
+    )
+  }, [courseData, trainers, seniorOrPrincipalLead])
 
   const completeStep = useCallback(
     (step: StepsEnum) => {
@@ -118,6 +143,7 @@ export const CreateCourseProvider: React.FC<
       trainers,
       go1Licensing,
       setGo1Licensing,
+      exceptions,
     }
   }, [
     completeStep,
@@ -134,6 +160,7 @@ export const CreateCourseProvider: React.FC<
     trainers,
     go1Licensing,
     setGo1Licensing,
+    exceptions,
   ])
 
   return (
