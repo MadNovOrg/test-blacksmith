@@ -25,7 +25,6 @@ export type FormValues = {
 }
 
 type Props = {
-  maxParticipants: number
   trainers?: CourseTrainer[]
   courseType: CourseType
   courseLevel: CourseLevel
@@ -58,7 +57,6 @@ const courseTrainerToFormValues = (
 }
 
 const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
-  maxParticipants,
   courseType,
   courseLevel,
   courseSchedule,
@@ -147,12 +145,6 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [form]
   )
-
-  useEffect(() => {
-    if (requiredAssistants.min === 0) {
-      form.setValue('assist', [], { shouldValidate: true })
-    }
-  }, [maxParticipants, form, requiredAssistants])
 
   return (
     <Stack component="form" spacing={5} data-testid="AssignTrainers-form">

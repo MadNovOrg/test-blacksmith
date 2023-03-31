@@ -198,165 +198,183 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     return course ? courseToCourseInput(course) : undefined
   }, [course])
 
-  const saveChanges = async (reviewInput?: FormValues) => {
-    const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
+  const saveChanges = useCallback(
+    async (reviewInput?: FormValues) => {
+      const trainersMap = new Map(course?.trainers?.map(t => [t.profile.id, t]))
 
-    try {
-      if (courseData && course && trainersData) {
-        assertCourseDataValid(courseData, courseDataValid)
+      try {
+        if (courseData && course && trainersData) {
+          assertCourseDataValid(courseData, courseDataValid)
 
-        const trainers = [
-          ...trainersData.assist.map(t => ({
-            ...profileToInput(course, CourseTrainerType.Assistant)(t),
-            status: trainersMap.get(t.id)?.status,
-          })),
-          ...trainersData.moderator.map(t => ({
-            ...profileToInput(course, CourseTrainerType.Moderator)(t),
-            status: trainersMap.get(t.id)?.status,
-          })),
-        ]
-
-        if (!acl.canAssignLeadTrainer() && profile) {
-          trainers.push({
-            course_id: course.id,
-            profile_id: profile.id,
-            type: CourseTrainerType.Leader,
-            status: InviteStatus.ACCEPTED,
-          })
-        } else {
-          trainers.push(
-            ...trainersData.lead.map(t => ({
-              ...profileToInput(course, CourseTrainerType.Leader)(t),
+          const trainers = [
+            ...trainersData.assist.map(t => ({
+              ...profileToInput(course, CourseTrainerType.Assistant)(t),
               status: trainersMap.get(t.id)?.status,
-            }))
-          )
-        }
+            })),
+            ...trainersData.moderator.map(t => ({
+              ...profileToInput(course, CourseTrainerType.Moderator)(t),
+              status: trainersMap.get(t.id)?.status,
+            })),
+          ]
 
-        const newVenueId =
-          [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
-            courseData.deliveryType
-          ) && courseData.venue
-            ? courseData.venue.id
-            : null
-        const newVirtualLink =
-          courseData.deliveryType === CourseDeliveryType.F2F
-            ? ''
-            : courseData.zoomMeetingUrl
-
-        const shouldGoIntoException =
-          !acl.isTTAdmin() && courseExceptions.length > 0
-
-        const editResponse = await updateCourse({
-          courseId: course.id,
-          courseInput: {
-            status: shouldGoIntoException
-              ? Course_Status_Enum.ExceptionsApprovalPending
-              : null,
-            name: generateCourseName(
-              {
-                level: courseData.courseLevel,
-                reaccreditation: courseData.reaccreditation,
-              },
-              t
-            ),
-            deliveryType: courseData.deliveryType,
-            level: courseData.courseLevel,
-            reaccreditation: courseData.reaccreditation,
-            go1Integration: courseData.blendedLearning,
-            freeSpaces: courseData.freeSpaces,
-            special_instructions: courseData.specialInstructions,
-            parking_instructions: courseData.parkingInstructions,
-            notes: courseData.notes,
-            ...(courseData.minParticipants
-              ? { min_participants: courseData.minParticipants }
-              : null),
-            max_participants: courseData.maxParticipants,
-            ...(courseData.organization
-              ? { organization_id: courseData.organization.id }
-              : null),
-            ...(courseData.contactProfile
-              ? { contactProfileId: courseData.contactProfile.id }
-              : null),
-            ...(courseData.salesRepresentative
-              ? { salesRepresentativeId: courseData.salesRepresentative.id }
-              : null),
-            ...(courseData.source ? { source: courseData.source } : null),
-            ...(courseData.usesAOL
-              ? {
-                  aolCostOfCourse: courseData.courseCost,
-                  aolCountry: courseData.aolCountry,
-                  aolRegion: courseData.aolRegion,
-                }
-              : null),
-          },
-          trainers,
-          scheduleId: course?.schedule[0].id,
-          scheduleInput: {
-            venue_id: newVenueId,
-            virtualLink: newVirtualLink,
-            start: courseData.startDateTime,
-            end: courseData.endDateTime,
-          },
-        })
-
-        if (editResponse.data?.updateCourse.id && courseDiffs.length) {
-          const dateChanged = courseDiffs.find(d => d.type === 'date')
-
-          if (!dateChanged) {
-            return
-          }
-
-          const payload = {
-            oldStartDate: course.schedule[0].start,
-            oldEndDate: course.schedule[0].end,
-            newStartDate: courseData.startDateTime.toISOString(),
-            newEndDate: courseData.endDateTime.toISOString(),
-            reason: reviewInput?.reason ?? '',
-            ...(course.type === CourseType.CLOSED && reviewInput
-              ? {
-                  feeType: reviewInput.feeType,
-                  customFee: reviewInput.customFee,
-                }
-              : null),
-          }
-
-          await insertAudit({
-            object: {
-              type: Course_Audit_Type_Enum.Reschedule,
+          if (!acl.canAssignLeadTrainer() && profile) {
+            trainers.push({
               course_id: course.id,
-              payload,
-              authorized_by: profile?.id,
+              profile_id: profile.id,
+              type: CourseTrainerType.Leader,
+              status: InviteStatus.ACCEPTED,
+            })
+          } else {
+            trainers.push(
+              ...trainersData.lead.map(t => ({
+                ...profileToInput(course, CourseTrainerType.Leader)(t),
+                status: trainersMap.get(t.id)?.status,
+              }))
+            )
+          }
+
+          const newVenueId =
+            [CourseDeliveryType.F2F, CourseDeliveryType.MIXED].includes(
+              courseData.deliveryType
+            ) && courseData.venue
+              ? courseData.venue.id
+              : null
+          const newVirtualLink =
+            courseData.deliveryType === CourseDeliveryType.F2F
+              ? ''
+              : courseData.zoomMeetingUrl
+
+          const shouldGoIntoException =
+            !acl.isTTAdmin() && courseExceptions.length > 0
+
+          const editResponse = await updateCourse({
+            courseId: course.id,
+            courseInput: {
+              status: shouldGoIntoException
+                ? Course_Status_Enum.ExceptionsApprovalPending
+                : null,
+              name: generateCourseName(
+                {
+                  level: courseData.courseLevel,
+                  reaccreditation: courseData.reaccreditation,
+                },
+                t
+              ),
+              deliveryType: courseData.deliveryType,
+              level: courseData.courseLevel,
+              reaccreditation: courseData.reaccreditation,
+              go1Integration: courseData.blendedLearning,
+              freeSpaces: courseData.freeSpaces,
+              special_instructions: courseData.specialInstructions,
+              parking_instructions: courseData.parkingInstructions,
+              notes: courseData.notes,
+              ...(courseData.minParticipants
+                ? { min_participants: courseData.minParticipants }
+                : null),
+              max_participants: courseData.maxParticipants,
+              ...(courseData.organization
+                ? { organization_id: courseData.organization.id }
+                : null),
+              ...(courseData.contactProfile
+                ? { contactProfileId: courseData.contactProfile.id }
+                : null),
+              ...(courseData.salesRepresentative
+                ? { salesRepresentativeId: courseData.salesRepresentative.id }
+                : null),
+              ...(courseData.source ? { source: courseData.source } : null),
+              ...(courseData.usesAOL
+                ? {
+                    aolCostOfCourse: courseData.courseCost,
+                    aolCountry: courseData.aolCountry,
+                    aolRegion: courseData.aolRegion,
+                  }
+                : null),
+            },
+            trainers,
+            scheduleId: course?.schedule[0].id,
+            scheduleInput: {
+              venue_id: newVenueId,
+              virtualLink: newVirtualLink,
+              start: courseData.startDateTime,
+              end: courseData.endDateTime,
             },
           })
-        }
 
-        if (editResponse.data?.updateCourse.id) {
-          notifyCourseEdit(
-            {
-              courseId: course.id,
-              level: course.level,
-              venueId: course.schedule[0].venue?.id || null,
-              virtualLink: course.schedule[0].virtualLink || null,
-              startDate: course.dates.aggregate.start.date,
-              endDate: course.dates.aggregate.end.date,
-              parkingInstructions: course.parking_instructions || '',
-              specialInstructions: course.special_instructions || '',
-            },
-            course.trainers?.map(trainer => ({
-              id: trainer.profile.id,
-              type: trainer.type,
-            })) || []
-          )
-          mutateCourse()
-          navigate(`/courses/${course.id}/details`)
-        } else {
-          console.error('error updating course')
+          if (editResponse.data?.updateCourse.id && courseDiffs.length) {
+            const dateChanged = courseDiffs.find(d => d.type === 'date')
+
+            if (!dateChanged) {
+              return
+            }
+
+            const payload = {
+              oldStartDate: course.schedule[0].start,
+              oldEndDate: course.schedule[0].end,
+              newStartDate: courseData.startDateTime.toISOString(),
+              newEndDate: courseData.endDateTime.toISOString(),
+              reason: reviewInput?.reason ?? '',
+              ...(course.type === CourseType.CLOSED && reviewInput
+                ? {
+                    feeType: reviewInput.feeType,
+                    customFee: reviewInput.customFee,
+                  }
+                : null),
+            }
+
+            await insertAudit({
+              object: {
+                type: Course_Audit_Type_Enum.Reschedule,
+                course_id: course.id,
+                payload,
+                authorized_by: profile?.id,
+              },
+            })
+          }
+
+          if (editResponse.data?.updateCourse.id) {
+            notifyCourseEdit(
+              {
+                courseId: course.id,
+                level: course.level,
+                venueId: course.schedule[0].venue?.id || null,
+                virtualLink: course.schedule[0].virtualLink || null,
+                startDate: course.dates.aggregate.start.date,
+                endDate: course.dates.aggregate.end.date,
+                parkingInstructions: course.parking_instructions || '',
+                specialInstructions: course.special_instructions || '',
+              },
+              course.trainers?.map(trainer => ({
+                id: trainer.profile.id,
+                type: trainer.type,
+              })) || []
+            )
+            mutateCourse()
+            navigate(`/courses/${course.id}/details`)
+          } else {
+            console.error('error updating course')
+          }
         }
+      } catch (err) {
+        console.error(err)
       }
-    } catch (err) {
-      console.error(err)
-    }
-  }
+    },
+    [
+      acl,
+      course,
+      courseData,
+      courseDataValid,
+      courseDiffs,
+      courseExceptions.length,
+      insertAudit,
+      mutateCourse,
+      navigate,
+      notifyCourseEdit,
+      profile,
+      t,
+      trainersData,
+      updateCourse,
+    ]
+  )
 
   const editCourse = useCallback(() => {
     if (!autoapproved) {
@@ -567,7 +585,6 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 courseData?.startDateTime &&
                 courseData.endDateTime ? (
                   <ChooseTrainers
-                    maxParticipants={courseData?.maxParticipants ?? 0}
                     courseType={courseData.type || CourseType.CLOSED}
                     courseLevel={courseData.courseLevel || CourseLevel.Level_1}
                     courseSchedule={{

@@ -107,7 +107,7 @@ export const DialogExportBlended: React.FC<React.PropsWithChildren<Props>> = ({
       setNeedFetch(false)
       closeModal()
     }
-  }, [closeModal, data, fileName, t])
+  }, [closeModal, data, fileName, needFetch, t])
 
   const onCancel = useCallback(() => {
     closeModal()

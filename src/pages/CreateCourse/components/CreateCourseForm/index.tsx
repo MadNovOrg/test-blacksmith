@@ -36,7 +36,6 @@ import {
   ValidCourseInput,
 } from '@app/types'
 import { LoadingStatus } from '@app/util'
-import { getRequiredAssistants } from '@app/util/trainerRatio'
 
 import { StepsEnum } from '../../types'
 import { useSaveCourse } from '../../useSaveCourse'
@@ -114,16 +113,6 @@ export const CreateCourseForm = () => {
     )
   }, [profile])
 
-  const requiredAssistants = useMemo(() => {
-    if (courseData) {
-      return getRequiredAssistants({
-        ...courseData,
-        hasSeniorOrPrincipalLeader:
-          courseType === CourseType.INDIRECT && seniorOrPrincipalLead,
-      })
-    }
-  }, [courseData, courseType, seniorOrPrincipalLead])
-
   const nextStepEnabled = useMemo(() => {
     if (courseType !== CourseType.INDIRECT) {
       return courseDataValid
@@ -134,14 +123,6 @@ export const CreateCourseForm = () => {
 
     return hasCheckedAllFlags && courseDataValid
   }, [consentFlags, courseDataValid, courseType])
-
-  useEffect(() => {
-    if (requiredAssistants) {
-      if (assistants.length > requiredAssistants.max) {
-        setAssistants(assistants.slice(0, requiredAssistants.max))
-      }
-    }
-  }, [requiredAssistants, assistants])
 
   const submit = useCallback(async () => {
     if (!courseData || !profile) return

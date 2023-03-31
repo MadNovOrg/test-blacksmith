@@ -203,7 +203,6 @@ export const AssignTrainers = () => {
       ) : null}
       <Stack spacing={5}>
         <ChooseTrainers
-          maxParticipants={courseData.maxParticipants}
           courseType={courseData.type}
           courseLevel={courseData.courseLevel}
           courseSchedule={{
