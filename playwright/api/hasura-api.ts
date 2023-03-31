@@ -1,3 +1,4 @@
+import { addYears } from 'date-fns'
 import { gql, GraphQLClient } from 'graphql-request'
 
 import {
@@ -35,6 +36,7 @@ import {
   WebinarsQueryVariables,
   WebinarSummaryFragment,
 } from '@app/generated/graphql'
+import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
 import BLOG_QUERY from '@app/queries/membership/blog'
 import CATEGORY_QUERY from '@app/queries/membership/category'
 import EBOOKS_QUERY from '@app/queries/membership/ebooks'
@@ -201,6 +203,29 @@ export const getProfileId = async (email: string): Promise<string> => {
   return response.profile[0].id
 }
 
+export const getCourseParticipantId = async (
+  courseId: number,
+  email: string
+): Promise<string> => {
+  const query = gql`
+    query MyQuery {
+      course_participant(
+        where: {
+          _and: {
+            course_id: { _eq: ${courseId} },
+            profile_id: { _eq: "${await getProfileId(email)}" }
+          }
+        }
+      ) {
+        id
+      }
+    }
+  `
+  const response: { course_participant: { id: string }[] } =
+    await getClient().request(query)
+  return response.course_participant[0].id
+}
+
 export const setCourseDates = async (
   courseId: number,
   newStart: Date,
@@ -255,80 +280,99 @@ export const insertCourse = async (
   trainerStatus = InviteStatus.PENDING,
   modules = true
 ): Promise<number> => {
-  const organization = course.organization
-    ? `, organization_id: "${await getOrganizationId(
-        course.organization.name
-      )}"`
-    : ''
-  const contactProfile = course.contactProfile
-    ? `, contactProfileId: "${await getProfileId(course.contactProfile.email)}"`
-    : ''
-
-  const venue = course.schedule[0].venue
-    ? `, venue_id: "${await getVenueId(course.schedule[0].venue.name)}"`
-    : ''
-
+  const organizationId =
+    course.organization?.name &&
+    (await getOrganizationId(course.organization.name))
+  const contactProfileId =
+    course.contactProfile?.email &&
+    (await getProfileId(course.contactProfile.email))
+  const venueId =
+    course.schedule[0].venue?.name &&
+    (await getVenueId(course.schedule[0].venue.name))
   const trainerId = await getProfileId(email)
-  const salesRepresentative = course.salesRepresentative
-    ? `, salesRepresentativeId: "${await getProfileId(
-        course.salesRepresentative.email
-      )}"`
-    : ''
-  const moduleIds = (
-    await getModuleIds(getModulesByLevel(course.level), course.level)
-  ).map((moduleId: string) => ({ moduleId: moduleId }))
+  const salesRepresentativeId =
+    course.salesRepresentative?.email &&
+    (await getProfileId(course.salesRepresentative.email))
+  const moduleIds = modules
+    ? await getModuleIds(getModulesByLevel(course.level), course.level)
+    : []
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const courseInput: any = {
+    deliveryType: course.deliveryType,
+    description: course.description,
+    go1Integration: course.go1Integration,
+    level: course.level,
+    min_participants: course.min_participants,
+    max_participants: course.max_participants,
+    name: course.name,
+    reaccreditation: course.reaccreditation,
+    status: course.status,
+    type: course.type,
+    gradingConfirmed: course.gradingConfirmed,
+  }
+
+  if (organizationId) {
+    courseInput.organization_id = organizationId
+  }
+  if (contactProfileId) {
+    courseInput.contactProfileId = contactProfileId
+  }
+  if (salesRepresentativeId) {
+    courseInput.salesRepresentativeId = salesRepresentativeId
+  }
+  if (venueId) {
+    courseInput.schedule = {
+      data: {
+        start: course.schedule[0].start.toISOString(),
+        end: course.schedule[0].end.toISOString(),
+        venue_id: venueId,
+      },
+    }
+  } else {
+    courseInput.schedule = {
+      data: {
+        start: course.schedule[0].start.toISOString(),
+        end: course.schedule[0].end.toISOString(),
+      },
+    }
+  }
+  const trainers = {
+    data: [
+      {
+        profile_id: trainerId,
+        type: 'LEADER',
+        status: trainerStatus,
+      },
+    ],
+  }
+  const modulesInput = {
+    data: moduleIds.map((moduleId: string) => ({ moduleId: moduleId })),
+  }
   const query = gql`
-    mutation MyMutation {
-      insert_course(objects: {
-        deliveryType: ${course.deliveryType},
-        description: "${course.description}",
-        trainers: {
-          data: {
-            profile_id: "${trainerId}",
-            type: LEADER,
-            status: ${trainerStatus}
-          }
-        },
-        go1Integration: ${course.go1Integration ? 'true' : 'false'},
-        level: ${course.level},
-        min_participants: ${course.min_participants},
-        max_participants: ${course.max_participants},
-        name: "${course.name}",
-        reaccreditation: ${course.reaccreditation},
-        status: ${course.status},
-        type: ${course.type},
-        schedule: {
-          data: {
-            start: "${course.schedule[0].start.toISOString()}",
-            end: "${course.schedule[0].end.toISOString()}"${venue}
-          }
-        }
-        gradingConfirmed: ${course.gradingConfirmed}
-        ${organization}
-        ${contactProfile}
-        ${salesRepresentative}
-        modules: {
-          data: ${
-            modules
-              ? JSON.stringify(moduleIds).replace(/"([^(")"]+)":/g, '$1:')
-              : `[]`
-          }
-        }
-      }) {
+    mutation InsertCourse($course: [course_insert_input!]!) {
+      insert_course(objects: $course) {
         returning {
           id
         }
       }
     }
   `
+  const variables = {
+    course: {
+      ...courseInput,
+      trainers,
+      modules: modulesInput,
+    },
+  }
   const response: { insert_course: { returning: [{ id: number }] } } =
-    await getClient().request(query)
+    await getClient().request(query, variables)
   const id = response.insert_course.returning[0].id
   if (id) {
     console.log(`Inserted course with ID ${id} for ${email}`)
     return id
   }
-  throw Error('Could not insert the course')
+  throw new Error('Could not insert the course')
 }
 
 export const deleteCourse = async (id?: number) => {
@@ -443,6 +487,7 @@ export const insertCourseParticipants = async (
           id
           profile {
             id
+            email
             fullName
           }
         }
@@ -453,8 +498,8 @@ export const insertCourseParticipants = async (
     const response = await getClient().request<{
       insert_course_participant: { returning: CourseParticipant[] }
     }>(query, { objects: participants })
-    users.forEach(user => {
-      console.log(`Adding ${user.email} to ${courseId}`)
+    response.insert_course_participant.returning.forEach(user => {
+      console.log(`Adding ${user.profile.email} to ${courseId}`)
     })
     return response.insert_course_participant.returning
   } catch (e) {
@@ -463,56 +508,46 @@ export const insertCourseParticipants = async (
   return []
 }
 
-export async function insertCourseGradingForParticipants(
-  courseId: number,
-  users: User[],
-  grade: Grade_Enum,
-  dateGraded = new Date().toISOString()
-): Promise<void> {
-  const participantIds = await Promise.all(
-    users.map(user => getProfileId(user.email))
-  )
-  const query = gql`
-    mutation SaveCourseGrading(
-      $modules: [course_participant_module_insert_input!]!
-      $participantIds: [uuid!]
-      $grade: grade_enum!
-      $courseId: Int!
-      $dateGraded: timestamptz!
-    ) {
-      saveModules: insert_course_participant_module(objects: $modules) {
-        affectedRows: affected_rows
-      }
-      saveParticipantsGrade: update_course_participant(
-        where: {
-          profile_id: { _in: $participantIds }
-          course_id: { _eq: $courseId }
-        }
-        _set: {
-          healthSafetyConsent: true
-          grade: $grade
-          dateGraded: $dateGraded
-        }
-      ) {
-        affectedRows: affected_rows
-      }
-      gradingStarted: update_course_by_pk(
-        pk_columns: { id: $courseId }
-        _set: { gradingStarted: true }
-      ) {
-        id
-      }
+async function setStatus(
+  users: string[],
+  moduleIds: string[]
+): Promise<
+  { completed: boolean; course_participant_id: string; module_id: string }[]
+> {
+  const statuses = []
+  for (const user of users) {
+    for (const moduleId of moduleIds) {
+      statuses.push({
+        completed: true,
+        course_participant_id: user,
+        module_id: moduleId,
+      })
     }
-  `
+  }
+  return statuses
+}
+
+export async function insertCourseGradingForParticipants(
+  course: Course,
+  users: User[],
+  grade: Grade_Enum
+): Promise<void> {
+  const courseId = course.id
+  const participantIds = await Promise.all(
+    users.map(user => getCourseParticipantId(courseId, user.email))
+  )
+  const moduleIds = (
+    await getModuleIds(getModulesByLevel(course.level), course.level)
+  ).map((moduleId: string) => moduleId)
+  const modules = await setStatus(participantIds, moduleIds)
   try {
     await getClient().request<{
       update_course_participant: { affected_rows: number }
-    }>(query, {
-      modules: [],
+    }>(SAVE_COURSE_GRADING, {
+      modules,
       participantIds,
       grade,
       courseId,
-      dateGraded,
     })
     console.log(`
       Updated the grade to "${grade}" for the following users on course "${courseId}":
@@ -520,6 +555,89 @@ export async function insertCourseGradingForParticipants(
           .map(user => `${user.givenName} ${user.familyName}`)
           .join('\n    - ')}
     `)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export async function insertCertificateForParticipants(
+  course: Course,
+  users: User[]
+): Promise<void> {
+  const variables = users.map(async user => ({
+    certificationDate: new Date().toISOString(),
+    courseId: course.id,
+    expiryDate: addYears(new Date(), 1).toISOString(),
+    profileId: await getProfileId(user.email),
+    courseName: course.name,
+    courseLevel: course.level,
+    number: `${course.id}-1`,
+  }))
+  const certificateQuery = gql`
+    mutation insertCertificate($objects: [course_certificate_insert_input!]!) {
+      insert_course_certificate(objects: $objects) {
+        returning {
+          id
+        }
+      }
+    }
+  `
+  let certificateResult
+  try {
+    certificateResult = await getClient().request<{
+      insert_course_certificate: { returning: { id: number }[] }
+    }>(certificateQuery, {
+      objects: await Promise.all(variables),
+    })
+
+    console.log(`
+      Inserted certificates for the following users on course "${course.id}":
+        - ${users
+          .map(user => `${user.givenName} ${user.familyName}`)
+          .join('\n    - ')}
+    `)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+
+  const certificateIds =
+    certificateResult.insert_course_certificate.returning.map(
+      certificate => certificate.id
+    )
+
+  const participantQuery = gql`
+    mutation updateParticipant($id: uuid!, $certificateId: uuid!) {
+      update_course_participant(
+        where: { id: { _eq: $id } }
+        _set: { certificate_id: $certificateId }
+      ) {
+        affected_rows
+      }
+    }
+  `
+  try {
+    await Promise.all(
+      users.map(async participant => {
+        const certificateId = certificateIds.shift()
+        if (!certificateId) {
+          return
+        }
+
+        try {
+          await getClient().request<{
+            update_course_participant: { affected_rows: number }
+          }>(participantQuery, {
+            id: await getCourseParticipantId(course.id, participant.email),
+            certificateId,
+          })
+        } catch (e) {
+          console.error(e)
+          throw e
+        }
+      })
+    )
   } catch (e) {
     console.error(e)
     throw e
