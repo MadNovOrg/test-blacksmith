@@ -15111,7 +15111,7 @@ export type Course_Certificate_Hold_Request = {
   certificate: Course_Certificate;
   certificate_id: Scalars['uuid'];
   changelog_id: Scalars['uuid'];
-  expiry_date: Scalars['date'];
+  expiry_date: Scalars['timestamp'];
   id: Scalars['uuid'];
   start_date: Scalars['date'];
 };
@@ -15146,7 +15146,7 @@ export type Course_Certificate_Hold_Request_Bool_Exp = {
   certificate?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificate_id?: InputMaybe<Uuid_Comparison_Exp>;
   changelog_id?: InputMaybe<Uuid_Comparison_Exp>;
-  expiry_date?: InputMaybe<Date_Comparison_Exp>;
+  expiry_date?: InputMaybe<Timestamp_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   start_date?: InputMaybe<Date_Comparison_Exp>;
 };
@@ -15166,7 +15166,7 @@ export type Course_Certificate_Hold_Request_Insert_Input = {
   certificate?: InputMaybe<Course_Certificate_Obj_Rel_Insert_Input>;
   certificate_id?: InputMaybe<Scalars['uuid']>;
   changelog_id?: InputMaybe<Scalars['uuid']>;
-  expiry_date?: InputMaybe<Scalars['date']>;
+  expiry_date?: InputMaybe<Scalars['timestamp']>;
   id?: InputMaybe<Scalars['uuid']>;
   start_date?: InputMaybe<Scalars['date']>;
 };
@@ -15176,7 +15176,7 @@ export type Course_Certificate_Hold_Request_Max_Fields = {
   __typename?: 'course_certificate_hold_request_max_fields';
   certificate_id?: Maybe<Scalars['uuid']>;
   changelog_id?: Maybe<Scalars['uuid']>;
-  expiry_date?: Maybe<Scalars['date']>;
+  expiry_date?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   start_date?: Maybe<Scalars['date']>;
 };
@@ -15186,7 +15186,7 @@ export type Course_Certificate_Hold_Request_Min_Fields = {
   __typename?: 'course_certificate_hold_request_min_fields';
   certificate_id?: Maybe<Scalars['uuid']>;
   changelog_id?: Maybe<Scalars['uuid']>;
-  expiry_date?: Maybe<Scalars['date']>;
+  expiry_date?: Maybe<Scalars['timestamp']>;
   id?: Maybe<Scalars['uuid']>;
   start_date?: Maybe<Scalars['date']>;
 };
@@ -15240,7 +15240,7 @@ export enum Course_Certificate_Hold_Request_Select_Column {
 export type Course_Certificate_Hold_Request_Set_Input = {
   certificate_id?: InputMaybe<Scalars['uuid']>;
   changelog_id?: InputMaybe<Scalars['uuid']>;
-  expiry_date?: InputMaybe<Scalars['date']>;
+  expiry_date?: InputMaybe<Scalars['timestamp']>;
   id?: InputMaybe<Scalars['uuid']>;
   start_date?: InputMaybe<Scalars['date']>;
 };
@@ -41406,7 +41406,7 @@ export type InsertCourseCertificateChangelogMutation = { __typename?: 'mutation_
 export type InsertCourseCertificateHoldRequestMutationVariables = Exact<{
   certificateId: Scalars['uuid'];
   changelogId: Scalars['uuid'];
-  expireDate: Scalars['date'];
+  expireDate: Scalars['timestamp'];
   startDate: Scalars['date'];
   newExpiryDate: Scalars['date'];
 }>;

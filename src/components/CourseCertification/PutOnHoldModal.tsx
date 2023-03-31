@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { addDays } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import enLocale from 'date-fns/locale/en-GB'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -298,7 +299,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           value={field.value}
                           onChange={field.onChange}
                           minDate={minDate}
-                          maxDate={values.dateTo || undefined}
+                          maxDate={addDays(values.dateTo, 1) || undefined}
                           disabled={edit}
                           renderInput={params => (
                             <TextField

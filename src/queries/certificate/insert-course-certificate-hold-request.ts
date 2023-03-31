@@ -4,7 +4,7 @@ export const INSERT_CERTIFICATE_HOLD_MUTATION = gql`
   mutation InsertCourseCertificateHoldRequest(
     $certificateId: uuid!
     $changelogId: uuid!
-    $expireDate: date!
+    $expireDate: timestamp!
     $startDate: date!
     $newExpiryDate: date!
   ) {
