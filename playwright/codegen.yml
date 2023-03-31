@@ -1,0 +1,11 @@
+overwrite: true
+schema:
+  - http://localhost:8080/v1/graphql:
+      headers:
+        x-hasura-admin-secret: tth-hasura-key
+documents: './**/!(*.d).{ts,tsx}'
+generates:
+  playwright/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations

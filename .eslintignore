@@ -4,3 +4,4 @@ playwright-report
 test-results
 src/generated/graphql.ts
 .eslintrc.js
+playwright/generated/graphql.ts

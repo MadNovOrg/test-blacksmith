@@ -448,6 +448,7 @@ select_permissions:
         - course_status
         - course_type
         - created_at
+        - created_by_id
         - description
         - free_spaces
         - go1_integration
