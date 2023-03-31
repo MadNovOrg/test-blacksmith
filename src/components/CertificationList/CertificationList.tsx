@@ -1,3 +1,4 @@
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import {
   Box,
   Button,
@@ -223,7 +224,7 @@ export const CertificationList: React.FC<
 
                 {showCol('grade') ? (
                   <TableCell data-testid="grade">
-                    <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="flex-start">
                       {p.grade ? <Grade grade={p.grade} /> : null}
                     </Box>
                   </TableCell>
@@ -281,18 +282,27 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 <TableCell sx={{ width: 0 }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    sx={{ whiteSpace: 'nowrap' }}
-                    onClick={() =>
-                      navigate(`/certification/${p.certificate?.id}`)
-                    }
-                    data-testid="view-certificate"
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="flex-start"
                   >
-                    {t('components.certification-list.view-certificate')}
-                  </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      sx={{ whiteSpace: 'nowrap' }}
+                      onClick={() =>
+                        navigate(`/certification/${p.certificate?.id}`)
+                      }
+                      data-testid="view-certificate"
+                    >
+                      {t('components.certification-list.view-certificate')}
+                    </Button>
+                    {status === CertificateStatus.ON_HOLD ? (
+                      <WarningAmberIcon color="warning" />
+                    ) : null}
+                  </Box>
                 </TableCell>
               </TableRow>
             )

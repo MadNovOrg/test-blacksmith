@@ -336,6 +336,7 @@
     "not-graded-yet": "You have not been graded on this course yet. Your certificate will appear here if you receive a passing grade",
     "on-hold-warning": "This certification is currently on hold from {{startDate, date_default}} to {{expireDate, date_default}}.",
     "on-hold-planned-warning": "This certification is currently on planned to be on hold from {{startDate, date_default}} to {{expireDate, date_default}}.",
+    "on-hold-contact-us": "If you wish reinstate this certificate, please contact us at: ",
     "on-hold-until": "until {{expireDate, date_defaultShort}}",
     "incomplete": "Incomplete",
     "modules-list-title": "Completed modules and techniques",

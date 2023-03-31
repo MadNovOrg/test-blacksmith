@@ -1,6 +1,4 @@
-import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import {
   Accordion,
   Alert,
@@ -60,6 +58,7 @@ import {
 import { CertificateStatusChip } from '../CertificateStatusChip'
 
 import CertificateHoldHistoryModal from './CertificateHoldHistoryModal'
+import HoldHeaderAlert from './HoldHeaderAlert'
 import UndoRevokeModal from './UndoRevokeModal'
 
 // workaround for using recat-pdf with vite
@@ -538,64 +537,13 @@ export const CourseCertification: React.FC<
           </Grid>
           <Grid item md={8}>
             {holdRequest ? (
-              <Grid item mb={2}>
-                <Alert
-                  variant="outlined"
-                  color="warning"
-                  sx={{
-                    my: 2,
-                    alignItems: 'center',
-                    '&& .MuiAlert-message': {
-                      width: '100%',
-                    },
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <Typography
-                      variant="body2"
-                      color="grey.900"
-                      data-testid="cancellation-alert"
-                    >
-                      {t(
-                        certificate.status === CertificateStatus.ON_HOLD
-                          ? 'on-hold-warning'
-                          : 'on-hold-planned-warning',
-                        {
-                          startDate: holdRequest.start_date,
-                          expireDate: holdRequest.expiry_date,
-                        }
-                      )}
-                    </Typography>
-                    <Box display="flex" justifyContent="flex-end" gap={2}>
-                      <Button
-                        variant="text"
-                        startIcon={<RemoveRedEyeIcon />}
-                        sx={{ ml: 1, py: 0 }}
-                        size="small"
-                        onClick={() => setShowCertificateHoldHistoryModal(true)}
-                      >
-                        {t('view-details')}
-                      </Button>
-                      <Button
-                        variant="contained"
-                        startIcon={<EditIcon />}
-                        sx={{ ml: 1, py: 0 }}
-                        size="small"
-                        data-testid="edit-hold-status-button"
-                        onClick={() =>
-                          setShowPutOnHoldModal({ edit: true, open: true })
-                        }
-                      >
-                        {t('edit')}
-                      </Button>
-                    </Box>
-                  </Box>
-                </Alert>
-              </Grid>
+              <HoldHeaderAlert
+                status={certificate.status as CertificateStatus}
+                holdRequestEndDate={holdRequest.start_date}
+                holdRequestStartDate={holdRequest.expiry_date}
+                onEdit={() => setShowPutOnHoldModal({ edit: true, open: true })}
+                onView={() => setShowCertificateHoldHistoryModal(true)}
+              />
             ) : null}
             <CertificateInfo
               grade={grade as Grade_Enum}
