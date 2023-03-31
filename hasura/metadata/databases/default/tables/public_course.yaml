@@ -541,6 +541,7 @@ select_permissions:
         - parking_instructions
         - reaccreditation
         - sales_representative_id
+        - source
         - special_instructions
         - updated_at
       computed_fields:
