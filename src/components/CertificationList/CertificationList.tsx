@@ -300,7 +300,10 @@ export const CertificationList: React.FC<
                       {t('components.certification-list.view-certificate')}
                     </Button>
                     {status === CertificateStatus.ON_HOLD ? (
-                      <WarningAmberIcon color="warning" />
+                      <WarningAmberIcon
+                        color="warning"
+                        sx={{ marginLeft: '0.2em' }}
+                      />
                     ) : null}
                   </Box>
                 </TableCell>

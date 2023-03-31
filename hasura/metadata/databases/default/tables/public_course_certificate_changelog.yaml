@@ -25,6 +25,28 @@ object_relationships:
     using:
       foreign_key_constraint_on: participant_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - participant_id
+        - payload
+        - type
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+        - author_id
+        - participant_id
+        - payload
+        - type
+      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -38,6 +60,17 @@ insert_permissions:
         - type
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
   - role: tt-admin
     permission:
       columns:

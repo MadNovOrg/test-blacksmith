@@ -73,7 +73,7 @@ const CertificateHoldHistoryModal: React.FC<
                 <ProfileAvatar profile={changelog.author} />
               </Box>
             </TableCell>
-            <TableCell sx={{ verticalAlign: 'top' }}>
+            <TableCell>
               {t('dates.fullDateTime', { date: changelog.createdAt })}
             </TableCell>
             <TableCell>

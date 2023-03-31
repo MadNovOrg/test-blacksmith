@@ -402,7 +402,14 @@ export const CourseCertification: React.FC<
   const holdRequest = data?.certificateHoldRequest[0]
   const courseParticipant = certificate?.participant
 
-  const gradingChangelogs = certificate?.participant?.certificateChanges ?? []
+  const gradingChangelogs = useMemo(() => {
+    return (
+      certificate?.participant?.certificateChanges.filter(
+        change =>
+          change.type !== Course_Certificate_Changelog_Type_Enum.PutOnHold
+      ) ?? []
+    )
+  }, [certificate])
 
   const holdChangelogs = useMemo(() => {
     return (
@@ -539,8 +546,8 @@ export const CourseCertification: React.FC<
             {holdRequest ? (
               <HoldHeaderAlert
                 status={certificate.status as CertificateStatus}
-                holdRequestEndDate={holdRequest.start_date}
-                holdRequestStartDate={holdRequest.expiry_date}
+                holdRequestEndDate={holdRequest.expiry_date}
+                holdRequestStartDate={holdRequest.start_date}
                 onEdit={() => setShowPutOnHoldModal({ edit: true, open: true })}
                 onView={() => setShowCertificateHoldHistoryModal(true)}
               />
