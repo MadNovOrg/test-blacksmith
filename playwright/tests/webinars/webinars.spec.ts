@@ -1,14 +1,14 @@
 import { test as base } from '@playwright/test'
 
-import { getWebinars } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { WebinarPage } from '../../pages/membership/WebinarPage'
 
 const test = base.extend<{
-  webinars: Awaited<ReturnType<typeof getWebinars>>
+  webinars: Awaited<ReturnType<typeof API.webinar.getWebinars>>
 }>({
   webinars: async ({}, use) => {
-    const webinars = await getWebinars()
+    const webinars = await API.webinar.getWebinars()
 
     await use(webinars)
   },

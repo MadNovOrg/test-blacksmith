@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { PostSummaryFragment } from '@app/generated/graphql'
 
-import { getBlogPosts, getPostById } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { BlogPage } from '../../pages/membership/BlogPage'
 
@@ -13,8 +13,8 @@ const test = base.extend<{
   }
 }>({
   data: async ({}, use) => {
-    const recentPosts = await getBlogPosts(4)
-    const post = await getPostById(recentPosts[0]?.id ?? '')
+    const recentPosts = await API.post.getBlogPosts(4)
+    const post = await API.post.getPostById(recentPosts[0]?.id ?? '')
     await use({ post, recentPosts })
   },
 })

@@ -3,8 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
-import { getLatestEmail } from '../../../api/email-api'
-import { deleteCourse, insertCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -21,7 +20,7 @@ const testData = [
       const course = UNIQUE_COURSE()
       course.type = CourseType.INDIRECT
       course.status = Course_Status_Enum.Scheduled
-      course.id = await insertCourse(
+      course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED
@@ -53,7 +52,7 @@ for (const data of testData) {
     course: async ({}, use) => {
       const course = await data.course()
       await use(course)
-      await deleteCourse(course.id)
+      await API.course.deleteCourse(course.id)
     },
   })
 
@@ -84,7 +83,7 @@ for (const data of testData) {
     )
 
     const attendeePage = await browser.newPage()
-    const email = await getLatestEmail(
+    const email = await API.email.getLatestEmail(
       data.attendee.email,
       'Register for training course'
     )

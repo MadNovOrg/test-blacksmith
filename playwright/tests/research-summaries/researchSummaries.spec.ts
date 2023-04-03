@@ -1,14 +1,17 @@
 import { test as base } from '@playwright/test'
 
-import { getResearchSummaries } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { ResearchSummariesPage } from '../../pages/membership/ResearchSummariesPage'
 
 const test = base.extend<{
-  researchSummaries: Awaited<ReturnType<typeof getResearchSummaries>>
+  researchSummaries: Awaited<
+    ReturnType<typeof API.research_summaries.getResearchSummaries>
+  >
 }>({
   researchSummaries: async ({}, use) => {
-    const researchSummaries = await getResearchSummaries()
+    const researchSummaries =
+      await API.research_summaries.getResearchSummaries()
 
     await use(researchSummaries)
   },

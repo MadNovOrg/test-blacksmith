@@ -1,15 +1,7 @@
 import { test as base } from '@playwright/test'
 import { addYears } from 'date-fns'
 
-import {
-  deleteGo1License,
-  deleteOrganization,
-  deleteOrganizationMember,
-  getProfileId,
-  insertGo1License,
-  insertOrganization,
-  insertOrganizationMember,
-} from '../../api/hasura-api'
+import * as API from '../../api'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { ProfilePage } from '../../pages/membership/ProfilePage'
@@ -23,15 +15,15 @@ type Go1LicenseContext = {
 const test = base.extend<{ licenseContext: Go1LicenseContext }>({
   licenseContext: async ({}, use) => {
     const [orgId, profileId] = await Promise.all([
-      insertOrganization({ name: 'Test organization' }),
-      getProfileId(users.user1.email),
+      API.organization.insertOrganization({ name: 'Test organization' }),
+      API.profile.getProfileId(users.user1.email),
     ])
     const [memberId, licenseId] = await Promise.all([
-      insertOrganizationMember({
+      API.organization.insertOrganizationMember({
         profile_id: profileId,
         organization_id: orgId,
       }),
-      insertGo1License({
+      API.go1_licensing.insertGo1License({
         profileId,
         orgId,
         expireDate: addYears(new Date(), 1),
@@ -39,9 +31,9 @@ const test = base.extend<{ licenseContext: Go1LicenseContext }>({
     ])
     await use({ licenseId, orgId, profileId })
     await Promise.all([
-      deleteGo1License(licenseId),
-      deleteOrganizationMember(memberId),
-      deleteOrganization(orgId),
+      API.go1_licensing.deleteGo1License(licenseId),
+      API.organization.deleteOrganizationMember(memberId),
+      API.organization.deleteOrganization(orgId),
     ])
   },
 })

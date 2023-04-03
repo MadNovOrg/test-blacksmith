@@ -3,13 +3,7 @@ import { test } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
-import {
-  getTrainerCourses,
-  insertCourse,
-  deleteCourse,
-  insertCourseParticipants,
-  makeSureTrainerHasCourses,
-} from '../api/hasura-api'
+import * as API from '../api'
 import { COURSES_TO_VIEW, UNIQUE_COURSE } from '../data/courses'
 import { users } from '../data/users'
 
@@ -21,13 +15,13 @@ test('insert test @data', async () => {
   const email = process.env.TRAINER ?? ''
 
   // delete all trainer's courses
-  const courses = await getTrainerCourses(email)
+  const courses = await API.course.getTrainerCourses(email)
   for (const course of courses) {
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   }
 
   // add some pending courses
-  await makeSureTrainerHasCourses(COURSES_TO_VIEW, email)
+  await API.course.makeSureTrainerHasCourses(COURSES_TO_VIEW, email)
 
   // add courses in the past with participants
   for (let i = 0; i < 3; i++) {
@@ -37,8 +31,12 @@ test('insert test @data', async () => {
     course.status = Course_Status_Enum.Scheduled
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')
     course.schedule[0].end = new Date('2022-03-15T16:00:00Z')
-    course.id = await insertCourse(course, email, InviteStatus.ACCEPTED)
-    await insertCourseParticipants(
+    course.id = await API.course.insertCourse(
+      course,
+      email,
+      InviteStatus.ACCEPTED
+    )
+    await API.course.insertCourseParticipants(
       course.id,
       [users.user1WithOrg, users.user2WithOrg],
       new Date('2022-03-14T00:00:00Z')

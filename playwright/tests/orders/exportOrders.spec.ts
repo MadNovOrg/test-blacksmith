@@ -8,21 +8,20 @@ import {
 } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
-import { deleteCourse, insertCourse, insertOrder } from '../../api/hasura-api'
-import { getOrders } from '../../api/hasura/orders'
+import * as API from '../../api'
 import { UNIQUE_COURSE } from '../../data/courses'
 import { UNIQUE_ORDER } from '../../data/order'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { OrderPage } from '../../pages/orders/OrderPage'
 
-type Orders = Awaited<ReturnType<typeof getOrders>>
+type Orders = Awaited<ReturnType<typeof API.order.getOrders>>
 
 const test = base.extend<{
   orders: Orders
 }>({
   orders: async ({}, use) => {
-    let orders = await getOrders({
+    let orders = await API.order.getOrders({
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -32,7 +31,7 @@ const test = base.extend<{
     // Ensure there is always at least one order
     if (orders.length < 1) {
       const newCourse = UNIQUE_COURSE()
-      const courseId = await insertCourse(
+      const courseId = await API.course.insertCourse(
         newCourse,
         users.trainer.email,
         InviteStatus.ACCEPTED
@@ -41,8 +40,8 @@ const test = base.extend<{
       const newOrder = await UNIQUE_ORDER(newCourse, users.userOrgAdmin, [
         users.user1,
       ])
-      await insertOrder(newOrder)
-      orders = await getOrders({
+      await API.order.insertOrder(newOrder)
+      orders = await API.order.getOrders({
         limit: 12,
         offset: 0,
         orderBy: [{ createdAt: Order_By.Asc }],
@@ -51,7 +50,7 @@ const test = base.extend<{
     }
     await use(orders)
     if (course) {
-      await deleteCourse(course)
+      await API.course.deleteCourse(course)
     }
   },
 })

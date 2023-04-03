@@ -1,9 +1,8 @@
-/* eslint-disable no-empty-pattern */
 import { test as base } from '@playwright/test'
 
 import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
-import { getVideoItems } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { VideoPage } from '../../pages/membership/VideoPage'
 
@@ -11,7 +10,7 @@ const test = base.extend<{
   videoItems: Array<VideoItemSummaryFragment | null>
 }>({
   videoItems: async ({}, use) => {
-    const videoItems = await getVideoItems()
+    const videoItems = await API.video.getVideoItems()
     await use(videoItems)
   },
 })

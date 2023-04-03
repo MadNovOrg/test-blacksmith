@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { getCategoryById, getTagById } from '../../api/hasura-api'
+import * as API from '../../api'
 import { PER_PAGE } from '../../constants'
 import { BasePage } from '../BasePage'
 
@@ -24,8 +24,8 @@ export class TermPage extends BasePage {
 
   async checkGridItems(
     tag:
-      | Awaited<ReturnType<typeof getCategoryById>>
-      | Awaited<ReturnType<typeof getTagById>>
+      | Awaited<ReturnType<typeof API.post.getCategoryById>>
+      | Awaited<ReturnType<typeof API.post.getTagById>>
   ) {
     tag?.posts?.nodes?.map(async post => {
       await expect(

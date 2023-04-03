@@ -3,13 +3,7 @@ import { test as base } from '@playwright/test'
 import { Grade_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
-import {
-  deleteCourse,
-  insertCourse,
-  insertCourseParticipants,
-  insertCourseGradingForParticipants,
-  insertCertificateForParticipants,
-} from '../../api/hasura-api'
+import * as API from '../../api'
 import { FINISHED_COURSE } from '../../data/courses'
 import { Course, User } from '../../data/types'
 import { users } from '../../data/users'
@@ -23,16 +17,20 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED
     course.gradingConfirmed = true
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseParticipants(course.id, [user])
-    await insertCourseGradingForParticipants(course, [user], Grade_Enum.Pass)
-    await insertCertificateForParticipants(course, [user])
+    await API.course.insertCourseParticipants(course.id, [user])
+    await API.course.insertCourseGradingForParticipants(
+      course,
+      [user],
+      Grade_Enum.Pass
+    )
+    await API.course.insertCertificateForParticipants(course, [user])
     await use({ course: course, user: user })
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
 })
 

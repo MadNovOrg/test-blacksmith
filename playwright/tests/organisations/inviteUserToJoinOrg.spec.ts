@@ -2,8 +2,7 @@ import { setTimeout } from 'timers/promises'
 
 import { test as base } from '@playwright/test'
 
-import { getLatestEmail } from '../../api/email-api'
-import { insertOrganization, deleteOrganization } from '../../api/hasura-api'
+import * as API from '../../api'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
 import { EmailPage } from '../../pages/EmailPage'
@@ -14,7 +13,7 @@ const test = base.extend<{
 }>({
   org: async ({}, use) => {
     const orgName = Date.now() + ' org'
-    const id = await insertOrganization({
+    const id = await API.organization.insertOrganization({
       name: orgName,
     })
     await use({ id: id, name: orgName })
@@ -22,7 +21,7 @@ const test = base.extend<{
     // between finishing the test and cleaning up the data
     // don't know the reason for it
     await setTimeout(100)
-    await deleteOrganization(id)
+    await API.organization.deleteOrganization(id)
   },
 })
 
@@ -44,7 +43,7 @@ test('invite user to join organisation by admin', async ({
   await orgPage.clickButtonToInviteUser()
   //go to email
   const inviteePage = await browser.newPage()
-  const email = await getLatestEmail(
+  const email = await API.email.getLatestEmail(
     users.user2WithOrg.email,
     `Join ${org.name} on Team Teach Hub`
   )

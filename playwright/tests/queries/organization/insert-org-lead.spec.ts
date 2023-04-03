@@ -9,7 +9,7 @@ import { MUTATION as InsertOrgLeadMutation } from '@app/queries/organization/ins
 
 import { buildOrganization } from '@test/mock-data-utils'
 
-import { deleteOrganizationsWhere } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [
@@ -57,7 +57,7 @@ forbiddenRoles.forEach(role => {
 })
 
 test.afterAll(async () => {
-  await deleteOrganizationsWhere({
+  await API.organization.deleteOrganizationsWhere({
     trustName: {
       _eq: 'insert-org-lead-spec',
     },

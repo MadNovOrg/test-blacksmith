@@ -1,6 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { getProfileId } from '../../api/hasura-api'
+import * as API from '../../api'
 import { CourseHeader } from '../../components/CourseHeader'
 import { UiTable } from '../../components/UiTable'
 import { toAttendeesTableRow } from '../../data/mappings'
@@ -398,7 +398,7 @@ export class CourseDetailsPage extends BasePage {
   async checkAttendeeExists(user: User) {
     const attendee = await this.page.locator('tr', {
       has: this.page.locator(
-        `a[href="/profile/${await getProfileId(user.email)}"]`
+        `a[href="/profile/${await API.profile.getProfileId(user.email)}"]`
       ),
     })
     await expect(attendee).toContainText(`${user.givenName} ${user.familyName}`)

@@ -6,7 +6,7 @@ import {
   Payment_Methods_Enum,
 } from '@app/generated/graphql'
 
-import { getOrders } from '../../api/hasura/orders'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { OrderPage } from '../../pages/orders/OrderPage'
 
@@ -16,7 +16,7 @@ const test = base.extend<{
   ccOrders: OrderInfoFragment[]
 }>({
   unfilteredOrders: async ({}, use) => {
-    const orders = await getOrders({
+    const orders = await API.order.getOrders({
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -25,7 +25,7 @@ const test = base.extend<{
     await use(orders)
   },
   invoiceOrders: async ({}, use) => {
-    const orders = await getOrders({
+    const orders = await API.order.getOrders({
       limit: 12,
       offset: 0,
       orderBy: [{ createdAt: Order_By.Asc }],
@@ -34,7 +34,7 @@ const test = base.extend<{
     await use(orders)
   },
   ccOrders: async ({}, use) => {
-    const orders = await getOrders({
+    const orders = await API.order.getOrders({
       orderBy: [{ createdAt: Order_By.Asc }],
       where: { paymentMethod: { _eq: Payment_Methods_Enum.Cc } },
       offset: 0,

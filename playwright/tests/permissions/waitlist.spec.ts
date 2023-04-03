@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { introspection } from '../../api/introspection-api'
+import * as API from '../../api'
 ;(
   [
     'anonymous',
@@ -13,7 +13,7 @@ import { introspection } from '../../api/introspection-api'
   ] as const
 ).forEach(role => {
   test(`it allows ${role} user to insert a waitlist`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
     const allowedFields = [
       'courseId',
       'email',
@@ -43,7 +43,7 @@ import { introspection } from '../../api/introspection-api'
 })
 ;(['sales-admin', 'trainer', 'tt-ops', 'tt-admin'] as const).forEach(role => {
   test(`it allows role ${role} to select waitlist`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
     const allowedFields = [
       'confirmed',
       'courseId',
@@ -72,7 +72,7 @@ import { introspection } from '../../api/introspection-api'
 })
 ;(['unverified', 'anonymous'] as const).forEach(role => {
   test(`doesn't allow role ${role} to select waitlist`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
     const waitlistsQuery = schema.__schema.queryType.fields.find(
       f => f.name === 'waitlist'
     )

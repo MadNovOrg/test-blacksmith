@@ -3,11 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseParticipant, InviteStatus } from '@app/types'
 
-import {
-  deleteCourse,
-  insertCourse,
-  insertCourseParticipants,
-} from '../../api/hasura-api'
+import * as API from '../../api'
 import { FINISHED_COURSE } from '../../data/courses'
 import { Course } from '../../data/types'
 import { users } from '../../data/users'
@@ -22,16 +18,16 @@ const test = base.extend<{
     const course = FINISHED_COURSE()
     course.gradingConfirmed = true
     course.status = Course_Status_Enum.GradeMissing
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
     await use(course)
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
   participants: async ({ course }, use) => {
-    const participants = await insertCourseParticipants(course.id, [
+    const participants = await API.course.insertCourseParticipants(course.id, [
       users.user1WithOrg,
       users.user2WithOrg,
     ])

@@ -3,11 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
-import {
-  deleteCourse,
-  insertCourse,
-  insertCourseParticipants,
-} from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -20,7 +16,7 @@ const createCourses = async (): Promise<Course[]> => {
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.Scheduled
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
@@ -33,10 +29,12 @@ const createCourses = async (): Promise<Course[]> => {
 const test = base.extend<{ courses: Course[] }>({
   courses: async ({}, use) => {
     const courses = await createCourses()
-    await insertCourseParticipants(courses[0].id, [users.user1WithOrg])
+    await API.course.insertCourseParticipants(courses[0].id, [
+      users.user1WithOrg,
+    ])
     await use(courses)
     for (const course of courses) {
-      await deleteCourse(course.id)
+      await API.course.deleteCourse(course.id)
     }
   },
 })

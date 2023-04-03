@@ -3,13 +3,14 @@ import { expect, test as base } from '@playwright/test'
 import { Course_Source_Enum, Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, RoleName } from '@app/types'
 
-import {
-  deleteCourse,
-  getProfileId,
-  insertCourse,
-} from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { users } from '../../../data/users'
+import {
+  AdminCourseQuery,
+  TrainerCourseQuery,
+  UnverifiedUserCoursesQuery,
+} from '../../../generated/graphql'
 import { runQueryAsRole } from '../../queries/gql-query'
 
 import {
@@ -17,12 +18,6 @@ import {
   TRAINER_COURSE_QUERY,
   UNVERIFIED_USER_COURSES_QUERY,
 } from './queries'
-
-import {
-  AdminCourseQuery,
-  TrainerCourseQuery,
-  UnverifiedUserCoursesQuery,
-} from 'playwright/generated/graphql'
 
 const test = base.extend<{
   courseIds: {
@@ -51,14 +46,14 @@ const test = base.extend<{
       trainerPendingCourseId,
       trainerUnavailableCourseId,
     ] = await Promise.all([
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.CLOSED,
@@ -66,21 +61,21 @@ const test = base.extend<{
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.INDIRECT,
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.CLOSED,
@@ -88,7 +83,7 @@ const test = base.extend<{
         },
         users.trainerWithOrg.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
@@ -96,7 +91,7 @@ const test = base.extend<{
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
@@ -104,7 +99,7 @@ const test = base.extend<{
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
@@ -112,7 +107,7 @@ const test = base.extend<{
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
@@ -120,7 +115,7 @@ const test = base.extend<{
         },
         users.trainer.email
       ),
-      insertCourse(
+      API.course.insertCourse(
         {
           ...UNIQUE_COURSE(),
           type: CourseType.OPEN,
@@ -142,16 +137,16 @@ const test = base.extend<{
       trainerUnavailableCourseId,
     })
     await Promise.all([
-      deleteCourse(openCourseId),
-      deleteCourse(closedCourseId),
-      deleteCourse(indirectCourseId),
-      deleteCourse(trainerCourseId),
-      deleteCourse(notTrainerCourseId),
-      deleteCourse(confirmModulesCourseId),
-      deleteCourse(scheduledCourseId),
-      deleteCourse(trainerMissingCourseId),
-      deleteCourse(trainerPendingCourseId),
-      deleteCourse(trainerUnavailableCourseId),
+      API.course.deleteCourse(openCourseId),
+      API.course.deleteCourse(closedCourseId),
+      API.course.deleteCourse(indirectCourseId),
+      API.course.deleteCourse(trainerCourseId),
+      API.course.deleteCourse(notTrainerCourseId),
+      API.course.deleteCourse(confirmModulesCourseId),
+      API.course.deleteCourse(scheduledCourseId),
+      API.course.deleteCourse(trainerMissingCourseId),
+      API.course.deleteCourse(trainerPendingCourseId),
+      API.course.deleteCourse(trainerUnavailableCourseId),
     ])
   },
 })
@@ -185,7 +180,7 @@ test('@query sales admin can select open and closed courses, but not indirect co
 test('@query trainer can select only courses where they are a trainer', async ({
   courseIds,
 }) => {
-  const profileId = await getProfileId(users.trainer.email)
+  const profileId = await API.profile.getProfileId(users.trainer.email)
 
   console.log(profileId)
 

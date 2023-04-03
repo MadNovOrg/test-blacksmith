@@ -1,54 +1,8 @@
 import { addYears } from 'date-fns'
-import { gql, GraphQLClient } from 'graphql-request'
+import { gql } from 'graphql-request'
 
-import {
-  BlogQuery,
-  BlogQueryVariables,
-  CategoryQuery,
-  CategoryQueryVariables,
-  EbooksQuery,
-  EbooksQueryVariables,
-  Go1_Licenses_Insert_Input,
-  Grade_Enum,
-  Organization_Bool_Exp,
-  Organization_Insert_Input,
-  Organization_Member_Insert_Input,
-  Podcast,
-  PodcastQuery,
-  PodcastQueryVariables,
-  PodcastsQuery,
-  PodcastsQueryVariables,
-  PostQuery,
-  PostQueryVariables,
-  PostSummaryFragment,
-  ResearchSummariesQuery,
-  ResearchSummariesQueryVariables,
-  TagQuery,
-  TagQueryVariables,
-  VideoItemQuery,
-  VideoItemQueryVariables,
-  VideoItemSummaryFragment,
-  VideoSeriesQuery,
-  VideoSeriesQueryVariables,
-  WebinarQuery,
-  WebinarQueryVariables,
-  WebinarsQuery,
-  WebinarsQueryVariables,
-  WebinarSummaryFragment,
-} from '@app/generated/graphql'
+import { Grade_Enum } from '@app/generated/graphql'
 import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
-import BLOG_QUERY from '@app/queries/membership/blog'
-import CATEGORY_QUERY from '@app/queries/membership/category'
-import EBOOKS_QUERY from '@app/queries/membership/ebooks'
-import PODCAST_QUERY from '@app/queries/membership/podcast'
-import PODCASTS_QUERY from '@app/queries/membership/podcasts'
-import POST_QUERY from '@app/queries/membership/post'
-import researchSummaries from '@app/queries/membership/research-summaries'
-import TAG_QUERY from '@app/queries/membership/tag'
-import VIDEO_ITEM_QUERY from '@app/queries/membership/video-item'
-import VIDEO_SERIES_QUERY from '@app/queries/membership/video-series'
-import WEBINAR_QUERY from '@app/queries/membership/webinar'
-import WEBINARS_QUERY from '@app/queries/membership/webinars'
 import {
   CourseLevel,
   CourseModule,
@@ -57,23 +11,13 @@ import {
   ModuleGroup,
 } from '@app/types'
 
-import { HASURA_BASE_URL, HASURA_SECRET } from '../constants'
-import { getModulesByLevel } from '../data/modules'
-import { Course, OrderCreation, User } from '../data/types'
+import { getModulesByLevel } from '../../data/modules'
+import { Course, User } from '../../data/types'
 
-const endpoint = `${HASURA_BASE_URL}/v1/graphql`
-
-let graphQLClient: GraphQLClient
-export const getClient = () => {
-  if (!graphQLClient) {
-    graphQLClient = new GraphQLClient(endpoint, {
-      headers: {
-        'x-hasura-admin-secret': HASURA_SECRET,
-      },
-    })
-  }
-  return graphQLClient
-}
+import { getClient } from './client'
+import { getOrganizationId } from './organization'
+import { getProfileId } from './profile'
+import { getVenueId } from './venue'
 
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   const query = gql`
@@ -182,27 +126,6 @@ export const getTrainerCourses = async (email: string): Promise<Course[]> => {
   return response.course
 }
 
-export const getOrganizationId = async (name: string): Promise<string> => {
-  const query = gql`query MyQuery { organization(where: {name: {_eq: "${name}"}}) { id }}`
-  const response: { organization: { id: string }[] } =
-    await getClient().request(query)
-  return response.organization[0].id
-}
-
-export const getVenueId = async (name: string): Promise<string> => {
-  const query = gql`query MyQuery { venue(where: {name: {_eq: "${name}"}}) { id }}`
-  const response: { venue: { id: string }[] } = await getClient().request(query)
-  return response.venue[0].id
-}
-
-export const getProfileId = async (email: string): Promise<string> => {
-  const query = gql`query MyQuery { profile(where: {email: {_eq: "${email}"}}) { id }}`
-  const response: { profile: { id: string }[] } = await getClient().request(
-    query
-  )
-  return response.profile[0].id
-}
-
 export const getCourseParticipantId = async (
   courseId: number,
   email: string
@@ -247,7 +170,6 @@ export const setCourseDates = async (
     console.error(e)
   }
 }
-
 export const getModuleIds = async (
   moduleGroups: string[],
   level: CourseLevel
@@ -641,299 +563,5 @@ export async function insertCertificateForParticipants(
   } catch (e) {
     console.error(e)
     throw e
-  }
-}
-
-export async function getAllPodcasts(): Promise<Podcast[]> {
-  const response = await getClient().request<
-    PodcastsQuery,
-    PodcastsQueryVariables
-  >(PODCASTS_QUERY, { input: { paging: { page: 1, perPage: 1000 } } })
-  return response.podcasts?.records ?? []
-}
-
-export async function getPodcastById(id: string): Promise<Podcast | null> {
-  const response = await getClient().request<
-    PodcastQuery,
-    PodcastQueryVariables
-  >(PODCAST_QUERY, { id })
-  return response.podcast?.podcast ?? null
-}
-
-export async function getVideoItems(
-  first = 1000
-): Promise<Array<VideoItemSummaryFragment | null>> {
-  const response = await getClient().request<
-    VideoSeriesQuery,
-    VideoSeriesQueryVariables
-  >(VIDEO_SERIES_QUERY, { first })
-  if (response.content?.videoSeriesItems?.nodes) {
-    return response.content.videoSeriesItems.nodes
-  }
-  return []
-}
-
-export async function getVideoItemById(
-  id: string
-): Promise<VideoItemSummaryFragment | null> {
-  const response = await getClient().request<
-    VideoItemQuery,
-    VideoItemQueryVariables
-  >(VIDEO_ITEM_QUERY, { id })
-  return response.content?.videoSeriesItem || null
-}
-
-export async function getBlogPosts(
-  first = 1000
-): Promise<(PostSummaryFragment | null)[]> {
-  const response = await getClient().request<BlogQuery, BlogQueryVariables>(
-    BLOG_QUERY,
-    {
-      first,
-    }
-  )
-  if (response.content?.posts?.nodes) {
-    return response.content.posts.nodes
-  }
-  return []
-}
-
-export async function getPostById(
-  id: string
-): Promise<PostSummaryFragment | null> {
-  const response = await getClient().request<PostQuery, PostQueryVariables>(
-    POST_QUERY,
-    { id }
-  )
-  return response.content?.post || null
-}
-
-export async function getFirstTagIdWithPosts(): Promise<string | null> {
-  const query = gql`
-    query FirstTagWithPosts {
-      content {
-        tags(where: { hideEmpty: true }, first: 1) {
-          nodes {
-            id
-          }
-        }
-      }
-    }
-  `
-  const response = await getClient().request<{
-    content?: { tags?: { nodes?: Array<{ id: string }> } }
-  }>(query)
-  if (response.content?.tags?.nodes?.length) {
-    return response.content.tags.nodes[0].id
-  }
-  return null
-}
-
-export async function getTagById(id: string) {
-  const response = await getClient().request<TagQuery, TagQueryVariables>(
-    TAG_QUERY,
-    { id }
-  )
-  if (response.content?.tag) {
-    return response.content.tag
-  }
-  return null
-}
-
-export async function getFirstCategoryIdWithPosts(): Promise<string | null> {
-  const query = gql`
-    query FirstCategoryWithPosts {
-      content {
-        categories(where: { hideEmpty: true }, first: 1) {
-          nodes {
-            id
-          }
-        }
-      }
-    }
-  `
-  const response = await getClient().request<{
-    content?: { categories?: { nodes?: Array<{ id: string }> } }
-  }>(query)
-  if (response.content?.categories?.nodes?.length) {
-    return response.content.categories.nodes[0].id
-  }
-  return null
-}
-
-export async function getCategoryById(id: string) {
-  const response = await getClient().request<
-    CategoryQuery,
-    CategoryQueryVariables
-  >(CATEGORY_QUERY, { id })
-  if (response.content?.category) {
-    return response.content.category
-  }
-  return null
-}
-
-export async function getEbooks(first = 1000) {
-  const response = await getClient().request<EbooksQuery, EbooksQueryVariables>(
-    EBOOKS_QUERY,
-    { first }
-  )
-  if (response.content?.ebooks?.nodes?.length) {
-    return response.content.ebooks.nodes
-  }
-  return []
-}
-
-export async function getResearchSummaries(first = 1000) {
-  const response = await getClient().request<
-    ResearchSummariesQuery,
-    ResearchSummariesQueryVariables
-  >(researchSummaries, { first })
-  if (response.content?.researchSummaries?.nodes?.length) {
-    return response.content.researchSummaries.nodes
-  }
-  return []
-}
-
-export async function getWebinars(
-  first = 1000
-): Promise<Array<WebinarSummaryFragment | null>> {
-  const response = await getClient().request<
-    WebinarsQuery,
-    WebinarsQueryVariables
-  >(WEBINARS_QUERY, { first })
-  if (response.content?.webinars?.nodes) {
-    return response.content.webinars.nodes
-  }
-  return []
-}
-
-export async function getWebinarById(
-  id: string
-): Promise<WebinarSummaryFragment | null> {
-  const response = await getClient().request<
-    WebinarQuery,
-    WebinarQueryVariables
-  >(WEBINAR_QUERY, { id })
-  return response.content?.webinar || null
-}
-
-export async function insertOrganization(
-  input: Organization_Insert_Input
-): Promise<string> {
-  const mutation = gql`
-    mutation InsertOrganization($object: organization_insert_input!) {
-      insert_organization_one(object: $object) {
-        id
-      }
-    }
-  `
-  const response: { insert_organization_one: { id: string } } =
-    await getClient().request(mutation, { object: input })
-  return response?.insert_organization_one?.id
-}
-
-export async function deleteOrganization(id: string): Promise<boolean> {
-  const mutation = gql`
-    mutation DeleteOrganization($id: uuid!) {
-      delete_organization_by_pk(id: $id) {
-        id
-      }
-    }
-  `
-  const response: { delete_organization_by_pk: { id: boolean } } =
-    await getClient().request(mutation, { id })
-  return response?.delete_organization_by_pk?.id
-}
-
-export async function deleteOrganizationsWhere(
-  where: Organization_Bool_Exp
-): Promise<boolean> {
-  const mutation = gql`
-    mutation DeleteOrganizations($where: organization_bool_exp!) {
-      delete_organization(where: $where) {
-        affected_rows
-      }
-    }
-  `
-  const response: { delete_organization: { affected_rows: boolean } } =
-    await getClient().request(mutation, { where })
-  return response?.delete_organization?.affected_rows
-}
-
-export async function insertOrganizationMember(
-  input: Organization_Member_Insert_Input
-) {
-  const mutation = gql`
-    mutation InsertOrganizationMember(
-      $input: organization_member_insert_input!
-    ) {
-      insert_organization_member_one(object: $input) {
-        id
-      }
-    }
-  `
-  const response: { insert_organization_member_one: { id: string } } =
-    await getClient().request(mutation, { input })
-  return response?.insert_organization_member_one?.id
-}
-
-export async function deleteOrganizationMember(id: string): Promise<boolean> {
-  const mutation = gql`
-    mutation DeleteOrganizationMember($id: uuid!) {
-      delete_organization_member_by_pk(id: $id) {
-        id
-      }
-    }
-  `
-  const response: { delete_organization_member_by_pk: { id: boolean } } =
-    await getClient().request(mutation, { id })
-  return response?.delete_organization_member_by_pk?.id
-}
-
-export async function insertGo1License(input: Go1_Licenses_Insert_Input) {
-  const mutation = gql`
-    mutation InsertGo1License($input: go1_licenses_insert_input!) {
-      insert_go1_licenses_one(object: $input) {
-        id
-      }
-    }
-  `
-  const response: { insert_go1_licenses_one: { id: string } } =
-    await getClient().request(mutation, { input })
-  return response?.insert_go1_licenses_one?.id
-}
-
-export async function deleteGo1License(id: string): Promise<boolean> {
-  const mutation = gql`
-    mutation DeleteGo1License($id: uuid!) {
-      delete_go1_licenses_by_pk(id: $id) {
-        id
-      }
-    }
-  `
-  const response: { delete_go1_licenses_by_pk: { id: boolean } } =
-    await getClient().request(mutation, { id })
-  return response?.delete_go1_licenses_by_pk?.id
-}
-
-export async function insertOrder(input: OrderCreation): Promise<number> {
-  const mutation = gql`
-    mutation InsertOrder($object: order_insert_input!) {
-      order: insert_order_one(object: $object) {
-        id
-      }
-    }
-  `
-  try {
-    const response = await getClient().request<{ order: { id: number } }>(
-      mutation,
-      { object: input }
-    )
-    console.log(
-      `Inserted order with ID "${response?.order.id}" for course "${input.courseId}"`
-    )
-    return response?.order.id
-  } catch (error) {
-    throw new Error(`Failed to create order: ${error}`)
   }
 }

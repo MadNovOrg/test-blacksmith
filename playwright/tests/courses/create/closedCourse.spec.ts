@@ -3,7 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseType } from '@app/types'
 
-import { deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -48,7 +48,7 @@ for (const data of dataSet) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
       await use(data.course)
-      await deleteCourse(data.course.id)
+      await API.course.deleteCourse(data.course.id)
     },
   })
 

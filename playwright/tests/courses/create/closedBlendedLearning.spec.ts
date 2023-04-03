@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { CourseDeliveryType, CourseType } from '@app/types'
 
-import { deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -30,7 +30,7 @@ const closedCourseData = {
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     await use(closedCourseData.course)
-    await deleteCourse(closedCourseData.course.id)
+    await API.course.deleteCourse(closedCourseData.course.id)
   },
 })
 

@@ -1,6 +1,6 @@
 import { PaymentMethod } from '@app/types'
 
-import { getProfileId, getOrganizationId } from '../api/hasura-api'
+import * as API from '../api'
 
 import { Course, OrderCreation, User } from './types'
 
@@ -23,8 +23,10 @@ export const UNIQUE_ORDER: (
   billingPhone: '+44 07849 123456',
   clientPurchaseOrder: '12345',
   registrants: registrants.map(user => user.email),
-  organizationId: await getOrganizationId(orderOwner.organization?.name ?? ''),
+  organizationId: await API.organization.getOrganizationId(
+    orderOwner.organization?.name ?? ''
+  ),
   promoCodes: [],
-  profileId: await getProfileId(orderOwner.email),
+  profileId: await API.profile.getProfileId(orderOwner.email),
   user: [],
 })

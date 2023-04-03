@@ -3,7 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus, CourseType } from '@app/types'
 
-import { insertCourse, deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -16,13 +16,13 @@ const test = base.extend<{ course: Course }>({
     course.type = CourseType.INDIRECT
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.Scheduled
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
     await use(course)
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
 })
 

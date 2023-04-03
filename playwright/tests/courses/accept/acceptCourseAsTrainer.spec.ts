@@ -3,7 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
-import { insertCourse, deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
@@ -17,7 +17,7 @@ const testData = [
     course: async () => {
       const course = UNIQUE_COURSE()
       course.status = Course_Status_Enum.TrainerPending
-      course.id = await insertCourse(
+      course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.PENDING
@@ -59,7 +59,7 @@ for (const data of testData) {
     course: async ({}, use) => {
       const course = await data.course()
       await use(course)
-      await deleteCourse(course.id)
+      await API.course.deleteCourse(course.id)
     },
   })
 

@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { VideoItemSummaryFragment } from '@app/generated/graphql'
 
-import { getVideoItemById, getVideoItems } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { VideoPage } from '../../pages/membership/VideoPage'
 
@@ -13,8 +13,8 @@ const test = base.extend<{
   }
 }>({
   data: async ({}, use) => {
-    const videoItems = await getVideoItems(5)
-    const videoItem = await getVideoItemById(videoItems[0]?.id ?? '')
+    const videoItems = await API.video.getVideoItems(5)
+    const videoItem = await API.video.getVideoItemById(videoItems[0]?.id ?? '')
     await use({ videoItem, recentItems: videoItems.slice(1) })
   },
 })

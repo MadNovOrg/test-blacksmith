@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { WebinarSummaryFragment } from '@app/generated/graphql'
 
-import { getWebinarById, getWebinars } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { WebinarPage } from '../../pages/membership/WebinarPage'
 
@@ -13,8 +13,10 @@ const test = base.extend<{
   }
 }>({
   data: async ({}, use) => {
-    const recentWebinars = await getWebinars(5)
-    const webinar = await getWebinarById(recentWebinars[0]?.id ?? '')
+    const recentWebinars = await API.webinar.getWebinars(5)
+    const webinar = await API.webinar.getWebinarById(
+      recentWebinars[0]?.id ?? ''
+    )
 
     await use({ webinar, recentItems: recentWebinars.slice(1) })
   },

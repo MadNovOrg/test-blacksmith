@@ -1,14 +1,14 @@
 import { test as base } from '@playwright/test'
 
-import { getEbooks } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { EBookPage } from '../../pages/membership/EBookPage'
 
 const test = base.extend<{
-  ebooks: Awaited<ReturnType<typeof getEbooks>>
+  ebooks: Awaited<ReturnType<typeof API.ebook.getEbooks>>
 }>({
   ebooks: async ({}, use) => {
-    const ebooks = await getEbooks()
+    const ebooks = await API.ebook.getEbooks()
 
     await use(ebooks)
   },

@@ -2,10 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { CourseLevel } from '@app/types'
 
-import {
-  deleteCourse,
-  makeSureTrainerHasCourses,
-} from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { COURSES_TO_VIEW } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -13,7 +10,9 @@ import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const deleteCourses = async (courses: Course[]) => {
-  const deletePromises = courses.map(course => deleteCourse(course.id))
+  const deletePromises = courses.map(course =>
+    API.course.deleteCourse(course.id)
+  )
   await Promise.all(deletePromises)
 }
 
@@ -24,7 +23,7 @@ const test = base.extend<{
   oneTwoLevelCourses: Course[]
 }>({
   coursesToView: async ({}, use) => {
-    const courses = await makeSureTrainerHasCourses(
+    const courses = await API.course.makeSureTrainerHasCourses(
       COURSES_TO_VIEW,
       users.trainerWithOrg.email
     )
@@ -35,7 +34,7 @@ const test = base.extend<{
     await use(COURSES_TO_VIEW[0].name.slice(1).toLocaleLowerCase())
   },
   searchResults: async ({ courseSearchText }, use) => {
-    const courses = await makeSureTrainerHasCourses(
+    const courses = await API.course.makeSureTrainerHasCourses(
       COURSES_TO_VIEW,
       users.trainerWithOrg.email
     )
@@ -46,7 +45,7 @@ const test = base.extend<{
     await deleteCourses(courses)
   },
   oneTwoLevelCourses: async ({}, use) => {
-    const courses = await makeSureTrainerHasCourses(
+    const courses = await API.course.makeSureTrainerHasCourses(
       COURSES_TO_VIEW,
       users.trainerWithOrg.email
     )

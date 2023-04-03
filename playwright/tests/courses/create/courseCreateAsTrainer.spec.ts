@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test'
 
 import { CourseType } from '@app/types'
 
-import { deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { stateFilePath } from '../../../hooks/global-setup'
@@ -15,7 +15,7 @@ const test = base.extend<{ course: Course }>({
     course.type = CourseType.INDIRECT
     course.organization = { name: 'London First School' }
     await use(course)
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
 })
 

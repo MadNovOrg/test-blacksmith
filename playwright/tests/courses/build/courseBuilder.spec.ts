@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { InviteStatus } from '@app/types'
 
-import { insertCourse, deleteCourse } from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { MODULES_SETUP } from '../../../data/modules'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -12,14 +12,14 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 for (const data of MODULES_SETUP) {
   const test = base.extend<{ course: Course }>({
     course: async ({}, use) => {
-      data.course.id = await insertCourse(
+      data.course.id = await API.course.insertCourse(
         data.course,
         users.trainer.email,
         InviteStatus.ACCEPTED,
         false
       )
       await use(data.course)
-      await deleteCourse(data.course.id)
+      await API.course.deleteCourse(data.course.id)
     },
   })
   test.use({ storageState: stateFilePath('trainer') })

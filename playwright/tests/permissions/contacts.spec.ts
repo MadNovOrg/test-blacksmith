@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { introspection } from '../../api/introspection-api'
+import * as API from '../../api'
 ;(
   [
     'anonymous',
@@ -14,7 +14,7 @@ import { introspection } from '../../api/introspection-api'
   ] as const
 ).forEach(role => {
   test(`@query it doesn't allow role ${role}  to insert a contact`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
 
     const insertMutation = schema.__schema.mutationType.fields.find(
       f => f.name === 'insert_xero_contact'
@@ -29,7 +29,7 @@ import { introspection } from '../../api/introspection-api'
 })
 ;(['sales-admin', 'tt-ops', 'tt-admin', 'ld'] as const).forEach(role => {
   test(`@query it allows role ${role} to select contact`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
     const allowedFields = [
       'addresses',
       'emailAddress',
@@ -71,7 +71,7 @@ import { introspection } from '../../api/introspection-api'
   ] as const
 ).forEach(role => {
   test(`@query doesn't allow role ${role} to select a contact`, async () => {
-    const schema = await introspection(role)
+    const schema = await API.introspection.introspection(role)
     const contactsQuery = schema.__schema.queryType.fields.find(
       f => f.name === 'xero_contact'
     )

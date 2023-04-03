@@ -1,18 +1,15 @@
 import { test as base } from '@playwright/test'
 
-import {
-  getFirstCategoryIdWithPosts,
-  getCategoryById,
-} from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { TermPage } from '../../pages/membership/TermPage'
 
 const test = base.extend<{
-  category: Awaited<ReturnType<typeof getCategoryById>>
+  category: Awaited<ReturnType<typeof API.post.getCategoryById>>
 }>({
   category: async ({}, use) => {
-    const categoryId = await getFirstCategoryIdWithPosts()
-    const category = await getCategoryById(categoryId ?? '')
+    const categoryId = await API.post.getFirstCategoryIdWithPosts()
+    const category = await API.post.getCategoryById(categoryId ?? '')
 
     await use(category)
   },

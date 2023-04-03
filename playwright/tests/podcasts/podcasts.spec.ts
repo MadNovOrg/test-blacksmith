@@ -2,13 +2,13 @@ import { test as base } from '@playwright/test'
 
 import { Podcast } from '@app/generated/graphql'
 
-import { getAllPodcasts } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { PodcastPage } from '../../pages/membership/PodcastPage'
 
 const test = base.extend<{ podcasts: Podcast[] }>({
   podcasts: async ({}, use) => {
-    const allPodcasts = await getAllPodcasts()
+    const allPodcasts = await API.podcast.getAllPodcasts()
     await use(allPodcasts)
   },
 })

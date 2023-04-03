@@ -2,7 +2,7 @@ import { setTimeout } from 'timers/promises'
 
 import { test as base } from '@playwright/test'
 
-import { deleteOrganization, insertOrganization } from '../..//api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { AllOrganisations } from '../../pages/org/AllOrganisations'
 
@@ -10,13 +10,15 @@ const test = base.extend<{
   orgId: string
 }>({
   orgId: async ({}, use) => {
-    const id = await insertOrganization({ name: 'Test organization' })
+    const id = await API.organization.insertOrganization({
+      name: 'Test organization',
+    })
     await use(id)
     // setting small timeout as there is some race condition
     // between finishing the test and cleaning up the data
     // don't know the reason for it
     await setTimeout(100)
-    await deleteOrganization(id)
+    await API.organization.deleteOrganization(id)
   },
 })
 

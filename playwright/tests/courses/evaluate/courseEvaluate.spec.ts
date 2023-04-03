@@ -2,11 +2,7 @@ import { test as base } from '@playwright/test'
 
 import { CourseType, InviteStatus } from '@app/types'
 
-import {
-  deleteCourse,
-  insertCourse,
-  insertCourseParticipants,
-} from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { FINISHED_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -17,14 +13,14 @@ const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = FINISHED_COURSE()
     course.type = CourseType.CLOSED
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseParticipants(course.id, [users.user1])
+    await API.course.insertCourseParticipants(course.id, [users.user1])
     await use(course)
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
 })
 

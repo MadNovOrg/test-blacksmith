@@ -3,12 +3,7 @@ import { test as base } from '@playwright/test'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
-import { getLatestEmail } from '../../../api/email-api'
-import {
-  deleteCourse,
-  insertCourse,
-  insertCourseParticipants,
-} from '../../../api/hasura-api'
+import * as API from '../../../api'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -21,14 +16,14 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.Scheduled
-    course.id = await insertCourse(
+    course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
       InviteStatus.ACCEPTED
     )
-    await insertCourseParticipants(course.id, [users.user1WithOrg])
+    await API.course.insertCourseParticipants(course.id, [users.user1WithOrg])
     await use(course)
-    await deleteCourse(course.id)
+    await API.course.deleteCourse(course.id)
   },
 })
 
@@ -48,7 +43,7 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
 
   // Accept the invitation to the course as the new attendee
   const attendeePage = await browser.newPage()
-  const email = await getLatestEmail(
+  const email = await API.email.getLatestEmail(
     users.user2WithOrg.email,
     'Register for training course'
   )

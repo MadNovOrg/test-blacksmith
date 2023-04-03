@@ -1,15 +1,15 @@
 import { test as base } from '@playwright/test'
 
-import { getFirstTagIdWithPosts, getTagById } from '../../api/hasura-api'
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { TermPage } from '../../pages/membership/TermPage'
 
 const test = base.extend<{
-  tag: Awaited<ReturnType<typeof getTagById>>
+  tag: Awaited<ReturnType<typeof API.post.getTagById>>
 }>({
   tag: async ({}, use) => {
-    const tagId = await getFirstTagIdWithPosts()
-    const tag = await getTagById(tagId ?? '')
+    const tagId = await API.post.getFirstTagIdWithPosts()
+    const tag = await API.post.getTagById(tagId ?? '')
 
     await use(tag)
   },
