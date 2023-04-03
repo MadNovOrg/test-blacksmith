@@ -1,11 +1,7 @@
 import { Download, expect, test as base } from '@playwright/test'
 import { readFile } from 'xlsx'
 
-import {
-  OrderInfoFragment,
-  Order_By,
-  Payment_Methods_Enum,
-} from '@app/generated/graphql'
+import { OrderInfoFragment, Payment_Methods_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
 import * as API from '../../api'
@@ -21,12 +17,7 @@ const test = base.extend<{
   orders: Orders
 }>({
   orders: async ({}, use) => {
-    let orders = await API.order.getOrders({
-      limit: 12,
-      offset: 0,
-      orderBy: [{ createdAt: Order_By.Asc }],
-      where: {},
-    })
+    let orders = await API.order.getOrders()
     const course = 0
     // Ensure there is always at least one order
     if (orders.length < 1) {
@@ -41,12 +32,7 @@ const test = base.extend<{
         users.user1,
       ])
       await API.order.insertOrder(newOrder)
-      orders = await API.order.getOrders({
-        limit: 12,
-        offset: 0,
-        orderBy: [{ createdAt: Order_By.Asc }],
-        where: {},
-      })
+      orders = await API.order.getOrders()
     }
     await use(orders)
     if (course) {

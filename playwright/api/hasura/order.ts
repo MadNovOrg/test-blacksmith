@@ -34,7 +34,12 @@ export async function insertOrder(input: OrderCreation): Promise<number> {
 }
 
 export async function getOrders(
-  variables: OrdersQueryVariables
+  variables: OrdersQueryVariables = {
+    limit: 12,
+    offset: 0,
+    orderBy: [],
+    where: {},
+  }
 ): Promise<OrderInfoFragment[]> {
   const response = await getClient().request<OrdersQuery, OrdersQueryVariables>(
     GET_ORDERS,
