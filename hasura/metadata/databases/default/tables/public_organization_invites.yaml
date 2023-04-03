@@ -28,6 +28,19 @@ object_relationships:
     using:
       foreign_key_constraint_on: profile_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      backend_only: false
   - role: tt-admin
     permission:
       check: {}
@@ -40,6 +53,19 @@ insert_permissions:
         - profile_id
         - status
         - updated_at
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
       backend_only: false
   - role: user
     permission:
@@ -62,6 +88,19 @@ insert_permissions:
         - profile_id
       backend_only: false
 select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
@@ -73,6 +112,19 @@ select_permissions:
         - profile_id
         - status
         - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
       filter: {}
       allow_aggregations: true
   - role: user
@@ -96,7 +148,33 @@ select_permissions:
                   _eq: true
       allow_aggregations: true
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
   - role: tt-admin
+    permission:
+      columns:
+        - is_admin
+        - email
+        - status
+        - created_at
+        - updated_at
+        - id
+        - org_id
+        - profile_id
+      filter: {}
+      check: {}
+  - role: tt-ops
     permission:
       columns:
         - is_admin
@@ -125,7 +203,13 @@ update_permissions:
                   _eq: true
       check: null
 delete_permissions:
+  - role: sales-admin
+    permission:
+      filter: {}
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}
   - role: user
