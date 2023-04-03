@@ -277,7 +277,6 @@ export const EditProfilePage: React.FC<
       dietaryRestrictions: null,
       roles: [
         {
-          userRole: '',
           employeeRoles: [],
           salesRoles: [],
           trainerRoles: defaultTrainerRoles,
@@ -443,7 +442,7 @@ export const EditProfilePage: React.FC<
       )
       if (canEditRoles) {
         const updatedRoles: string[] = []
-        const updatedTrainerRoles: (string | null)[] = []
+        const updatedTrainerRoles: (string | undefined)[] = []
         data.roles.map(obj => {
           if (obj.userRole === RoleName.TRAINER) {
             updatedTrainerRoles.push(
@@ -452,7 +451,7 @@ export const EditProfilePage: React.FC<
               obj.trainerRoles.BILDRole,
               obj.trainerRoles.moderatorRole
                 ? TrainerRoleTypeName.MODERATOR
-                : null
+                : undefined
             )
           }
 

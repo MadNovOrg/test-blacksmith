@@ -140,7 +140,7 @@ export const CourseEvaluation = () => {
   )
 
   const schema = useMemo(() => {
-    const obj: Record<string, yup.AnySchema> = {}
+    const obj: Record<string, yup.StringSchema> = {}
 
     questions?.questions.forEach(q => {
       const s = yup.string()
@@ -149,7 +149,7 @@ export const CourseEvaluation = () => {
         obj[q.id] = s.required(t('course-evaluation.required-field')).oneOf(
           [
             profile ? profile.fullName : Date.now().toString(36), // if profile doesnt exist, cant validate signature
-            null,
+            '',
           ],
           t('course-evaluation.invalid-signature')
         )

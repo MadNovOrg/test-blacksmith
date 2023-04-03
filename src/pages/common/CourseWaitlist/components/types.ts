@@ -9,7 +9,7 @@ export const getFormSchema = (t: TFunction) => {
 
     surname: yup.string().required(requiredMsg(t, 'surname')),
 
-    email: schemas.email(t, true),
+    email: schemas.email(t).required(t('validation-errors.email-required')),
 
     phone: yup
       .string()

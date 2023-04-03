@@ -5,8 +5,6 @@ import { RoleName, TrainerRoleTypeName } from '@app/types'
 
 import { render, screen, userEvent, waitFor } from '@test/index'
 
-import { EmployeeRoleName } from '../../EditProfile'
-
 import { EditRoles, RolesFields } from '.'
 
 describe('component: EditRoles', () => {
@@ -28,15 +26,11 @@ describe('component: EditRoles', () => {
   }
 
   it('displays employee roles', () => {
-    const mockRoles = {
+    const mockRoles: FormValues = {
       roles: [
         {
           userRole: 'tt-employee',
-          employeeRoles: [
-            RoleName.TT_OPS,
-            RoleName.FINANCE,
-            'sales',
-          ] as EmployeeRoleName[],
+          employeeRoles: [RoleName.TT_OPS, RoleName.FINANCE, 'sales'],
           salesRoles: [RoleName.SALES_ADMIN],
           trainerRoles: {
             trainerRole: '',

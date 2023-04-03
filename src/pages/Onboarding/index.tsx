@@ -68,7 +68,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         profileId: profile?.id,
         familyName: data.familyName,
         givenName: data.givenName,
-        dob: data.dob,
+        dob: data.dob as string,
         phone: data.phone,
       },
     })
@@ -161,7 +161,9 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
                   inputFormat={INPUT_DATE_FORMAT}
                   value={field.value ?? null}
                   onChange={(d: Date | null) => {
-                    setValue('dob', d, { shouldValidate: true })
+                    if (d) {
+                      setValue('dob', d, { shouldValidate: true })
+                    }
                   }}
                   renderInput={params => (
                     <TextField

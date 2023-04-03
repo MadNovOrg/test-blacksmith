@@ -124,6 +124,8 @@ export const makeSchema = (t: TFunction) =>
                   )
                 )
               }
+
+              return s
             }),
         })
       )
@@ -144,7 +146,7 @@ export const makeSchema = (t: TFunction) =>
           )
           .when('name', {
             is: '',
-            then: s => s.nullable(true),
+            then: s => s.nullable(),
             otherwise: s =>
               s.required(t('pages.create-course.trainer-expenses.value-error')),
           }),

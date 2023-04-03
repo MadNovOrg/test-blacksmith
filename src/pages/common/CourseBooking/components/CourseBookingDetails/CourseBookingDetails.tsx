@@ -196,34 +196,39 @@ export const CourseBookingDetails: React.FC<
 
       sector: yup.string().required(requiredMsg(t, 'sector')),
       position: yup.string().required(requiredMsg(t, 'position')),
-      otherPosition: yup.string().when('position', {
-        is: 'other',
-        then: yup
-          .string()
-          .required(t('validation-errors.other-position-required')),
+      otherPosition: yup.string().when('position', ([position], schema) => {
+        return position === 'other'
+          ? schema.required(t('validation-errors.other-position-required'))
+          : schema
       }),
-
       paymentMethod: yup
         .string()
         .oneOf(Object.values(PaymentMethod))
         .required(),
 
-      invoiceDetails: yup.object().when('paymentMethod', {
-        is: PaymentMethod.Invoice,
-        then: invoiceDetailsFormSchema(t),
-      }),
+      invoiceDetails: yup
+        .object()
+        .when('paymentMethod', ([paymentMethod], schema) => {
+          return paymentMethod === PaymentMethod.Invoice
+            ? invoiceDetailsFormSchema(t)
+            : schema
+        }),
 
       courseLevel: yup.string(),
       courseType: yup.string(),
-      attendeeValidCertificate: yup
+      attedeeValidCertificate: yup
         .boolean()
-        .when(['courseLevel', 'courseType'], {
-          is: isAttendeeValidCertificateMandatory,
-          then: yup
-            .boolean()
-            .oneOf([true], t('validation-errors.this-field-is-required')),
-          otherwise: yup.boolean(),
-        }),
+        .when(
+          ['courseLevel', 'courseType'],
+          ([courseLevel, courseType], schema) => {
+            return isAttendeeValidCertificateMandatory(courseLevel, courseType)
+              ? schema.oneOf(
+                  [true],
+                  t('validation-errors.this-field-is-required')
+                )
+              : schema
+          }
+        ),
     })
   }, [t])
 

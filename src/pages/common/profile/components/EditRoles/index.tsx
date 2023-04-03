@@ -414,14 +414,14 @@ export const EditRoles = () => {
                 sx={{ marginTop: 2 }}
                 onClick={() => {
                   append({
-                    userRole: '',
+                    userRole: RoleName.USER,
                     employeeRoles: [] as RoleName[],
                     salesRoles: [] as RoleName[],
                     trainerRoles: {
                       trainerRole: '',
                       AOLRole: '',
                       BILDRole: '',
-                      moderator: false,
+                      moderatorRole: false,
                     },
                   })
                 }}

@@ -48,7 +48,7 @@ function schema(t: TFunction, currentBalance: number) {
     }),
     licensePrice: yup
       .number()
-      .nullable(true)
+      .nullable()
       .typeError(t('error-license-price-positive'))
       .positive(t('error-license-price-positive'))
       .when('issueRefund', {

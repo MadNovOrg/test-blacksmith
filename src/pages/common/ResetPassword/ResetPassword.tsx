@@ -69,7 +69,7 @@ export const ResetPasswordPage = () => {
             .trim()
             .required(t('validation-errors.confirm-password-required'))
             .oneOf(
-              [yup.ref('password'), null],
+              [yup.ref('password'), ''],
               t('validation-errors.confirm-password-invalid')
             ),
           code: yup

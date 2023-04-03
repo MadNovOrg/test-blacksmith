@@ -22,7 +22,7 @@ export const schema = yup.object({
     .required(),
   customFee: yup
     .number()
-    .nullable(true)
+    .nullable()
     .transform(v => (isNaN(v) ? null : v))
     .when('feeType', {
       is: (value: TransferFeeType) => value === TransferFeeType.CustomFee,

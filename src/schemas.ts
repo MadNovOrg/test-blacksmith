@@ -19,11 +19,9 @@ yup.addMethod(yup.string, 'phoneNumber', function (t: TFunction) {
 })
 
 const schemas = {
-  email: (t: TFunction, required = true) => {
+  email: (t: TFunction) => {
     const email = yup.string().email(t('validation-errors.email-invalid'))
-    return required
-      ? email.required(t('validation-errors.email-required'))
-      : email
+    return email
   },
 
   emailCode: (t: TFunction) => {
@@ -46,7 +44,7 @@ const schemas = {
     return yup
       .string()
       .oneOf(
-        [yup.ref(passRef), null],
+        [yup.ref(passRef), ''],
         t('validation-errors.confirm-password-invalid')
       )
   },

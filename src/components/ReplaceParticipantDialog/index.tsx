@@ -63,7 +63,7 @@ export const ReplaceParticipantDialog: React.FC<
   const { t, _t } = useScopedTranslation(TRANSLATION_SCOPE)
 
   const schema = yup.object({
-    email: schemas.email(_t, true).required(),
+    email: schemas.email(_t).required(),
     firstName: yup.string().required(requiredMsg(_t, 'first-name')),
     surname: yup.string().required(requiredMsg(_t, 'surname')),
     termsAccepted: yup.bool().required().isTrue(),

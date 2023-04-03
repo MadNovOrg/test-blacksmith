@@ -27,6 +27,17 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }))
 
+async function submitForm(email: string) {
+  const emailInput = screen.getByLabelText(/email address/i)
+  expect(emailInput).toHaveValue('')
+
+  if (email) {
+    await userEvent.type(emailInput, email)
+  }
+
+  await userEvent.click(screen.getByRole('button', { name: 'Submit' }))
+}
+
 describe('page: ForgotPassword', () => {
   it('renders as expected', async () => {
     render(<ForgotPasswordPage />)
@@ -39,10 +50,7 @@ describe('page: ForgotPassword', () => {
   it('does not submit if email is empty', async () => {
     render(<ForgotPasswordPage />)
 
-    const emailInput = screen.getByTestId('forgot-email-input')
-    expect(emailInput).toHaveValue('')
-
-    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await submitForm('')
 
     await waitForText('Please enter your email')
 
@@ -53,11 +61,7 @@ describe('page: ForgotPassword', () => {
   it('does not submit if email is invalid format', async () => {
     render(<ForgotPasswordPage />)
 
-    const emailInput = screen.getByTestId('forgot-email-input')
-    expect(emailInput).toHaveValue('')
-
-    await userEvent.type(emailInput, 'ge@vedvho')
-    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
+    await submitForm('invalid email')
 
     await waitForText('Please enter a valid email address')
 
@@ -68,12 +72,9 @@ describe('page: ForgotPassword', () => {
   it('submits when email is valid', async () => {
     render(<ForgotPasswordPage />)
 
-    const emailInput = screen.getByTestId('forgot-email-input')
-    expect(emailInput).toHaveValue('')
-
     const email = chance.email()
-    await userEvent.type(emailInput, email)
-    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
+
+    await submitForm(email)
 
     await waitForCalls(AuthMock.forgotPassword)
     expect(AuthMock.forgotPassword).toHaveBeenCalledWith(email)
@@ -94,10 +95,9 @@ describe('page: ForgotPassword', () => {
       resendPassword: true,
     })
 
-    const emailInput = screen.getByTestId('forgot-email-input')
     const email = chance.email()
-    await userEvent.type(emailInput, email)
-    await userEvent.click(screen.getByTestId('forgot-pass-submit'))
+
+    await submitForm(email)
 
     await waitForCalls(AuthMock.forgotPassword)
     await waitForCalls(gqlRequestMocked)

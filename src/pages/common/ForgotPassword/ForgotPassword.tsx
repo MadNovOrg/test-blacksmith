@@ -3,7 +3,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { Alert, Box, Button, Link, TextField, Typography } from '@mui/material'
 import { Auth } from 'aws-amplify'
 import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 
@@ -13,28 +13,30 @@ import { gqlRequest } from '@app/lib/gql-request'
 import { RESEND_PASSWORD_MUTATION } from '@app/queries/user-queries/resend-password'
 import { schemas, yup } from '@app/schemas'
 
-type ForgotPasswordInput = {
-  email: string
-}
-
 export const ForgotPasswordPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
 
-  const schema = useMemo(() => yup.object({ email: schemas.email(t) }), [t])
+  const schema = useMemo(
+    () =>
+      yup.object({
+        email: schemas.email(t).required(t('validation-errors.email-required')),
+      }),
+    [t]
+  )
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ForgotPasswordInput>({
+  } = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
     defaultValues: { email: '' },
   })
 
-  const onSubmit = async (data: ForgotPasswordInput) => {
+  const onSubmit: SubmitHandler<yup.InferType<typeof schema>> = async data => {
     setIsLoading(true)
     setError(false)
 
@@ -55,6 +57,7 @@ export const ForgotPasswordPage = () => {
       if (result?.resendPassword) {
         navigate('/login?passwordResent=true')
       } else {
+        setIsLoading(false)
         setError(true)
       }
     }
@@ -74,7 +77,7 @@ export const ForgotPasswordPage = () => {
       </Typography>
 
       {error ? (
-        <Alert severity="error">
+        <Alert severity="error" sx={{ mt: 2 }}>
           {t('pages.forgot-password.generic-error')}
         </Alert>
       ) : null}
