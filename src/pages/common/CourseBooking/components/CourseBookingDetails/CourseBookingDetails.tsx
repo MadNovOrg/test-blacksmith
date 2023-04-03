@@ -117,7 +117,11 @@ const AttendeeValidCertificate: React.FC<
   )
 }
 
-const isAttendeeValidCertificateMandatory = (courseLevel: CourseLevel) =>
+const isAttendeeValidCertificateMandatory = (
+  courseLevel: CourseLevel,
+  courseType: CourseType
+) =>
+  courseType === CourseType.OPEN &&
   [
     CourseLevel.Advanced,
     CourseLevel.IntermediateTrainer,
@@ -137,6 +141,7 @@ type FormInputs = {
   invoiceDetails?: InvoiceDetails
 
   courseLevel: CourseLevel
+  courseType: CourseType
   attendeeValidCertificate?: boolean
 }
 
@@ -209,13 +214,16 @@ export const CourseBookingDetails: React.FC<
       }),
 
       courseLevel: yup.string(),
-      attendeeValidCertificate: yup.boolean().when('courseLevel', {
-        is: isAttendeeValidCertificateMandatory,
-        then: yup
-          .boolean()
-          .oneOf([true], t('validation-errors.this-field-is-required')),
-        otherwise: yup.boolean(),
-      }),
+      courseType: yup.string(),
+      attendeeValidCertificate: yup
+        .boolean()
+        .when(['courseLevel', 'courseType'], {
+          is: isAttendeeValidCertificateMandatory,
+          then: yup
+            .boolean()
+            .oneOf([true], t('validation-errors.this-field-is-required')),
+          otherwise: yup.boolean(),
+        }),
     })
   }, [t])
 
@@ -232,6 +240,7 @@ export const CourseBookingDetails: React.FC<
       paymentMethod: PaymentMethod.Invoice,
       invoiceDetails: booking.invoiceDetails,
       courseLevel: course.level,
+      courseType: course.type,
       attendeeValidCertificate: false,
     },
   })
@@ -282,7 +291,8 @@ export const CourseBookingDetails: React.FC<
   }
 
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
-    course.level
+    course.level,
+    course.type
   )
 
   return (
