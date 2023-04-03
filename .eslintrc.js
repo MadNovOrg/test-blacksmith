@@ -66,6 +66,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': ['error', 'nofunc'],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'react-hooks/exhaustive-deps': 'error',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
   },
