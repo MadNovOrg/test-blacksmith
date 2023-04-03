@@ -37,7 +37,7 @@ export const TrainerExpenses = () => {
   }, [completeStep, navigate])
 
   const onChange = useCallback(
-    (data: FormValues, isValid: boolean) => {
+    (data: FormValues['expenses'], isValid: boolean) => {
       setExpenses(data)
       setExpensesValid(isValid)
     },

@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Typography, Box, Stack } from '@mui/material'
 import { mapValues, zipObject } from 'lodash-es'
 import React, { memo, useEffect, useMemo } from 'react'
-import { useForm, Controller, Resolver, useWatch } from 'react-hook-form'
+import { useForm, Controller, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
 
@@ -15,12 +15,12 @@ import {
   TrainerExpenses,
 } from './TrainerExpenses'
 
-export type FormValues = Record<string, Entry>
+export type FormValues = { expenses: Record<string, Entry> }
 
 type Props = {
-  initialValues?: FormValues
+  initialValues?: FormValues['expenses']
   trainers?: TrainerInput[]
-  onChange?: (data: FormValues, isValid: boolean) => void
+  onChange?: (data: FormValues['expenses'], isValid: boolean) => void
 }
 
 const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
@@ -31,27 +31,34 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   const schema = useMemo(
-    () => yup.lazy(obj => yup.object(mapValues(obj, () => makeSchema(t)))),
+    () =>
+      yup.object({
+        expenses: yup.lazy(obj =>
+          yup.object(mapValues(obj, () => makeSchema(t)))
+        ),
+      }),
     [t]
   )
 
   const form = useForm<FormValues>({
     mode: 'all',
-    defaultValues:
-      initialValues ??
-      zipObject(
-        trainers.map(t => t.profile_id),
-        trainers.map(_ => ({
-          transport: [
-            {
-              accommodationNights: 0,
-              method: TransportMethod.NONE,
-            },
-          ],
-          miscellaneous: [],
-        }))
-      ),
-    resolver: yupResolver(schema) as Resolver<FormValues>,
+    defaultValues: {
+      expenses:
+        initialValues ??
+        zipObject(
+          trainers.map(t => t.profile_id),
+          trainers.map(_ => ({
+            transport: [
+              {
+                accommodationNights: 0,
+                method: TransportMethod.NONE,
+              },
+            ],
+            miscellaneous: [],
+          }))
+        ),
+    },
+    resolver: yupResolver(schema),
   })
 
   const formValues = useWatch({
@@ -59,7 +66,12 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   })
 
   useEffect(() => {
-    onChange(formValues as FormValues, form.formState.isValid)
+    if (formValues.expenses) {
+      onChange(
+        formValues.expenses as FormValues['expenses'],
+        form.formState.isValid
+      )
+    }
   }, [formValues, form.formState, onChange])
 
   return (
@@ -75,7 +87,7 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
             key={trainer.profile_id}
           >
             <Controller
-              name={trainer.profile_id}
+              name={`expenses.${trainer.profile_id}`}
               control={form.control}
               render={({ field }) => (
                 <TrainerExpenses
