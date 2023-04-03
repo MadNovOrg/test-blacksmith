@@ -4,7 +4,7 @@ set -eou pipefail
 
 # Create AWS Cognito User
 function create_user() {
-    echo "${user} user creation"
+    echo "Cognito: ${user} user creation"
     aws cognito-idp admin-create-user \
         --user-pool-id "${user_pool}" \
         --username "${user}" \
@@ -15,7 +15,7 @@ function create_user() {
 
 # Delete AWS Cognito User
 function delete_user() {
-    echo "${user} user deletion"
+    echo "Cognito: ${user} user deletion"
     aws cognito-idp admin-delete-user \
         --user-pool-id "${user_pool}" \
         --username "${user}" \
@@ -24,7 +24,7 @@ function delete_user() {
 
 # Set AWS Cognito User Password
 function user_set_pass() {
-    echo "${user} user set password"
+    echo "Cognito: ${user} user set password"
     aws cognito-idp admin-set-user-password \
       --user-pool-id "${user_pool}" \
       --username "${user}" \
@@ -38,7 +38,7 @@ function cognito_get_users() {
     aws cognito-idp list-users \
       --user-pool-id "${user_pool}" \
       --region "${aws_region}" \
-      --query 'Users[*].Username' \
+      --query 'Users[*].Attributes[?Name==`email`].[Value]' \
       --output text 
 }
 
@@ -48,7 +48,7 @@ function usage() {
     echo -e "Syntax: ${BLUE}$(basename ${0}) [-c <cognito pool id>] [-u <map of users to create>] [-p <cognito new user password>]${ENDCOLOR}" 1>&2
     echo -e "Options:"
     echo -e "${GREEN}-c${ENDCOLOR}   AWS Cognito user pool ID."
-    echo -e "${GREEN}-u${ENDCOLOR}   Names of users got from DB through Hasura."
+    echo -e "${GREEN}-u${ENDCOLOR}   Names of users got from profile DB table."
     echo -e "${GREEN}-p${ENDCOLOR}   AWS Cognito user pool password for the new users.(${RED}OPTIONAL - Needed for user creation ONLY${ENDCOLOR})"
     echo "====================================================================================================================================================================="
 }
@@ -57,24 +57,42 @@ function usage() {
 # Import/Creation Cognito Users
 # Export Cognito Users from DB using Hasura
 function main() {
-    #Clean Cognito User Pool
+    # Get all users from Cognito
     cognito_users=( $(cognito_get_users) )
-    echo "All Cognito Users will be deleted"
-    for user in ${cognito_users[@]}; do
-        delete_user
-    done
 
-    sleep 3
-    echo "Cognito Users will be recreated according to profile DB table"
+    echo "Cognito Users will be updated according to profile DB table"
     # Create all users retrived from DB profile table
-    for user in ${db_users[@]}; do
+    idx=0
+    for user in "${db_users[@]}"
+    do
         # Validate user provides proper email address
-        if [[ "${user}" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$ ]]
-        then
-            create_user
-            user_set_pass
+        if [[ "${user}" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$ ]]; then
+            # Validate if profile DB user is part of Cognito
+            if [[ ! " ${cognito_users[*]} " =~ " ${user} " ]]; then
+                create_user
+                user_set_pass
+            fi
+        else 
+            echo "Removing user from profile users array due to invalid email" 
+            unset "db_users[idx]"
         fi
+        ((idx+=1))
     done
+    # Re-alinging array indexes
+    db_users=( "${db_users[@]}" ) 
+
+    # Check if 2 arrays have the same users
+    if [[ ${#db_users[@]} -lt ${#cognito_users[@]} ]]; then 
+        for user in "${cognito_users[@]}"
+        do
+            # Validate if Cognito user is part of profile DB table
+            if [[ ! " ${db_users[*]} " =~ " ${user} " ]]; then
+                delete_user 
+            fi
+        done
+    else 
+        echo "Cognito and Profile DB users are aligned!"
+    fi
 }
 
 # Colors to be used for terminal output
@@ -86,7 +104,6 @@ ENDCOLOR="\e[0m"
 
 # Declare vars to avoid input unset errors
 user_pool=''
-#aws_profile=''
 db_users=''
 cognito_user_password=''
 
@@ -107,10 +124,6 @@ while getopts ':c:u:p:' OPTION; do
             db_users=( ${OPTARG} )
             echo -e "${MAG}Users (-u)${ENDCOLOR}: ${BLUE}${db_users[@]}${ENDCOLOR}"
             ;;
-#        a)
-#            aws_profile="${OPTARG}"  
-#            echo -e "${MAG}AWS profile (-a)${ENDCOLOR}: ${BLUE}${aws_profile}${ENDCOLOR}"
-#            ;;
         ?)
             usage
             ;;
@@ -128,7 +141,7 @@ usage_needed=false
 [ -z $cognito_user_password ] && echo "Missing argument: -p" && usage_needed=true
 
 # Provide AWS cli related vars
-#export AWS_PROFILE=${aws_profile}
+#export AWS_PROFILE="<profile name> #In case script runs locally
 aws_region='eu-west-2'
 
 main
