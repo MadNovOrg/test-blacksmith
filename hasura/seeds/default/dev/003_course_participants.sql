@@ -167,4 +167,4 @@ INSERT INTO public.course_participant (registration_id, course_id, profile_id, i
 ('af9e4740-9e8e-4465-adab-4a5ebbb73e4b', 10006, '6896b053-0d36-45b4-889c-9472d846c4a1', '5e7c2158-92a8-4c70-a506-f3b205b4ccad', 'd1d9a569-6f96-42ee-ac83-1ecb3f849010', true, false, 'PASS'),
 ('3c665955-9ae8-47bc-84b6-9c103fea3b05', 10006, 'fbe6eb48-ad58-40f9-9388-07e743240ce3', 'c90c93de-24a5-47cb-816d-d1a379543d86', 'd1d9a569-6f96-42ee-ac83-1ecb3f849011', true, false, 'PASS'),
 ('3c665955-9ae8-47bc-84b6-9c103fea3b07', 10006, '5ef68528-fb02-4462-8261-689930075d15', 'ed8bf937-41e0-4644-a13b-ed31f2ccb05b', '5ef68528-fb02-4462-8261-689930075d15', true, false, 'PASS'),
-('3c665955-9ae8-47bc-84b6-9c103fea3b08', 10006, '8e80fda2-ed5a-4284-b95a-cbec399303f5', '99f985c2-9740-4208-9ba1-56db9c770423', '8e80fda2-ed5a-4284-b95a-cbec399303f5', true, false, 'PASS');
+('3c665955-9ae8-47bc-84b6-9c103fea3b08', 10007, '8e80fda2-ed5a-4284-b95a-cbec399303f5', '99f985c2-9740-4208-9ba1-56db9c770423', '8e80fda2-ed5a-4284-b95a-cbec399303f5', true, false, 'PASS');

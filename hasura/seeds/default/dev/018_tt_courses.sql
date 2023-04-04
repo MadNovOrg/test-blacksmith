@@ -34,7 +34,9 @@ values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', '
         'a24397aa-b059-46b9-a728-955580823ce4', false, 'EXCEPTIONS_APPROVAL_PENDING', 6, 5, false, false, 10015, null,
         0, null, '810A May23', null, null, false, 455, null),
        ('Positive Behaviour Training: Level One ', 'INDIRECT', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
-        false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, null, '810A Feb23', null, null, false, 305, '');
+        false, 'SCHEDULED', 6, 6, false, false, 10014, null, 0, null, '810A Feb23', null, null, false, 305, ''),
+       ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
+        false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, null, '810A Feb23', null, null, false, 305, '');
 
 SELECT setval('course_id_seq', 10027);
 
@@ -58,7 +60,9 @@ values ('1e345ec4-f99f-4ce7-b765-ee2d36d7f338', 10019, 'INDR-L1-10019-1', '2025-
        ('919645da-1eb0-4862-a1f4-6cf06558f61f', 10019, 'INDR-L1-10019-4', '2025-12-06', '47b5b128-0a47-4094-86f6-87005eb12d71',
         'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
        ('df5b8cab-f132-4936-bb66-9219b3f0a6b9', 10019, 'INDR-L1-10019-5', '2025-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
-        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false);
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2022-12-06', false),
+       ('54eba8c3-6355-4d96-8649-fe793f7f0983', 10085, 'OP-L1-10085-1', '2022-12-06', 'fbe6eb48-ad58-40f9-9388-07e743240ce3',
+        'Positive Behaviour Training: Level One ', 'LEVEL_1', '2019-12-06', false);
 
 insert into public.course_invites (status, email, course_id)
 values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
@@ -88,7 +92,8 @@ values ('PENDING', 'rosemary12@teamteach.testinator.com', 10014),
        ('PENDING', 'james.phenlan@teamteach.testinator.com', 10019),
        ('PENDING', 'charles.scanlon@teamteach.testinator.com', 10019),
        ('DECLINED', 'timothy.murphy@teamteach.testinator.com', 10019),
-       ('DECLINED', 'marquis.pappas@teamteach.testinator.com', 10019);
+       ('DECLINED', 'marquis.pappas@teamteach.testinator.com', 10019),
+       ('ACCEPTED', 'lilac.reuben@teamteach.testinator.com', 10085);
 
 insert into public.course_module (module_id, course_id)
 select module.id as module_id, 10014 as course_id
@@ -155,6 +160,12 @@ select module.id as module_id, 10026 as course_id
 from public.module
 where module.course_level = 'LEVEL_1';
 
+
+insert into public.course_module (module_id, course_id)
+select module.id as module_id, 10085 as course_id
+from public.module
+where module.course_level = 'LEVEL_1';
+
 insert into public.course_participant (booking_date, profile_id, attended, grading_feedback, grade, date_graded,
                                        course_id, certificate_id, hs_consent)
 values ('2022-12-06 12:42:07.622554 +00:00', '127ac7f5-9c91-4b1c-8c13-13e226d60f78', true, '', 'FAIL',
@@ -178,7 +189,9 @@ values ('2022-12-06 12:42:07.622554 +00:00', '127ac7f5-9c91-4b1c-8c13-13e226d60f
        ('2022-12-06 12:42:07.622554 +00:00', '47b5b128-0a47-4094-86f6-87005eb12d71', true, '', 'PASS',
         '2022-12-06 11:43:48.227000 +00:00', 10019, '919645da-1eb0-4862-a1f4-6cf06558f61f', false),
        ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS',
-        '2022-12-06 11:43:48.227000 +00:00', 10019, 'df5b8cab-f132-4936-bb66-9219b3f0a6b9', false);
+        '2022-12-06 11:43:48.227000 +00:00', 10019, 'df5b8cab-f132-4936-bb66-9219b3f0a6b9', false),
+       ('2022-12-06 12:42:07.622554 +00:00', 'fbe6eb48-ad58-40f9-9388-07e743240ce3', true, '', 'PASS',
+        '2022-12-06 11:43:48.227000 +00:00', 10085, '54eba8c3-6355-4d96-8649-fe793f7f0983', false);
 
 INSERT INTO public.course_participant_module (course_participant_id, module_id, completed)
 SELECT participant.id as course_participant_id, module.id as module_id, TRUE as completed
@@ -186,7 +199,7 @@ FROM public.course_participant participant
          JOIN public.course course ON participant.course_id = course.id
          JOIN public.course_module cmodule ON cmodule.course_id = course.id
          JOIN public.module module ON cmodule.module_id = module.id
-WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026);
+WHERE course.id IN (10014, 10015, 10016, 10017, 10018, 10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026, 10085);
 
 insert into public.venue (id, name, geo_coordinates, city, address_line_one, address_line_two, post_code,
                           google_places_id)
@@ -231,7 +244,9 @@ values (date(now()) + time '09:00' + interval '3 month', date(now()) + time '17:
        (date(now()) + time '09:00' + interval '10 month', date(now()) + time '17:00' + interval '10 month',
         'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10025),
        (date(now()) + time '09:00' + interval '11 month', date(now()) + time '17:00' + interval '11 month',
-        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10026);
+        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10026),
+        (date(now()) + time '09:00' - interval '12 months', date(now()) + time '17:00' - interval '12 months',
+        'cb7cb6c9-5e59-4fc4-b9d5-028f2bb40ccf', 10085);
 
 insert into public.course_trainer (profile_id, type, course_id, status)
 values  ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10014, 'ACCEPTED'),
@@ -247,4 +262,5 @@ values  ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10014, 'ACCEPTED'),
         ('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'LEADER', 10023, 'ACCEPTED'),
         ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10024, 'ACCEPTED'),
         ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10025, 'ACCEPTED'),
-        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10026, 'ACCEPTED');
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10026, 'ACCEPTED'),
+        ('dccd780a-9745-4972-a43e-95ec3ef361df', 'LEADER', 10085, 'ACCEPTED');
