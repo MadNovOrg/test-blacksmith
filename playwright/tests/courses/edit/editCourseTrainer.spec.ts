@@ -39,6 +39,8 @@ test('edit course notes for indirect course as a trainer', async ({
   )
   await courseDetailsPage.clickEditCourseButton()
   await courseDetailsPage.fillNotes('notes3')
+  // Required at the moment due to additional trainers always being required
+  await courseDetailsPage.addAdditionalTrainer()
   await courseDetailsPage.clickSaveButton()
   await courseDetailsPage.checkNotesOnCoursePage('notes3')
 })

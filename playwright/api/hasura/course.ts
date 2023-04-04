@@ -7,6 +7,7 @@ import {
   CourseLevel,
   CourseModule,
   CourseParticipant,
+  CourseTrainerType,
   InviteStatus,
   ModuleGroup,
 } from '@app/types'
@@ -263,7 +264,7 @@ export const insertCourse = async (
     data: [
       {
         profile_id: trainerId,
-        type: 'LEADER',
+        type: CourseTrainerType.Leader,
         status: trainerStatus,
       },
     ],

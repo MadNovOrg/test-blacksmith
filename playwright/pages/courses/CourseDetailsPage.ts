@@ -195,6 +195,8 @@ export class CourseDetailsPage extends BasePage {
   readonly cancelEntireCoursePopUp: CancelEntireCoursePopUp
   readonly certificationTab: Locator
   readonly certificateGrade: Locator
+  readonly searchTrainerInput: Locator
+  readonly searchTrainerOption: Locator
 
   constructor(page: Page) {
     super(page)
@@ -251,6 +253,12 @@ export class CourseDetailsPage extends BasePage {
       '[data-testid=participant-course-certification]'
     )
     this.certificateGrade = this.page.locator('[data-testid=certificate-grade]')
+    this.searchTrainerInput = this.page.locator(
+      '[data-testid=SearchTrainers-input]'
+    )
+    this.searchTrainerOption = this.page.locator(
+      '[data-testid=SearchTrainers-option]'
+    )
   }
 
   async goto(courseId: string) {
@@ -438,5 +446,10 @@ export class CourseDetailsPage extends BasePage {
 
   async checkCertification(grade: 'Pass') {
     await expect(this.certificateGrade).toContainText(grade)
+  }
+
+  async addAdditionalTrainer() {
+    await this.searchTrainerInput.fill('trainer')
+    await this.searchTrainerOption.first().click()
   }
 }

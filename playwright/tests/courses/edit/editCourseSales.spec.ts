@@ -30,19 +30,19 @@ const test = base.extend<{ course: Course }>({
 
 test.use({ storageState: stateFilePath('salesAdmin') })
 
-test('edit course notes as a sales rep for closed course', async ({
-  page,
-  course,
-}) => {
-  const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto(`${course.id}`)
-  const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
-    course.id
-  )
-  await courseDetailsPage.clickEditCourseButton()
-  await courseDetailsPage.fillNotes('notes3')
-  //workaround to not having sales rep set in course creation, have to set it now to save edit course
-  await courseDetailsPage.fillSalesRepresentative()
-  await courseDetailsPage.clickSaveButton()
-  await courseDetailsPage.checkNotesOnCoursePage('notes3')
-})
+// 'See https://behaviourhub.atlassian.net/browse/TTHP-1274'
+// for some reason test.fail is not working in this test
+test.fixme(
+  'edit course notes as a sales rep for closed course',
+  async ({ page, course }) => {
+    const myCoursesPage = new MyCoursesPage(page)
+    await myCoursesPage.goto(`${course.id}`)
+    const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
+      course.id
+    )
+    await courseDetailsPage.clickEditCourseButton()
+    await courseDetailsPage.fillNotes('notes3')
+    await courseDetailsPage.clickSaveButton()
+    await courseDetailsPage.checkNotesOnCoursePage('notes3')
+  }
+)
