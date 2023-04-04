@@ -81,27 +81,48 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         }}
       >
         {acl.canOverrideGrades() && (
-          <MenuItem onClick={onShowModifyGrade} disabled={isRevoked}>
+          <MenuItem
+            data-testid="manage-certificate-modify-grade"
+            onClick={onShowModifyGrade}
+            disabled={isRevoked}
+          >
             {t('modify-grade')}
           </MenuItem>
         )}
         {acl.canViewCertifications() && (
-          <MenuItem onClick={onShowPutOnHoldModal} disabled={isRevoked}>
+          <MenuItem
+            data-testid="manage-certificate-hold-certificate"
+            onClick={onShowPutOnHoldModal}
+            disabled={isRevoked}
+          >
             {t('hold-certificate')}
           </MenuItem>
         )}
 
         {acl.isTTAdmin() && certificateChangeLength ? (
-          <MenuItem onClick={onShowChangelogModal}>{t('change-log')}</MenuItem>
+          <MenuItem
+            data-testid="manage-certificate-change-log"
+            onClick={onShowChangelogModal}
+          >
+            {t('change-log')}
+          </MenuItem>
         ) : null}
 
         {acl.canRevokeCert() &&
           (isRevoked ? (
-            <MenuItem onClick={onShowUndoRevokeModal}>
+            <MenuItem
+              data-testid="manage-certificate-undo-revoke"
+              onClick={onShowUndoRevokeModal}
+            >
               {t('undo-revoke')}
             </MenuItem>
           ) : (
-            <MenuItem onClick={onShowRevokeModal}>{t('revoke-cert')}</MenuItem>
+            <MenuItem
+              data-testid="manage-certificate-revoke-cert"
+              onClick={onShowRevokeModal}
+            >
+              {t('revoke-cert')}
+            </MenuItem>
           ))}
       </Menu>
     </>

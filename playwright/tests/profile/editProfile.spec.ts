@@ -1,16 +1,16 @@
 import { test } from '@playwright/test'
 
 import { stateFilePath } from '../../hooks/global-setup'
-import { MyProfilePage } from '../../pages/profile/MyProfilePage'
+import { ProfilePage } from '../../pages/profile/ProfilePage'
 
 test.use({ storageState: stateFilePath('user1') })
 
 test('edit user profile as an attendee user', async ({ page }) => {
-  const myProfilePage = new MyProfilePage(page)
-  await myProfilePage.goto()
-  await myProfilePage.clickEditButton()
-  await myProfilePage.enterPhoneNumber()
-  await myProfilePage.clickSaveChanges()
-  await myProfilePage.goto()
-  await myProfilePage.checkProfileChanges()
+  const profilePage = new ProfilePage(page)
+  await profilePage.goto()
+  await profilePage.clickEditButton()
+  await profilePage.enterPhoneNumber()
+  await profilePage.clickSaveChanges()
+  await profilePage.goto()
+  await profilePage.checkProfileChanges()
 })

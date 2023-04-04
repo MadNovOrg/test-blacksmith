@@ -111,6 +111,7 @@ const ModifyGradeModal: React.FC<
 
           <Grid item xs={12}>
             <TextField
+              data-testid="modify-grade-modal-notes"
               variant="filled"
               required
               error={showNoteError}
@@ -136,6 +137,7 @@ const ModifyGradeModal: React.FC<
 
         <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2}>
           <Button
+            data-testid="modify-grade-modal-cancel"
             type="button"
             variant="outlined"
             color="secondary"
@@ -145,6 +147,7 @@ const ModifyGradeModal: React.FC<
             {t('common.cancel')}
           </Button>
           <Button
+            data-testid="modify-grade-modal-confirm"
             type="button"
             variant="contained"
             color="primary"

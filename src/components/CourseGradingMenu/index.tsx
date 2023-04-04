@@ -21,7 +21,11 @@ interface Props {
   initialValue?: Grade_Enum | undefined | null
 }
 
-type GradeOption = { key: Grade_Enum; label: string; icon: React.ReactNode }
+type GradeOption = {
+  key: Grade_Enum
+  label: string
+  icon: React.ReactNode
+}
 
 export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
@@ -125,6 +129,7 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
       >
         {options.map((option, index) => (
           <MenuItem
+            data-testid={`modify-grade-${option.key}`}
             key={option.key}
             selected={index === selectedIndex}
             onClick={event => handleMenuItemClick(event, index, option.key)}

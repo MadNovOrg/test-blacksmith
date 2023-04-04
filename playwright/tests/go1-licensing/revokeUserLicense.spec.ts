@@ -4,7 +4,7 @@ import { addYears } from 'date-fns'
 import * as API from '../../api'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
-import { ProfilePage } from '../../pages/membership/ProfilePage'
+import { ProfilePage } from '../../pages/profile/ProfilePage'
 
 type Go1LicenseContext = {
   orgId: string
