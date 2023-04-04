@@ -11,6 +11,7 @@ import {
   Container,
   Grid,
   Link,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -209,30 +210,37 @@ export const ViewProfilePage: React.FC<
                 data-testid="personal-details-container"
                 bgcolor="common.white"
                 p={3}
-                pb={1}
                 borderRadius={1}
               >
-                <DetailsRow label={t('first-name')} value={profile.givenName} />
-                <DetailsRow label={t('surname')} value={profile.familyName} />
-                <DetailsRow label={t('email')} value={profile.email} />
-                <DetailsRow label={t('phone')} value={profile.phone} />
-                <DetailsRow label={t('dob')} value={profile.dob} />
-                <DetailsRow label={t('job-title')} value={profile.jobTitle} />
-                <DetailsRow label={t('dbs')} value={profile.dbs} />
-                <DetailsRow
-                  label={t('dietary-restrictions')}
-                  value={
-                    profile.dietaryRestrictions === ''
-                      ? '--'
-                      : profile.dietaryRestrictions
-                  }
-                />
-                <DetailsRow
-                  label={t('disabilities')}
-                  value={
-                    profile.disabilities === '' ? '--' : profile.disabilities
-                  }
-                />
+                <Stack spacing={2}>
+                  <DetailsRow
+                    label={t('first-name')}
+                    value={profile.givenName}
+                  />
+                  <DetailsRow label={t('surname')} value={profile.familyName} />
+                  <DetailsRow label={t('email')} value={profile.email} />
+                  <DetailsRow label={t('phone')} value={profile.phone} />
+                  <DetailsRow
+                    label={t('dob')}
+                    value={t('dates.default', { date: profile.dob })}
+                  />
+                  <DetailsRow label={t('job-title')} value={profile.jobTitle} />
+                  <DetailsRow label={t('dbs')} value={profile.dbs} />
+                  <DetailsRow
+                    label={t('dietary-restrictions')}
+                    value={
+                      profile.dietaryRestrictions === ''
+                        ? '--'
+                        : profile.dietaryRestrictions
+                    }
+                  />
+                  <DetailsRow
+                    label={t('disabilities')}
+                    value={
+                      profile.disabilities === '' ? '--' : profile.disabilities
+                    }
+                  />
+                </Stack>
               </Box>
             )}
             {acl.canSeeProfileRoles() && (

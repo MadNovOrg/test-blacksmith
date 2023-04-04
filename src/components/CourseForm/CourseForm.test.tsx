@@ -203,7 +203,10 @@ describe('component: CourseForm', () => {
     expect(screen.getByLabelText('Reaccreditation')).not.toBeChecked()
     expect(screen.getByLabelText('Face to face')).toBeChecked()
 
-    const startDate = format(new Date(schedule.start), INPUT_DATE_FORMAT)
+    const startDate = format(
+      new Date(schedule.start),
+      INPUT_DATE_FORMAT.split('/').join(' / ')
+    )
     expect(screen.getByLabelText('Start date')).toHaveValue(startDate)
 
     const startTime = format(new Date(schedule.start), INPUT_TIME_FORMAT)

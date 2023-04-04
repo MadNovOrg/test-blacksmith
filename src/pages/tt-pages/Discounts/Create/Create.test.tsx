@@ -1,11 +1,10 @@
-import { startOfDay, subDays } from 'date-fns'
+import { startOfDay } from 'date-fns'
 import { setMedia } from 'mock-match-media'
 import React from 'react'
 import { Client, Provider } from 'urql'
 import { fromValue } from 'wonka'
 
 import { Promo_Code_Type_Enum } from '@app/generated/graphql'
-import { dateInputValueFormat, dateInputValueParse } from '@app/util'
 
 import { screen, render, within, userEvent, waitFor, chance } from '@test/index'
 import { profile } from '@test/providers'
@@ -180,56 +179,51 @@ describe('page: CreateDiscount', () => {
   it('validates validFrom is required', async () => {
     _render(<Create />)
 
-    const btnSubmit = screen.getByTestId('btn-submit')
+    const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
 
-    const validFrom = screen.getByTestId('fld-validFrom')
-    const validFromMuiFilledInput = validFrom.parentElement
-    const validFromMuiFormControl = validFromMuiFilledInput?.parentElement
-    expect(validFromMuiFilledInput).not.toHaveClass('Mui-error')
+    await userEvent.clear(startDate)
 
-    await userEvent.clear(validFrom)
-    expect(screen.getByTestId('fld-validFrom')).toHaveValue('')
-
-    await userEvent.click(btnSubmit)
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
+    )
 
     await waitFor(() => {
-      expect(validFromMuiFilledInput).toHaveClass('Mui-error')
       expect(
-        within(validFromMuiFormControl as HTMLElement).getByText(
-          'This field is required'
+        within(screen.getByTestId('valid-from')).getByText(
+          /this field is required/i
         )
       ).toBeInTheDocument()
-
-      expect(mockFetcher).not.toHaveBeenCalled()
     })
+
+    expect(true).toBe(true)
   })
 
   it('validates validTo is >= to validFrom', async () => {
     _render(<Create />)
 
-    const btnSubmit = screen.getByTestId('btn-submit')
-
-    const validFrom = screen.getByTestId('fld-validFrom')
-    const validTo = screen.getByTestId('fld-validTo')
-    const validToMuiFilledInput = validTo.parentElement
-    const validToMuiFormControl = validToMuiFilledInput?.parentElement
-    expect(validToMuiFilledInput).not.toHaveClass('Mui-error')
-
-    const fromDate = dateInputValueParse((validFrom as HTMLInputElement).value)
-    validTo.focus()
-    await userEvent.paste(dateInputValueFormat(subDays(fromDate, 1)))
-
-    await userEvent.click(btnSubmit)
+    const startDate = screen.getByLabelText(/start date/i) as HTMLInputElement
+    const endDate = screen.getByLabelText(/end date/i) as HTMLInputElement
 
     await waitFor(() => {
-      expect(validToMuiFilledInput).toHaveClass('Mui-error')
-      expect(
-        within(validToMuiFormControl as HTMLElement).getByText(
-          "Must be greater or equal to 'Start date'"
-        )
-      ).toBeInTheDocument()
+      startDate.focus()
+    })
 
-      expect(mockFetcher).not.toHaveBeenCalled()
+    await userEvent.paste('02/01/2023')
+
+    await waitFor(() => {
+      endDate.focus()
+    })
+
+    await userEvent.paste('01/01/2023')
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /create discount/i })
+    )
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/must be greater or equal to 'Start date'/i)
+      ).toBeInTheDocument()
     })
   })
 

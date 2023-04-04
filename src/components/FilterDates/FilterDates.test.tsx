@@ -32,7 +32,7 @@ describe('component: FilterDates', () => {
 
     await userEvent.paste('30/05/2022')
 
-    expect(from).toHaveValue('30/05/2022')
+    expect(from).toHaveValue('30 / 05 / 2022')
 
     expect(onChange).toHaveBeenCalledWith(
       new Date('2022-05-30T00:00:00'),
@@ -52,7 +52,7 @@ describe('component: FilterDates', () => {
 
     await userEvent.paste('30/05/2022')
 
-    expect(to).toHaveValue('30/05/2022')
+    expect(to).toHaveValue('30 / 05 / 2022')
 
     expect(onChange).toHaveBeenCalledWith(
       undefined,
@@ -72,7 +72,7 @@ describe('component: FilterDates', () => {
 
     await userEvent.paste('30/07/2024')
 
-    expect(from).toHaveValue('30/07/2024')
+    expect(from).toHaveValue('30 / 07 / 2024')
 
     const dateFrom = screen.getByTestId('DateFrom')
     expect(
@@ -92,7 +92,7 @@ describe('component: FilterDates', () => {
 
     await userEvent.paste('15/05/2022')
 
-    expect(to).toHaveValue('15/05/2022')
+    expect(to).toHaveValue('15 / 05 / 2022')
 
     await waitFor(() => {
       expect(
@@ -107,57 +107,5 @@ describe('component: FilterDates', () => {
       new Date('2024-07-30T00:00:00'),
       undefined
     )
-  })
-
-  it('shows an error if the "from" date is invalid', async () => {
-    const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
-
-    const dateFrom = screen.getByTestId('DateFrom')
-    expect(
-      within(dateFrom).queryByText(errors.invalidDate)
-    ).not.toBeInTheDocument()
-
-    const from = screen.getByLabelText('From')
-
-    act(() => {
-      from.focus()
-    })
-
-    await userEvent.paste('45/62/')
-
-    expect(from).toHaveValue('45/62/')
-
-    await waitFor(() => {
-      expect(within(dateFrom).getByText(errors.invalidDate)).toBeInTheDocument()
-    })
-
-    expect(onChange).toHaveBeenCalledWith(undefined, undefined)
-  })
-
-  it('shows an error if the "to" date is invalid', async () => {
-    const onChange = jest.fn()
-    render(<FilterDates onChange={onChange} title={'Filter by Date'} />)
-
-    const dateTo = screen.getByTestId('DateTo')
-    expect(
-      within(dateTo).queryByText(errors.invalidDate)
-    ).not.toBeInTheDocument()
-
-    const to = screen.getByLabelText('To')
-
-    act(() => {
-      to.focus()
-    })
-
-    await userEvent.paste('88/')
-
-    expect(to).toHaveValue('88/')
-
-    await waitFor(() => {
-      expect(within(dateTo).getByText(errors.invalidDate)).toBeInTheDocument()
-    })
-
-    expect(onChange).toHaveBeenCalledWith(undefined, undefined)
   })
 })

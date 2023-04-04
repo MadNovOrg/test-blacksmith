@@ -388,21 +388,20 @@ export const EditOrgDetails: React.FC<
                     render={({ field }) => (
                       <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                          inputFormat={INPUT_DATE_FORMAT}
+                          format={INPUT_DATE_FORMAT}
                           value={field.value}
                           onChange={field.onChange}
-                          renderInput={params => (
-                            <TextField
-                              {...params}
-                              error={!!errors.ofstedRating}
-                              helperText={errors.ofstedRating?.message}
-                              label={t(
+                          slotProps={{
+                            textField: {
+                              error: !!errors.ofstedRating,
+                              helperText: errors.ofstedRating?.message,
+                              label: t(
                                 'pages.edit-org-details.ofsted-last-inspection'
-                              )}
-                              variant="filled"
-                              fullWidth
-                            />
-                          )}
+                              ),
+                              variant: 'filled',
+                              fullWidth: true,
+                            },
+                          }}
                         />
                       </LocalizationProvider>
                     )}

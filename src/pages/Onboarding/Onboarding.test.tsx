@@ -97,15 +97,16 @@ describe('page: Onboarding', () => {
       }: {
         variables: UpdateProfileMutationVariables
       }) => {
-        const success =
+        const success = Boolean(
           variables.input.profileId === profileId &&
-          variables.input.givenName === firstName &&
-          variables.input.familyName === lastName &&
-          variables.input.phone
+            variables.input.givenName === firstName &&
+            variables.input.familyName === lastName &&
+            variables.input.phone
+        )
 
         return fromValue<{ data: UpdateProfileMutation }>({
           data: {
-            updateUserProfile: Boolean(success),
+            updateUserProfile: success,
           },
         })
       },

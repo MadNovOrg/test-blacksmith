@@ -219,28 +219,27 @@ export const AvailableCourses: React.FC<
                     <DatePicker
                       value={dateFrom}
                       onChange={setDateFrom}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          data-testid="DateFrom"
-                          label={t('common.from')}
-                          variant="standard"
-                          fullWidth
-                        />
-                      )}
+                      slotProps={{
+                        textField: {
+                          'data-testid': 'DateFrom',
+                          label: t('common.from'),
+                          // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                          variant: 'standard',
+                          fullWidth: true,
+                        },
+                      }}
                     />
 
                     <DatePicker
                       value={dateTo}
                       onChange={setDateTo}
-                      renderInput={params => (
-                        <TextField
-                          {...params}
-                          label={t('common.to')}
-                          variant="standard"
-                          fullWidth
-                        />
-                      )}
+                      slotProps={{
+                        textField: {
+                          label: t('common.to'),
+                          variant: 'standard',
+                          fullWidth: true,
+                        },
+                      }}
                     />
                   </Stack>
                 </Box>

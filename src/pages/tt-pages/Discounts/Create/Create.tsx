@@ -13,7 +13,6 @@ import {
   MenuItem,
   InputAdornment,
   Alert,
-  TextFieldProps,
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -439,55 +438,51 @@ export const Create: React.FC<React.PropsWithChildren<unknown>> = () => {
           <Box display="flex" gap={2}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
-                inputFormat={INPUT_DATE_FORMAT}
+                format={INPUT_DATE_FORMAT}
                 value={values.validFrom}
                 onChange={d => {
                   setValue('validFrom', d ? startOfDay(d) : null)
                 }}
                 minDate={minDate}
                 maxDate={values.validTo}
-                renderInput={(params: TextFieldProps) => (
-                  <TextField
-                    {...params}
-                    label={t('pages.promoCodes.fld-validFrom-label')}
-                    variant="filled"
-                    fullWidth
-                    inputProps={{
-                      ...params.inputProps,
+                slotProps={{
+                  textField: {
+                    'data-testid': 'valid-from',
+                    label: t('pages.promoCodes.fld-validFrom-label'),
+                    // @ts-expect-error bla
+                    variant: 'filled',
+                    fullWidth: true,
+                    inputProps: {
                       'data-testid': 'fld-validFrom',
-                    }}
-                    error={!!formState.errors.validFrom}
-                    helperText={
+                    },
+                    error: !!formState.errors.validFrom,
+                    helperText:
                       formState.errors.validFrom?.message ??
-                      t('pages.promoCodes.fld-validFrom-hint')
-                    }
-                  />
-                )}
+                      t('pages.promoCodes.fld-validFrom-hint'),
+                  },
+                }}
               />
               <DatePicker
-                inputFormat={INPUT_DATE_FORMAT}
+                format={INPUT_DATE_FORMAT}
                 value={values.validTo}
                 onChange={d => {
                   setValue('validTo', d ? endOfDay(d) : null)
                 }}
                 minDate={values.validFrom}
-                renderInput={params => (
-                  <TextField
-                    {...params}
-                    label={t('pages.promoCodes.fld-validTo-label')}
-                    variant="filled"
-                    fullWidth
-                    inputProps={{
-                      ...params.inputProps,
+                slotProps={{
+                  textField: {
+                    label: t('pages.promoCodes.fld-validTo-label'),
+                    variant: 'filled',
+                    fullWidth: true,
+                    inputProps: {
                       'data-testid': 'fld-validTo',
-                    }}
-                    error={!!formState.errors.validTo}
-                    helperText={
+                    },
+                    error: !!formState.errors.validTo,
+                    helperText:
                       formState.errors.validTo?.message ??
-                      t('pages.promoCodes.fld-validTo-hint')
-                    }
-                  />
-                )}
+                      t('pages.promoCodes.fld-validTo-hint'),
+                  },
+                }}
               />
             </LocalizationProvider>
           </Box>

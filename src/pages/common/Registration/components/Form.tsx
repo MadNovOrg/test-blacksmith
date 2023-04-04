@@ -30,7 +30,7 @@ import {
   ParamsType,
   ResponseType,
 } from '@app/queries/profile/insert-profile-temp'
-import { DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 import { FormInputs, getFormSchema } from './types'
 
@@ -243,22 +243,21 @@ export const Form: React.FC<React.PropsWithChildren<Props>> = ({
               render={({ field }) => (
                 <DatePicker
                   label={t('dob')}
-                  mask={DATE_MASK}
-                  inputFormat={INPUT_DATE_FORMAT}
+                  format={INPUT_DATE_FORMAT}
                   value={field.value}
                   onChange={(d: Date | null) => setValue('dob', d)}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      variant="filled"
-                      data-testid="dob-input"
-                      fullWidth
-                      sx={{ bgcolor: 'grey.100' }}
-                      error={!!errors.dob}
-                      helperText={errors.dob?.message}
-                      required
-                    />
-                  )}
+                  slotProps={{
+                    textField: {
+                      // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                      variant: 'filled',
+                      'data-testid': 'dob-input',
+                      fullWidth: true,
+                      sx: { bgcolor: 'grey.100' },
+                      error: !!errors.dob,
+                      helperText: errors.dob?.message,
+                      required: true,
+                    },
+                  }}
                 />
               )}
             />

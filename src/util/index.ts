@@ -52,7 +52,7 @@ export const noop = () => {
 }
 
 export const dateInputValueParse = (value: string): Date => {
-  return parse(value, INPUT_DATE_FORMAT, new Date())
+  return parse(value.replace(/\s/g, ''), INPUT_DATE_FORMAT, new Date())
 }
 
 export const dateInputValueFormat = (date: Date): string => {

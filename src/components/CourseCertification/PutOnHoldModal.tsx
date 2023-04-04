@@ -301,18 +301,16 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           minDate={minDate}
                           maxDate={addDays(values.dateTo, 1) || undefined}
                           disabled={edit}
-                          renderInput={params => (
-                            <TextField
-                              {...params}
-                              data-testid="DateFrom"
-                              label={t('common.from')}
-                              variant="standard"
-                              error={!!errors.dateFrom}
-                              helperText={errors.dateFrom?.message}
-                              disabled={edit}
-                              fullWidth
-                            />
-                          )}
+                          slotProps={{
+                            textField: {
+                              label: t('common.from'),
+                              variant: 'standard',
+                              error: !!errors.dateFrom,
+                              helperText: errors.dateFrom?.message,
+                              disabled: edit,
+                              fullWidth: true,
+                            },
+                          }}
                         />
                       )}
                     />
@@ -326,17 +324,17 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           value={field.value}
                           onChange={field.onChange}
                           minDate={values.dateFrom || undefined}
-                          renderInput={params => (
-                            <TextField
-                              {...params}
-                              data-testid="DateTo"
-                              label={t('common.to')}
-                              variant="standard"
-                              error={!!errors.dateTo}
-                              helperText={errors.dateTo?.message}
-                              fullWidth
-                            />
-                          )}
+                          slotProps={{
+                            textField: {
+                              'data-testid': 'DateTo',
+                              label: t('common.to'),
+                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+                              variant: 'standard',
+                              error: !!errors.dateTo,
+                              helperText: errors.dateTo?.message,
+                              fullWidth: true,
+                            },
+                          }}
                         />
                       )}
                     />

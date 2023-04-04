@@ -26,7 +26,7 @@ import {
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { MUTATION as UPDATE_PROFILE_MUTATION } from '@app/queries/profile/update-profile'
 import { schemas, yup } from '@app/schemas'
-import { DATE_MASK, INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
+import { INPUT_DATE_FORMAT, requiredMsg } from '@app/util'
 
 export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
   const { t, _t } = useScopedTranslation('pages.onboarding')
@@ -38,7 +38,8 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
     familyName: yup.string().required(requiredMsg(_t, 'surname')),
     phone: schemas.phone(_t),
     dob: yup
-      .mixed()
+      .date()
+      .nullable()
       .typeError(t('validation-errors.invalid-date-optional'))
       .required(_t('validation-errors.date-required')),
     tcs: yup.boolean().oneOf([true], t('tcs-required')),
@@ -68,7 +69,7 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
         profileId: profile?.id,
         familyName: data.familyName,
         givenName: data.givenName,
-        dob: data.dob as string,
+        dob: data.dob.toDateString(), // not an ISO, we are not storing timezone info
         phone: data.phone,
       },
     })
@@ -157,24 +158,22 @@ export const Onboarding: React.FC<React.PropsWithChildren<unknown>> = () => {
               render={({ field }) => (
                 <DatePicker
                   label={_t('dob')}
-                  mask={DATE_MASK}
-                  inputFormat={INPUT_DATE_FORMAT}
+                  format={INPUT_DATE_FORMAT}
                   value={field.value ?? null}
                   onChange={(d: Date | null) => {
                     if (d) {
                       setValue('dob', d, { shouldValidate: true })
                     }
                   }}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      variant="filled"
-                      fullWidth
-                      error={Boolean(errors.dob)}
-                      helperText={errors.dob?.message as string}
-                      required
-                    />
-                  )}
+                  slotProps={{
+                    textField: {
+                      variant: 'filled',
+                      fullWidth: true,
+                      error: Boolean(errors.dob),
+                      helperText: errors.dob?.message as string,
+                      required: true,
+                    },
+                  }}
                 />
               )}
             />

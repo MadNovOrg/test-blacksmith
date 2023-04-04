@@ -1,9 +1,8 @@
-import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers'
 import React from 'react'
 import { noop } from 'ts-essentials'
 
-import { DATE_MASK, INPUT_DATE_FORMAT } from '@app/util'
+import { INPUT_DATE_FORMAT } from '@app/util'
 
 export type CourseDatePickerProps = {
   value: Date | null
@@ -29,23 +28,22 @@ export const CourseDatePicker = ({
   return (
     <DatePicker
       label={label}
-      mask={DATE_MASK}
-      inputFormat={INPUT_DATE_FORMAT}
+      format={INPUT_DATE_FORMAT}
       value={value}
       onChange={onChange}
       minDate={minDate}
       maxDate={maxDate}
-      renderInput={params => (
-        <TextField
-          data-test={`${label}-datePicker-textField`}
-          variant="filled"
-          {...params}
-          fullWidth
-          error={Boolean(error)}
-          helperText={error?.message}
-          onBlur={onBlur}
-        />
-      )}
+      slotProps={{
+        textField: {
+          // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+          variant: 'filled',
+          fullWidth: true,
+          error: Boolean(error),
+          helperText: error?.message,
+          onBlur: onBlur,
+          'data-testid': `${label}-datePicker-textField`,
+        },
+      }}
     />
   )
 }

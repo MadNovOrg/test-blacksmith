@@ -750,17 +750,16 @@ export const EditProfilePage: React.FC<
                   <Grid item md={6}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DatePicker
-                        inputFormat="dd/MM/yyyy"
+                        format="dd/MM/yyyy"
                         value={values.dob}
                         onChange={(d: Date | null) => setValue('dob', d)}
-                        renderInput={params => (
-                          <TextField
-                            {...params}
-                            label={t('dob')}
-                            variant="filled"
-                            fullWidth
-                          />
-                        )}
+                        slotProps={{
+                          textField: {
+                            label: t('dob'),
+                            variant: 'filled',
+                            fullWidth: true,
+                          },
+                        }}
                       />
                     </LocalizationProvider>
                   </Grid>

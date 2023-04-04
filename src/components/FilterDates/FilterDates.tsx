@@ -1,5 +1,4 @@
 import Box, { BoxProps } from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
@@ -67,17 +66,17 @@ export const FilterDates: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           maxDate={to || undefined}
           onError={reason => setFromError(reason?.toString() || '')}
-          renderInput={params => (
-            <TextField
-              {...params}
-              data-testid="DateFrom"
-              label={t('common.from')}
-              variant="standard"
-              fullWidth
-              error={fromError !== ''}
-              helperText={getErrorMessage(fromError)}
-            />
-          )}
+          slotProps={{
+            textField: {
+              'data-testid': 'DateFrom',
+              label: t('common.from'),
+              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+              variant: 'standard',
+              fullWidth: true,
+              error: fromError !== '',
+              helperText: getErrorMessage(fromError),
+            },
+          }}
         />
 
         <DatePicker
@@ -88,17 +87,17 @@ export const FilterDates: React.FC<React.PropsWithChildren<Props>> = ({
           }}
           minDate={from || undefined}
           onError={reason => setToError(reason?.toString() || '')}
-          renderInput={params => (
-            <TextField
-              {...params}
-              data-testid="DateTo"
-              label={t('common.to')}
-              variant="standard"
-              fullWidth
-              error={toError !== ''}
-              helperText={getErrorMessage(toError)}
-            />
-          )}
+          slotProps={{
+            textField: {
+              'data-testid': 'DateTo',
+              label: t('common.to'),
+              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
+              variant: 'standard',
+              fullWidth: true,
+              error: toError !== '',
+              helperText: getErrorMessage(toError),
+            },
+          }}
         />
       </Box>
     </LocalizationProvider>
