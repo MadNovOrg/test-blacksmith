@@ -104,7 +104,11 @@ export const filtersToWhereClause = (
       { course_code: { _ilike: `%${query}%` } },
     ]
 
-    where._or = orClauses.filter(Boolean)
+    if (where._or) {
+      where._and = [{ _or: where._or }, { _or: orClauses.filter(Boolean) }]
+    } else {
+      where._or = orClauses.filter(Boolean)
+    }
   }
 
   return where
