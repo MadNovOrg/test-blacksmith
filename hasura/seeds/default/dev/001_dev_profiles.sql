@@ -60,10 +60,10 @@ INSERT INTO identity (provider_id, profile_id, type) VALUES
 ('f562f82d-87c7-472b-8141-0ec4f465d9fa', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com
 ('2c436c6a-db32-4b91-ba8a-bcabc1a7affa', '48c9c19b-e7bf-4309-9679-52d5619d27dd', 'cognito'), -- ops@teamteach.testinator.com staging
 
-('d182199a-b9a1-42cd-b329-7675644cace6', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
+('443abe40-c9f8-4fb1-af33-3f1c602ca754', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com
 ('281fbeeb-99a3-46d0-81b6-c3dca984d1af', '48812860-89a5-41be-95c9-b8889e88bffd', 'cognito'), -- moderator@teamteach.testinator.com staging
 
-('3a815f2d-68ce-4009-a20d-08895ae67068', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com
+('c6bfe325-a350-43fb-b149-7e6a1e457176', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com
 ('8080870a-9be0-4a16-97f5-3cb2b29a8c65', 'ed8826a3-6cf4-4631-8b47-5d80b7a574fa', 'cognito'), -- org.adm@teamteach.testinator.com staging
 
 ('c353ca53-bc7f-46e0-8736-920acb4ccce8', '8ee0d91a-8573-4a4c-91c2-afa1a2ed49e2', 'cognito'), -- password@teamteach.testinator.com

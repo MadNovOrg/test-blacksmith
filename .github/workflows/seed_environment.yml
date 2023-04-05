@@ -24,6 +24,7 @@ permissions:
 
 env:
   DEFAULT_ENV: 'DEV'
+  DEFAULT_PASS: 'Test12345!'
 jobs:
   data:
     name: Seed ${{ github.event.inputs.environment }}
@@ -103,6 +104,6 @@ jobs:
           chmod +x ./.github/scripts/cognito_user_migration.sh
           user_pool=${COGNITO_POOL_ID}
           db_users=( ${{ steps.profile-db.outputs.db_users }} )
-          cognito_user_password=${{ inputs.cognito_user_pass }}
+          cognito_user_password=${{ inputs.cognito_user_pass || env.DEFAULT_PASS }}
           ./.github/scripts/cognito_user_migration.sh -c "${user_pool}" -u "${db_users[*]}" -p "${cognito_user_password}"
         shell: bash
