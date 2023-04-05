@@ -385,20 +385,23 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   }, [autoapproved, saveChanges])
 
   const disabledFields = useMemo(() => {
-    if (course && !acl.canEditWithoutRestrictions(course.type)) {
-      return new Set<DisabledFields>([
-        'organization',
-        'contactProfile',
-        'courseLevel',
-        'blendedLearning',
-        'reaccreditation',
-        'deliveryType',
-        'usesAOL',
-        'aolCountry',
-        'aolRegion',
-        'minParticipants',
-        'maxParticipants',
-      ])
+    if (course) {
+      if (!acl.canEditWithoutRestrictions(course.type)) {
+        return new Set<DisabledFields>([
+          'organization',
+          'contactProfile',
+          'courseLevel',
+          'blendedLearning',
+          'reaccreditation',
+          'deliveryType',
+          'usesAOL',
+          'aolCountry',
+          'aolRegion',
+          'minParticipants',
+          'maxParticipants',
+        ])
+      }
+      return new Set<DisabledFields>(['courseLevel'])
     }
 
     return new Set([])

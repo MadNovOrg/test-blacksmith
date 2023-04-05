@@ -598,7 +598,6 @@ update_permissions:
         - cancellation_reason
         - contact_profile_id
         - course_delivery_type
-        - course_level
         - course_status
         - course_type
         - created_at
@@ -635,7 +634,6 @@ update_permissions:
         - cancellation_reason
         - contact_profile_id
         - course_delivery_type
-        - course_level
         - course_status
         - created_at
         - description
@@ -678,7 +676,6 @@ update_permissions:
         - cancellation_reason
         - contact_profile_id
         - course_delivery_type
-        - course_level
         - course_status
         - course_type
         - created_at
