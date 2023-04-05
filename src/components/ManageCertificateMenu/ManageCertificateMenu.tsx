@@ -56,6 +56,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
           borderColor: theme => theme.colors.navy[100],
           whiteSpace: 'nowrap',
         }}
+        data-testid="manage-certification-button"
       >
         {t('manage-certificate')}
       </Button>
