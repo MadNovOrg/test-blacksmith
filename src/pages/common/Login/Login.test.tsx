@@ -8,6 +8,7 @@ import {
   chance,
   screen,
   waitForText,
+  userEvent,
 } from '@test/index'
 
 import { LoginPage } from './Login'
@@ -41,7 +42,7 @@ describe('Login', () => {
 
     const email = screen.getByTestId('input-email')
 
-    fireEvent.change(email, { target: { value: 'not@valid' } })
+    userEvent.type(email, 'not@valid')
     fireEvent.click(screen.getByTestId('login-submit'))
 
     await waitForText('Please enter a valid email address')
