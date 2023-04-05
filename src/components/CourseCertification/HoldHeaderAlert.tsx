@@ -30,6 +30,7 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
       <Grid item mb={2}>
         <Alert
           variant="outlined"
+          data-testid="on-hold-alert"
           color="warning"
           sx={{
             my: 2,
@@ -45,11 +46,7 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
             alignItems="center"
           >
             <Box>
-              <Typography
-                variant="body2"
-                color="grey.900"
-                data-testid="cancellation-alert"
-              >
+              <Typography variant="body2" color="grey.900">
                 {t(
                   status === CertificateStatus.ON_HOLD
                     ? 'on-hold-warning'
@@ -61,11 +58,7 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
                 )}
               </Typography>
               {!acl.canManageCert() && (
-                <Typography
-                  variant="body2"
-                  color="grey.900"
-                  data-testid="cancellation-alert"
-                >
+                <Typography variant="body2" color="grey.900">
                   {t('on-hold-contact-us')}
                   <Link href="mailto:info@teamteach.co.uk" component="a">
                     info@teamteach.co.uk
@@ -81,6 +74,7 @@ const HoldHeaderAlert: React.FC<React.PropsWithChildren<HoldHeaderAlertProps>> =
                   sx={{ ml: 1, py: 0 }}
                   size="small"
                   onClick={onView}
+                  data-testid="view-details"
                 >
                   {t('view-details')}
                 </Button>

@@ -231,6 +231,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                             'common.course-certificate.put-on-hold-modal.select-reason'
                           )}
                           variant="filled"
+                          data-testid="reason-input"
                           value={field.value}
                           onChange={field.onChange}
                           inputProps={{ 'data-testid': 'hold-reason-select' }}
@@ -279,6 +280,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                         <TextField
                           fullWidth
                           variant="filled"
+                          data-testid="add-notes"
                           error={fieldState.invalid}
                           label={t(
                             'common.course-certificate.put-on-hold-modal.please-add-a-note'
@@ -303,11 +305,14 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                           disabled={edit}
                           slotProps={{
                             textField: {
+                              'data-testid': 'DateFrom',
                               label: t('common.from'),
+                              // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               variant: 'standard',
                               error: !!errors.dateFrom,
                               helperText: errors.dateFrom?.message,
                               disabled: edit,
+                              id: 'DateFrom',
                               fullWidth: true,
                             },
                           }}
@@ -331,6 +336,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                               // @ts-expect-error no arbitrary props are allowed by types, which is wrong
                               variant: 'standard',
                               error: !!errors.dateTo,
+                              id: 'DateTo',
                               helperText: errors.dateTo?.message,
                               fullWidth: true,
                             },
@@ -378,6 +384,7 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     variant="contained"
                     color="primary"
                     size="large"
+                    data-testid="submit-on-hold"
                     onClick={
                       canSubmit ? undefined : () => setShowHoldModal(false)
                     }

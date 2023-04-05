@@ -193,7 +193,7 @@ export const CertificationList: React.FC<
             const status = p.certificate?.status as CertificateStatus
 
             return (
-              <TableRow key={p.id}>
+              <TableRow key={p.id} data-testid={`cert-row-${p.id}`}>
                 {checkbox.rowCell(
                   p.id,
                   p.certificate.status === CertificateStatus.REVOKED

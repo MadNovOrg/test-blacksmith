@@ -76,7 +76,9 @@ const RevokeCertModal: React.FC<
 
       <Box mt={2}>
         <FormControl variant="standard" fullWidth>
-          <InputLabel id="reason-label">{t('reason-for-revoke')}</InputLabel>
+          <InputLabel data-testid="revoke-reason-input" id="reason-label">
+            {t('reason-for-revoke')}
+          </InputLabel>
           <Select
             labelId="reason-label"
             onChange={e => {
@@ -117,6 +119,7 @@ const RevokeCertModal: React.FC<
           sx={{ flex: 1 }}
           control={
             <Checkbox
+              data-testid="revoke-checkbox"
               checked={confirmed}
               onChange={e => setConfirmed(e.target.checked)}
             />
@@ -142,6 +145,7 @@ const RevokeCertModal: React.FC<
         <Button
           variant="contained"
           color="primary"
+          data-testid="confirm-button"
           sx={{ ml: 2 }}
           disabled={!allowRevoke || saving}
           onClick={handleRevoke}

@@ -91,9 +91,9 @@ export const ManageCertificateMenu: React.FC<Props> = ({
         )}
         {acl.canViewCertifications() && (
           <MenuItem
-            data-testid="manage-certificate-hold-certificate"
             onClick={onShowPutOnHoldModal}
             disabled={isRevoked}
+            data-testid="manage-certificate-hold-certificate"
           >
             {t('hold-certificate')}
           </MenuItem>
@@ -118,7 +118,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
             </MenuItem>
           ) : (
             <MenuItem
-              data-testid="manage-certificate-revoke-cert"
+              data-testid="manage-certificate-revoke-certificate"
               onClick={onShowRevokeModal}
             >
               {t('revoke-certificate')}
