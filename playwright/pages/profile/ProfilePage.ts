@@ -10,7 +10,6 @@ export class ProfilePage extends BasePage {
   readonly certificateButton: Locator
   readonly phoneNumberField: Locator
   readonly viewPhoneNumber: Locator
-  readonly inputtedPhoneNumber: string
 
   constructor(page: Page) {
     super(page)
@@ -20,26 +19,24 @@ export class ProfilePage extends BasePage {
       `[data-testid*=certificate] button`
     )
     this.phoneNumberField = this.page.locator('[data-testid="phone"]')
-    this.inputtedPhoneNumber = `${Date.now()}`
-    this.viewPhoneNumber = this.page
-      .locator('[data-testid="personal-details-container"] > div')
-      .nth(3)
+    this.viewPhoneNumber = this.page.locator('[data-testid="profile-phone"]')
   }
 
   async goto(profileId?: string, orgId?: string) {
     if (orgId) {
       await super.goto(`profile/${profileId}?orgId=${orgId}`)
-      return
+    } else {
+      await super.goto(`profile/${profileId ?? ''}`)
     }
-    await super.goto(`profile/${profileId ?? ''}`)
   }
 
   async clickEditButton() {
     await this.editProfile.click()
   }
 
-  async enterPhoneNumber() {
-    await this.phoneNumberField.fill(this.inputtedPhoneNumber)
+  async enterPhoneNumber(phoneNumber: string) {
+    await this.phoneNumberField.clear()
+    await this.phoneNumberField.type(phoneNumber)
   }
 
   async clickSaveChanges() {
@@ -50,10 +47,8 @@ export class ProfilePage extends BasePage {
     ])
   }
 
-  async checkProfileChanges() {
-    await expect(this.viewPhoneNumber).toHaveText(
-      'Phone' + this.inputtedPhoneNumber
-    )
+  async checkPhoneNumber(phoneNumber: string) {
+    await expect(this.viewPhoneNumber).toHaveText(phoneNumber)
   }
 
   async checkLicenceIdExists(licenseId: string, exists: boolean) {

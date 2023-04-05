@@ -13,6 +13,7 @@ export const DetailsRow = ({
   valueProps,
   containerProps,
   children,
+  'data-testid': dataTestId,
 }: {
   label: string | ReactNode
   value?: string | ReactNode
@@ -20,13 +21,14 @@ export const DetailsRow = ({
   valueProps?: TypographyProps
   containerProps?: BoxProps
   children?: React.ReactNode
+  'data-testid'?: string
 }) => (
   <Box display="flex" alignItems="center" {...(containerProps ?? {})}>
     <Typography flex={1} color="grey.700" {...(labelProps ?? {})}>
       {label}
     </Typography>
     {value ? (
-      <Typography flex={2} {...(valueProps ?? {})}>
+      <Typography data-testid={dataTestId} flex={2} {...(valueProps ?? {})}>
         {value}
       </Typography>
     ) : null}

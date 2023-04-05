@@ -214,19 +214,42 @@ export const ViewProfilePage: React.FC<
               >
                 <Stack spacing={2}>
                   <DetailsRow
+                    data-testid="profile-first-name"
                     label={t('first-name')}
                     value={profile.givenName}
                   />
-                  <DetailsRow label={t('surname')} value={profile.familyName} />
-                  <DetailsRow label={t('email')} value={profile.email} />
-                  <DetailsRow label={t('phone')} value={profile.phone} />
                   <DetailsRow
+                    data-testid="profile-surname"
+                    label={t('surname')}
+                    value={profile.familyName}
+                  />
+                  <DetailsRow
+                    data-testid="profile-email"
+                    label={t('email')}
+                    value={profile.email}
+                  />
+                  <DetailsRow
+                    data-testid="profile-phone"
+                    label={t('phone')}
+                    value={profile.phone}
+                  />
+                  <DetailsRow
+                    data-testid="profile-dob"
                     label={t('dob')}
                     value={t('dates.default', { date: profile.dob })}
                   />
-                  <DetailsRow label={t('job-title')} value={profile.jobTitle} />
-                  <DetailsRow label={t('dbs')} value={profile.dbs} />
                   <DetailsRow
+                    data-testid="profile-job-title"
+                    label={t('job-title')}
+                    value={profile.jobTitle}
+                  />
+                  <DetailsRow
+                    data-testid="profile-dbs"
+                    label={t('dbs')}
+                    value={profile.dbs}
+                  />
+                  <DetailsRow
+                    data-testid="profile-dietary-restrictions"
                     label={t('dietary-restrictions')}
                     value={
                       profile.dietaryRestrictions === ''
@@ -235,6 +258,7 @@ export const ViewProfilePage: React.FC<
                     }
                   />
                   <DetailsRow
+                    data-testid="profile-disabilities"
                     label={t('disabilities')}
                     value={
                       profile.disabilities === '' ? '--' : profile.disabilities
