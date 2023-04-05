@@ -123,7 +123,7 @@ export const OrgUsersTable: React.FC<
   return (
     <>
       <TableContainer component={Paper} elevation={0}>
-        <Table>
+        <Table data-testid="organisation-members">
           <TableHead
             cols={cols}
             orderBy={sorting.by}

@@ -1,0 +1,49 @@
+import { setTimeout } from 'timers/promises'
+
+import { test as base } from '@playwright/test'
+
+import * as API from '../../api'
+import { User } from '../../data/types'
+import { users } from '../../data/users'
+import { stateFilePath } from '../../hooks/global-setup'
+import { AllOrganisations } from '../../pages/org/AllOrganisations'
+
+const test = base.extend<{
+  organisation: { id: string; name: string; user: User }
+}>({
+  organisation: async ({}, use) => {
+    const orgName = Date.now() + ' org'
+    const id = await API.organization.insertOrganization({
+      name: orgName,
+    })
+    const [orgId, profileId] = await Promise.all([
+      API.organization.insertOrganization({ name: orgName }),
+      API.profile.getProfileId(users.user1.email),
+    ])
+    await API.organization.insertOrganizationMember({
+      profile_id: profileId,
+      organization_id: orgId,
+    })
+    await use({ id: orgId, name: orgName, user: users.user1 })
+    // setting small timeout as there is some race condition
+    // between finishing the test and cleaning up the data
+    // don't know the reason for it
+    await setTimeout(100)
+    await API.organization.deleteOrganization(id)
+  },
+})
+
+test.use({ storageState: stateFilePath('admin') })
+
+test('remove user from organisation as admin', async ({
+  page,
+  organisation,
+}) => {
+  const orgPage = new AllOrganisations(page)
+  await orgPage.goto(organisation.id)
+  await orgPage.clickIndividualsTab()
+  await orgPage.checkOrganisationUserExists(organisation.user, true)
+  const editUserModal = await orgPage.clickEditUserButton()
+  await editUserModal.clickRemoveFromOrganisation()
+  await orgPage.checkOrganisationUserExists(organisation.user, false)
+})

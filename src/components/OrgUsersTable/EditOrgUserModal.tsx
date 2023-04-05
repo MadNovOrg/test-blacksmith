@@ -133,6 +133,7 @@ export const EditOrgUserModal: React.FC<
         mt={2}
       >
         <Button
+          data-testid="remove-from-organization"
           type="button"
           variant="outlined"
           color="secondary"

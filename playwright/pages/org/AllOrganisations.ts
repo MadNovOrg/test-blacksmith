@@ -4,7 +4,10 @@ import { readFile } from 'xlsx'
 
 import { Go1_History_Events_Enum } from '@app/generated/graphql'
 
+import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
+
+import { EditUserModal } from './EditUserModal'
 
 export class AllOrganisations extends BasePage {
   readonly addNewOrganisation: Locator
@@ -33,6 +36,8 @@ export class AllOrganisations extends BasePage {
   readonly inviteOrgWorkEmail: Locator
   readonly confirmInviteUsers: Locator
   readonly orgTable: Locator
+  readonly editUserButton: Locator
+  readonly organisationMembersTable: Locator
 
   constructor(page: Page) {
     super(page)
@@ -76,6 +81,10 @@ export class AllOrganisations extends BasePage {
       '[data-testid="invite-user-submit-btn"]'
     )
     this.orgTable = this.page.locator('tbody tr >> nth=0')
+    this.editUserButton = this.page.locator('[data-testid=edit-user-button]')
+    this.organisationMembersTable = this.page.locator(
+      '[data-testid=organisation-members]'
+    )
   }
 
   async goto(orgId?: string) {
@@ -218,7 +227,25 @@ export class AllOrganisations extends BasePage {
   async clickButtonToInviteUser() {
     await this.confirmInviteUsers.click()
   }
+
   async checkUserHasJoinedOrg(name: string) {
     await expect(this.orgTable).toContainText(name)
+  }
+
+  async clickEditUserButton() {
+    await this.editUserButton.click()
+    return new EditUserModal(this.page)
+  }
+
+  async checkOrganisationUserExists(user: User, exists: boolean) {
+    if (exists) {
+      await expect(this.organisationMembersTable).toContainText(
+        `${user.givenName} ${user.familyName}`
+      )
+    } else {
+      await expect(this.organisationMembersTable).not.toContainText(
+        `${user.givenName} ${user.familyName}`
+      )
+    }
   }
 }
