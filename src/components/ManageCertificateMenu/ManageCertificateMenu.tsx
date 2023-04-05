@@ -47,7 +47,6 @@ export const ManageCertificateMenu: React.FC<Props> = ({
     <>
       <Button
         fullWidth
-        data-testid="manage-certification-button"
         size="large"
         variant="outlined"
         color="secondary"
@@ -58,7 +57,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
           whiteSpace: 'nowrap',
         }}
       >
-        {t('manage-certification')}
+        {t('manage-certificate')}
       </Button>
       <Menu
         id="certificate-action-menu"
@@ -121,7 +120,7 @@ export const ManageCertificateMenu: React.FC<Props> = ({
               data-testid="manage-certificate-revoke-cert"
               onClick={onShowRevokeModal}
             >
-              {t('revoke-cert')}
+              {t('revoke-certificate')}
             </MenuItem>
           ))}
       </Menu>

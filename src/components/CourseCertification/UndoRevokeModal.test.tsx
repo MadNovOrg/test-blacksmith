@@ -37,7 +37,9 @@ describe('UndoRevokeModal', () => {
   it('renders as expected', async () => {
     setup()
 
-    expect(screen.getByText(/undo the revocation/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/user will regain full access/i)
+    ).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled()
 

@@ -38,7 +38,7 @@ describe('RevokeCertModal', () => {
     setup()
 
     expect(
-      screen.getByText(/revoke access for this certificate/i)
+      screen.getByText(/user will no longer have access to the certificate/i)
     ).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: 'Confirm' })).toBeDisabled()

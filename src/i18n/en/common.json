@@ -361,13 +361,12 @@
     "cert-loading": "Loading certificate...",
     "completed-message": "Has successfully completed the following Team teach course:",
     "modify-grade": "Modify grade",
-    "manage-certification": "Manage certification",
-    "revoke-certificate": "Revoke Certificate",
+    "manage-certificate": "Manage certificate",
+    "revoke-certificate": "Revoke certificate",
     "hold-certificate": "Put on hold",
     "confirm-dates": "Confirm new dates",
-    "revoke-cert": "Revoke certificate",
     "email-notification": "Users will be notified by email.",
-    "undo-revoke": "Undo revoke",
+    "undo-revoke": "Reinstate certificate",
     "change-log": "Change log",
     "certificate-hold-history-log": "Certificate On Hold History",
     "put-on-hold-modal": {
@@ -386,7 +385,7 @@
         "others": "Others"
       }
     },
-    "revoked-warning": "This certification has been revoked. It can no longer be accessed. ",
+    "revoked-warning": "This certificate has been revoked and can no longer be accessed by the user.",
     "revoked-warning-user": "If you wish reinstate this certificate, please contact us at info@teamteach.co.uk",
     "modify-grade-modal": {
       "warning": "Modifications to attendee’s grade will be visible to the trainer, attendee, and\nwill be reflected on their granted certificate.",
@@ -394,7 +393,7 @@
       "confirm-modification": "Confirm modification"
     },
     "revoke-cert-modal": {
-      "description": "You are about to revoke access for this certificate. Please confirm this action.",
+      "description": "Once this is confirmed, the user will no longer have access to the certificate and the relevant resources.",
       "reason-for-revoke": "Reason for revoking",
       "specify-reason": "Specify reason",
       "confirm-revoke": "Please confirm that you want to proceed with this action",
@@ -404,7 +403,7 @@
       "revoke-error": "Error revoking certificate"
     },
     "undo-revoke-modal": {
-      "description": "Are you sure you want to undo the revocation of this certification? This action will immediately restore the attendee's access to their certification, and the \"Revoked\" banner will be removed",
+      "description": "Once this action has been confirmed, the user will regain full access to their certificate and the relevant resources.",
       "confirm-undo": "Please confirm that you want to proceed with this action"
     },
     "expired-on": "Expired on {{date, date_default}}",

@@ -30,7 +30,7 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('revoke certificate')).not.toBeInTheDocument()
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certification' })
+      screen.getByRole('button', { name: 'Manage certificate' })
     )
 
     expect(screen.queryByText('Modify grade')).toBeInTheDocument()
@@ -38,7 +38,7 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('Change log')).toBeInTheDocument()
     expect(screen.queryByText('Revoke certificate')).toBeInTheDocument()
 
-    expect(screen.queryByText('Undo revoke')).not.toBeInTheDocument()
+    expect(screen.queryByText('Reinstate certificate')).not.toBeInTheDocument()
   })
 
   it('when role is not admin', async () => {
@@ -56,7 +56,7 @@ describe('ManageCertificateMenu', () => {
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certification' })
+      screen.getByRole('button', { name: 'Manage certificate' })
     )
 
     expect(screen.queryByText('Modify grade')).not.toBeInTheDocument()
@@ -64,7 +64,7 @@ describe('ManageCertificateMenu', () => {
     expect(screen.queryByText('Change log')).not.toBeInTheDocument()
     expect(screen.queryByText('Revoke certificate')).not.toBeInTheDocument()
 
-    expect(screen.queryByText('Undo revoke')).not.toBeInTheDocument()
+    expect(screen.queryByText('Reinstate certificate')).not.toBeInTheDocument()
   })
 
   it('when cert is revoked', async () => {
@@ -82,10 +82,10 @@ describe('ManageCertificateMenu', () => {
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certification' })
+      screen.getByRole('button', { name: 'Manage certificate' })
     )
 
-    expect(screen.queryByText('Undo revoke')).toBeInTheDocument()
+    expect(screen.queryByText('Reinstate certificate')).toBeInTheDocument()
     expect(screen.queryByText('Modify grade')).toHaveAttribute('aria-disabled')
     expect(screen.queryByText('Put on hold')).toHaveAttribute('aria-disabled')
   })
@@ -105,7 +105,7 @@ describe('ManageCertificateMenu', () => {
     )
 
     await userEvent.click(
-      screen.getByRole('button', { name: 'Manage certification' })
+      screen.getByRole('button', { name: 'Manage certificate' })
     )
 
     expect(screen.queryByText('Change log')).not.toBeInTheDocument()

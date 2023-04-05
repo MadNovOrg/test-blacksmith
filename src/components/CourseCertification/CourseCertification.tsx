@@ -632,7 +632,9 @@ export const CourseCertification: React.FC<
         <Dialog
           open={showRevokeCertModal}
           onClose={() => setShowRevokeCertModal(false)}
-          title={<Typography variant="h3">{t('revoke-cert')}</Typography>}
+          title={
+            <Typography variant="h3">{t('revoke-certificate')}</Typography>
+          }
           maxWidth={800}
         >
           <RevokeCertModal
