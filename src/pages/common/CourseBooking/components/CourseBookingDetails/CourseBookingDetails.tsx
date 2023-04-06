@@ -216,19 +216,14 @@ export const CourseBookingDetails: React.FC<
 
       courseLevel: yup.string(),
       courseType: yup.string(),
-      attedeeValidCertificate: yup
+      attendeeValidCertificate: yup
         .boolean()
-        .when(
-          ['courseLevel', 'courseType'],
-          ([courseLevel, courseType], schema) => {
-            return isAttendeeValidCertificateMandatory(courseLevel, courseType)
-              ? schema.oneOf(
-                  [true],
-                  t('validation-errors.this-field-is-required')
-                )
-              : schema
-          }
-        ),
+        .when(['courseLevel', 'courseType'], {
+          is: isAttendeeValidCertificateMandatory,
+          then: schema =>
+            schema.oneOf([true], t('validation-errors.this-field-is-required')),
+          otherwise: schema => schema,
+        }),
     })
   }, [t])
 
