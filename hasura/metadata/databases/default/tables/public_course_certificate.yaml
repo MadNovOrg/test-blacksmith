@@ -233,6 +233,17 @@ delete_permissions:
     permission:
       filter: {}
 event_triggers:
+  - name: certificate_revoke
+    definition:
+      enable_manual: false
+      update:
+        columns:
+          - is_revoked
+    retry_conf:
+      num_retries: 0
+      interval_sec: 10
+      timeout_sec: 60
+    webhook: '{{EVENTS_HOST}}/certificate/revoke'
   - name: course_certificate_added
     definition:
       enable_manual: false
