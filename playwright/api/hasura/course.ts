@@ -3,9 +3,9 @@ import { gql } from 'graphql-request'
 
 import { Grade_Enum } from '@app/generated/graphql'
 import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
+import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   CourseLevel,
-  CourseModule,
   CourseParticipant,
   CourseTrainerType,
   InviteStatus,
@@ -131,22 +131,14 @@ export const getCourseParticipantId = async (
   courseId: number,
   email: string
 ): Promise<string> => {
-  const query = gql`
-    query MyQuery {
-      course_participant(
-        where: {
-          _and: {
-            course_id: { _eq: ${courseId} },
-            profile_id: { _eq: "${await getProfileId(email)}" }
-          }
-        }
-      ) {
-        id
-      }
-    }
-  `
+  const profileId = await getProfileId(email)
   const response: { course_participant: { id: string }[] } =
-    await getClient().request(query)
+    await getClient().request<{
+      course_participant: { id: string }[]
+    }>(GET_PARTICIPANT, {
+      courseId,
+      profileId,
+    })
   return response.course_participant[0].id
 }
 
@@ -342,40 +334,6 @@ export const makeSureTrainerHasCourses = async (
     course => !existingCourses.map(c => c.id).includes(course.id)
   )
   return newCourses
-}
-
-export const insertCourseModules = async (
-  courseId: number,
-  moduleIds: string[],
-  covered?: boolean
-): Promise<CourseModule[]> => {
-  const modules = moduleIds.map(id => ({
-    courseId: courseId,
-    moduleId: id,
-    covered: covered ?? null,
-  }))
-  const query = gql`
-    mutation MyMutation($objects: [course_module_insert_input!] = []) {
-      insert_course_module(objects: $objects) {
-        affected_rows
-        returning {
-          module {
-            moduleGroup {
-              name
-            }
-          }
-        }
-      }
-    }
-  `
-  try {
-    const response = await getClient().request<{
-      insert_course_module: { returning: CourseModule[] }
-    }>(query, { objects: modules })
-    return response.insert_course_module.returning
-  } catch (e) {
-    throw new Error(`Failed to insert course modules: ${e}`)
-  }
 }
 
 export const insertCourseParticipants = async (
