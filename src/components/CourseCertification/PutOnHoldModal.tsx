@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { addDays } from 'date-fns'
+import { addDays, parseISO } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -33,6 +33,8 @@ import theme from '@app/theme'
 import { NonNullish } from '@app/types'
 
 import ConfirmDatesModal from './ConfirmDatesModal'
+
+const MINUTES_IN_FUTURE = 10
 
 type Participant = Pick<
   NonNullish<GetCertificateQuery['certificate']>,
@@ -109,7 +111,11 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                 'common.course-certificate.put-on-hold-modal.select-reason-error'
               )
             ),
-          note: yup.string().nullable(),
+          note: yup
+            .string()
+            .required(
+              t('common.course-certificate.put-on-hold-modal.note-error')
+            ),
         })
         .required()
     }, [t])
@@ -123,8 +129,10 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
     } = useForm<yup.InferType<typeof schema>>({
       resolver: yupResolver(schema),
       defaultValues: {
-        dateFrom: edit ? lastChangelog?.payload?.startDate : null,
-        dateTo: edit ? lastChangelog?.payload?.expireDate : null,
+        dateFrom: edit
+          ? parseISO(lastChangelog?.payload?.startDate)
+          : undefined,
+        dateTo: edit ? parseISO(lastChangelog?.payload?.expireDate) : undefined,
         reasonSelected: edit ? lastChangelog?.payload?.reason : '',
         note: edit ? lastChangelog?.payload?.note : '',
       },
@@ -142,6 +150,12 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
           if (!values.dateFrom || !values.dateTo) {
             return
           }
+
+          const currentDate = new Date(Date.now())
+          values.dateTo.setHours(
+            currentDate.getHours(),
+            currentDate.getMinutes() + MINUTES_IN_FUTURE
+          )
 
           const { insertChangeLog } = await fetcher<
             InsertCourseCertificateChangelogMutation,
@@ -275,13 +289,13 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
                     <Controller
                       name="note"
                       control={control}
-                      rules={{ required: true }}
-                      render={({ field, fieldState }) => (
+                      render={({ field }) => (
                         <TextField
                           fullWidth
                           variant="filled"
                           data-testid="add-notes"
-                          error={fieldState.invalid}
+                          error={!!errors.note}
+                          helperText={errors.note?.message}
                           label={t(
                             'common.course-certificate.put-on-hold-modal.please-add-a-note'
                           )}

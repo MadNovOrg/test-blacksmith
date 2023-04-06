@@ -373,16 +373,17 @@
       "warning": "Once you put on hold, attendee will no longer have access to the certificate.",
       "notes": "Notes",
       "reason": "Reason",
-      "please-add-a-note": "Please add a note (optional)",
+      "please-add-a-note": "Please add a note",
       "to-date-greater-error": "To date must be greater than from",
       "select-reason": "Select a reason",
       "select-reason-error": "Please select a reason",
+      "note-error": "Please ender notes",
       "add-updated-notes": "Add Updated Notes",
       "reasons": {
         "maternity": "Maternity leave",
         "sickness": "Long Term sickness",
         "legal": "Legal Reason",
-        "others": "Others"
+        "others": "Other"
       }
     },
     "revoked-warning": "This certificate has been revoked and can no longer be accessed by the user.",
