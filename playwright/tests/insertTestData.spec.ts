@@ -1,6 +1,6 @@
 import { test } from '@playwright/test'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
 import * as API from '../api'
@@ -27,6 +27,7 @@ test('insert test @data', async () => {
   for (let i = 0; i < 3; i++) {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
+    course.source = Course_Source_Enum.EmailEnquiry
     course.organization = { name: 'London First School' }
     course.status = Course_Status_Enum.Scheduled
     course.schedule[0].start = new Date('2022-03-15T09:00:00Z')

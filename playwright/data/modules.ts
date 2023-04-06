@@ -1,3 +1,4 @@
+import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { UNIQUE_COURSE } from './courses'
@@ -20,6 +21,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
       return course
@@ -86,6 +88,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
@@ -153,6 +156,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       course.deliveryType = CourseDeliveryType.MIXED
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
@@ -220,6 +224,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       course.deliveryType = CourseDeliveryType.VIRTUAL
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
@@ -286,6 +291,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.go1Integration = true
@@ -354,6 +360,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       course.deliveryType = CourseDeliveryType.MIXED
       course.level = CourseLevel.Level_1
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.go1Integration = true
@@ -421,6 +428,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
       return course
@@ -496,6 +504,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       course.deliveryType = CourseDeliveryType.MIXED
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = false
       return course
@@ -570,6 +579,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
@@ -644,6 +654,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.reaccreditation = true
       return course
@@ -718,6 +729,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.go1Integration = true
@@ -793,6 +805,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Level_2
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       course.deliveryType = CourseDeliveryType.F2F
       course.reaccreditation = true
@@ -869,6 +882,7 @@ export const MODULES_SETUP: ModuleSetup[] = [
       const course = UNIQUE_COURSE()
       course.level = CourseLevel.Advanced
       course.type = CourseType.CLOSED
+      course.source = Course_Source_Enum.EmailEnquiry
       course.organization = { name: 'London First School' }
       return course
     })(),
