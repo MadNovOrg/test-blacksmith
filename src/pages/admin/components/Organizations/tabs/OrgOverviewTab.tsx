@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import { Course_Status_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import useOrg, { ALL_ORGS } from '@app/hooks/useOrg'
@@ -190,11 +191,9 @@ export const OrgOverviewTab: React.FC<
         <Typography variant="h4">
           {t('pages.org-details.tabs.overview.available-courses-for-booking')}
         </Typography>
-
         {coursesForBooking?.map(course => (
           <CourseForBookingTile course={course} key={course.id} />
         ))}
-
         <Button
           variant="outlined"
           onClick={() => navigate('courses')}
@@ -202,6 +201,7 @@ export const OrgOverviewTab: React.FC<
         >
           {t('pages.org-details.tabs.overview.see-all-courses')}
         </Button>
+        <RequestAQuoteBanner sx={{ mt: 2 }} />
       </Grid>
     </Grid>
   )

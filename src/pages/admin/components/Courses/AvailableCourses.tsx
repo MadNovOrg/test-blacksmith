@@ -1,5 +1,4 @@
 import {
-  Button,
   CircularProgress,
   Container,
   MenuItem,
@@ -19,6 +18,7 @@ import { useParams, useSearchParams } from 'react-router-dom'
 
 import { FilterSearch } from '@app/components/FilterSearch'
 import { FullHeightPage } from '@app/components/FullHeightPage'
+import { RequestAQuoteBanner } from '@app/components/RequestAQuoteBanner'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Bool_Exp,
@@ -244,28 +244,7 @@ export const AvailableCourses: React.FC<
                   </Stack>
                 </Box>
 
-                <Box
-                  sx={{
-                    bgcolor: theme.colors.navy[100],
-                    borderRadius: 1,
-                    p: 2,
-                    textAlign: 'center',
-                  }}
-                >
-                  <Typography variant="h4">
-                    {t('pages.available-courses.learn-more-about')}
-                  </Typography>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2 }}
-                    target="_blank"
-                    href={import.meta.env.VITE_REQUEST_QUOTE_URL}
-                  >
-                    {t('pages.available-courses.request-a-quote')}
-                  </Button>
-                </Box>
+                <RequestAQuoteBanner />
               </Stack>
             </Box>
 
