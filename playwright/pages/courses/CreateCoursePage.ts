@@ -62,11 +62,11 @@ export class CreateCoursePage extends BasePage {
       '.MuiAutocomplete-popper .MuiAutocomplete-option'
     )
     this.startDateInput = this.page.locator(
-      '[data-test="Start date-datePicker-textField"] input'
+      '[data-testid="Start date-datePicker-textField"] input'
     )
     this.startTimeInput = this.page.locator('[data-testid="start-time"] input')
     this.endDateInput = this.page.locator(
-      '[data-test="End date-datePicker-textField"] input'
+      '[data-testid="End date-datePicker-textField"] input'
     )
     this.endTimeInput = this.page.locator('[data-testid="end-time"] input')
     this.minAttendeesInput = this.page.locator(
@@ -144,12 +144,14 @@ export class CreateCoursePage extends BasePage {
   }
 
   async setStartDateTime(dateTime: Date) {
+    await this.startDateInput.click()
     await this.startDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '08:00' && (await this.startTimeInput.fill(time))
   }
 
   async setEndDateTime(dateTime: Date) {
+    await this.endDateInput.click()
     await this.endDateInput.type(format(dateTime, INPUT_DATE_FORMAT))
     const time = toUiTime(dateTime)
     time !== '17:00' && (await this.endTimeInput.fill(time))

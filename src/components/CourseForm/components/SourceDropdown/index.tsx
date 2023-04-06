@@ -19,7 +19,12 @@ export const SourceDropdown = React.forwardRef(function SourceDropdown(
 
   return (
     <FormControl fullWidth variant="filled">
-      <InputLabel id="course-source-dropdown">{t('placeholder')}</InputLabel>
+      <InputLabel
+        id="course-source-dropdown"
+        data-testid="course-source-dropdown"
+      >
+        {t('placeholder')}
+      </InputLabel>
       <Select {...props} id="course-source-dropdown" ref={ref}>
         {options.map(option => (
           <MenuItem
