@@ -1,11 +1,12 @@
 import { gql } from 'graphql-request'
 
-import { ORGANIZATION } from '@app/queries/fragments'
+import { CERTIFICATE_CHANGELOG, ORGANIZATION } from '@app/queries/fragments'
 
 export const Matcher = /(query GetOrgDetails)/i
 
 export const QUERY = gql`
   ${ORGANIZATION}
+  ${CERTIFICATE_CHANGELOG}
   query GetOrgDetails($where: organization_bool_exp = {}) {
     orgs: organization(where: $where) {
       ...Organization
@@ -27,6 +28,11 @@ export const QUERY = gql`
         courseLevel
         expiryDate
         status
+        participant {
+          certificateChanges(order_by: { createdAt: desc }) {
+            ...CertificateChangelog
+          }
+        }
       }
       go1Licenses(where: { organization: $where }) {
         id

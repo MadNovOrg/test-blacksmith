@@ -1,4 +1,3 @@
-import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import {
   Box,
   Button,
@@ -57,7 +56,7 @@ export const CertificationList: React.FC<
   filtered = false,
   sorting,
   hideTitle,
-  columns = ['name', 'contact', 'organisation', 'grade'],
+  columns = ['name', 'contact', 'organisation', 'grade', 'status'],
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -191,13 +190,16 @@ export const CertificationList: React.FC<
             if (!p.certificate) return null
 
             const status = p.certificate?.status as CertificateStatus
+            const isRevoked = p.certificate.status === CertificateStatus.REVOKED
+            const isOnHold = p.certificate.status === CertificateStatus.ON_HOLD
+            const statusTooltip =
+              isRevoked || isOnHold
+                ? p.certificateChanges?.[0]?.payload?.note ?? '' // if revoked or on hold, the first changelog has the reason
+                : undefined
 
             return (
               <TableRow key={p.id} data-testid={`cert-row-${p.id}`}>
-                {checkbox.rowCell(
-                  p.id,
-                  p.certificate.status === CertificateStatus.REVOKED
-                )}
+                {checkbox.rowCell(p.id, isRevoked)}
 
                 {showCol('name') ? (
                   <TableCell data-testid="name">
@@ -257,7 +259,10 @@ export const CertificationList: React.FC<
 
                 {showCol('status') ? (
                   <TableCell data-testid="status">
-                    <CertificateStatusChip status={status} />
+                    <CertificateStatusChip
+                      status={status}
+                      tooltip={statusTooltip}
+                    />
                   </TableCell>
                 ) : null}
 
@@ -299,12 +304,6 @@ export const CertificationList: React.FC<
                     >
                       {t('components.certification-list.view-certificate')}
                     </Button>
-                    {status === CertificateStatus.ON_HOLD ? (
-                      <WarningAmberIcon
-                        color="warning"
-                        sx={{ marginLeft: '0.2em' }}
-                      />
-                    ) : null}
                   </Box>
                 </TableCell>
               </TableRow>

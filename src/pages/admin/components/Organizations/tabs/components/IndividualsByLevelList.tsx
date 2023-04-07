@@ -125,6 +125,14 @@ export const IndividualsByLevelList: React.FC<
             )
             const certificationStatus =
               certification?.status as CertificateStatus
+            const isRevoked = certificationStatus === CertificateStatus.REVOKED
+            const isOnHold = certificationStatus === CertificateStatus.ON_HOLD
+            const statusTooltip =
+              isRevoked || isOnHold
+                ? certification?.participant?.certificateChanges[0]?.payload
+                    ?.note
+                : undefined
+
             return (
               <TableRow key={profile.id} sx={{ backgroundColor: 'white' }}>
                 <TableCell>
@@ -162,7 +170,10 @@ export const IndividualsByLevelList: React.FC<
                 </TableCell>
                 {courseLevel ? (
                   <TableCell>
-                    <CertificateStatusChip status={certificationStatus} />
+                    <CertificateStatusChip
+                      status={certificationStatus}
+                      tooltip={statusTooltip}
+                    />
                     <Typography variant="body2">
                       {certificationStatus !== CertificateStatus.REVOKED &&
                         t(

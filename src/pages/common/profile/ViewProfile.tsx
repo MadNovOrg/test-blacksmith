@@ -506,6 +506,10 @@ export const ViewProfilePage: React.FC<
                             {certificate.status ? (
                               <CertificateStatusChip
                                 status={certificate.status as CertificateStatus}
+                                tooltip={
+                                  certificate.participant?.certificateChanges[0]
+                                    ?.payload?.note
+                                }
                               />
                             ) : null}
                             {certificate.status !==

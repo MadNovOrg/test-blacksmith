@@ -173,6 +173,7 @@ type CertificateInfoProps = {
   certificationNumber: string
   dateIssued: string
   status: CertificateStatus
+  statusTooltip?: string
   expireHoldDate?: string
   onShowChangelogModal: VoidFunction
 }
@@ -187,6 +188,7 @@ const CertificateInfo: React.FC<
   certificationNumber,
   dateIssued,
   status,
+  statusTooltip,
   expireHoldDate,
   onShowChangelogModal,
 }) => {
@@ -295,7 +297,10 @@ const CertificateInfo: React.FC<
                 {_t('status')}
               </Typography>
               <Box display="flex" alignItems="center">
-                <CertificateStatusChip status={status} />
+                <CertificateStatusChip
+                  status={status}
+                  tooltip={statusTooltip}
+                />
                 {isOnHold ? (
                   <Typography variant="body2" sx={{ ml: 1 }}>
                     {t(`on-hold-until`, {
@@ -463,6 +468,12 @@ export const CourseCertification: React.FC<
   const courseDeliveryType = courseParticipant?.course.deliveryType
 
   const isRevoked = certificate.status === CertificateStatus.REVOKED
+  const isOnHold = certificate.status === CertificateStatus.ON_HOLD
+
+  const statusTooltip =
+    isRevoked || isOnHold
+      ? certificate.participant.certificateChanges[0].payload.note
+      : ''
 
   return (
     <Box>
@@ -560,6 +571,7 @@ export const CourseCertification: React.FC<
               certificationNumber={certificationNumber}
               dateIssued={certificate.certificationDate}
               status={certificate.status as CertificateStatus}
+              statusTooltip={statusTooltip}
               expireHoldDate={holdRequest ? holdRequest.expiry_date : undefined}
               onShowChangelogModal={() => setShowChangelogModal(true)}
             />

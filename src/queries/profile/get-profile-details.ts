@@ -1,10 +1,15 @@
 import { gql } from 'graphql-request'
 
-import { CERTIFICATE, PROFILE } from '@app/queries/fragments'
+import {
+  CERTIFICATE,
+  CERTIFICATE_CHANGELOG,
+  PROFILE,
+} from '@app/queries/fragments'
 
 export const QUERY = gql`
   ${PROFILE}
   ${CERTIFICATE}
+  ${CERTIFICATE_CHANGELOG}
   query GetProfileDetails(
     $profileId: uuid!
     $withGo1Licenses: Boolean = false
@@ -82,6 +87,9 @@ export const QUERY = gql`
       ...Certificate
       participant {
         grade
+        certificateChanges(order_by: { createdAt: desc }) {
+          ...CertificateChangelog
+        }
       }
     }
     upcomingCourses: course(

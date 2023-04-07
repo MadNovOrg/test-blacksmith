@@ -1,6 +1,10 @@
 import { gql } from 'graphql-request'
 
-import { CERTIFICATE, COURSE } from '@app/queries/fragments'
+import {
+  CERTIFICATE,
+  CERTIFICATE_CHANGELOG,
+  COURSE,
+} from '@app/queries/fragments'
 import { CourseParticipant, SortOrder } from '@app/types'
 
 export type ResponseType = {
@@ -23,6 +27,7 @@ export type ParamsType = {
 export const QUERY = gql`
   ${COURSE}
   ${CERTIFICATE}
+  ${CERTIFICATE_CHANGELOG}
   query CourseParticipants(
     $limit: Int
     $offset: Int
@@ -64,6 +69,9 @@ export const QUERY = gql`
           name
           id
         }
+      }
+      certificateChanges(order_by: { createdAt: desc }) {
+        ...CertificateChangelog
       }
     }
     courseParticipantsAggregation: course_participant_aggregate(where: $where) {

@@ -512,7 +512,7 @@ export type SearchTrainer = {
 export type CourseCertificateChangelog = {
   oldGrade: Grade
   newGrade: Grade
-  notes: string
+  payload: { note?: string }
   author: Profile
   participant: CourseParticipant
 } & Base

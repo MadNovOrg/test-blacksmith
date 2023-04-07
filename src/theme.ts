@@ -61,6 +61,7 @@ declare module '@mui/material/styles' {
     secondaryGrey: PaletteOptions['primary']
     perfume: PaletteOptions['primary']
     neonBlue: PaletteOptions['primary']
+    critical: PaletteOptions['primary']
   }
 }
 
@@ -76,6 +77,7 @@ declare module '@mui/material/Chip' {
     gray: true
     perfume: true
     neonBlue: true
+    critical: true
   }
 }
 
@@ -184,6 +186,10 @@ const theme = createTheme({
       main: '#D32F2F',
       light: '#FAE6E6',
       dark: '#990F0F',
+    },
+    critical: {
+      main: '#FAE6E6',
+      contrastText: '#990F0F',
     },
     success: {
       main: '#9EB934',

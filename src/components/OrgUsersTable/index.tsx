@@ -209,6 +209,9 @@ export const OrgUsersTable: React.FC<
                     {filteredCerts.map(cert => {
                       const certificationStatus =
                         cert?.status as CertificateStatus
+                      const statusTooltip =
+                        cert.participant?.certificateChanges[0]?.payload?.note
+
                       return (
                         <Box
                           key={cert.id}
@@ -216,7 +219,10 @@ export const OrgUsersTable: React.FC<
                           alignItems="center"
                           py={1}
                         >
-                          <CertificateStatusChip status={certificationStatus} />
+                          <CertificateStatusChip
+                            status={certificationStatus}
+                            tooltip={statusTooltip}
+                          />
                           <Typography variant="body2" ml={1}>
                             {t(
                               `common.certificates.${cert.courseLevel.toLowerCase()}`
