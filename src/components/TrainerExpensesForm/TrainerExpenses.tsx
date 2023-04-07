@@ -2,13 +2,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {
+  Box,
   Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
   Grid,
   InputLabel,
-  Stack,
   Switch,
   TextField,
   Typography,
@@ -201,7 +201,7 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
     validTransport[validTransport.length - 1].method !== TransportMethod.NONE
 
   return (
-    <Stack spacing={0} ml={2} mt={3}>
+    <Box p={2} sx={{ background: theme.palette.common.white }}>
       <Typography fontWeight="600">{trainer.fullName}</Typography>
 
       {transport?.map((entry, idx) =>
@@ -426,25 +426,22 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
       )}
 
       {showAddTripButton ? (
-        <Button
-          variant="text"
-          sx={{
-            marginTop: theme.spacing(4),
-            marginLeft: theme.spacing(2),
-            width: 'fit-content',
-          }}
-          startIcon={<AddIcon />}
-          onClick={() => {
-            const idx = transport?.length ?? 0
-            const name: `transport.${number}` = `transport.${idx}`
-            const newEntry = { method: TransportMethod.NONE }
-            setValue(name, newEntry)
-            setDisplayAccommodation({ ...displayAccommodation, [idx]: false })
-          }}
-          data-testid="add-trip-button"
-        >
-          {t('pages.create-course.trainer-expenses.another-trip')}
-        </Button>
+        <Box>
+          <Button
+            variant="text"
+            startIcon={<AddIcon />}
+            onClick={() => {
+              const idx = transport?.length ?? 0
+              const name: `transport.${number}` = `transport.${idx}`
+              const newEntry = { method: TransportMethod.NONE }
+              setValue(name, newEntry)
+              setDisplayAccommodation({ ...displayAccommodation, [idx]: false })
+            }}
+            data-testid="add-trip-button"
+          >
+            {t('pages.create-course.trainer-expenses.another-trip')}
+          </Button>
+        </Box>
       ) : null}
 
       {miscellaneous?.map((entry, idx) =>
@@ -524,6 +521,6 @@ export const TrainerExpenses: React.FC<React.PropsWithChildren<Props>> = ({
       >
         {t('pages.create-course.trainer-expenses.miscellaneous-costs')}
       </Button>
-    </Stack>
+    </Box>
   )
 }

@@ -75,32 +75,34 @@ const TrainerExpensesForm: React.FC<React.PropsWithChildren<Props>> = ({
   }, [formValues, form.formState, onChange])
 
   return (
-    <Stack component="form" spacing={5} data-testid="TrainerExpenses-form">
+    <Box component="form" data-testid="TrainerExpenses-form">
       <Box>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" mb={2}>
           {t('pages.create-course.trainer-expenses.title')}
         </Typography>
 
-        {trainers.map(trainer => (
-          <Box
-            data-testid={`trainer-${trainer.profile_id}`}
-            key={trainer.profile_id}
-          >
-            <Controller
-              name={`expenses.${trainer.profile_id}`}
-              control={form.control}
-              render={({ field }) => (
-                <TrainerExpenses
-                  trainer={trainer}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </Box>
-        ))}
+        <Stack spacing={3}>
+          {trainers.map(trainer => (
+            <Box
+              data-testid={`trainer-${trainer.profile_id}`}
+              key={trainer.profile_id}
+            >
+              <Controller
+                name={`expenses.${trainer.profile_id}`}
+                control={form.control}
+                render={({ field }) => (
+                  <TrainerExpenses
+                    trainer={trainer}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </Box>
+          ))}
+        </Stack>
       </Box>
-    </Stack>
+    </Box>
   )
 }
 

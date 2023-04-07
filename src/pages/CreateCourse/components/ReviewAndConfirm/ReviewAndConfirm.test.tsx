@@ -1,10 +1,10 @@
-/* eslint-disable jest/no-conditional-expect */
-import { add } from 'date-fns'
+import { add, addHours } from 'date-fns'
 import React from 'react'
 import useSWR from 'swr'
 
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
+  CourseLevel,
   CourseType,
   Currency,
   ExpensesInput,
@@ -12,9 +12,9 @@ import {
   TransportMethod,
   ValidCourseInput,
 } from '@app/types'
-import { courseToCourseInput, roundToTwoDecimals } from '@app/util'
+import { courseToCourseInput, getTrainerCarCostPerMile } from '@app/util'
 
-import { render, screen, waitFor, within } from '@test/index'
+import { formatCurrency, render, screen, waitFor, within } from '@test/index'
 import {
   buildCourse,
   buildCourseSchedule,
@@ -41,22 +41,6 @@ jest.mock('@app/hooks/use-fetcher', () => ({
   useFetcher: () => mockFetcher,
 }))
 mockFetcher.mockReturnValue({})
-
-const formatCurrency = (v: number): string => {
-  const [integer, decimal] = roundToTwoDecimals(v).toFixed(2).split('.')
-
-  let result = ''
-  for (let i = integer.length - 1; i >= 0; --i) {
-    const c = integer[i]
-    if ((integer.length - i - 1) % 3 === 0 && integer.length - i - 1 > 0) {
-      result = `,${result}`
-    }
-
-    result = `${c}${result}`
-  }
-
-  return `£${result}.${decimal}`
-}
 
 const schedule = buildCourseSchedule({
   overrides: {
@@ -138,6 +122,23 @@ describe('component: ReviewAndConfirm', () => {
   })
 
   it('renders course summary if course data is in context', async () => {
+    const schedule = buildCourseSchedule({
+      overrides: {
+        start: new Date(2023, 1, 1).toISOString(),
+        end: addHours(new Date(2023, 1, 1), 8).toISOString(),
+      },
+    })
+
+    const courseData = courseToCourseInput(
+      buildCourse({
+        overrides: {
+          max_participants: 100,
+          schedule: [schedule],
+          level: CourseLevel.Level_1,
+        },
+      })
+    ) as ValidCourseInput
+
     mockSWR.mockReturnValue({
       data: {
         coursePricing: [
@@ -169,147 +170,232 @@ describe('component: ReviewAndConfirm', () => {
       { auth: { activeRole: RoleName.TT_ADMIN } }
     )
 
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('ReviewAndConfirm-page-content')
-      ).toBeInTheDocument()
-    })
-
     expect(
-      screen.queryByTestId('ReviewAndConfirm-alert')
-    ).not.toBeInTheDocument()
-
-    expect(screen.queryByText(/8 hours/)).toBeInTheDocument()
-    expect(
-      screen.queryByText(courseData.salesRepresentative.fullName, {
-        exact: false,
-      })
-    ).toBeInTheDocument()
-    expect(screen.queryByText(/810A [A-Z][a-z]{2}\d{2}/)).toBeInTheDocument()
-
-    let totalExpenses = 0
-    trainers.forEach(t => {
-      const { transport, miscellaneous } = expenses[t.profile_id]
-      let accommodationNightsTotal = 0
-
-      const trainerData = within(
-        screen.getByTestId(`${t.fullName}-trainer-expenses`)
-      )
-
-      transport
-        .filter(({ method }) => method !== TransportMethod.NONE)
-        .forEach(({ method, value, accommodationNights, flightDays }, idx) => {
-          expect(value).not.toBeNull()
-
-          const roundValue = roundToTwoDecimals(value as number)
-
-          if (accommodationNights) {
-            accommodationNightsTotal += accommodationNights
-          }
-
-          const tripData = within(
-            trainerData.getByTestId(`${t.fullName}-trip-${idx}`)
-          )
-          switch (method) {
-            case TransportMethod.CAR:
-              expect(
-                tripData.getByText(`${formatCurrency(0.6 * roundValue)}`, {
-                  exact: false,
-                })
-              ).toBeInTheDocument()
-              expect(
-                tripData.getByText(`${roundValue} miles`)
-              ).toBeInTheDocument()
-
-              totalExpenses += roundToTwoDecimals(0.6 * roundValue)
-              break
-
-            case TransportMethod.FLIGHTS:
-              expect(flightDays).not.toBeNull()
-              expect(
-                tripData.getByText(
-                  `${flightDays} ${flightDays === 1 ? 'day' : 'days'} of travel`
-                )
-              ).toBeInTheDocument()
-            // FALLS THROUGH
-            case TransportMethod.PUBLIC:
-            case TransportMethod.PRIVATE:
-              expect(
-                tripData.getByText(`${roundValue}`, {
-                  exact: false,
-                })
-              ).toBeInTheDocument()
-
-              totalExpenses += roundValue
-              break
-
-            default:
-              break
-          }
-        })
-
-      if (accommodationNightsTotal > 0) {
-        expect(trainerData.getByText(/Accommodation/)).toBeInTheDocument()
-        expect(
-          trainerData.getByText(
-            `${formatCurrency(30 * accommodationNightsTotal)}`,
-            { exact: false }
-          )
-        ).toBeInTheDocument()
-        expect(
-          trainerData.getByText(
-            `${accommodationNightsTotal} ${
-              accommodationNightsTotal > 1 ? 'nights' : 'night'
-            }`,
-            { exact: false }
-          )
-        ).toBeInTheDocument()
-
-        totalExpenses += roundToTwoDecimals(30 * accommodationNightsTotal)
-      }
-
-      miscellaneous?.forEach(({ name, value }) => {
-        expect(name).not.toBeNull()
-        expect(value).not.toBeNull()
-
-        const roundValue = roundToTwoDecimals(value as number)
-
-        expect(
-          trainerData.getByText(name as string, { exact: false })
-        ).toBeInTheDocument()
-        expect(
-          trainerData.getByText(`${formatCurrency(roundValue)}`, {
-            exact: false,
-          })
-        ).toBeInTheDocument()
-
-        totalExpenses += roundValue
-      })
-    })
-
-    expect(screen.getByText(/Trainer expenses total/)).toBeInTheDocument()
-    expect(screen.getByTestId('trainer-total-expenses')).toHaveTextContent(
-      formatCurrency(totalExpenses)
+      screen.getByTestId('course-title-duration').textContent
+    ).toMatchInlineSnapshot(
+      `"Positive Behaviour Training: Level One  - 8 hours"`
     )
 
-    expect(screen.getByText(/Course Cost/)).toBeInTheDocument()
-    expect(screen.getByText('£1,100.00', { exact: false })).toBeInTheDocument()
-
-    expect(screen.getByText(/Sub total/)).toBeInTheDocument()
-    expect(screen.getByText('£900.00', { exact: false })).toBeInTheDocument()
-
-    expect(screen.getByText(/VAT \(20%\)/)).toBeInTheDocument()
     expect(
-      screen.getByText(`${formatCurrency(totalExpenses * 0.2 + 180)}`, {
-        exact: false,
-      })
+      screen.getByTestId('course-dates').textContent
+    ).toMatchInlineSnapshot(
+      `"1 February 2023, 12:00 AM - 1 February 2023, 08:00 AM"`
+    )
+
+    expect(
+      within(screen.getByTestId('sales-row')).getByText(
+        courseData.salesRepresentative.fullName
+      )
     ).toBeInTheDocument()
 
-    expect(screen.getByText(/Amount due \(GBP\)/)).toBeInTheDocument()
     expect(
-      screen.getByText(`${formatCurrency(totalExpenses * 1.2 + 1080.0)}`, {
-        exact: false,
+      within(screen.getByTestId('account-code-row')).getByText(
+        courseData.accountCode
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('displays course costs correctly', () => {
+    const PRICING_PER_PARTICIPANT = 100
+    const NUM_OF_PARTICIPANTS = 10
+    const schedule = buildCourseSchedule({
+      overrides: {
+        start: new Date(2023, 1, 1).toISOString(),
+        end: addHours(new Date(2023, 1, 1), 8).toISOString(),
+      },
+    })
+
+    const leadTrainer = buildTrainerInput()
+    const assistantTrainer = buildTrainerInputAssistant()
+
+    const courseData = courseToCourseInput(
+      buildCourse({
+        overrides: {
+          max_participants: NUM_OF_PARTICIPANTS,
+          schedule: [schedule],
+          level: CourseLevel.Level_1,
+          freeSpaces: 2,
+        },
       })
+    ) as ValidCourseInput
+
+    const leadTrainerExpenses = buildExpensesInput({
+      overrides: {
+        transport: [
+          {
+            method: TransportMethod.CAR,
+            value: 50,
+            accommodationCost: 50,
+            accommodationNights: 1,
+          },
+        ],
+        miscellaneous: [{ name: 'Misc', value: 100 }],
+      },
+    })
+
+    const assistantTrainerExpenses = buildExpensesInput({
+      overrides: {
+        transport: [
+          { method: TransportMethod.FLIGHTS, value: 250, flightDays: 1 },
+        ],
+        miscellaneous: [{ name: 'Misc', value: 150 }],
+      },
+    })
+
+    const expenses = {
+      [leadTrainer.profile_id]: leadTrainerExpenses,
+      [assistantTrainer.profile_id]: assistantTrainerExpenses,
+    }
+
+    const trainers = [leadTrainer, assistantTrainer]
+
+    mockSWR.mockReturnValue({
+      data: {
+        coursePricing: [
+          {
+            id: '',
+            level: Course_Level_Enum.Level_1,
+            type: Course_Type_Enum.Closed,
+            blended: false,
+            reaccreditation: false,
+            priceAmount: PRICING_PER_PARTICIPANT,
+            priceCurrency: Currency.GBP,
+            xeroCode: '',
+          },
+        ],
+      },
+      mutate: jest.fn(),
+      isValidating: false,
+      error: null,
+      isLoading: false,
+    })
+
+    const trainerExpenses = 610
+    const freeSpacesDiscount = PRICING_PER_PARTICIPANT * courseData.freeSpaces
+    const coursePricing = PRICING_PER_PARTICIPANT * courseData.maxParticipants
+    const subtotal = trainerExpenses + coursePricing - freeSpacesDiscount
+    const vat = 1.2
+
+    render(
+      <CreateCourseProvider
+        initialValue={{
+          courseData,
+          expenses,
+          trainers,
+        }}
+        courseType={CourseType.CLOSED}
+      >
+        <ReviewAndConfirm />
+      </CreateCourseProvider>,
+      { auth: { activeRole: RoleName.TT_ADMIN } }
+    )
+
+    const leadTrainerRow = screen.getByTestId(
+      `trainer-${leadTrainer.profile_id}-row`
+    )
+    const leadTrainerTrip = screen.getByTestId(`${leadTrainer.fullName}-trip-0`)
+    const leadTrainerAccommodationCostsRow = screen.getByTestId(
+      `${leadTrainer.fullName}-accommodation-costs`
+    )
+    const leadTrainerAccommodationNights = screen.getByTestId(
+      `${leadTrainer.fullName}-accommodation-nights`
+    )
+
+    expect(
+      within(leadTrainerRow).getByText(leadTrainer?.fullName ?? '')
+    ).toBeInTheDocument()
+
+    expect(within(leadTrainerTrip).getByText(/car/i)).toBeInTheDocument()
+    expect(
+      within(leadTrainerTrip).getByText(
+        formatCurrency(
+          getTrainerCarCostPerMile(leadTrainerExpenses.transport[0].value)
+        )
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(leadTrainerTrip).getByText(
+        `${leadTrainerExpenses.transport[0].value} miles`
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(leadTrainerRow).getByText(/accommodation/i)
+    ).toBeInTheDocument()
+
+    expect(
+      within(leadTrainerAccommodationCostsRow).getByText(/accommodation/i)
+    ).toBeInTheDocument()
+    expect(
+      within(leadTrainerAccommodationCostsRow).getByText(formatCurrency(50))
+    ).toBeInTheDocument()
+
+    expect(
+      within(leadTrainerAccommodationNights).getByText(/1 night/i)
+    ).toBeInTheDocument()
+
+    const assistantTrainerTrip = screen.getByTestId(
+      `${assistantTrainer.fullName}-trip-0`
+    )
+
+    const assistantTrainerMiscRow = screen.getByTestId(
+      `${assistantTrainer.fullName}-misc-0`
+    )
+
+    expect(
+      within(assistantTrainerTrip).getByText(/flights/i)
+    ).toBeInTheDocument()
+
+    expect(
+      within(assistantTrainerTrip).getByText(formatCurrency(250))
+    ).toBeInTheDocument()
+
+    expect(
+      within(assistantTrainerTrip).getByText(/1 day of travel/)
+    ).toBeInTheDocument()
+
+    expect(
+      within(assistantTrainerMiscRow).getByText(/misc/i)
+    ).toBeInTheDocument()
+    expect(
+      within(assistantTrainerMiscRow).getByText(formatCurrency(150))
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('trainer-total-expenses')).getByText(
+        /trainer expenses total/i
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('trainer-total-expenses')).getByText(
+        formatCurrency(trainerExpenses)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('course-price-row')).getByText(
+        formatCurrency(PRICING_PER_PARTICIPANT * NUM_OF_PARTICIPANTS)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('free-spaces-row')).getByText(
+        `-${formatCurrency(courseData.freeSpaces * PRICING_PER_PARTICIPANT)}`
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('subtotal-row')).getByText(
+        formatCurrency(subtotal)
+      )
+    ).toBeInTheDocument()
+
+    expect(
+      within(screen.getByTestId('total-costs-row')).getByText(
+        formatCurrency(subtotal * vat)
+      )
     ).toBeInTheDocument()
   })
 })

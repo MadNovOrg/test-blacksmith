@@ -1,9 +1,10 @@
 import { Alert, Box, Grid, Stack, Typography } from '@mui/material'
 import { parseISO } from 'date-fns'
-import React, { Fragment, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import useSWR from 'swr'
 
+import { InfoPanel } from '@app/components/InfoPanel'
 import { Course_Level_Enum, Course_Type_Enum } from '@app/generated/graphql'
 import {
   QUERY as GET_COURSE_PRICING,
@@ -43,7 +44,7 @@ const PageRow: React.FC<React.PropsWithChildren<PageRowProps>> = ({
   caption,
   isBold,
   label,
-  mt = 4,
+  mt = 0,
   value,
   testId,
 }) => (
@@ -131,9 +132,16 @@ const ExpensesDetails: React.FC<
 
       const formattedAmount = t('common.currency', { amount: value })
 
-      return <PageRow label={name} value={formattedAmount} key={key} />
+      return (
+        <PageRow
+          label={name}
+          value={formattedAmount}
+          key={key}
+          testId={`${trainerName}-misc-${key}`}
+        />
+      )
     },
-    [t]
+    [t, trainerName]
   )
 
   const getRowForExpense = useCallback(
@@ -178,28 +186,36 @@ const ExpensesDetails: React.FC<
 
     return (
       <>
-        <PageRow label={aLabel} value={aFormattedAmount} />
         <PageRow
-          mt={0}
+          label={aLabel}
+          value={aFormattedAmount}
+          testId={`${trainerName}-accommodation-costs`}
+        />
+        <PageRow
           label={sLabel}
           value={sFormattedAmount}
           caption={sCaption}
+          testId={`${trainerName}-accommodation-nights`}
         />
       </>
     )
-  }, [t, expenses.transport])
+  }, [t, expenses.transport, trainerName])
 
   return (
     <Box data-testid={`${trainerName}-trainer-expenses`}>
-      <PageRow />
-      <PageRow isBold={true} label={trainerName} />
-      {expenses.transport
-        ?.filter(({ method }) => method !== TransportMethod.NONE)
-        .map((e, idx) => getRowForExpense(e, 'transport', idx))}
-      {accommodationRow}
-      {expenses.miscellaneous?.map((e, idx) =>
-        getRowForExpense(e, 'miscellaneous', idx)
-      )}
+      <Typography variant="h6" fontWeight={600} mb={1}>
+        {trainerName}
+      </Typography>
+
+      <Stack spacing={1}>
+        {expenses.transport
+          ?.filter(({ method }) => method !== TransportMethod.NONE)
+          .map((e, idx) => getRowForExpense(e, 'transport', idx))}
+        {accommodationRow}
+        {expenses.miscellaneous?.map((e, idx) =>
+          getRowForExpense(e, 'miscellaneous', idx)
+        )}
+      </Stack>
     </Box>
   )
 }
@@ -322,11 +338,10 @@ export const PageContent = () => {
       const freeSpacesDiscount = roundToTwoDecimals(
         -pricing.priceAmount * courseData.freeSpaces
       )
-      const subtotal = courseBasePrice + freeSpacesDiscount
-      const vat = roundToTwoDecimals(
-        getVatAmount(subtotal + trainerExpensesTotal)
-      )
-      const amountDue = subtotal + vat + trainerExpensesTotal
+      const subtotal =
+        courseBasePrice + freeSpacesDiscount + trainerExpensesTotal
+      const vat = roundToTwoDecimals(getVatAmount(subtotal))
+      const amountDue = subtotal + vat
 
       return [courseBasePrice, subtotal, freeSpacesDiscount, vat, amountDue]
     }, [courseData, data, trainerExpensesTotal])
@@ -346,36 +361,51 @@ export const PageContent = () => {
   }
 
   return (
-    <Stack spacing={2} data-testid="ReviewAndConfirm-page-content">
-      <Typography variant="subtitle1">
+    <Box data-testid="ReviewAndConfirm-page-content">
+      <Typography variant="subtitle1" mb={2} component="h1">
         {t('pages.create-course.review-and-confirm.title')}
       </Typography>
 
-      <Stack spacing={2} pl={2}>
-        <Typography variant="body1" fontWeight={600}>
-          {courseName} - {courseDuration}
-        </Typography>
+      <Stack spacing="2px">
+        <InfoPanel data-testid="course-info">
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            component="h6"
+            mb={1}
+            data-testid="course-title-duration"
+          >
+            {courseName} - {courseDuration}
+          </Typography>
 
-        <Typography variant="body2">
-          {t('dates.withTime', { date: startDate })} -{' '}
-          {t('dates.withTime', { date: endDate })}
-        </Typography>
+          <Typography color="dimGrey.main" data-testid="course-dates">
+            {t('dates.withTime', { date: startDate })} -{' '}
+            {t('dates.withTime', { date: endDate })}
+          </Typography>
+        </InfoPanel>
 
-        <PageRow />
-
-        <PageRow
-          label={t(
-            'pages.create-course.review-and-confirm.sales-representative'
-          )}
-          value={courseData.salesRepresentative?.fullName}
-        />
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.account-code')}
-          value={courseData.accountCode}
-        />
+        <InfoPanel>
+          <Stack spacing={1}>
+            <PageRow
+              label={t(
+                'pages.create-course.review-and-confirm.sales-representative'
+              )}
+              value={courseData.salesRepresentative?.fullName}
+              testId="sales-row"
+            />
+            <PageRow
+              label={t('pages.create-course.review-and-confirm.account-code')}
+              value={courseData.accountCode}
+              testId="account-code-row"
+            />
+          </Stack>
+        </InfoPanel>
 
         {trainers?.map(trainer => (
-          <Fragment key={trainer.profile_id}>
+          <InfoPanel
+            key={trainer.profile_id}
+            data-testid={`trainer-${trainer.profile_id}-row`}
+          >
             {expenses && expenses[trainer.profile_id] ? (
               <ExpensesDetails
                 expenses={expenses[trainer.profile_id]}
@@ -386,53 +416,59 @@ export const PageContent = () => {
                 label={t('pages.create-course.review-and-confirm.no-travels')}
               />
             )}
-          </Fragment>
+          </InfoPanel>
         ))}
 
-        <PageRow />
+        <InfoPanel>
+          <PageRow
+            label={t(
+              'pages.create-course.review-and-confirm.trainer-expenses-total'
+            )}
+            value={t('common.currency', { amount: trainerExpensesTotal })}
+            testId="trainer-total-expenses"
+          />
+        </InfoPanel>
 
-        <PageRow
-          label={t(
-            'pages.create-course.review-and-confirm.trainer-expenses-total'
-          )}
-          value={t('common.currency', { amount: trainerExpensesTotal })}
-          testId="trainer-total-expenses"
-        />
+        <InfoPanel>
+          <PageRow
+            label={t('pages.create-course.review-and-confirm.base-price')}
+            value={t('common.currency', { amount: courseBasePrice })}
+            testId="course-price-row"
+          />
+        </InfoPanel>
 
-        <PageRow />
+        <InfoPanel>
+          <Stack spacing={1}>
+            <PageRow
+              label={t('pages.create-course.review-and-confirm.free-spaces', {
+                count: courseData.freeSpaces,
+              })}
+              value={t('common.currency', { amount: freeSpacesDiscount })}
+              testId="free-spaces-row"
+            />
 
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.base-price')}
-          value={t('common.currency', { amount: courseBasePrice })}
-        />
+            <PageRow
+              label={t('pages.create-course.review-and-confirm.subtotal')}
+              value={t('common.currency', { amount: subtotal })}
+              testId="subtotal-row"
+            />
 
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.free-spaces', {
-            count: courseData.freeSpaces,
-          })}
-          value={t('common.currency', { amount: freeSpacesDiscount })}
-        />
+            <PageRow
+              label={t('pages.create-course.review-and-confirm.vat')}
+              value={t('common.currency', { amount: vat })}
+            />
+          </Stack>
+        </InfoPanel>
 
-        <PageRow />
-
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.subtotal')}
-          value={t('common.currency', { amount: subtotal })}
-        />
-
-        <PageRow
-          label={t('pages.create-course.review-and-confirm.vat')}
-          value={t('common.currency', { amount: vat })}
-        />
-
-        <PageRow />
-
-        <PageRow
-          isBold={true}
-          label={t('pages.create-course.review-and-confirm.amount-due')}
-          value={t('common.currency', { amount: amountDue })}
-        />
+        <InfoPanel>
+          <PageRow
+            isBold={true}
+            label={t('pages.create-course.review-and-confirm.amount-due')}
+            value={t('common.currency', { amount: amountDue })}
+            testId="total-costs-row"
+          />
+        </InfoPanel>
       </Stack>
-    </Stack>
+    </Box>
   )
 }
