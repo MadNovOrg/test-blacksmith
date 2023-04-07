@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { addDays, parseISO } from 'date-fns'
+import { addDays, parseISO, differenceInDays } from 'date-fns'
 import enLocale from 'date-fns/locale/en-GB'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -177,14 +177,15 @@ const PutOnHoldModal: React.FC<React.PropsWithChildren<PutOnHoldModalProps>> =
           const dateTo = zonedTimeToUtc(values.dateTo, 'GMT')
 
           if (edit) {
-            timeDiff =
-              new Date(lastChangelog?.payload?.expireDate).getTime() -
-              dateFrom.getTime()
+            timeDiff = differenceInDays(
+              dateTo,
+              new Date(lastChangelog?.payload?.expireDate)
+            )
           } else {
-            timeDiff = dateTo.getTime() - dateFrom.getTime()
+            timeDiff = differenceInDays(dateTo, dateFrom)
           }
 
-          const totalDiff = timeDiff + new Date(certificateExpiryDate).getTime()
+          const totalDiff = addDays(new Date(certificateExpiryDate), timeDiff)
           const expireDate = zonedTimeToUtc(new Date(totalDiff), 'GMT')
 
           await fetcher<
