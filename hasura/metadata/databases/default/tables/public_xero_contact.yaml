@@ -57,3 +57,18 @@ select_permissions:
         - id
       filter: {}
       allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - addresses
+        - phones
+        - email_address
+        - first_name
+        - last_name
+        - name
+        - xero_id
+        - id
+      filter:
+        email_address:
+          _eq: X-Hasura-User-Email
+      allow_aggregations: true

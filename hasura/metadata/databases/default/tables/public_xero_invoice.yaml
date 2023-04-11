@@ -116,3 +116,28 @@ select_permissions:
         - status
       filter: {}
       allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - amount_due
+        - amount_paid
+        - currency_code
+        - due_date
+        - fully_paid_on_date
+        - id
+        - invoice_number
+        - issued_date
+        - line_items
+        - reference
+        - subtotal
+        - total
+        - total_tax
+        - xero_contact_id
+        - xero_id
+      computed_fields:
+        - status
+      filter:
+        contact:
+          email_address:
+            _eq: X-Hasura-User-Email
+      allow_aggregations: true
