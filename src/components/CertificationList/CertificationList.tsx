@@ -218,8 +218,8 @@ export const CertificationList: React.FC<
 
                 {showCol('organisation') ? (
                   <TableCell data-testid="organisation">
-                    <Link href={`/organisations/${p.course.organization?.id}`}>
-                      {p.course.organization?.name}
+                    <Link href={`/organisations/${p.course?.organization?.id}`}>
+                      {p.course?.organization?.name}
                     </Link>
                   </TableCell>
                 ) : null}
@@ -252,7 +252,7 @@ export const CertificationList: React.FC<
                 {showCol('course-code') ? (
                   <TableCell data-testid="course-code">
                     <Typography variant="body2" color="grey.700">
-                      {p.course.course_code}
+                      {p.course?.course_code}
                     </Typography>
                   </TableCell>
                 ) : null}
