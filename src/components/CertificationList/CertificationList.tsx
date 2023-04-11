@@ -316,7 +316,7 @@ export const CertificationList: React.FC<
                         onClick={() =>
                           navigate(`/certification/${p.certificate?.id}`)
                         }
-                        data-testid="view-certificate"
+                        data-testid={`view-certificate-${p.course?.id}`}
                         disabled={isRevoked}
                       >
                         {isRevoked

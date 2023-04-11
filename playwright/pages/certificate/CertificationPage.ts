@@ -79,7 +79,14 @@ export class CertificationPage extends BasePage {
   }
 
   async clickFirstViewCertificate(): Promise<CertificatePage> {
-    await this.table.firstRow.locator('[data-testid=view-certificate]').click()
+    await this.table.firstRow.locator('[data-testid*=view-certificate]').click()
+    return new CertificatePage(this.page)
+  }
+
+  async clickViewCertificate(courseId: number): Promise<CertificatePage> {
+    await this.page
+      .locator(`[data-testid=view-certificate-${courseId}]`)
+      .click()
     return new CertificatePage(this.page)
   }
 

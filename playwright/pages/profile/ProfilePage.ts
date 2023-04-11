@@ -37,6 +37,7 @@ export class ProfilePage extends BasePage {
   async enterPhoneNumber(phoneNumber: string) {
     await this.phoneNumberField.clear()
     await this.phoneNumberField.type(phoneNumber)
+    await expect(this.phoneNumberField).toHaveValue(phoneNumber)
   }
 
   async clickSaveChanges() {
