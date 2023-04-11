@@ -37,6 +37,7 @@ import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 
 import {
+  extractEmails,
   formatContactAddress,
   getTrainerExpensesLineItems,
   isDiscountLineItem,
@@ -64,12 +65,12 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const course = order?.course
   const invoice = order?.invoice
 
-  const lineItemForRegistrants = useMemo(() => {
+  const registrantsLineItems = useMemo(() => {
     return course?.name
-      ? invoice?.lineItems?.find((li: XeroLineItem) =>
+      ? invoice?.lineItems?.filter((li: XeroLineItem) =>
           isRegistrantLineItem(li, course.level)
         )
-      : null
+      : []
   }, [invoice, course])
 
   const go1LicensesLineItem = useMemo(() => {
@@ -153,6 +154,10 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
   const status = invoice?.status as Xero_Invoice_Status_Enum
   const statusColor = INVOICE_STATUS_COLOR[status]
 
+  const accountCode = registrantsLineItems.length
+    ? registrantsLineItems[0].accountCode
+    : go1LicensesLineItem?.accountCode
+
   return (
     <FullHeightPage bgcolor={theme.palette.grey[100]}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -230,22 +235,50 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                     </Box>
                   </DetailsItemBox>
 
-                  {order?.registrants?.length ? (
+                  {registrantsLineItems?.length ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
-                        {order?.registrants?.map((email: string) => (
-                          <ItemRow
-                            key={email}
-                            data-testid={`order-registrant-${email}`}
-                          >
-                            <Typography color="grey.700">{email}</Typography>
-                            <Typography color="grey.700">
-                              {_t('common.currency', {
-                                amount: lineItemForRegistrants?.unitAmount,
-                              })}
-                            </Typography>
-                          </ItemRow>
-                        ))}
+                        {registrantsLineItems?.map((lineItem: XeroLineItem) => {
+                          const [email] =
+                            extractEmails(lineItem.description ?? '') ?? []
+
+                          if (!email) {
+                            return (
+                              <ItemRow
+                                key={course?.name}
+                                data-testid={`order-registrant-${course?.name}`}
+                              >
+                                <Typography color="grey.700">
+                                  {`${course?.name.trim()}, ${_t(
+                                    'dates.default',
+                                    {
+                                      date: course?.start,
+                                    }
+                                  )}, ${course?.course_code}`}
+                                </Typography>
+                                <Typography color="grey.700">
+                                  {_t('common.currency', {
+                                    amount: lineItem?.lineAmount,
+                                  })}
+                                </Typography>
+                              </ItemRow>
+                            )
+                          }
+
+                          return (
+                            <ItemRow
+                              key={email}
+                              data-testid={`order-registrant-${email}`}
+                            >
+                              <Typography color="grey.700">{email}</Typography>
+                              <Typography color="grey.700">
+                                {_t('common.currency', {
+                                  amount: lineItem?.unitAmount,
+                                })}
+                              </Typography>
+                            </ItemRow>
+                          )
+                        })}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}
@@ -412,6 +445,15 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                       </ItemRow>
                     </Stack>
                   </DetailsItemBox>
+
+                  {accountCode ? (
+                    <DetailsItemBox>
+                      <Stack spacing={2}>
+                        <Typography fontWeight={600}>Account code</Typography>
+                        <Typography color="grey.700">{accountCode}</Typography>
+                      </Stack>
+                    </DetailsItemBox>
+                  ) : null}
 
                   <DetailsItemBox>
                     <Stack spacing={2}>

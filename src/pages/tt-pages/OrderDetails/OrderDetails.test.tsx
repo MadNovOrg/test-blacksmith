@@ -141,14 +141,14 @@ describe('page: OrderDetails', () => {
             overrides: {
               quantity: 1,
               unitAmount: unitPrice,
-              description: 'Level One',
+              description: `Level One, ${user1Email}`,
             },
           }),
           buildLineItem({
             overrides: {
               quantity: 1,
               unitAmount: unitPrice,
-              description: 'Level One',
+              description: `Level One, ${user2Email}`,
             },
           }),
         ],

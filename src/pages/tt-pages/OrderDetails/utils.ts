@@ -14,7 +14,10 @@ export function isRegistrantLineItem(
   lineItem: OnlyXeroDescription | null,
   courseLevel: string
 ) {
-  return lineItem?.description?.includes(t(`course-levels.${courseLevel}`))
+  return (
+    lineItem?.description?.includes(t(`course-levels.${courseLevel}`)) &&
+    !isDiscountLineItem(lineItem)
+  )
 }
 
 export function isGo1LicensesItem(lineItem: OnlyXeroDescription | null) {
@@ -55,4 +58,12 @@ export function formatContactAddress(address: XeroAddress) {
   ]
     .filter(Boolean)
     .join(', ')
+}
+
+export function extractEmails(text: string) {
+  const matches = text.match(
+    /([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi
+  )
+
+  return matches
 }
