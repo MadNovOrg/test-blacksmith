@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import { pdf } from '@react-pdf/renderer'
@@ -198,7 +199,15 @@ export const CertificationList: React.FC<
                 : undefined
 
             return (
-              <TableRow key={p.id} data-testid={`cert-row-${p.id}`}>
+              <TableRow
+                key={p.id}
+                data-testid={`cert-row-${p.id}`}
+                sx={
+                  isRevoked
+                    ? { bgcolor: theme => theme.colors.red[50] }
+                    : undefined
+                }
+              >
                 {checkbox.rowCell(p.id, isRevoked)}
 
                 {showCol('name') ? (
@@ -287,24 +296,35 @@ export const CertificationList: React.FC<
                 ) : null}
 
                 <TableCell sx={{ width: 0 }}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="flex-start"
+                  <Tooltip
+                    title={
+                      isRevoked
+                        ? t('common.course-certificate.revoked-generic-warning')
+                        : undefined
+                    }
                   >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      sx={{ whiteSpace: 'nowrap' }}
-                      onClick={() =>
-                        navigate(`/certification/${p.certificate?.id}`)
-                      }
-                      data-testid="view-certificate"
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
                     >
-                      {t('components.certification-list.view-certificate')}
-                    </Button>
-                  </Box>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{ whiteSpace: 'nowrap' }}
+                        onClick={() =>
+                          navigate(`/certification/${p.certificate?.id}`)
+                        }
+                        data-testid="view-certificate"
+                        disabled={isRevoked}
+                      >
+                        {isRevoked
+                          ? t('common.certification-status.revoked')
+                          : t('components.certification-list.view-certificate')}
+                      </Button>
+                    </Box>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             )

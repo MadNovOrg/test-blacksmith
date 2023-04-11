@@ -27,6 +27,7 @@ declare module '@mui/material/styles' {
       purple: ColorPartial
       fuschia: ColorPartial
       grey: ColorPartial
+      red: ColorPartial
     }
   }
   // allow configuration using `createTheme`
@@ -39,6 +40,7 @@ declare module '@mui/material/styles' {
       purple?: ColorPartial
       fuschia?: ColorPartial
       grey?: ColorPartial
+      red?: ColorPartial
     }
   }
 
@@ -166,6 +168,9 @@ const theme = createTheme({
       700: '#881649',
       800: '#5C0F32',
       900: '#2C0718',
+    },
+    red: {
+      50: '#FDF5F5',
     },
   },
   palette: {
