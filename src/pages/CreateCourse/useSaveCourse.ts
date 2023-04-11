@@ -114,7 +114,7 @@ export function useSaveCourse(): {
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
-  const { profile } = useAuth()
+  const { profile, acl } = useAuth()
   const { removeDraft } = useCourseDraft(
     profile?.id ?? '',
     courseData?.type ?? CourseType.OPEN
@@ -210,7 +210,9 @@ export function useSaveCourse(): {
             ...(courseData.type === CourseType.INDIRECT &&
             go1Licensing?.prices.amountDue
               ? {
-                  [exceptions?.length ? 'tempOrders' : 'orders']: {
+                  [exceptions?.length && !acl.isAdmin()
+                    ? 'tempOrders'
+                    : 'orders']: {
                     data: [
                       {
                         registrants: [], // we are buying Go1 licenses, not registering participants
@@ -273,6 +275,7 @@ export function useSaveCourse(): {
     fetcher,
     t,
     expenses,
+    acl,
     go1Licensing,
     profile?.fullName,
     profile?.email,
