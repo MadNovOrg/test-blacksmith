@@ -56,6 +56,8 @@ insert_permissions:
   - role: sales-admin
     permission:
       check: {}
+      set:
+        email: x-hasura-User-email
       columns:
         - accept_marketing
         - accept_tcs

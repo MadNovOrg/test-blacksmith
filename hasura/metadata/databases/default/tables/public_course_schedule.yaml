@@ -102,12 +102,7 @@ select_permissions:
         - updated_at
         - id
         - venue_id
-      filter:
-        course:
-          course_type:
-            _in:
-              - CLOSED
-              - OPEN
+      filter: {}
       allow_aggregations: true
   - role: trainer
     permission:

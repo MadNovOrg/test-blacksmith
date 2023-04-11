@@ -65,6 +65,30 @@ object_relationships:
     using:
       foreign_key_constraint_on: organization_id
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      set:
+        profile_id: x-hasura-User-Id
+      columns:
+        - billing_address
+        - billing_email
+        - billing_family_name
+        - billing_given_name
+        - billing_phone
+        - client_purchase_order
+        - course_id
+        - created_at
+        - currency
+        - id
+        - organization_id
+        - payment_method
+        - promo_codes
+        - quantity
+        - registrants
+        - user
+        - xero_invoice_number
+      backend_only: false
   - role: trainer
     permission:
       check: {}

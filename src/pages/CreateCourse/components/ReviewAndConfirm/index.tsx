@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '@app/context/auth'
 import { LoadingStatus } from '@app/util'
 
 import { StepsEnum } from '../../types'
@@ -26,6 +27,7 @@ export const ReviewAndConfirm = () => {
   } = useCreateCourse()
   const { saveCourse, savingStatus } = useSaveCourse()
   const navigate = useNavigate()
+  const { acl } = useAuth()
 
   const [error, setError] = useState('')
 
@@ -41,9 +43,11 @@ export const ReviewAndConfirm = () => {
     try {
       const courseId = await saveCourse()
       completeStep(StepsEnum.REVIEW_AND_CONFIRM)
-      navigate(
-        `/registration?course_id=${courseId}&quantity=${courseData.maxParticipants}`
-      )
+      acl.isAdmin()
+        ? navigate(
+            `/registration?course_id=${courseId}&quantity=${courseData.maxParticipants}`
+          )
+        : navigate(`/manage-courses/all/${courseId}/details`)
     } catch (err) {
       console.error(err)
       setError(t('pages.create-course.review-and-confirm.unknown-error'))
@@ -51,6 +55,7 @@ export const ReviewAndConfirm = () => {
   }, [
     completeStep,
     courseData,
+    acl,
     expenses,
     navigate,
     saveCourse,
