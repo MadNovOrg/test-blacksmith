@@ -80,7 +80,11 @@ export const ResourceDetails = () => {
                         resources={resourceCategory?.resources?.nodes}
                       />
                     </Box>
-                  ) : null}
+                  ) : (
+                    <Typography sx={{ mb: 1 }}>
+                      {t('pages.resources.resource-details.empty')}
+                    </Typography>
+                  )}
 
                   {resourceCategory?.children?.nodes?.map(categoryLevelOne => (
                     <Box key={categoryLevelOne?.id} sx={{ mb: 7 }}>

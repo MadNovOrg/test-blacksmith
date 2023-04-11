@@ -231,7 +231,8 @@
     },
     "resource-details": {
       "back-to-resources": "Back to resources",
-      "search": "Search resources"
+      "search": "Search resources",
+      "empty": "No resources found"
     }
   },
   "create-course": {

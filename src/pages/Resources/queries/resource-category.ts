@@ -9,7 +9,7 @@ export const RESOURCE_CATEGORY_SUMMARY = gql`
     id
     name
     description
-    resources(where: { search: $term, orderby: { field: DATE, order: ASC } }) {
+    resources(where: { search: $term, orderby: { field: SLUG, order: ASC } }) {
       nodes {
         ...ResourceSummary
       }

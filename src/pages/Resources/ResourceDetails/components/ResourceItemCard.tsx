@@ -24,19 +24,19 @@ export const ResourceItemCard = ({ resource }: Props) => {
 
   return (
     <Card sx={{ boxShadow: 'none', p: 1 }}>
-      <Box display="flex" alignItems="center">
-        {resourceType && iconsByResourceType[resourceType]}
-        <Typography
-          fontWeight={600}
-          sx={{ flexGrow: 1, mx: 2 }}
-          lineHeight="28px"
-        >
-          {resource.title}
-        </Typography>
-        <Link target="_blank" component={'a'} href={attachmentURL ?? ''}>
+      <Link target="_blank" component={'a'} href={attachmentURL ?? ''}>
+        <Box display="flex" alignItems="center">
+          {resourceType && iconsByResourceType[resourceType]}
+          <Typography
+            fontWeight={600}
+            sx={{ flexGrow: 1, mx: 2 }}
+            lineHeight="28px"
+          >
+            {resource.title}
+          </Typography>
           <LaunchIcon fontSize="small" />
-        </Link>
-      </Box>
+        </Box>
+      </Link>
     </Card>
   )
 }
