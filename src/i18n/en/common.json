@@ -377,7 +377,7 @@
       "to-date-greater-error": "To date must be greater than from",
       "select-reason": "Select a reason",
       "select-reason-error": "Please select a reason",
-      "note-error": "Please ender notes",
+      "note-error": "Please enter notes",
       "add-updated-notes": "Add Updated Notes",
       "reasons": {
         "maternity": "Maternity leave",
