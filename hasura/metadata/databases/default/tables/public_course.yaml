@@ -252,11 +252,7 @@ insert_permissions:
       backend_only: false
   - role: tt-admin
     permission:
-      check:
-        course_type:
-          _in:
-            - CLOSED
-            - OPEN
+      check: {}
       set:
         created_by_id: x-hasura-User-Id
       columns:
@@ -509,11 +505,7 @@ select_permissions:
         - end
         - freeSlots
         - start
-      filter:
-        course_type:
-          _in:
-            - CLOSED
-            - OPEN
+      filter: {}
       allow_aggregations: true
   - role: tt-ops
     permission:
@@ -777,11 +769,7 @@ update_permissions:
         - source
         - special_instructions
         - updated_at
-      filter:
-        course_type:
-          _in:
-            - OPEN
-            - CLOSED
+      filter: {}
       check: null
   - role: tt-ops
     permission:
