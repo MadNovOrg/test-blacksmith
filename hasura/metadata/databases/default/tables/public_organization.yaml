@@ -55,6 +55,46 @@ array_relationships:
           schema: public
           name: organization_member
 insert_permissions:
+  - role: finance
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      backend_only: false
+  - role: ld
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      backend_only: false
   - role: sales-admin
     permission:
       check: {}
@@ -106,15 +146,66 @@ insert_permissions:
       backend_only: false
   - role: user
     permission:
-      check: {}
+      check:
+        members:
+          _and:
+            - is_admin:
+                _eq: true
+            - profile_id:
+                _eq: X-Hasura-User-Id
       columns:
         - address
         - attributes
         - name
         - trust_name
         - trust_type
+        - xero_contact_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - region
+        - sector
+        - trust_name
+        - trust_type
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id
+      filter: {}
+  - role: ld
+    permission:
+      columns:
+        - name
+        - go1_licenses
+        - reserved_go1_licenses
+        - address
+        - attributes
+        - contact_details
+        - original_record
+        - preferences
+        - tags
+        - geo_coordinates
+        - region
+        - sector
+        - trust_name
+        - trust_type
+        - xero_contact_id
+        - created_at
+        - updated_at
+        - id
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -247,6 +338,48 @@ select_permissions:
         - xero_contact_id
       filter: {}
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      filter: {}
+      check: {}
+  - role: ld
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      filter: {}
+      check: {}
   - role: sales-admin
     permission:
       columns:
@@ -285,6 +418,27 @@ update_permissions:
         - xero_contact_id
       filter: {}
       check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - id
+        - name
+        - original_record
+        - preferences
+        - region
+        - reserved_go1_licenses
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      filter: {}
+      check: {}
   - role: user
     permission:
       columns:

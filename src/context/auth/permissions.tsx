@@ -180,7 +180,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       return roles.some(r => r === auth.activeRole)
     },
     canCreateOrgs: () => {
-      const roles = [RoleName.TT_ADMIN]
+      const roles = [
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+        RoleName.FINANCE,
+        RoleName.LD,
+      ]
       return roles.some(r => r === auth.activeRole)
     },
 

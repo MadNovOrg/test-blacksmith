@@ -177,24 +177,25 @@ export const Organizations: React.FC<
               justifyContent="flex-end"
               mb={2}
             >
+              {acl.isTTAdmin() ? (
+                <Button
+                  variant="contained"
+                  data-testid="export-blended-learning-licence-summary"
+                  onClick={() => setExportShowModal(true)}
+                  sx={{ marginRight: '1em' }}
+                >
+                  {t('pages.admin.organizations.export.blended-learning')}
+                </Button>
+              ) : null}
+
               {acl.canCreateOrgs() ? (
-                <>
-                  <Button
-                    variant="contained"
-                    data-testid="export-blended-learning-licence-summary"
-                    onClick={() => setExportShowModal(true)}
-                    sx={{ marginRight: '1em' }}
-                  >
-                    {t('pages.admin.organizations.export.blended-learning')}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    data-testid="add-new-org-button"
-                    onClick={() => navigate('/organisations/new')}
-                  >
-                    {t('pages.admin.organizations.add-new-organization')}
-                  </Button>
-                </>
+                <Button
+                  variant="contained"
+                  data-testid="add-new-org-button"
+                  onClick={() => navigate('/organisations/new')}
+                >
+                  {t('pages.admin.organizations.add-new-organization')}
+                </Button>
               ) : null}
             </Box>
             <DialogExportBlended
