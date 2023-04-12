@@ -139,7 +139,16 @@ update_permissions:
                       _eq: true
       check: null
 delete_permissions:
+  - role: ld
+    permission:
+      filter: {}
+  - role: sales-admin
+    permission:
+      filter: {}
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}
   - role: user
