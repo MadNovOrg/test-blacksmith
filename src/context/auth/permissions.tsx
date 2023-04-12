@@ -14,6 +14,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
 
+    isSalesAdmin: () => activeRole === RoleName.SALES_ADMIN,
+
     isTrainer: () => activeRole === RoleName.TRAINER,
 
     isLD: () => activeRole === RoleName.LD,

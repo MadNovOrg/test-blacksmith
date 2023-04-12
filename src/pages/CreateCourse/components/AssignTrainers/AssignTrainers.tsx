@@ -156,7 +156,10 @@ export const AssignTrainers = () => {
         nextPage = '../trainer-expenses'
       } else {
         const id = await saveCourse()
-        nextPage = '/courses'
+        nextPage =
+          acl.isTTAdmin() || acl.isSalesAdmin()
+            ? `/courses/${id}/details`
+            : '/courses'
 
         if (!id) {
           return
@@ -166,7 +169,7 @@ export const AssignTrainers = () => {
       completeStep(StepsEnum.ASSIGN_TRAINER)
       navigate(nextPage)
     }
-  }, [completeStep, courseData, navigate, saveCourse, trainers])
+  }, [completeStep, courseData, navigate, saveCourse, trainers, acl])
 
   const handleSubmitButtonClick = useCallback(async () => {
     if (courseData) {
