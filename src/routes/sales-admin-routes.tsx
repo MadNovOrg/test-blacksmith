@@ -75,6 +75,8 @@ const MyCourses = React.lazy(() =>
   }))
 )
 
+const ResourcesRoutes = React.lazy(() => import('./resources'))
+
 const SalesAdminRoutes = () => {
   return (
     <Routes>
@@ -127,6 +129,8 @@ const SalesAdminRoutes = () => {
           <Route path="courses" element={<AvailableCourses />} />
         </Route>
       </Route>
+
+      <Route path="resources/*" element={<ResourcesRoutes />} />
 
       <Route path="certifications" element={<Certifications />} />
 
