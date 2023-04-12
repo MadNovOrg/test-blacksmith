@@ -76,7 +76,7 @@ export const OrgIndividualsTab: React.FC<
                     data-testid="tabUsers"
                   />
                   <Tab
-                    label={t('pages.org-details.tabs.users.tabs.pending', {
+                    label={t('pages.org-details.tabs.users.tabs.invites', {
                       number: stats[orgId]?.pendingInvites?.count ?? 0,
                     })}
                     value={OrgIndividualsSubtabs.INVITES}

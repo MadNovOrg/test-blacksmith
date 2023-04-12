@@ -1006,7 +1006,7 @@
         "title": "Individuals",
         "tabs": {
           "individuals": "Individuals ({{number}})",
-          "pending": "Pending ({{number}})"
+          "invites": "Invites ({{number}})"
         },
         "cols-name": "Name",
         "cols-certification": "Certification",
