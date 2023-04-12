@@ -261,7 +261,9 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 t
               ),
               deliveryType: courseData.deliveryType,
-              level: courseData.courseLevel,
+              level: acl.canEditWithoutRestrictions(course.type)
+                ? courseData.courseLevel
+                : undefined,
               reaccreditation: courseData.reaccreditation,
               go1Integration: courseData.blendedLearning,
               freeSpaces: courseData.freeSpaces,
