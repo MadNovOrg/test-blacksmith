@@ -51,10 +51,16 @@ export type Discounts = Record<
   Pick<Promo_Code, 'amount' | 'type'> & { amountCurrency: number }
 >
 
+export type ParticipantInput = {
+  firstName: string
+  lastName: string
+  email: string
+}
+
 type CourseDetails = GetTempProfileResponseType['tempProfiles'][0]['course']
 
 type State = {
-  emails: string[]
+  participants: ParticipantInput[]
   quantity: number
   price: number
   currency: Currency
@@ -183,7 +189,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
     setCourse(profile.course)
     setBooking({
       quantity: profile.quantity,
-      emails: [],
+      participants: [],
       price: pricing.priceAmount,
       currency: pricing.priceCurrency,
       vat: 20,
@@ -302,7 +308,7 @@ export const BookingProvider: React.FC<React.PropsWithChildren<Props>> = ({
         billingEmail: booking.invoiceDetails?.email ?? '',
         billingPhone: booking.invoiceDetails?.phone ?? '',
         clientPurchaseOrder: booking.invoiceDetails?.purchaseOrder ?? '',
-        registrants: booking.emails,
+        registrants: booking.participants,
         organizationId: booking.orgId,
         promoCodes,
       },

@@ -1,30 +1,29 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Alert,
-  Autocomplete,
   Box,
   Button,
-  Chip,
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
+  Grid,
   InputLabel,
   MenuItem,
   NativeSelect,
   Radio,
   RadioGroup,
   TextField,
-  Checkbox,
   Typography,
 } from '@mui/material'
 import { map } from 'lodash-es'
-import React, { useEffect, useMemo, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import {
+  Control,
   Controller,
+  FieldErrors,
   FormProvider,
   useForm,
-  Control,
-  FieldErrors,
 } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -36,11 +35,11 @@ import {
 } from '@app/components/InvoiceForm'
 import { OrgSelector } from '@app/components/OrgSelector'
 import { PaymentMethod } from '@app/generated/graphql'
-import { yup } from '@app/schemas'
-import { CourseType, InvoiceDetails, CourseLevel } from '@app/types'
-import { getFieldError, requiredMsg } from '@app/util'
+import { schemas, yup } from '@app/schemas'
+import { CourseLevel, CourseType, InvoiceDetails } from '@app/types'
+import { requiredMsg } from '@app/util'
 
-import { Sector, useBooking } from '../BookingContext'
+import { ParticipantInput, Sector, useBooking } from '../BookingContext'
 import { PromoCode } from '../PromoCode'
 
 export type AttendeeValidCertificateProps = {
@@ -130,7 +129,7 @@ const isAttendeeValidCertificateMandatory = (
 
 type FormInputs = {
   quantity: number
-  emails: string[]
+  participants: ParticipantInput[]
   orgId: string
   orgName: string
   sector: Sector
@@ -176,13 +175,14 @@ export const CourseBookingDetails: React.FC<
     return yup.object({
       quantity: yup.number().required(),
 
-      emails: yup
+      participants: yup
         .array()
         .of(
-          yup
-            .string()
-            .email(t('validation-errors.email-invalid'))
-            .required(t('validation-errors.email-invalid'))
+          yup.object({
+            firstName: yup.string().required(requiredMsg(t, 'first-name')),
+            lastName: yup.string().required(requiredMsg(t, 'last-name')),
+            email: schemas.email(t).required(requiredMsg(t, 'email')),
+          })
         )
         .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
         .required(requiredMsg(t, 'emails')),
@@ -231,7 +231,7 @@ export const CourseBookingDetails: React.FC<
     resolver: yupResolver(schema),
     defaultValues: {
       quantity: booking.quantity,
-      emails: booking.emails,
+      participants: booking.participants,
       orgId: booking.orgId,
       orgName: booking.orgName,
       sector: booking.sector,
@@ -248,7 +248,7 @@ export const CourseBookingDetails: React.FC<
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors },
     watch,
     control,
     setValue,
@@ -277,22 +277,30 @@ export const CourseBookingDetails: React.FC<
 
   const positionOptions = values.sector ? positions[values.sector] : []
 
-  const emailsOnChange = (_: unknown, values: string[]) => {
-    let processed: string[] = []
-    values.forEach(value => {
-      processed = processed.concat(
-        value
-          .split(/[,\s;]/)
-          .map(s => s.trim())
-          .filter(Boolean)
-      )
-    })
-    setValue('emails', processed, { shouldValidate: isSubmitted })
-  }
-
   const showAttendeeValidCertificate = isAttendeeValidCertificateMandatory(
     course.level,
     course.type
+  )
+
+  useEffect(() => {
+    if (booking.quantity !== booking.participants.length) {
+      const participants = booking.participants.slice(0, booking.quantity)
+      for (let i = 0; i < booking.quantity - booking.participants.length; i++) {
+        participants.push({
+          firstName: '',
+          lastName: '',
+          email: '',
+        })
+      }
+      setBooking({ participants })
+    }
+  }, [booking.quantity, booking.participants, setBooking])
+
+  const getParticipantError = useCallback(
+    (index: number, field: keyof ParticipantInput) => {
+      return errors.participants?.[index]?.[field]
+    },
+    [errors.participants]
   )
 
   return (
@@ -500,59 +508,67 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4}>
-          <Autocomplete
-            multiple
-            id="emails"
-            options={[] as string[]}
-            value={values?.emails}
-            freeSolo
-            autoSelect
-            onChange={emailsOnChange}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                // disable key rule because getTagProps already sets correct key
-                // eslint-disable-next-line react/jsx-key
-                <Chip
-                  variant="filled"
-                  label={option}
-                  {...getTagProps({ index })}
-                />
-              ))
-            }
-            renderInput={params => (
-              <TextField
-                {...params}
-                variant="filled"
-                label={t('enter-emails')}
-                placeholder={t('emails')}
-                inputProps={{ ...params.inputProps, sx: { height: 40 } }}
-                sx={{ bgcolor: 'grey.100' }}
-                error={!!errors.emails}
-                helperText={
-                  errors.emails ? (
-                    <Box
-                      component="span"
-                      display="flex"
-                      justifyContent="space-between"
-                      bgcolor="common.white"
-                    >
-                      <Typography variant="caption">
-                        {values?.emails?.length} / {values.quantity}
-                      </Typography>
-
-                      <Typography variant="caption">
-                        {getFieldError(errors.emails)}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Typography variant="caption">
-                      {values?.emails?.length} / {values.quantity}
-                    </Typography>
-                  )
-                }
-              />
-            )}
-          />
+          {booking.participants.map((participant, index) => (
+            <Box key={`participant-${index}`} display="flex" gap={1}>
+              <Typography p={1}>{index + 1}</Typography>
+              <Grid container spacing={3} mb={3}>
+                <Grid item md={12}>
+                  <TextField
+                    label={t('email')}
+                    variant="filled"
+                    placeholder={t('email-placeholder')}
+                    {...register(`participants.${index}.email`)}
+                    inputProps={{
+                      'data-testid': `participant-${index}-input-email`,
+                    }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    error={!!getParticipantError(index, 'email')}
+                    helperText={
+                      getParticipantError(index, 'email')?.message ?? ''
+                    }
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('first-name')}
+                    variant="filled"
+                    placeholder={t('first-name-placeholder')}
+                    {...register(`participants.${index}.firstName`)}
+                    inputProps={{
+                      'data-testid': `participant-${index}-input-first-name`,
+                    }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    error={!!getParticipantError(index, 'firstName')}
+                    helperText={
+                      getParticipantError(index, 'firstName')?.message ?? ''
+                    }
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item md={6}>
+                  <TextField
+                    label={t('surname')}
+                    variant="filled"
+                    placeholder={t('surname-placeholder')}
+                    {...register(`participants.${index}.lastName`)}
+                    inputProps={{
+                      'data-testid': `participant-${index}-input-surname`,
+                    }}
+                    sx={{ bgcolor: 'grey.100' }}
+                    error={!!getParticipantError(index, 'lastName')}
+                    helperText={
+                      getParticipantError(index, 'lastName')?.message ?? ''
+                    }
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
 
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}\n`}

@@ -485,6 +485,12 @@ input CanApplyPromoCodeInput {
   code: String!
 }
 
+input CreateOrderParticipantInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+}
+
 input CreateOrderInput {
   courseId: Int!
   quantity: Int!
@@ -495,7 +501,7 @@ input CreateOrderInput {
   billingEmail: String!
   billingPhone: String!
   clientPurchaseOrder: String!
-  registrants: [String!]!
+  registrants: [CreateOrderParticipantInput!]!
   organizationId: String!
   promoCodes: [String!]!
 }

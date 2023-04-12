@@ -1445,12 +1445,18 @@ export type CreateOrderInput = {
   paymentMethod: PaymentMethod;
   promoCodes: Array<Scalars['String']>;
   quantity: Scalars['Int'];
-  registrants: Array<Scalars['String']>;
+  registrants: Array<CreateOrderParticipantInput>;
 };
 
 export type CreateOrderOutput = {
   __typename?: 'CreateOrderOutput';
   id: Scalars['uuid'];
+};
+
+export type CreateOrderParticipantInput = {
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
 };
 
 /** Input for the createPage mutation */

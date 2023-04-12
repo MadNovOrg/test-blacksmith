@@ -18,8 +18,8 @@ import { useAuth } from '@app/context/auth'
 import { PaymentMethod } from '@app/generated/graphql'
 import {
   formatCourseVenue,
-  isOrderDueDateImmediate,
   getOrderDueDate,
+  isOrderDueDateImmediate,
 } from '@app/util'
 
 import { useBooking } from '../BookingContext'
@@ -194,9 +194,16 @@ export const CourseBookingReview: React.FC<
         <Typography gutterBottom fontWeight="600">
           {t('registrants')}
         </Typography>
-        {booking.emails.map(email => (
-          <Box key={email} display="flex" justifyContent="space-between" mb={1}>
-            <Typography color="grey.700">{email}</Typography>
+        {booking.participants.map(participant => (
+          <Box
+            key={participant.email}
+            display="flex"
+            justifyContent="space-between"
+            mb={1}
+          >
+            <Typography color="grey.700">
+              {participant.firstName} {participant.lastName} {participant.email}
+            </Typography>
             <Typography color="grey.700">
               {t('currency', {
                 amount: booking.price,

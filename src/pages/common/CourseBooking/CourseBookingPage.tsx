@@ -27,7 +27,7 @@ const BookingRoutes: React.FC<React.PropsWithChildren<unknown>> = () => {
 
         <Route path="details" element={<CourseBookingDetails />} />
 
-        {booking.emails?.length ? (
+        {booking.participants?.length ? (
           <Route path="review" element={<CourseBookingReview />} />
         ) : null}
 
