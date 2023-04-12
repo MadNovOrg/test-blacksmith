@@ -1,24 +1,37 @@
 import { Box, Link, List, ListItem, Typography } from '@mui/material'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FullHeightPage } from '@app/components/FullHeightPage'
 import { Tile } from '@app/components/Tile'
+import { useAuth } from '@app/context/auth'
 import theme from '@app/theme'
 
 type AdminPageProps = unknown
-
-const hubSettings = [
-  { name: 'users', link: '/admin/users' },
-  { name: 'organisations', link: '/organisations/list' },
-  { name: 'discounts', link: '/admin/discounts' },
-  { name: 'cancellations-transfers-replacements', link: '/admin/audit' },
-]
 
 export const AdminPage: React.FC<
   React.PropsWithChildren<AdminPageProps>
 > = () => {
   const { t } = useTranslation()
+  const { acl } = useAuth()
+
+  const hubSettings = useMemo(() => {
+    const hubSettings = [
+      { name: 'users', link: '/admin/users' },
+      { name: 'organisations', link: '/organisations/list' },
+    ]
+    if (acl.canViewAdminDiscount()) {
+      hubSettings.push({ name: 'discounts', link: '/admin/discounts' })
+    }
+    if (acl.canViewAdminCancellationsTransfersReplacements()) {
+      hubSettings.push({
+        name: 'cancellations-transfers-replacements',
+        link: '/admin/audit',
+      })
+    }
+    return hubSettings
+  }, [acl])
+
   return (
     <FullHeightPage
       bgcolor={theme.palette.grey[100]}

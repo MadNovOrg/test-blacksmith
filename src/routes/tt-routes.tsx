@@ -153,7 +153,7 @@ const TTAdminRoutes = () => {
         <Route path=":id" element={<OrderDetails />} />
       </Route>
 
-      {acl.isTTAdmin() ? (
+      {acl.canViewAdmin() ? (
         <>
           <Route path="admin">
             <Route index element={<AdminPage />} />
