@@ -465,7 +465,7 @@ export const CourseCertification: React.FC<
     )
   }
 
-  const courseDeliveryType = courseParticipant?.course.deliveryType
+  const courseDeliveryType = courseParticipant?.course?.deliveryType
 
   const isRevoked = certificate.status === CertificateStatus.REVOKED
   const isOnHold = certificate.status === CertificateStatus.ON_HOLD
