@@ -598,6 +598,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                     onChange={handleTrainersDataChange}
                     autoFocus={false}
                     requiredAssistants={requiredAssistants}
+                    isReAccreditation={courseData.reaccreditation}
                   />
                 ) : null}
 

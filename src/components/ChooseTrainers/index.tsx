@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Box, FormHelperText, Stack, Typography } from '@mui/material'
-import { differenceInDays } from 'date-fns'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller, Resolver, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -33,6 +32,7 @@ type Props = {
   autoFocus?: boolean
   disabled?: boolean
   requiredAssistants: RequiredAssistants
+  isReAccreditation: boolean
 }
 
 const courseTrainerToFormValues = (
@@ -65,6 +65,7 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   autoFocus = true,
   disabled = false,
+  isReAccreditation = false,
 }) => {
   const { t } = useTranslation()
   const { acl } = useAuth()
@@ -75,23 +76,8 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const needsModerator = useMemo(() => {
-    const duration = differenceInDays(
-      new Date(courseSchedule.end),
-      new Date(courseSchedule.start)
-    )
-
-    switch (courseLevel) {
-      case CourseLevel.Advanced:
-      case CourseLevel.AdvancedTrainer:
-        return duration >= 4
-
-      case CourseLevel.IntermediateTrainer:
-        return duration >= 5
-
-      default:
-        return false
-    }
-  }, [courseSchedule, courseLevel])
+    return !isReAccreditation
+  }, [isReAccreditation])
 
   const schema = useMemo(() => {
     return yup.object({

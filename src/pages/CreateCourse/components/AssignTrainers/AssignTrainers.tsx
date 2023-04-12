@@ -215,6 +215,7 @@ export const AssignTrainers = () => {
           onChange={handleTrainersDataChange}
           trainers={trainerInputToCourseTrainer(trainers)}
           requiredAssistants={requiredAssistants}
+          isReAccreditation={courseData.reaccreditation}
         />
         <Box
           display="flex"
