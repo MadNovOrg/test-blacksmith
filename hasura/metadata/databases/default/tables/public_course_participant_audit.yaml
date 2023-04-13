@@ -51,6 +51,8 @@ insert_permissions:
   - role: tt-admin
     permission:
       check: {}
+      set:
+        authorized_by: x-hasura-User-Id
       columns:
         - payload
         - type

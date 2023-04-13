@@ -99,6 +99,7 @@ export const CourseAttendance = () => {
           type: Course_Participant_Audit_Type_Enum.Attended,
           profile_id: participant?.profile.id,
           course_id: Number(courseId),
+          payload: {},
         })
       } else {
         notAttended.push(id)
@@ -106,6 +107,7 @@ export const CourseAttendance = () => {
           type: Course_Participant_Audit_Type_Enum.NotAttended,
           profile_id: participant?.profile.id,
           course_id: Number(courseId),
+          payload: {},
         })
       }
     }

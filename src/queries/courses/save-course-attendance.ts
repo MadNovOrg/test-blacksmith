@@ -1,17 +1,13 @@
 import { gql } from 'graphql-request'
 
-import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
+import { Course_Participant_Audit_Insert_Input } from '@app/generated/graphql'
 
 export type ResponseType = {
   saveAttended: { affectedRows: number }
   saveNotAttended: { affectedRows: number }
 }
 
-type AuditEntry = {
-  type: Course_Participant_Audit_Type_Enum
-  profile_id: string
-  course_id: number
-}
+type AuditEntry = Course_Participant_Audit_Insert_Input
 
 export type ParamsType = {
   attended: string[]
