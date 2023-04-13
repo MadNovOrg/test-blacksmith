@@ -1,0 +1,56 @@
+table:
+  schema: public
+  name: bild_strategy
+configuration:
+  custom_root_fields: {}
+  column_config:
+    short_name:
+      custom_name: shortName
+  custom_column_names:
+    short_name: shortName
+select_permissions:
+  - role: ld
+    permission:
+      columns:
+        - duration
+        - modules
+        - name
+        - short_name
+        - id
+      filter: {}
+  - role: sales-admin
+    permission:
+      columns:
+        - id
+        - name
+        - modules
+        - short_name
+        - duration
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - duration
+        - modules
+        - name
+        - short_name
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - duration
+        - modules
+        - name
+        - short_name
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - duration
+        - modules
+        - name
+        - short_name
+        - id
+      filter: {}

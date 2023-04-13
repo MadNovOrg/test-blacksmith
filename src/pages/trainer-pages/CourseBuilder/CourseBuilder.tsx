@@ -68,19 +68,21 @@ const MAX_COURSE_DURATION_MAP = {
     [CourseLevel.Level_1]: 6 * 60, // 1 training day
     [CourseLevel.Level_2]: 2 * 6 * 60, // 2 training days
     [CourseLevel.IntermediateTrainer]: 5 * 6 * 60, // 5 training days
-    [CourseLevel.BildActTrainer]: 5 * 6 * 60, // 5 training days
+    [CourseLevel.BildRegular]: 5 * 6 * 60, // 5 training days
     [CourseLevel.AdvancedTrainer]: 5 * 6 * 60, // 5 training days
     [CourseLevel.Advanced]: 4 * 6 * 60, // 4 training days
-    [CourseLevel.BildAct]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
+    [CourseLevel.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
+    [CourseLevel.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days -  TODO change when we get clarity
   },
   reaccreditation: {
     [CourseLevel.Level_1]: 6 * 60, // 1 training day
     [CourseLevel.Level_2]: 6 * 60, // 1 training day
     [CourseLevel.IntermediateTrainer]: 2 * 6 * 60, // 2 training days
-    [CourseLevel.BildActTrainer]: 2 * 6 * 60, // 2 training days
+    [CourseLevel.BildRegular]: 2 * 6 * 60, // 2 training days
     [CourseLevel.AdvancedTrainer]: 2 * 6 * 60, // 2 training days
     [CourseLevel.Advanced]: 3 * 6 * 60, // 3 training days
-    [CourseLevel.BildAct]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
+    [CourseLevel.BildIntermediateTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
+    [CourseLevel.BildAdvancedTrainer]: 4 * 6 * 60, // 4 training days - TODO change when we get clarity
   },
 }
 

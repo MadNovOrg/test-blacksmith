@@ -36,8 +36,9 @@ const LEVEL_TERMS: Record<
   [Course_Level_Enum.Advanced]: TERMS,
   [Course_Level_Enum.IntermediateTrainer]: TRAINER_TERMS,
   [Course_Level_Enum.AdvancedTrainer]: TRAINER_TERMS,
-  [Course_Level_Enum.BildAct]: TERMS,
-  [Course_Level_Enum.BildActTrainer]: TERMS,
+  [Course_Level_Enum.BildRegular]: TERMS,
+  [Course_Level_Enum.BildAdvancedTrainer]: TERMS,
+  [Course_Level_Enum.BildIntermediateTrainer]: TERMS,
 }
 
 export const ReschedulingTermsTable: React.FC<

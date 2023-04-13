@@ -282,8 +282,9 @@ export const Users = () => {
               excludedStatuses={
                 new Set([
                   Course_Level_Enum.Advanced,
-                  Course_Level_Enum.BildAct,
-                  Course_Level_Enum.BildActTrainer,
+                  Course_Level_Enum.BildRegular,
+                  Course_Level_Enum.BildIntermediateTrainer,
+                  Course_Level_Enum.BildAdvancedTrainer,
                   Course_Level_Enum.Level_1,
                   Course_Level_Enum.Level_2,
                 ])

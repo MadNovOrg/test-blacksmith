@@ -1,7 +1,7 @@
 INSERT INTO public.course (id, description, name, course_type, course_delivery_type, course_level, organization_id,
-                           reaccreditation, go1_integration, course_status, grading_confirmed)
+                           reaccreditation, go1_integration, course_status, grading_confirmed, accredited_by)
 VALUES (10012, '-', 'Positive Behaviour Training: Level One', 'OPEN', 'F2F', 'LEVEL_1',
-        'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', false);
+        'c43b2ba0-8630-43e5-9558-f59ee9a224f0', false, false, 'SCHEDULED', false, 'ICM');
 SELECT setval('course_id_seq', 10013);
 
 INSERT INTO public.course_schedule (start, "end", course_id, venue_id)

@@ -34,6 +34,8 @@ configuration:
       custom_name: level
     updated_at:
       custom_name: updatedAt
+    accredited_by:
+      custom_name: accreditedBy
     created_at:
       custom_name: createdAt
     go1_integration:
@@ -60,6 +62,7 @@ configuration:
     grading_confirmed: gradingConfirmed
     course_level: level
     updated_at: updatedAt
+    accredited_by: accreditedBy
     created_at: createdAt
     go1_integration: go1Integration
     account_code: accountCode
@@ -86,6 +89,13 @@ object_relationships:
     using:
       foreign_key_constraint_on: sales_representative_id
 array_relationships:
+  - name: bildStrategies
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_bild_strategy
   - name: evaluation_answers
     using:
       foreign_key_constraint_on:
@@ -189,6 +199,7 @@ insert_permissions:
         created_by_id: x-hasura-User-Id
       columns:
         - account_code
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
@@ -225,6 +236,7 @@ insert_permissions:
       set:
         created_by_id: x-hasura-User-Id
       columns:
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
@@ -257,6 +269,7 @@ insert_permissions:
         created_by_id: x-hasura-User-Id
       columns:
         - account_code
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
@@ -294,6 +307,7 @@ insert_permissions:
         created_by_id: x-hasura-User-Id
       columns:
         - account_code
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region
@@ -591,6 +605,7 @@ select_permissions:
     permission:
       columns:
         - account_code
+        - accredited_by
         - aol_cost_of_course
         - aol_country
         - aol_region

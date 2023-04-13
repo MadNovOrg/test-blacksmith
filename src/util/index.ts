@@ -52,7 +52,7 @@ export const noop = () => {
 }
 
 export const dateInputValueParse = (value: string): Date => {
-  return parse(value.replace(/\s/g, ''), INPUT_DATE_FORMAT, new Date())
+  return parse(value, INPUT_DATE_FORMAT, new Date())
 }
 
 export const dateInputValueFormat = (date: Date): string => {
@@ -198,24 +198,6 @@ export const COURSE_TYPE_TO_PREFIX = {
   [CourseType.OPEN]: 'OP',
   [CourseType.CLOSED]: 'CL',
   [CourseType.INDIRECT]: 'INDR',
-}
-
-export const COURSE_LEVEL_TO_PREFIX = {
-  [CourseLevel.Level_1]: 'L1',
-  [CourseLevel.Level_2]: 'L2',
-  [CourseLevel.Advanced]: 'ADV',
-  [CourseLevel.BildAct]: 'ACT',
-  [CourseLevel.IntermediateTrainer]: 'INT-T',
-  [CourseLevel.AdvancedTrainer]: 'ADV-T',
-  [CourseLevel.BildActTrainer]: 'ACT-T',
-}
-
-export const getCertificateNumberPrefix = (
-  type: CourseType,
-  level: CourseLevel,
-  courseId: string
-): string => {
-  return `${COURSE_TYPE_TO_PREFIX[type]}-${COURSE_LEVEL_TO_PREFIX[level]}-${courseId}`
 }
 
 export const requiredMsg = (t: TFunction, name: string) => {

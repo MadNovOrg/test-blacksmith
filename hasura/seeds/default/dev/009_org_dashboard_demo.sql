@@ -54,9 +54,9 @@ values ('d787defd-481c-414b-95ff-ecbcc12ae500', 'ed8826a3-6cf4-4631-8b47-5d80b7a
        ('d787defd-481c-414b-95ff-ecbcc12ae500', '85687c6e-d8a4-4e98-a47e-a66c8059919b', false),
        ('d787defd-481c-414b-95ff-ecbcc12ae500', '49f34a78-a73d-46c3-a17f-5cee00feb1ca', false);
 
-insert into "course" (id, organization_id, course_type, course_delivery_type, course_level, name, course_status)
+insert into "course" (id, organization_id, course_type, course_delivery_type, course_level, name, course_status, accredited_by)
 values
-(20123, 'd787defd-481c-414b-95ff-ecbcc12ae500', 'CLOSED', 'F2F', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'SCHEDULED');
+(20123, 'd787defd-481c-414b-95ff-ecbcc12ae500', 'CLOSED', 'F2F', 'ADVANCED', 'Positive Behaviour Training: Advanced Modules', 'SCHEDULED', 'ICM');
 
 insert into "course_schedule" (course_id, start, "end", venue_id)
 values (20123, NOW() + interval '30 days', NOW() + interval '35 days', 'bd4e4af5-8822-485c-bf48-16fe0d50729b');

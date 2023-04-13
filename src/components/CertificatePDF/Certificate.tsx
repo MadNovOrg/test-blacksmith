@@ -2,7 +2,6 @@ import pdf from '@react-pdf/renderer'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import BILDOutlineImage from '@app/assets/outline_bild.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
 import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
 import { CourseLevel } from '@app/types'
@@ -88,14 +87,7 @@ export const CertificateDocument: React.FC<
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <Image
-          src={
-            courseLevel === CourseLevel.BildAct
-              ? BILDOutlineImage
-              : ICMOutlineImage
-          }
-          style={styles.pageBackground}
-        />
+        <Image src={ICMOutlineImage} style={styles.pageBackground} />
         <Text style={{ ...styles.title, marginTop: '100' }}>
           {' '}
           {t('common.course-certificate.title')}

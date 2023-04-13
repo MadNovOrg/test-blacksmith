@@ -34,13 +34,14 @@ const CourseLevelTrainerLevels = {
     CourseLevel.AdvancedTrainer,
   ],
   [CourseLevel.Advanced]: [CourseLevel.IntermediateTrainer],
-  [CourseLevel.BildAct]: [CourseLevel.BildActTrainer],
+  [CourseLevel.BildRegular]: [CourseLevel.BildRegular],
   [CourseLevel.IntermediateTrainer]: [
     CourseLevel.IntermediateTrainer,
     CourseLevel.AdvancedTrainer,
   ],
   [CourseLevel.AdvancedTrainer]: [CourseLevel.AdvancedTrainer],
-  [CourseLevel.BildActTrainer]: [CourseLevel.BildActTrainer],
+  [CourseLevel.BildIntermediateTrainer]: [CourseLevel.BildIntermediateTrainer],
+  [CourseLevel.BildAdvancedTrainer]: [CourseLevel.BildAdvancedTrainer],
 }
 
 const MIN_DURATION_FOR_TIME_COMMITMENT = 6 * 60 // 6h

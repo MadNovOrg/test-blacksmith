@@ -24,10 +24,14 @@ const requiredCertificateLevel = {
   [CourseLevel.Level_1]: [],
   [CourseLevel.Level_2]: [],
   [CourseLevel.Advanced]: [CourseLevel.Level_2],
-  [CourseLevel.BildAct]: [],
+  [CourseLevel.BildRegular]: [],
   [CourseLevel.IntermediateTrainer]: [CourseLevel.Level_1, CourseLevel.Level_2],
   [CourseLevel.AdvancedTrainer]: [CourseLevel.IntermediateTrainer],
-  [CourseLevel.BildActTrainer]: [CourseLevel.BildAct],
+  [CourseLevel.BildIntermediateTrainer]: [CourseLevel.BildRegular],
+  [CourseLevel.BildAdvancedTrainer]: [
+    CourseLevel.BildRegular,
+    CourseLevel.BildIntermediateTrainer,
+  ],
 }
 
 export type MissingCertificateInfo = {

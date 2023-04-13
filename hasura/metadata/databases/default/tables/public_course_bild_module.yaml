@@ -1,0 +1,105 @@
+table:
+  schema: public
+  name: course_bild_module
+insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+      backend_only: false
+  - role: trainer
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+      backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - modules
+        - id
+      backend_only: false
+select_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null
+  - role: tt-ops
+    permission:
+      columns:
+        - course_id
+        - modules
+        - id
+      filter: {}
+      check: null

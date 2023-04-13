@@ -333,16 +333,19 @@ custom_types:
         - value: ADVANCED
           is_deprecated: null
           description: null
-        - value: BILD_ACT
-          is_deprecated: null
-          description: null
         - value: INTERMEDIATE_TRAINER
           is_deprecated: null
           description: null
         - value: ADVANCED_TRAINER
           is_deprecated: null
           description: null
-        - value: BILD_ACT_TRAINER
+        - value: BILD_REGULAR
+          is_deprecated: null
+          description: null
+        - value: BILD_INTERMEDIATE_TRAINER
+          is_deprecated: null
+          description: null
+        - value: BILD_ADVANCED_TRAINER
           is_deprecated: null
           description: null
     - name: SearchTrainerAvailability
@@ -605,6 +608,7 @@ custom_types:
     - name: XeroInvoicesStatusInput
     - name: Go1LicensesChangeInput
     - name: CanApplyPromoCodeInput
+    - name: CreateOrderParticipantInput
     - name: CreateOrderInput
     - name: ReplaceParticipantInput
     - name: TransferFee

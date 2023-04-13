@@ -229,10 +229,11 @@ export enum CourseLevel {
   Level_1 = 'LEVEL_1',
   Level_2 = 'LEVEL_2',
   Advanced = 'ADVANCED',
-  BildAct = 'BILD_ACT',
+  BildRegular = 'BILD_REGULAR',
   IntermediateTrainer = 'INTERMEDIATE_TRAINER',
   AdvancedTrainer = 'ADVANCED_TRAINER',
-  BildActTrainer = 'BILD_ACT_TRAINER',
+  BildIntermediateTrainer = 'BILD_INTERMEDIATE_TRAINER',
+  BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
 }
 
 export enum CourseDeliveryType {
