@@ -472,7 +472,7 @@ export const CourseCertification: React.FC<
 
   const statusTooltip =
     isRevoked || isOnHold
-      ? certificate.participant.certificateChanges[0].payload.note
+      ? certificate.participant.certificateChanges[0]?.payload?.note
       : ''
 
   return (
