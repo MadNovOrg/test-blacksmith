@@ -113,9 +113,18 @@ select_permissions:
         - profile_id
         - question_id
       filter:
-        participant:
-          profile_id:
-            _eq: X-Hasura-User-Id
+        _or:
+          - participant:
+              id:
+                _eq: X-Hasura-User-Id
+          - course:
+              organization:
+                members:
+                  _and:
+                    - profile_id:
+                        _eq: X-Hasura-User-Id
+                    - is_admin:
+                        _eq: true
       allow_aggregations: true
 event_triggers:
   - name: course_evaluation_added

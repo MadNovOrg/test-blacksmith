@@ -11,6 +11,7 @@ import { OrgDashboard } from '@app/pages/admin/components/Organizations/OrgDashb
 import { NotFound } from '@app/pages/common/NotFound'
 import { CourseCertificationDetails } from '@app/pages/trainer-pages/CourseCertificationDetails'
 import { CourseDetails as TrainerCourseDetails } from '@app/pages/trainer-pages/CourseDetails'
+import { EvaluationSummary } from '@app/pages/trainer-pages/EvaluationSummary'
 import { ChooseTransferCourse } from '@app/pages/TransferParticipant/components/ChooseTransferCourse'
 import { TransferDetails } from '@app/pages/TransferParticipant/components/TransferDetails'
 import { TransferReview } from '@app/pages/TransferParticipant/components/TransferReview'
@@ -63,6 +64,11 @@ const UserRoutes = () => {
             <Route index element={<ManageCourses />} />
             <Route path=":id">
               <Route path="details" element={<TrainerCourseDetails />} />
+              <Route path="evaluation">
+                <Route path="view" element={<CourseEvaluation />} />
+                <Route path="summary" element={<EvaluationSummary />} />
+              </Route>
+
               <Route
                 path="transfer/:participantId"
                 element={<UserTransferParticipant />}
