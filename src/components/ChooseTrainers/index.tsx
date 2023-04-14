@@ -76,8 +76,9 @@ const ChooseTrainers: React.FC<React.PropsWithChildren<Props>> = ({
   )
 
   const needsModerator = useMemo(() => {
+    if (courseType === CourseType.INDIRECT) return false
     return !isReAccreditation
-  }, [isReAccreditation])
+  }, [isReAccreditation, courseType])
 
   const schema = useMemo(() => {
     return yup.object({
