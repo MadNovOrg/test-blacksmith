@@ -42,6 +42,7 @@ import {
   checkCourseDetailsForExceptions,
   CourseException,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { getMinimumTimeCommitment } from '@app/pages/trainer-pages/CourseBuilder/helpers'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
 import { QUERY as GetCourseById } from '@app/queries/courses/get-course-by-id'
 import { MUTATION as SaveCourseModules } from '@app/queries/courses/save-course-modules'
@@ -95,6 +96,8 @@ export const CourseBuilder: React.FC<
   const navigate = useNavigate()
   const theme = useTheme()
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
+  const [isTimeCommitmentModalOpen, setIsTimeCommitmentModalOpen] =
+    useState(false)
 
   const { acl } = useAuth()
 
@@ -163,6 +166,13 @@ export const CourseBuilder: React.FC<
       0
     )
   }, [courseModuleSlots, mandatoryModules])
+  const estimatedDurationInHours = Math.ceil(estimatedCourseDuration / 60)
+
+  const minimumTimeCommitment = useMemo(() => {
+    if (courseData?.course?.level)
+      return getMinimumTimeCommitment(courseData?.course?.level)
+    return 0
+  }, [courseData])
 
   const maxDuration = useMemo(() => {
     const course = courseData?.course
@@ -447,6 +457,14 @@ export const CourseBuilder: React.FC<
     return color[500]
   }
 
+  const submitButtonHandler = useCallback(() => {
+    if (minimumTimeCommitment) {
+      setIsTimeCommitmentModalOpen(true)
+    } else {
+      return onCourseSubmit()
+    }
+  }, [minimumTimeCommitment, onCourseSubmit])
+
   const onClearCourse = async () => {
     if (courseData?.course) {
       const courseId = courseData.course.id
@@ -714,7 +732,7 @@ export const CourseBuilder: React.FC<
                   </div>
                   <Button
                     variant="outlined"
-                    onClick={onCourseSubmit}
+                    onClick={submitButtonHandler}
                     disabled={
                       !courseModuleSlots?.filter(slot => !!slot.module)
                         .length && !mandatoryModules?.length
@@ -747,6 +765,20 @@ export const CourseBuilder: React.FC<
           </Box>
         )}
       </DragDropContext>
+      <ConfirmDialog
+        open={isTimeCommitmentModalOpen}
+        onOk={submitCourse}
+        onCancel={() => setIsTimeCommitmentModalOpen(false)}
+        message={t(
+          'pages.trainer-base.create-course.new-course.time-commitment-message',
+          { hours: Math.max(minimumTimeCommitment, estimatedDurationInHours) }
+        )}
+        title={t(
+          'pages.trainer-base.create-course.new-course.time-commitment-title'
+        )}
+        okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
+        data-testid="time-commitment-dialog"
+      ></ConfirmDialog>
       <CourseExceptionsConfirmation
         open={courseExceptions.length > 0}
         onCancel={() => setCourseExceptions([])}
