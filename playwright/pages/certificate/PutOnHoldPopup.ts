@@ -34,12 +34,12 @@ export class PutOnHoldPopup extends BasePage {
   }
 
   async selectFromDate() {
-    await this.fromDate.click()
+    //await this.fromDate.click()
     await this.fromDate.type('10122023')
   }
 
   async selectToDate() {
-    await this.toDate.click()
+    //await this.toDate.click()
     await this.toDate.type('10012024')
   }
 

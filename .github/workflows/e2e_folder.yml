@@ -20,6 +20,7 @@ on:
           - auth
           - blog
           - booking
+          - certificate
           - courses/accept
           - courses/build
           - courses/cancel
