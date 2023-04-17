@@ -34,8 +34,16 @@ const orders = [
     promoCodes: [],
     quantity: 2,
     registrants: [
-      'seed.registrant1@teamteach.testinator.com',
-      'seed.registrant2@teamteach.testinator.com',
+      {
+        firstName: 'Seed',
+        lastName: 'Registrant 1',
+        email: 'seed.registrant1@teamteach.testinator.com',
+      },
+      {
+        firstName: 'Seed',
+        lastName: 'Registrant 2',
+        email: 'seed.registrant2@teamteach.testinator.com',
+      },
     ],
   },
   {
@@ -51,8 +59,16 @@ const orders = [
     promoCodes: ['CODE_5%_ALL'],
     quantity: 2,
     registrants: [
-      'seed.registrant3@teamteach.testinator.com',
-      'seed.registrant4@teamteach.testinator.com',
+      {
+        email: 'seed.registrant3@teamteach.testinator.com',
+        firstName: 'Seed',
+        lastName: 'Registrant 3',
+      },
+      {
+        firstName: 'Seed',
+        lastName: 'Registrant 4',
+        email: 'seed.registrant4@teamteach.testinator.com',
+      },
     ],
   },
 ]
