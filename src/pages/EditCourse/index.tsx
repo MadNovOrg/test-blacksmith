@@ -682,7 +682,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   }),
                 })
 
-                navigate(`/courses/${course.id}`)
+                navigate(`/courses/${course.id}/details`)
               }}
             />
           </Dialog>

@@ -10,6 +10,8 @@ import { users } from '../../../data/users'
 import { stateFilePath } from '../../../hooks/global-setup'
 import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
+const allowedRoles = ['salesAdmin', 'ops', 'admin']
+
 const testData = [
   {
     name: 'open course',
@@ -51,23 +53,25 @@ for (const data of testData) {
     },
   })
 
-  test.use({ storageState: stateFilePath('admin') })
+  allowedRoles.forEach(role => {
+    test.use({ storageState: stateFilePath(role) })
 
-  test(`cancel course as admin: ${data.name} @smoke`, async ({
-    page,
-    course,
-  }) => {
-    const adminCoursesPage = new MyCoursesPage(page)
-    await adminCoursesPage.goto(`${course.id}`)
-    const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
-      course.id
-    )
-    await courseDetailsPage.clickEditCourseButton()
-    await courseDetailsPage.clickCancelCourseButton()
-    await courseDetailsPage.clickCancelCourseDropdown()
-    await courseDetailsPage.checkCancelCourseCheckbox()
-    await courseDetailsPage.clickCancelEntireCourseButton()
-    await adminCoursesPage.goto(`${course.id}`)
-    await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
+    test(`cancel course as ${role}: ${data.name} @smoke`, async ({
+      page,
+      course,
+    }) => {
+      const adminCoursesPage = new MyCoursesPage(page)
+      await adminCoursesPage.goto(`${course.id}`)
+      const courseDetailsPage = await adminCoursesPage.clickCourseDetailsPage(
+        course.id
+      )
+      await courseDetailsPage.clickEditCourseButton()
+      await courseDetailsPage.clickCancelCourseButton()
+      await courseDetailsPage.clickCancelCourseDropdown()
+      await courseDetailsPage.checkCancelCourseCheckbox()
+      await courseDetailsPage.clickCancelEntireCourseButton()
+      await adminCoursesPage.goto(`${course.id}`)
+      await adminCoursesPage.checkCourseStatus(course.id, 'Cancelled')
+    })
   })
 }
