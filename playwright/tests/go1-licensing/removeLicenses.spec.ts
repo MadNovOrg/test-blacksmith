@@ -25,8 +25,10 @@ const test = base.extend<{
 
 test.use({ storageState: stateFilePath('admin') })
 
-test('licenses can be removed', async ({ page, orgId }) => {
-  const orgPage = new AllOrganisations(page)
+const removeLicenses = async (
+  orgPage: AllOrganisations,
+  orgId: string
+): Promise<void> => {
   await orgPage.gotoOrganisation(orgId)
   await orgPage.clickBlendedLearningLicences()
   await orgPage.expectLicencesRemaining('10')
@@ -36,4 +38,34 @@ test('licenses can be removed', async ({ page, orgId }) => {
   await orgPage.fillInvoiceNotes('This is a note')
   await orgPage.clickSaveDetails()
   await orgPage.expectLicencesRemaining('5')
+}
+
+test('licenses can be removed by admin', async ({ browser, orgId }) => {
+  const salesAdminContext = await browser.newContext({
+    storageState: stateFilePath('Admin'),
+  })
+  const page = await salesAdminContext.newPage()
+
+  const orgPage = new AllOrganisations(page)
+  await removeLicenses(orgPage, orgId)
+})
+
+test('licenses can be removed by sales-admin', async ({ browser, orgId }) => {
+  const salesAdminContext = await browser.newContext({
+    storageState: stateFilePath('salesAdmin'),
+  })
+  const page = await salesAdminContext.newPage()
+
+  const orgPage = new AllOrganisations(page)
+  await removeLicenses(orgPage, orgId)
+})
+
+test('licenses can be removed by ops', async ({ browser, orgId }) => {
+  const salesAdminContext = await browser.newContext({
+    storageState: stateFilePath('ops'),
+  })
+  const page = await salesAdminContext.newPage()
+
+  const orgPage = new AllOrganisations(page)
+  await removeLicenses(orgPage, orgId)
 })

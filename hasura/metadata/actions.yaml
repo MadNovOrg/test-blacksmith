@@ -144,6 +144,8 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/go1-licensing/change'
     permissions:
+      - role: tt-ops
+      - role: sales-admin
       - role: tt-admin
     comment: go1LicensesChange
   - name: importLegacyCertificate
