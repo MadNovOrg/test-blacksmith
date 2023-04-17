@@ -38,6 +38,12 @@ export type Course = {
   status: Course_Status_Enum
   reaccreditation: boolean
   schedule: CourseSchedule[]
+  dates?: {
+    aggregate: {
+      start: { date: Date }
+      end: { date: Date }
+    }
+  }
   go1Integration?: boolean
   min_participants: number
   max_participants: number

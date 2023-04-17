@@ -25,8 +25,8 @@ export const sortModulesByName = (a: ModuleGroup, b: ModuleGroup) => {
 }
 
 export const sortCoursesByAllFields = (
-  a: CourseTableRow,
-  b: CourseTableRow
+  a: Promise<CourseTableRow> | CourseTableRow,
+  b: Promise<CourseTableRow> | CourseTableRow
 ) => {
   if (JSON.stringify(a) < JSON.stringify(b)) return -1
   if (JSON.stringify(a) > JSON.stringify(b)) return 1

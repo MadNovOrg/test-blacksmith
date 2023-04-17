@@ -2,6 +2,7 @@ import { addYears } from 'date-fns'
 import { gql } from 'graphql-request'
 
 import { Grade_Enum } from '@app/generated/graphql'
+import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
 import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
@@ -21,110 +22,30 @@ import { getProfileId } from './profile'
 import { getVenueId } from './venue'
 
 export const getTrainerCourses = async (email: string): Promise<Course[]> => {
-  const query = gql`
-    query MyQuery {
-      course(
-        where: {
-          _or: [
-            {
-              trainers: {
-                profile: {
-                  email: { _eq: "${email}" }
-                }
-              }
-            }
-            {
-              _and: [
-                { type: { _eq: OPEN } }
-                {
-                  participants: {
-                    profile: {
-                      organizations: {
-                        organization: {
-                          members: {
-                            _and: [
-                              { isAdmin: { _eq: true } }
-                              {
-                                profile: {
-                                  email: {
-                                    _eq: "${email}"
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-            {
-              organization: {
-                members: {
-                  _and: [
-                    {
-                      profile: {
-                        email: {
-                          _eq: "${email}"
-                        }
-                      }
-                    }
-                    { isAdmin: { _eq: true } }
-                  ]
-                }
-              }
-            }
-            { _and: [{ type: { _eq: OPEN } }, { status: { _eq: SCHEDULED } }] }
-          ]
-        }
-        order_by: { name: asc }
-      ) {
-        id
-        deliveryType
-        description
-        level
-        min_participants
-        max_participants
-        name
-        course_code
-        reaccreditation
-        organization {
-          name
-        }
-        schedule {
-          start
-          end
-          venue {
-            name
-            city
-          }
-        }
-        trainers {
-          id
-          profile {
-            fullName
-          }
-        }
-        participants_aggregate {
-          aggregate {
-            count
-          }
-        }
-        status
-        type
-      }
+  const { courses } = await getClient().request<{ courses: Course[] }>(
+    TRAINER_COURSES,
+    {
+      where: {
+        trainers: {
+          profile_id: { _eq: await getProfileId(email) },
+        },
+      },
     }
-  `
-  const response: { course: Course[] } = await getClient().request(query)
-  response.course.forEach((course: Course) => {
-    course.schedule.forEach(schedule => {
-      schedule.start = new Date(schedule.start)
-      schedule.end = new Date(schedule.end)
-    })
+  )
+  // Update the start and end times for each course
+  const updatedCourses = courses.map(course => {
+    return {
+      ...course,
+      schedule: course.schedule.map(schedule => {
+        return {
+          ...schedule,
+          start: course.dates?.aggregate?.start.date as Date,
+          end: course.dates?.aggregate?.end.date as Date,
+        }
+      }),
+    }
   })
-  return response.course
+  return updatedCourses
 }
 
 export const getCourseParticipantId = async (

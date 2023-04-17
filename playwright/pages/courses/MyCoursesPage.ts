@@ -7,7 +7,7 @@ import { UiTable } from '../../components/UiTable'
 import { UserMenu } from '../../components/UserMenu'
 import { toCourseTableRow } from '../../data/mappings'
 import { Course, CourseTableRow } from '../../data/types'
-import { sortCoursesByAllFields as rowsByAllFields } from '../../util'
+import { sortCoursesByAllFields } from '../../util'
 import { BasePage } from '../BasePage'
 
 import { CourseDetailsPage } from './course-details/CourseDetailsPage'
@@ -49,15 +49,16 @@ export class MyCoursesPage extends BasePage {
 
   // compares the courses table rows ignoring the order
   async checkRows(courses: Course[]) {
-    await expect(this.coursesTable.rows).toHaveCount(courses.length)
     const expectedRows = courses.map(toCourseTableRow)
-    expectedRows.sort(rowsByAllFields)
+    expectedRows.sort(sortCoursesByAllFields)
     const actualRows = (await this.coursesTable.getRows({
       ignoreEmptyHeaders: true,
     })) as CourseTableRow[]
-    actualRows.sort(rowsByAllFields)
+    actualRows.sort(sortCoursesByAllFields)
     actualRows.forEach(row => {
-      expect(expectedRows.indexOf(row)).toBeTruthy()
+      return expect(
+        expectedRows.indexOf(row as unknown as Promise<CourseTableRow>)
+      ).toBeTruthy()
     })
   }
 

@@ -1,6 +1,6 @@
 import { expect, Locator } from '@playwright/test'
 
-type TableRow = Record<string, string>
+import { CourseTableRow } from '../data/types'
 
 export class UiTable {
   readonly root: Locator
@@ -35,8 +35,8 @@ export class UiTable {
 
   async getRows(
     options: { ignoreEmptyHeaders?: boolean } = { ignoreEmptyHeaders: false }
-  ): Promise<TableRow[]> {
-    const result: TableRow[] = []
+  ): Promise<CourseTableRow[]> {
+    const result: CourseTableRow[] = []
     await this.root.scrollIntoViewIfNeeded()
     const headers = await this.getHeaders({
       ignoreEmpty: options.ignoreEmptyHeaders,
@@ -52,7 +52,7 @@ export class UiTable {
             .nth(j)
             .textContent()) as string
         }
-        result.push(resultRow)
+        result.push(resultRow as unknown as CourseTableRow)
       }
     }
     return result

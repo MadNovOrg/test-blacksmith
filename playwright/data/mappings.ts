@@ -8,7 +8,6 @@ import { AttendeesTableRow, Course, CourseTableRow, User } from './types'
 
 const toUiTime = (date: Date) => {
   const tz = 'Etc/UTC'
-
   return `${formatInTimeZone(
     date,
     tz,
@@ -16,7 +15,9 @@ const toUiTime = (date: Date) => {
   )}${formatInTimeZone(date, tz, dateFormats.date_onlyTime)}`
 }
 
-export const toCourseTableRow: (course: Course) => CourseTableRow = course => {
+export const toCourseTableRow: (
+  course: Course
+) => Promise<CourseTableRow> = async course => {
   const startUiTime = toUiTime(course.schedule[0].start)
   const endUiTime = toUiTime(course.schedule[0].end)
   return {
