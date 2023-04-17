@@ -8,7 +8,7 @@ import { FINISHED_COURSE } from '../../data/courses'
 import { Course } from '../../data/types'
 import { users } from '../../data/users'
 import { stateFilePath } from '../../hooks/global-setup'
-import { CourseDetailsPage } from '../../pages/courses/CourseDetailsPage'
+import { CourseDetailsPage } from '../../pages/courses/course-details/CourseDetailsPage'
 
 const test = base.extend<{
   course: Course

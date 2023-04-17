@@ -1,6 +1,6 @@
 import { addMonths, subDays } from 'date-fns'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
+import { Course_Status_Enum, Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import { buildVenue } from '@test/mock-data-utils'
@@ -190,6 +190,7 @@ export const UNIQUE_COURSE: () => Course = () => ({
   min_participants: 6,
   max_participants: 11,
   gradingConfirmed: false,
+  source: Course_Source_Enum.EmailEnquiry,
 })
 
 export const FINISHED_COURSE: () => Course = () => ({

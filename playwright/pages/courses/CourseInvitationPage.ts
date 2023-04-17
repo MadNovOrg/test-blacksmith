@@ -1,8 +1,9 @@
 import { Locator, Page } from '@playwright/test'
 
 import { waitForGraphQLResponse } from '../../commands'
-import { CourseDetailsPage } from '../../pages/courses/CourseDetailsPage'
 import { BasePage } from '../BasePage'
+
+import { CourseDetailsPage } from './course-details/CourseDetailsPage'
 
 export class CourseInvitationPage extends BasePage {
   readonly willAttendOption: Locator

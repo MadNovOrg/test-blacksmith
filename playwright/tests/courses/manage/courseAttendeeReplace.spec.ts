@@ -27,26 +27,24 @@ const test = base.extend<{ course: Course }>({
   },
 })
 
-test(`transfer an attendee to another course `, async ({ browser, course }) => {
-  const orgAdminContext = await browser.newContext({
-    storageState: stateFilePath('userOrgAdmin'),
-  })
-  const orgAdminPage = await orgAdminContext.newPage()
-  const myCoursesPage = new MyCoursesPage(orgAdminPage)
+test.use({ storageState: stateFilePath('userOrgAdmin') })
+
+test(`replace an attendee on a course`, async ({ browser, course, page }) => {
+  const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.gotoManageCourses(`${course.id}`)
   const courseDetailsPage = await myCoursesPage.clickCourseDetailsPage(
     course.id
   )
   await courseDetailsPage.clickManageAttendance()
-  await courseDetailsPage.clickAttendeeReplace()
-  await courseDetailsPage.replaceAttendee(users.user2WithOrg)
+  const replaceAttendeePopup = await courseDetailsPage.clickAttendeeReplace()
+  await replaceAttendeePopup.replaceAttendee(users.user2WithOrg)
 
   // Accept the invitation to the course as the new attendee
-  const attendeePage = await browser.newPage()
   const email = await API.email.getLatestEmail(
     users.user2WithOrg.email,
     'Register for training course'
   )
+  const attendeePage = await browser.newPage()
   const emailPage = new EmailPage(attendeePage)
   await emailPage.renderContent(email.html)
   const invitationPage = await emailPage.clickRegisterNowButton()
@@ -54,7 +52,7 @@ test(`transfer an attendee to another course `, async ({ browser, course }) => {
   await attendeeCourseDetailsPage.checkSuccessMessage(
     'You are now attending this course. Please complete the checklist.'
   )
-  await orgAdminPage.reload()
+  await page.reload()
 
   await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
 })

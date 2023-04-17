@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import axios from 'axios'
 
 import { Email } from '../data/types'
 import { delay } from '../util'
@@ -18,12 +18,12 @@ const requestOptions = {
 
 const deleteEmail = async (email: string, id: string) => {
   const [inbox, domain] = email.split('@')
-  const response = await fetch(
+  const response = await axios.delete(
     `${baseUrl}/domains/${domain}/inboxes/${inbox}/messages/${id}`,
-    { ...requestOptions, method: 'DELETE' }
+    requestOptions
   )
-  if (!response.ok) {
-    console.error(`[API] could not delete email: ${await response.text()}`)
+  if (response.status !== 200) {
+    console.error(`[API] could not delete email: ${response.statusText}`)
   }
 }
 
@@ -32,15 +32,13 @@ const getEmail = async (
   domain: string,
   id: string
 ): Promise<Email> => {
-  const response = await fetch(
-    `${baseUrl}/domains/${domain}/inboxes/${inbox}/messages/${id}`,
-    requestOptions
-  )
+  const url = `${baseUrl}/domains/${domain}/inboxes/${inbox}/messages/${id}`
   // Try to overcome any Mailinator API issues (e.g: 500s)
   let triesLeft = 3
   do {
-    if (response.ok) {
-      const body = await response.clone().json()
+    const response = await axios.get(url, requestOptions)
+    if (response.status === 200) {
+      const body = response.data
       const htmlPart = (body.parts as Array<EmailPart>).find(part =>
         part.headers['content-type'].startsWith('text/html')
       )
@@ -54,9 +52,7 @@ const getEmail = async (
       }
     } else {
       console.error(
-        `[API] error on reading email with ID ${id}: ${await response
-          .clone()
-          .text()}`
+        `[API] error on reading email with ID ${id}: ${response.statusText}`
       )
     }
     triesLeft--
@@ -72,9 +68,9 @@ export const getLatestEmail = async (
   const url = `${baseUrl}/domains/${domain}/inboxes/${inbox}?limit=1`
   let triesLeft = 10
   do {
-    const response = await fetch(url, requestOptions)
-    if (response.ok) {
-      const body = await response.json()
+    const response = await axios.get(url, requestOptions)
+    if (response.status === 200) {
+      const body = response.data
       const emailFound = body.msgs.length > 0 && body.msgs[0].seconds_ago < 30
       if (emailFound && subject && body.msgs[0].subject !== subject) {
         // If subject is specified but doesn't match, skip this email
@@ -88,9 +84,7 @@ export const getLatestEmail = async (
       }
       await delay(1000)
     } else {
-      console.error(
-        `[API] could not read emails for: '${await response.text()}'`
-      )
+      console.error(`[API] could not read emails for: '${response.statusText}'`)
     }
     triesLeft--
   } while (triesLeft > 0)

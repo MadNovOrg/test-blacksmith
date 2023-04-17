@@ -1,170 +1,19 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import * as API from '../../api'
-import { CourseHeader } from '../../components/CourseHeader'
-import { UiTable } from '../../components/UiTable'
-import { toAttendeesTableRow } from '../../data/mappings'
-import { User } from '../../data/types'
-import { BasePage } from '../BasePage'
-import { CourseGradingPage } from '../courses/CourseGradingPage'
-import { CourseTransferPage } from '../courses/CourseTransferPage'
+import * as API from '../../../api'
+import { CourseHeader } from '../../../components/CourseHeader'
+import { UiTable } from '../../../components/UiTable'
+import { toAttendeesTableRow } from '../../../data/mappings'
+import { User } from '../../../data/types'
+import { BasePage } from '../../BasePage'
+import { CourseGradingPage } from '../CourseGradingPage'
+import { CourseTransferPage } from '../CourseTransferPage'
 
-class InviteAttendeesPopUp {
-  readonly page: Page
-  readonly emailInput: Locator
-  readonly sendButton: Locator
-
-  constructor(page: Page) {
-    this.page = page
-    this.emailInput = this.page.locator(
-      '[data-testid="modal-invites-emails"] input'
-    )
-    this.sendButton = this.page.locator('data-testid=modal-invites-send')
-  }
-
-  async enterEmails(emails: string[]) {
-    for (const email of emails) {
-      await this.emailInput.fill(email)
-      await this.emailInput.press('Enter')
-    }
-  }
-
-  async clickSendButton() {
-    await this.sendButton.click()
-  }
-}
-
-class RequestCancellationPopup {
-  readonly page: Page
-  readonly reasonForCancellationInput: Locator
-  readonly confirmCheckbox: Locator
-  readonly confirmButton: Locator
-
-  constructor(page: Page) {
-    this.page = page
-    this.reasonForCancellationInput = this.page.locator(
-      '[data-testid="cancel-course-reason"] input'
-    )
-    this.confirmCheckbox = this.page.locator(
-      'data-testid=request-cancel-checkbox'
-    )
-    this.confirmButton = this.page.locator(
-      'data-testid=request-cancel-submit-button'
-    )
-  }
-
-  async addReasonForCancellation(text: string) {
-    await this.reasonForCancellationInput.type(text)
-  }
-
-  async checkConfirmCheckbox() {
-    await this.confirmCheckbox.check()
-  }
-
-  async clickConfirmButton() {
-    await this.confirmButton.click()
-  }
-}
-class CancelEntireCoursePopUp {
-  readonly page: Page
-  readonly feeRadioButton: Locator
-  readonly cancelEntireCourseButton: Locator
-
-  constructor(page: Page) {
-    this.page = page
-    this.feeRadioButton = this.page.locator('text=Apply cancellation terms')
-    this.cancelEntireCourseButton = this.page.locator(
-      'data-testid=cancel-entire-course-button'
-    )
-  }
-
-  async checkFeeRadioButton() {
-    await this.feeRadioButton.check()
-  }
-
-  async clickCancelEntireCourseButton() {
-    await this.cancelEntireCourseButton.click()
-  }
-}
-
-class RemoveAttendeePopUp {
-  readonly page: Page
-  readonly applyCancellationTermsRadioButton: Locator
-  readonly customFeeRadioButton: Locator
-  readonly noFeesRadioButton: Locator
-  readonly removeAttendeeButton: Locator
-  readonly closeButton: Locator
-  readonly reasonForCancellationInput: Locator
-  readonly confirmationCheckbox: Locator
-
-  constructor(page: Page) {
-    this.page = page
-    this.applyCancellationTermsRadioButton = this.page.locator(
-      '[data-testid="apply-cancellation-terms-radioButton"]'
-    )
-    this.customFeeRadioButton = this.page.locator(
-      '[data-testid="custom-fee-radioButton"]'
-    )
-    this.noFeesRadioButton = this.page.locator(
-      '[data-testid="no-fees-radioButton"]'
-    )
-    this.removeAttendeeButton = this.page.locator(
-      '[data-testid="removeAttendee-button"]'
-    )
-    this.closeButton = this.page.locator('[data-testid="close-button"]')
-    this.reasonForCancellationInput = this.page.locator(
-      '[data-testid="reasonForCancellation-input"] input'
-    )
-    this.confirmationCheckbox = this.page.locator(
-      '[data-testid="confirmation-checkbox"]'
-    )
-  }
-
-  async removeAttendeeWithNoteUsingUser(
-    userRole = 'admin',
-    note = 'Reason of removing the attendee'
-  ) {
-    await this.reasonForCancellationInput.type(note)
-    userRole !== 'admin' && (await this.confirmationCheckbox.click())
-    await this.removeAttendeeButton.click()
-  }
-}
-
-class ReplaceAttendeePopUp {
-  readonly page: Page
-  readonly firstNameInput: Locator
-  readonly surnameInput: Locator
-  readonly emailInput: Locator
-  readonly termsAcceptedCheckbox: Locator
-  readonly cancelButton: Locator
-  readonly submitButton: Locator
-
-  constructor(page: Page) {
-    this.page = page
-    this.firstNameInput = this.page.locator('input[name=firstName]')
-    this.surnameInput = this.page.locator('input[name=surname]')
-    this.emailInput = this.page.locator('input[name=email]')
-    this.termsAcceptedCheckbox = this.page.locator('input[name=termsAccepted]')
-    this.cancelButton = this.page.locator('[data-testid=replace-cancel]')
-    this.submitButton = this.page.locator('[data-testid=replace-submit]')
-  }
-
-  async enterDetails(
-    firstName: string,
-    surname: string,
-    email: string,
-    termsAccepted = true
-  ) {
-    await this.firstNameInput.fill(firstName)
-    await this.surnameInput.fill(surname)
-    await this.emailInput.fill(email)
-    await this.termsAcceptedCheckbox.setChecked(termsAccepted)
-  }
-
-  async clickSubmitButton() {
-    await this.submitButton.click()
-  }
-}
+import { CancelEntireCoursePopUp } from './CancelEntireCoursePopup'
+import { InviteAttendeesPopUp } from './InviteAttendeesPopup'
+import { RemoveAttendeePopUp } from './RemoveAttendeePopup'
+import { ReplaceAttendeePopUp } from './ReplaceAttendeePopup'
+import { RequestCancellationPopup } from './RequestCancellationPopup'
 
 export class CourseDetailsPage extends BasePage {
   readonly additionalNotes: Locator
@@ -181,18 +30,14 @@ export class CourseDetailsPage extends BasePage {
   readonly gradingTab: Locator
   readonly header: CourseHeader
   readonly inviteAttendeesButton: Locator
-  readonly invitePopUp: InviteAttendeesPopUp
   readonly invitesLeftText: Locator
   readonly manageAttendanceButtonSelector: string
   readonly pendingTab: Locator
-  readonly replacePopUp: ReplaceAttendeePopUp
   readonly saveButton: Locator
   readonly successMessage: Locator
   readonly requestCancellationButton: Locator
-  readonly requestCancellationPopUp: RequestCancellationPopup
   readonly cancellationRequestAlert: Locator
   readonly approveCancellationButton: Locator
-  readonly cancelEntireCoursePopUp: CancelEntireCoursePopUp
   readonly certificationTab: Locator
   readonly certificateGrade: Locator
   readonly searchTrainerInput: Locator
@@ -210,10 +55,6 @@ export class CourseDetailsPage extends BasePage {
     this.attendingTab = this.page.locator('data-testid=tabParticipants')
     this.pendingTab = this.page.locator('data-testid=tabPending')
     this.declinedTab = this.page.locator('data-testid=tabDeclined')
-    this.invitePopUp = new InviteAttendeesPopUp(this.page)
-    this.replacePopUp = new ReplaceAttendeePopUp(this.page)
-    this.requestCancellationPopUp = new RequestCancellationPopup(this.page)
-    this.cancelEntireCoursePopUp = new CancelEntireCoursePopUp(this.page)
     this.attendeesTable = new UiTable(
       this.page.locator('data-testid=attending-table')
     )
@@ -390,17 +231,9 @@ export class CourseDetailsPage extends BasePage {
     return new RemoveAttendeePopUp(this.page)
   }
 
-  async clickAttendeeReplace() {
+  async clickAttendeeReplace(): Promise<ReplaceAttendeePopUp> {
     await this.page.locator('[data-testid=attendee-replace]').click()
-  }
-
-  async replaceAttendee(user: User) {
-    await this.replacePopUp.enterDetails(
-      user.givenName,
-      user.familyName,
-      user.email
-    )
-    await this.replacePopUp.clickSubmitButton()
+    return new ReplaceAttendeePopUp(this.page)
   }
 
   async checkAttendeeExists(user: User) {

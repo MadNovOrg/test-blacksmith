@@ -38,10 +38,11 @@ export async function waitForGraphQLResponse(
     return (
       response.url().includes('/graphql') &&
       response.status() === 200 &&
-      (await response.json()).data[keyToFind]
+      (await response.text()).includes(keyToFind)
     )
   })
-  const { data } = await response.json()
+  const responseBody = await response.text()
+  const { data } = JSON.parse(responseBody)
   if (JSON.stringify(data[keyToFind]).includes(valueToFind)) {
     return data
   }

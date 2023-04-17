@@ -10,8 +10,8 @@ import { Course, CourseTableRow } from '../../data/types'
 import { sortCoursesByAllFields as rowsByAllFields } from '../../util'
 import { BasePage } from '../BasePage'
 
+import { CourseDetailsPage } from './course-details/CourseDetailsPage'
 import { CourseBuilderPage } from './CourseBuilderPage'
-import { CourseDetailsPage } from './CourseDetailsPage'
 
 export class MyCoursesPage extends BasePage {
   readonly searchInput: Locator

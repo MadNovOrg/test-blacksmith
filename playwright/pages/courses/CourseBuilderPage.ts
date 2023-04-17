@@ -4,7 +4,7 @@ import { ModuleGroup } from '../../data/types'
 import { delay, sortModulesByName } from '../../util'
 import { BasePage } from '../BasePage'
 
-import { CourseDetailsPage } from './CourseDetailsPage'
+import { CourseDetailsPage } from './course-details/CourseDetailsPage'
 
 export class CourseBuilderPage extends BasePage {
   readonly courseInfo: Locator
