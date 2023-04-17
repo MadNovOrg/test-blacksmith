@@ -6,15 +6,17 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import React, { useState } from 'react'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { CourseLevel } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 import { TransferTermsTable } from '@app/pages/TransferParticipant/components/TransferTermsTable'
 
 export const ParticipantTransferInfo: React.FC<
   React.PropsWithChildren<{
     startDate: Date
+    courseLevel: CourseLevel
     onCancel: () => void
   }>
-> = ({ startDate, onCancel }) => {
+> = ({ startDate, onCancel, courseLevel }) => {
   const { t } = useScopedTranslation(
     'pages.course-details.modify-my-attendance.transfer-info'
   )
@@ -27,7 +29,7 @@ export const ParticipantTransferInfo: React.FC<
         {t('alert-message')}
       </Alert>
       <Box mt={2}>
-        <TransferTermsTable startDate={startDate} />
+        <TransferTermsTable startDate={startDate} courseLevel={courseLevel} />
       </Box>
 
       <Box mt={4}>

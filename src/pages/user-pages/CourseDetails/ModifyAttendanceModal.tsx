@@ -98,6 +98,7 @@ export const ModifyAttendanceModal: React.FC<
           <ParticipantTransferInfo
             startDate={new Date(course.schedule[0].start)}
             onCancel={onClose}
+            courseLevel={course.level}
           />
         ) : null}
         {!selectedAction ? (

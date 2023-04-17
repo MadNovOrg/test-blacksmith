@@ -13,6 +13,7 @@ import { InfoPanel, InfoRow } from '@app/components/InfoPanel'
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  CourseLevel,
   TransferFeeType,
   TransferParticipantMutation,
   TransferParticipantMutationVariables,
@@ -21,7 +22,7 @@ import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { TRANSFER_PARTICIPANT } from '../../queries'
 import { TransferStepsEnum } from '../../types'
-import { getTransferTermsFee } from '../../utils'
+import { getTransferTermsFee, isTrainTheTrainerCourse } from '../../utils'
 import { CourseInfoPanel } from '../CourseInfoPanel'
 import {
   TransferModeEnum,
@@ -93,9 +94,11 @@ export const TransferReview: React.FC<
     }
   }
 
-  if (!toCourse || !fees) {
+  if (!toCourse || !fees || !fromCourse?.level) {
     return <Navigate to={'../'} replace />
   }
+
+  const courseLevel = fromCourse.level as unknown as CourseLevel
 
   return (
     <Box>
@@ -164,8 +167,11 @@ export const TransferReview: React.FC<
                     label={t('transfer-details.apply-terms-option')}
                     value={t(
                       `transfer-details.${getTransferTermsFee(
-                        new Date(fromCourse?.start ?? '')
-                      )}-fee`
+                        new Date(fromCourse?.start ?? ''),
+                        courseLevel
+                      )}-fee${
+                        isTrainTheTrainerCourse(courseLevel) ? '-trainer' : ''
+                      }`
                     )}
                   />
                 </InfoPanel>
@@ -175,8 +181,11 @@ export const TransferReview: React.FC<
                     <Typography fontWeight={600}>
                       {t(
                         `transfer-details.${getTransferTermsFee(
-                          new Date(fromCourse?.start ?? '')
-                        )}-fee`
+                          new Date(fromCourse?.start ?? ''),
+                          courseLevel
+                        )}-fee${
+                          isTrainTheTrainerCourse(courseLevel) ? '-trainer' : ''
+                        }`
                       )}
                     </Typography>
                   </InfoRow>

@@ -7,6 +7,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { MarkOptional } from 'ts-essentials'
 
+import { CourseLevel } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
 
 import { TransferStepsEnum } from '../../types'
@@ -49,7 +50,7 @@ export const TransferDetails: React.FC<
     []
   )
 
-  if (!toCourse) {
+  if (!toCourse || !fromCourse) {
     return <Navigate to={'../'} replace />
   }
 
@@ -77,6 +78,7 @@ export const TransferDetails: React.FC<
 
       <FeesPanel
         courseStartDate={courseStartDate}
+        courseLevel={fromCourse.level as unknown as CourseLevel}
         onChange={handleFeesChange}
         mode={mode}
       />

@@ -1,12 +1,40 @@
-import { differenceInDays } from 'date-fns'
+import { differenceInWeeks } from 'date-fns'
 
-export const getTransferTermsFee = (startDate: Date): number => {
-  const diff = differenceInDays(startDate, new Date())
-  if (diff < 14) {
-    return 25
-  } else if (diff < 29) {
-    return 15
-  } else {
+import { CourseLevel } from '@app/generated/graphql'
+
+export function isTrainTheTrainerCourse(courseLevel: CourseLevel) {
+  return [
+    CourseLevel.IntermediateTrainer,
+    CourseLevel.AdvancedTrainer,
+  ].includes(courseLevel)
+}
+
+export const getTransferTermsFee = (
+  startDate: Date,
+  courseLevel: CourseLevel
+): 0 | 15 | 25 | 50 => {
+  const diffInWeeks = differenceInWeeks(startDate, new Date())
+  const isTrainTheTrainerLevel = isTrainTheTrainerCourse(courseLevel)
+
+  if (isTrainTheTrainerLevel) {
+    if (diffInWeeks < 1) {
+      return 50
+    }
+
+    if (diffInWeeks < 4) {
+      return 25
+    }
+
     return 0
   }
+
+  if (diffInWeeks < 2) {
+    return 25
+  }
+
+  if (diffInWeeks < 4) {
+    return 15
+  }
+
+  return 0
 }
