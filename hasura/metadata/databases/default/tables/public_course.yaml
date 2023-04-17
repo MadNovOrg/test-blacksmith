@@ -188,6 +188,47 @@ computed_fields:
         schema: public
         name: course_start_date
 insert_permissions:
+  - role: ld
+    permission:
+      check:
+        course_type:
+          _in:
+            - OPEN
+      set:
+        created_by_id: x-hasura-User-Id
+      columns:
+        - account_code
+        - accredited_by
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - cancellation_fee_percent
+        - cancellation_reason
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - notes
+        - organization_id
+        - parking_instructions
+        - reaccreditation
+        - sales_representative_id
+        - source
+        - special_instructions
+        - updated_at
+      backend_only: false
   - role: sales-admin
     permission:
       check:
@@ -366,6 +407,47 @@ select_permissions:
                 - TRAINER_MISSING
                 - TRAINER_PENDING
                 - TRAINER_UNAVAILABLE
+  - role: ld
+    permission:
+      columns:
+        - account_code
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - cancellation_fee_percent
+        - cancellation_reason
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - created_by_id
+        - description
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - notes
+        - organization_id
+        - parking_instructions
+        - reaccreditation
+        - sales_representative_id
+        - source
+        - special_instructions
+        - updated_at
+      computed_fields:
+        - course_code
+        - end
+        - freeSlots
+        - start
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:

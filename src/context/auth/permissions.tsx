@@ -145,6 +145,23 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         case RoleName.TT_ADMIN:
           return true
         case RoleName.LD:
+          return [CourseType.OPEN].includes(type)
+        case RoleName.TT_OPS:
+          return [CourseType.OPEN, CourseType.CLOSED].includes(type)
+        case RoleName.SALES_ADMIN: {
+          return [CourseType.CLOSED, CourseType.OPEN].includes(type)
+        }
+        case RoleName.TRAINER:
+          return [CourseType.INDIRECT].includes(type)
+      }
+
+      return false
+    },
+
+    canEditCourses: (type: CourseType) => {
+      switch (auth.activeRole) {
+        case RoleName.TT_ADMIN:
+          return true
         case RoleName.TT_OPS:
           return [CourseType.OPEN, CourseType.CLOSED].includes(type)
         case RoleName.SALES_ADMIN: {

@@ -176,7 +176,7 @@ export const CourseDetails = () => {
               <CourseHeroSummary
                 course={course}
                 renderButton={() =>
-                  acl.canCreateCourse(course.type) &&
+                  acl.canEditCourses(course.type) &&
                   !courseEnded(course) &&
                   !courseCancelled ? (
                     <Button
