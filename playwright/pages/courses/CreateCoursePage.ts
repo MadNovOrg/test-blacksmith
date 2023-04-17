@@ -89,9 +89,7 @@ export class CreateCoursePage extends BasePage {
     this.salesPersonInput = this.page.locator(
       '[data-testid="profile-selector-sales-representative"] input'
     )
-    this.sourceDropdown = this.page.locator(
-      '[data-testid="source-dropdown"] input'
-    )
+    this.sourceDropdown = this.page.locator('[data-testid="source-dropdown"]')
     this.sourceOption = (source: Course_Source_Enum) => {
       return this.page.locator(`[data-testid="source-option-${source}"]`)
     }
