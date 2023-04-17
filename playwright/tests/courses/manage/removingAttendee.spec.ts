@@ -31,6 +31,26 @@ const testData = [
       return course
     },
   },
+  {
+    user: 'ops',
+    userToRemove: users.user2WithOrg,
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.status = Course_Status_Enum.Scheduled
+      course.id = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.ACCEPTED
+      )
+      await API.course.insertCourseParticipants(course.id, [
+        users.user1WithOrg,
+        users.user2WithOrg,
+        users.user1,
+        users.user2,
+      ])
+      return course
+    },
+  },
   // TODO uncomment tests after fixing TTHP-1161
   // {
   //   user: 'ops',

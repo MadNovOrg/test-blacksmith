@@ -30,6 +30,10 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/participant/cancel/individual'
     permissions:
+      - role: trainer
+      - role: tt-admin
+      - role: tt-ops
+      - role: ld
       - role: user
   - name: cancelMyselfFromCourse
     definition:

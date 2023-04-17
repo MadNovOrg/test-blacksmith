@@ -306,7 +306,20 @@ update_permissions:
           _eq: X-Hasura-User-Id
       check: null
 delete_permissions:
+  - role: ld
+    permission:
+      filter: {}
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
   - role: tt-admin
+    permission:
+      filter: {}
+  - role: tt-ops
     permission:
       filter: {}
 event_triggers:

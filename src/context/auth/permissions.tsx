@@ -297,9 +297,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         return true
       }
 
-      return [RoleName.TT_ADMIN, RoleName.TT_OPS, RoleName.SALES_ADMIN].some(
-        r => r === auth.activeRole
-      )
+      return [
+        RoleName.TT_ADMIN,
+        RoleName.TT_OPS,
+        RoleName.SALES_ADMIN,
+        RoleName.LD,
+      ].some(r => r === auth.activeRole)
     },
     canManageParticipantAttendandance: () => {
       return (
