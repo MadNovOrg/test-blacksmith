@@ -37,7 +37,6 @@ insert_permissions:
             - NOT_ATTENDED
       set:
         authorized_by: x-hasura-User-Id
-        payload: '{}'
       columns:
         - authorized_by
         - course_id
