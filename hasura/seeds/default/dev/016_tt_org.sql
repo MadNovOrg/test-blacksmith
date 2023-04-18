@@ -78,4 +78,6 @@ INSERT INTO public.course_certificate (profile_id, number, expiry_date, course_n
 
 INSERT INTO public.profile_trainer_role_type (profile_id, trainer_role_type_id) VALUES
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', (SELECT id FROM public.trainer_role_type WHERE name = 'principal')),
-('dccd780a-9745-4972-a43e-95ec3ef361df', (SELECT id FROM public.trainer_role_type WHERE name = 'senior'));
+('dccd780a-9745-4972-a43e-95ec3ef361df', (SELECT id FROM public.trainer_role_type WHERE name = 'senior')),
+('62946c00-1da3-44f7-97a6-4b1c8da4f2ef', (SELECT id FROM public.trainer_role_type WHERE name = 'moderator')),
+('921ddd50-6d03-4bec-a0f4-6bd6f2da20a6', (SELECT id FROM public.trainer_role_type WHERE name = 'moderator'));
