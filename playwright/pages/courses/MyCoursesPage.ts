@@ -1,6 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test'
 
-import { waitForGraphQLResponse } from '../../commands'
 import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
@@ -130,11 +129,8 @@ export class MyCoursesPage extends BasePage {
     await this.submitButton.click()
   }
 
-  async confirmModules() {
-    await Promise.all([
-      waitForGraphQLResponse(this.page, 'course', 'createdAt'),
-      this.page.getByText('Confirm').click(),
-    ])
+  async confirmModules(): Promise<CourseDetailsPage> {
+    await this.page.locator('[data-testid="dialog-confirm-button"]').click()
     return new CourseDetailsPage(this.page)
   }
 

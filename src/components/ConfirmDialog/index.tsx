@@ -50,6 +50,7 @@ export const ConfirmDialog: React.FC<
           color="primary"
           size="large"
           onClick={onOk}
+          data-testid="dialog-confirm-button"
         >
           {okLabel ?? t('common.confirm')}
         </Button>

@@ -35,9 +35,9 @@ test('cancel indirect course as trainer', async ({ page, course }) => {
     course.id
   )
   await courseDetailsPage.clickEditCourseButton()
-  await courseDetailsPage.clickCancelCourseButton()
-  await courseDetailsPage.enterCancellationReason()
-  await courseDetailsPage.clickCancelEntireCourseButton()
+  const cancelPopup = await courseDetailsPage.clickCancelCourseButton()
+  await cancelPopup.enterCancellationReason()
+  await cancelPopup.clickCancelEntireCourseButton()
   await trainerCoursesPage.goto(`${course.id}`)
   await trainerCoursesPage.checkCourseStatus(course.id, 'Cancelled')
 })

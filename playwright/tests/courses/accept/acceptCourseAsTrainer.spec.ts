@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test'
 
 import { Course_Status_Enum } from '@app/generated/graphql'
-import { InviteStatus } from '@app/types'
+import { CourseType, InviteStatus } from '@app/types'
 
 import * as API from '../../../api'
 import { TARGET_ENV } from '../../../constants'
@@ -25,33 +25,32 @@ const testData = [
       return course
     },
   },
-  // TODO uncomment after implementing https://behaviourhub.atlassian.net/browse/TTHP-575
-  // {
-  //   name: 'accept indirect course as trainer',
-  //   course: async () => {
-  //     const course = UNIQUE_COURSE()
-  //     course.type = CourseType.INDIRECT
-  //     course.id = await insertCourse(
-  //       course,
-  //       users.trainer.email,
-  //       InviteStatus.PENDING
-  //     )
-  //     return course
-  //   },
-  // },
-  // {
-  //   name: 'accept closed course as trainer @smoke',
-  //   course: async () => {
-  //     const course = UNIQUE_COURSE()
-  //     course.type = CourseType.CLOSED
-  //     course.id = await insertCourse(
-  //       course,
-  //       users.trainer.email,
-  //       InviteStatus.PENDING
-  //     )
-  //     return course
-  //   },
-  // },
+  {
+    name: 'accept indirect course as trainer',
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.INDIRECT
+      course.id = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.PENDING
+      )
+      return course
+    },
+  },
+  {
+    name: 'accept closed course as trainer @smoke',
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.CLOSED
+      course.id = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.PENDING
+      )
+      return course
+    },
+  },
 ]
 
 for (const data of testData) {
@@ -66,8 +65,8 @@ for (const data of testData) {
   test.use({ storageState: stateFilePath('trainer') })
 
   test(data.name, async ({ page, course }) => {
-    // We skip this test when running as a smoke test as there is no backend
-    // eslint-disable-next-line playwright/no-skipped-test
+    //We skip this test when running as a smoke test as there is no backend
+    //eslint-disable-next-line playwright/no-skipped-test
     test.skip(Boolean(process.env.CI) && TARGET_ENV === 'local')
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto(`${course.id}`)

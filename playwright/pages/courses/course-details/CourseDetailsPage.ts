@@ -22,8 +22,6 @@ export class CourseDetailsPage extends BasePage {
   readonly attendingTab: Locator
   readonly attendingText: Locator
   readonly cancelCourseButton: Locator
-  readonly cancelCourseCheckbox: Locator
-  readonly cancelEntireCourseButton: Locator
   readonly courseGradingNav: Locator
   readonly declinedTab: Locator
   readonly editCourseButton: Locator
@@ -62,12 +60,6 @@ export class CourseDetailsPage extends BasePage {
     this.saveButton = this.page.locator('[data-testid="save-button"]')
     this.cancelCourseButton = this.page.locator(
       '[data-testid="cancel-course-button"]'
-    )
-    this.cancelCourseCheckbox = this.page.locator(
-      '[data-testid="cancel-entire-course-checkbox"]'
-    )
-    this.cancelEntireCourseButton = this.page.locator(
-      '[data-testid="cancel-entire-course-button"]'
     )
     this.additionalNotes = this.page.locator(
       '[data-testid="additional-notes-label"]'
@@ -185,29 +177,10 @@ export class CourseDetailsPage extends BasePage {
     )
   }
 
-  async clickCancelCourseButton() {
+  async clickCancelCourseButton(): Promise<CancelEntireCoursePopUp> {
     await this.cancelCourseButton.click()
+    return new CancelEntireCoursePopUp(this.page)
   }
-
-  async clickCancelCourseDropdown() {
-    await this.page.locator('[data-testid="cancel-course-dropdown"]').click()
-    await this.page.getByText('Trainer availability').click()
-  }
-
-  async enterCancellationReason(reason = 'Some reason for cancelling') {
-    await this.page.locator('input[name=cancellationReason]').type(reason)
-  }
-
-  async checkCancelCourseCheckbox() {
-    await this.page
-      .locator('[data-testid="cancel-entire-course-checkbox"]')
-      .check()
-  }
-
-  async clickCancelEntireCourseButton() {
-    await this.cancelEntireCourseButton.click()
-  }
-
   async clickManageAttendance() {
     await this.page.locator('[data-testid=manage-attendance]').click()
   }
