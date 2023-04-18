@@ -169,8 +169,7 @@ export const CourseBuilder: React.FC<
   const estimatedDurationInHours = Math.ceil(estimatedCourseDuration / 60)
 
   const minimumTimeCommitment = useMemo(() => {
-    if (courseData?.course?.level)
-      return getMinimumTimeCommitment(courseData?.course?.level)
+    if (courseData?.course) return getMinimumTimeCommitment(courseData?.course)
     return 0
   }, [courseData])
 

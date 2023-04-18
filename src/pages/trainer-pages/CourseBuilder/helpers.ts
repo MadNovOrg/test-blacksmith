@@ -1,11 +1,18 @@
 import { Course_Level_Enum } from '@app/generated/graphql'
 
-export const getMinimumTimeCommitment = (courseLevel: Course_Level_Enum) => {
+export const getMinimumTimeCommitment = ({
+  level,
+  reaccreditation,
+}: {
+  level: Course_Level_Enum
+  reaccreditation?: boolean | null
+}) => {
   if (
-    courseLevel === Course_Level_Enum.Level_1 ||
-    courseLevel === Course_Level_Enum.Level_2
+    reaccreditation ||
+    level === Course_Level_Enum.Level_1 ||
+    level === Course_Level_Enum.Level_2
   )
     return 6
-  if (courseLevel === Course_Level_Enum.Advanced) return 12
+  if (level === Course_Level_Enum.Advanced) return 12
   return 0
 }
