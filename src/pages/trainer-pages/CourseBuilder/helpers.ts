@@ -10,9 +10,9 @@ export const getMinimumTimeCommitment = ({
   if (
     reaccreditation ||
     level === Course_Level_Enum.Level_1 ||
-    level === Course_Level_Enum.Level_2
+    level === Course_Level_Enum.Advanced
   )
     return 6
-  if (level === Course_Level_Enum.Advanced) return 12
+  if (level === Course_Level_Enum.Level_2) return 12
   return 0
 }
