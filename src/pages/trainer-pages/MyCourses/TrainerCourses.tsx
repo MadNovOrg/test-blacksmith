@@ -3,31 +3,23 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { BooleanParam, useQueryParam, withDefault } from 'use-query-params'
+import { useNavigate } from 'react-router-dom'
 
 import { CreateCourseMenu } from '@app/components/CreateCourseMenu'
-import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
-import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
-import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
-import { FilterCourseType } from '@app/components/FilterCourseType'
-import { FilterDates } from '@app/components/FilterDates'
-import { FilterSearch } from '@app/components/FilterSearch'
 import { SnackbarMessage } from '@app/components/SnackbarMessage'
 import { useAuth } from '@app/context/auth'
 import {
   Course_Invite_Status_Enum,
-  Course_Level_Enum,
   Course_Trainer_Type_Enum,
-  Course_Type_Enum,
 } from '@app/generated/graphql'
-import { useCourses } from '@app/hooks/useCourses'
+import { CoursesFilters, useCourses } from '@app/hooks/useCourses'
 import { useTablePagination } from '@app/hooks/useTablePagination'
 import { useTableSort } from '@app/hooks/useTableSort'
-import { AdminOnlyCourseStatus, RoleName } from '@app/types'
+import { RoleName } from '@app/types'
 
 import { ActionableCoursesTable } from './components/ActionableCoursesTable'
 import { CoursesTable } from './components/CoursesTable'
+import { Filters } from './components/Filters'
 import useActionableCourses from './hooks/useActionableCourses'
 import { getActionableStatuses } from './utils'
 
@@ -37,13 +29,6 @@ export type Props = {
   showAvailableCoursesButton?: boolean
 }
 
-type DateFilters = {
-  filterStartDate?: Date | undefined
-  filterEndDate?: Date | undefined
-  filterCreateStartDate?: Date | undefined
-  filterCreateEndDate?: Date | undefined
-}
-
 export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   orgId,
@@ -51,9 +36,8 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const [searchParams] = useSearchParams()
 
-  const { activeRole, acl, isOrgAdmin } = useAuth()
+  const { activeRole, acl } = useAuth()
   const isTrainer = activeRole === RoleName.TRAINER
 
   const sorting = useTableSort('start', 'desc')
@@ -67,16 +51,6 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     return []
   }, [activeRole])
 
-  const [keyword, setKeyword] = useState(searchParams.get('q') ?? '')
-  const [filterLevel, setFilterLevel] = useState<Course_Level_Enum[]>([])
-  const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
-  const [filterStatus, setFilterStatus] = useState<string[]>([])
-  const [dateFilters, setDateFilters] = useState<DateFilters>()
-  const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
-    'bl',
-    withDefault(BooleanParam, false)
-  )
-
   const { Pagination, perPage, currentPage } = useTablePagination({
     id: 'my-courses',
   })
@@ -86,48 +60,7 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     currentPage: actionableCurrentPage,
   } = useTablePagination({ initialPerPage: 5, id: 'actionable-courses' })
 
-  const filters = useMemo(() => {
-    let startDate = undefined
-    let endDate = undefined
-    let createStartDate = undefined
-    let createEndDate = undefined
-
-    if (dateFilters?.filterStartDate) {
-      startDate = new Date(dateFilters.filterStartDate)
-      startDate.setHours(0, 0, 0)
-    }
-    if (dateFilters?.filterEndDate) {
-      endDate = new Date(dateFilters.filterEndDate)
-      endDate.setHours(23, 59, 59)
-    }
-    if (dateFilters?.filterCreateStartDate) {
-      createStartDate = new Date(dateFilters.filterCreateStartDate)
-      createStartDate.setHours(0, 0, 0)
-    }
-    if (dateFilters?.filterCreateEndDate) {
-      createEndDate = new Date(dateFilters.filterCreateEndDate)
-      createEndDate.setHours(23, 59, 59)
-    }
-
-    return {
-      statuses: filterStatus,
-      levels: filterLevel,
-      types: filterType,
-      go1Integration: filterBlendedLearning,
-      keyword,
-      excludedStatuses: Array.from(actionableStatuses),
-      creation: { start: createStartDate, end: createEndDate },
-      schedule: { start: startDate, end: endDate },
-    }
-  }, [
-    actionableStatuses,
-    dateFilters,
-    filterBlendedLearning,
-    filterLevel,
-    filterStatus,
-    filterType,
-    keyword,
-  ])
+  const [filters, setFilters] = useState<CoursesFilters | undefined>()
 
   const [
     { data: actionableCourses, fetching: fetchingActionableCourses },
@@ -156,17 +89,10 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     }
   )
 
-  const isDateEmpty = Object.values(dateFilters || {}).every(
-    x => x === undefined || x === null
-  )
-
   const filtered = Boolean(
-    keyword ||
-      filterStatus.length ||
-      filterType.length ||
-      filterLevel.length ||
-      filterBlendedLearning ||
-      !isDateEmpty
+    Object.values(filters ?? {}).some(
+      filter => (Array.isArray(filter) && filter.length) || Boolean(filter)
+    )
   )
 
   useEffect(() => {
@@ -184,7 +110,6 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
       const isAccepted =
         status === Course_Invite_Status_Enum.Accepted &&
         trainer.type === Course_Trainer_Type_Enum.Leader
-      setKeyword('')
 
       if (isAccepted) {
         navigate(`./${course.id}/modules`)
@@ -195,18 +120,6 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
     },
     [mutate, navigate, refetchActionableCourses]
   )
-
-  const onDatesChange = useCallback((from?: Date, to?: Date) => {
-    setDateFilters(prev => {
-      return { ...prev, filterStartDate: from, filterEndDate: to }
-    })
-  }, [])
-
-  const onCreateDatesChange = useCallback((from?: Date, to?: Date) => {
-    setDateFilters(prev => {
-      return { ...prev, filterCreateStartDate: from, filterCreateEndDate: to }
-    })
-  }, [])
 
   const fetchingCourses = loading || fetchingActionableCourses
 
@@ -226,51 +139,18 @@ export const TrainerCourses: React.FC<React.PropsWithChildren<Props>> = ({
           </Typography>
 
           <Stack gap={4} mt={4}>
-            <FilterSearch value={keyword} onChange={setKeyword} />
-            <FilterDates
-              onChange={onDatesChange}
-              title={t('filters.course-date-range')}
-              data-testid={'date-range'}
-              queryParam={'Range'}
-            />
-            <FilterDates
-              onChange={onCreateDatesChange}
-              title={t('filters.created-range')}
-              data-testid={'date-created'}
-              queryParam={'Created'}
-            />
-            <Box>
-              <Typography variant="body2" fontWeight="bold">
-                {t('filter-by')}
-              </Typography>
-              <Stack gap={1}>
-                <FilterByBlendedLearning
-                  selected={filterBlendedLearning}
-                  onChange={setFilterBlendedLearning}
-                />
-                <FilterCourseLevel onChange={setFilterLevel} />
-                <FilterCourseType onChange={setFilterType} />
-                <FilterCourseStatus
-                  onChange={setFilterStatus}
-                  customStatuses={
-                    acl.isTTAdmin() || isOrgAdmin
-                      ? new Set([AdminOnlyCourseStatus.CancellationRequested])
-                      : undefined
-                  }
-                />
-              </Stack>
-            </Box>
+            <Filters onChange={setFilters} />
           </Stack>
         </Box>
 
         <Box flex={1}>
           <Box
             display="flex"
-            alignItems="center"
-            justifyContent="space-between"
+            alignItems="right"
+            justifyContent="end"
+            alignContent="right"
             mb={2}
           >
-            <Box></Box>
             <Box display="flex" gap={1}>
               {acl.canCreateCourses() ? <CreateCourseMenu /> : null}
               {showAvailableCoursesButton ? (

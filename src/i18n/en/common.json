@@ -196,10 +196,11 @@
     "LEVEL_1": "Level One",
     "LEVEL_2": "Level Two",
     "ADVANCED": "Advanced Modules",
-    "BILD_ACT": "BILD Act",
     "INTERMEDIATE_TRAINER": "Intermediate Trainer",
     "ADVANCED_TRAINER": "Advanced Trainer",
-    "BILD_ACT_TRAINER": "BILD Act Trainer"
+    "BILD_REGULAR": "BILD Certified",
+    "BILD_INTERMEDIATE_TRAINER": "BILD Intermediate Trainer",
+    "BILD_ADVANCED_TRAINER": "BILD Advanced Trainer"
   },
   "course-types": {
     "OPEN": "Open",
@@ -436,6 +437,7 @@
     "date-obtained": "Filter by date obtained",
     "payment-method": "Payment Method",
     "status": "Status",
+    "accredited-by": "Accredited By",
     "currency": "Currency",
     "CC": "Credit card",
     "INVOICE": "Invoice",

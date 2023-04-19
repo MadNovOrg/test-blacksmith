@@ -8,6 +8,7 @@ import { Client, Provider } from 'urql'
 import { fromValue, never } from 'wonka'
 
 import {
+  Accreditors_Enum,
   Course_Bool_Exp,
   Course_Level_Enum,
   Course_Status_Enum,
@@ -1591,6 +1592,53 @@ describe('trainers-pages/MyCourses', () => {
 
       await expectActionableTableTo({
         table: actionableTbl,
+        include: [filteredCourse],
+        exclude: [course],
+      })
+    })
+
+    it('filters by accredited by', async () => {
+      const course = buildTrainerCourse()
+      const filteredCourse = buildTrainerCourse()
+
+      const client = {
+        executeQuery: ({
+          variables,
+        }: {
+          variables: TrainerCoursesQueryVariables
+        }) => {
+          const courses = variables.where?.accreditedBy?._in?.includes(
+            Accreditors_Enum.Bild
+          )
+            ? [filteredCourse]
+            : [course]
+
+          return fromValue<{ data: TrainerCoursesQuery }>({
+            data: {
+              courses,
+              course_aggregate: {
+                aggregate: {
+                  count: courses.length,
+                },
+              },
+            },
+          })
+        },
+      }
+
+      _render(
+        <Provider value={client as unknown as Client}>
+          <TrainerCourses />
+        </Provider>
+      )
+
+      await userEvent.click(
+        within(screen.getByTestId('filter-accredited-by')).getByText('BILD')
+      )
+
+      const table = screen.getByTestId('courses-table')
+      await expectCourseTableTo({
+        table,
         include: [filteredCourse],
         exclude: [course],
       })

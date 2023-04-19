@@ -3,6 +3,7 @@ import { useQuery } from 'urql'
 
 import { useAuth } from '@app/context/auth'
 import {
+  Accreditors_Enum,
   Course_Bool_Exp,
   Course_Invite_Status_Enum,
   Course_Level_Enum,
@@ -35,6 +36,7 @@ export type CoursesFilters = {
     start?: Date
     end?: Date
   }
+  accreditedBy?: Accreditors_Enum[]
 }
 
 type Props = {
@@ -89,6 +91,10 @@ export const filtersToWhereClause = (
     if (filters?.schedule?.end) {
       where.schedule._and?.push({ end: { _lte: filters.schedule.end } })
     }
+  }
+
+  if (filters?.accreditedBy?.length) {
+    where.accreditedBy = { _in: filters.accreditedBy }
   }
 
   const query = filters?.keyword?.trim()
