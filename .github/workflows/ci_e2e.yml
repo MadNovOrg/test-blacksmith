@@ -56,12 +56,14 @@ jobs:
           npm run hasura -- migrate apply --database-name default
           npm run hasura -- migrate status --database-name default
           npm run hasura -- metadata reload
-          npm run hasura -- seed apply --database-name default
           npm run hasura -- migrate apply --goto 101 --database-name default
           npm run hasura -- migrate status --database-name default
           npm run hasura -- migrate apply --database-name default
           npm run hasura -- migrate status --database-name default
           npm run hasura -- metadata reload
+
+      - name: Hasura Seed Data
+        run: npm run hasura -- seed apply --database-name default
 
       - name: Playwright setup
         run: |

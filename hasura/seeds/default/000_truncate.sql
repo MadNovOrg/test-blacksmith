@@ -33,3 +33,5 @@ TRUNCATE TABLE public.go1_licenses CASCADE;
 TRUNCATE TABLE public.go1_licenses_history CASCADE;
 TRUNCATE TABLE public.xero_invoice CASCADE;
 TRUNCATE TABLE public.xero_contact CASCADE;
+TRUNCATE TABLE public.course_bild_module CASCADE;
+TRUNCATE TABLE public.course_bild_strategy CASCADE;
