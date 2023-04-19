@@ -344,9 +344,9 @@
       }
     },
     "form": {
-      "health-leaflet-copy": "I acknowledge I must send the health and safety leaflet at least 2 weeks before the course begins. (If the course is starting in less than 2 weeks, send as soon as possible before the course begins.)",
-      "practice-protocol-copy": "I acknowledge I will confirm practice protocols and a first aider.",
-      "valid-id-copy": "I acknowledge I will ensure all delegates have a valid form of ID (passport or driving licence) before commencing the training."
+      "health-leaflet-copy": "I confirm that I will ensure all course registrants have read the Health Guidance & Training Information.",
+      "practice-protocol-copy": "I confirm that I will follow Team Teach protocols and have the correct first aid protocols in place.",
+      "valid-id-copy": "I confirm that I will check that all course attendees have a valid form of ID before commencing the training through either passport, driving licence or organisation verification."
     },
     "save-as-draft": "Save as draft",
     "submitted-course": "{{code}} has been created.",
