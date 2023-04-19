@@ -42,7 +42,7 @@ const removeLicenses = async (
 
 test('licenses can be removed by admin', async ({ browser, orgId }) => {
   const salesAdminContext = await browser.newContext({
-    storageState: stateFilePath('Admin'),
+    storageState: stateFilePath('admin'),
   })
   const page = await salesAdminContext.newPage()
 
