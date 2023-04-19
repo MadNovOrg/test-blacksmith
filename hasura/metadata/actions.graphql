@@ -182,6 +182,13 @@ type Query {
 }
 
 type Mutation {
+  sendCourseInformation(
+    courseId: Int!
+    attendeeIds: [uuid!]!
+  ): SendCourseInformationOutput!
+}
+
+type Mutation {
   stripeCreatePaymentIntent(
     input: StripeCreatePaymentIntentInput!
   ): StripeCreatePaymentIntentOutput
@@ -393,6 +400,12 @@ enum DeleteUserError {
   CERT_EXIST
   SELF_DELETE
   USER_TRAINER
+}
+
+enum SendCourseInformationError {
+  COURSE_NOT_FOUND
+  ATTENDEE_NOT_FOUND
+  ATTENDEE_LIST_IS_EMPTY
 }
 
 input PlansCreateInput {
@@ -922,6 +935,11 @@ type NotifyCourseEditOutput {
 
 type ApproveCourseOutput {
   success: Boolean!
+}
+
+type SendCourseInformationOutput {
+  success: Boolean!
+  error: SendCourseInformationError
 }
 
 scalar Date

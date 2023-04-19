@@ -583,7 +583,14 @@
     "invite-sent": "Invite sent.",
     "invite-cancelled": "Invite cancelled.",
     "no-attendees": "No attendees",
-    "manage-attendance": "Manage attendance"
+    "manage-attendance": "Manage attendance",
+    "resend-course-info": {
+      "modal": {
+        "title": "Resend course information",
+        "message": "Do you want to resend the course information to {{fullName}}?"
+      }
+    },
+    "course-information-sent": "Corse information sent."
   },
   "course-grading-details": {
     "title": "Grading details",

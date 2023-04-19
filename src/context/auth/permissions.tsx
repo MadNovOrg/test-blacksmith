@@ -304,11 +304,21 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.LD,
       ].some(r => r === auth.activeRole)
     },
+    canSendCourseInformation: () => {
+      const roles = [
+        RoleName.TRAINER,
+        RoleName.TT_OPS,
+        RoleName.TT_ADMIN,
+        RoleName.SALES_ADMIN,
+      ]
+      return roles.some(r => r === auth.activeRole)
+    },
     canManageParticipantAttendandance: () => {
       return (
         acl.canTransferParticipant() ||
         acl.canReplaceParticipant() ||
-        acl.canRemoveParticipant()
+        acl.canRemoveParticipant() ||
+        acl.canSendCourseInformation()
       )
     },
     canGradeParticipants: (

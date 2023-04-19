@@ -13,15 +13,22 @@ import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { ConfirmDialog } from '@app/components/ConfirmDialog'
 import {
   Mode,
   ReplaceParticipantDialog,
 } from '@app/components/ReplaceParticipantDialog'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
+import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { useMatchMutate } from '@app/hooks/useMatchMutate'
 import { RemoveIndividualModal } from '@app/pages/trainer-pages/components/CourseAttendees/RemoveIndividualModal'
+import {
+  MUTATION as SEND_COURSE_INFO,
+  ParamsType as SendCourseInfoParamType,
+  ResponseType as SendCourseInfoResponseType,
+} from '@app/queries/courses/send-course-information'
 import { Matcher } from '@app/queries/participants/get-course-participants'
 import {
   BlendedLearningStatus,
@@ -36,24 +43,32 @@ import { CourseActionsMenu } from './CourseActionsMenu'
 
 type TabProperties = {
   course: Course
+  onSendingCourseInformation: (success: boolean) => void
 }
 
 const PER_PAGE = 12
 const ROWS_PER_PAGE_OPTIONS = [12, 24, 50, 100]
 
-export const AttendingTab = ({ course }: TabProperties) => {
+export const AttendingTab = ({
+  course,
+  onSendingCourseInformation,
+}: TabProperties) => {
   const { isOrgAdmin, acl } = useAuth()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(0)
   const [perPage, setPerPage] = useState(PER_PAGE)
   const [sortColumn, setSortColumn] = useState<string>('name')
   const [order, setOrder] = useState<SortOrder>('asc')
-  const [individual, setIndividual] = useState<CourseParticipant>()
+  const [individualToRemove, setIndividualToRemove] =
+    useState<CourseParticipant>()
   const [participantToReplace, setParticipantToReplace] =
+    useState<CourseParticipant>()
+  const [individualToResendInfo, setIndividualToResendInfo] =
     useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
   const navigate = useNavigate()
+  const fetcher = useFetcher()
 
   const {
     data: courseParticipants,
@@ -141,6 +156,31 @@ export const AttendingTab = ({ course }: TabProperties) => {
     [navigate]
   )
 
+  const sendCourseInfo = useCallback(
+    async (
+      courseId: SendCourseInfoParamType['courseId'],
+      attendeeIds: SendCourseInfoParamType['attendeeIds']
+    ) => {
+      setIndividualToResendInfo(undefined)
+      try {
+        const response = await fetcher<
+          SendCourseInfoResponseType,
+          SendCourseInfoParamType
+        >(SEND_COURSE_INFO, { courseId, attendeeIds })
+
+        if (response?.sendCourseInformation.success) {
+          onSendingCourseInformation(true)
+        } else {
+          console.log('Error! ', response?.sendCourseInformation)
+          onSendingCourseInformation(false)
+        }
+      } catch (err) {
+        onSendingCourseInformation(false)
+      }
+    },
+    [fetcher, onSendingCourseInformation]
+  )
+
   return (
     <>
       {courseParticipantsLoadingStatus === LoadingStatus.SUCCESS &&
@@ -208,11 +248,14 @@ export const AttendingTab = ({ course }: TabProperties) => {
                           setParticipantToReplace(participant)
                         }}
                         onRemoveClick={participant => {
-                          setIndividual(participant)
+                          setIndividualToRemove(participant)
                         }}
                         onTransferClick={participant => {
                           handleTransfer(participant.id)
                         }}
+                        onResendCourseInformationClick={participant =>
+                          setIndividualToResendInfo(participant)
+                        }
                       />
                     </TableCell>
                   ) : null}
@@ -234,11 +277,11 @@ export const AttendingTab = ({ course }: TabProperties) => {
             />
           ) : null}
 
-          {individual ? (
+          {individualToRemove ? (
             <RemoveIndividualModal
-              participant={individual}
+              participant={individualToRemove}
               course={course}
-              onClose={() => setIndividual(undefined)}
+              onClose={() => setIndividualToRemove(undefined)}
               onSave={invalidateCache}
             />
           ) : null}
@@ -254,6 +297,23 @@ export const AttendingTab = ({ course }: TabProperties) => {
               onClose={() => setParticipantToReplace(undefined)}
               onSuccess={invalidateCache}
               mode={isOrgAdmin ? Mode.ORG_ADMIN : Mode.TT_ADMIN}
+            />
+          ) : null}
+
+          {individualToResendInfo ? (
+            <ConfirmDialog
+              open={Boolean(individualToResendInfo)}
+              title={t(
+                'pages.course-participants.resend-course-info.modal.title'
+              )}
+              message={t(
+                'pages.course-participants.resend-course-info.modal.message',
+                { fullName: individualToResendInfo?.profile.fullName }
+              )}
+              onCancel={() => setIndividualToResendInfo(undefined)}
+              onOk={() =>
+                sendCourseInfo(course.id, [individualToResendInfo?.id])
+              }
             />
           ) : null}
         </>

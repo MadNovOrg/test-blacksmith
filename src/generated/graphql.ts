@@ -9756,6 +9756,18 @@ export type SearchTrainersInput = {
   trainerType?: InputMaybe<CourseTrainerType>;
 };
 
+export enum SendCourseInformationError {
+  AttendeeListIsEmpty = 'ATTENDEE_LIST_IS_EMPTY',
+  AttendeeNotFound = 'ATTENDEE_NOT_FOUND',
+  CourseNotFound = 'COURSE_NOT_FOUND'
+}
+
+export type SendCourseInformationOutput = {
+  __typename?: 'SendCourseInformationOutput';
+  error?: Maybe<SendCourseInformationError>;
+  success: Scalars['Boolean'];
+};
+
 /** Input for the sendPasswordResetEmail mutation */
 export type SendPasswordResetEmailInput = {
   /** This is an ID that can be passed to a mutation by the client to track the progress of mutations and catch possible duplicate mutation submissions. */
@@ -13375,9 +13387,11 @@ export enum Availability_Update_Column {
 /** columns and relationships of "bild_strategy" */
 export type Bild_Strategy = {
   __typename?: 'bild_strategy';
+  duration?: Maybe<Scalars['Int']>;
   id: Scalars['uuid'];
   modules: Scalars['jsonb'];
   name: Scalars['String'];
+  shortName: Scalars['String'];
 };
 
 
@@ -13396,9 +13410,17 @@ export type Bild_Strategy_Aggregate = {
 /** aggregate fields of "bild_strategy" */
 export type Bild_Strategy_Aggregate_Fields = {
   __typename?: 'bild_strategy_aggregate_fields';
+  avg?: Maybe<Bild_Strategy_Avg_Fields>;
   count: Scalars['Int'];
   max?: Maybe<Bild_Strategy_Max_Fields>;
   min?: Maybe<Bild_Strategy_Min_Fields>;
+  stddev?: Maybe<Bild_Strategy_Stddev_Fields>;
+  stddev_pop?: Maybe<Bild_Strategy_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Bild_Strategy_Stddev_Samp_Fields>;
+  sum?: Maybe<Bild_Strategy_Sum_Fields>;
+  var_pop?: Maybe<Bild_Strategy_Var_Pop_Fields>;
+  var_samp?: Maybe<Bild_Strategy_Var_Samp_Fields>;
+  variance?: Maybe<Bild_Strategy_Variance_Fields>;
 };
 
 
@@ -13413,18 +13435,28 @@ export type Bild_Strategy_Append_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
 };
 
+/** aggregate avg on columns */
+export type Bild_Strategy_Avg_Fields = {
+  __typename?: 'bild_strategy_avg_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
 /** Boolean expression to filter rows from the table "bild_strategy". All fields are combined with a logical 'AND'. */
 export type Bild_Strategy_Bool_Exp = {
   _and?: InputMaybe<Array<Bild_Strategy_Bool_Exp>>;
   _not?: InputMaybe<Bild_Strategy_Bool_Exp>;
   _or?: InputMaybe<Array<Bild_Strategy_Bool_Exp>>;
+  duration?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
   modules?: InputMaybe<Jsonb_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  shortName?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "bild_strategy" */
 export enum Bild_Strategy_Constraint {
+  /** unique or primary key constraint */
+  BildStrategyNameKey = 'bild_strategy_name_key',
   /** unique or primary key constraint */
   BildStrategyPkey = 'bild_strategy_pkey'
 }
@@ -13444,25 +13476,36 @@ export type Bild_Strategy_Delete_Key_Input = {
   modules?: InputMaybe<Scalars['String']>;
 };
 
+/** input type for incrementing numeric columns in table "bild_strategy" */
+export type Bild_Strategy_Inc_Input = {
+  duration?: InputMaybe<Scalars['Int']>;
+};
+
 /** input type for inserting data into table "bild_strategy" */
 export type Bild_Strategy_Insert_Input = {
+  duration?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  shortName?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Bild_Strategy_Max_Fields = {
   __typename?: 'bild_strategy_max_fields';
+  duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
+  shortName?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
 export type Bild_Strategy_Min_Fields = {
   __typename?: 'bild_strategy_min_fields';
+  duration?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
+  shortName?: Maybe<Scalars['String']>;
 };
 
 /** response of any mutation on the table "bild_strategy" */
@@ -13483,9 +13526,11 @@ export type Bild_Strategy_On_Conflict = {
 
 /** Ordering options when selecting data from "bild_strategy". */
 export type Bild_Strategy_Order_By = {
+  duration?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   modules?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  shortName?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: bild_strategy */
@@ -13501,29 +13546,81 @@ export type Bild_Strategy_Prepend_Input = {
 /** select columns of table "bild_strategy" */
 export enum Bild_Strategy_Select_Column {
   /** column name */
+  Duration = 'duration',
+  /** column name */
   Id = 'id',
   /** column name */
   Modules = 'modules',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  ShortName = 'shortName'
 }
 
 /** input type for updating data in table "bild_strategy" */
 export type Bild_Strategy_Set_Input = {
+  duration?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
   modules?: InputMaybe<Scalars['jsonb']>;
   name?: InputMaybe<Scalars['String']>;
+  shortName?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregate stddev on columns */
+export type Bild_Strategy_Stddev_Fields = {
+  __typename?: 'bild_strategy_stddev_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Bild_Strategy_Stddev_Pop_Fields = {
+  __typename?: 'bild_strategy_stddev_pop_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Bild_Strategy_Stddev_Samp_Fields = {
+  __typename?: 'bild_strategy_stddev_samp_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Bild_Strategy_Sum_Fields = {
+  __typename?: 'bild_strategy_sum_fields';
+  duration?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "bild_strategy" */
 export enum Bild_Strategy_Update_Column {
   /** column name */
+  Duration = 'duration',
+  /** column name */
   Id = 'id',
   /** column name */
   Modules = 'modules',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  ShortName = 'shortName'
 }
+
+/** aggregate var_pop on columns */
+export type Bild_Strategy_Var_Pop_Fields = {
+  __typename?: 'bild_strategy_var_pop_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Bild_Strategy_Var_Samp_Fields = {
+  __typename?: 'bild_strategy_var_samp_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Bild_Strategy_Variance_Fields = {
+  __typename?: 'bild_strategy_variance_fields';
+  duration?: Maybe<Scalars['Float']>;
+};
 
 /** status enum for go1 course/module */
 export type Blended_Learning_Status = {
@@ -13874,6 +13971,10 @@ export type Course = {
   aolCostOfCourse?: Maybe<Scalars['numeric']>;
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
+  /** An array relationship */
+  bildStrategies: Array<Course_Bild_Strategy>;
+  /** An aggregate relationship */
+  bildStrategies_aggregate: Course_Bild_Strategy_Aggregate;
   cancellationFeePercent?: Maybe<Scalars['Int']>;
   cancellationReason?: Maybe<Scalars['String']>;
   /** An object relationship */
@@ -13959,6 +14060,26 @@ export type Course = {
   waitlists: Array<Waitlist>;
   /** An aggregate relationship */
   waitlists_aggregate: Waitlist_Aggregate;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseBildStrategiesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Bild_Strategy_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Bild_Strategy_Order_By>>;
+  where?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseBildStrategies_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Bild_Strategy_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Bild_Strategy_Order_By>>;
+  where?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
 };
 
 
@@ -14837,7 +14958,7 @@ export type Course_Bild_Strategy = {
   __typename?: 'course_bild_strategy';
   course_id: Scalars['Int'];
   id: Scalars['uuid'];
-  strategy_id: Scalars['uuid'];
+  strategyName: Scalars['String'];
 };
 
 /** aggregated selection of "course_bild_strategy" */
@@ -14870,10 +14991,37 @@ export type Course_Bild_Strategy_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Bild_Strategy_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Bild_Strategy_Max_Order_By>;
+  min?: InputMaybe<Course_Bild_Strategy_Min_Order_By>;
+  stddev?: InputMaybe<Course_Bild_Strategy_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Bild_Strategy_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Bild_Strategy_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Bild_Strategy_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Bild_Strategy_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Bild_Strategy_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Bild_Strategy_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "course_bild_strategy" */
+export type Course_Bild_Strategy_Arr_Rel_Insert_Input = {
+  data: Array<Course_Bild_Strategy_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Bild_Strategy_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Course_Bild_Strategy_Avg_Fields = {
   __typename?: 'course_bild_strategy_avg_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Avg_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course_bild_strategy". All fields are combined with a logical 'AND'. */
@@ -14883,7 +15031,7 @@ export type Course_Bild_Strategy_Bool_Exp = {
   _or?: InputMaybe<Array<Course_Bild_Strategy_Bool_Exp>>;
   course_id?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<Uuid_Comparison_Exp>;
-  strategy_id?: InputMaybe<Uuid_Comparison_Exp>;
+  strategyName?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "course_bild_strategy" */
@@ -14901,7 +15049,7 @@ export type Course_Bild_Strategy_Inc_Input = {
 export type Course_Bild_Strategy_Insert_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
-  strategy_id?: InputMaybe<Scalars['uuid']>;
+  strategyName?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
@@ -14909,7 +15057,14 @@ export type Course_Bild_Strategy_Max_Fields = {
   __typename?: 'course_bild_strategy_max_fields';
   course_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
-  strategy_id?: Maybe<Scalars['uuid']>;
+  strategyName?: Maybe<Scalars['String']>;
+};
+
+/** order by max() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Max_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  strategyName?: InputMaybe<Order_By>;
 };
 
 /** aggregate min on columns */
@@ -14917,7 +15072,14 @@ export type Course_Bild_Strategy_Min_Fields = {
   __typename?: 'course_bild_strategy_min_fields';
   course_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
-  strategy_id?: Maybe<Scalars['uuid']>;
+  strategyName?: Maybe<Scalars['String']>;
+};
+
+/** order by min() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Min_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  strategyName?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_bild_strategy" */
@@ -14940,7 +15102,7 @@ export type Course_Bild_Strategy_On_Conflict = {
 export type Course_Bild_Strategy_Order_By = {
   course_id?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
-  strategy_id?: InputMaybe<Order_By>;
+  strategyName?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: course_bild_strategy */
@@ -14955,14 +15117,14 @@ export enum Course_Bild_Strategy_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  StrategyId = 'strategy_id'
+  StrategyName = 'strategyName'
 }
 
 /** input type for updating data in table "course_bild_strategy" */
 export type Course_Bild_Strategy_Set_Input = {
   course_id?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['uuid']>;
-  strategy_id?: InputMaybe<Scalars['uuid']>;
+  strategyName?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -14971,10 +15133,20 @@ export type Course_Bild_Strategy_Stddev_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Stddev_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Course_Bild_Strategy_Stddev_Pop_Fields = {
   __typename?: 'course_bild_strategy_stddev_pop_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Stddev_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -14983,10 +15155,20 @@ export type Course_Bild_Strategy_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Stddev_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Course_Bild_Strategy_Sum_Fields = {
   __typename?: 'course_bild_strategy_sum_fields';
   course_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Sum_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "course_bild_strategy" */
@@ -14996,7 +15178,7 @@ export enum Course_Bild_Strategy_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  StrategyId = 'strategy_id'
+  StrategyName = 'strategyName'
 }
 
 /** aggregate var_pop on columns */
@@ -15005,16 +15187,31 @@ export type Course_Bild_Strategy_Var_Pop_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Var_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Course_Bild_Strategy_Var_Samp_Fields = {
   __typename?: 'course_bild_strategy_var_samp_fields';
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Var_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Course_Bild_Strategy_Variance_Fields = {
   __typename?: 'course_bild_strategy_variance_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_bild_strategy" */
+export type Course_Bild_Strategy_Variance_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course". All fields are combined with a logical 'AND'. */
@@ -15027,6 +15224,7 @@ export type Course_Bool_Exp = {
   aolCostOfCourse?: InputMaybe<Numeric_Comparison_Exp>;
   aolCountry?: InputMaybe<String_Comparison_Exp>;
   aolRegion?: InputMaybe<String_Comparison_Exp>;
+  bildStrategies?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
   cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
   cancellationReason?: InputMaybe<String_Comparison_Exp>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Bool_Exp>;
@@ -18134,6 +18332,7 @@ export type Course_Insert_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
+  bildStrategies?: InputMaybe<Course_Bild_Strategy_Arr_Rel_Insert_Input>;
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Obj_Rel_Insert_Input>;
@@ -19233,6 +19432,7 @@ export type Course_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
+  bildStrategies_aggregate?: InputMaybe<Course_Bild_Strategy_Aggregate_Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
   cancellationRequest?: InputMaybe<Course_Cancellation_Request_Order_By>;
@@ -26373,6 +26573,8 @@ export type Mutation_Root = {
   /** replaceParticipant */
   replaceParticipant?: Maybe<ReplaceParticipantOutput>;
   resendPassword: Scalars['Boolean'];
+  /** Send course information to the specified course attendees */
+  sendCourseInformation: SendCourseInformationOutput;
   stripeCreatePaymentIntent?: Maybe<StripeCreatePaymentIntentOutput>;
   /** transferParticipant */
   transferParticipant?: Maybe<TransferParticipantOutput>;
@@ -28895,6 +29097,13 @@ export type Mutation_RootResendPasswordArgs = {
 
 
 /** mutation root */
+export type Mutation_RootSendCourseInformationArgs = {
+  attendeeIds: Array<Scalars['uuid']>;
+  courseId: Scalars['Int'];
+};
+
+
+/** mutation root */
 export type Mutation_RootStripeCreatePaymentIntentArgs = {
   input: StripeCreatePaymentIntentInput;
 };
@@ -28952,6 +29161,7 @@ export type Mutation_RootUpdate_Bild_StrategyArgs = {
   _delete_at_path?: InputMaybe<Bild_Strategy_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Bild_Strategy_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Bild_Strategy_Delete_Key_Input>;
+  _inc?: InputMaybe<Bild_Strategy_Inc_Input>;
   _prepend?: InputMaybe<Bild_Strategy_Prepend_Input>;
   _set?: InputMaybe<Bild_Strategy_Set_Input>;
   where: Bild_Strategy_Bool_Exp;
@@ -28964,6 +29174,7 @@ export type Mutation_RootUpdate_Bild_Strategy_By_PkArgs = {
   _delete_at_path?: InputMaybe<Bild_Strategy_Delete_At_Path_Input>;
   _delete_elem?: InputMaybe<Bild_Strategy_Delete_Elem_Input>;
   _delete_key?: InputMaybe<Bild_Strategy_Delete_Key_Input>;
+  _inc?: InputMaybe<Bild_Strategy_Inc_Input>;
   _prepend?: InputMaybe<Bild_Strategy_Prepend_Input>;
   _set?: InputMaybe<Bild_Strategy_Set_Input>;
   pk_columns: Bild_Strategy_Pk_Columns_Input;
@@ -42797,6 +43008,14 @@ export type SaveCourseModulesMutationVariables = Exact<{
 
 
 export type SaveCourseModulesMutation = { __typename?: 'mutation_root', deleted?: { __typename?: 'course_module_mutation_response', count: number } | null, inserted?: { __typename?: 'course_module_mutation_response', count: number } | null };
+
+export type SendCourseInformationMutationVariables = Exact<{
+  courseId: Scalars['Int'];
+  attendeeIds: Array<Scalars['uuid']> | Scalars['uuid'];
+}>;
+
+
+export type SendCourseInformationMutation = { __typename?: 'mutation_root', sendCourseInformation: { __typename?: 'SendCourseInformationOutput', success: boolean, error?: SendCourseInformationError | null } };
 
 export type SetCourseDraftMutationVariables = Exact<{
   courseType: Scalars['String'];

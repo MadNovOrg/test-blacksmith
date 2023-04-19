@@ -14,6 +14,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {
@@ -27,6 +28,7 @@ describe('component: CourseActionsMenu', () => {
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for an ops user', async () => {
@@ -36,6 +38,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {
@@ -49,6 +52,7 @@ describe('component: CourseActionsMenu', () => {
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for a sales admin user', async () => {
@@ -58,6 +62,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {
@@ -71,6 +76,7 @@ describe('component: CourseActionsMenu', () => {
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for a sales representative user', async () => {
@@ -80,6 +86,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {
@@ -93,6 +100,29 @@ describe('component: CourseActionsMenu', () => {
     expect(screen.queryByText(/remove/i)).not.toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.queryByText(/transfer/i)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/resend course information/i)
+    ).not.toBeInTheDocument()
+  })
+
+  it('displays correct options for a trainer user', async () => {
+    render(
+      <CourseActionsMenu
+        item={{ id: chance.guid() }}
+        onRemoveClick={jest.fn()}
+        onReplaceClick={jest.fn()}
+        onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
+      />,
+      {
+        auth: {
+          activeRole: RoleName.TRAINER,
+        },
+      }
+    )
+
+    await userEvent.click(screen.getByText(/manage attendance/i))
+    expect(screen.getByText(/resend course information/i)).toBeInTheDocument()
   })
 
   it('renders correct options for an org admin user', async () => {
@@ -102,6 +132,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={jest.fn()}
         onReplaceClick={jest.fn()}
         onTransferClick={jest.fn()}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {
@@ -116,6 +147,9 @@ describe('component: CourseActionsMenu', () => {
     expect(screen.getByText(/remove/i)).toBeInTheDocument()
     expect(screen.getByText(/replace/i)).toBeInTheDocument()
     expect(screen.getByText(/transfer/i)).toBeInTheDocument()
+    expect(
+      screen.queryByText(/resend course information/i)
+    ).not.toBeInTheDocument()
   })
 
   it('calls correct callbacks when clicked on an option', async () => {
@@ -123,6 +157,7 @@ describe('component: CourseActionsMenu', () => {
     const onRemoveMock = jest.fn()
     const onReplaceMock = jest.fn()
     const onTransferMock = jest.fn()
+    const onResendCourseInformationMock = jest.fn()
 
     render(
       <CourseActionsMenu
@@ -130,6 +165,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={onRemoveMock}
         onReplaceClick={onReplaceMock}
         onTransferClick={onTransferMock}
+        onResendCourseInformationClick={onResendCourseInformationMock}
       />,
       {
         auth: {
@@ -155,6 +191,12 @@ describe('component: CourseActionsMenu', () => {
     await userEvent.click(screen.getByText(/transfer/i))
     expect(onTransferMock).toHaveBeenCalledTimes(1)
     expect(onTransferMock).toHaveBeenCalledWith(actionableItem)
+
+    await userEvent.click(screen.getByText(/manage attendance/i))
+
+    await userEvent.click(screen.getByText(/resend course information/i))
+    expect(onResendCourseInformationMock).toHaveBeenCalledTimes(1)
+    expect(onResendCourseInformationMock).toHaveBeenCalledWith(actionableItem)
   })
 
   it("doesn't display anything if a user doesn't have a permission to manage attendance", () => {
@@ -169,6 +211,7 @@ describe('component: CourseActionsMenu', () => {
         onRemoveClick={onRemoveMock}
         onReplaceClick={onReplaceMock}
         onTransferClick={onTransferMock}
+        onResendCourseInformationClick={jest.fn()}
       />,
       {
         auth: {

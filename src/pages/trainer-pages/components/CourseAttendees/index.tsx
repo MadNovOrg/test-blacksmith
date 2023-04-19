@@ -34,6 +34,12 @@ export const CourseAttendees: React.FC<
   const { id } = useParams()
   const [selectedTab, setSelectedTab] = useState('0')
   const { acl } = useAuth()
+  const [showCourseInformationAlert, setShowCourseInformationAlert] = useState<
+    | {
+        success: boolean
+      }
+    | undefined
+  >(undefined)
 
   const { t } = useTranslation()
 
@@ -91,6 +97,21 @@ export const CourseAttendees: React.FC<
               })}
             </Typography>
 
+            {showCourseInformationAlert ? (
+              <Alert
+                variant="outlined"
+                severity={
+                  showCourseInformationAlert.success ? 'success' : 'error'
+                }
+              >
+                {t(
+                  showCourseInformationAlert.success
+                    ? 'pages.course-participants.course-information-sent'
+                    : 'common.errors.generic.unknown-error-please-retry'
+                )}
+              </Alert>
+            ) : null}
+
             <CourseInvites
               course={course}
               attendeesCount={courseParticipantsTotal ?? 0}
@@ -142,7 +163,12 @@ export const CourseAttendees: React.FC<
             </TabList>
 
             <TabPanel value="0" sx={{ px: 0 }}>
-              <AttendingTab course={course} />
+              <AttendingTab
+                course={course}
+                onSendingCourseInformation={success =>
+                  setShowCourseInformationAlert({ success })
+                }
+              />
             </TabPanel>
             {!isOpenCourse ? (
               <>

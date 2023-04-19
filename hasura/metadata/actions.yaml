@@ -223,6 +223,16 @@ actions:
     permissions:
       - role: sales-admin
       - role: trainer
+  - name: sendCourseInformation
+    definition:
+      kind: synchronous
+      handler: '{{ACTIONS_HOST}}/email/course-information'
+    permissions:
+      - role: tt-admin
+      - role: tt-ops
+      - role: trainer
+      - role: sales-admin
+    comment: Send course information to the specified course attendees
   - name: stripeCreatePaymentIntent
     definition:
       kind: synchronous
@@ -598,6 +608,17 @@ custom_types:
         - value: USER_TRAINER
           is_deprecated: null
           description: null
+    - name: SendCourseInformationError
+      values:
+        - value: COURSE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: ATTENDEE_NOT_FOUND
+          is_deprecated: null
+          description: null
+        - value: ATTENDEE_LIST_IS_EMPTY
+          is_deprecated: null
+          description: null
   input_objects:
     - name: PlansCreateInput
     - name: UpsertZoomMeetingInput
@@ -681,5 +702,6 @@ custom_types:
     - name: DeleteUserOutput
     - name: NotifyCourseEditOutput
     - name: ApproveCourseOutput
+    - name: SendCourseInformationOutput
   scalars:
     - name: Date

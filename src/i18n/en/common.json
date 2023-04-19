@@ -23,7 +23,8 @@
     "generic": {
       "record-not-found": "Record not found.",
       "loading-error": "There was an error loading data.",
-      "invite-accept-error": "Unable to accept invitation"
+      "invite-accept-error": "Unable to accept invitation",
+      "unknown-error-please-retry": "An error occurred. Please try again."
     }
   },
   "home": "Home",
@@ -49,6 +50,7 @@
   "orders": "Orders",
   "change": "Change",
   "remove": "Remove",
+  "resend-course-information": "Resend course information",
   "admin": "Administrator",
   "moderator": "Moderator",
   "invoice-contact": "Invoice contact details",
