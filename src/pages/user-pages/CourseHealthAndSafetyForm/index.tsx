@@ -88,10 +88,6 @@ export const CourseHealthAndSafetyForm = () => {
           </Grid>
 
           <Grid item md={7} pt={10} px={2} container gap={3}>
-            <Typography variant="body1">
-              {t('pages.hs-form.information.p1')}
-            </Typography>
-
             <Typography variant="subtitle1" mt={2}>
               {t('pages.hs-form.information.h1')}
             </Typography>

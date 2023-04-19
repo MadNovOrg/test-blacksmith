@@ -938,13 +938,12 @@
     "no-organisation": "-NA-"
   },
   "hs-form": {
-    "back-to-checklist": "Back to checklist",
+    "back-to-checklist": "Back to Checklist",
     "heading": "Health & Safety Consent Form",
     "information": {
-      "p1": "In order for Team Teach Ltd to keep accurate and up-to-date records of your personal data, training certification and remind you of when your certification is due for renewal, we require your permission to collect and store your personal data on our training management system in accordance with our Privacy Policy.",
       "h1": "Health Guidance & Training Information",
       "health-check-label": "I confirm that I have read the Health Guidance & Training Information.",
-      "p2": "The Health guidance & training information leaflet should be found in the email containing the Course Instructions. If this is missing, please contact Team Teach.",
+      "p2": "The Health Guidance & Training Information leaflet should be found in the email containing the Course Instructions. If this is missing, please contact Team Teach.",
       "h2": "Personal Risk Assessment",
       "risk-check-label": "I agree to adhere to all Team Teach protocols. Course members are encouraged to take responsibility in completing a personal risk assessment prior to attending the course. I am aware I can opt out of an activity at any time. Course members are asked not to offer any resistance when learning techniques during practical sessions.",
       "h3": "Signature",
