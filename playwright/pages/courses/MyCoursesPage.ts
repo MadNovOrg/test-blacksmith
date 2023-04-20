@@ -64,6 +64,11 @@ export class MyCoursesPage extends BasePage {
   async searchCourse(text: string) {
     await this.searchInput.fill(text)
   }
+  async checkNumberOfTableRows(numberOfRows: number) {
+    await expect(
+      this.tableRoot.locator('[data-testid*="course-row"]')
+    ).toHaveCount(numberOfRows)
+  }
 
   async filterCourses(filterTestId: string, items: string[]) {
     await this.filterBy(filterTestId).click()

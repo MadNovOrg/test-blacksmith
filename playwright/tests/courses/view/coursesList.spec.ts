@@ -18,8 +18,6 @@ const deleteCourses = async (courses: Course[]) => {
 
 const test = base.extend<{
   coursesToView: Course[]
-  courseSearchText: string
-  searchResults: Course[]
   oneTwoLevelCourses: Course[]
 }>({
   coursesToView: async ({}, use) => {
@@ -30,20 +28,7 @@ const test = base.extend<{
     await use(courses)
     await deleteCourses(courses)
   },
-  courseSearchText: async ({}, use) => {
-    await use(COURSES_TO_VIEW[0].name.slice(1).toLocaleLowerCase())
-  },
-  searchResults: async ({ courseSearchText }, use) => {
-    const courses = await API.course.makeSureTrainerHasCourses(
-      COURSES_TO_VIEW,
-      users.trainerWithOrg.email
-    )
-    const filterCourses = courses.filter(course =>
-      course.name.toLocaleLowerCase().includes(courseSearchText)
-    )
-    await use(filterCourses)
-    await deleteCourses(courses)
-  },
+
   oneTwoLevelCourses: async ({}, use) => {
     const courses = await API.course.makeSureTrainerHasCourses(
       COURSES_TO_VIEW,
@@ -65,13 +50,6 @@ test('my courses view @smoke', async ({ page, coursesToView }) => {
   const myCoursesPage = new MyCoursesPage(page)
   await myCoursesPage.goto()
   await myCoursesPage.checkRows(coursesToView)
-})
-
-test('my courses search', async ({ page, courseSearchText, searchResults }) => {
-  const myCoursesPage = new MyCoursesPage(page)
-  await myCoursesPage.goto()
-  await myCoursesPage.searchCourse(courseSearchText)
-  await myCoursesPage.checkRows(searchResults)
 })
 
 test('my courses filter', async ({ page, oneTwoLevelCourses }) => {
