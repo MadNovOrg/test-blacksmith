@@ -2,7 +2,6 @@ import AccountIcon from '@mui/icons-material/AccountCircle'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import { Button } from '@mui/material'
 import Divider from '@mui/material/Divider'
@@ -97,18 +96,6 @@ export const UserMenu: React.FC<React.PropsWithChildren<unknown>> = () => {
         )}
 
         <Divider />
-
-        <MenuItem onClick={() => handleMenuClick('/notifications')}>
-          <ListItemIcon>
-            <NotificationsIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText
-            data-testid="notifications-link"
-            primaryTypographyProps={{ variant: 'body2' }}
-          >
-            {t('notifications')}
-          </ListItemText>
-        </MenuItem>
 
         <MenuItem onClick={logout}>
           <ListItemIcon>

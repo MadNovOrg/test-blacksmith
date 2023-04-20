@@ -32,10 +32,9 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(3)
+    expect(listItems).toHaveLength(2)
     expect(listItems[0]).toHaveTextContent('My Profile')
-    expect(listItems[1]).toHaveTextContent('Notifications')
-    expect(listItems[2]).toHaveTextContent('Logout')
+    expect(listItems[1]).toHaveTextContent('Logout')
   })
 
   it('renders unverified USER role items', async () => {
@@ -51,11 +50,10 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(4)
+    expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Verify')
-    expect(listItems[2]).toHaveTextContent('Notifications')
-    expect(listItems[3]).toHaveTextContent('Logout')
+    expect(listItems[2]).toHaveTextContent('Logout')
   })
 
   it('renders verified TT ADMIN role items', async () => {
@@ -71,11 +69,10 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(4)
+    expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Administrator')
-    expect(listItems[2]).toHaveTextContent('Notifications')
-    expect(listItems[3]).toHaveTextContent('Logout')
+    expect(listItems[2]).toHaveTextContent('Logout')
   })
 
   it('renders unverified TT ADMIN role items', async () => {
@@ -91,12 +88,11 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(5)
+    expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Verify')
     expect(listItems[2]).toHaveTextContent('Administrator')
-    expect(listItems[3]).toHaveTextContent('Notifications')
-    expect(listItems[4]).toHaveTextContent('Logout')
+    expect(listItems[3]).toHaveTextContent('Logout')
   })
 
   it('renders verified TT OPS role items', async () => {
@@ -112,11 +108,10 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(4)
+    expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Administrator')
-    expect(listItems[2]).toHaveTextContent('Notifications')
-    expect(listItems[3]).toHaveTextContent('Logout')
+    expect(listItems[2]).toHaveTextContent('Logout')
   })
 
   it('renders unverified TT OPS role items', async () => {
@@ -132,12 +127,11 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(5)
+    expect(listItems).toHaveLength(4)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Verify')
     expect(listItems[2]).toHaveTextContent('Administrator')
-    expect(listItems[3]).toHaveTextContent('Notifications')
-    expect(listItems[4]).toHaveTextContent('Logout')
+    expect(listItems[3]).toHaveTextContent('Logout')
   })
 
   it('renders verified TRAINER role items', async () => {
@@ -153,10 +147,9 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(3)
+    expect(listItems).toHaveLength(2)
     expect(listItems[0]).toHaveTextContent('My Profile')
-    expect(listItems[1]).toHaveTextContent('Notifications')
-    expect(listItems[2]).toHaveTextContent('Logout')
+    expect(listItems[1]).toHaveTextContent('Logout')
   })
 
   it('renders unverified TRAINER role items', async () => {
@@ -172,11 +165,10 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(4)
+    expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Verify')
-    expect(listItems[2]).toHaveTextContent('Notifications')
-    expect(listItems[3]).toHaveTextContent('Logout')
+    expect(listItems[2]).toHaveTextContent('Logout')
   })
 
   it('renders verified SALES REPRESENTATIVE role items', async () => {
@@ -192,10 +184,9 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(3)
+    expect(listItems).toHaveLength(2)
     expect(listItems[0]).toHaveTextContent('My Profile')
-    expect(listItems[1]).toHaveTextContent('Notifications')
-    expect(listItems[2]).toHaveTextContent('Logout')
+    expect(listItems[1]).toHaveTextContent('Logout')
   })
 
   it('renders unverified SALES REPRESENTATIVE role items', async () => {
@@ -211,10 +202,9 @@ describe('component: ProfileMenu', () => {
     const button = screen.getByRole('button', { name: profile.fullName })
     await userEvent.click(button)
     const listItems = within(screen.getByRole('list')).getAllByRole('button')
-    expect(listItems).toHaveLength(4)
+    expect(listItems).toHaveLength(3)
     expect(listItems[0]).toHaveTextContent('My Profile')
     expect(listItems[1]).toHaveTextContent('Verify')
-    expect(listItems[2]).toHaveTextContent('Notifications')
-    expect(listItems[3]).toHaveTextContent('Logout')
+    expect(listItems[2]).toHaveTextContent('Logout')
   })
 })

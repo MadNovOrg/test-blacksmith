@@ -2,7 +2,6 @@ import { expect, Locator, Page } from '@playwright/test'
 
 export enum Option {
   ViewEditAccount = 'profile-link',
-  Notifications = 'notifications-link',
   Logout = 'logout-link',
 }
 

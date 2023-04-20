@@ -3,7 +3,6 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import AdminIcon from '@mui/icons-material/SupervisorAccount'
 import {
   Box,
@@ -96,18 +95,6 @@ export const ProfileMenu: React.FC<
               </ListItemText>
             </ListItemButton>
           )}
-
-          <ListItemButton onClick={() => navigate('/notifications')}>
-            <ListItemIcon>
-              <NotificationsIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              data-testid="notifications-link"
-              primaryTypographyProps={{ variant: 'body2' }}
-            >
-              {t('notifications')}
-            </ListItemText>
-          </ListItemButton>
 
           <ListItemButton onClick={logout}>
             <ListItemIcon>
