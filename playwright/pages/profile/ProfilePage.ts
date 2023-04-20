@@ -44,7 +44,6 @@ export class ProfilePage extends BasePage {
     await Promise.all([
       waitForGraphQLRequest(this.page, 'UpdateProfile'),
       this.saveChanges.click(),
-      super.waitForPageLoad(),
     ])
   }
 
