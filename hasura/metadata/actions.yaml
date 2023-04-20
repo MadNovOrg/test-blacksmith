@@ -208,6 +208,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/replace-participant'
     permissions:
+      - role: sales-admin
       - role: user
     comment: replaceParticipant
   - name: resendPassword
@@ -245,6 +246,7 @@ actions:
       kind: synchronous
       handler: '{{ACTIONS_HOST}}/transfer'
     permissions:
+      - role: sales-admin
       - role: user
     comment: transferParticipant
   - name: updateAvatar
