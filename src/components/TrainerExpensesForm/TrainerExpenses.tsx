@@ -58,13 +58,13 @@ export const makeSchema = (t: TFunction) =>
                 min: 0,
               })
             )
-            .when('method', {
-              is: TransportMethod.NONE,
-              then: s => s.optional(),
-              otherwise: s =>
-                s.required(
-                  t('pages.create-course.trainer-expenses.value-error')
-                ),
+            .when('method', ([method], s) => {
+              if (method === TransportMethod.NONE) {
+                return s.optional()
+              }
+              return s.required(
+                t('pages.create-course.trainer-expenses.value-error')
+              )
             }),
           flightDays: yup
             .number()
@@ -79,13 +79,13 @@ export const makeSchema = (t: TFunction) =>
                 min: 1,
               })
             )
-            .when('method', {
-              is: TransportMethod.FLIGHTS,
-              then: s =>
-                s.required(
+            .when('method', ([method], s) => {
+              if (method === TransportMethod.FLIGHTS) {
+                return s.required(
                   t('pages.create-course.trainer-expenses.days-error')
-                ),
-              otherwise: s => s.optional(),
+                )
+              }
+              return s.optional()
             }),
           accommodationRequired: yup.boolean(),
           accommodationNights: yup
@@ -96,7 +96,7 @@ export const makeSchema = (t: TFunction) =>
                 min: 1,
               })
             )
-            .when('accommodationRequired', (accommodationRequired, s) => {
+            .when('accommodationRequired', ([accommodationRequired], s) => {
               if (accommodationRequired) {
                 return s.min(
                   1,
@@ -116,7 +116,7 @@ export const makeSchema = (t: TFunction) =>
             .typeError(
               t('pages.create-course.trainer-expenses.num-error', { min: 0 })
             )
-            .when('accommodationNights', (accommodationNights, s) => {
+            .when('accommodationNights', ([accommodationNights], s) => {
               if (accommodationNights) {
                 return s.required(
                   t(
@@ -124,7 +124,6 @@ export const makeSchema = (t: TFunction) =>
                   )
                 )
               }
-
               return s
             }),
         })
