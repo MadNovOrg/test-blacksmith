@@ -105,6 +105,14 @@ const SalesAdminRoutes = () => {
               <Route path="view" element={<CourseEvaluation />} />
               <Route path="summary" element={<EvaluationSummary />} />
             </Route>
+            <Route
+              path="transfer/:participantId"
+              element={<AdminTransferParticipantPage />}
+            >
+              <Route index element={<ChooseTransferCourse />} />
+              <Route path="details" element={<TransferDetails />} />
+              <Route path="review" element={<TransferReview />} />
+            </Route>
           </Route>
         </Route>
       </Route>
@@ -128,14 +136,6 @@ const SalesAdminRoutes = () => {
             path="grading/:participantId"
             element={<ParticipantGrading />}
           />
-          <Route
-            path="transfer/:participantId"
-            element={<AdminTransferParticipantPage />}
-          >
-            <Route index element={<ChooseTransferCourse />} />
-            <Route path="details" element={<TransferDetails />} />
-            <Route path="review" element={<TransferReview />} />
-          </Route>
         </Route>
       </Route>
 
