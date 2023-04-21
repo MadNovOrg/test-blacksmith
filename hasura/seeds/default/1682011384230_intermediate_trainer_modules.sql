@@ -63,7 +63,6 @@ INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
 ('Circles of danger', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Posturing and body language', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Experiencing feeling', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
-('Experiencing feeling', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Calm stance', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Calming scripts', (SELECT id FROM module_group WHERE name = 'Personal Space & Body Language' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 
@@ -76,7 +75,7 @@ INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
 ('Stretches', (SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Row boat & ride bike', (SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Pass ball', (SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
-('Sensitivty of fingers', (SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
+('Sensitivity of fingers', (SELECT id FROM module_group WHERE name = 'Physical Warm Up' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 
 ('Arm responses', (SELECT id FROM module_group WHERE name = 'Personal Safety' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Side step in', (SELECT id FROM module_group WHERE name = 'Personal Safety' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
@@ -146,7 +145,5 @@ INSERT INTO module (name, module_group_id, module_category, course_level) VALUES
 ('Responses to kicking', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Change of face in seats', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Alternative change of face in seated', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
-('Alternative change of face in seated', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
-('Small child escorts', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Small child escorts', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER'),
 ('Response to dead weight', (SELECT id FROM module_group WHERE name = 'Seated Holds' AND course_level = 'INTERMEDIATE_TRAINER'), 'THEORY', 'INTERMEDIATE_TRAINER');
