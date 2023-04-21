@@ -208,7 +208,12 @@ const CertificateInfo: React.FC<
   return (
     <Box>
       {isRevoked ? (
-        <Alert severity="warning" sx={{ mb: 2 }} variant="outlined">
+        <Alert
+          severity="warning"
+          sx={{ mb: 2 }}
+          variant="outlined"
+          data-testid="revoked-cert-alert"
+        >
           {t('revoked-warning')}
           {acl.isTTAdmin() ? (
             <Button

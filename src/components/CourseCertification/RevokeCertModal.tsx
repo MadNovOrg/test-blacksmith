@@ -94,7 +94,9 @@ const RevokeCertModal: React.FC<
           >
             <MenuItem value="BAD_BEHAVIOUR">{t('bad-behaviour')}</MenuItem>
             <MenuItem value="LEGAL_REASON">{t('legal-reason')}</MenuItem>
-            <MenuItem value="OTHER">{t('other')}</MenuItem>
+            <MenuItem value="OTHER" data-testid="other-dropdown-option">
+              {t('other')}
+            </MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -104,6 +106,7 @@ const RevokeCertModal: React.FC<
           <TextField
             variant="standard"
             required
+            data-testid="specify-reason"
             label={t('specify-reason')}
             placeholder={t('specify-reason')}
             fullWidth
