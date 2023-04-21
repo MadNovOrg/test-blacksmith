@@ -122,9 +122,10 @@ export function checkCourseDetailsForExceptions(
     exceptions.push(CourseException.TRAINER_RATIO_NOT_MET)
   }
 
-  if (isAdvisedTimeExceeded(courseData)) {
-    exceptions.push(CourseException.ADVISED_TIME_EXCEEDED)
-  }
+  // Temporarily disabled (check TTHP-575)
+  // if (isAdvisedTimeExceeded(courseData)) {
+  //   exceptions.push(CourseException.ADVISED_TIME_EXCEEDED)
+  // }
 
   return exceptions
 }
