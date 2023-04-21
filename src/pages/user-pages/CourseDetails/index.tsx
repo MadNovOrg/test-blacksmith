@@ -23,13 +23,13 @@ import { CoursePrerequisitesAlert } from '@app/components/CoursePrerequisitesAle
 import { LinkBehavior } from '@app/components/LinkBehavior'
 import { PillTab, PillTabList } from '@app/components/PillTabs'
 import { useAuth } from '@app/context/auth'
-import { Organization } from '@app/generated/graphql'
-import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
 import {
-  ParamsType as GetFeedbackUsersParamsType,
-  QUERY as GET_FEEDBACK_USERS_QUERY,
-  ResponseType as GetFeedbackUsersResponseType,
-} from '@app/queries/course-evaluation/get-feedback-users'
+  GetFeedbackUsersQuery,
+  GetFeedbackUsersQueryVariables,
+  Organization,
+} from '@app/generated/graphql'
+import { ModifyAttendanceModal } from '@app/pages/user-pages/CourseDetails/ModifyAttendanceModal'
+import { QUERY as GET_FEEDBACK_USERS_QUERY } from '@app/queries/course-evaluation/get-feedback-users'
 import { GetParticipant } from '@app/queries/participants/get-course-participant-by-profile-id'
 import {
   ParamsType as GetCourseParamsType,
@@ -91,10 +91,10 @@ export const CourseDetails = () => {
     data?.course_participant?.length > 0 ? data?.course_participant[0] : null
 
   const { data: usersData, error } = useSWR<
-    GetFeedbackUsersResponseType,
+    GetFeedbackUsersQuery,
     Error,
-    [string, GetFeedbackUsersParamsType]
-  >([GET_FEEDBACK_USERS_QUERY, { courseId }])
+    [string, GetFeedbackUsersQueryVariables]
+  >([GET_FEEDBACK_USERS_QUERY, { courseId: parseInt(courseId || '') }])
   const loading = !usersData && !error
 
   const didAttendeeSubmitFeedback = useMemo(() => {

@@ -114,9 +114,10 @@ select_permissions:
         - question_id
       filter:
         _or:
-          - participant:
-              id:
-                _eq: X-Hasura-User-Id
+          - course:
+              participants:
+                profile_id:
+                  _eq: X-Hasura-User-Id
           - course:
               organization:
                 members:
