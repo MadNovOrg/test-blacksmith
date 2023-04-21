@@ -106,9 +106,7 @@ export const CourseBuilder: React.FC<
   )
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
-  const [availableModules, setAvailableModules] = useState<AvailableModule[]>(
-    []
-  )
+  const [availableModules, setAvailableModules] = useState<AvailableModule[]>()
   const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleGroupSlot[]>(
     []
   )
@@ -205,7 +203,7 @@ export const CourseBuilder: React.FC<
   )
 
   useEffect(() => {
-    if (availableModules.length === 0 && modulesData && courseData) {
+    if (!availableModules && modulesData && courseData) {
       const addedModuleGroupIds = new Set<string>(
         courseData.course?.moduleGroupIds.map(
           courseModule => courseModule.module.moduleGroup?.id
@@ -251,7 +249,7 @@ export const CourseBuilder: React.FC<
 
       function setModuleUsage(moduleId: string, used: boolean) {
         setAvailableModules(prevState =>
-          prevState.map(module => {
+          (prevState ?? []).map(module => {
             return {
               ...module,
               used: module.id === moduleId ? used : module.used,
@@ -324,7 +322,7 @@ export const CourseBuilder: React.FC<
         }
       } else if (destination.droppableId.startsWith('course-modules')) {
         // add module to course
-        const draggedModule = availableModules.find(
+        const draggedModule = (availableModules ?? []).find(
           module => draggableId === module.draggableId
         )
         if (!draggedModule) return
@@ -468,7 +466,7 @@ export const CourseBuilder: React.FC<
     if (courseData?.course) {
       const courseId = courseData.course.id
       setAvailableModules(prevState =>
-        prevState.map(module => ({
+        (prevState ?? []).map(module => ({
           ...module,
           used: false,
         }))
@@ -614,7 +612,7 @@ export const CourseBuilder: React.FC<
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {availableModules.map((m, index) => (
+                      {(availableModules ?? []).map((m, index) => (
                         <Draggable
                           key={m.id}
                           draggableId={m.draggableId}
