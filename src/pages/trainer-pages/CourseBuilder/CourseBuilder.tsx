@@ -180,6 +180,12 @@ export const CourseBuilder: React.FC<
       : 0
   }, [courseData])
 
+  const courseDescription = t(
+    `pages.trainer-base.create-course.new-course.description-${
+      courseData?.course?.level
+    }${courseData?.course?.reaccreditation ? '-reaccreditation' : ''}`
+  )
+
   const saveModules = useCallback(
     async (modules: ModuleGroup[]) => {
       const course = courseData?.course
@@ -573,12 +579,14 @@ export const CourseBuilder: React.FC<
                   </Box>
                 )}
                 <Typography variant="body2">
-                  {t(
-                    'pages.trainer-base.create-course.new-course.description',
-                    {
-                      duration: maxDuration ? maxDuration / 60 : 0,
-                    }
-                  )}
+                  {courseDescription !== ''
+                    ? courseDescription
+                    : t(
+                        'pages.trainer-base.create-course.new-course.description',
+                        {
+                          duration: maxDuration ? maxDuration / 60 : 0,
+                        }
+                      )}
                 </Typography>
               </Box>
               <Box
