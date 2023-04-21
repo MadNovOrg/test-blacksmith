@@ -766,7 +766,7 @@ export const CourseBuilder: React.FC<
       </DragDropContext>
       <ConfirmDialog
         open={isTimeCommitmentModalOpen}
-        onOk={submitCourse}
+        onOk={onCourseSubmit}
         onCancel={() => setIsTimeCommitmentModalOpen(false)}
         message={t(
           'pages.trainer-base.create-course.new-course.time-commitment-message',
