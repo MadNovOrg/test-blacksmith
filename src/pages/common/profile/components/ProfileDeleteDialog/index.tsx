@@ -44,6 +44,9 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
       setSaving(false)
 
       if (deleteUser.error) {
+        if (deleteUser.error === DeleteUserError.CertExist) {
+          return setError(t('no-delete-certified'))
+        }
         if (deleteUser.error === DeleteUserError.UserTrainer) {
           return setError(
             t('no-delete-trainer', { courseIds: deleteUser.courseIds })
@@ -68,13 +71,22 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
       ) : null}
 
       {profile ? (
-        <Typography variant="body2">
-          {t('confirmation-message', {
-            firstName: profile.givenName,
-            lastName: profile.familyName,
-            email: profile.email,
-          })}
-        </Typography>
+        <>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            {t('confirmation-title', {
+              firstName: profile.givenName,
+              lastName: profile.familyName,
+              email: profile.email,
+            })}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            {t('confirmation-message')}
+          </Typography>
+
+          <Alert severity="warning" variant="outlined" sx={{ mb: 2, mt: 2 }}>
+            {t('confirmation-warning')}
+          </Alert>
+        </>
       ) : null}
 
       <Box display="flex" justifyContent="space-between" mt={2}>
@@ -84,6 +96,7 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
           variant="contained"
           onClick={onSubmit}
           loading={saving}
+          color="error"
         >
           {t('delete')}
         </LoadingButton>
