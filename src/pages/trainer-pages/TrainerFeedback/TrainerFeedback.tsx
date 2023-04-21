@@ -21,16 +21,14 @@ import { BooleanQuestion } from '@app/components/BooleanQuestion'
 import { QuestionGroup } from '@app/components/QuestionGroup'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
+import { SaveTrainerCourseEvaluationMutation } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourse from '@app/hooks/useCourse'
 import {
   QUERY as GET_COURSE_EVALUATION_QUESTIONS_QUERY,
   ResponseType as GetCourseEvaluationQuestionsResponseType,
 } from '@app/queries/course-evaluation/get-questions'
-import {
-  MUTATION as SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
-  ResponseType as SaveCourseEvaluationResponseType,
-} from '@app/queries/course-evaluation/save-evaluation'
+import { MUTATION as SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION } from '@app/queries/course-evaluation/save-trainer-evaluation'
 import {
   CourseEvaluationQuestion,
   CourseEvaluationQuestionType,
@@ -118,8 +116,8 @@ export const TrainerFeedback = () => {
         }
       })
 
-      const response = await fetcher<SaveCourseEvaluationResponseType>(
-        SAVE_COURSE_EVALUATION_ANSWERS_MUTATION,
+      const response = await fetcher<SaveTrainerCourseEvaluationMutation>(
+        SAVE_TRAINER_COURSE_EVALUATION_ANSWERS_MUTATION,
         {
           answers,
         }

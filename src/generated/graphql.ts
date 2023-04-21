@@ -42839,6 +42839,13 @@ export type SaveCourseEvaluationMutationVariables = Exact<{
 
 export type SaveCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null, update_course_participant_by_pk?: { __typename?: 'course_participant', completed_evaluation?: boolean | null } | null };
 
+export type SaveTrainerCourseEvaluationMutationVariables = Exact<{
+  answers: Array<Course_Evaluation_Answers_Insert_Input> | Course_Evaluation_Answers_Insert_Input;
+}>;
+
+
+export type SaveTrainerCourseEvaluationMutation = { __typename?: 'mutation_root', inserted?: { __typename?: 'course_evaluation_answers_mutation_response', rows: Array<{ __typename?: 'course_evaluation_answers', id: any }> } | null };
+
 export type ApproveCourseMutationVariables = Exact<{
   courseId: Scalars['Int'];
 }>;
