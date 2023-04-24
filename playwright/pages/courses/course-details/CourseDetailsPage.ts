@@ -17,29 +17,32 @@ import { RequestCancellationPopup } from './RequestCancellationPopup'
 
 export class CourseDetailsPage extends BasePage {
   readonly additionalNotes: Locator
+  readonly approveCancellationButton: Locator
   readonly attendeeRemoveButton: Locator
   readonly attendeesTable: UiTable
   readonly attendingTab: Locator
   readonly attendingText: Locator
   readonly cancelCourseButton: Locator
+  readonly cancellationRequestAlert: Locator
+  readonly certificateGrade: Locator
+  readonly certificationTab: Locator
   readonly courseGradingNav: Locator
+  readonly courseName: Locator
   readonly declinedTab: Locator
   readonly editCourseButton: Locator
+  readonly gradeAllAttendees: Locator
   readonly gradingTab: Locator
   readonly header: CourseHeader
   readonly inviteAttendeesButton: Locator
   readonly invitesLeftText: Locator
   readonly manageAttendanceButtonSelector: string
+  readonly noteInput: Locator
   readonly pendingTab: Locator
-  readonly saveButton: Locator
-  readonly successMessage: Locator
   readonly requestCancellationButton: Locator
-  readonly cancellationRequestAlert: Locator
-  readonly approveCancellationButton: Locator
-  readonly certificationTab: Locator
-  readonly certificateGrade: Locator
+  readonly saveButton: Locator
   readonly searchTrainerInput: Locator
   readonly searchTrainerOption: Locator
+  readonly successMessage: Locator
 
   constructor(page: Page) {
     super(page)
@@ -48,6 +51,7 @@ export class CourseDetailsPage extends BasePage {
     this.inviteAttendeesButton = this.page.locator(
       'data-testid=course-invite-btn'
     )
+    this.courseName = this.page.locator('[data-testid=course-name]')
     this.invitesLeftText = this.page.locator('data-testid=invites-left')
     this.attendingText = this.page.locator('data-testid=attending')
     this.attendingTab = this.page.locator('data-testid=tabParticipants')
@@ -92,14 +96,14 @@ export class CourseDetailsPage extends BasePage {
     this.searchTrainerOption = this.page.locator(
       '[data-testid=SearchTrainers-option]'
     )
+    this.gradeAllAttendees = this.page.locator(
+      '[data-testid=grade-all-attendees]'
+    )
+    this.noteInput = this.page.locator('[data-testid="notes-input"] >> input')
   }
 
   async goto(courseId: string) {
     await super.goto(`courses/${courseId}/details`)
-    await this.waitForLoad()
-  }
-
-  async waitForLoad() {
     await expect(this.attendingText).toBeVisible()
   }
 
@@ -152,9 +156,7 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async fillNotes(inputtedNote: string) {
-    await this.page
-      .locator('[data-testid="notes-input"] >> input')
-      .fill(`${inputtedNote}`)
+    await this.noteInput.fill(inputtedNote)
   }
 
   async clickSaveButton() {
@@ -181,8 +183,9 @@ export class CourseDetailsPage extends BasePage {
     await this.cancelCourseButton.click()
     return new CancelEntireCoursePopUp(this.page)
   }
+
   async clickManageAttendance() {
-    await this.page.locator('[data-testid=manage-attendance]').click()
+    await this.page.locator(this.manageAttendanceButtonSelector).click()
   }
 
   async clickManageAttendanceByAttendeeData(attendeeData: string) {
@@ -223,8 +226,12 @@ export class CourseDetailsPage extends BasePage {
   }
 
   async clickGradeAllAttendees(): Promise<CourseGradingPage> {
-    await this.page.click('text=Grade all attendees')
+    await this.gradeAllAttendees.click()
     return new CourseGradingPage(this.page)
+  }
+
+  async checkCourseName() {
+    await expect(this.courseName).toBeVisible()
   }
 
   async clickParticipantByGrade(id: string): Promise<CourseGradingPage> {
@@ -233,10 +240,12 @@ export class CourseDetailsPage extends BasePage {
     )
     return new CourseGradingPage(this.page)
   }
+
   async clickRequestCancellation(): Promise<RequestCancellationPopup> {
     await this.requestCancellationButton.click()
     return new RequestCancellationPopup(this.page)
   }
+
   async cancellationRequestIsVisible() {
     await this.cancellationRequestAlert.isVisible()
   }

@@ -2,6 +2,8 @@ import { expect, Locator, Page } from '@playwright/test'
 
 import { BasePage } from '../BasePage'
 
+import { CourseDetailsPage } from './course-details/CourseDetailsPage'
+
 export class CourseGradingDetailsPage extends BasePage {
   readonly confirmModules: Locator
   readonly continueToAttendees: Locator
@@ -36,7 +38,8 @@ export class CourseGradingDetailsPage extends BasePage {
     await this.page.click(`text=${moduleGroupName}`)
   }
 
-  async clickContinueToAttendees() {
+  async clickContinueToAttendees(): Promise<CourseDetailsPage> {
     await this.continueToAttendees.click()
+    return new CourseDetailsPage(this.page)
   }
 }

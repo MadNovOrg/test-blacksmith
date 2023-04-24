@@ -230,6 +230,7 @@ export const CourseGrading: React.FC<
                         onClick={() =>
                           navigate(`/courses/${course.id}/grading`)
                         }
+                        data-testid="grade-all-attendees"
                       >
                         {t(
                           'pages.course-details.tabs.grading.grade-all-attendees'

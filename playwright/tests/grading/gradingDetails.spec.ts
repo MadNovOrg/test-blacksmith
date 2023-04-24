@@ -42,5 +42,6 @@ test('marks participants as attended and enables grading', async ({
   )
   await gradingDetailsPage.checkSelected(participants.length)
   await gradingDetailsPage.clickConfirmModules()
-  await gradingDetailsPage.clickContinueToAttendees()
+  const courseDetailsPage = await gradingDetailsPage.clickContinueToAttendees()
+  await courseDetailsPage.checkCourseName()
 })
