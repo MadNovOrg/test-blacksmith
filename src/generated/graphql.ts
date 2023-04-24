@@ -2191,6 +2191,7 @@ export type DeleteTagPayload = {
 export enum DeleteUserError {
   CertExist = 'CERT_EXIST',
   GeneralError = 'GENERAL_ERROR',
+  PendingCourse = 'PENDING_COURSE',
   SelfDelete = 'SELF_DELETE',
   UserTrainer = 'USER_TRAINER'
 }

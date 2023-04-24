@@ -351,6 +351,7 @@
     "delete": "Delete",
     "delete-error": "An error occurred while deleting the user.",
     "no-delete-trainer": "This user is a trainer for course(s): {{courseIds}}.",
+    "no-delete-active-course": "This user has pending/unfinished course(s): {{courseIds}}.",
     "no-delete-certified": "Can not delete user with a certificate."
   },
   "course-instructions-dialog": {

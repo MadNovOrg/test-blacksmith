@@ -52,6 +52,11 @@ export const ProfileDeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
             t('no-delete-trainer', { courseIds: deleteUser.courseIds })
           )
         }
+        if (deleteUser.error === DeleteUserError.PendingCourse) {
+          return setError(
+            t('no-delete-active-course', { courseIds: deleteUser.courseIds })
+          )
+        }
         return setError(t('delete-error'))
       }
 
