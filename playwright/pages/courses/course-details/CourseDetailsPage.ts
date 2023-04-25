@@ -118,9 +118,11 @@ export class CourseDetailsPage extends BasePage {
     await expect(this.invitesLeftText).toHaveText(text)
   }
 
-  async checkAttendingText(text: string) {
+  async checkAttendingText(numberOfAttendees: number, maxParticipants: number) {
     await this.page.reload()
-    await expect(this.attendingText).toHaveText(text)
+    await expect(this.attendingText).toHaveText(
+      `${numberOfAttendees} of ${maxParticipants} attending`
+    )
   }
 
   async checkAttendingTabText(text: string) {

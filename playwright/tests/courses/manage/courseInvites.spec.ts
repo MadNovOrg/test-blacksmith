@@ -78,10 +78,7 @@ for (const data of testData) {
     await courseDetailsPage.checkInvitesLeftText(
       `${course.max_participants - 1} invites left`
     )
-    await courseDetailsPage.checkAttendingText(
-      `0 of ${course.max_participants} attending`
-    )
-
+    await courseDetailsPage.checkAttendingText(0, course.max_participants)
     const attendeePage = await browser.newPage()
     const email = await API.email.getLatestEmail(
       data.attendee.email,
@@ -94,10 +91,7 @@ for (const data of testData) {
     await attendeeCourseDetailsPage.checkSuccessMessage(
       'You are now attending this course. Please complete the checklist.'
     )
-
-    await courseDetailsPage.checkAttendingText(
-      `1 of ${course.max_participants} attending`
-    )
+    await courseDetailsPage.checkAttendingText(1, course.max_participants)
     await courseDetailsPage.checkAttendingTabText('Attending (1)')
     await courseDetailsPage.checkPendingTabText('Pending (0)')
     // For trainer we're masking the personal data
