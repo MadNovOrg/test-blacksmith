@@ -52,11 +52,15 @@ export async function deleteOrganization(id: string): Promise<boolean> {
     mutation DeleteOrganization($id: uuid!) {
       delete_organization_by_pk(id: $id) {
         id
+        name
       }
     }
   `
-  const response: { delete_organization_by_pk: { id: boolean } } =
+  const response: { delete_organization_by_pk: { id: boolean; name: string } } =
     await getClient().request(mutation, { id })
+  console.log(
+    `Deleted "${response?.delete_organization_by_pk?.name}" successfully`
+  )
   return response?.delete_organization_by_pk?.id
 }
 

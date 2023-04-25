@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from '@playwright/test'
 import { Chance } from 'chance'
+import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'xlsx'
 
 import { Go1_History_Events_Enum } from '@app/generated/graphql'
@@ -38,6 +39,7 @@ export class AllOrganisations extends BasePage {
   readonly orgTable: Locator
   readonly editUserButton: Locator
   readonly organisationMembersTable: Locator
+  readonly organisationTitle: Locator
 
   constructor(page: Page) {
     super(page)
@@ -50,7 +52,7 @@ export class AllOrganisations extends BasePage {
     this.exportHistory = this.page.locator('data-testid=export-history')
     this.invoiceNote = this.page.locator('text=Add a note (optional)')
     this.invoiceNumber = this.page.locator('text=Invoice number *')
-    this.inputtedOrgName = `org ${Date.now()}`
+    this.inputtedOrgName = `org ${uuidv4()}`
     this.licencesRemaining = this.page.locator('data-testid=licenses-remaining')
     this.line1 = this.page.locator('[data-testid="addr-line1"]')
     this.manageRemainingLicences = this.page.locator(
@@ -85,6 +87,7 @@ export class AllOrganisations extends BasePage {
     this.organisationMembersTable = this.page.locator(
       '[data-testid=organisation-members]'
     )
+    this.organisationTitle = this.page.locator('[data-testid=org-title]')
   }
 
   async goto(orgId?: string) {
@@ -102,8 +105,9 @@ export class AllOrganisations extends BasePage {
     await this.addNewOrganisation.click()
   }
 
-  async addNewOrganisationName() {
+  async addNewOrganisationName(): Promise<string> {
     await this.organisationName.fill(this.inputtedOrgName)
+    return this.inputtedOrgName
   }
 
   chance = new Chance()
@@ -145,9 +149,7 @@ export class AllOrganisations extends BasePage {
   }
 
   async checkNewOrgPage() {
-    await expect(this.page.getByTestId('org-title')).toHaveText(
-      this.inputtedOrgName
-    )
+    await expect(this.organisationTitle).toHaveText(this.inputtedOrgName)
   }
 
   async clickBlendedLearningLicences() {

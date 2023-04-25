@@ -1,5 +1,6 @@
 import { test } from '@playwright/test'
 
+import * as API from '../../api'
 import { stateFilePath } from '../../hooks/global-setup'
 import { AllOrganisations } from '../../pages/org/AllOrganisations'
 
@@ -10,7 +11,7 @@ test('add new organisation as admin', async ({ page }) => {
   await orgPage.goto()
   await orgPage.clickSeeAllOrganisations()
   await orgPage.clickNewOrganisation()
-  await orgPage.addNewOrganisationName()
+  const orgName = await orgPage.addNewOrganisationName()
   await orgPage.addTrustName()
   await orgPage.addLine1()
   await orgPage.addCity()
@@ -19,7 +20,9 @@ test('add new organisation as admin', async ({ page }) => {
   await orgPage.addWorkEmail()
   await orgPage.clickSaveOrganisation()
   await orgPage.goto()
-  //check new org is on organisation summary table
+  // Check new org is on organisation summary table
   await orgPage.findNewOrg()
   await orgPage.checkNewOrgPage()
+  const orgId = await API.organization.getOrganizationId(orgName)
+  await API.organization.deleteOrganization(orgId)
 })
