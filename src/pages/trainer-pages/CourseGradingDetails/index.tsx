@@ -8,7 +8,7 @@ import {
 } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Outlet, useLocation, useParams } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 
 import { BackButton } from '@app/components/BackButton'
 import { FullHeightPage } from '@app/components/FullHeightPage'
@@ -19,17 +19,11 @@ import theme from '@app/theme'
 import { LoadingStatus } from '@app/util'
 
 import { CourseGradingSteps } from './CourseGradingSteps'
+import { GradingDetailsProvider } from './GradingDetailsProvider'
 
 export const CourseGradingDetails = () => {
   const { id: courseId } = useParams()
-  const { t } = useTranslation()
-  const location = useLocation()
-
-  const onModulesStep = location.pathname.includes('modules')
-
-  const currentStepKey = onModulesStep ? 'modules' : 'grading-clearance'
-
-  const completedSteps = onModulesStep ? ['grading-clearance'] : ['']
+  const { t } = useTranslation('pages', { keyPrefix: 'course-grading-details' })
 
   const { data: course, status } = useCourse(courseId ?? '')
 
@@ -47,31 +41,26 @@ export const CourseGradingDetails = () => {
         ) : null}
 
         {status === LoadingStatus.ERROR ? (
-          <Alert severity="error">
-            {t('pages.course-grading-details.course-error-alert-text')}
-          </Alert>
+          <Alert severity="error">{t('course-error-alert-text')}</Alert>
         ) : null}
         {course ? (
-          <>
+          <GradingDetailsProvider accreditedBy={course.accreditedBy}>
             <Box display="flex">
               <Box width={400} display="flex" flexDirection="column" pr={4}>
                 <Sticky top={20}>
                   <Box mb={2}>
                     <BackButton
                       to={`/courses/${courseId}/details?tab=${CourseDetailsTabs.GRADING}`}
-                      label={t('pages.course-grading-details.back-button-text')}
+                      label={t('back-button-text')}
                     />
                   </Box>
                   <Typography variant="h2" mb={2}>
-                    {t('pages.course-grading-details.title')}
+                    {t('title')}
                   </Typography>
                   <Typography variant="h3" mb={5} fontWeight="600">
                     {course?.name}
                   </Typography>
-                  <CourseGradingSteps
-                    completedSteps={completedSteps}
-                    currentStepKey={currentStepKey}
-                  />
+                  <CourseGradingSteps />
                 </Sticky>
               </Box>
 
@@ -81,7 +70,7 @@ export const CourseGradingDetails = () => {
                 </Box>
               </Box>
             </Box>
-          </>
+          </GradingDetailsProvider>
         ) : null}
       </Container>
     </FullHeightPage>

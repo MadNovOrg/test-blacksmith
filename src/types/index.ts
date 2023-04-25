@@ -1,6 +1,7 @@
 import { DeepNonNullable } from 'ts-essentials'
 
 import {
+  Accreditors_Enum,
   Course_Source_Enum,
   Course_Status_Enum,
   Grade_Enum,
@@ -70,6 +71,7 @@ export type Course = {
   modulesDuration?: number
   special_instructions?: string
   parking_instructions?: string
+  accreditedBy: Accreditors_Enum
 } & Omit<Base, 'id'>
 
 export type CourseModule = {

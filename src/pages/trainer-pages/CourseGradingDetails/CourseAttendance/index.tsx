@@ -4,20 +4,23 @@ import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import { Course_Participant_Audit_Type_Enum } from '@app/generated/graphql'
+import {
+  Course_Participant_Audit_Insert_Input,
+  Course_Participant_Audit_Type_Enum,
+  SaveCourseAttendanceMutation,
+  SaveCourseAttendanceMutationVariables,
+} from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
-import {
-  MUTATION,
-  ParamsType,
-  ResponseType,
-} from '@app/queries/courses/save-course-attendance'
+import { MUTATION } from '@app/queries/courses/save-course-attendance'
 import { CourseParticipant } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
 import { CourseAttendanceList } from '../CourseAttendanceList'
+import { useGradingDetails } from '../GradingDetailsProvider'
+import { useSaveGradingDetails } from '../hooks/useSaveGradingDetails'
 
 const StyledList = styled('ol')(({ theme }) => ({
   paddingLeft: theme.spacing(3),
@@ -35,12 +38,15 @@ export const CourseAttendance = () => {
   const [attendanceSavingStatus, setAttendanceSavingStatus] = useState(
     LoadingStatus.IDLE
   )
-  const navigate = useNavigate()
   const { t } = useTranslation()
+
+  const { completeStep, steps } = useGradingDetails()
 
   const { data: participantsData, status } = useCourseParticipants(
     Number(courseId) ?? ''
   )
+
+  const saveGradingDetails = useSaveGradingDetails()
 
   const ATTENDANCE_KEY = `course-attendance-${courseId}`
 
@@ -84,9 +90,9 @@ export const CourseAttendance = () => {
     setAttendanceSavingStatus(LoadingStatus.FETCHING)
 
     const attended: string[] = []
-    const attendedAudit: ParamsType['attendedAudit'] = []
+    const attendedAudit: Course_Participant_Audit_Insert_Input[] = []
     const notAttended: string[] = []
-    const notAttendedAudit: ParamsType['notAttendedAudit'] = []
+    const notAttendedAudit: Course_Participant_Audit_Insert_Input[] = []
 
     for (const id in attendanceRef.current) {
       const participant = participantsData?.find(
@@ -113,17 +119,27 @@ export const CourseAttendance = () => {
     }
 
     try {
-      await fetcher<ResponseType, ParamsType>(MUTATION, {
-        attended,
-        attendedAudit,
-        notAttended,
-        notAttendedAudit,
-      })
+      await Promise.all(
+        [
+          await fetcher<
+            SaveCourseAttendanceMutation,
+            SaveCourseAttendanceMutationVariables
+          >(MUTATION, {
+            attended,
+            attendedAudit,
+            notAttended,
+            notAttendedAudit,
+          }),
+          steps.length === 1
+            ? saveGradingDetails({ courseId: Number(courseId) })
+            : null,
+        ].filter(Boolean)
+      )
 
       setAttendanceSavingStatus(LoadingStatus.SUCCESS)
       localStorage.removeItem(ATTENDANCE_KEY)
 
-      navigate('./modules')
+      completeStep('grading-clearance')
     } catch (err) {
       setAttendanceSavingStatus(LoadingStatus.ERROR)
     }
@@ -190,7 +206,9 @@ export const CourseAttendance = () => {
               endIcon={<ArrowForwardIcon />}
             >
               <Typography variant="body1" fontWeight={600}>
-                {t('pages.course-attendance.next-page-button-text')}
+                {steps.length > 1
+                  ? t('pages.course-attendance.next-page-button-text')
+                  : t('pages.modules-selection.save-button-text')}
               </Typography>
             </LoadingButton>
           </Box>

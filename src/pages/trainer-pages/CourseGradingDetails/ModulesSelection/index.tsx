@@ -14,6 +14,7 @@ import {
 } from '@app/queries/courses/save-course-modules-selection'
 import { LoadingStatus } from '@app/util'
 
+import { useGradingDetails } from '../GradingDetailsProvider'
 import { HoldsRecord, ModulesSelectionList } from '../ModulesSelectionList'
 
 const StyledText = styled(Typography)(({ theme }) => ({
@@ -29,6 +30,8 @@ export const ModulesSelection = () => {
   const [savingSelectionStatus, setSavingSelectionStatus] = useState(
     LoadingStatus.IDLE
   )
+
+  const { backToStep } = useGradingDetails()
 
   const STORAGE_KEY = `modules-selection-${courseId}`
 
@@ -175,9 +178,7 @@ export const ModulesSelection = () => {
           <Box display="flex" justifyContent="space-between" mt={3}>
             <LoadingButton
               loading={savingSelectionStatus === LoadingStatus.FETCHING}
-              onClick={() => {
-                navigate(`/courses/${courseId}/grading-details`)
-              }}
+              onClick={() => backToStep('grading-clearance')}
               sx={{ py: 1 }}
             >
               <Typography variant="body1" fontWeight={600}>

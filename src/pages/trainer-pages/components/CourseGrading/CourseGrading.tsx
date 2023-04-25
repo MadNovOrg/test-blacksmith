@@ -15,7 +15,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { styled } from '@mui/system'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -28,19 +27,11 @@ import useCourseParticipants from '@app/hooks/useCourseParticipants'
 import { Course, SortOrder } from '@app/types'
 import { LoadingStatus } from '@app/util'
 
+import { GradingDetailsAlert } from './components/GradingDetailsAlert'
+
 type CourseGradingProps = {
   course: Course
 }
-
-const StyledList = styled('ol')(({ theme }) => ({
-  paddingLeft: theme.spacing(3),
-  color: theme.palette.secondary.main,
-}))
-
-const StyledText = styled(Typography)(({ theme }) => ({
-  display: 'inline',
-  color: theme.palette.secondary.main,
-}))
 
 export const CourseGrading: React.FC<
   React.PropsWithChildren<CourseGradingProps>
@@ -329,85 +320,16 @@ export const CourseGrading: React.FC<
           </>
         ) : (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box
-              maxWidth="sm"
-              sx={{
-                borderRadius: 1,
-                backgroundColor: theme.colors.navy[50],
-                padding: 3,
-              }}
-            >
-              <StyledText variant="body1" fontWeight="600">
-                {t(
-                  'pages.course-details.tabs.grading.grading-details-confirmation.line1'
-                ) + ' '}
-              </StyledText>
-              <StyledText variant="body1">
-                {t(
-                  'pages.course-details.tabs.grading.grading-details-confirmation.line2'
-                )}
-              </StyledText>
-              <StyledList>
-                <Box sx={{ my: 2 }}>
-                  <li>
-                    <StyledText variant="body1" fontWeight="600">
-                      {t(
-                        'pages.course-details.tabs.grading.grading-details-confirmation.line3'
-                      ) + ' '}
-                    </StyledText>
-                    <StyledText variant="body1">
-                      {t(
-                        'pages.course-details.tabs.grading.grading-details-confirmation.line4'
-                      ) + ' '}
-                    </StyledText>
-                    <StyledList type="a">
-                      <li>
-                        <StyledText variant="body1">
-                          {t(
-                            'pages.course-details.tabs.grading.grading-details-confirmation.line5'
-                          )}
-                        </StyledText>
-                      </li>
-                      <li>
-                        <StyledText variant="body1">
-                          {t(
-                            'pages.course-details.tabs.grading.grading-details-confirmation.line6'
-                          )}
-                        </StyledText>
-                      </li>
-                      <li>
-                        <StyledText variant="body1">
-                          {t(
-                            'pages.course-details.tabs.grading.grading-details-confirmation.line7'
-                          )}
-                        </StyledText>
-                      </li>
-                    </StyledList>
-                  </li>
-                </Box>
-                <li>
-                  <StyledText variant="body1" fontWeight="600">
-                    {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line8'
-                    ) + ' '}
-                  </StyledText>
-                  <StyledText variant="body1">
-                    {t(
-                      'pages.course-details.tabs.grading.grading-details-confirmation.line9'
-                    ) + ' '}
-                  </StyledText>
-                </li>
-              </StyledList>
+            <GradingDetailsAlert course={course}>
               {canGradeParticipants ? (
                 <Box display="flex" justifyContent={'flex-end'}>
                   <Button
                     variant="contained"
                     color="primary"
                     size="medium"
-                    onClick={() =>
-                      navigate(`/courses/${course.id}/grading-details`)
-                    }
                     sx={{ py: 1 }}
+                    href={`/courses/${course.id}/grading-details`}
+                    LinkComponent={LinkBehavior}
                   >
                     <Typography variant="body1" fontWeight={600}>
                       {t(
@@ -417,7 +339,7 @@ export const CourseGrading: React.FC<
                   </Button>
                 </Box>
               ) : null}
-            </Box>
+            </GradingDetailsAlert>
           </Box>
         )}
       </Container>

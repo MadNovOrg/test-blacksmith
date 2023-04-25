@@ -1,5 +1,5 @@
 import { gql } from 'graphql-request'
-import useSWR from 'swr'
+import { useQuery } from 'urql'
 
 import { Grade_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
@@ -74,10 +74,13 @@ export default function useCourseGradingData(courseId: string): {
   status: LoadingStatus
   error?: Error
 } {
-  const { data, error } = useSWR<ResponseType, Error, [string, ParamsType]>([
-    QUERY,
-    { id: courseId },
-  ])
+  const [{ data, error }] = useQuery<ResponseType, ParamsType>({
+    query: QUERY,
+    variables: {
+      id: courseId,
+    },
+    requestPolicy: 'cache-and-network',
+  })
 
   return {
     data: data?.course,

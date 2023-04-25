@@ -2,6 +2,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import useCourse from '@app/hooks/useCourse'
 import { LoadingStatus } from '@app/util'
 
@@ -129,7 +130,11 @@ describe('page: CourseGradingDetails', () => {
   })
 
   it("doesn't mark any step as completed if on attendance page", () => {
-    const course = buildCourse()
+    const course = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Icm,
+      },
+    })
 
     useCourseMocked.mockReturnValue({
       mutate: jest.fn(),
@@ -154,7 +159,11 @@ describe('page: CourseGradingDetails', () => {
   })
 
   it('marks attendance step as completed modules page', () => {
-    const course = buildCourse()
+    const course = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Icm,
+      },
+    })
 
     useCourseMocked.mockReturnValue({
       mutate: jest.fn(),
@@ -180,5 +189,33 @@ describe('page: CourseGradingDetails', () => {
       within(attendanceNavItem).getByTestId('CheckIcon')
     ).toBeInTheDocument()
     expect(within(modulesNavItem).getByText('2')).toBeInTheDocument()
+  })
+
+  it("doesn't render steps for BILD course", () => {
+    const course = buildCourse({
+      overrides: {
+        accreditedBy: Accreditors_Enum.Bild,
+      },
+    })
+
+    useCourseMocked.mockReturnValue({
+      mutate: jest.fn(),
+      data: course,
+      status: LoadingStatus.SUCCESS,
+    })
+
+    render(
+      <Routes>
+        <Route path="/:id/grading-details" element={<CourseGradingDetails />}>
+          <Route path="modules" element={<h1>Modules</h1>} />
+        </Route>
+      </Routes>,
+      {},
+      { initialEntries: [`/${course.id}/grading-details`] }
+    )
+
+    expect(
+      screen.queryByTestId('course-grading-details-nav')
+    ).not.toBeInTheDocument()
   })
 })

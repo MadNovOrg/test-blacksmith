@@ -1,21 +1,5 @@
 import { gql } from 'graphql-request'
 
-import { Course_Participant_Audit_Insert_Input } from '@app/generated/graphql'
-
-export type ResponseType = {
-  saveAttended: { affectedRows: number }
-  saveNotAttended: { affectedRows: number }
-}
-
-type AuditEntry = Course_Participant_Audit_Insert_Input
-
-export type ParamsType = {
-  attended: string[]
-  attendedAudit: AuditEntry[]
-  notAttended: string[]
-  notAttendedAudit: AuditEntry[]
-}
-
 export const MUTATION = gql`
   mutation SaveCourseAttendance(
     $attended: [uuid!]!,

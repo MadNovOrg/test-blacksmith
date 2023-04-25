@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import useCourseModules from '@app/hooks/useCourseModules'
 import { MUTATION } from '@app/queries/courses/save-course-modules-selection'
@@ -8,6 +9,8 @@ import { LoadingStatus } from '@app/util'
 
 import { render, screen, within, userEvent, waitForText } from '@test/index'
 import { buildCourseModule } from '@test/mock-data-utils'
+
+import { GradingDetailsProvider } from '../GradingDetailsProvider'
 
 import { ModulesSelection } from './index'
 
@@ -27,12 +30,14 @@ describe('page: ModulesSelection', () => {
     useCourseModulesMock.mockReturnValue({ status: LoadingStatus.FETCHING })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -55,12 +60,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -95,12 +102,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -135,12 +144,14 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -182,12 +193,14 @@ describe('page: ModulesSelection', () => {
     )
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -221,13 +234,15 @@ describe('page: ModulesSelection', () => {
     })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-        <Route path="/courses/:id/details" element={<h1>Manage page</h1>} />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route
+            path="/:id/grading-details/modules"
+            element={<ModulesSelection />}
+          />
+          <Route path="/courses/:id/details" element={<h1>Manage page</h1>} />
+        </Routes>
+      </GradingDetailsProvider>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
     )
@@ -246,26 +261,22 @@ describe('page: ModulesSelection', () => {
   })
 
   it('navigates back to the module grading clearance page when clicked on the button', async () => {
-    const COURSE_ID = 'course-id'
-
     useCourseModulesMock.mockReturnValue({
       status: LoadingStatus.SUCCESS,
       data: [buildCourseModule(), buildCourseModule(), buildCourseModule()],
     })
 
     render(
-      <Routes>
-        <Route
-          path="/:id/grading-details/modules"
-          element={<ModulesSelection />}
-        />
-        <Route
-          path="/courses/:id/grading-details"
-          element={<h1>Grading clearance page</h1>}
-        />
-      </Routes>,
+      <GradingDetailsProvider accreditedBy={Accreditors_Enum.Icm}>
+        <Routes>
+          <Route path="grading-details">
+            <Route index element={<h1>Grading clearance page</h1>} />
+            <Route path="modules" element={<ModulesSelection />} />
+          </Route>
+        </Routes>
+      </GradingDetailsProvider>,
       {},
-      { initialEntries: [`/${COURSE_ID}/grading-details/modules`] }
+      { initialEntries: [`/grading-details/modules`] }
     )
 
     await userEvent.click(screen.getByText('Back to grading clearance'))

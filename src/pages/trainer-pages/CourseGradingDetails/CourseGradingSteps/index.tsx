@@ -1,26 +1,37 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StepsNavigation } from '@app/components/StepsNavigation'
 
-interface Props {
-  completedSteps: string[]
-  currentStepKey: string | null
-}
+import { useGradingDetails } from '../GradingDetailsProvider'
 
-export const CourseGradingSteps: React.FC<React.PropsWithChildren<Props>> = ({
-  completedSteps,
-  currentStepKey,
-}) => {
+export const CourseGradingSteps: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
 
-  const items = [
-    {
-      key: 'grading-clearance',
-      label: t('pages.course-grading-details.grading-clearance-step'),
-    },
-    { key: 'modules', label: t('pages.course-grading-details.modules-step') },
-  ]
+  const { steps, currentStepKey, completedSteps } = useGradingDetails()
+
+  const items = useMemo(() => {
+    const items = []
+    if (steps.includes('grading-clearance')) {
+      items.push({
+        key: 'grading-clearance',
+        label: t('pages.course-grading-details.grading-clearance-step'),
+      })
+    }
+
+    if (steps.includes('modules')) {
+      items.push({
+        key: 'modules',
+        label: t('pages.course-grading-details.modules-step'),
+      })
+    }
+
+    return items
+  }, [steps, t])
+
+  if (steps.length <= 1) {
+    return null
+  }
 
   return (
     <StepsNavigation

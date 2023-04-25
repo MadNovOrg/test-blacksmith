@@ -4,6 +4,7 @@ import { add, sub } from 'date-fns'
 
 import { getAccountCode } from '@app/components/CourseForm/helpers'
 import {
+  Accreditors_Enum,
   CategorySummaryFragment,
   Course_Status_Enum,
   EbookSummaryFragment,
@@ -233,6 +234,7 @@ export const buildCourse = build<Course>({
     salesRepresentative: perBuild(() => buildProfile()),
     accountCode: getAccountCode(),
     freeSpaces: 0,
+    accreditedBy: Accreditors_Enum.Icm,
   },
 })
 
@@ -270,6 +272,7 @@ export const buildStartedCourse = build<Course>({
     moduleGroupIds: [],
     contactProfileId: undefined,
     aolCostOfCourse: undefined,
+    accreditedBy: Accreditors_Enum.Icm,
   },
 })
 
@@ -305,6 +308,7 @@ export const buildEndedCourse = build<Course>({
     },
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
+    accreditedBy: Accreditors_Enum.Icm,
   },
 })
 
@@ -340,6 +344,7 @@ export const buildNotStartedCourse = build<Course>({
     },
     modulesAgg: { aggregate: { count: 0 } },
     moduleGroupIds: [],
+    accreditedBy: Accreditors_Enum.Icm,
   },
 })
 
