@@ -489,7 +489,11 @@ select_permissions:
         - end
         - freeSlots
         - start
-      filter: {}
+      filter:
+        course_type:
+          _in:
+            - CLOSED
+            - OPEN
       allow_aggregations: true
   - role: trainer
     permission:
@@ -763,6 +767,45 @@ select_permissions:
                     - TRAINER_UNAVAILABLE
       allow_aggregations: true
 update_permissions:
+  - role: ld
+    permission:
+      columns:
+        - account_code
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - cancellation_fee_percent
+        - cancellation_reason
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - notes
+        - organization_id
+        - parking_instructions
+        - reaccreditation
+        - sales_representative_id
+        - source
+        - special_instructions
+        - updated_at
+      filter:
+        course_type:
+          _in:
+            - CLOSED
+            - OPEN
+      check: null
   - role: sales-admin
     permission:
       columns:
@@ -796,7 +839,11 @@ update_permissions:
         - source
         - special_instructions
         - updated_at
-      filter: {}
+      filter:
+        course_type:
+          _in:
+            - CLOSED
+            - OPEN
       check: null
   - role: trainer
     permission:
@@ -884,6 +931,7 @@ update_permissions:
         - cancellation_reason
         - contact_profile_id
         - course_delivery_type
+        - course_level
         - course_status
         - course_type
         - created_at
@@ -905,8 +953,12 @@ update_permissions:
         - source
         - special_instructions
         - updated_at
-      filter: {}
-      check: {}
+      filter:
+        course_type:
+          _in:
+            - CLOSED
+            - OPEN
+      check: null
   - role: user
     permission:
       columns:

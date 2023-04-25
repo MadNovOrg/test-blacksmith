@@ -28,23 +28,54 @@ const testData = [
       return course
     },
   },
-  // Cannot invite closed course as admin, see https://behaviourhub.atlassian.net/browse/TTHP-1249
-  /*{
-    name: 'closed course',
-    user: 'admin',
-    attendee: users.userWithInvite,
+  {
+    name: 'indirect course',
+    user: 'ops',
+    attendee: users.user1WithOrg,
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.type = CourseType.CLOSED
+      course.type = CourseType.INDIRECT
       course.status = Course_Status_Enum.Scheduled
-      course.id = await insertCourse(
+      course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
         InviteStatus.ACCEPTED
       )
       return course
     },
-  },*/
+  },
+  {
+    name: 'closed course',
+    user: 'salesAdmin',
+    attendee: users.user1WithOrg,
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.CLOSED
+      course.status = Course_Status_Enum.Scheduled
+      course.id = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.ACCEPTED
+      )
+      return course
+    },
+  },
+  {
+    name: 'closed course',
+    user: 'admin',
+    attendee: users.user1WithOrg,
+    course: async () => {
+      const course = UNIQUE_COURSE()
+      course.type = CourseType.CLOSED
+      course.status = Course_Status_Enum.Scheduled
+      course.id = await API.course.insertCourse(
+        course,
+        users.trainer.email,
+        InviteStatus.ACCEPTED
+      )
+      return course
+    },
+  },
 ]
 
 for (const data of testData) {

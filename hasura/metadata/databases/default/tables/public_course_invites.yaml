@@ -25,9 +25,34 @@ object_relationships:
         column_mapping:
           id: invite_id
 insert_permissions:
-  - role: sales-admin
+  - role: ld
     permission:
       check: {}
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
+  - role: sales-admin
+    permission:
+      check:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+      columns:
+        - course_id
+        - email
+        - status
+      backend_only: false
+  - role: trainer
+    permission:
+      check:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
       columns:
         - course_id
         - email
@@ -63,6 +88,18 @@ insert_permissions:
         - status
       backend_only: false
 select_permissions:
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -79,6 +116,22 @@ select_permissions:
             _in:
               - CLOSED
               - OPEN
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - email
+        - note
+        - status
+        - created_at
+        - updated_at
+        - id
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: tt-admin
     permission:
@@ -122,14 +175,40 @@ select_permissions:
                 _eq: X-Hasura-User-Id
       allow_aggregations: true
 update_permissions:
-  - role: sales-admin
+  - role: ld
     permission:
       columns:
         - course_id
         - email
         - status
       filter: {}
+      check: null
+  - role: sales-admin
+    permission:
+      columns:
+        - course_id
+        - email
+        - status
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
       check: {}
+  - role: trainer
+    permission:
+      columns:
+        - course_id
+        - email
+        - note
+        - status
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      check: null
   - role: tt-admin
     permission:
       columns:
@@ -162,6 +241,24 @@ update_permissions:
                   _eq: PENDING
       check: null
 delete_permissions:
+  - role: ld
+    permission:
+      filter: {}
+  - role: sales-admin
+    permission:
+      filter:
+        course:
+          course_type:
+            _in:
+              - CLOSED
+              - OPEN
+  - role: trainer
+    permission:
+      filter:
+        course:
+          trainers:
+            profile_id:
+              _eq: X-Hasura-User-Id
   - role: tt-admin
     permission:
       filter: {}
