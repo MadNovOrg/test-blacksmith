@@ -51,22 +51,6 @@ const testData = [
       return course
     },
   },
-  // TODO uncomment tests after fixing TTHP-1161
-  // {
-  //   user: 'ops',
-  //   userToRemove: users.user2WithOrg,
-  //   course: async () => {
-  //     const course = UNIQUE_COURSE()
-  //     course.type = CourseType.OPEN
-  //     course.status = Course_Status_Enum.Scheduled
-  //     course.id = await insertCourse(
-  //       course,
-  //       users.trainer.email,
-  //       InviteStatus.ACCEPTED
-  //     )
-  //     return course
-  //   },
-  // },
 ]
 
 for (const data of testData) {
