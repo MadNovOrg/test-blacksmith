@@ -229,6 +229,29 @@ select_permissions:
                       - profile_id:
                           _eq: X-Hasura-User-Id
       allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - course_id
+        - created_at
+        - date_graded
+        - go1_enrolment_id
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - hs_consent
+        - id
+        - invite_id
+        - invoice_id
+        - order_id
+        - profile_id
+        - registration_id
+        - updated_at
+      filter: {}
+      allow_aggregations: true
   - role: tt-ops
     permission:
       columns:
@@ -341,9 +364,12 @@ update_permissions:
         - registration_id
         - updated_at
       filter:
-        certificate:
-          is_revoked:
-            _eq: false
+        _or:
+          - _not:
+              certificate: {}
+          - certificate:
+              is_revoked:
+                _eq: false
       check: null
   - role: tt-ops
     permission:

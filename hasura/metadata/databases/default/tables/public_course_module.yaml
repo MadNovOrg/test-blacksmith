@@ -34,6 +34,14 @@ insert_permissions:
         - module_id
         - updated_at
       backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - course_id
+        - covered
+        - module_id
+      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -119,6 +127,17 @@ select_permissions:
             profile_id:
               _eq: X-Hasura-User-Id
       allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - covered
+        - course_id
+        - created_at
+        - updated_at
+        - id
+        - module_id
+      filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:
@@ -141,6 +160,12 @@ update_permissions:
             profile_id:
               _eq: X-Hasura-User-Id
       check: null
+  - role: tt-admin
+    permission:
+      columns:
+        - covered
+      filter: {}
+      check: null
 delete_permissions:
   - role: trainer
     permission:
@@ -149,3 +174,6 @@ delete_permissions:
           trainers:
             profile_id:
               _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}
