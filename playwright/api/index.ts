@@ -1,4 +1,5 @@
 export * as course from './hasura/course'
+export * as invitations from './hasura/invitations'
 export * as ebook from './hasura/ebook'
 export * as email from './email-api'
 export * as go1_licensing from './hasura/go1-licensing'

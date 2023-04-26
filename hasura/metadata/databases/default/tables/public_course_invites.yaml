@@ -78,10 +78,13 @@ insert_permissions:
     permission:
       check:
         course:
-          trainers:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
+          organization:
+            members:
+              _and:
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+                - is_admin:
+                    _eq: true
       columns:
         - course_id
         - email
@@ -201,10 +204,13 @@ select_permissions:
         - updated_at
       filter:
         course:
-          trainers:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
+          organization:
+            members:
+              _and:
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+                - is_admin:
+                    _eq: true
       allow_aggregations: true
 update_permissions:
   - role: ld
@@ -260,17 +266,11 @@ update_permissions:
       columns:
         - status
       filter:
-        _or:
-          - course:
-              trainers:
-                profile:
-                  id:
-                    _eq: X-Hasura-User-Id
-          - _and:
-              - email:
-                  _eq: X-Hasura-User-Email
-              - status:
-                  _eq: PENDING
+        _and:
+          - email:
+              _eq: X-Hasura-User-Email
+          - status:
+              _eq: PENDING
       check: null
 delete_permissions:
   - role: ld
@@ -301,10 +301,13 @@ delete_permissions:
     permission:
       filter:
         course:
-          trainers:
-            profile:
-              id:
-                _eq: X-Hasura-User-Id
+          organization:
+            members:
+              _and:
+                - profile_id:
+                    _eq: X-Hasura-User-Id
+                - is_admin:
+                    _eq: true
 event_triggers:
   - name: send_invite_email
     definition:

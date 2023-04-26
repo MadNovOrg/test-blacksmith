@@ -25,5 +25,6 @@ export async function runQueryAsRole<T>(
       'x-hasura-role': role,
     },
   })
+
   return graphQLClient.request<T>(query, variables)
 }
