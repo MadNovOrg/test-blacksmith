@@ -1,7 +1,12 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import useSWR from 'swr'
 
 import { useAuth } from '@app/context/auth'
+import {
+  GetUserCanAccessResourcesQuery,
+  GetUserCanAccessResourcesQueryVariables,
+} from '@app/generated/graphql'
 import { AvailableCourses } from '@app/pages/admin/components/Courses/AvailableCourses'
 import { ManageCourses } from '@app/pages/admin/components/Courses/ManageCourses'
 import Organizations from '@app/pages/admin/components/Organizations'
@@ -22,13 +27,24 @@ import { CourseDetails } from '@app/pages/user-pages/CourseDetails'
 import { CourseEvaluation } from '@app/pages/user-pages/CourseEvaluation'
 import { CourseHealthAndSafetyForm } from '@app/pages/user-pages/CourseHealthAndSafetyForm'
 import { AttendeeCourses } from '@app/pages/user-pages/MyCourses'
+import { GET_USER_CAN_ACCESS_RESOURCES } from '@app/queries/certificate/get-user-can-access-resources'
 
 import MembershipRoutes from './membership'
 
 const ResourcesRoutes = React.lazy(() => import('./resources'))
 
 const UserRoutes = () => {
-  const { acl } = useAuth()
+  const { acl, profile } = useAuth()
+
+  const { data } = useSWR<
+    GetUserCanAccessResourcesQuery,
+    Error,
+    [string, GetUserCanAccessResourcesQueryVariables]
+  >([GET_USER_CAN_ACCESS_RESOURCES, { profileId: profile?.id }])
+
+  const showResources =
+    (data?.certificates.aggregate?.count ||
+      0 + (data?.participant.aggregate?.count || 0)) > 0
 
   return (
     <Routes>
@@ -100,7 +116,9 @@ const UserRoutes = () => {
 
       <Route path="membership/*" element={<MembershipRoutes />} />
 
-      <Route path="resources/*" element={<ResourcesRoutes />} />
+      {showResources ? (
+        <Route path="resources/*" element={<ResourcesRoutes />} />
+      ) : null}
 
       <Route path="*" element={<NotFound />} />
     </Routes>

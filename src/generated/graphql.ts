@@ -42751,6 +42751,13 @@ export type InsertWaitlistMutationVariables = Exact<{
 
 export type InsertWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affectedRows: number } | null };
 
+export type GetUserCanAccessResourcesQueryVariables = Exact<{
+  profileId?: InputMaybe<Scalars['uuid']>;
+}>;
+
+
+export type GetUserCanAccessResourcesQuery = { __typename?: 'query_root', certificates: { __typename?: 'course_certificate_aggregate', aggregate?: { __typename?: 'course_certificate_aggregate_fields', count: number } | null }, participant: { __typename?: 'course_participant_aggregate', aggregate?: { __typename?: 'course_participant_aggregate_fields', count: number } | null } };
+
 export type GetCertificateQueryVariables = Exact<{
   id: Scalars['uuid'];
 }>;

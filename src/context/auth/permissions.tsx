@@ -264,13 +264,12 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
       return false
     },
-    canViewResources: () => {
-      const roles = [
-        RoleName.TT_ADMIN,
-        RoleName.USER,
-        RoleName.TRAINER,
-        RoleName.SALES_ADMIN,
-      ]
+    canViewResources: (showResources: boolean) => {
+      if (auth.activeRole === RoleName.USER) {
+        return showResources
+      }
+
+      const roles = [RoleName.TT_ADMIN, RoleName.TRAINER, RoleName.SALES_ADMIN]
       return roles.some(r => r === auth.activeRole)
     },
     canViewCourseHistory: () => {
