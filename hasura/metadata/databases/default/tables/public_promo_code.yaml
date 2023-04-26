@@ -48,6 +48,23 @@ array_relationships:
           schema: public
           name: course_promo_code
 insert_permissions:
+  - role: sales-admin
+    permission:
+      check: {}
+      columns:
+        - amount
+        - booker_single_use
+        - code
+        - created_by
+        - description
+        - enabled
+        - id
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      backend_only: false
   - role: tt-ops
     permission:
       check: {}
@@ -109,6 +126,24 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: sales-admin
+    permission:
+      columns:
+        - amount
+        - approved_by
+        - booker_single_use
+        - code
+        - created_by
+        - denied_by
+        - description
+        - enabled
+        - levels
+        - type
+        - uses_max
+        - valid_from
+        - valid_to
+      filter: {}
+      check: {}
   - role: tt-ops
     permission:
       columns:
@@ -127,6 +162,13 @@ update_permissions:
         - valid_to
       filter: {}
       check: {}
+delete_permissions:
+  - role: sales-admin
+    permission:
+      filter: {}
+  - role: tt-ops
+    permission:
+      filter: {}
 event_triggers:
   - name: promo_code_created
     definition:
