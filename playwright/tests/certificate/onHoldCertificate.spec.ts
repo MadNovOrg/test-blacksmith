@@ -46,9 +46,8 @@ test('admin can put a certificate on hold', async ({ page, certificate }) => {
   )
   await certPage.clickManageCertificateButton()
   const putOnHoldPopup = await certPage.clickPutOnHold()
-  //new popup page
   await putOnHoldPopup.selectReason()
-  await putOnHoldPopup.addNotes('notes9')
+  await putOnHoldPopup.addNotes()
   await putOnHoldPopup.selectFromDate()
   await putOnHoldPopup.selectToDate()
   await putOnHoldPopup.submitOnHold()

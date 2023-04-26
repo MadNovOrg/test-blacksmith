@@ -1,5 +1,7 @@
 import * as fs from 'fs'
 
+import { addDays, format } from 'date-fns'
+
 import { CourseTableRow, ModuleGroup } from './data/types'
 import { stateFilePath } from './hooks/global-setup'
 
@@ -40,4 +42,9 @@ export const toUiTime = (date: Date) => {
     hour12: false,
     timeZone: 'UTC',
   })
+}
+
+export const getFormattedDate = (daysToAdd: number) => {
+  const newDate = addDays(new Date(), daysToAdd)
+  return format(newDate, 'ddMMyyyy')
 }
