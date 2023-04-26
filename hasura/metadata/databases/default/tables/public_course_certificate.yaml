@@ -221,6 +221,7 @@ select_permissions:
       computed_fields:
         - status
       filter: {}
+      allow_aggregations: true
   - role: unverified
     permission:
       columns:

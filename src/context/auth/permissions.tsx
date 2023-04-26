@@ -208,6 +208,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
       const roles = [
         RoleName.TT_ADMIN,
         RoleName.SALES_ADMIN,
+        RoleName.TT_OPS,
         RoleName.FINANCE,
         RoleName.LD,
       ]
