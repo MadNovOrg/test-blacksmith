@@ -17,12 +17,7 @@ import { CourseLevel } from '@app/types'
 import { Dialog } from '../Dialog'
 import { SelectLevels } from '../SelectLevels'
 
-import {
-  GET_SELECTED,
-  SearchCourse,
-  SEARCH_COURSES,
-  QueryResult,
-} from './queries'
+import { SearchCourse, SEARCH_COURSES, QueryResult } from './queries'
 
 type Props = {
   value: number[]
@@ -59,15 +54,11 @@ export const SelectCourses: React.FC<React.PropsWithChildren<Props>> = ({
     [searchResult.data]
   )
 
-  const [selectedResult] = useQuery<QueryResult>({
-    query: GET_SELECTED,
-    variables: { ids: [...selectedIds] },
-    pause: value.length === 0,
-  })
-
   const selected = useMemo(
-    () => selectedResult.data?.courses ?? [],
-    [selectedResult.data]
+    () =>
+      searchResult.data?.courses.filter(course => selectedIds.has(course.id)) ??
+      [],
+    [searchResult, selectedIds]
   )
 
   const courses = useMemo(() => {

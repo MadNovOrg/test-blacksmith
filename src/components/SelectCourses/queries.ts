@@ -42,12 +42,3 @@ export const SEARCH_COURSES = gql`
     }
   }
 `
-
-export const GET_SELECTED = gql`
-  ${COURSE}
-  query GetSelectedCourses($ids: [Int!]!) {
-    courses: course(where: { id: { _in: $ids } }) {
-      ...SearchCourse
-    }
-  }
-`
