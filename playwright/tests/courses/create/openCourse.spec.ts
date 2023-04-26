@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test'
 
-import { CourseDeliveryType } from '@app/types'
+import { CourseDeliveryType, CourseLevel } from '@app/types'
 
 import * as API from '../../../api'
 import { TARGET_ENV } from '../../../constants'
@@ -12,23 +12,54 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const dataSet = [
   {
-    name: 'open f2f as admin',
+    name: 'open L1 virtual as admin @smoke',
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
+      course.deliveryType = CourseDeliveryType.VIRTUAL
       return course
     })(),
   },
   {
-    name: 'open virtual as ops',
+    name: 'open L1 virtual as ops @smoke',
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.VIRTUAL
-      course.schedule[0].virtualLink = 'www.zoom.com/testlink'
       return course
     })(),
   },
+  {
+    name: 'open L2 mixed as admin',
+    user: 'admin',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = CourseLevel.Level_2
+      course.deliveryType = CourseDeliveryType.MIXED
+      return course
+    })(),
+  },
+  {
+    name: 'open L1 F2F as ops',
+    user: 'ops',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.level = CourseLevel.Level_1
+      course.deliveryType = CourseDeliveryType.F2F
+      return course
+    })(),
+  },
+  //TODO uncomment after TTHP-575 will be moved to done
+  // {
+  //   name: 'open L2 F2F as sales admin',
+  //   user: 'salesAdmin',
+  //   course: (() => {
+  //     const course = UNIQUE_COURSE()
+  //     course.level = CourseLevel.Level_2
+  //     course.deliveryType = CourseDeliveryType.F2F
+  //     return course
+  //   })(),
+  // },
 ]
 
 for (const data of dataSet) {

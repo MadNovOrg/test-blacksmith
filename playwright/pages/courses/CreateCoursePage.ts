@@ -207,11 +207,11 @@ export class CreateCoursePage extends BasePage {
     if (course.deliveryType !== CourseDeliveryType.VIRTUAL) {
       await this.selectVenue(course.schedule[0].venue?.name as string)
     }
-    // TODO workaroud - remove this if after fixing TTHP-1216
+    // TODO workaround - remove this if after fixing /TTHP-1216
     if (
       (course.deliveryType === CourseDeliveryType.VIRTUAL ||
         course.deliveryType === CourseDeliveryType.MIXED) &&
-      (await this.onlineMeetingLinkInput.innerText()) === ''
+      (await this.onlineMeetingLinkInput.inputValue()) === ''
     ) {
       await this.onlineMeetingLinkInput.type('www.zoom.com/blabla')
     }
