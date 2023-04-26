@@ -33,6 +33,29 @@ insert_permissions:
         - profile_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - created_at
+        - id
+        - is_admin
+        - member_type
+        - organization_id
+        - position
+        - profile_id
+        - updated_at
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -46,6 +69,29 @@ select_permissions:
         - organization_id
         - profile_id
       filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - created_at
+        - id
+        - is_admin
+        - member_type
+        - organization_id
+        - position
+        - profile_id
+        - updated_at
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+      allow_aggregations: true
   - role: tt-admin
     permission:
       columns:
@@ -114,6 +160,40 @@ select_permissions:
                       _eq: true
       allow_aggregations: true
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - is_admin
+        - position
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+      check: null
+  - role: sales-representative
+    permission:
+      columns:
+        - is_admin
+        - position
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - organization:
+              members:
+                _and:
+                  - profile_id:
+                      _eq: X-Hasura-User-Id
+                  - is_admin:
+                      _eq: true
+      check: null
   - role: tt-admin
     permission:
       columns:

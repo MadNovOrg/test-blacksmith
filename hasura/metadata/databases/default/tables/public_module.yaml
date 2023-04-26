@@ -37,6 +37,19 @@ select_permissions:
         - id
         - module_group_id
       filter: {}
+  - role: finance
+    permission:
+      columns:
+        - course_level
+        - created_at
+        - description
+        - id
+        - module_category
+        - module_group_id
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -49,6 +62,19 @@ select_permissions:
         - id
         - module_group_id
       filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - course_level
+        - created_at
+        - description
+        - id
+        - module_category
+        - module_group_id
+        - name
+        - updated_at
+      filter: {}
+      allow_aggregations: true
   - role: user
     permission:
       columns:

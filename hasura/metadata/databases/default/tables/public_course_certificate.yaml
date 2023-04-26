@@ -78,6 +78,35 @@ insert_permissions:
         - profile_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - number
+        - profile_id
+        - updated_at
+      computed_fields:
+        - status
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                      - is_admin:
+                          _eq: true
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -94,6 +123,35 @@ select_permissions:
       computed_fields:
         - status
       filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - certification_date
+        - course_id
+        - course_level
+        - course_name
+        - created_at
+        - expiry_date
+        - id
+        - number
+        - profile_id
+        - updated_at
+      computed_fields:
+        - status
+      filter:
+        _or:
+          - profile_id:
+              _eq: X-Hasura-User-Id
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    _and:
+                      - profile_id:
+                          _eq: X-Hasura-User-Id
+                      - is_admin:
+                          _eq: true
+      allow_aggregations: true
   - role: trainer
     permission:
       columns:

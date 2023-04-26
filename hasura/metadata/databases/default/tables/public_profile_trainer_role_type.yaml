@@ -17,6 +17,24 @@ insert_permissions:
         - updated_at
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - profile_id
+        - trainer_role_type_id
+        - created_at
+        - updated_at
+      filter: {}
   - role: unverified
     permission:
       columns:

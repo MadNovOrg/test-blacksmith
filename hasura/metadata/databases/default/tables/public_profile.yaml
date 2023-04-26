@@ -138,6 +138,36 @@ computed_fields:
         name: profile_phone
       session_argument: hasura_session
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - addresses
+        - archived
+        - attributes
+        - avatar
+        - contact_details
+        - created_at
+        - dbs
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - preferences
+        - tags
+        - title
+        - updated_at
+      computed_fields:
+        - email
+        - familyName
+        - fullName
+        - givenName
+        - phone
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       columns:
@@ -170,6 +200,36 @@ select_permissions:
         - phone
       filter: {}
       allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - addresses
+        - archived
+        - attributes
+        - avatar
+        - contact_details
+        - created_at
+        - dbs
+        - dietary_restrictions
+        - disabilities
+        - dob
+        - id
+        - job_title
+        - last_activity
+        - original_record
+        - preferences
+        - tags
+        - title
+        - updated_at
+      computed_fields:
+        - email
+        - familyName
+        - fullName
+        - givenName
+        - phone
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
   - role: tt-admin
     permission:
       columns:
@@ -297,6 +357,22 @@ select_permissions:
       filter: {}
       allow_aggregations: true
 update_permissions:
+  - role: finance
+    permission:
+      columns:
+        - last_activity
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+  - role: sales-representative
+    permission:
+      columns:
+        - last_activity
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
   - role: tt-admin
     permission:
       columns:

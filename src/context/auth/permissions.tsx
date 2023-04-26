@@ -14,6 +14,10 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
 
     isTTAdmin: () => activeRole === RoleName.TT_ADMIN,
 
+    isSalesRepresentative: () => activeRole === RoleName.SALES_REPRESENTATIVE,
+
+    isFinance: () => activeRole === RoleName.FINANCE,
+
     isSalesAdmin: () => activeRole === RoleName.SALES_ADMIN,
 
     isTrainer: () => activeRole === RoleName.TRAINER,
@@ -74,6 +78,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ]
       return roles.some(r => r === auth.activeRole)
     },
@@ -125,6 +131,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ]
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
@@ -217,6 +225,8 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_ADMIN,
         RoleName.LD,
         RoleName.SALES_ADMIN,
+        RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ]
       return auth.isOrgAdmin || roles.some(r => r === auth.activeRole)
     },
@@ -290,6 +300,7 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         RoleName.TT_OPS,
         RoleName.SALES_ADMIN,
         RoleName.SALES_REPRESENTATIVE,
+        RoleName.FINANCE,
       ].some(r => r === auth.activeRole)
     },
     canRemoveParticipant: () => {

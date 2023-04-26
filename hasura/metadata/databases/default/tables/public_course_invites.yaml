@@ -88,7 +88,7 @@ insert_permissions:
         - status
       backend_only: false
 select_permissions:
-  - role: ld
+  - role: finance
     permission:
       columns:
         - course_id
@@ -100,6 +100,22 @@ select_permissions:
         - updated_at
       filter: {}
       allow_aggregations: true
+  - role: ld
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
   - role: sales-admin
     permission:
       columns:
@@ -117,6 +133,22 @@ select_permissions:
               - CLOSED
               - OPEN
       allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - email
+        - id
+        - note
+        - status
+        - updated_at
+      filter:
+        course:
+          trainers:
+            profile:
+              id:
+                _eq: X-Hasura-User-Id
   - role: trainer
     permission:
       columns:

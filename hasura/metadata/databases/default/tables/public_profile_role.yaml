@@ -21,6 +21,16 @@ insert_permissions:
         - role_id
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - profile_id
+        - role_id
+        - _source
+        - created_at
+        - updated_at
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -30,6 +40,16 @@ select_permissions:
         - id
         - profile_id
         - role_id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - profile_id
+        - role_id
+        - _source
+        - created_at
+        - updated_at
       filter: {}
   - role: tt-admin
     permission:

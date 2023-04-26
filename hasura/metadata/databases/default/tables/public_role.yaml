@@ -10,6 +10,14 @@ array_relationships:
           schema: public
           name: profile_role
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -17,6 +25,14 @@ select_permissions:
         - rank
         - data
         - id
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - name
+        - data
+        - rank
       filter: {}
   - role: trainer
     permission:

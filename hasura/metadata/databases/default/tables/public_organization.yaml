@@ -61,6 +61,9 @@ insert_permissions:
       columns:
         - address
         - attributes
+        - name
+        - trust_name
+        - trust_type
         - contact_details
         - geo_coordinates
         - go1_licenses
@@ -114,6 +117,16 @@ insert_permissions:
         - trust_name
         - trust_type
         - xero_contact_id
+      backend_only: false
+  - role: sales-representative
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - name
+        - trust_name
+        - trust_type
       backend_only: false
   - role: tt-admin
     permission:
@@ -165,24 +178,22 @@ select_permissions:
   - role: finance
     permission:
       columns:
-        - name
-        - go1_licenses
-        - reserved_go1_licenses
         - address
         - attributes
         - contact_details
+        - created_at
+        - geo_coordinates
+        - id
+        - name
         - original_record
         - preferences
-        - tags
-        - geo_coordinates
         - region
         - sector
+        - tags
         - trust_name
         - trust_type
-        - xero_contact_id
-        - created_at
         - updated_at
-        - id
+        - xero_contact_id
       filter: {}
   - role: ld
     permission:
@@ -229,6 +240,26 @@ select_permissions:
         - id
       filter: {}
       allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - created_at
+        - geo_coordinates
+        - id
+        - name
+        - original_record
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - updated_at
+        - xero_contact_id
+      filter: {}
   - role: trainer
     permission:
       columns:
@@ -345,6 +376,9 @@ update_permissions:
         - attributes
         - contact_details
         - geo_coordinates
+        - name
+        - preferences
+        - region
         - go1_licenses
         - id
         - name
@@ -401,6 +435,28 @@ update_permissions:
         - xero_contact_id
       filter: {}
       check: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - name
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+      filter:
+        members:
+          _and:
+            - is_admin:
+                _eq: true
+            - profile_id:
+                _eq: X-Hasura-User-Id
+      check: null
   - role: tt-admin
     permission:
       columns:

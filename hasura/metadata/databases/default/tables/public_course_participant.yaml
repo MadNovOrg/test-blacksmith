@@ -109,6 +109,34 @@ select_permissions:
                   - TRAINER_PENDING
                   - TRAINER_UNAVAILABLE
       allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed_evaluation
+        - course_id
+        - date_graded
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - hs_consent
+        - id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter:
+        _or:
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    profile_id:
+                      _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -136,6 +164,34 @@ select_permissions:
             _in:
               - CLOSED
               - OPEN
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - attended
+        - booking_date
+        - certificate_id
+        - completed_evaluation
+        - course_id
+        - date_graded
+        - go1_enrolment_status
+        - grade
+        - grading_feedback
+        - hs_consent
+        - id
+        - invoice_id
+        - profile_id
+        - registration_id
+      filter:
+        _or:
+          - profile:
+              organizations:
+                organization:
+                  members:
+                    profile_id:
+                      _eq: X-Hasura-User-Id
+          - profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: trainer
     permission:

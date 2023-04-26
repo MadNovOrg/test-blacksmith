@@ -91,6 +91,19 @@ select_permissions:
                   - TRAINER_PENDING
                   - TRAINER_UNAVAILABLE
       allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
+      filter: {}
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -102,6 +115,19 @@ select_permissions:
         - updated_at
         - id
         - venue_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - created_at
+        - end
+        - id
+        - start
+        - updated_at
+        - venue_id
+        - virtual_link
       filter: {}
       allow_aggregations: true
   - role: trainer

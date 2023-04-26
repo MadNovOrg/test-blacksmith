@@ -45,6 +45,15 @@ insert_permissions:
         - type
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - status
+        - type
+      filter: {}
   - role: sales-admin
     permission:
       columns:
@@ -59,6 +68,15 @@ select_permissions:
             _in:
               - CLOSED
               - OPEN
+  - role: sales-representative
+    permission:
+      columns:
+        - course_id
+        - id
+        - profile_id
+        - status
+        - type
+      filter: {}
   - role: trainer
     permission:
       columns:

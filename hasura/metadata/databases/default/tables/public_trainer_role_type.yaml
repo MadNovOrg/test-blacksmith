@@ -16,6 +16,18 @@ select_permissions:
         - name
         - id
       filter: {}
+  - role: finance
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
   - role: trainer
     permission:
       columns:

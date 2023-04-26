@@ -407,6 +407,50 @@ select_permissions:
                 - TRAINER_MISSING
                 - TRAINER_PENDING
                 - TRAINER_UNAVAILABLE
+  - role: finance
+    permission:
+      columns:
+        - account_code
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - cancellation_fee_percent
+        - cancellation_reason
+        - contact_profile_id
+        - course_delivery_type
+        - course_level
+        - course_status
+        - course_type
+        - created_at
+        - created_by_id
+        - description
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - notes
+        - organization_id
+        - parking_instructions
+        - reaccreditation
+        - sales_representative_id
+        - source
+        - special_instructions
+        - updated_at
+      computed_fields:
+        - course_code
+        - end
+        - freeSlots
+        - start
+      filter:
+        course_type:
+          _in:
+            - CLOSED
+            - OPEN
   - role: ld
     permission:
       columns:
@@ -803,8 +847,8 @@ update_permissions:
       filter:
         course_type:
           _in:
-            - CLOSED
             - OPEN
+            - CLOSED
       check: null
   - role: sales-admin
     permission:
@@ -844,6 +888,44 @@ update_permissions:
           _in:
             - CLOSED
             - OPEN
+      check: null
+  - role: sales-representative
+    permission:
+      columns:
+        - account_code
+        - aol_cost_of_course
+        - aol_country
+        - aol_region
+        - cancellation_fee_percent
+        - cancellation_reason
+        - contact_profile_id
+        - course_delivery_type
+        - course_status
+        - course_type
+        - created_at
+        - description
+        - free_spaces
+        - go1_integration
+        - grading_confirmed
+        - grading_started
+        - id
+        - max_participants
+        - min_participants
+        - modules_duration
+        - name
+        - notes
+        - organization_id
+        - parking_instructions
+        - reaccreditation
+        - sales_representative_id
+        - source
+        - special_instructions
+        - updated_at
+      filter:
+        course_type:
+          _in:
+            - OPEN
+            - CLOSED
       check: null
   - role: trainer
     permission:

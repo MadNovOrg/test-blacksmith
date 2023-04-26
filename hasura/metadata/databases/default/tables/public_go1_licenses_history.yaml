@@ -24,6 +24,10 @@ insert_permissions:
         - payload
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns: []
+      filter: {}
   - role: sales-admin
     permission:
       columns:

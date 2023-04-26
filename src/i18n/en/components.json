@@ -81,6 +81,8 @@
     "tt-ops": "Ops",
     "tt-admin": "Admin",
     "sales-admin": "Sales administrator",
+    "sales-representative": "Sale Representative",
+    "finance": "Finance", 
     "ld": "L&D"
   },
   "course-form": {

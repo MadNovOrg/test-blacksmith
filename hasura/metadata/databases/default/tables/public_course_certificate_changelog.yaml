@@ -60,7 +60,29 @@ insert_permissions:
         - type
       backend_only: false
 select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
   - role: sales-admin
+    permission:
+      columns:
+        - author_id
+        - created_at
+        - id
+        - participant_id
+        - payload
+        - type
+        - updated_at
+      filter: {}
+  - role: sales-representative
     permission:
       columns:
         - author_id

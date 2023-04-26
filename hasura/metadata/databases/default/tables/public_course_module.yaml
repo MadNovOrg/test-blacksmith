@@ -68,6 +68,17 @@ select_permissions:
                   - TRAINER_PENDING
                   - TRAINER_UNAVAILABLE
       allow_aggregations: true
+  - role: finance
+    permission:
+      columns:
+        - id
+        - module_id
+      filter:
+        course:
+          participants:
+            profile_id:
+              _eq: X-Hasura-User-Id
+      allow_aggregations: true
   - role: sales-admin
     permission:
       columns:
@@ -81,6 +92,17 @@ select_permissions:
         course:
           course_type:
             _eq: CLOSED
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - id
+        - module_id
+      filter:
+        course:
+          participants:
+            profile_id:
+              _eq: X-Hasura-User-Id
       allow_aggregations: true
   - role: trainer
     permission:
