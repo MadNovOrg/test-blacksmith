@@ -147,6 +147,25 @@ insert_permissions:
         - trust_type
         - xero_contact_id
       backend_only: false
+  - role: tt-ops
+    permission:
+      check: {}
+      columns:
+        - address
+        - attributes
+        - contact_details
+        - geo_coordinates
+        - go1_licenses
+        - name
+        - original_record
+        - preferences
+        - region
+        - sector
+        - tags
+        - trust_name
+        - trust_type
+        - xero_contact_id
+      backend_only: false
   - role: unverified
     permission:
       check: {}

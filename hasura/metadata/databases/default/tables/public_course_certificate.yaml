@@ -124,6 +124,7 @@ select_permissions:
       computed_fields:
         - status
       filter: {}
+      allow_aggregations: true
   - role: sales-representative
     permission:
       columns:
@@ -209,15 +210,16 @@ select_permissions:
     permission:
       columns:
         - certification_date
-        - expiry_date
         - course_id
         - course_level
         - course_name
-        - number
         - created_at
-        - updated_at
+        - expiry_date
         - id
+        - is_revoked
+        - number
         - profile_id
+        - updated_at
       computed_fields:
         - status
       filter: {}
