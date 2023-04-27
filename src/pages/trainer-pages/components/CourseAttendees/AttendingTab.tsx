@@ -1,3 +1,4 @@
+import SendIcon from '@mui/icons-material/Send'
 import {
   Box,
   Chip,
@@ -7,6 +8,7 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Button,
 } from '@mui/material'
 import Link from '@mui/material/Link'
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react'
@@ -138,7 +140,7 @@ export const AttendingTab = ({
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        isOpenCourse && acl.canManageParticipantAttendandance()
+        acl.canManageParticipantAttendandance()
           ? {
               id: 'actions',
               label: '',
@@ -146,7 +148,7 @@ export const AttendingTab = ({
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse, isOpenCourse, acl]
+    [t, isBlendedCourse, acl]
   )
 
   const handleTransfer = useCallback(
@@ -239,24 +241,37 @@ export const AttendingTab = ({
                   <TableCell>
                     {t('pages.course-details.tabs.attendees.view-documents')}
                   </TableCell>
-                  {isOpenCourse && acl.canManageParticipantAttendandance() ? (
+                  {acl.canManageParticipantAttendandance() ? (
                     <TableCell>
-                      <CourseActionsMenu
-                        item={courseParticipant}
-                        data-testid="manage-attendance"
-                        onReplaceClick={participant => {
-                          setParticipantToReplace(participant)
-                        }}
-                        onRemoveClick={participant => {
-                          setIndividualToRemove(participant)
-                        }}
-                        onTransferClick={participant => {
-                          handleTransfer(participant.id)
-                        }}
-                        onResendCourseInformationClick={participant =>
-                          setIndividualToResendInfo(participant)
-                        }
-                      />
+                      {!isOpenCourse || acl.canOnlySendCourseInformation() ? (
+                        <Button
+                          startIcon={
+                            <SendIcon color="primary" titleAccess="Send" />
+                          }
+                          onClick={() =>
+                            setIndividualToResendInfo(courseParticipant)
+                          }
+                        >
+                          {t('common.resend-course-information')}
+                        </Button>
+                      ) : (
+                        <CourseActionsMenu
+                          item={courseParticipant}
+                          data-testid="manage-attendance"
+                          onReplaceClick={participant => {
+                            setParticipantToReplace(participant)
+                          }}
+                          onRemoveClick={participant => {
+                            setIndividualToRemove(participant)
+                          }}
+                          onTransferClick={participant => {
+                            handleTransfer(participant.id)
+                          }}
+                          onResendCourseInformationClick={participant =>
+                            setIndividualToResendInfo(participant)
+                          }
+                        />
+                      )}
                     </TableCell>
                   ) : null}
                 </TableRow>

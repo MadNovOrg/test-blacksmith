@@ -332,6 +332,14 @@ export function getACL(auth: MarkOptional<AuthContextType, 'acl'>) {
         acl.canSendCourseInformation()
       )
     },
+    canOnlySendCourseInformation: () => {
+      return (
+        !acl.canTransferParticipant() &&
+        !acl.canReplaceParticipant() &&
+        !acl.canRemoveParticipant() &&
+        acl.canSendCourseInformation()
+      )
+    },
     canGradeParticipants: (
       trainers: { profile: { id: string }; type: CourseTrainerType }[]
     ) => {
