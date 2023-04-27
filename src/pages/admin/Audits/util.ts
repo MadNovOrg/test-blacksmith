@@ -39,8 +39,10 @@ export const getAttendeeInvoice = (log: AttendeeLogType) => {
       return log.course.orders[0]
     }
   } else {
-    return log.course.orders.find(
-      order => order.registrants.indexOf(log.profile.email) > -1
+    return log.course.orders.find(order =>
+      order.registrants.find(
+        (register: { email: string }) => register.email === log.profile.email
+      )
     )
   }
   return null
