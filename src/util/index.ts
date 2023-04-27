@@ -250,6 +250,7 @@ export const courseToCourseInput = (course: Course): CourseInput => {
     specialInstructions: course.special_instructions ?? '',
     parkingInstructions: course.parking_instructions ?? '',
     source: course.source ?? '',
+    bildStrategies: null,
   }
 }
 

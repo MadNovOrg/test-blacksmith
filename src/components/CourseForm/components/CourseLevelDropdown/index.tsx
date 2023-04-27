@@ -2,6 +2,7 @@ import { Select, SelectChangeEvent, MenuItem } from '@mui/material'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { CourseLevel, CourseType } from '@app/types'
 
 import { getLevels } from '../../helpers'
@@ -12,6 +13,7 @@ interface Props {
   value: SelectValue
   onChange: (event: SelectChangeEvent<SelectValue>) => void
   courseType: CourseType
+  courseAccreditor: Accreditors_Enum
   disabled?: boolean
 }
 
@@ -19,11 +21,15 @@ export const CourseLevelDropdown: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   onChange,
   courseType,
+  courseAccreditor,
   disabled = false,
 }) => {
   const { t } = useTranslation()
 
-  const levels = useMemo(() => getLevels(courseType), [courseType])
+  const levels = useMemo(
+    () => getLevels(courseType, courseAccreditor),
+    [courseType, courseAccreditor]
+  )
   const selected = value || levels[0]
 
   useEffect(() => {

@@ -13128,8 +13128,7 @@ export enum Accreditors_Constraint {
 
 export enum Accreditors_Enum {
   Bild = 'BILD',
-  Icm = 'ICM',
-  Rse = 'RSE'
+  Icm = 'ICM'
 }
 
 /** Boolean expression to compare columns of type "accreditors_enum". All fields are combined with logical 'AND'. */
@@ -42719,6 +42718,11 @@ export type GetCourseAuditLogsQueryVariables = Exact<{
 
 
 export type GetCourseAuditLogsQuery = { __typename?: 'query_root', logs: Array<{ __typename?: 'course_audit', id: any, created_at: any, updated_at: any, payload: any, authorizedBy: { __typename?: 'profile', id: any, avatar?: string | null, fullName?: string | null, archived?: boolean | null }, course: { __typename?: 'course', id: number, course_code?: string | null, type: Course_Type_Enum, orders: Array<{ __typename?: 'order', id: any, xeroInvoiceNumber?: string | null }> } }>, logsAggregate: { __typename?: 'course_audit_aggregate', aggregate?: { __typename?: 'course_audit_aggregate_fields', count: number } | null } };
+
+export type GetBildStrategiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBildStrategiesQuery = { __typename?: 'query_root', strategies: Array<{ __typename?: 'bild_strategy', id: any, name: string, shortName: string, modules: any, duration?: number | null }> };
 
 export type GetWaitlistQueryVariables = Exact<{
   where: Waitlist_Bool_Exp;

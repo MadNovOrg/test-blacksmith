@@ -17,6 +17,7 @@ import CourseForm from '@app/components/CourseForm'
 import { SearchTrainers } from '@app/components/SearchTrainers'
 import { useAuth } from '@app/context/auth'
 import {
+  Accreditors_Enum,
   CourseLevel,
   CourseTrainerType,
   SearchTrainer,
@@ -55,6 +56,7 @@ export const CreateCourseForm = () => {
     completeStep,
     courseData,
     courseType,
+    courseAccreditor,
     saveDraft,
     setCourseData,
     setCurrentStepKey,
@@ -67,6 +69,7 @@ export const CreateCourseForm = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { profile, acl } = useAuth()
+  const isBild = courseAccreditor === Accreditors_Enum.Bild
 
   const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
     []
@@ -78,6 +81,7 @@ export const CreateCourseForm = () => {
     healthLeaflet: false,
     practiceProtocols: false,
     validID: false,
+    needsAnalysis: false,
   })
 
   useEffect(() => {
@@ -147,7 +151,9 @@ export const CreateCourseForm = () => {
 
     assertCourseDataValid(courseData, courseDataValid)
 
-    if (courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
+    // If course is indirect, check if there are any exceptions
+    // No need to check for exceptions for BILD courses
+    if (!isBild && courseType === CourseType.INDIRECT && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
         assistants.map(assistant => ({
@@ -203,6 +209,7 @@ export const CreateCourseForm = () => {
       <CourseForm
         onChange={handleCourseFormChange}
         type={courseType}
+        accreditor={courseAccreditor}
         courseInput={courseData}
       />
 
@@ -268,6 +275,22 @@ export const CreateCourseForm = () => {
               }
               label={t('pages.create-course.form.valid-id-copy') as string}
             />
+
+            {isBild && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={consentFlags.needsAnalysis}
+                    onChange={e =>
+                      handleConsentFlagChange('needsAnalysis', e.target.checked)
+                    }
+                  />
+                }
+                label={
+                  t('pages.create-course.form.needs-analysis-copy') as string
+                }
+              />
+            )}
           </FormGroup>
         </>
       ) : null}

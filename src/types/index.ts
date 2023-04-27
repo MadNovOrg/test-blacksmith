@@ -238,6 +238,14 @@ export enum CourseLevel {
   BildAdvancedTrainer = 'BILD_ADVANCED_TRAINER',
 }
 
+export enum BildStrategies {
+  Primary = 'PRIMARY',
+  Secondary = 'SECONDARY',
+  NonRestrictiveTertiary = 'NON_RESTRICTIVE_TERTIARY',
+  RestrictiveTertiaryIntermediate = 'RESTRICTIVE_TERTIARY_INTERMEDIATE',
+  RestrictiveTertiaryAdvanced = 'RESTRICTIVE_TERTIARY_ADVANCED',
+}
+
 export enum CourseDeliveryType {
   F2F = 'F2F',
   VIRTUAL = 'VIRTUAL',
@@ -549,6 +557,7 @@ export type CourseInput = {
   specialInstructions: string
   parkingInstructions: string
   source: Course_Source_Enum | ''
+  bildStrategies: Record<BildStrategies, boolean> | null
 }
 
 export type ValidCourseInput = DeepNonNullable<

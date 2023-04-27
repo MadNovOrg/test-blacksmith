@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@app/context/auth'
 import { useSnackbar } from '@app/context/snackbar'
 import {
+  Accreditors_Enum,
   Course_Expenses_Insert_Input,
   Course_Status_Enum,
   Payment_Methods_Enum,
@@ -16,6 +17,7 @@ import {
   ResponseType,
 } from '@app/queries/courses/insert-course'
 import {
+  BildStrategies,
   CourseDeliveryType,
   CourseExpenseType,
   CourseTrainerType,
@@ -109,8 +111,14 @@ export function useSaveCourse(): {
   savingStatus: LoadingStatus
   saveCourse: SaveCourse
 } {
-  const { courseData, expenses, trainers, go1Licensing, exceptions } =
-    useCreateCourse()
+  const {
+    courseData,
+    expenses,
+    trainers,
+    go1Licensing,
+    exceptions,
+    courseAccreditor,
+  } = useCreateCourse()
   const [savingStatus, setSavingStatus] = useState(LoadingStatus.IDLE)
   const fetcher = useFetcher()
   const { t } = useTranslation()
@@ -123,6 +131,8 @@ export function useSaveCourse(): {
   const { addSnackbarMessage } = useSnackbar()
 
   const saveCourse = useCallback<SaveCourse>(async () => {
+    const isBild = courseAccreditor === Accreditors_Enum.Bild
+
     try {
       if (courseData) {
         setSavingStatus(LoadingStatus.FETCHING)
@@ -147,6 +157,18 @@ export function useSaveCourse(): {
               t
             ),
             deliveryType: courseData.deliveryType,
+            accreditedBy: courseAccreditor,
+            bildStrategies: isBild
+              ? {
+                  data: Object.keys(courseData.bildStrategies).flatMap(s => {
+                    const strategy = s as BildStrategies
+                    if (courseData.bildStrategies[strategy]) {
+                      return [{ strategyName: strategy }]
+                    }
+                    return []
+                  }),
+                }
+              : undefined,
             level: courseData.courseLevel,
             reaccreditation: courseData.reaccreditation,
             go1Integration: courseData.blendedLearning,
@@ -283,6 +305,7 @@ export function useSaveCourse(): {
     addSnackbarMessage,
     removeDraft,
     exceptions,
+    courseAccreditor,
   ])
 
   return {

@@ -28,9 +28,7 @@ import { AdminOnlyCourseStatus } from '@app/types'
 
 import { getActionableStatuses } from '../../utils'
 
-const allAccreditors = Object.values(Accreditors_Enum).filter(
-  accreditor => accreditor !== 'RSE'
-)
+const allAccreditors = Object.values(Accreditors_Enum)
 
 type DateFilters = {
   filterStartDate?: Date | undefined

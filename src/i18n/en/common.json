@@ -201,6 +201,13 @@
     "BILD_INTERMEDIATE_TRAINER": "BILD Intermediate Trainer",
     "BILD_ADVANCED_TRAINER": "BILD Advanced Trainer"
   },
+  "bild-strategies": {
+    "PRIMARY": "Primary",
+    "SECONDARY": "Secondary",
+    "NON_RESTRICTIVE_TERTIARY": "Non Restrictive Tertiary",
+    "RESTRICTIVE_TERTIARY_INTERMEDIATE": "Restrictive Tertiary Intermediate",
+    "RESTRICTIVE_TERTIARY_ADVANCED": "Restrictive Tertiary Advanced"
+  },
   "course-types": {
     "OPEN": "Open",
     "CLOSED": "Closed",

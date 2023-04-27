@@ -4,6 +4,7 @@ import {
   Box,
   Checkbox,
   CircularProgress,
+  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -27,11 +28,13 @@ import { noop } from 'ts-essentials'
 import { FormPanel } from '@app/components/FormPanel'
 import { NumericTextField } from '@app/components/NumericTextField'
 import { useAuth } from '@app/context/auth'
-import { Course_Source_Enum } from '@app/generated/graphql'
+import { Accreditors_Enum, Course_Source_Enum } from '@app/generated/graphql'
+import { useBildStrategies } from '@app/hooks/useBildStrategies'
 import useZoomMeetingLink from '@app/hooks/useZoomMeetingLink'
 import { yup } from '@app/schemas'
 import theme from '@app/theme'
 import {
+  BildStrategies,
   CourseDeliveryType,
   CourseInput,
   CourseLevel,
@@ -67,6 +70,7 @@ export type DisabledFields = Partial<keyof CourseInput>
 
 interface Props {
   type?: CourseType
+  accreditor?: Accreditors_Enum
   courseInput?: CourseInput
   disabledFields?: Set<DisabledFields>
   onChange?: (input: { data?: CourseInput; isValid?: boolean }) => void
@@ -74,9 +78,15 @@ interface Props {
 
 const accountCodeValue = getAccountCode()
 
+const defaultCourseLevels: Record<Accreditors_Enum, CourseLevel> = {
+  [Accreditors_Enum.Icm]: CourseLevel.Level_1,
+  [Accreditors_Enum.Bild]: CourseLevel.BildRegular,
+} as const
+
 const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   onChange = noop,
   type: courseType = CourseType.OPEN,
+  accreditor: courseAccreditor = Accreditors_Enum.Icm,
   courseInput,
   disabledFields = new Set(),
 }) => {
@@ -86,6 +96,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const hasOrg = [CourseType.CLOSED, CourseType.INDIRECT].includes(courseType)
   const isClosedCourse = courseType === CourseType.CLOSED
   const hasMinParticipants = courseType === CourseType.OPEN
+  const isBild = courseAccreditor === Accreditors_Enum.Bild
+  const { strategies: bildStrategies } = useBildStrategies(isBild)
 
   const schema = useMemo(
     () =>
@@ -214,7 +226,8 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       organization: courseInput?.organization ?? null,
       salesRepresentative: courseInput?.salesRepresentative ?? null,
       contactProfile: courseInput?.contactProfile ?? null,
-      courseLevel: courseInput?.courseLevel ?? CourseLevel.Level_1,
+      courseLevel:
+        courseInput?.courseLevel ?? defaultCourseLevels[courseAccreditor],
       blendedLearning: courseInput?.blendedLearning ?? false,
       reaccreditation: courseInput?.reaccreditation ?? false,
       deliveryType: courseInput?.deliveryType ?? CourseDeliveryType.F2F,
@@ -247,12 +260,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
       courseCost: courseInput?.courseCost ?? null,
       accountCode: courseInput?.accountCode ?? accountCodeValue,
       type: courseType,
+      accreditor: courseAccreditor,
       notes: courseInput?.notes ?? null,
       specialInstructions: courseInput?.specialInstructions ?? '',
       parkingInstructions: courseInput?.parkingInstructions ?? '',
       source: courseInput?.source ?? '',
+      bildStrategies: isBild
+        ? bildStrategies.reduce((acc, strategy) => {
+            acc[strategy.name] =
+              courseInput?.bildStrategies?.[strategy.name] ?? false
+            return acc
+          }, {} as Record<BildStrategies, boolean>)
+        : null,
     }),
-    [courseInput, courseType]
+    [courseInput, courseType, courseAccreditor, bildStrategies, isBild]
   )
 
   const {
@@ -277,7 +298,13 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
   const deliveryType = values.deliveryType
   const courseLevel = values.courseLevel
   const isBlended = values.blendedLearning
-  const canBlended = canBeBlended(courseType, courseLevel, deliveryType)
+  const isBildPrimary = values.bildStrategies?.[BildStrategies.Primary] ?? false
+  const canBlended = canBeBlended(
+    courseType,
+    courseLevel,
+    deliveryType,
+    isBildPrimary
+  )
   const canReacc = canBeReacc(courseType, courseLevel, deliveryType, isBlended)
   const canF2F = canBeF2F(courseType, courseLevel)
   const canVirtual = canBeVirtual(courseType, courseLevel)
@@ -552,6 +579,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                   )
                 }}
                 courseType={courseType}
+                courseAccreditor={courseAccreditor}
                 disabled={disabledFields.has('courseLevel')}
               />
             )}
@@ -565,6 +593,34 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
             <FormHelperText error>{errors.courseLevel.message}</FormHelperText>
           ) : null}
         </FormControl>
+
+        {bildStrategies.length ? (
+          <Box display="flex" flexWrap="wrap">
+            {bildStrategies.map(strategy => (
+              <Controller
+                key={strategy.id}
+                name={`bildStrategies.${strategy.name}`}
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    sx={{ width: '50%', mr: 0 }}
+                    control={
+                      <Switch
+                        {...field}
+                        checked={
+                          values.bildStrategies?.[strategy.name] ?? false
+                        }
+                      />
+                    }
+                    label={t(`common.bild-strategies.${strategy.name}`)}
+                  />
+                )}
+              />
+            ))}
+          </Box>
+        ) : null}
+
+        <Divider sx={{ my: 1 }} />
 
         <Controller
           name="blendedLearning"
@@ -857,7 +913,11 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
         {courseType === CourseType.INDIRECT ? (
           <>
-            <Typography mt={2} fontWeight={600}>
+            <Typography
+              mt={2}
+              fontWeight={600}
+              color={isBild ? 'text.disabled' : undefined}
+            >
               {t('components.course-form.aol-title')}
             </Typography>
             <FormControlLabel
@@ -872,7 +932,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                     }
                   }}
                   checked={usesAOL}
-                  disabled={disabledFields.has('usesAOL')}
+                  disabled={disabledFields.has('usesAOL') || isBild}
                 />
               }
               label={t('components.course-form.aol-label')}

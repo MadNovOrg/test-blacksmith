@@ -3,6 +3,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import {
+  Accreditors_Enum,
   Course_Status_Enum,
   Currency,
   Payment_Methods_Enum,
@@ -179,7 +180,6 @@ describe('component: ReviewLicenseOrder', () => {
         </Routes>
       </CreateCourseProvider>
     )
-
     await userEvent.click(screen.getByText(/course builder/i))
 
     await waitFor(() => {
@@ -191,6 +191,7 @@ describe('component: ReviewLicenseOrder', () => {
       expect(mutation).toEqual(MUTATION)
       expect(variables).toEqual({
         course: {
+          accreditedBy: Accreditors_Enum.Icm,
           deliveryType: courseData.deliveryType,
           name: expect.any(String),
           level: 'LEVEL_1',

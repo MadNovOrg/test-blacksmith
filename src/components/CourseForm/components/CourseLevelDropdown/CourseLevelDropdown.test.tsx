@@ -1,6 +1,7 @@
 import React from 'react'
 import { noop } from 'ts-essentials'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { CourseLevel, CourseType } from '@app/types'
 
 import { render, screen, userEvent } from '@test/index'
@@ -18,6 +19,7 @@ describe('component: CourseLevelDropdown', () => {
         value=""
         onChange={noop}
         courseType={CourseType.OPEN}
+        courseAccreditor={Accreditors_Enum.Icm}
       />
     )
 
@@ -36,6 +38,7 @@ describe('component: CourseLevelDropdown', () => {
         value=""
         onChange={noop}
         courseType={CourseType.CLOSED}
+        courseAccreditor={Accreditors_Enum.Icm}
       />
     )
 
@@ -56,6 +59,7 @@ describe('component: CourseLevelDropdown', () => {
         value=""
         onChange={noop}
         courseType={CourseType.INDIRECT}
+        courseAccreditor={Accreditors_Enum.Icm}
       />
     )
 

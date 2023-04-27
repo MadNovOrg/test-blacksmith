@@ -1,6 +1,7 @@
 import { format, isValid, isBefore, isEqual } from 'date-fns'
 import { TFunction } from 'i18next'
 
+import { Accreditors_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
 
 import aolRegionsByCountry from './aolRegions'
@@ -47,9 +48,12 @@ export function isEndDateTimeBeforeStartDateTime(
   }
 }
 
-export function getLevels(courseType: CourseType) {
+export function getLevels(
+  courseType: CourseType,
+  courseAccreditor: Accreditors_Enum
+) {
   const types = {
-    [CourseType.OPEN]: () => {
+    [`${Accreditors_Enum.Icm}-${CourseType.OPEN}`]: () => {
       return [
         CourseLevel.Level_1,
         CourseLevel.Level_2,
@@ -58,7 +62,7 @@ export function getLevels(courseType: CourseType) {
       ]
     },
 
-    [CourseType.CLOSED]: () => {
+    [`${Accreditors_Enum.Icm}-${CourseType.CLOSED}`]: () => {
       return [
         CourseLevel.Level_1,
         CourseLevel.Level_2,
@@ -68,18 +72,33 @@ export function getLevels(courseType: CourseType) {
       ]
     },
 
-    [CourseType.INDIRECT]: () => {
+    [`${Accreditors_Enum.Icm}-${CourseType.INDIRECT}`]: () => {
       return [CourseLevel.Level_1, CourseLevel.Level_2, CourseLevel.Advanced]
+    },
+
+    [`${Accreditors_Enum.Bild}-${CourseType.INDIRECT}`]: () => {
+      return [
+        CourseLevel.BildRegular,
+        CourseLevel.BildIntermediateTrainer,
+        CourseLevel.BildAdvancedTrainer,
+      ]
     },
   }
 
-  return types[courseType]()
+  return types[`${courseAccreditor}-${courseType}`]()
 }
+
+const bildLevels = [
+  CourseLevel.BildRegular,
+  CourseLevel.BildIntermediateTrainer,
+  CourseLevel.BildAdvancedTrainer,
+]
 
 export function canBeBlended(
   courseType: CourseType,
   courseLevel: CourseLevel | '',
-  deliveryType: CourseDeliveryType
+  deliveryType: CourseDeliveryType,
+  isBildPrimary: boolean
 ) {
   const isF2F = deliveryType === CourseDeliveryType.F2F
   const isMixed = deliveryType === CourseDeliveryType.MIXED
@@ -118,6 +137,10 @@ export function canBeBlended(
 
     [CourseType.INDIRECT]: () => {
       if (!courseLevel) return false
+
+      if (bildLevels.includes(courseLevel)) {
+        return isBildPrimary
+      }
 
       if (isF2F) {
         const levels = [CourseLevel.Level_1, CourseLevel.Level_2]
@@ -264,6 +287,7 @@ export function canBeF2F(
         CourseLevel.Level_1,
         CourseLevel.Level_2,
         CourseLevel.Advanced,
+        CourseLevel.BildRegular,
       ]
       return levels.includes(courseLevel)
     },
