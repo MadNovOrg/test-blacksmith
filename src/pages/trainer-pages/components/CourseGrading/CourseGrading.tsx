@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Grade } from '@app/components/Grade'
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import useCourseParticipants from '@app/hooks/useCourseParticipants'
@@ -261,19 +262,29 @@ export const CourseGrading: React.FC<
                           </TableCell>
                         ) : null}
                         <TableCell>
-                          {courseParticipant.profile.archived
-                            ? t('common.archived-profile')
-                            : courseParticipant.profile.fullName}
+                          <LinkToProfile
+                            profileId={courseParticipant.profile.id}
+                            isProfileArchived={
+                              courseParticipant.profile.archived
+                            }
+                          >
+                            {courseParticipant.profile.archived
+                              ? t('common.archived-profile')
+                              : courseParticipant.profile.fullName}
+                          </LinkToProfile>
                         </TableCell>
                         <TableCell>
-                          <Link
-                            href={`/profile/${courseParticipant.profile.id}`}
+                          <LinkToProfile
+                            profileId={courseParticipant.profile.id}
+                            isProfileArchived={
+                              courseParticipant.profile.archived
+                            }
                           >
                             {courseParticipant.profile.email}
                             {courseParticipant.profile.contactDetails.map(
                               contact => contact.value
                             )}
-                          </Link>
+                          </LinkToProfile>
                         </TableCell>
                         <TableCell>
                           {courseParticipant.profile.organizations.map(org => (

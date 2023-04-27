@@ -20,8 +20,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import { Grade } from '@app/components/Grade'
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { Col, TableHead } from '@app/components/Table/TableHead'
+import { useAuth } from '@app/context/auth'
 import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
 import { useTableChecks } from '@app/hooks/useTableChecks'
 import type { Sorting } from '@app/hooks/useTableSort'
@@ -61,6 +63,7 @@ export const CertificationList: React.FC<
 }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { acl } = useAuth()
   const { checkbox, selected, isSelected } = useTableChecks()
 
   const selectedParticipants = useMemo(
@@ -212,16 +215,26 @@ export const CertificationList: React.FC<
 
                 {showCol('name') ? (
                   <TableCell data-testid="name">
-                    <ProfileAvatar profile={p.profile} />
+                    <ProfileAvatar
+                      profile={p.profile}
+                      disableLink={
+                        !acl.canViewProfiles() ||
+                        (p.profile.archived &&
+                          !acl.canViewArchivedProfileData())
+                      }
+                    />
                   </TableCell>
                 ) : null}
 
                 {showCol('contact') ? (
                   <TableCell data-testid="contact">
-                    <Link href={`/profile/${p.profile.id}`}>
+                    <LinkToProfile
+                      profileId={p.profile.id}
+                      isProfileArchived={p.profile.archived}
+                    >
                       {p.profile.email}
                       {p.profile.contactDetails.map(contact => contact.value)}
-                    </Link>
+                    </LinkToProfile>
                   </TableCell>
                 ) : null}
 

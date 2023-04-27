@@ -19,6 +19,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 
 import { LinkBehavior } from '@app/components/LinkBehavior'
+import { LinkToProfile } from '@app/components/LinkToProfile'
 import { TableHead } from '@app/components/Table/TableHead'
 import { useAuth } from '@app/context/auth'
 import {
@@ -226,14 +227,22 @@ export const EvaluationSummaryTab: React.FC<
                 e.profile.id === profileId ? null : (
                   <TableRow key={e.id}>
                     <TableCell>
-                      {e.profile.archived
-                        ? t('common.archived-profile')
-                        : e.profile.fullName}
+                      <LinkToProfile
+                        profileId={e.profile.id}
+                        isProfileArchived={e.profile.archived}
+                      >
+                        {e.profile.archived
+                          ? t('common.archived-profile')
+                          : e.profile.fullName}
+                      </LinkToProfile>
                     </TableCell>
                     <TableCell>
-                      <Link href={`/profile/${e.profile.id}`}>
+                      <LinkToProfile
+                        profileId={e.profile.id}
+                        isProfileArchived={e.profile.archived}
+                      >
                         {e.profile.email}
-                      </Link>
+                      </LinkToProfile>
                     </TableCell>
                     <TableCell>
                       {e.profile.organizations
