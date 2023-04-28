@@ -374,17 +374,20 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     const mustChange = !canReacc && values.reaccreditation
-    mustChange && setValue('reaccreditation', false)
-    setValue(
-      'specialInstructions',
-      getDefaultSpecialInstructions(
-        courseType,
-        courseLevel,
-        CourseDeliveryType.F2F,
-        mustChange ? false : values.reaccreditation,
-        t
+    if (mustChange) {
+      const newReaccreditationValue = false
+      setValue('reaccreditation', newReaccreditationValue)
+      setValue(
+        'specialInstructions',
+        getDefaultSpecialInstructions(
+          courseType,
+          courseLevel,
+          CourseDeliveryType.F2F,
+          newReaccreditationValue,
+          t
+        )
       )
-    )
+    }
   }, [canReacc, courseLevel, courseType, setValue, t, values.reaccreditation])
 
   useEffect(() => {

@@ -13,6 +13,7 @@ type Props = {
   onCancel: () => void
   specialInstructions?: string
   parkingInstructions?: string
+  showParkingInstructions?: boolean
 }
 
 export const CourseInstructionsDialog: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const CourseInstructionsDialog: React.FC<Props> = ({
   onCancel,
   specialInstructions = '',
   parkingInstructions = '',
+  showParkingInstructions = true,
 }) => {
   const { t } = useTranslation()
 
@@ -32,12 +34,16 @@ export const CourseInstructionsDialog: React.FC<Props> = ({
         <Content>
           <RichTextEditor value={specialInstructions} editable={false} />
         </Content>
-        <Title sx={{ marginTop: 3 }}>
-          {t('components.course-instructions-dialog.parking-title')}
-        </Title>
-        <Content>
-          <RichTextEditor value={parkingInstructions} editable={false} />
-        </Content>
+        {showParkingInstructions && (
+          <>
+            <Title sx={{ marginTop: 3 }}>
+              {t('components.course-instructions-dialog.parking-title')}
+            </Title>
+            <Content>
+              <RichTextEditor value={parkingInstructions} editable={false} />
+            </Content>
+          </>
+        )}
       </Box>
     </Dialog>
   )

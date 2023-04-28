@@ -24,7 +24,7 @@ import { CourseInstructionsDialog } from '@app/components/CourseInstructionsDial
 import { CourseStatusChip } from '@app/components/CourseStatusChip'
 import { Course_Status_Enum } from '@app/generated/graphql'
 import theme from '@app/theme'
-import { Course } from '@app/types'
+import { Course, CourseDeliveryType } from '@app/types'
 import {
   getCourseBeginsForMessage,
   getCourseDurationMessage,
@@ -245,6 +245,9 @@ export const CourseHeroSummary: React.FC<React.PropsWithChildren<Props>> = ({
           onCancel={() => setIsInstructionsDialogOpen(false)}
           specialInstructions={course.special_instructions}
           parkingInstructions={course.parking_instructions}
+          showParkingInstructions={
+            course.deliveryType !== CourseDeliveryType.VIRTUAL
+          }
         />
       ) : null}
     </Box>
