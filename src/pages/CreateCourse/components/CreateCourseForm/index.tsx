@@ -9,6 +9,7 @@ import {
   FormGroup,
   Typography,
 } from '@mui/material'
+import omit from 'lodash-es/omit'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -122,8 +123,13 @@ export const CreateCourseForm = () => {
       return courseDataValid
     }
 
+    const evaluatedFlag =
+      courseType === CourseType.INDIRECT
+        ? omit(consentFlags, 'needsAnalysis')
+        : consentFlags
+
     const hasCheckedAllFlags =
-      Object.values(consentFlags).filter(flag => flag === false).length === 0
+      Object.values(evaluatedFlag).filter(flag => flag === false).length === 0
 
     return hasCheckedAllFlags && courseDataValid
   }, [consentFlags, courseDataValid, courseType])
