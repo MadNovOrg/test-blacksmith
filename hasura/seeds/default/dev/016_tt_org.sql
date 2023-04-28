@@ -63,18 +63,18 @@ INSERT INTO public.profile_role (profile_id, role_id) VALUES
 
 INSERT INTO public.course_certificate (profile_id, number, expiry_date, course_name, course_level, certification_date, is_revoked) VALUES
 -- tt.adv.trainer@teamteach.testinator.com
-('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'CL-ADV-90000-1', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+('5dd7b79c-9ef2-4712-833e-e2f12bdd672d', 'CL-ADV-90000-1', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
 -- tt.int.trainer@teamteach.testinator.com
 ('749791ef-e4c4-4a5f-881a-461e4724138d', 'CL-INT-80000-1', NOW() + interval '12 months', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
 -- tt.expired.adv.trainer@teamteach.testinator.com
-('6ea4e91b-9856-4533-9544-949caba236fb', 'CL-ADV-90000-2', NOW() - interval '10 days', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+('6ea4e91b-9856-4533-9544-949caba236fb', 'CL-ADV-90000-2', NOW() - interval '10 days', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
 ('6ea4e91b-9856-4533-9544-949caba236fb', 'CL-INT-80000-2', NOW() + interval '12 months', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
 -- tt.expired.int.trainer@teamteach.testinator.com
 ('30f8fdda-a7ec-44d5-afa0-26d5147d0ea5', 'CL-INT-80000-3', NOW() - interval '10 days', 'Positive Behaviour Training: Intermediate Trainer', 'INTERMEDIATE_TRAINER', NOW() - interval '12 months', false),
 -- tt.principal.trainer@teamteach.testinator.com
-('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'CL-ADV-90000-3', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
+('88072bb2-10e0-4417-b9ce-ec05265b8b56', 'CL-ADV-90000-3', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false),
 -- tt.senior.trainer@teamteach.testinator.com
-('dccd780a-9745-4972-a43e-95ec3ef361df', 'CL-ADV-90000-4', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Modules', 'ADVANCED_TRAINER', NOW() - interval '12 months', false);
+('dccd780a-9745-4972-a43e-95ec3ef361df', 'CL-ADV-90000-4', NOW() + interval '12 months', 'Positive Behaviour Training: Advanced Trainer', 'ADVANCED_TRAINER', NOW() - interval '12 months', false);
 
 INSERT INTO public.profile_trainer_role_type (profile_id, trainer_role_type_id) VALUES
 ('88072bb2-10e0-4417-b9ce-ec05265b8b56', (SELECT id FROM public.trainer_role_type WHERE name = 'principal')),
