@@ -593,7 +593,7 @@
         "message": "Do you want to resend the course information to {{fullName}}?"
       }
     },
-    "course-information-sent": "Corse information sent."
+    "course-information-sent": "Course information sent."
   },
   "course-grading-details": {
     "title": "Grading details",
