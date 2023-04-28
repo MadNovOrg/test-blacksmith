@@ -277,6 +277,11 @@ export const CourseDetails = () => {
                         ? t('incomplete')
                         : t('complete')
                     }
+                    color={
+                      !didAttendeeSubmitFeedback || !courseHasEnded
+                        ? 'default'
+                        : 'success'
+                    }
                     sx={{ marginRight: 2 }}
                     data-testid="evaluate-course-complete-message"
                   />
