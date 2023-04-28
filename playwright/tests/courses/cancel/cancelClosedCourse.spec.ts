@@ -1,6 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
 import * as API from '../../../api'
@@ -17,7 +16,6 @@ const test = base.extend<{ course: Course }>({
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
     course.organization = { name: 'London First School' }
-    course.status = Course_Status_Enum.Scheduled
     course.id = await API.course.insertCourse(
       course,
       users.trainer.email,

@@ -1,6 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseType } from '@app/types'
 
 import * as API from '../../../api'
@@ -22,7 +21,6 @@ const dataSet = [
       course.contactProfile = users.userOrgAdmin
       course.freeSpaces = 1
       course.salesRepresentative = users.salesAdmin
-      course.source = Course_Source_Enum.EmailEnquiry
       return course
     })(),
   },
@@ -38,7 +36,6 @@ const dataSet = [
       course.freeSpaces = 1
       course.deliveryType = CourseDeliveryType.MIXED
       course.salesRepresentative = users.salesAdmin
-      course.source = Course_Source_Enum.EmailEnquiry
       return course
     })(),
   },

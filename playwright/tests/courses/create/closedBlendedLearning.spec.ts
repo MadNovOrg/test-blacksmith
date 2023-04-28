@@ -1,6 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Source_Enum } from '@app/generated/graphql'
 import { CourseDeliveryType, CourseType } from '@app/types'
 
 import * as API from '../../../api'
@@ -18,7 +17,6 @@ const closedCourseData = {
   course: (() => {
     const course = UNIQUE_COURSE()
     course.type = CourseType.CLOSED
-    course.source = Course_Source_Enum.EmailEnquiry
     course.organization = { name: 'London First School' }
     course.contactProfile = users.userOrgAdmin
     course.freeSpaces = 1

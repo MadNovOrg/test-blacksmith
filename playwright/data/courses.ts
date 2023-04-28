@@ -173,7 +173,8 @@ export const UNIQUE_COURSE: () => Course = () => ({
   name: 'Positive Behaviour Training: Level One',
   description: `Some description ${Date.now()}`,
   level: CourseLevel.Level_1,
-  status: Course_Status_Enum.ConfirmModules,
+  status: Course_Status_Enum.Scheduled,
+  source: Course_Source_Enum.EmailEnquiry,
   deliveryType: CourseDeliveryType.F2F,
   type: CourseType.OPEN,
   reaccreditation: false,
@@ -190,7 +191,6 @@ export const UNIQUE_COURSE: () => Course = () => ({
   min_participants: 6,
   max_participants: 11,
   gradingConfirmed: false,
-  source: Course_Source_Enum.EmailEnquiry,
 })
 
 export const FINISHED_COURSE: () => Course = () => ({

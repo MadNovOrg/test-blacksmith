@@ -1,6 +1,5 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
 import { InviteStatus } from '@app/types'
 
 import * as API from '../../../api'
@@ -14,7 +13,6 @@ const allowedRoles = ['salesAdmin', 'ops', 'admin']
 const test = base.extend<{ course: Course }>({
   course: async ({}, use) => {
     const course = UNIQUE_COURSE()
-    course.status = Course_Status_Enum.Scheduled
     course.id = await API.course.insertCourse(
       course,
       users.trainer.email,
