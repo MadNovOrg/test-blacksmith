@@ -188,7 +188,8 @@
   "course-delivery-type": {
     "F2F": "Face to Face",
     "BLENDED": "Blended",
-    "VIRTUAL": "Virtual"
+    "VIRTUAL": "Virtual",
+    "MIXED": "Face to Face and Virtual"
   },
   "marketting-label-short": "I agree to receive marketing materials with information on courses and offers.",
   "course-levels": {
