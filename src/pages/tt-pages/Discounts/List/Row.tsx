@@ -18,7 +18,7 @@ import {
 } from '@app/generated/graphql'
 import { CourseLevel } from '@app/types'
 
-import { getPromoCodeStatus, getPromoCodeStatusColor } from '../helpers'
+import { getPromoCodeStatus, DISCOUNT_STATUS_COLOR } from '../helpers'
 
 import { ApproveDeny } from './ApproveDeny'
 
@@ -126,9 +126,9 @@ export const Row: React.FC<React.PropsWithChildren<Props>> = ({
           <Chip
             size="small"
             label={t(`pages.promoCodes.status-${status}`)}
+            color={DISCOUNT_STATUS_COLOR[status]}
             sx={{
               fontSize: 11,
-              backgroundColor: getPromoCodeStatusColor(status),
             }}
           />
         )}

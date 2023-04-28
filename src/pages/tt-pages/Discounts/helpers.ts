@@ -38,14 +38,13 @@ export const getPromoCodeStatus = (
   return PromoCodeStatus.ACTIVE
 }
 
-export const getPromoCodeStatusColor = (status: PromoCodeStatus) => {
-  const colors = {
-    [PromoCodeStatus.APPROVAL_PENDING]: '#FEF4E4',
-    [PromoCodeStatus.ACTIVE]: '#F3F5E6',
-    [PromoCodeStatus.SCHEDULED]: '#E1F2F4',
-    [PromoCodeStatus.EXPIRED]: '#EEEEEE',
-    [PromoCodeStatus.DENIED]: '#EEEEEE',
-  }
-
-  return colors[status]
+export const DISCOUNT_STATUS_COLOR: Record<
+  PromoCodeStatus,
+  'gray' | 'warning' | 'success' | 'info' | 'error'
+> = {
+  [PromoCodeStatus.APPROVAL_PENDING]: 'warning',
+  [PromoCodeStatus.ACTIVE]: 'success',
+  [PromoCodeStatus.SCHEDULED]: 'info',
+  [PromoCodeStatus.EXPIRED]: 'gray',
+  [PromoCodeStatus.DENIED]: 'error',
 }
