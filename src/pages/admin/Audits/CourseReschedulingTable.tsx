@@ -26,6 +26,7 @@ import {
 import { ExportAuditsButton } from '@app/pages/admin/Audits/ExportAuditsButton'
 import {
   CourseLogType,
+  getCourseInvoice,
   getExportDataRenderFunction,
 } from '@app/pages/admin/Audits/util'
 
@@ -95,6 +96,13 @@ export const CourseReschedulingTable: React.FC<
         sorting: false,
         exportRender: (log: CourseLogType) =>
           new Date(log.payload?.newEndDate).toString(),
+      },
+      {
+        id: 'invoice_no',
+        label: t('common.invoice-no'),
+        sorting: false,
+        exportRender: (log: CourseLogType) =>
+          getCourseInvoice(log)?.xeroInvoiceNumber ?? '',
       },
       {
         id: 'authorizedBy.fullName',
@@ -168,6 +176,7 @@ export const CourseReschedulingTable: React.FC<
                 />
 
                 {logs.map(log => {
+                  const invoice = getCourseInvoice(log)
                   return (
                     <TableRow
                       key={log.id}
@@ -216,6 +225,15 @@ export const CourseReschedulingTable: React.FC<
                         {t('dates.defaultShort', {
                           date: new Date(log.payload?.newEndDate),
                         })}
+                      </TableCell>
+                      <TableCell>
+                        {invoice ? (
+                          <Link href={`/orders/${invoice.id}`}>
+                            <Typography variant="body2">
+                              {invoice.xeroInvoiceNumber}
+                            </Typography>
+                          </Link>
+                        ) : null}
                       </TableCell>
                       <TableCell>
                         {log.authorizedBy ? (
