@@ -9,6 +9,11 @@ jobs:
   tests:
     name: E2E smoke tests
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2]
+        shardTotal: [2]
     env:
       CI: true
     services:
@@ -72,7 +77,7 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:smoke
+        run: npm run test:e2e:smoke -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3
