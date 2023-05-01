@@ -38,7 +38,7 @@ values ('Positive Behaviour Training: Level One ', 'CLOSED', 'F2F', 'LEVEL_1', '
        ('Positive Behaviour Training: Level One ', 'OPEN', 'F2F', 'LEVEL_1', 'a24397aa-b059-46b9-a728-955580823ce4',
         false, 'EVALUATION_MISSING', 6, 6, true, false, 10085, null, 0, null, '810A Feb23', null, null, false, 305, '', 'ICM', null);
 
-SELECT setval('course_id_seq', 10027);
+SELECT setval('course_id_seq', 11000);
 
 insert into public.course_audit (course_id, authorized_by, type, payload)
 values (10016, '749791ef-e4c4-4a5f-881a-461e4724138d', 'CANCELLATION',

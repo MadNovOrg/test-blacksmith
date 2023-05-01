@@ -37,10 +37,9 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { NotFound } from '@app/pages/common/NotFound'
-import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation'
 import {
   checkCourseDetailsForExceptions,
-  CourseException,
+  shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { getMinimumTimeCommitment } from '@app/pages/trainer-pages/CourseBuilder/helpers'
 import { FINALIZE_COURSE_BUILDER_MUTATION } from '@app/queries/courses/finalize-course-builder'
@@ -101,9 +100,6 @@ export const CourseBuilder: React.FC<
 
   const { acl } = useAuth()
 
-  const [courseExceptions, setCourseExceptions] = useState<CourseException[]>(
-    []
-  )
   const [submitError, setSubmitError] = useState<string>()
   const [mandatoryModules, setMandatoryModules] = useState<ModuleGroup[]>([])
   const [availableModules, setAvailableModules] = useState<AvailableModule[]>()
@@ -368,50 +364,6 @@ export const CourseBuilder: React.FC<
         await saveModules(modulesData.filter(group => group.mandatory))
       }
       setSubmitError(undefined)
-      const hasExceptions = courseExceptions.length > 0
-      try {
-        await fetcher<
-          FinalizeCourseBuilderMutation,
-          FinalizeCourseBuilderMutationVariables
-        >(FINALIZE_COURSE_BUILDER_MUTATION, {
-          id: courseData.course.id,
-          duration: estimatedCourseDuration,
-          status: hasExceptions
-            ? Course_Status_Enum.ExceptionsApprovalPending
-            : null,
-        })
-
-        if (!courseCreated) {
-          addSnackbarMessage('course-submitted', {
-            label: t(
-              'pages.trainer-base.create-course.new-course.submitted-course',
-              { code: courseData.course.course_code }
-            ),
-          })
-        }
-
-        navigate(hasExceptions ? '/' : '../details')
-      } catch (e: unknown) {
-        setSubmitError((e as Error).message)
-      }
-    }
-  }, [
-    addSnackbarMessage,
-    courseCreated,
-    courseData?.course,
-    courseExceptions.length,
-    estimatedCourseDuration,
-    fetcher,
-    modulesData,
-    navigate,
-    saveModules,
-    t,
-  ])
-
-  const onCourseSubmit = useCallback(async () => {
-    if (!courseData?.course) return
-
-    if (!acl.isTTAdmin()) {
       const leader = courseData.course.trainers.find(
         c => c.type === Course_Trainer_Type_Enum.Leader
       )
@@ -443,11 +395,56 @@ export const CourseBuilder: React.FC<
           })),
         }))
       )
-      setCourseExceptions(exceptions)
-      if (exceptions.length > 0) return
+      const status =
+        exceptions.length > 0 &&
+        shouldGoIntoExceptionApproval(acl, courseData.course.type)
+          ? Course_Status_Enum.ExceptionsApprovalPending
+          : null
+      try {
+        await fetcher<
+          FinalizeCourseBuilderMutation,
+          FinalizeCourseBuilderMutationVariables
+        >(FINALIZE_COURSE_BUILDER_MUTATION, {
+          id: courseData.course.id,
+          duration: estimatedCourseDuration,
+          status,
+        })
+
+        if (!courseCreated) {
+          addSnackbarMessage('course-submitted', {
+            label: t(
+              'pages.trainer-base.create-course.new-course.submitted-course',
+              { code: courseData.course.course_code }
+            ),
+          })
+        }
+
+        navigate(
+          status === Course_Status_Enum.ExceptionsApprovalPending
+            ? '/'
+            : '../details'
+        )
+      } catch (e: unknown) {
+        setSubmitError((e as Error).message)
+      }
     }
+  }, [
+    acl,
+    addSnackbarMessage,
+    courseCreated,
+    courseData?.course,
+    estimatedCourseDuration,
+    fetcher,
+    modulesData,
+    navigate,
+    saveModules,
+    t,
+  ])
+
+  const onCourseSubmit = useCallback(async () => {
+    setIsTimeCommitmentModalOpen(false)
     setIsConfirmationModalOpen(true)
-  }, [acl, courseData, estimatedCourseDuration])
+  }, [])
 
   function getModuleCardColor(
     module: AvailableModule | ModuleGroup,
@@ -784,12 +781,6 @@ export const CourseBuilder: React.FC<
         okLabel={t('pages.trainer-base.create-course.new-course.submit-course')}
         data-testid="time-commitment-dialog"
       ></ConfirmDialog>
-      <CourseExceptionsConfirmation
-        open={courseExceptions.length > 0}
-        onCancel={() => setCourseExceptions([])}
-        onSubmit={submitCourse}
-        exceptions={courseExceptions}
-      />
       <ConfirmDialog
         open={isConfirmationModalOpen}
         message={t(
@@ -801,7 +792,7 @@ export const CourseBuilder: React.FC<
         )}
         onCancel={() => setIsConfirmationModalOpen(false)}
         okLabel={t('common.confirm')}
-        cancelLabel={t('common.never-mind')}
+        cancelLabel={t('common.cancel')}
         data-testid={'confirm-warning'}
       />
     </>

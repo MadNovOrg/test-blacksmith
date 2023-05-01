@@ -20,7 +20,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { isDate, isValid as isValidDate } from 'date-fns'
-import React, { memo, useEffect, useMemo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { noop } from 'ts-essentials'
@@ -41,7 +41,7 @@ import {
   CourseType,
   RoleName,
 } from '@app/types'
-import { LoadingStatus, extractTime } from '@app/util'
+import { extractTime, LoadingStatus } from '@app/util'
 
 import { OrgSelector } from '../OrgSelector'
 import { ProfileSelector } from '../ProfileSelector'
@@ -61,9 +61,9 @@ import {
   canBeReacc,
   canBeVirtual,
   getAccountCode,
-  makeDate,
-  isEndDateTimeBeforeStartDateTime,
   getDefaultSpecialInstructions,
+  isEndDateTimeBeforeStartDateTime,
+  makeDate,
 } from './helpers'
 
 export type DisabledFields = Partial<keyof CourseInput>

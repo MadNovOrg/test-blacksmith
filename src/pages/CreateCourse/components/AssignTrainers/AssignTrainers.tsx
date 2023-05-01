@@ -12,6 +12,7 @@ import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components
 import {
   checkCourseDetailsForExceptions,
   CourseException,
+  isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   CourseTrainer,
@@ -177,13 +178,28 @@ export const AssignTrainers = () => {
         { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
         trainers
       )
-      if (!acl.isTTAdmin() && exceptions.length > 0) {
+      if (courseData.type === CourseType.CLOSED && exceptions.length > 0) {
         setCourseExceptions(exceptions)
       } else {
         await submit()
       }
     }
-  }, [acl, courseData, seniorOrPrincipalLead, submit, trainers])
+  }, [courseData, seniorOrPrincipalLead, submit, trainers])
+
+  const showTrainerRatioWarning = useMemo(() => {
+    return (
+      courseData?.courseLevel &&
+      isTrainersRatioNotMet(
+        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        trainers.map(trainer => ({
+          profile_id: trainer.profile_id,
+          type: trainer.type,
+          fullName: trainer.fullName,
+          levels: trainer.levels,
+        }))
+      )
+    )
+  }, [trainers, courseData, seniorOrPrincipalLead])
 
   if (!courseData) {
     return (
@@ -217,6 +233,15 @@ export const AssignTrainers = () => {
           requiredAssistants={requiredAssistants}
           isReAccreditation={courseData.reaccreditation}
         />
+
+        {showTrainerRatioWarning ? (
+          <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+            {t(
+              `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+            )}
+          </Alert>
+        ) : null}
+
         <Box
           display="flex"
           justifyContent="space-between"
@@ -255,6 +280,7 @@ export const AssignTrainers = () => {
           onCancel={() => setCourseExceptions([])}
           onSubmit={submit}
           exceptions={courseExceptions}
+          courseType={courseData?.type}
         />
       </Stack>
     </>

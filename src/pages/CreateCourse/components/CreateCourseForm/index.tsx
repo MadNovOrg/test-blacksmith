@@ -28,6 +28,7 @@ import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components
 import {
   checkCourseDetailsForExceptions,
   CourseException,
+  isTrainersRatioNotMet,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   CourseInput,
@@ -154,7 +155,6 @@ export const CreateCourseForm = () => {
 
   const handleNextStepButtonClick = async () => {
     if (!courseData || !profile) return
-
     assertCourseDataValid(courseData, courseDataValid)
 
     // If course is indirect, check if there are any exceptions
@@ -205,6 +205,21 @@ export const CreateCourseForm = () => {
       ? 'course-builder-button-text'
       : 'select-trainers-button-text'
 
+  const showTrainerRatioWarning = useMemo(() => {
+    return (
+      courseData?.courseLevel &&
+      isTrainersRatioNotMet(
+        { ...courseData, hasSeniorOrPrincipalLeader: seniorOrPrincipalLead },
+        assistants.map(assistant => ({
+          profile_id: assistant.id,
+          type: CourseTrainerType.Assistant,
+          fullName: assistant.fullName,
+          levels: assistant.levels,
+        }))
+      )
+    )
+  }, [assistants, courseData, seniorOrPrincipalLead])
+
   return (
     <Box paddingBottom={5}>
       {savingStatus === LoadingStatus.ERROR ? (
@@ -238,6 +253,14 @@ export const CreateCourseForm = () => {
               setAssistants(event.target.value)
             }}
           />
+
+          {showTrainerRatioWarning ? (
+            <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+              {t(
+                `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+              )}
+            </Alert>
+          ) : null}
 
           <FormGroup sx={{ marginTop: 3 }} data-testid="acknowledge-checks">
             <FormControlLabel
@@ -323,6 +346,7 @@ export const CreateCourseForm = () => {
         onCancel={() => setCourseExceptions([])}
         onSubmit={submit}
         exceptions={courseExceptions}
+        courseType={courseType}
       />
     </Box>
   )

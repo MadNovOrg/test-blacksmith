@@ -1,5 +1,6 @@
 import { differenceInDays, isFuture } from 'date-fns'
 
+import { getACL } from '@app/context/auth/permissions'
 import {
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
@@ -64,12 +65,14 @@ export type TrainerData = {
   }[]
 }[]
 
-export const isOutsideOfNoticePeriod = (courseData: CourseData) => {
+export const isOutsideOfNoticePeriod = (
+  courseData: Pick<CourseData, 'startDateTime'>
+) => {
   return differenceInDays(courseData.startDateTime, new Date()) < 4 * 7
 }
 
 export const isLeadTrainerInGracePeriod = (
-  courseData: CourseData,
+  courseData: Pick<CourseData, 'courseLevel'>,
   trainers: TrainerData
 ) => {
   const leader = trainers.find(t => {
@@ -128,4 +131,13 @@ export function checkCourseDetailsForExceptions(
   // }
 
   return exceptions
+}
+
+export function shouldGoIntoExceptionApproval(
+  acl: ReturnType<typeof getACL>,
+  type: Course_Type_Enum | CourseType
+) {
+  if (type === Course_Type_Enum.Open) return false
+  if (type === Course_Type_Enum.Closed) return true
+  return !acl.isTTAdmin()
 }

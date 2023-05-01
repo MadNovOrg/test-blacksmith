@@ -4,23 +4,30 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog } from '@app/components/Dialog'
 import { useAuth } from '@app/context/auth'
-import { CourseException } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
-import { RoleName } from '@app/types'
+import { Course_Type_Enum } from '@app/generated/graphql'
+import {
+  CourseException,
+  shouldGoIntoExceptionApproval,
+} from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
+import { CourseType } from '@app/types'
 
 type Props = {
   open: boolean
   onCancel: () => void
   onSubmit: () => void
   exceptions: CourseException[]
+  courseType?: Course_Type_Enum | CourseType
   submitLabel?: string
 }
 
 export const CourseExceptionsConfirmation: React.FC<
   React.PropsWithChildren<Props>
-> = ({ open, onCancel, onSubmit, exceptions, submitLabel }) => {
+> = ({ open, onCancel, onSubmit, exceptions, submitLabel, courseType }) => {
   const { t } = useTranslation()
-  const { activeRole } = useAuth()
-  const isAdmin = activeRole === RoleName.TT_ADMIN
+  const { acl } = useAuth()
+
+  const approvalRequired =
+    !courseType || shouldGoIntoExceptionApproval(acl, courseType)
 
   return (
     <Dialog
@@ -30,9 +37,9 @@ export const CourseExceptionsConfirmation: React.FC<
         <Typography variant="h3" fontWeight={600}>
           {t(
             `pages.create-course.exceptions.${
-              isAdmin
-                ? 'course-contains-exceptions'
-                : 'course-approval-required'
+              approvalRequired
+                ? 'course-approval-required'
+                : 'no-approval-required'
             }`
           )}
         </Typography>
@@ -44,7 +51,7 @@ export const CourseExceptionsConfirmation: React.FC<
           <Typography variant="body1" fontWeight={600}>
             {t(
               `pages.create-course.exceptions.${
-                isAdmin ? 'admin-header' : 'warning-header'
+                approvalRequired ? 'approval-header' : 'no-approval-header'
               }`
             )}
           </Typography>

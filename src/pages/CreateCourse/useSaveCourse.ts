@@ -11,6 +11,7 @@ import {
 } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { useCourseDraft } from '@app/hooks/useCourseDraft'
+import { shouldGoIntoExceptionApproval } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import {
   MUTATION,
   ParamsType,
@@ -139,13 +140,17 @@ export function useSaveCourse(): {
 
         const leadTrainerMissing =
           trainers.filter(t => t.type === CourseTrainerType.Leader).length === 0
+        const approveExceptions =
+          exceptions.length > 0 &&
+          shouldGoIntoExceptionApproval(acl, courseData.type)
 
-        const status =
-          courseData.type === CourseType.INDIRECT
-            ? Course_Status_Enum.ApprovalPending
-            : leadTrainerMissing
-            ? Course_Status_Enum.TrainerMissing
-            : Course_Status_Enum.TrainerPending
+        const status = approveExceptions
+          ? Course_Status_Enum.ExceptionsApprovalPending
+          : courseData.type === CourseType.INDIRECT
+          ? Course_Status_Enum.ApprovalPending
+          : leadTrainerMissing
+          ? Course_Status_Enum.TrainerMissing
+          : Course_Status_Enum.TrainerPending
 
         const response = await fetcher<ResponseType, ParamsType>(MUTATION, {
           course: {
@@ -294,14 +299,12 @@ export function useSaveCourse(): {
   }, [
     courseData,
     trainers,
+    acl,
     fetcher,
     t,
     expenses,
-    acl,
     go1Licensing,
-    profile?.fullName,
-    profile?.email,
-    profile?.phone,
+    profile,
     addSnackbarMessage,
     removeDraft,
     exceptions,

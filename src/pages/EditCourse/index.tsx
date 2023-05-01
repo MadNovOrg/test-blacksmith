@@ -41,6 +41,8 @@ import { CourseExceptionsConfirmation } from '@app/pages/CreateCourse/components
 import {
   checkCourseDetailsForExceptions,
   CourseException,
+  isTrainersRatioNotMet,
+  shouldGoIntoExceptionApproval,
 } from '@app/pages/CreateCourse/components/CourseExceptionsConfirmation/utils'
 import { CourseCancellationModal } from '@app/pages/EditCourse/CourseCancellationModal'
 import { RegistrantsCancellationModal } from '@app/pages/EditCourse/RegistrantsCancellationModal'
@@ -244,15 +246,16 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
               ? ''
               : courseData.zoomMeetingUrl
 
-          const shouldGoIntoException =
-            !acl.isTTAdmin() && courseExceptions.length > 0
+          const status =
+            courseExceptions.length > 0 &&
+            shouldGoIntoExceptionApproval(acl, course.type)
+              ? Course_Status_Enum.ExceptionsApprovalPending
+              : null
 
           const editResponse = await updateCourse({
             courseId: course.id,
             courseInput: {
-              status: shouldGoIntoException
-                ? Course_Status_Enum.ExceptionsApprovalPending
-                : null,
+              status,
               name: generateCourseName(
                 {
                   level: courseData.courseLevel,
@@ -444,7 +447,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
   const submitButtonHandler = useCallback(async () => {
     if (!courseData || !profile || !trainersData) return
 
-    if (courseData.type === CourseType.INDIRECT && !acl.isTTAdmin()) {
+    if (courseData.type !== CourseType.OPEN && !acl.isTTAdmin()) {
       const exceptions = checkCourseDetailsForExceptions(
         {
           ...courseData,
@@ -463,7 +466,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
           levels: assistant.levels,
         }))
       )
-      if (!acl.isTTAdmin() && exceptions.length > 0) {
+      if (exceptions.length > 0) {
         setCourseExceptions(exceptions)
         return
       }
@@ -477,6 +480,30 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
     seniorOrPrincipalLead,
     trainersData,
   ])
+
+  const showTrainerRatioWarning = useMemo(() => {
+    if (
+      !courseData?.courseLevel ||
+      !courseData?.type ||
+      !courseData?.maxParticipants
+    )
+      return false
+    return isTrainersRatioNotMet(
+      {
+        ...courseData,
+        courseLevel: courseData.courseLevel as unknown as CourseLevel,
+        type: courseData.type as unknown as CourseType,
+        maxParticipants: courseData.maxParticipants as unknown as number,
+        hasSeniorOrPrincipalLeader: seniorOrPrincipalLead,
+      },
+      (trainersData?.assist ?? []).map(assistant => ({
+        profile_id: assistant.id,
+        type: CourseTrainerType.Assistant,
+        fullName: assistant.fullName,
+        levels: assistant.levels,
+      }))
+    )
+  }, [trainersData, courseData, seniorOrPrincipalLead])
 
   if (
     (courseStatus === LoadingStatus.SUCCESS && !course) ||
@@ -601,6 +628,14 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                   />
                 ) : null}
 
+                {showTrainerRatioWarning ? (
+                  <Alert severity="warning" variant="outlined" sx={{ mt: 1 }}>
+                    {t(
+                      `pages.create-course.exceptions.type_${CourseException.TRAINER_RATIO_NOT_MET}`
+                    )}
+                  </Alert>
+                ) : null}
+
                 <Box display="flex" justifyContent="space-between" mt={4}>
                   {cancellableCourse && canCancelCourse ? (
                     <Button
@@ -704,6 +739,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
             onCancel={() => setCourseExceptions([])}
             onSubmit={editCourse}
             exceptions={courseExceptions}
+            courseType={courseData?.type ?? undefined}
           />
         </>
       ) : null}
