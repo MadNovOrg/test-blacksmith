@@ -82,7 +82,7 @@
     "react-youtube": "^10.1.0",
     "react18-input-otp": "^1.1.2",
     "sanitize-html": "^2.9.0",
-    "swr": "^2.1.1",
+    "swr": "^2.1.5",
     "urql": "^3.0.3",
     "use-debounce": "^9.0.4",
     "use-query-params": "^2.2.0",
