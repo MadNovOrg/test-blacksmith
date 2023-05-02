@@ -27,6 +27,10 @@ const TEMP_DIR = './tmp'
 
 const PER_PAGE = 12
 
+const TEST_SETTINGS: { role: '' | 'tt-admin' } = {
+  role: '',
+}
+
 export {
   TARGET_ENV,
   BASE_URL,
@@ -34,4 +38,5 @@ export {
   HASURA_BASE_URL,
   HASURA_SECRET,
   PER_PAGE,
+  TEST_SETTINGS,
 }

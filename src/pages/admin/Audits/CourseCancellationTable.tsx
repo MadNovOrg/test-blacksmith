@@ -163,7 +163,10 @@ export const CourseCancellationTable: React.FC<
                         <Link
                           href={`/manage-courses/all/${log.course.id}/details`}
                         >
-                          <Typography variant="body2">
+                          <Typography
+                            data-testid="audit-log-entry-course-code"
+                            variant="body2"
+                          >
                             {log.course.course_code}
                           </Typography>
                         </Link>

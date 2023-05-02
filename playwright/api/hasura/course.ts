@@ -2,6 +2,7 @@ import { addYears } from 'date-fns'
 import { gql } from 'graphql-request'
 
 import { Grade_Enum } from '@app/generated/graphql'
+import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
 import { GetParticipant as GET_PARTICIPANT } from '@app/queries/participants/get-course-participant-by-profile-id'
@@ -84,6 +85,7 @@ export const setCourseDates = async (
     console.error(e)
   }
 }
+
 export const getModuleIds = async (
   moduleGroups: string[],
   level: CourseLevel
@@ -440,6 +442,28 @@ export async function insertCertificateForParticipants(
         }
       })
     )
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export const cancelCourse = async (
+  courseId: number,
+  cancellationReason = 'reason',
+  cancellationFeePercent = 0
+) => {
+  try {
+    await getClient().request<{
+      update_course_participant: { affected_rows: number }
+    }>(CANCEL_COURSE_MUTATION, {
+      courseId,
+      cancellationReason,
+      cancellationFeePercent,
+    })
+    console.log(`
+      Cancelled the course "${courseId}" with the reason "${cancellationReason}"
+    `)
   } catch (e) {
     console.error(e)
     throw e
