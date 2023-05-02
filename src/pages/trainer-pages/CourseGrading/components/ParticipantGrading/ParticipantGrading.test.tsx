@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Routes, useSearchParams } from 'react-router-dom'
+import { Client, Provider } from 'urql'
+import { fromValue } from 'wonka'
 
-import { Grade_Enum } from '@app/generated/graphql'
-import useCourseParticipant from '@app/hooks/useCourseParticipant'
-import { LoadingStatus } from '@app/util'
+import { CourseParticipantQuery, Grade_Enum } from '@app/generated/graphql'
 
 import { render, screen, within, userEvent, waitFor } from '@test/index'
 import {
@@ -14,10 +14,6 @@ import {
 } from '@test/mock-data-utils'
 
 import { ParticipantGrading } from '.'
-
-jest.mock('@app/hooks/useCourseParticipant')
-
-const useCourseParticipantMocked = jest.mocked(useCourseParticipant)
 
 const MockCourseDetails = () => {
   const [searchParams] = useSearchParams()
@@ -31,20 +27,28 @@ describe('page: ParticipantGrading', () => {
       overrides: {
         grade: Grade_Enum.Pass,
       },
-    })
+    }) as unknown as NonNullable<CourseParticipantQuery['participant']>
 
-    useCourseParticipantMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: participant,
-    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CourseParticipantQuery }>({
+          data: {
+            participant,
+          },
+        }),
+    } as unknown as Client
 
     render(
-      <ParticipantGrading />,
+      <Provider value={client}>
+        <ParticipantGrading />
+      </Provider>,
       {},
       { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
     )
 
-    expect(screen.getByText(participant.profile.fullName)).toBeInTheDocument()
+    expect(
+      screen.getByText(participant.profile.fullName ?? '')
+    ).toBeInTheDocument()
     expect(screen.getByText('Pass')).toBeInTheDocument()
   })
 
@@ -84,15 +88,21 @@ describe('page: ParticipantGrading', () => {
         grade: Grade_Enum.Pass,
         gradingModules,
       },
-    })
+    }) as unknown as NonNullable<CourseParticipantQuery['participant']>
 
-    useCourseParticipantMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: participant,
-    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CourseParticipantQuery }>({
+          data: {
+            participant,
+          },
+        }),
+    } as unknown as Client
 
     render(
-      <ParticipantGrading />,
+      <Provider value={client}>
+        <ParticipantGrading />
+      </Provider>,
       {},
       { initialEntries: [`/courses/course-id/grading/${participant.id}`] }
     )
@@ -130,19 +140,30 @@ describe('page: ParticipantGrading', () => {
   })
 
   it('navigates back to the course details page with grading query param', async () => {
-    useCourseParticipantMocked.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: buildParticipant(),
-    })
+    const client = {
+      executeQuery: () =>
+        fromValue<{ data: CourseParticipantQuery }>({
+          data: {
+            participant: buildParticipant() as unknown as NonNullable<
+              CourseParticipantQuery['participant']
+            >,
+          },
+        }),
+    } as unknown as Client
 
     render(
-      <Routes>
-        <Route
-          element={<ParticipantGrading />}
-          path="/courses/:id/grading/:participant-id"
-        />
-        <Route element={<MockCourseDetails />} path={'/courses/:id/details'} />
-      </Routes>,
+      <Provider value={client}>
+        <Routes>
+          <Route
+            element={<ParticipantGrading />}
+            path="/courses/:id/grading/:participant-id"
+          />
+          <Route
+            element={<MockCourseDetails />}
+            path={'/courses/:id/details'}
+          />
+        </Routes>
+      </Provider>,
       {},
       { initialEntries: [`/courses/course-id/grading/participant-id`] }
     )

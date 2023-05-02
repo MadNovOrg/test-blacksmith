@@ -12,6 +12,7 @@ import {
   Grade_Enum,
   Course_Delivery_Type_Enum,
 } from '@app/generated/graphql'
+import { getAvailableGrades } from '@app/rules/grading'
 import { noop } from '@app/util'
 
 interface Props {
@@ -38,6 +39,9 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
   const { t } = useTranslation()
 
   const options: GradeOption[] = useMemo(() => {
+    const gradingOptions: GradeOption[] = []
+    const availableGrades = getAvailableGrades(courseLevel, courseDeliveryType)
+
     const passOption: GradeOption = {
       key: Grade_Enum.Pass,
       icon: <CheckCircleIcon color="success" sx={{ mr: 1 }} />,
@@ -62,25 +66,23 @@ export const CourseGradingMenu: React.FC<React.PropsWithChildren<Props>> = ({
       label: t('pages.course-grading.grade-assist-only'),
     }
 
-    if (
-      (courseDeliveryType === Course_Delivery_Type_Enum.Virtual &&
-        courseLevel === Course_Level_Enum.Level_1) ||
-      courseDeliveryType === Course_Delivery_Type_Enum.Mixed
-    ) {
-      return [passOption, failOption]
+    if (availableGrades.includes(Grade_Enum.Pass)) {
+      gradingOptions.push(passOption)
     }
 
-    if (
-      courseDeliveryType === Course_Delivery_Type_Enum.F2F &&
-      [
-        Course_Level_Enum.AdvancedTrainer,
-        Course_Level_Enum.IntermediateTrainer,
-      ].includes(courseLevel)
-    ) {
-      return [passOption, assistOnlyOption, failOption]
+    if (availableGrades.includes(Grade_Enum.Fail)) {
+      gradingOptions.push(failOption)
     }
 
-    return [passOption, observeOnlyOption, failOption]
+    if (availableGrades.includes(Grade_Enum.ObserveOnly)) {
+      gradingOptions.push(observeOnlyOption)
+    }
+
+    if (availableGrades.includes(Grade_Enum.AssistOnly)) {
+      gradingOptions.push(assistOnlyOption)
+    }
+
+    return gradingOptions
   }, [t, courseDeliveryType, courseLevel])
 
   const [selectedIndex, setSelectedIndex] = React.useState<number>(

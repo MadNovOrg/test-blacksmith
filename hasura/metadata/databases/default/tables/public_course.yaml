@@ -89,6 +89,13 @@ object_relationships:
     using:
       foreign_key_constraint_on: sales_representative_id
 array_relationships:
+  - name: bildModules
+    using:
+      foreign_key_constraint_on:
+        column: course_id
+        table:
+          schema: public
+          name: course_bild_module
   - name: bildStrategies
     using:
       foreign_key_constraint_on:

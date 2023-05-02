@@ -13973,6 +13973,10 @@ export type Course = {
   aolCountry?: Maybe<Scalars['String']>;
   aolRegion?: Maybe<Scalars['String']>;
   /** An array relationship */
+  bildModules: Array<Course_Bild_Module>;
+  /** An aggregate relationship */
+  bildModules_aggregate: Course_Bild_Module_Aggregate;
+  /** An array relationship */
   bildStrategies: Array<Course_Bild_Strategy>;
   /** An aggregate relationship */
   bildStrategies_aggregate: Course_Bild_Strategy_Aggregate;
@@ -14061,6 +14065,26 @@ export type Course = {
   waitlists: Array<Waitlist>;
   /** An aggregate relationship */
   waitlists_aggregate: Waitlist_Aggregate;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseBildModulesArgs = {
+  distinct_on?: InputMaybe<Array<Course_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Bild_Module_Bool_Exp>;
+};
+
+
+/** columns and relationships of "course" */
+export type CourseBildModules_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Bild_Module_Bool_Exp>;
 };
 
 
@@ -14784,15 +14808,42 @@ export type Course_Bild_Module_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "course_bild_module" */
+export type Course_Bild_Module_Aggregate_Order_By = {
+  avg?: InputMaybe<Course_Bild_Module_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Course_Bild_Module_Max_Order_By>;
+  min?: InputMaybe<Course_Bild_Module_Min_Order_By>;
+  stddev?: InputMaybe<Course_Bild_Module_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Course_Bild_Module_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Course_Bild_Module_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Course_Bild_Module_Sum_Order_By>;
+  var_pop?: InputMaybe<Course_Bild_Module_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Course_Bild_Module_Var_Samp_Order_By>;
+  variance?: InputMaybe<Course_Bild_Module_Variance_Order_By>;
+};
+
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Course_Bild_Module_Append_Input = {
   modules?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** input type for inserting array relation for remote table "course_bild_module" */
+export type Course_Bild_Module_Arr_Rel_Insert_Input = {
+  data: Array<Course_Bild_Module_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Bild_Module_On_Conflict>;
 };
 
 /** aggregate avg on columns */
 export type Course_Bild_Module_Avg_Fields = {
   __typename?: 'course_bild_module_avg_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by avg() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Avg_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "course_bild_module". All fields are combined with a logical 'AND'. */
@@ -14845,11 +14896,23 @@ export type Course_Bild_Module_Max_Fields = {
   id?: Maybe<Scalars['uuid']>;
 };
 
+/** order by max() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Max_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Course_Bild_Module_Min_Fields = {
   __typename?: 'course_bild_module_min_fields';
   course_id?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Min_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "course_bild_module" */
@@ -14908,10 +14971,20 @@ export type Course_Bild_Module_Stddev_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Stddev_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Course_Bild_Module_Stddev_Pop_Fields = {
   __typename?: 'course_bild_module_stddev_pop_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Stddev_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -14920,10 +14993,20 @@ export type Course_Bild_Module_Stddev_Samp_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Stddev_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Course_Bild_Module_Sum_Fields = {
   __typename?: 'course_bild_module_sum_fields';
   course_id?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Sum_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "course_bild_module" */
@@ -14942,16 +15025,31 @@ export type Course_Bild_Module_Var_Pop_Fields = {
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Var_Pop_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Course_Bild_Module_Var_Samp_Fields = {
   __typename?: 'course_bild_module_var_samp_fields';
   course_id?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Var_Samp_Order_By = {
+  course_id?: InputMaybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Course_Bild_Module_Variance_Fields = {
   __typename?: 'course_bild_module_variance_fields';
   course_id?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "course_bild_module" */
+export type Course_Bild_Module_Variance_Order_By = {
+  course_id?: InputMaybe<Order_By>;
 };
 
 /** columns and relationships of "course_bild_strategy" */
@@ -15225,6 +15323,7 @@ export type Course_Bool_Exp = {
   aolCostOfCourse?: InputMaybe<Numeric_Comparison_Exp>;
   aolCountry?: InputMaybe<String_Comparison_Exp>;
   aolRegion?: InputMaybe<String_Comparison_Exp>;
+  bildModules?: InputMaybe<Course_Bild_Module_Bool_Exp>;
   bildStrategies?: InputMaybe<Course_Bild_Strategy_Bool_Exp>;
   cancellationFeePercent?: InputMaybe<Int_Comparison_Exp>;
   cancellationReason?: InputMaybe<String_Comparison_Exp>;
@@ -18333,6 +18432,7 @@ export type Course_Insert_Input = {
   aolCostOfCourse?: InputMaybe<Scalars['numeric']>;
   aolCountry?: InputMaybe<Scalars['String']>;
   aolRegion?: InputMaybe<Scalars['String']>;
+  bildModules?: InputMaybe<Course_Bild_Module_Arr_Rel_Insert_Input>;
   bildStrategies?: InputMaybe<Course_Bild_Strategy_Arr_Rel_Insert_Input>;
   cancellationFeePercent?: InputMaybe<Scalars['Int']>;
   cancellationReason?: InputMaybe<Scalars['String']>;
@@ -19433,6 +19533,7 @@ export type Course_Order_By = {
   aolCostOfCourse?: InputMaybe<Order_By>;
   aolCountry?: InputMaybe<Order_By>;
   aolRegion?: InputMaybe<Order_By>;
+  bildModules_aggregate?: InputMaybe<Course_Bild_Module_Aggregate_Order_By>;
   bildStrategies_aggregate?: InputMaybe<Course_Bild_Strategy_Aggregate_Order_By>;
   cancellationFeePercent?: InputMaybe<Order_By>;
   cancellationReason?: InputMaybe<Order_By>;
@@ -19486,6 +19587,8 @@ export type Course_Order_By = {
 export type Course_Participant = {
   __typename?: 'course_participant';
   attended?: Maybe<Scalars['Boolean']>;
+  /** An object relationship */
+  bildGradingModules?: Maybe<Course_Participant_Bild_Module>;
   bookingDate?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   certificate?: Maybe<Course_Certificate>;
@@ -20144,12 +20247,180 @@ export type Course_Participant_Avg_Order_By = {
   go1EnrolmentId?: InputMaybe<Order_By>;
 };
 
+/** Graded BILD modules for a course participant */
+export type Course_Participant_Bild_Module = {
+  __typename?: 'course_participant_bild_module';
+  /** An object relationship */
+  course_participant: Course_Participant;
+  id: Scalars['uuid'];
+  modules: Scalars['jsonb'];
+  participant_id: Scalars['uuid'];
+};
+
+
+/** Graded BILD modules for a course participant */
+export type Course_Participant_Bild_ModuleModulesArgs = {
+  path?: InputMaybe<Scalars['String']>;
+};
+
+/** aggregated selection of "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Aggregate = {
+  __typename?: 'course_participant_bild_module_aggregate';
+  aggregate?: Maybe<Course_Participant_Bild_Module_Aggregate_Fields>;
+  nodes: Array<Course_Participant_Bild_Module>;
+};
+
+/** aggregate fields of "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Aggregate_Fields = {
+  __typename?: 'course_participant_bild_module_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Course_Participant_Bild_Module_Max_Fields>;
+  min?: Maybe<Course_Participant_Bild_Module_Min_Fields>;
+};
+
+
+/** aggregate fields of "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Course_Participant_Bild_Module_Append_Input = {
+  modules?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** Boolean expression to filter rows from the table "course_participant_bild_module". All fields are combined with a logical 'AND'. */
+export type Course_Participant_Bild_Module_Bool_Exp = {
+  _and?: InputMaybe<Array<Course_Participant_Bild_Module_Bool_Exp>>;
+  _not?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+  _or?: InputMaybe<Array<Course_Participant_Bild_Module_Bool_Exp>>;
+  course_participant?: InputMaybe<Course_Participant_Bool_Exp>;
+  id?: InputMaybe<Uuid_Comparison_Exp>;
+  modules?: InputMaybe<Jsonb_Comparison_Exp>;
+  participant_id?: InputMaybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "course_participant_bild_module" */
+export enum Course_Participant_Bild_Module_Constraint {
+  /** unique or primary key constraint */
+  CourseParticipantBildModuleParticipantIdKey = 'course_participant_bild_module_participant_id_key',
+  /** unique or primary key constraint */
+  CourseParticipantBildModulePkey = 'course_participant_bild_module_pkey'
+}
+
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Course_Participant_Bild_Module_Delete_At_Path_Input = {
+  modules?: InputMaybe<Array<Scalars['String']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Course_Participant_Bild_Module_Delete_Elem_Input = {
+  modules?: InputMaybe<Scalars['Int']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Course_Participant_Bild_Module_Delete_Key_Input = {
+  modules?: InputMaybe<Scalars['String']>;
+};
+
+/** input type for inserting data into table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Insert_Input = {
+  course_participant?: InputMaybe<Course_Participant_Obj_Rel_Insert_Input>;
+  id?: InputMaybe<Scalars['uuid']>;
+  modules?: InputMaybe<Scalars['jsonb']>;
+  participant_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Course_Participant_Bild_Module_Max_Fields = {
+  __typename?: 'course_participant_bild_module_max_fields';
+  id?: Maybe<Scalars['uuid']>;
+  participant_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Course_Participant_Bild_Module_Min_Fields = {
+  __typename?: 'course_participant_bild_module_min_fields';
+  id?: Maybe<Scalars['uuid']>;
+  participant_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Mutation_Response = {
+  __typename?: 'course_participant_bild_module_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Course_Participant_Bild_Module>;
+};
+
+/** input type for inserting object relation for remote table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Obj_Rel_Insert_Input = {
+  data: Course_Participant_Bild_Module_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Course_Participant_Bild_Module_On_Conflict>;
+};
+
+/** on_conflict condition type for table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_On_Conflict = {
+  constraint: Course_Participant_Bild_Module_Constraint;
+  update_columns?: Array<Course_Participant_Bild_Module_Update_Column>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "course_participant_bild_module". */
+export type Course_Participant_Bild_Module_Order_By = {
+  course_participant?: InputMaybe<Course_Participant_Order_By>;
+  id?: InputMaybe<Order_By>;
+  modules?: InputMaybe<Order_By>;
+  participant_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: course_participant_bild_module */
+export type Course_Participant_Bild_Module_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Course_Participant_Bild_Module_Prepend_Input = {
+  modules?: InputMaybe<Scalars['jsonb']>;
+};
+
+/** select columns of table "course_participant_bild_module" */
+export enum Course_Participant_Bild_Module_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Modules = 'modules',
+  /** column name */
+  ParticipantId = 'participant_id'
+}
+
+/** input type for updating data in table "course_participant_bild_module" */
+export type Course_Participant_Bild_Module_Set_Input = {
+  id?: InputMaybe<Scalars['uuid']>;
+  modules?: InputMaybe<Scalars['jsonb']>;
+  participant_id?: InputMaybe<Scalars['uuid']>;
+};
+
+/** update columns of table "course_participant_bild_module" */
+export enum Course_Participant_Bild_Module_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Modules = 'modules',
+  /** column name */
+  ParticipantId = 'participant_id'
+}
+
 /** Boolean expression to filter rows from the table "course_participant". All fields are combined with a logical 'AND'. */
 export type Course_Participant_Bool_Exp = {
   _and?: InputMaybe<Array<Course_Participant_Bool_Exp>>;
   _not?: InputMaybe<Course_Participant_Bool_Exp>;
   _or?: InputMaybe<Array<Course_Participant_Bool_Exp>>;
   attended?: InputMaybe<Boolean_Comparison_Exp>;
+  bildGradingModules?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
   bookingDate?: InputMaybe<Timestamptz_Comparison_Exp>;
   certificate?: InputMaybe<Course_Certificate_Bool_Exp>;
   certificateChanges?: InputMaybe<Course_Certificate_Changelog_Bool_Exp>;
@@ -20432,6 +20703,7 @@ export type Course_Participant_Inc_Input = {
 /** input type for inserting data into table "course_participant" */
 export type Course_Participant_Insert_Input = {
   attended?: InputMaybe<Scalars['Boolean']>;
+  bildGradingModules?: InputMaybe<Course_Participant_Bild_Module_Obj_Rel_Insert_Input>;
   bookingDate?: InputMaybe<Scalars['timestamptz']>;
   certificate?: InputMaybe<Course_Certificate_Obj_Rel_Insert_Input>;
   certificateChanges?: InputMaybe<Course_Certificate_Changelog_Arr_Rel_Insert_Input>;
@@ -20732,6 +21004,7 @@ export type Course_Participant_On_Conflict = {
 /** Ordering options when selecting data from "course_participant". */
 export type Course_Participant_Order_By = {
   attended?: InputMaybe<Order_By>;
+  bildGradingModules?: InputMaybe<Course_Participant_Bild_Module_Order_By>;
   bookingDate?: InputMaybe<Order_By>;
   certificate?: InputMaybe<Course_Certificate_Order_By>;
   certificateChanges_aggregate?: InputMaybe<Course_Certificate_Changelog_Aggregate_Order_By>;
@@ -26052,6 +26325,10 @@ export type Mutation_Root = {
   delete_course_participant_audit_type?: Maybe<Course_Participant_Audit_Type_Mutation_Response>;
   /** delete single row from the table: "course_participant_audit_type" */
   delete_course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** delete data from the table: "course_participant_bild_module" */
+  delete_course_participant_bild_module?: Maybe<Course_Participant_Bild_Module_Mutation_Response>;
+  /** delete single row from the table: "course_participant_bild_module" */
+  delete_course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
   /** delete single row from the table: "course_participant" */
   delete_course_participant_by_pk?: Maybe<Course_Participant>;
   /** delete data from the table: "course_participant_cancellation" */
@@ -26375,6 +26652,10 @@ export type Mutation_Root = {
   insert_course_participant_audit_type?: Maybe<Course_Participant_Audit_Type_Mutation_Response>;
   /** insert a single row into the table: "course_participant_audit_type" */
   insert_course_participant_audit_type_one?: Maybe<Course_Participant_Audit_Type>;
+  /** insert data into the table: "course_participant_bild_module" */
+  insert_course_participant_bild_module?: Maybe<Course_Participant_Bild_Module_Mutation_Response>;
+  /** insert a single row into the table: "course_participant_bild_module" */
+  insert_course_participant_bild_module_one?: Maybe<Course_Participant_Bild_Module>;
   /** insert data into the table: "course_participant_cancellation" */
   insert_course_participant_cancellation?: Maybe<Course_Participant_Cancellation_Mutation_Response>;
   /** insert a single row into the table: "course_participant_cancellation" */
@@ -26711,6 +26992,10 @@ export type Mutation_Root = {
   update_course_participant_audit_type?: Maybe<Course_Participant_Audit_Type_Mutation_Response>;
   /** update single row of the table: "course_participant_audit_type" */
   update_course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** update data of the table: "course_participant_bild_module" */
+  update_course_participant_bild_module?: Maybe<Course_Participant_Bild_Module_Mutation_Response>;
+  /** update single row of the table: "course_participant_bild_module" */
+  update_course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
   /** update single row of the table: "course_participant" */
   update_course_participant_by_pk?: Maybe<Course_Participant>;
   /** update data of the table: "course_participant_cancellation" */
@@ -27360,6 +27645,18 @@ export type Mutation_RootDelete_Course_Participant_Audit_TypeArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Course_Participant_Audit_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Participant_Bild_ModuleArgs = {
+  where: Course_Participant_Bild_Module_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Course_Participant_Bild_Module_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -28397,6 +28694,20 @@ export type Mutation_RootInsert_Course_Participant_Audit_TypeArgs = {
 export type Mutation_RootInsert_Course_Participant_Audit_Type_OneArgs = {
   object: Course_Participant_Audit_Type_Insert_Input;
   on_conflict?: InputMaybe<Course_Participant_Audit_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Participant_Bild_ModuleArgs = {
+  objects: Array<Course_Participant_Bild_Module_Insert_Input>;
+  on_conflict?: InputMaybe<Course_Participant_Bild_Module_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Course_Participant_Bild_Module_OneArgs = {
+  object: Course_Participant_Bild_Module_Insert_Input;
+  on_conflict?: InputMaybe<Course_Participant_Bild_Module_On_Conflict>;
 };
 
 
@@ -29681,6 +29992,30 @@ export type Mutation_RootUpdate_Course_Participant_Audit_TypeArgs = {
 export type Mutation_RootUpdate_Course_Participant_Audit_Type_By_PkArgs = {
   _set?: InputMaybe<Course_Participant_Audit_Type_Set_Input>;
   pk_columns: Course_Participant_Audit_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Bild_ModuleArgs = {
+  _append?: InputMaybe<Course_Participant_Bild_Module_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Participant_Bild_Module_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Participant_Bild_Module_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Participant_Bild_Module_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Participant_Bild_Module_Prepend_Input>;
+  _set?: InputMaybe<Course_Participant_Bild_Module_Set_Input>;
+  where: Course_Participant_Bild_Module_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Course_Participant_Bild_Module_By_PkArgs = {
+  _append?: InputMaybe<Course_Participant_Bild_Module_Append_Input>;
+  _delete_at_path?: InputMaybe<Course_Participant_Bild_Module_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Course_Participant_Bild_Module_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Course_Participant_Bild_Module_Delete_Key_Input>;
+  _prepend?: InputMaybe<Course_Participant_Bild_Module_Prepend_Input>;
+  _set?: InputMaybe<Course_Participant_Bild_Module_Set_Input>;
+  pk_columns: Course_Participant_Bild_Module_Pk_Columns_Input;
 };
 
 
@@ -35507,6 +35842,12 @@ export type Query_Root = {
   course_participant_audit_type_aggregate: Course_Participant_Audit_Type_Aggregate;
   /** fetch data from the table: "course_participant_audit_type" using primary key columns */
   course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** fetch data from the table: "course_participant_bild_module" */
+  course_participant_bild_module: Array<Course_Participant_Bild_Module>;
+  /** fetch aggregated fields from the table: "course_participant_bild_module" */
+  course_participant_bild_module_aggregate: Course_Participant_Bild_Module_Aggregate;
+  /** fetch data from the table: "course_participant_bild_module" using primary key columns */
+  course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
   /** fetch data from the table: "course_participant" using primary key columns */
   course_participant_by_pk?: Maybe<Course_Participant>;
   /** fetch data from the table: "course_participant_cancellation" */
@@ -36575,6 +36916,29 @@ export type Query_RootCourse_Participant_Audit_Type_AggregateArgs = {
 
 export type Query_RootCourse_Participant_Audit_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Query_RootCourse_Participant_Bild_ModuleArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Participant_Bild_Module_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+};
+
+
+export type Query_RootCourse_Participant_Bild_Module_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -38191,6 +38555,12 @@ export type Subscription_Root = {
   course_participant_audit_type_aggregate: Course_Participant_Audit_Type_Aggregate;
   /** fetch data from the table: "course_participant_audit_type" using primary key columns */
   course_participant_audit_type_by_pk?: Maybe<Course_Participant_Audit_Type>;
+  /** fetch data from the table: "course_participant_bild_module" */
+  course_participant_bild_module: Array<Course_Participant_Bild_Module>;
+  /** fetch aggregated fields from the table: "course_participant_bild_module" */
+  course_participant_bild_module_aggregate: Course_Participant_Bild_Module_Aggregate;
+  /** fetch data from the table: "course_participant_bild_module" using primary key columns */
+  course_participant_bild_module_by_pk?: Maybe<Course_Participant_Bild_Module>;
   /** fetch data from the table: "course_participant" using primary key columns */
   course_participant_by_pk?: Maybe<Course_Participant>;
   /** fetch data from the table: "course_participant_cancellation" */
@@ -39233,6 +39603,29 @@ export type Subscription_RootCourse_Participant_Audit_Type_AggregateArgs = {
 
 export type Subscription_RootCourse_Participant_Audit_Type_By_PkArgs = {
   name: Scalars['String'];
+};
+
+
+export type Subscription_RootCourse_Participant_Bild_ModuleArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Participant_Bild_Module_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Course_Participant_Bild_Module_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Course_Participant_Bild_Module_Order_By>>;
+  where?: InputMaybe<Course_Participant_Bild_Module_Bool_Exp>;
+};
+
+
+export type Subscription_RootCourse_Participant_Bild_Module_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -42630,12 +43023,23 @@ export type JoinWaitlistMutationVariables = Exact<{
 
 export type JoinWaitlistMutation = { __typename?: 'mutation_root', waitlist?: { __typename?: 'waitlist_mutation_response', affected_rows: number } | null };
 
+export type SaveBildGradeMutationVariables = Exact<{
+  modules: Array<Course_Participant_Bild_Module_Insert_Input> | Course_Participant_Bild_Module_Insert_Input;
+  participantIds?: InputMaybe<Array<Scalars['uuid']> | Scalars['uuid']>;
+  grade: Grade_Enum;
+  feedback?: InputMaybe<Scalars['String']>;
+  courseId: Scalars['Int'];
+}>;
+
+
+export type SaveBildGradeMutation = { __typename?: 'mutation_root', saveModules?: { __typename?: 'course_participant_bild_module_mutation_response', affected_rows: number } | null, saveParticipantsGrade?: { __typename?: 'course_participant_mutation_response', affectedRows: number } | null, gradingStarted?: { __typename?: 'course', id: number } | null };
+
 export type CourseGradingDataQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }> } | null };
+export type CourseGradingDataQuery = { __typename?: 'query_root', course?: { __typename?: 'course', id: number, name: string, type: Course_Type_Enum, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum, participants: Array<{ __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, profile: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null } }>, modules: Array<{ __typename?: 'course_module', id: any, covered?: boolean | null, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string, mandatory: boolean } | null } }>, bildModules: Array<{ __typename?: 'course_bild_module', id: any, modules: any }> } | null };
 
 export type SaveGradingDetailsMutationVariables = Exact<{
   courseId: Scalars['Int'];
@@ -43577,7 +43981,7 @@ export type CourseParticipantQueryVariables = Exact<{
 }>;
 
 
-export type CourseParticipantQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, dateGraded?: any | null, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, gradingModules: Array<{ __typename?: 'course_participant_module', id: any, completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null } | null };
+export type CourseParticipantQuery = { __typename?: 'query_root', participant?: { __typename?: 'course_participant', id: any, attended?: boolean | null, grade?: Grade_Enum | null, dateGraded?: any | null, course: { __typename?: 'course', id: number, name: string, level: Course_Level_Enum, deliveryType: Course_Delivery_Type_Enum, accreditedBy: Accreditors_Enum }, profile: { __typename?: 'profile', fullName?: string | null, avatar?: string | null, archived?: boolean | null, email?: string | null, contactDetails: any, organizations: Array<{ __typename?: 'organization_member', organization: { __typename?: 'organization', id: any, name: string } }> }, gradingModules: Array<{ __typename?: 'course_participant_module', id: any, completed: boolean, module: { __typename?: 'module', id: any, name: string, moduleGroup?: { __typename?: 'module_group', id: any, name: string } | null } }>, bildGradingModules?: { __typename?: 'course_participant_bild_module', id: any, modules: any } | null, certificate?: { __typename?: 'course_certificate', id: any, createdAt: any, updatedAt: any, number: string, expiryDate: any, certificationDate: any, courseName: string, courseLevel: string, status?: string | null } | null } | null };
 
 export type GetCourseParticipantIdQueryVariables = Exact<{
   profileId: Scalars['uuid'];

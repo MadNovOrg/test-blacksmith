@@ -27,6 +27,13 @@ configuration:
     hs_consent: healthSafetyConsent
     invoice_id: invoiceID
 object_relationships:
+  - name: bildGradingModules
+    using:
+      foreign_key_constraint_on:
+        column: participant_id
+        table:
+          schema: public
+          name: course_participant_bild_module
   - name: certificate
     using:
       manual_configuration:

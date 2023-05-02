@@ -622,7 +622,9 @@
     "modal-title": "Grading confirmation",
     "modal-description": "Are you sure you want to confirm your grading against attendees? Please note you will not be able to make changes after this has been submitted.",
     "modal-cancel-btn-text": "Cancel",
-    "modal-confirm-btn-text": "Confirm"
+    "modal-confirm-btn-text": "Confirm",
+    "no-modules": "There are no modules for this course.",
+    "grading-error": "There was an error when grading."
   },
   "participant-grading": {
     "title": "View grade",

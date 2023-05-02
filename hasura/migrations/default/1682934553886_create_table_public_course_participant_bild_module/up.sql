@@ -1,0 +1,2 @@
+CREATE TABLE "public"."course_participant_bild_module" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "participant_id" uuid NOT NULL, "modules" jsonb NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("participant_id") REFERENCES "public"."course_participant"("id") ON UPDATE cascade ON DELETE cascade, UNIQUE ("participant_id"));COMMENT ON TABLE "public"."course_participant_bild_module" IS E'Graded BILD modules for a course participant';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

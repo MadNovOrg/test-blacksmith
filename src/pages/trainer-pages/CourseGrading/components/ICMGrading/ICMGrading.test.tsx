@@ -5,59 +5,26 @@ import { Grade_Enum } from '@app/generated/graphql'
 import { useFetcher } from '@app/hooks/use-fetcher'
 import { MUTATION } from '@app/queries/grading/save-course-grading'
 import { Grade } from '@app/types'
-import { LoadingStatus } from '@app/util'
 
 import { render, screen, within, userEvent, waitForText } from '@test/index'
-import {
-  buildCourse,
-  buildCourseModule,
-  buildParticipant,
-} from '@test/mock-data-utils'
+import { buildCourseModule, buildParticipant } from '@test/mock-data-utils'
 
-import useCourseGradingData from './useCourseGradingData'
+import { buildGradingCourse, selectGradingOption } from '../../test-utils'
 
-import { CourseGrading } from '.'
+import { ICMGrading } from '.'
 
-jest.mock('./useCourseGradingData')
 jest.mock('@app/hooks/use-fetcher')
 
 const useFetcherMock = jest.mocked(useFetcher)
-const useCourseGradingDataMock = jest.mocked(useCourseGradingData)
-
-async function selectGradingOption(grade: string) {
-  await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
-  const menu = screen.getByTestId('course-grading-options')
-  await userEvent.click(within(menu).getByText(grade))
-}
 
 describe('page: CourseGrading', () => {
   afterEach(() => {
     localStorage.clear()
   })
 
-  it('displays spinner while loading course grading data', () => {
-    const COURSE_ID = 'course-id'
-
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.FETCHING,
-      data: undefined,
-    })
-
-    render(
-      <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
-      </Routes>,
-      {},
-      { initialEntries: [`/${COURSE_ID}/grading`] }
-    )
-
-    expect(screen.getByTestId('course-fetching')).toBeInTheDocument()
-  })
-
   it('displays course name, course participants who attended and covered course modules', () => {
     const COURSE_ID = 'course-id'
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
@@ -67,18 +34,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
+        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
       </Routes>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
@@ -117,7 +82,6 @@ describe('page: CourseGrading', () => {
   it("doesn't display already graded participants", () => {
     const COURSE_ID = 'course-id'
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
@@ -127,18 +91,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
+        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
       </Routes>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
@@ -176,8 +138,6 @@ describe('page: CourseGrading', () => {
 
   it('displays selected participants from query param', () => {
     const COURSE_ID = 'course-id'
-
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
@@ -188,18 +148,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
+        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
       </Routes>,
       {},
       {
@@ -228,7 +186,6 @@ describe('page: CourseGrading', () => {
   it('displays confirmation modal when clicked on submit button', async () => {
     const COURSE_ID = 'course-id'
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
@@ -238,18 +195,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
+        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
       </Routes>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
@@ -267,7 +222,6 @@ describe('page: CourseGrading', () => {
   it('closes modal when saving is not confirmed', async () => {
     const COURSE_ID = 'course-id'
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: false },
@@ -277,18 +231,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path="/:id/grading" element={<CourseGrading />} />
+        <Route path="/:id/grading" element={<ICMGrading course={course} />} />
       </Routes>,
       {},
       { initialEntries: [`/${COURSE_ID}/grading`] }
@@ -306,7 +258,6 @@ describe('page: CourseGrading', () => {
   it("disables save button if a grading option isn't selected", () => {
     const COURSE_ID = 'course-id'
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: true },
@@ -317,18 +268,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path=":id/grading" element={<CourseGrading />} />
+        <Route path=":id/grading" element={<ICMGrading course={course} />} />
         <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
       </Routes>,
       {},
@@ -348,7 +297,6 @@ describe('page: CourseGrading', () => {
       saveParticipantsGrade: { affectedRows: 2 },
     })
 
-    const course = buildCourse()
     const courseModules = [
       { ...buildCourseModule(), covered: true },
       { ...buildCourseModule(), covered: true },
@@ -359,18 +307,16 @@ describe('page: CourseGrading', () => {
       { ...buildParticipant(), attended: true },
     ]
 
-    useCourseGradingDataMock.mockReturnValue({
-      status: LoadingStatus.SUCCESS,
-      data: {
-        ...course,
-        participants: courseParticipants,
+    const course = buildGradingCourse({
+      overrides: {
         modules: courseModules,
+        participants: courseParticipants,
       },
     })
 
     render(
       <Routes>
-        <Route path=":id/grading" element={<CourseGrading />} />
+        <Route path=":id/grading" element={<ICMGrading course={course} />} />
         <Route path="/courses/:id/details" element={<h1>Course details</h1>} />
       </Routes>,
       {},

@@ -1,38 +1,11 @@
 import { gql } from 'graphql-request'
 import { useQuery } from 'urql'
 
-import { Grade_Enum } from '@app/generated/graphql'
-import { CourseDeliveryType, CourseLevel, CourseType } from '@app/types'
-import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
-
-type ParamsType = {
-  id: string
-}
-
-type ResponseType = {
-  course: {
-    id: number
-    name: string
-    type: CourseType
-    level: CourseLevel
-    deliveryType: CourseDeliveryType
-    participants: Array<{
-      id: string
-      profile: { id: string; fullName: string; avatar: string }
-      attended: boolean
-      grade?: Grade_Enum
-    }>
-    modules: Array<{
-      id: string
-      covered: boolean
-      module: {
-        id: string
-        name: string
-        moduleGroup: { id: string; name: string; mandatory: boolean }
-      }
-    }>
-  }
-}
+import {
+  CourseGradingDataQuery,
+  CourseGradingDataQueryVariables,
+} from '@app/generated/graphql'
+import { getSWRLoadingStatus } from '@app/util'
 
 const QUERY = gql`
   query CourseGradingData($id: Int!) {
@@ -42,7 +15,10 @@ const QUERY = gql`
       type
       level
       deliveryType
-      participants {
+      accreditedBy
+      participants(
+        where: { attended: { _eq: true }, grade: { _is_null: true } }
+      ) {
         id
         profile {
           id
@@ -65,16 +41,19 @@ const QUERY = gql`
           }
         }
       }
+      bildModules {
+        id
+        modules
+      }
     }
   }
 `
 
-export default function useCourseGradingData(courseId: string): {
-  data?: ResponseType['course']
-  status: LoadingStatus
-  error?: Error
-} {
-  const [{ data, error }] = useQuery<ResponseType, ParamsType>({
+export default function useCourseGradingData(courseId: number) {
+  const [{ data, error }] = useQuery<
+    CourseGradingDataQuery,
+    CourseGradingDataQueryVariables
+  >({
     query: QUERY,
     variables: {
       id: courseId,

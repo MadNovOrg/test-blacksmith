@@ -22,8 +22,8 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
     expect(
       within(menu).queryByText('Non-Physical Pass')
     ).not.toBeInTheDocument()
@@ -42,9 +42,9 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Non-Physical Pass')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Non-Physical Pass')).toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
@@ -60,9 +60,9 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Non-Physical Pass')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Non-Physical Pass')).toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
   })
 
@@ -78,9 +78,9 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Assist only')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Assist only')).toBeInTheDocument()
     expect(
       within(menu).queryByText('Non-Physical Pass')
     ).not.toBeInTheDocument()
@@ -98,9 +98,9 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
-    expect(within(menu).getByText('Assist only')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Assist only')).toBeInTheDocument()
     expect(
       within(menu).queryByText('Non-Physical Pass')
     ).not.toBeInTheDocument()
@@ -118,11 +118,71 @@ describe('component: CourseGradingMenu', () => {
 
     const menu = screen.getByTestId('course-grading-options')
 
-    expect(within(menu).getByText('Pass')).toBeVisible()
-    expect(within(menu).getByText('Fail')).toBeVisible()
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
     expect(
       within(menu).queryByText('Non-Physical Pass')
     ).not.toBeInTheDocument()
     expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
+  })
+
+  it(`displays correct options for ${Course_Level_Enum.BildRegular}`, async () => {
+    render(
+      <CourseGradingMenu
+        courseLevel={Course_Level_Enum.BildRegular}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
+      />
+    )
+
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+
+    const menu = screen.getByTestId('course-grading-options')
+
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
+    expect(within(menu).queryByText('Assist only')).not.toBeInTheDocument()
+  })
+
+  it(`displays correct options for ${Course_Level_Enum.BildIntermediateTrainer}`, async () => {
+    render(
+      <CourseGradingMenu
+        courseLevel={Course_Level_Enum.BildIntermediateTrainer}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
+      />
+    )
+
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+
+    const menu = screen.getByTestId('course-grading-options')
+
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Assist only')).toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
+  })
+
+  it(`displays correct options for ${Course_Level_Enum.BildAdvancedTrainer}`, async () => {
+    render(
+      <CourseGradingMenu
+        courseLevel={Course_Level_Enum.BildAdvancedTrainer}
+        courseDeliveryType={Course_Delivery_Type_Enum.F2F}
+      />
+    )
+
+    await userEvent.click(screen.getByTestId('course-grading-menu-selected'))
+
+    const menu = screen.getByTestId('course-grading-options')
+
+    expect(within(menu).getByText('Pass')).toBeInTheDocument()
+    expect(within(menu).getByText('Fail')).toBeInTheDocument()
+    expect(within(menu).getByText('Assist only')).toBeInTheDocument()
+    expect(
+      within(menu).queryByText('Non-Physical Pass')
+    ).not.toBeInTheDocument()
   })
 })

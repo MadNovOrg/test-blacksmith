@@ -1,0 +1,106 @@
+table:
+  schema: public
+  name: course_participant_bild_module
+object_relationships:
+  - name: course_participant
+    using:
+      foreign_key_constraint_on: participant_id
+insert_permissions:
+  - role: trainer
+    permission:
+      check:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+      columns:
+        - id
+        - participant_id
+        - modules
+      backend_only: false
+  - role: tt-admin
+    permission:
+      check: {}
+      columns:
+        - modules
+        - id
+        - participant_id
+      backend_only: false
+select_permissions:
+  - role: finance
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-admin
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true
+  - role: sales-representative
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true
+  - role: trainer
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+      allow_aggregations: true
+  - role: tt-admin
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true
+  - role: tt-ops
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter: {}
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+        - modules
+        - id
+        - participant_id
+      filter:
+        course_participant:
+          profile_id:
+            _eq: X-Hasura-User-Id
+      allow_aggregations: true
+delete_permissions:
+  - role: trainer
+    permission:
+      filter:
+        course_participant:
+          course:
+            trainers:
+              profile_id:
+                _eq: X-Hasura-User-Id
+  - role: tt-admin
+    permission:
+      filter: {}

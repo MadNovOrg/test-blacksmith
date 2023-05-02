@@ -1,11 +1,6 @@
 import { gql } from 'graphql-request'
 
-import { CourseParticipant } from '@app/types'
-
 import { CERTIFICATE } from '../fragments'
-
-export type ParamsType = { id: string }
-export type ResponseType = { participant: CourseParticipant }
 
 export const QUERY = gql`
   ${CERTIFICATE}
@@ -18,6 +13,7 @@ export const QUERY = gql`
         name
         level
         deliveryType
+        accreditedBy
       }
       profile {
         fullName
@@ -45,6 +41,10 @@ export const QUERY = gql`
             name
           }
         }
+      }
+      bildGradingModules {
+        id
+        modules
       }
       certificate {
         ...Certificate
