@@ -83,4 +83,12 @@ export class ProfilePage extends BasePage {
     await this.certificateButton.first().click()
     return new CertificationPage(this.page)
   }
+
+  async checkCourseHistory(courseId: number, action: 'Transferred') {
+    await expect(
+      this.page
+        .locator(`data-testid=course-row-${courseId}`)
+        .locator('data-testid=course-action')
+    ).toHaveText(action)
+  }
 }

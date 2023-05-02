@@ -370,7 +370,7 @@ export const ViewProfilePage: React.FC<
             <Typography variant="subtitle2" mb={1} mt={3}>
               {t('course-as-attendee')}
             </Typography>
-            <Table sx={{ mt: 1 }}>
+            <Table data-testid="course-as-attendee" sx={{ mt: 1 }}>
               <TableHead>
                 <TableRow
                   sx={{
@@ -399,16 +399,17 @@ export const ViewProfilePage: React.FC<
                           backgroundColor: 'common.white',
                         },
                       }}
+                      data-testid={`course-row-${row.course_id}`}
                     >
-                      <TableCell>
+                      <TableCell data-testid="course-name">
                         <Link href={`/courses/${row.course_id}/details`}>
                           {row.course.name}
                         </Link>
                       </TableCell>
-                      <TableCell>
+                      <TableCell data-testid="course-action">
                         {t(`participant-audit-types.${row.type}`)}
                       </TableCell>
-                      <TableCell>
+                      <TableCell data-testid="course-date">
                         {t('dates.defaultShort', {
                           date: row.course.dates.aggregate?.end?.date,
                         })}

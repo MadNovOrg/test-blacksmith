@@ -1,7 +1,8 @@
 import { addYears } from 'date-fns'
 import { gql } from 'graphql-request'
 
-import { Grade_Enum } from '@app/generated/graphql'
+import { Grade_Enum, TransferFeeType } from '@app/generated/graphql'
+import { TRANSFER_PARTICIPANT } from '@app/pages/TransferParticipant/queries'
 import { CANCEL_COURSE_MUTATION } from '@app/queries/courses/cancel-course'
 import { QUERY as TRAINER_COURSES } from '@app/queries/courses/get-trainer-courses'
 import { MUTATION as SAVE_COURSE_GRADING } from '@app/queries/grading/save-course-grading'
@@ -222,7 +223,6 @@ export const deleteCourse = async (id?: number) => {
     mutation MyMutation {
       delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id}}}}) { affected_rows }
       delete_course_participant(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_course_participant_audit(where: {course_id: {_eq: ${id}}}) { affected_rows }
       delete_course_invites(where: {course_id: {_eq: ${id}}}) { affected_rows }
       delete_course_trainer(where: {course_id: {_eq: ${id}}}) { affected_rows }
       delete_course_schedule(where: {course_id: {_eq: ${id}}}) { affected_rows }
@@ -467,5 +467,35 @@ export const cancelCourse = async (
   } catch (e) {
     console.error(e)
     throw e
+  }
+}
+
+export const transferToCourse = async (
+  fromCourseId: number,
+  toCourseId: number,
+  email: string
+): Promise<void> => {
+  const participantId = await getCourseParticipantId(fromCourseId, email)
+  const variables = {
+    input: {
+      fee: {
+        type: TransferFeeType.ApplyTerms,
+      },
+      participantId: participantId,
+      toCourseId: toCourseId,
+    },
+  }
+  const response: { transferParticipant: { success: string; error: string } } =
+    await getClient().request<{
+      transferParticipant: { success: string; error: string }
+    }>(TRANSFER_PARTICIPANT, variables)
+  if (response.transferParticipant.success) {
+    console.log(
+      `Transferred "${email}" from course "${fromCourseId}" to "${toCourseId}"`
+    )
+  } else {
+    console.log(
+      `Transfer failed due to "${response.transferParticipant.error}"`
+    )
   }
 }
