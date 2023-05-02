@@ -3,6 +3,7 @@ import { groupBy } from 'lodash-es'
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import TTLogoImage from '@app/assets/TT-Colour-Logo.png'
 import {
   Course,
   CourseEvaluationGroupedQuestion,
@@ -16,7 +17,7 @@ import {
 } from '@app/types'
 import { formatCourseVenue } from '@app/util'
 
-const { Document, Font, Page, StyleSheet, Text, View } = pdf
+const { Document, Font, Page, StyleSheet, Text, View, Image } = pdf
 
 type SummaryDocumentProps = {
   course: Course
@@ -194,6 +195,11 @@ const styles = StyleSheet.create({
   markedAnswer: {
     backgroundColor: '#59C13D',
   },
+  logo: {
+    alignSelf: 'center',
+    width: '90',
+    height: '90',
+  },
 })
 
 const FlexGroup: React.FC<React.PropsWithChildren<FlexGroupProps>> = ({
@@ -327,6 +333,7 @@ export const SummaryDocument: React.FC<
   return (
     <Document>
       <Page size="A4" orientation="portrait" style={styles.page}>
+        <Image style={styles.logo} src={TTLogoImage} />
         <View id="content" style={styles.mainView}>
           <View id="header">
             <Text style={[styles.title, styles.textAlignCenter, styles.bold]}>
