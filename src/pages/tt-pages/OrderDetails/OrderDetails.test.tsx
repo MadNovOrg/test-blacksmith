@@ -1,8 +1,8 @@
 import { addHours } from 'date-fns'
 import { DocumentNode } from 'graphql'
 import React from 'react'
-import { Client, Provider, CombinedError } from 'urql'
-import { never, fromValue } from 'wonka'
+import { Client, CombinedError, Provider } from 'urql'
+import { fromValue, never } from 'wonka'
 
 import {
   Course_Level_Enum,
@@ -10,10 +10,10 @@ import {
   GetOrderQuery,
   GetXeroInvoicesForOrdersQuery,
   Payment_Methods_Enum,
+  Xero_Invoice_Status_Enum,
   XeroAddressType,
   XeroLineItemSummaryFragment,
   XeroPhoneType,
-  Xero_Invoice_Status_Enum,
 } from '@app/generated/graphql'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
 import { QUERY as GET_ORDER_QUERY } from '@app/queries/order/get-order'
@@ -124,7 +124,7 @@ describe('page: OrderDetails', () => {
     ).toMatchInlineSnapshot(`"25 Jan 202308:00 AM - 04:00 PM"`)
   })
 
-  it('renders registrant emails and prices', () => {
+  it('renders order line items', () => {
     const user1Email = chance.email()
     const user2Email = chance.email()
     const unitPrice = 130
@@ -182,9 +182,11 @@ describe('page: OrderDetails', () => {
       </Provider>
     )
 
-    const user1Row = screen.getByTestId(`order-registrant-${user1Email}`)
+    const user1Row = screen.getByTestId(`order-registrant-0`)
 
-    expect(within(user1Row).getByText(user1Email)).toBeInTheDocument()
+    expect(
+      within(user1Row).getByText(invoice.lineItems[0].description)
+    ).toBeInTheDocument()
     expect(
       within(user1Row).getByText(formatCurrency(unitPrice))
     ).toBeInTheDocument()

@@ -185,7 +185,15 @@ export const CourseBookingDetails: React.FC<
           })
         )
         .length(yup.ref('quantity'), t('validation-errors.max-registrants'))
-        .required(requiredMsg(t, 'emails')),
+        .required(requiredMsg(t, 'emails'))
+        .test(
+          'unique-email',
+          t('pages.book-course.duplicated-email-addresses'),
+          values => {
+            const emails = values.map(v => v.email)
+            return emails.length === new Set(emails).size
+          }
+        ),
 
       orgId: yup
         .string()
@@ -508,67 +516,78 @@ export const CourseBookingDetails: React.FC<
           {t('registration')}
         </Typography>
         <Box bgcolor="common.white" p={2} mb={4}>
-          {booking.participants.map((participant, index) => (
-            <Box key={`participant-${index}`} display="flex" gap={1}>
-              <Typography p={1}>{index + 1}</Typography>
-              <Grid container spacing={3} mb={3}>
-                <Grid item md={12}>
-                  <TextField
-                    label={t('email')}
-                    variant="filled"
-                    placeholder={t('email-placeholder')}
-                    {...register(`participants.${index}.email`)}
-                    inputProps={{
-                      'data-testid': `participant-${index}-input-email`,
-                    }}
-                    sx={{ bgcolor: 'grey.100' }}
-                    error={!!getParticipantError(index, 'email')}
-                    helperText={
-                      getParticipantError(index, 'email')?.message ?? ''
-                    }
-                    fullWidth
-                    required
-                  />
+          {booking.participants.map((participant, index) => {
+            const emailValue = values.participants[index]?.email
+            const emailDuplicated =
+              !!values.participants[index] &&
+              !!emailValue &&
+              values.participants.filter(p => p.email === emailValue).length > 1
+            return (
+              <Box key={`participant-${index}`} display="flex" gap={1}>
+                <Typography p={1}>{index + 1}</Typography>
+                <Grid container spacing={3} mb={3}>
+                  <Grid item md={12}>
+                    <TextField
+                      label={t('email')}
+                      variant="filled"
+                      placeholder={t('email-placeholder')}
+                      {...register(`participants.${index}.email`)}
+                      inputProps={{
+                        'data-testid': `participant-${index}-input-email`,
+                      }}
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={
+                        emailDuplicated || !!getParticipantError(index, 'email')
+                      }
+                      helperText={
+                        emailDuplicated
+                          ? t('pages.book-course.duplicated-email-addresses')
+                          : getParticipantError(index, 'email')?.message ?? ''
+                      }
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      label={t('first-name')}
+                      variant="filled"
+                      placeholder={t('first-name-placeholder')}
+                      {...register(`participants.${index}.firstName`)}
+                      inputProps={{
+                        'data-testid': `participant-${index}-input-first-name`,
+                      }}
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={!!getParticipantError(index, 'firstName')}
+                      helperText={
+                        getParticipantError(index, 'firstName')?.message ?? ''
+                      }
+                      fullWidth
+                      required
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      label={t('surname')}
+                      variant="filled"
+                      placeholder={t('surname-placeholder')}
+                      {...register(`participants.${index}.lastName`)}
+                      inputProps={{
+                        'data-testid': `participant-${index}-input-surname`,
+                      }}
+                      sx={{ bgcolor: 'grey.100' }}
+                      error={!!getParticipantError(index, 'lastName')}
+                      helperText={
+                        getParticipantError(index, 'lastName')?.message ?? ''
+                      }
+                      fullWidth
+                      required
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    label={t('first-name')}
-                    variant="filled"
-                    placeholder={t('first-name-placeholder')}
-                    {...register(`participants.${index}.firstName`)}
-                    inputProps={{
-                      'data-testid': `participant-${index}-input-first-name`,
-                    }}
-                    sx={{ bgcolor: 'grey.100' }}
-                    error={!!getParticipantError(index, 'firstName')}
-                    helperText={
-                      getParticipantError(index, 'firstName')?.message ?? ''
-                    }
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item md={6}>
-                  <TextField
-                    label={t('surname')}
-                    variant="filled"
-                    placeholder={t('surname-placeholder')}
-                    {...register(`participants.${index}.lastName`)}
-                    inputProps={{
-                      'data-testid': `participant-${index}-input-surname`,
-                    }}
-                    sx={{ bgcolor: 'grey.100' }}
-                    error={!!getParticipantError(index, 'lastName')}
-                    helperText={
-                      getParticipantError(index, 'lastName')?.message ?? ''
-                    }
-                    fullWidth
-                    required
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-          ))}
+              </Box>
+            )
+          })}
 
           <Alert variant="filled" color="info" severity="info" sx={{ mt: 2 }}>
             <b>{t('important')}:</b> {`${t('pages.book-course.notice')}\n`}

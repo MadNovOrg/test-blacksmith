@@ -19,15 +19,15 @@ import { LinkBehavior } from '@app/components/LinkBehavior'
 import { Sticky } from '@app/components/Sticky'
 import { useAuth } from '@app/context/auth'
 import {
-  Payment_Methods_Enum,
-  XeroAddressType,
-  XeroPhone,
-  XeroLineItem,
-  XeroAddress,
-  Xero_Invoice_Status_Enum,
-  XeroPhoneType,
-  CourseLevel,
   Course_Type_Enum,
+  CourseLevel,
+  Payment_Methods_Enum,
+  Xero_Invoice_Status_Enum,
+  XeroAddress,
+  XeroAddressType,
+  XeroLineItem,
+  XeroPhone,
+  XeroPhoneType,
 } from '@app/generated/graphql'
 import { useOrder } from '@app/hooks/useOrder'
 import { usePromoCodes } from '@app/hooks/usePromoCodes'
@@ -37,7 +37,6 @@ import theme from '@app/theme'
 import { INVOICE_STATUS_COLOR, isNotNullish } from '@app/util'
 
 import {
-  extractEmails,
   formatContactAddress,
   getTrainerExpensesLineItems,
   isDiscountLineItem,
@@ -238,39 +237,15 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                   {registrantsLineItems?.length ? (
                     <DetailsItemBox>
                       <Stack spacing={2}>
-                        {registrantsLineItems?.map((lineItem: XeroLineItem) => {
-                          const [email] =
-                            extractEmails(lineItem.description ?? '') ?? []
-
-                          if (!email) {
-                            return (
-                              <ItemRow
-                                key={course?.name}
-                                data-testid={`order-registrant-${course?.name}`}
-                              >
-                                <Typography color="grey.700">
-                                  {`${course?.name.trim()}, ${_t(
-                                    'dates.default',
-                                    {
-                                      date: course?.start,
-                                    }
-                                  )}, ${course?.course_code}`}
-                                </Typography>
-                                <Typography color="grey.700">
-                                  {_t('common.currency', {
-                                    amount: lineItem?.lineAmount,
-                                  })}
-                                </Typography>
-                              </ItemRow>
-                            )
-                          }
-
-                          return (
+                        {registrantsLineItems?.map(
+                          (lineItem: XeroLineItem, index: number) => (
                             <ItemRow
-                              key={email}
-                              data-testid={`order-registrant-${email}`}
+                              key={index}
+                              data-testid={`order-registrant-${index}`}
                             >
-                              <Typography color="grey.700">{email}</Typography>
+                              <Typography color="grey.700">
+                                {lineItem.description}
+                              </Typography>
                               <Typography color="grey.700">
                                 {_t('common.currency', {
                                   amount: lineItem?.unitAmount,
@@ -278,7 +253,7 @@ export const OrderDetails: React.FC<React.PropsWithChildren<unknown>> = () => {
                               </Typography>
                             </ItemRow>
                           )
-                        })}
+                        )}
                       </Stack>
                     </DetailsItemBox>
                   ) : null}

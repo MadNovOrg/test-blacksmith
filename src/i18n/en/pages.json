@@ -81,7 +81,8 @@
         "intermediate-trainer": "$t(certificates.level-one)/$t(certificates.level-two)",
         "advanced-trainer": "$t(certificates.level-one)/$t(certificates.level-two) & $t(certificates.advanced)"
       }
-    }
+    },
+    "duplicated-email-addresses": "Duplicated email address."
   },
   "home": {
     "title": "Home"
