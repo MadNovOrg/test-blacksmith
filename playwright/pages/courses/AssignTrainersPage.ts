@@ -11,6 +11,7 @@ export class AssignTrainersPage extends BasePage {
   readonly assistantInput: Locator
   readonly selectedTrainer: Locator
   readonly selectedAssistants: Locator
+  readonly autocompleteLoading: Locator
   readonly autocompleteOptions: Locator
   readonly trainerExpensesButton: Locator
   readonly createCourseButton: Locator
@@ -22,6 +23,9 @@ export class AssignTrainersPage extends BasePage {
     )
     this.assistantInput = this.page.locator(
       '[data-testid="AssignTrainers-assist"] [data-testid="SearchTrainers-input"]'
+    )
+    this.autocompleteLoading = this.page.locator(
+      '.MuiAutocomplete-popper .MuiAutocomplete-loading'
     )
     this.autocompleteOptions = this.page.locator(
       '.MuiAutocomplete-popper .MuiAutocomplete-option'
@@ -52,7 +56,7 @@ export class AssignTrainersPage extends BasePage {
 
   async selectTrainer(trainer: User) {
     await this.trainerInput.type(`${trainer.givenName}`)
-    await expect(this.autocompleteOptions).toHaveCount(1)
+    await expect(this.autocompleteLoading).toHaveCount(0)
     await this.autocompleteOptions.first().click()
   }
 

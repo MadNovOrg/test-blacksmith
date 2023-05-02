@@ -36,6 +36,10 @@ export class CreateCoursePage extends BasePage {
   readonly sourceDropdown: Locator
   readonly sourceOption: (source: Course_Source_Enum) => Locator
   readonly orderDetailsButton: Locator
+  readonly specialInstructions: Locator
+  readonly specialInstructionsDetails: Locator
+  readonly parkingInstructions: Locator
+  readonly parkingInstructionsDetails: Locator
 
   constructor(page: Page) {
     super(page)
@@ -93,6 +97,18 @@ export class CreateCoursePage extends BasePage {
     this.sourceOption = (source: Course_Source_Enum) => {
       return this.page.locator(`[data-testid="source-option-${source}"]`)
     }
+    this.specialInstructions = this.page.locator(
+      'data-testid=course-form-special-instructions'
+    )
+    this.specialInstructionsDetails = this.page.locator(
+      '[data-testid=course-form-special-instructions-details]'
+    )
+    this.parkingInstructions = this.page.locator(
+      'data-testid=course-form-parking-instructions'
+    )
+    this.parkingInstructionsDetails = this.page.locator(
+      '[data-testid=course-form-parking-instructions-details]'
+    )
   }
 
   async goto(courseType: string) {
@@ -192,6 +208,30 @@ export class CreateCoursePage extends BasePage {
     }
   }
 
+  async setSpecialInstructions(
+    instructions = 'Some special instructions for the course'
+  ) {
+    await this.specialInstructions.click()
+    await this.specialInstructionsDetails.locator('button').click()
+    await this.specialInstructionsDetails
+      .locator('[role=textbox]')
+      .fill(instructions)
+    await this.specialInstructionsDetails
+      .locator('button:text("Save changes")')
+      .click()
+  }
+
+  async setParkingInstructions(instructions = 'Come to the main car park!') {
+    await this.parkingInstructions.click()
+    await this.parkingInstructionsDetails.locator('button').click()
+    await this.parkingInstructionsDetails
+      .locator('[role=textbox]')
+      .fill(instructions)
+    await this.parkingInstructionsDetails
+      .locator('button:text("Save changes")')
+      .click()
+  }
+
   async fillCourseDetails(course: Course) {
     if (course.type !== CourseType.OPEN && course.organization) {
       await this.selectOrganisation(course.organization.name)
@@ -214,6 +254,10 @@ export class CreateCoursePage extends BasePage {
       (await this.onlineMeetingLinkInput.inputValue()) === ''
     ) {
       await this.onlineMeetingLinkInput.type('www.zoom.com/blabla')
+    }
+    await this.setSpecialInstructions()
+    if (course.deliveryType != CourseDeliveryType.VIRTUAL) {
+      await this.setParkingInstructions()
     }
     await this.setStartDateTime(course.schedule[0].start)
     await this.setEndDateTime(course.schedule[0].end)

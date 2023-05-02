@@ -20,6 +20,7 @@ type Props = {
   maxLength?: number
   editMode?: boolean
   onSave?: (value?: string) => void
+  'data-testid'?: string
 }
 
 export const InstructionAccordionField: React.FC<Props> = ({
@@ -31,6 +32,7 @@ export const InstructionAccordionField: React.FC<Props> = ({
   defaultValue = '',
   editMode = true,
   onSave = noop,
+  'data-testid': testId = '',
 }) => {
   const { t } = useTranslation()
   const [editorValue, setEditorValue] = useState(value)
@@ -129,11 +131,17 @@ export const InstructionAccordionField: React.FC<Props> = ({
         sx={{
           borderBottom: `1px solid ${theme.palette.grey[400]}`,
         }}
+        data-testid={testId ? testId : undefined}
       >
         <Typography>{title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <Box sx={{ marginTop: 1 }}>{editable ? editFiled : readOnlyField}</Box>
+        <Box
+          sx={{ marginTop: 1 }}
+          data-testid={testId ? `${testId}-details` : undefined}
+        >
+          {editable ? editFiled : readOnlyField}
+        </Box>
       </AccordionDetails>
     </Accordion>
   )

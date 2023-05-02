@@ -784,6 +784,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
               confirmResetMessage={t(
                 'components.course-form.special-instructions.modal-message'
               )}
+              data-testid="course-form-special-instructions"
               defaultValue={retrieveDefaultSpecialInstructions()}
               value={field.value}
               onSave={field.onChange}
@@ -806,6 +807,7 @@ const CourseForm: React.FC<React.PropsWithChildren<Props>> = ({
                 confirmResetMessage={t(
                   'components.course-form.parking-instructions.modal-message'
                 )}
+                data-testid="course-form-parking-instructions"
                 value={field.value}
                 onSave={field.onChange}
                 editMode={false}
