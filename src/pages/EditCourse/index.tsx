@@ -344,6 +344,7 @@ export const EditCourse: React.FC<React.PropsWithChildren<unknown>> = () => {
                 endDate: course.dates.aggregate.end.date,
                 parkingInstructions: course.parking_instructions || '',
                 specialInstructions: course.special_instructions || '',
+                notes: course.notes || '',
               },
               course.trainers?.map(trainer => ({
                 id: trainer.profile.id,

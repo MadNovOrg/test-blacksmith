@@ -4154,6 +4154,7 @@ export type NotifyCourseInput = {
   courseId: Scalars['Int'];
   endDate: Scalars['date'];
   level: CourseLevel;
+  notes: Scalars['String'];
   parkingInstructions: Scalars['String'];
   specialInstructions: Scalars['String'];
   startDate: Scalars['date'];
