@@ -39,7 +39,7 @@ import {
   CourseType,
   SortOrder,
 } from '@app/types'
-import { LoadingStatus } from '@app/util'
+import { LoadingStatus, courseEnded } from '@app/util'
 
 import { CourseActionsMenu } from './CourseActionsMenu'
 
@@ -69,6 +69,7 @@ export const AttendingTab = ({
     useState<CourseParticipant>()
   const isBlendedCourse = course.go1Integration
   const isOpenCourse = course.type === CourseType.OPEN
+  const isCourseEnded = courseEnded(course)
   const navigate = useNavigate()
   const fetcher = useFetcher()
 
@@ -140,7 +141,7 @@ export const AttendingTab = ({
           label: t('pages.course-participants.documents'),
           sorting: false,
         },
-        acl.canManageParticipantAttendandance()
+        !isCourseEnded && acl.canManageParticipantAttendandance()
           ? {
               id: 'actions',
               label: '',
@@ -148,7 +149,7 @@ export const AttendingTab = ({
             }
           : null,
       ].filter(Boolean),
-    [t, isBlendedCourse, acl]
+    [t, isBlendedCourse, isCourseEnded, acl]
   )
 
   const handleTransfer = useCallback(
@@ -249,7 +250,7 @@ export const AttendingTab = ({
                   <TableCell>
                     {t('pages.course-details.tabs.attendees.view-documents')}
                   </TableCell>
-                  {acl.canManageParticipantAttendandance() ? (
+                  {!isCourseEnded && acl.canManageParticipantAttendandance() ? (
                     <TableCell>
                       {!isOpenCourse || acl.canOnlySendCourseInformation() ? (
                         <Button
