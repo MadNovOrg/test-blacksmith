@@ -614,6 +614,9 @@ custom_types:
         - value: USER_TRAINER
           is_deprecated: null
           description: null
+        - value: PENDING_COURSE
+          is_deprecated: null
+          description: null
     - name: SendCourseInformationError
       values:
         - value: COURSE_NOT_FOUND

@@ -400,6 +400,7 @@ enum DeleteUserError {
   CERT_EXIST
   SELF_DELETE
   USER_TRAINER
+  PENDING_COURSE
 }
 
 enum SendCourseInformationError {
