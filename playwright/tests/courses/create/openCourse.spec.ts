@@ -3,7 +3,6 @@ import { test as base } from '@playwright/test'
 import { CourseDeliveryType, CourseLevel } from '@app/types'
 
 import * as API from '../../../api'
-import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -12,7 +11,7 @@ import { MyCoursesPage } from '../../../pages/courses/MyCoursesPage'
 
 const dataSet = [
   {
-    name: 'open L1 virtual as admin @smoke',
+    name: 'open L1 virtual as admin',
     user: 'admin',
     course: (() => {
       const course = UNIQUE_COURSE()
@@ -21,11 +20,20 @@ const dataSet = [
     })(),
   },
   {
-    name: 'open L1 virtual as ops @smoke',
+    name: 'open L1 virtual as ops',
     user: 'ops',
     course: (() => {
       const course = UNIQUE_COURSE()
       course.deliveryType = CourseDeliveryType.VIRTUAL
+      return course
+    })(),
+  },
+  {
+    name: 'open L1 F2F as ops',
+    user: 'ops',
+    course: (() => {
+      const course = UNIQUE_COURSE()
+      course.deliveryType = CourseDeliveryType.F2F
       return course
     })(),
   },
@@ -39,16 +47,7 @@ const dataSet = [
       return course
     })(),
   },
-  {
-    name: 'open L1 F2F as ops',
-    user: 'ops',
-    course: (() => {
-      const course = UNIQUE_COURSE()
-      course.level = CourseLevel.Level_1
-      course.deliveryType = CourseDeliveryType.F2F
-      return course
-    })(),
-  },
+
   //TODO uncomment after TTHP-575 will be moved to done
   // {
   //   name: 'open L2 F2F as sales admin',
@@ -75,10 +74,8 @@ for (const data of dataSet) {
     browserName,
     course,
   }) => {
-    // Disabled in firefox due to datepicker issues
-    // Disabled locally due to venue setting not populating
     // eslint-disable-next-line playwright/no-skipped-test
-    test.skip(browserName === 'firefox' || TARGET_ENV === 'local')
+    test.skip(browserName === 'firefox')
     const context = await browser.newContext({
       storageState: stateFilePath(data.user),
     })

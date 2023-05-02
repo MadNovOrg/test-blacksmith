@@ -39,7 +39,7 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   browserName,
   course,
 }) => {
-  // Disable in firefox due to datepicker issues
+  // Disabled in firefox due to datepicker issues
   // eslint-disable-next-line playwright/no-skipped-test
   test.skip(browserName === 'firefox')
   const context = await browser.newContext({

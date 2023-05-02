@@ -3,7 +3,6 @@ import { test as base } from '@playwright/test'
 import { CourseDeliveryType, CourseType } from '@app/types'
 
 import * as API from '../../../api'
-import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -55,9 +54,8 @@ for (const data of dataSet) {
     course,
   }) => {
     // Disabled in firefox due to datepicker issues
-    // Disabled locally due to venue setting not populating
     // eslint-disable-next-line playwright/no-skipped-test
-    test.skip(browserName === 'firefox' || TARGET_ENV === 'local')
+    test.skip(browserName === 'firefox')
     const context = await browser.newContext({
       storageState: stateFilePath(data.user),
     })

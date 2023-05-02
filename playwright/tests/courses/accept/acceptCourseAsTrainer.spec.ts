@@ -1,10 +1,8 @@
 import { test as base } from '@playwright/test'
 
-import { Course_Status_Enum } from '@app/generated/graphql'
 import { CourseType, InviteStatus } from '@app/types'
 
 import * as API from '../../../api'
-import { TARGET_ENV } from '../../../constants'
 import { UNIQUE_COURSE } from '../../../data/courses'
 import { Course } from '../../../data/types'
 import { users } from '../../../data/users'
@@ -16,7 +14,6 @@ const testData = [
     name: 'accept open course as trainer @smoke',
     course: async () => {
       const course = UNIQUE_COURSE()
-      course.status = Course_Status_Enum.TrainerPending
       course.id = await API.course.insertCourse(
         course,
         users.trainer.email,
@@ -26,7 +23,7 @@ const testData = [
     },
   },
   {
-    name: 'accept indirect course as trainer',
+    name: 'accept indirect course as trainer @smoke',
     course: async () => {
       const course = UNIQUE_COURSE()
       course.type = CourseType.INDIRECT
@@ -65,9 +62,6 @@ for (const data of testData) {
   test.use({ storageState: stateFilePath('trainer') })
 
   test(data.name, async ({ page, course }) => {
-    //We skip this test when running as a smoke test as there is no backend
-    //eslint-disable-next-line playwright/no-skipped-test
-    test.skip(Boolean(process.env.CI) && TARGET_ENV === 'local')
     const myCoursesPage = new MyCoursesPage(page)
     await myCoursesPage.goto(`${course.id}`)
     await myCoursesPage.acceptCourse(course.id)

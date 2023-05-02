@@ -42,16 +42,10 @@ for (const data of testData) {
     },
   })
 
-  // Currently failing as when trying to remove users
-  // you are given the error "Permission denied"
   test(`removing the attendee from open course using ${data.user}`, async ({
     browser,
     course,
   }) => {
-    test.fail(
-      true,
-      'There is a permissions issue when attempting to remove a user'
-    )
     const trainerContext = await browser.newContext({
       storageState: stateFilePath(data.user),
     })

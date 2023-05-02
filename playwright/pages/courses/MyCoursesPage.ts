@@ -1,5 +1,8 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+import { InviteStatus } from '@app/types'
+
+import { waitForGraphQLResponse } from '../../commands'
 import { CreateCourseMenu } from '../../components/CreateCourseMenu'
 import { RoleSwitcher } from '../../components/RoleSwitcher'
 import { UiTable } from '../../components/UiTable'
@@ -22,6 +25,9 @@ export class MyCoursesPage extends BasePage {
   readonly userMenu: UserMenu
   readonly roleSwitcher: RoleSwitcher
   readonly submitButton: Locator
+  readonly dialogueConfirmButton: Locator
+  readonly proceedButton: Locator
+  readonly modalSubmitButton: Locator
 
   constructor(page: Page) {
     super(page)
@@ -36,6 +42,13 @@ export class MyCoursesPage extends BasePage {
     this.coursesTable = new UiTable(this.tableRoot)
     this.createCourseMenu = new CreateCourseMenu(this.page)
     this.submitButton = this.page.locator('[data-testid="submit-button"]')
+    this.dialogueConfirmButton = this.page.locator(
+      '[data-testid="dialog-confirm-button"]'
+    )
+    this.proceedButton = this.page.locator('[data-testid="proceed-button"]')
+    this.modalSubmitButton = this.page.locator(
+      '[data-testid="AcceptDeclineCourse-modalSubmit"]'
+    )
   }
 
   async goto(id?: string) {
@@ -125,9 +138,14 @@ export class MyCoursesPage extends BasePage {
   }
 
   async goToCourseBuilder() {
-    await this.page
-      .locator('[data-testid="AcceptDeclineCourse-modalSubmit"]')
-      .click()
+    await Promise.all([
+      waitForGraphQLResponse(
+        this.page,
+        'update_course_trainer_by_pk',
+        `"status":"${InviteStatus.ACCEPTED}"`
+      ),
+      this.modalSubmitButton.click(),
+    ])
   }
 
   async submitDefaultModules() {
@@ -135,11 +153,11 @@ export class MyCoursesPage extends BasePage {
   }
 
   async confirmModules(): Promise<CourseDetailsPage> {
-    await this.page.locator('[data-testid="dialog-confirm-button"]').click()
+    await this.dialogueConfirmButton.click()
     return new CourseDetailsPage(this.page)
   }
 
   async confirmCourseException() {
-    await this.page.locator('[data-testid="proceed-button"]').click()
+    await this.proceedButton.click()
   }
 }
