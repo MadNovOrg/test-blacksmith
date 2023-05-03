@@ -1,4 +1,5 @@
-import { Chip } from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+import { Chip, Tooltip } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/system'
 import React from 'react'
@@ -20,11 +21,12 @@ export type CountPanelParams = {
       | 'gray'
     label: string
   }
+  tooltip?: string
 }
 
 export const CountPanel: React.FC<
   React.PropsWithChildren<CountPanelParams>
-> = ({ count, label, chip }) => {
+> = ({ count, label, chip, tooltip }) => {
   return (
     <Tile flexDirection="row" gap={2}>
       <Typography variant="h2" mx={2}>
@@ -43,6 +45,14 @@ export const CountPanel: React.FC<
           {label}
         </Typography>
       )}
+
+      {tooltip ? (
+        <Box display="flex" flexGrow={1} justifyContent={'flex-end'}>
+          <Tooltip title={tooltip}>
+            <InfoIcon color={'action'} />
+          </Tooltip>
+        </Box>
+      ) : null}
     </Tile>
   )
 }

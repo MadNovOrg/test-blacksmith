@@ -24,6 +24,9 @@ export const OrgStatsTiles: React.FC<
         <CountPanel
           count={stats[orgId]?.profiles.count}
           label={t('pages.org-details.tabs.overview.total-individuals')}
+          tooltip={t(
+            'pages.org-details.tabs.overview.all-organisation-members'
+          )}
         />
       </Grid>
 
@@ -37,6 +40,9 @@ export const OrgStatsTiles: React.FC<
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: stats[orgId]?.certificates.active.enrolled,
           })}
+          tooltip={t(
+            'pages.org-details.tabs.overview.members-with-active-certificates'
+          )}
         />
       </Grid>
 
@@ -62,6 +68,9 @@ export const OrgStatsTiles: React.FC<
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: stats[orgId]?.certificates.expiringSoon.enrolled,
           })}
+          tooltip={t(
+            'pages.org-details.tabs.overview.members-with-certificates-to-expire'
+          )}
         />
       </Grid>
       <Grid item xs={3} md={3} p={1} borderRadius={1}>
@@ -74,6 +83,9 @@ export const OrgStatsTiles: React.FC<
           label={t('pages.org-details.tabs.overview.currently-enrolled', {
             count: stats[orgId]?.certificates.expired.enrolled,
           })}
+          tooltip={t(
+            'pages.org-details.tabs.overview.members-with-expired-certificates'
+          )}
         />
       </Grid>
     </Grid>

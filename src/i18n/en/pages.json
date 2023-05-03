@@ -1073,7 +1073,12 @@
           "bild_act_trainer": "BILD ACT Trainer ({{ count }})",
           "advanced_trainer": "Advanced Trainer ({{ count }})",
           "no-certification": "No certification ({{ count }})"
-        }
+        },
+        "all-organisation-members": "All organisation members",
+        "members-with-active-certificates": "Members with active certificates",
+        "members-with-certificates-to-expire": "Members with certificates due to expire within the next 3 months.",
+        "members-with-expired-certificates": "Members with certificates that have expired in the last 3 months."
+
       },
       "licenses": {
         "title": "Blended learning licences",
