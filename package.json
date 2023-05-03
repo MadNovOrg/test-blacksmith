@@ -101,7 +101,7 @@
     "@graphql-codegen/typescript-operations": "^3.0.4",
     "@inrupt/jest-jsdom-polyfills": "^1.5.5",
     "@jackfranklin/test-data-bot": "^2.1.0",
-    "@playwright/test": "^1.32.3",
+    "@playwright/test": "^1.33.0",
     "@storybook/addon-actions": "^7.0.6",
     "@storybook/addon-essentials": "^7.0.7",
     "@storybook/addon-links": "^7.0.2",

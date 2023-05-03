@@ -32,7 +32,6 @@ export const ConfirmDialog: React.FC<
   return (
     <Dialog open={open} onClose={onCancel} title={title} data-testid={testId}>
       {message}
-
       <Grid container display="flex" justifyContent="flex-end" gap={2} mt={2}>
         <Button
           type="button"
@@ -40,6 +39,7 @@ export const ConfirmDialog: React.FC<
           color="secondary"
           size="large"
           onClick={onCancel}
+          data-testid="dialog-cancel-button"
           sx={{ mr: 2 }}
         >
           {cancelLabel ?? t('common.cancel')}

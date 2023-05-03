@@ -19,8 +19,9 @@ export class CourseBuilderPage extends BasePage {
   readonly estimatedDuration: Locator
   readonly submitButton: Locator
   readonly clearButton: Locator
-  readonly confirmDialog: Locator
   readonly confirmWarningDialog: Locator
+  readonly timeCommitmentDialog: Locator
+  readonly confirmDialogSubmitButton: string
 
   constructor(page: Page) {
     super(page)
@@ -45,8 +46,11 @@ export class CourseBuilderPage extends BasePage {
     this.estimatedDuration = this.page.locator('data-testid=progress-bar-label')
     this.submitButton = this.page.locator('data-testid=submit-button')
     this.clearButton = this.page.locator('data-testid=clear-button')
-    this.confirmDialog = this.page.locator('[role=dialog]')
     this.confirmWarningDialog = this.page.locator('data-testid=confirm-warning')
+    this.confirmDialogSubmitButton = 'data-testid=dialog-confirm-button'
+    this.timeCommitmentDialog = this.page.locator(
+      'data-testid=time-commitment-dialog'
+    )
   }
 
   async goto(courseId: string) {
@@ -99,11 +103,25 @@ export class CourseBuilderPage extends BasePage {
 
   async clickSubmitButton(): Promise<CourseDetailsPage> {
     await this.submitButton.click()
-    const confirmModalVisible = await this.confirmDialog.isVisible()
-    if (confirmModalVisible) {
-      await this.confirmDialog.locator('button:has-text("Proceed")').click()
-    }
+    await this.confirmTimeCommitmentDialog()
+    await this.confirmCourseBuilderDialog()
     return new CourseDetailsPage(this.page)
+  }
+
+  async confirmTimeCommitmentDialog() {
+    if (await this.timeCommitmentDialog.isVisible()) {
+      await this.timeCommitmentDialog
+        .locator(this.confirmDialogSubmitButton)
+        .click()
+    }
+  }
+
+  async confirmCourseBuilderDialog() {
+    if (await this.confirmWarningDialog.isVisible()) {
+      await this.confirmWarningDialog
+        .locator(this.confirmDialogSubmitButton)
+        .click()
+    }
   }
 
   async clickConfirmWarningSubmitButton(): Promise<CourseDetailsPage> {

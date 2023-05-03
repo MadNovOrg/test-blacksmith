@@ -793,7 +793,7 @@ export const CourseBuilder: React.FC<
         onCancel={() => setIsConfirmationModalOpen(false)}
         okLabel={t('common.confirm')}
         cancelLabel={t('common.cancel')}
-        data-testid={'confirm-warning'}
+        data-testid="confirm-warning-dialog"
       />
     </>
   )

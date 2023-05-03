@@ -61,48 +61,4 @@ export class UiTable {
   async checkIsVisible() {
     await expect(this.root).toBeVisible({ timeout: 20000 })
   }
-
-  /**
-   * Gets the cell locator.
-   * Row is defined by column name and the predicate function to match with the row we need.
-   * Column is defined by column name.
-   * @param idColumnName column name where the row identifier is
-   * @param match predicate that defines whether the cell matches the ID (i.e. contains a link with course ID)
-   * @param columnName column name we need to take the cell from
-   */
-  async getCell(
-    idColumnName: string,
-    match: (cell: Locator) => Promise<boolean>,
-    columnName: string
-  ): Promise<Locator> {
-    const headers = await this.getHeaders()
-    const columnIndex = headers.indexOf(idColumnName)
-    const rowsCount = await this.getRowsCount()
-    const idCells = []
-    for (let i = 0; i < rowsCount; i++) {
-      const idCell = this.rows.nth(i).locator('td').nth(columnIndex)
-      if (await match(idCell)) {
-        return this.rows.nth(i).locator('td').nth(headers.indexOf(columnName))
-      }
-      idCells.push(await idCell.innerHTML())
-    }
-    throw Error(
-      `No cell found with match "${match.toString()}" under column "${idColumnName}"
-      Cells inner HTML:
-      ${idCells.join('\n')}`
-    )
-  }
-
-  async getCellWithText(columnName: string, text: string): Promise<Locator> {
-    const headers = await this.getHeaders()
-    const columnIndex = headers.indexOf(columnName)
-    const rowsCount = await this.getRowsCount()
-    for (let i = 0; i < rowsCount; i++) {
-      const cell = this.rows.nth(i).locator('td').nth(columnIndex)
-      if (((await cell.textContent()) as string).includes(text)) {
-        return cell
-      }
-    }
-    throw Error(`No cell found with text "${text}"`)
-  }
 }

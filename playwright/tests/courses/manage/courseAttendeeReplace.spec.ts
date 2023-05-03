@@ -50,7 +50,5 @@ test(`replace an attendee on a course`, async ({ browser, course, page }) => {
   await attendeeCourseDetailsPage.checkSuccessMessage(
     'You are now attending this course. Please complete the checklist.'
   )
-  await page.reload()
-
   await courseDetailsPage.checkAttendeeExists(users.user2WithOrg)
 })

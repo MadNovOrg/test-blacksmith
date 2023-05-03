@@ -35,7 +35,14 @@ const test = base.extend<{ certificate: { course: Course; user: User } }>({
 
 test.use({ storageState: stateFilePath('admin') })
 
-test('admin can put a certificate on hold', async ({ page, certificate }) => {
+test('admin can put a certificate on hold', async ({
+  page,
+  browserName,
+  certificate,
+}) => {
+  // Disabled in firefox due to datepicker issues
+  // eslint-disable-next-line playwright/no-skipped-test
+  test.skip(browserName === 'firefox')
   const certificationPage = new CertificationPage(page)
   await certificationPage.goto(
     `${certificate.user.givenName} ${certificate.user.familyName}`

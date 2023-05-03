@@ -63,8 +63,7 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
     await trainerExpensesPage.clickReviewAndConfirmButton()
 
   course.id = await reviewAndConfirmPage.getCourseIdOnCreation()
-  // TODO uncomment this assertion after fixing TTHP-1260
-  // await coursesListPage.checkCourseStatus(course.id, 'Trainer pending')
+  await coursesListPage.checkCourseStatus(course.id, 'Trainer pending')
 
   const trainerContext = await browser.newContext({
     storageState: stateFilePath('trainer'),
@@ -72,9 +71,6 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   const trainerPage = await trainerContext.newPage()
   const trainerCoursesListPage = new MyCoursesPage(trainerPage)
   const courseBuilderPage = new CourseBuilderPage(trainerPage)
-  const trainerApprovalExceptionModal = new CourseApprovalRequiredModal(
-    trainerPage
-  )
 
   await trainerCoursesListPage.goto()
   await trainerCoursesListPage.searchCourse(`${course.id}`)
@@ -82,7 +78,6 @@ test(`create blended learning course: ${closedCourseData.name}`, async ({
   await trainerCoursesListPage.acceptCourse(course.id)
   await trainerCoursesListPage.goToCourseBuilder()
   await courseBuilderPage.clickSubmitButton()
-  await trainerApprovalExceptionModal.confirmCourseException()
   await trainerCoursesListPage.searchCourse(`${course.id}`)
   await trainerCoursesListPage.checkCourseStatus(
     course.id,

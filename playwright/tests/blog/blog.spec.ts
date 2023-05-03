@@ -22,10 +22,6 @@ test('displays posts with featured and grid display', async ({
   page,
   posts,
 }) => {
-  test.fail(
-    true,
-    'Currently failing as there are no default images for blog posts, see https://behaviourhub.atlassian.net/browse/TTHP-1261'
-  )
   const blogPage = new BlogPage(page)
   await blogPage.goto()
   await blogPage.checkFeaturedImage(
