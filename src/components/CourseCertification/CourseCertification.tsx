@@ -26,6 +26,7 @@ import {
   cpdImage,
   icmImage,
   ntaImage,
+  bildImage,
 } from '@app/assets'
 import { CertificateDocument } from '@app/components/CertificatePDF'
 import ChangelogModal from '@app/components/CourseCertification/ChangelogModal'
@@ -37,6 +38,7 @@ import { ManageCertificateMenu } from '@app/components/ManageCertificateMenu'
 import { ProfileAvatar } from '@app/components/ProfileAvatar'
 import { useAuth } from '@app/context/auth'
 import {
+  Accreditors_Enum,
   Course_Certificate_Changelog_Type_Enum,
   Course_Delivery_Type_Enum,
   Course_Level_Enum,
@@ -46,6 +48,7 @@ import {
   Grade_Enum,
 } from '@app/generated/graphql'
 import { useScopedTranslation } from '@app/hooks/useScopedTranslation'
+import { Strategy } from '@app/pages/trainer-pages/CourseGrading/components/BILDGrading/types'
 import { QUERY } from '@app/queries/certificate/get-certificate'
 import theme from '@app/theme'
 import { CertificateStatus, CourseLevel, NonNullish } from '@app/types'
@@ -205,6 +208,17 @@ const CertificateInfo: React.FC<
   const isRevoked = status === CertificateStatus.REVOKED
   const isOnHold = status === CertificateStatus.ON_HOLD
 
+  const strategyModules: Record<string, Strategy> =
+    courseParticipant?.bildGradingModules?.modules
+
+  if (!courseParticipant) {
+    return (
+      <Typography variant="body2">
+        {t('completed-modules-unavailable')}
+      </Typography>
+    )
+  }
+
   return (
     <Box>
       {isRevoked ? (
@@ -244,7 +258,7 @@ const CertificateInfo: React.FC<
       </Typography>
 
       <Typography variant="subtitle1" gutterBottom>
-        {courseParticipant?.course?.name}
+        {courseParticipant.course?.name}
       </Typography>
 
       {grade !== Grade_Enum.Fail ? (
@@ -317,33 +331,37 @@ const CertificateInfo: React.FC<
             </Grid>
           </Grid>
 
-          <Box
-            sx={{
-              mt: 6,
-              gap: 6,
-              display: 'flex',
-              mb: 9,
-            }}
-          >
-            <MUIImage
-              duration={0}
-              src={icmImage}
-              width={imageSize}
-              height={imageSize}
-            />
+          <Box mt={8} gap={6} display="flex" mb={9} alignItems="center">
+            {courseParticipant.course.accreditedBy === Accreditors_Enum.Icm ? (
+              <MUIImage
+                duration={0}
+                src={icmImage}
+                width={imageSize}
+                height={imageSize}
+              />
+            ) : null}
+
+            {courseParticipant.course.accreditedBy === Accreditors_Enum.Bild ? (
+              <MUIImage
+                duration={0}
+                src={bildImage}
+                width={imageSize}
+                height={imageSize}
+                style={{ filter: 'grayscale(1' }}
+              />
+            ) : null}
+
             <MUIImage
               duration={0}
               src={cpdImage}
               width={imageSize}
               height={imageSize}
-              sx={{ mt: 2 }}
             />
             <MUIImage
               duration={0}
               src={ntaImage}
               width={imageSize}
               height={imageSize}
-              sx={{ mt: 2 }}
             />
           </Box>
         </>
@@ -371,10 +389,63 @@ const CertificateInfo: React.FC<
         </>
       ) : null}
 
-      {!courseParticipant ? (
-        <Typography variant="body2">
-          {t('completed-modules-unavailable')}
-        </Typography>
+      {courseParticipant.bildGradingModules?.modules ? (
+        <>
+          <Typography variant="h3" gutterBottom>
+            {t('modules-list-title')}
+          </Typography>
+          {Object.keys(strategyModules).map(strategyName => (
+            <>
+              <Accordion
+                key={strategyName}
+                data-testid={`strategy-accordion-${strategyName}`}
+              >
+                <AccordionSummary
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  <Typography variant="subtitle2">
+                    {_t(`common.bild-strategies.${strategyName}`)}
+                  </Typography>
+                </AccordionSummary>
+
+                <AccordionDetails sx={{ pt: 0, pb: 3 }}>
+                  <Stack spacing={1.5}>
+                    {strategyModules[strategyName].modules?.length
+                      ? strategyModules[strategyName].modules?.map(module => (
+                          <Typography key={module.name}>
+                            {module.name}
+                          </Typography>
+                        ))
+                      : null}
+                  </Stack>
+
+                  {strategyModules[strategyName].groups?.length
+                    ? strategyModules[strategyName].groups?.map(group => (
+                        <Box key={group.name}>
+                          <Typography fontWeight="500" mb={1}>
+                            {group.name}
+                          </Typography>
+
+                          <Stack spacing={1.5} sx={{ pl: 2 }}>
+                            {group.modules?.length
+                              ? group.modules.map(module => (
+                                  <Typography key={module.name}>
+                                    {module.name}
+                                  </Typography>
+                                ))
+                              : null}
+                          </Stack>
+                        </Box>
+                      ))
+                    : null}
+                </AccordionDetails>
+              </Accordion>
+              <Divider />
+            </>
+          ))}
+        </>
       ) : null}
     </Box>
   )
@@ -481,7 +552,7 @@ export const CourseCertification: React.FC<
       : ''
 
   return (
-    <Box>
+    <Box mb={6}>
       <Container>
         <Grid container>
           <Grid item md={3} px={4}>
@@ -499,7 +570,7 @@ export const CourseCertification: React.FC<
                 </Box>
               ) : null}
 
-              {grade !== Grade_Enum.Fail ? (
+              {grade !== Grade_Enum.Fail && courseParticipant ? (
                 <Button
                   fullWidth
                   data-testid="download-certificate-button"
@@ -524,6 +595,7 @@ export const CourseCertification: React.FC<
                         }
                         certificationNumber={certificationNumber}
                         expiryDate={certificate.expiryDate}
+                        accreditedBy={courseParticipant.course.accreditedBy}
                       />
                     }
                     fileName="certificate.pdf"

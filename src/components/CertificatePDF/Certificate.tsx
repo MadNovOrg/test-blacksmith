@@ -2,8 +2,13 @@ import pdf from '@react-pdf/renderer'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import BILDOutlineImage from '@app/assets/outline_bild.jpg'
 import ICMOutlineImage from '@app/assets/outline_icm.jpg'
-import { Course_Delivery_Type_Enum, Grade_Enum } from '@app/generated/graphql'
+import {
+  Accreditors_Enum,
+  Course_Delivery_Type_Enum,
+  Grade_Enum,
+} from '@app/generated/graphql'
 import { CourseLevel } from '@app/types'
 
 // workaround for using react-pdf with vite
@@ -69,6 +74,7 @@ type CertificateDocumentProps = {
   courseDeliveryType: Course_Delivery_Type_Enum
   certificationNumber: string
   expiryDate: string
+  accreditedBy: Accreditors_Enum
 }
 
 export const CertificateDocument: React.FC<
@@ -81,13 +87,19 @@ export const CertificateDocument: React.FC<
   courseDeliveryType,
   certificationNumber,
   expiryDate,
+  accreditedBy,
 }) => {
   const { t } = useTranslation()
 
   return (
     <Document>
       <Page size="A4" orientation="landscape" style={styles.page}>
-        <Image src={ICMOutlineImage} style={styles.pageBackground} />
+        {accreditedBy === Accreditors_Enum.Icm ? (
+          <Image src={ICMOutlineImage} style={styles.pageBackground} />
+        ) : (
+          <Image src={BILDOutlineImage} style={styles.pageBackground} />
+        )}
+
         <Text style={{ ...styles.title, marginTop: '100' }}>
           {' '}
           {t('common.course-certificate.title')}
@@ -128,7 +140,7 @@ export const CertificateDocument: React.FC<
           })}
         </Text>
         <Text style={styles.footer}>
-          {t('common.course-certificate.certificate-footer')}
+          {t(`common.course-certificate.certificate-footer-${accreditedBy}`)}
         </Text>
       </Page>
     </Document>

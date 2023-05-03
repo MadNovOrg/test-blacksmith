@@ -9,8 +9,9 @@ export { ReactComponent as EbookIcon } from './ebook-icon.svg'
 export { ReactComponent as ResearchSummaryIcon } from './research-summary-icon.svg'
 export { ReactComponent as PodcastsIcon } from './podcasts-icon.svg'
 
+import bildImage from './bild.jpg'
 import cpdImage from './cpd.png'
 import icmImage from './icm.png'
 import ntaImage from './nta.png'
 
-export { icmImage, cpdImage, ntaImage }
+export { icmImage, cpdImage, ntaImage, bildImage }

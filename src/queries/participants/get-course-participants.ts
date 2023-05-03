@@ -65,6 +65,7 @@ export const QUERY = gql`
       }
       course {
         ...Course
+        accreditedBy
         organization {
           name
           id

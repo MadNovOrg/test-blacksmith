@@ -2,8 +2,6 @@ import { gql } from 'graphql-request'
 
 import { CERTIFICATE, CERTIFICATE_CHANGELOG } from '@app/queries/fragments'
 
-export type ParamsType = { id: string }
-
 export const QUERY = gql`
   ${CERTIFICATE}
   ${CERTIFICATE_CHANGELOG}
@@ -43,11 +41,16 @@ export const QUERY = gql`
             }
           }
         }
+        bildGradingModules {
+          id
+          modules
+        }
         course {
           id
           name
           level
           deliveryType
+          accreditedBy
         }
         certificateChanges(order_by: { createdAt: desc }) {
           ...CertificateChangelog

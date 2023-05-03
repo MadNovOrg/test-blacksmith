@@ -114,6 +114,7 @@ export const CertificationList: React.FC<
           }
           certificationNumber={p.certificate?.number ?? ''}
           expiryDate={p.certificate?.expiryDate ?? ''}
+          accreditedBy={p.course.accreditedBy}
         />,
       ])
       if (tuples.length > 1) {
