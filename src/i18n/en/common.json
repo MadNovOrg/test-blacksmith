@@ -444,6 +444,7 @@
     "created-range": "Filter by Creation Date",
     "date-obtained": "Filter by date obtained",
     "payment-method": "Payment Method",
+    "warning-statuses": "Show all warning statuses",
     "status": "Status",
     "accredited-by": "Accredited By",
     "currency": "Currency",

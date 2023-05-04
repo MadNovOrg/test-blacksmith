@@ -12,6 +12,7 @@ import {
 
 import { FilterAccordion, FilterOption } from '@app/components/FilterAccordion'
 import { FilterByBlendedLearning } from '@app/components/FilterByBlendedLearning'
+import { FilterByCourseStatusWarnings } from '@app/components/FilterByCourseStatusWarnings'
 import { FilterCourseLevel } from '@app/components/FilterCourseLevel'
 import { FilterCourseStatus } from '@app/components/FilterCourseStatus'
 import { FilterCourseType } from '@app/components/FilterCourseType'
@@ -21,6 +22,7 @@ import { useAuth } from '@app/context/auth'
 import {
   Accreditors_Enum,
   Course_Level_Enum,
+  Course_Status_Enum,
   Course_Type_Enum,
 } from '@app/generated/graphql'
 import { CoursesFilters } from '@app/hooks/useCourses'
@@ -51,10 +53,15 @@ export function Filters({ onChange }: Props) {
   const [filterType, setFilterType] = useState<Course_Type_Enum[]>([])
   const [filterStatus, setFilterStatus] = useState<string[]>([])
   const [dateFilters, setDateFilters] = useState<DateFilters>()
+  const [filterWarningStatuses, setFilterWarningStatuses] = useState<
+    Course_Status_Enum[]
+  >([])
+
   const [filterBlendedLearning, setFilterBlendedLearning] = useQueryParam(
     'bl',
     withDefault(BooleanParam, false)
   )
+
   const [accreditedBy, setAccreditedBy] = useQueryParam(
     'accredited-by',
     React.useMemo(
@@ -97,6 +104,10 @@ export function Filters({ onChange }: Props) {
     })
   }, [])
 
+  const onStatusWarningChange = useCallback((values: Course_Status_Enum[]) => {
+    setFilterWarningStatuses(values)
+  }, [])
+
   const onAccreditedByChange = useCallback(
     (values: FilterOption<Accreditors_Enum>[]) => {
       setAccreditedBy(values.flatMap(value => (value.selected ? value.id : [])))
@@ -128,7 +139,7 @@ export function Filters({ onChange }: Props) {
     }
 
     const filters = {
-      statuses: filterStatus,
+      statuses: [...filterStatus, ...filterWarningStatuses],
       levels: filterLevel,
       types: filterType,
       go1Integration: filterBlendedLearning,
@@ -142,6 +153,7 @@ export function Filters({ onChange }: Props) {
     onChange(filters)
   }, [
     actionableStatuses,
+    filterWarningStatuses,
     dateFilters,
     filterBlendedLearning,
     filterLevel,
@@ -186,6 +198,7 @@ export function Filters({ onChange }: Props) {
                 : undefined
             }
           />
+          <FilterByCourseStatusWarnings onChange={onStatusWarningChange} />
           <FilterAccordion
             title={t('filters.accredited-by')}
             options={accreditedByOptions}
