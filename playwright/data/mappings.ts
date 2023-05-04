@@ -20,11 +20,12 @@ export const toCourseTableRow: (
 ) => Promise<CourseTableRow> = async course => {
   const startUiTime = toUiTime(course.schedule[0].start)
   const endUiTime = toUiTime(course.schedule[0].end)
+  const { venue } = course.schedule[0] ?? {}
+  const venueName = venue?.name ?? ''
+  const venueCity = venue?.city ?? ''
   return {
     Name: `${course.name}${course.course_code}`,
-    Venue: course.schedule[0].venue
-      ? `${course.schedule[0].venue.name}${course.schedule[0].venue.city}`
-      : '',
+    Venue: `${venueName}${venueCity}`,
     Type: common['course-types'][course.type],
     'Startsorted descending': startUiTime,
     End: endUiTime,
@@ -37,9 +38,17 @@ export const toCourseTableRow: (
   }
 }
 
-export const toAttendeesTableRow: (user: User) => AttendeesTableRow = user => ({
-  Name: `${user.givenName} ${user.familyName}`,
-  Contact: user.email,
-  Organisation: user.organization ? user.organization.name : '',
-  Documents: 'View',
-})
+export function toAttendeesTableRow({
+  givenName,
+  familyName,
+  email,
+  organization,
+}: User): AttendeesTableRow {
+  return {
+    Name: `${givenName} ${familyName}`,
+    Email: email,
+    Organisation: organization?.name || '',
+    Documents: 'View',
+    '': 'SendResend course information',
+  }
+}

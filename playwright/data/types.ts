@@ -92,9 +92,10 @@ export type ModuleGroup = {
 
 export type AttendeesTableRow = {
   Name: string
-  Contact: string
+  Email: string
   Organisation: string
   Documents: string
+  [key: string]: string
 }
 
 export type InvoiceDetails = {

@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request'
+import { v4 as uuidv4 } from 'uuid'
 
 import { HASURA_BASE_URL, HASURA_SECRET, TEST_SETTINGS } from '../../constants'
 
@@ -19,6 +20,8 @@ export const getClient = () => {
     graphQLClient = new GraphQLClient(endpoint, {
       headers: {
         'x-hasura-admin-secret': HASURA_SECRET,
+        'x-hasura-user-id': uuidv4(),
+        'x-hasura-user-email': 'whatever',
         ...additionalHeaders,
       },
     })

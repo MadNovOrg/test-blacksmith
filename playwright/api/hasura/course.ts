@@ -119,23 +119,6 @@ export const insertCourse = async (
   trainerStatus = InviteStatus.PENDING,
   modules = true
 ): Promise<number> => {
-  const organizationId =
-    course.organization?.name &&
-    (await getOrganizationId(course.organization.name))
-  const contactProfileId =
-    course.contactProfile?.email &&
-    (await getProfileId(course.contactProfile.email))
-  const venueId =
-    course.schedule[0].venue?.name &&
-    (await getVenueId(course.schedule[0].venue.name))
-  const trainerId = await getProfileId(email)
-  const salesRepresentativeId =
-    course.salesRepresentative?.email &&
-    (await getProfileId(course.salesRepresentative.email))
-  const moduleIds = modules
-    ? await getModuleIds(getModulesByLevel(course.level), course.level)
-    : []
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const courseInput: any = {
     deliveryType: course.deliveryType,
@@ -150,22 +133,27 @@ export const insertCourse = async (
     type: course.type,
     gradingConfirmed: course.gradingConfirmed,
   }
-
-  if (organizationId) {
-    courseInput.organization_id = organizationId
+  if (course.organization) {
+    courseInput.organization_id = await getOrganizationId(
+      course.organization.name
+    )
   }
-  if (contactProfileId) {
-    courseInput.contactProfileId = contactProfileId
+  if (course.contactProfile) {
+    courseInput.contactProfileId = await getProfileId(
+      course.contactProfile.email
+    )
   }
-  if (salesRepresentativeId) {
-    courseInput.salesRepresentativeId = salesRepresentativeId
+  if (course.salesRepresentative) {
+    courseInput.salesRepresentativeId = await getProfileId(
+      course.salesRepresentative.email
+    )
   }
-  if (venueId) {
+  if (course.schedule[0].venue) {
     courseInput.schedule = {
       data: {
         start: course.schedule[0].start.toISOString(),
         end: course.schedule[0].end.toISOString(),
-        venue_id: venueId,
+        venue_id: await getVenueId(course.schedule[0].venue.name),
       },
     }
   } else {
@@ -179,12 +167,15 @@ export const insertCourse = async (
   const trainers = {
     data: [
       {
-        profile_id: trainerId,
+        profile_id: await getProfileId(email),
         type: CourseTrainerType.Leader,
         status: trainerStatus,
       },
     ],
   }
+  const moduleIds = modules
+    ? await getModuleIds(getModulesByLevel(course.level), course.level)
+    : []
   const modulesInput = {
     data: moduleIds.map((moduleId: string) => ({ moduleId: moduleId })),
   }
@@ -220,22 +211,14 @@ export const deleteCourse = async (id?: number) => {
     return
   }
   const query = gql`
-    mutation MyMutation {
-      delete_course_participant_module(where: {course_participant: {course_id: {_eq: ${id}}}}) { affected_rows }
-      delete_course_participant(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_course_invites(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_course_trainer(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_course_schedule(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_course_module(where: {courseId: {_eq: ${id}}}) { affected_rows }
-      delete_course_certificate(where: {courseId: {_eq: ${id}}}) { affected_rows }
-      delete_course_enquiry(where: {courseId: {_eq: ${id}}}) { affected_rows }
-      delete_course_audit(where: {course_id: {_eq: ${id}}}) { affected_rows }
-      delete_order(where: {courseId: {_eq: ${id}}}) { affected_rows }
-      delete_course(where: {id: {_eq: ${id}}}) { affected_rows }
+    mutation MyMutation($course_id: Int!) {
+      delete_course(where: { id: { _eq: $course_id } }) {
+        affected_rows
+      }
     }
   `
   try {
-    await getClient().request(query)
+    await getClient().request(query, { course_id: id })
     console.log(`Deleted course with the id "${id}"`)
   } catch (e) {
     console.error(`ERROR: ${e}`)

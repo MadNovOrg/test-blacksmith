@@ -1,5 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
+import { waitForGraphQLResponse } from '../../commands'
 import { BasePage } from '../BasePage'
 
 export class CourseTransferPage extends BasePage {
@@ -33,6 +34,10 @@ export class CourseTransferPage extends BasePage {
   }
 
   async clickConfirmTransfer() {
-    await this.confirmTransfer.click()
+    await this.waitForPageLoad()
+    await Promise.all([
+      waitForGraphQLResponse(this.page, 'transferParticipant', 'success'),
+      this.confirmTransfer.click(),
+    ])
   }
 }
