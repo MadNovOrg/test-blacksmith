@@ -206,7 +206,9 @@
         "warning-dialog-title": "Course builder",
         "warning-dialog": "Please be aware once you submit this course, this can not be changed",
         "time-commitment-message": "By submitting this course, you commit to at least {{hours}} hours of training.",
-        "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, please resubmit the course as Level Two.\n\nPlease note: It may not effect your delivery timings."
+        "course-level-one-info": "Additional holds that are not listed above, will fall under the Level Two certification. If these are required, the course will need to be resubmitted as a Level Two.\n\nPlease contact Team Teach at ",
+        "course-level-one-or":  " or on ",
+        "course-level-one-note": "\n\nPlease note: It may not effect your delivery timings."
       }
     }
   },

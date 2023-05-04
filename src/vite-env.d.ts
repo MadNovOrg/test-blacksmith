@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   VITE_GMAPS_KEY: string
   VITE_BASE_WORDPRESS_URL: string
   VITE_STRIPE_KEY: string
+  VITE_TT_INFO_PHONE: string
   VITE_TT_INFO_EMAIL_ADDRESS: string
   VITE_TT_TRAINING_EMAIL_ADDRESS: string
   VITE_SENTRY_DSN: string

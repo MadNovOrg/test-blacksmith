@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  Link,
   Typography,
   useTheme,
 } from '@mui/material'
+import parsePhoneNumber from 'libphonenumber-js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   DragDropContext,
@@ -106,6 +108,8 @@ export const CourseBuilder: React.FC<
   const [courseModuleSlots, setCourseModuleSlots] = useState<ModuleGroupSlot[]>(
     []
   )
+
+  const phoneNumber = parsePhoneNumber(`${import.meta.env.VITE_TT_INFO_PHONE}`)
 
   const { addSnackbarMessage, getSnackbarMessage } = useSnackbar()
 
@@ -701,6 +705,23 @@ export const CourseBuilder: React.FC<
                     <Alert severity="info">
                       {t(
                         'pages.trainer-base.create-course.new-course.course-level-one-info'
+                      )}
+                      <Link
+                        href={`mailto:${
+                          import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS
+                        }`}
+                        component="a"
+                      >
+                        {import.meta.env.VITE_TT_INFO_EMAIL_ADDRESS}
+                      </Link>
+                      {t(
+                        'pages.trainer-base.create-course.new-course.course-level-one-or'
+                      )}
+                      <Link href={phoneNumber?.getURI()} component="a">
+                        {phoneNumber?.formatInternational()}
+                      </Link>
+                      {t(
+                        'pages.trainer-base.create-course.new-course.course-level-one-note'
                       )}
                     </Alert>
                   </Box>
