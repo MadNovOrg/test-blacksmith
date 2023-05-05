@@ -44113,6 +44113,11 @@ export type CanApplyPromoCodeQueryVariables = Exact<{
 
 export type CanApplyPromoCodeQuery = { __typename?: 'query_root', canApplyPromoCode: { __typename?: 'CanApplyPromoCodeOutput', result?: { __typename?: 'PromoCodeOutput', code: string, amount: number, type: string } | null } };
 
+export type GetPromoCodesPendingApprovalQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPromoCodesPendingApprovalQuery = { __typename?: 'query_root', promoCodes: Array<{ __typename?: 'promo_code', id: any, code: string, description?: string | null, type: Promo_Code_Type_Enum, amount: any, validFrom: any, validTo?: any | null, bookerSingleUse: boolean, usesMax?: any | null, levels: any, enabled: boolean, approvedBy?: any | null, createdBy: any, createdAt: any, updatedAt: any, courses: Array<{ __typename?: 'course_promo_code', course?: { __typename?: 'course', id: number, course_code?: string | null } | null }>, creator: { __typename?: 'profile', id: any, fullName?: string | null, avatar?: string | null, archived?: boolean | null } }> };
+
 export type GetPromoCodesQueryVariables = Exact<{
   orderBy?: InputMaybe<Array<Promo_Code_Order_By> | Promo_Code_Order_By>;
   where?: InputMaybe<Promo_Code_Bool_Exp>;

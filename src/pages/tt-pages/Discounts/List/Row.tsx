@@ -1,11 +1,11 @@
 import InfoIcon from '@mui/icons-material/Info'
 import {
-  TableRow,
-  TableCell,
   Box,
+  Chip,
+  TableCell,
+  TableRow,
   Tooltip,
   Typography,
-  Chip,
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,18 +18,20 @@ import {
 } from '@app/generated/graphql'
 import { CourseLevel } from '@app/types'
 
-import { getPromoCodeStatus, DISCOUNT_STATUS_COLOR } from '../helpers'
+import { DISCOUNT_STATUS_COLOR, getPromoCodeStatus } from '../helpers'
 
 import { ApproveDeny } from './ApproveDeny'
 
 type Props = {
   promo: GetPromoCodesQuery['promoCodes'][number]
   showApprove?: boolean
+  onAction: () => Promise<unknown>
 }
 
 export const Row: React.FC<React.PropsWithChildren<Props>> = ({
   promo,
   showApprove = false,
+  onAction,
 }) => {
   const { t } = useTranslation()
 
@@ -121,7 +123,7 @@ export const Row: React.FC<React.PropsWithChildren<Props>> = ({
 
       <TableCell>
         {showApprove ? (
-          <ApproveDeny promoCode={promo} />
+          <ApproveDeny promoCode={promo} onAction={onAction} />
         ) : (
           <Chip
             size="small"

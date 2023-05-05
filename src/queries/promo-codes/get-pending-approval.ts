@@ -1,17 +1,5 @@
 import { gql } from 'graphql-request'
 
-import {
-  GetPromoCodesQueryVariables,
-  Promo_Code_Type_Enum,
-  Query_Root,
-} from '@app/generated/graphql'
-
-export type InputType = GetPromoCodesQueryVariables
-
-export type ResponseType = {
-  promoCodes: Query_Root['promo_code']
-}
-
 export const QUERY = gql`
   query GetPromoCodesPendingApproval {
     promoCodes: promo_code(
@@ -19,14 +7,8 @@ export const QUERY = gql`
         approvedBy: { _is_null: true }
         deniedBy: { _is_null: true }
         _or: [
-          {
-            amount: { _gt: 15 }
-            type: { _eq: ${Promo_Code_Type_Enum.Percent} }
-          }
-          {
-            amount: { _gt: 3 }
-            type: { _eq: ${Promo_Code_Type_Enum.FreePlaces} }
-          }
+          { amount: { _gt: 15 }, type: { _eq: PERCENT } }
+          { amount: { _gt: 3 }, type: { _eq: FREE_PLACES } }
         ]
       }
       order_by: { createdBy: asc }
@@ -41,15 +23,20 @@ export const QUERY = gql`
       bookerSingleUse
       usesMax
       levels
-      courses
+      courses {
+        course {
+          id
+          course_code
+        }
+      }
       enabled
       approvedBy
       createdBy
       creator {
         id
         fullName
-          avatar
-          archived
+        avatar
+        archived
       }
       createdAt
       updatedAt

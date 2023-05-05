@@ -7,9 +7,9 @@ import {
   Promo_Code_Type_Enum,
 } from '@app/generated/graphql'
 import {
+  InputType,
   QUERY,
   ResponseType,
-  InputType,
 } from '@app/queries/promo-codes/get-promo-codes'
 import { PromoCodeStatus, SortOrder } from '@app/types'
 import { getSWRLoadingStatus, LoadingStatus } from '@app/util'
@@ -189,7 +189,11 @@ export const usePromoCodes = ({
     return query
   }, [filters.status])
 
-  const { data, error } = useSWR<ResponseType, Error, [string, InputType]>([
+  const { data, error, mutate } = useSWR<
+    ResponseType,
+    Error,
+    [string, InputType]
+  >([
     QUERY,
     {
       orderBy: sort.by ? { [sort.by]: sort.dir } : undefined,
@@ -206,6 +210,7 @@ export const usePromoCodes = ({
     total: data?.promo_code_aggregate.aggregate?.count ?? 0,
     error,
     status,
+    mutate,
     isLoading: status === LoadingStatus.FETCHING,
   }
 }

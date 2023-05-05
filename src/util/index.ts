@@ -51,6 +51,10 @@ export const noop = () => {
   // empty
 }
 
+export const asyncNoop = async () => {
+  // empty
+}
+
 export const dateInputValueParse = (value: string): Date => {
   return parse(value, INPUT_DATE_FORMAT, new Date())
 }

@@ -42,6 +42,7 @@ describe('page: OrderDetails', () => {
       total: 0,
       error: undefined,
       status: LoadingStatus.IDLE,
+      mutate: jest.fn(),
     })
   })
 
@@ -278,6 +279,7 @@ describe('page: OrderDetails', () => {
       status: LoadingStatus.IDLE,
       error: undefined,
       total: 1,
+      mutate: jest.fn(),
     })
 
     const client = {

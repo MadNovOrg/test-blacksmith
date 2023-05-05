@@ -1,16 +1,16 @@
 import {
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
   CircularProgress,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
   Typography,
 } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { TableHead, Col } from '@app/components/Table/TableHead'
+import { Col, TableHead } from '@app/components/Table/TableHead'
 import { TableNoRows } from '@app/components/Table/TableNoRows'
 import { GetPromoCodesQuery } from '@app/generated/graphql'
 import type { Sorting } from '@app/hooks/useTableSort'
@@ -22,6 +22,7 @@ type Props = {
   sorting: Sorting
   loading: boolean
   filtered: boolean
+  onAction: () => Promise<unknown>
 }
 
 export const DiscountsTable: React.FC<React.PropsWithChildren<Props>> = ({
@@ -29,6 +30,7 @@ export const DiscountsTable: React.FC<React.PropsWithChildren<Props>> = ({
   sorting,
   loading,
   filtered,
+  onAction,
 }) => {
   const { t } = useTranslation()
 
@@ -76,7 +78,7 @@ export const DiscountsTable: React.FC<React.PropsWithChildren<Props>> = ({
           />
 
           {promoCodes.map(promo => (
-            <Row key={promo.id} promo={promo} />
+            <Row key={promo.id} promo={promo} onAction={onAction} />
           ))}
         </TableBody>
       </Table>

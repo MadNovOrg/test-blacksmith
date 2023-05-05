@@ -1,5 +1,5 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material'
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import { useTableSort } from '@app/hooks/useTableSort'
 import { Filters } from './Filters'
 import { PendingApproval } from './PendingApproval'
 import { DiscountsTable } from './Table'
+
 type Filters = {
   from?: Date
   to?: Date
@@ -27,7 +28,7 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
   const sorting = useTableSort('createdAt', 'asc')
   const [filters, setFilters] = useState<Filters>({})
 
-  const { promoCodes, total, isLoading } = usePromoCodes({
+  const { promoCodes, total, isLoading, mutate } = usePromoCodes({
     sort: { by: sorting.by, dir: sorting.dir },
     filters,
     limit,
@@ -81,13 +82,14 @@ export const DiscountsList: React.FC<React.PropsWithChildren<unknown>> = () => {
             </Button>
           </Box>
 
-          <PendingApproval />
+          <PendingApproval onAction={mutate} />
 
           <DiscountsTable
             promoCodes={promoCodes}
             sorting={sorting}
             loading={isLoading}
             filtered={filtered}
+            onAction={mutate}
           />
 
           <Pagination total={total} />
