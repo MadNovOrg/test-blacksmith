@@ -77,7 +77,9 @@ jobs:
 
       - name: Playwright tests
         id: playwright
-        run: npm run test:e2e:smoke -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: |
+          while ! curl --silent --output /dev/null --fail --max-time 300 http://localhost:3000; do sleep 1; done &&
+          npm run test:e2e:smoke -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Playwright report
         uses: actions/upload-artifact@v3

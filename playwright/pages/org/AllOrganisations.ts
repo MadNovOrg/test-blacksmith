@@ -3,7 +3,7 @@ import { Chance } from 'chance'
 import { v4 as uuidv4 } from 'uuid'
 import { readFile } from 'xlsx'
 
-import { Go1_History_Events_Enum } from '@app/generated/graphql'
+import { Go1_Licenses_History_Set_Input } from '@app/generated/graphql'
 
 import { User } from '../../data/types'
 import { BasePage } from '../BasePage'
@@ -185,7 +185,7 @@ export class AllOrganisations extends BasePage {
     await this.removeCheckbox.check()
   }
 
-  async checkExportOfLicences() {
+  async checkExportOfLicences(data: Go1_Licenses_History_Set_Input) {
     const [download] = await Promise.all([
       this.page.waitForEvent('download'),
       this.exportHistory.click(),
@@ -193,25 +193,39 @@ export class AllOrganisations extends BasePage {
     const downloadPath = (await download.path()) as string
     const workbook = readFile(downloadPath)
     const sheet = workbook.Sheets[workbook.SheetNames[0]]
-    // Heading Row
-    expect(sheet['A1'].v).toBe('Date')
-    expect(sheet['B1'].v).toBe('Event')
-    expect(sheet['C1'].v).toBe('Invoice number')
-    expect(sheet['D1'].v).toBe('Course code')
-    expect(sheet['E1'].v).toBe('Course start date')
-    expect(sheet['F1'].v).toBe('Note')
-    expect(sheet['G1'].v).toBe('Invoked by')
-    expect(sheet['H1'].v).toBe('Action')
-    expect(sheet['I1'].v).toBe('Balance')
-    expect(sheet['J1'].v).toBe('Reserved balance')
-    expect(sheet['K1'].v).toBe('Cost per licence')
-    // Content
-    expect(sheet['B2'].v).toBe(Go1_History_Events_Enum.LicensesAdded)
-    expect(sheet['C2'].v).toBe('INV.001')
-    expect(sheet['G2'].v).toBe('John Doe')
-    expect(sheet['H2'].v).toEqual('+10')
-    expect(sheet['I2'].v).toEqual(10)
-    expect(sheet['J2'].v).toEqual(0)
+    const expectedRows = [
+      // Column Names
+      {
+        A: 'Date',
+        B: 'Event',
+        C: 'Invoice number',
+        D: 'Course code',
+        E: 'Course start date',
+        F: 'Note',
+        G: 'Invoked by',
+        H: 'Action',
+        I: 'Balance',
+        J: 'Reserved balance',
+        K: 'Cost per licence',
+      },
+      // Contents
+      {
+        B: data.event,
+        C: data.payload.invoiceId,
+        G: data.payload.invokedBy,
+        H: `+${data.change}`,
+        I: data.balance,
+        J: 0,
+      },
+      // Add additional rows if required
+    ]
+    for (let i = 0; i < expectedRows.length; i++) {
+      const row = expectedRows[i]
+      for (const [column, expectedValue] of Object.entries(row)) {
+        const cell = sheet[`${column}${i + 1}`]
+        expect(cell?.v).toBe(expectedValue)
+      }
+    }
   }
 
   async clickIndividualsTab() {

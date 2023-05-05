@@ -1,7 +1,9 @@
 import { gql } from 'graphql-request'
 
-import { Go1_Licenses_History_Set_Input } from '@app/generated/graphql'
-import { Go1_Licenses_Insert_Input } from '@app/generated/graphql'
+import {
+  Go1_Licenses_History_Set_Input,
+  Go1_Licenses_Insert_Input,
+} from '@app/generated/graphql'
 
 import { getClient } from './client'
 
