@@ -14,15 +14,13 @@ import { HasuraRole, runQueryAsRole } from '../gql-query'
 
 const allowedRoles: HasuraRole[] = [
   'unverified',
-  'user',
-  'trainer',
   'sales-admin',
   'tt-ops',
   'tt-admin',
   'ld',
 ]
 
-const forbiddenRoles: HasuraRole[] = ['anonymous']
+const forbiddenRoles: HasuraRole[] = ['anonymous', 'user', 'trainer']
 
 function buildMutationInput(): InsertOrgMutationVariables {
   const org = buildOrganization()
